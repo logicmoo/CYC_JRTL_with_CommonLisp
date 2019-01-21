@@ -167,6 +167,7 @@ final public class LargeObjectView<BoxType extends Box>
 
 	private TriggerMouseAdapter mouseAdapter;
 
+	@Override
 	public final boolean initGUI() {
 		synchronized (valueLock) {
 			if (initedGuiOnce == true)

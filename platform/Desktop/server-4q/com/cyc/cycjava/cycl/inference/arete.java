@@ -1201,15 +1201,18 @@ public final class arete extends SubLTranslatedFile
         return (SubLObject)arete.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_arete_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_arete_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_arete_file();
     }
     

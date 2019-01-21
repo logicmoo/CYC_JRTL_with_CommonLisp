@@ -40,7 +40,8 @@ public class BeanBowlPanel extends JPanel implements ActionListener, DocumentLis
     return context.getBowl();
   }
 
-  public void actionPerformed(ActionEvent evt){
+  @Override
+public void actionPerformed(ActionEvent evt){
     if (evt.getSource() == classField || evt.getSource() == classBrowserButton) {
       openClassBrowser();
     }
@@ -113,15 +114,18 @@ public class BeanBowlPanel extends JPanel implements ActionListener, DocumentLis
     classBrowserButton.setEnabled(currentClass != null);
   }
 
-  public void insertUpdate(DocumentEvent e) {
+  @Override
+public void insertUpdate(DocumentEvent e) {
     classFieldChanged();
   }
 
-  public void removeUpdate(DocumentEvent e) {
+  @Override
+public void removeUpdate(DocumentEvent e) {
     classFieldChanged();
   }
 
-  public void changedUpdate(DocumentEvent e) {
+  @Override
+public void changedUpdate(DocumentEvent e) {
     classFieldChanged();
   }
 

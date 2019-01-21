@@ -59,19 +59,23 @@ public class NumberField extends JPanel implements ActionListener, KeyListener, 
 	* All PropertyChangeListeners will receive property change events
 	* when the date changes.
 	*/
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener p) {
 		propSupport.addPropertyChangeListener(p);
 	}
 
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener p) {
 		propSupport.removePropertyChangeListener(p);
 	}
 
-  public void addVetoableChangeListener(VetoableChangeListener v) {
+  @Override
+public void addVetoableChangeListener(VetoableChangeListener v) {
     vetoSupport.addVetoableChangeListener(v);
   }
 
-  public void removeVetoableChangeListener(VetoableChangeListener v) {
+  @Override
+public void removeVetoableChangeListener(VetoableChangeListener v) {
     vetoSupport.removeVetoableChangeListener(v);
   }
 
@@ -115,6 +119,7 @@ public class NumberField extends JPanel implements ActionListener, KeyListener, 
 	/**
 	* Event handling routine
 	*/
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (textfield.isEditable() && e.getSource() == scrollPanel) {
 			if (e.getID() == ScrollButtonPanel.DECREMENT)
@@ -129,12 +134,14 @@ public class NumberField extends JPanel implements ActionListener, KeyListener, 
 	/**
 	* Event handling routine
 	*/
+	@Override
 	public void focusGained(FocusEvent evt) {
 	}
 
 	/**
 	* Event handling routine
 	*/
+	@Override
 	public void focusLost(FocusEvent evt) {
     readValue();
 	}
@@ -170,6 +177,7 @@ public class NumberField extends JPanel implements ActionListener, KeyListener, 
 	/**
 	* Event handling routine
 	*/
+	@Override
 	public void keyPressed(KeyEvent e) {
 		if (textfield.isEditable()) {
 			if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -196,12 +204,14 @@ public class NumberField extends JPanel implements ActionListener, KeyListener, 
 	/**
 	* Event handling routine
 	*/
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 
 	/**
 	* Event handling routine
 	*/
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 

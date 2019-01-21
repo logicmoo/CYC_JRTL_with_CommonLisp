@@ -193,15 +193,18 @@ public final class genls_hierarchy_problems extends SubLTranslatedFile
         return (SubLObject)genls_hierarchy_problems.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_genls_hierarchy_problems_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_genls_hierarchy_problems_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_genls_hierarchy_problems_file();
     }
     

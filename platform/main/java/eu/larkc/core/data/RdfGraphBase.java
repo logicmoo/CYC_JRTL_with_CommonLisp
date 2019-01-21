@@ -20,10 +20,12 @@ public abstract class RdfGraphBase implements RdfGraph {
 		this.name = name;
 	}
 
+	@Override
 	public URI getName() {
 		return name;
 	}
 	
+	@Override
 	public String toString() {
 		return name.stringValue();
 	}

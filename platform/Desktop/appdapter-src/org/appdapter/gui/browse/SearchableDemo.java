@@ -141,6 +141,7 @@ public class SearchableDemo implements AnyOper.Singleton, AnyOper.Autoload {
 		JCheckBox checkbox = new JCheckBox("Recursive");
 		checkbox.setMnemonic('R');
 		checkbox.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					treeSearchable.setRecursive(true);

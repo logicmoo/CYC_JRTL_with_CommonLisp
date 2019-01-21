@@ -2582,15 +2582,18 @@ public final class inference_worker_join_ordered extends SubLTranslatedFile
         return (SubLObject)inference_worker_join_ordered.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_worker_join_ordered_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_worker_join_ordered_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_worker_join_ordered_file();
     }
     
@@ -2704,31 +2707,38 @@ public final class inference_worker_join_ordered extends SubLTranslatedFile
             this.$restricted_non_focal_link_index = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$join_ordered_link_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$focal_proof_index;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$non_focal_proof_index;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$restricted_non_focal_link_index;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$focal_proof_index = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$non_focal_proof_index = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$restricted_non_focal_link_index = value;
         }
         
@@ -2743,7 +2753,8 @@ public final class inference_worker_join_ordered extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("JOIN-ORDERED-LINK-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_worker_join_ordered.join_ordered_link_data_p(arg1);
         }
     }

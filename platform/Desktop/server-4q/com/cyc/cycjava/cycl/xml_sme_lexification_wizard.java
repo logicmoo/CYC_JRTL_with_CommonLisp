@@ -297,15 +297,18 @@ public final class xml_sme_lexification_wizard extends SubLTranslatedFile
         return (SubLObject)xml_sme_lexification_wizard.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_xml_sme_lexification_wizard_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_xml_sme_lexification_wizard_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_xml_sme_lexification_wizard_file();
     }
     

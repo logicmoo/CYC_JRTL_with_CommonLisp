@@ -46,6 +46,7 @@ public class MacroObject extends Function  {
 {
 		return (LispObject) macroExpander;
 	}
+	@Override
 	public SubLSymbol getFunctionSymbol() {
 		return (SubLSymbol)lambdaName;
 	}
@@ -60,7 +61,8 @@ public class MacroObject extends Function  {
                                                name));
   }
 
-  public LispObject execute(LispObject[] args)
+  @Override
+public LispObject execute(LispObject[] args)
   {
   	if(args.length<10) return dispatch(args);
 		LispObject lo =  getExpander().execute(args);
@@ -70,6 +72,7 @@ public class MacroObject extends Function  {
   }
 
 
+	@Override
 	public LispObject arrayify(LispObject... args) {
 		if(true)return error(new UndefinedFunction(lambdaName));
 		LispObject fun = getExpander();
@@ -80,7 +83,8 @@ public class MacroObject extends Function  {
 		//return execute(args);
 	}
 
-  protected void extraInfo(StringBuilder sb)
+  @Override
+protected void extraInfo(StringBuilder sb)
   {
     sb.append(" "+ macroExpander);
   }

@@ -67,7 +67,8 @@ public class Shrinker {
         File d = new File(args[n]);
 
         optimize(f, d, new SimpleRemapper(MAPPING) {
-            public String map(String key) {
+            @Override
+			public String map(String key) {
                 String s = super.map(key);
                 if (s != null) {
                     unused.remove(key);
@@ -129,7 +130,8 @@ public class Shrinker {
 
     static class ConstantComparator implements Comparator {
 
-        public int compare(final Object o1, final Object o2) {
+        @Override
+		public int compare(final Object o1, final Object o2) {
             Constant c1 = (Constant) o1;
             Constant c2 = (Constant) o2;
             int d = getSort(c1) - getSort(c2);

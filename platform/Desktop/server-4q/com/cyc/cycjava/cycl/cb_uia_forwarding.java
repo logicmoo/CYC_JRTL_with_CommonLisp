@@ -401,15 +401,18 @@ public final class cb_uia_forwarding extends SubLTranslatedFile
         return (SubLObject)cb_uia_forwarding.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_uia_forwarding_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_uia_forwarding_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_uia_forwarding_file();
     }
     

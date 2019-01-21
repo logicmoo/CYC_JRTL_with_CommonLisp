@@ -74,7 +74,8 @@ public class JenaArqQueryFuncs
     
     public static List<QuerySolution> findAllSolutions(final Dataset ds, final Query parsedQuery, final QuerySolution initBinding) {
         final JenaArqResultSetProcessor<List<QuerySolution>> resProc = (JenaArqResultSetProcessor<List<QuerySolution>>)new JenaArqResultSetProcessor<List<QuerySolution>>() {
-            public List<QuerySolution> processResultSet(final ResultSet rset) {
+            @Override
+			public List<QuerySolution> processResultSet(final ResultSet rset) {
                 final List<QuerySolution> solnList = new ArrayList<QuerySolution>();
                 while (rset.hasNext()) {
                     final QuerySolution qsoln = rset.next();

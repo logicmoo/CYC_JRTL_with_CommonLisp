@@ -188,16 +188,19 @@ public class MethodNode extends MemberNode implements MethodVisitor {
     // Implementation of the MethodVisitor interface
     // ------------------------------------------------------------------------
 
-    public AnnotationVisitor visitAnnotationDefault() {
+    @Override
+	public AnnotationVisitor visitAnnotationDefault() {
         return new AnnotationNode(new ArrayList(0) {
-            public boolean add(final Object o) {
+            @Override
+			public boolean add(final Object o) {
                 annotationDefault = o;
                 return super.add(o);
             }
         });
     }
 
-    public AnnotationVisitor visitParameterAnnotation(
+    @Override
+	public AnnotationVisitor visitParameterAnnotation(
         final int parameter,
         final String desc,
         final boolean visible)
@@ -225,10 +228,12 @@ public class MethodNode extends MemberNode implements MethodVisitor {
         return an;
     }
 
-    public void visitCode() {
+    @Override
+	public void visitCode() {
     }
 
-    public void visitFrame(
+    @Override
+	public void visitFrame(
         final int type,
         final int nLocal,
         final Object[] local,
@@ -242,23 +247,28 @@ public class MethodNode extends MemberNode implements MethodVisitor {
                 : getLabelNodes(stack)));
     }
 
-    public void visitInsn(final int opcode) {
+    @Override
+	public void visitInsn(final int opcode) {
         instructions.add(new InsnNode(opcode));
     }
 
-    public void visitIntInsn(final int opcode, final int operand) {
+    @Override
+	public void visitIntInsn(final int opcode, final int operand) {
         instructions.add(new IntInsnNode(opcode, operand));
     }
 
-    public void visitVarInsn(final int opcode, final int var) {
+    @Override
+	public void visitVarInsn(final int opcode, final int var) {
         instructions.add(new VarInsnNode(opcode, var));
     }
 
-    public void visitTypeInsn(final int opcode, final String type) {
+    @Override
+	public void visitTypeInsn(final int opcode, final String type) {
         instructions.add(new TypeInsnNode(opcode, type));
     }
 
-    public void visitFieldInsn(
+    @Override
+	public void visitFieldInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -267,7 +277,8 @@ public class MethodNode extends MemberNode implements MethodVisitor {
         instructions.add(new FieldInsnNode(opcode, owner, name, desc));
     }
 
-    public void visitMethodInsn(
+    @Override
+	public void visitMethodInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -276,23 +287,28 @@ public class MethodNode extends MemberNode implements MethodVisitor {
         instructions.add(new MethodInsnNode(opcode, owner, name, desc));
     }
 
-    public void visitJumpInsn(final int opcode, final Label label) {
+    @Override
+	public void visitJumpInsn(final int opcode, final Label label) {
         instructions.add(new JumpInsnNode(opcode, getLabelNode(label)));
     }
 
-    public void visitLabel(final Label label) {
+    @Override
+	public void visitLabel(final Label label) {
         instructions.add(getLabelNode(label));
     }
 
-    public void visitLdcInsn(final Object cst) {
+    @Override
+	public void visitLdcInsn(final Object cst) {
         instructions.add(new LdcInsnNode(cst));
     }
 
-    public void visitIincInsn(final int var, final int increment) {
+    @Override
+	public void visitIincInsn(final int var, final int increment) {
         instructions.add(new IincInsnNode(var, increment));
     }
 
-    public void visitTableSwitchInsn(
+    @Override
+	public void visitTableSwitchInsn(
         final int min,
         final int max,
         final Label dflt,
@@ -304,7 +320,8 @@ public class MethodNode extends MemberNode implements MethodVisitor {
                 getLabelNodes(labels)));
     }
 
-    public void visitLookupSwitchInsn(
+    @Override
+	public void visitLookupSwitchInsn(
         final Label dflt,
         final int[] keys,
         final Label[] labels)
@@ -314,11 +331,13 @@ public class MethodNode extends MemberNode implements MethodVisitor {
                 getLabelNodes(labels)));
     }
 
-    public void visitMultiANewArrayInsn(final String desc, final int dims) {
+    @Override
+	public void visitMultiANewArrayInsn(final String desc, final int dims) {
         instructions.add(new MultiANewArrayInsnNode(desc, dims));
     }
 
-    public void visitTryCatchBlock(
+    @Override
+	public void visitTryCatchBlock(
         final Label start,
         final Label end,
         final Label handler,
@@ -330,7 +349,8 @@ public class MethodNode extends MemberNode implements MethodVisitor {
                 type));
     }
 
-    public void visitLocalVariable(
+    @Override
+	public void visitLocalVariable(
         final String name,
         final String desc,
         final String signature,
@@ -346,11 +366,13 @@ public class MethodNode extends MemberNode implements MethodVisitor {
                 index));
     }
 
-    public void visitLineNumber(final int line, final Label start) {
+    @Override
+	public void visitLineNumber(final int line, final Label start) {
         instructions.add(new LineNumberNode(line, getLabelNode(start)));
     }
 
-    public void visitMaxs(final int maxStack, final int maxLocals) {
+    @Override
+	public void visitMaxs(final int maxStack, final int maxLocals) {
         this.maxStack = maxStack;
         this.maxLocals = maxLocals;
     }

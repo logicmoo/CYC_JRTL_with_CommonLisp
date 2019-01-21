@@ -33,7 +33,8 @@ public final class InsertTagDialog extends InputDialog implements Constants
         setHistory(new History("insertTag"));
     }
 
-    protected List getCompletions(String prefix)
+    @Override
+	protected List getCompletions(String prefix)
     {
         prefix = prefix.toLowerCase();
         List elements = HtmlMode.elements();

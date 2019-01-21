@@ -57,6 +57,7 @@ class BSHClassDeclaration extends SimpleNode
 
 	/**
 	*/
+	@Override
 	public Object eval( CallStack callstack, Interpreter interpreter )
 		throws EvalError
 	{
@@ -97,6 +98,7 @@ class BSHClassDeclaration extends SimpleNode
 		}
 	}
 
+	@Override
 	public String toString() {
 		return "ClassDeclaration: "+name;
 	}

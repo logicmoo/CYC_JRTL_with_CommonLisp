@@ -1047,15 +1047,18 @@ public final class ghl_search_vars extends SubLTranslatedFile
         return (SubLObject)ghl_search_vars.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_ghl_search_vars_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_ghl_search_vars_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_ghl_search_vars_file();
     }
     
@@ -1164,39 +1167,48 @@ public final class ghl_search_vars extends SubLTranslatedFile
             this.$tv = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$ghl_search_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$graphl_search;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$predicates;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$directions;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$tv;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$graphl_search = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$predicates = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$directions = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$tv = value;
         }
         
@@ -1211,7 +1223,8 @@ public final class ghl_search_vars extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GHL-SEARCH-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return ghl_search_vars.ghl_search_p(arg1);
         }
     }

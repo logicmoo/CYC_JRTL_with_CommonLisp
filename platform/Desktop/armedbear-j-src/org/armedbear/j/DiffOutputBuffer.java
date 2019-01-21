@@ -46,7 +46,8 @@ public final class DiffOutputBuffer extends Buffer
         setText(output);
     }
 
-    public final File getCurrentDirectory()
+    @Override
+	public final File getCurrentDirectory()
     {
         return directory;
     }
@@ -75,7 +76,8 @@ public final class DiffOutputBuffer extends Buffer
         return vcType;
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         return title != null ? title : "";
     }

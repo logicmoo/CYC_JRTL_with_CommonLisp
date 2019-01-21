@@ -83,6 +83,7 @@ public class CustomCellEditor extends CustomCellRenderer implements TableCellEdi
 		edit_row = row;
 	}
 
+	@Override
 	public void setValue(Object value) {
 		//String str = getTextName(value, edit_row, edit_col);
 		super.setValue(value);

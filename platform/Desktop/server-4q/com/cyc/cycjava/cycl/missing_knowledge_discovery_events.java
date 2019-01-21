@@ -195,15 +195,18 @@ public final class missing_knowledge_discovery_events extends SubLTranslatedFile
         return (SubLObject)missing_knowledge_discovery_events.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_missing_knowledge_discovery_events_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_missing_knowledge_discovery_events_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_missing_knowledge_discovery_events_file();
     }
     

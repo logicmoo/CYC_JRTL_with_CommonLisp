@@ -174,7 +174,8 @@ public final class Completion
         return s;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         if (isUnique()) {
             String s = (String) list.get(0);

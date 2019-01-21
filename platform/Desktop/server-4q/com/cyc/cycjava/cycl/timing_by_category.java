@@ -394,15 +394,18 @@ public final class timing_by_category extends SubLTranslatedFile
         return (SubLObject)timing_by_category.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_timing_by_category_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_timing_by_category_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_timing_by_category_file();
     }
     

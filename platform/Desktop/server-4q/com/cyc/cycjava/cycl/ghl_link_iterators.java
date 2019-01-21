@@ -489,15 +489,18 @@ public final class ghl_link_iterators extends SubLTranslatedFile
         return (SubLObject)ghl_link_iterators.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_ghl_link_iterators_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_ghl_link_iterators_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_ghl_link_iterators_file();
     }
     

@@ -2635,15 +2635,18 @@ public final class sksi_cost_estimates extends SubLTranslatedFile
         return (SubLObject)sksi_cost_estimates.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_cost_estimates_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_cost_estimates_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_cost_estimates_file();
     }
     

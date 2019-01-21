@@ -912,15 +912,18 @@ public final class removal_modules_natfunction extends SubLTranslatedFile
         return (SubLObject)removal_modules_natfunction.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_natfunction_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_natfunction_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_natfunction_file();
     }
     

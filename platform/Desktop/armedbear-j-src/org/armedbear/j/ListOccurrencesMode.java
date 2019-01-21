@@ -43,17 +43,20 @@ public final class ListOccurrencesMode extends AbstractMode implements Constants
         return mode;
     }
 
-    public JPopupMenu getContextMenu(Editor editor)
+    @Override
+	public JPopupMenu getContextMenu(Editor editor)
     {
         return null;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new ListOccurrencesFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "findOccurrenceAtDot");
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "findOccurrenceAtDot");

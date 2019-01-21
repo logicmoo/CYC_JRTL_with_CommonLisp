@@ -38,6 +38,7 @@ class BSHThrowStatement extends SimpleNode
 {
 	BSHThrowStatement(int id) { super(id); }
 
+	@Override
 	public Object eval( CallStack callstack, Interpreter interpreter)  
 		throws EvalError
 	{

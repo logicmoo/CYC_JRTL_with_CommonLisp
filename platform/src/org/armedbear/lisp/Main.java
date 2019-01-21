@@ -54,18 +54,20 @@ public final class Main
 
 	public static boolean isSublispDefault = false;
 
-	public static ThreadLocal<Boolean> isSubLisp = new ThreadLocal<Boolean>()
+	public static InheritableThreadLocal<Boolean> isSubLisp = new InheritableThreadLocal<Boolean>()
 	{
 
+		@Override
 		protected Boolean initialValue()
 		{
 			return isSublispDefault;
 		}
 
 	};
-	public static ThreadLocal<Boolean> isNoDebug = new ThreadLocal<Boolean>()
+	public static InheritableThreadLocal<Boolean> isNoDebug = new InheritableThreadLocal<Boolean>()
 	{
 
+		@Override
 		protected Boolean initialValue()
 		{
 			return Boolean.FALSE;
@@ -195,6 +197,7 @@ public final class Main
 
 	public static ThreadLocal<Boolean> globalContext = new ThreadLocal<Boolean>()
 	{
+		@Override
 		protected Boolean initialValue()
 		{
 			return false;

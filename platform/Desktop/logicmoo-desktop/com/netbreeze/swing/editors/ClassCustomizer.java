@@ -14,6 +14,7 @@ import java.beans.*;
  * @author Henrik Kniberg
  */
 public class ClassCustomizer extends LargeBeanView {
+	@Override
 	protected void initGUI() {
 		super.initGUI();
 

@@ -249,15 +249,18 @@ public final class cb_javascript_macros extends SubLTranslatedFile
         return (SubLObject)cb_javascript_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_javascript_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_javascript_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_javascript_macros_file();
     }
     

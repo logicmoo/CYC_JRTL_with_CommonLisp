@@ -236,15 +236,18 @@ public final class removal_modules_reflexive_on extends SubLTranslatedFile
         return (SubLObject)removal_modules_reflexive_on.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_reflexive_on_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_reflexive_on_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_reflexive_on_file();
     }
     
@@ -274,7 +277,8 @@ public final class removal_modules_reflexive_on extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REFLEXIVE-ON-PREDICATE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_reflexive_on.reflexive_on_predicateP(arg1);
         }
     }

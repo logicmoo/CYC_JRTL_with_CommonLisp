@@ -1407,6 +1407,12 @@ public class SubLException extends RuntimeException implements SubLObject
 	{
 		return "    " + super.toString();
 	}
+	
+	@Override
+	public String princToString()
+	{
+		return "    " + super.toString();
+	}
 
 	@Override
 	public SubLStruct toStruct()
@@ -1459,6 +1465,7 @@ public class SubLException extends RuntimeException implements SubLObject
 	}
 
 	//@Override
+	@Override
 	public RuntimeException javaInstance() {
 		return this;
 	}

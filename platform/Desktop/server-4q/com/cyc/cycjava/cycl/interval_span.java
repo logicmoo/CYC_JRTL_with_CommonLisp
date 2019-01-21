@@ -282,15 +282,18 @@ public final class interval_span extends SubLTranslatedFile
         return (SubLObject)interval_span.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_interval_span_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_interval_span_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_interval_span_file();
     }
     
@@ -335,23 +338,28 @@ public final class interval_span extends SubLTranslatedFile
             this.$end = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$interval_span_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$start;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$end;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$start = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$end = value;
         }
         
@@ -366,7 +374,8 @@ public final class interval_span extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INTERVAL-SPAN-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return interval_span.interval_span_p(arg1);
         }
     }

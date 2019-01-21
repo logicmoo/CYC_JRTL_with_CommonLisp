@@ -36,7 +36,8 @@ public class BasicSubsystemHandle extends SubsystemHandle
         return this.myWellKnownRegistry();
     }
 
-    public VerySimpleRegistry getRequiredOverRegistry(final String functionCtx) {
+    @Override
+	public VerySimpleRegistry getRequiredOverRegistry(final String functionCtx) {
         final VerySimpleRegistry vsr = this.getVerySimpleRegistry();
         if (vsr == null) {
             final String msg = new StringBuilder().append((Object)"getRequiredOverRegistry(").append((Object)functionCtx).append((Object)") : Somehow got a null OverRegistry").toString();

@@ -525,15 +525,18 @@ public final class cycl_variables extends SubLTranslatedFile
         return (SubLObject)cycl_variables.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cycl_variables_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cycl_variables_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cycl_variables_file();
     }
     
@@ -579,7 +582,8 @@ public final class cycl_variables extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EL-VAR?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_variables.el_varP(arg1);
         }
     }
@@ -590,7 +594,8 @@ public final class cycl_variables extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INVALID-VARIABLE-NAME-CHAR"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_variables.invalid_variable_name_char(arg1);
         }
     }
@@ -601,7 +606,8 @@ public final class cycl_variables extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DEFAULT-EL-VAR?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_variables.default_el_varP(arg1);
         }
     }
@@ -612,7 +618,8 @@ public final class cycl_variables extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-VAR?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_variables.cyc_varP(arg1);
         }
     }
@@ -623,7 +630,8 @@ public final class cycl_variables extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-VAR?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_variables.hl_varP(arg1);
         }
     }

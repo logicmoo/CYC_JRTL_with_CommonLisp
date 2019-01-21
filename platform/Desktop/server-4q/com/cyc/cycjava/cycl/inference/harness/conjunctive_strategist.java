@@ -781,15 +781,18 @@ public final class conjunctive_strategist extends SubLTranslatedFile
         return (SubLObject)conjunctive_strategist.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_conjunctive_strategist_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_conjunctive_strategist_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_conjunctive_strategist_file();
     }
     

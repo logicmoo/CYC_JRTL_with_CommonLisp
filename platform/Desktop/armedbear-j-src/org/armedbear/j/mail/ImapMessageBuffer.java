@@ -78,7 +78,8 @@ public final class ImapMessageBuffer extends MessageBuffer
         readOnly = true;
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         if (isLoaded())
             return LOAD_COMPLETED;
@@ -95,7 +96,8 @@ public final class ImapMessageBuffer extends MessageBuffer
     private BackgroundProcess loadProcess = new BackgroundProcess() {
         private ProgressNotifier progressNotifier;
 
-        public void run()
+        @Override
+		public void run()
         {
             // Mailbox is locked in ImapMailbox.readMessage() before calling
             // ImapMessageBuffer constructor.
@@ -121,7 +123,8 @@ public final class ImapMessageBuffer extends MessageBuffer
             }
         }
 
-        public void cancel()
+        @Override
+		public void cancel()
         {
             Log.debug("loadProcess.cancel cancelled!");
             cancelled = true;
@@ -133,12 +136,14 @@ public final class ImapMessageBuffer extends MessageBuffer
         }
     };
 
-    public void deleteMessage()
+    @Override
+	public void deleteMessage()
     {
         storeFlagsInternal(ACTION_DELETE);
     }
 
-    public void flagMessage()
+    @Override
+	public void flagMessage()
     {
         storeFlagsInternal(ACTION_FLAG);
     }
@@ -155,7 +160,8 @@ public final class ImapMessageBuffer extends MessageBuffer
         }
         final int uid = ((ImapMailboxEntry)entry).getUid();
         Runnable deleteMessageRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     ImapSession session = ((ImapMailbox)mailbox).getSession();
@@ -207,7 +213,8 @@ public final class ImapMessageBuffer extends MessageBuffer
                             loadMessage(null);
                         } else {
                             Runnable messageIndexRunnable = new Runnable() {
-                                public void run()
+                                @Override
+								public void run()
                                 {
                                     MailCommands.messageIndex(editor);
                                     editor.status("Last undeleted message");
@@ -229,7 +236,8 @@ public final class ImapMessageBuffer extends MessageBuffer
         new Thread(deleteMessageRunnable).start();
     }
 
-    public void moveMessage()
+    @Override
+	public void moveMessage()
     {
         final Editor editor = Editor.currentEditor();
         final ImapMailboxEntry toBeMoved = (ImapMailboxEntry) entry;
@@ -252,7 +260,8 @@ public final class ImapMessageBuffer extends MessageBuffer
         }
         final String destination = s;
         Runnable moveMessageRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     ImapSession session = ((ImapMailbox) mailbox).getSession();
@@ -293,7 +302,8 @@ public final class ImapMessageBuffer extends MessageBuffer
                                 loadMessage(null);
                             } else {
                                 Runnable messageIndexRunnable = new Runnable() {
-                                    public void run()
+                                    @Override
+									public void run()
                                     {
                                         MailCommands.messageIndex(editor);
                                         editor.status("Last undeleted message");
@@ -306,7 +316,8 @@ public final class ImapMessageBuffer extends MessageBuffer
                         } else {
                             setBusy(false);
                             Runnable reportError = new Runnable() {
-                                public void run()
+                                @Override
+								public void run()
                                 {
                                     editor.updateDisplay();
                                     MessageDialog.showMessageDialog(editor, "Operation failed", "Error");

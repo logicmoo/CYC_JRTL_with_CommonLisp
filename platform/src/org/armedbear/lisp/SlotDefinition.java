@@ -122,7 +122,8 @@ public final class SlotDefinition extends StandardObject
     setInstanceSlotValue(Symbol.ALLOCATION, Keyword.INSTANCE);
   }
 
-  public String printObjectImpl()
+  @Override
+public String printObjectImpl()
   {
     StringBuilder sb =
       new StringBuilder(Symbol.SLOT_DEFINITION.printObject());
@@ -145,7 +146,8 @@ public final class SlotDefinition extends StandardObject
     {
       super("%make-slot-definition", PACKAGE_SYS, true, "slot-class");
     }
-    public LispObject execute(LispObject slotDefinitionClass)
+    @Override
+	public LispObject execute(LispObject slotDefinitionClass)
     {
       if (!(slotDefinitionClass instanceof StandardClass))
         return type_error(slotDefinitionClass,

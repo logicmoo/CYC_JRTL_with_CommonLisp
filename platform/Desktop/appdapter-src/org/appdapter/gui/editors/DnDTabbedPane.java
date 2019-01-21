@@ -67,10 +67,12 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 	public DnDTabbedPane(int dir) {
 		super(dir);
 		final DragSourceListener dsl = new DragSourceListener() {
+			@Override
 			public void dragEnter(DragSourceDragEvent e) {
 				e.getDragSourceContext().setCursor(DragSource.DefaultMoveDrop);
 			}
 
+			@Override
 			public void dragExit(DragSourceEvent e) {
 				e.getDragSourceContext().setCursor(DragSource.DefaultMoveNoDrop);
 				m_lineRect.setRect(0, 0, 0, 0);
@@ -79,6 +81,7 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 				s_glassPane.repaint();
 			}
 
+			@Override
 			public void dragOver(DragSourceDragEvent e) {
 				//e.getLocation()
 				//This method returns a Point indicating the cursor location in screen coordinates at the moment
@@ -114,6 +117,7 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 				e.getDragSourceContext().setCursor(DragSource.DefaultMoveDrop);
 			}
 
+			@Override
 			public void dragDropEnd(DragSourceDropEvent e) {
 				m_isDrawRect = false;
 				m_lineRect.setRect(0, 0, 0, 0);
@@ -147,6 +151,7 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 				}
 			}
 
+			@Override
 			public void dropActionChanged(DragSourceDragEvent e) {
 				DragSourceContext dsc = e.getDragSourceContext();
 				Debuggable.toInfoStringF("" + e);
@@ -154,6 +159,7 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 		};
 
 		final DragGestureListener dgl = new DragGestureListener() {
+			@Override
 			public void dragGestureRecognized(DragGestureEvent e) {
 				// System.out.println("dragGestureRecognized");
 				Point tabPt = e.getDragOrigin();
@@ -175,6 +181,7 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 		new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new CDropTargetListener(), true);
 		new DragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY_OR_MOVE, dgl);
 		m_acceptor = new TabAcceptor() {
+			@Override
 			public boolean isDropAcceptable(DnDTabbedPane a_component, int a_index) {
 				return true;
 			}
@@ -273,17 +280,20 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 			m_data = new TabTransferData(DnDTabbedPane.this, a_tabIndex);
 		}
 
+		@Override
 		public Object getTransferData(DataFlavor flavor) {
 			return m_data;
 			// return DnDTabbedPane.this;
 		}
 
+		@Override
 		public DataFlavor[] getTransferDataFlavors() {
 			DataFlavor[] f = new DataFlavor[1];
 			f[0] = FLAVOR;
 			return f;
 		}
 
+		@Override
 		public boolean isDataFlavorSupported(DataFlavor flavor) {
 			return flavor.getHumanPresentableName().equals(NAME);
 		}
@@ -352,6 +362,7 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 	}
 
 	class CDropTargetListener implements DropTargetListener {
+		@Override
 		public void dragEnter(DropTargetDragEvent e) {
 			// System.out.println("DropTarget.dragEnter: " + DnDTabbedPane.this);
 
@@ -362,14 +373,17 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 			} // if
 		}
 
+		@Override
 		public void dragExit(DropTargetEvent e) {
 			// System.out.println("DropTarget.dragExit: " + DnDTabbedPane.this);
 			m_isDrawRect = false;
 		}
 
+		@Override
 		public void dropActionChanged(DropTargetDragEvent e) {
 		}
 
+		@Override
 		public void dragOver(final DropTargetDragEvent e) {
 			TabTransferData data = getTabTransferData(e);
 
@@ -386,6 +400,7 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 			}
 		}
 
+		@Override
 		public void drop(DropTargetDropEvent a_event) {
 			// System.out.println("DropTarget.drop: " + DnDTabbedPane.this);
 
@@ -692,6 +707,7 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 		return new Rectangle(0, 0, getWidth(), lastTab.y + lastTab.height);
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
@@ -746,6 +762,7 @@ abstract public class DnDTabbedPane extends JideTabbedPane {
 			return m_draggingGhost.getHeight(this);
 		}
 
+		@Override
 		public void paintComponent(Graphics g) {
 			if (m_draggingGhost == null) {
 				return;

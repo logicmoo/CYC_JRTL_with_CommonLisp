@@ -91,7 +91,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         constructor = "<init>".equals(name);
     }
 
-    public void visitCode() {
+    @Override
+	public void visitCode() {
         mv.visitCode();
         if (constructor) {
             stackFrame = new ArrayList();
@@ -102,7 +103,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitLabel(final Label label) {
+    @Override
+	public void visitLabel(final Label label) {
         mv.visitLabel(label);
 
         if (constructor && branches != null) {
@@ -114,7 +116,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitInsn(final int opcode) {
+    @Override
+	public void visitInsn(final int opcode) {
         if (constructor) {
             int s;
             switch (opcode) {
@@ -311,7 +314,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         mv.visitInsn(opcode);
     }
 
-    public void visitVarInsn(final int opcode, final int var) {
+    @Override
+	public void visitVarInsn(final int opcode, final int var) {
         super.visitVarInsn(opcode, var);
 
         if (constructor) {
@@ -342,7 +346,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitFieldInsn(
+    @Override
+	public void visitFieldInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -382,7 +387,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitIntInsn(final int opcode, final int operand) {
+    @Override
+	public void visitIntInsn(final int opcode, final int operand) {
         mv.visitIntInsn(opcode, operand);
 
         if (constructor && opcode!=NEWARRAY) {
@@ -390,7 +396,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitLdcInsn(final Object cst) {
+    @Override
+	public void visitLdcInsn(final Object cst) {
         mv.visitLdcInsn(cst);
 
         if (constructor) {
@@ -401,7 +408,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitMultiANewArrayInsn(final String desc, final int dims) {
+    @Override
+	public void visitMultiANewArrayInsn(final String desc, final int dims) {
         mv.visitMultiANewArrayInsn(desc, dims);
 
         if (constructor) {
@@ -412,7 +420,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitTypeInsn(final int opcode, final String type) {
+    @Override
+	public void visitTypeInsn(final int opcode, final String type) {
         mv.visitTypeInsn(opcode, type);
 
         // ANEWARRAY, CHECKCAST or INSTANCEOF don't change stack
@@ -421,7 +430,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitMethodInsn(
+    @Override
+	public void visitMethodInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -468,7 +478,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitJumpInsn(final int opcode, final Label label) {
+    @Override
+	public void visitJumpInsn(final int opcode, final Label label) {
         mv.visitJumpInsn(opcode, label);
 
         if (constructor) {
@@ -504,7 +515,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitLookupSwitchInsn(
+    @Override
+	public void visitLookupSwitchInsn(
         final Label dflt,
         final int[] keys,
         final Label[] labels)
@@ -517,7 +529,8 @@ public abstract class AdviceAdapter extends GeneratorAdapter implements Opcodes
         }
     }
 
-    public void visitTableSwitchInsn(
+    @Override
+	public void visitTableSwitchInsn(
         final int min,
         final int max,
         final Label dflt,

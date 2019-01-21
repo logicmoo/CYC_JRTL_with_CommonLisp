@@ -1000,15 +1000,18 @@ public final class cb_query_search extends SubLTranslatedFile
         return (SubLObject)cb_query_search.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_query_search_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_query_search_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_query_search_file();
     }
     

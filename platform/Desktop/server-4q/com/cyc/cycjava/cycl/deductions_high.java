@@ -632,15 +632,18 @@ public final class deductions_high extends SubLTranslatedFile
         return (SubLObject)deductions_high.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_deductions_high_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_deductions_high_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_deductions_high_file();
     }
     

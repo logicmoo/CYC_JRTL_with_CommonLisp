@@ -115,6 +115,7 @@ class BSHMethodDeclaration extends SimpleNode
 		Evaluate the declaration of the method.  That is, determine the
 		structure of the method and install it into the caller's namespace.
 	*/
+	@Override
 	public Object eval( CallStack callstack, Interpreter interpreter )
 		throws EvalError
 	{
@@ -173,6 +174,7 @@ class BSHMethodDeclaration extends SimpleNode
 		}
 	}
 
+	@Override
 	public String toString() {
 		return "MethodDeclaration: "+name;
 	}

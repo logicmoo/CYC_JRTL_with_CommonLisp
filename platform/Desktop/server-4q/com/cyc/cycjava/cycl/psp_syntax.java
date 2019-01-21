@@ -630,15 +630,18 @@ public final class psp_syntax extends SubLTranslatedFile
         return (SubLObject)psp_syntax.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_psp_syntax_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_psp_syntax_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_psp_syntax_file();
     }
     

@@ -672,15 +672,18 @@ public final class ctest_utils extends SubLTranslatedFile
         return (SubLObject)ctest_utils.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_ctest_utils_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_ctest_utils_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_ctest_utils_file();
     }
     

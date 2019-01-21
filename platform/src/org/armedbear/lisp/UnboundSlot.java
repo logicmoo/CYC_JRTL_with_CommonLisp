@@ -43,7 +43,8 @@ public final class UnboundSlot extends CellError
         initialize(initArgs);
     }
 
-    protected void initialize(LispObject initArgs)
+    @Override
+	protected void initialize(LispObject initArgs)
     {
         super.initialize(initArgs);
         while (initArgs != NIL) {
@@ -67,7 +68,8 @@ public final class UnboundSlot extends CellError
         setInstanceSlotValue(Symbol.INSTANCE, instance);
     }
 
-    public String getMessage()
+    @Override
+	public String getMessage()
     {
         final LispThread thread = LispThread.currentThread();
         final SpecialBindingsMark mark = thread.markSpecialBindings();
@@ -85,17 +87,20 @@ public final class UnboundSlot extends CellError
         }
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.UNBOUND_SLOT;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return StandardClass.UNBOUND_SLOT;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.UNBOUND_SLOT)
             return T;

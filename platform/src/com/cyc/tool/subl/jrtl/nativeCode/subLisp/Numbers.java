@@ -65,19 +65,19 @@ public class Numbers extends SubLTrampolineFile {
 		@Override
 		public SubLNumber processMathFunc(SubLObject arg1, SubLObject arg2, MultiArgMathFuncDesc mathFunc) {
 			BigInteger firstArg = arg1.isBigIntegerBignum() ? ((SubLBigIntBignum) arg1).getBigInt()
-					: new BigInteger(arg1.toString());
+					: new BigInteger(arg1.princToString());
 			BigInteger secondArg = arg2.isBigIntegerBignum() ? ((SubLBigIntBignum) arg2).getBigInt()
-					: new BigInteger(arg2.toString());
+					: new BigInteger(arg2.princToString());
 			return SubLNumberFactory.makeInteger(mathFunc.getBinaryValue(firstArg, secondArg));
 		}
 
 		@Override
 		public SubLNumber processMathFunc(SubLObject[] args, MultiArgMathFuncDesc mathFunc) {
 			BigInteger result = args[0].isBigIntegerBignum() ? ((SubLBigIntBignum) args[0]).getBigInt()
-					: new BigInteger(args[0].toString());
+					: new BigInteger(args[0].princToString());
 			for (int i = 1, size = args.length; i < size; ++i)
 				result = mathFunc.getBinaryValue(result, args[i].isBigIntegerBignum()
-						? ((SubLBigIntBignum) args[i]).getBigInt() : new BigInteger(args[i].toString()));
+						? ((SubLBigIntBignum) args[i]).getBigInt() : new BigInteger(args[i].princToString()));
 			return SubLNumberFactory.makeInteger(result);
 		}
 	}

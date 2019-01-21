@@ -5266,15 +5266,18 @@ public final class removal_modules_asserted_formula extends SubLTranslatedFile
         return (SubLObject)removal_modules_asserted_formula.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_asserted_formula_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_asserted_formula_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_asserted_formula_file();
     }
     
@@ -5372,7 +5375,8 @@ public final class removal_modules_asserted_formula extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-ASSERTED-SENTENCE-LOOKUP-POS-COST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_asserted_formula.removal_asserted_sentence_lookup_pos_cost(arg1, (SubLObject)$removal_asserted_sentence_lookup_pos_cost$UnaryFunction.UNPROVIDED);
         }
     }
@@ -5383,7 +5387,8 @@ public final class removal_modules_asserted_formula extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-ASSERTED-SENTENCE-LOOKUP-POS-COST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return removal_modules_asserted_formula.removal_asserted_sentence_lookup_pos_cost(arg1, arg2);
         }
     }
@@ -5394,7 +5399,8 @@ public final class removal_modules_asserted_formula extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-ASSERTED-SENTENCE-LOOKUP-ITERATOR"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_asserted_formula.removal_asserted_sentence_lookup_iterator(arg1);
         }
     }

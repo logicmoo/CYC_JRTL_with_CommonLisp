@@ -45,14 +45,17 @@ public final class LarkcInit extends SubLTranslatedFile {
 		return NIL;
 	}
 		
+	@Override
 	public void runTopLevelForms() {
 		
 	}
 
+	@Override
 	public void declareFunctions() {
 		declareFunction(myName, "initializeLarkc", "INITIALIZE-LARKC", 0, 0, false);
 	}
 
+	@Override
 	public void initializeVariables() {
 		
 	}

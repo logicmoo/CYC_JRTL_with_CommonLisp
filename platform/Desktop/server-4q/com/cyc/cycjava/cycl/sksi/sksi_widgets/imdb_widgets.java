@@ -374,15 +374,18 @@ public final class imdb_widgets extends SubLTranslatedFile
         return (SubLObject)imdb_widgets.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_imdb_widgets_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_imdb_widgets_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_imdb_widgets_file();
     }
     

@@ -36,6 +36,7 @@ public class XMLDocumentImpl implements XMLDocument {
 		this.url = url;
 	}
 
+	@Override
 	public URL getURL(){
 		URL ret = null;
 		try{

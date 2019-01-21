@@ -47,7 +47,8 @@ public final class socket_stream extends Primitive
         super("%socket-stream", PACKAGE_SYS, false, "socket element-type external-format");
     }
 
-    public LispObject execute(LispObject first, LispObject second, LispObject third)
+    @Override
+	public LispObject execute(LispObject first, LispObject second, LispObject third)
 
     {
         Socket socket = (Socket) ((JavaObject)first).getObject();

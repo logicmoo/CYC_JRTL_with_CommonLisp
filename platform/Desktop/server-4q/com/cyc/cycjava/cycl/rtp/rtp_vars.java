@@ -44,15 +44,18 @@ public final class rtp_vars extends SubLTranslatedFile
         return (SubLObject)rtp_vars.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rtp_vars_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rtp_vars_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rtp_vars_file();
     }
     

@@ -209,15 +209,18 @@ public final class transformation_tactician_execution extends SubLTranslatedFile
         return (SubLObject)transformation_tactician_execution.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_transformation_tactician_execution_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_transformation_tactician_execution_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_transformation_tactician_execution_file();
     }
     

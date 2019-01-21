@@ -436,15 +436,18 @@ public final class rbp_chart_parser extends SubLTranslatedFile
         return (SubLObject)rbp_chart_parser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rbp_chart_parser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rbp_chart_parser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rbp_chart_parser_file();
     }
     
@@ -510,47 +513,58 @@ public final class rbp_chart_parser extends SubLTranslatedFile
             this.$block_hash = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$rbp_chart_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$input_length;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$edges;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$done_spans;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$block_merge_fn;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$block_hash;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$input_length = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$edges = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$done_spans = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$block_merge_fn = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$block_hash = value;
         }
         
@@ -565,7 +579,8 @@ public final class rbp_chart_parser extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RBP-CHART-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return rbp_chart_parser.rbp_chart_p(arg1);
         }
     }

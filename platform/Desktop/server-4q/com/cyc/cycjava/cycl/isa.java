@@ -10398,15 +10398,18 @@ public final class isa extends SubLTranslatedFile
         return (SubLObject)isa.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_isa_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_isa_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_isa_file();
     }
     
@@ -10655,7 +10658,8 @@ public final class isa extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INSTANCEOF-AFTER-ADDING"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return isa.instanceof_after_adding(arg1, arg2);
         }
     }
@@ -10666,7 +10670,8 @@ public final class isa extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INSTANCEOF-AFTER-REMOVING"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return isa.instanceof_after_removing(arg1, arg2);
         }
     }

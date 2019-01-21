@@ -2299,15 +2299,18 @@ public final class file_vector extends SubLTranslatedFile
         return (SubLObject)file_vector.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_file_vector_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_file_vector_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_file_vector_file();
     }
     
@@ -2325,31 +2328,38 @@ public final class file_vector extends SubLTranslatedFile
             this.$wide_mark = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$fvector_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$data_stream;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$index_stream;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$wide_mark;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$data_stream = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$index_stream = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$wide_mark = value;
         }
         
@@ -2364,7 +2374,8 @@ public final class file_vector extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FVECTOR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return file_vector.fvector_p(arg1);
         }
     }

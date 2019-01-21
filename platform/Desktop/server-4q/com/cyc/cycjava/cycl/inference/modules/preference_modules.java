@@ -1881,15 +1881,18 @@ public final class preference_modules extends SubLTranslatedFile
         return (SubLObject)preference_modules.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_preference_modules_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_preference_modules_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_preference_modules_file();
     }
     
@@ -2108,71 +2111,88 @@ public final class preference_modules extends SubLTranslatedFile
             this.$any_predicates = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$preference_module_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$name;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$predicate;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$sense;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$required_pattern;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$preference_level;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$preference_func;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$required_mt;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$any_predicates;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$name = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$predicate = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$sense = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$required_pattern = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$preference_level = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$preference_func = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$required_mt = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$any_predicates = value;
         }
         
@@ -2187,7 +2207,8 @@ public final class preference_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PREFERENCE-MODULE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return preference_modules.preference_module_p(arg1);
         }
     }
@@ -2198,7 +2219,8 @@ public final class preference_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-PREFERENCE-MODULE-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return preference_modules.sxhash_preference_module_method(arg1);
         }
     }

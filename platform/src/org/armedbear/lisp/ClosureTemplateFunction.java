@@ -29,37 +29,43 @@ public abstract class ClosureTemplateFunction extends Closure
     super(list2(Symbol.LAMBDA, lambdaList), null);
   }
 
-  public final LispObject execute() throws ConditionThrowable
+  @Override
+public final LispObject execute() throws ConditionThrowable
   {
     return notImplemented();
   }
 
-  public final LispObject execute(LispObject arg) throws ConditionThrowable
+  @Override
+public final LispObject execute(LispObject arg) throws ConditionThrowable
   {
     return notImplemented();
   }
 
-  public final LispObject execute(LispObject first, LispObject second)
+  @Override
+public final LispObject execute(LispObject first, LispObject second)
     throws ConditionThrowable
   {
     return notImplemented();
   }
 
-  public final LispObject execute(LispObject first, LispObject second,
+  @Override
+public final LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
     throws ConditionThrowable
   {
     return notImplemented();
   }
 
-  public final LispObject execute(LispObject first, LispObject second,
+  @Override
+public final LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
     throws ConditionThrowable
   {
     return notImplemented();
   }
 
-  public final LispObject execute(LispObject first, LispObject second,
+  @Override
+public final LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth,
                                   LispObject fifth)
     throws ConditionThrowable
@@ -67,7 +73,8 @@ public abstract class ClosureTemplateFunction extends Closure
     return notImplemented();
   }
 
-  public final LispObject execute(LispObject first, LispObject second,
+  @Override
+public final LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth,
                                   LispObject fifth, LispObject sixth)
     throws ConditionThrowable
@@ -75,7 +82,8 @@ public abstract class ClosureTemplateFunction extends Closure
     return notImplemented();
   }
 
-  public final LispObject execute(LispObject first, LispObject second,
+  @Override
+public final LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth,
                                   LispObject fifth, LispObject sixth,
                                   LispObject seventh)
@@ -84,7 +92,8 @@ public abstract class ClosureTemplateFunction extends Closure
     return notImplemented();
   }
 
-  public final LispObject execute(LispObject first, LispObject second,
+  @Override
+public final LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth,
                                   LispObject fifth, LispObject sixth,
                                   LispObject seventh, LispObject eighth)
@@ -99,7 +108,8 @@ public abstract class ClosureTemplateFunction extends Closure
   }
 
   // Zero args.
-  public LispObject execute(LispObject[] context) throws ConditionThrowable
+  @Override
+public LispObject execute(LispObject[] context) throws ConditionThrowable
   {
     LispObject[] args = new LispObject[0];
     return execute(context, args);

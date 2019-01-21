@@ -190,10 +190,12 @@ public class RepoOntologyPanel extends ScreenBoxPanel<MutableRepoBox> implements
 
 				// Add listener to the model
 				this.listener = new StatementListener() {
+					@Override
 					public void addedStatement(Statement s) {
 						notifyConcurrentChange();
 					}
 
+					@Override
 					public void removedStatement(Statement s) {
 						notifyConcurrentChange();
 					}

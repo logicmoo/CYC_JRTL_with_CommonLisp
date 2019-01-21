@@ -718,15 +718,18 @@ public final class canon_tl extends SubLTranslatedFile
         return (SubLObject)canon_tl.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_canon_tl_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_canon_tl_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_canon_tl_file();
     }
     
@@ -772,7 +775,8 @@ public final class canon_tl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TL-TERM?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return canon_tl.tl_termP(arg1);
         }
     }

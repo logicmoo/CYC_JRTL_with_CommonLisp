@@ -43,7 +43,8 @@ public final class WebMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(VK_MOUSE_1, 0, "mouseFollowLink");
         km.mapKey(KeyEvent.VK_ENTER, 0, "followLink");
@@ -55,7 +56,8 @@ public final class WebMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_R, 0, "webReload");
     }
 
-    public void populateMenu(Editor editor, Menu menu)
+    @Override
+	public void populateMenu(Editor editor, Menu menu)
     {
         final String text = menu.getText();
         if (text == "File") {
@@ -99,22 +101,26 @@ public final class WebMode extends AbstractMode implements Constants, Mode
             super.populateMenu(editor, menu);
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new WebFormatter(buffer);
     }
 
-    protected ToolBar getDefaultToolBar(Frame frame)
+    @Override
+	protected ToolBar getDefaultToolBar(Frame frame)
     {
         return new WebModeToolBar(frame);
     }
 
-    public final String getContextString(Editor editor, boolean verbose /*ignored*/)
+    @Override
+	public final String getContextString(Editor editor, boolean verbose /*ignored*/)
     {
         return getContextString(editor.getDot());
     }
 
-    public final String getMouseMovedContextString(Editor editor, Position pos)
+    @Override
+	public final String getMouseMovedContextString(Editor editor, Position pos)
     {
         // We want to clear the status text if the mouse is not over a link, so
         // return "" instead of null.

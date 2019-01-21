@@ -313,7 +313,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         return handled;
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         // Force tool tip to be hidden.
         ToolTipManager.sharedInstance().setEnabled(false);
@@ -332,7 +333,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         }
     }
 
-    public void keyReleased(KeyEvent e)
+    @Override
+	public void keyReleased(KeyEvent e)
     {
         e.consume();
         if (editor.getFrame().getFocusedComponent() != display)
@@ -354,7 +356,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         lastKeyEvent = KeyEvent.KEY_RELEASED;
     }
 
-    public void keyTyped(KeyEvent e)
+    @Override
+	public void keyTyped(KeyEvent e)
     {
         if (editor.getFrame().getFocusedComponent() != display)
             return;
@@ -363,7 +366,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         dispatch(e);
     }
 
-    public void mouseClicked(MouseEvent e)
+    @Override
+	public void mouseClicked(MouseEvent e)
     {
         // Mask off the bits we don't care about (Java 1.4).
         int modifiers = e.getModifiers() & 0x1f;
@@ -388,7 +392,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
 
     private boolean dragTextStarting;
 
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         if (editor.getFocusedComponent() == editor.getLocationBarTextField()) {
             TextFieldHandler handler = editor.getLocationBarTextField().getHandler();
@@ -438,13 +443,16 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         dispatch(e);
     }
 
-    public void mouseReleased(MouseEvent e)
+    @Override
+	public void mouseReleased(MouseEvent e)
     {
     }
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e) {}
+    @Override
+	public void mouseExited(MouseEvent e) {}
 
     private boolean dispatchMousePressed(MouseEvent e)
     {
@@ -542,12 +550,14 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
                                               keycode, (char) 0, modifiers));
     }
 
-    public void mouseDragged(MouseEvent e)
+    @Override
+	public void mouseDragged(MouseEvent e)
     {
         dispatch(e);
     }
 
-    public void mouseMoved(MouseEvent e)
+    @Override
+	public void mouseMoved(MouseEvent e)
     {
         final Buffer buffer = editor.getBuffer();
         final Position pos = display.positionFromPoint(e.getPoint());
@@ -651,10 +661,12 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         return true;
     }
 
-    public void actionPerformed(final ActionEvent e)
+    @Override
+	public void actionPerformed(final ActionEvent e)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 dispatch(e);
             }
@@ -662,7 +674,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         SwingUtilities.invokeLater(r);
     }
 
-    public void dragEnter(DropTargetDragEvent event)
+    @Override
+	public void dragEnter(DropTargetDragEvent event)
     {
         if (editor.getBuffer().isReadOnly()) {
             event.rejectDrag();
@@ -673,14 +686,16 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         }
     }
 
-    public void dragExit(DropTargetEvent e)
+    @Override
+	public void dragExit(DropTargetEvent e)
     {
         display.setDragCaretPos(null);
         if (Platform.isPlatformUnix() && dragSourceContext != null)
             dragSourceContext.setCursor(getDragCursor(CURSOR_NO));
     }
 
-    public void dragOver(DropTargetDragEvent event)
+    @Override
+	public void dragOver(DropTargetDragEvent event)
     {
         if (event.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             Point pt = event.getLocation();
@@ -722,7 +737,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         }
     }
 
-    public void drop(DropTargetDropEvent event)
+    @Override
+	public void drop(DropTargetDropEvent event)
     {
         Transferable t = event.getTransferable();
         if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
@@ -852,13 +868,15 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
             display.moveCaretToDotCol();
     }
 
-    public void dropActionChanged(DropTargetDragEvent event)
+    @Override
+	public void dropActionChanged(DropTargetDragEvent event)
     {
         if (Platform.isPlatformUnix() && dragSourceContext != null)
             dragSourceContext.setCursor(getCursorForAction(event.getDropAction()));
     }
 
-    public void dragGestureRecognized(DragGestureEvent event)
+    @Override
+	public void dragGestureRecognized(DragGestureEvent event)
     {
         if (!Editor.preferences().getBooleanProperty(Property.ENABLE_DRAG_TEXT))
             return;
@@ -881,7 +899,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         }
     }
 
-    public void dragDropEnd(DragSourceDropEvent event)
+    @Override
+	public void dragDropEnd(DragSourceDropEvent event)
     {
         if (dragTextRegion != null && !editor.getBuffer().isReadOnly())
             if (event.getDropAction() == DnDConstants.ACTION_MOVE)
@@ -893,7 +912,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         display.repaintChangedLines();
     }
 
-    public void dragEnter(DragSourceDragEvent event)
+    @Override
+	public void dragEnter(DragSourceDragEvent event)
     {
         if (Platform.isPlatformUnix()) {
             DragSourceContext dsc = event.getDragSourceContext();
@@ -901,11 +921,13 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         }
     }
 
-    public void dragOver(DragSourceDragEvent event)
+    @Override
+	public void dragOver(DragSourceDragEvent event)
     {
     }
 
-    public void dropActionChanged(DragSourceDragEvent event)
+    @Override
+	public void dropActionChanged(DragSourceDragEvent event)
     {
         if (Platform.isPlatformUnix()) {
             DragSourceContext dsc = event.getDragSourceContext();
@@ -917,7 +939,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         }
     }
 
-    public void dragExit(DragSourceEvent event)
+    @Override
+	public void dragExit(DragSourceEvent event)
     {
         DragSourceContext dsc = event.getDragSourceContext();
         if (Platform.isPlatformUnix())

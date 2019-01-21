@@ -36,11 +36,13 @@ public class AbstractQuerySpecification implements QuerySpecification {
     this.constraints = constraints;
   }
   
-  public Set getConstraints() {
+  @Override
+public Set getConstraints() {
     return constraints;
   }
   
-  public java.util.Set getFilteredConstraints(Class constraintType) {
+  @Override
+public java.util.Set getFilteredConstraints(Class constraintType) {
     HashSet result = new HashSet();
     return result;
 //    if(constraints == null)
@@ -48,15 +50,18 @@ public class AbstractQuerySpecification implements QuerySpecification {
 //    Iterator it = constraints.iterator();
   }
   
-  public String getGloss() {
+  @Override
+public String getGloss() {
     return "";
   }
   
-  public Object getQuestion() {
+  @Override
+public Object getQuestion() {
     return null;
   }
   
-  public Object clone() {
+  @Override
+public Object clone() {
     return null;
   }
   

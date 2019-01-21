@@ -11,11 +11,13 @@ public class URLDirModelRepoSpec extends RepoSpecForDirectory
     private final String dirModelURL;
     private final List<ClassLoader> fileModelCLs;
     
-    public Model getDirectoryModel() {
+    @Override
+	public Model getDirectoryModel() {
         return FancyRepoLoader$.MODULE$.readDirectoryModelFromURL(this.dirModelURL, (Map)null, (List)this.fileModelCLs);
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return this.dirModelURL;
     }
     

@@ -653,7 +653,8 @@ public class Frame {
      * 
      * @return a string representation of this frame.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer b = new StringBuffer();
         for (int i = 0; i < getLocals(); ++i) {
             b.append(getLocal(i));

@@ -41,6 +41,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 
 	protected Layout layout;
 
+	@Override
 	public SubLStructDecl getStructDecl()
 	{
 		if (layout != null) return (SubLStructDecl) layout;

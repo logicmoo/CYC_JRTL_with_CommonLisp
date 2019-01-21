@@ -67,13 +67,15 @@ public class SidebarTagList extends SidebarList implements Constants,
         this.buffer = buffer;
     }
 
-    public final String getLabelText()
+    @Override
+	public final String getLabelText()
     {
         File file = editor.getBuffer().getFile();
         return file != null ? file.getName() : null;
     }
 
-    public synchronized void refresh()
+    @Override
+	public synchronized void refresh()
     {
         if (!SwingUtilities.isEventDispatchThread())
             Debug.bug("SidebarTagList.refresh() called from background thread!");
@@ -94,7 +96,8 @@ public class SidebarTagList extends SidebarList implements Constants,
         if (tagger == null)
             return;
         Runnable runTaggerRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 boolean locked = false;
                 try {
@@ -116,7 +119,8 @@ public class SidebarTagList extends SidebarList implements Constants,
                 if (tags != null) {
                     final Object[] listData = tags.toArray();
                     Runnable replaceListDataRunnable = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             // Make sure user didn't change buffers while we
                             // were preparing the tag list.
@@ -144,7 +148,8 @@ public class SidebarTagList extends SidebarList implements Constants,
 
     // Set the selection to the last tag before the position of the caret in
     // the current editor.
-    public synchronized void updatePosition()
+    @Override
+	public synchronized void updatePosition()
     {
         if (tags == null)
             return;
@@ -191,7 +196,8 @@ public class SidebarTagList extends SidebarList implements Constants,
         editor.setFocusToDisplay();
     }
 
-    public synchronized String getToolTipText(MouseEvent e)
+    @Override
+	public synchronized String getToolTipText(MouseEvent e)
     {
         if (tags != null) {
             int index = locationToIndex(e.getPoint());
@@ -203,7 +209,8 @@ public class SidebarTagList extends SidebarList implements Constants,
         return null;
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         int keyCode = e.getKeyCode();
         int modifiers = e.getModifiers();
@@ -241,18 +248,21 @@ public class SidebarTagList extends SidebarList implements Constants,
         editor.getDispatcher().setEnabled(false);
     }
 
-    public void keyReleased(KeyEvent e)
+    @Override
+	public void keyReleased(KeyEvent e)
     {
         e.consume();
         editor.getDispatcher().setEnabled(true);
     }
 
-    public void keyTyped(KeyEvent e)
+    @Override
+	public void keyTyped(KeyEvent e)
     {
         e.consume();
     }
 
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         LocationBar.cancelInput();
         editor.ensureActive();
@@ -270,19 +280,24 @@ public class SidebarTagList extends SidebarList implements Constants,
             editor.setFocusToDisplay();
     }
 
-    public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
 
-    public void mouseClicked(MouseEvent e) {}
+    @Override
+	public void mouseClicked(MouseEvent e) {}
 
-    public void mouseMoved(MouseEvent e)
+    @Override
+	public void mouseMoved(MouseEvent e)
     {
         String text = getToolTipText(e);
         sidebar.getFrame().setStatusText(text != null ? text : "");
     }
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e)
+    @Override
+	public void mouseExited(MouseEvent e)
     {
         final Frame frame = sidebar.getFrame();
         final StatusBar statusBar = frame.getStatusBar();
@@ -299,5 +314,6 @@ public class SidebarTagList extends SidebarList implements Constants,
         }
     }
 
-    public void mouseDragged(MouseEvent e) {}
+    @Override
+	public void mouseDragged(MouseEvent e) {}
 }

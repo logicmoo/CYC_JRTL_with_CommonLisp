@@ -549,15 +549,18 @@ public final class inverted_indexes_concrete extends SubLTranslatedFile
         return (SubLObject)inverted_indexes_concrete.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inverted_indexes_concrete_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inverted_indexes_concrete_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inverted_indexes_concrete_file();
     }
     

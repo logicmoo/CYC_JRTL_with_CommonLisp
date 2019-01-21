@@ -271,7 +271,8 @@ public final class JavaFormatter extends Formatter implements Constants
         }
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         clearSegmentList();
         if (line == null) {
@@ -282,7 +283,8 @@ public final class JavaFormatter extends Formatter implements Constants
         return segmentList;
     }
 
-    public boolean parseBuffer()
+    @Override
+	public boolean parseBuffer()
     {
         int state = STATE_NEUTRAL;
         Line line = buffer.getFirstLine();
@@ -349,7 +351,8 @@ public final class JavaFormatter extends Formatter implements Constants
         return "!&|<>=+/*-^".indexOf(c) >= 0;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("JavaMode");

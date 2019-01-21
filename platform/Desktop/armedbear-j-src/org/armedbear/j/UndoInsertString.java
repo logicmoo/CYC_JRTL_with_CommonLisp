@@ -39,7 +39,8 @@ public class UndoInsertString extends AbstractUndoableEdit
         postState = new PostState(editor);
     }
 
-    public void undo()
+    @Override
+	public void undo()
     {
         super.undo();
         final Editor editor = Editor.currentEditor();
@@ -49,7 +50,8 @@ public class UndoInsertString extends AbstractUndoableEdit
         update(editor);
     }
 
-    public void redo()
+    @Override
+	public void redo()
     {
         super.redo();
         final Editor editor = Editor.currentEditor();

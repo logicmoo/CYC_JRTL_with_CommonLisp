@@ -34,14 +34,17 @@ public final class BinaryLine extends AbstractLine implements Line
          this.count = count;
     }
 
-    public final int flags()
+    @Override
+	public final int flags()
     {
         return 0;
     }
 
-    public final void setFlags(int flags) {}
+    @Override
+	public final void setFlags(int flags) {}
 
-    public final String getText()
+    @Override
+	public final String getText()
     {
         Debug.assertTrue(bytes != null);
         FastStringBuffer sb = new FastStringBuffer(256);
@@ -66,39 +69,47 @@ public final class BinaryLine extends AbstractLine implements Line
         return sb.toString();
     }
 
-    public final void setText(String s) {}
+    @Override
+	public final void setText(String s) {}
 
-    public final char charAt(int i)
+    @Override
+	public final char charAt(int i)
     {
         return getText().charAt(i);
     }
 
-    public final String substring(int beginIndex)
+    @Override
+	public final String substring(int beginIndex)
     {
         return getText().substring(beginIndex);
     }
 
-    public final String substring(int beginIndex, int endIndex)
+    @Override
+	public final String substring(int beginIndex, int endIndex)
     {
         return getText().substring(beginIndex, endIndex);
     }
 
-    public final String trim()
+    @Override
+	public final String trim()
     {
         return getText().trim();
     }
 
-    public final int length()
+    @Override
+	public final int length()
     {
         return getText().length();
     }
 
-    public final byte[] getBytes(String encoding)
+    @Override
+	public final byte[] getBytes(String encoding)
     {
         return bytes;
     }
 
-    public final boolean isBlank()
+    @Override
+	public final boolean isBlank()
     {
         return false;
     }

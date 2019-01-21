@@ -1187,15 +1187,18 @@ public final class transcript_server extends SubLTranslatedFile
         return (SubLObject)transcript_server.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_transcript_server_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_transcript_server_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_transcript_server_file();
     }
     

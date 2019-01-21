@@ -35,6 +35,8 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
+
 public final class HashTableFunctions
 {
   static final LispObject FUNCTION_EQ =
@@ -54,7 +56,8 @@ public final class HashTableFunctions
         super("%make-hash-table", PACKAGE_SYS, false);
       }
         
-      public LispObject execute(LispObject test, LispObject size,
+      @Override
+	public LispObject execute(LispObject test, LispObject size,
                                 LispObject rehashSize, 
                                 LispObject rehashThreshold)
       {
@@ -80,7 +83,8 @@ public final class HashTableFunctions
       pf__make_weak_hash_table() {
         super("%make-weak-hash-table", PACKAGE_SYS, false);
       }
-      public LispObject execute(LispObject test, 
+      @Override
+	public LispObject execute(LispObject test, 
                                 LispObject size,
                                 LispObject rehashSize, 
                                 LispObject rehashThreshold,
@@ -115,20 +119,22 @@ public final class HashTableFunctions
         super(Symbol.GETHASH, "key hash-table &optional default");
       }
 
-      public LispObject execute(LispObject key, LispObject ht)
+      @Override
+	public LispObject execute(LispObject key, LispObject ht)
 
       {
-          if (ht instanceof WeakHashTable) {
-              return ((WeakHashTable)ht).gethash(key);
+          if (ht instanceof SubLHashtable) {
+              return ((SubLHashtable)ht).gethash(key).toLispObject();
           }
           return checkHashTable(ht).gethash(key);
       }
       
-      public LispObject execute(LispObject key, LispObject ht,
+      @Override
+	public LispObject execute(LispObject key, LispObject ht,
                                 LispObject defaultValue)
       {
-          if (ht instanceof WeakHashTable) {
-              return ((WeakHashTable)ht).gethash(key, defaultValue);
+          if (ht instanceof SubLHashtable) {
+              return ((SubLHashtable)ht).gethash(key, defaultValue);
           }
           return checkHashTable(ht).gethash(key, defaultValue);
       }
@@ -142,15 +148,16 @@ public final class HashTableFunctions
       pf_gethash1() {
         super(Symbol.GETHASH1, "key hash-table");
       }
-      public LispObject execute(LispObject first, LispObject second) {
-        if (second instanceof WeakHashTable) {
-            final WeakHashTable ht = (WeakHashTable) second;
+      @Override
+	public LispObject execute(LispObject first, LispObject second) {
+        if (second instanceof SubLHashtable) {
+            final SubLHashtable ht = (SubLHashtable) second;
             synchronized (ht) {
-                final LispObject value = ht.get(first);
+                final LispObject value = (LispObject) ht.get(first);
                 return value != null ? value : NIL;
             }
         } else {
-            final HashTable ht = checkHashTable(second);
+            final LispHashTable ht = checkHashTable(second);
             synchronized (ht) {
                 final LispObject value = ht.get(first);
                 return value != null ? value : NIL;
@@ -168,19 +175,21 @@ public final class HashTableFunctions
         super(Symbol.PUTHASH,
              "key hash-table new-value &optional default");
       }
-      public LispObject execute(LispObject key, LispObject ht,
+      @Override
+	public LispObject execute(LispObject key, LispObject ht,
                                 LispObject value)
       {
-        if (ht instanceof WeakHashTable) {
-            return ((WeakHashTable)ht).puthash(key, value);
+        if (ht instanceof SubLHashtable) {
+            return ((SubLHashtable)ht).puthash(key, value);
         }
         return checkHashTable(ht).puthash(key, value);
       }
-      public LispObject execute(LispObject key, LispObject ht,
+      @Override
+	public LispObject execute(LispObject key, LispObject ht,
                                 LispObject ignored, LispObject value)
       {
-        if (ht instanceof WeakHashTable) {
-            return ((WeakHashTable)ht).puthash(key, value);
+        if (ht instanceof SubLHashtable) {
+            return ((SubLHashtable)ht).puthash(key, value);
         }
         return checkHashTable(ht).puthash(key, value);
       }
@@ -195,9 +204,10 @@ public final class HashTableFunctions
       pf_remhash() {
         super(Symbol.REMHASH, "key hash-table");
       }
-      public LispObject execute(LispObject key, LispObject ht) {
-        if (ht instanceof WeakHashTable) {
-            return ((WeakHashTable)ht).remhash(key);
+      @Override
+	public LispObject execute(LispObject key, LispObject ht) {
+        if (ht instanceof SubLHashtable) {
+            return ((SubLHashtable)ht).remhash(key);
         }
         return checkHashTable(ht).remhash(key);
       }
@@ -211,10 +221,11 @@ public final class HashTableFunctions
       pf_clrhash() {
         super(Symbol.CLRHASH, "hash-table");
       }
-      public LispObject execute(LispObject ht)
+      @Override
+	public LispObject execute(LispObject ht)
       {
-        if (ht instanceof WeakHashTable) {
-            ((WeakHashTable)ht).clear();
+        if (ht instanceof SubLHashtable) {
+            ((SubLHashtable)ht).clear();
             return ht;
         }
         checkHashTable(ht).clear();
@@ -231,10 +242,11 @@ public final class HashTableFunctions
       pf_hash_table_count() {
           super(Symbol.HASH_TABLE_COUNT, "hash-table");
       }
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
-          if (arg instanceof WeakHashTable) {
-              return Fixnum.getInstance(((WeakHashTable)arg).getCount());
+          if (arg instanceof SubLHashtable) {
+              return Fixnum.getInstance(((SubLHashtable)arg).getCount());
           }
           return Fixnum.getInstance(checkHashTable(arg).getCount());
       }
@@ -248,7 +260,8 @@ public final class HashTableFunctions
       pf_sxhash() {
         super(Symbol.SXHASH, "object");
       }
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
         return Fixnum.getInstance(arg.sxhash());
       }
@@ -263,7 +276,8 @@ public final class HashTableFunctions
       pf_psxhash() {
         super("psxhash", PACKAGE_SYS, true, "object");
       }
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
         return Fixnum.getInstance(arg.psxhash());
       }
@@ -278,10 +292,11 @@ public final class HashTableFunctions
       pf_hash_table_p(){
         super(Symbol.HASH_TABLE_P,"object");
       }
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
-          if (arg instanceof WeakHashTable) return T;
-          return arg instanceof HashTable ? T : NIL;
+          if (arg instanceof SubLHashtable) return T;
+          return arg instanceof LispHashTable ? T : NIL;
       }
     };
 
@@ -294,10 +309,11 @@ public final class HashTableFunctions
       pf_hash_table_entries() {
         super("hash-table-entries", PACKAGE_SYS, false);
       }
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
-          if (arg instanceof WeakHashTable) {
-              return ((WeakHashTable)arg).ENTRIES();
+          if (arg instanceof SubLHashtable) {
+              return ((SubLHashtable)arg).ENTRIES();
           }
           return checkHashTable(arg).ENTRIES();
       }
@@ -312,12 +328,13 @@ public final class HashTableFunctions
       pf_hash_table_test() {
         super(Symbol.HASH_TABLE_TEST, "hash-table");
       }
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
-          if (arg instanceof WeakHashTable) {
-              return ((WeakHashTable)arg).getTest();
+          if (arg instanceof SubLHashtable) {
+              return ((SubLHashtable)arg).getTestSymbol();
           }
-          return checkHashTable(arg).getTest();
+          return checkHashTable(arg).getTestSymbol();
       }
     };
 
@@ -330,10 +347,11 @@ public final class HashTableFunctions
       pf_hash_table_size() {
         super(Symbol.HASH_TABLE_SIZE, "hash-table");
       }
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
-          if (arg instanceof WeakHashTable) {
-              return Fixnum.getInstance(((WeakHashTable)arg).getSize());
+          if (arg instanceof SubLHashtable) {
+              return Fixnum.getInstance(((SubLHashtable)arg).getSize());
           }
           return Fixnum.getInstance(checkHashTable(arg).getSize());
       }
@@ -347,10 +365,11 @@ public final class HashTableFunctions
       pf_hash_table_rehash_size() {
         super(Symbol.HASH_TABLE_REHASH_SIZE, "hash-table");
       }
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
-          if (arg instanceof WeakHashTable) {
-              return ((WeakHashTable)arg).getRehashSize();
+          if (arg instanceof SubLHashtable) {
+              return ((SubLHashtable)arg).getRehashSize();
           }
           return checkHashTable(arg).getRehashSize();
       }
@@ -364,10 +383,11 @@ public final class HashTableFunctions
       pf_hash_table_rehash_threshold() {
         super(Symbol.HASH_TABLE_REHASH_THRESHOLD, "hash-table");
       }
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
-          if (arg instanceof WeakHashTable) {
-              return ((WeakHashTable)arg).getRehashThreshold();
+          if (arg instanceof SubLHashtable) {
+              return ((SubLHashtable)arg).getRehashThreshold();
           }
           return checkHashTable(arg).getRehashThreshold();
       }
@@ -384,11 +404,10 @@ public final class HashTableFunctions
       pf_maphash() {
         super(Symbol.MAPHASH, "function hash-table");
       }
-      public LispObject execute(LispObject first, LispObject second)
+      @Override
+	public LispObject execute(LispObject first, LispObject second)
       {
-          if (second instanceof WeakHashTable) {
-              return ((WeakHashTable)second).MAPHASH(first);
-          }
+    	  if(second instanceof SubLHashtable) return ((SubLHashtable)second).MAPHASH(first);
         return checkHashTable(second).MAPHASH(first);
       }
     };
@@ -402,19 +421,16 @@ public final class HashTableFunctions
       pf_hash_table_weakness() {
           super(Symbol.HASH_TABLE_WEAKNESS, "hash-table");
       }
-      public LispObject execute(LispObject first) 
+      @Override
+	public LispObject execute(LispObject first) 
       {
-          if (first instanceof HashTable) {
-              return NIL;
-          } else if (first instanceof WeakHashTable) {
-              return ((WeakHashTable)first).getWeakness();
-          }
-          return type_error(first, Symbol.HASH_TABLE);
+    	  if(first instanceof SubLHashtable) return ((SubLHashtable)first).getWeakness();
+          return checkHashTable(first).getWeakness();
       }
   };
 
-  protected static HashTable checkHashTable(LispObject ht) {
-    if (ht instanceof HashTable) return (HashTable)ht;
+  protected static LispHashTable checkHashTable(LispObject ht) {
+    if (ht instanceof LispHashTable) return (LispHashTable)ht;
     type_error(ht, Symbol.HASH_TABLE);    
     return null;
   }

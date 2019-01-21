@@ -230,15 +230,18 @@ public final class finite_state_cascade_parser extends SubLTranslatedFile
         return (SubLObject)finite_state_cascade_parser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_finite_state_cascade_parser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_finite_state_cascade_parser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_finite_state_cascade_parser_file();
     }
     
@@ -283,23 +286,28 @@ public final class finite_state_cascade_parser extends SubLTranslatedFile
             this.$lexer = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$finite_state_cascade_parser_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$transducers;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$lexer;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$transducers = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$lexer = value;
         }
         
@@ -314,7 +322,8 @@ public final class finite_state_cascade_parser extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FINITE-STATE-CASCADE-PARSER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return finite_state_cascade_parser.finite_state_cascade_parser_p(arg1);
         }
     }

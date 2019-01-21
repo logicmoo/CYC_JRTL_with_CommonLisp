@@ -158,17 +158,20 @@ public final class SimpleArray_T extends AbstractArray
     return index;
   }
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     return list(Symbol.SIMPLE_ARRAY, elementType, getDimensions());
   }
 
-  public LispObject classOf()
+  @Override
+public LispObject classOf()
   {
     return BuiltInClass.SIMPLE_ARRAY;
   }
 
-  public LispObject typep(LispObject typeSpecifier)
+  @Override
+public LispObject typep(LispObject typeSpecifier)
   {
     if (typeSpecifier == Symbol.SIMPLE_ARRAY)
       return T;
@@ -177,12 +180,14 @@ public final class SimpleArray_T extends AbstractArray
     return super.typep(typeSpecifier);
   }
 
-  public int getRank()
+  @Override
+public int getRank()
   {
     return dimv.length;
   }
 
-  public LispObject getDimensions()
+  @Override
+public LispObject getDimensions()
   {
     LispObject result = NIL;
     for (int i = dimv.length; i-- > 0;)
@@ -190,7 +195,8 @@ public final class SimpleArray_T extends AbstractArray
     return result;
   }
 
-  public int getDimension(int n)
+  @Override
+public int getDimension(int n)
   {
     try
       {
@@ -203,22 +209,26 @@ public final class SimpleArray_T extends AbstractArray
       }
   }
 
-  public LispObject getElementType()
+  @Override
+public LispObject getElementType()
   {
     return elementType;
   }
 
-  public int getTotalSize()
+  @Override
+public int getTotalSize()
   {
     return totalSize;
   }
 
-  public boolean isAdjustable()
+  @Override
+public boolean isAdjustable()
   {
     return false;
   }
 
-  public LispObject AREF(int index)
+  @Override
+public LispObject AREF(int index)
   {
     try
       {
@@ -230,7 +240,8 @@ public final class SimpleArray_T extends AbstractArray
       }
   }
 
-  public void aset(int index, LispObject newValue)
+  @Override
+public void aset(int index, LispObject newValue)
   {
     try
       {
@@ -242,7 +253,8 @@ public final class SimpleArray_T extends AbstractArray
       }
   }
 
-  public int getRowMajorIndex(int[] subscripts)
+  @Override
+public int getRowMajorIndex(int[] subscripts)
   {
     final int rank = dimv.length;
     if (rank != subscripts.length)
@@ -276,7 +288,8 @@ public final class SimpleArray_T extends AbstractArray
     return sum;
   }
 
-  public LispObject get(int[] subscripts)
+  @Override
+public LispObject get(int[] subscripts)
   {
     try
       {
@@ -289,7 +302,8 @@ public final class SimpleArray_T extends AbstractArray
       }
   }
 
-  public void set(int[] subscripts, LispObject newValue)
+  @Override
+public void set(int[] subscripts, LispObject newValue)
 
   {
     try
@@ -303,18 +317,21 @@ public final class SimpleArray_T extends AbstractArray
       }
   }
 
-  public void fill(LispObject obj)
+  @Override
+public void fill(LispObject obj)
   {
     for (int i = totalSize; i-- > 0;)
       data[i] = obj;
   }
 
-  public String printObjectImpl()
+  @Override
+public String printObjectImpl()
   {
     return printObject(dimv);
   }
 
-  public AbstractArray adjustArray(int[] dimv, LispObject initialElement,
+  @Override
+public AbstractArray adjustArray(int[] dimv, LispObject initialElement,
                                    LispObject initialContents)
 
   {

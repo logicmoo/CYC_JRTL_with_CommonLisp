@@ -280,7 +280,8 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
             data[i] = obj;
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         if (Symbol.PRINT_READABLY.symbolValue() != NIL) {
             error(new PrintNotReadable(list(Keyword.OBJECT, this)));
@@ -290,7 +291,8 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
         return printObject(dimv);
     }
 
-    public AbstractArray adjustArray(int[] dimv, LispObject initialElement,
+    @Override
+	public AbstractArray adjustArray(int[] dimv, LispObject initialElement,
                                      LispObject initialContents)
 
     {
@@ -338,7 +340,8 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
         }
     }
 
-    public AbstractArray adjustArray(int[] dimv, AbstractArray displacedTo,
+    @Override
+	public AbstractArray adjustArray(int[] dimv, AbstractArray displacedTo,
                                      int displacement)
     {
         return new ComplexArray(dimv, displacedTo, displacement);

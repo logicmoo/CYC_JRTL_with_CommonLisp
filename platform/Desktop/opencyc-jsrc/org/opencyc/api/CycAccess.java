@@ -4738,7 +4738,8 @@ public class CycAccess {
    * @throws CycApiException if the api request results in a cyc server error
    * @deprecated
    */
-  public boolean isQuotedCollection(CycFort cycFort)
+  @Deprecated
+public boolean isQuotedCollection(CycFort cycFort)
           throws UnknownHostException, IOException, CycApiException {
     throw new CycApiException(
             "quotedCollection is no longer supported, see Quote");
@@ -4757,7 +4758,8 @@ public class CycAccess {
    * @throws CycApiException if the api request results in a cyc server error
    * @deprecated
    */
-  public boolean isQuotedCollection(CycFort cycFort,
+  @Deprecated
+public boolean isQuotedCollection(CycFort cycFort,
           CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
     throw new CycApiException(
@@ -6923,7 +6925,8 @@ public class CycAccess {
    * @deprecated use
    * <code>executeQuery</code>
    */
-  public CycList askNewCycQuery(final CycList query,
+  @Deprecated
+public CycList askNewCycQuery(final CycList query,
           final CycObject mt,
           final InferenceParameters queryProperties)
           throws UnknownHostException, IOException, CycApiException {
@@ -7700,7 +7703,8 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public CycList askCycQuery(CycList query, CycObject mt,
+  @Deprecated
+public CycList askCycQuery(CycList query, CycObject mt,
           HashMap queryProperties)
           throws UnknownHostException, IOException, CycApiException {
     CycList parameterList = new CycList();
@@ -7771,7 +7775,8 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public CycList askWithVariable(CycList query,
+  @Deprecated
+public CycList askWithVariable(CycList query,
           CycVariable variable,
           CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
@@ -7818,7 +7823,8 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public CycList askWithVariables(CycList query,
+  @Deprecated
+public CycList askWithVariables(CycList query,
           List variables,
           CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
@@ -7865,7 +7871,8 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public boolean isQueryTrue(CycList query, CycObject mt)
+  @Deprecated
+public boolean isQueryTrue(CycList query, CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
     String command = makeSubLStmt(CYC_QUERY, canonicalizeList(query), makeELMt(
             mt));
@@ -7887,7 +7894,8 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public boolean isQueryTrue_Cached(CycList query,
+  @Deprecated
+public boolean isQueryTrue_Cached(CycList query,
           CycObject mt)
           throws IOException, CycApiException {
     Boolean isQueryTrue = askCache.get(query);
@@ -11099,7 +11107,8 @@ public class CycAccess {
    * @return the XML datetime string corresponding to the given CycL date
    * @deprecated use DateConverter.
    */
-  static public String xmlDatetimeString(final CycList date) throws IOException, CycApiException {
+  @Deprecated
+static public String xmlDatetimeString(final CycList date) throws IOException, CycApiException {
     try {
       final CycNaut dateNaut = (CycNaut) CycNaut.convertIfPromising(date);
       final Date javadate = DateConverter.parseCycDate(dateNaut,

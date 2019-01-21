@@ -248,7 +248,7 @@ public class UnitTest extends TestCase implements CommonSymbols {
 				shouldPrintTests("Skipping " + vars[i] + " in test ....");
 			else
 				testEvalEquals("T", "(cmultiple-value-bind (second minute hour day month year) (decode-universal-time "
-						+ universalTime + " " + (timezone == CommonSymbols.UNPROVIDED ? "" : timezone.toString()) + ") "
+						+ universalTime + " " + (timezone == CommonSymbols.UNPROVIDED ? "" : timezone.princToString()) + ") "
 						+ "(= " + vars[i] + " " + values[i] + "))");
 	}
 
@@ -951,8 +951,8 @@ public class UnitTest extends TestCase implements CommonSymbols {
 		SubLObject val1 = SubLProcess.nthMultipleValue(CommonSymbols.ONE_INTEGER);
 		SubLObject val2 = SubLProcess.nthMultipleValue(CommonSymbols.TWO_INTEGER);
 		Values.resetMultipleValues();
-		testEvalEquals("2", val1.toString());
-		testEvalEquals("3", val2.toString());
+		testEvalEquals("2", val1.princToString());
+		testEvalEquals("3", val2.princToString());
 		Values.resetMultipleValues();
 		SubLObject firstVal = testCmultipleValueBindHelper();
 		SubLObject secondVal = SubLProcess.nthMultipleValue(CommonSymbols.ONE_INTEGER);
@@ -1386,10 +1386,10 @@ public class UnitTest extends TestCase implements CommonSymbols {
 			testEvalEquals("NIL", "(directory \"" + newSubDir.getAbsolutePath() + "\")");
 			testEvalEquals("T", "(numberp (file-write-date \"" + newSubDir.getAbsolutePath() + "\"))");
 			testEvalEquals("T",
-					"(<= " + currentTime.toString() + " (file-write-date \"" + newSubDir.getAbsolutePath() + "\"))");
+					"(<= " + currentTime.princToString() + " (file-write-date \"" + newSubDir.getAbsolutePath() + "\"))");
 			SubLObject dirModTime = Filesys.file_write_date(SubLObjectFactory.makeString(newSubDir.getAbsolutePath()));
-			BigInteger currentTimeTemp = new BigInteger(currentTime.toString());
-			BigInteger dirModTimeTemp = new BigInteger(dirModTime.toString());
+			BigInteger currentTimeTemp = new BigInteger(currentTime.princToString());
+			BigInteger dirModTimeTemp = new BigInteger(dirModTime.princToString());
 			Assert.assertTrue(
 					"Directory modification time " + dirModTimeTemp + " is less than the test start time "
 							+ currentTimeTemp + " ???",
@@ -1416,12 +1416,12 @@ public class UnitTest extends TestCase implements CommonSymbols {
 				testEvalEquals("NIL", "(directory-p \"" + myFile.getAbsolutePath() + "\")");
 				testEvalEquals("T", "(numberp (file-write-date \"" + myFile.getAbsolutePath() + "\"))");
 				testEvalEquals("T",
-						"(<= " + currentTime.toString() + " (file-write-date \"" + myFile.getAbsolutePath() + "\"))");
+						"(<= " + currentTime.princToString() + " (file-write-date \"" + myFile.getAbsolutePath() + "\"))");
 				testEvalEquals("T", "(<=  (file-write-date \"" + newSubDir.getAbsolutePath() + "\")"
 						+ " (file-write-date \"" + myFile.getAbsolutePath() + "\"))");
 				SubLObject fileModTime = Filesys
 						.file_write_date(SubLObjectFactory.makeString(myFile.getAbsolutePath()));
-				BigInteger fileModTimeTemp = new BigInteger(fileModTime.toString());
+				BigInteger fileModTimeTemp = new BigInteger(fileModTime.princToString());
 				Assert.assertTrue(
 						"File modification time " + fileModTimeTemp + " is less than the test start time "
 								+ currentTimeTemp + " ???",
@@ -1813,6 +1813,7 @@ public class UnitTest extends TestCase implements CommonSymbols {
 		testEvalEquals("8", "(ash 16 -1)");
 		testEvalEquals("-79", "(ash -100000000000000000000000000000000 -100)");
 		SubLNumber number = Sxhash.sxhash_rot(SubLNumberFactory.makeInteger(212), CommonSymbols.TWO_INTEGER).toNumber();
+		testEvalEquals("848", number.princToString());
 		testEvalEquals("848", number.toString());
 		testEvalEquals("T", "(evenp 2)");
 		testEvalEquals("T", "(evenp -2)");
@@ -4382,10 +4383,13 @@ public class UnitTest extends TestCase implements CommonSymbols {
 			representation = list.toString();
 			Assert.assertEquals("There are no omission-marks in the terribly deep list.", true,
 					representation.indexOf("#") != -1);
+			representation = list.princToString();
+			Assert.assertEquals("There are no omission-marks in the terribly deep list.", true,
+					representation.indexOf("#") != -1);
 			shouldPrintTests("Truncating via *PRINT-LEVEL* results in " + representation);
 			shouldPrintTests("Testing the printer control vars on vectors ....");
 			SubLObject vector = readAndEval("'#(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20)");
-			representation = vector.toString();
+			representation = vector.princToString();
 			Assert.assertEquals("There are no elipses in the terribly long vector.", true,
 					representation.indexOf("...") != -1);
 			shouldPrintTests("Truncating via *PRINT-LENGTH* results in " + representation);

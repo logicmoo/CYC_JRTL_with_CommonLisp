@@ -14,7 +14,8 @@ public class MatrixRowCSV implements MatrixRow
     private final String[] myRowArr;
     private final BasicDebugger theDbg;
     
-    public String dump() {
+    @Override
+	public String dump() {
         return MatrixRow$class.dump((MatrixRow)this);
     }
     
@@ -26,11 +27,13 @@ public class MatrixRowCSV implements MatrixRow
         return this.theDbg;
     }
     
-    public int getPossibleColumnCount() {
+    @Override
+	public int getPossibleColumnCount() {
         return this.myRowArr().length;
     }
     
-    public Option<String> getPossibleColumnValueString(final int colIdx) {
+    @Override
+	public Option<String> getPossibleColumnValueString(final int colIdx) {
         Object module$;
         if (colIdx < 0 || colIdx >= this.myRowArr().length) {
             this.theDbg().logWarning(new StringBuilder().append((Object)"Column index ").append((Object)BoxesRunTime.boxToInteger(colIdx)).append((Object)" is out of bounds for rowArray length ").append((Object)BoxesRunTime.boxToInteger(this.myRowArr().length)).toString());

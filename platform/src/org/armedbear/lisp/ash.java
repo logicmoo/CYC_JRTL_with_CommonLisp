@@ -42,7 +42,8 @@ public final class ash extends Primitive
         super("ash", "integer count");
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
 
     {
         return first.ash(second);

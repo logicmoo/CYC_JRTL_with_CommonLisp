@@ -598,15 +598,18 @@ public final class reformulator_module_subcollection_processor extends SubLTrans
         return (SubLObject)reformulator_module_subcollection_processor.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_reformulator_module_subcollection_processor_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_reformulator_module_subcollection_processor_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_reformulator_module_subcollection_processor_file();
     }
     
@@ -708,63 +711,78 @@ public final class reformulator_module_subcollection_processor extends SubLTrans
             this.$arg_to = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$rl_scfn_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$hierarchy_pred;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$var_name;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$naut;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$subcollection_fn;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$arg_from;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$pred;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$arg_to;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$hierarchy_pred = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$var_name = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$naut = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$subcollection_fn = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$arg_from = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$pred = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$arg_to = value;
         }
         
@@ -779,7 +797,8 @@ public final class reformulator_module_subcollection_processor extends SubLTrans
             super(SubLTranslatedFile.extractFunctionNamed("RL-SCFN-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return reformulator_module_subcollection_processor.rl_scfn_data_p(arg1);
         }
     }

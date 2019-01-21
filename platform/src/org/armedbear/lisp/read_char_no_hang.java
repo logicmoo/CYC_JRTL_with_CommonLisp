@@ -32,7 +32,8 @@ public final class read_char_no_hang extends Primitive
               "&optional input-stream eof-error-p eof-value recursive-p");
     }
 
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    @Override
+	public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         int length = args.length;
         if (length > 4)

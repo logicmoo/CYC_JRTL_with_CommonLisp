@@ -41,6 +41,7 @@ public class UseEditor<BoxType extends Box> extends ScreenBoxPanel<BoxType> impl
 	 * @param listener  An object to be invoked when a PropertyChange
 	 *		event is fired.
 	 */
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		super.addPropertyChangeListener(listener);
 	}
@@ -50,6 +51,7 @@ public class UseEditor<BoxType extends Box> extends ScreenBoxPanel<BoxType> impl
 	 *
 	 * @param listener  The PropertyChange listener to be removed.
 	 */
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		super.removePropertyChangeListener(listener);
 	}

@@ -58,7 +58,8 @@ public class Binding implements Comparable {
      *
      * @return a <tt>String</tt> representation of the <tt>Binding</tt> object.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         if (value instanceof String)
             return cycVariable + " = \"" + value + "\"";
         else
@@ -101,7 +102,8 @@ public class Binding implements Comparable {
      * @param object the reference object with which to compare.
      * @return <tt>true</tt> if some other object is equal to this <tt>Binding</tt>
      */
-     public boolean equals (Object object) {
+     @Override
+	public boolean equals (Object object) {
         if (! (object instanceof Binding))
             return false;
         if (! ((Binding) object).cycVariable.equals(cycVariable))
@@ -121,7 +123,8 @@ public class Binding implements Comparable {
      * @return a negative integer, zero, or a positive integer as this
      * object is less than, equal to, or greater than the specified object
      */
-     public int compareTo (Object object) {
+     @Override
+	public int compareTo (Object object) {
         if (! (object instanceof Binding))
             throw new ClassCastException("Must be a Binding object");
         return this.cycVariable.compareTo(((Binding) object).cycVariable);
@@ -132,7 +135,8 @@ public class Binding implements Comparable {
      *
      * @return a clone of this instance
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         return new Binding(this.cycVariable, this.value);
     }
 

@@ -48,7 +48,8 @@ public final class RewriteMailboxesTask extends IdleThreadTask
     private final Runnable runnable = new Runnable() {
         private long lastRun;
 
-        public void run()
+        @Override
+		public void run()
         {
             if (!Editor.isMailEnabled())
                 return;
@@ -68,7 +69,8 @@ public final class RewriteMailboxesTask extends IdleThreadTask
                                         mb.setBusy(true);
                                         mb.setWaitCursor();
                                         Runnable r = new Runnable() {
-                                            public void run()
+                                            @Override
+											public void run()
                                             {
                                                 mb.rewriteMailbox(false);
                                                 mb.setBusy(false);

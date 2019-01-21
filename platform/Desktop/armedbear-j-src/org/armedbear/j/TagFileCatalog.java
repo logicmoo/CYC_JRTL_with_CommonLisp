@@ -182,7 +182,8 @@ public final class TagFileCatalog
             this.tagfileName = tagfileName;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return tagfileName + " " + directoryPath + " " + modeName;
         }

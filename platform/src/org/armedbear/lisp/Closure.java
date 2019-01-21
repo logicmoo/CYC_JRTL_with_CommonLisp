@@ -116,7 +116,8 @@ abstract public class Closure extends Function
 
   abstract public boolean isClosureSubclass();
 
-  final public LispObject typep(LispObject typeSpecifier)
+  @Override
+final public LispObject typep(LispObject typeSpecifier)
   {
 	  boolean  isClosureSubclass = isClosureSubclass();
 	  LispObject typeOf = typeOf();
@@ -161,7 +162,8 @@ abstract public class Closure extends Function
 		return execute(args);
 	}
 
-  final public String printObjectImpl()
+  @Override
+final public String printObjectImpl()
 	{
 		LispObject name = getLambdaName();
 		StringBuilder sb = new StringBuilder(getDotName(getClass()) + " ");

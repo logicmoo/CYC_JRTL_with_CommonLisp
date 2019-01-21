@@ -763,15 +763,18 @@ public final class cyclifier_interface extends SubLTranslatedFile
         return (SubLObject)cyclifier_interface.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cyclifier_interface_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cyclifier_interface_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cyclifier_interface_file();
     }
     

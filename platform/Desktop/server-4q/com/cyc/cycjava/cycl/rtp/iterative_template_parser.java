@@ -5350,15 +5350,18 @@ public final class iterative_template_parser extends SubLTranslatedFile
         return (SubLObject)iterative_template_parser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_iterative_template_parser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_iterative_template_parser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_iterative_template_parser_file();
     }
     
@@ -5744,87 +5747,108 @@ public final class iterative_template_parser extends SubLTranslatedFile
             this.$syntactic_choices = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$itp_node_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$id;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$parent;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$component;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$span;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$new_parse;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$assertion;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$children;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$permutations;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$syntactic_node;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$syntactic_choices;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$id = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$parent = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$component = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$span = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$new_parse = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$assertion = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$children = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$permutations = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$syntactic_node = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$syntactic_choices = value;
         }
         
@@ -5839,7 +5863,8 @@ public final class iterative_template_parser extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ITP-NODE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iterative_template_parser.itp_node_p(arg1);
         }
     }
@@ -5869,79 +5894,98 @@ public final class iterative_template_parser extends SubLTranslatedFile
             this.$working_mt = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$itp_state_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$sequence;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$complete_parses_only;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$work_set;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$solution_set;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$sentence;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$category;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$cache;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$psp_charts;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$working_mt;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$sequence = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$complete_parses_only = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$work_set = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$solution_set = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$sentence = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$category = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$cache = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$psp_charts = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$working_mt = value;
         }
         
@@ -5956,7 +6000,8 @@ public final class iterative_template_parser extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ITP-STATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iterative_template_parser.itp_state_p(arg1);
         }
     }

@@ -83,7 +83,8 @@ public final class MailAddressExpansion extends Expansion
         }
     }
 
-    public String getNextCandidate()
+    @Override
+	public String getNextCandidate()
     {
         if (candidates == null || candidates.size() == 0)
             return null;

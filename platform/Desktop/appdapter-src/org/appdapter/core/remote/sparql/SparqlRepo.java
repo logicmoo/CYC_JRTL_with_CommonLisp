@@ -15,11 +15,13 @@ public class SparqlRepo extends OmniLoaderRepo
         this.dirModelName = dirModelName;
     }
     
-    public Model getDirectoryModel() {
+    @Override
+	public Model getDirectoryModel() {
         return this.getMainQueryDataset().getNamedModel(this.dirModelName);
     }
     
-    protected Dataset makeMainQueryDataset() {
+    @Override
+	protected Dataset makeMainQueryDataset() {
         return (Dataset)new SparqlDataset(new SparqlDatasetGraph(this.endpointURI));
     }
 }

@@ -54,6 +54,7 @@ public class LocalReasonManagerFromSetOfStatementsManager extends LocalPluginMan
 			super("Reason");
 		}
 
+		@Override
 		public void run() {
 			mReasoner.initialise();
 			Context context = mReasoner.createContext();

@@ -372,7 +372,8 @@ public final class Mbox
         summary.write(summaryFile);
     }
 
-    protected void finalize() throws Throwable
+    @Override
+	protected void finalize() throws Throwable
     {
         Log.debug("Mbox.finalize " + file);
         super.finalize();

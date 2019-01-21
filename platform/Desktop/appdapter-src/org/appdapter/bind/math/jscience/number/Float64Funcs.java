@@ -11,19 +11,23 @@ public class Float64Funcs
     
     public static NumberFactory<Float64> getNumberFactory() {
         return new NumberFactory<Float64>() {
-            public Float64 getZero() {
+            @Override
+			public Float64 getZero() {
                 return Float64.ZERO;
             }
             
-            public Float64 getOne() {
+            @Override
+			public Float64 getOne() {
                 return Float64.ONE;
             }
             
-            public Float64 getOneHalf() {
+            @Override
+			public Float64 getOneHalf() {
                 return Float64.valueOf(0.5);
             }
             
-            public Float64 makeNumberFromDouble(final double d) {
+            @Override
+			public Float64 makeNumberFromDouble(final double d) {
                 return Float64Funcs.makeFloat64(d);
             }
             
@@ -31,7 +35,8 @@ public class Float64Funcs
                 throw new UnsupportedOperationException("Not supported yet.");
             }
             
-            public Float64[] makeArray(final int size) {
+            @Override
+			public Float64[] makeArray(final int size) {
                 return (Float64[])makeArrayForClass((Class)Float64.class, size);
             }
         };

@@ -107,6 +107,7 @@ public class Float extends Term
 		}
 	}
 
+	@Override
 	public Term[] args()
 	{
 		return new Term[] {};
@@ -130,6 +131,7 @@ public class Float extends Term
 		}
 	}
 
+	@Override
 	public final BigInteger bigValue()
 	{
 		return bigFloatValue().toBigInteger();
@@ -142,6 +144,7 @@ public class Float extends Term
 	 * @return the value of this Double converted to a double (perhaps Double.NEGATIVE_INFINITY or
 	 *         Double.POSITIVE_INFINITY)
 	 */
+	@Override
 	public final double doubleValue()
 	{
 		if (bigValue == null)
@@ -161,6 +164,7 @@ public class Float extends Term
 	 *            The Object to compare (not necessarily an Double)
 	 * @return true if the Object satisfies the above condition
 	 */
+	@Override
 	public final boolean equals(Object obj)
 	{
 		if (this == obj)
@@ -199,6 +203,7 @@ public class Float extends Term
 	 *
 	 * @return the value of this Double converted to a float
 	 */
+	@Override
 	public final float floatValue()
 	{
 		if (bigValue == null)
@@ -217,6 +222,7 @@ public class Float extends Term
 	 *
 	 * @return whether this Double's functor has (double) 'name' and 'arity'
 	 */
+	@Override
 	public final boolean hasFunctor(double val, int arity)
 	{
 		return this.value == val && this.bigValue == null && arity == 0;
@@ -239,6 +245,7 @@ public class Float extends Term
 	 *             if the value of this Double is too great to be represented as a Java int
 	 * @return the int value of this Double
 	 */
+	@Override
 	public final int intValue()
 	{
 		if (bigValue != null || value < java.lang.Integer.MIN_VALUE || value > java.lang.Integer.MAX_VALUE)
@@ -254,6 +261,7 @@ public class Float extends Term
 	/**
 	 * @return whether this Double's value is too big to represent as a double
 	 */
+	@Override
 	public final boolean isBig()
 	{
 		return bigValue != null; // always canonical
@@ -264,6 +272,7 @@ public class Float extends Term
 	 *
 	 * @return the value of this org.jpl7.Double as a long
 	 */
+	@Override
 	public final long longValue()
 	{
 		if (bigValue != null)
@@ -285,6 +294,7 @@ public class Float extends Term
 	 * @param term
 	 *            A (previously created) term_t which is to be set to a Prolog integer
 	 */
+	@Override
 	protected final void put(Map<String, term_t> varnames_to_vars, term_t term)
 	{
 		if (isBig())
@@ -307,6 +317,7 @@ public class Float extends Term
 	 *
 	 * @return a Prolog source text representation of this Double's value
 	 */
+	@Override
 	public String toString()
 	{
 		if (bigValue == null)
@@ -324,11 +335,13 @@ public class Float extends Term
 	 *
 	 * @return the type of this term, as "Prolog.FLOAT"
 	 */
+	@Override
 	public final int type()
 	{
 		return Prolog.FLOAT;
 	}
 
+	@Override
 	public String typeName()
 	{
 		return "Float";

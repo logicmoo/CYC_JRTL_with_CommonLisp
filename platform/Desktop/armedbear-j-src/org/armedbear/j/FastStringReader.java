@@ -48,12 +48,14 @@ public final class FastStringReader extends Reader
             --index;
     }
 
-    public int read()
+    @Override
+	public int read()
     {
         return index < length ? s.charAt(index++) : -1;
     }
 
-    public int read(char array[], int offset, int count)
+    @Override
+	public int read(char array[], int offset, int count)
     {
         if (offset < 0 || count < 0 || offset + count > array.length)
             throw new IndexOutOfBoundsException();
@@ -120,36 +122,42 @@ public final class FastStringReader extends Reader
         return s.substring(begin, index);
     }
 
-    public long skip(long count)
+    @Override
+	public long skip(long count)
     {
         final long actual = Math.min(count, length - index);
         index += actual;
         return actual;
     }
 
-    public boolean ready()
+    @Override
+	public boolean ready()
     {
         return true;
     }
 
-    public boolean markSupported()
+    @Override
+	public boolean markSupported()
     {
         return true;
     }
 
-    public void mark(int readAheadLimit)
+    @Override
+	public void mark(int readAheadLimit)
     {
         if (readAheadLimit < 0)
             throw new IllegalArgumentException("Read-ahead limit < 0");
         mark = index;
     }
 
-    public void reset()
+    @Override
+	public void reset()
     {
         index = mark;
     }
 
-    public void close() {}
+    @Override
+	public void close() {}
 
     public final String remainder()
     {

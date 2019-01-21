@@ -1592,15 +1592,18 @@ public final class reformulator_datastructures extends SubLTranslatedFile
         return (SubLObject)reformulator_datastructures.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_reformulator_datastructures_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_reformulator_datastructures_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_reformulator_datastructures_file();
     }
     

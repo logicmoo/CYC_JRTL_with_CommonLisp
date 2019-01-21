@@ -40,22 +40,26 @@ public final class VHDLMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public String getCommentStart()
+    @Override
+	public String getCommentStart()
     {
         return "-- ";
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new VHDLFormatter(buffer);
     }
 
-    public boolean isKeyword(String s)
+    @Override
+	public boolean isKeyword(String s)
     {
         return keywords.isKeyword(s.toLowerCase());
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
         km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
@@ -65,22 +69,26 @@ public final class VHDLMode extends AbstractMode implements Constants, Mode
         km.mapKey(0xffc9, 0, "wrapComment"); // F12
     }
 
-    public boolean isTaggable()
+    @Override
+	public boolean isTaggable()
     {
         return true;
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new VHDLTagger(buffer);
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
 
-    public boolean canIndentPaste()
+    @Override
+	public boolean canIndentPaste()
     {
         return false;
     }
@@ -89,7 +97,8 @@ public final class VHDLMode extends AbstractMode implements Constants, Mode
     private static final RE thenRE = new UncheckedRE("\\s+then$");
     private static final RE loopRE = new UncheckedRE("\\s+loop$");
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final int indentSize = buffer.getIndentSize();
         final Line model = findModel(line);
@@ -130,12 +139,14 @@ public final class VHDLMode extends AbstractMode implements Constants, Mode
         return new String(it.hideSyntacticWhitespace(line.getText())).trim();
     }
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         return startChars.indexOf(c) >= 0;
     }
 
-    public boolean isIdentifierPart(char c)
+    @Override
+	public boolean isIdentifierPart(char c)
     {
         return partChars.indexOf(c) >= 0;
     }

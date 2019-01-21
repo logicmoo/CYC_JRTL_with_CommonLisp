@@ -94,7 +94,8 @@ public class PropertiesPanel extends JPanel {
   }*/
 
   class PropertyComparator implements Comparator {
-    public int compare(Object first, Object second) {
+    @Override
+	public int compare(Object first, Object second) {
       PropertyDescriptor a = (PropertyDescriptor) first;
       PropertyDescriptor b = (PropertyDescriptor) second;
       String nameA = a.getName();
@@ -102,7 +103,8 @@ public class PropertiesPanel extends JPanel {
       return nameA.compareTo(nameB);
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
       return (o instanceof PropertyComparator);
     }
   }

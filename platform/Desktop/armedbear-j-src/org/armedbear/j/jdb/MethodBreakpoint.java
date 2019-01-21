@@ -54,7 +54,8 @@ public final class MethodBreakpoint extends ResolvableBreakpoint
         return methodName;
     }
 
-    public EventRequest resolveEventRequest(ReferenceType refType) throws Exception
+    @Override
+	public EventRequest resolveEventRequest(ReferenceType refType) throws Exception
     {
         Method method = findMatchingMethod(refType);
         if (method == null)
@@ -139,7 +140,8 @@ public final class MethodBreakpoint extends ResolvableBreakpoint
         }
     }
 
-    public void resolved()
+    @Override
+	public void resolved()
     {
         if (file != null) {
             Buffer buffer = Editor.getBufferList().findBuffer(file);
@@ -151,7 +153,8 @@ public final class MethodBreakpoint extends ResolvableBreakpoint
         jdb.log("Breakpoint resolved: " + getLocationString());
     }
 
-    public String getLocationString()
+    @Override
+	public String getLocationString()
     {
         FastStringBuffer sb = new FastStringBuffer();
         if (className != null) {
@@ -164,7 +167,8 @@ public final class MethodBreakpoint extends ResolvableBreakpoint
         return sb.toString();
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer();
         if (className != null) {

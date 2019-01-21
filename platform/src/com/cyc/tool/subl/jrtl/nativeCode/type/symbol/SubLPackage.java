@@ -89,7 +89,7 @@ abstract public class SubLPackage extends LispObject implements SubLObject {
 				"DIGIT-CHAR-P", "DIRECTORY", "DIRECTORY-P", "DISASSEMBLE-GUID-TO-FIXNUMS",
 				"DISASSEMBLE-INTEGER-TO-FIXNUMS", "DOCUMENTATION", "DPB", "ECHO-STREAM-INPUT-STREAM",
 				"ECHO-STREAM-OUTPUT-STREAM", "EIGHTH", "ELT", "ENCODE-UNIVERSAL-TIME", "ENDP", "ENFORCE-MUST",
-				"ENFORCE-TYPE", "ENSURE-PRIVATE-STREAM", "EQ", "EQL", "EQUAL", "EQUALP", "ERROR", "EVAL", "EVAL-WHEN",
+				"ENFORCE-TYPE", "ENSURE-PRIVATE-STREAM", "EQ", "EQL", "EQUAL", "EQUALP", "ERROR", "EVAL", // "EVAL-WHEN",
 				"EVENP", "EXIT", "EXP", "EXPORT", "EXPT", "FALSE", "FBOUNDP", "FIF", "FIFTH", "FILE-AUTHOR",
 				"FILE-LENGTH", "FILE-POSITION", "FILE-STRING-LENGTH", "FILE-WRITE-DATE", "FILL", "FIND", "FIND-IF",
 				//"FIND-IF-NOT",
@@ -894,10 +894,13 @@ abstract public class SubLPackage extends LispObject implements SubLObject {
 		return symbols;
 	}
 
+	@Override
 	abstract public LispObject typeOf();
 
+	@Override
 	abstract public LispObject classOf();
 
+	@Override
 	abstract public LispObject getDescription();
 
 	abstract public String toDebugString();

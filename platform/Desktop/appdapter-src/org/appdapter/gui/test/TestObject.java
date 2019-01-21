@@ -75,6 +75,7 @@ public class TestObject {
 		return button;
 	}
 
+	@Override
 	public String toString() {
 		return name + " (" + hashCode() + ")";
 	}

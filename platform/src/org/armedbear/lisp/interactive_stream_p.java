@@ -43,7 +43,8 @@ public final class interactive_stream_p extends Primitive
         super("interactive-stream-p", "stream");
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         if (arg instanceof Stream)
             return ((Stream)arg).isInteractive() ? T : NIL;

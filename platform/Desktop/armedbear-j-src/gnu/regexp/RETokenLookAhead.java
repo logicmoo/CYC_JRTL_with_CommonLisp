@@ -33,7 +33,8 @@ final class RETokenLookAhead extends REToken
     this.negative = negative;
   }
 
-  boolean match(CharIndexed input, REMatch mymatch)
+  @Override
+boolean match(CharIndexed input, REMatch mymatch)
   {
     REMatch trymatch = (REMatch)mymatch.clone();
     REMatch trymatch1 = (REMatch)mymatch.clone();
@@ -58,7 +59,8 @@ final class RETokenLookAhead extends REToken
     }
   }
 
-    void dump(StringBuffer os) {
+    @Override
+	void dump(StringBuffer os) {
 	os.append("(?");
 	os.append(negative ? '!' : '=');
 	re.dumpAll(os);

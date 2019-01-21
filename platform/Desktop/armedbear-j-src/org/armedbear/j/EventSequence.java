@@ -67,7 +67,8 @@ public final class EventSequence
         return sb.toString();
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer();
         sb.append("begin EventSequence\n");

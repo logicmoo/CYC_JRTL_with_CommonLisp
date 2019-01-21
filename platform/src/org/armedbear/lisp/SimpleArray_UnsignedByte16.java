@@ -124,17 +124,20 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         return index;
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return list(Symbol.SIMPLE_ARRAY, UNSIGNED_BYTE_16, getDimensions());
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.SIMPLE_ARRAY;
     }
 
-    public LispObject typep(LispObject typeSpecifier)
+    @Override
+	public LispObject typep(LispObject typeSpecifier)
     {
         if (typeSpecifier == Symbol.SIMPLE_ARRAY)
             return T;
@@ -143,12 +146,14 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         return super.typep(typeSpecifier);
     }
 
-    public int getRank()
+    @Override
+	public int getRank()
     {
         return dimv.length;
     }
 
-    public LispObject getDimensions()
+    @Override
+	public LispObject getDimensions()
     {
         LispObject result = NIL;
         for (int i = dimv.length; i-- > 0;)
@@ -156,7 +161,8 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         return result;
     }
 
-    public int getDimension(int n)
+    @Override
+	public int getDimension(int n)
     {
         try {
             return dimv[n];
@@ -167,22 +173,26 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         }
     }
 
-    public LispObject getElementType()
+    @Override
+	public LispObject getElementType()
     {
         return UNSIGNED_BYTE_16;
     }
 
-    public int getTotalSize()
+    @Override
+	public int getTotalSize()
     {
         return totalSize;
     }
 
-    public boolean isAdjustable()
+    @Override
+	public boolean isAdjustable()
     {
         return false;
     }
 
-    public int aref(int index)
+    @Override
+	public int aref(int index)
     {
         try {
             return data[index];
@@ -194,7 +204,8 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         }
     }
 
-    public LispObject AREF(int index)
+    @Override
+	public LispObject AREF(int index)
     {
         try {
             return Fixnum.getInstance(data[index]);
@@ -204,7 +215,8 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         }
     }
 
-    public void aset(int index, LispObject obj)
+    @Override
+	public void aset(int index, LispObject obj)
     {
         try {
             data[index] = Fixnum.getValue(obj);
@@ -214,7 +226,8 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         }
     }
 
-    public int getRowMajorIndex(int[] subscripts)
+    @Override
+	public int getRowMajorIndex(int[] subscripts)
     {
         final int rank = dimv.length;
         if (rank != subscripts.length) {
@@ -245,7 +258,8 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         return sum;
     }
 
-    public LispObject get(int[] subscripts)
+    @Override
+	public LispObject get(int[] subscripts)
     {
         try {
             return Fixnum.getInstance(data[getRowMajorIndex(subscripts)]);
@@ -256,7 +270,8 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         }
     }
 
-    public void set(int[] subscripts, LispObject obj)
+    @Override
+	public void set(int[] subscripts, LispObject obj)
 
     {
         try {
@@ -268,14 +283,16 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         }
     }
 
-    public void fill(LispObject obj)
+    @Override
+	public void fill(LispObject obj)
     {
         int n = Fixnum.getValue(obj);
         for (int i = totalSize; i-- > 0;)
             data[i] = n;
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         if (Symbol.PRINT_READABLY.symbolValue() != NIL) {
             error(new PrintNotReadable(list(Keyword.OBJECT, this)));
@@ -285,7 +302,8 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         return printObject(dimv);
     }
 
-    public AbstractArray adjustArray(int[] dimv, LispObject initialElement,
+    @Override
+	public AbstractArray adjustArray(int[] dimv, LispObject initialElement,
                                      LispObject initialContents)
 
     {
@@ -333,7 +351,8 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
         }
     }
 
-    public AbstractArray adjustArray(int[] dimv, AbstractArray displacedTo,
+    @Override
+	public AbstractArray adjustArray(int[] dimv, AbstractArray displacedTo,
                                      int displacement)
     {
         return new ComplexArray(dimv, displacedTo, displacement);

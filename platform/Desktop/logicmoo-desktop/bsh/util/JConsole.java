@@ -139,8 +139,11 @@ public class JConsole extends JScrollPane
 	private	PrintStream out;
 
 	public InputStream getInputStream() { return in; }
+	@Override
 	public Reader getIn() { return new InputStreamReader(in); }
+	@Override
 	public PrintStream getOut() { return out;	}
+	@Override
 	public PrintStream getErr() { return out;	}
 
     private int	cmdStart = 0;
@@ -184,6 +187,7 @@ public class JConsole extends JScrollPane
 		text = new JTextPane( doc=new DefaultStyledDocument() )
 			{
 			{ setContentType("text/html"); }
+				@Override
 				public void	cut() {
 					if (text.getCaretPosition() < cmdStart)	{
 						super.copy();
@@ -192,6 +196,7 @@ public class JConsole extends JScrollPane
 					}
 				}
 
+				@Override
 				public void	paste()	{
 					forceCaretMoveToEnd();
 					super.paste();
@@ -263,7 +268,8 @@ public class JConsole extends JScrollPane
 	 public class MyHTMLEditorKit extends HTMLEditorKit {
 
 	        MyLinkController handler=new MyLinkController();
-	        public void install(JEditorPane c) {
+	        @Override
+			public void install(JEditorPane c) {
 	            MouseListener[] oldMouseListeners=c.getMouseListeners();
 	            MouseMotionListener[] oldMouseMotionListeners=c.getMouseMotionListeners();
 	            super.install(c);
@@ -291,7 +297,8 @@ public class JConsole extends JScrollPane
 
 	        public class MyLinkController extends LinkController {
 
-	            public void mouseClicked(MouseEvent e) {
+	            @Override
+				public void mouseClicked(MouseEvent e) {
 	                JEditorPane editor = (JEditorPane) e.getSource();
 
 	                if (editor.isEditable() && SwingUtilities.isLeftMouseButton(e)) {
@@ -303,7 +310,8 @@ public class JConsole extends JScrollPane
 	                }
 
 	            }
-	            public void mouseMoved(MouseEvent e) {
+	            @Override
+				public void mouseMoved(MouseEvent e) {
 	                JEditorPane editor = (JEditorPane) e.getSource();
 
 	                if (editor.isEditable()) {
@@ -365,6 +373,7 @@ public class JConsole extends JScrollPane
 	private Object findPrintedObject(String host) {
 		return BeanShellCntrl.bowl.findBean(host);
 	}
+	@Override
 	public void requestFocus()
 	{
 		super.requestFocus();
@@ -373,16 +382,19 @@ public class JConsole extends JScrollPane
 	}
 
 
+	@Override
 	public void keyPressed(	KeyEvent e ) {
 	    type( e );
 	    gotUp=false;
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	    type( e );
 	}
 
-    public void	keyReleased(KeyEvent e)	{
+    @Override
+	public void	keyReleased(KeyEvent e)	{
 		gotUp=true;
 		type( e	);
     }
@@ -593,6 +605,7 @@ public class JConsole extends JScrollPane
 		if(!textStr.endsWith(" ")) textStr = textStr.concat(" ");
 		final String textStr0 = textStr;
 		invokeAndWait(new Runnable() {
+			@Override
 			public void run() {
 				try {
 				text.setContentType( "text/html" );
@@ -753,8 +766,10 @@ public class JConsole extends JScrollPane
 		//text.repaint();
 	}
 
+	@Override
 	public void println(final Object o) {
 		invokeAndWait(new Runnable() {
+			@Override
 			public void run() {
 				printObject(o);
 				printText("\n");
@@ -765,8 +780,10 @@ public class JConsole extends JScrollPane
 		text.repaint();
 	}
 
+	@Override
 	public void print(final Object o) {
 		invokeAndWait(new Runnable() {
+			@Override
 			public void run() {
 				printObject(o);
 				resetCommandStart();
@@ -845,6 +862,7 @@ public class JConsole extends JScrollPane
 		text.repaint();
 	}
 
+	@Override
 	public void error( Object o ) {
 	    print( o, Color.red );
 	}
@@ -860,6 +878,7 @@ public class JConsole extends JScrollPane
 			return;
 
 		invokeAndWait(new Runnable() {
+			@Override
 			public void run() {
 				text.insertIcon(icon);
 				resetCommandStart();
@@ -872,12 +891,14 @@ public class JConsole extends JScrollPane
 		print(s, font, null);
     }
 
+	@Override
 	public void print(Object s, Color color) {
 		print(s, null, color);
 	}
 
 	public void print(final Object o, final Font font, final Color color) {
 		invokeAndWait(new Runnable() {
+			@Override
 			public void run() {
 				AttributeSet old = getStyle();
 				setStyle(font, color);
@@ -910,6 +931,7 @@ public class JConsole extends JScrollPane
 	    )
 	{
 		invokeAndWait(new Runnable() {
+			@Override
 			public void run() {
 				AttributeSet old = getStyle();
 				setStyle(fontFamilyName, size, color, bold,	italic,	underline);
@@ -992,6 +1014,7 @@ public class JConsole extends JScrollPane
 		return text.getCharacterAttributes();
     }
 
+	@Override
 	public void setFont( Font font ) {
 		super.setFont( font );
 
@@ -1013,6 +1036,7 @@ public class JConsole extends JScrollPane
 		println(myName + ": Input	closed...");
 	}
 
+	@Override
 	public void run() {
 		try {
 			inPipeWatcherLoop();
@@ -1022,15 +1046,18 @@ public class JConsole extends JScrollPane
 		}
 	}
 
+	@Override
 	public String toString() {
 		return myName;
 	}
 
     // MouseListener Interface
-    public void	mouseClicked(MouseEvent	event) {
+    @Override
+	public void	mouseClicked(MouseEvent	event) {
     }
 
-    public void mousePressed(MouseEvent event) {
+    @Override
+	public void mousePressed(MouseEvent event) {
 
         if (event.isPopupTrigger()) {
             menu.show(
@@ -1038,7 +1065,8 @@ public class JConsole extends JScrollPane
         }
     }
 
-    public void	mouseReleased(MouseEvent event)	{
+    @Override
+	public void	mouseReleased(MouseEvent event)	{
 		if (event.isPopupTrigger()) {
 			menu.show((Component)event.getSource(), event.getX(),
 			event.getY());
@@ -1046,22 +1074,26 @@ public class JConsole extends JScrollPane
 		text.repaint();
     }
 
-    public void	mouseEntered(MouseEvent	event) {
+    @Override
+	public void	mouseEntered(MouseEvent	event) {
 
     }
 
-    public void	mouseExited(MouseEvent event) {
+    @Override
+	public void	mouseExited(MouseEvent event) {
     }
 
     // property	change
-    public void	propertyChange(PropertyChangeEvent event) {
+    @Override
+	public void	propertyChange(PropertyChangeEvent event) {
 		if (event.getPropertyName().equals("lookAndFeel")) {
 			SwingUtilities.updateComponentTreeUI(menu);
 		}
     }
 
     // handle cut, copy	and paste
-    public void	actionPerformed(ActionEvent event) {
+    @Override
+	public void	actionPerformed(ActionEvent event) {
 		String cmd = event.getActionCommand();
 		if (cmd.equals(CUT)) {
 			text.cut();
@@ -1110,6 +1142,7 @@ public class JConsole extends JScrollPane
 		{
 			super(pout);
 		}
+		@Override
 		public synchronized int read() throws IOException {
 			if ( closed )
 				throw new IOException("stream closed");
@@ -1130,16 +1163,19 @@ public class JConsole extends JScrollPane
 				super.in = -1;  /* now empty */
 			return ret;
 		}
+		@Override
 		public void close() throws IOException {
 			closed = true;
 			super.close();
 		}
 	}
 
+	@Override
 	public void setNameCompletion( NameCompletion nc ) {
 		this.nameCompletion = nc;
 	}
 
+	@Override
 	public void setWaitFeedback( boolean on ) {
 		if ( on )
 			setCursor( Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR) );

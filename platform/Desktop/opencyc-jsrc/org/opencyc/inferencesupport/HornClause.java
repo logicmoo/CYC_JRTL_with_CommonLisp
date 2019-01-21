@@ -231,7 +231,8 @@ public class HornClause {
      * @param object the object for comparison
      * @return <tt>boolean</tt> indicating equality of an object with this object.
      */
-    public boolean equals(Object object) {
+    @Override
+	public boolean equals(Object object) {
         if (! (object instanceof HornClause))
             return false;
         HornClause thatHornClause = (HornClause) object;
@@ -244,7 +245,8 @@ public class HornClause {
      *
      * @return a clone of this instance
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         HornClause cloneHornClause = new HornClause();
         cloneHornClause.variables = (ArrayList) this.variables.clone();
         cloneHornClause.consequent = (QueryLiteral) this.consequent.clone();
@@ -261,7 +263,8 @@ public class HornClause {
      *
      * @return the string representation of the <tt>HornClause</tt>
      */
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer stringBuffer = new StringBuffer("(implies");
         if (antecedantConjuncts.size() == 1) {
             stringBuffer.append("\n  ");

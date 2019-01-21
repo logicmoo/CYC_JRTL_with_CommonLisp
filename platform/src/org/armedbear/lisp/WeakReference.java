@@ -42,20 +42,24 @@ public class WeakReference extends LispObject {
         this.ref = new java.lang.ref.WeakReference<LispObject>(ref);
     }
 
-    public LispObject typeOf() {
+    @Override
+	public LispObject typeOf() {
         return Symbol.WEAK_REFERENCE;
     }
 
-    public LispObject classOf() {
+    @Override
+	public LispObject classOf() {
         return BuiltInClass.WEAK_REFERENCE;
     }
 
-    public String printObjectImpl() {
+    @Override
+	public String printObjectImpl() {
         return unreadableString("WEAK-REFERENCE "
                 + toString());
     }
 
-    public LispObject typep(LispObject typeSpecifier) {
+    @Override
+	public LispObject typep(LispObject typeSpecifier) {
         if (typeSpecifier == Symbol.WEAK_REFERENCE) {
             return T;
         }
@@ -76,7 +80,8 @@ public class WeakReference extends LispObject {
             super("make-weak-reference", PACKAGE_EXT, true);
         }
 
-        public LispObject execute(LispObject obj) {
+        @Override
+		public LispObject execute(LispObject obj) {
 	    return new WeakReference(obj);
         }
     };
@@ -94,7 +99,8 @@ public class WeakReference extends LispObject {
             super("weak-reference-value", PACKAGE_EXT, true);
         }
 
-        public LispObject execute(LispObject obj) {
+        @Override
+		public LispObject execute(LispObject obj) {
             if (! (obj instanceof WeakReference))
                 return Lisp.type_error(obj, Symbol.WEAK_REFERENCE);
             

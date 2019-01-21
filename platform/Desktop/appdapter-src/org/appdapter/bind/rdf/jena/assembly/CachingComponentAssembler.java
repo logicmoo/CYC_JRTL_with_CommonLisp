@@ -104,7 +104,8 @@ public abstract class CachingComponentAssembler<MKC extends MutableKnownComponen
         comp.setDescription(descValString);
     }
 
-    public final Object open(final Assembler asmblr, final Resource rsrc, final Mode mode) {
+    @Override
+	public final Object open(final Assembler asmblr, final Resource rsrc, final Mode mode) {
         this.getLogger().debug("Assembler[{}] is opening component at: {}", (Object)this, (Object)rsrc);
         final JenaResourceItem wrapperItem = new JenaResourceItem(rsrc);
         final MKC comp = this.fetchOrMakeComponent((Ident)wrapperItem, (Item)wrapperItem, asmblr, mode);

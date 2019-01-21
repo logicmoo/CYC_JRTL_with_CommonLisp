@@ -45,7 +45,8 @@ public final class lisp_implementation_version extends Primitive
         super("lisp-implementation-version","");
     }
 
-    public LispObject execute()
+    @Override
+	public LispObject execute()
     {
         String jdkVersion = MessageFormat.format("{0}-{1}-{2}",
                                                  System.getProperty("java.vm.name"),

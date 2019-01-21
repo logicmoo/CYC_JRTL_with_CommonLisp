@@ -86,22 +86,26 @@ public class FreshLRUCache<K,V> implements Map<K,V> {
     }
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     cache.clear();
   }
 
-  public boolean containsKey(Object key) {
+  @Override
+public boolean containsKey(Object key) {
     V val = get((K)key);
     return (val != null);
   }
 
-  @SuppressWarnings("element-type-mismatch")
+  @Override
+@SuppressWarnings("element-type-mismatch")
   public boolean containsValue(Object value) {
     return cache.containsValue(value);
   }
 
   /** note this is a copy and not backed by the map */
-  public Set<Map.Entry<K, V>> entrySet() {
+  @Override
+public Set<Map.Entry<K, V>> entrySet() {
     Set<Map.Entry<K, CachedValue<V>>> entrySet = cache.entrySet();
     List<K> expiredKeys = new ArrayList<K>(128);
     Set<Map.Entry<K, V>> result = new HashSet<Map.Entry<K,V>>(entrySet.size());
@@ -119,7 +123,8 @@ public class FreshLRUCache<K,V> implements Map<K,V> {
     return result;
   }
 
-  public V get(Object key) {
+  @Override
+public V get(Object key) {
     CachedValue<V> val = cache.get((K)key);
     if (val == null) {
       return null;
@@ -131,16 +136,19 @@ public class FreshLRUCache<K,V> implements Map<K,V> {
     return val.get();
   }
 
-  public boolean isEmpty() {
+  @Override
+public boolean isEmpty() {
     return cache.isEmpty();
   }
 
-  public Set<K> keySet() {
+  @Override
+public Set<K> keySet() {
     clearStaleEntries();
     return cache.keySet();
   }
 
-  public V put(K key, V value) {
+  @Override
+public V put(K key, V value) {
     return put(key, value, defaultKeepAliveMsecs);
   }
 
@@ -150,23 +158,27 @@ public class FreshLRUCache<K,V> implements Map<K,V> {
     return (oldVal == null) ? null : oldVal.get();
   }
 
-  public void putAll(Map<? extends K,? extends V> m) {
+  @Override
+public void putAll(Map<? extends K,? extends V> m) {
     for (Map.Entry<? extends K,? extends V> entry : m.entrySet()) {
       put (entry.getKey(), entry.getValue());
     }
   }
 
-  public V remove(Object key) {
+  @Override
+public V remove(Object key) {
     CachedValue<V> oldVal = cache.remove((K)key);
     return (oldVal == null) ? null : oldVal.get();
   }
 
-  public int size() {
+  @Override
+public int size() {
     return cache.size();
   }
 
   /** note this is a copy and not backed by the map */
-  public Collection<V> values() {
+  @Override
+public Collection<V> values() {
     Set<Map.Entry<K, CachedValue<V>>> entrySet = cache.entrySet();
     List<K> expiredKeys = new ArrayList<K>(128);
     Collection<V> result = new ArrayList<V>(entrySet.size());

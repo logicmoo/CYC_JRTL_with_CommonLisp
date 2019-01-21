@@ -1105,15 +1105,18 @@ public final class control_vars extends SubLTranslatedFile
         return (SubLObject)control_vars.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_control_vars_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_control_vars_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_control_vars_file();
     }
 

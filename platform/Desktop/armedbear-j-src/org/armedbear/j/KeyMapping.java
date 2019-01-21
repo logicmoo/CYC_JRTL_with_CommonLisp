@@ -115,7 +115,8 @@ public class KeyMapping implements Constants
         return command;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer(64);
         sb.append(Utilities.getKeyText(keyChar, keyCode, modifiers));

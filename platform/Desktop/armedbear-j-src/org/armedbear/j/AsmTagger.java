@@ -64,7 +64,8 @@ public final class AsmTagger extends Tagger
     return null;
   }
 
-  public void run()
+  @Override
+public void run()
   {
     ArrayList tags = new ArrayList();
     Line line = buffer.getFirstLine();

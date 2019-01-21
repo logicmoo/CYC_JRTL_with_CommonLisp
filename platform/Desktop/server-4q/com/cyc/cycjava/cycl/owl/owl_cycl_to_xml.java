@@ -4225,15 +4225,18 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile
         return (SubLObject)owl_cycl_to_xml.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_owl_cycl_to_xml_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_owl_cycl_to_xml_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_owl_cycl_to_xml_file();
     }
     

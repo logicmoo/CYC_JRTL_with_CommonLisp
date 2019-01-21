@@ -1670,15 +1670,18 @@ public final class multibindings extends SubLTranslatedFile
         return (SubLObject)multibindings.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_multibindings_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_multibindings_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_multibindings_file();
     }
     
@@ -1768,31 +1771,38 @@ public final class multibindings extends SubLTranslatedFile
             this.$degenerateP = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$mbinding_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$multi_var_term_map;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$simple_var_term_map;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$degenerateP;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$multi_var_term_map = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$simple_var_term_map = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$degenerateP = value;
         }
         
@@ -1807,7 +1817,8 @@ public final class multibindings extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("MBINDING-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return multibindings.mbinding_p(arg1);
         }
     }

@@ -272,15 +272,18 @@ public final class defstruct_sequence extends SubLTranslatedFile
         return (SubLObject)defstruct_sequence.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_defstruct_sequence_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_defstruct_sequence_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_defstruct_sequence_file();
     }
     

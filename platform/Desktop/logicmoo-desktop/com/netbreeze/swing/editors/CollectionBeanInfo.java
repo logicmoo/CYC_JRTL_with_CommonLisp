@@ -4,7 +4,8 @@ import java.beans.*;
 import java.util.*;
 
 public class CollectionBeanInfo extends SimpleBeanInfo {
-  public BeanDescriptor getBeanDescriptor() {
+  @Override
+public BeanDescriptor getBeanDescriptor() {
     return new BeanDescriptor(Collection.class, CollectionCustomizer.class);
   }
 }

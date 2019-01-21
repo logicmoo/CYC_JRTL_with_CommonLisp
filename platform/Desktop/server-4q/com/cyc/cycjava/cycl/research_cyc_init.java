@@ -1801,16 +1801,19 @@ public final class research_cyc_init extends SubLTranslatedFile
 				SubLObjectFactory.makeSymbol("CLEAR-SPP-MORE-BASIC?-CACHED"), SubLObjectFactory.makeSymbol("CLEAR-GET-ISA-RESTRICTIONS-FROM-SENTENCE")});
 	}
 
+	@Override
 	public void declareFunctions()
 	{
 		declare_research_cyc_init_file();
 	}
 
+	@Override
 	public void initializeVariables()
 	{
 		init_research_cyc_init_file();
 	}
 
+	@Override
 	public void runTopLevelForms()
 	{
 		setup_research_cyc_init_file();

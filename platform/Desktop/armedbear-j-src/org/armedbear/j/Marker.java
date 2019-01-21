@@ -216,7 +216,8 @@ public final class Marker implements Constants
       }
   }
 
-  public boolean equals(Object object)
+  @Override
+public boolean equals(Object object)
   {
     if (this == object)
       return true;

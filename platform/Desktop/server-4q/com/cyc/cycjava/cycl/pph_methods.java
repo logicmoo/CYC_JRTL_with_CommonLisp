@@ -6287,15 +6287,18 @@ public final class pph_methods extends SubLTranslatedFile
         return (SubLObject)pph_methods.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_methods_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_methods_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_methods_file();
     }
     
@@ -6742,7 +6745,8 @@ public final class pph_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NL-GENERATION-CACHE-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_methods.nl_generation_cache_method(arg1, (SubLObject)$nl_generation_cache_method$UnaryFunction.UNPROVIDED);
         }
     }
@@ -6753,7 +6757,8 @@ public final class pph_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NL-GENERATION-CACHE-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return pph_methods.nl_generation_cache_method(arg1, arg2);
         }
     }

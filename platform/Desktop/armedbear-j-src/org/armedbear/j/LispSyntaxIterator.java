@@ -33,7 +33,8 @@ public final class LispSyntaxIterator extends DefaultSyntaxIterator
 
     // Caller must make sure parseBuffer() has been called so flags will be
     // correct.
-    public char[] hideSyntacticWhitespace(Line line)
+    @Override
+	public char[] hideSyntacticWhitespace(Line line)
     {
         if (line.flags() == STATE_QUOTE)
             return hideSyntacticWhitespace(line.getText(), STATE_QUOTE);
@@ -41,7 +42,8 @@ public final class LispSyntaxIterator extends DefaultSyntaxIterator
             return hideSyntacticWhitespace(line.getText(), STATE_NEUTRAL);
     }
 
-    public char[] hideSyntacticWhitespace(String s)
+    @Override
+	public char[] hideSyntacticWhitespace(String s)
     {
         return hideSyntacticWhitespace(s, STATE_NEUTRAL);
     }

@@ -5030,15 +5030,18 @@ public final class cb_inferred_index extends SubLTranslatedFile
         return (SubLObject)cb_inferred_index.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_inferred_index_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_inferred_index_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_inferred_index_file();
     }
     

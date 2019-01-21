@@ -2034,15 +2034,18 @@ public final class plausible_narts extends SubLTranslatedFile
         return (SubLObject)plausible_narts.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_plausible_narts_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_plausible_narts_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_plausible_narts_file();
     }
     

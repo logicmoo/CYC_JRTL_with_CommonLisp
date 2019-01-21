@@ -72,7 +72,8 @@ public class VariableSelectionAttributes implements Comparable {
      * @return a negative integer, zero, or a positive integer as this
      * object is less than, equal to, or greater than the specified object
      */
-     public int compareTo (Object object) {
+     @Override
+	public int compareTo (Object object) {
         if (! (object instanceof VariableSelectionAttributes))
             throw new ClassCastException("Must be a VariableSelectionAttributes object");
         Integer remainingDomainSize2 = ((VariableSelectionAttributes) object).remainingDomainSize;
@@ -91,7 +92,8 @@ public class VariableSelectionAttributes implements Comparable {
      *
      * @return a <tt>String</tt> representation of the <tt>VariableSelectionAttributes</tt> object.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return cycVariable + "  domain: " + remainingDomainSize + "  degree: " + degree;
     }
 

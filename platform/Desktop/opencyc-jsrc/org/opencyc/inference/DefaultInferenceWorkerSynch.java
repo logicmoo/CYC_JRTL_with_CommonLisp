@@ -191,14 +191,16 @@ public class DefaultInferenceWorkerSynch extends DefaultInferenceWorker implemen
   //// Public Area
 
   /** Performs the synchronous inference operation. */
-  public InferenceResultSet executeQuery()
+  @Override
+public InferenceResultSet executeQuery()
   throws IOException, TimeOutException, CycApiException {
     List results = performSynchronousInference();
     return new InferenceResultSet(results, this);
   }
   
   /** Performs the synchronous inference operation. */
-  public List performSynchronousInference()
+  @Override
+public List performSynchronousInference()
   throws IOException, TimeOutException, CycApiException {
     if (getStatus() == SubLWorkerStatus.NOT_STARTED_STATUS) {
       start();
@@ -261,16 +263,20 @@ public class DefaultInferenceWorkerSynch extends DefaultInferenceWorker implemen
   /** Initializes this object by registering an inference event listener. */
   private void init() {
     addInferenceListener(new InferenceWorkerListener () {
-      public void notifyInferenceAnswersAvailable(InferenceWorker inferenceWorker, List newAnswers) {
+      @Override
+	public void notifyInferenceAnswersAvailable(InferenceWorker inferenceWorker, List newAnswers) {
       }
 
-      public void notifyInferenceCreated(InferenceWorker inferenceWorker) {
+      @Override
+	public void notifyInferenceCreated(InferenceWorker inferenceWorker) {
       }
 
-      public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus, InferenceSuspendReason suspendReason, InferenceWorker inferenceWorker) {
+      @Override
+	public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus, InferenceSuspendReason suspendReason, InferenceWorker inferenceWorker) {
       }
 
-      public void notifyInferenceTerminated(InferenceWorker inferenceWorker, Exception e) {
+      @Override
+	public void notifyInferenceTerminated(InferenceWorker inferenceWorker, Exception e) {
         synchronized(lock) {
           lock.notify();
         }

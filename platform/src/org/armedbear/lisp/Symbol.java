@@ -755,7 +755,8 @@ public Symbol(AbstractString string, Package pkg)
     return name;
   }
 
-  public SubLPackage getPackage()
+  @Override
+public SubLPackage getPackage()
   {
 	  if(pkg instanceof SubLPackage) return pkg.toPackage();
       return null;
@@ -811,7 +812,8 @@ public Symbol(AbstractString string, Package pkg)
     this.setTLValue(value);
   }
 
-  public boolean isConstantSymbol()
+  @Override
+public boolean isConstantSymbol()
   {
     return (flags & FLAG_CONSTANT) != 0 && this.accessModeVar==VariableAccessMode.CONSTANT;
   }
@@ -835,7 +837,8 @@ public Symbol(AbstractString string, Package pkg)
       flags &= ~FLAG_BUILT_IN_FUNCTION;
   }
 
-  public String getName()
+  @Override
+public String getName()
   {
     return name.getStringValue();
   }
@@ -884,7 +887,8 @@ public Symbol(AbstractString string, Package pkg)
 	  	//setValueSL(argVal);
  }
 
-  public void setValue(SubLObject argVal) {
+  @Override
+public void setValue(SubLObject argVal) {
   	setValueCL((LispObject) argVal);
   	//setValueSL(argVal);
   }
@@ -1076,7 +1080,9 @@ public void symbolSetQ(LispObject argVal, Environment envI, LispThread threadI) 
   	public int hashCode() {
   		return hashCode(0);
   	}
-      public SymbolMacro getSymbolMacro() {
+     
+     public SymbolMacro getSymbolMacro() {
+		if (propertyList == null || propertyList==NIL) return null;
           LispObject symbolMacro = get(this, SYMBOL_MACRO, null);
           if(symbolMacro instanceof SymbolMacro) {
               return (SymbolMacro) symbolMacro;
@@ -1324,14 +1330,16 @@ public void symbolSetQ(LispObject argVal, Environment envI, LispThread threadI) 
    	return function;
   }
 
-  public LispObject getSymbolFunction()
+  @Override
+public LispObject getSymbolFunction()
   {
 	  Environment env = Environment.currentLispEnvironment();
 	  return env.lookupFunction(this);
   }
 
 
-  public final LispObject getSymbolFunctionOrDie()
+  @Override
+public final LispObject getSymbolFunctionOrDie()
   {
 		final LispObject function = getSymbolFunction();
     if (function == null)
@@ -1370,7 +1378,7 @@ public void symbolSetQ(LispObject argVal, Environment envI, LispThread threadI) 
   /** See LispObject.getStringValue() */
   @Override
   public String getStringValue() {
-	  LispObject value = symbolValue();
+	  LispObject value = symbolValueNoThrow();
 	  if(value==null) return name.getStringValue().toLowerCase();
 	  if(value==this) return getName().toLowerCase();
 	  return value.getStringValue();
@@ -1403,6 +1411,12 @@ public void symbolSetQ(LispObject argVal, Environment envI, LispThread threadI) 
 		return unquoted;
 	}
 
+    @Override
+	public java.lang.String princToString()
+	{
+	  return name.getStringValue();
+	}
+  
 	String printObjectImpl(boolean printReadably, boolean printEscape)
 	{
 		if (Lisp.printingObject == this) { return toDebugString(); }

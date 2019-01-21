@@ -1019,15 +1019,18 @@ public final class cycl_query_specification extends SubLTranslatedFile
         return (SubLObject)cycl_query_specification.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cycl_query_specification_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cycl_query_specification_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cycl_query_specification_file();
     }
     
@@ -1186,127 +1189,158 @@ public final class cycl_query_specification extends SubLTranslatedFile
             this.$enable_consideration_of_disjunctive_temporal_relations = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$cycl_query_specification_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$cycl_id;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$formula;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$mt;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$comment;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$max_number_of_results;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$back_chaining;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$time_cutoff_secs;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$max_depth;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$removal_cost_cutoff;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$enable_negation_by_failure;
         }
         
-        public SubLObject getField12() {
+        @Override
+		public SubLObject getField12() {
             return this.$enable_hl_predicate_backchaining;
         }
         
-        public SubLObject getField13() {
+        @Override
+		public SubLObject getField13() {
             return this.$enable_cache_backwards_query_results;
         }
         
-        public SubLObject getField14() {
+        @Override
+		public SubLObject getField14() {
             return this.$enable_unbound_predicate_backchaining;
         }
         
-        public SubLObject getField15() {
+        @Override
+		public SubLObject getField15() {
             return this.$enable_semantic_pruning;
         }
         
-        public SubLObject getField16() {
+        @Override
+		public SubLObject getField16() {
             return this.$enable_consideration_of_disjunctive_temporal_relations;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$cycl_id = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$formula = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$mt = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$comment = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$max_number_of_results = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$back_chaining = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$time_cutoff_secs = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$max_depth = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$removal_cost_cutoff = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$enable_negation_by_failure = value;
         }
         
-        public SubLObject setField12(final SubLObject value) {
+        @Override
+		public SubLObject setField12(final SubLObject value) {
             return this.$enable_hl_predicate_backchaining = value;
         }
         
-        public SubLObject setField13(final SubLObject value) {
+        @Override
+		public SubLObject setField13(final SubLObject value) {
             return this.$enable_cache_backwards_query_results = value;
         }
         
-        public SubLObject setField14(final SubLObject value) {
+        @Override
+		public SubLObject setField14(final SubLObject value) {
             return this.$enable_unbound_predicate_backchaining = value;
         }
         
-        public SubLObject setField15(final SubLObject value) {
+        @Override
+		public SubLObject setField15(final SubLObject value) {
             return this.$enable_semantic_pruning = value;
         }
         
-        public SubLObject setField16(final SubLObject value) {
+        @Override
+		public SubLObject setField16(final SubLObject value) {
             return this.$enable_consideration_of_disjunctive_temporal_relations = value;
         }
         
@@ -1321,7 +1355,8 @@ public final class cycl_query_specification extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYCL-QUERY-SPECIFICATION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_query_specification.cycl_query_specification_p(arg1);
         }
     }

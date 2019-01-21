@@ -115,7 +115,9 @@ class SparqlQueryRefusedException extends SparqlException
 
 class SimpleQoSParameters implements QoSParameters
 {
+	@Override
 	public int getRequiredNumberOfAnswers() { return 1000; }
+	@Override
 	public long getMaximumRuntime() { return 60; }
 }
 
@@ -133,7 +135,8 @@ class Pair<Left, Right> {
     public static <A, B> Pair<A, B> create(A left, B right) {
         return new Pair<A, B>(left, right); }
  
-    public final boolean equals(Object o) {
+    @Override
+	public final boolean equals(Object o) {
         if (!(o instanceof Pair)) return false;
         final Pair<?, ?> other = (Pair) o;
         return equal(getLeft(), other.getLeft()) && equal(getRight(), other.getRight());
@@ -143,7 +146,8 @@ class Pair<Left, Right> {
         if (o1 == null) return o2 == null;
         else return o1.equals(o2); }
  
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         int a = getLeft() == null ? 0 : getLeft().hashCode();
         int b = getRight() == null ? 0 : getRight().hashCode();
  
@@ -688,10 +692,12 @@ class SparqlTest
 			);
 		}
 		 
+		@Override
 		public URI getName() {
 			throw new UnsupportedOperationException();
 		}
 		 
+		@Override
 		public CloseableIterator<Statement> getStatements() {
 			throw new UnsupportedOperationException();
 		}
@@ -728,8 +734,10 @@ class SparqlTest
 					));
 		}
 		
-		 public List<String> getVariables() { return variables; }
-		 public CloseableIterator<Binding> iterator() { return new SimpleCloseableIterator<Binding>( bindings.iterator()); }
+		 @Override
+		public List<String> getVariables() { return variables; }
+		 @Override
+		public CloseableIterator<Binding> iterator() { return new SimpleCloseableIterator<Binding>( bindings.iterator()); }
 		
 		static class MyTestBinding implements VariableBinding.Binding 
 		{
@@ -741,6 +749,7 @@ class SparqlTest
 				for (Value value : values_) values.add(value); 
 			}
 			
+			@Override
 			public List<Value> getValues() {
 				return values;
 			}
@@ -971,6 +980,7 @@ public class SPARQLHandler implements HttpHandler {
 	 * 
 	 * @param httpExchange Single-exchange HTTP request/response.
 	 */
+	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
 
 		SparqlQueryRequest queryRequest = null;

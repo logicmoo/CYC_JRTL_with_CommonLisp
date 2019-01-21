@@ -777,15 +777,18 @@ public final class sort_variants extends SubLTranslatedFile
         return (SubLObject)sort_variants.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sort_variants_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sort_variants_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sort_variants_file();
     }
     

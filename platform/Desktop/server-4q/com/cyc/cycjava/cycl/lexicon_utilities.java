@@ -9812,15 +9812,18 @@ public final class lexicon_utilities extends SubLTranslatedFile
         return (SubLObject)lexicon_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_lexicon_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_lexicon_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_lexicon_utilities_file();
     }
     

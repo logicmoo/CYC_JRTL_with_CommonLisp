@@ -32,12 +32,14 @@ public final class FindTagTextFieldHandler extends DefaultTextFieldHandler
         super(editor, textField);
     }
 
-    public boolean wantTab()
+    @Override
+	public boolean wantTab()
     {
         return true;
     }
 
-    public void enter()
+    @Override
+	public void enter()
     {
         String pattern = textField.getText();
         if (pattern == null)
@@ -182,7 +184,8 @@ public final class FindTagTextFieldHandler extends DefaultTextFieldHandler
         return (list != null && list.size() > 0) ? list : null;
     }
 
-    public List getCompletions(final String prefix)
+    @Override
+	public List getCompletions(final String prefix)
     {
         List list = getCompletionsInCurrentBuffer(prefix);
         Mode mode = editor.getMode();

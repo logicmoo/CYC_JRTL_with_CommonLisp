@@ -740,15 +740,18 @@ public final class cb_owl_importer extends SubLTranslatedFile
         return (SubLObject)cb_owl_importer.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_owl_importer_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_owl_importer_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_owl_importer_file();
     }
     

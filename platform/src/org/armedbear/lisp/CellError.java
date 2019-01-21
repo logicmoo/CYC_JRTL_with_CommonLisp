@@ -48,7 +48,8 @@ public class CellError extends LispError
         initialize(initArgs);
     }
 
-    protected void initialize(LispObject initArgs)
+    @Override
+	protected void initialize(LispObject initArgs)
     {
         super.initialize(initArgs);
         LispObject name = NIL;
@@ -74,17 +75,20 @@ public class CellError extends LispError
         setInstanceSlotValue(Symbol.NAME, name);
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.CELL_ERROR;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return StandardClass.CELL_ERROR;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.CELL_ERROR)
             return T;
@@ -93,7 +97,8 @@ public class CellError extends LispError
         return super.typep(type);
     }
 
-    public String getMessage()
+    @Override
+	public String getMessage()
     {
         if (Symbol.PRINT_ESCAPE.symbolValue() == NIL)
             return super.getMessage();

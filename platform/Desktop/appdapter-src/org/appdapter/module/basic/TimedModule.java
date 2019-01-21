@@ -16,7 +16,8 @@ public abstract class TimedModule<Ctx> extends BasicModule<Ctx>
     
     protected abstract void doInit(final Ctx p0);
     
-    public synchronized void initModule() {
+    @Override
+	public synchronized void initModule() {
         this.enterBasicInitModule(true);
         final Ctx ctx = (Ctx)this.getContext();
         final Long beginStamp = this.logInfoEvent(10, true, (Long)null, ".doInit()-BEGIN", new Object[0]);
@@ -27,7 +28,8 @@ public abstract class TimedModule<Ctx> extends BasicModule<Ctx>
     
     protected abstract void doStart(final Ctx p0);
     
-    public synchronized void start() {
+    @Override
+	public synchronized void start() {
         this.enterBasicStart();
         final Ctx ctx = (Ctx)this.getContext();
         final Long beginStamp = this.logInfoEvent(0, true, (Long)null, ".doStart()-BEGIN", new Object[0]);
@@ -38,7 +40,8 @@ public abstract class TimedModule<Ctx> extends BasicModule<Ctx>
     
     protected abstract void doRunOnce(final Ctx p0, final long p1);
     
-    public synchronized void runOnce() {
+    @Override
+	public synchronized void runOnce() {
         this.enterBasicRunOnce();
         final Ctx ctx = (Ctx)this.getContext();
         final int msgImportance = (this.myCompletedRunCount % this.myRunDebugModulus == 0L) ? 0 : -10;
@@ -51,7 +54,8 @@ public abstract class TimedModule<Ctx> extends BasicModule<Ctx>
     
     protected abstract void doStop(final Ctx p0);
     
-    public synchronized void stop() {
+    @Override
+	public synchronized void stop() {
         this.enterBasicStop();
         final Ctx ctx = (Ctx)this.getContext();
         final Long beginStamp = this.logInfoEvent(0, true, (Long)null, ".doStop()-BEGIN", new Object[0]);
@@ -62,7 +66,8 @@ public abstract class TimedModule<Ctx> extends BasicModule<Ctx>
     
     protected abstract void doRelease(final Ctx p0);
     
-    public synchronized void releaseModule() {
+    @Override
+	public synchronized void releaseModule() {
         this.enterBasicReleaseModule();
         final Ctx ctx = (Ctx)this.getContext();
         final Long beginStamp = this.logInfoEvent(0, true, (Long)null, ".doRelease()-BEGIN", new Object[0]);
@@ -71,7 +76,8 @@ public abstract class TimedModule<Ctx> extends BasicModule<Ctx>
         this.exitBasicReleaseModule();
     }
     
-    public String getFieldSummary() {
+    @Override
+	public String getFieldSummary() {
         return super.getFieldSummary() + ", compRunCnt=" + this.getCompletedRunCount();
     }
 }

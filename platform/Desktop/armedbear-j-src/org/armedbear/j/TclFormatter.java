@@ -242,7 +242,8 @@ public final class TclFormatter extends Formatter implements Constants
         }
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         clearSegmentList();
         parseLine(line);
@@ -263,7 +264,8 @@ public final class TclFormatter extends Formatter implements Constants
         return "!&|<>=+/*-".indexOf(c) >= 0;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("TclMode");

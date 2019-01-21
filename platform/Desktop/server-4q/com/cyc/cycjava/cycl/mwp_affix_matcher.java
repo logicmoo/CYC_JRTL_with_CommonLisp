@@ -640,15 +640,18 @@ public final class mwp_affix_matcher extends SubLTranslatedFile
         return (SubLObject)mwp_affix_matcher.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_mwp_affix_matcher_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_mwp_affix_matcher_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_mwp_affix_matcher_file();
     }
     

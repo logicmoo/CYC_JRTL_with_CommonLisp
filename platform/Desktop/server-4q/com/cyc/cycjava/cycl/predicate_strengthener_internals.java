@@ -1052,15 +1052,18 @@ public final class predicate_strengthener_internals extends SubLTranslatedFile
         return (SubLObject)predicate_strengthener_internals.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_predicate_strengthener_internals_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_predicate_strengthener_internals_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_predicate_strengthener_internals_file();
     }
     

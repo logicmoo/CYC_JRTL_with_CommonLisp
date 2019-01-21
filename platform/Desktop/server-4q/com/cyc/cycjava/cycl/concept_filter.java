@@ -1360,15 +1360,18 @@ public final class concept_filter extends SubLTranslatedFile
         return (SubLObject)concept_filter.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_concept_filter_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_concept_filter_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_concept_filter_file();
     }
     
@@ -1503,7 +1506,8 @@ public final class concept_filter extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-CONCEPT-FILTER-ALL-ISA"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return concept_filter.clear_concept_filter_all_isa();
         }
     }
@@ -1514,7 +1518,8 @@ public final class concept_filter extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-NODES-SUPPRESSED-FROM-FILTER"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return concept_filter.clear_nodes_suppressed_from_filter();
         }
     }

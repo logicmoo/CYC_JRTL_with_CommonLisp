@@ -10,7 +10,8 @@ public final class BasicDescription implements Description
         this.myName = name;
     }
     
-    public String getName() {
+    @Override
+	public String getName() {
         return this.myName;
     }
     

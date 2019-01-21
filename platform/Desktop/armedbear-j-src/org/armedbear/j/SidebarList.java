@@ -46,11 +46,13 @@ public abstract class SidebarList extends JList implements NavigationComponent
         setFocusTraversalKeysEnabled(false);
     }
 
-    public void refresh()
+    @Override
+	public void refresh()
     {
     }
 
-    public void updatePosition()
+    @Override
+	public void updatePosition()
     {
     }
 
@@ -96,7 +98,8 @@ public abstract class SidebarList extends JList implements NavigationComponent
             setOpaque(true);
         }
 
-        public Component getListCellRendererComponent(
+        @Override
+		public Component getListCellRendererComponent(
             JList list,
             Object value,
             int index,
@@ -137,7 +140,8 @@ public abstract class SidebarList extends JList implements NavigationComponent
             return this;
         }
 
-        public void paintComponent(java.awt.Graphics g)
+        @Override
+		public void paintComponent(java.awt.Graphics g)
         {
             Display.setRenderingHints(g);
             super.paintComponent(g);

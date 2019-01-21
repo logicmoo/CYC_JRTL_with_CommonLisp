@@ -370,15 +370,18 @@ public final class sksi_rewrite_modules extends SubLTranslatedFile
         return (SubLObject)sksi_rewrite_modules.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_rewrite_modules_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_rewrite_modules_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_rewrite_modules_file();
     }
     

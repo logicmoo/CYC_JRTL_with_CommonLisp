@@ -458,15 +458,18 @@ public final class hierarchical_visitor extends SubLTranslatedFile
         return (SubLObject)hierarchical_visitor.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_hierarchical_visitor_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_hierarchical_visitor_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_hierarchical_visitor_file();
     }
     
@@ -547,55 +550,68 @@ public final class hierarchical_visitor extends SubLTranslatedFile
             this.$param = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$hierarchical_visitor_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$begin_path_fn;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$end_path_fn;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$accept_node_fn;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$begin_visit_fn;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$end_visit_fn;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$param;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$begin_path_fn = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$end_path_fn = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$accept_node_fn = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$begin_visit_fn = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$end_visit_fn = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$param = value;
         }
         
@@ -610,7 +626,8 @@ public final class hierarchical_visitor extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HIERARCHICAL-VISITOR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hierarchical_visitor.hierarchical_visitor_p(arg1);
         }
     }

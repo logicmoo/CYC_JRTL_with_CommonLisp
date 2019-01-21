@@ -148,7 +148,8 @@ public class CycBulkAssertions {
      * @return <tt>true</tt> if the object is equal to this object, otherwise
      * returns <tt>false</tt>
      */
-    public boolean equals (Object object) {
+    @Override
+	public boolean equals (Object object) {
 	if ( !(object instanceof CycBulkAssertions) )
 	    return  false;
 	return(this == (CycBulkAssertions) object);
@@ -159,7 +160,8 @@ public class CycBulkAssertions {
      *
      * @return a <tt>String</tt> representation of the <tt>CycBulkAssertions</tt>
      */
-    public String toString () {
+    @Override
+	public String toString () {
 	StringWriter sr = new StringWriter(255);
 	PrintWriter pw = new PrintWriter(sr);
 	pw.println("; CycBulkAssertions: " + defaultMt + ": " + this.hashCode() );

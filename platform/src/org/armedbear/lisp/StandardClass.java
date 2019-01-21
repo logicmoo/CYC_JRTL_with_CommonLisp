@@ -56,7 +56,8 @@ public class StandardClass extends SlotClass
 
   // used as init-function for slots in this file.
   static Function constantlyNil = new Function() {
-    public LispObject execute()
+    @Override
+	public LispObject execute()
     {
       return NIL;
     }
@@ -80,7 +81,8 @@ public class StandardClass extends SlotClass
                       Symbol._DOCUMENTATION),
                  NIL)
       {
-        public LispClass getLispClass()
+        @Override
+		public LispClass getLispClass()
         {
           return STANDARD_CLASS;
         }
@@ -102,7 +104,8 @@ public class StandardClass extends SlotClass
                       Symbol._DOCUMENTATION),
                  NIL)
       {
-        public LispClass getLispClass()
+        @Override
+		public LispClass getLispClass()
         {
           return FUNCALLABLE_STANDARD_CLASS;
         }
@@ -184,17 +187,20 @@ public class StandardClass extends SlotClass
     setInstanceSlotValue(symName, newName);
   }
 
-  public LispObject getLispClassName()
+  @Override
+public LispObject getLispClassName()
   {
     return getInstanceSlotValue(symName);
   }
 
-  public void setLispClassName(LispObject newName)
+  @Override
+public void setLispClassName(LispObject newName)
   {
     setInstanceSlotValue(symName, newName);
   }
 
-  public Layout getClassLayout()
+  @Override
+public Layout getClassLayout()
   {
     LispObject layout = getInstanceSlotValue(symLayout);
     if (layout == UNBOUND_VALUE)
@@ -214,47 +220,56 @@ public class StandardClass extends SlotClass
     return (layout == UNBOUND_VALUE) ? null : (Layout)layout;
   }
 
-  public void setClassLayout(LispObject newLayout)
+  @Override
+public void setClassLayout(LispObject newLayout)
   {
     setInstanceSlotValue(symLayout, newLayout);
   }
 
-  public LispObject getDirectSuperclasses()
+  @Override
+public LispObject getDirectSuperclasses()
   {
     return getInstanceSlotValue(symDirectSuperclasses);
   }
 
-  public void setDirectSuperclasses(LispObject directSuperclasses)
+  @Override
+public void setDirectSuperclasses(LispObject directSuperclasses)
   {
     setInstanceSlotValue(symDirectSuperclasses, directSuperclasses);
   }
 
-  public final boolean isFinalized()
+  @Override
+public final boolean isFinalized()
   {
     return getInstanceSlotValue(symFinalizedP) != NIL;
   }
 
-  public final void setFinalized(boolean b)
+  @Override
+public final void setFinalized(boolean b)
   {
     setInstanceSlotValue(symFinalizedP, b ? T : NIL);
   }
 
-  public LispObject getDirectSubclasses()
+  @Override
+public LispObject getDirectSubclasses()
   {
     return getInstanceSlotValue(symDirectSubclasses);
   }
 
-  public void setDirectSubclasses(LispObject directSubclasses)
+  @Override
+public void setDirectSubclasses(LispObject directSubclasses)
   {
     setInstanceSlotValue(symDirectSubclasses, directSubclasses);
   }
 
-  public LispObject getCPL()
+  @Override
+public LispObject getCPL()
   {
     return getInstanceSlotValue(symPrecedenceList);
   }
 
-  public void setCPL(LispObject... cpl)
+  @Override
+public void setCPL(LispObject... cpl)
   {
     LispObject obj1 = cpl[0];
     if (obj1.listp() && cpl.length == 1)
@@ -269,77 +284,92 @@ public class StandardClass extends SlotClass
       }
   }
 
-  public LispObject getDirectMethods()
+  @Override
+public LispObject getDirectMethods()
   {
     return getInstanceSlotValue(symDirectMethods);
   }
 
-  public void setDirectMethods(LispObject methods)
+  @Override
+public void setDirectMethods(LispObject methods)
   {
     setInstanceSlotValue(symDirectMethods, methods);
   }
 
-  public LispObject getDocumentation()
+  @Override
+public LispObject getDocumentation()
   {
     return getInstanceSlotValue(Symbol._DOCUMENTATION);
   }
 
-  public void setDocumentation(LispObject doc)
+  @Override
+public void setDocumentation(LispObject doc)
   {
     setInstanceSlotValue(Symbol._DOCUMENTATION, doc);
   }
 
-  public LispObject getDirectSlotDefinitions()
+  @Override
+public LispObject getDirectSlotDefinitions()
   {
     return getInstanceSlotValue(symDirectSlots);
   }
 
-  public void setDirectSlotDefinitions(LispObject directSlotDefinitions)
+  @Override
+public void setDirectSlotDefinitions(LispObject directSlotDefinitions)
   {
     setInstanceSlotValue(symDirectSlots, directSlotDefinitions);
   }
 
-  public LispObject getSlotDefinitions()
+  @Override
+public LispObject getSlotDefinitions()
   {
     return getInstanceSlotValue(symSlots);
   }
 
-  public void setSlotDefinitions(LispObject slotDefinitions)
+  @Override
+public void setSlotDefinitions(LispObject slotDefinitions)
   {
      setInstanceSlotValue(symSlots, slotDefinitions);
   }
 
-  public LispObject getDirectDefaultInitargs()
+  @Override
+public LispObject getDirectDefaultInitargs()
   {
     return getInstanceSlotValue(symDirectDefaultInitargs);
   }
 
-  public void setDirectDefaultInitargs(LispObject directDefaultInitargs)
+  @Override
+public void setDirectDefaultInitargs(LispObject directDefaultInitargs)
   {
     setInstanceSlotValue(symDirectDefaultInitargs, directDefaultInitargs);
   }
 
-  public LispObject getDefaultInitargs()
+  @Override
+public LispObject getDefaultInitargs()
   {
     return getInstanceSlotValue(symDefaultInitargs);
   }
 
-  public void setDefaultInitargs(LispObject defaultInitargs)
+  @Override
+public void setDefaultInitargs(LispObject defaultInitargs)
   {
     setInstanceSlotValue(symDefaultInitargs, defaultInitargs);
   }
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     return Symbol.STANDARD_CLASS;
   }
 
-  public LispObject classOf()
+  @Override
+public LispObject classOf()
   {
     return STANDARD_CLASS;
   }
 
-  public LispObject typep(LispObject type)
+  @Override
+public LispObject typep(LispObject type)
   {
     if (type == Symbol.STANDARD_CLASS)
       return T;
@@ -348,7 +378,8 @@ public class StandardClass extends SlotClass
     return super.typep(type);
   }
 
-  public String printObjectUnreadable()
+  @Override
+public String printObjectUnreadable()
   {
     StringBuilder sb =
       new StringBuilder(Symbol.STANDARD_CLASS.printObject());

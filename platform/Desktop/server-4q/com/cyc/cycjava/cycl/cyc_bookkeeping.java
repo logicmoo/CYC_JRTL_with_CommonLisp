@@ -205,15 +205,18 @@ public final class cyc_bookkeeping extends SubLTranslatedFile
         return (SubLObject)cyc_bookkeeping.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cyc_bookkeeping_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cyc_bookkeeping_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cyc_bookkeeping_file();
     }
     

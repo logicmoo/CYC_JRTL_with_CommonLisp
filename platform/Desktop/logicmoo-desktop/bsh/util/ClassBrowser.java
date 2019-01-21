@@ -308,6 +308,7 @@ public class ClassBrowser extends JSplitPane
 
 		ptree = new PackageTree( pset );
 		ptree.addTreeSelectionListener( new TreeSelectionListener() {
+			@Override
 			public void valueChanged(TreeSelectionEvent e) {
 				TreePath tp = e.getPath();
 				Object [] oa = tp.getPath();
@@ -369,6 +370,7 @@ public class ClassBrowser extends JSplitPane
 
 		tree = new JTree();
 		tree.addTreeSelectionListener( new TreeSelectionListener() {
+			@Override
 			public void valueChanged(TreeSelectionEvent e) {
 				driveToClass( e.getPath().getLastPathComponent().toString() );
 			}
@@ -422,6 +424,7 @@ public class ClassBrowser extends JSplitPane
 		this.iframe = frame;
 	}
 
+	@Override
 	public void valueChanged(ListSelectionEvent e) 
 	{
 		if ( e.getSource() == classlist ) 
@@ -628,6 +631,7 @@ public class ClassBrowser extends JSplitPane
 
 	}
 
+	@Override
 	public void classPathChanged() {
 		Set pset = classPath.getPackagesSet();
 		ptree.setPackages( pset );

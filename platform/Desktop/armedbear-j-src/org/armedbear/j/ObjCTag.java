@@ -29,23 +29,27 @@ public final class ObjCTag extends LocalTag
         canonicalSignature = parseCanonicalSignatureForMethod();
     }
 
-    public String getMethodName()
+    @Override
+	public String getMethodName()
     {
         int index = name.indexOf(':');
         return index >= 0 ? name.substring(0, index) : name;
     }
 
-    public String getLongName()
+    @Override
+	public String getLongName()
     {
         return canonicalSignature;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return name;
     }
 
-    public String getSidebarText()
+    @Override
+	public String getSidebarText()
     {
         return name;
     }

@@ -799,15 +799,18 @@ public final class proof_view_summary extends SubLTranslatedFile
         return (SubLObject)proof_view_summary.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_proof_view_summary_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_proof_view_summary_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_proof_view_summary_file();
     }
     

@@ -93,15 +93,18 @@ public final class removal_modules_backchain_required extends SubLTranslatedFile
         return (SubLObject)removal_modules_backchain_required.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_backchain_required_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_backchain_required_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_backchain_required_file();
     }
     
@@ -123,7 +126,8 @@ public final class removal_modules_backchain_required extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CURRENT-PROBLEM-STORE-TRANSFORMATION-ALLOWED?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return removal_modules_backchain_required.current_problem_store_transformation_allowedP((SubLObject)$current_problem_store_transformation_allowedP$ZeroArityFunction.UNPROVIDED);
         }
     }
@@ -134,7 +138,8 @@ public final class removal_modules_backchain_required extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CURRENT-PROBLEM-STORE-TRANSFORMATION-ALLOWED?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_backchain_required.current_problem_store_transformation_allowedP(arg1);
         }
     }
@@ -145,7 +150,8 @@ public final class removal_modules_backchain_required extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-BACKCHAIN-REQUIRED-ASENT-IN-RELEVANT-MT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_backchain_required.inference_backchain_required_asent_in_relevant_mtP(arg1, (SubLObject)$inference_backchain_required_asent_in_relevant_mtP$UnaryFunction.UNPROVIDED);
         }
     }
@@ -156,7 +162,8 @@ public final class removal_modules_backchain_required extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-BACKCHAIN-REQUIRED-ASENT-IN-RELEVANT-MT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return removal_modules_backchain_required.inference_backchain_required_asent_in_relevant_mtP(arg1, arg2);
         }
     }

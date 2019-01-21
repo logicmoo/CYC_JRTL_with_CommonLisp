@@ -57,7 +57,8 @@ public class MemoryClassLoader extends JavaClassLoader {
         this.internalNamePrefix = "";
     }
 
-    protected Class<?> loadClass(String name, boolean resolve)
+    @Override
+	protected Class<?> loadClass(String name, boolean resolve)
             throws ClassNotFoundException {
         /* First we check if we should load the class ourselves,
          * allowing the default handlers to kick in if we don't...
@@ -94,7 +95,8 @@ public class MemoryClassLoader extends JavaClassLoader {
         return super.loadClass(name, resolve);
     }
 
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
+    @Override
+	protected Class<?> findClass(String name) throws ClassNotFoundException {
         try {
             if (checkPreCompiledClassLoader) {
                 Class<?> c = findPrecompiledClassOrNull(name);
@@ -110,7 +112,8 @@ public class MemoryClassLoader extends JavaClassLoader {
         }
     }
 
-    public byte[] getFunctionClassBytes(String name) {
+    @Override
+	public byte[] getFunctionClassBytes(String name) {
         if (hashtable.containsKey(name)) {
             return (byte[])hashtable.get(name).javaInstance();
         }
@@ -136,7 +139,8 @@ public class MemoryClassLoader extends JavaClassLoader {
             super("make-memory-class-loader", PACKAGE_SYS, false);
         }
 
-        public LispObject execute() {
+        @Override
+		public LispObject execute() {
             return new MemoryClassLoader().boxedThis;
         }
     };
@@ -147,7 +151,8 @@ public class MemoryClassLoader extends JavaClassLoader {
             super("put-memory-function", PACKAGE_SYS, false, "loader class-name class-bytes");
         }
 
-        public LispObject execute(LispObject loader, LispObject className, LispObject classBytes) {
+        @Override
+		public LispObject execute(LispObject loader, LispObject className, LispObject classBytes) {
             MemoryClassLoader l = (MemoryClassLoader) loader.javaInstance(MemoryClassLoader.class);
             return (LispObject)l.hashtable.put(className.getStringValue(), (JavaObject)classBytes);
         }
@@ -159,7 +164,8 @@ public class MemoryClassLoader extends JavaClassLoader {
             super("get-memory-function", PACKAGE_SYS, false, "loader class-name");
         }
 
-        public LispObject execute(LispObject loader, LispObject name) {
+        @Override
+		public LispObject execute(LispObject loader, LispObject name) {
             MemoryClassLoader l = (MemoryClassLoader) loader.javaInstance(MemoryClassLoader.class);
             return l.loadFunction(name.getStringValue());
         }

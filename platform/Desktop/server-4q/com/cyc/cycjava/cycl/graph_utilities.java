@@ -949,15 +949,18 @@ public final class graph_utilities extends SubLTranslatedFile
         return (SubLObject)graph_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_graph_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_graph_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_graph_utilities_file();
     }
     
@@ -1032,7 +1035,8 @@ public final class graph_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EXTRACT-LINK-NODES-INT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return graph_utilities.extract_link_nodes_int(arg1);
         }
     }
@@ -1043,7 +1047,8 @@ public final class graph_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LENGTH-FIRST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return graph_utilities.length_first(arg1);
         }
     }

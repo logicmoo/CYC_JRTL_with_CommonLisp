@@ -45,7 +45,8 @@ import org.objectweb.asm.tree.MethodInsnNode;
  */
 public class BasicVerifier extends BasicInterpreter {
 
-    public Value copyOperation(final AbstractInsnNode insn, final Value value)
+    @Override
+	public Value copyOperation(final AbstractInsnNode insn, final Value value)
             throws AnalyzerException
     {
         Value expected;
@@ -93,7 +94,8 @@ public class BasicVerifier extends BasicInterpreter {
         return value;
     }
 
-    public Value unaryOperation(final AbstractInsnNode insn, final Value value)
+    @Override
+	public Value unaryOperation(final AbstractInsnNode insn, final Value value)
             throws AnalyzerException
     {
         Value expected;
@@ -182,7 +184,8 @@ public class BasicVerifier extends BasicInterpreter {
         return super.unaryOperation(insn, value);
     }
 
-    public Value binaryOperation(
+    @Override
+	public Value binaryOperation(
         final AbstractInsnNode insn,
         final Value value1,
         final Value value2) throws AnalyzerException
@@ -309,7 +312,8 @@ public class BasicVerifier extends BasicInterpreter {
         }
     }
 
-    public Value ternaryOperation(
+    @Override
+	public Value ternaryOperation(
         final AbstractInsnNode insn,
         final Value value1,
         final Value value2,
@@ -370,7 +374,8 @@ public class BasicVerifier extends BasicInterpreter {
         return null;
     }
 
-    public Value naryOperation(final AbstractInsnNode insn, final List values)
+    @Override
+	public Value naryOperation(final AbstractInsnNode insn, final List values)
             throws AnalyzerException
     {
         int opcode = insn.getOpcode();

@@ -47,17 +47,20 @@ public final class UndefinedFunction extends CellError
       setCellName(obj);
   }
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     return Symbol.UNDEFINED_FUNCTION;
   }
 
-  public LispObject classOf()
+  @Override
+public LispObject classOf()
   {
     return StandardClass.UNDEFINED_FUNCTION;
   }
 
-  public LispObject typep(LispObject type)
+  @Override
+public LispObject typep(LispObject type)
   {
     if (type == Symbol.UNDEFINED_FUNCTION)
       return T;
@@ -66,7 +69,8 @@ public final class UndefinedFunction extends CellError
     return super.typep(type);
   }
 
-  public String getMessage()
+  @Override
+public String getMessage()
   {
     StringBuilder sb = new StringBuilder("The function ");
     sb.append(getCellName().princToString());

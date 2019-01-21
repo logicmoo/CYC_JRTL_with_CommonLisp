@@ -35,7 +35,8 @@ public final class UndoInsertLineSeparator extends AbstractUndoableEdit
         preState = new PreState(editor);
     }
 
-    public void undo()
+    @Override
+	public void undo()
     {
         super.undo();
         final Editor editor = Editor.currentEditor();
@@ -54,7 +55,8 @@ public final class UndoInsertLineSeparator extends AbstractUndoableEdit
         buffer.repaint();
     }
 
-    public void redo()
+    @Override
+	public void redo()
     {
         super.redo();
         final Editor editor = Editor.currentEditor();

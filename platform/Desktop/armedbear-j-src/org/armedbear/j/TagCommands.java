@@ -83,7 +83,8 @@ public final class TagCommands implements Constants
         textField.setText("");
         if (editor.getDispatcher().getLastEvent().getSource() instanceof MenuItem) {
             Runnable r = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     editor.setFocusToTextField();
                 }

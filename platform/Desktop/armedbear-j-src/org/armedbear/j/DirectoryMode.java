@@ -44,7 +44,8 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public NavigationComponent getSidebarComponent(Editor editor)
+    @Override
+	public NavigationComponent getSidebarComponent(Editor editor)
     {
         Debug.assertTrue(editor.getBuffer().getMode() == mode);
         if (!editor.getBuffer().getBooleanProperty(Property.ENABLE_TREE))
@@ -57,12 +58,14 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
         return view.getSidebarComponent();
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new DirectoryFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "dirOpenFile");
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "dirOpenFile");
@@ -87,7 +90,8 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
         km.mapKey('f', "dirForward");
     }
 
-    public void populateMenu(Editor editor, Menu menu)
+    @Override
+	public void populateMenu(Editor editor, Menu menu)
     {
         final String text = menu.getText();
         if (text == "File") {
@@ -126,7 +130,8 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
             super.populateMenu(editor, menu);
     }
 
-    public void populateModeMenu(Editor editor, Menu menu)
+    @Override
+	public void populateModeMenu(Editor editor, Menu menu)
     {
         Buffer buffer = editor.getBuffer();
         Directory dir = buffer instanceof Directory ? (Directory) buffer : null;
@@ -197,7 +202,8 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
         }
     }
 
-    protected ToolBar getDefaultToolBar(Frame frame)
+    @Override
+	protected ToolBar getDefaultToolBar(Frame frame)
     {
         return new DirectoryModeToolBar(frame);
     }

@@ -159,7 +159,8 @@ public class JenaModelUtils implements UIAnnotations.UtilClass
         for (final Model m : foundIn) {
             for (final Object s : m.listStatements().filterKeep((Filter)new Filter<Statement>() {
 
-                public boolean accept(final Statement arg0) {
+                @Override
+				public boolean accept(final Statement arg0) {
                     return n0.equals((Object)arg0.getSubject().asNode()) ||
                     		n0.equals((Object)arg0.getPredicate().asNode()) ||
                     		n0.equals((Object)arg0.getObject().asNode());

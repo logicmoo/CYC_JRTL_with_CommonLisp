@@ -30,6 +30,7 @@ public abstract class FunctionalRegistryMap<SRCHKEY, RESULT> implements MapTeste
 
 	public abstract RESULT tryLast(SRCHKEY c);
 
+	@Override
 	public abstract int meetSearchCriteria(SRCHKEY t, SRCHKEY c);
 
 	public RESULT tryFirstThenAltrates(SRCHKEY c) {

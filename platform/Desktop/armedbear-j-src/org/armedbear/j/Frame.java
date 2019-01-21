@@ -107,7 +107,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
         return rect;
     }
 
-    protected void processEvent(java.awt.AWTEvent e)
+    @Override
+	protected void processEvent(java.awt.AWTEvent e)
     {
         if (!(e instanceof KeyEvent))
             super.processEvent(e);
@@ -336,7 +337,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
         }
         // Make sure toolbar doesn't steal focus.
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 JComponent c = getFocusedComponent();
                 if (c != null)
@@ -784,7 +786,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
 
     private boolean active;
 
-    public final boolean isActive()
+    @Override
+	public final boolean isActive()
     {
         return active;
     }
@@ -807,7 +810,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
         }
     }
 
-    public void windowActivated(WindowEvent e)
+    @Override
+	public void windowActivated(WindowEvent e)
     {
         active = true;
         Editor.setCurrentEditor(currentEditor);
@@ -815,7 +819,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
         repaint();
         // 1.4.0-rc hangs if we call reactivate() directly here.
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 reactivate();
             }
@@ -823,7 +828,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
         SwingUtilities.invokeLater(r);
     }
 
-    public void windowDeactivated(WindowEvent e)
+    @Override
+	public void windowDeactivated(WindowEvent e)
     {
         active = false;
         // Show/hide caret.
@@ -832,7 +838,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
             editors[1].repaint();
     }
 
-    public void windowOpened(WindowEvent e)
+    @Override
+	public void windowOpened(WindowEvent e)
     {
         if (adjustPlacementRunnable != null) {
             adjustPlacementRunnable.run();
@@ -840,24 +847,29 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
         }
     }
 
-    public void windowClosing(WindowEvent e)
+    @Override
+	public void windowClosing(WindowEvent e)
     {
         editors[0].killFrame();
     }
 
-    public void windowClosed(WindowEvent e)
+    @Override
+	public void windowClosed(WindowEvent e)
     {
     }
 
-    public void windowIconified(WindowEvent e)
+    @Override
+	public void windowIconified(WindowEvent e)
     {
     }
 
-    public void windowDeiconified(WindowEvent e)
+    @Override
+	public void windowDeiconified(WindowEvent e)
     {
     }
 
-    public void windowStateChanged(WindowEvent e)
+    @Override
+	public void windowStateChanged(WindowEvent e)
     {
         int newState = e.getNewState();
         if (newState == 0) {
@@ -1000,7 +1012,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
         folderTree = obj;
     }
 
-    public void componentResized(ComponentEvent e)
+    @Override
+	public void componentResized(ComponentEvent e)
     {
         if (extendedState != 6) {
             // Not maximized.
@@ -1008,7 +1021,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
         }
     }
 
-    public void componentMoved(ComponentEvent e)
+    @Override
+	public void componentMoved(ComponentEvent e)
     {
         if (extendedState != 6) {
             // Not maximized.
@@ -1016,14 +1030,18 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
         }
     }
 
-    public void componentShown(ComponentEvent e) {}
+    @Override
+	public void componentShown(ComponentEvent e) {}
 
-    public void componentHidden(ComponentEvent e) {}
+    @Override
+	public void componentHidden(ComponentEvent e) {}
 
-    public void focusGained(FocusEvent e)
+    @Override
+	public void focusGained(FocusEvent e)
     {
         currentEditor.setFocusToDisplay();
     }
 
-    public void focusLost(FocusEvent e) {}
+    @Override
+	public void focusLost(FocusEvent e) {}
 }

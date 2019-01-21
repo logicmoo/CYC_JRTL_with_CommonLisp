@@ -1486,15 +1486,18 @@ public final class kb_ontology_utilities extends SubLTranslatedFile
         return (SubLObject)kb_ontology_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_ontology_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_ontology_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_ontology_utilities_file();
     }
     

@@ -3152,15 +3152,18 @@ public final class cyc_navigator_internals extends SubLTranslatedFile
         return (SubLObject)cyc_navigator_internals.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cyc_navigator_internals_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cyc_navigator_internals_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cyc_navigator_internals_file();
     }
     

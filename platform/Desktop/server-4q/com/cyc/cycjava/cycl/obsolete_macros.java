@@ -2078,15 +2078,18 @@ public final class obsolete_macros extends SubLTranslatedFile
         return (SubLObject)obsolete_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_obsolete_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_obsolete_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_obsolete_macros_file();
     }
     

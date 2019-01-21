@@ -36,15 +36,18 @@ public final class preference_module_declarations extends SubLTranslatedFile
         return (SubLObject)preference_module_declarations.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_preference_module_declarations_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_preference_module_declarations_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_preference_module_declarations_file();
     }
     

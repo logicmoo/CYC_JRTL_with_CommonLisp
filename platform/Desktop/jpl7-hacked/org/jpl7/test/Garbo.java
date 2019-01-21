@@ -10,6 +10,7 @@ public class Garbo {
 		this.i = created++;
 	}
 
+	@Override
 	protected void finalize() throws Throwable {
 		try {
 			destroyed++;

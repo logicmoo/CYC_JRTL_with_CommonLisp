@@ -14167,15 +14167,18 @@ public final class cure_api extends SubLTranslatedFile
         return (SubLObject)cure_api.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cure_api_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cure_api_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cure_api_file();
     }
     

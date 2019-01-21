@@ -61,7 +61,8 @@ public final class IllegalMonitorState extends ProgramError
     
     String message = "Illegal monitor state.";
 
-    public String getMessage()
+    @Override
+	public String getMessage()
     {
         return message;
     }

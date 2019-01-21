@@ -72,7 +72,8 @@ public final class RecentFilesDialog extends AbstractDialog implements MouseList
         table.requestFocus();
     }
 
-    protected void ok()
+    @Override
+	protected void ok()
     {
         openSelectedFile();
     }
@@ -120,7 +121,8 @@ public final class RecentFilesDialog extends AbstractDialog implements MouseList
         }
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         JTableHeader th = table.getTableHeader();
         TableColumnModel columnModel = th.getColumnModel();
@@ -138,7 +140,8 @@ public final class RecentFilesDialog extends AbstractDialog implements MouseList
         return "RecentFilesDialog.columnWidth." + i;
     }
 
-    public void mouseClicked(MouseEvent e)
+    @Override
+	public void mouseClicked(MouseEvent e)
     {
         if (e.getClickCount() == 2)
             openSelectedFile();
@@ -163,10 +166,14 @@ public final class RecentFilesDialog extends AbstractDialog implements MouseList
         }
     }
 
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
+    @Override
+	public void mousePressed(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseExited(MouseEvent e) {}
 
     public static void recentFiles()
     {

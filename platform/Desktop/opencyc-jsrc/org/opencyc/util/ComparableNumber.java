@@ -72,7 +72,8 @@ public class ComparableNumber extends Number implements Comparable<ComparableNum
     return hash;
   }
 
-  public int compareTo(final ComparableNumber o) {
+  @Override
+public int compareTo(final ComparableNumber o) {
     if (number.getClass().equals(o.getNumber().getClass())) {
       return ((Comparable) number).compareTo((Comparable) o.getNumber());
     } else {

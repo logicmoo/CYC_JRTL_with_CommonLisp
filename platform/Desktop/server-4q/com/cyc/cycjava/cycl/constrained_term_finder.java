@@ -780,15 +780,18 @@ public final class constrained_term_finder extends SubLTranslatedFile
         return (SubLObject)constrained_term_finder.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_constrained_term_finder_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_constrained_term_finder_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_constrained_term_finder_file();
     }
     

@@ -33,7 +33,8 @@ public final class ListRegistersFormatter extends Formatter
         this.buffer = buffer;
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         if (line instanceof ListRegistersLine)
             return formatStatusLine((ListRegistersLine)line);
@@ -60,7 +61,8 @@ public final class ListRegistersFormatter extends Formatter
         return segmentList;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("ListRegistersMode");

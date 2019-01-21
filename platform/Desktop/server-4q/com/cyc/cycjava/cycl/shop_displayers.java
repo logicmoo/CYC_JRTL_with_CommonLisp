@@ -1439,15 +1439,18 @@ public final class shop_displayers extends SubLTranslatedFile
         return (SubLObject)shop_displayers.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_shop_displayers_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_shop_displayers_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_shop_displayers_file();
     }
     

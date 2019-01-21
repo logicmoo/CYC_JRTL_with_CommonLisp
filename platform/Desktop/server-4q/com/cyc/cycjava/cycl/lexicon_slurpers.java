@@ -875,15 +875,18 @@ public final class lexicon_slurpers extends SubLTranslatedFile
         return (SubLObject)lexicon_slurpers.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_lexicon_slurpers_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_lexicon_slurpers_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_lexicon_slurpers_file();
     }
     

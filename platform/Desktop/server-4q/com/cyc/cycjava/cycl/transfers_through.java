@@ -1131,15 +1131,18 @@ public final class transfers_through extends SubLTranslatedFile
         return (SubLObject)transfers_through.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_transfers_through_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_transfers_through_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_transfers_through_file();
     }
     

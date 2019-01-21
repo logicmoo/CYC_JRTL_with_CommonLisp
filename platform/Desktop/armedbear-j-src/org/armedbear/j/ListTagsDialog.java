@@ -121,7 +121,8 @@ public final class ListTagsDialog extends AbstractDialog implements MouseListene
         return tag;
     }
 
-    protected void ok()
+    @Override
+	protected void ok()
     {
         dispose();
         int index = list.getSelectedIndex();
@@ -129,13 +130,15 @@ public final class ListTagsDialog extends AbstractDialog implements MouseListene
             tag = (Tag) tags.get(index);
     }
 
-    public void mouseClicked(MouseEvent e)
+    @Override
+	public void mouseClicked(MouseEvent e)
     {
         if (e.getClickCount() == 2)
             ok();
     }
 
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         if (e.getModifiers() == InputEvent.BUTTON2_MASK) {
             int index = list.locationToIndex(e.getPoint());
@@ -144,11 +147,14 @@ public final class ListTagsDialog extends AbstractDialog implements MouseListene
         }
     }
 
-    public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e) {}
+    @Override
+	public void mouseExited(MouseEvent e) {}
 
     public static void listTags()
     {

@@ -59,7 +59,8 @@ public final class MessageMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public NavigationComponent getSidebarComponent(Editor editor)
+    @Override
+	public NavigationComponent getSidebarComponent(Editor editor)
     {
         View view = editor.getCurrentView();
         if (view == null)
@@ -69,12 +70,14 @@ public final class MessageMode extends AbstractMode implements Constants, Mode
         return view.getSidebarComponent();
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new MessageFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey('h', "messageToggleHeaders");
         km.mapKey('f', "messageForward");
@@ -97,17 +100,20 @@ public final class MessageMode extends AbstractMode implements Constants, Mode
         km.mapKey('q', "tempBufferQuit");
     }
 
-    protected final ToolBar getDefaultToolBar(Frame frame)
+    @Override
+	protected final ToolBar getDefaultToolBar(Frame frame)
     {
         return new MessageModeToolBar(frame);
     }
 
-    public final String getContextString(Editor editor, boolean verbose /*ignored*/)
+    @Override
+	public final String getContextString(Editor editor, boolean verbose /*ignored*/)
     {
         return getContextString(editor.getDot());
     }
 
-    public final String getMouseMovedContextString(Editor editor, Position pos)
+    @Override
+	public final String getMouseMovedContextString(Editor editor, Position pos)
     {
         // We want to clear the status text if the mouse is not over a link, so
         // return "" instead of null.

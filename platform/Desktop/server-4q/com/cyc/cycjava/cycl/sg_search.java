@@ -191,15 +191,18 @@ public final class sg_search extends SubLTranslatedFile
         return (SubLObject)sg_search.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sg_search_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sg_search_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sg_search_file();
     }
     

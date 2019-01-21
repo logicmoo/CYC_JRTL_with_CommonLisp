@@ -387,7 +387,8 @@ class Node extends DefaultMutableTreeNode
     }
 
     private static final Comparator comparator = new Comparator() {
-        public int compare(Object o1, Object o2)
+        @Override
+		public int compare(Object o1, Object o2)
         {
             return RFC822Date.compare(((Node)o1).getDate(),
                 ((Node)o2).getDate());

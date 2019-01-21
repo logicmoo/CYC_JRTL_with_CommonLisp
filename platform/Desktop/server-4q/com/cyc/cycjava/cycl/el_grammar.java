@@ -397,15 +397,18 @@ public final class el_grammar extends SubLTranslatedFile
         return (SubLObject)el_grammar.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_el_grammar_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_el_grammar_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_el_grammar_file();
     }
     

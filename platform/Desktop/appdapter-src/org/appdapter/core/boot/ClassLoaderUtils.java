@@ -310,14 +310,16 @@ public class ClassLoaderUtils
             this.bcw = bbw;
         }
 
-        public void unregisterClassLoader(final BundleActivator b, final BundleContext c) {
+        @Override
+		public void unregisterClassLoader(final BundleActivator b, final BundleContext c) {
             ClassLoaderUtils.unregisterClassLoader(b, c);
             if (this.bcw != null) {
                 this.bcw.unregisterClassLoader(b, c);
             }
         }
 
-        public void registerClassLoader(final BundleActivator b, final BundleContext c) {
+        @Override
+		public void registerClassLoader(final BundleActivator b, final BundleContext c) {
             ClassLoaderUtils.registerClassLoader(b, c);
             if (this.bcw != null) {
                 this.bcw.registerClassLoader(b, c);

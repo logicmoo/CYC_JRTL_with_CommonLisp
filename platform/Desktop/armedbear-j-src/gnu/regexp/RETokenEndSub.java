@@ -24,12 +24,14 @@ final class RETokenEndSub extends REToken {
 	super(subIndex);
     }
     
-    boolean match(CharIndexed input, REMatch mymatch) {
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) {
 	mymatch.end[subIndex] = mymatch.index;
 	return next(input, mymatch);
     }
     
-    void dump(StringBuffer os) {
+    @Override
+	void dump(StringBuffer os) {
 	// handled by RE
     }
 }

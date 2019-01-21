@@ -30,16 +30,19 @@ public class BeanList extends JPanel implements BeansContextListener {
     context.addListener(this);
   }
 
-  public Dimension getPreferredSize() {
+  @Override
+public Dimension getPreferredSize() {
     return new Dimension(130, 200);
 //    return Utility.getMaxDimension(new Dimension(250, 200), super.getPreferredSize());
   }
 
-  public Dimension getMinimumSize() {
+  @Override
+public Dimension getMinimumSize() {
     return getPreferredSize();
   }
 
-  public void beanAdded(String named, Object obj) {
+  @Override
+public void beanAdded(String named, Object obj) {
     //@optimize
     reloadContents();
     invalidate();
@@ -47,7 +50,8 @@ public class BeanList extends JPanel implements BeansContextListener {
     repaint();
   }
 
-  public void beanRemoved(String named, Object obj) {
+  @Override
+public void beanRemoved(String named, Object obj) {
     //@optimize
     reloadContents();
     invalidate();

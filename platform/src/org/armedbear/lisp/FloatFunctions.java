@@ -44,7 +44,8 @@ public final class FloatFunctions
         new Primitive("set-floating-point-modes", PACKAGE_EXT, true,
                       "&key traps")
     {
-        public LispObject execute(LispObject[] args)
+        @Override
+		public LispObject execute(LispObject[] args)
         {
             if (args.length % 2 != 0)
                 program_error("Odd number of keyword arguments.");
@@ -78,7 +79,8 @@ public final class FloatFunctions
     private static final Primitive GET_FLOATING_POINT_MODES =
         new Primitive("get-floating-point-modes", PACKAGE_EXT, true, "")
     {
-        public LispObject execute()
+        @Override
+		public LispObject execute()
         {
             LispObject traps = NIL;
             if (TRAP_UNDERFLOW)
@@ -103,7 +105,8 @@ public final class FloatFunctions
 
         // See also: http://paste.lisp.org/display/10847
 
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof SingleFloat) {
                 int bits =
@@ -147,7 +150,8 @@ public final class FloatFunctions
     private static final Primitive _FLOAT_BITS =
         new Primitive("%float-bits", PACKAGE_SYS, true, "integer")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof SingleFloat) {
                 int bits = Float.floatToIntBits(((SingleFloat)arg).floatValue());
@@ -300,7 +304,8 @@ public final class FloatFunctions
     private static final Primitive SINGLE_FLOAT_BITS =
         new Primitive("single-float-bits", PACKAGE_SYS, true, "float")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof SingleFloat) {
                 SingleFloat f = (SingleFloat) arg;

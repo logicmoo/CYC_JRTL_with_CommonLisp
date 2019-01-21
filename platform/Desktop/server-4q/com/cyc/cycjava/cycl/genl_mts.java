@@ -1858,15 +1858,18 @@ public final class genl_mts extends SubLTranslatedFile
         return (SubLObject)genl_mts.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_genl_mts_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_genl_mts_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_genl_mts_file();
     }
     

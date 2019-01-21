@@ -7,7 +7,8 @@ import com.netbreeze.util.Utility;
 import java.beans.*;
 
 public class ThrowableCustomizer extends LargeBeanView {
-  protected void initGUI() {
+  @Override
+protected void initGUI() {
     super.initGUI();
 
     String name;

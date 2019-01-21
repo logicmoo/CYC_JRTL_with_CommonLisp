@@ -248,7 +248,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
   }
 
   //// Public Area
-  public void releaseInferenceResources(long timeoutMsecs)
+  @Override
+public void releaseInferenceResources(long timeoutMsecs)
           throws java.io.IOException, org.opencyc.util.TimeOutException, CycApiException {
     abort();
     SubLWorkerSynch subLWorker = new DefaultSubLWorkerSynch("(destroy-problem-store "
@@ -269,7 +270,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * @return all the InferenceWorkerListeners listening in on this
    * InferenceWorker's events
    */
-  public Object[] getInferenceListeners() {
+  @Override
+public Object[] getInferenceListeners() {
     synchronized (inferenceListeners) {
       return inferenceListeners.getListeners(inferenceListenerClass);
     }
@@ -280,7 +282,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * @param listener the listener that wishes to listen
    * for events sent out by this InferenceWorker
    */
-  public void addInferenceListener(InferenceWorkerListener listener) {
+  @Override
+public void addInferenceListener(InferenceWorkerListener listener) {
     synchronized (inferenceListeners) {
       inferenceListeners.add(inferenceListenerClass, listener);
     }
@@ -291,14 +294,16 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * @param listener the listener that no longer wishes
    * to receive events from this InferenceWorker
    */
-  public void removeInferenceListener(InferenceWorkerListener listener) {
+  @Override
+public void removeInferenceListener(InferenceWorkerListener listener) {
     synchronized (inferenceListeners) {
       inferenceListeners.remove(inferenceListenerClass, listener);
     }
   }
 
   /** Removes all listeners from this InferenceWorker. */
-  public void removeAllInferenceListeners() {
+  @Override
+public void removeAllInferenceListeners() {
     synchronized (inferenceListeners) {
       Object[] listenerArray = inferenceListeners.getListenerList();
       for (int i = 0, size = listenerArray.length; i < size; i += 2) {
@@ -317,7 +322,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * @see org.opencyc.inference.DefaultInferenceWorker#interruptInference(int) 
    * @see org.opencyc.inference.DefaultInferenceWorker#continueInference(org.opencyc.inference.params.InferenceParameters) 
    **/
-  public void interruptInference() {
+  @Override
+public void interruptInference() {
     interruptInference(null);
   }
 
@@ -325,7 +331,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * Interrupt inference with specified patience.
    * @param patience After this many seconds, if it has not halted, inference will be aborted.
    */
-  public void interruptInference(int patience) {
+  @Override
+public void interruptInference(int patience) {
     interruptInference(new Integer(patience));
   }
 
@@ -334,13 +341,16 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
     DefaultSubLWorker newWorker = new DefaultSubLWorker(command, getCycServer(), true, 0);
     SubLWorkerListener listener = new SubLWorkerListener() {
 
-      public void notifySubLWorkerStarted(SubLWorkerEvent event) {
+      @Override
+	public void notifySubLWorkerStarted(SubLWorkerEvent event) {
       }
 
-      public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
+      @Override
+	public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
       }
 
-      public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
+      @Override
+	public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
 //      System.out.println("Inference Interrupted "+event.getStatus()+" "+event.getWork());
       }
     };
@@ -355,7 +365,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
     }
   }
 
-  public void continueInference(InferenceParameters queryProperties) {
+  @Override
+public void continueInference(InferenceParameters queryProperties) {
     String command = createInferenceContinuationCommand(queryProperties);
     DefaultSubLWorker newWorker = new DefaultSubLWorker(command, getCycServer(), true, getTimeoutMsecs());
     /*newWorker.addListener(new SubLWorkerListener() {
@@ -365,15 +376,18 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
     });*/
     newWorker.addListener(new SubLWorkerListener() {
 
-      public void notifySubLWorkerStarted(SubLWorkerEvent event) {
+      @Override
+	public void notifySubLWorkerStarted(SubLWorkerEvent event) {
         doSubLWorkerStarted(event);
       }
 
-      public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
+      @Override
+	public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
         doSubLWorkerDataAvailable(event);
       }
 
-      public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
+      @Override
+	public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
         doSubLWorkerTerminated(event);
       }
     });
@@ -385,7 +399,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
     //throw new UnsupportedOperationException("continueInference() needs to be implemented.");
   }
 
-  public void abort() throws java.io.IOException {
+  @Override
+public void abort() throws java.io.IOException {
     //String command = createInferenceAbortionCommand();
     //DefaultSubLWorkerSynch newWorker = new DefaultSubLWorkerSynch(command, getCycServer(), false, getTimeoutMsecs());
     //newWorker.getWork();
@@ -400,7 +415,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * @param index
    * @return a specified answer
    */
-  public Object getAnswerAt(int index) {
+  @Override
+public Object getAnswerAt(int index) {
     return answers.get(index);
   }
 
@@ -408,7 +424,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    *
    * @return the number of answers that this worker's inference currently has.
    */
-  public int getAnswersCount() {
+  @Override
+public int getAnswersCount() {
     return answers.size();
   }
 
@@ -416,7 +433,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    *
    * @return a list of answers from this worker's inference.
    */
-  public List getAnswers() {
+  @Override
+public List getAnswers() {
     synchronized (answers) {
       return new CycList(answers);
     }
@@ -428,7 +446,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * @param endIndex
    * @return a sub-list of answers from this worker's inference.
    */
-  public List getAnswers(int startIndex, int endIndex) {
+  @Override
+public List getAnswers(int startIndex, int endIndex) {
     return new ArrayList(answers.subList(startIndex, endIndex));
   }
 
@@ -436,7 +455,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    *
    * @return the ID number of this worker's inference.
    */
-  public int getInferenceId() {
+  @Override
+public int getInferenceId() {
     return inferenceId;
   }
 
@@ -449,7 +469,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    *
    * @return the current status of this worker's inference.
    */
-  public InferenceStatus getInferenceStatus() {
+  @Override
+public InferenceStatus getInferenceStatus() {
     return status;
   }
 
@@ -457,7 +478,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    *
    * @return the ID number of the problem store for this worker.
    */
-  public int getProblemStoreId() {
+  @Override
+public int getProblemStoreId() {
     return problemStoreId;
   }
 
@@ -465,7 +487,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * Returns a string representation of the InferenceWorker.
    * @return a string representation of the InferenceWorker
    */
-  public String toString() {
+  @Override
+public String toString() {
     return toString(2);
   }
 
@@ -474,7 +497,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * @param indentLength the number of spaces to preceed each line of
    * output String
    */
-  public String toString(int indentLength) {
+  @Override
+public String toString(int indentLength) {
     final String newline = System.getProperty("line.separator");
     final StringBuffer nlBuff = new StringBuffer();
     nlBuff.append(newline);
@@ -508,7 +532,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    *
    * @return the reason this worker was suspended.
    */
-  public InferenceSuspendReason getSuspendReason() {
+  @Override
+public InferenceSuspendReason getSuspendReason() {
     return suspendReason;
   }
   //// Protected Area
@@ -532,15 +557,18 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
   private void init() {
     this.addListener(new SubLWorkerListener() {
 
-      public void notifySubLWorkerStarted(SubLWorkerEvent event) {
+      @Override
+	public void notifySubLWorkerStarted(SubLWorkerEvent event) {
         doSubLWorkerStarted(event);
       }
 
-      public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
+      @Override
+	public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
         doSubLWorkerDataAvailable(event);
       }
 
-      public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
+      @Override
+	public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
         doSubLWorkerTerminated(event);
       }
     });
@@ -776,20 +804,24 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
               CycAccess.inferencePSC, null, access, 10000);
       worker.addInferenceListener(new InferenceWorkerListener() {
 
-        public void notifyInferenceCreated(InferenceWorker inferenceWorker) {
+        @Override
+		public void notifyInferenceCreated(InferenceWorker inferenceWorker) {
           System.out.println("GOT CREATED EVENT\n" + inferenceWorker);
         }
 
-        public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus,
+        @Override
+		public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus,
                 InferenceSuspendReason suspendReason, InferenceWorker inferenceWorker) {
           System.out.println("GOT STATUS CHANGED EVENT\n" + inferenceWorker);
         }
 
-        public void notifyInferenceAnswersAvailable(InferenceWorker inferenceWorker, List newAnswers) {
+        @Override
+		public void notifyInferenceAnswersAvailable(InferenceWorker inferenceWorker, List newAnswers) {
           System.out.println("GOT NEW ANSWERS EVENT\n" + inferenceWorker);
         }
 
-        public void notifyInferenceTerminated(InferenceWorker inferenceWorker, Exception e) {
+        @Override
+		public void notifyInferenceTerminated(InferenceWorker inferenceWorker, Exception e) {
           System.out.println("GOT TERMINATED EVENT\n" + inferenceWorker);
           if (e != null) {
             e.printStackTrace();

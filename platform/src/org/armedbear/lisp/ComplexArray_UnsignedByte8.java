@@ -119,22 +119,26 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
         return index;
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return list(Symbol.ARRAY, UNSIGNED_BYTE_8, getDimensions());
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.ARRAY;
     }
 
-    public int getRank()
+    @Override
+	public int getRank()
     {
         return dimv.length;
     }
 
-    public LispObject getDimensions()
+    @Override
+	public LispObject getDimensions()
     {
         LispObject result = NIL;
         for (int i = dimv.length; i-- > 0;)
@@ -142,7 +146,8 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
         return result;
     }
 
-    public int getDimension(int n)
+    @Override
+	public int getDimension(int n)
     {
         try {
             return dimv[n];
@@ -153,17 +158,20 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
         }
     }
 
-    public LispObject getElementType()
+    @Override
+	public LispObject getElementType()
     {
         return UNSIGNED_BYTE_8;
     }
 
-    public int getTotalSize()
+    @Override
+	public int getTotalSize()
     {
         return totalSize;
     }
 
-    public LispObject arrayDisplacement()
+    @Override
+	public LispObject arrayDisplacement()
     {
         LispObject value1, value2;
         if (array != null) {
@@ -176,7 +184,8 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
         return LispThread.currentThread().setValues(value1, value2);
     }
 
-    public LispObject AREF(int index)
+    @Override
+	public LispObject AREF(int index)
     {
         if (data != null) {
             try {
@@ -189,7 +198,8 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
             return array.AREF(index + displacement);
     }
 
-    public void aset(int index, LispObject newValue)
+    @Override
+	public void aset(int index, LispObject newValue)
     {
         if (data != null) {
             try {
@@ -202,7 +212,8 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
             array.aset(index + displacement, newValue);
     }
 
-    public void fill(LispObject obj)
+    @Override
+	public void fill(LispObject obj)
     {
         if (data != null) {
             byte b = coerceLispObjectToJavaByte(obj);
@@ -214,7 +225,8 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
         }
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         if (Symbol.PRINT_READABLY.symbolValue() != NIL) {
             error(new PrintNotReadable(list(Keyword.OBJECT, this)));
@@ -225,7 +237,8 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
     }
 
 
-    public AbstractArray adjustArray(int[] dims,
+    @Override
+	public AbstractArray adjustArray(int[] dims,
                                               LispObject initialElement,
                                               LispObject initialContents)
             {
@@ -257,7 +270,8 @@ public final class ComplexArray_UnsignedByte8 extends AbstractArray
         }
     }
 
-    public AbstractArray adjustArray(int[] dims,
+    @Override
+	public AbstractArray adjustArray(int[] dims,
                                               AbstractArray displacedTo,
                                               int displacement)
             {

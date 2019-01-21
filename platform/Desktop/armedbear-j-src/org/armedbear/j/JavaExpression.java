@@ -45,7 +45,8 @@ public final class JavaExpression extends Expression implements Constants
         return type;
     }
 
-    public boolean matches(LocalTag tag)
+    @Override
+	public boolean matches(LocalTag tag)
     {
         if (!name.equals(tag.getMethodName()))
             return false;
@@ -63,7 +64,8 @@ public final class JavaExpression extends Expression implements Constants
         return true;
     }
 
-    public boolean equals(Object obj)
+    @Override
+	public boolean equals(Object obj)
     {
         if (this == obj)
             return true;
@@ -79,7 +81,8 @@ public final class JavaExpression extends Expression implements Constants
         return false;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer();
         switch (type) {

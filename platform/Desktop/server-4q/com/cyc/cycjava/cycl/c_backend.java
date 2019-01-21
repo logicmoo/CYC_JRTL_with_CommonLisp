@@ -3914,15 +3914,18 @@ public final class c_backend extends SubLTranslatedFile
         return (SubLObject)c_backend.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_c_backend_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_c_backend_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_c_backend_file();
     }
     

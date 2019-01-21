@@ -1033,15 +1033,18 @@ public final class inference_worker_join extends SubLTranslatedFile
         return (SubLObject)inference_worker_join.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_worker_join_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_worker_join_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_worker_join_file();
     }
     
@@ -1127,31 +1130,38 @@ public final class inference_worker_join extends SubLTranslatedFile
             this.$second_proof_index = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$join_link_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$join_vars;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$first_proof_index;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$second_proof_index;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$join_vars = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$first_proof_index = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$second_proof_index = value;
         }
         
@@ -1166,7 +1176,8 @@ public final class inference_worker_join extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("JOIN-LINK-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_worker_join.join_link_data_p(arg1);
         }
     }

@@ -40,7 +40,8 @@ import org.armedbear.j.Editor;
         readOnly = true;
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         if (mailbox.lock()) {
             try {
@@ -56,7 +57,8 @@ import org.armedbear.j.Editor;
         return LOAD_FAILED;
     }
 
-    public void deleteMessage()
+    @Override
+	public void deleteMessage()
     {
         if (mailbox.lock()) {
             try {
@@ -81,7 +83,8 @@ import org.armedbear.j.Editor;
         }
     }
 
-    public void flagMessage()
+    @Override
+	public void flagMessage()
     {
         if (mailbox.lock()) {
             try {

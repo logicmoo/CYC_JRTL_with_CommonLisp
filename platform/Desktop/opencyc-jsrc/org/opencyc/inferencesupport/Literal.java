@@ -119,7 +119,8 @@ public class Literal  implements Comparable{
      * @param object the object for comparison
      * @return <tt>boolean</tt> indicating equality of an object with this object.
      */
-    public boolean equals(Object object) {
+    @Override
+	public boolean equals(Object object) {
         if (! (object instanceof Literal))
             return false;
         Literal thatLiteral = (Literal) object;
@@ -131,7 +132,8 @@ public class Literal  implements Comparable{
      *
      * @return the hash code for the <tt>Literal</tt>
      */
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return this.formula.hashCode();
     }
 
@@ -144,7 +146,8 @@ public class Literal  implements Comparable{
      * @return a negative integer, zero, or a positive integer as this
      * object is less than, equal to, or greater than the specified object
      */
-     public int compareTo (Object object) {
+     @Override
+	public int compareTo (Object object) {
         if (! (object instanceof Literal))
             throw new ClassCastException("Must be a Literal object");
         return (new Integer(this.getArity())).compareTo(new Integer(((Literal) object).getArity()));
@@ -403,7 +406,8 @@ public class Literal  implements Comparable{
      *
      * @return the literal's formula formated as a <tt>String</tt>.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return formula.toString();
     }
 

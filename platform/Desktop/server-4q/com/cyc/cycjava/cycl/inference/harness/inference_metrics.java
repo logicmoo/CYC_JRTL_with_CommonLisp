@@ -3304,15 +3304,18 @@ public final class inference_metrics extends SubLTranslatedFile
         return (SubLObject)inference_metrics.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_metrics_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_metrics_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_metrics_file();
     }
     
@@ -3856,39 +3859,48 @@ public final class inference_metrics extends SubLTranslatedFile
             this.$cross_productP = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$inference_metric_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$name;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$evaluation_func;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$evaluation_arg1;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$cross_productP;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$name = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$evaluation_func = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$evaluation_arg1 = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$cross_productP = value;
         }
         
@@ -3903,7 +3915,8 @@ public final class inference_metrics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-METRIC-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_metrics.inference_metric_p(arg1);
         }
     }

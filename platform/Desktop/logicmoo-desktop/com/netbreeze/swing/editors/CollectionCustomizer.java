@@ -11,7 +11,8 @@ import javax.swing.event.*;
 public class CollectionCustomizer extends LargeBeanView implements ChangeListener {
   CollectionContentsPanel contents;
 
-  protected void initGUI() {
+  @Override
+protected void initGUI() {
     super.initGUI();
     try {
       contents = new CollectionContentsPanel((Collection) getBean());
@@ -22,7 +23,8 @@ public class CollectionCustomizer extends LargeBeanView implements ChangeListene
     }
   }
 
-  public void stateChanged(ChangeEvent evt) {
+  @Override
+public void stateChanged(ChangeEvent evt) {
     if (tabs.getSelectedIndex() == 0) {
       if (contents != null) {
         contents.reloadContents();

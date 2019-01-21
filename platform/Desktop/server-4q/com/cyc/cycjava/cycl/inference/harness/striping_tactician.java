@@ -2831,15 +2831,18 @@ public final class striping_tactician extends SubLTranslatedFile
         return (SubLObject)striping_tactician.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_striping_tactician_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_striping_tactician_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_striping_tactician_file();
     }
     
@@ -3053,63 +3056,78 @@ public final class striping_tactician extends SubLTranslatedFile
             this.$new_root_metrics_map = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$striping_tactician_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$new_root_substrategy;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$transformation_substrategy;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$removal_substrategies;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$new_root_r_map;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$new_root_proofiness_map;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$new_root_delay_map;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$new_root_metrics_map;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$new_root_substrategy = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$transformation_substrategy = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$removal_substrategies = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$new_root_r_map = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$new_root_proofiness_map = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$new_root_delay_map = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$new_root_metrics_map = value;
         }
         
@@ -3124,7 +3142,8 @@ public final class striping_tactician extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRIPING-TACTICIAN-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return striping_tactician.striping_tactician_data_p(arg1);
         }
     }
@@ -3152,71 +3171,88 @@ public final class striping_tactician extends SubLTranslatedFile
             this.$answer_count = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$new_root_metrics_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$start_inference_step_count;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$index;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$start_time;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$time_to_first_answer;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$steps_to_first_answer;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$time_to_last_answer;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$steps_to_last_answer;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$answer_count;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$start_inference_step_count = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$index = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$start_time = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$time_to_first_answer = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$steps_to_first_answer = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$time_to_last_answer = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$steps_to_last_answer = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$answer_count = value;
         }
         
@@ -3231,7 +3267,8 @@ public final class striping_tactician extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NEW-ROOT-METRICS-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return striping_tactician.new_root_metrics_p(arg1);
         }
     }

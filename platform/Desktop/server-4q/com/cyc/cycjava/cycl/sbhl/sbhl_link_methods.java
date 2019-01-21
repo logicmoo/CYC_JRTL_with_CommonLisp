@@ -3711,15 +3711,18 @@ public final class sbhl_link_methods extends SubLTranslatedFile
         return (SubLObject)sbhl_link_methods.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_link_methods_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_link_methods_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_link_methods_file();
     }
     

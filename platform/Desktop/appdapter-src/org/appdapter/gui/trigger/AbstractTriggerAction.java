@@ -150,5 +150,6 @@ public abstract class AbstractTriggerAction extends AbstractAction implements KM
 		return getValue(Action.NAME, String.class);
 	}
 
+	@Override
 	abstract public void actionPerformed(ActionEvent e);
 }

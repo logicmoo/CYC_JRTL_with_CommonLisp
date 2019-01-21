@@ -8,7 +8,8 @@ import java.awt.*;
 import javax.swing.*;
 
 public class BeanBowlApplet extends JApplet {
-  public void init() {
+  @Override
+public void init() {
     Box box = new Box(BoxLayout.Y_AXIS);
     getContentPane().setLayout(new BorderLayout());
     getContentPane().add("Center", box);

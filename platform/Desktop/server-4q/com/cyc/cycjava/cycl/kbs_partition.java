@@ -597,15 +597,18 @@ public final class kbs_partition extends SubLTranslatedFile
         return (SubLObject)kbs_partition.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kbs_partition_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kbs_partition_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kbs_partition_file();
     }
     

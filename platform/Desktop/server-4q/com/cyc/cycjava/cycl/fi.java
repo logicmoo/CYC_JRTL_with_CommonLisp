@@ -4861,15 +4861,18 @@ public final class fi extends SubLTranslatedFile
         return (SubLObject)fi.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_fi_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_fi_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_fi_file();
     }
     

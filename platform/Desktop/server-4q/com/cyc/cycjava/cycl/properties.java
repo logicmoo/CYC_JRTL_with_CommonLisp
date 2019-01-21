@@ -2290,15 +2290,18 @@ public final class properties extends SubLTranslatedFile
         return (SubLObject)properties.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_properties_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_properties_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_properties_file();
     }
     

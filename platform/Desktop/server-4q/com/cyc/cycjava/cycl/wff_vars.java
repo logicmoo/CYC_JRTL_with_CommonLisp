@@ -364,15 +364,18 @@ public final class wff_vars extends SubLTranslatedFile
         return (SubLObject)wff_vars.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_wff_vars_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_wff_vars_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_wff_vars_file();
     }
     

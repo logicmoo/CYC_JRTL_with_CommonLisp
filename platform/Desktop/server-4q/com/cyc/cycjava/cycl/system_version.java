@@ -83,15 +83,18 @@ public final class system_version extends SubLTranslatedFile
         return (SubLObject)system_version.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_system_version_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_system_version_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_system_version_file();
     }
     

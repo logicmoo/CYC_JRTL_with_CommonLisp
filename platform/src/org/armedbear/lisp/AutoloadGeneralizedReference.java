@@ -43,7 +43,8 @@ public final class AutoloadGeneralizedReference extends Autoload
     this.indicator = indicator;
   }
 
-  public void load()
+  @Override
+public void load()
   {
     Load.loadSystemFile(getFileName(), true);
   }
@@ -59,7 +60,8 @@ public final class AutoloadGeneralizedReference extends Autoload
     pf_autoload_setf_expander() {
       super("autoload-setf-expander", PACKAGE_EXT, true);
     }
-    public LispObject execute(LispObject first, LispObject second) {
+    @Override
+	public LispObject execute(LispObject first, LispObject second) {
       final String filename = second.getStringValue();
       return installAutoloadGeneralizedReference(first, SETF_EXPANDER, filename);
     }
@@ -76,7 +78,8 @@ public final class AutoloadGeneralizedReference extends Autoload
     pf_autoload_setf_function() {
       super("autoload-setf-function", PACKAGE_EXT, true);
     }
-    public LispObject execute(LispObject first, LispObject second) {
+    @Override
+	public LispObject execute(LispObject first, LispObject second) {
       final String filename = second.getStringValue();
       return installAutoloadGeneralizedReference(first, SETF_FUNCTION, filename);
     }
@@ -92,7 +95,8 @@ public final class AutoloadGeneralizedReference extends Autoload
     pf_autoload_ref_p() {
       super("autoload-ref-p", PACKAGE_EXT, true, "symbol");
     }
-    public LispObject execute(LispObject arg) {
+    @Override
+	public LispObject execute(LispObject arg) {
       LispObject list = checkSymbol(arg).getPropertyList();
       while (list != NIL) {
         if (list.car() instanceof AutoloadGeneralizedReference) {

@@ -78,7 +78,8 @@ public final class ConfirmReplacementDialog extends AbstractDialog
         return button;
     }
 
-    protected void enter()
+    @Override
+	protected void enter()
     {
         yes();
     }
@@ -174,7 +175,8 @@ public final class ConfirmReplacementDialog extends AbstractDialog
             replacement.setConfirmChanges(false);
     }
 
-    public void actionPerformed(ActionEvent e)
+    @Override
+	public void actionPerformed(ActionEvent e)
     {
         if (e.getActionCommand().equals("Yes")) {
             yes();
@@ -198,7 +200,8 @@ public final class ConfirmReplacementDialog extends AbstractDialog
         }
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         if (e.isConsumed())
             return;
@@ -235,7 +238,8 @@ public final class ConfirmReplacementDialog extends AbstractDialog
         super.keyPressed(e);
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         rect = getBounds();
         super.dispose();

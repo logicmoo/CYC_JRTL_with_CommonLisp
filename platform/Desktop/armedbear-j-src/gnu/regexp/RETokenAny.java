@@ -32,11 +32,13 @@ final class RETokenAny extends REToken {
     this.matchNull = matchNull;
   }
 
-  int getMinimumLength() {
+  @Override
+int getMinimumLength() {
     return 1;
   }
 
-    boolean match(CharIndexed input, REMatch mymatch) {
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) {
     char ch = input.charAt(mymatch.index);
     if ((ch == CharIndexed.OUT_OF_BOUNDS)
 	|| (!newline && (ch == '\n'))
@@ -47,7 +49,8 @@ final class RETokenAny extends REToken {
     return next(input, mymatch);
   }
 
-  void dump(StringBuffer os) {
+  @Override
+void dump(StringBuffer os) {
     os.append('.');
   }
 }

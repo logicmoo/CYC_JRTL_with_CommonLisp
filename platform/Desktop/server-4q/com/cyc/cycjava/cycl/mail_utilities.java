@@ -760,15 +760,18 @@ public final class mail_utilities extends SubLTranslatedFile
         return (SubLObject)mail_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_mail_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_mail_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_mail_utilities_file();
     }
     

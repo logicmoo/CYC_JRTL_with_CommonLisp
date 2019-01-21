@@ -103,7 +103,8 @@ public final class StatusBar extends JComponent
         return sb.toString();
     }
 
-    public void paint(Graphics g)
+    @Override
+	public void paint(Graphics g)
     {
         Editor editor = frame.getCurrentEditor();
         Buffer buffer = editor.getBuffer();
@@ -144,7 +145,8 @@ public final class StatusBar extends JComponent
         paintImmediately(0, 0, getWidth(), getHeight());
     }
 
-    public void preferencesChanged()
+    @Override
+	public void preferencesChanged()
     {
         displayContext =
             Editor.preferences().getIntegerProperty(Property.STATUS_BAR_DISPLAY_CONTEXT);

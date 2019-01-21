@@ -44,6 +44,7 @@ public class LocalInformationSetTransformManager extends LocalPluginManager <Inf
 			super("Information Set Transformer");
 		}
 
+		@Override
 		public void run() {
 			mTransformer.initialise();
 			Context context = mTransformer.createContext();

@@ -131,7 +131,8 @@ public final class LocationBar extends JPanel implements Constants,
             Debug.bug();
     }
 
-    public void paintComponent(java.awt.Graphics g)
+    @Override
+	public void paintComponent(java.awt.Graphics g)
     {
         if (editor == Editor.currentEditor()) {
             label.setForeground(Color.black);
@@ -173,7 +174,8 @@ public final class LocationBar extends JPanel implements Constants,
         }
     }
 
-    public void actionPerformed(ActionEvent e)
+    @Override
+	public void actionPerformed(ActionEvent e)
     {
         final Frame frame = editor.getFrame();
         frame.closeEditor(editor);
@@ -183,17 +185,22 @@ public final class LocationBar extends JPanel implements Constants,
             sidebar.setUpdateFlag(SIDEBAR_SET_BUFFER);
     }
 
-    public void mouseClicked(MouseEvent e) {}
+    @Override
+	public void mouseClicked(MouseEvent e) {}
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e) {}
+    @Override
+	public void mouseExited(MouseEvent e) {}
 
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         editor.ensureActive();
         editor.getFrame().setFocus(textField);
     }
 
-    public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
 }

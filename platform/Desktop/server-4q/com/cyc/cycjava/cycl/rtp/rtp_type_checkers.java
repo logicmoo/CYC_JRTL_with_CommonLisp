@@ -585,15 +585,18 @@ public final class rtp_type_checkers extends SubLTranslatedFile
         return (SubLObject)rtp_type_checkers.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rtp_type_checkers_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rtp_type_checkers_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rtp_type_checkers_file();
     }
     

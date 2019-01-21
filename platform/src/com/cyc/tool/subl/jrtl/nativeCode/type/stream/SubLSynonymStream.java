@@ -112,11 +112,13 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 	}
 
 	/** throws exception if isRandomAccess() returns false */
+	@Override
 	public long file_length() {
 		return getStream(true).file_length();
 	}
 
 	/** throws exception if isRandomAccess() returns false */
+	@Override
 	public void seek(long pos) {
 		getStream(true).seek(pos);
 	}
@@ -133,35 +135,42 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 	 */
 
 	/** throws exception if isRandomAccess() returns false */
+	@Override
 	public void setLength(long newLength) {
 		getStream(true).setLength(newLength);
 	}
 
+	@Override
 	public void setNewline(String newline) {
 		getStream(true).setNewline(newline);
 	}
 
 	/** Method created to avoid casting */
+	@Override
 	public SubLInputBinaryStream toInputBinaryStream() {
 		return getStream(true).toInputBinaryStream();
 	}
 
 	/** Method created to avoid casting */
+	@Override
 	public SubLInputStream toInputStream() {
 		return getStream(true).toInputStream();
 	}
 
 	/** Method created to avoid casting */
+	@Override
 	public SubLInputTextStream toInputTextStream() {
 		return getStream(true).toInputTextStream();
 	}
 
 	/** Method created to avoid casting */
+	@Override
 	public SubLOutputBinaryStream toOutputBinaryStream() {
 		return getStream(true).toOutputBinaryStream();
 	}
 
 	/** Method created to avoid casting */
+	@Override
 	public SubLOutputStream toOutputStream() {
 		return getStream(true).toOutputStream();
 	}
@@ -170,4 +179,11 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 	public SubLOutputTextStream toOutputTextStream() {
 		return getStream(true).toOutputTextStream();
 	}
+	
+	@Override
+	public int getLineNumber()
+	{
+		return getStream(true).getLineNumber();
+	}
+
 }

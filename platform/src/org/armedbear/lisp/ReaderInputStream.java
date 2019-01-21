@@ -24,7 +24,8 @@ public class ReaderInputStream extends InputStream
         this.encoding = encoding;
     }
 
-    public synchronized int read() throws IOException {
+    @Override
+	public synchronized int read() throws IOException {
         if (this.in == null) {
             throw new IOException("Stream Closed");
         }
@@ -48,7 +49,8 @@ public class ReaderInputStream extends InputStream
         return result;
     }
 
-    public synchronized int read(final byte[] b, final int off, int len) throws IOException {
+    @Override
+	public synchronized int read(final byte[] b, final int off, int len) throws IOException {
         if (this.in == null) {
             throw new IOException("Stream Closed");
         }
@@ -74,7 +76,8 @@ public class ReaderInputStream extends InputStream
         return len;
     }
 
-    public synchronized void mark(final int limit) {
+    @Override
+	public synchronized void mark(final int limit) {
         try {
             this.in.mark(limit);
         }
@@ -83,7 +86,8 @@ public class ReaderInputStream extends InputStream
         }
     }
 
-    public synchronized int available() throws IOException {
+    @Override
+	public synchronized int available() throws IOException {
         if (this.in == null) {
             throw new IOException("Stream Closed");
         }
@@ -96,11 +100,13 @@ public class ReaderInputStream extends InputStream
         return 0;
     }
 
-    public boolean markSupported() {
+    @Override
+	public boolean markSupported() {
         return false;
     }
 
-    public synchronized void reset() throws IOException {
+    @Override
+	public synchronized void reset() throws IOException {
         if (this.in == null) {
             throw new IOException("Stream Closed");
         }
@@ -108,7 +114,8 @@ public class ReaderInputStream extends InputStream
         this.in.reset();
     }
 
-    public synchronized void close() throws IOException {
+    @Override
+	public synchronized void close() throws IOException {
         this.in.close();
         this.slack = null;
         this.in = null;

@@ -662,15 +662,18 @@ public final class sparse_vector extends SubLTranslatedFile
         return (SubLObject)sparse_vector.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sparse_vector_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sparse_vector_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sparse_vector_file();
     }
     
@@ -731,23 +734,28 @@ public final class sparse_vector extends SubLTranslatedFile
             this.$dimensions = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$sparse_vector_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$magnitude;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$dimensions;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$magnitude = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$dimensions = value;
         }
         
@@ -762,7 +770,8 @@ public final class sparse_vector extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SPARSE-VECTOR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sparse_vector.sparse_vector_p(arg1);
         }
     }

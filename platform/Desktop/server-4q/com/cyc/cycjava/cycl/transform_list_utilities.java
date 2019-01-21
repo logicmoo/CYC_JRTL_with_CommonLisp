@@ -825,15 +825,18 @@ public final class transform_list_utilities extends SubLTranslatedFile
         return (SubLObject)transform_list_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_transform_list_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_transform_list_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_transform_list_utilities_file();
     }
     

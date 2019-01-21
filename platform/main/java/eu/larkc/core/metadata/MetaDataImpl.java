@@ -17,6 +17,7 @@ public class MetaDataImpl implements MetaData {
 	}
 	
 	 
+	@Override
 	public MethodMetaData[] getMethods() {
 		MethodMetaData[] methodMetaDataArray = new MethodMetaData[methodMetaDataV.size()];
 		methodMetaDataV.toArray(methodMetaDataArray);
@@ -24,6 +25,7 @@ public class MetaDataImpl implements MetaData {
 	}
 
 	 
+	@Override
 	public String getPluginType() {
 		return pluginType;
 	}

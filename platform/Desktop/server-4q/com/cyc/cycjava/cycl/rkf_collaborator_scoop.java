@@ -1399,15 +1399,18 @@ public final class rkf_collaborator_scoop extends SubLTranslatedFile
         return (SubLObject)rkf_collaborator_scoop.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_collaborator_scoop_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_collaborator_scoop_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_collaborator_scoop_file();
     }
     
@@ -1626,39 +1629,48 @@ public final class rkf_collaborator_scoop extends SubLTranslatedFile
             this.$initialized_p = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$scoop_session_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$machine;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$port;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$tcp_server;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$initialized_p;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$machine = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$port = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$tcp_server = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$initialized_p = value;
         }
         
@@ -1673,7 +1685,8 @@ public final class rkf_collaborator_scoop extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SCOOP-SESSION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return rkf_collaborator_scoop.scoop_session_p(arg1);
         }
     }

@@ -395,15 +395,18 @@ public final class modification_counting_map extends SubLTranslatedFile
         return (SubLObject)modification_counting_map.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_modification_counting_map_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_modification_counting_map_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_modification_counting_map_file();
     }
     
@@ -465,31 +468,38 @@ public final class modification_counting_map extends SubLTranslatedFile
             this.$remove_count = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$modification_counting_map_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$map;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$put_count;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$remove_count;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$map = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$put_count = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$remove_count = value;
         }
         
@@ -504,7 +514,8 @@ public final class modification_counting_map extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("MODIFICATION-COUNTING-MAP-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return modification_counting_map.modification_counting_map_p(arg1);
         }
     }

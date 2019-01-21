@@ -102,6 +102,7 @@ public class TestOLD {
 		final Query q = new Query("jpl_slow_goal"); // 10 successive sleep(1)
 		System.err.println("test10s:");
 		Thread t = new Thread(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					System.err.println("q.hasSolution() ... ");

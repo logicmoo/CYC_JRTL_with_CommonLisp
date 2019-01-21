@@ -7107,15 +7107,18 @@ public final class cb_kct_test extends SubLTranslatedFile
         return (SubLObject)cb_kct_test.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_kct_test_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_kct_test_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_kct_test_file();
     }
     
@@ -7642,111 +7645,138 @@ public final class cb_kct_test extends SubLTranslatedFile
             this.$answer_cardinality = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$kct_test_state_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$test_spec;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$name;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$comments;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$query_state;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$save_mt;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$answer_status;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$answer_options_index;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$answer_options_bindings_index;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$categories;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$metrics;
         }
         
-        public SubLObject getField12() {
+        @Override
+		public SubLObject getField12() {
             return this.$cyclists;
         }
         
-        public SubLObject getField13() {
+        @Override
+		public SubLObject getField13() {
             return this.$notes;
         }
         
-        public SubLObject getField14() {
+        @Override
+		public SubLObject getField14() {
             return this.$answer_cardinality;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$test_spec = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$name = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$comments = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$query_state = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$save_mt = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$answer_status = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$answer_options_index = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$answer_options_bindings_index = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$categories = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$metrics = value;
         }
         
-        public SubLObject setField12(final SubLObject value) {
+        @Override
+		public SubLObject setField12(final SubLObject value) {
             return this.$cyclists = value;
         }
         
-        public SubLObject setField13(final SubLObject value) {
+        @Override
+		public SubLObject setField13(final SubLObject value) {
             return this.$notes = value;
         }
         
-        public SubLObject setField14(final SubLObject value) {
+        @Override
+		public SubLObject setField14(final SubLObject value) {
             return this.$answer_cardinality = value;
         }
         
@@ -7761,7 +7791,8 @@ public final class cb_kct_test extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("KCT-TEST-STATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cb_kct_test.kct_test_state_p(arg1);
         }
     }
@@ -7779,31 +7810,38 @@ public final class cb_kct_test extends SubLTranslatedFile
             this.$id = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$kct_answer_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$binding_set;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$status;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$id;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$binding_set = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$status = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$id = value;
         }
         
@@ -7818,7 +7856,8 @@ public final class cb_kct_test extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("KCT-ANSWER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cb_kct_test.kct_answer_p(arg1);
         }
     }

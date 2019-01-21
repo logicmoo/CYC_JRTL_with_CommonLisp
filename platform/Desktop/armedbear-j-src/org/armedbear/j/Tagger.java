@@ -85,5 +85,6 @@ public abstract class Tagger implements Constants, Runnable
         }
     }
 
-    public abstract void run();
+    @Override
+	public abstract void run();
 }

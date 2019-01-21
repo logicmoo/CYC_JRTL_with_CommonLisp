@@ -982,15 +982,18 @@ public final class file_backed_cache extends SubLTranslatedFile
         return (SubLObject)file_backed_cache.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_file_backed_cache_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_file_backed_cache_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_file_backed_cache_file();
     }
     
@@ -1088,79 +1091,98 @@ public final class file_backed_cache extends SubLTranslatedFile
             this.$is_busy = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$file_backed_cache_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$file_hash_table_cache;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$local_cache;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$file_hash_table_path;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$should_preload_cache;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$is_fort_cache;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$fht_cache_percentage;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$test;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$mode;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$is_busy;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$file_hash_table_cache = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$local_cache = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$file_hash_table_path = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$should_preload_cache = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$is_fort_cache = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$fht_cache_percentage = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$test = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$mode = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$is_busy = value;
         }
         
@@ -1175,7 +1197,8 @@ public final class file_backed_cache extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FILE-BACKED-CACHE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return file_backed_cache.file_backed_cache_p(arg1);
         }
     }

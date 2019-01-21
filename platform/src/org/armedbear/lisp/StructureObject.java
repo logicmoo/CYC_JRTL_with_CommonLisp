@@ -89,6 +89,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		}
 	}
 
+	@Override
 	protected LispObject badIndex(int n)
 	{
 		StringBuilder sb = new StringBuilder("Invalid slot index ");
@@ -174,6 +175,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		this.setStructureClass((StructureClass) obj.classOf());
 	}
 
+	@Override
 	public LispObject typeOf()
 	{
 		if (structureClass == null) return super.typeOf();
@@ -185,6 +187,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		return typeOf();
 	}
 
+	@Override
 	public LispObject classOf()
 	{
 		if (structureClass == null) return super.classOf();
@@ -232,6 +235,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	 * @param slotName
 	 * @return
 	 */
+	@Override
 	final public int getInstanceSlotIndex(LispObject slotName)
 	{
 
@@ -242,6 +246,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	//		return getLayout().getSharedSlotLocation(slotName);
 	//	}
 
+	@Override
 	public void setSlotValue(LispObject slotName, LispObject newValue)
 	{
 		final int index = getSlotIndex(slotName);
@@ -261,6 +266,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		}
 	}
 
+	@Override
 	public LispObject getParts()
 	{
 		LispObject result = NIL;
@@ -294,6 +300,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		return effectiveSlot;
 	}
 
+	@Override
 	public LispObject typep(LispObject type)
 	{
 		if (type instanceof StructureClass) { return memq(type, ((LispClass) classOf()).getCPL()) ? T : NIL; }
@@ -325,11 +332,13 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		return false;
 	}
 
+	@Override
 	public final int psxhash()
 	{
 		return psxhash(4);
 	}
 
+	@Override
 	public final int psxhash(int depth)
 	{
 		int result = mix(classOf().sxhash(), 7814971);
@@ -343,6 +352,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		return result & 0x7fffffff;
 	}
 
+	@Override
 	public String printObject()
 	{
 		List set = printingObjectR.get();
@@ -359,6 +369,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	}
 
+	@Override
 	public String printObjectImpl()
 	{
 		try
@@ -590,6 +601,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 			super("structure-set", PACKAGE_SYS, true);
 		}
 
+		@Override
 		public LispObject execute(LispObject first, LispObject second, LispObject third)
 		{
 			if (first instanceof StructureObject) try
@@ -621,28 +633,33 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 			return new StructureObject(checkSymbol(first), second);
 		}
 
+		@Override
 		public LispObject execute(LispObject first, LispObject second, LispObject third)
 
 		{
 			return new StructureObject(checkSymbol(first), second, third);
 		}
 
+		@Override
 		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth)
 
 		{
 			return new StructureObject(checkSymbol(first), second, third, fourth);
 		}
 
+		@Override
 		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth)
 		{
 			return new StructureObject(checkSymbol(first), second, third, fourth, fifth);
 		}
 
+		@Override
 		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth)
 		{
 			return new StructureObject(checkSymbol(first), second, third, fourth, fifth, sixth);
 		}
 
+		@Override
 		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh)
 		{
 			return new StructureObject(checkSymbol(first), second, third, fourth, fifth, sixth, seventh);
@@ -737,6 +754,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	}
 
 	//@Override
+	@Override
 	public LispObject getSharedSlotLocation(LispObject slotName)
 	{
 		// TODO Auto-generated method stub
@@ -762,6 +780,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	}
 
 	//	@Override
+	@Override
 	public SubLObject[] getSlots()
 	{
 		return slots;
@@ -769,6 +788,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	//
 	//@Override
+	@Override
 	public void setSlots(LispObject[] tempSlots)
 	{
 		slots = tempSlots;

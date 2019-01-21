@@ -1332,15 +1332,18 @@ public final class kb_indexing_macros extends SubLTranslatedFile
         return (SubLObject)kb_indexing_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_indexing_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_indexing_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_indexing_macros_file();
     }
     

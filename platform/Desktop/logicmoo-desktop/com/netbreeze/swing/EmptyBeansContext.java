@@ -12,7 +12,8 @@ class EmptyBeansContext implements BeansContext{
    *
    * @returns true if the bean was added, false if the bean was already there
    */
-  public boolean addBean(Object bean) {
+  @Override
+public boolean addBean(Object bean) {
     return false;
   }
 
@@ -21,40 +22,50 @@ class EmptyBeansContext implements BeansContext{
    *
    * @returns true if the bean was removed, false if that bean wasn't in this context
    */
-  public boolean removeBean(Object bean) {
+  @Override
+public boolean removeBean(Object bean) {
     return false;
   }
 
-  public Collection getBeansOfType(Class type) {
+  @Override
+public Collection getBeansOfType(Class type) {
     return new Vector();
   }
 
-  public boolean containsBean(Object bean) {
+  @Override
+public boolean containsBean(Object bean) {
     return false;
   }
 
-  public void showBeanDetails(Object bean) {
+  @Override
+public void showBeanDetails(Object bean) {
   }
 
-  public void addListener(BeansContextListener o) {
+  @Override
+public void addListener(BeansContextListener o) {
   }
 
-  public void removeListener(BeansContextListener o) {
+  @Override
+public void removeListener(BeansContextListener o) {
   }
 
-  public Collection getActions(Object bean) {
+  @Override
+public Collection getActions(Object bean) {
     return new Vector();
   }
 
-  public Object findBean(String name) {
+  @Override
+public Object findBean(String name) {
     return null;
   }
 
-  public String getBeanName(Object bean) {
+  @Override
+public String getBeanName(Object bean) {
     return "" + bean;
   }
 
-  public void showError(String msg, Throwable err) {
+  @Override
+public void showError(String msg, Throwable err) {
     new ErrorDialog(msg, err).show();
   }
 

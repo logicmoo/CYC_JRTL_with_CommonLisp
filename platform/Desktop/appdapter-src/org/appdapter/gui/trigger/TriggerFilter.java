@@ -26,6 +26,7 @@ public class TriggerFilter implements Cloneable {
 	boolean addGlobalStatics = UtilityMenuOptions.addGlobalStatics || UtilityMenuOptions.allTriggersAreGlobal;
 	boolean addNonMembers = addGlobalStatics;
 	
+	@Override
 	public TriggerFilter clone() {
 		try {
 			return (TriggerFilter) super.clone();

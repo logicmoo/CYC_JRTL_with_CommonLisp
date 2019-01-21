@@ -150,7 +150,8 @@ public class ClassNode extends MemberNode implements ClassVisitor {
     // Implementation of the ClassVisitor interface
     // ------------------------------------------------------------------------
 
-    public void visit(
+    @Override
+	public void visit(
         final int version,
         final int access,
         final String name,
@@ -168,12 +169,14 @@ public class ClassNode extends MemberNode implements ClassVisitor {
         }
     }
 
-    public void visitSource(final String file, final String debug) {
+    @Override
+	public void visitSource(final String file, final String debug) {
         sourceFile = file;
         sourceDebug = debug;
     }
 
-    public void visitOuterClass(
+    @Override
+	public void visitOuterClass(
         final String owner,
         final String name,
         final String desc)
@@ -183,7 +186,8 @@ public class ClassNode extends MemberNode implements ClassVisitor {
         outerMethodDesc = desc;
     }
 
-    public void visitInnerClass(
+    @Override
+	public void visitInnerClass(
         final String name,
         final String outerName,
         final String innerName,
@@ -196,7 +200,8 @@ public class ClassNode extends MemberNode implements ClassVisitor {
         innerClasses.add(icn);
     }
 
-    public FieldVisitor visitField(
+    @Override
+	public FieldVisitor visitField(
         final int access,
         final String name,
         final String desc,
@@ -208,7 +213,8 @@ public class ClassNode extends MemberNode implements ClassVisitor {
         return fn;
     }
 
-    public MethodVisitor visitMethod(
+    @Override
+	public MethodVisitor visitMethod(
         final int access,
         final String name,
         final String desc,

@@ -1015,15 +1015,18 @@ public final class hash_table_utilities extends SubLTranslatedFile
         return (SubLObject)hash_table_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_hash_table_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_hash_table_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_hash_table_utilities_file();
     }
     

@@ -6561,16 +6561,19 @@ public final class abstract_lexicon extends SubLTranslatedFile
 				ConsesLow.list(SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), SubLObjectFactory.makeSymbol("FABRICATION-FORBIDDEN?"), NIL, SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list(SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), SubLObjectFactory.makeSymbol("FABRICATION-ALLOWED?"), NIL, SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list(SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), SubLObjectFactory.makeSymbol("CREATE-LEX-ENTRIES"), ConsesLow.list(SubLObjectFactory.makeSymbol("STRING"), SubLObjectFactory.makeSymbol("NL-TRIE-ENTRY")), SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list(SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), SubLObjectFactory.makeSymbol("NOUN-COMPOUND-LEARN"), ConsesLow.list(SubLObjectFactory.makeSymbol("TEXT")), SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list(SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), SubLObjectFactory.makeSymbol("COOCCURRENCE-STATISTICS-LEARN"), ConsesLow.list(SubLObjectFactory.makeSymbol("TEXT")), SubLObjectFactory.makeKeyword("PROTECTED")) });
 	}
 
+	@Override
 	public void declareFunctions()
 	{
 		declare_abstract_lexicon_file();
 	}
 
+	@Override
 	public void initializeVariables()
 	{
 		init_abstract_lexicon_file();
 	}
 
+	@Override
 	public void runTopLevelForms()
 	{
 		setup_abstract_lexicon_file();
@@ -7343,66 +7346,79 @@ public final class abstract_lexicon extends SubLTranslatedFile
 			this.$type = CommonSymbols.NIL;
 		}
 
+		@Override
 		public SubLStructDecl getStructDecl()
 		{
 			return (SubLStructDecl) $textract_lemma_native.structDecl;
 		}
 
+		@Override
 		public SubLObject getField2()
 		{
 			return this.$paragraph;
 		}
 
+		@Override
 		public SubLObject getField3()
 		{
 			return this.$sentence;
 		}
 
+		@Override
 		public SubLObject getField4()
 		{
 			return this.$word;
 		}
 
+		@Override
 		public SubLObject getField5()
 		{
 			return this.$string;
 		}
 
+		@Override
 		public SubLObject getField6()
 		{
 			return this.$canon;
 		}
 
+		@Override
 		public SubLObject getField7()
 		{
 			return this.$type;
 		}
 
+		@Override
 		public SubLObject setField2(final SubLObject value)
 		{
 			return this.$paragraph = value;
 		}
 
+		@Override
 		public SubLObject setField3(final SubLObject value)
 		{
 			return this.$sentence = value;
 		}
 
+		@Override
 		public SubLObject setField4(final SubLObject value)
 		{
 			return this.$word = value;
 		}
 
+		@Override
 		public SubLObject setField5(final SubLObject value)
 		{
 			return this.$string = value;
 		}
 
+		@Override
 		public SubLObject setField6(final SubLObject value)
 		{
 			return this.$canon = value;
 		}
 
+		@Override
 		public SubLObject setField7(final SubLObject value)
 		{
 			return this.$type = value;
@@ -7421,6 +7437,7 @@ public final class abstract_lexicon extends SubLTranslatedFile
 			super(SubLTranslatedFile.extractFunctionNamed("TEXTRACT-LEMMA-P"));
 		}
 
+		@Override
 		public SubLObject processItem(final SubLObject arg1)
 		{
 			return textract_lemma_p(arg1);
@@ -7434,6 +7451,7 @@ public final class abstract_lexicon extends SubLTranslatedFile
 			super(SubLTranslatedFile.extractFunctionNamed("CLEAR-PREDS-FOR-LEXICON-EXCLUSION"));
 		}
 
+		@Override
 		public SubLObject processItem()
 		{
 			return clear_preds_for_lexicon_exclusion();
@@ -7454,36 +7472,43 @@ public final class abstract_lexicon extends SubLTranslatedFile
 			this.$lexicon = CommonSymbols.NIL;
 		}
 
+		@Override
 		public SubLStructDecl getStructDecl()
 		{
 			return (SubLStructDecl) $abstract_lexicon_iterator_state_native.structDecl;
 		}
 
+		@Override
 		public SubLObject getField2()
 		{
 			return this.$trie_iterator;
 		}
 
+		@Override
 		public SubLObject getField3()
 		{
 			return this.$next_entries;
 		}
 
+		@Override
 		public SubLObject getField4()
 		{
 			return this.$lexicon;
 		}
 
+		@Override
 		public SubLObject setField2(final SubLObject value)
 		{
 			return this.$trie_iterator = value;
 		}
 
+		@Override
 		public SubLObject setField3(final SubLObject value)
 		{
 			return this.$next_entries = value;
 		}
 
+		@Override
 		public SubLObject setField4(final SubLObject value)
 		{
 			return this.$lexicon = value;
@@ -7502,6 +7527,7 @@ public final class abstract_lexicon extends SubLTranslatedFile
 			super(SubLTranslatedFile.extractFunctionNamed("ABSTRACT-LEXICON-ITERATOR-STATE-P"));
 		}
 
+		@Override
 		public SubLObject processItem(final SubLObject arg1)
 		{
 			return abstract_lexicon_iterator_state_p(arg1);

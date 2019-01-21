@@ -101,17 +101,20 @@ public class Package extends SubLPackage implements java.io.Serializable
 		lispName = new SimpleString(name);
 	}
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
 		return Symbol.PACKAGE;
 	}
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
 		return BuiltInClass.PACKAGE;
 	}
 
-    public LispObject getDescription()
+    @Override
+	public LispObject getDescription()
     {
 		if (name != null) {
 			StringBuilder sb = new StringBuilder("The ");
@@ -122,7 +125,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return new SimpleString("PACKAGE");
 	}
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
 		if (type == Symbol.PACKAGE)
 			return T;
@@ -131,7 +135,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return super.typep(type);
 	}
 
-    public SubLPackage toPackage() {
+    @Override
+	public SubLPackage toPackage() {
     	return this;
     }
 
@@ -141,6 +146,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return showShortName();
 	}
 
+	@Override
 	public String showShortName() {
 		String list = name;
 		if (nicknames != null) {
@@ -156,7 +162,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return list;
 	}
 
-    public final String getName()
+    @Override
+	public final String getName()
     {
 		if(Lisp.insideToString>0) return showShortName();
 		return name;
@@ -167,14 +174,16 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return lispName != null ? lispName : NIL;
 	}
 
-    public final LispObject getPropertyList()
+    @Override
+	public final LispObject getPropertyList()
     {
 		if (propertyList == null)
 			propertyList = NIL;
 		return propertyList;
 	}
 
-    public final void setPropertyList(LispObject obj)
+    @Override
+	public final void setPropertyList(LispObject obj)
     {
 		if (obj == null)
 			throw new NullPointerException();
@@ -263,32 +272,38 @@ public class Package extends SubLPackage implements java.io.Serializable
 		Packages.addPackage(this);
 	}
 
-    public Symbol findInternalSymbol(AbstractString name)
+    @Override
+	public Symbol findInternalSymbol(AbstractString name)
     {
 		return internalSymbols.get(name.getStringValue());
 	}
 
-    public Symbol findInternalSymbol(String name)
+    @Override
+	public Symbol findInternalSymbol(String name)
     {
 		return internalSymbols.get(name);
 	}
 
-    public Symbol findExternalSymbol(AbstractString name)
+    @Override
+	public Symbol findExternalSymbol(AbstractString name)
     {
 		return externalSymbols.get(name.getStringValue());
 	}
 
-    public Symbol findExternalSymbol(String name)
+    @Override
+	public Symbol findExternalSymbol(String name)
     {
 		return externalSymbols.get(name);
 	}
 
-    public Symbol findExternalSymbol(AbstractString name, int hash)
+    @Override
+	public Symbol findExternalSymbol(AbstractString name, int hash)
     {
 		return externalSymbols.get(name.getStringValue());
 	}
 
 	// Returns null if symbol is not accessible in this package.
+	@Override
 	public Symbol findAccessibleSymbol(AbstractString name)
 
 	{
@@ -296,6 +311,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 	}
 
 	// Returns null if symbol is not accessible in this package.
+	@Override
 	public Symbol findAccessibleSymbol(String symbolName)
 
 	{
@@ -321,6 +337,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return null;
 	}
 
+	@Override
 	public LispObject findSymbol(String name)
 
 	{
@@ -375,7 +392,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 
 
 	// Helper function to add T and NIL to PACKAGE_CL.
-    public void addSymbol(Symbol symbol)
+    @Override
+	public void addSymbol(Symbol symbol)
     {
 		//Debug.assertTrue(symbol.getPackageOrNil() == this);
 		final String symbolName = symbol.getName();
@@ -400,26 +418,30 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return addSymbol(name.getStringValue());
 	}
 
-    public Symbol addInternalSymbol(String symbolName)
+    @Override
+	public Symbol addInternalSymbol(String symbolName)
     {
 		final Symbol symbol = new Symbol(symbolName, this);
 		internalSymbols.put(symbolName, symbol);
 		return symbol;
 	}
 
-    public Symbol addExternalSymbol(String symbolName)
+    @Override
+	public Symbol addExternalSymbol(String symbolName)
     {
 		final Symbol symbol = new Symbol(symbolName, this);
 		externalSymbols.put(symbolName, symbol);
 		return symbol;
 	}
 
-    public synchronized Symbol intern(AbstractString symbolName)
+    @Override
+	public synchronized Symbol intern(AbstractString symbolName)
     {
 		return intern(symbolName.getStringValue());
 	}
 
-    public synchronized Symbol intern(String symbolName)
+    @Override
+	public synchronized Symbol intern(String symbolName)
     {
 		// Look in external and internal symbols of this package.
 		Symbol symbol = externalSymbols.get(symbolName);
@@ -443,7 +465,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return addSymbol(symbolName);
 	}
 
-    public synchronized Symbol intern(final AbstractString s,
+    @Override
+	public synchronized Symbol intern(final AbstractString s,
                                       final LispThread thread)
     {
 		String symbolName = s.getStringValue();
@@ -469,6 +492,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return (Symbol) thread.setValues(addSymbol(symbolName), NIL);
 	}
 
+	@Override
 	public synchronized Symbol internAndExport(String symbolName)
 
 	{
@@ -594,11 +618,13 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return ret;
 	}
 
+	@Override
 	public void importSymbol(SubLObject symbol) {
 		importSymbol((Symbol)symbol.toSymbol());
 	}
 
-    public synchronized void importSymbol(Symbol symbol)
+    @Override
+	public synchronized void importSymbol(Symbol symbol)
     {
 		if (symbol.getPackageOrNil() == this)
 			return; // Nothing to do.
@@ -619,7 +645,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 			symbol.setPackage(this);
 	}
 
-    public synchronized void export(final Symbol symbol)
+    @Override
+	public synchronized void export(final Symbol symbol)
     {
 		final String symbolName = symbol.getName();
 		Symbol sym = null;
@@ -680,6 +707,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 		packageError(sb.toString());
 	}
 
+	@Override
 	public synchronized void unexport(final Symbol symbol)
 
 	{
@@ -696,6 +724,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 		}
 	}
 
+	@Override
 	public synchronized void shadow(final String symbolName)
 
 	{
@@ -719,7 +748,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		shadowingSymbols.put(symbolName, symbol);
 	}
 
-    public synchronized void shadowingImport(Symbol symbol)
+    @Override
+	public synchronized void shadowingImport(Symbol symbol)
     {
 		final String symbolName = symbol.getName();
 		Symbol existing = externalSymbols.get(symbolName);
@@ -748,6 +778,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 	// "USE-PACKAGE causes PACKAGE to inherit all the external symbols of
 	// PACKAGES-TO-USE. The inherited symbols become accessible as internal
 	// symbols of PACKAGE."
+	@Override
 	public void usePackage(Package pkg) {
 		usePackage(pkg, false);
 	}
@@ -914,6 +945,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 
 
 
+	@Override
 	public void unusePackage(Package pkg)
     {
 		if (useList instanceof Cons) {
@@ -948,14 +980,16 @@ public class Package extends SubLPackage implements java.io.Serializable
 		nicknames.add(s);
 	}
 
-    public String getNickname()
+    @Override
+	public String getNickname()
     {
 		if (nicknames != null && nicknames.size() > 0)
 			return (String) nicknames.get(0);
 		return null;
 	}
 
-    public LispObject packageNicknames()
+    @Override
+	public LispObject packageNicknames()
     {
 		LispObject list = NIL;
 		if (nicknames != null) {
@@ -967,19 +1001,22 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return list;
 	}
 
-    public LispObject getUseList()
+    @Override
+	public LispObject getUseList()
     {
 		if (useList == null)
 			useList = NIL;
 		return useList;
 	}
 
-    public boolean uses(LispObject pkg)
+    @Override
+	public boolean uses(LispObject pkg)
     {
 		return (useList instanceof Cons) && memq(pkg, useList);
 	}
 
-    public LispObject getUsedByList()
+    @Override
+	public LispObject getUsedByList()
     {
 		LispObject list = NIL;
 		if (usedByList != null) {
@@ -991,7 +1028,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return list;
 	}
 
-  public LispObject getLocalPackageNicknames()
+  @Override
+public LispObject getLocalPackageNicknames()
   {
 		LispObject list = NIL;
 		if (localNicknames != null) {
@@ -1002,7 +1040,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return list;
 	}
 
-  public LispObject addLocalPackageNickname(String name, Package pack)
+  @Override
+public LispObject addLocalPackageNickname(String name, Package pack)
   {
 		if (localNicknames == null) {
 			localNicknames = new ConcurrentHashMap<String, Package>();
@@ -1021,7 +1060,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		}
 	}
 
-  public LispObject removeLocalPackageNickname(String name)
+  @Override
+public LispObject removeLocalPackageNickname(String name)
   {
 		if (localNicknames == null || !localNicknames.containsKey(name)) {
 			return NIL;
@@ -1031,7 +1071,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		}
 	}
 
-  public void removeLocalPackageNicknamesForPackage(Package p)
+  @Override
+public void removeLocalPackageNicknamesForPackage(Package p)
   {
 		if (localNicknames == null || !localNicknames.containsValue(p)) {
 			return;
@@ -1044,7 +1085,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		}
 	}
 
-  public Collection<Package> getLocallyNicknamedPackages()
+  @Override
+public Collection<Package> getLocallyNicknamedPackages()
   {
 		// for implementing package-locally-nicknamed-by-list
     if (localNicknames == null) return new ArrayList<Package>();
@@ -1052,7 +1094,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 	}
 
 	// Find package named `name', taking local nicknames into account
-  public Package findPackage(String name)
+  @Override
+public Package findPackage(String name)
   {
 		if (localNicknames != null) {
 			Package pkg = localNicknames.get(name);
@@ -1061,7 +1104,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return Packages.findPackageGlobally(name);
 	}
 
-    public LispObject getShadowingSymbols()
+    @Override
+	public LispObject getShadowingSymbols()
     {
 		LispObject list = NIL;
 		if (shadowingSymbols != null) {
@@ -1073,12 +1117,14 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return list;
 	}
 
-    public synchronized Collection getExternalSymbols()
+    @Override
+	public synchronized Collection getExternalSymbols()
     {
 		return externalSymbols.values();
 	}
 
-    public synchronized List<Symbol> getAccessibleSymbols()
+    @Override
+	public synchronized List<Symbol> getAccessibleSymbols()
     {
 		ArrayList<Symbol> list = new ArrayList<Symbol>();
 		list.addAll(internalSymbols.values());
@@ -1115,7 +1161,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return list;
 	}
 
-    public synchronized LispObject PACKAGE_INTERNAL_SYMBOLS()
+    @Override
+	public synchronized LispObject PACKAGE_INTERNAL_SYMBOLS()
     {
 		LispObject list = NIL;
 		Collection symbols = internalSymbols.values();
@@ -1124,7 +1171,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return list;
 	}
 
-    public synchronized LispObject PACKAGE_EXTERNAL_SYMBOLS()
+    @Override
+	public synchronized LispObject PACKAGE_EXTERNAL_SYMBOLS()
     {
 		LispObject list = NIL;
 		Collection symbols = externalSymbols.values();
@@ -1133,7 +1181,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return list;
 	}
 
-    public synchronized LispObject PACKAGE_INHERITED_SYMBOLS()
+    @Override
+	public synchronized LispObject PACKAGE_INHERITED_SYMBOLS()
     {
 		LispObject list = NIL;
 		if (useList instanceof Cons) {
@@ -1156,7 +1205,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return list;
 	}
 
-    public synchronized LispObject getSymbols()
+    @Override
+	public synchronized LispObject getSymbols()
     {
 		LispObject list = NIL;
 		Collection internals = internalSymbols.values();
@@ -1168,12 +1218,14 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return list;
 		}
 
-    public synchronized Symbol[] symbols()
+    @Override
+	public synchronized Symbol[] symbols()
     {
 		return (Symbol[]) getLocalSymbols().toArray();
 	}
 
-    public String printObject()
+    @Override
+	public String printObject()
     {
     	boolean printReadable = Lisp.initialized && (_PRINT_FASL_.symbolValue() != NIL|| Lisp.isPrintReadable(null)) && name != null;
 		if (printReadable) {
@@ -1189,6 +1241,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 		}
 	}
 
+	@Override
 	public Object readResolve() throws java.io.ObjectStreamException {
 		Package pkg = findPackage(name);
 		if (pkg != null) {
@@ -1198,6 +1251,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 		}
 	}
 
+	@Override
 	public boolean isExported(SubLSymbol symbol) {
 		final String symbolName = symbol.getName();
 		/// if(true) return externalSymbols.containsKey(symbolName);
@@ -1205,10 +1259,12 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return sym == symbol;
 	}
 
+	@Override
 	public LispObject unintern(SubLSymbol symbol) {
 		return unintern(symbol.toLispObject());
 	}
 
+	@Override
 	public Set getLocalSymbols() {
 		synchronized(this) {
 		Set set = new HashSet();
@@ -1218,16 +1274,19 @@ public class Package extends SubLPackage implements java.io.Serializable
 		}
 	}
 
+	@Override
 	public Symbol internAndExport(SubLString symbolName, boolean updatePackage) {
 		Symbol symbol = internAndExport(symbolName.getStringValue());
 
 		return symbol;
 	}
 
+	@Override
 	public SubLObject getNickNames() {
 		return SubLObjectFactory.makeCons(nicknames);
 	}
 
+	@Override
 	public SubLString getNameAsSubLString() {
 		return lispName.toStr();
 	}

@@ -635,6 +635,7 @@ public class BshClassManager
 			this.types = types;
 		}
 
+		@Override
 		public int hashCode() 
 		{ 
 			if ( hashCode == 0 ) 
@@ -650,6 +651,7 @@ public class BshClassManager
 			return hashCode;
 		}
 
+		@Override
 		public boolean equals( Object o ) { 
 			SignatureKey target = (SignatureKey)o;
 			if ( types == null )

@@ -294,7 +294,8 @@ public final class ShellScriptFormatter extends Formatter
         endToken(state);
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         if (line == null) {
             clearSegmentList();
@@ -315,7 +316,8 @@ public final class ShellScriptFormatter extends Formatter
         return segmentList;
     }
 
-    public boolean parseBuffer()
+    @Override
+	public boolean parseBuffer()
     {
         int state = STATE_NEUTRAL;
         Line line = buffer.getFirstLine();
@@ -398,7 +400,8 @@ public final class ShellScriptFormatter extends Formatter
         return changed;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("ShellScriptMode");

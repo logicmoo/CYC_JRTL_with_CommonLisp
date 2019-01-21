@@ -273,7 +273,8 @@ public final class Jdb extends Buffer implements JdbConstants
     }
 
     private final Runnable fireContextChangedRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             synchronized (contextListeners) {
                 for (Iterator it = contextListeners.iterator(); it.hasNext();)
@@ -290,12 +291,14 @@ public final class Jdb extends Buffer implements JdbConstants
             SwingUtilities.invokeLater(fireContextChangedRunnable);
     }
 
-    public void initialize()
+    @Override
+	public void initialize()
     {
         // Nothing to do.
     }
 
-    public synchronized int load()
+    @Override
+	public synchronized int load()
     {
         if (!isLoaded()) {
             try {
@@ -429,7 +432,8 @@ public final class Jdb extends Buffer implements JdbConstants
     public void prompt()
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 appendString(prompt, true, JdbFormatter.JDB_FORMAT_PROMPT);
             }
@@ -469,7 +473,8 @@ public final class Jdb extends Buffer implements JdbConstants
     private void log(final String s, final boolean forceNewLine, final int flags)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 Log.debug(s);
                 appendString(s.concat("\n"), forceNewLine,
@@ -567,10 +572,12 @@ public final class Jdb extends Buffer implements JdbConstants
 
     public void displayRemoteOutput(InputStream inputStream) {
         ReaderThread readerThread = new ReaderThread(inputStream) {
-            public void update(final String s)
+            @Override
+			public void update(final String s)
             {
                 Runnable runnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         appendString(s, false, JdbFormatter.JDB_FORMAT_OUTPUT);
                     }
@@ -765,7 +772,8 @@ public final class Jdb extends Buffer implements JdbConstants
     public void startProcess()
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 startProcessInternal();
             }
@@ -915,7 +923,8 @@ public final class Jdb extends Buffer implements JdbConstants
     public void source(final Editor editor)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 if (location == null)
                     return;
@@ -991,7 +1000,8 @@ public final class Jdb extends Buffer implements JdbConstants
         return true;
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         killVM();
         if (controlDialog != null) {
@@ -1777,23 +1787,27 @@ public final class Jdb extends Buffer implements JdbConstants
         return currentValue;
     }
 
-    public boolean isModified()
+    @Override
+	public boolean isModified()
     {
         return false;
     }
 
     // For the buffer list.
-    public String toString()
+    @Override
+	public String toString()
     {
         return "jdb";
     }
 
-    public String getTitle()
+    @Override
+	public String getTitle()
     {
         return "jdb";
     }
 
-    public Icon getIcon()
+    @Override
+	public Icon getIcon()
     {
         return Utilities.getIconFromFile("jpty.png");
     }

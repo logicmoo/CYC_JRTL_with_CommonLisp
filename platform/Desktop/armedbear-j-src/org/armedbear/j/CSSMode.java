@@ -37,27 +37,32 @@ public final class CSSMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new CSSFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
 
-    public boolean canIndentPaste()
+    @Override
+	public boolean canIndentPaste()
     {
         return false;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final int indentSize = buffer.getIndentSize();
         final Line model = findModel(line);
@@ -77,12 +82,14 @@ public final class CSSMode extends AbstractMode implements Constants, Mode
         return model;
     }
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         return startChars.indexOf(c) >= 0;
     }
 
-    public boolean isIdentifierPart(char c)
+    @Override
+	public boolean isIdentifierPart(char c)
     {
         return partChars.indexOf(c) >= 0;
     }

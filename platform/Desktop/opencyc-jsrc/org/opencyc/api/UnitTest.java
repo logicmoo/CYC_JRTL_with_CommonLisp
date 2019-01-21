@@ -1458,7 +1458,8 @@ public class UnitTest implements CycLeaseManager.CycLeaseManagerListener {
      *
      * @param evt the the given Cyc API services lease event
      */
-    public void notifyCycLeaseEvent(
+    @Override
+	public void notifyCycLeaseEvent(
             org.opencyc.api.CycLeaseManager.CycLeaseEventObject evt) {
         System.out.println("Notified of: " + evt.toString());
     }
@@ -4319,7 +4320,8 @@ public class UnitTest implements CycLeaseManager.CycLeaseManagerListener {
          *
          * @throws RuntimeException when wrong answer detected
          */
-        public void run() {
+        @Override
+		public void run() {
 
             try {
                 for (int i = 0; i < repeatCount; i++) {

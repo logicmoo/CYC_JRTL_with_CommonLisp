@@ -420,6 +420,7 @@ public class BshMethod
 		return modifiers != null && modifiers.hasModifier(name);
 	}
 
+	@Override
 	public String toString() {
 		return "Scripted Method: "
 			+ StringUtil.methodString( name, getParameterTypes() ); 

@@ -11,7 +11,8 @@ public class BasicPattern implements Pattern
         this.myDesc = desc;
     }
     
-    public boolean matches(final Description d) {
+    @Override
+	public boolean matches(final Description d) {
         return this.myDesc.equals(d);
     }
     

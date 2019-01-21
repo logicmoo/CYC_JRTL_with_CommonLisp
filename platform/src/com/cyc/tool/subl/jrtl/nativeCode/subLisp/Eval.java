@@ -9,11 +9,13 @@ import java.lang.reflect.Modifier;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Main;
 import org.globus.cog.gridface.impl.desktop.interfaces.AccessActionProxy;
+import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.JVMImpl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -231,48 +233,105 @@ public class Eval implements SubLFile
 		return SubLNil.NIL;
 	}
 
-	public static SubLObject load(SubLObject filename)
+	public static SubLObject load(final SubLObject filename)
+	{
+		return BeanShellCntrl.with_sublisp(true, new Callable<SubLObject>()
+		{
+			@Override
+			public SubLObject call() throws Exception
+			{
+				return load_sublisp(filename);
+			}
+		});
+	}
+
+	public static SubLObject load_sublisp(SubLObject filename)
 	{
 		boolean success = false;
 		SubLObject stream = SubLNil.NIL;
+		SubLObject form;
 		try
 		{
 			String theFilename = filename.getStringValue();
 			SubLInputTextStream fileStream = (SubLInputTextStream) (stream = SubLStreamFactory.makeFileStream(theFilename, CommonSymbols.INPUT_KEYWORD, Keyword.TEXT_KEYWORD_CHARACTER, SubLNil.NIL, CommonSymbols.ERROR_KEYWORD, SubLNil.NIL).toInputTextStream());
 			SubLDigestInputTextStream digestStream = null;
+			int verbose = 1;
 			try
 			{
 				digestStream = (SubLDigestInputTextStream) (stream = new SubLDigestInputTextStream(fileStream, MessageDigest.getInstance("SHA-1")));
 			} catch (NoSuchAlgorithmException ex)
 			{
+				//verbose++;
 			}
 			System.out.println(";;; loading " + theFilename + " ... ");
+
 			boolean done = false;
+			SubLObject lastForm = SubLNil.NIL;
+			SubLObject lastRetVal = SubLNil.NIL;
+			SubLObject currentForm = SubLNil.NIL;
+			int formCouunt = 0;
 			while (!done)
 			{
 				Values.resetMultipleValues();
 				SubLObject pos = streams_high.file_position(stream, CommonSymbols.UNPROVIDED);
-				SubLObject form = reader.read_ignoring_errors(digestStream, SubLNil.NIL, Eval.EOF_KEYWORD);
-				SubLObject error = SubLProcess.nthMultipleValue(CommonSymbols.ONE_INTEGER);
-				Values.resetMultipleValues();
-				if (error == CommonSymbols.ERROR_KEYWORD)
-				{
-					if (form != Eval.EOF_KEYWORD)
-						Errors.error(Eval.LOAD_ERROR_STRING_1, streams_high.file_position(stream, CommonSymbols.UNPROVIDED), filename);
-					else
-						success = true;
-					done = true;
+				if(formCouunt>195) {
+					form = reader.read_ignoring_errors(digestStream, SubLNil.NIL, Eval.EOF_KEYWORD);
+					
+				} else {
+					
+					form = reader.read_ignoring_errors(digestStream, SubLNil.NIL, Eval.EOF_KEYWORD);
 				}
-				else
-					try
+				formCouunt++;
+				if (verbose > 0)
+				{
+
+					System.err.format(";;; %s(%d): %s%n", String.valueOf(SubLPackage.getCurrentPackage()), formCouunt, String.valueOf(form));
+				}
+				{
+					SubLObject error = SubLProcess.nthMultipleValue(CommonSymbols.ONE_INTEGER);
+					Values.resetMultipleValues();
+					if (error == CommonSymbols.ERROR_KEYWORD)
 					{
-						eval(form);
-					} catch (Exception xcpt)
-					{
-						SubLObject args = SubLObjectFactory.makeList(new SubLObject[] { form, filename, pos });
-						SubLObject msg = format.really_format(SubLNil.NIL, Eval.EVAL_ERROR_STRING, args);
-						Errors.error(msg.toStr(), xcpt);
+						if (form != Eval.EOF_KEYWORD)
+						{ //
+							if (verbose >= 0)
+							{
+								System.err.println(";; lastForm=" + lastForm);
+								System.err.println(";; lastRetVal=" + lastRetVal);
+								System.err.println(";; currentForm=" + currentForm);
+							}
+							Errors.error(Eval.LOAD_ERROR_STRING_1, streams_high.file_position(stream, CommonSymbols.UNPROVIDED), //
+									filename);
+						}
+
+						else
+							success = true;
+						done = true;
+						break;
 					}
+				}
+
+				try
+				{
+					currentForm = form;
+					lastRetVal = eval(form);
+					if (verbose > 0)
+					{
+						System.err.format(";;; Result(%d)  <==== %s%n", formCouunt, String.valueOf(lastRetVal));
+					}
+					lastForm = form;
+				} catch (Exception xcpt)
+				{
+					SubLObject args = SubLObjectFactory.makeList(new SubLObject[] { form, filename, pos });
+					SubLObject msg = format.really_format(SubLNil.NIL, Eval.EVAL_ERROR_STRING, args);
+					Errors.error(msg.toStr(), xcpt);
+				} catch (Throwable xcpt)
+				{
+					SubLObject args = SubLObjectFactory.makeList(new SubLObject[] { form, filename, pos });
+					SubLObject msg = format.really_format(SubLNil.NIL, Eval.EVAL_ERROR_STRING, args);
+					Errors.error(msg.toStr(), xcpt);
+				}
+
 			}
 			System.out.print(";;; ... " + theFilename + " loaded");
 			if (digestStream != null)

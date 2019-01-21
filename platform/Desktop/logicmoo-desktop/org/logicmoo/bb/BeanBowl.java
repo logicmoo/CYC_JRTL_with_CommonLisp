@@ -423,6 +423,7 @@ public class BeanBowl implements VetoableChangeListener, PropertyChangeListener,
 	 * as "name" or "selected" has changed. The BeanBowl will update its state
 	 * as necessary.
 	 */
+	@Override
 	public synchronized void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals("name")) {
 			// Name has changed - so update the name index
@@ -503,6 +504,7 @@ public class BeanBowl implements VetoableChangeListener, PropertyChangeListener,
 	 * This would happen, for example, if someone is trying to rename a bean to
 	 * a name that another bean within this bowl already has.
 	 */
+	@Override
 	public void vetoableChange(PropertyChangeEvent evt) throws PropertyVetoException {
 		if (evt.getPropertyName().equals("name")) {
 			// The name of a wrapper has changed. Make sure there are no name

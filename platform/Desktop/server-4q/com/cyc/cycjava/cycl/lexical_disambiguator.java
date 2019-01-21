@@ -36,15 +36,18 @@ public final class lexical_disambiguator extends SubLTranslatedFile
         return (SubLObject)lexical_disambiguator.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_lexical_disambiguator_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_lexical_disambiguator_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_lexical_disambiguator_file();
     }
     

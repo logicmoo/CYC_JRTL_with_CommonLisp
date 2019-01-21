@@ -38,7 +38,8 @@ public abstract class CycFort extends DefaultCycObject implements CycDenotationa
    * @return a negative integer, zero, or a positive integer as this
    * object is less than, equal to, or greater than the specified object
    */
-  public int compareTo(Object object) {
+  @Override
+public int compareTo(Object object) {
     if (this instanceof CycConstant) {
       if (object instanceof CycConstant)
         return this.toString().compareTo(object.toString());
@@ -63,7 +64,8 @@ public abstract class CycFort extends DefaultCycObject implements CycDenotationa
    * @param object the <tt>Object</tt> for equality comparison
    * @return equals <tt>boolean</tt> value indicating equality or non-equality.
    */
-  abstract public boolean equals(Object object);
+  @Override
+abstract public boolean equals(Object object);
   
   /**
    * Returns <tt>true</tt> some object equals this <tt>CycFort</tt> at the EL level.
@@ -71,7 +73,8 @@ public abstract class CycFort extends DefaultCycObject implements CycDenotationa
    * @param object the <tt>Object</tt> for equality comparison
    * @return equals <tt>boolean</tt> value indicating equality or non-equality.
    */
-  abstract public boolean equalsAtEL(Object object);
+  @Override
+abstract public boolean equalsAtEL(Object object);
   
   /**
    * When true, indicates that the fort is invalid.

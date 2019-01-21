@@ -3897,15 +3897,18 @@ public final class coreference_resolution extends SubLTranslatedFile
         return (SubLObject)coreference_resolution.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_coreference_resolution_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_coreference_resolution_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_coreference_resolution_file();
     }
     
@@ -4277,87 +4280,108 @@ public final class coreference_resolution extends SubLTranslatedFile
             this.$sentences = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$coreference_resolution_discourse_struct_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$implementation;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$parser;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$use_pspP;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$max_sufficient_recentness;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$max_possible_antecedents;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$max_sufficient_recentness_for_gendered_pronoun;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$max_possible_antecedents_for_gendered_pronoun;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$reference_note_hash;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$recent_references;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$sentences;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$implementation = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$parser = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$use_pspP = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$max_sufficient_recentness = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$max_possible_antecedents = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$max_sufficient_recentness_for_gendered_pronoun = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$max_possible_antecedents_for_gendered_pronoun = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$reference_note_hash = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$recent_references = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$sentences = value;
         }
         
@@ -4372,7 +4396,8 @@ public final class coreference_resolution extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("COREFERENCE-RESOLUTION-DISCOURSE-STRUCT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return coreference_resolution.coreference_resolution_discourse_struct_p(arg1);
         }
     }
@@ -4404,87 +4429,108 @@ public final class coreference_resolution extends SubLTranslatedFile
             this.$referent = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$reference_info_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$index_number;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$tree;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$cycls;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$possible_antecedentP;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$possible_anaphorP;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$possible_antecedents;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$likely_antecedents;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$best_antecedent;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$functional_dependency;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$referent;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$index_number = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$tree = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$cycls = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$possible_antecedentP = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$possible_anaphorP = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$possible_antecedents = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$likely_antecedents = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$best_antecedent = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$functional_dependency = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$referent = value;
         }
         
@@ -4499,7 +4545,8 @@ public final class coreference_resolution extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REFERENCE-INFO-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return coreference_resolution.reference_info_p(arg1);
         }
     }
@@ -4523,55 +4570,68 @@ public final class coreference_resolution extends SubLTranslatedFile
             this.$number = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$referent_struct_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$references;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$equals;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$types;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$facts;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$gender;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$number;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$references = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$equals = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$types = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$facts = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$gender = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$number = value;
         }
         
@@ -4586,7 +4646,8 @@ public final class coreference_resolution extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REFERENT-STRUCT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return coreference_resolution.referent_struct_p(arg1);
         }
     }

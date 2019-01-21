@@ -48,14 +48,21 @@ public class InternalFrameCacher {
   }
 
   class Listener implements InternalFrameListener {
-    public void internalFrameOpened(InternalFrameEvent e) {}
-    public void internalFrameClosing(InternalFrameEvent e) {}
-    public void internalFrameClosed(InternalFrameEvent e) {
+    @Override
+	public void internalFrameOpened(InternalFrameEvent e) {}
+    @Override
+	public void internalFrameClosing(InternalFrameEvent e) {}
+    @Override
+	public void internalFrameClosed(InternalFrameEvent e) {
       removeFrame((JInternalFrame) e.getSource());
     }
-    public void internalFrameIconified(InternalFrameEvent e) {}
-    public void internalFrameDeiconified(InternalFrameEvent e) {}
-    public void internalFrameActivated(InternalFrameEvent e) {}
-    public void internalFrameDeactivated(InternalFrameEvent e) {}
+    @Override
+	public void internalFrameIconified(InternalFrameEvent e) {}
+    @Override
+	public void internalFrameDeiconified(InternalFrameEvent e) {}
+    @Override
+	public void internalFrameActivated(InternalFrameEvent e) {}
+    @Override
+	public void internalFrameDeactivated(InternalFrameEvent e) {}
   }
 }

@@ -149,10 +149,10 @@ property-mult-property and property-div-property functions.
              (convert-to-cycl obj))
 	(t obj)))
 
-;; (case-sensitive-read-km *standard-input* t nil t)
-(defun convert-to-cycl (s) (if (not (fboundp 'cyc::find-constant)) s
-            (cyc::find-or-create-constant (string s))))
-
+(defun convert-to-cycl (s) 
+  (if (not (fboundp 'cyc::find-constant)) s
+            (if (not (fboundp 'cyc::foc)) (cyc::find-or-create-constant (string s))
+            (cyc::foc (string s)))))
 (eval-when
  (:compile-toplevel :load-toplevel :execute)
  (set-dispatch-macro-character #\# #\$ #'hash-dollar-reader))

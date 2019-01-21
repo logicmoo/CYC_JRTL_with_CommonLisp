@@ -10,26 +10,28 @@ tmpfs                 3.9G  272K  3.9G   1% /dev/shm
 //enki/c$             932G  327G  606G  36% /mnt/enki
 [root@titan ~]# cd /javaCyc
 
-(load "cynd/osim.lisp")
+(sl:load "e2c/osim.lisp")
 |#
+(in-package "CYC")
 
 (csetq *SMT* #$EverythingPSC)
-(define foc (string) (ret (find-or-create-constant string)))
 
-;;;; use (load "cynd/osim.lisp")
-(in-package "CYC")
+
+;;;; use (sl:load "e2c/osim.lisp")
 (define FORCE-PRINT (string) 
  (print string) (force-output))
 
 (force-print "loading sim.lisp...1 of 5.")
-;;;;(load "cynd/kepatches.lisp")
+;;;;(sl:load "e2c/kepatches.lisp")
 
 ;;;;==================================================
 ;;;; MICROTHEORY SETUP
 ;;;;==================================================
 (defparameter *UVMt* (foc "UniversalVocabularyMt"))
 (defparameter *BASEKB* (foc "BaseKB"))
-(defparameter *VocabularyMt* (find-or-create-constant "SimVocabularyMt"))
+
+(defparameter *VocabularyMt* (foc "SimVocabularyMt"))
+
 (ke-assert-now `(#$isa ,*VocabularyMt*  #$Microtheory) *UVMt*)
 
 
@@ -62,20 +64,20 @@ tmpfs                 3.9G  272K  3.9G   1% /dev/shm
    *PPH-SPEAKER* :UNKNOWN 
    *PPH-QUANTIFY-VARS?* T )
 
-(define d3 () (load "cynd/osim.lisp"))
-
-(define transd3 () 
-    (clet ((ts-file (TRANSLATE-FILE "CynD" "cynd/osim.lisp"))
-        (fout (OPEN-TEXT "cynd/osim.trans" :output)))
-        (SHOW-TRANS-SUBL-FILE ts-file fout)(close FOUT)
-        (C-BACKEND-OUTPUT-FILE-AND-HEADER-FILE ts-file "cynd/osim.c")
-        (ret ts-file)))
+(define d3 () (sl:load "e2c/osim.lisp"))
 
 (define transd3 () 
     (clet ((ts-file (TRANSLATE-FILE "CynD" "init/javatest.lisp"))
         (fout (OPEN-TEXT "javatest.trans" :output)))
         (SHOW-TRANS-SUBL-FILE ts-file fout)(close FOUT)
         (C-BACKEND-OUTPUT-FILE-AND-HEADER-FILE ts-file "javatest.c")
+        (ret ts-file)))
+
+(define transd3 () 
+    (clet ((ts-file (TRANSLATE-FILE "CynD" "e2c/osim.lisp"))
+        (fout (OPEN-TEXT "e2c/osim.trans" :output)))
+        (SHOW-TRANS-SUBL-FILE ts-file fout)(close FOUT)
+        (C-BACKEND-OUTPUT-FILE-AND-HEADER-FILE ts-file "e2c/osim.c")
         (ret ts-file)))
 
 (define Trans-JavaTest () 
@@ -120,15 +122,15 @@ tmpfs                 3.9G  272K  3.9G   1% /dev/shm
 (print "done loading MicrotheoryFunction.")(force-output)
 
 
-(sim-assert `(#$isa ,(find-or-create-constant "SimResearchProject") #$Cyc-BasedProject))
+(sim-assert `(#$isa ,(foc "SimResearchProject") #$Cyc-BasedProject))
 
 (sim-assert `(#$assertionDirectionSpecificationMtForProject (#$ProjectManagementMicrotheoryFn #$SimResearchProject) #$SimResearchProject))
 
 
 ;;;; Collections
-;;(sim-assert `(#$isa ,(find-or-create-constant "SimConstant") #$Collection) *VocabularyMt*)
+;;(sim-assert `(#$isa ,(foc "SimConstant") #$Collection) *VocabularyMt*)
 ;;(sim-assert `(#$collectionConventionMt #$SimConstant ,*VocabularyMt*) *BASEKB*)
-;;(sim-assert `(#$isa ,(find-or-create-constant "SimCollection") #$CollectionType) *VocabularyMt*)
+;;(sim-assert `(#$isa ,(foc "SimCollection") #$CollectionType) *VocabularyMt*)
 ;;(sim-assert `(#$isa #$SimCollection #$SimConstant) *VocabularyMt*)
 ;;(sim-assert `(#$genls #$SimCollection #$SimConstant) *VocabularyMt*)
 ;; seems alot of this very basic things could/should be used by now
@@ -139,15 +141,18 @@ tmpfs                 3.9G  272K  3.9G   1% /dev/shm
 
 ;;;; Globals
 (defparameter *first-made* ())
-(define sim-cyc (name) 
-  (clet ((const (multiple-value-list  (find-or-create-constant name))))
+(define sim-cyc (cyc::name) 
+  (clet ((const (multiple-value-list (find-or-create-constant cyc::name))))
    (csetq *first-made* (cdr  const))
    ;;(sim-assert `(#$isa ,const #$SimConstant) *VocabularyMt*)
    (csetq *first-made* (car  const))
     (ret (car const))))
                           
 (define sim-col (simname) 
-    (clet ((super (find-constant simname))(supertype (find-constant (cconcatenate  simname "Type")))(const  (sim-cyc (cconcatenate "Sim"  (string-proper simname)))))
+    (clet 
+       ((super (find-constant simname))
+        (supertype (find-constant (cconcatenate  simname "Type")))
+        (const  (sim-cyc (cconcatenate "Sim"  (string-proper simname)))))
 ;;;     (sim-assert `(#$isa ,const #$FirstOrderCollection) *VocabularyMt*)
     (pwhen *first-made*
      (sim-assert `(#$isa ,const #$Collection) *VocabularyMt*)
@@ -383,8 +388,8 @@ assertions in situations where two incompatible hypotheses will be constructed."
 (sim-assert '(#$typeGenls #$BPVAgentType #$BPVAgent)*UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$typeGenls #$BPVAgentType #$BPVAgent)*UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$genls #$BPVAgentType #$FirstOrderCollection) *UVMt* '(:DIRECTION :FORWARD))
-(find-or-create-constant "BPVAgent")
-(find-or-create-constant "BPVAgentType")
+(foc "BPVAgent")
+(foc "BPVAgentType")
 (sim-assert `(#$isa #$BPVAgent #$Collection) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$genls #$BPVAgent #$BPVItem) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$genls #$BPVAgentType #$FirstOrderCollection) *UVMt* '(:DIRECTION :FORWARD))
@@ -394,8 +399,8 @@ assertions in situations where two incompatible hypotheses will be constructed."
 (sim-assert '(#$genls #$BPVAgent #$IntelligentAgent) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$genls #$BPVAgent #$Agent-Generic) *UVMt* '(:DIRECTION :FORWARD))
 ;;(#$mtAgentType #$BPVAgentType
-(find-or-create-constant "BPVArtifact")
-(find-or-create-constant "BPVArtifactType")
+(foc "BPVArtifact")
+(foc "BPVArtifactType")
 (sim-assert `(#$isa #$BPVArtifact #$Collection) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$genls #$BPVArtifact #$BPVItem) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert `(#$isa #$BPVArtifactType #$CollectionType) *UVMt* '(:DIRECTION :FORWARD))
@@ -407,8 +412,8 @@ assertions in situations where two incompatible hypotheses will be constructed."
 (sim-assert '(#$genls #$BPVArtifact #$InanimateObject) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$genls #$BPVArtifact #$Artifact) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$genls #$BPVArtifactType #$ExistingObjectType) *UVMt* '(:DIRECTION :FORWARD))
-(find-or-create-constant "BPVLocation")
-(find-or-create-constant "BPVLocationType")
+(foc "BPVLocation")
+(foc "BPVLocationType")
 (sim-assert `(#$isa #$BPVLocation #$Collection) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert `(#$isa #$BPVLocationType #$CollectionType) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$typeGenls #$BPVLocationType #$BPVLocation)*UVMt* '(:DIRECTION :FORWARD))
@@ -438,7 +443,7 @@ assertions in situations where two incompatible hypotheses will be constructed."
 ;;==================================================
 ;; Function: Angle2Fn
 ;;==================================================
-(find-or-create-constant "Angle2Fn")
+(foc "Angle2Fn")
 (sim-assert `(#$isa ,(sim-cyc "Angle2Fn")  #$BinaryFunction) *UVMt*)
 (sim-assert `(#$isa ,(sim-cyc "Angle2Fn")  #$UnreifiableFunction) *UVMt*)
 (sim-assert `(#$arg1Isa ,(sim-cyc "Angle2Fn")  #$AngularDistance) *UVMt*)
@@ -450,7 +455,7 @@ assertions in situations where two incompatible hypotheses will be constructed."
 ;;==================================================
 ;; Function: Point3Fn
 ;;==================================================
-(find-or-create-constant "Point3Fn")
+(foc "Point3Fn")
 ;;(fi-kill #$Point3Fn)
 (sim-assert '(#$isa #$Point3Fn #$TernaryFunction) *UVMt*)
 (sim-assert `(#$isa #$Point3Fn #$UnreifiableFunction) *UVMt*)
@@ -469,7 +474,7 @@ assertions in situations where two incompatible hypotheses will be constructed."
 ;;==================================================
 ;; Function: BoundsOfDirectionFn
 ;;==================================================
-(find-or-create-constant "BoundsOfDirectionFn")
+(foc "BoundsOfDirectionFn")
 ;; (fi-kill #$BoundsOfDirectionFn)
 (sim-assert `(#$isa #$BoundsOfDirectionFn #$BinaryFunction) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert `(#$isa #$BoundsOfDirectionFn #$IndividualDenotingFunction) *UVMt* '(:DIRECTION :FORWARD))
@@ -554,8 +559,8 @@ assertions in situations where two incompatible hypotheses will be constructed."
 ;;==================================================
 ;; Collection SimItem
 ;;==================================================
-(find-or-create-constant "SimItemFn")
-(find-or-create-constant "simItemToName")
+(foc "SimItemFn")
+(foc "simItemToName")
 (sim-assert '(#$isa #$SimItemFn #$InvertibleFunction) *VocabularyMt*)
 ;;(sim-assert `(#$isa #$simItemToName #$FunctionalPredicate) *VocabularyMt*)
 (sim-assert `(#$isa #$simItemToName #$BinaryPredicate) *VocabularyMt*)
@@ -571,7 +576,8 @@ assertions in situations where two incompatible hypotheses will be constructed."
 (sim-assert '(#$arg1Isa #$simItemToName #$BPVItem) *VocabularyMt* ':MONOTONIC ':FORWARD)
 (sim-assert '(#$arg2Isa #$simItemToName #$CharacterString) *VocabularyMt* ':MONOTONIC ':FORWARD)
 (sim-assert '(#$comment #$simItemToName "(#$simItemToName ITEM STRING) identifies STRING as the name of the sim ITEM.") *VocabularyMt*)
-(sim-assert '(#$genTemplate #$simItemToName (#$ConcatenatePhrasesFn (#$BestNLPhraseOfStringFn "the sim itemname for") (#$TermParaphraseFn-NP :ARG1) (#$PhraseFormFn #$presentTense-Generic (#$HeadWordOfPhraseFn (#$BestVerbFormForSubjectFn #$Be-TheWord (#$NthPhraseFn 2)))) (#$TermParaphraseFn-NP (#$StringMentionFn :ARG2)))) #$EnglishParaphraseMt ':DEFAULT ':FORWARD)
+
+(sim-assert '(#$genTemplate #$simItemToName (#$ConcatenatePhrasesFn (#$PhraseFromStringFn "the sim itemname for") (#$ParaphraseFn-Np :ARG1) (#$PhraseFn-Constrained #$presentTense-Generic (#$HeadWordOfPhraseFn (#$BestVerbFormForSubjectFn #$Be-TheWord (#$NthPhraseFn 2)))) (#$ParaphraseFn-Np (#$StringMentionFn :ARG2)))) #$EnglishParaphraseMt ':DEFAULT ':FORWARD)
 ;;(sim-assert '(#$multiWordStringDenotesArgInReln (#$TheList "sim" "item") #$Name-TheWord #$CountNoun #$simItemToName 2) #$EnglishMt ':DEFAULT ':FORWARD)
 (sim-assert `(#$expansion #$SimItemFn (#$InstanceWithRelationToFn #$SimItem #$simItemToName :ARG1)) *VocabularyMt* ':MONOTONIC ':FORWARD)
 (sim-assert `(#$expansion #$SimItemFn (#$InstanceNamedFn #$SimItem :ARG1)) *VocabularyMt* ':MONOTONIC ':FORWARD)
@@ -594,7 +600,7 @@ See also #$simItemToName (which is the #$functionCorrespondingPredicate for #$Si
 ;;==================================================
 ;; Collection SimClass
 ;;==================================================
-(find-or-create-constant "simIsa")
+(foc "simIsa")
 (sim-assert `(#$isa #$simIsa #$BinaryPredicate) *UVMt* ':MONOTONIC ':FORWARD)
 ;;(sim-assert '(#$isa #$simIsa #$RelationalNounSlot) #$GeneralLexiconMt ':MONOTONIC ':FORWARD)
 ;;(sim-assert '(#$arg1Isa #$simIsa #$Individual) *VocabularyMt* ':MONOTONIC ':FORWARD)
@@ -608,8 +614,8 @@ See also #$simItemToName (which is the #$functionCorrespondingPredicate for #$Si
 ;;==================================================
 ;; Collection SimProperty
 ;;==================================================
-(find-or-create-constant "SimPropertyFn")
-(find-or-create-constant "simRelation")
+(foc "SimPropertyFn")
+(foc "simRelation")
 (sim-assert `(#$isa #$SimPropertyFn #$TermMacroFunction) *VocabularyMt*)
 (sim-assert '(#$isa #$SimPropertyFn #$PredicateDenotingFunction) *VocabularyMt*)
 (sim-assert '(#$isa #$SimPropertyFn #$UnaryFunction) *VocabularyMt*)
@@ -625,7 +631,7 @@ See also #$simItemToName (which is the #$functionCorrespondingPredicate for #$Si
 (sim-assert '(#$arg1Isa #$simRelation #$Relation) *VocabularyMt* ':MONOTONIC ':FORWARD)
 (sim-assert '(#$arg2Isa #$simRelation #$CharacterString) *VocabularyMt* ':MONOTONIC ':FORWARD)
 (sim-assert '(#$comment #$simRelation "(#$simRelation RELATION STRING) identifies STRING as the name of the sim RELATION.") *VocabularyMt*)
-(sim-assert '(#$genTemplate #$simRelation (#$ConcatenatePhrasesFn (#$BestNLPhraseOfStringFn "the sim propertyname for") (#$TermParaphraseFn-NP :ARG1) (#$PhraseFormFn #$presentTense-Generic (#$HeadWordOfPhraseFn (#$BestVerbFormForSubjectFn #$Be-TheWord (#$NthPhraseFn 2)))) (#$TermParaphraseFn-NP (#$StringMentionFn :ARG2)))) #$EnglishParaphraseMt ':DEFAULT ':FORWARD)
+(sim-assert '(#$genTemplate #$simRelation (#$ConcatenatePhrasesFn (#$PhraseFromStringFn "the sim propertyname for") (#$ParaphraseFn-Np :ARG1) (#$PhraseFn-Constrained #$presentTense-Generic (#$HeadWordOfPhraseFn (#$BestVerbFormForSubjectFn #$Be-TheWord (#$NthPhraseFn 2)))) (#$ParaphraseFn-Np (#$StringMentionFn :ARG2)))) #$EnglishParaphraseMt ':DEFAULT ':FORWARD)
 ;;(sim-assert '(#$strictlyFunctionalInArgs #$simRelation 1) *VocabularyMt* ':MONOTONIC ':FORWARD)
 ;;(sim-assert '(#$multiWordStringDenotesArgInReln (#$TheList "sim" "property") #$Name-TheWord #$CountNoun #$simRelation 2) #$EnglishMt ':DEFAULT ':FORWARD)
 (sim-assert `(#$expansion #$SimPropertyFn (#$PredicateNamedFn #$SimProperty :ARG1)) *VocabularyMt* ':MONOTONIC ':FORWARD)
@@ -644,7 +650,7 @@ Also (#$simActionToFacetNext ?RELATION (#$SimFacetFn \"propertyname\" ?STRING)")
 ;;==================================================
 ;; Collection SimAction
 ;;==================================================
-(find-or-create-constant "SimActionFn")
+(foc "SimActionFn")
 (sim-assert `(#$isa #$SimActionFn #$TermMacroFunction) *VocabularyMt*)
 (sim-assert '(#$isa #$SimActionFn #$PredicateDenotingFunction) *VocabularyMt*)
 (sim-assert '(#$isa #$SimActionFn #$UnaryFunction) *VocabularyMt*)
@@ -668,7 +674,7 @@ Also (#$simActionToFacet ?Action (#$SimFacetFn \"Actionname\" ?STRING)") *Vocabu
 ;; Function: SimFacetFn
 ;;==================================================
 (sim-assert `(#$isa ,(sim-trans "Facet" "Thing") #$RelationalNounSlot) *UVMt* ':MONOTONIC ':FORWARD)
-(find-or-create-constant "SimFacetFn")
+(foc "SimFacetFn")
 ;;(fi-kill #$Point3Fn)
 (sim-assert '(#$isa #$SimFacetFn #$BinaryFunction) *UVMt*)
 (sim-assert '(#$isa #$SimFacetFn #$CollectionDenotingFunction) *UVMt*)
@@ -697,13 +703,13 @@ Used in (#$sim<Item/Class>ToFacet ?THING (#$SimFacetFn ?STRING ?VALUE))") *Vocab
 ;; Collection SimClass
 ;;==================================================
 ;;(sim-assert '(#$isa (#$InstanceNamedFn (#$JavaClassFn "java.io.PrintStream") "out") #$Thing)  *UVMt* ':MONOTONIC ':FORWARD)
-(find-or-create-constant "simGenls")
+(foc "simGenls")
 (sim-assert `(#$isa #$simGenls #$BinaryPredicate) *UVMt* ':MONOTONIC ':FORWARD)
 (sim-assert '(#$arg1Isa #$simGenls #$Collection) *VocabularyMt* ':MONOTONIC ':FORWARD)
 (sim-assert '(#$arg2Isa #$simGenls #$Collection) *UVMt* ':MONOTONIC ':FORWARD)
 (sim-assert '(#$genlPreds #$simGenls #$genls) *VocabularyMt* ':MONOTONIC ':FORWARD)
 (sim-assert '(#$comment #$simGenls "(#$simGenls ?COL ?FACET) identifies ?COL as having the sim ?FACET.") *VocabularyMt*)
-(sim-assert '(#$genTemplate #$simGenls (#$ConcatenatePhrasesFn (#$BestNLPhraseOfStringFn "the sim classname for") (#$TermParaphraseFn-NP :ARG1) (#$PhraseFormFn #$presentTense-Generic (#$HeadWordOfPhraseFn (#$BestVerbFormForSubjectFn #$Be-TheWord (#$NthPhraseFn 2)))) (#$TermParaphraseFn-NP (#$StringMentionFn :ARG2)))) #$EnglishParaphraseMt ':DEFAULT ':FORWARD)
+(sim-assert '(#$genTemplate #$simGenls (#$ConcatenatePhrasesFn (#$PhraseFromStringFn "the sim classname for") (#$ParaphraseFn-Np :ARG1) (#$PhraseFn-Constrained #$presentTense-Generic (#$HeadWordOfPhraseFn (#$BestVerbFormForSubjectFn #$Be-TheWord (#$NthPhraseFn 2)))) (#$ParaphraseFn-Np (#$StringMentionFn :ARG2)))) #$EnglishParaphraseMt ':DEFAULT ':FORWARD)
 ;;(sim-assert '(#$isa #$simGenls #$RelationalNounSlot) #$GeneralLexiconMt ':MONOTONIC ':FORWARD)
 ;;(sim-assert '(#$transitiveViaArgInverse #$simGenls #$genls 1) *BASEKB* ':MONOTONIC ':FORWARD)
 ;;(sim-assert '(#$implies (#$and (#$simGenls ?COL ?TYPE)(#$genls ?SUB ?COL))(#$simGenls ?SUB ?TYPE)) *BASEKB* ':MONOTONIC ':BACKWARD)
@@ -715,7 +721,7 @@ Used in (#$sim<Item/Class>ToFacet ?THING (#$SimFacetFn ?STRING ?VALUE))") *Vocab
 
 (sim-assert `(#$isa ,(sim-col "Class") #$FacetingCollectionType) *MappingMt*)
 (sim-assert `(#$genls ,(sim-col "Class") #$BPVItemType) *VocabularyMt*)
-(find-or-create-constant "SimClassFn")
+(foc "SimClassFn")
 (sim-assert `(#$isa #$SimClassFn #$TermMacroFunction) *VocabularyMt*)
 (sim-assert '(#$isa #$SimClassFn #$CollectionDenotingFunction) *VocabularyMt*)
 (sim-assert '(#$isa #$SimClassFn #$UnaryFunction) *VocabularyMt*)
@@ -970,7 +976,7 @@ Also (#$simGenls ?CLASS (#$SimFacetFn \"classname\" ?STRING)") *VocabularyMt*)
          (evalstr `(sl::define ,prename ,args ,@body)))
            (csetq name (join-strings  (mapcar #'string-proper (string-tokenize (string-DOWNCASE namestr) '(#\space #\-))) ""))
            (punless (string-equal (substring name 0 4) "sim") (csetq name (cconcatenate "Sim" (string-proper name))))
-           (csetq name (find-or-create-constant (cconcatenate (string-DOWNCASE (substring name 0 1)) (substring name 1))))
+           (csetq name (foc (cconcatenate (string-DOWNCASE (substring name 0 1)) (substring name 1))))
            (sim-assert `(#$isa ,name #$FunctionalPredicate) *VocabularyMt*)
            (sim-assert `(#$programCode (#$OperatorFn ,namestr) (#$SubLEntityFn #$ComputerCode (#$SubLQuoteFn ,evalstr))) *VocabularyMt*)           
            (sim-assert `(#$programFunctionOperator ,name (#$OperatorFn ,namestr)) *VocabularyMt*)
@@ -1050,7 +1056,7 @@ Also (#$simGenls ?CLASS (#$SimFacetFn \"classname\" ?STRING)") *VocabularyMt*)
 
                 
 (force-output)
-(find-or-create-constant "Sim-ProvableSentence")
+(foc "Sim-ProvableSentence")
 (sim-assert '(#$isa #$Sim-ProvableSentence #$Collection) *VocabularyMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$defnSufficient #$Sim-ProvableSentence (#$SubLQuoteFn ProvableSentence)) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$genls #$Sim-ProvableSentence #$CycLSentence-Askable) *UVMt* '(:DIRECTION :FORWARD))
@@ -1065,7 +1071,7 @@ Also (#$simGenls ?CLASS (#$SimFacetFn \"classname\" ?STRING)") *VocabularyMt*)
      (print (list cmd result))
      (ret result))))
 
-(find-or-create-constant "Sim-UnprovableSentence")
+(foc "Sim-UnprovableSentence")
 (sim-assert '(#$isa #$Sim-UnprovableSentence #$Collection) *VocabularyMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$defnSufficient #$Sim-UnprovableSentence (#$SubLQuoteFn UnprovableSentence)) *UVMt* '(:DIRECTION :FORWARD))
 (sim-assert '(#$genls #$Sim-UnprovableSentence #$CycLSentence-Askable) *UVMt* '(:DIRECTION :FORWARD))
@@ -1088,13 +1094,13 @@ Also (#$simGenls ?CLASS (#$SimFacetFn \"classname\" ?STRING)") *VocabularyMt*)
 (defparameter *WorldStaticStateMt* *StaticStateMt*)
 (defparameter *WorldCurrentStateMt* *InitialStateMt*)
 
-(print `(load "cynd/startrek.lisp"))
+(print `(sl:load "e2c/startrek.lisp"))
 
-(print `(load "cynd/osim-bindings.lisp"))
-(print `(load "cynd/startrek.lisp"))
-(print `(load "cynd/osim-creation.lisp"))
-(print `(load "cynd/osim-sksi.lisp"))
-(print `(load "cynd/osim-methods.lisp"))
+(print `(sl:load "e2c/osim-bindings.lisp"))
+(print `(sl:load "e2c/startrek.lisp"))
+(print `(sl:load "e2c/osim-creation.lisp"))
+(print `(sl:load "e2c/osim-sksi.lisp"))
+(print `(sl:load "e2c/osim-methods.lisp"))
 
 (force-output)
 
@@ -1156,7 +1162,7 @@ Also (#$simGenls ?CLASS (#$SimFacetFn \"classname\" ?STRING)") *VocabularyMt*)
 
 ;;(sim-assert `(#$genlMt (#$MtSpace #$CurrentWorldDataCollectorMt-NonHomocentric (#$MtTimeDimFn #$Now)) ,*CurrentStateMt*) *UVMt* '(:DIRECTION :FORWARD))
 
-(load "cynd/osim-agent-planner.lisp")
+(sl:load "e2c/osim-agent-planner.lisp")
 
 (sim-assert '(#$simRelation (#$NonDavidsonianPredFn #$DroppingAnObject (#$TheList #$doneBy #$objectActedOn)) "entity_dropItem") )
 (sim-assert '(#$simRelation (#$NonDavidsonianPredFn #$DroppingAnObject-Purposeful (#$TheList #$doneBy #$objectActedOn)) "entity_dropItem") )
@@ -1174,7 +1180,7 @@ Also (#$simGenls ?CLASS (#$SimFacetFn \"classname\" ?STRING)") *VocabularyMt*)
 
 (defparameter *simtimestep* 0)
 
-(define sim-goto-next-state (&optional (mt *CurrentStateMt*)(nextMt (find-or-create-constant (cconcatenate  "SimState" (write-to-string (cinc *simtimestep*)) "Mt"))))
+(define sim-goto-next-state (&optional (mt *CurrentStateMt*)(nextMt (foc (cconcatenate  "SimState" (write-to-string (cinc *simtimestep*)) "Mt"))))
     (sim-assert `(#$isa ,nextMt ,(sim-col "StateMicrotheory")  ) *VocabularyMt*)
     (sim-assert `(#$initialSituation ,nextMt ,mt) *BASEKB*)     
     (sim-retract `(#$genlMt ,*CurrentStateMt* ,*CurrentStateMt*) *VocabularyMt*)
@@ -1194,7 +1200,7 @@ Also (#$simGenls ?CLASS (#$SimFacetFn \"classname\" ?STRING)") *VocabularyMt*)
                  (ret (dfn (read-from-string str))))
             (pwhen (char= #\# (char str 0))
                  (pwhen (char= #\$ (char str 1))
-                    (ret (find-or-create-constant (substring str 2))))                   
+                    (ret (foc (substring str 2))))                   
                  (ret (dfn (read-from-string str))))
             (csetq retval (count #\space str))
             (pwhen (= retval 2)
@@ -1214,8 +1220,8 @@ Also (#$simGenls ?CLASS (#$SimFacetFn \"classname\" ?STRING)") *VocabularyMt*)
                        
 
 
-(print `(progn (load "cynd/startrek.lisp")(load "cynd/osim-bindings.lisp")
-  (load "cynd/startrek.lisp") (load "cynd/osim-creation.lisp")(load "cynd/osim-sksi.lisp")(load "cynd/osim-methods.lisp")))
+(print `(progn (sl:load "e2c/startrek.lisp")(sl:load "e2c/osim-bindings.lisp")
+  (sl:load "e2c/startrek.lisp") (sl:load "e2c/osim-creation.lisp")(sl:load "e2c/osim-sksi.lisp")(sl:load "e2c/osim-methods.lisp")))
 
 (sim-assert `(#$implies (#$isa ?Mt #$SimCurrentStateMicrotheory) (#$genlMt  ,*CurrentStateMt* ?Mt)))
 

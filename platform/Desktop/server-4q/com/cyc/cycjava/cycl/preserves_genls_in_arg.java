@@ -1656,15 +1656,18 @@ public final class preserves_genls_in_arg extends SubLTranslatedFile
         return (SubLObject)preserves_genls_in_arg.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_preserves_genls_in_arg_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_preserves_genls_in_arg_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_preserves_genls_in_arg_file();
     }
     
@@ -1739,7 +1742,8 @@ public final class preserves_genls_in_arg extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PGIA-AFTER-ADDING-ISA"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return preserves_genls_in_arg.pgia_after_adding_isa(arg1, arg2);
         }
     }

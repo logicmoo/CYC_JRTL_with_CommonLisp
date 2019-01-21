@@ -31,6 +31,7 @@ import sun.reflect.FieldAccessor;
 
 public class SubLStructDeclNative extends SubLStructDecl
 {
+	@Override
 	public LispObject isInstance(SubLObject v_object)
 	{
 		boolean was = ((v_object.getClass() == structClass));
@@ -375,6 +376,7 @@ public class SubLStructDeclNative extends SubLStructDecl
 
 	}
 
+	@Override
 	public void setTrackStructInstance(boolean track, int pingAt)
 	{
 		this.trackStructInstance = track;

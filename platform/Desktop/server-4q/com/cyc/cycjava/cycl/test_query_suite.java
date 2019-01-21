@@ -400,15 +400,18 @@ public final class test_query_suite extends SubLTranslatedFile
         return (SubLObject)test_query_suite.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_test_query_suite_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_test_query_suite_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_test_query_suite_file();
     }
     
@@ -476,39 +479,48 @@ public final class test_query_suite extends SubLTranslatedFile
             this.$queries = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$test_query_suite_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$cycl_id;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$comment;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$mt;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$queries;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$cycl_id = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$comment = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$mt = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$queries = value;
         }
         
@@ -523,7 +535,8 @@ public final class test_query_suite extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TEST-QUERY-SUITE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return test_query_suite.test_query_suite_p(arg1);
         }
     }

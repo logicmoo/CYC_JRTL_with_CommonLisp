@@ -14,11 +14,13 @@ public class PrintinListener extends ObjectListener
         return this.prefix;
     }
     
-    public void added(final Object x) {
+    @Override
+	public void added(final Object x) {
         Predef$.MODULE$.println((Object)new StringBuilder().append((Object)this.prefix()).append((Object)" added: ").append(x).toString());
     }
     
-    public void removed(final Object x) {
+    @Override
+	public void removed(final Object x) {
         Predef$.MODULE$.println((Object)new StringBuilder().append((Object)this.prefix()).append((Object)" removed: ").append(x).toString());
     }
     

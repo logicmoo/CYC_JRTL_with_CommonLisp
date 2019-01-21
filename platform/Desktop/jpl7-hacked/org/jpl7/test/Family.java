@@ -25,6 +25,7 @@ public class Family extends Thread {
 		}
 	}
 
+	@Override
 	public void run() {
 		Map<String, Term> solution;
 		Variable X = new Variable("X");

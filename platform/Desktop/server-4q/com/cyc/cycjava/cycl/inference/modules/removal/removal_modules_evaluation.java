@@ -190,15 +190,18 @@ public final class removal_modules_evaluation extends SubLTranslatedFile
         return (SubLObject)removal_modules_evaluation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_evaluation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_evaluation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_evaluation_file();
     }
     
@@ -225,7 +228,8 @@ public final class removal_modules_evaluation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-EVAL-EXCLUSIVE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_evaluation.removal_eval_exclusive(arg1, (SubLObject)$removal_eval_exclusive$UnaryFunction.UNPROVIDED);
         }
     }
@@ -236,7 +240,8 @@ public final class removal_modules_evaluation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-EVAL-EXCLUSIVE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return removal_modules_evaluation.removal_eval_exclusive(arg1, arg2);
         }
     }
@@ -247,7 +252,8 @@ public final class removal_modules_evaluation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-EVAL-REQUIRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_evaluation.removal_eval_required(arg1, (SubLObject)$removal_eval_required$UnaryFunction.UNPROVIDED);
         }
     }
@@ -258,7 +264,8 @@ public final class removal_modules_evaluation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-EVAL-REQUIRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return removal_modules_evaluation.removal_eval_required(arg1, arg2);
         }
     }

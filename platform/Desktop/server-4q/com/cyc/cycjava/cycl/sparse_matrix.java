@@ -816,15 +816,18 @@ public final class sparse_matrix extends SubLTranslatedFile
         return (SubLObject)sparse_matrix.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sparse_matrix_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sparse_matrix_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sparse_matrix_file();
     }
     
@@ -884,23 +887,28 @@ public final class sparse_matrix extends SubLTranslatedFile
             this.$columns = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$sparse_matrix_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$rows;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$columns;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$rows = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$columns = value;
         }
         
@@ -915,7 +923,8 @@ public final class sparse_matrix extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SPARSE-MATRIX-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sparse_matrix.sparse_matrix_p(arg1);
         }
     }

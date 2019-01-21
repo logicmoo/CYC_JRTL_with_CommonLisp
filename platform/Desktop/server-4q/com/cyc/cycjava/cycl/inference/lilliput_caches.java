@@ -735,15 +735,18 @@ public final class lilliput_caches extends SubLTranslatedFile
         return (SubLObject)lilliput_caches.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_lilliput_caches_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_lilliput_caches_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_lilliput_caches_file();
     }
     

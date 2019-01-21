@@ -1454,15 +1454,18 @@ public final class query_sentence_lexifier extends SubLTranslatedFile
         return (SubLObject)query_sentence_lexifier.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_query_sentence_lexifier_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_query_sentence_lexifier_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_query_sentence_lexifier_file();
     }
     
@@ -1607,7 +1610,8 @@ public final class query_sentence_lexifier extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-SENTENTIAL-OPERATORS"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return query_sentence_lexifier.clear_sentential_operators();
         }
     }

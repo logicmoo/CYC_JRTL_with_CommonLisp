@@ -210,7 +210,8 @@ public class DirectoryTreeModel extends DefaultTreeModel
 
     // Case-sensitive filename comparator (Unix).
     private final static Comparator csFileNameComparator = new Comparator() {
-        public int compare(Object o1, Object o2)
+        @Override
+		public int compare(Object o1, Object o2)
         {
             String name1 = ((File)o1).getName();
             String name2 = ((File)o2).getName();
@@ -220,7 +221,8 @@ public class DirectoryTreeModel extends DefaultTreeModel
 
     // Case-insensitive filename comparator (Windows).
     private final static Comparator ciFileNameComparator = new Comparator() {
-        public int compare(Object o1, Object o2)
+        @Override
+		public int compare(Object o1, Object o2)
         {
             String name1 = ((File)o1).getName();
             String name2 = ((File)o2).getName();

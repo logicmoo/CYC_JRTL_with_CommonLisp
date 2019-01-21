@@ -19,11 +19,13 @@ public class CSVFileRepoSpec extends RepoSpecForDirectory
         return CSVFileRepoSpec$.MODULE$.$lessinit$greater$default$2();
     }
     
-    public Model getDirectoryModel() {
+    @Override
+	public Model getDirectoryModel() {
         return CsvFileSheetLoader$.MODULE$.readDirectoryModelFromCsvFile(this.dirSheet, (List)this.fileModelCLs, this.namespaceSheet);
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return this.dirSheet;
     }
     

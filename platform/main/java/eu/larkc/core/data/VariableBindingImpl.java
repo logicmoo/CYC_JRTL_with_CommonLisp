@@ -33,8 +33,10 @@ public class VariableBindingImpl implements VariableBinding
 		}
 	}
 	
-	 public List<String> getVariables() { return variables; }
-	 public CloseableIterator<Binding> iterator() { return new SimpleCloseableIterator<Binding>( bindings.iterator()); }
+	 @Override
+	public List<String> getVariables() { return variables; }
+	 @Override
+	public CloseableIterator<Binding> iterator() { return new SimpleCloseableIterator<Binding>( bindings.iterator()); }
 	
 	public static class BindingRow implements VariableBinding.Binding 
 	{
@@ -55,6 +57,7 @@ public class VariableBindingImpl implements VariableBinding
 			values.add(v);
 		}
 	
+		@Override
 		public List<Value> getValues() {
 			return values;
 		}

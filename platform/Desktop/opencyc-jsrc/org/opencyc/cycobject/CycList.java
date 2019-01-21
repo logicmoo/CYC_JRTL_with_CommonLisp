@@ -211,7 +211,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    *
    * @return a clone of this instance
    */
-  public Object clone() {
+  @Override
+public Object clone() {
     return new CycList<E>(this);
   }
 
@@ -276,7 +277,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    *
    * @return the CycList size including the optional dotted element
    */
-  public int size() {
+  @Override
+public int size() {
     int result = super.size();
     if (!isProperList()) {
       result++;
@@ -326,7 +328,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * @throws CycApiException if the api request results in a cyc server error
    * @deprecated use CycAccess.isFormulaWellFormed(this, mt);
    */
-  public boolean isFormulaWellFormed(final ELMt mt)
+  @Deprecated
+public boolean isFormulaWellFormed(final ELMt mt)
           throws IOException, UnknownHostException, CycApiException {
     return CycAccess.getCurrent().isFormulaWellFormed(this, mt);
   }
@@ -340,7 +343,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * @throws CycApiException if the api request results in a cyc server error
    * @deprecated use CycAccess.isCycLNonAtomicReifableTerm();
    */
-  public boolean isCycLNonAtomicReifableTerm()
+  @Deprecated
+public boolean isCycLNonAtomicReifableTerm()
           throws IOException, UnknownHostException, CycApiException {
     return CycAccess.getCurrent().isCycLNonAtomicReifableTerm(this);
   }
@@ -354,7 +358,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * @throws CycApiException if the api request results in a cyc server error
    * @deprecated use CycAccess.isCycLNonAtomicUnreifableTerm();
    */
-  public boolean isCycLNonAtomicUnreifableTerm()
+  @Deprecated
+public boolean isCycLNonAtomicUnreifableTerm()
           throws IOException, UnknownHostException, CycApiException {
     return CycAccess.getCurrent().isCycLNonAtomicUnreifableTerm(this);
   }
@@ -540,7 +545,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     return this;
   }
 
-  public boolean add(E e) {
+  @Override
+public boolean add(E e) {
     return super.add(e);
   }
 
@@ -607,7 +613,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     }
   }
 
-  public boolean addAll(Collection<? extends E> col) {
+  @Override
+public boolean addAll(Collection<? extends E> col) {
     boolean result = super.addAll(col);
     if (col instanceof CycList) {
       CycList cycList = (CycList) col;
@@ -1101,7 +1108,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     }
   }
 
-  public int hashCode() {
+  @Override
+public int hashCode() {
     int code = 0;
     for (final E item : this) {
       code = code ^ item.hashCode();
@@ -1228,7 +1236,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     return !(e1.hasNext() || e2.hasNext());
   }
 
-  public int compareTo(Object o) {
+  @Override
+public int compareTo(Object o) {
     if (o == this) {
       return 0;
     }
@@ -1319,7 +1328,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * @return a <tt>String</tt> representation in cyclified form.
    *
    */
-  public String cyclifyWithEscapeChars() {
+  @Override
+public String cyclifyWithEscapeChars() {
     return cyclifyWithEscapeChars(false);
   }
 
@@ -1358,7 +1368,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * @return a <tt>String</tt> representation in cyclified form.
    *
    */
-  public String cyclify() {
+  @Override
+public String cyclify() {
     final StringBuffer result = new StringBuffer("(");
     for (int i = 0; i < super.size(); i++) {
       E object = this.get(i);
@@ -1525,7 +1536,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    *
    * @return this object in a form suitable for use as an <tt>CycList</tt> api expression value
    */
-  public Object cycListApiValue() {
+  @Override
+public Object cycListApiValue() {
     return cycListApiValue(false);
   }
 
@@ -1596,7 +1608,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     }
   }
 
-  public E get(int index) {
+  @Override
+public E get(int index) {
     if ((index == (size() - 1)) && (!isProperList())) {
       return getDottedElement();
     } else {
@@ -1614,7 +1627,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * @throws    IndexOutOfBoundsException if index out of range
    *		  <tt>(index &lt; 0 || index &gt;= size())</tt>.
    */
-  public E set(int index, E element) {
+  @Override
+public E set(int index, E element) {
     if ((index == (size() - 1)) && (!isProperList())) {
       final E oldValue = getDottedElement();
       setDottedElement(element);
@@ -1862,7 +1876,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * -- or relative to the indentation currently specified in the indent_string field
    * of the xml_writer object, relative = true.
    */
-  public void toXML(final XMLWriter xmlWriter, final int indent,
+  @Override
+public void toXML(final XMLWriter xmlWriter, final int indent,
           final boolean relative) throws IOException {
     final int startingIndent = xmlWriter.getIndentLength();
     xmlWriter.printXMLStartTag(cycListXMLTag, indent, relative, true);
@@ -2127,7 +2142,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     }
   }
 
-  public List getReferencedConstants() {
+  @Override
+public List getReferencedConstants() {
     return treeConstants();
   }
   //// serializable
@@ -2378,11 +2394,13 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
         int expectedModCount = modCount;
         int mySize = getProperListSize();
 
-        public boolean hasNext() {
+        @Override
+		public boolean hasNext() {
             return (cursor != mySize);
         }
 
-        @SuppressWarnings("unchecked")
+        @Override
+		@SuppressWarnings("unchecked")
         public E next() {
             checkForComodification();
             int i = cursor;
@@ -2393,7 +2411,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
             return (E) get(lastRet = i);
         }
 
-        public void remove() {
+        @Override
+		public void remove() {
             if (lastRet < 0)
                 throw new IllegalStateException();
             checkForComodification();
@@ -2420,19 +2439,23 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
             cursor = index;
         }
 
-        public boolean hasPrevious() {
+        @Override
+		public boolean hasPrevious() {
             return (cursor != 0);
         }
 
-        public int nextIndex() {
+        @Override
+		public int nextIndex() {
             return cursor;
         }
 
-        public int previousIndex() {
+        @Override
+		public int previousIndex() {
             return (cursor - 1);
         }
 
-        @SuppressWarnings("unchecked")
+        @Override
+		@SuppressWarnings("unchecked")
         public E previous() {
             checkForComodification();
             int i = cursor - 1;
@@ -2443,7 +2466,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
             return (E) get(lastRet = i);
         }
 
-        public void set(E e) {
+        @Override
+		public void set(E e) {
             if (lastRet < 0) {
                 throw new IllegalStateException();
             }
@@ -2456,7 +2480,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
             }
         }
 
-        public void add(E e) {
+        @Override
+		public void add(E e) {
             checkForComodification();
 
             try {

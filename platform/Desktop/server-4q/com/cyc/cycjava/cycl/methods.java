@@ -7078,15 +7078,18 @@ public final class methods extends SubLTranslatedFile
         return (SubLObject)methods.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_methods_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_methods_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_methods_file();
     }
     

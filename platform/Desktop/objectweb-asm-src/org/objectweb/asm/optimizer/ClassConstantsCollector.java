@@ -53,7 +53,8 @@ public class ClassConstantsCollector extends ClassAdapter {
         this.cp = cp;
     }
 
-    public void visit(
+    @Override
+	public void visit(
         final int version,
         final int access,
         final String name,
@@ -83,7 +84,8 @@ public class ClassConstantsCollector extends ClassAdapter {
         cv.visit(version, access, name, signature, superName, interfaces);
     }
 
-    public void visitSource(final String source, final String debug) {
+    @Override
+	public void visitSource(final String source, final String debug) {
         if (source != null) {
             cp.newUTF8("SourceFile");
             cp.newUTF8(source);
@@ -94,7 +96,8 @@ public class ClassConstantsCollector extends ClassAdapter {
         cv.visitSource(source, debug);
     }
 
-    public void visitOuterClass(
+    @Override
+	public void visitOuterClass(
         final String owner,
         final String name,
         final String desc)
@@ -107,7 +110,8 @@ public class ClassConstantsCollector extends ClassAdapter {
         cv.visitOuterClass(owner, name, desc);
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -121,12 +125,14 @@ public class ClassConstantsCollector extends ClassAdapter {
                 visible), cp);
     }
 
-    public void visitAttribute(final Attribute attr) {
+    @Override
+	public void visitAttribute(final Attribute attr) {
         // can do nothing
         cv.visitAttribute(attr);
     }
 
-    public void visitInnerClass(
+    @Override
+	public void visitInnerClass(
         final String name,
         final String outerName,
         final String innerName,
@@ -145,7 +151,8 @@ public class ClassConstantsCollector extends ClassAdapter {
         cv.visitInnerClass(name, outerName, innerName, access);
     }
 
-    public FieldVisitor visitField(
+    @Override
+	public FieldVisitor visitField(
         final int access,
         final String name,
         final String desc,
@@ -174,7 +181,8 @@ public class ClassConstantsCollector extends ClassAdapter {
                 value), cp);
     }
 
-    public MethodVisitor visitMethod(
+    @Override
+	public MethodVisitor visitMethod(
         final int access,
         final String name,
         final String desc,

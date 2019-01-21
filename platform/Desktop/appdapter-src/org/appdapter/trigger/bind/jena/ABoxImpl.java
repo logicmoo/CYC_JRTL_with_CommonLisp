@@ -20,7 +20,8 @@ public abstract class ABoxImpl<TrigType extends Trigger<? extends ABoxImpl<TrigT
         this.myTriggers = new ArrayList<TrigType>();
     }
     
-    public Logger getLogger() {
+    @Override
+	public Logger getLogger() {
         return ABoxImpl.theLogger;
     }
     
@@ -32,37 +33,45 @@ public abstract class ABoxImpl<TrigType extends Trigger<? extends ABoxImpl<TrigT
         return ABoxImpl.theLogger;
     }
     
-    public void useLoggerForClass(final Class c) {
+    @Override
+	public void useLoggerForClass(final Class c) {
         final Logger l = getLoggerForClass(c);
         this.setLogger(l);
     }
     
-    protected boolean isLoggerUsable() {
+    @Override
+	protected boolean isLoggerUsable() {
         final Logger l = this.getLogger();
         return l != null && !(l instanceof NOPLogger);
     }
     
-    public void setContext(final BoxContext bc) {
+    @Override
+	public void setContext(final BoxContext bc) {
         this.myBoxContext = bc;
     }
     
-    public BoxContext getBoxContext() {
+    @Override
+	public BoxContext getBoxContext() {
         return this.myBoxContext;
     }
     
-    public void clearTriggers() {
+    @Override
+	public void clearTriggers() {
         this.myTriggers.clear();
     }
     
-    public void attachTrigger(final TrigType trig) {
+    @Override
+	public void attachTrigger(final TrigType trig) {
         this.myTriggers.add(trig);
     }
     
-    public List<TrigType> getTriggers() {
+    @Override
+	public List<TrigType> getTriggers() {
         return this.myTriggers;
     }
     
-    public String getFieldSummary() {
+    @Override
+	public String getFieldSummary() {
         return super.getFieldSummary() + ", triggerCount=" + this.myTriggers.size();
     }
     

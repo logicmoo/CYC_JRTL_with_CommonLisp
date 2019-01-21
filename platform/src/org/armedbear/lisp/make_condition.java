@@ -53,7 +53,8 @@ Form: (LET* ((TP (QUOTE (AND SIMPLE-ERROR TYPE-ERROR))) (C (MAKE-CONDITION TP)))
  */
     // ### %make-condition
     // %make-condition type slot-initializations => condition
-    public LispObject execute(LispObject type, LispObject initArgs)
+    @Override
+	public LispObject execute(LispObject type, LispObject initArgs)
 
     {
         final Symbol symbol;

@@ -175,7 +175,8 @@ public class TraceClassVisitor extends TraceAbstractVisitor implements
     // Implementation of the ClassVisitor interface
     // ------------------------------------------------------------------------
 
-    public void visit(
+    @Override
+	public void visit(
         final int version,
         final int access,
         final String name,
@@ -240,7 +241,8 @@ public class TraceClassVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitSource(final String file, final String debug) {
+    @Override
+	public void visitSource(final String file, final String debug) {
         buf.setLength(0);
         if (file != null) {
             buf.append(tab)
@@ -263,7 +265,8 @@ public class TraceClassVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitOuterClass(
+    @Override
+	public void visitOuterClass(
         final String owner,
         final String name,
         final String desc)
@@ -284,7 +287,8 @@ public class TraceClassVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -297,7 +301,8 @@ public class TraceClassVisitor extends TraceAbstractVisitor implements
         return tav;
     }
 
-    public void visitAttribute(final Attribute attr) {
+    @Override
+	public void visitAttribute(final Attribute attr) {
         text.add("\n");
         super.visitAttribute(attr);
 
@@ -306,7 +311,8 @@ public class TraceClassVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitInnerClass(
+    @Override
+	public void visitInnerClass(
         final String name,
         final String outerName,
         final String innerName,
@@ -331,7 +337,8 @@ public class TraceClassVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public FieldVisitor visitField(
+    @Override
+	public FieldVisitor visitField(
         final int access,
         final String name,
         final String desc,
@@ -384,7 +391,8 @@ public class TraceClassVisitor extends TraceAbstractVisitor implements
         return tav;
     }
 
-    public MethodVisitor visitMethod(
+    @Override
+	public MethodVisitor visitMethod(
         final int access,
         final String name,
         final String desc,
@@ -456,7 +464,8 @@ public class TraceClassVisitor extends TraceAbstractVisitor implements
         return tcv;
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         text.add("}\n");
 
         print(pw);

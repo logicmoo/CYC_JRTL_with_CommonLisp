@@ -28,6 +28,7 @@ public class ORDIGraphResult extends GraphResultBase implements TupleQueryResult
 	private String[] bindNames;
 	private final static long serialVersionUID = 1L;
 
+	@Override
 	public synchronized void startQueryResult(List<String> list) {
 		bindNames = list.toArray(new String[list.size()]);
 		if (bindNames.length < 3) {
@@ -35,6 +36,7 @@ public class ORDIGraphResult extends GraphResultBase implements TupleQueryResult
 		}
 	}
 
+	@Override
 	public synchronized void endQueryResult() {
 		while (true) {
 			try {
@@ -45,6 +47,7 @@ public class ORDIGraphResult extends GraphResultBase implements TupleQueryResult
 		}
 	}
 
+	@Override
 	public synchronized void handleSolution(BindingSet bindingset)
 			throws TupleQueryResultHandlerException {
 		if (isClosed) {
@@ -63,6 +66,7 @@ public class ORDIGraphResult extends GraphResultBase implements TupleQueryResult
 		}
 	}
 
+	@Override
 	public synchronized void close() {
 		isClosed = true;
 	}

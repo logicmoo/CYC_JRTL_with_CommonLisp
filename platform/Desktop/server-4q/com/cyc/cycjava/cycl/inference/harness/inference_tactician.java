@@ -1460,15 +1460,18 @@ public final class inference_tactician extends SubLTranslatedFile
         return (SubLObject)inference_tactician.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_tactician_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_tactician_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_tactician_file();
     }
     
@@ -1579,7 +1582,8 @@ public final class inference_tactician extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGY-SORT-PREDICATE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_tactician.strategy_sort_predicateP(arg1, arg2);
         }
     }
@@ -1590,7 +1594,8 @@ public final class inference_tactician extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HAPPINESS->"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_tactician.happiness_G(arg1, arg2);
         }
     }

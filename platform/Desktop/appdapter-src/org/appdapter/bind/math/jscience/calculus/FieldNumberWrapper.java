@@ -21,19 +21,23 @@ abstract class FieldNumberWrapper<FNW extends FieldNumberWrapper<FNW, JSFN>, JSF
         this.myJScienceNumber = jsciNum;
     }
 
-    public long longValue() {
+    @Override
+	public long longValue() {
         return this.myJScienceNumber.longValue();
     }
 
-    public double doubleValue() {
+    @Override
+	public double doubleValue() {
         return this.myJScienceNumber.doubleValue();
     }
 
-    public BigDecimal decimalValue() {
+    @Override
+	public BigDecimal decimalValue() {
         return this.myJScienceNumber.decimalValue();
     }
 
-    public int compareTo(final FieldNumberWrapper<FNW, JSFN> otherFN) {
+    @Override
+	public int compareTo(final FieldNumberWrapper<FNW, JSFN> otherFN) {
         return this.myJScienceNumber.compareTo((JSFN)otherFN.getJScienceNumber());
     }
 }

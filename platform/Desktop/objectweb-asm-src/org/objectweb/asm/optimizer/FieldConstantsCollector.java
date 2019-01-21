@@ -51,7 +51,8 @@ public class FieldConstantsCollector implements FieldVisitor {
         this.cp = cp;
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -65,12 +66,14 @@ public class FieldConstantsCollector implements FieldVisitor {
                 visible), cp);
     }
 
-    public void visitAttribute(final Attribute attr) {
+    @Override
+	public void visitAttribute(final Attribute attr) {
         // can do nothing
         fv.visitAttribute(attr);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         fv.visitEnd();
     }
 }

@@ -31,7 +31,8 @@ final class RETokenBackRef extends REToken {
 
   // should implement getMinimumLength() -- any ideas?
 
-    boolean match(CharIndexed input, REMatch mymatch) {
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) {
 	int b,e;
 	b = mymatch.start[num];
 	e = mymatch.end[num];
@@ -45,7 +46,8 @@ final class RETokenBackRef extends REToken {
 	return next(input, mymatch);
     }
     
-    void dump(StringBuffer os) {
+    @Override
+	void dump(StringBuffer os) {
 	os.append('\\').append(num);
     }
 }

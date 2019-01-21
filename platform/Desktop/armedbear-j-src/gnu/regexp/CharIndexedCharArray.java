@@ -28,16 +28,19 @@ class CharIndexedCharArray implements CharIndexed, Serializable {
 	anchor = index;
     }
     
-    public char charAt(int index) {
+    @Override
+	public char charAt(int index) {
 	int pos = anchor + index;
 	return ((pos < s.length) && (pos >= 0)) ? s[pos] : OUT_OF_BOUNDS;
     }
     
-    public boolean isValid() {
+    @Override
+	public boolean isValid() {
 	return (anchor < s.length);
     }
     
-    public boolean move(int index) {
+    @Override
+	public boolean move(int index) {
 	return ((anchor += index) < s.length);
     }
 }

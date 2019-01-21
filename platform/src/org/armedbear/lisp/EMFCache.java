@@ -47,7 +47,8 @@ public final class EMFCache extends LispObject
     cache = new ConcurrentHashMap<CacheEntry,LispObject>();
   }
 
-  public String printObjectImpl()
+  @Override
+public String printObjectImpl()
   {
     return unreadableString("EMF-CACHE");
   }
@@ -79,7 +80,8 @@ public final class EMFCache extends LispObject
       this.array = array;
     }
 
-    public int hashCode()
+    @Override
+	public int hashCode()
     {
       int result = 0;
       for (int i = array.length; i-- > 0;)
@@ -87,7 +89,8 @@ public final class EMFCache extends LispObject
       return result;
     }
 
-    public boolean equals(Object object)
+    @Override
+	public boolean equals(Object object)
     {
       if (!(object instanceof CacheEntry))
         return false;
@@ -111,7 +114,8 @@ public final class EMFCache extends LispObject
     {
       super("%make-emf-cache", PACKAGE_SYS, true);
     }
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
       return new EMFCache();
     }
@@ -128,7 +132,8 @@ public final class EMFCache extends LispObject
       super("%reinit-emf-cache", PACKAGE_SYS, true,
             "generic-function eql-specializer-objects-list");
     }
-    public LispObject execute(LispObject generic_function, LispObject eql_specializers)
+    @Override
+	public LispObject execute(LispObject generic_function, LispObject eql_specializers)
     {
       final FuncallableStandardObject gf = checkStandardGenericFunction(generic_function);
       EMFCache cache = gf.cache;
@@ -152,7 +157,8 @@ public final class EMFCache extends LispObject
     {
       super("cache-emf", PACKAGE_SYS, true, "generic-function args emf");
     }
-    public LispObject execute(LispObject first, LispObject second,
+    @Override
+	public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
     {
       final FuncallableStandardObject gf = checkStandardGenericFunction(first);
@@ -182,7 +188,8 @@ public final class EMFCache extends LispObject
     pf_get_cached_emf() {
       super("get-cached-emf", PACKAGE_SYS, true, "generic-function args");
     }
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
     {
       final FuncallableStandardObject gf = checkStandardGenericFunction(first);
       EMFCache cache = gf.cache;

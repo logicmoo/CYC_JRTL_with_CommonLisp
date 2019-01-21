@@ -37,12 +37,14 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
     return mode;
   }
 
-  public Formatter getFormatter(Buffer buffer)
+  @Override
+public Formatter getFormatter(Buffer buffer)
   {
     return new DiffFormatter(buffer);
   }
 
-  protected void setKeyMapDefaults( KeyMap km )
+  @Override
+protected void setKeyMapDefaults( KeyMap km )
   {
     km.mapKey(KeyEvent.VK_ENTER, 0, "diffGotoFile");
     km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "diffGotoFile");

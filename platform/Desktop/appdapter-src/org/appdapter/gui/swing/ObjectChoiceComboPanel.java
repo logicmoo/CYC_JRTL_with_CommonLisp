@@ -192,6 +192,7 @@ public class ObjectChoiceComboPanel extends JJPanel implements ToFromKeyConverte
 	private void initGUI() {
 
 		combo = new JComboBox(model) {
+			@Override
 			public void setSelectedItem(Object anObject) {
 				if (ReflectUtils.eq(selectedItemReminder, anObject, false)) {
 					return;
@@ -206,6 +207,7 @@ public class ObjectChoiceComboPanel extends JJPanel implements ToFromKeyConverte
 			 *  
 			 * @return the <code>ComboBoxEditor</code> that displays the selected item
 			 */
+			@Override
 			public ComboBoxEditor getEditor() {
 				ComboBoxEditor editor = super.getEditor();
 				if (editor != null)
@@ -298,6 +300,7 @@ public class ObjectChoiceComboPanel extends JJPanel implements ToFromKeyConverte
 		* to the selected value and returns the label, set up
 		* to display the text and image.
 		*/
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			JComponent view = this;
 			if (value != null && value == NULLOBJECT) {
@@ -338,6 +341,7 @@ public class ObjectChoiceComboPanel extends JJPanel implements ToFromKeyConverte
 
 	}
 
+	@Override
 	public Object getValue() {
 		if (model == null)
 			return model;

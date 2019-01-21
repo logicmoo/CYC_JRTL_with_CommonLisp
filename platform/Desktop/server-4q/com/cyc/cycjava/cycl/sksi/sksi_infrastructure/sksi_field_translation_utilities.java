@@ -4714,15 +4714,18 @@ public final class sksi_field_translation_utilities extends SubLTranslatedFile
         return (SubLObject)sksi_field_translation_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_field_translation_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_field_translation_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_field_translation_utilities_file();
     }
     
@@ -4801,7 +4804,8 @@ public final class sksi_field_translation_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DECODING-PHYSICAL-FIELD-INDEXICALS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sksi_field_translation_utilities.decoding_physical_field_indexicals(arg1);
         }
     }

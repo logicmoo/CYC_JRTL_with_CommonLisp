@@ -571,15 +571,18 @@ public final class decision_tree extends SubLTranslatedFile
         return (SubLObject)decision_tree.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_decision_tree_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_decision_tree_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_decision_tree_file();
     }
     

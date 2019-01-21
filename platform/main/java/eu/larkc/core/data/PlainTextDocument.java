@@ -17,6 +17,7 @@ public class PlainTextDocument implements NaturalLanguageDocument {
 		mText = text;
 	}
 
+	@Override
 	public String getText() {
 		return mText;
 	}

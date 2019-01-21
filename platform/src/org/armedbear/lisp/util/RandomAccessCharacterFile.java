@@ -147,7 +147,8 @@ public class RandomAccessCharacterFile {
         }
 
         private byte[] buf = new byte[1];
-        public final void write(int b) throws IOException {
+        @Override
+		public final void write(int b) throws IOException {
             buf[0] = (byte)b;
             RandomAccessCharacterFile.this.write(buf, 0, 1);
         }
@@ -247,11 +248,13 @@ public class RandomAccessCharacterFile {
         RandomAccessWriter() {
         }
 
-        public final void close() throws IOException {
+        @Override
+		public final void close() throws IOException {
             RandomAccessCharacterFile.this.close();
         }
 
-        public final void flush() throws IOException {
+        @Override
+		public final void flush() throws IOException {
             RandomAccessCharacterFile.this.flush();
         }
 

@@ -101,13 +101,15 @@ class BeanMenuController implements BeansContextListener {
   }
 */
 
-  public void beanAdded(String name, Object obj) {
+  @Override
+public void beanAdded(String name, Object obj) {
     if (obj == bean) {
       updateMenu();
     }
   }
 
-  public void beanRemoved(String named, Object obj) {
+  @Override
+public void beanRemoved(String named, Object obj) {
     if (obj == bean) {
       updateMenu();
     }

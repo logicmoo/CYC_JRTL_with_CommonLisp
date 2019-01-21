@@ -17,11 +17,13 @@ public class OfflineXlsSheetRepoSpec extends RepoSpecForDirectory
         return OfflineXlsSheetRepoSpec$.MODULE$.$lessinit$greater$default$4();
     }
     
-    public Model getDirectoryModel() {
+    @Override
+	public Model getDirectoryModel() {
         return XLSXSheetRepoLoader$.MODULE$.readDirectoryModelFromXLSX(this.sheetLocation, this.namespaceSheet, this.dirSheet, (List)this.fileModelCLs);
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuilder().append((Object)"xlsx:/").append((Object)this.sheetLocation).append((Object)"/").append((Object)this.namespaceSheet).append((Object)"/").append((Object)this.dirSheet).toString();
     }
     

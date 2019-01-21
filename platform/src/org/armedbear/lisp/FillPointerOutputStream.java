@@ -55,7 +55,8 @@ public final class FillPointerOutputStream extends Stream
     private static final Primitive MAKE_FILL_POINTER_OUTPUT_STREAM =
         new Primitive("make-fill-pointer-output-stream", PACKAGE_SYS, true)
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof ComplexString) {
                 ComplexString string = (ComplexString) arg;
@@ -70,7 +71,8 @@ public final class FillPointerOutputStream extends Stream
 
     class Writer extends java.io.Writer
     {
-        public void write(char cbuf[], int off, int len)
+        @Override
+		public void write(char cbuf[], int off, int len)
         {
             int fp = string.getFillPointer();
             if (fp >= 0) {
@@ -84,11 +86,13 @@ public final class FillPointerOutputStream extends Stream
             string.setFillPointer(fp);
         }
 
-        public void flush()
+        @Override
+		public void flush()
         {
         }
 
-        public void close()
+        @Override
+		public void close()
         {
         }
     }

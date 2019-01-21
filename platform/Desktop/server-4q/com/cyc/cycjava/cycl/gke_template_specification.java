@@ -521,15 +521,18 @@ public final class gke_template_specification extends SubLTranslatedFile
         return (SubLObject)gke_template_specification.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_gke_template_specification_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_gke_template_specification_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_gke_template_specification_file();
     }
     
@@ -653,127 +656,158 @@ public final class gke_template_specification extends SubLTranslatedFile
             this.$exclude_replacement_position = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$gke_template_specification_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$constant;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$formula;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$assert_mt;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$parsing_mt;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$natural_language_mt;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$mode;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$replacement_method;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$arg_replacement_method;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$focal_term;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$assertion_format;
         }
         
-        public SubLObject getField12() {
+        @Override
+		public SubLObject getField12() {
             return this.$candidate_replacement;
         }
         
-        public SubLObject getField13() {
+        @Override
+		public SubLObject getField13() {
             return this.$constraint_on_replacement;
         }
         
-        public SubLObject getField14() {
+        @Override
+		public SubLObject getField14() {
             return this.$constraint_on_replacement_basis;
         }
         
-        public SubLObject getField15() {
+        @Override
+		public SubLObject getField15() {
             return this.$exclude_replacement;
         }
         
-        public SubLObject getField16() {
+        @Override
+		public SubLObject getField16() {
             return this.$exclude_replacement_position;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$constant = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$formula = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$assert_mt = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$parsing_mt = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$natural_language_mt = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$mode = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$replacement_method = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$arg_replacement_method = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$focal_term = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$assertion_format = value;
         }
         
-        public SubLObject setField12(final SubLObject value) {
+        @Override
+		public SubLObject setField12(final SubLObject value) {
             return this.$candidate_replacement = value;
         }
         
-        public SubLObject setField13(final SubLObject value) {
+        @Override
+		public SubLObject setField13(final SubLObject value) {
             return this.$constraint_on_replacement = value;
         }
         
-        public SubLObject setField14(final SubLObject value) {
+        @Override
+		public SubLObject setField14(final SubLObject value) {
             return this.$constraint_on_replacement_basis = value;
         }
         
-        public SubLObject setField15(final SubLObject value) {
+        @Override
+		public SubLObject setField15(final SubLObject value) {
             return this.$exclude_replacement = value;
         }
         
-        public SubLObject setField16(final SubLObject value) {
+        @Override
+		public SubLObject setField16(final SubLObject value) {
             return this.$exclude_replacement_position = value;
         }
         
@@ -788,7 +822,8 @@ public final class gke_template_specification extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GKE-TEMPLATE-SPECIFICATION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return gke_template_specification.gke_template_specification_p(arg1);
         }
     }

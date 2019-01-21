@@ -923,15 +923,18 @@ public final class nl_reformulator extends SubLTranslatedFile
         return (SubLObject)nl_reformulator.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_nl_reformulator_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_nl_reformulator_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_nl_reformulator_file();
     }
     

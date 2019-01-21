@@ -1127,7 +1127,8 @@ public final class Utilities implements Constants
             final Process p = Runtime.getRuntime().exec(s);
             if (p != null) {
                 Thread t = new Thread("Utilities.have(\"" + s + "\") destroy") {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         try {
                             final BufferedReader reader =
@@ -1665,7 +1666,8 @@ public final class Utilities implements Constants
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         Border border =
             new TitledBorder(BorderFactory.createEtchedBorder(), title) {
-            public void paintBorder(Component c, Graphics g, int x, int y,
+            @Override
+			public void paintBorder(Component c, Graphics g, int x, int y,
                                     int width, int height)
             {
                 Display.setRenderingHints(g);

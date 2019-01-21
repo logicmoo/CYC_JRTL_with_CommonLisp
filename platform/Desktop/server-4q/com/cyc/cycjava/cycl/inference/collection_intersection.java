@@ -1240,15 +1240,18 @@ public final class collection_intersection extends SubLTranslatedFile
         return (SubLObject)collection_intersection.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_collection_intersection_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_collection_intersection_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_collection_intersection_file();
     }
     

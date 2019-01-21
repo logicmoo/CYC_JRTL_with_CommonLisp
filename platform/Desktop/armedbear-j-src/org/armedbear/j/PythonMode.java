@@ -38,32 +38,38 @@ public final class PythonMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
 
-    public boolean canIndentPaste()
+    @Override
+	public boolean canIndentPaste()
     {
         return false;
     }
 
-    public final SyntaxIterator getSyntaxIterator(Position pos)
+    @Override
+	public final SyntaxIterator getSyntaxIterator(Position pos)
     {
         return new PythonSyntaxIterator(pos);
     }
 
-    public final String getCommentStart()
+    @Override
+	public final String getCommentStart()
     {
         return "#";
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new PythonFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_TAB, 0, "tab");
         km.mapKey(KeyEvent.VK_TAB, SHIFT_MASK, "slideOut");
@@ -72,29 +78,34 @@ public final class PythonMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_I, ALT_MASK, "cycleIndentSize");
     }
 
-    public final boolean isTaggable()
+    @Override
+	public final boolean isTaggable()
     {
         return true;
     }
 
-    public final Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public final Tagger getTagger(SystemBuffer buffer)
     {
         return new PythonTagger(buffer);
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         return new PythonIndenter(line, buffer).getCorrectIndentation();
     }
 
-    public final boolean isIdentifierStart(char c)
+    @Override
+	public final boolean isIdentifierStart(char c)
     {
         if (c > 127)
             return false;
         return values[c] == 1;
     }
 
-    public final boolean isIdentifierPart(char c)
+    @Override
+	public final boolean isIdentifierPart(char c)
     {
         if (c > 127)
             return false;

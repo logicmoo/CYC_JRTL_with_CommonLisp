@@ -70,6 +70,7 @@ import org.armedbear.lisp.Stream;
 import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.TwoWayStream;
 import org.armedbear.lisp.WriterOutputStream;
+import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 
@@ -79,6 +80,7 @@ public class REPLConsole extends DefaultStyledDocument {
 
   private Reader reader = new Reader() {
 
+		@Override
 		public void close() throws RuntimeException {
 		}
 
@@ -101,9 +103,11 @@ public class REPLConsole extends DefaultStyledDocument {
 
   private Writer writer = new Writer() {
 
+		@Override
 		public void close() throws RuntimeException {
 		}
 
+		@Override
 		public void flush() throws RuntimeException {
 		}
 
@@ -120,7 +124,8 @@ public class REPLConsole extends DefaultStyledDocument {
             reader.notifyAll();
           }
           Runnable r = new Runnable() {
-              public void run() {
+              @Override
+			public void run() {
                 synchronized(reader) {
                   try {
 								superInsertString(insertOffs, new String(cbuf, off, len), null);
@@ -155,7 +160,8 @@ public class REPLConsole extends DefaultStyledDocument {
 				Stream.createStream(Symbol.SYSTEM_STREAM, new BufferedWriter(writer)), string);
 
     replThread = new Thread("REPL-thread-" + System.identityHashCode(this)) {
-        public void run() {
+        @Override
+		public void run() {
 				// while (true) {
 				try {
 					replWrapper.run();
@@ -169,6 +175,7 @@ public class REPLConsole extends DefaultStyledDocument {
 		return replThread;
   }
 
+	@Override
 	public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
     synchronized(reader) {
       int bufferStart = getLength() - inputBuffer.length();
@@ -236,11 +243,13 @@ public class REPLConsole extends DefaultStyledDocument {
     addDocumentListener(new DocumentListener() {
 
         //			@Override
-        public void changedUpdate(DocumentEvent e) {
+        @Override
+		public void changedUpdate(DocumentEvent e) {
         }
 
         // @Override
-        public void insertUpdate(DocumentEvent e) {
+        @Override
+		public void insertUpdate(DocumentEvent e) {
           int len = getLength();
 				if (len - e.getLength() == e.getOffset()) { // The insert was at
 															// the end of the
@@ -250,7 +259,8 @@ public class REPLConsole extends DefaultStyledDocument {
         }
 
         // @Override
-        public void removeUpdate(DocumentEvent e) {
+        @Override
+		public void removeUpdate(DocumentEvent e) {
         }
       });
     txt.setCaretPosition(getLength());
@@ -285,6 +295,7 @@ public class REPLConsole extends DefaultStyledDocument {
 
 	public Runnable makeReplWrapper(final Stream in, final Stream out, final String string) {
 		return new Runnable() {
+			@Override
 			public void run() {
 				final LispThread thread = LispThread.currentThread();
 				SpecialBindingsMark lastSpecialBinding = thread.markSpecialBindings();
@@ -297,8 +308,8 @@ public class REPLConsole extends DefaultStyledDocument {
 					thread.bindSpecial(Symbol.TERMINAL_IO, ioStream);
 					thread.bindSpecial(Symbol.DEBUG_IO, ioStream);
 					thread.bindSpecial(Symbol.QUERY_IO, ioStream);
-					System.setIn(new ReaderInputStream(reader));
-					System.setOut(new PrintStream(new WriterOutputStream(writer)));
+					SystemCurrent.setIn(new ReaderInputStream(reader));
+					SystemCurrent.setOut(new PrintStream(new WriterOutputStream(writer)));
 					// return fn.execute();
 					result[0] = interpreter.eval(string);// fn.run();
 					System.out.println("Result=" + getResult());
@@ -314,6 +325,7 @@ public class REPLConsole extends DefaultStyledDocument {
 		final Stream in = Stream.createStream(Symbol.SYSTEM_STREAM, new BufferedReader(reader));
 		final Stream out = Stream.createStream(Symbol.SYSTEM_STREAM, new BufferedWriter(writer));
 		return new Runnable() {
+			@Override
 			public void run() {
 				final LispThread thread = LispThread.currentThread();
 				SpecialBindingsMark lastSpecialBinding = thread.markSpecialBindings();

@@ -193,15 +193,18 @@ public final class pph_error_message_truncator extends SubLTranslatedFile
         return (SubLObject)pph_error_message_truncator.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_error_message_truncator_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_error_message_truncator_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_error_message_truncator_file();
     }
     

@@ -47,7 +47,8 @@ public abstract class CaseFrobStream extends Stream
         this.target = target;
     }
 
-    public LispObject getStreamElementType()
+    @Override
+	public LispObject getStreamElementType()
     {
         return target.getStreamElementType();
     }
@@ -201,12 +202,14 @@ public abstract class CaseFrobStream extends Stream
         return target.terpri();
     }
 
-    public LispObject FRESH_LINE()
+    @Override
+	public LispObject FRESH_LINE()
     {
         return target.FRESH_LINE();
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         return unreadableString("CASE-FROB-STREAM");
     }

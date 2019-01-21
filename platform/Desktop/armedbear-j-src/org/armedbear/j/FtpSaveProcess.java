@@ -105,7 +105,8 @@ public class FtpSaveProcess implements BackgroundProcess, Constants
         new Thread(this).start();
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         Debug.assertTrue(buffer.isLocked());
         try {
@@ -185,7 +186,8 @@ public class FtpSaveProcess implements BackgroundProcess, Constants
         session.unlock();
     }
 
-    public synchronized void cancel()
+    @Override
+	public synchronized void cancel()
     {
         if (progressNotifier != null) {
             progressNotifier.cancel();
@@ -197,7 +199,8 @@ public class FtpSaveProcess implements BackgroundProcess, Constants
     // Confirm overwrite of existing destination file for saveAs() and
     // saveCopy().
     private final Runnable confirmOverwriteRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             Debug.assertTrue(SwingUtilities.isEventDispatchThread());
             Debug.assertTrue(session.isLocked());
@@ -218,7 +221,8 @@ public class FtpSaveProcess implements BackgroundProcess, Constants
     // Confirm save if destination file has changed on the remote host since
     // it was loaded.
     private final Runnable confirmDestinationChangedRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             Debug.assertTrue(SwingUtilities.isEventDispatchThread());
             final Editor editor = Editor.currentEditor();
@@ -236,7 +240,8 @@ public class FtpSaveProcess implements BackgroundProcess, Constants
     };
 
     private final Runnable cancelRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             buffer.setBusy(false);
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {

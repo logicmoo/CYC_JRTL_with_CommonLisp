@@ -857,6 +857,7 @@ public class TriggerMenuFactory<TT extends Trigger<Box<TT>> & KnownComponent> {
 			jmi.addActionListener((ActionListener) trig);
 		} else {
 			jmi.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					Box box = Utility.asBox(b, e);
 					trig.fire(box);

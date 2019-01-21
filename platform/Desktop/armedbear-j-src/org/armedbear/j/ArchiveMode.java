@@ -52,12 +52,14 @@ public final class ArchiveMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new PlainTextFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "archiveOpenFile");
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "archiveOpenFile");
@@ -176,7 +178,8 @@ public final class ArchiveMode extends AbstractMode implements Constants, Mode
         return cache;
     }
 
-    public void loadFile(Buffer buffer, File file)
+    @Override
+	public void loadFile(Buffer buffer, File file)
     {
         if (!buffer.isLoaded()) {
             ZipInputStream in = null;

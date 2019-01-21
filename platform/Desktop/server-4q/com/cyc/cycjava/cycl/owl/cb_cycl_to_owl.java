@@ -939,15 +939,18 @@ public final class cb_cycl_to_owl extends SubLTranslatedFile
         return (SubLObject)cb_cycl_to_owl.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_cycl_to_owl_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_cycl_to_owl_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_cycl_to_owl_file();
     }
     

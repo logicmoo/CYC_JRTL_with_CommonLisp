@@ -47,17 +47,20 @@ public class MethodList extends JList {
       return (Method) methods.get(index);
     }
 
-    public Object getElementAt(int index) {
+    @Override
+	public Object getElementAt(int index) {
       return getMethodAt(index).getName();
     }
 
-    public int getSize() {
+    @Override
+	public int getSize() {
       return methods.size();
     }
   }
 
   class MethodComparator implements Comparator {
-    public int compare(Object first, Object second) {
+    @Override
+	public int compare(Object first, Object second) {
       Method a = (Method) first;
       Method b = (Method) second;
       String nameA = a.getName();
@@ -65,7 +68,8 @@ public class MethodList extends JList {
       return nameA.compareTo(nameB);
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
       return (o instanceof MethodComparator);
     }
   }

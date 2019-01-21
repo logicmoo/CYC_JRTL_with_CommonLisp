@@ -36,7 +36,8 @@ public class Native
     public static void initialize()
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 installControlCHandler(); // Never returns.
             }

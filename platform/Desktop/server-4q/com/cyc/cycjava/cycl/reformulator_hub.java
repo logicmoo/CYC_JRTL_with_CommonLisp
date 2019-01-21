@@ -1488,15 +1488,18 @@ public final class reformulator_hub extends SubLTranslatedFile
         return (SubLObject)reformulator_hub.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_reformulator_hub_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_reformulator_hub_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_reformulator_hub_file();
     }
     

@@ -539,15 +539,18 @@ public final class rdf_n_triples_parser extends SubLTranslatedFile
         return (SubLObject)rdf_n_triples_parser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rdf_n_triples_parser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rdf_n_triples_parser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rdf_n_triples_parser_file();
     }
     

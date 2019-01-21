@@ -111,7 +111,8 @@ public final class ModeListEntry
             return false;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return displayName;
     }

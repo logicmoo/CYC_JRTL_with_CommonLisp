@@ -160,7 +160,8 @@ public final class Primitive implements ParserConstants, java.io.Serializable
             return value;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         if(value == Special.NULL_VALUE)
             return "null";
@@ -794,6 +795,7 @@ public final class Primitive implements ParserConstants, java.io.Serializable
 		Primitives compare equal with other Primitives containing an equal
 		wrapped value.
 	*/
+	@Override
 	public boolean equals( Object obj ) 
 	{
 		if ( obj instanceof Primitive )
@@ -806,6 +808,7 @@ public final class Primitive implements ParserConstants, java.io.Serializable
 		The hash of the Primitive is tied to the hash of the wrapped value but
 		shifted so that they are not the same.
 	*/
+	@Override
 	public int hashCode() 
 	{
 		return this.value.hashCode() * 21; // arbitrary

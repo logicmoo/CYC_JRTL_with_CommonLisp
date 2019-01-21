@@ -462,15 +462,18 @@ public final class rkf_knowledge_sorter extends SubLTranslatedFile
         return (SubLObject)rkf_knowledge_sorter.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_knowledge_sorter_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_knowledge_sorter_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_knowledge_sorter_file();
     }
     

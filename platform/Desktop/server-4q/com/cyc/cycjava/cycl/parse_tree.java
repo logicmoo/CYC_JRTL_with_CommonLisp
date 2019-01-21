@@ -4775,15 +4775,18 @@ public final class parse_tree extends SubLTranslatedFile
         return (SubLObject)parse_tree.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_parse_tree_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_parse_tree_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_parse_tree_file();
     }
     

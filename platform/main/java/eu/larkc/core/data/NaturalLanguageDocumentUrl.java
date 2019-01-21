@@ -78,6 +78,7 @@ public class NaturalLanguageDocumentUrl implements NaturalLanguageDocument {
 		documentStr = null;
 	}
 
+	@Override
 	public String getText() {
 		if (documentStr == null) {
 			retrieve();

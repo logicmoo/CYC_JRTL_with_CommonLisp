@@ -71,6 +71,7 @@ import org.armedbear.lisp.SimpleString;
 import org.armedbear.lisp.SpecialOperator;
 import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.Version;
+import org.globus.cog.abstraction.impl.file.webdav.InteractiveWebDAVSecurityContextImpl;
 import org.jpl7.Atom;
 import org.jpl7.Compound;
 import org.jpl7.JPL;
@@ -121,7 +122,7 @@ import com.sun.tools.attach.VirtualMachineDescriptor;
 //import com.netbreeze.bbowl.gui.BeanBowlGUI;
 
 import bsh.EvalError;
-import bsh.Interpreter;
+//import bsh.Interpreter;
 import bsh.NameSpace;
 import bsh.Primitive;
 import bsh.Reflect;
@@ -172,12 +173,14 @@ public class BeanShellCntrl
 	static public boolean inited_subl;
 	static public boolean inited_cyc;
 	static public boolean inited_kb;
+	static public boolean inited_cyc_sees_cl;
+	static public boolean inited_cl_sees_cyc;
 	static public boolean inited_cyc_server;
 	static public boolean inited_cyc_complete;
 
 	// final static public BeanBowlGUI gui = BeanBowlGUI.getDefaultFrame();
 
-	static public Interpreter bshInterpreter;
+	static public bsh.Interpreter bshInterpreter;
 
 	final static public Map<String, Symbol> prologMethods = new HashMap();
 	final static public Method multiMethod;
@@ -487,33 +490,43 @@ public class BeanShellCntrl
 	@LispMethod
 	static public void cl_imports_cyc()
 	{
-		// if(true) return ;
-		//SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
-		Lisp.PACKAGE_SYS.ALLOW_INHERIT_CONFLICTS = true;
-		PACKAGE_EXT.ALLOW_INHERIT_CONFLICTS = true;
-		PACKAGE_CL.ALLOW_INHERIT_CONFLICTS = true;
-		PACKAGE_CL_USER.ALLOW_INHERIT_CONFLICTS = true;
-		PACKAGE_CL_USER.usePackage(PACKAGE_CYC, true);
-		PACKAGE_CL_USER.unusePackage(PACKAGE_CL);
-		PACKAGE_CL_USER.unusePackage(PACKAGE_EXT);
-		PACKAGE_CL_USER.unusePackage(PACKAGE_JAVA);
-		PACKAGE_CL_USER.usePackage(PACKAGE_SUBLISP, true);
-		PACKAGE_CL_USER.usePackage(PACKAGE_EXT, true);
-		PACKAGE_CL_USER.usePackage(PACKAGE_JAVA, true);
-		PACKAGE_CL_USER.usePackage(PACKAGE_CL, true);
-		PACKAGE_CL_USER.addNickname("USER");
-		//  PACKAGE_SUBLISP.usePackage(PACKAGE_CL, true);
+		synchronized (StartupLock)
+		{
+			if (inited_cl_sees_cyc) return;
+			inited_cl_sees_cyc = true;
+			// if(true) return ;
+			//SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
+			Lisp.PACKAGE_SYS.ALLOW_INHERIT_CONFLICTS = true;
+			PACKAGE_EXT.ALLOW_INHERIT_CONFLICTS = true;
+			PACKAGE_CL.ALLOW_INHERIT_CONFLICTS = true;
+			PACKAGE_CL_USER.ALLOW_INHERIT_CONFLICTS = true;
+			PACKAGE_CL_USER.usePackage(PACKAGE_CYC, true);
+			PACKAGE_CL_USER.unusePackage(PACKAGE_CL);
+			PACKAGE_CL_USER.unusePackage(PACKAGE_EXT);
+			PACKAGE_CL_USER.unusePackage(PACKAGE_JAVA);
+			PACKAGE_CL_USER.usePackage(PACKAGE_SUBLISP, true);
+			PACKAGE_CL_USER.usePackage(PACKAGE_EXT, true);
+			PACKAGE_CL_USER.usePackage(PACKAGE_JAVA, true);
+			PACKAGE_CL_USER.usePackage(PACKAGE_CL, true);
+			PACKAGE_CL_USER.addNickname("USER");
+			//  PACKAGE_SUBLISP.usePackage(PACKAGE_CL, true);
+		}
 	}
 
 	@LispMethod
 	static public void cyc_imports_cl()
 	{
-		PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
-		PACKAGE_CYC.usePackage(PACKAGE_JAVA, true);
-		PACKAGE_CYC.usePackage(PACKAGE_EXT, true);
-		PACKAGE_CYC.usePackage(PACKAGE_CL, true);
-		PACKAGE_CYC.usePackage(PACKAGE_CL_USER, true);
-		PACKAGE_CYC.usePackage(PACKAGE_SUBLISP, true);
+		synchronized (StartupLock)
+		{
+			if (inited_cyc_sees_cl) return;
+			inited_cyc_sees_cl = true;
+			PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
+			PACKAGE_CYC.usePackage(PACKAGE_JAVA, true);
+			PACKAGE_CYC.usePackage(PACKAGE_EXT, true);
+			PACKAGE_CYC.usePackage(PACKAGE_CL, true);
+			PACKAGE_CYC.usePackage(PACKAGE_CL_USER, true);
+			PACKAGE_CYC.usePackage(PACKAGE_SUBLISP, true);
+		}
 	}
 
 	/**
@@ -701,6 +714,23 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
+	static public <T> T with_sublisp(boolean tf, Callable<T> str)
+	{
+		boolean wasSubLisp = Main.isSubLisp();
+		Main.setSubLisp(tf);
+		try
+		{
+			return str.call();
+		} catch (Exception e)
+		{
+			throw JVMImpl.doThrow(e);
+		} finally
+		{
+			Main.setSubLisp(wasSubLisp);
+		}
+	}
+
+	@LispMethod
 	static public SubLObject cyc_eval_progn(SubLCons specialForm, SubLEnvironment env)
 	{
 		init_subl();
@@ -844,18 +874,22 @@ public class BeanShellCntrl
 
 	static public bsh.Interpreter ensureBSH()
 	{
-		if (bshInterpreter == null)
+
+		synchronized (StartupLock)
 		{
-			bshInterpreter = new bsh.Interpreter();
-			bshMasterNamespace = bshInterpreter.getNameSpace();
+			if (bshInterpreter == null)
+			{
+				bshInterpreter = new bsh.Interpreter();
+				bshMasterNamespace = bshInterpreter.getNameSpace();
+			}
+			return bshInterpreter;
 		}
-		return bshInterpreter;
 	}
 
 	static public bsh.Interpreter new_bsh_interpeter() throws EvalError
 	{
 		bshInterpreter = ensureBSH();
-		return (Interpreter) bshInterpreter.eval("new bsh.Interpreter()");
+		return (bsh.Interpreter) bshInterpreter.eval("new bsh.Interpreter()");
 	}
 
 	static public bsh.NameSpace masterNamespace()
@@ -1315,7 +1349,10 @@ public class BeanShellCntrl
 		boolean was_noExit = Main.noExit;
 		try
 		{
-			return Lisp.PACKAGE_TPL.findAccessibleSymbol("TOP-LEVEL-LOOP").execute();
+
+			org.armedbear.lisp.Interpreter.createNewLispInstance(System.in, System.out, new File(".").getAbsolutePath(), Version.getVersion(), false).run();
+			return Symbol.STAR.getSymbolValue();
+			// return Lisp.PACKAGE_TPL.findAccessibleSymbol("TOP-LEVEL-LOOP").execute();
 		} finally
 		{
 			Main.setSubLisp(wasSubLisp);
@@ -2620,6 +2657,12 @@ public class BeanShellCntrl
 		{
 			evalArgs = evalArgsFirst;
 		}
+
+	}
+
+	public static org.armedbear.lisp.Interpreter currentLisp()
+	{
+		return null;
 
 	}
 

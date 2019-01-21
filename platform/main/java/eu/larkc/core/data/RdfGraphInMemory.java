@@ -26,10 +26,12 @@ public class RdfGraphInMemory extends RdfGraphBase {
 		this.data = new SetOfStatementsImpl(data);
 	}
 
+	@Override
 	public CloseableIterator<Statement> getStatements() {
 		return data.getStatements();
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof RdfGraphInMemory == false) {
 			return false;
@@ -37,6 +39,7 @@ public class RdfGraphInMemory extends RdfGraphBase {
 		return data.equals(((RdfGraphInMemory) o).data);
 	}
 
+	@Override
 	public int hashCode() {
 		return getName().toString().hashCode();
 	}

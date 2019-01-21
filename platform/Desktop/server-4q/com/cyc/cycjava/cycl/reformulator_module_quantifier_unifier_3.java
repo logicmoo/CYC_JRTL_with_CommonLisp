@@ -701,15 +701,18 @@ public final class reformulator_module_quantifier_unifier_3 extends SubLTranslat
         return (SubLObject)reformulator_module_quantifier_unifier_3.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_reformulator_module_quantifier_unifier_3_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_reformulator_module_quantifier_unifier_3_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_reformulator_module_quantifier_unifier_3_file();
     }
     

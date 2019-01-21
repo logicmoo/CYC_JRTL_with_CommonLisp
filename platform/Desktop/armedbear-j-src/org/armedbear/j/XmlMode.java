@@ -69,7 +69,8 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         return errorBuffer;
     }
 
-    public NavigationComponent getSidebarComponent(Editor editor)
+    @Override
+	public NavigationComponent getSidebarComponent(Editor editor)
     {
         Debug.assertTrue(editor.getBuffer().getMode() == getMode());
         if (!editor.getBuffer().getBooleanProperty(Property.ENABLE_TREE))
@@ -82,22 +83,26 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         return view.getSidebarComponent();
     }
 
-    public String getCommentStart()
+    @Override
+	public String getCommentStart()
     {
         return COMMENT_START;
     }
 
-    public String getCommentEnd()
+    @Override
+	public String getCommentEnd()
     {
         return COMMENT_END;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new XmlFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_TAB, 0, "tab");
         km.mapKey(KeyEvent.VK_TAB, CTRL_MASK, "insertTab");
@@ -123,7 +128,8 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_F9, CTRL_MASK, "recompile");
     }
 
-    public void populateModeMenu(Editor editor, Menu menu)
+    @Override
+	public void populateModeMenu(Editor editor, Menu menu)
     {
         menu.add(editor, "Insert Element", 'I', "xmlInsertTag");
         menu.add(editor, "End Current Element", 'E', "xmlInsertMatchingEndTag");
@@ -137,7 +143,8 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         menu.add(editor, "Show Error Message", 'M', "showMessage", enabled);
     }
 
-    public void loadFile(Buffer buffer, File file)
+    @Override
+	public void loadFile(Buffer buffer, File file)
     {
         String encoding = null;
         try {
@@ -185,12 +192,14 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         }
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final Line model = getModel(line);
         if (model == null)
@@ -579,7 +588,8 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         return model;
     }
 
-    public char fixCase(Editor editor, char c)
+    @Override
+	public char fixCase(Editor editor, char c)
     {
         if (!Character.isUpperCase(c) && !Character.isLowerCase(c))
             return c;

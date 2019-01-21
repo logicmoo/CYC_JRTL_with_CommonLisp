@@ -13,7 +13,8 @@ public interface Box<TrigType extends Trigger<? extends Box<TrigType>>> extends 
     
     List<TrigType> getTriggers();
     
-    Object getValue();
+    @Override
+	Object getValue();
 }
 
 /*

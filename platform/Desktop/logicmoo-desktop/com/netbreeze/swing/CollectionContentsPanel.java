@@ -60,7 +60,8 @@ public class CollectionContentsPanel extends JPanel implements SmallBeanView.Rem
     buttonPanel.add(new JLabel("To add objects just drag them into the panel below."));
     reloadButton.addActionListener(
       new ActionListener() {
-        public void actionPerformed(ActionEvent event) {
+        @Override
+		public void actionPerformed(ActionEvent event) {
           reloadContents();
         }
       }
@@ -79,7 +80,8 @@ public class CollectionContentsPanel extends JPanel implements SmallBeanView.Rem
     reloadContents();
   }
 
-  public void beanRemoved(Object bean, Collection parent) {
+  @Override
+public void beanRemoved(Object bean, Collection parent) {
     reloadContents();
   }
 
@@ -100,15 +102,19 @@ public class CollectionContentsPanel extends JPanel implements SmallBeanView.Rem
 
 //======= Drag/Drop methods ====================================0
 
-  public void dragEnter(DropTargetDragEvent event) {
+  @Override
+public void dragEnter(DropTargetDragEvent event) {
     event.acceptDrag (DnDConstants.ACTION_MOVE);
   }
 
-  public void dragExit(DropTargetEvent dtde) {
+  @Override
+public void dragExit(DropTargetEvent dtde) {
   }
-  public void dragOver(DropTargetDragEvent dtde) {
+  @Override
+public void dragOver(DropTargetDragEvent dtde) {
   }
-  public void drop(DropTargetDropEvent event) {
+  @Override
+public void drop(DropTargetDropEvent event) {
     Transferable t = event.getTransferable();
     try {
       Object o = t.getTransferData(new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType));
@@ -118,6 +124,7 @@ public class CollectionContentsPanel extends JPanel implements SmallBeanView.Rem
       new ErrorDialog("An error occurred while handling a drop operation", err).show();
     }
   }
-  public void dropActionChanged(DropTargetDragEvent dtde) {
+  @Override
+public void dropActionChanged(DropTargetDragEvent dtde) {
   }
 }

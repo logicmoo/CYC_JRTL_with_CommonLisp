@@ -34,7 +34,8 @@ public final class AdjustPlacementRunnable implements Runnable
         this.extendedState = extendedState;
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         if (extendedState != 0) {
             frame.storeExtendedState(extendedState);
@@ -43,7 +44,8 @@ public final class AdjustPlacementRunnable implements Runnable
         final Editor editor = frame.getCurrentEditor();
         editor.setFocusToDisplay();
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 // Must call setDisplayReady(true) before calling reframe().
                 Editor.setDisplayReady(true);

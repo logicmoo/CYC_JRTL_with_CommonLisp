@@ -691,15 +691,18 @@ public final class sksi_hl_support_utilities extends SubLTranslatedFile
         return (SubLObject)sksi_hl_support_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_hl_support_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_hl_support_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_hl_support_utilities_file();
     }
     

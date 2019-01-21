@@ -233,6 +233,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 		return (Function) interpreter.eval("#'" + name);
 	}
 
+	@Override
 	public Bindings createBindings() {
 		return new SimpleBindings();
 	}
@@ -262,6 +263,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 	    return retVal.javaInstance();
     }
 
+	@Override
 	public Object eval(String code, ScriptContext ctx) throws ScriptException {
 		return eval(evalScript, new SimpleString(code), ctx);
 	}
@@ -277,6 +279,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 		return w.toString();
 	}
 
+	@Override
 	public Object eval(Reader code, ScriptContext ctx) throws ScriptException {
 		try {
 			return eval(toString(code), ctx);
@@ -285,10 +288,12 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 		}
 	}
 
+	@Override
 	public ScriptEngineFactory getFactory() {
 		return new AbclScriptEngineFactory();
 	}
 
+	@Override
 	public Object getInterface(Class clasz) {
 		try {
 			return getInterface(eval("(cl:find-package '#:ABCL-SCRIPT-USER)"), clasz);
@@ -297,6 +302,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public Object getInterface(Object thiz, Class clasz) {
 	    Symbol s = findSymbol("jmake-proxy", "JAVA");
@@ -304,7 +310,8 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 	    return  ((JavaObject) s.execute(iface, (LispObject) thiz)).javaInstance();
 	}
 
-    public Object invokeFunction(String name, Object... args) throws ScriptException, NoSuchMethodException {
+    @Override
+	public Object invokeFunction(String name, Object... args) throws ScriptException, NoSuchMethodException {
 	Symbol s;
 	if(name.indexOf(':') >= 0) {
 	    s = findSymbol(name);
@@ -328,7 +335,8 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 	}
     }
 
-    public Object invokeMethod(Object thiz, String name, Object... args) throws ScriptException, NoSuchMethodException {
+    @Override
+	public Object invokeMethod(Object thiz, String name, Object... args) throws ScriptException, NoSuchMethodException {
 	throw new UnsupportedOperationException("Common Lisp does not have methods in the Java sense. Use invokeFunction instead.");
     }
 
@@ -340,10 +348,12 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 	    this.function = function;
 	}
 
+	@Override
 	public Object eval(ScriptContext context) throws ScriptException {
 	    return AbclScriptEngine.this.eval(evalCompiledScript, function, context);
 	}
 
+	@Override
 	public ScriptEngine getEngine() {
 	    return AbclScriptEngine.this;
 	}
@@ -351,6 +361,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
     }
 
 
+	@Override
 	public CompiledScript compile(String script) throws ScriptException {
 		try {
 		    Function f = (Function) compileScript.execute(new SimpleString(script));
@@ -360,6 +371,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 		}
 	}
 
+	@Override
 	public CompiledScript compile(Reader script) throws ScriptException {
 		try {
 			return compile(toString(script));

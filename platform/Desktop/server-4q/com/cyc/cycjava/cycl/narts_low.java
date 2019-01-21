@@ -605,15 +605,18 @@ public final class narts_low extends SubLTranslatedFile
         return (SubLObject)narts_low.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_narts_low_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_narts_low_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_narts_low_file();
     }
     

@@ -208,7 +208,8 @@ public class MyStreamTokenizer {
    * @see java.io.InputStreamReader
    * @see java.io.StreamTokenizer#StreamTokenizer(java.io.Reader)
    */
-  public MyStreamTokenizer(InputStream is) {
+  @Deprecated
+public MyStreamTokenizer(InputStream is) {
     this();
     if (is == null) {
       throw new NullPointerException();
@@ -730,7 +731,8 @@ public class MyStreamTokenizer {
    * @see java.io.StreamTokenizer#sval
    * @see java.io.StreamTokenizer#ttype
    */
-  public String toString() {
+  @Override
+public String toString() {
     String ret;
     switch (ttype) {
       case TT_EOF:

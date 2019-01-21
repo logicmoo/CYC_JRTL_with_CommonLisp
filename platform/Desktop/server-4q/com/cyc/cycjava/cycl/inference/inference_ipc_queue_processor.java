@@ -909,15 +909,18 @@ public final class inference_ipc_queue_processor extends SubLTranslatedFile
         return (SubLObject)inference_ipc_queue_processor.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_ipc_queue_processor_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_ipc_queue_processor_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_ipc_queue_processor_file();
     }
     
@@ -1035,111 +1038,138 @@ public final class inference_ipc_queue_processor extends SubLTranslatedFile
             this.$inference_death_counter = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$inference_ipc_queue_processor_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$inference;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$ipc_queue;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$inference_answer_process_function;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$nl_generation_properties;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$minimum_time_before_sending_new_answers;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$incremental_resultsP;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$next_answer_index;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$results;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$doneP;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$last_answer_post_time;
         }
         
-        public SubLObject getField12() {
+        @Override
+		public SubLObject getField12() {
             return this.$message_queue;
         }
         
-        public SubLObject getField13() {
+        @Override
+		public SubLObject getField13() {
             return this.$inference_process;
         }
         
-        public SubLObject getField14() {
+        @Override
+		public SubLObject getField14() {
             return this.$inference_death_counter;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$inference = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$ipc_queue = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$inference_answer_process_function = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$nl_generation_properties = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$minimum_time_before_sending_new_answers = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$incremental_resultsP = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$next_answer_index = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$results = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$doneP = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$last_answer_post_time = value;
         }
         
-        public SubLObject setField12(final SubLObject value) {
+        @Override
+		public SubLObject setField12(final SubLObject value) {
             return this.$message_queue = value;
         }
         
-        public SubLObject setField13(final SubLObject value) {
+        @Override
+		public SubLObject setField13(final SubLObject value) {
             return this.$inference_process = value;
         }
         
-        public SubLObject setField14(final SubLObject value) {
+        @Override
+		public SubLObject setField14(final SubLObject value) {
             return this.$inference_death_counter = value;
         }
         
@@ -1154,7 +1184,8 @@ public final class inference_ipc_queue_processor extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-IPC-QUEUE-PROCESSOR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_ipc_queue_processor.inference_ipc_queue_processor_p(arg1);
         }
     }

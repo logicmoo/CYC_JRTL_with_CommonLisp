@@ -43,14 +43,16 @@ public final class listen extends Primitive
         super("listen", "&optional input-stream");
     }
 
-    public LispObject execute()
+    @Override
+	public LispObject execute()
     {
         Stream stream =
             checkCharacterInputStream(Symbol.STANDARD_INPUT.symbolValue());
         return stream.listen();
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         return inSynonymOf(arg).listen();
     }

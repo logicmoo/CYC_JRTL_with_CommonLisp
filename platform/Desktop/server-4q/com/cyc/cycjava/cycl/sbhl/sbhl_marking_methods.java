@@ -2590,15 +2590,18 @@ public final class sbhl_marking_methods extends SubLTranslatedFile
         return (SubLObject)sbhl_marking_methods.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_marking_methods_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_marking_methods_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_marking_methods_file();
     }
     
@@ -2645,7 +2648,8 @@ public final class sbhl_marking_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-MARK-CLOSURE-AS-MARKED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_marking_methods.sbhl_mark_closure_as_marked(arg1);
         }
     }

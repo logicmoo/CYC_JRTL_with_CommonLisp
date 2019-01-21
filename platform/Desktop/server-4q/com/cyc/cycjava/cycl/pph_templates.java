@@ -6941,15 +6941,18 @@ public final class pph_templates extends SubLTranslatedFile
         return (SubLObject)pph_templates.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_templates_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_templates_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_templates_file();
     }
     
@@ -7238,7 +7241,8 @@ public final class pph_templates extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GEN-TEMPLATE-VERBOSITY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_templates.gen_template_verbosity(arg1);
         }
     }
@@ -7249,7 +7253,8 @@ public final class pph_templates extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DO-PPH-EXPAND-PHRASE-NAUTS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_templates.do_pph_expand_phrase_nauts(arg1);
         }
     }

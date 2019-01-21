@@ -49,12 +49,14 @@ public final class Nil extends SubLNil
         initializeConstant(this);
     }
 
-    public Object javaInstance()
+    @Override
+	public Object javaInstance()
     {
         return null;
     }
 
-    public Object javaInstance(Class c)
+    @Override
+	public Object javaInstanceImpl(Class c)
     {
       String cn = c.getName();
       if (cn != null) {
@@ -65,27 +67,32 @@ public final class Nil extends SubLNil
       return javaInstance();
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.NULL;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.NULL;
     }
 
-    public LispObject getDescription()
+    @Override
+	public LispObject getDescription()
     {
         return new SimpleString("The symbol NIL");
     }
 
-    public boolean getBooleanValue()
+    @Override
+	public boolean getBooleanValue()
     {
         return false;
     }
 
-    public LispObject typep(LispObject typeSpecifier)
+    @Override
+	public LispObject typep(LispObject typeSpecifier)
     {
         if (typeSpecifier == Symbol.NULL)
             return T;
@@ -108,22 +115,26 @@ public final class Nil extends SubLNil
         return super.typep(typeSpecifier);
     }
 
-    public boolean constantp()
+    @Override
+	public boolean constantp()
     {
         return true;
     }
 
-    public final LispObject getSymbolValue()
+    @Override
+	public final LispObject getSymbolValue()
     {
         return this;
     }
 
-    public int length()
+    @Override
+	public int length()
     {
         return 0;
     }
 
-    public LispObject NTH(int index)
+    @Override
+	public LispObject NTH(int index)
     {
         if (index < 0)
             error(new TypeError(String.valueOf(index) +
@@ -131,27 +142,32 @@ public final class Nil extends SubLNil
         return NIL;
     }
 
-    public LispObject elt(int index)
+    @Override
+	public LispObject elt(int index)
     {
         return error(new TypeError("ELT: invalid index " + index + " for " + this + "."));
     }
 
-    public LispObject reverse()
+    @Override
+	public LispObject reverse()
     {
         return this;
     }
 
-    public LispObject nreverse()
+    @Override
+	public LispObject nreverse()
     {
         return this;
     }
 
-    public LispObject[] copyToArray()
+    @Override
+	public LispObject[] copyToArray()
     {
         return new LispObject[0];
     }
 
-    public LispObject NOT()
+    @Override
+	public LispObject NOT()
     {
         return T;
     }
@@ -162,7 +178,8 @@ public final class Nil extends SubLNil
 //        return null;
 //    }
 
-    public Object readResolve() throws java.io.ObjectStreamException {
+    @Override
+	public Object readResolve() throws java.io.ObjectStreamException {
        return NIL;
     }
 

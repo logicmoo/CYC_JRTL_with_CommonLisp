@@ -1155,15 +1155,18 @@ public final class reformulator_rule_unifier extends SubLTranslatedFile
         return (SubLObject)reformulator_rule_unifier.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_reformulator_rule_unifier_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_reformulator_rule_unifier_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_reformulator_rule_unifier_file();
     }
     
@@ -1209,7 +1212,8 @@ public final class reformulator_rule_unifier extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NEITHER-DIRECTION?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return reformulator_rule_unifier.neither_directionP(arg1);
         }
     }

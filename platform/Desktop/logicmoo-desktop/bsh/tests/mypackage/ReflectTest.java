@@ -6,6 +6,7 @@ package bsh.tests.mypackage;
 public class ReflectTest {
 	public Runnable getRunnable() {
 		return new Runnable() {
+			@Override
 			public void run() { System.out.println("run!"); }
 		};
 	}

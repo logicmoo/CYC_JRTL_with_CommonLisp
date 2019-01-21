@@ -92,7 +92,8 @@ public abstract class Mailbox extends Buffer
         previewBuffer = buf;
     }
 
-    public Buffer getSecondary()
+    @Override
+	public Buffer getSecondary()
     {
         return previewBuffer;
     }
@@ -491,7 +492,8 @@ public abstract class Mailbox extends Buffer
         if (to == null)
             return;
         Runnable bounceRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 boolean succeeded = false;
                 try {
@@ -504,7 +506,8 @@ public abstract class Mailbox extends Buffer
                 }
                 if (succeeded) {
                     Runnable successRunnable = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             final int size = toBeBounced.size();
                             FastStringBuffer sb = new FastStringBuffer(String.valueOf(size));
@@ -518,7 +521,8 @@ public abstract class Mailbox extends Buffer
                     SwingUtilities.invokeLater(successRunnable);
                 } else {
                     Runnable errorRunnable = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             MessageDialog.showMessageDialog(editor, "Failed", "Bounce");
                         }
@@ -747,7 +751,8 @@ public abstract class Mailbox extends Buffer
     }
 
     // Find first message that's not seen and not deleted.
-    public Position getInitialDotPos()
+    @Override
+	public Position getInitialDotPos()
     {
         if (getFirstLine() == null)
             return null;
@@ -817,7 +822,8 @@ public abstract class Mailbox extends Buffer
         else
             currentEntry = null;
         final Runnable completionRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                     Editor ed = it.nextEditor();
@@ -832,7 +838,8 @@ public abstract class Mailbox extends Buffer
             }
         };
         Runnable sortRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 editor.setWaitCursor();
                 try {
@@ -997,7 +1004,8 @@ public abstract class Mailbox extends Buffer
     private static void sortEntriesByDate(List list)
     {
         Comparator c = new Comparator() {
-            public int compare(Object o1, Object o2)
+            @Override
+			public int compare(Object o1, Object o2)
             {
                 return RFC822Date.compare(((MailboxEntry)o1).getDate(),
                     ((MailboxEntry)o2).getDate());
@@ -1080,12 +1088,14 @@ public abstract class Mailbox extends Buffer
     }
 
     // For the buffer list.
-    public Icon getIcon()
+    @Override
+	public Icon getIcon()
     {
         return Utilities.getIconFromFile(newMessageCount > 0 ? "mailbox_new.png" : "mailbox.png");
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         return "";
     }
@@ -1106,7 +1116,8 @@ public abstract class Mailbox extends Buffer
     protected void status(final String s)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 for (int i = 0; i < Editor.getFrameCount(); i++) {
                     Editor ed = Editor.getFrame(i).getCurrentEditor();
@@ -1163,7 +1174,8 @@ public abstract class Mailbox extends Buffer
     protected void error(final String text, final String title)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 Editor editor = Editor.currentEditor();
                 // Restore default cursor.
@@ -1178,7 +1190,8 @@ public abstract class Mailbox extends Buffer
     protected void success(final String text)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 Editor.currentEditor().status(text);
             }
@@ -1201,7 +1214,8 @@ public abstract class Mailbox extends Buffer
     }
 
     private Runnable updateDisplayRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             invalidate();
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -1281,7 +1295,8 @@ public abstract class Mailbox extends Buffer
     private void setDotLine(final Line line)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                     Editor ed = it.nextEditor();
@@ -1304,7 +1319,8 @@ public abstract class Mailbox extends Buffer
             SwingUtilities.invokeLater(r);
     }
 
-    public String getStatusText(Editor editor)
+    @Override
+	public String getStatusText(Editor editor)
     {
         FastStringBuffer sb = new FastStringBuffer();
         if (editor.getDot() != null) {
@@ -1329,7 +1345,8 @@ public abstract class Mailbox extends Buffer
         return sb.toString();
     }
 
-    public void saveView(Editor editor)
+    @Override
+	public void saveView(Editor editor)
     {
         final View view = saveViewInternal(editor);
         final Line topLine = editor.getTopLine();
@@ -1344,7 +1361,8 @@ public abstract class Mailbox extends Buffer
         setLastView(view);
     }
 
-    public void restoreView(Editor editor)
+    @Override
+	public void restoreView(Editor editor)
     {
         final Display display = editor.getDisplay();
         final View view = editor.getView(this);

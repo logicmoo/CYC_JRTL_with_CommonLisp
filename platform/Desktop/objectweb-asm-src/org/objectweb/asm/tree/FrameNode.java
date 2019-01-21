@@ -128,7 +128,8 @@ public class FrameNode extends AbstractInsnNode {
         }
     }
 
-    public int getType() {
+    @Override
+	public int getType() {
         return FRAME;
     }
 
@@ -137,7 +138,8 @@ public class FrameNode extends AbstractInsnNode {
      * 
      * @param mv a method visitor.
      */
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         switch (type) {
             case Opcodes.F_NEW:
             case Opcodes.F_FULL:
@@ -162,7 +164,8 @@ public class FrameNode extends AbstractInsnNode {
         }
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+	public AbstractInsnNode clone(final Map labels) {
         FrameNode clone = new FrameNode();
         clone.type = type;
         if (local != null) {

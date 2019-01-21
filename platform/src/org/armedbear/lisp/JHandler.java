@@ -99,7 +99,8 @@ public final class JHandler
     private static final Primitive _JREGISTER_HANDLER =
         new Primitive("%jregister-handler", PACKAGE_JAVA)
     {
-        public LispObject execute(LispObject[] args)
+        @Override
+		public LispObject execute(LispObject[] args)
         {
             if (args.length != 5)
                 return error(new WrongNumberOfArgumentsException(this, 5));

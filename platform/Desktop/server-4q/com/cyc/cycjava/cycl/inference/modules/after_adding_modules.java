@@ -2955,15 +2955,18 @@ public final class after_adding_modules extends SubLTranslatedFile
         return (SubLObject)after_adding_modules.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_after_adding_modules_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_after_adding_modules_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_after_adding_modules_file();
     }
     
@@ -3180,7 +3183,8 @@ public final class after_adding_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-ISA-DEPENDENT-CACHES"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return after_adding_modules.clear_isa_dependent_caches(arg1, arg2);
         }
     }

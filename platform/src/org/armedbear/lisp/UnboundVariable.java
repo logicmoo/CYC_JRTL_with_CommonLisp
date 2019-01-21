@@ -47,7 +47,8 @@ public final class UnboundVariable extends CellError
       setCellName(obj);
   }
 
-  public String getMessage()
+  @Override
+public String getMessage()
   {
     LispThread thread = LispThread.currentThread();
     final SpecialBindingsMark mark = thread.markSpecialBindings();
@@ -63,17 +64,20 @@ public final class UnboundVariable extends CellError
     return sb.toString();
   }
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     return Symbol.UNBOUND_VARIABLE;
   }
 
-  public LispObject classOf()
+  @Override
+public LispObject classOf()
   {
     return StandardClass.UNBOUND_VARIABLE;
   }
 
-  public LispObject typep(LispObject type)
+  @Override
+public LispObject typep(LispObject type)
   {
     if (type == Symbol.UNBOUND_VARIABLE)
       return T;

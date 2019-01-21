@@ -47,6 +47,7 @@ public class AWTRemoteApplet extends Applet
 	OutputStream out;
 	InputStream in;
 
+	@Override
 	public void init() 
 	{
 		setLayout(new BorderLayout());

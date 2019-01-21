@@ -110,16 +110,19 @@ public class OpenFileDialog extends JDialog implements FocusListener
         editor.setFocusToDisplay();
     }
 
-    public void focusGained(FocusEvent e)
+    @Override
+	public void focusGained(FocusEvent e)
     {
         textField.requestFocus();
     }
 
-    public void focusLost(FocusEvent e)
+    @Override
+	public void focusLost(FocusEvent e)
     {
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         super.dispose();
         editor.restoreFocus();

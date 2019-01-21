@@ -24,6 +24,7 @@ import bsh.util.*;
 */
 public class AWTDemoApplet extends Applet
 {
+	@Override
 	public void init()
 	{
 		setLayout(new BorderLayout());

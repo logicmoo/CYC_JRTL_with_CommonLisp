@@ -110,15 +110,18 @@ public class BeanTable extends JTable {
   }
 
   class Model extends AbstractTableModel {
-    public int getRowCount() {
+    @Override
+	public int getRowCount() {
       return beans.size();
     }
 
-    public int getColumnCount() {
+    @Override
+	public int getColumnCount() {
       return props.length;
     }
 
-    public String getColumnName(int columnIndex) {
+    @Override
+	public String getColumnName(int columnIndex) {
       return props[columnIndex].getDisplayName();
     }
 
@@ -136,7 +139,8 @@ public class BeanTable extends JTable {
 
     } */
 
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
+    @Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
       return false;
       //return props[columnIndex].getWriteMethod() != null;
     }
@@ -145,7 +149,8 @@ public class BeanTable extends JTable {
       return beans.get(rowIndex);
     }
 
-    public Object getValueAt(int rowIndex, int columnIndex) {
+    @Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
       Object bean = getBeanAt(rowIndex);
       PropertyDescriptor prop = props[columnIndex];
       try {

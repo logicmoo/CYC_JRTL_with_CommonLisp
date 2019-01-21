@@ -4480,15 +4480,18 @@ public final class sksi_infrastructure_utilities extends SubLTranslatedFile
         return (SubLObject)sksi_infrastructure_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_infrastructure_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_infrastructure_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_infrastructure_utilities_file();
     }
     
@@ -4634,7 +4637,8 @@ public final class sksi_infrastructure_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LOGICAL-FIELD-INDEXICAL-EL-FORMULA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sksi_infrastructure_utilities.logical_field_indexical_el_formula_p(arg1);
         }
     }

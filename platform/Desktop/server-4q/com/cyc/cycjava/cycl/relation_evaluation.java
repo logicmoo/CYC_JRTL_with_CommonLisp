@@ -785,15 +785,18 @@ public final class relation_evaluation extends SubLTranslatedFile
         return (SubLObject)relation_evaluation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_relation_evaluation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_relation_evaluation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_relation_evaluation_file();
     }
     
@@ -849,7 +852,8 @@ public final class relation_evaluation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-EVALUATE-ARG"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return relation_evaluation.cyc_evaluate_arg(arg1);
         }
     }
@@ -860,7 +864,8 @@ public final class relation_evaluation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-CACHED-EVALUATION-FUNCTION"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return relation_evaluation.clear_cached_evaluation_function();
         }
     }

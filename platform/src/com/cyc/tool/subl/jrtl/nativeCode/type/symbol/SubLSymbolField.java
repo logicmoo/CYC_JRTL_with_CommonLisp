@@ -44,9 +44,6 @@ import com.cyc.tool.subl.util.SubLFiles.*;
  */
 public final class SubLSymbolField extends Symbol implements SubLSymbol {
 
-  /* (non-Javadoc)
-   * @see dmiles.JavaAlien.IJavaAlien#javaInstance()
-   */
   @Override
   public Object javaInstance() {
     return field;
@@ -80,15 +77,18 @@ public final class SubLSymbolField extends Symbol implements SubLSymbol {
   //// Public Area
 
   /** Method created to avoid casting */
-  public final SubLSymbol toSymbol() {
+  @Override
+public final SubLSymbol toSymbol() {
     return this;
   }
 
-  public final int getBindingId() {
+  @Override
+public final int getBindingId() {
     return INVALID_BINDING_INDEX;
   }
 
-  public SubLObject getValue() {
+  @Override
+public SubLObject getValue() {
     try {
       return org.armedbear.lisp.JavaObject.getInstance(field.get(obj),type);
     } catch (IllegalArgumentException e) {
@@ -99,7 +99,8 @@ public final class SubLSymbolField extends Symbol implements SubLSymbol {
     return this;
   }
 
-  public void setValue(SubLObject value) {
+  @Override
+public void setValue(SubLObject value) {
     try {
         field.set(obj,((LispObject)value).javaInstance(type));
     } catch (IllegalArgumentException e) {
@@ -109,142 +110,200 @@ public final class SubLSymbolField extends Symbol implements SubLSymbol {
     }
   }
 
-  public final SubLObject getDynamicValue(SubLObject[] bindings) {
+  @Override
+public final SubLObject getDynamicValue(SubLObject[] bindings) {
     return getValue();
   }
 
-  public final void setDynamicValue(SubLObject newValue, SubLObject[] bindings) {
+  @Override
+public final void setDynamicValue(SubLObject newValue, SubLObject[] bindings) {
     Errors.error("Can't change the value of field-as-symbol: " + this);
   }
 
-  public final SubLObject getDynamicValue(SubLThread thread) {
+  @Override
+public final SubLObject getDynamicValue(SubLThread thread) {
     return getValue();// Errors.error(this + " is not boundp.");
   }
 
-  public final void setDynamicValue(SubLObject newValue, SubLThread thread) {
+  @Override
+public final void setDynamicValue(SubLObject newValue, SubLThread thread) {
     Errors.error("Can't change the value of field-as-symbol symbol: " + this);
   }
 
-  public SubLObject getDynamicValue() {
+  @Override
+public SubLObject getDynamicValue() {
   //  Errors.error(this + " is not boundp.");
     return getValue();
   }
 
-  public void setDynamicValue(SubLObject value) {
+  @Override
+public void setDynamicValue(SubLObject value) {
     Errors.error("Can't change the value of field-as-symbol symbol: " + this);
   }
 
-  public SubLObject getGlobalValue() {
+  @Override
+public SubLObject getGlobalValue() {
    // Errors.error(this + " is not boundp.");
     return getValue();
   }
 
-  public void setGlobalValue(SubLObject value) {
+  @Override
+public void setGlobalValue(SubLObject value) {
     //Errors.error("Can't change the value of field-as-symbol symbol: " + this);
     setValue(value);
   }
 
-  public final SubLObject currentBinding(SubLObject[] bindings) {
+  @Override
+public final SubLObject currentBinding(SubLObject[] bindings) {
     if (true)  return getValue();
     return Errors.error("field-as-symbol: " + this + " does not have a dynamic binding.");
   }
 
-  public final void bind(SubLObject newValue, SubLObject[] bindings) {
+  @Override
+public final void bind(SubLObject newValue, SubLObject[] bindings) {
     Errors.error("field-as-symbol: " + this + " cannot be dynamically bound.");
     setValue(newValue);
   }
 
-  public final void rebind(SubLObject oldValue, SubLObject[] bindings) {
+  @Override
+public final void rebind(SubLObject oldValue, SubLObject[] bindings) {
     Errors.error("field-as-symbol: " + this + " cannot be dynamically rebound.");
     setValue(oldValue);
   }
 
-  public final SubLObject currentBinding(SubLThread thread) {
+  @Override
+public final SubLObject currentBinding(SubLThread thread) {
     Errors.warn("field-as-symbol: " + this + " does not have a dynamic binding.");
     return getValue();
   }
 
-  public final void bind(SubLObject newValue, SubLThread thread) {
+  @Override
+public final void bind(SubLObject newValue, SubLThread thread) {
     Errors.warn("field-as-symbol: " + this + " cannot be dynamically bound.");
     setValue(newValue);
   }
 
-  public final void rebind(SubLObject oldValue, SubLThread thread) {
+  @Override
+public final void rebind(SubLObject oldValue, SubLThread thread) {
     Errors.warn("field-as-symbol: " + this + " cannot be dynamically rebound.");
     setValue(oldValue);
   }
 
-  public boolean isDynamic() {
+  @Override
+public boolean isDynamic() {
     return false;
   }
 
-  public boolean isGlobal() {
+  @Override
+public boolean isGlobal() {
     return true;
   }
 
-  public boolean isUndeclared() {
+  @Override
+public boolean isUndeclared() {
     return false;
   }
 
-  public final boolean isConstantSymbol() {
+  @Override
+public final boolean isConstantSymbol() {
     return  Modifier.isFinal(field.getModifiers());
   }
 
-  public SubLObject eval(SubLEnvironment env)
+  @Override
+public SubLObject eval(SubLEnvironment env)
   throws InvalidSubLExpressionException {
     return getValue();
   }
 
-  public static String SYMBOL_TYPE_NAME = "SYMBOL";
+ // public static String SYMBOL_TYPE_NAME = "SYMBOL";
 
-  public String toTypeName() {
+  @Override
+public String toTypeName() {
     return SYMBOL_TYPE_NAME;
   }
 
-  public void forceGlobalValue(SubLObject newValue) {
+  @Override
+public void forceGlobalValue(SubLObject newValue) {
    // throw new SubLException("Cannot set the value of keyword: " + this + ".");
     setValue(newValue);
   }
 
-  public void setAccessMode(VariableAccessMode accessMode) {}
+  @Override
+public void setAccessMode(VariableAccessMode accessMode) {}
 
-  public final boolean isNil() { return false; }
-  public final boolean isBoolean() { return false; }
-  public final boolean isSymbol() { return true; }
+  @Override
+public final boolean isNil() { return false; }
+  @Override
+public final boolean isBoolean() { return false; }
+  @Override
+public final boolean isSymbol() { return true; }
  // public final boolean isKeyword() { return false; }
-  public final boolean isAtom() { return true; }
-  public final boolean isCons() { return false; }
-  public final boolean isList() { return false; }
-  public final boolean isSequence() { return false; }
-  public final boolean isNumber() { return false; }
-  public final boolean isFixnum() { return false; }
-  public final boolean isBignum() { return false; }
-  public final boolean isIntBignum() { return false; }
-  public final boolean isLongBignum() { return false; }
-  public final boolean isBigIntegerBignum() { return false; }
-  public final boolean isInteger() { return false; }
-  public final boolean isDouble() { return false; }
-  public final boolean isChar() { return false; }
-  public final boolean isString() { return false; }
-  public final boolean isVector() { return false; }
-  public final boolean isFunction() { return false; }
-  public final boolean isFunctionSpec() { return false; }
-  public final boolean isMacroOperator() { return false; }
-  public final boolean isHashtable() { return false; }
-  public final boolean isProcess() { return false; }
-  public final boolean isLock() { return false; }
-  public final boolean isReadWriteLock() { return false; }
-  public final boolean isStructure() { return false; }
-  public final boolean isStream() { return false; }
-  public final boolean isPackage() { return false; }
-  public final boolean isError() { return false; }
-  public final boolean isGuid() { return false; }
-  public final boolean isSemaphore() { return false; }
-  public final boolean isEnvironment() { return false; }
-  public final boolean isHashtableIterator() { return false; }
-  public final boolean isRegexPattern() { return false; }
-  public final boolean isKeyhash() { return false; }
-  public final boolean isKeyhashIterator() { return false; }
+  @Override
+public final boolean isAtom() { return true; }
+  @Override
+public final boolean isCons() { return false; }
+  @Override
+public final boolean isList() { return false; }
+  @Override
+public final boolean isSequence() { return false; }
+  @Override
+public final boolean isNumber() { return false; }
+  @Override
+public final boolean isFixnum() { return false; }
+  @Override
+public final boolean isBignum() { return false; }
+  @Override
+public final boolean isIntBignum() { return false; }
+  @Override
+public final boolean isLongBignum() { return false; }
+  @Override
+public final boolean isBigIntegerBignum() { return false; }
+  @Override
+public final boolean isInteger() { return false; }
+  @Override
+public final boolean isDouble() { return false; }
+  @Override
+public final boolean isChar() { return false; }
+  @Override
+public final boolean isString() { return false; }
+  @Override
+public final boolean isVector() { return false; }
+  @Override
+public final boolean isFunction() { return false; }
+  @Override
+public final boolean isFunctionSpec() { return false; }
+  @Override
+public final boolean isMacroOperator() { return false; }
+  @Override
+public final boolean isHashtable() { return false; }
+  @Override
+public final boolean isProcess() { return false; }
+  @Override
+public final boolean isLock() { return false; }
+  @Override
+public final boolean isReadWriteLock() { return false; }
+  @Override
+public final boolean isStructure() { return false; }
+  @Override
+public final boolean isStream() { return false; }
+  @Override
+public final boolean isPackage() { return false; }
+  @Override
+public final boolean isError() { return false; }
+  @Override
+public final boolean isGuid() { return false; }
+  @Override
+public final boolean isSemaphore() { return false; }
+  @Override
+public final boolean isEnvironment() { return false; }
+  @Override
+public final boolean isHashtableIterator() { return false; }
+  @Override
+public final boolean isRegexPattern() { return false; }
+  @Override
+public final boolean isKeyhash() { return false; }
+  @Override
+public final boolean isKeyhashIterator() { return false; }
 
   //// Protected Area
 

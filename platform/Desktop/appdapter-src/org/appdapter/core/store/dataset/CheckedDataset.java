@@ -18,7 +18,8 @@ public class CheckedDataset extends DatasetImpl implements Dataset
 {
     boolean realPassedInModels;
     
-    protected Model graph2model(final Graph graph) {
+    @Override
+	protected Model graph2model(final Graph graph) {
         return super.graph2model(graph);
     }
     
@@ -26,7 +27,8 @@ public class CheckedDataset extends DatasetImpl implements Dataset
         this(DatasetGraphFactory.createMemFixed());
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return this.getClass().getName() + "@" + Integer.toHexString(this.hashCode());
     }
     
@@ -42,25 +44,29 @@ public class CheckedDataset extends DatasetImpl implements Dataset
         this.dsg = g.asDatasetGraph();
     }
     
-    public DatasetGraph asDatasetGraph() {
+    @Override
+	public DatasetGraph asDatasetGraph() {
         if (this.dsg == null) {
             return super.asDatasetGraph();
         }
         return this.dsg;
     }
     
-    public void close() {
+    @Override
+	public void close() {
         this.asDatasetGraph().close();
     }
     
-    public boolean containsNamedModel(final String n) {
+    @Override
+	public boolean containsNamedModel(final String n) {
         final Node gn = RepoDatasetFactory.correctModelName(n);
         final DatasetGraph g = this.asDatasetGraph();
         final boolean contained = g.containsGraph(gn);
         return contained;
     }
     
-    public void addNamedModel(final String n, final Model m) {
+    @Override
+	public void addNamedModel(final String n, final Model m) {
         final Node gn = RepoDatasetFactory.correctModelName(n);
         this.offerName(m, n);
         Model innerModel = null;
@@ -92,7 +98,8 @@ public class CheckedDataset extends DatasetImpl implements Dataset
         }
     }
     
-    public Model getNamedModel(final String n) {
+    @Override
+	public Model getNamedModel(final String n) {
         if (n == null) {
             return super.getNamedModel(n);
         }
@@ -114,14 +121,16 @@ public class CheckedDataset extends DatasetImpl implements Dataset
         return RepoDatasetFactory.createModelForGraph((Graph)graph);
     }
     
-    public void removeNamedModel(final String n) {
+    @Override
+	public void removeNamedModel(final String n) {
         final Node gn = RepoDatasetFactory.correctModelName(n);
         RepoDatasetFactory.untested(new Object[] { "remove named model + n" });
         final DatasetGraph g = this.asDatasetGraph();
         g.removeGraph(gn);
     }
     
-    public void replaceNamedModel(final String n, final Model m) {
+    @Override
+	public void replaceNamedModel(final String n, final Model m) {
         final Node gn = RepoDatasetFactory.correctModelName(n);
         Model innerModel = null;
         this.offerName(m, n);
@@ -148,19 +157,22 @@ public class CheckedDataset extends DatasetImpl implements Dataset
         this.addNamedModel(n, m);
     }
     
-    public Model getDefaultModel() {
+    @Override
+	public Model getDefaultModel() {
         final DatasetGraph g = this.asDatasetGraph();
         final Model m = RepoDatasetFactory.createModelForGraph(g.getDefaultGraph());
         this.setDefaultModel(m);
         return m;
     }
     
-    public Lock getLock() {
+    @Override
+	public Lock getLock() {
         final DatasetGraph g = this.asDatasetGraph();
         return g.getLock();
     }
     
-    public Iterator<String> listNames() {
+    @Override
+	public Iterator<String> listNames() {
         final ArrayList<String> nameList = new ArrayList<String>();
         final DatasetGraph g = this.asDatasetGraph();
         final Iterator<Node> nodeIt = (Iterator<Node>)g.listGraphNodes();

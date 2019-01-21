@@ -43,17 +43,20 @@ public final class TclMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public String getCommentStart()
+    @Override
+	public String getCommentStart()
     {
         return "# ";
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new TclFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey('{', "electricOpenBrace");
         km.mapKey('}', "electricCloseBrace");
@@ -70,22 +73,26 @@ public final class TclMode extends AbstractMode implements Constants, Mode
         km.mapKey(0xffc9, 0, "wrapComment"); // F12
     }
 
-    public boolean isTaggable()
+    @Override
+	public boolean isTaggable()
     {
         return true;
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new TclTagger(buffer);
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final int indentSize = buffer.getIndentSize();
 
@@ -191,12 +198,14 @@ public final class TclMode extends AbstractMode implements Constants, Mode
         return new String(it.hideSyntacticWhitespace(line.getText())).trim();
     }
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         return !Character.isWhitespace(c);
     }
 
-    public boolean isIdentifierPart(char c)
+    @Override
+	public boolean isIdentifierPart(char c)
     {
         return !Character.isWhitespace(c);
     }

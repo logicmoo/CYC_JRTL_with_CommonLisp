@@ -209,7 +209,8 @@ public final class PopSession
         state = DISCONNECTED;
     }
 
-    protected void finalize()
+    @Override
+	protected void finalize()
     {
         Log.debug("PopSession.finalize");
     }

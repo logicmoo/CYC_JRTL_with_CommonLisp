@@ -302,15 +302,18 @@ public final class subcyclifier extends SubLTranslatedFile
         return (SubLObject)subcyclifier.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_subcyclifier_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_subcyclifier_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_subcyclifier_file();
     }
     
@@ -374,15 +377,18 @@ public final class subcyclifier extends SubLTranslatedFile
             this.$cyclifiers = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$cyclifier_pool_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$cyclifiers;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$cyclifiers = value;
         }
         
@@ -397,7 +403,8 @@ public final class subcyclifier extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYCLIFIER-POOL-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return subcyclifier.cyclifier_pool_p(arg1);
         }
     }

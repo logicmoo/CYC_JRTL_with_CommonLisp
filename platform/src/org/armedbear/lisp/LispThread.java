@@ -111,7 +111,8 @@ public abstract class LispThread extends LispObject
     LispThread(final Function fun, LispObject name)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     threadValue = funcall(wrapper,
@@ -688,7 +689,8 @@ public abstract class LispThread extends LispObject
             stack = new Object[size];
             this.next = next;
         }
-        public LispObject getParts() {
+        @Override
+		public LispObject getParts() {
         Cons result = new Cons(NIL);
         return result
           .push(new Symbol("INITIAL-SEGMENT-SIZE"))
@@ -1016,7 +1018,8 @@ public abstract class LispThread extends LispObject
         }
     }
 
-    public LispObject execute(LispObject function, LispObject first,
+    @Override
+	public LispObject execute(LispObject function, LispObject first,
                               LispObject second, LispObject third,
                               LispObject fourth, LispObject fifth,
                               LispObject sixth, LispObject seventh,

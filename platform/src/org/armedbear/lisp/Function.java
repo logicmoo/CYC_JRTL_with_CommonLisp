@@ -292,6 +292,7 @@ public abstract class Function extends Operator  implements SubLFunction
     }
 
 
+	@Override
 	public SubLObject apply(SubLCons p0, SubLEnvironment p1) {
 		return getBinaryFunction().processItem(p0, p1);
 		//return Lisp.eval(cons, env);
@@ -301,7 +302,8 @@ public abstract class Function extends Operator  implements SubLFunction
 
 
 
-	  public LispObject funcallCL(LispObject... args)
+	  @Override
+	public LispObject funcallCL(LispObject... args)
 	  {
 		  return this.execute((LispObject[])args);
 	  }
@@ -309,7 +311,8 @@ public abstract class Function extends Operator  implements SubLFunction
 
 
 	  // Special operator
-	  public LispObject execute(LispObject form, Environment env)
+	  @Override
+	public LispObject execute(LispObject form, Environment env)
 	  {
 			if(isSubLispFunction()) {
 			    SubLObject toEval = super.apply((SubLCons) form, env);
@@ -324,6 +327,7 @@ public abstract class Function extends Operator  implements SubLFunction
 		return true;
 	}
 
+	@Override
 	public SubLObject evalViaApply(SubLCons form, SubLEnvironment env)  {
 		if(isSubLispFunction()) {
 			return super.evalViaApply(form, env);

@@ -78,7 +78,8 @@ public class LispShell extends Shell
     slime = title.startsWith("slime ");
   }
 
-  public final boolean isLisp()
+  @Override
+public final boolean isLisp()
   {
     return true;
   }
@@ -197,7 +198,8 @@ public class LispShell extends Shell
     return lisp;
   }
 
-  protected void startProcess()
+  @Override
+protected void startProcess()
   {
     if (shellCommand == null)
       {
@@ -263,12 +265,14 @@ public class LispShell extends Shell
       }
   }
 
-  protected void initializeHistory()
+  @Override
+protected void initializeHistory()
   {
     history = new History("lisp.history", 30);
   }
 
-  public void enter()
+  @Override
+public void enter()
   {
     if (!checkProcess())
       return;
@@ -442,7 +446,8 @@ public class LispShell extends Shell
     sendInputToLisp(command);
   }
 
-  protected void stdOutUpdate(final String s)
+  @Override
+protected void stdOutUpdate(final String s)
   {
     String prompt;
     int index = s.lastIndexOf('\n');
@@ -471,7 +476,8 @@ public class LispShell extends Shell
       output = prompt;
     Runnable r = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           Position pos = getEnd();
           if (pos != null)
@@ -500,11 +506,13 @@ public class LispShell extends Shell
     SwingUtilities.invokeLater(r);
   }
 
-  protected void stdErrUpdate(final String s)
+  @Override
+protected void stdErrUpdate(final String s)
   {
     Runnable r = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           appendString(s);
           if (isBusy())
@@ -516,7 +524,8 @@ public class LispShell extends Shell
     SwingUtilities.invokeLater(r);
   }
 
-  protected void appendString(String s)
+  @Override
+protected void appendString(String s)
   {
     try
       {
@@ -669,7 +678,8 @@ public class LispShell extends Shell
       }
   }
 
-  public void dispose()
+  @Override
+public void dispose()
   {
     if (!checkProcess())
       {
@@ -678,7 +688,8 @@ public class LispShell extends Shell
       }
     Thread t = new Thread("LispShell dispose")
       {
-        public void run()
+        @Override
+		public void run()
         {
           try
             {
@@ -712,22 +723,26 @@ public class LispShell extends Shell
     t.start();
   }
 
-  public File getCurrentDirectory()
+  @Override
+public File getCurrentDirectory()
   {
     return currentDirectory;
   }
 
-  public File getCompletionDirectory()
+  @Override
+public File getCompletionDirectory()
   {
     return currentDirectory;
   }
 
-  public String getFileNameForDisplay()
+  @Override
+public String getFileNameForDisplay()
   {
     return title;
   }
 
-  public String toString()
+  @Override
+public String toString()
   {
     return title;
   }
@@ -818,7 +833,8 @@ public class LispShell extends Shell
   {
     Runnable r = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           try
             {
@@ -841,7 +857,8 @@ public class LispShell extends Shell
   {
     Runnable r = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           try
             {

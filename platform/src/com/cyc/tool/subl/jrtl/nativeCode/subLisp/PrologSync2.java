@@ -62,6 +62,7 @@ public class PrologSync2 extends SubLTrampolineFile
 		{
 			objStack.add(new WeakReference<Object>(abstractSubLStruct)
 			{
+				@Override
 				public String toString()
 				{
 					return String.valueOf(get());
@@ -275,16 +276,19 @@ public class PrologSync2 extends SubLTrampolineFile
 
 	}
 
+	@Override
 	public void declareFunctions()
 	{
 		SubLFiles.declareFunction(me, "save_content_state", "SAVE-CONTENT-STATE", 0, 0, false);
 		SubLFiles.declareFunction(me, "load_content_state", "LOAD-CONTENT-STATE", 0, 0, false);
 	}
 
+	@Override
 	public void initializeVariables()
 	{
 	}
 
+	@Override
 	public void runTopLevelForms()
 	{
 	}

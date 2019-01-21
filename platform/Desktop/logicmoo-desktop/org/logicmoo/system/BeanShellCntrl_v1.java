@@ -94,8 +94,7 @@ import bsh.This;
 import bsh.UtilEvalError;
 import bsh.util.JConsole;
 import sun.misc.Unsafe;
-
-public class BeanShellCntrl_v1
+class BeanShellCntrl_hide_UNUSED
 {
 
 	static public BeanBowl bowl = new BeanBowl();
@@ -107,7 +106,7 @@ public class BeanShellCntrl_v1
 
 	static Container desktop;
 	static public boolean disableProlog = false;
-	static public boolean disablePrologSync = true;
+	static public boolean disablePrologSync = false;
 	static Editor editor = null;
 	static public final LispObject[] EMPTY_LISP_OBJECT = new LispObject[0];
 
@@ -425,6 +424,7 @@ public class BeanShellCntrl_v1
 		{
 
 			// Netbeans IDE automatically overrides this toString()
+			@Override
 			public String toString()
 			{
 				return string.toString();
@@ -516,6 +516,7 @@ public class BeanShellCntrl_v1
 		{
 
 			// Netbeans IDE automatically overrides this toString()
+			@Override
 			public String toString()
 			{
 				return string.toString();

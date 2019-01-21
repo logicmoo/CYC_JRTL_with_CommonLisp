@@ -32,6 +32,7 @@ import java.io.InputStream;
  *             class instead.
  */
 
+@Deprecated
 public class REFilterInputStream extends FilterInputStream {
 
     private RE expr;
@@ -63,7 +64,8 @@ public class REFilterInputStream extends FilterInputStream {
    * Reads the next byte from the stream per the general contract of
    * InputStream.read().  Returns -1 on error or end of stream.
    */
-  public int read() {
+  @Override
+public int read() {
     // If we have buffered replace data, use it.
     if ((buffer != null) && (bufpos < buffer.length())) {
       return (int) buffer.charAt(bufpos++);
@@ -97,12 +99,14 @@ public class REFilterInputStream extends FilterInputStream {
    * Returns false.  REFilterInputStream does not support mark() and
    * reset() methods. 
    */
-  public boolean markSupported() {
+  @Override
+public boolean markSupported() {
     return false;
   }
 
   /** Reads from the stream into the provided array. */
-  public int read(byte[] b, int off, int len) {
+  @Override
+public int read(byte[] b, int off, int len) {
     int i;
     int ok = 0;
     while (len-- > 0) {
@@ -115,7 +119,8 @@ public class REFilterInputStream extends FilterInputStream {
   }
 
   /** Reads from the stream into the provided array. */
-  public int read(byte[] b) {
+  @Override
+public int read(byte[] b) {
     return read(b,0,b.length);
   }
 }

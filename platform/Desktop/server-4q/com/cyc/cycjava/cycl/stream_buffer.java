@@ -1065,15 +1065,18 @@ public final class stream_buffer extends SubLTranslatedFile
         return (SubLObject)stream_buffer.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_stream_buffer_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_stream_buffer_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_stream_buffer_file();
     }
     
@@ -1189,23 +1192,28 @@ public final class stream_buffer extends SubLTranslatedFile
             this.$position = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$string_buffer_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$string;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$position;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$string = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$position = value;
         }
         
@@ -1220,7 +1228,8 @@ public final class stream_buffer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRING-BUFFER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return stream_buffer.string_buffer_p(arg1);
         }
     }
@@ -1240,39 +1249,48 @@ public final class stream_buffer extends SubLTranslatedFile
             this.$position = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$stream_buffer_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$stream;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$buffer;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$end;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$position;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$stream = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$buffer = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$end = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$position = value;
         }
         
@@ -1287,7 +1305,8 @@ public final class stream_buffer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STREAM-BUFFER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return stream_buffer.stream_buffer_p(arg1);
         }
     }

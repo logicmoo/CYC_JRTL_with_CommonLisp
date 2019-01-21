@@ -19,26 +19,31 @@ public final class $constant_native extends SubLStructNative
 		this.$name = (SubLObject) CommonSymbols.NIL;
 	}
 
+	@Override
 	public SubLStructDecl getStructDecl()
 	{
 		return (SubLStructDecl) $constant_native.structDecl;
 	}
 
+	@Override
 	public SubLObject getField2()
 	{
 		return this.$suid;
 	}
 
+	@Override
 	public SubLObject getField3()
 	{
 		return this.$name;
 	}
 
+	@Override
 	public SubLObject setField2(final SubLObject value)
 	{
 		return this.$suid = value;
 	}
 
+	@Override
 	public SubLObject setField3(final SubLObject value)
 	{
 		return this.$name = value;

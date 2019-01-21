@@ -57,18 +57,21 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
             elements[i] = Fixnum.getValue(array[i]);
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return list(Symbol.SIMPLE_ARRAY, UNSIGNED_BYTE_16,
                      new Cons(Fixnum.getInstance(capacity)));
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.VECTOR;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.SIMPLE_ARRAY)
             return T;
@@ -77,37 +80,44 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
         return super.typep(type);
     }
 
-    public LispObject getElementType()
+    @Override
+	public LispObject getElementType()
     {
         return UNSIGNED_BYTE_16;
     }
 
-    public boolean isSimpleVector()
+    @Override
+	public boolean isSimpleVector()
     {
         return false;
     }
 
-    public boolean hasFillPointer()
+    @Override
+	public boolean hasFillPointer()
     {
         return false;
     }
 
-    public boolean isAdjustable()
+    @Override
+	public boolean isAdjustable()
     {
         return false;
     }
 
-    public int capacity()
+    @Override
+	public int capacity()
     {
         return capacity;
     }
 
-    public int length()
+    @Override
+	public int length()
     {
         return capacity;
     }
 
-    public LispObject elt(int index)
+    @Override
+	public LispObject elt(int index)
     {
         try {
             return Fixnum.getInstance(elements[index]);
@@ -119,7 +129,8 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
     }
 
     // Ignores fill pointer.
-    public int aref(int index)
+    @Override
+	public int aref(int index)
     {
         try {
             return elements[index];
@@ -132,7 +143,8 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
     }
 
     // Ignores fill pointer.
-    public LispObject AREF(int index)
+    @Override
+	public LispObject AREF(int index)
     {
         try {
             return Fixnum.getInstance(elements[index]);
@@ -143,7 +155,8 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
         }
     }
 
-    public void aset(int index, int n)
+    @Override
+	public void aset(int index, int n)
     {
         try {
             elements[index] = n;
@@ -153,7 +166,8 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
         }
     }
 
-    public void aset(int index, LispObject obj)
+    @Override
+	public void aset(int index, LispObject obj)
     {
         if (obj instanceof Fixnum) {
                 try {
@@ -168,7 +182,8 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
         }
     }
 
-    public LispObject subseq(int start, int end)
+    @Override
+	public LispObject subseq(int start, int end)
     {
         BasicVector_UnsignedByte16 v = new BasicVector_UnsignedByte16(end - start);
         int i = start, j = 0;
@@ -182,14 +197,16 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
         }
     }
 
-    public void fill(LispObject obj)
+    @Override
+	public void fill(LispObject obj)
     {
         int n = Fixnum.getValue(obj);
         for (int i = capacity; i-- > 0;)
             elements[i] = n;
     }
 
-    public void shrink(int n)
+    @Override
+	public void shrink(int n)
     {
         if (n < capacity) {
             int[] newArray = new int[n];
@@ -203,7 +220,8 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
         error(new LispError());
     }
 
-    public LispObject reverse()
+    @Override
+	public LispObject reverse()
     {
         BasicVector_UnsignedByte16 result = new BasicVector_UnsignedByte16(capacity);
         int i, j;
@@ -212,7 +230,8 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
         return result;
     }
 
-    public LispObject nreverse()
+    @Override
+	public LispObject nreverse()
     {
         int i = 0;
         int j = capacity - 1;
@@ -226,7 +245,8 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
         return this;
     }
 
-    public AbstractVector adjustArray(int newCapacity,
+    @Override
+	public AbstractVector adjustArray(int newCapacity,
                                        LispObject initialElement,
                                        LispObject initialContents)
 
@@ -259,7 +279,8 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
         return this;
     }
 
-    public AbstractVector adjustArray(int newCapacity,
+    @Override
+	public AbstractVector adjustArray(int newCapacity,
                                        AbstractArray displacedTo,
                                        int displacement)
     {

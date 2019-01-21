@@ -199,7 +199,8 @@ public final class FindInFiles extends Replacement implements Constants,
         filters = list;
     }
 
-    public final void run()
+    @Override
+	public final void run()
     {
         Debug.assertTrue(outputBuffer != null);
         outputBuffer.setBusy(true);
@@ -209,7 +210,8 @@ public final class FindInFiles extends Replacement implements Constants,
         outputBuffer.setBusy(false);
         if (!cancelled && getReplaceWith() != null) {
             Runnable r = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     Editor.getTagFileManager().setEnabled(false);
                     replaceInAllFiles();
@@ -242,7 +244,8 @@ public final class FindInFiles extends Replacement implements Constants,
         if (getReplaceWith() == null) {
             // Find in files, not replace in files.
             Runnable runnable = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     frame.setDefaultCursor();
                     if (outputBuffer != null) {
@@ -283,7 +286,8 @@ public final class FindInFiles extends Replacement implements Constants,
         SwingUtilities.invokeLater(updateDisplayRunnable);
     }
 
-    public final void cancel()
+    @Override
+	public final void cancel()
     {
         cancelled = true;
     }
@@ -420,7 +424,8 @@ public final class FindInFiles extends Replacement implements Constants,
     }
 
     private final Runnable updateDisplayRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             Position end = null;
             for (EditorIterator iter = new EditorIterator(); iter.hasNext();) {
@@ -476,7 +481,8 @@ public final class FindInFiles extends Replacement implements Constants,
 
         // Restore state and display completion message.
         Runnable runnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 editor.activate(oldBuffer);
                 editor.setUpdateFlag(REPAINT);
@@ -494,7 +500,8 @@ public final class FindInFiles extends Replacement implements Constants,
     private void handleCheckFileException(final CheckFileException e)
     {
         Runnable runnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 String title = "Replace In Files";
                 String message = e.getMessage();
@@ -520,7 +527,8 @@ public final class FindInFiles extends Replacement implements Constants,
     private void handleSaveException(final SaveException e)
     {
         Runnable runnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 String title = "Replace In Files";
                 String message = e.getMessage();
@@ -562,7 +570,8 @@ public final class FindInFiles extends Replacement implements Constants,
                 frame.setWaitCursor();
             } else {
                 Runnable runnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         frame.setDefaultCursor();
                         try {

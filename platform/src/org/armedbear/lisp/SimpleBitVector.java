@@ -64,17 +64,20 @@ public final class SimpleBitVector extends AbstractBitVector
         }
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return list(Symbol.SIMPLE_BIT_VECTOR, Fixnum.getInstance(capacity));
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.SIMPLE_BIT_VECTOR;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.SIMPLE_BIT_VECTOR)
             return T;
@@ -87,27 +90,32 @@ public final class SimpleBitVector extends AbstractBitVector
         return super.typep(type);
     }
 
-    public boolean hasFillPointer()
+    @Override
+	public boolean hasFillPointer()
     {
         return false;
     }
 
-    public boolean isAdjustable()
+    @Override
+	public boolean isAdjustable()
     {
         return false;
     }
 
-    public boolean isSimpleVector()
+    @Override
+	public boolean isSimpleVector()
     {
         return true;
     }
 
-    public int length()
+    @Override
+	public int length()
     {
         return capacity;
     }
 
-    public LispObject elt(int index)
+    @Override
+	public LispObject elt(int index)
     {
         if (index < 0 || index >= length())
             badIndex(index, length());
@@ -115,7 +123,8 @@ public final class SimpleBitVector extends AbstractBitVector
         return (bits[offset] & (1L << (index & LONG_MASK))) != 0 ? Fixnum.ONE : Fixnum.ZERO;
     }
 
-    public LispObject AREF(int index)
+    @Override
+	public LispObject AREF(int index)
     {
         if (index < 0 || index >= capacity)
             badIndex(index, capacity);
@@ -123,7 +132,8 @@ public final class SimpleBitVector extends AbstractBitVector
         return (bits[offset] & (1L << (index & LONG_MASK))) != 0 ? Fixnum.ONE : Fixnum.ZERO;
     }
 
-    public void aset(int index, LispObject newValue)
+    @Override
+	public void aset(int index, LispObject newValue)
     {
         if (index < 0 || index >= capacity)
             badIndex(index, capacity);
@@ -142,25 +152,29 @@ public final class SimpleBitVector extends AbstractBitVector
         type_error(newValue, Symbol.BIT);
     }
 
-    protected int getBit(int index)
+    @Override
+	protected int getBit(int index)
     {
         int offset = index >> 6;
         return (bits[offset] & (1L << (index & LONG_MASK))) != 0 ? 1 : 0;
     }
 
-    protected void setBit(int index)
+    @Override
+	protected void setBit(int index)
     {
         int offset = index >> 6;
         bits[offset] |= 1L << (index & LONG_MASK);
     }
 
-    protected void clearBit(int index)
+    @Override
+	protected void clearBit(int index)
     {
         int offset = index >> 6;
         bits[offset] &= ~(1L << (index & LONG_MASK));
     }
 
-    public void shrink(int n)
+    @Override
+	public void shrink(int n)
     {
         if (n < capacity) {
             int size = n >>> 6;
@@ -179,7 +193,8 @@ public final class SimpleBitVector extends AbstractBitVector
         error(new LispError());
     }
 
-    public AbstractVector adjustArray(int newCapacity,
+    @Override
+	public AbstractVector adjustArray(int newCapacity,
                                        LispObject initialElement,
                                        LispObject initialContents)
 
@@ -223,7 +238,8 @@ public final class SimpleBitVector extends AbstractBitVector
         return this;
     }
 
-    public AbstractVector adjustArray(int newCapacity,
+    @Override
+	public AbstractVector adjustArray(int newCapacity,
                                        AbstractArray displacedTo,
                                        int displacement)
 
@@ -326,7 +342,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-and", PACKAGE_SYS, false,
                       "bit-vector1 bit-vector2 result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -340,7 +357,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-ior", PACKAGE_SYS, false,
                       "bit-vector1 bit-vector2 result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -355,7 +373,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-xor", PACKAGE_SYS, false,
                       "bit-vector1 bit-vector2 result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -370,7 +389,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-eqv", PACKAGE_SYS, false,
                       "bit-vector1 bit-vector2 result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -384,7 +404,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-nand", PACKAGE_SYS, false,
                       "bit-vector1 bit-vector2 result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -398,7 +419,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-nor", PACKAGE_SYS, false,
                       "bit-vector1 bit-vector2 result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -412,7 +434,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-andc1", PACKAGE_SYS, false,
                       "bit-vector1 bit-vector2 result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -426,7 +449,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-andc2", PACKAGE_SYS, false,
                       "bit-vector1 bit-vector2 result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -441,7 +465,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-orc1", PACKAGE_SYS, false,
                       "bit-vector1 bit-vector2 result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -455,7 +480,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-orc2", PACKAGE_SYS, false,
                       "bit-vector1 bit-vector2 result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -469,7 +495,8 @@ public final class SimpleBitVector extends AbstractBitVector
         new Primitive("%simple-bit-vector-bit-not", PACKAGE_SYS, false,
                       "bit-vector result-bit-vector")
     {
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
 
         {
             SimpleBitVector v = (SimpleBitVector) first;

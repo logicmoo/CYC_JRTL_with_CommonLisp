@@ -92,7 +92,8 @@ class BSHAmbiguousName extends SimpleNode
 		The interpretation of an ambiguous name is context sensitive.
 		We disallow a generic eval( ).
 	*/
-    public Object eval( CallStack callstack, Interpreter interpreter ) 
+    @Override
+	public Object eval( CallStack callstack, Interpreter interpreter ) 
 		throws EvalError
     {
 		throw new InterpreterError( 
@@ -100,6 +101,7 @@ class BSHAmbiguousName extends SimpleNode
 			+"  Use toObject() if you want an object." );
     }
 
+	@Override
 	public String toString() {
 		return "AmbigousName: "+text;
 	}

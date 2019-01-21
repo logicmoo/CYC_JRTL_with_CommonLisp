@@ -36,7 +36,8 @@ public final class LabelUI extends MetalLabelUI
         return labelUI;
     }
 
-    protected void paintEnabledText(JLabel l, Graphics g, String s,
+    @Override
+	protected void paintEnabledText(JLabel l, Graphics g, String s,
                                     int textX, int textY)
     {
         Display.setRenderingHints(g);
@@ -44,7 +45,8 @@ public final class LabelUI extends MetalLabelUI
     }
 
 
-    protected void paintDisabledText(JLabel l, Graphics g, String s,
+    @Override
+	protected void paintDisabledText(JLabel l, Graphics g, String s,
                                      int textX, int textY)
     {
         Display.setRenderingHints(g);

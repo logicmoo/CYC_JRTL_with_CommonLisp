@@ -45,17 +45,20 @@ public class SimpleRemapper extends Remapper {
         this.mapping = Collections.singletonMap(oldName, newName);
     }
 
-    public String mapMethodName(String owner, String name, String desc) {
+    @Override
+	public String mapMethodName(String owner, String name, String desc) {
         String s = map(owner + '.' + name + desc);
         return s == null ? name : s;
     }
 
-    public String mapFieldName(String owner, String name, String desc) {
+    @Override
+	public String mapFieldName(String owner, String name, String desc) {
         String s = map(owner + '.' + name);
         return s == null ? name : s;
     }
     
-    public String map(String key) {
+    @Override
+	public String map(String key) {
         return (String) mapping.get(key);
     }
     

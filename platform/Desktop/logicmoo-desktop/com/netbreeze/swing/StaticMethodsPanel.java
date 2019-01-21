@@ -38,6 +38,7 @@ public class StaticMethodsPanel extends JPanel implements ActionListener, ListSe
 		initGUI();
 	}
 
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		Method current = methodList.getSelectedMethod();
 
@@ -79,6 +80,7 @@ public class StaticMethodsPanel extends JPanel implements ActionListener, ListSe
 		methodList.addListSelectionListener(this);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getSource() == executeButton) {
 			Method method = methodList.getSelectedMethod();

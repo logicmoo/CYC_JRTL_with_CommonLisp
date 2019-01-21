@@ -35,6 +35,7 @@ public class Masstest extends Thread {
 		System.out.println("errString=" + errString);
 	}
 
+	@Override
 	public void run() {
 		try {
 			predQuery();

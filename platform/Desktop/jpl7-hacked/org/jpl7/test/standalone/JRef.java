@@ -35,7 +35,8 @@ public class JRef {
 
     @Rule
     public TestRule watcher = new TestWatcher() {
-        protected void starting(Description description) {
+        @Override
+		protected void starting(Description description) {
 //            logger.info("{} being run...", description.getMethodName());
 
             System.out.println("Starting test: " + description.getMethodName());

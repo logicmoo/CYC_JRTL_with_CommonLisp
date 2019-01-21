@@ -11126,15 +11126,18 @@ public final class at_defns extends SubLTranslatedFile
         return (SubLObject)at_defns.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_at_defns_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_at_defns_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_at_defns_file();
     }
     

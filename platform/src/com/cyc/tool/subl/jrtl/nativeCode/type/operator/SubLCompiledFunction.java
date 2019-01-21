@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.armedbear.lisp.ControlTransfer;
 import org.armedbear.lisp.Function;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
@@ -146,19 +147,21 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 			if (e instanceof Unhandleable) {
 				throw (Unhandleable) e;
 			}
-			if (e instanceof CatchableThrow) {
-				throw (CatchableThrow) e;
+			if (e instanceof ControlTransfer) {
+				throw (ControlTransfer) e;
 			}
 			if (e instanceof Error) {
 				throw (Error) e;
 			}
+			e.printStackTrace();
+			
 			try {
 				result = (SubLObject) m.invoke(null, args);
 			} catch (Throwable e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			}
 			Errors.error("Error calling " + methodName + ".", e);
+			
 		} catch (final Throwable e2) {
 			if (e2 instanceof Unhandleable) {
 				throw (Unhandleable) e2;

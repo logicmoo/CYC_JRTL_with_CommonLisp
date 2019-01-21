@@ -5,7 +5,8 @@ import org.appdapter.api.registry.Description;
 
 public abstract class BasicMaker<OT> implements Maker<OT>
 {
-    public Description getRegistryDesc(final OT obj, final String objName) {
+    @Override
+	public Description getRegistryDesc(final OT obj, final String objName) {
         return (Description)new BasicDescription(objName);
     }
 }

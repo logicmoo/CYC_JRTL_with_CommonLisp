@@ -8,11 +8,13 @@ import org.appdapter.api.trigger.Box;
 
 public abstract class TriggerImpl<BoxType extends Box<? extends TriggerImpl<BoxType>>> extends KnownComponentImpl implements MutableTrigger<BoxType>, MenuName
 {
-    public String getFieldSummary() {
+    @Override
+	public String getFieldSummary() {
         return super.getFieldSummary() + ", trigger-field-summary-goes-here";
     }
     
-    public String getMenuPath() {
+    @Override
+	public String getMenuPath() {
         final String lbl = this.getShortLabel();
         if (lbl != null && lbl.length() > 1) {
             return lbl;

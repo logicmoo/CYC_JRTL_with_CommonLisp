@@ -1866,15 +1866,18 @@ public final class assertions_high extends SubLTranslatedFile
         return (SubLObject)assertions_high.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_assertions_high_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_assertions_high_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_assertions_high_file();
     }
     
@@ -2067,7 +2070,8 @@ public final class assertions_high extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ASSERTION-MT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return assertions_high.assertion_mt(arg1);
         }
     }
@@ -2078,7 +2082,8 @@ public final class assertions_high extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ASSERTION-FORMULA"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return assertions_high.assertion_formula(arg1);
         }
     }
@@ -2089,7 +2094,8 @@ public final class assertions_high extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GAF-FORMULA"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return assertions_high.gaf_formula(arg1);
         }
     }
@@ -2100,7 +2106,8 @@ public final class assertions_high extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INVALID-ASSERTION?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return assertions_high.invalid_assertionP(arg1, (SubLObject)$invalid_assertionP$UnaryFunction.UNPROVIDED);
         }
     }
@@ -2111,7 +2118,8 @@ public final class assertions_high extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INVALID-ASSERTION?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return assertions_high.invalid_assertionP(arg1, arg2);
         }
     }
@@ -2122,7 +2130,8 @@ public final class assertions_high extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VALID-ASSERTION"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return assertions_high.valid_assertion(arg1, (SubLObject)$valid_assertion$UnaryFunction.UNPROVIDED);
         }
     }
@@ -2133,7 +2142,8 @@ public final class assertions_high extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VALID-ASSERTION"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return assertions_high.valid_assertion(arg1, arg2);
         }
     }

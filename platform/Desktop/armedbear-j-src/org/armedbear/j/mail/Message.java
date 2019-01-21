@@ -39,12 +39,14 @@ public final class Message extends MimePart
         super(raw, headers);
     }
 
-    public Vector getParts()
+    @Override
+	public Vector getParts()
     {
         return messageParts;
     }
 
-    public MimePart getPart(int i)
+    @Override
+	public MimePart getPart(int i)
     {
         if (messageParts == null)
             return null;
@@ -55,7 +57,8 @@ public final class Message extends MimePart
         return (MimePart) messageParts.get(i);
     }
 
-    public void parse()
+    @Override
+	public void parse()
     {
         super.parse();
         Vector parts = super.getParts();

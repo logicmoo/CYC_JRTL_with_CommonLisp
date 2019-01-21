@@ -57,24 +57,28 @@ public class CMode extends JavaMode implements Constants, Mode
         return mode;
     }
 
-    public String getCommentStart()
+    @Override
+	public String getCommentStart()
     {
 //         return "/*";
         return "// ";
     }
 
-    public String getCommentEnd()
+    @Override
+	public String getCommentEnd()
     {
 //         return "*/";
         return null;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new CFormatter(buffer, LANGUAGE_C);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         super.setKeyMapDefaults(km);
         km.mapKey('#', "electricPound");
@@ -82,7 +86,8 @@ public class CMode extends JavaMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_F6, CTRL_MASK, "iList");
     }
 
-    public void populateModeMenu(Editor editor, Menu menu)
+    @Override
+	public void populateModeMenu(Editor editor, Menu menu)
     {
         menu.add(editor, "Compile...", 'C', "compile");
         menu.add(editor, "Recompile", 'R', "recompile");
@@ -93,22 +98,26 @@ public class CMode extends JavaMode implements Constants, Mode
         menu.add(editor, "Show Error Message", 'M', "showMessage", enabled);
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new CTagger(buffer);
     }
 
-    public boolean hasQualifiedNames()
+    @Override
+	public boolean hasQualifiedNames()
     {
         return false;
     }
 
-    public boolean isQualifiedName(String s)
+    @Override
+	public boolean isQualifiedName(String s)
     {
         return false;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         if (line.trim().startsWith("#"))
             return 0; // Preprocessor directive.
@@ -195,7 +204,8 @@ public class CMode extends JavaMode implements Constants, Mode
         return null;
     }
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         if (c >= 'a' && c <= 'z')
             return true;
@@ -206,7 +216,8 @@ public class CMode extends JavaMode implements Constants, Mode
         return false;
     }
 
-    public boolean isIdentifierPart(char c)
+    @Override
+	public boolean isIdentifierPart(char c)
     {
         if (c >= 'a' && c <= 'z')
             return true;

@@ -51,7 +51,8 @@ public final class JProxy
     new Primitive("%jnew-proxy", PACKAGE_JAVA, false,
                   "interface &rest method-names-and-defs")
     {
-      public LispObject execute(LispObject[] args)
+      @Override
+	public LispObject execute(LispObject[] args)
       {
         int length = args.length;
         if (length < 3 || length % 2 != 1)
@@ -78,7 +79,8 @@ public final class JProxy
       this.table = table;
     }
 
-    public Object invoke(Object proxy, Method method, Object[] args)
+    @Override
+	public Object invoke(Object proxy, Method method, Object[] args)
     {
       String methodName = method.getName();
 
@@ -157,6 +159,7 @@ public final class JProxy
 	    this.function = function;
 	}
   		
+	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 	    if(hashCodeMethod.equals(method)) {
 		return System.identityHashCode(proxy);
@@ -195,7 +198,8 @@ public final class JProxy
 	    new Primitive("%jmake-invocation-handler", PACKAGE_JAVA, false,
 	                  "function") {
 		
-	      	public LispObject execute(LispObject[] args) {
+	      	@Override
+			public LispObject execute(LispObject[] args) {
 	      		int length = args.length;
 	      		if (length != 1) {
 	      			return error(new WrongNumberOfArgumentsException(this, 1));
@@ -211,7 +215,8 @@ public final class JProxy
 	    new Primitive("%jmake-proxy", PACKAGE_JAVA, false,
 	                  "interfaces invocation-handler") {
 		
-	      	public LispObject execute(final LispObject[] args) {
+	      	@Override
+			public LispObject execute(final LispObject[] args) {
 	      		int length = args.length;
 	      		if (length != 3) {
 	      			return error(new WrongNumberOfArgumentsException(this, 3));

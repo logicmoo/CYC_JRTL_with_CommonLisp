@@ -69,6 +69,7 @@ abstract public class CompiledClosure extends Closure
       return result;
   }
 
+	@Override
 	public LispObject typeOf() {
 		return Symbol.COMPILED_FUNCTION;
 	}
@@ -88,14 +89,16 @@ abstract public class CompiledClosure extends Closure
 
 
   // Zero args.
-  public LispObject execute()
+  @Override
+public LispObject execute()
   {
     LispObject[] args = new LispObject[0];
     return execute(args);
   }
 
   // One arg.
-  public LispObject execute( LispObject first)
+  @Override
+public LispObject execute( LispObject first)
 
   {
     LispObject[] args = new LispObject[1];
@@ -104,7 +107,8 @@ abstract public class CompiledClosure extends Closure
   }
 
   // Two args.
-  public LispObject execute( LispObject first,
+  @Override
+public LispObject execute( LispObject first,
                             LispObject second)
 
   {
@@ -115,7 +119,8 @@ abstract public class CompiledClosure extends Closure
   }
 
   // Three args.
-  public LispObject execute( LispObject first,
+  @Override
+public LispObject execute( LispObject first,
                             LispObject second, LispObject third)
 
   {
@@ -127,7 +132,8 @@ abstract public class CompiledClosure extends Closure
   }
 
   // Four args.
-  public LispObject execute( LispObject first,
+  @Override
+public LispObject execute( LispObject first,
                             LispObject second, LispObject third,
                             LispObject fourth)
 
@@ -141,7 +147,8 @@ abstract public class CompiledClosure extends Closure
   }
 
   // Five args.
-  public LispObject execute( LispObject first,
+  @Override
+public LispObject execute( LispObject first,
                             LispObject second, LispObject third,
                             LispObject fourth, LispObject fifth)
 
@@ -156,7 +163,8 @@ abstract public class CompiledClosure extends Closure
   }
 
   // Six args.
-  public LispObject execute( LispObject first,
+  @Override
+public LispObject execute( LispObject first,
                             LispObject second, LispObject third,
                             LispObject fourth, LispObject fifth,
                             LispObject sixth)
@@ -173,7 +181,8 @@ abstract public class CompiledClosure extends Closure
   }
 
   // Seven args.
-  public LispObject execute( LispObject first,
+  @Override
+public LispObject execute( LispObject first,
                             LispObject second, LispObject third,
                             LispObject fourth, LispObject fifth,
                             LispObject sixth, LispObject seventh)
@@ -191,7 +200,8 @@ abstract public class CompiledClosure extends Closure
   }
 
   // Eight args.
-  public LispObject execute( LispObject first,
+  @Override
+public LispObject execute( LispObject first,
                             LispObject second, LispObject third,
                             LispObject fourth, LispObject fifth,
                             LispObject sixth, LispObject seventh,
@@ -211,7 +221,8 @@ abstract public class CompiledClosure extends Closure
   }
 
   // Arg array.
-  public LispObject execute(LispObject[] args)
+  @Override
+public LispObject execute(LispObject[] args)
 
   {
     return notImplemented();
@@ -221,7 +232,8 @@ abstract public class CompiledClosure extends Closure
   private static final Primitive LOAD_COMPILED_FUNCTION =
       new Primitive("load-compiled-function", PACKAGE_SYS, true, "source")
   {
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
       String namestring = null;
       if (arg instanceof Pathname)
@@ -244,7 +256,8 @@ abstract public class CompiledClosure extends Closure
   private static final Primitive VARLIST =
       new Primitive("varlist", PACKAGE_SYS, false)
   {
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
       if (arg instanceof Closure)
         return ((Closure)arg).getVariableList();
@@ -252,6 +265,7 @@ abstract public class CompiledClosure extends Closure
     }
   };
 
+	@Override
 	public boolean isClosureSubclass() {
 		return getClass() != CompiledClosure.class;
 	}

@@ -205,7 +205,8 @@ private static Logger theLogger;
 
 //==== Property notification methods ===============
 
-  public void propertyChange(PropertyChangeEvent evt) {
+  @Override
+public void propertyChange(PropertyChangeEvent evt) {
     if (evt.getSource() == bowl) {
       if (evt.getPropertyName().equals("selected")) {
         updateSelectedMenu();
@@ -213,7 +214,8 @@ private static Logger theLogger;
     }
   }
 
-  protected void processEvent(AWTEvent e) {
+  @Override
+protected void processEvent(AWTEvent e) {
     if (e.getID() == Event.WINDOW_DESTROY) {
       getLogger().info("Shutting down bean bowl...");
       try {
@@ -379,7 +381,8 @@ class SaveAction extends AbstractAction {
     SaveAction() {
       super("Save", Icons.saveBowl);
     }
-    public void actionPerformed(ActionEvent evt) {
+    @Override
+	public void actionPerformed(ActionEvent evt) {
       saveBowl();
     }
   }
@@ -388,7 +391,8 @@ class SaveAction extends AbstractAction {
     SaveAsAction() {
       super("Save as...", Icons.saveBowlAs);
     }
-    public void actionPerformed(ActionEvent evt) {
+    @Override
+	public void actionPerformed(ActionEvent evt) {
       saveBowlAs();
     }
   }
@@ -397,7 +401,8 @@ class SaveAction extends AbstractAction {
     NewAction() {
       super("New", Icons.newBowl);
     }
-    public void actionPerformed(ActionEvent evt) {
+    @Override
+	public void actionPerformed(ActionEvent evt) {
       newBowl();
     }
   }
@@ -406,7 +411,8 @@ class SaveAction extends AbstractAction {
     OpenAction() {
       super("Open", Icons.openBowl);
     }
-    public void actionPerformed(ActionEvent evt) {
+    @Override
+	public void actionPerformed(ActionEvent evt) {
       openBowl();
     }
   }
@@ -415,13 +421,15 @@ class SaveAction extends AbstractAction {
     AboutAction() {
       super("About Bean Bowl...", Icons.about);
     }
-    public void actionPerformed(ActionEvent evt) {
+    @Override
+	public void actionPerformed(ActionEvent evt) {
       setEnabled(false);
       SplashWindow splash = new SplashWindow(Icons.loadIcon("splash.jpg"), true);
       splash.show();
       splash.addWindowListener(
         new WindowAdapter() {
-          public void windowClosed(WindowEvent e) {
+          @Override
+		public void windowClosed(WindowEvent e) {
             setEnabled(true);
           }
         }
@@ -436,7 +444,8 @@ class SaveAction extends AbstractAction {
       super(file.getName(), Icons.recentFile);
       this.recentFile = file;
     }
-    public void actionPerformed(ActionEvent evt) {
+    @Override
+	public void actionPerformed(ActionEvent evt) {
       openBowl(recentFile);
     }
   }

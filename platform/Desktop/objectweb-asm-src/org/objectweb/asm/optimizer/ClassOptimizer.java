@@ -58,7 +58,8 @@ public class ClassOptimizer extends RemappingClassAdapter {
     // Overridden methods
     // ------------------------------------------------------------------------
 
-    public void visit(
+    @Override
+	public void visit(
         final int version,
         final int access,
         final String name,
@@ -70,11 +71,13 @@ public class ClassOptimizer extends RemappingClassAdapter {
         pkgName = name.substring(0, name.lastIndexOf('/'));
     }
 
-    public void visitSource(final String source, final String debug) {
+    @Override
+	public void visitSource(final String source, final String debug) {
         // remove debug info
     }
 
-    public void visitOuterClass(
+    @Override
+	public void visitOuterClass(
         final String owner,
         final String name,
         final String desc)
@@ -82,7 +85,8 @@ public class ClassOptimizer extends RemappingClassAdapter {
         // remove debug info
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -90,11 +94,13 @@ public class ClassOptimizer extends RemappingClassAdapter {
         return null;
     }
 
-    public void visitAttribute(final Attribute attr) {
+    @Override
+	public void visitAttribute(final Attribute attr) {
         // remove non standard attributes
     }
 
-    public void visitInnerClass(
+    @Override
+	public void visitInnerClass(
         final String name,
         final String outerName,
         final String innerName,
@@ -103,7 +109,8 @@ public class ClassOptimizer extends RemappingClassAdapter {
         // remove debug info
     }
 
-    public FieldVisitor visitField(
+    @Override
+	public FieldVisitor visitField(
         final int access,
         final String name,
         final String desc,
@@ -134,7 +141,8 @@ public class ClassOptimizer extends RemappingClassAdapter {
         return null; // remove debug info
     }
 
-    public MethodVisitor visitMethod(
+    @Override
+	public MethodVisitor visitMethod(
         final int access,
         final String name,
         final String desc,
@@ -162,7 +170,8 @@ public class ClassOptimizer extends RemappingClassAdapter {
         }
     }
     
-    protected MethodVisitor createRemappingMethodAdapter(
+    @Override
+	protected MethodVisitor createRemappingMethodAdapter(
         int access,
         String newDesc,
         MethodVisitor mv)

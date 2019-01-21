@@ -16,15 +16,18 @@ public final class $assertion_native extends SubLStructNative
         this.$id = (SubLObject)CommonSymbols.NIL;
     }
     
-    public SubLStructDecl getStructDecl() {
+    @Override
+	public SubLStructDecl getStructDecl() {
         return (SubLStructDecl)$assertion_native.structDecl;
     }
     
-    public SubLObject getField2() {
+    @Override
+	public SubLObject getField2() {
         return this.$id;
     }
     
-    public SubLObject setField2(final SubLObject value) {
+    @Override
+	public SubLObject setField2(final SubLObject value) {
         return this.$id = value;
     }
     

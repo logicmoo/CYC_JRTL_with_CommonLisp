@@ -5078,15 +5078,18 @@ public final class sbhl_macros extends SubLTranslatedFile
         return (SubLObject)sbhl_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_macros_file();
     }
     

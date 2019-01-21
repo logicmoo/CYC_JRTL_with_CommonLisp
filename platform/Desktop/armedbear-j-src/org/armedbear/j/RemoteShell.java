@@ -50,12 +50,14 @@ public class RemoteShell extends Shell
     }
 
     // Called in Shell constructor, so we override it here.
-    protected void initializeHistory()
+    @Override
+	protected void initializeHistory()
     {
         history = new History("remoteShell.history");
     }
 
-    protected void startProcess()
+    @Override
+	protected void startProcess()
     {
         Process process = null;
         try {
@@ -182,7 +184,8 @@ public class RemoteShell extends Shell
         return s;
     }
 
-    protected String stdOutFilter(String s)
+    @Override
+	protected String stdOutFilter(String s)
     {
         if (type == TYPE_TELNET)
             return telnetStdOutFilter(s);
@@ -204,7 +207,8 @@ public class RemoteShell extends Shell
         return s;
     }
 
-    protected void stdOutUpdate(final String s)
+    @Override
+	protected void stdOutUpdate(final String s)
     {
         // Filter to prevent two carriage returns in a row.
         final FastStringBuffer sb = new FastStringBuffer(s.length());
@@ -225,7 +229,8 @@ public class RemoteShell extends Shell
             }
         }
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 appendString(sb.toString());
                 setEndOfOutput(new Position(getEnd()));
@@ -238,7 +243,8 @@ public class RemoteShell extends Shell
         SwingUtilities.invokeLater(r);
     }
 
-    protected String stdErrFilter(String s)
+    @Override
+	protected String stdErrFilter(String s)
     {
         return s;
     }
@@ -248,18 +254,21 @@ public class RemoteShell extends Shell
         return host;
     }
 
-    public final File getCurrentDirectory()
+    @Override
+	public final File getCurrentDirectory()
     {
         return Directories.getUserHomeDirectory();
     }
 
     // For the buffer list.
-    public String toString()
+    @Override
+	public String toString()
     {
         return title;
     }
 
-    public String getTitle()
+    @Override
+	public String getTitle()
     {
         return title;
     }

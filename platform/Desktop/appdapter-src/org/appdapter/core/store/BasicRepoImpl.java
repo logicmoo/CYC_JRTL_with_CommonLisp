@@ -121,11 +121,13 @@ public abstract class BasicRepoImpl extends BasicQueryProcessorImpl implements R
         }
     }
     
-    public boolean isRemote() {
+    @Override
+	public boolean isRemote() {
         return false;
     }
     
-    public void setNamedModelShareType(final List<Ident> modelIDs, final String shareName, final boolean clearRemote, final boolean clearLocal, final boolean mergeAfterClear, final boolean isSharedAfterMerge, final RemoteDatasetProviderSpec remoteDatasetProviderSpec) {
+    @Override
+	public void setNamedModelShareType(final List<Ident> modelIDs, final String shareName, final boolean clearRemote, final boolean clearLocal, final boolean mergeAfterClear, final boolean isSharedAfterMerge, final RemoteDatasetProviderSpec remoteDatasetProviderSpec) {
         final List<ShareSpec> shareSpecs = new ArrayList<ShareSpec>();
         for (final Ident modelId : modelIDs) {
             shareSpecs.add((ShareSpec)new ShareSpecImpl(modelId, shareName, clearRemote, clearLocal, mergeAfterClear, isSharedAfterMerge, remoteDatasetProviderSpec, TaskState.TaskNeedsStart));
@@ -133,7 +135,8 @@ public abstract class BasicRepoImpl extends BasicQueryProcessorImpl implements R
         this.setNamedModelShareType(shareSpecs, (RemoteDatasetProviderSpec)remoteDatasetProviderSpec.getRemoteDatasetProvider());
     }
     
-    public void setNamedModelShareType(final List<ShareSpec> shareSpecs, final RemoteDatasetProviderSpec remoteDatasetProvider) {
+    @Override
+	public void setNamedModelShareType(final List<ShareSpec> shareSpecs, final RemoteDatasetProviderSpec remoteDatasetProvider) {
         this.finishLoading();
         final Map<Ident, ShareSpec> prev = this.getSharedModelSpecs();
         for (final ShareSpec shareSpec : shareSpecs) {
@@ -147,11 +150,13 @@ public abstract class BasicRepoImpl extends BasicQueryProcessorImpl implements R
         this.finishLoading();
     }
     
-    public Map<Ident, ShareSpec> getSharedModelSpecs() {
+    @Override
+	public Map<Ident, ShareSpec> getSharedModelSpecs() {
         return this.sharedModelSpecs;
     }
     
-    public Model getNamedModel(final Ident modelID, final boolean createIfMissing) {
+    @Override
+	public Model getNamedModel(final Ident modelID, final boolean createIfMissing) {
         final Dataset repoDset = this.getMainQueryDataset();
         final Lock lock = repoDset.getLock();
         String name = modelID.getAbsUriString();
@@ -205,7 +210,8 @@ public abstract class BasicRepoImpl extends BasicQueryProcessorImpl implements R
         this.myMainQueryDataset = myMainQueryDataset;
     }
     
-    public Dataset getMainQueryDataset() {
+    @Override
+	public Dataset getMainQueryDataset() {
         this.beginLoading();
         if (this.myMainQueryDataset == null) {
             this.myMainQueryDataset = this.makeMainQueryDataset();
@@ -251,14 +257,16 @@ public abstract class BasicRepoImpl extends BasicQueryProcessorImpl implements R
         this.isLoadingFinished = true;
     }
     
-    public List<Repo.GraphStat> getGraphStats() {
+    @Override
+	public List<Repo.GraphStat> getGraphStats() {
         final List<Repo.GraphStat> stats = new ArrayList<Repo.GraphStat>();
         final Dataset mainDset = this.getMainQueryDataset();
         final Iterator<String> nameIt = (Iterator<String>)mainDset.listNames();
         while (nameIt.hasNext()) {
             final String modelName = nameIt.next();
             final Repo.GraphStat gs = new Repo.GraphStat(modelName, (GetObject)new GetObject<Model>() {
-                public Model getValue() {
+                @Override
+				public Model getValue() {
                     return mainDset.getNamedModel(modelName);
                 }
             });
@@ -267,7 +275,8 @@ public abstract class BasicRepoImpl extends BasicQueryProcessorImpl implements R
         return stats;
     }
     
-    public <ResType> ResType processQuery(final Query parsedQuery, final QuerySolution initBinding, final JenaArqResultSetProcessor<ResType> resProc) {
+    @Override
+	public <ResType> ResType processQuery(final Query parsedQuery, final QuerySolution initBinding, final JenaArqResultSetProcessor<ResType> resProc) {
         ResType result = null;
         try {
             final Dataset ds = this.getMainQueryDataset();
@@ -279,19 +288,22 @@ public abstract class BasicRepoImpl extends BasicQueryProcessorImpl implements R
         return result;
     }
     
-    public List<QuerySolution> findAllSolutions(final Query parsedQuery, final QuerySolution initBinding) {
+    @Override
+	public List<QuerySolution> findAllSolutions(final Query parsedQuery, final QuerySolution initBinding) {
         final Dataset ds = this.getMainQueryDataset();
         return (List<QuerySolution>)JenaArqQueryFuncs.findAllSolutions(ds, parsedQuery, initBinding);
     }
     
-    public Model getNamedModel(final Ident graphNameIdent) {
+    @Override
+	public Model getNamedModel(final Ident graphNameIdent) {
         final Dataset mqd = this.getMainQueryDataset();
         String absURI = graphNameIdent.getAbsUriString();
         absURI = RepoOper.correctModelName(absURI);
         return mqd.getNamedModel(absURI);
     }
     
-    public Set<Object> assembleRootsFromNamedModel(final Ident graphNameIdent) {
+    @Override
+	public Set<Object> assembleRootsFromNamedModel(final Ident graphNameIdent) {
         final Model loadedModel = this.getNamedModel(graphNameIdent);
         if (loadedModel == null) {
             this.getLogger().error("No model found at {}", (Object)graphNameIdent);

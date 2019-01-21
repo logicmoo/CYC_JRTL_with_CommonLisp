@@ -119,15 +119,18 @@ public final class yes_no_question extends SubLTranslatedFile
         return (SubLObject)yes_no_question.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_yes_no_question_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_yes_no_question_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_yes_no_question_file();
     }
     

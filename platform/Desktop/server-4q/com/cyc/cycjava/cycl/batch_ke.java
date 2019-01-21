@@ -1037,15 +1037,18 @@ public final class batch_ke extends SubLTranslatedFile
         return (SubLObject)batch_ke.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_batch_ke_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_batch_ke_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_batch_ke_file();
     }
     

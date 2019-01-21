@@ -42,7 +42,8 @@ public final class RubyTagger extends Tagger
         super(buffer);
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         ArrayList tags = new ArrayList();
         Position pos = new Position(buffer.getFirstLine(), 0);

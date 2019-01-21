@@ -13629,15 +13629,18 @@ public final class sbhl_search_methods extends SubLTranslatedFile
         return (SubLObject)sbhl_search_methods.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_search_methods_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_search_methods_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_search_methods_file();
     }
     
@@ -13712,7 +13715,8 @@ public final class sbhl_search_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-STOP-AT-HORIZON"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_search_methods.sbhl_stop_at_horizon(arg1);
         }
     }

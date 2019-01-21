@@ -41,15 +41,18 @@ public final class abductive_tactician extends SubLTranslatedFile
         return (SubLObject)abductive_tactician.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_abductive_tactician_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_abductive_tactician_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_abductive_tactician_file();
     }
     

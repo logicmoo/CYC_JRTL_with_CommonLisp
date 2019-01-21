@@ -107,7 +107,8 @@ public class BasicModuleTestOne extends BasicDebugger
 
     public static class PowerModule extends NullModule<Ctx>
     {
-        public synchronized void runOnce() {
+        @Override
+		public synchronized void runOnce() {
             this.enterBasicRunOnce();
             final Long runStart = this.logInfoEvent(0, true, (Long)null, "runOnce", new Object[] { "BEGIN" });
             final Ctx c = (Ctx)this.getContext();

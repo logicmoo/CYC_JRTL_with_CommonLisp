@@ -67,15 +67,18 @@ public class IntInsnNode extends AbstractInsnNode {
         this.opcode = opcode;
     }
 
-    public int getType() {
+    @Override
+	public int getType() {
         return INT_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitIntInsn(opcode, operand);
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+	public AbstractInsnNode clone(final Map labels) {
         return new IntInsnNode(opcode, operand);
     }
 }

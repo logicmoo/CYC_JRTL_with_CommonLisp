@@ -69,7 +69,8 @@ public class HistoryTextField extends JTextField implements FocusListener,
         this(Editor.currentEditor(), columns);
     }
 
-    public Dimension getPreferredSize() {
+    @Override
+	public Dimension getPreferredSize() {
         Dimension size = super.getPreferredSize();
         size.width = getColumns() * 11;
         return size;
@@ -127,7 +128,8 @@ public class HistoryTextField extends JTextField implements FocusListener,
             history.reset();
     }
 
-    public String getText()
+    @Override
+	public String getText()
     {
         String s = super.getText();
         int length = s.length();
@@ -183,37 +185,46 @@ public class HistoryTextField extends JTextField implements FocusListener,
         }
     }
 
-    public void paintComponent(Graphics g)
+    @Override
+	public void paintComponent(Graphics g)
     {
         Display.setRenderingHints(g);
         super.paintComponent(g);
     }
 
-    public void focusGained(FocusEvent e)
+    @Override
+	public void focusGained(FocusEvent e)
     {
         selectAll();
     }
 
-    public void focusLost(FocusEvent e)
+    @Override
+	public void focusLost(FocusEvent e)
     {
         int length = getText().length();
         select(length, length);
     }
 
-    public void mouseClicked(MouseEvent e) {}
+    @Override
+	public void mouseClicked(MouseEvent e) {}
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e) {}
+    @Override
+	public void mouseExited(MouseEvent e) {}
 
-    public void mousePressed(MouseEvent e) {}
+    @Override
+	public void mousePressed(MouseEvent e) {}
 
-    public void mouseReleased(MouseEvent e)
+    @Override
+	public void mouseReleased(MouseEvent e)
     {
         final int dot = getCaretPosition();
         final int mark = getCaret().getMark();
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 setCaretPosition(mark);
                 moveCaretPosition(dot);

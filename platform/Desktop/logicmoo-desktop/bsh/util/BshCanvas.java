@@ -57,6 +57,7 @@ public class BshCanvas extends JComponent {
 		this.ths = ths;
 	}
 
+	@Override
 	public void paintComponent( Graphics g ) {
 		// copy buffered image
 		if ( imageBuffer != null )
@@ -82,6 +83,7 @@ public class BshCanvas extends JComponent {
 		return imageBuffer.getGraphics();
 	}
 
+	@Override
 	public void setBounds( int x, int y, int width, int height ) {
 		setPreferredSize( new Dimension(width, height) );
 		setMinimumSize( new Dimension(width, height) );

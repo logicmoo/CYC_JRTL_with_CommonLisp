@@ -30,7 +30,8 @@ public final class CppTag extends LocalTag
             canonicalSignature = pos.getLine().trim();
     }
 
-    public String getMethodName()
+    @Override
+	public String getMethodName()
     {
         int index = name.indexOf("::");
         if (index >= 0)
@@ -39,7 +40,8 @@ public final class CppTag extends LocalTag
             return name;
     }
 
-    public String getLongName()
+    @Override
+	public String getLongName()
     {
         if (name.startsWith("class "))
             return name;

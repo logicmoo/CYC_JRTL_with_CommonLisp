@@ -141,7 +141,8 @@ public abstract class CycWorker extends SwingWorker {
    * CycWorker. Appropriate listeners are notified when this
    * is called.
    */
-  public void start() {
+  @Override
+public void start() {
     notifyStatChange(CYC_WORKER_START);
     super.start();
   }
@@ -150,7 +151,8 @@ public abstract class CycWorker extends SwingWorker {
    * This method interrupts a currently running CycWorker.
    * Appropriate listeners are notified when this is called.
    */       
-  public void interrupt() {
+  @Override
+public void interrupt() {
     notifyStatChange(CYC_WORKER_INTERRUPT);
     super.interrupt();
   }
@@ -161,7 +163,8 @@ public abstract class CycWorker extends SwingWorker {
    * then the construct() method finishes.
    * Appropriate listeners are notified when this is called.
    */
-  public void finished() {
+  @Override
+public void finished() {
     notifyStatChange(CYC_WORKER_FINISHED);
     super.finished();
   }

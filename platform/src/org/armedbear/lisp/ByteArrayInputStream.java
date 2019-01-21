@@ -51,17 +51,20 @@ public final class ByteArrayInputStream extends Stream
         initAsBinaryInputStream(byteArrayInputStream = new java.io.ByteArrayInputStream(bytes));
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.STREAM; //TODO
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.STREAM; //TODO
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         return super.typep(type); //TODO
     }
@@ -73,11 +76,13 @@ public final class ByteArrayInputStream extends Stream
                        "bytes &optional element-type")
     {
 
-        public LispObject execute(LispObject bytes) {
+        @Override
+		public LispObject execute(LispObject bytes) {
             return new ByteArrayInputStream((byte[]) bytes.javaInstance(byte[].class));
         }
 
-        public LispObject execute(LispObject bytes, LispObject elementType)
+        @Override
+		public LispObject execute(LispObject bytes, LispObject elementType)
         {
             return new ByteArrayInputStream((byte[]) bytes.javaInstance(byte[].class), elementType);
         }

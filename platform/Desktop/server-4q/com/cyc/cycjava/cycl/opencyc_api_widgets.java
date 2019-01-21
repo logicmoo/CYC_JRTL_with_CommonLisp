@@ -62,15 +62,18 @@ public final class opencyc_api_widgets extends SubLTranslatedFile
         return (SubLObject)opencyc_api_widgets.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_opencyc_api_widgets_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_opencyc_api_widgets_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_opencyc_api_widgets_file();
     }
     

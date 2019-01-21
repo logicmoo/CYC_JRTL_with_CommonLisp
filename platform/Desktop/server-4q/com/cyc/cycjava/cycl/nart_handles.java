@@ -884,15 +884,18 @@ public final class nart_handles extends SubLTranslatedFile
         return (SubLObject)nart_handles.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_nart_handles_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_nart_handles_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_nart_handles_file();
     }
     
@@ -984,15 +987,18 @@ public final class nart_handles extends SubLTranslatedFile
             this.$id = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$nart_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$id;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$id = value;
         }
         
@@ -1007,7 +1013,8 @@ public final class nart_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NART-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nart_handles.nart_p(arg1);
         }
     }
@@ -1018,7 +1025,8 @@ public final class nart_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-NART-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nart_handles.sxhash_nart_method(arg1);
         }
     }

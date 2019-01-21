@@ -43,18 +43,21 @@ public final class NewsGroupSummaryMode extends MailboxMode
         return mode;
     }
 
-    public NavigationComponent getSidebarComponent(Editor editor)
+    @Override
+	public NavigationComponent getSidebarComponent(Editor editor)
     {
         return null;
     }
 
-    protected final void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected final void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "readArticleOtherWindow");
         km.mapKey(KeyEvent.VK_ENTER, CTRL_MASK, "readArticle");
     }
 
-    protected ToolBar getDefaultToolBar(Frame frame)
+    @Override
+	protected ToolBar getDefaultToolBar(Frame frame)
     {
         return frame.getDefaultToolBar();
     }

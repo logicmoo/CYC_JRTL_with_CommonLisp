@@ -4769,15 +4769,18 @@ public final class cb_shop extends SubLTranslatedFile
         return (SubLObject)cb_shop.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_shop_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_shop_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_shop_file();
     }
     

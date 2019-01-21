@@ -1126,15 +1126,18 @@ public final class unification_utilities extends SubLTranslatedFile
         return (SubLObject)NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_unification_utilities_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_unification_utilities_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_unification_utilities_file();
     }
 
@@ -1199,7 +1202,8 @@ public final class unification_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("UNIFY-CLAUSE"));
         }
 
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return unify_clause(arg1, arg2, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         }
     }
@@ -1210,7 +1214,8 @@ public final class unification_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-MONAD-GENL-MT-CACHED?"));
         }
 
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return clear_monad_genl_mt_cachedP();
         }
     }

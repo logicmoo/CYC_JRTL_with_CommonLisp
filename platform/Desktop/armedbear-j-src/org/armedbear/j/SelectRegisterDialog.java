@@ -32,7 +32,8 @@ public final class SelectRegisterDialog extends InputDialog
     setHistory(new History("selectRegister.register"));
   }
 
-  protected List getCompletions(String prefix)
+  @Override
+protected List getCompletions(String prefix)
   {
     String lower = prefix.toLowerCase();
     String[] names = null;

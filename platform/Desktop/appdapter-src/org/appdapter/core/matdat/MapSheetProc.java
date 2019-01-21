@@ -25,7 +25,8 @@ public class MapSheetProc extends SheetProc
         return this.myResultMap;
     }
 
-    public void absorbDataRow(final MatrixRow cellRow) {
+    @Override
+	public void absorbDataRow(final MatrixRow cellRow) {
         final Option key = cellRow.getPossibleColumnValueString(this.keyColIdx());
         final Option value = cellRow.getPossibleColumnValueString(this.vColIdx());
         if (key.isDefined() && value.isDefined()) {

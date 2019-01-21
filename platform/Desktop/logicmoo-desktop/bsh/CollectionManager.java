@@ -159,9 +159,11 @@ public class CollectionManager
 				final Object array = iterateOverMe;
 				return new Enumeration() {
 					int index = 0, length = Array.getLength(array);
+					@Override
 					public Object nextElement() { 
 						return Array.get(array, index++);
 					}
+					@Override
 					public boolean hasMoreElements() { return index<length; }
 				};
 			} 
@@ -182,6 +184,7 @@ public class CollectionManager
 		 *
 		 * @return The next object
 		 */
+		@Override
 		public Object next() {
 			return 	enumeration.nextElement();
 		}
@@ -192,6 +195,7 @@ public class CollectionManager
 		 *
 		 * @return The next object
 		 */
+		@Override
 		public boolean hasNext() {
 			return enumeration.hasMoreElements();
 		}

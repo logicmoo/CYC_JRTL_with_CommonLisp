@@ -191,6 +191,7 @@ class BSHType extends SimpleNode
 		return arrayDims;
 	}
 
+	@Override
 	public void classLoaderChanged() {
 		type = null;
 		baseType = null;

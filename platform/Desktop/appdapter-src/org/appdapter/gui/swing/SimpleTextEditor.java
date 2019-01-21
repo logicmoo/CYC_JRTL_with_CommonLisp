@@ -63,6 +63,7 @@ public class SimpleTextEditor extends JAutoResizingTextArea implements ActionLis
 	/**
 	* Empty implementation of the ClipboardOwner interface.
 	*/
+	@Override
 	public void lostOwnership(Clipboard aClipboard, Transferable aContents) {
 		//do nothing
 	}
@@ -111,6 +112,7 @@ public class SimpleTextEditor extends JAutoResizingTextArea implements ActionLis
 	}
 
 	class UndoListener implements UndoableEditListener {
+		@Override
 		public void undoableEditHappened(UndoableEditEvent e) {
 			undoManager.addEdit(e.getEdit());
 			undoAction.update();
@@ -123,11 +125,13 @@ public class SimpleTextEditor extends JAutoResizingTextArea implements ActionLis
 			update();
 		}
 
+		@Override
 		public Object getValue(String key) {
 			update();
 			return super.getValue(key);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (this.isEnabled()) {
 				undo();
@@ -145,11 +149,13 @@ public class SimpleTextEditor extends JAutoResizingTextArea implements ActionLis
 			update();
 		}
 
+		@Override
 		public Object getValue(String key) {
 			update();
 			return super.getValue(key);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (this.isEnabled()) {
 				redo();
@@ -349,6 +355,7 @@ public class SimpleTextEditor extends JAutoResizingTextArea implements ActionLis
 		popup.show(e.getComponent(), x, y);
 	}
 
+	@Override
 	public Action[] getActions() {
 		ArrayList actions = new ArrayList<Action>();
 		for (Component c : initEditMenu(true).getMenuComponents()) {
@@ -496,6 +503,7 @@ public class SimpleTextEditor extends JAutoResizingTextArea implements ActionLis
 	/**
 		Listen for text changes to update the status line.
 	*/
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 		displayStatus("");
 		fileSaved = false;
@@ -504,6 +512,7 @@ public class SimpleTextEditor extends JAutoResizingTextArea implements ActionLis
 	/**
 	 * Update status for insert
 	*/
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		displayStatus("");
 		fileSaved = false;
@@ -512,6 +521,7 @@ public class SimpleTextEditor extends JAutoResizingTextArea implements ActionLis
 	/**
 	 * Update status for remove
 	*/
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		displayStatus("");
 		fileSaved = false;
@@ -547,6 +557,7 @@ public class SimpleTextEditor extends JAutoResizingTextArea implements ActionLis
 
 	   @param e -- the ActionEvent that led to this method call
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		// Get the selected menu item
 		JMenuItem m0 = (JMenuItem) e.getSource();
@@ -840,6 +851,7 @@ public class SimpleTextEditor extends JAutoResizingTextArea implements ActionLis
 		f.setVisible(true);
 		f.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		f.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosed(WindowEvent e) {
 				te.fileClose();
 			}

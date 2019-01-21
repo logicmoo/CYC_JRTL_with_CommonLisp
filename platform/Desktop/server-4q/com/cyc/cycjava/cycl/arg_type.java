@@ -4707,15 +4707,18 @@ public final class arg_type extends SubLTranslatedFile
         return (SubLObject)arg_type.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_arg_type_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_arg_type_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_arg_type_file();
     }
     
@@ -4888,7 +4891,8 @@ public final class arg_type extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-CACHED-RELATION-ARG-OK?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return arg_type.clear_cached_relation_arg_okP();
         }
     }
@@ -4899,7 +4903,8 @@ public final class arg_type extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VARIABLE-TERM-WRT-ARG-TYPE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return arg_type.variable_term_wrt_arg_typeP(arg1);
         }
     }
@@ -4923,55 +4928,68 @@ public final class arg_type extends SubLTranslatedFile
             this.$atomicP = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$arg_constraint_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$sentence;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$mt;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$test_function;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$test_args;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$closedP;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$atomicP;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$sentence = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$mt = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$test_function = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$test_args = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$closedP = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$atomicP = value;
         }
         
@@ -4986,7 +5004,8 @@ public final class arg_type extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ARG-CONSTRAINT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return arg_type.arg_constraint_p(arg1);
         }
     }

@@ -40,6 +40,11 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLNumber;
  */
 abstract public class LispInteger extends AbstractSubLNumber implements java.io.Serializable
 {
+    @Override
+    public LispInteger toLispObject()
+    {
+    	return this;
+    }
 
   public static LispInteger getInstance(long l) {
       if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)

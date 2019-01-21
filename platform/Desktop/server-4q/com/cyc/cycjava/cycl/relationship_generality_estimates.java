@@ -254,15 +254,18 @@ public final class relationship_generality_estimates extends SubLTranslatedFile
         return (SubLObject)relationship_generality_estimates.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_relationship_generality_estimates_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_relationship_generality_estimates_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_relationship_generality_estimates_file();
     }
     

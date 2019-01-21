@@ -33,6 +33,7 @@ public class LargeBeanView extends BeanView implements Customizer {
 		this(null);
 	}
 
+	@Override
 	public Dimension getPreferredSize() {
 		/*
 		 * Dimension dim = super.getPreferredSize(); int w,h; w =
@@ -41,10 +42,12 @@ public class LargeBeanView extends BeanView implements Customizer {
 		return Utility.getConstrainedDimension(getMinimumSize(), super.getPreferredSize(), getMaximumSize());
 	}
 
+	@Override
 	public Dimension getMinimumSize() {
 		return new Dimension(400, 350);
 	}
 
+	@Override
 	public Dimension getMaximumSize() {
 		return new Dimension(800, 600); // Toolkit.getDefaultToolkit().getScreenSize();
 	}
@@ -53,6 +56,7 @@ public class LargeBeanView extends BeanView implements Customizer {
 	 * Delegates directly to setBean(...). This method is needed to conform to
 	 * the Customizer interface.
 	 */
+	@Override
 	public void setObject(Object o) {
 		setBean(o);
 	}
@@ -61,6 +65,7 @@ public class LargeBeanView extends BeanView implements Customizer {
 	 * This method is needed to conform to the Customizer interface. It doesn't
 	 * do anything yet.
 	 */
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 	}
 
@@ -68,9 +73,11 @@ public class LargeBeanView extends BeanView implements Customizer {
 	 * This method is needed to conform to the Customizer interface. It doesn't
 	 * do anything yet.
 	 */
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 	}
 
+	@Override
 	protected void beanChanged(Object oldBean, Object newBean) {
 		removeAll();
 		initGUI();

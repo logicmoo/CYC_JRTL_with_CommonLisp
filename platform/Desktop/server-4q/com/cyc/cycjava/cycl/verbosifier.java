@@ -914,15 +914,18 @@ public final class verbosifier extends SubLTranslatedFile
         return (SubLObject)verbosifier.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_verbosifier_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_verbosifier_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_verbosifier_file();
     }
 
@@ -962,7 +965,8 @@ public final class verbosifier extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EXPANDIBLE-EL-RELATION-EXPRESSION?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return verbosifier.expandible_el_relation_expressionP(arg1, (SubLObject)UNPROVIDED);
         }
     }
@@ -973,7 +977,8 @@ public final class verbosifier extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EXPANDIBLE-EL-RELATION-EXPRESSION?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return verbosifier.expandible_el_relation_expressionP(arg1, arg2);
         }
     }

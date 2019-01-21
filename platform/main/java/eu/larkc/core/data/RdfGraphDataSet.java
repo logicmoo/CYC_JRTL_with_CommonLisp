@@ -26,6 +26,7 @@ public class RdfGraphDataSet extends RdfGraphBase {
 		this.endpoint = endpoint;
 	}
 
+	@Override
 	public CloseableIterator<Statement> getStatements() {
 		String q = String.format(
 				"construct {?s ?p ?o} FROM <%s> WHERE {?s ?p ?o}", getName());
@@ -35,6 +36,7 @@ public class RdfGraphDataSet extends RdfGraphBase {
 		return new GraphCloseableIterator(getName(), inner);
 	}
 	
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof RdfGraphDataSet == false) {
 			return false;
@@ -49,6 +51,7 @@ public class RdfGraphDataSet extends RdfGraphBase {
 		return true;
 	}
 
+	@Override
 	public int hashCode() {
 		// the mutable hashcodes are risky (timeStamp)
 		return getName().toString().hashCode();
@@ -71,24 +74,29 @@ public class RdfGraphDataSet extends RdfGraphBase {
 			this.inner = inner;
 		}
 
+		@Override
 		public boolean hasNext() {
 			return inner.hasNext();
 		}
 
+		@Override
 		public Statement next() {
 			Statement s = inner.next();
 			return new ContextStatementImpl(s.getSubject(), s.getPredicate(), s
 					.getObject(), graph);
 		}
 
+		@Override
 		public void remove() {
 			inner.remove();
 		}
 
+		@Override
 		public void close() {
 			inner.close();
 		}
 
+		@Override
 		public boolean isClosed() {
 			return inner.isClosed();
 		}

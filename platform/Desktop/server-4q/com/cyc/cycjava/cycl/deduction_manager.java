@@ -267,15 +267,18 @@ public final class deduction_manager extends SubLTranslatedFile
         return (SubLObject)deduction_manager.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_deduction_manager_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_deduction_manager_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_deduction_manager_file();
     }
     

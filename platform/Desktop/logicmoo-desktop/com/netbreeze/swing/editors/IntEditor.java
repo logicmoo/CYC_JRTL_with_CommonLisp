@@ -13,11 +13,13 @@ public class IntEditor extends PropertyEditorSupport implements PropertyChangeLi
   public IntEditor() {
   }
 
-  public void setAsText(String text) throws IllegalArgumentException {
+  @Override
+public void setAsText(String text) throws IllegalArgumentException {
     setValue(Integer.valueOf(text));
   }
 
-  public void setValue(Object value) {
+  @Override
+public void setValue(Object value) {
     if (value != null && !(value.equals(getValue()))) {
       Integer intValue;
       try {
@@ -49,7 +51,8 @@ public class IntEditor extends PropertyEditorSupport implements PropertyChangeLi
     }
   }
 
-  public Component getCustomEditor() {
+  @Override
+public Component getCustomEditor() {
     if (field == null) {
       try {
         field = new NumberField(Integer.class, new Integer(0), true);
@@ -65,11 +68,13 @@ public class IntEditor extends PropertyEditorSupport implements PropertyChangeLi
     return field;
   }
 
-  public boolean supportsCustomEditor() {
+  @Override
+public boolean supportsCustomEditor() {
     return true;
   }
 
-  public void propertyChange(PropertyChangeEvent evt) {
+  @Override
+public void propertyChange(PropertyChangeEvent evt) {
     super.setValue(evt.getNewValue());
   }
 }

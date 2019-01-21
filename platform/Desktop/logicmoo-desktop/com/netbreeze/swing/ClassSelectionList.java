@@ -171,7 +171,8 @@ public class ClassSelectionList extends JPanel {
         // create new list control and override getToolTipText method to display
         // tooltip containing info about class or interface
         list = new JList(model) {
-            public String getToolTipText(java.awt.event.MouseEvent ev) {
+            @Override
+			public String getToolTipText(java.awt.event.MouseEvent ev) {
                 if (ev == null) return null;
                 // gets collection index from position of cursor on the screen
                 int index = list.locationToIndex(new Point(ev.getX(), ev.getY()));
@@ -229,7 +230,8 @@ public class ClassSelectionList extends JPanel {
      * Add a PropertyChangeListener to the listener list.
      * @param l The listener to add.
      */
-    public void addPropertyChangeListener(java.beans.PropertyChangeListener l) {
+    @Override
+	public void addPropertyChangeListener(java.beans.PropertyChangeListener l) {
         propertySupport.addPropertyChangeListener (l);
     }
 
@@ -237,7 +239,8 @@ public class ClassSelectionList extends JPanel {
      * Removes a PropertyChangeListener from the listener list.
      * @param l The listener to remove.
      */
-    public void removePropertyChangeListener(java.beans.PropertyChangeListener l) {
+    @Override
+	public void removePropertyChangeListener(java.beans.PropertyChangeListener l) {
         propertySupport.removePropertyChangeListener (l);
     }
 
@@ -413,7 +416,8 @@ public class ClassSelectionList extends JPanel {
             this.data = data;
         }
 
-        public int compareTo(Object o) {
+        @Override
+		public int compareTo(Object o) {
           ListData listData = (ListData) o;
           Class c = listData.getData();
           String thisClass = Utility.getShortClassName(data);
@@ -440,7 +444,8 @@ public class ClassSelectionList extends JPanel {
          * get string representation of list data - name of the class
          * @return string representation of class.
          */
-        public String toString() {
+        @Override
+		public String toString() {
             return getClassName(data);
         }
     }
@@ -471,7 +476,8 @@ public class ClassSelectionList extends JPanel {
          *  @param cellHasFocus True if the specified cell has the focus.
          *  @return label component configured to display cell for list
          */
-        public Component getListCellRendererComponent(JList list, Object value,
+        @Override
+		public Component getListCellRendererComponent(JList list, Object value,
                 int index, boolean isSelected, boolean cellHasFocus) {
           try {
             setComponentOrientation(list.getComponentOrientation());
@@ -496,7 +502,8 @@ public class ClassSelectionList extends JPanel {
          * standard method to paint non standard selection for list control.
          * @param g the specified Graphics window
          */
-        public void paint(Graphics g) {
+        @Override
+		public void paint(Graphics g) {
             Icon icon = getIcon();
 
           try {
@@ -539,7 +546,8 @@ public class ClassSelectionList extends JPanel {
          *  Called whenever the value of the selection in the list changes.
          *  @param e The event that characterizes the change.
          */
-        public void valueChanged(ListSelectionEvent e) {
+        @Override
+		public void valueChanged(ListSelectionEvent e) {
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 
             if (e.getValueIsAdjusting() == false) {
@@ -646,7 +654,8 @@ public class ClassSelectionList extends JPanel {
          * @param index an index into this list.
          * @see javax.swing.DefaultListModel#getElementAt(int )
          */
-        public Object getElementAt(int index) {
+        @Override
+		public Object getElementAt(int index) {
             return getValues().get(index);
         }
         /**
@@ -654,7 +663,8 @@ public class ClassSelectionList extends JPanel {
          * @return the number of components in this list.
          * @see Vector#size()
          */
-        public int getSize() {
+        @Override
+		public int getSize() {
             return getValues().size();
         }
     }

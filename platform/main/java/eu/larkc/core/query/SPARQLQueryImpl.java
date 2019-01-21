@@ -66,10 +66,12 @@ public class SPARQLQueryImpl implements SPARQLQuery {
 		this(query, RDF.TYPE.stringValue());
 	}
 
+	@Override
 	public boolean isAsk() {
 		return query instanceof ParsedBooleanQuery;
 	}
 
+	@Override
 	public boolean isDescribe() {
 		if (getGraphQuery() < 0) {
 			return true;
@@ -77,6 +79,7 @@ public class SPARQLQueryImpl implements SPARQLQuery {
 		return false;
 	}
 
+	@Override
 	public boolean isConstruct() {
 		if (getGraphQuery() > 0) {
 			return true;
@@ -84,16 +87,19 @@ public class SPARQLQueryImpl implements SPARQLQuery {
 		return false;
 	}
 
+	@Override
 	public boolean isSelect() {
 		return query instanceof ParsedTupleQuery;
 	}
 
+	@Override
 	public DataSet getDataSet() {
 		SPARQLEndpoint local = DataFactory.INSTANCE.createRdfStoreConnection();
 		return new DataSetImpl(local, query.getDataset().getDefaultGraphs(),
 				query.getDataset().getNamedGraphs());
 	}
 
+	@Override
 	public void setDataSet(DataSet ds) {
 		if (LocalStoreSPARQLService.class.isInstance(ds.getSPARQLEndpoint()) == false) {
 			throw new IllegalArgumentException(
@@ -112,10 +118,12 @@ public class SPARQLQueryImpl implements SPARQLQuery {
 		query.setDataset(d);
 	}
 
+	@Override
 	public URI getLabelledGroup() {
 		return label;
 	}
 
+	@Override
 	public void setLabelledGroup(URI label) {
 		this.label = label;
 	}
@@ -124,6 +132,7 @@ public class SPARQLQueryImpl implements SPARQLQuery {
 		return query;
 	}
 
+	@Override
 	public String toString() {
 		return originalQuery;
 	}

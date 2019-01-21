@@ -46,7 +46,8 @@ public class Settings implements java.io.Serializable {
     }
   }
 
-  protected void finalize() {
+  @Override
+protected void finalize() {
     try {
       saveToFile();
     } catch (Exception err) {

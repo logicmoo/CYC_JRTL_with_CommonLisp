@@ -41,7 +41,8 @@ public final class ListRegistersBuffer extends Buffer
         setInitialized(true);
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         if (!isLoaded()) {
             loadInternal();
@@ -51,7 +52,8 @@ public final class ListRegistersBuffer extends Buffer
         return LOAD_COMPLETED;
     }
 
-    public void reload()
+    @Override
+	public void reload()
     {
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
             Editor ed = it.nextEditor();
@@ -132,12 +134,14 @@ public final class ListRegistersBuffer extends Buffer
         }
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         return "listRegisters";
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return "listRegisters";
     }

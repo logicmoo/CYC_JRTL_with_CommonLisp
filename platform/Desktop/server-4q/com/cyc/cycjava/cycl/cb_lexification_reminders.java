@@ -297,15 +297,18 @@ public final class cb_lexification_reminders extends SubLTranslatedFile
         return (SubLObject)cb_lexification_reminders.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_lexification_reminders_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_lexification_reminders_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_lexification_reminders_file();
     }
     

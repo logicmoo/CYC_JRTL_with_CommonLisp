@@ -29,7 +29,8 @@ final class RETokenEnd extends REToken {
     this.newline = newline;
   }
 
-    boolean match(CharIndexed input, REMatch mymatch) {
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) {
 	char ch = input.charAt(mymatch.index);
 	if (ch == CharIndexed.OUT_OF_BOUNDS)
 	    return ((mymatch.eflags & RE.REG_NOTEOL)>0) ? 
@@ -49,7 +50,8 @@ final class RETokenEnd extends REToken {
 	return false;
     }
 
-  void dump(StringBuffer os) {
+  @Override
+void dump(StringBuffer os) {
     os.append('$');
   }
 }

@@ -11,13 +11,16 @@ public class cycl extends InitializingSubLFile
 {
     public static final SubLFile me;
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         try {
             SubLFiles.initialize("eu.cyc.sparql.server.Sparql");
             SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");

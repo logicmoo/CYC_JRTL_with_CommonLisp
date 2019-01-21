@@ -744,15 +744,18 @@ public final class red_implementation extends SubLTranslatedFile
         return (SubLObject)red_implementation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_red_implementation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_red_implementation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_red_implementation_file();
     }
     

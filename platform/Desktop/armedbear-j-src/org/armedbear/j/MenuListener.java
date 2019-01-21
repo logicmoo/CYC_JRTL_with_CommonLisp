@@ -25,12 +25,14 @@ import javax.swing.event.MenuEvent;
 
 public final class MenuListener implements javax.swing.event.MenuListener
 {
-    public void menuCanceled(MenuEvent e)
+    @Override
+	public void menuCanceled(MenuEvent e)
     {
 //         Log.debug("menuCanceled " + e.toString());
     }
 
-    public void menuDeselected(MenuEvent e)
+    @Override
+	public void menuDeselected(MenuEvent e)
     {
 //         Log.debug("menuDeselected " + e.toString());
         if (e.getSource() instanceof org.armedbear.j.Menu) {
@@ -42,7 +44,8 @@ public final class MenuListener implements javax.swing.event.MenuListener
         Editor.isMenuSelected = false;
     }
 
-    public void menuSelected(MenuEvent e)
+    @Override
+	public void menuSelected(MenuEvent e)
     {
 //         Log.debug("menuSelected " + e.toString());
         if (e.getSource() instanceof org.armedbear.j.Menu) {

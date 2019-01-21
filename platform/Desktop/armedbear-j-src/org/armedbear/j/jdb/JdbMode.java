@@ -48,12 +48,14 @@ public final class JdbMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public ToolBar getToolBar(Frame frame)
+    @Override
+	public ToolBar getToolBar(Frame frame)
     {
         return JavaMode.getMode().getToolBar(frame);
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new JdbFormatter(buffer);
     }

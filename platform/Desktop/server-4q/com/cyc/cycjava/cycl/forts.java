@@ -1075,15 +1075,18 @@ public final class forts extends SubLTranslatedFile
         return (SubLObject)forts.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_forts_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_forts_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_forts_file();
     }
     
@@ -1203,7 +1206,8 @@ public final class forts extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FORT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return forts.fort_p(arg1);
         }
     }
@@ -1214,7 +1218,8 @@ public final class forts extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FORT-INTERNAL-ID"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return forts.fort_internal_id(arg1);
         }
     }
@@ -1225,7 +1230,8 @@ public final class forts extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INVALID-FORT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return forts.invalid_fortP(arg1);
         }
     }
@@ -1241,23 +1247,28 @@ public final class forts extends SubLTranslatedFile
             this.$narts = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$fort_id_index_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$constants;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$narts;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$constants = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$narts = value;
         }
         
@@ -1272,7 +1283,8 @@ public final class forts extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FORT-ID-INDEX-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return forts.fort_id_index_p(arg1);
         }
     }

@@ -160,15 +160,18 @@ public final class system_administration_utilities extends SubLTranslatedFile
         return (SubLObject)system_administration_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_system_administration_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_system_administration_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_system_administration_utilities_file();
     }
     

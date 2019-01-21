@@ -72,17 +72,20 @@ public abstract class BroadcastStream extends Stream
         return streams;
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.BROADCAST_STREAM;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.BROADCAST_STREAM;
     }
 
-    public LispObject typep(LispObject typeSpecifier)
+    @Override
+	public LispObject typep(LispObject typeSpecifier)
     {
         if (typeSpecifier == Symbol.BROADCAST_STREAM)
             return T;
@@ -91,14 +94,16 @@ public abstract class BroadcastStream extends Stream
         return super.typep(typeSpecifier);
     }
 
-    public LispObject listen()
+    @Override
+	public LispObject listen()
     {
         notSupported();
         // Not reached.
         return NIL;
     }
 
-    public LispObject fileLength()
+    @Override
+	public LispObject fileLength()
     {
         if (streams.length > 0)
             return streams[streams.length - 1].fileLength();
@@ -106,7 +111,8 @@ public abstract class BroadcastStream extends Stream
             return Fixnum.ZERO;
     }
 
-    public LispObject fileStringLength(LispObject arg)
+    @Override
+	public LispObject fileStringLength(LispObject arg)
     {
         if (streams.length > 0)
             return streams[streams.length - 1].fileStringLength(arg);
@@ -115,52 +121,60 @@ public abstract class BroadcastStream extends Stream
     }
 
     // Returns -1 at end of file.
-    protected int _readChar()
+    @Override
+	protected int _readChar()
     {
         notSupported();
         // Not reached.
         return -1;
     }
 
-    protected void _unreadChar(int n)
+    @Override
+	protected void _unreadChar(int n)
     {
         notSupported();
     }
 
-    protected boolean _charReady()
+    @Override
+	protected boolean _charReady()
     {
         notSupported();
         // Not reached.
         return false;
     }
 
-    public void _writeChar(char c)
+    @Override
+	public void _writeChar(char c)
     {
         for (int i = 0; i < streams.length; i++)
             streams[i]._writeChar(c);
     }
 
-    public void _writeChars(char[] chars, int start, int end)
+    @Override
+	public void _writeChars(char[] chars, int start, int end)
 
     {
         for (int i = 0; i < streams.length; i++)
             streams[i]._writeChars(chars, start, end);
     }
 
-    public void _writeString(String s)
+    @Override
+	public void _writeString(String s)
     {
         for (int i = 0; i < streams.length; i++)
             streams[i]._writeString(s);
     }
 
-    public void _writeLine(String s)
+    @Override
+	public void _writeLine(String s)
     {
         for (int i = 0; i < streams.length; i++)
             streams[i]._writeLine(s);
     }
 
     // Reads an 8-bit byte.
-    public int _readByte()
+    @Override
+	public int _readByte()
     {
         notSupported();
         // Not reached.
@@ -168,24 +182,28 @@ public abstract class BroadcastStream extends Stream
     }
 
     // Writes an 8-bit byte.
-    public void _writeByte(int n)
+    @Override
+	public void _writeByte(int n)
     {
         for (int i = 0; i < streams.length; i++)
             streams[i]._writeByte(n);
     }
 
-    public void _finishOutput()
+    @Override
+	public void _finishOutput()
     {
         for (int i = 0; i < streams.length; i++)
             streams[i]._finishOutput();
     }
 
-    public void _clearInput()
+    @Override
+	public void _clearInput()
     {
         notSupported();
     }
 
-    protected long _getFilePosition()
+    @Override
+	protected long _getFilePosition()
     {
         if (streams.length == 0)
             return 0;
@@ -193,12 +211,14 @@ public abstract class BroadcastStream extends Stream
             return streams[streams.length-1]._getFilePosition();
     }
 
-    protected boolean _setFilePosition(LispObject arg)
+    @Override
+	protected boolean _setFilePosition(LispObject arg)
     {
         return false;
     }
 
-    public void _close()
+    @Override
+	public void _close()
     {
         setOpen(false);
     }
@@ -208,7 +228,8 @@ public abstract class BroadcastStream extends Stream
         error(new TypeError("Operation is not supported for streams of type BROADCAST-STREAM."));
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         return unreadableString("BROADCAST-STREAM", true);
     }
@@ -217,11 +238,13 @@ public abstract class BroadcastStream extends Stream
     private static final Primitive MAKE_BROADCAST_STREAM =
         new Primitive("make-broadcast-stream", "&rest streams")
     {
-        public LispObject execute()
+        @Override
+		public LispObject execute()
         {
             return new SubLBroadcastStream(new Stream[0]);
         }
-        public LispObject execute(LispObject[] args)
+        @Override
+		public LispObject execute(LispObject[] args)
         {
             Stream[] streams = new Stream[args.length];
             for (int i = 0; i < args.length; i++) {
@@ -244,7 +267,8 @@ public abstract class BroadcastStream extends Stream
     private static final Primitive BROADCAST_STREAM_STREAMS =
         new Primitive("broadcast-stream-streams", "broadcast-stream")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof BroadcastStream) {
                 BroadcastStream stream = (BroadcastStream) arg;

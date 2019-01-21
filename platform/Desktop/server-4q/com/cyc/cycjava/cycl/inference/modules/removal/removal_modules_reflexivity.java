@@ -321,15 +321,18 @@ public final class removal_modules_reflexivity extends SubLTranslatedFile
         return (SubLObject)removal_modules_reflexivity.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_reflexivity_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_reflexivity_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_reflexivity_file();
     }
     
@@ -369,7 +372,8 @@ public final class removal_modules_reflexivity extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-REFLEXIVE-ONE-ARG-EXPAND"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_reflexivity.removal_reflexive_one_arg_expand(arg1, (SubLObject)$removal_reflexive_one_arg_expand$UnaryFunction.UNPROVIDED);
         }
     }
@@ -380,7 +384,8 @@ public final class removal_modules_reflexivity extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-REFLEXIVE-ONE-ARG-EXPAND"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return removal_modules_reflexivity.removal_reflexive_one_arg_expand(arg1, arg2);
         }
     }

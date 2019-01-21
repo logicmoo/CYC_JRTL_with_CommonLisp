@@ -42,7 +42,8 @@ public abstract class CompilationErrorBuffer extends Buffer
         setInitialized(true);
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         if (!isLoaded()) {
             if (getFirstLine() == null) {
@@ -132,13 +133,15 @@ public abstract class CompilationErrorBuffer extends Buffer
         return null;
     }
 
-    public boolean isModified()
+    @Override
+	public boolean isModified()
     {
         return false;
     }
 
     // For the buffer list.
-    public Icon getIcon()
+    @Override
+	public Icon getIcon()
     {
         return Utilities.getIconFromFile("jpty.png");
     }

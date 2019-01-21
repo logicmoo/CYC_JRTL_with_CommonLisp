@@ -81,6 +81,7 @@ ButtonFactory, AskIfEqual, UIAware, Action, ActionListener, KMCTrigger, GetDispl
 			TriggerForInstance.this.actionPerformed(e);
 		}
 
+		@Override
 		public String toString() {
 			return getShortLabel();
 		}
@@ -173,6 +174,7 @@ ButtonFactory, AskIfEqual, UIAware, Action, ActionListener, KMCTrigger, GetDispl
 
 	}
 
+	@Override
 	public DisplayContext getDisplayContext() {
 		if (displayContext != null)
 			return displayContext;
@@ -183,6 +185,7 @@ ButtonFactory, AskIfEqual, UIAware, Action, ActionListener, KMCTrigger, GetDispl
 		return super.getIdent();
 	}
 
+	@Override
 	public abstract Object getIdentityObject();
 
 	final public String getMenuName() {
@@ -195,6 +198,7 @@ ButtonFactory, AskIfEqual, UIAware, Action, ActionListener, KMCTrigger, GetDispl
 		return nym;
 	}
 
+	@Override
 	public String getMenuPath() {
 		boolean was = Debuggable.isNotShowingExceptions();
 		Debuggable.setDoNotShowExceptions(true);
@@ -221,6 +225,7 @@ ButtonFactory, AskIfEqual, UIAware, Action, ActionListener, KMCTrigger, GetDispl
 		return Utility.dref(targetBox);
 	}
 
+	@Override
 	final public int hashCode() {
 		return getIdentityObject().hashCode();
 	}
@@ -288,16 +293,19 @@ ButtonFactory, AskIfEqual, UIAware, Action, ActionListener, KMCTrigger, GetDispl
 			setMenuInfo();
 		}
 		MouseListener myMouseListener = new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 3)
 					return;
 				onMouseEvent(e);
 			}
 
+			@Override
 			public void mouseReleased(MouseEvent e) {
 				onMouseEvent(e);
 			}
 
+			@Override
 			public void mousePressed(MouseEvent e) {
 				//onMouseEvent(e);
 			}

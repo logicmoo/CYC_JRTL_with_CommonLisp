@@ -5,6 +5,7 @@ package com.cyc.tool.subl.util;
 
 import java.util.logging.Level;
 
+import org.armedbear.lisp.ControlTransfer;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 
@@ -18,17 +19,21 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 public abstract class SafeRunnable extends FromSubLisp implements Runnable {
 
 	@Override
+	public SafeRunnable toLispObject()
+	{
+		return this;
+	}
+	
+	@Override
 	public void run() {
 		try {
 			SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
 			safeRun();
-		} catch (SubLProcess.TerminationRequest tr) {
-		} catch (Exception e) {
-			try {
-				Errors.handleError(e);
-			} catch (CatchableThrow t) {
-				t.printStackTrace();
-			}
+		} catch (ControlTransfer tr) {
+			throw tr;
+		} catch (SubLProcess.TerminationRequest tr) {	
+		} catch (Throwable e) {
+			Errors.handleError(e);
 		}
 	}
 

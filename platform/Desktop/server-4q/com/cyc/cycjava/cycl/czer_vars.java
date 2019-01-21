@@ -530,15 +530,18 @@ public final class czer_vars extends SubLTranslatedFile
         return (SubLObject)czer_vars.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_czer_vars_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_czer_vars_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_czer_vars_file();
     }
     

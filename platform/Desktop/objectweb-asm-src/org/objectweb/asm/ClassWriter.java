@@ -577,7 +577,8 @@ public class ClassWriter implements ClassVisitor {
     // Implementation of the ClassVisitor interface
     // ------------------------------------------------------------------------
 
-    public void visit(
+    @Override
+	public void visit(
         final int version,
         final int access,
         final String name,
@@ -602,7 +603,8 @@ public class ClassWriter implements ClassVisitor {
         }
     }
 
-    public void visitSource(final String file, final String debug) {
+    @Override
+	public void visitSource(final String file, final String debug) {
         if (file != null) {
             sourceFile = newUTF8(file);
         }
@@ -611,7 +613,8 @@ public class ClassWriter implements ClassVisitor {
         }
     }
 
-    public void visitOuterClass(
+    @Override
+	public void visitOuterClass(
         final String owner,
         final String name,
         final String desc)
@@ -622,7 +625,8 @@ public class ClassWriter implements ClassVisitor {
         }
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -643,12 +647,14 @@ public class ClassWriter implements ClassVisitor {
         return aw;
     }
 
-    public void visitAttribute(final Attribute attr) {
+    @Override
+	public void visitAttribute(final Attribute attr) {
         attr.next = attrs;
         attrs = attr;
     }
 
-    public void visitInnerClass(
+    @Override
+	public void visitInnerClass(
         final String name,
         final String outerName,
         final String innerName,
@@ -664,7 +670,8 @@ public class ClassWriter implements ClassVisitor {
         innerClasses.putShort(access);
     }
 
-    public FieldVisitor visitField(
+    @Override
+	public FieldVisitor visitField(
         final int access,
         final String name,
         final String desc,
@@ -674,7 +681,8 @@ public class ClassWriter implements ClassVisitor {
         return new FieldWriter(this, access, name, desc, signature, value);
     }
 
-    public MethodVisitor visitMethod(
+    @Override
+	public MethodVisitor visitMethod(
         final int access,
         final String name,
         final String desc,
@@ -691,7 +699,8 @@ public class ClassWriter implements ClassVisitor {
                 computeFrames);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
     }
 
     // ------------------------------------------------------------------------

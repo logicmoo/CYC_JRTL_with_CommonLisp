@@ -936,15 +936,18 @@ public final class applicable_relations extends SubLTranslatedFile
         return (SubLObject)applicable_relations.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_applicable_relations_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_applicable_relations_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_applicable_relations_file();
     }
     

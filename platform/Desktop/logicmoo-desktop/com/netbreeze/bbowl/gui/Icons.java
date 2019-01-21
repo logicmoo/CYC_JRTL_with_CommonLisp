@@ -63,15 +63,18 @@ public class Icons {
   }
 
   static class DummyIcon implements Icon, java.io.Serializable {
-    public int getIconWidth() {
+    @Override
+	public int getIconWidth() {
       return 16;
     }
 
-    public int getIconHeight() {
+    @Override
+	public int getIconHeight() {
       return 16;
     }
 
-    public void paintIcon(Component c,
+    @Override
+	public void paintIcon(Component c,
                                 Graphics g,
                                 int x,
                                 int y) {

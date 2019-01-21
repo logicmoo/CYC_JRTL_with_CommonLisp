@@ -60,36 +60,42 @@ public final class MailboxFileWriter extends BufferedWriter
         return offset;
     }
 
-    public void write(int c) throws IOException
+    @Override
+	public void write(int c) throws IOException
     {
         super.write(c);
         ++offset;
     }
 
-    public void write(char[] cbuf, int off, int len) throws IOException
+    @Override
+	public void write(char[] cbuf, int off, int len) throws IOException
     {
         super.write(cbuf, off, len);
         offset += len;
     }
 
-    public void write(String s, int off, int len) throws IOException
+    @Override
+	public void write(String s, int off, int len) throws IOException
     {
         super.write(s, off, len);
         offset += len;
     }
 
-    public void newLine() throws IOException
+    @Override
+	public void newLine() throws IOException
     {
         super.write('\n'); // Always use '\n' as line terminator.
         ++offset;
     }
 
-    public void flush() throws IOException
+    @Override
+	public void flush() throws IOException
     {
         super.flush();
     }
 
-    public void close() throws IOException
+    @Override
+	public void close() throws IOException
     {
         super.close();
     }

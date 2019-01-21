@@ -70,7 +70,8 @@ public final class HttpLoadProcess extends LoadProcess implements BackgroundProc
         contentType = s;
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         if (buffer != null) {
             buffer.setBusy(true);

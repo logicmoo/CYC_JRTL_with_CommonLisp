@@ -21,6 +21,7 @@ public class StringEditor extends GoodPropertyEditorSupport {
 		return true;
 	}
 
+	@Override
 	public void setValue(Object value) {
 		if (value instanceof String || value == null) {
 			super.setValue(value);

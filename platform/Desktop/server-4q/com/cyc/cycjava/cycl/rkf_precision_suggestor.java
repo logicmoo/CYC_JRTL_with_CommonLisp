@@ -1071,15 +1071,18 @@ public final class rkf_precision_suggestor extends SubLTranslatedFile
         return (SubLObject)rkf_precision_suggestor.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_precision_suggestor_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_precision_suggestor_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_precision_suggestor_file();
     }
     

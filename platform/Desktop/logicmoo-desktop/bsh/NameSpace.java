@@ -798,7 +798,8 @@ public class NameSpace
 	/**
 		@deprecated See #setTypedVariable( String, Class, Object, Modifiers )
 	*/
-    public void	setTypedVariable(
+    @Deprecated
+	public void	setTypedVariable(
 		String	name, Class type, Object value,	boolean	isFinal )
 		throws UtilEvalError
 	{
@@ -1405,6 +1406,7 @@ public class NameSpace
 		@return all variable and method names in this and all parent
 		namespaces
 	*/
+	@Override
 	public String [] getAllNames()
 	{
 		Vector vec = new Vector();
@@ -1436,6 +1438,7 @@ public class NameSpace
 		Implements NameSource
 		Add a listener who is notified upon changes to names in this space.
 	*/
+	@Override
 	public void addNameSourceListener( NameSource.Listener listener ) {
 		if ( nameSourceListeners == null )
 			nameSourceListeners = new Vector();
@@ -1453,6 +1456,7 @@ public class NameSpace
 	}
 
 
+	@Override
 	public String toString() {
 		return "NameSpace: "
 			+ ( nsName==null
@@ -1515,6 +1519,7 @@ public class NameSpace
 	/**
 		Clear all cached classes and names
 	*/
+	@Override
 	public void classLoaderChanged() {
 		nameSpaceChanged();
 	}

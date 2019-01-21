@@ -426,15 +426,18 @@ public final class removal_modules_nth_largest_element extends SubLTranslatedFil
         return (SubLObject)removal_modules_nth_largest_element.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_nth_largest_element_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_nth_largest_element_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_nth_largest_element_file();
     }
     

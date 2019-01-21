@@ -87,7 +87,8 @@ public class ConstraintRule extends Literal implements Comparable{
      *
      * @return a clone of this instance
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         return new ConstraintRule((CycList) this.formula.clone());
     }
 

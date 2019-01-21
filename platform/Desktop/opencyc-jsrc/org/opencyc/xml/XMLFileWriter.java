@@ -56,7 +56,8 @@ public class XMLFileWriter extends XMLWriter {
      * to the current indentation level, if <code>false</code> is indented with respect to
      * the beginning of the line.
      */
-    public void indentPrint (String string, int indent, boolean relative) throws java.io.IOException {
+    @Override
+	public void indentPrint (String string, int indent, boolean relative) throws java.io.IOException {
         this.setIndent(indent, relative);
         String newString = this.indentString + string;
         int newStringLength = newString.length();
@@ -68,21 +69,24 @@ public class XMLFileWriter extends XMLWriter {
      *
      * @param string the string to be printed.
      */
-    public void print (String string) throws java.io.IOException {
+    @Override
+	public void print (String string) throws java.io.IOException {
         writer.write(string, 0, string.length());
     }
 
     /**
      * Flushes the <code>FileWriter</code> in the field @see #writer.
      */
-    public void flush () throws java.io.IOException {
+    @Override
+	public void flush () throws java.io.IOException {
         writer.flush();
     }
 
   /**
    * Closes the <code>FileWriter</code> in the field @see #writer.
    */
-  public void close() throws java.io.IOException {
+  @Override
+public void close() throws java.io.IOException {
     writer.close();
   }
 

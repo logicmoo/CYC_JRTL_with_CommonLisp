@@ -940,15 +940,18 @@ public final class rule_applicability_tree extends SubLTranslatedFile
         return (SubLObject)rule_applicability_tree.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rule_applicability_tree_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rule_applicability_tree_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rule_applicability_tree_file();
     }
     

@@ -1724,15 +1724,18 @@ public final class kif extends SubLTranslatedFile
         return (SubLObject)kif.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kif_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kif_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kif_file();
     }
     
@@ -1911,15 +1914,18 @@ public final class kif extends SubLTranslatedFile
             this.$print_string = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$kif_term_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$print_string;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$print_string = value;
         }
         
@@ -1934,7 +1940,8 @@ public final class kif extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("KIF-TERM-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kif.kif_term_p(arg1);
         }
     }

@@ -20,6 +20,7 @@ class DataLayerService {
 			ordi = Factory.createDefaultTSource();
 			Runtime rt = Runtime.getRuntime();
 			shutdownThread = new Thread() {
+				@Override
 				public void run() {
 					logger.info("Shutdown request is invoked!");
 					String persist = System.getProperty(NO_PERSIST, "true");

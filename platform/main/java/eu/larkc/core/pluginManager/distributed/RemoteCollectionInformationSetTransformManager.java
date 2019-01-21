@@ -58,6 +58,7 @@ public class RemoteCollectionInformationSetTransformManager extends RemotePlugin
 			super("Information Set Transformer");
 		}
 
+		@Override
 		public void run() {
 			for (;;) {
 				PluginManager.Message controlMessage = getNextControlMessage();

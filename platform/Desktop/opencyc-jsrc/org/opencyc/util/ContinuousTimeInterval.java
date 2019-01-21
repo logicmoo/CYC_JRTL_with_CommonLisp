@@ -153,7 +153,8 @@ public class ContinuousTimeInterval extends AbstractTimeInterval {
    * @return the corresponding CycObject
    * @see org.opencyc.cycobject.CycObject
    */
-  public CycObject toCycTerm() {
+  @Override
+public CycObject toCycTerm() {
     //@TODO -- Handle Terminus start/ends.
     try {
       return new CycNaut(getCycFunctor(), getCycTermForStart(),

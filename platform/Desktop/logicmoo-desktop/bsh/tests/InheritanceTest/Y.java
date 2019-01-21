@@ -1,6 +1,7 @@
 package bsh.tests. InheritanceTest;
 
 public class Y extends X implements C {
+	@Override
 	public void c() {
 		System.out.println("Y.c()");
 	}

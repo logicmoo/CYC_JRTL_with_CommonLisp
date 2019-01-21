@@ -73,7 +73,8 @@ public class SparqlGraph extends JenaWrappedGraph implements GraphWithPerform, G
         }
     }
     
-    public void add(final Triple arg0) throws AddDeniedException {
+    @Override
+	public void add(final Triple arg0) throws AddDeniedException {
         this.performAdd(arg0);
     }
     
@@ -89,7 +90,8 @@ public class SparqlGraph extends JenaWrappedGraph implements GraphWithPerform, G
         }
     }
     
-    public void performAdd(final Triple t) {
+    @Override
+	public void performAdd(final Triple t) {
         final String updateString = "INSERT DATA { " + ((this.graphURI != null) ? ("GRAPH <" + this.graphURI + "> { ") : "") + sparqlNodeUpdate(t.getSubject(), "") + " " + sparqlNodeUpdate(t.getPredicate(), "") + " " + sparqlNodeUpdate(t.getObject(), "") + " } " + ((this.graphURI != null) ? " } " : "");
         if (this.graphURI != null) {
             SparqlGraph.log.info((Object)("=====> update to graph " + this.graphURI));
@@ -98,7 +100,8 @@ public class SparqlGraph extends JenaWrappedGraph implements GraphWithPerform, G
         this.executeUpdate(updateString);
     }
     
-    public void performDelete(final Triple t) {
+    @Override
+	public void performDelete(final Triple t) {
         final String updateString = "DELETE DATA { " + ((this.graphURI != null) ? ("GRAPH <" + this.graphURI + "> { ") : "") + sparqlNodeUpdate(t.getSubject(), "") + " " + sparqlNodeUpdate(t.getPredicate(), "") + " " + sparqlNodeUpdate(t.getObject(), "") + " } " + ((this.graphURI != null) ? " } " : "");
         this.executeUpdate(updateString);
     }
@@ -108,14 +111,17 @@ public class SparqlGraph extends JenaWrappedGraph implements GraphWithPerform, G
         this.executeUpdate(updateString);
     }
     
-    public void close() {
+    @Override
+	public void close() {
     }
     
-    public boolean contains(final Triple arg0) {
+    @Override
+	public boolean contains(final Triple arg0) {
         return this.contains(arg0.getSubject(), arg0.getPredicate(), arg0.getObject());
     }
     
-    public boolean contains(final Node subject, final Node predicate, final Node object) {
+    @Override
+	public boolean contains(final Node subject, final Node predicate, final Node object) {
         if (subject.isBlank() || predicate.isBlank() || object.isBlank()) {
             return false;
         }
@@ -132,15 +138,18 @@ public class SparqlGraph extends JenaWrappedGraph implements GraphWithPerform, G
         return result;
     }
     
-    public void delete(final Triple arg0) throws DeleteDeniedException {
+    @Override
+	public void delete(final Triple arg0) throws DeleteDeniedException {
         this.performDelete(arg0);
     }
     
-    public boolean dependsOn(final Graph arg0) {
+    @Override
+	public boolean dependsOn(final Graph arg0) {
         return false;
     }
     
-    public ExtendedIterator<Triple> find(final TripleMatch arg0) {
+    @Override
+	public ExtendedIterator<Triple> find(final TripleMatch arg0) {
         final Triple t = arg0.asTriple();
         return this.find(t.getSubject(), t.getPredicate(), t.getObject());
     }
@@ -186,7 +195,8 @@ public class SparqlGraph extends JenaWrappedGraph implements GraphWithPerform, G
         return sparqlNode(node, varName);
     }
     
-    public ExtendedIterator<Triple> find(final Node subject, final Node predicate, final Node object) {
+    @Override
+	public ExtendedIterator<Triple> find(final Node subject, final Node predicate, final Node object) {
         if (this.isVar(subject) || this.isVar(predicate) || this.isVar(object)) {
             final StringBuffer findQuery = new StringBuffer("SELECT * WHERE { \n");
             if (this.graphURI != null) {
@@ -217,50 +227,60 @@ public class SparqlGraph extends JenaWrappedGraph implements GraphWithPerform, G
         return node == null || node.isVariable() || node == Node.ANY;
     }
     
-    public BulkUpdateHandler getBulkUpdateHandler() {
+    @Override
+	public BulkUpdateHandler getBulkUpdateHandler() {
         if (this.bulkUpdateHandler == null) {
             this.bulkUpdateHandler = (BulkUpdateHandler)new SparqlGraphBulkUpdater(this);
         }
         return this.bulkUpdateHandler;
     }
     
-    public Capabilities getCapabilities() {
+    @Override
+	public Capabilities getCapabilities() {
         return SparqlGraph.capabilities;
     }
     
-    public GraphEventManager getEventManager() {
+    @Override
+	public GraphEventManager getEventManager() {
         if (this.eventManager == null) {
             this.eventManager = (GraphEventManager)new SimpleEventManager((Graph)this);
         }
         return this.eventManager;
     }
     
-    public PrefixMapping getPrefixMapping() {
+    @Override
+	public PrefixMapping getPrefixMapping() {
         return this.prefixMapping;
     }
     
-    public GraphStatisticsHandler getStatisticsHandler() {
+    @Override
+	public GraphStatisticsHandler getStatisticsHandler() {
         return null;
     }
     
-    public TransactionHandler getTransactionHandler() {
+    @Override
+	public TransactionHandler getTransactionHandler() {
         return null;
     }
     
-    public boolean isClosed() {
+    @Override
+	public boolean isClosed() {
         return false;
     }
     
-    public boolean isEmpty() {
+    @Override
+	public boolean isEmpty() {
         return this.size() == 0;
     }
     
-    public boolean isIsomorphicWith(final Graph arg0) {
+    @Override
+	public boolean isIsomorphicWith(final Graph arg0) {
         SparqlGraph.log.info((Object)"Hey dummy!");
         throw new UnsupportedOperationException("isIsomorphicWith() not supported by SPARQL graphs");
     }
     
-    public int size() {
+    @Override
+	public int size() {
         final int size = this.find(null, null, null).toList().size();
         return size;
     }
@@ -326,39 +346,48 @@ public class SparqlGraph extends JenaWrappedGraph implements GraphWithPerform, G
     static {
         log = LogFactory.getLog((Class)SparqlGraph.class);
         capabilities = (Capabilities)new Capabilities() {
-            public boolean addAllowed() {
+            @Override
+			public boolean addAllowed() {
                 return false;
             }
             
-            public boolean addAllowed(final boolean everyTriple) {
+            @Override
+			public boolean addAllowed(final boolean everyTriple) {
                 return false;
             }
             
-            public boolean canBeEmpty() {
+            @Override
+			public boolean canBeEmpty() {
                 return true;
             }
             
-            public boolean deleteAllowed() {
+            @Override
+			public boolean deleteAllowed() {
                 return false;
             }
             
-            public boolean deleteAllowed(final boolean everyTriple) {
+            @Override
+			public boolean deleteAllowed(final boolean everyTriple) {
                 return false;
             }
             
-            public boolean findContractSafe() {
+            @Override
+			public boolean findContractSafe() {
                 return true;
             }
             
-            public boolean handlesLiteralTyping() {
+            @Override
+			public boolean handlesLiteralTyping() {
                 return true;
             }
             
-            public boolean iteratorRemoveAllowed() {
+            @Override
+			public boolean iteratorRemoveAllowed() {
                 return false;
             }
             
-            public boolean sizeAccurate() {
+            @Override
+			public boolean sizeAccurate() {
                 return true;
             }
         };

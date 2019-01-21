@@ -555,15 +555,18 @@ public final class washington_post_restaurants_widgets extends SubLTranslatedFil
         return (SubLObject)washington_post_restaurants_widgets.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_washington_post_restaurants_widgets_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_washington_post_restaurants_widgets_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_washington_post_restaurants_widgets_file();
     }
     

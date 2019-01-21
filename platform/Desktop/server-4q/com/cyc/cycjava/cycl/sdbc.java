@@ -3584,15 +3584,18 @@ public final class sdbc extends SubLTranslatedFile
         return (SubLObject)sdbc.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sdbc_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sdbc_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sdbc_file();
     }
 
@@ -3629,103 +3632,128 @@ public final class sdbc extends SubLTranslatedFile
             this.$mailman = (SubLObject)CommonSymbols.NIL;
         }
 
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$sql_connection_native.structDecl;
         }
 
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$db;
         }
 
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$user;
         }
 
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$dbms_server;
         }
 
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$port;
         }
 
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$channel;
         }
 
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$statements;
         }
 
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$lock;
         }
 
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$subprotocol;
         }
 
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$proxy_server;
         }
 
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$error_handling;
         }
 
-        public SubLObject getField12() {
+        @Override
+		public SubLObject getField12() {
             return this.$tickets;
         }
 
-        public SubLObject getField13() {
+        @Override
+		public SubLObject getField13() {
             return this.$mailman;
         }
 
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$db = value;
         }
 
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$user = value;
         }
 
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$dbms_server = value;
         }
 
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$port = value;
         }
 
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$channel = value;
         }
 
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$statements = value;
         }
 
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$lock = value;
         }
 
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$subprotocol = value;
         }
 
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$proxy_server = value;
         }
 
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$error_handling = value;
         }
 
-        public SubLObject setField12(final SubLObject value) {
+        @Override
+		public SubLObject setField12(final SubLObject value) {
             return this.$tickets = value;
         }
 
-        public SubLObject setField13(final SubLObject value) {
+        @Override
+		public SubLObject setField13(final SubLObject value) {
             return this.$mailman = value;
         }
 
@@ -3740,7 +3768,8 @@ public final class sdbc extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SQL-CONNECTION-P"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sdbc.sql_connection_p(arg1);
         }
     }
@@ -3756,23 +3785,28 @@ public final class sdbc extends SubLTranslatedFile
             this.$result = (SubLObject)CommonSymbols.NIL;
         }
 
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$sql_ticket_native.structDecl;
         }
 
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$semaphore;
         }
 
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$result;
         }
 
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$semaphore = value;
         }
 
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$result = value;
         }
 
@@ -3787,7 +3821,8 @@ public final class sdbc extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SQL-TICKET-P"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sdbc.sql_ticket_p(arg1);
         }
     }
@@ -3805,31 +3840,38 @@ public final class sdbc extends SubLTranslatedFile
             this.$code = (SubLObject)CommonSymbols.NIL;
         }
 
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$sdbc_error_native.structDecl;
         }
 
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$type;
         }
 
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$message;
         }
 
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$code;
         }
 
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$type = value;
         }
 
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$message = value;
         }
 
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$code = value;
         }
 
@@ -3844,7 +3886,8 @@ public final class sdbc extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SDBC-ERROR-P"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sdbc.sdbc_error_p(arg1);
         }
     }
@@ -3870,63 +3913,78 @@ public final class sdbc extends SubLTranslatedFile
             this.$id = (SubLObject)CommonSymbols.NIL;
         }
 
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$sql_result_set_native.structDecl;
         }
 
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$rows;
         }
 
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$current;
         }
 
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$last;
         }
 
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$start;
         }
 
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$connection;
         }
 
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$block_size;
         }
 
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$id;
         }
 
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$rows = value;
         }
 
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$current = value;
         }
 
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$last = value;
         }
 
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$start = value;
         }
 
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$connection = value;
         }
 
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$block_size = value;
         }
 
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$id = value;
         }
 
@@ -3941,7 +3999,8 @@ public final class sdbc extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SQL-RESULT-SET-P"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sdbc.sql_result_set_p(arg1);
         }
     }
@@ -3965,55 +4024,68 @@ public final class sdbc extends SubLTranslatedFile
             this.$rs = (SubLObject)CommonSymbols.NIL;
         }
 
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$sql_statement_native.structDecl;
         }
 
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$connection;
         }
 
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$id;
         }
 
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$sql;
         }
 
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$settings;
         }
 
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$batch;
         }
 
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$rs;
         }
 
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$connection = value;
         }
 
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$id = value;
         }
 
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$sql = value;
         }
 
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$settings = value;
         }
 
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$batch = value;
         }
 
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$rs = value;
         }
 
@@ -4028,7 +4100,8 @@ public final class sdbc extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SQL-STATEMENT-P"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sdbc.sql_statement_p(arg1);
         }
     }

@@ -46,7 +46,8 @@ public class UndoLineEdit extends AbstractUndoableEdit implements Constants,
         preState = new State(buffer);
     }
 
-    public boolean addEdit(UndoableEdit edit)
+    @Override
+	public boolean addEdit(UndoableEdit edit)
     {
         if (edit instanceof UndoLineEdit) {
             UndoLineEdit e = (UndoLineEdit) edit;
@@ -56,7 +57,8 @@ public class UndoLineEdit extends AbstractUndoableEdit implements Constants,
         return false;
     }
 
-    public void undo()
+    @Override
+	public void undo()
     {
         super.undo();
         final Editor editor = Editor.currentEditor();
@@ -74,7 +76,8 @@ public class UndoLineEdit extends AbstractUndoableEdit implements Constants,
         }
     }
 
-    public void redo()
+    @Override
+	public void redo()
     {
         super.redo();
         final Editor editor = Editor.currentEditor();

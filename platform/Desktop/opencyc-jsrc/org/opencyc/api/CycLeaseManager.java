@@ -117,7 +117,8 @@ public class CycLeaseManager extends Thread {
   public static long CYC_API_SERVICES_LEASE_REQUEST_TIMEOUT_MILLIS = 120000;
 
   /** Performs periodic Cyc api service lease acquisition, and notifies listeners if the lease fails or is denied. */
-  public void run() {
+  @Override
+public void run() {
 
     //// Preconditions
     assert listeners != null : "listeners must not be null";
@@ -312,7 +313,8 @@ public class CycLeaseManager extends Thread {
      *
      * @return a string representation of this object
      */
-    public String toString() {
+    @Override
+	public String toString() {
       return "CycLeaseEvent (" + cycLeaseManagerReason.getReason() + ")";
     }
 

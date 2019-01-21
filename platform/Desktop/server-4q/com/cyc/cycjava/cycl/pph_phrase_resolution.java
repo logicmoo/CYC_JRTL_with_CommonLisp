@@ -3669,15 +3669,18 @@ public final class pph_phrase_resolution extends SubLTranslatedFile
         return (SubLObject)pph_phrase_resolution.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_phrase_resolution_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_phrase_resolution_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_phrase_resolution_file();
     }
     
@@ -3932,7 +3935,8 @@ public final class pph_phrase_resolution extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-CURRENT-LIST-ITEM-FORMULA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_phrase_resolution.pph_current_list_item_formula_p(arg1);
         }
     }
@@ -3943,7 +3947,8 @@ public final class pph_phrase_resolution extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-PHRASE-OUTPUT-ITEM-EMPTY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_phrase_resolution.pph_phrase_output_item_empty_p(arg1);
         }
     }
@@ -3954,7 +3959,8 @@ public final class pph_phrase_resolution extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-NTH-PHRASE-NAUT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_phrase_resolution.pph_nth_phrase_naut_p(arg1);
         }
     }
@@ -3965,7 +3971,8 @@ public final class pph_phrase_resolution extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-FINITE-VERB-PRED?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_phrase_resolution.pph_finite_verb_predP(arg1);
         }
     }
@@ -3976,7 +3983,8 @@ public final class pph_phrase_resolution extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-NON-PLURAL-NOUN-PRED?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_phrase_resolution.pph_non_plural_noun_predP(arg1);
         }
     }

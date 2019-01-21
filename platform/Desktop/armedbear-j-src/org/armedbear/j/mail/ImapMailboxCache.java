@@ -71,7 +71,8 @@ public final class ImapMailboxCache implements Serializable
     public void writeCache()
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 writeCacheInternal();
             }

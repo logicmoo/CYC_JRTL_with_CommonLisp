@@ -3551,15 +3551,18 @@ public final class form_translation extends SubLTranslatedFile
         return (SubLObject)form_translation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_form_translation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_form_translation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_form_translation_file();
     }
     

@@ -42,7 +42,8 @@ final class RETokenOneOf extends REToken {
     this.negative = negative;
   }
 
-  int getMinimumLength() {
+  @Override
+int getMinimumLength() {
     int min = Integer.MAX_VALUE;
     int x;
     for (int i=0; i < options.size(); i++) {
@@ -52,7 +53,8 @@ final class RETokenOneOf extends REToken {
     return min;
   }
 
-    boolean match(CharIndexed input, REMatch mymatch) {
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) {
     if (negative && (input.charAt(mymatch.index) == CharIndexed.OUT_OF_BOUNDS)) 
       return false;
 
@@ -101,7 +103,8 @@ final class RETokenOneOf extends REToken {
     // index+1 works for [^abc] lists, not for generic lookahead (--> index)
   }
 
-  void dump(StringBuffer os) {
+  @Override
+void dump(StringBuffer os) {
     os.append(negative ? "[^" : "(?:");
     for (int i = 0; i < options.size(); i++) {
       if (!negative && (i > 0)) os.append('|');

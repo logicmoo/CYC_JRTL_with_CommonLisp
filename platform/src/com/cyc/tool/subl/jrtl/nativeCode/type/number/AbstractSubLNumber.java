@@ -70,7 +70,7 @@ public abstract class AbstractSubLNumber extends FromSubLisp implements SubLNumb
 		else
 			Errors.error(this + " does not have a slot: " + fieldNum + ".");
 	}
-
+	
 	@Override
 	public BigDecimal bigDecimalValue() {
 		return new BigDecimal(""+getNativeNumber());
@@ -209,6 +209,7 @@ public abstract class AbstractSubLNumber extends FromSubLisp implements SubLNumb
 	}
 
 
+	@Override
 	public boolean eql(SubLObject obj) {
 		if (!obj.isNumber())
 			return false;
@@ -262,6 +263,7 @@ public abstract class AbstractSubLNumber extends FromSubLisp implements SubLNumb
 
 
 	// @todo get rid of duplication with AbstractSubLObject -APB
+	@Override
 	public void enforceType(SubLSymbol predicate) throws SubLException {
 		// @todo make special case unary filter functions for SubL predicates
 		// They should be created and initialized in UnaryFunction -APB
@@ -1105,6 +1107,11 @@ public abstract class AbstractSubLNumber extends FromSubLisp implements SubLNumb
 	public String printObject() {
 		  return printObjectImpl();
 	  }
+	@Override
+	public String princToString()
+	{
+		return printObject();
+	}
 	@Override
 	public String printObjectImpl() {
 		return getNativeNumber().toString();

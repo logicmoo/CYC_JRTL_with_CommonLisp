@@ -55,6 +55,7 @@ public class LocalCollectionInformationSetTransformManager extends LocalPluginMa
 			super("Information Set Transformer");
 		}
 
+		@Override
 		public void run() 
 		{
 			mTransformer.initialise();
@@ -165,6 +166,7 @@ public class LocalCollectionInformationSetTransformManager extends LocalPluginMa
 			this.cx = cx;
 		}
 		
+		@Override
 		public InformationSet call()
 		{
 			return mTransformer.transform(is, co, cx);

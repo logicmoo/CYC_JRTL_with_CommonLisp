@@ -31,7 +31,8 @@ import javax.swing.JTextField;
 
 public class ActionListener implements java.awt.event.ActionListener 
 {
-    public void actionPerformed(ActionEvent actionevent) {
+    @Override
+	public void actionPerformed(ActionEvent actionevent) {
         String as[] = { actionevent.paramString(), actionevent.getActionCommand() };
         int ai[] = { actionevent.getModifiers() };
 	long al[] = { actionevent.getWhen() }; // not yet used

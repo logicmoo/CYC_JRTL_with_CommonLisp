@@ -1937,15 +1937,18 @@ public final class tva_utilities extends SubLTranslatedFile
         return (SubLObject)tva_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_tva_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_tva_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_tva_utilities_file();
     }
     
@@ -2054,7 +2057,8 @@ public final class tva_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TVA-ASSERTION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return tva_utilities.tva_assertion_p(arg1);
         }
     }
@@ -2065,7 +2069,8 @@ public final class tva_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SOME-TRANSITIVE-VIA-ARG-ASSERTION?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return tva_utilities.some_transitive_via_arg_assertionP(arg1);
         }
     }
@@ -2076,7 +2081,8 @@ public final class tva_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SOME-CONSERVATIVE-VIA-ARG-ASSERTION?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return tva_utilities.some_conservative_via_arg_assertionP(arg1);
         }
     }
@@ -2087,7 +2093,8 @@ public final class tva_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-CACHED-SOME-TVA-FOR-PREDICATE"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return tva_utilities.clear_cached_some_tva_for_predicate();
         }
     }
@@ -2098,7 +2105,8 @@ public final class tva_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-CACHED-SOME-CVA-FOR-PREDICATE"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return tva_utilities.clear_cached_some_cva_for_predicate();
         }
     }
@@ -2109,7 +2117,8 @@ public final class tva_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-CACHED-TVA-SPEC-PREDS-AND-INVERSES"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return tva_utilities.clear_cached_tva_spec_preds_and_inverses();
         }
     }

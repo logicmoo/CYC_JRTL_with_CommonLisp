@@ -164,15 +164,18 @@ public final class file_vector_backed_map_exerciser extends SubLTranslatedFile
         return (SubLObject)file_vector_backed_map_exerciser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_file_vector_backed_map_exerciser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_file_vector_backed_map_exerciser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_file_vector_backed_map_exerciser_file();
     }
     

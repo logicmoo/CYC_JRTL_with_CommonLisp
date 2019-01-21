@@ -410,15 +410,18 @@ public final class wh_question extends SubLTranslatedFile
         return (SubLObject)wh_question.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_wh_question_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_wh_question_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_wh_question_file();
     }
     

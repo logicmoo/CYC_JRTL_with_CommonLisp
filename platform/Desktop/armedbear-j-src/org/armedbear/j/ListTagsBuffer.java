@@ -53,7 +53,8 @@ public final class ListTagsBuffer extends Buffer
         setInitialized(true);
     }
 
-    public Position getInitialDotPos()
+    @Override
+	public Position getInitialDotPos()
     {
         for (Line line = getFirstLine(); line != null; line = line.next()) {
             if (line instanceof TagLine)

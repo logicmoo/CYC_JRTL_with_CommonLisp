@@ -178,7 +178,8 @@ public class CycConstant extends CycFort implements Serializable {
    * @param indent an int that specifies by how many spaces to indent
    * @param relative a boolean; if true indentation is relative, otherwise absolute
    */
-  public void toXML(XMLWriter xmlWriter, int indent, boolean relative)
+  @Override
+public void toXML(XMLWriter xmlWriter, int indent, boolean relative)
   throws IOException {
     xmlWriter.printXMLStartTag(constantXMLTag, indent, relative, true);
     int subIndent = indentLength;
@@ -201,7 +202,8 @@ public class CycConstant extends CycFort implements Serializable {
    *
    * @return the hash code for the <tt>CycConstant</tt>
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return getGuid().hashCode();
   }
   
@@ -211,7 +213,8 @@ public class CycConstant extends CycFort implements Serializable {
    * @param object the <tt>Object</tt> for equality comparison
    * @return equals <tt>boolean</tt> value indicating equality or non-equality.
    */
-  public boolean equals(Object object) {
+  @Override
+public boolean equals(Object object) {
     if (! (object instanceof CycConstant))
       return false;
     Guid thisGuid = getGuid();
@@ -225,7 +228,8 @@ public class CycConstant extends CycFort implements Serializable {
    * @param object the <tt>Object</tt> for equality comparison
    * @return equals <tt>boolean</tt> value indicating equality or non-equality.
    */
-  public boolean equalsAtEL(Object object) {
+  @Override
+public boolean equalsAtEL(Object object) {
     return equals(object);
   }
   
@@ -239,7 +243,8 @@ public class CycConstant extends CycFort implements Serializable {
   /**
    * Returns a String representation of the <tt>CycConstant</tt>.
    */
-  public String toString() {
+  @Override
+public String toString() {
     if (isFree)
       return "FREE";
     else if (isInvalid)
@@ -255,7 +260,8 @@ public class CycConstant extends CycFort implements Serializable {
    *
    * @return the name of the <tt>CycConstant</tt> with "#$" prefixed.
    */
-  public String cyclify() {
+  @Override
+public String cyclify() {
     if (isFree)
       return "FREE";
     else if (isInvalid)
@@ -269,7 +275,8 @@ public class CycConstant extends CycFort implements Serializable {
    *
    * @return this object in a form suitable for use as an <tt>CycList</tt> api expression value
    */
-  public Object cycListApiValue() {
+  @Override
+public Object cycListApiValue() {
     return this;
   }
   
@@ -298,7 +305,8 @@ public class CycConstant extends CycFort implements Serializable {
    * a symbol or variable will return the empty list.
    * @return a list of all constants refered to by this CycObject
    **/
-  public List getReferencedConstants() {
+  @Override
+public List getReferencedConstants() {
     List result = new ArrayList();
     result.add(this);
     return result;

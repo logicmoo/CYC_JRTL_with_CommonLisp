@@ -1991,14 +1991,17 @@ public final class kb_object_manager extends SubLTranslatedFile {
 		return (SubLObject) kb_object_manager.NIL;
 	}
 
+	@Override
 	public void declareFunctions() {
 		declare_kb_object_manager_file();
 	}
 
+	@Override
 	public void initializeVariables() {
 		init_kb_object_manager_file();
 	}
 
+	@Override
 	public void runTopLevelForms() {
 		setup_kb_object_manager_file();
 	}
@@ -2200,118 +2203,147 @@ public final class kb_object_manager extends SubLTranslatedFile {
 			this.$dummy3 = (SubLObject) CommonSymbols.NIL;
 		}
 
+		@Override
 		public SubLStructDecl getStructDecl() {
 			return (SubLStructDecl) $kb_object_manager_native.structDecl;
 		}
 
+		@Override
 		public SubLObject getField2() {
 			return this.$name;
 		}
 
+		@Override
 		public SubLObject getField3() {
 			return this.$content_lock;
 		}
 
+		@Override
 		public SubLObject getField4() {
 			return this.$lru_size_percentage;
 		}
 
+		@Override
 		public SubLObject getField5() {
 			return this.$content_table;
 		}
 
+		@Override
 		public SubLObject getField6() {
 			return this.$usage_table;
 		}
 
+		@Override
 		public SubLObject getField7() {
 			return this.$lru_information;
 		}
 
+		@Override
 		public SubLObject getField8() {
 			return this.$file_vector;
 		}
 
+		@Override
 		public SubLObject getField9() {
 			return this.$id_threshold;
 		}
 
+		@Override
 		public SubLObject getField10() {
 			return this.$load_func;
 		}
 
+		@Override
 		public SubLObject getField11() {
 			return this.$meter_swap_timeP;
 		}
 
+		@Override
 		public SubLObject getField12() {
 			return this.$swap_time;
 		}
 
+		@Override
 		public SubLObject getField13() {
 			return this.$lru_size_max;
 		}
 
+		@Override
 		public SubLObject getField14() {
 			return this.$sub_file_vector;
 		}
 
+		@Override
 		public SubLObject getField15() {
 			return this.$dummy3;
 		}
 
+		@Override
 		public SubLObject setField2(final SubLObject value) {
 			return this.$name = value;
 		}
 
+		@Override
 		public SubLObject setField3(final SubLObject value) {
 			return this.$content_lock = value;
 		}
 
+		@Override
 		public SubLObject setField4(final SubLObject value) {
 			return this.$lru_size_percentage = value;
 		}
 
+		@Override
 		public SubLObject setField5(final SubLObject value) {
 			return this.$content_table = value;
 		}
 
+		@Override
 		public SubLObject setField6(final SubLObject value) {
 			return this.$usage_table = value;
 		}
 
+		@Override
 		public SubLObject setField7(final SubLObject value) {
 			return this.$lru_information = value;
 		}
 
+		@Override
 		public SubLObject setField8(final SubLObject value) {
 			return this.$file_vector = value;
 		}
 
+		@Override
 		public SubLObject setField9(final SubLObject value) {
 			return this.$id_threshold = value;
 		}
 
+		@Override
 		public SubLObject setField10(final SubLObject value) {
 			return this.$load_func = value;
 		}
 
+		@Override
 		public SubLObject setField11(final SubLObject value) {
 			return this.$meter_swap_timeP = value;
 		}
 
+		@Override
 		public SubLObject setField12(final SubLObject value) {
 			return this.$swap_time = value;
 		}
 
+		@Override
 		public SubLObject setField13(final SubLObject value) {
 			return this.$lru_size_max = value;
 		}
 
+		@Override
 		public SubLObject setField14(final SubLObject value) {
 			return this.$sub_file_vector = value;
 		}
 
+		@Override
 		public SubLObject setField15(final SubLObject value) {
 			return this.$dummy3 = value;
 		}
@@ -2333,6 +2365,7 @@ public final class kb_object_manager extends SubLTranslatedFile {
 			super(SubLTranslatedFile.extractFunctionNamed("KB-OBJECT-MANAGER-P"));
 		}
 
+		@Override
 		public SubLObject processItem(final SubLObject arg1) {
 			return kb_object_manager.kb_object_manager_p(arg1);
 		}

@@ -2184,15 +2184,18 @@ public final class inference_datastructures_enumerated_types extends SubLTransla
         return (SubLObject)inference_datastructures_enumerated_types.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_datastructures_enumerated_types_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_datastructures_enumerated_types_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_datastructures_enumerated_types_file();
     }
     
@@ -2485,7 +2488,8 @@ public final class inference_datastructures_enumerated_types extends SubLTransla
             super(SubLTranslatedFile.extractFunctionNamed("QUERY-STATIC-PROPERTY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_enumerated_types.query_static_property_p(arg1);
         }
     }
@@ -2496,7 +2500,8 @@ public final class inference_datastructures_enumerated_types extends SubLTransla
             super(SubLTranslatedFile.extractFunctionNamed("QUERY-DYNAMIC-PROPERTY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_enumerated_types.query_dynamic_property_p(arg1);
         }
     }
@@ -2507,7 +2512,8 @@ public final class inference_datastructures_enumerated_types extends SubLTransla
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-QUERY-METRIC-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_enumerated_types.inference_query_metric_p(arg1);
         }
     }
@@ -2518,7 +2524,8 @@ public final class inference_datastructures_enumerated_types extends SubLTransla
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-STATIC-PROPERTY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_enumerated_types.inference_static_property_p(arg1);
         }
     }
@@ -2529,7 +2536,8 @@ public final class inference_datastructures_enumerated_types extends SubLTransla
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-DYNAMIC-PROPERTY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_enumerated_types.inference_dynamic_property_p(arg1);
         }
     }
@@ -2540,7 +2548,8 @@ public final class inference_datastructures_enumerated_types extends SubLTransla
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGY-STATIC-PROPERTY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_enumerated_types.strategy_static_property_p(arg1);
         }
     }
@@ -2551,7 +2560,8 @@ public final class inference_datastructures_enumerated_types extends SubLTransla
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGY-DYNAMIC-PROPERTY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_enumerated_types.strategy_dynamic_property_p(arg1);
         }
     }
@@ -2562,7 +2572,8 @@ public final class inference_datastructures_enumerated_types extends SubLTransla
             super(SubLTranslatedFile.extractFunctionNamed("PROBLEM-STORE-PROPERTY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_enumerated_types.problem_store_property_p(arg1);
         }
     }

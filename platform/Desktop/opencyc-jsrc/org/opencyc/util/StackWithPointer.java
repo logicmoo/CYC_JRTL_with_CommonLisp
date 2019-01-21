@@ -45,7 +45,8 @@ public class StackWithPointer extends Stack {
      * @param item object to be pushed onto the <tt>Stack</tt>
      * @return Object that was pushed onto the <tt>Stack</tt>
      */
-    public Object push ( Object item ) {
+    @Override
+	public Object push ( Object item ) {
         sp++;
         return super.push(item);
     }
@@ -55,7 +56,8 @@ public class StackWithPointer extends Stack {
      *
      * @return <tt>Object</tt> that was on the top of the <tt>Stack</tt>
      */
-    public Object pop() {
+    @Override
+	public Object pop() {
         --sp;
         return super.pop();
     }

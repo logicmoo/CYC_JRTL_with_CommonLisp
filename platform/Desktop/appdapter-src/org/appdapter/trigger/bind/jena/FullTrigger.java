@@ -5,7 +5,8 @@ import org.appdapter.api.trigger.Box;
 
 public interface FullTrigger<BoxType extends Box<? extends MutableTrigger<BoxType>>> extends MutableTrigger<BoxType>
 {
-    void fire(final BoxType p0);
+    @Override
+	void fire(final BoxType p0);
 }
 
 /*

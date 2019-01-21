@@ -2123,15 +2123,18 @@ public final class tva_strategy extends SubLTranslatedFile
         return (SubLObject)tva_strategy.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_tva_strategy_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_tva_strategy_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_tva_strategy_file();
     }
     
@@ -2246,47 +2249,58 @@ public final class tva_strategy extends SubLTranslatedFile
             this.$tactics_considered = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$tva_strategy_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$inverse_mode_p;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$argnums_unified;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$argnums_remaining;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$tactics;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$tactics_considered;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$inverse_mode_p = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$argnums_unified = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$argnums_remaining = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$tactics = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$tactics_considered = value;
         }
         
@@ -2301,7 +2315,8 @@ public final class tva_strategy extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TVA-STRATEGY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return tva_strategy.tva_strategy_p(arg1);
         }
     }

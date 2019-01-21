@@ -2324,15 +2324,18 @@ public final class cb_proof_view extends SubLTranslatedFile
         return (SubLObject)cb_proof_view.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_proof_view_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_proof_view_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_proof_view_file();
     }
     

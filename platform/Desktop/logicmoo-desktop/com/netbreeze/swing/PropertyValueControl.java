@@ -332,7 +332,8 @@ public class PropertyValueControl extends JPanel implements PropertyChangeListen
       currentEditor.addPropertyChangeListener(this);
   }
 
-  public void propertyChange(PropertyChangeEvent evt) {
+  @Override
+public void propertyChange(PropertyChangeEvent evt) {
     if (isBound() && evt.getSource() == source) {
       //the source bean's property changed...
       readBoundValue();
@@ -483,7 +484,8 @@ public class PropertyValueControl extends JPanel implements PropertyChangeListen
       return this.getValue();
     }
 
-    public void propertyChange(PropertyChangeEvent evt) {
+    @Override
+	public void propertyChange(PropertyChangeEvent evt) {
       Object bean = evt.getNewValue();
       //BeanWrapper bean = (BeanWrapper) val;
       try {
@@ -496,7 +498,8 @@ public class PropertyValueControl extends JPanel implements PropertyChangeListen
       }
     }
 
-    public void setValue(Object newValue) {
+    @Override
+	public void setValue(Object newValue) {
       Object oldValue = super.getValue();
       if (!Utility.isEqual(oldValue, newValue)) {
         super.setValue(newValue);
@@ -532,7 +535,8 @@ public class PropertyValueControl extends JPanel implements PropertyChangeListen
       }
     }
 
-    public Component getCustomEditor() {
+    @Override
+	public Component getCustomEditor() {
       if (editable) {
         if (choice == null) {
           choice = new BeanChoice(context, type, getBean());
@@ -549,7 +553,8 @@ public class PropertyValueControl extends JPanel implements PropertyChangeListen
       }
     }
 
-    public boolean supportsCustomEditor() {
+    @Override
+	public boolean supportsCustomEditor() {
       return true;
     }
   }
@@ -563,7 +568,8 @@ public class PropertyValueControl extends JPanel implements PropertyChangeListen
       readValue();
     }
 
-    public void propertyChange(PropertyChangeEvent evt) {
+    @Override
+	public void propertyChange(PropertyChangeEvent evt) {
       readValue();
     }
 
@@ -584,18 +590,22 @@ public class PropertyValueControl extends JPanel implements PropertyChangeListen
       addFocusListener(this);
     }
 
-    public void propertyChange(PropertyChangeEvent evt) {
+    @Override
+	public void propertyChange(PropertyChangeEvent evt) {
       readValue();
     }
 
-    public void actionPerformed(ActionEvent evt) {
+    @Override
+	public void actionPerformed(ActionEvent evt) {
       writeValue();
     }
 
-    public void focusGained(FocusEvent e) {
+    @Override
+	public void focusGained(FocusEvent e) {
     }
 
-    public void focusLost(FocusEvent e) {
+    @Override
+	public void focusLost(FocusEvent e) {
       writeValue();
     }
 
@@ -632,11 +642,13 @@ public class PropertyValueControl extends JPanel implements PropertyChangeListen
       setMaximumRowCount(10);
     }
 
-    public void propertyChange(PropertyChangeEvent evt) {
+    @Override
+	public void propertyChange(PropertyChangeEvent evt) {
       readValue();
     }
 
-    public void actionPerformed(ActionEvent evt) {
+    @Override
+	public void actionPerformed(ActionEvent evt) {
       writeValue();
     }
 

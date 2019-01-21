@@ -1095,15 +1095,18 @@ public final class cb_applicable_relations extends SubLTranslatedFile
         return (SubLObject)cb_applicable_relations.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_applicable_relations_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_applicable_relations_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_applicable_relations_file();
     }
     

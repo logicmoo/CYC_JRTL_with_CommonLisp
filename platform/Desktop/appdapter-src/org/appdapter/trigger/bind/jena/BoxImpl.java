@@ -15,7 +15,8 @@ public class BoxImpl<TrigType extends Trigger<? extends ABoxImpl<TrigType>>> ext
         return Arrays.asList(this, this.getIdent(), this.getShortLabel());
     }
     
-    public <T, E extends T> Iterable<E> getObjects(final Class<T> type) {
+    @Override
+	public <T, E extends T> Iterable<E> getObjects(final Class<T> type) {
         final HashSet<E> objs = new HashSet<E>();
         for (final Object o : this.getObjects()) {
             if (type.isInstance(o)) {
@@ -25,7 +26,8 @@ public class BoxImpl<TrigType extends Trigger<? extends ABoxImpl<TrigType>>> ext
         return objs;
     }
     
-    public Object getValue() {
+    @Override
+	public Object getValue() {
         return this;
     }
 }

@@ -149,15 +149,18 @@ public final class sksi_preference_module_generation extends SubLTranslatedFile
         return (SubLObject)sksi_preference_module_generation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_preference_module_generation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_preference_module_generation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_preference_module_generation_file();
     }
     

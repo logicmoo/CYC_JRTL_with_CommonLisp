@@ -152,7 +152,8 @@ public class REException extends Exception {
    * as well as its index position in the string or character array
    * being compiled.
    */
-  public String getMessage() {
+  @Override
+public String getMessage() {
     Object[] args = {new Integer(pos)};
     StringBuffer sb = new StringBuffer();
     String prefix = RE.getLocalizedMessage("error.prefix");

@@ -61,7 +61,8 @@ public class VariablePopulationItem implements Comparable {
      * @return a negative integer, zero, or a positive integer as this
      * object is less than, equal to, or greater than the specified object
      */
-     public int compareTo (Object object) {
+     @Override
+	public int compareTo (Object object) {
         if (! (object instanceof VariablePopulationItem))
             throw new ClassCastException("Must be a VariablePopulation object");
         VariablePopulationItem thatVariablePopulationItem = (VariablePopulationItem) object;

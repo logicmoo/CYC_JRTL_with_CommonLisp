@@ -1406,15 +1406,18 @@ public final class definitional_question extends SubLTranslatedFile
         return (SubLObject)definitional_question.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_definitional_question_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_definitional_question_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_definitional_question_file();
     }
     

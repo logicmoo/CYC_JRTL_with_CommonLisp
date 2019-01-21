@@ -172,7 +172,7 @@ public final class JavaObject extends LispObject {
      */
     public final static LispObject getInstance(Object obj, Class<?> intendedClass) {
         if (obj == null)
-            return new JavaObject(null);
+            return new JavaObject(null, intendedClass);
 
         if (obj instanceof LispObject)
             return (LispObject)obj;
@@ -277,7 +277,7 @@ public final class JavaObject extends LispObject {
     }
 
     @Override
-    public Object javaInstance(Class<?> c) {
+    public Object javaInstanceImpl(Class<?> c) {
         if(obj == null) {
             if(c.isPrimitive()) {
                 throw new NullPointerException("Cannot assign null to " + c);
@@ -693,7 +693,8 @@ public final class JavaObject extends LispObject {
     }
 
     private static final Primitive _FIND_JAVA_CLASS = new Primitive("%find-java-class", PACKAGE_JAVA, false, "class-name-or-class") {
-            public LispObject execute(LispObject arg) {
+            @Override
+			public LispObject execute(LispObject arg) {
                 try {
                     if(arg instanceof AbstractString) {
                         return findJavaClass(Class.forName((String) arg.getStringValue()));
@@ -708,7 +709,8 @@ public final class JavaObject extends LispObject {
         };
 
     private static final Primitive _REGISTER_JAVA_CLASS = new Primitive("%register-java-class", PACKAGE_JAVA, false, "jclass class-metaobject") {
-            public LispObject execute(LispObject jclass, LispObject classMetaObject) {
+            @Override
+			public LispObject execute(LispObject jclass, LispObject classMetaObject) {
                 return registerJavaClass((Class<?>) jclass.javaInstance(), classMetaObject);
             }
 

@@ -91,6 +91,7 @@ public class term_t extends LongHolder {
 	 * @return true if the supplied object is a term_t instances and the long
 	 *         values are the same
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof term_t) && this.value == ((term_t) obj).value && this.value != UNASSIGNED;
 	}

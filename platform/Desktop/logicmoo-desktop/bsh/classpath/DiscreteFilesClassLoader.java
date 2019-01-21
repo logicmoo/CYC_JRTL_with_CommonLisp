@@ -73,6 +73,7 @@ public class DiscreteFilesClassLoader extends BshClassLoader
 
 	/**
 	*/
+	@Override
 	public Class findClass( String name ) throws ClassNotFoundException 
 	{
 		// Load it if it's one of our classes
@@ -88,6 +89,7 @@ public class DiscreteFilesClassLoader extends BshClassLoader
 			return super.findClass( name );
 	}
 
+	@Override
 	public String toString() {
 		return super.toString() + "for files: "+map;
 	}

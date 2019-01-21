@@ -1523,15 +1523,18 @@ public final class lexicon_dumping extends SubLTranslatedFile
         return (SubLObject)lexicon_dumping.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_lexicon_dumping_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_lexicon_dumping_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_lexicon_dumping_file();
     }
     

@@ -1160,15 +1160,18 @@ public final class parallelism_utilities extends SubLTranslatedFile
         return (SubLObject)parallelism_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_parallelism_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_parallelism_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_parallelism_utilities_file();
     }
     
@@ -1317,143 +1320,178 @@ public final class parallelism_utilities extends SubLTranslatedFile
             this.$progress_indicator = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$parallel_iterator_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$source_iterator;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$function;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$shared_args;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$svs;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$width;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$batch;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$total;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$sofar;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$message;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$initializer;
         }
         
-        public SubLObject getField12() {
+        @Override
+		public SubLObject getField12() {
             return this.$reducer;
         }
         
-        public SubLObject getField13() {
+        @Override
+		public SubLObject getField13() {
             return this.$final_result;
         }
         
-        public SubLObject getField14() {
+        @Override
+		public SubLObject getField14() {
             return this.$lock;
         }
         
-        public SubLObject getField15() {
+        @Override
+		public SubLObject getField15() {
             return this.$begin_semaphore;
         }
         
-        public SubLObject getField16() {
+        @Override
+		public SubLObject getField16() {
             return this.$finish_semaphore;
         }
         
-        public SubLObject getField17() {
+        @Override
+		public SubLObject getField17() {
             return this.$process_pool;
         }
         
-        public SubLObject getField18() {
+        @Override
+		public SubLObject getField18() {
             return this.$progress_indicator;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$source_iterator = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$function = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$shared_args = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$svs = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$width = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$batch = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$total = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$sofar = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$message = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$initializer = value;
         }
         
-        public SubLObject setField12(final SubLObject value) {
+        @Override
+		public SubLObject setField12(final SubLObject value) {
             return this.$reducer = value;
         }
         
-        public SubLObject setField13(final SubLObject value) {
+        @Override
+		public SubLObject setField13(final SubLObject value) {
             return this.$final_result = value;
         }
         
-        public SubLObject setField14(final SubLObject value) {
+        @Override
+		public SubLObject setField14(final SubLObject value) {
             return this.$lock = value;
         }
         
-        public SubLObject setField15(final SubLObject value) {
+        @Override
+		public SubLObject setField15(final SubLObject value) {
             return this.$begin_semaphore = value;
         }
         
-        public SubLObject setField16(final SubLObject value) {
+        @Override
+		public SubLObject setField16(final SubLObject value) {
             return this.$finish_semaphore = value;
         }
         
-        public SubLObject setField17(final SubLObject value) {
+        @Override
+		public SubLObject setField17(final SubLObject value) {
             return this.$process_pool = value;
         }
         
-        public SubLObject setField18(final SubLObject value) {
+        @Override
+		public SubLObject setField18(final SubLObject value) {
             return this.$progress_indicator = value;
         }
         
@@ -1468,7 +1506,8 @@ public final class parallelism_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PARALLEL-ITERATOR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return parallelism_utilities.parallel_iterator_p(arg1);
         }
     }

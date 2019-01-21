@@ -61,6 +61,7 @@ public class Httpd extends Thread
 		ss = new ServerSocket(port);
 	}
 
+	@Override
 	public void run()
 	{
 //		System.out.println("starting httpd...");
@@ -90,6 +91,7 @@ class HttpdConnection extends Thread
 		setPriority(NORM_PRIORITY - 1);
 	}
 
+	@Override
 	public void run()
 	{
 		try

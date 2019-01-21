@@ -62,7 +62,8 @@ public class CheckedGraph implements Graph, PrefixMapping
         this.nameSpaceChecked = makeNameSpaceChecked;
     }
 
-    public void add(final Triple t) throws AddDeniedException {
+    @Override
+	public void add(final Triple t) throws AddDeniedException {
         this.checkAdd();
         final Triple t2 = this.visitURIs(t);
         this.modelGraph.add(t2);
@@ -99,78 +100,96 @@ public class CheckedGraph implements Graph, PrefixMapping
         throw ex;
     }
 
-    public void clear() {
+    @Override
+	public void clear() {
         this.checkRemove();
         this.modelGraph.clear();
     }
 
-    public void close() {
+    @Override
+	public void close() {
         this.modelGraph.close();
     }
 
-    public boolean contains(final Node s, final Node p, final Node o) {
+    @Override
+	public boolean contains(final Node s, final Node p, final Node o) {
         return this.modelGraph.contains(s, p, o);
     }
 
-    public boolean contains(final Triple t) {
+    @Override
+	public boolean contains(final Triple t) {
         return this.modelGraph.contains(t);
     }
 
-    public void delete(final Triple t) throws DeleteDeniedException {
+    @Override
+	public void delete(final Triple t) throws DeleteDeniedException {
         this.checkRemove();
         this.modelGraph.delete(t);
     }
 
-    public boolean dependsOn(final Graph g) {
+    @Override
+	public boolean dependsOn(final Graph g) {
         return this.modelGraph.dependsOn(g);
     }
 
-    public ExtendedIterator<Triple> find(final Node s, final Node p, final Node o) {
+    @Override
+	public ExtendedIterator<Triple> find(final Node s, final Node p, final Node o) {
         return (ExtendedIterator<Triple>)this.modelGraph.find(s, p, o);
     }
 
-    public ExtendedIterator<Triple> find(final TripleMatch m) {
+    @Override
+	public ExtendedIterator<Triple> find(final TripleMatch m) {
         return (ExtendedIterator<Triple>)this.modelGraph.find(m);
     }
 
-    @Deprecated
+    @Override
+	@Deprecated
     public BulkUpdateHandler getBulkUpdateHandler() {
         return this.modelGraph.getBulkUpdateHandler();
     }
 
-    public Capabilities getCapabilities() {
+    @Override
+	public Capabilities getCapabilities() {
         return this.modelGraph.getCapabilities();
     }
 
-    public GraphEventManager getEventManager() {
+    @Override
+	public GraphEventManager getEventManager() {
         return this.modelGraph.getEventManager();
     }
 
-    public PrefixMapping getPrefixMapping() {
+    @Override
+	public PrefixMapping getPrefixMapping() {
         return (PrefixMapping)this;
     }
 
-    public GraphStatisticsHandler getStatisticsHandler() {
+    @Override
+	public GraphStatisticsHandler getStatisticsHandler() {
         return this.modelGraph.getStatisticsHandler();
     }
 
-    public TransactionHandler getTransactionHandler() {
+    @Override
+	public TransactionHandler getTransactionHandler() {
         return this.modelGraph.getTransactionHandler();
     }
 
-    public boolean isClosed() {
+    @Override
+	public boolean isClosed() {
         return this.modelGraph.isClosed();
     }
 
-    public boolean isEmpty() {
+    @Override
+	public boolean isEmpty() {
         return this.modelGraph.isEmpty();
     }
 
-    public boolean isIsomorphicWith(final Graph n) {
+    @Override
+	public boolean isIsomorphicWith(final Graph n) {
         return this.modelGraph.isIsomorphicWith(n);
     }
 
-    public void remove(final Node s, final Node p, final Node o) {
+    @Override
+	public void remove(final Node s, final Node p, final Node o) {
         if (s == null) {
             this.checkRemove();
         }
@@ -180,7 +199,8 @@ public class CheckedGraph implements Graph, PrefixMapping
         this.modelGraph.remove(s, p, o);
     }
 
-    public int size() {
+    @Override
+	public int size() {
         return this.modelGraph.size();
     }
 
@@ -208,7 +228,8 @@ public class CheckedGraph implements Graph, PrefixMapping
         }
     }
 
-    public PrefixMapping setNsPrefix(final String prefix, final String uri) {
+    @Override
+	public PrefixMapping setNsPrefix(final String prefix, final String uri) {
         this.checkPrefix(prefix);
         final String prevURI = this.prefixMap.getNsPrefixURI(prefix);
         final String prevPrefix = this.prefixMap.getNsURIPrefix(uri);
@@ -218,16 +239,19 @@ public class CheckedGraph implements Graph, PrefixMapping
         return (PrefixMapping)this;
     }
 
-    public PrefixMapping removeNsPrefix(final String prefix) {
+    @Override
+	public PrefixMapping removeNsPrefix(final String prefix) {
         this.prefixMap.removeNsPrefix(prefix);
         return (PrefixMapping)this;
     }
 
-    public PrefixMapping setNsPrefixes(final PrefixMapping other) {
+    @Override
+	public PrefixMapping setNsPrefixes(final PrefixMapping other) {
         return this.setNsPrefixes(other.getNsPrefixMap());
     }
 
-    public PrefixMapping setNsPrefixes(final Map<String, String> map) {
+    @Override
+	public PrefixMapping setNsPrefixes(final Map<String, String> map) {
         final Iterator<Map.Entry<String, String>> it = map.entrySet().iterator();
         final List<String> removedPrefixes = new ArrayList<String>(this.getNsPrefixMap().keySet());
         while (it.hasNext()) {
@@ -250,7 +274,8 @@ public class CheckedGraph implements Graph, PrefixMapping
         return (PrefixMapping)this;
     }
 
-    public PrefixMapping withDefaultMappings(final PrefixMapping map) {
+    @Override
+	public PrefixMapping withDefaultMappings(final PrefixMapping map) {
         for (final Map.Entry<String, String> e : map.getNsPrefixMap().entrySet()) {
             final String prefix = e.getKey();
             final String uri = e.getValue();
@@ -261,35 +286,43 @@ public class CheckedGraph implements Graph, PrefixMapping
         return (PrefixMapping)this;
     }
 
-    public String getNsPrefixURI(final String prefix) {
+    @Override
+	public String getNsPrefixURI(final String prefix) {
         return this.prefixMap.getNsPrefixURI(prefix);
     }
 
-    public String getNsURIPrefix(final String uri) {
+    @Override
+	public String getNsURIPrefix(final String uri) {
         return this.prefixMap.getNsURIPrefix(uri);
     }
 
-    public Map<String, String> getNsPrefixMap() {
+    @Override
+	public Map<String, String> getNsPrefixMap() {
         return Collections.unmodifiableMap((Map<? extends String, ? extends String>)this.prefixMap.getNsPrefixMap());
     }
 
-    public String expandPrefix(final String prefixed) {
+    @Override
+	public String expandPrefix(final String prefixed) {
         return this.prefixMap.expandPrefix(prefixed);
     }
 
-    public String shortForm(final String uri) {
+    @Override
+	public String shortForm(final String uri) {
         return this.prefixMap.shortForm(uri);
     }
 
-    public String qnameFor(final String uri) {
+    @Override
+	public String qnameFor(final String uri) {
         return this.prefixMap.qnameFor(uri);
     }
 
-    public PrefixMapping lock() {
+    @Override
+	public PrefixMapping lock() {
         return (PrefixMapping)this;
     }
 
-    public boolean samePrefixMappingAs(final PrefixMapping other) {
+    @Override
+	public boolean samePrefixMappingAs(final PrefixMapping other) {
         return this.prefixMap.samePrefixMappingAs(other);
     }
 

@@ -836,15 +836,18 @@ public final class kct_cyc_testing extends SubLTranslatedFile
         return (SubLObject)kct_cyc_testing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kct_cyc_testing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kct_cyc_testing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kct_cyc_testing_file();
     }
     

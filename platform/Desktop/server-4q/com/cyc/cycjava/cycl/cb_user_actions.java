@@ -531,15 +531,18 @@ public final class cb_user_actions extends SubLTranslatedFile
         return (SubLObject)cb_user_actions.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_user_actions_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_user_actions_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_user_actions_file();
     }
     

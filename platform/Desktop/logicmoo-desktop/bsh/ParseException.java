@@ -56,7 +56,7 @@ public class ParseException extends EvalError {
 		this.sourceFile = file;
 	}
 
-	public String getErrorSourceFile() { 
+	@Override	public String getErrorSourceFile() { 
 		return sourceFile; 
 	}
 
@@ -142,7 +142,7 @@ public class ParseException extends EvalError {
   public String[] tokenImage;
 
   // Begin BeanShell Modification - moved body to overloaded getMessage()
-  public String	getMessage() {
+  @Overridepublic String	getMessage() {
 	return getMessage( false );
   }
   // End BeanShell Modification - moved body to overloaded getMessage()
@@ -265,12 +265,12 @@ public class ParseException extends EvalError {
 
 	// Begin BeanShell Modification - override error methods and toString
 
-	public int getErrorLineNumber() 
+	@Override	public int getErrorLineNumber() 
 	{
 		return currentToken.next.beginLine;
 	}
 
-	public String getErrorText() { 
+	@Override	public String getErrorText() { 
 		// copied from generated getMessage()
 		int	maxSize	= 0;
 		for	(int i = 0; i <	expectedTokenSequences.length; i++) {
@@ -294,7 +294,7 @@ public class ParseException extends EvalError {
 		return retval;
 	}
 
-	public String toString() {
+	@Override	public String toString() {
 		return getMessage();
 	}
 

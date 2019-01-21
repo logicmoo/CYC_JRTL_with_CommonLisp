@@ -155,12 +155,14 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
         return replacement;
     }
 
-    public void textValueChanged(TextEvent e)
+    @Override
+	public void textValueChanged(TextEvent e)
     {
         setRestrictToSelectionDefault();
     }
 
-    public void actionPerformed(ActionEvent e)
+    @Override
+	public void actionPerformed(ActionEvent e)
     {
         final String cmd = e.getActionCommand();
         if (cmd != null && cmd.equals(regularExpressionCheckBox.getText())) {
@@ -209,7 +211,8 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
         restrictToSelectionCheckBox.setSelected(checked);
     }
 
-    protected void ok()
+    @Override
+	protected void ok()
     {
         replacement.setPattern(patternControl.getText());
         if (replacement.getPatternLength() == 0) {
@@ -263,7 +266,8 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
         dispose();
     }
 
-    protected void cancel()
+    @Override
+	protected void cancel()
     {
         replacement = null;
         dispose();

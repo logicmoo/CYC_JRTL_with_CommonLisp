@@ -19,35 +19,43 @@ public class BshScriptEngineFactory implements
 
 	final List<String> names = Arrays.asList( "beanshell", "bsh", "java" );
 
-    public String getEngineName() {
+    @Override
+	public String getEngineName() {
 		return "BeanShell Engine";
 	}
 
-    public String getEngineVersion() {
+    @Override
+	public String getEngineVersion() {
 		return "1.0";
 	}
 
-    public List<String> getExtensions() {
+    @Override
+	public List<String> getExtensions() {
 		return extensions;
 	}
 
-    public List<String> getMimeTypes() {
+    @Override
+	public List<String> getMimeTypes() {
 		return mimeTypes;
 	}
 
-    public List<String> getNames() {
+    @Override
+	public List<String> getNames() {
 		return names;
 	}
 
-    public String getLanguageName() {
+    @Override
+	public String getLanguageName() {
 		return "BeanShell";
 	}
 
-    public String getLanguageVersion() {
+    @Override
+	public String getLanguageVersion() {
 		return bsh.Interpreter.VERSION + "";
 	}
 
-    public Object getParameter( String param ) {
+    @Override
+	public Object getParameter( String param ) {
 	    if ( param.equals( ScriptEngine.ENGINE ) )
 			return getEngineName();
 		if ( param.equals( ScriptEngine.ENGINE_VERSION ) )
@@ -64,7 +72,8 @@ public class BshScriptEngineFactory implements
 		return null;
 	}
 
-    public String getMethodCallSyntax( 
+    @Override
+	public String getMethodCallSyntax( 
 		String objectName, String methodName, String ... args ) 
 	{
 		// Note: this is very close to the bsh.StringUtil.methodString()
@@ -84,11 +93,13 @@ public class BshScriptEngineFactory implements
         return sb.toString();
 	}
 
-    public String getOutputStatement( String message ) {
+    @Override
+	public String getOutputStatement( String message ) {
 		return "print( \"" + message + "\" );";
 	}
 
-    public String getProgram( String ... statements )
+    @Override
+	public String getProgram( String ... statements )
 	{
 		StringBuffer sb = new StringBuffer();
 		for( int i=0; i< statements.length; i++ )
@@ -105,6 +116,7 @@ public class BshScriptEngineFactory implements
 
 	// Begin impl ScriptEngineFactory
 
+	@Override
 	public ScriptEngine getScriptEngine() 
 	{
 		return new BshScriptEngine();

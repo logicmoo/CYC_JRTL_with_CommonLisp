@@ -493,15 +493,18 @@ public final class reformulator_testing extends SubLTranslatedFile
         return (SubLObject)reformulator_testing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_reformulator_testing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_reformulator_testing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_reformulator_testing_file();
     }
     

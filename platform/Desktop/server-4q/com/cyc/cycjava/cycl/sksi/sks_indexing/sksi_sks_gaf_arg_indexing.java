@@ -853,15 +853,18 @@ public final class sksi_sks_gaf_arg_indexing extends SubLTranslatedFile
         return (SubLObject)sksi_sks_gaf_arg_indexing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_sks_gaf_arg_indexing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_sks_gaf_arg_indexing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_sks_gaf_arg_indexing_file();
     }
     
@@ -931,55 +934,68 @@ public final class sksi_sks_gaf_arg_indexing extends SubLTranslatedFile
             this.$modules = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$sksi_supported_gaf_argument_cache_entry_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$argument_position;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$query_form;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$predicate;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$mt;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$count;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$modules;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$argument_position = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$query_form = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$predicate = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$mt = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$count = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$modules = value;
         }
         
@@ -994,7 +1010,8 @@ public final class sksi_sks_gaf_arg_indexing extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SKSI-SUPPORTED-GAF-ARGUMENT-CACHE-ENTRY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sksi_sks_gaf_arg_indexing.sksi_supported_gaf_argument_cache_entry_p(arg1);
         }
     }
@@ -1005,7 +1022,8 @@ public final class sksi_sks_gaf_arg_indexing extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SKSI-SUPPORTED-GAF-ARGUMENT-CACHE-ENTRY-ARGUMENT-POSITION"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sksi_sks_gaf_arg_indexing.sksi_supported_gaf_argument_cache_entry_argument_position(arg1);
         }
     }

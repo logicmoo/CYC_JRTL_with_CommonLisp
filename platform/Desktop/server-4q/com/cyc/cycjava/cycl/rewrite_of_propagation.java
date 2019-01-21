@@ -389,15 +389,18 @@ public final class rewrite_of_propagation extends SubLTranslatedFile
         return (SubLObject)rewrite_of_propagation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rewrite_of_propagation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rewrite_of_propagation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rewrite_of_propagation_file();
     }
     
@@ -429,7 +432,8 @@ public final class rewrite_of_propagation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FORT-WITH-SOME-SOURCE-REWRITE-OF-ASSERTIONS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return rewrite_of_propagation.fort_with_some_source_rewrite_of_assertions(arg1);
         }
     }

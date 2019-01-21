@@ -7495,15 +7495,18 @@ public final class ghl_search_methods extends SubLTranslatedFile
         return (SubLObject)ghl_search_methods.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_ghl_search_methods_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_ghl_search_methods_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_ghl_search_methods_file();
     }
     
@@ -7580,7 +7583,8 @@ public final class ghl_search_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GHL-CLOSURE-SEARCH-ITERATOR-DONE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return ghl_search_methods.ghl_closure_search_iterator_done(arg1);
         }
     }
@@ -7591,7 +7595,8 @@ public final class ghl_search_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GHL-CLOSURE-SEARCH-ITERATOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return ghl_search_methods.ghl_closure_search_iterator_next(arg1);
         }
     }
@@ -7602,7 +7607,8 @@ public final class ghl_search_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GHL-CLOSURE-SEARCH-ITERATOR-FINALIZE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return ghl_search_methods.ghl_closure_search_iterator_finalize(arg1);
         }
     }

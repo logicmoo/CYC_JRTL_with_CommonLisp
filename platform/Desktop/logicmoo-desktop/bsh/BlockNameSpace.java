@@ -72,7 +72,8 @@ class BlockNameSpace extends NameSpace
 		removed, but it cannot.  When recurse is false we still need to set the
 		variable in our parent, not here.
 	*/
-    public void	setVariable( 
+    @Override
+	public void	setVariable( 
 		String name, Object value, boolean strictJava, boolean recurse ) 
 		throws UtilEvalError 
 	{
@@ -158,32 +159,37 @@ class BlockNameSpace extends NameSpace
 		"if" statement). 
 		@see #getBlockThis( Interpreter )
 	*/
-    public This getThis( Interpreter declaringInterpreter ) {
+    @Override
+	public This getThis( Interpreter declaringInterpreter ) {
 		return getNonBlockParent().getThis( declaringInterpreter );
 	}
 
 	/**
 		super is our parent's super
 	*/
-    public This getSuper( Interpreter declaringInterpreter ) {
+    @Override
+	public This getSuper( Interpreter declaringInterpreter ) {
 		return getNonBlockParent().getSuper( declaringInterpreter );
 	}
 
 	/**
 		delegate import to our parent
 	*/
-    public void	importClass(String name) {
+    @Override
+	public void	importClass(String name) {
 		getParent().importClass( name );
 	}
 
 	/**
 		delegate import to our parent
 	*/
-    public void	importPackage(String name) {
+    @Override
+	public void	importPackage(String name) {
 		getParent().importPackage( name );
 	}
 
-    public void	setMethod(String name, BshMethod method) 
+    @Override
+	public void	setMethod(String name, BshMethod method) 
 		throws UtilEvalError
 	{
 		getParent().setMethod( name, method );

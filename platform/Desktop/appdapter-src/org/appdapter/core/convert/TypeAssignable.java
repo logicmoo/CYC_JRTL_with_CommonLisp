@@ -10,6 +10,7 @@ public interface TypeAssignable {
 
 	public Integer declaresConverts(Object val, Class valClass, Class objNeedsToBe, List maxConverts);
 
+	@Override
 	public String toString();
 
 	public Converter CASTING_ONLY = new Converter() {
@@ -21,6 +22,7 @@ public interface TypeAssignable {
 			return (T) obj;
 		}
 
+		@Override
 		public Integer declaresConverts(Object val, Class have, Class must, List maxConverts) {
 			if (must == null || have == null)
 				return WILL;
@@ -44,6 +46,7 @@ public interface TypeAssignable {
 		}
 	};
 	public TypeAssignable PERFECT = new TypeAssignable() {
+		@Override
 		public Integer declaresConverts(Object val, Class have, Class must, List maxConverts) {
 			if (must == null || have == null)
 				return WILL;

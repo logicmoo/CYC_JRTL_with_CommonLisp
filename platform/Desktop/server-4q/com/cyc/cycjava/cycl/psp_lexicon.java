@@ -817,15 +817,18 @@ public final class psp_lexicon extends SubLTranslatedFile
         return (SubLObject)psp_lexicon.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_psp_lexicon_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_psp_lexicon_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_psp_lexicon_file();
     }
     

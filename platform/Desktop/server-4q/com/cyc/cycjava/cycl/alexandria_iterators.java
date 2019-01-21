@@ -1758,15 +1758,18 @@ public final class alexandria_iterators extends SubLTranslatedFile
         return (SubLObject)alexandria_iterators.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_alexandria_iterators_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_alexandria_iterators_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_alexandria_iterators_file();
     }
     

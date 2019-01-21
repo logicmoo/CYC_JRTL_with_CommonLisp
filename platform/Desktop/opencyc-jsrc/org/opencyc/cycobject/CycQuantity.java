@@ -37,7 +37,8 @@ public class CycQuantity implements Comparable<CycQuantity> {
   /** Create a new CycQuantity from its CycList representation.
    * @deprecated Use CycNaut version.
    */
-  public static CycQuantity valueOf(final CycList cycList) {
+  @Deprecated
+public static CycQuantity valueOf(final CycList cycList) {
     if (cycList.size() < 2) {
       return null;
     } else if (cycList.size() > 3) {
@@ -79,7 +80,8 @@ public class CycQuantity implements Comparable<CycQuantity> {
     return null;
   }
   
-  public String toString() {
+  @Override
+public String toString() {
     if (minValue.equals(maxValue)) {
       return "(" + unitOfMeasure + " " + minValue + ")";
     } else {
@@ -88,7 +90,8 @@ public class CycQuantity implements Comparable<CycQuantity> {
   }
   
   
-  public int compareTo(CycQuantity o) {
+  @Override
+public int compareTo(CycQuantity o) {
     if (o.unitOfMeasure.equals(unitOfMeasure)) {
       if (o.minValue.equals(minValue)) {
         return compare(maxValue, o.maxValue);

@@ -185,7 +185,8 @@ public final class JdbDialog extends AbstractDialog
         return session;
     }
 
-    protected void ok()
+    @Override
+	protected void ok()
     {
         String mainClass = mainClassTextField.getText();
         if (mainClass == null || mainClass.length() < 1) {

@@ -1516,15 +1516,18 @@ public final class constant_handles extends SubLTranslatedFile
         return (SubLObject)constant_handles.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_constant_handles_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_constant_handles_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_constant_handles_file();
     }
     
@@ -1626,7 +1629,8 @@ public final class constant_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CONSTANT-PRINT-FUNCTION-TRAMPOLINE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return constant_handles.constant_print_function_trampoline(arg1, arg2);
         }
     }
@@ -1637,7 +1641,8 @@ public final class constant_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CONSTANT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return constant_handles.constant_p(arg1);
         }
     }
@@ -1648,7 +1653,8 @@ public final class constant_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-CONSTANT-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return constant_handles.sxhash_constant_method(arg1);
         }
     }
@@ -1659,7 +1665,8 @@ public final class constant_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VALID-CONSTANT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return constant_handles.valid_constantP(arg1, (SubLObject)$valid_constantP$UnaryFunction.UNPROVIDED);
         }
     }
@@ -1670,7 +1677,8 @@ public final class constant_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VALID-CONSTANT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return constant_handles.valid_constantP(arg1, arg2);
         }
     }
@@ -1681,7 +1689,8 @@ public final class constant_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INVALID-CONSTANT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return constant_handles.invalid_constantP(arg1, (SubLObject)$invalid_constantP$UnaryFunction.UNPROVIDED);
         }
     }
@@ -1692,7 +1701,8 @@ public final class constant_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INVALID-CONSTANT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return constant_handles.invalid_constantP(arg1, arg2);
         }
     }

@@ -108,7 +108,8 @@ public final class JavaTree extends SidebarTree implements Constants,
         setToolTipText("");
     }
 
-    public void refresh()
+    @Override
+	public void refresh()
     {
         boolean force = (arrangedByType != arrangeByType) ||
             (sorted != sort);
@@ -123,7 +124,8 @@ public final class JavaTree extends SidebarTree implements Constants,
             if (tags != null && tags == bufferTags)
                 return; // Nothing to do.
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 refreshInternal(buffer, bufferTags);
             }
@@ -142,7 +144,8 @@ public final class JavaTree extends SidebarTree implements Constants,
                 getDefaultModel(bufferTags, arrangeByType, sort);
             final List finalBufferTags = bufferTags;
             Runnable completionRunnable = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     setModel(model);
                     arrangedByType = arrangeByType;
@@ -207,7 +210,8 @@ public final class JavaTree extends SidebarTree implements Constants,
     {
         MethodComparator() {}
 
-        public int compare(Object o1, Object o2)
+        @Override
+		public int compare(Object o1, Object o2)
         {
             String s1 = o1.toString();
             String s2 = o2.toString();
@@ -263,7 +267,8 @@ public final class JavaTree extends SidebarTree implements Constants,
         }
     }
 
-    public void updatePosition()
+    @Override
+	public void updatePosition()
     {
         TreeModel model = getModel();
         if (model == null)
@@ -350,13 +355,15 @@ public final class JavaTree extends SidebarTree implements Constants,
         }
     }
 
-    public final String getLabelText()
+    @Override
+	public final String getLabelText()
     {
         File file = editor.getBuffer().getFile();
         return file != null ? file.getName() : null;
     }
 
-    public String getToolTipText(MouseEvent e)
+    @Override
+	public String getToolTipText(MouseEvent e)
     {
         JavaTag t = getJavaTagAtPoint(e.getPoint());
         return t != null ? t.getToolTipText() : null;
@@ -375,7 +382,8 @@ public final class JavaTree extends SidebarTree implements Constants,
         return null;
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         final int keyCode = e.getKeyCode();
         final int modifiers = e.getModifiers();
@@ -421,18 +429,21 @@ public final class JavaTree extends SidebarTree implements Constants,
         editor.getDispatcher().setEnabled(false);
     }
 
-    public void keyReleased(KeyEvent e)
+    @Override
+	public void keyReleased(KeyEvent e)
     {
         e.consume();
         editor.getDispatcher().setEnabled(true);
     }
 
-    public void keyTyped(KeyEvent e)
+    @Override
+	public void keyTyped(KeyEvent e)
     {
         e.consume();
     }
 
-    protected void processMouseEvent(MouseEvent e)
+    @Override
+	protected void processMouseEvent(MouseEvent e)
     {
         if (e.isPopupTrigger()) {
             JavaTreePopupMenu popup = new JavaTreePopupMenu(this);
@@ -441,11 +452,14 @@ public final class JavaTree extends SidebarTree implements Constants,
             super.processMouseEvent(e);
     }
 
-    public void mousePressed(MouseEvent e) {}
+    @Override
+	public void mousePressed(MouseEvent e) {}
 
-    public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
 
-    public void mouseClicked(MouseEvent e)
+    @Override
+	public void mouseClicked(MouseEvent e)
     {
         LocationBar.cancelInput();
         editor.ensureActive();
@@ -461,9 +475,11 @@ public final class JavaTree extends SidebarTree implements Constants,
         editor.setFocusToDisplay();
     }
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e)
+    @Override
+	public void mouseExited(MouseEvent e)
     {
         frame.getCurrentEditor().setFocusToDisplay();
     }
@@ -562,7 +578,8 @@ public final class JavaTree extends SidebarTree implements Constants,
             oldBackgroundSelectionColor = getBackgroundSelectionColor();
         }
 
-        public Component getTreeCellRendererComponent(JTree tree, Object value,
+        @Override
+		public Component getTreeCellRendererComponent(JTree tree, Object value,
             boolean selected, boolean expanded, boolean leaf, int row,
             boolean hasFocus)
         {
@@ -596,7 +613,8 @@ public final class JavaTree extends SidebarTree implements Constants,
             return this;
         }
 
-        public void paintComponent(Graphics g)
+        @Override
+		public void paintComponent(Graphics g)
         {
             Display.setRenderingHints(g);
             super.paintComponent(g);

@@ -34,14 +34,25 @@
 package org.armedbear.lisp;
 
 import java.util.concurrent.locks.ReentrantLock;
+
+//import org.armedbear.lisp.HashTable.HTComparator;
+
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
+
 import static org.armedbear.lisp.Lisp.*;
 
 public class HashTable
     extends LispObject
-    implements org.armedbear.lisp.protocol.Hashtable
+    implements org.armedbear.lisp.protocol.Hashtable, LispHashTable
 {
 
-    protected static final float loadFactor = 0.75f;
+	@Override
+	public LispObject getWeakness()
+	{
+		return NIL;
+	}
+
+	protected static final float loadFactor = 0.75f;
     protected final LispObject rehashSize;
     protected final LispObject rehashThreshold;
     // The rounded product of the capacity and the load factor. When the number
@@ -52,10 +63,10 @@ public class HashTable
     protected volatile HashEntry[] buckets;
     // The number of key-value pairs.
     protected volatile int count;
-    final Comparator comparator;
+    final HTComparator comparator;
     final private ReentrantLock lock = new ReentrantLock();
 
-    protected HashTable(Comparator c, int size, LispObject rehashSize,
+    protected HashTable(HTComparator c, int size, LispObject rehashSize,
             LispObject rehashThreshold) {
         this.rehashSize = rehashSize;
         this.rehashThreshold = rehashThreshold;
@@ -73,10 +84,9 @@ public class HashTable
         }
         return capacity;
     }
-
     public static HashTable newEqHashTable(int size, LispObject rehashSize,
             LispObject rehashThreshold) {
-        return new HashTable(new Comparator(), size, rehashSize, rehashThreshold);
+        return new HashTable(new EqComparator(), size, rehashSize, rehashThreshold);
     }
 
     public static HashTable newEqlHashTable(int size, LispObject rehashSize,
@@ -94,31 +104,50 @@ public class HashTable
         return new HashTable(new EqualpComparator(), size, rehashSize, rehashThreshold);
     }
 
-    public final LispObject getRehashSize() {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#getRehashSize()
+	 */
+    @Override
+	public final LispObject getRehashSize() {
         return rehashSize;
     }
 
-    public final LispObject getRehashThreshold() {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#getRehashThreshold()
+	 */
+    @Override
+	public final LispObject getRehashThreshold() {
         return rehashThreshold;
     }
 
-    public int getSize() {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#getSize()
+	 */
+    @Override
+	public int getSize() {
         return buckets.length;
     }
 
-    public int getCount() {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#getCount()
+	 */
+    @Override
+	public int getCount() {
         return count;
     }
 
-    public LispObject typeOf() {
+    @Override
+	public LispObject typeOf() {
         return Symbol.HASH_TABLE;
     }
 
-    public LispObject classOf() {
+    @Override
+	public LispObject classOf() {
         return BuiltInClass.HASH_TABLE;
     }
 
-    public LispObject typep(LispObject type) {
+    @Override
+	public LispObject typep(LispObject type) {
         if (type == Symbol.HASH_TABLE) {
             return T;
         }
@@ -128,16 +157,17 @@ public class HashTable
         return super.typep(type);
     }
 
-    public boolean equalp(LispObject obj) {
+    @Override
+	public boolean equalp(LispObject obj) {
         if (this == obj) {
             return true;
         }
         if (obj instanceof HashTable) {
-            HashTable ht = (HashTable) obj;
+        	HashTable ht = (HashTable) obj;
             if (count != ht.count) {
                 return false;
             }
-            if (getTest() != ht.getTest()) {
+            if (getTestSymbol() != ht.getTestSymbol()) {
                 return false;
             }
             LispObject entries = ENTRIES();
@@ -155,7 +185,8 @@ public class HashTable
         return false;
     }
 
-    public LispObject getParts() {
+    @Override
+	public LispObject getParts() {
         // No need to take out a read lock, for the same reason as MAPHASH
         HashEntry[] b = buckets;
         LispObject parts = NIL;
@@ -170,7 +201,11 @@ public class HashTable
         return parts.nreverse();
     }
 
-    public void clear() {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#clear()
+	 */
+    @Override
+	public void clear() {
         lock.lock();
         try {
             buckets = new HashEntry[buckets.length];
@@ -181,7 +216,11 @@ public class HashTable
     }
 
     // gethash key hash-table &optional default => value, present-p
-    public LispObject gethash(LispObject key) {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#gethash(org.armedbear.lisp.LispObject)
+	 */
+    @Override
+	public LispObject gethash(LispObject key) {
         LispObject value = get(key);
         final LispObject presentp;
         if (value == null) {
@@ -193,7 +232,11 @@ public class HashTable
     }
 
     // gethash key hash-table &optional default => value, present-p
-    public LispObject gethash(LispObject key, LispObject defaultValue) {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#gethash(org.armedbear.lisp.LispObject, org.armedbear.lisp.LispObject)
+	 */
+    @Override
+	public LispObject gethash(LispObject key, LispObject defaultValue) {
         LispObject value = get(key);
         final LispObject presentp;
         if (value == null) {
@@ -205,28 +248,41 @@ public class HashTable
         return LispThread.currentThread().setValues(value, presentp);
     }
 
-    public LispObject gethash1(LispObject key) {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#gethash1(org.armedbear.lisp.LispObject)
+	 */
+    @Override
+	public LispObject gethash1(LispObject key) {
         final LispObject value = get(key);
         return value != null ? value : NIL;
     }
 
-    public LispObject puthash(LispObject key, LispObject newValue) {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#puthash(org.armedbear.lisp.LispObject, org.armedbear.lisp.LispObject)
+	 */
+    @Override
+	public LispObject puthash(LispObject key, LispObject newValue) {
         put(key, newValue);
         return newValue;
     }
 
     // remhash key hash-table => generalized-boolean
-    public LispObject remhash(LispObject key) {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#remhash(org.armedbear.lisp.LispObject)
+	 */
+    @Override
+	public LispObject remhash(LispObject key) {
         // A value in a Lisp hash table can never be null, so...
         return remove(key) != null ? T : NIL;
     }
 
-    public String printObjectImpl() {
+    @Override
+	public String printObjectImpl() {
         if (Symbol.PRINT_READABLY.symbolValue(LispThread.currentThread()) != NIL) {
             error(new PrintNotReadable(list(Keyword.OBJECT, this)));
             return null; // Not reached.
         }
-        StringBuilder sb = new StringBuilder(getTest().princToString());
+        StringBuilder sb = new StringBuilder(getTestSymbol().princToString());
         sb.append(' ');
         sb.append(Symbol.HASH_TABLE.princToString());
         sb.append(' ');
@@ -242,8 +298,12 @@ public class HashTable
         return unreadableString(sb.toString());
     }
 
-    public Symbol getTest() {
-        return comparator.getTest();
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#getTestSymbol()
+	 */
+    @Override
+	public Symbol getTestSymbol() {
+        return comparator.getTestSymbol();
     }
 
     protected HashEntry getEntry(LispObject key) {
@@ -260,7 +320,11 @@ public class HashTable
         return null;
     }
 
-    public LispObject get(LispObject key) {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#get(org.armedbear.lisp.LispObject)
+	 */
+    @Override
+	public LispObject get(LispObject key) {
         HashEntry e = getEntry(key);
         LispObject v = (e == null) ? null : e.value;
 
@@ -276,7 +340,11 @@ public class HashTable
         }
     }
 
-    public void put(LispObject key, LispObject value) {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#put(org.armedbear.lisp.LispObject, org.armedbear.lisp.LispObject)
+	 */
+    @Override
+	public void put(LispObject key, LispObject value) {
         lock.lock();
         try {
             HashEntry e = getEntry(key);
@@ -297,7 +365,11 @@ public class HashTable
         }
     }
 
-    public LispObject remove(LispObject key) {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#remove(org.armedbear.lisp.LispObject)
+	 */
+    @Override
+	public LispObject remove(LispObject key) {
         lock.lock();
         try {
             int index = comparator.hash(key) & (buckets.length - 1);
@@ -347,12 +419,20 @@ public class HashTable
     }
 
 
-    public LispObject ENTRIES() {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#ENTRIES()
+	 */
+    @Override
+	public LispObject ENTRIES() {
         return getEntries();
     }
 
     // Returns a list of (key . value) pairs.
-    public LispObject getEntries() {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#getEntries()
+	 */
+    @Override
+	public LispObject getEntries() {
         // No need to take out a read lock, for the same reason as MAPHASH
         HashEntry[] b = buckets;
         LispObject list = NIL;
@@ -366,7 +446,11 @@ public class HashTable
         return list;
     }
 
-    public LispObject MAPHASH(LispObject function) {
+    /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#MAPHASH(org.armedbear.lisp.LispObject)
+	 */
+    @Override
+	public LispObject MAPHASH(LispObject function) {
         // Don't take out a read lock: it can't be upgraded to a write
         // lock, which would block the scenario where put() is called to
         // set the value of the current entry
@@ -381,55 +465,86 @@ public class HashTable
         }
         return NIL;
     }
+    
+    protected interface HTComparator
+    {
+        Symbol getTestSymbol();
 
-    protected static class Comparator {
+        boolean keysEqual(LispObject key1, LispObject key2);
 
-        Symbol getTest() {
+        int hash(LispObject key);
+    }
+    
+    public static class EqComparator implements HTComparator {
+
+        @Override
+        public Symbol getTestSymbol() {
             return Symbol.EQ;
         }
 
-        boolean keysEqual(LispObject key1, LispObject key2) {
+        @Override
+        public boolean keysEqual(LispObject key1, LispObject key2) {
             return key1 == key2;
         }
 
-        int hash(LispObject key) {
+        @Override
+        public int hash(LispObject key) {
             return key.sxhash();
         }
     }
 
-    protected static class EqlComparator extends Comparator {
+    public static class EqlComparator implements HTComparator {
 
-        Symbol getTest() {
+        @Override
+        public Symbol getTestSymbol() {
             return Symbol.EQL;
         }
 
-        boolean keysEqual(LispObject key1, LispObject key2) {
+        @Override
+        public boolean keysEqual(LispObject key1, LispObject key2) {
             return key1.eql(key2);
         }
+
+        @Override
+        public int hash(LispObject key) {
+            return key.sxhash();
+        }
+
     }
+    
 
-    protected static class EqualComparator extends Comparator {
+    public static class EqualComparator implements HTComparator {
 
-        Symbol getTest() {
+        @Override
+        public Symbol getTestSymbol() {
             return Symbol.EQUAL;
         }
 
-        boolean keysEqual(LispObject key1, LispObject key2) {
+        @Override
+        public boolean keysEqual(LispObject key1, LispObject key2) {
             return key1.equal(key2);
+        }
+        
+        @Override
+        public int hash(LispObject key) {
+            return key.sxhash();
         }
     }
 
-    protected static class EqualpComparator extends Comparator {
+    public static class EqualpComparator implements HTComparator {
 
-        Symbol getTest() {
+        @Override
+        public Symbol getTestSymbol() {
             return Symbol.EQUALP;
         }
 
-        boolean keysEqual(LispObject key1, LispObject key2) {
+        @Override
+        public boolean keysEqual(LispObject key1, LispObject key2) {
             return key1.equalp(key2);
         }
 
-        int hash(LispObject key) {
+        @Override
+        public int hash(LispObject key) {
             return key.psxhash();
         }
     }
@@ -450,10 +565,19 @@ public class HashTable
     }
 
     // For EQUALP hash tables.
-    public int psxhash() {
+    @Override
+	public int psxhash() {
         long result = 2062775257; // Chosen at random.
         result = mix(result, count);
-        result = mix(result, getTest().sxhash());
+        result = mix(result, getTestSymbol().sxhash());
         return (int) (result & 0x7fffffff);
     }
+
+
+
+	@Override
+	public HashTable toLispObject()
+	{
+		return this;
+	}
 }

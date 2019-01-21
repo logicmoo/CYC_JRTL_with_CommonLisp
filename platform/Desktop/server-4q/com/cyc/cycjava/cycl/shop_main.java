@@ -951,15 +951,18 @@ public final class shop_main extends SubLTranslatedFile
         return (SubLObject)shop_main.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_shop_main_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_shop_main_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_shop_main_file();
     }
     

@@ -117,6 +117,7 @@ abstract public class URLClassLoaderBase extends URLClassLoader implements HRKRe
 		return rememberClass(name, (Class) callProtectedMethodNullOnUncheck(false, true, this, "findBootstrapClassOrNull", name));
 	}
 
+	@Override
 	final protected Class<?> findClass(final String name) throws ClassNotFoundException {
 		return rememberClass(name, findClassLocalMethodologyActuallyDefines(name));
 	}

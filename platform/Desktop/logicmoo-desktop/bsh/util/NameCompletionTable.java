@@ -114,6 +114,7 @@ public class NameCompletionTable extends ArrayList
 			}
 	}
 
+	@Override
 	public String [] completeName( String part ) 
 	{
 		List found = new ArrayList();

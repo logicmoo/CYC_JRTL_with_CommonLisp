@@ -489,12 +489,14 @@ public final class Property implements Comparable, Constants
         return true;
     }
 
-    public boolean equals(Object obj)
+    @Override
+	public boolean equals(Object obj)
     {
         return this == obj;
     }
 
-    public int hashCode()
+    @Override
+	public int hashCode()
     {
         return key.hashCode();
     }
@@ -514,7 +516,8 @@ public final class Property implements Comparable, Constants
         return sb.toString();
     }
 
-    public int compareTo(Object o)
+    @Override
+	public int compareTo(Object o)
     {
         Property p = (Property) o;
         return displayName.compareToIgnoreCase(p.displayName);

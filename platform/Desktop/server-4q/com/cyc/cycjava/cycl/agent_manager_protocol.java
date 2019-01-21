@@ -157,15 +157,18 @@ public final class agent_manager_protocol extends SubLTranslatedFile
         return (SubLObject)agent_manager_protocol.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_agent_manager_protocol_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_agent_manager_protocol_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_agent_manager_protocol_file();
     }
     

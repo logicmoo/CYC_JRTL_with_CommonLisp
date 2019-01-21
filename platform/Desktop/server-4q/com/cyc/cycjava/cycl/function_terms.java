@@ -555,15 +555,18 @@ public final class function_terms extends SubLTranslatedFile
         return (SubLObject)function_terms.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_function_terms_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_function_terms_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_function_terms_file();
     }
     

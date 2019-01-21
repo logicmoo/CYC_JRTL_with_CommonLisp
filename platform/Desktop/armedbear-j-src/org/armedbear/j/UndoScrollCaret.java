@@ -30,7 +30,8 @@ public final class UndoScrollCaret extends UndoMove
         super(editor);
     }
 
-    public boolean addEdit(UndoableEdit edit)
+    @Override
+	public boolean addEdit(UndoableEdit edit)
     {
         return (edit instanceof UndoScrollCaret);
     }

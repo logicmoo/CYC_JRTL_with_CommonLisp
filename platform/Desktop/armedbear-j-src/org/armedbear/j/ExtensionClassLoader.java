@@ -25,7 +25,8 @@ import java.io.DataInputStream;
 
 public final class ExtensionClassLoader extends ClassLoader
 {
-    public Class loadClass(String s, boolean resolve) throws ClassNotFoundException
+    @Override
+	public Class loadClass(String s, boolean resolve) throws ClassNotFoundException
     {
         try {
             File file = null;

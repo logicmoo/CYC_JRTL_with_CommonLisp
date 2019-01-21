@@ -73,7 +73,8 @@ public final class SshFile extends File
         return file;
     }
 
-    public final File getRoot()
+    @Override
+	public final File getRoot()
     {
         SshFile file = new SshFile();
         file.hostName = this.hostName;
@@ -85,7 +86,8 @@ public final class SshFile extends File
         return file;
     }
 
-    public String netPath()
+    @Override
+	public String netPath()
     {
         FastStringBuffer sb = new FastStringBuffer(256);
         sb.append(PREFIX_SSH);
@@ -103,7 +105,8 @@ public final class SshFile extends File
         return sb.toString();
     }
 
-    public File getParentFile()
+    @Override
+	public File getParentFile()
     {
         if (canonicalPath() == null || canonicalPath.equals("/"))
             return null; // No parent.
@@ -116,7 +119,8 @@ public final class SshFile extends File
             userName, password, port);
     }
 
-    public boolean isDirectory()
+    @Override
+	public boolean isDirectory()
     {
         if (type == TYPE_LINK) {
             if (DirectoryCache.getDirectoryCache().getListing(this) != null)
@@ -170,12 +174,14 @@ public final class SshFile extends File
         return type == TYPE_DIRECTORY;
     }
 
-    public boolean isLink()
+    @Override
+	public boolean isLink()
     {
         return type == TYPE_LINK;
     }
 
-    public boolean exists()
+    @Override
+	public boolean exists()
     {
         SshSession session = SshSession.getSession(this);
         if (session == null)
@@ -186,12 +192,14 @@ public final class SshFile extends File
         return result;
     }
 
-    public String getDirectoryListing()
+    @Override
+	public String getDirectoryListing()
     {
         return getDirectoryListing(false);
     }
 
-    public String getDirectoryListing(boolean forceRefresh)
+    @Override
+	public String getDirectoryListing(boolean forceRefresh)
     {
         if (!forceRefresh) {
             String listing =
@@ -212,7 +220,8 @@ public final class SshFile extends File
         return listing;
     }
 
-    public boolean equals(Object obj)
+    @Override
+	public boolean equals(Object obj)
     {
         if (!(obj instanceof SshFile))
             return false;
@@ -239,12 +248,14 @@ public final class SshFile extends File
         return f.canonicalPath.equals(canonicalPath);
     }
 
-    public final String getSeparator()
+    @Override
+	public final String getSeparator()
     {
         return "/";
     }
 
-    public final char getSeparatorChar()
+    @Override
+	public final char getSeparatorChar()
     {
         return '/';
     }

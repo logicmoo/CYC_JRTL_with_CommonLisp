@@ -46,27 +46,32 @@ public final class ObjCMode extends CMode implements Constants, Mode
         return mode;
     }
 
-    public final String getCommentStart()
+    @Override
+	public final String getCommentStart()
     {
         return "// ";
     }
 
-    public final String getCommentEnd()
+    @Override
+	public final String getCommentEnd()
     {
         return null;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new CFormatter(buffer, LANGUAGE_OBJC);
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new ObjCTagger(buffer);
     }
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         if (c == '@')
             return true;

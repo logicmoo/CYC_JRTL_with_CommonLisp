@@ -154,15 +154,18 @@ public final class reformulator_module_dates extends SubLTranslatedFile
         return (SubLObject)reformulator_module_dates.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_reformulator_module_dates_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_reformulator_module_dates_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_reformulator_module_dates_file();
     }
     

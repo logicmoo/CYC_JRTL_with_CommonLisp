@@ -146,7 +146,8 @@ public final class Aliases implements PreferencesChangeListener
         }
     }
 
-    public void preferencesChanged()
+    @Override
+	public void preferencesChanged()
     {
         String inbox = Editor.preferences().getStringProperty(Property.INBOX);
         if (inbox != null)

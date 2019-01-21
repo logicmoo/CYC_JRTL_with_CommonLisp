@@ -173,15 +173,18 @@ public final class reformulation_specification extends SubLTranslatedFile
         return (SubLObject)reformulation_specification.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_reformulation_specification_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_reformulation_specification_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_reformulation_specification_file();
     }
     

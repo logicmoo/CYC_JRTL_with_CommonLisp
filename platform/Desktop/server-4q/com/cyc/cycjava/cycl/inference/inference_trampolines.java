@@ -3500,15 +3500,18 @@ public final class inference_trampolines extends SubLTranslatedFile
         return (SubLObject)inference_trampolines.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_trampolines_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_trampolines_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_trampolines_file();
     }
     
@@ -3626,7 +3629,8 @@ public final class inference_trampolines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-PREDICATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_trampolines.inference_predicate_p(arg1);
         }
     }
@@ -3637,7 +3641,8 @@ public final class inference_trampolines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-SYMMETRIC-PREDICATE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_trampolines.inference_symmetric_predicateP(arg1);
         }
     }
@@ -3648,7 +3653,8 @@ public final class inference_trampolines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-COMMUTATIVE-PREDICATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_trampolines.inference_commutative_predicate_p(arg1);
         }
     }
@@ -3659,7 +3665,8 @@ public final class inference_trampolines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-PARTIALLY-COMMUTATIVE-PREDICATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_trampolines.inference_partially_commutative_predicate_p(arg1);
         }
     }
@@ -3670,7 +3677,8 @@ public final class inference_trampolines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-TRANSITIVE-PREDICATE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_trampolines.inference_transitive_predicateP(arg1);
         }
     }
@@ -3681,7 +3689,8 @@ public final class inference_trampolines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-EVALUATABLE-PREDICATE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_trampolines.inference_evaluatable_predicateP(arg1);
         }
     }
@@ -3692,7 +3701,8 @@ public final class inference_trampolines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-REFLEXIVE-PREDICATE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_trampolines.inference_reflexive_predicateP(arg1);
         }
     }
@@ -3703,7 +3713,8 @@ public final class inference_trampolines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-INDETERMINATE-TERM-P"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return inference_trampolines.clear_indeterminate_term_p();
         }
     }
@@ -3714,7 +3725,8 @@ public final class inference_trampolines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-SOME-GENL-PRED-OR-INVERSE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_trampolines.inference_some_genl_pred_or_inverseP(arg1);
         }
     }
@@ -3725,7 +3737,8 @@ public final class inference_trampolines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-SOME-SPEC-PRED-OR-INVERSE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_trampolines.inference_some_spec_pred_or_inverseP(arg1);
         }
     }

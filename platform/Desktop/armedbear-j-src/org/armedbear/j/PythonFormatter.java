@@ -327,14 +327,16 @@ public final class PythonFormatter extends Formatter
         }
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         clearSegmentList();
         parseLine(line);
         return segmentList;
     }
 
-    public boolean parseBuffer()
+    @Override
+	public boolean parseBuffer()
     {
         int state = PYTHON_STATE_NEUTRAL;
         Line line = buffer.getFirstLine();
@@ -418,7 +420,8 @@ public final class PythonFormatter extends Formatter
         return "!&|<>=+/*-".indexOf(c) >= 0;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable(null);

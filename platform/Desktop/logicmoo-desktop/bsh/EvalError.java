@@ -64,6 +64,7 @@ public class EvalError extends Exception
 	/**
 		Print the error with line number and stack trace.
 	*/
+	@Override
 	public String toString() 
 	{
 		String trace;
@@ -151,6 +152,7 @@ public class EvalError extends Exception
 	/**
 		@see #toString() for a full display of the information
 	*/
+	@Override
 	public String getMessage() { return message; }
 
 	public void setMessage( String s ) { message = s; }

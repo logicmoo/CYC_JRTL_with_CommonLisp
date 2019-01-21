@@ -108,6 +108,7 @@ public abstract class RemotePluginManager <E, F> implements PluginManager {
 	/**
 	 * @see eu.larkc.core.pluginManager.PluginManager#accept(eu.larkc.core.pluginManager.PluginManager.Message)
 	 */
+	@Override
 	public void accept(Message message) {
 		mControlQueue.put(message);
 	}
@@ -124,6 +125,7 @@ public abstract class RemotePluginManager <E, F> implements PluginManager {
 	/**
 	 * @see eu.larkc.core.pluginManager.PluginManager#setPrevious(eu.larkc.core.pluginManager.PluginManager)
 	 */
+	@Override
 	public void setPrevious(PluginManager provider) {
 		this.mPreviousPlugin = provider;
 	}
@@ -149,6 +151,7 @@ public abstract class RemotePluginManager <E, F> implements PluginManager {
 	/**
 	 * @see eu.larkc.core.pluginManager.PluginManager#start()
 	 */
+	@Override
 	public void start() {
 		if (thread != null) {
 			thread.start();

@@ -55,7 +55,8 @@ public class VariablesByAscendingDomainSizeComparator implements Comparator {
      * @exception ClassCastException - if the arguments' types prevent them from
      * being compared by this Comparator
      */
-    public int compare (Object variable1, Object variable2) {
+    @Override
+	public int compare (Object variable1, Object variable2) {
         Integer remainingDomainSize1 =
             new Integer(valueDomains.getUnmarkedDomainSize((CycVariable) variable1));
         Integer remainingDomainSize2 =
@@ -71,7 +72,8 @@ public class VariablesByAscendingDomainSizeComparator implements Comparator {
      * @return <tt>true</tt> only if the specified object is also a
      * comparator and it imposes the same ordering as this comparator.
      */
-     public boolean equals (Object object) {
+     @Override
+	public boolean equals (Object object) {
         return object instanceof VariablesByAscendingDomainSizeComparator;
      }
 }

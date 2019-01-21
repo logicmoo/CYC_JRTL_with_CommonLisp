@@ -4071,15 +4071,18 @@ public final class owlification extends SubLTranslatedFile
         return (SubLObject)owlification.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_owlification_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_owlification_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_owlification_file();
     }
     

@@ -45,7 +45,8 @@ public final class PendingOperations implements Runnable
             notify();
     }
 
-    public synchronized void run()
+    @Override
+	public synchronized void run()
     {
         if (operations != null && operations.size() > 0) {
             Editor.currentEditor().status("Completing pending operations...");

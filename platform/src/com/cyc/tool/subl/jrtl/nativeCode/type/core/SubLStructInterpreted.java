@@ -39,6 +39,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 	{
 	}
 
+	@Override
 	abstract public int hashCode(int currentDepth);
 
 	/*final*/ protected SubLObject[] slots;
@@ -124,6 +125,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		slots = tempSlots;
 	}
 
+	@Override
 	public LispObject getSlotValue_0()
 	{
 		try
@@ -135,6 +137,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 	}
 
+	@Override
 	public LispObject getSlotValue_1()
 	{
 		try
@@ -146,6 +149,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 	}
 
+	@Override
 	public LispObject getSlotValue_2()
 	{
 		try
@@ -157,6 +161,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 	}
 
+	@Override
 	public LispObject getSlotValue_3()
 	{
 		try
@@ -168,6 +173,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 	}
 
+	@Override
 	public LispObject getSlotValue(int index)
 	{
 		try
@@ -179,6 +185,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 	}
 
+	@Override
 	public int getFixnumSlotValue(int index)
 	{
 		try
@@ -192,6 +199,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 	}
 
+	@Override
 	public boolean getSlotValueAsBoolean(int index)
 	{
 		try
@@ -205,6 +213,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 	}
 
+	@Override
 	final public void setSlotValue(int index, LispObject value)
 	{
 		try
@@ -270,6 +279,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 			return super.equalsA(obj);
 		}
 
+		@Override
 		public String printObjectImpl()
 		{
 			try

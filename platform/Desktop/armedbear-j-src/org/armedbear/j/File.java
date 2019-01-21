@@ -871,14 +871,16 @@ public class File implements Comparable
         return file.delete();
     }
 
-    public int hashCode()
+    @Override
+	public int hashCode()
     {
         if (file == null)
             throw new NotSupportedException();
         return file.hashCode();
     }
 
-    public boolean equals(Object obj)
+    @Override
+	public boolean equals(Object obj)
     {
         if (this == obj)
             return true;
@@ -907,7 +909,8 @@ public class File implements Comparable
         return f.canonicalPath.equals(canonicalPath);
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return netPath();
     }
@@ -1030,7 +1033,8 @@ public class File implements Comparable
         }
     }
 
-    public final int compareTo(Object o)
+    @Override
+	public final int compareTo(Object o)
     {
         return getName().compareTo(((File)o).getName());
     }

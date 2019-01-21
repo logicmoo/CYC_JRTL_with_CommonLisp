@@ -547,7 +547,8 @@ public class CodeWriter implements CodeVisitor {
   // Implementation of the CodeVisitor interface
   // --------------------------------------------------------------------------
 
-  public void visitInsn (final int opcode) {
+  @Override
+public void visitInsn (final int opcode) {
     if (computeMaxs) {
       // updates current and max stack sizes
       int size = stackSize + SIZE[opcode];
@@ -569,7 +570,8 @@ public class CodeWriter implements CodeVisitor {
     code.put1(opcode);
   }
 
-  public void visitIntInsn (final int opcode, final int operand) {
+  @Override
+public void visitIntInsn (final int opcode, final int operand) {
     if (computeMaxs && opcode != Constants.NEWARRAY) {
       // updates current and max stack sizes only if opcode == NEWARRAY
       // (stack size variation = 0 for BIPUSH or SIPUSH)
@@ -587,7 +589,8 @@ public class CodeWriter implements CodeVisitor {
     }
   }
 
-  public void visitVarInsn (final int opcode, final int var) {
+  @Override
+public void visitVarInsn (final int opcode, final int var) {
     if (computeMaxs) {
       // updates current and max stack sizes
       if (opcode == Constants.RET) {
@@ -632,7 +635,8 @@ public class CodeWriter implements CodeVisitor {
     }
   }
 
-  public void visitTypeInsn (final int opcode, final String desc) {
+  @Override
+public void visitTypeInsn (final int opcode, final String desc) {
     if (computeMaxs && opcode == Constants.NEW) {
       // updates current and max stack sizes only if opcode == NEW
       // (stack size variation = 0 for ANEWARRAY, CHECKCAST, INSTANCEOF)
@@ -646,7 +650,8 @@ public class CodeWriter implements CodeVisitor {
     code.put12(opcode, cw.newClass(desc).index);
   }
 
-  public void visitFieldInsn (
+  @Override
+public void visitFieldInsn (
     final int opcode,
     final String owner,
     final String name,
@@ -681,7 +686,8 @@ public class CodeWriter implements CodeVisitor {
     code.put12(opcode, cw.newField(owner, name, desc).index);
   }
 
-  public void visitMethodInsn (
+  @Override
+public void visitMethodInsn (
     final int opcode,
     final String owner,
     final String name,
@@ -732,7 +738,8 @@ public class CodeWriter implements CodeVisitor {
     }
   }
 
-  public void visitJumpInsn (final int opcode, final Label label) {
+  @Override
+public void visitJumpInsn (final int opcode, final Label label) {
     if (CHECK) {
       if (label.owner == null) {
         label.owner = this;
@@ -787,7 +794,8 @@ public class CodeWriter implements CodeVisitor {
     }
   }
 
-  public void visitLabel (final Label label) {
+  @Override
+public void visitLabel (final Label label) {
     if (CHECK) {
       if (label.owner == null) {
         label.owner = this;
@@ -811,7 +819,8 @@ public class CodeWriter implements CodeVisitor {
     resize |= label.resolve(this, code.length, code.data);
   }
 
-  public void visitLdcInsn (final Object cst) {
+  @Override
+public void visitLdcInsn (final Object cst) {
     Item i = cw.newCst(cst);
     if (computeMaxs) {
       int size;
@@ -838,7 +847,8 @@ public class CodeWriter implements CodeVisitor {
     }
   }
 
-  public void visitIincInsn (final int var, final int increment) {
+  @Override
+public void visitIincInsn (final int var, final int increment) {
     if (computeMaxs) {
       // updates max locals only (no stack change)
       int n = var + 1;
@@ -854,7 +864,8 @@ public class CodeWriter implements CodeVisitor {
     }
   }
 
-  public void visitTableSwitchInsn (
+  @Override
+public void visitTableSwitchInsn (
     final int min,
     final int max,
     final Label dflt,
@@ -886,7 +897,8 @@ public class CodeWriter implements CodeVisitor {
     }
   }
 
-  public void visitLookupSwitchInsn (
+  @Override
+public void visitLookupSwitchInsn (
     final Label dflt,
     final int keys[],
     final Label labels[])
@@ -918,7 +930,8 @@ public class CodeWriter implements CodeVisitor {
     }
   }
 
-  public void visitMultiANewArrayInsn (final String desc, final int dims) {
+  @Override
+public void visitMultiANewArrayInsn (final String desc, final int dims) {
     if (computeMaxs) {
       // updates current stack size (max stack size unchanged because stack
       // size variation always negative or null)
@@ -929,7 +942,8 @@ public class CodeWriter implements CodeVisitor {
     code.put12(Constants.MULTIANEWARRAY, classItem.index).put1(dims);
   }
 
-  public void visitTryCatchBlock (
+  @Override
+public void visitTryCatchBlock (
     final Label start,
     final Label end,
     final Label handler,
@@ -962,7 +976,8 @@ public class CodeWriter implements CodeVisitor {
     catchTable.put2(type != null ? cw.newClass(type).index : 0);
   }
 
-  public void visitMaxs (final int maxStack, final int maxLocals) {
+  @Override
+public void visitMaxs (final int maxStack, final int maxLocals) {
     if (computeMaxs) {
       // true (non relative) max stack size
       int max = 0;
@@ -1016,7 +1031,8 @@ public class CodeWriter implements CodeVisitor {
     }
   }
 
-  public void visitLocalVariable (
+  @Override
+public void visitLocalVariable (
     final String name,
     final String desc,
     final Label start,
@@ -1043,7 +1059,8 @@ public class CodeWriter implements CodeVisitor {
     localVar.put2(index);
   }
 
-  public void visitLineNumber (final int line, final Label start) {
+  @Override
+public void visitLineNumber (final int line, final Label start) {
     if (CHECK) {
       if (start.owner != this || !start.resolved) {
         throw new IllegalArgumentException();

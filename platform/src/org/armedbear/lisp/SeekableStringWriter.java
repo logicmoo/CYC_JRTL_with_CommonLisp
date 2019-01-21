@@ -49,17 +49,20 @@ public final class SeekableStringWriter extends Writer {
         stringBuffer = new StringBuffer(initialSize);
     }
 
-    public SeekableStringWriter append(char c) {
+    @Override
+	public SeekableStringWriter append(char c) {
         write(c);
         return this;
     }
 
-    public SeekableStringWriter append(CharSequence csq) {
+    @Override
+	public SeekableStringWriter append(CharSequence csq) {
         write(csq.toString());
         return this;
     }
 
-    public SeekableStringWriter append(CharSequence csq, int start, int end) {
+    @Override
+	public SeekableStringWriter append(CharSequence csq, int start, int end) {
         write(csq.subSequence(start, end).toString());
         return this;
     }

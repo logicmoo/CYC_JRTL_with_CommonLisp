@@ -482,11 +482,13 @@ public class Utility extends UtilityMenuOptions {
 	public static JMenu toolsMenu;
 	public static JMenu lastResultsMenu;
 	public static ThreadLocal<Boolean> disableOptionalArgs = new ThreadLocal<Boolean>() {
+		@Override
 		protected Boolean initialValue() {
 			return false;
 		};
 	};
 	public static ThreadLocal<Boolean> canMakeInstanceTriggers = new ThreadLocal<Boolean>() {
+		@Override
 		protected Boolean initialValue() {
 			return false;
 		};
@@ -3452,6 +3454,7 @@ public class Utility extends UtilityMenuOptions {
 	public static java.awt.Image loadImage(final Class c, final String resourceName) {
 		try {
 			java.awt.image.ImageProducer ip = (java.awt.image.ImageProducer) java.security.AccessController.doPrivileged(new java.security.PrivilegedAction() {
+				@Override
 				public Object run() {
 					java.net.URL url;
 					if ((url = getResource(c, resourceName)) == null) {
@@ -3660,6 +3663,7 @@ public class Utility extends UtilityMenuOptions {
 			printStackTrace(e);
 		}
 		taskEqueue.addTask("loadAssemblerInstances", new Runnable() {
+			@Override
 			public void run() {
 				try {
 					singletAssemblerCacheGrabber.loadAssemblerInstances();
@@ -3670,6 +3674,7 @@ public class Utility extends UtilityMenuOptions {
 		});
 
 		taskEqueue.addTask("loadAddedBoxes", new Runnable() {
+			@Override
 			public void run() {
 				try {
 					singletAssemblerCacheGrabber.loadAddedBoxes();
@@ -3854,6 +3859,7 @@ public class Utility extends UtilityMenuOptions {
 			}
 
 			// Netbeans IDE automatically overrides this toString()
+			@Override
 			public String toString() {
 				return string.toString();
 			}
@@ -4044,6 +4050,7 @@ public class Utility extends UtilityMenuOptions {
 			this.popup = menu;
 		}
 
+		@Override
 		public void setVisible(boolean v) {
 			// Make sure we grab the focus so that key events don't go astray.
 			if (v)
@@ -4051,6 +4058,7 @@ public class Utility extends UtilityMenuOptions {
 			super.setVisible(v);
 		}
 
+		@Override
 		public void paint(Graphics g) {
 			//super.paint(g);
 		}
@@ -4068,36 +4076,43 @@ public class Utility extends UtilityMenuOptions {
 		 * disarmed -- it keeps its dark gray background or whatever its L&F uses to
 		 * indicate that the button is currently being pressed.
 		 */
+		@Override
 		public void mouseDragged(MouseEvent e) {
 			if (isNeedToRedispatch())
 				redispatchMouseEvent(e);
 		}
 
+		@Override
 		public void mouseMoved(MouseEvent e) {
 			if (isNeedToRedispatch())
 				redispatchMouseEvent(e);
 		}
 
+		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (isNeedToRedispatch())
 				redispatchMouseEvent(e);
 		}
 
+		@Override
 		public void mouseEntered(MouseEvent e) {
 			if (isNeedToRedispatch())
 				redispatchMouseEvent(e);
 		}
 
+		@Override
 		public void mouseExited(MouseEvent e) {
 			if (isNeedToRedispatch())
 				redispatchMouseEvent(e);
 		}
 
+		@Override
 		public void mousePressed(MouseEvent e) {
 			if (isNeedToRedispatch())
 				redispatchMouseEvent(e);
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent e) {
 			if (isNeedToRedispatch()) {
 				redispatchMouseEvent(e);
@@ -4106,11 +4121,13 @@ public class Utility extends UtilityMenuOptions {
 		}
 
 		// Once we have focus, keep it if we're visible
+		@Override
 		public void focusLost(FocusEvent fe) {
 			if (isVisible())
 				requestFocus();
 		}
 
+		@Override
 		public void focusGained(FocusEvent fe) {
 		}
 

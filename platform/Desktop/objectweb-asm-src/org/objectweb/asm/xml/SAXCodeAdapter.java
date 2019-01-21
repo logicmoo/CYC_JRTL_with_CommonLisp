@@ -78,10 +78,12 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         }
     }
 
-    public final void visitCode() {
+    @Override
+	public final void visitCode() {
     }
 
-    public void visitFrame(
+    @Override
+	public void visitFrame(
         final int type,
         final int nLocal,
         final Object[] local,
@@ -156,29 +158,34 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         }
     }
 
-    public final void visitInsn(final int opcode) {
+    @Override
+	public final void visitInsn(final int opcode) {
         addElement(AbstractVisitor.OPCODES[opcode], new AttributesImpl());
     }
 
-    public final void visitIntInsn(final int opcode, final int operand) {
+    @Override
+	public final void visitIntInsn(final int opcode, final int operand) {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("", "value", "value", "", Integer.toString(operand));
         addElement(AbstractVisitor.OPCODES[opcode], attrs);
     }
 
-    public final void visitVarInsn(final int opcode, final int var) {
+    @Override
+	public final void visitVarInsn(final int opcode, final int var) {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("", "var", "var", "", Integer.toString(var));
         addElement(AbstractVisitor.OPCODES[opcode], attrs);
     }
 
-    public final void visitTypeInsn(final int opcode, final String type) {
+    @Override
+	public final void visitTypeInsn(final int opcode, final String type) {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("", "desc", "desc", "", type);
         addElement(AbstractVisitor.OPCODES[opcode], attrs);
     }
 
-    public final void visitFieldInsn(
+    @Override
+	public final void visitFieldInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -191,7 +198,8 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         addElement(AbstractVisitor.OPCODES[opcode], attrs);
     }
 
-    public final void visitMethodInsn(
+    @Override
+	public final void visitMethodInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -204,19 +212,22 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         addElement(AbstractVisitor.OPCODES[opcode], attrs);
     }
 
-    public final void visitJumpInsn(final int opcode, final Label label) {
+    @Override
+	public final void visitJumpInsn(final int opcode, final Label label) {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("", "label", "label", "", getLabel(label));
         addElement(AbstractVisitor.OPCODES[opcode], attrs);
     }
 
-    public final void visitLabel(final Label label) {
+    @Override
+	public final void visitLabel(final Label label) {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("", "name", "name", "", getLabel(label));
         addElement("Label", attrs);
     }
 
-    public final void visitLdcInsn(final Object cst) {
+    @Override
+	public final void visitLdcInsn(final Object cst) {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("",
                 "cst",
@@ -231,14 +242,16 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         addElement(AbstractVisitor.OPCODES[Opcodes.LDC], attrs);
     }
 
-    public final void visitIincInsn(final int var, final int increment) {
+    @Override
+	public final void visitIincInsn(final int var, final int increment) {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("", "var", "var", "", Integer.toString(var));
         attrs.addAttribute("", "inc", "inc", "", Integer.toString(increment));
         addElement(AbstractVisitor.OPCODES[Opcodes.IINC], attrs);
     }
 
-    public final void visitTableSwitchInsn(
+    @Override
+	public final void visitTableSwitchInsn(
         final int min,
         final int max,
         final Label dflt,
@@ -258,7 +271,8 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         addEnd(o);
     }
 
-    public final void visitLookupSwitchInsn(
+    @Override
+	public final void visitLookupSwitchInsn(
         final Label dflt,
         final int[] keys,
         final Label[] labels)
@@ -276,7 +290,8 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         addEnd(o);
     }
 
-    public final void visitMultiANewArrayInsn(final String desc, final int dims)
+    @Override
+	public final void visitMultiANewArrayInsn(final String desc, final int dims)
     {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("", "desc", "desc", "", desc);
@@ -284,7 +299,8 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         addElement(AbstractVisitor.OPCODES[Opcodes.MULTIANEWARRAY], attrs);
     }
 
-    public final void visitTryCatchBlock(
+    @Override
+	public final void visitTryCatchBlock(
         final Label start,
         final Label end,
         final Label handler,
@@ -300,7 +316,8 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         addElement("TryCatch", attrs);
     }
 
-    public final void visitMaxs(final int maxStack, final int maxLocals) {
+    @Override
+	public final void visitMaxs(final int maxStack, final int maxLocals) {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("",
                 "maxStack",
@@ -317,7 +334,8 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         addEnd("code");
     }
 
-    public void visitLocalVariable(
+    @Override
+	public void visitLocalVariable(
         final String name,
         final String desc,
         final String signature,
@@ -341,14 +359,16 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
         addElement("LocalVar", attrs);
     }
 
-    public final void visitLineNumber(final int line, final Label start) {
+    @Override
+	public final void visitLineNumber(final int line, final Label start) {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("", "line", "line", "", Integer.toString(line));
         attrs.addAttribute("", "start", "start", "", getLabel(start));
         addElement("LineNumber", attrs);
     }
 
-    public AnnotationVisitor visitAnnotationDefault() {
+    @Override
+	public AnnotationVisitor visitAnnotationDefault() {
         return new SAXAnnotationAdapter(getContentHandler(),
                 "annotationDefault",
                 0,
@@ -356,7 +376,8 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
                 null);
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -367,7 +388,8 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
                 desc);
     }
 
-    public AnnotationVisitor visitParameterAnnotation(
+    @Override
+	public AnnotationVisitor visitParameterAnnotation(
         final int parameter,
         final String desc,
         final boolean visible)
@@ -379,7 +401,8 @@ public final class SAXCodeAdapter extends SAXAdapter implements MethodVisitor {
                 desc);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         addEnd("method");
     }
 

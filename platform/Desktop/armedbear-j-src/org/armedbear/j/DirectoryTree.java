@@ -74,7 +74,8 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
         return new DirectoryTree(editor, null);
     }
 
-    public final String getLabelText()
+    @Override
+	public final String getLabelText()
     {
         return editor.getBuffer().getFile().getName();
     }
@@ -89,12 +90,14 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
         return editor;
     }
 
-    public void refresh()
+    @Override
+	public void refresh()
     {
         if (!SwingUtilities.isEventDispatchThread())
             Debug.bug("DirectoryTree.refresh() called from background thread!");
         Runnable refreshRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 File file = editor.getBuffer().getFile();
                 if (file == null)
@@ -104,7 +107,8 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
                     if (treeModel != null) {
                         final DefaultMutableTreeNode node = getNode(file);
                         Runnable completionRunnable = new Runnable() {
-                            public void run()
+                            @Override
+							public void run()
                             {
                                 setModel(treeModel);
                                 if (node != null)
@@ -123,7 +127,8 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
                     final DefaultMutableTreeNode node = getNode(file);
                     if (node != null && node != selectedNode) {
                         Runnable completionRunnable = new Runnable() {
-                            public void run()
+                            @Override
+							public void run()
                             {
                                 scrollNodeToCenter(node);
                             }
@@ -156,7 +161,8 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
         return treeModel.getNode(file);
     }
 
-    public void updatePosition()
+    @Override
+	public void updatePosition()
     {
         int limit = getRowCount();
         int rowToBeSelected = -1;
@@ -192,13 +198,17 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
             clearSelection();
     }
 
-    public void valueChanged(TreeSelectionEvent e) {}
+    @Override
+	public void valueChanged(TreeSelectionEvent e) {}
 
-    public void treeCollapsed(TreeExpansionEvent e) {}
+    @Override
+	public void treeCollapsed(TreeExpansionEvent e) {}
 
-    public void treeExpanded(TreeExpansionEvent e) {}
+    @Override
+	public void treeExpanded(TreeExpansionEvent e) {}
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         int keyCode = e.getKeyCode();
         int modifiers = e.getModifiers();
@@ -256,20 +266,23 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
         editor.getDispatcher().setEnabled(false);
     }
 
-    public void keyReleased(KeyEvent e)
+    @Override
+	public void keyReleased(KeyEvent e)
     {
         e.consume();
         editor.getDispatcher().setEnabled(true);
     }
 
-    public void keyTyped(KeyEvent e)
+    @Override
+	public void keyTyped(KeyEvent e)
     {
         e.consume();
     }
 
     private boolean ignoreMouseClicked;
 
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         ignoreMouseClicked = false;
         LocationBar.cancelInput();
@@ -292,9 +305,11 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
             editor.setFocusToDisplay();
     }
 
-    public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
 
-    public void mouseClicked(MouseEvent e)
+    @Override
+	public void mouseClicked(MouseEvent e)
     {
         if (ignoreMouseClicked) {
             e.consume();
@@ -329,16 +344,20 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
         }
     }
 
-    public void mouseMoved(MouseEvent e) {}
+    @Override
+	public void mouseMoved(MouseEvent e) {}
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e)
+    @Override
+	public void mouseExited(MouseEvent e)
     {
         editor.setFocusToDisplay();
     }
 
-    public void mouseDragged(MouseEvent e) {}
+    @Override
+	public void mouseDragged(MouseEvent e) {}
 
     private static class DirectoryTreeCellRenderer extends DefaultTreeCellRenderer
     {
@@ -362,7 +381,8 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
             setLeafIcon(Utilities.getIconFromFile("dir_close.png"));
         }
 
-        public Component getTreeCellRendererComponent(
+        @Override
+		public Component getTreeCellRendererComponent(
             JTree tree,
             Object value,
             boolean selected,
@@ -384,7 +404,8 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
             return this;
         }
 
-        public void paintComponent(Graphics g)
+        @Override
+		public void paintComponent(Graphics g)
         {
             Display.setRenderingHints(g);
             super.paintComponent(g);

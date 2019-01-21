@@ -46,7 +46,8 @@ public final class OutputBuffer extends Buffer
     return outputBuffer;
   }
 
-  public int load()
+  @Override
+public int load()
   {
     if (!isLoaded())
       {
@@ -60,7 +61,8 @@ public final class OutputBuffer extends Buffer
     return LOAD_COMPLETED;
   }
 
-  public String getFileNameForDisplay()
+  @Override
+public String getFileNameForDisplay()
   {
     return title != null ? title : "";
   }

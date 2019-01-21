@@ -1420,15 +1420,18 @@ public final class agenda extends SubLTranslatedFile
         return (SubLObject)agenda.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_agenda_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_agenda_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_agenda_file();
     }
     
@@ -1586,7 +1589,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AGENDA-WORK-TO-DO"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.agenda_work_to_do();
         }
     }
@@ -1597,7 +1601,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AGENDA-SHOULD-QUIT?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.agenda_should_quitP();
         }
     }
@@ -1608,7 +1613,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RESTART-AGENDA-FLAG?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.restart_agenda_flagP();
         }
     }
@@ -1619,7 +1625,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SAVE-OPERATIONS?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.save_operationsP();
         }
     }
@@ -1630,7 +1637,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("WORRY-TRANSMIT-OPERATIONS?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.worry_transmit_operationsP();
         }
     }
@@ -1641,7 +1649,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RUN-AUXILIARY-OP?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.run_auxiliary_opP();
         }
     }
@@ -1652,7 +1661,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RUN-LOCAL-OP?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.run_local_opP();
         }
     }
@@ -1663,7 +1673,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NORMAL-TRANSMIT-OPERATIONS?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.normal_transmit_operationsP();
         }
     }
@@ -1674,7 +1685,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RUN-REMOTE-OP?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.run_remote_opP();
         }
     }
@@ -1685,7 +1697,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LOAD-OPERATIONS?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.load_operationsP();
         }
     }
@@ -1696,7 +1709,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SAVE-EXPERIENCE?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.save_experienceP();
         }
     }
@@ -1707,7 +1721,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AGENDA-SAVE-ASKED-QUERIES?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.agenda_save_asked_queriesP();
         }
     }
@@ -1718,7 +1733,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("MONITOR-SKSI-GLOBAL-RESOURCING?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.monitor_sksi_global_resourcingP();
         }
     }
@@ -1729,7 +1745,8 @@ public final class agenda extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AGENDA-DAILY-GC-READY-P"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return agenda.agenda_daily_gc_ready_p();
         }
     }

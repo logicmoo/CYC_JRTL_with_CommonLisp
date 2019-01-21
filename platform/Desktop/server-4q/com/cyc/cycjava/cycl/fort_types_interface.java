@@ -1913,15 +1913,18 @@ public final class fort_types_interface extends SubLTranslatedFile
         return (SubLObject)fort_types_interface.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_fort_types_interface_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_fort_types_interface_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_fort_types_interface_file();
     }
     
@@ -2026,7 +2029,8 @@ public final class fort_types_interface extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("COLLECTION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return fort_types_interface.collection_p(arg1);
         }
     }
@@ -2037,7 +2041,8 @@ public final class fort_types_interface extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PREDICATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return fort_types_interface.predicate_p(arg1);
         }
     }
@@ -2048,7 +2053,8 @@ public final class fort_types_interface extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SCOPING-RELATION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return fort_types_interface.scoping_relation_p(arg1);
         }
     }
@@ -2059,7 +2065,8 @@ public final class fort_types_interface extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SIBLING-DISJOINT-COLLECTION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return fort_types_interface.sibling_disjoint_collection_p(arg1);
         }
     }

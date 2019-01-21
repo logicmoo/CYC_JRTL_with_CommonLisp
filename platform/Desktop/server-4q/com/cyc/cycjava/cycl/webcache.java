@@ -246,15 +246,18 @@ public final class webcache extends SubLTranslatedFile
         return (SubLObject)webcache.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_webcache_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_webcache_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_webcache_file();
     }
     

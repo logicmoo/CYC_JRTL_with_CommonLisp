@@ -2230,15 +2230,18 @@ public final class dictionary_utilities extends SubLTranslatedFile
         return (SubLObject)dictionary_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_dictionary_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_dictionary_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_dictionary_utilities_file();
     }
     
@@ -2379,23 +2382,28 @@ public final class dictionary_utilities extends SubLTranslatedFile
             this.$lock = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$synchronized_dictionary_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$dictionary;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$lock;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$dictionary = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$lock = value;
         }
         
@@ -2410,7 +2418,8 @@ public final class dictionary_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SYNCHRONIZED-DICTIONARY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return dictionary_utilities.synchronized_dictionary_p(arg1);
         }
     }

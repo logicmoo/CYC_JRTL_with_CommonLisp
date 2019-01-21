@@ -44,6 +44,7 @@ public class LocalQueryTransformManager extends LocalPluginManager <Query, Query
 			super("Query Transformer");
 		}
 
+		@Override
 		public void run() {
 			mTransformer.initialise();
 			Context context = mTransformer.createContext();

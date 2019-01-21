@@ -35,7 +35,8 @@ public final class UndoFold extends AbstractUndoableEdit
         preState = new State(editor);
     }
 
-    public void undo()
+    @Override
+	public void undo()
     {
         super.undo();
         final Editor editor = Editor.currentEditor();
@@ -44,7 +45,8 @@ public final class UndoFold extends AbstractUndoableEdit
         editor.setUpdateFlag(REFRAME);
     }
 
-    public void redo()
+    @Override
+	public void redo()
     {
         super.redo();
         final Editor editor = Editor.currentEditor();

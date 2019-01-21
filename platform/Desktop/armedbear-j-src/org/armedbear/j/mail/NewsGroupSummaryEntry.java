@@ -116,12 +116,14 @@ public final class NewsGroupSummaryEntry extends MailboxEntry
         return messageNumber;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return toString(1);
     }
 
-    public String toString(int depth)
+    @Override
+	public String toString(int depth)
     {
         FastStringBuffer sb = new FastStringBuffer();
         if (SHOW_MESSAGE_NUMBERS) {
@@ -142,7 +144,8 @@ public final class NewsGroupSummaryEntry extends MailboxEntry
         return sb.toString();
     }
 
-    protected String formatFrom(int fieldWidth)
+    @Override
+	protected String formatFrom(int fieldWidth)
     {
         String s = from;
         int index = s.indexOf('<');

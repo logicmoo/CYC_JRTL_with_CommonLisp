@@ -16,15 +16,18 @@ public class RepoFromClient extends OmniLoaderRepo
         this.dirModelName = dirModelName;
     }
     
-    public Model getDirectoryModel() {
+    @Override
+	public Model getDirectoryModel() {
         return this.getMainQueryDataset().getNamedModel(this.dirModelName);
     }
     
-    protected Dataset makeMainQueryDataset() {
+    @Override
+	protected Dataset makeMainQueryDataset() {
         return this.rc.getRepo().getMainQueryDataset();
     }
     
-    public Dataset getMainQueryDataset() {
+    @Override
+	public Dataset getMainQueryDataset() {
         return this.rc.getRepo().getMainQueryDataset();
     }
 }

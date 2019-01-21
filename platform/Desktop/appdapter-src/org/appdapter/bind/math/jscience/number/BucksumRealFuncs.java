@@ -99,11 +99,13 @@ public class BucksumRealFuncs
 
     public static FieldNumberFactory<Real> getRealNumberFactory() {
         return (FieldNumberFactory<Real>)new FieldNumberFactory<Real>() {
-            public Real getZero() {
+            @Override
+			public Real getZero() {
                 return Real.ZERO;
             }
 
-            public Real getOne() {
+            @Override
+			public Real getOne() {
                 return Real.ONE;
             }
 
@@ -111,15 +113,18 @@ public class BucksumRealFuncs
                 return this.makeNumberFromDouble(0.5);
             }
 
-            public Real makeNumberFromDouble(final double d) {
+            @Override
+			public Real makeNumberFromDouble(final double d) {
                 return BucksumRealFuncs.makeReal(d);
             }
 
-            public Real[] makeArray(final int size) {
+            @Override
+			public Real[] makeArray(final int size) {
                 return (Real[])GeneralFactory.makeArrayForClass((Class)Real.class, size);
             }
 
-            public Real makeNumberFromInt(final int i) {
+            @Override
+			public Real makeNumberFromInt(final int i) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         };

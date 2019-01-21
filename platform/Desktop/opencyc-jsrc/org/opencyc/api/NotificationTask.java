@@ -32,7 +32,8 @@ class NotificationTask implements Runnable {
     worker.getNotificationQueue().add(this);
   }
 
-  public void run() {
+  @Override
+public void run() {
     while (worker.getNotificationQueue().peek() != this) {
       try {
         Thread.sleep(1);

@@ -129,7 +129,8 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
 //	}
 
 
-    public char[] charsOld()
+    @Override
+	public char[] charsOld()
     {
         return chars;
     }
@@ -347,19 +348,21 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         return this;
     }
 
-    public String getStringValue()
+    @Override
+	public String getStringValue()
     {
     	if(string==null) string = String.valueOf(chars);
     	return string;
     }
 
-    public Object javaInstance()
+    @Override
+	public Object javaInstance()
     {
         return getStringValue();
     }
 
     @Override
-    public Object javaInstance(Class c)
+    public Object javaInstanceImpl(Class c)
     {
         return javaInstance();
     }
@@ -461,7 +464,8 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         }
     }
 
-    public int sxhash()
+    @Override
+	public int sxhash()
     {
         if(capacity == 0) return 0;
         int hashCode = randomStringHashBase;
@@ -537,7 +541,8 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         return new ComplexString(newCapacity, displacedTo, displacement);
     }
 
-    public String toString()  {
+    @Override
+	public String toString()  {
 		string = getStringValue();
 		if (Lisp.insideToString == 0) {
 			if(!Lisp.debug) Debug.assertViolation("calling toString in a STR " + string + ".. use getStringValue() instead");

@@ -4371,15 +4371,18 @@ public final class quantities extends SubLTranslatedFile
         return (SubLObject)quantities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_quantities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_quantities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_quantities_file();
     }
     

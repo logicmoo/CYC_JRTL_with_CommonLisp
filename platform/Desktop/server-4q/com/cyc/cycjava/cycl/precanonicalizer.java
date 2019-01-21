@@ -625,15 +625,18 @@ public final class precanonicalizer extends SubLTranslatedFile
         return (SubLObject)precanonicalizer.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_precanonicalizer_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_precanonicalizer_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_precanonicalizer_file();
     }
     
@@ -677,7 +680,8 @@ public final class precanonicalizer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EL-EVALUATABLE-EXPRESSION?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return precanonicalizer.el_evaluatable_expressionP(arg1, (SubLObject)$el_evaluatable_expressionP$UnaryFunction.UNPROVIDED);
         }
     }
@@ -688,7 +692,8 @@ public final class precanonicalizer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EL-EVALUATABLE-EXPRESSION?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return precanonicalizer.el_evaluatable_expressionP(arg1, arg2);
         }
     }

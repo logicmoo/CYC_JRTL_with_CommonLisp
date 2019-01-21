@@ -1011,15 +1011,18 @@ public final class virtual_indexing extends SubLTranslatedFile
         return (SubLObject)virtual_indexing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_virtual_indexing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_virtual_indexing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_virtual_indexing_file();
     }
     

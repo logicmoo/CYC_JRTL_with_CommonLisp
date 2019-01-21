@@ -194,15 +194,18 @@ public final class html_id_links extends SubLTranslatedFile
         return (SubLObject)html_id_links.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_html_id_links_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_html_id_links_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_html_id_links_file();
     }
     

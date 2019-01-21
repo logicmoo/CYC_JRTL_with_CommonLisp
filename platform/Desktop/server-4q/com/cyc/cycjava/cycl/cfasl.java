@@ -2827,15 +2827,18 @@ public final class cfasl extends SubLTranslatedFile
         return (SubLObject)cfasl.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cfasl_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cfasl_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cfasl_file();
     }
     
@@ -2852,23 +2855,28 @@ public final class cfasl extends SubLTranslatedFile
             this.$count = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$cfasl_encoding_stream_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$internal_stream;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$count;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$internal_stream = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$count = value;
         }
         
@@ -2883,7 +2891,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-ENCODING-STREAM-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_encoding_stream_p(arg1);
         }
     }
@@ -2899,23 +2908,28 @@ public final class cfasl extends SubLTranslatedFile
             this.$position = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$cfasl_decoding_stream_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$internal_stream;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$position;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$internal_stream = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$position = value;
         }
         
@@ -2930,7 +2944,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-DECODING-STREAM-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_decoding_stream_p(arg1);
         }
     }
@@ -2944,15 +2959,18 @@ public final class cfasl extends SubLTranslatedFile
             this.$position = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$cfasl_count_stream_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$position;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$position = value;
         }
         
@@ -2967,7 +2985,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-COUNT-STREAM-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_count_stream_p(arg1);
         }
     }
@@ -2978,7 +2997,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-N-8BIT-INT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_n_8bit_int(arg1);
         }
     }
@@ -2989,7 +3009,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-P-16BIT-INT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_p_16bit_int(arg1);
         }
     }
@@ -3000,7 +3021,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-P-24BIT-INT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_p_24bit_int(arg1);
         }
     }
@@ -3011,7 +3033,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-N-24BIT-INT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_n_24bit_int(arg1);
         }
     }
@@ -3022,7 +3045,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-P-32BIT-INT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_p_32bit_int(arg1);
         }
     }
@@ -3033,7 +3057,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-P-BIGNUM"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_p_bignum(arg1);
         }
     }
@@ -3044,7 +3069,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-P-FLOAT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_p_float(arg1);
         }
     }
@@ -3055,7 +3081,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-N-FLOAT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_n_float(arg1);
         }
     }
@@ -3066,7 +3093,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-KEYWORD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_keyword(arg1);
         }
     }
@@ -3077,7 +3105,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-OTHER-SYMBOL"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_other_symbol(arg1);
         }
     }
@@ -3088,7 +3117,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-NIL"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_nil(arg1);
         }
     }
@@ -3099,7 +3129,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-COMMON-SYMBOL"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_common_symbol(arg1);
         }
     }
@@ -3110,7 +3141,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-LIST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_list(arg1);
         }
     }
@@ -3121,7 +3153,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-DOTTED-LIST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_dotted_list(arg1);
         }
     }
@@ -3132,7 +3165,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-GENERAL-VECTOR"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_general_vector(arg1);
         }
     }
@@ -3143,7 +3177,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-STRING"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_string(arg1);
         }
     }
@@ -3154,7 +3189,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-CHARACTER"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_character(arg1);
         }
     }
@@ -3165,7 +3201,8 @@ public final class cfasl extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-GUID"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl.cfasl_input_guid(arg1);
         }
     }

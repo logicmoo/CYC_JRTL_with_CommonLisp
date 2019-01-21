@@ -444,15 +444,18 @@ public final class subl_extensions extends SubLTranslatedFile
         return (SubLObject)subl_extensions.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_subl_extensions_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_subl_extensions_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_subl_extensions_file();
     }
     
@@ -563,39 +566,48 @@ public final class subl_extensions extends SubLTranslatedFile
             this.$plist = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$structure_info_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$type_name;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$slot_list;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$accessor_associations;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$plist;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$type_name = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$slot_list = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$accessor_associations = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$plist = value;
         }
         
@@ -610,7 +622,8 @@ public final class subl_extensions extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRUCTURE-INFO-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return subl_extensions.structure_info_p(arg1);
         }
     }

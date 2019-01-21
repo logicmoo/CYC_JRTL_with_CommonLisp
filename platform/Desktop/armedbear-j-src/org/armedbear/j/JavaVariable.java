@@ -69,7 +69,8 @@ public final class JavaVariable
         return name;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer(type);
         sb.append(' ');

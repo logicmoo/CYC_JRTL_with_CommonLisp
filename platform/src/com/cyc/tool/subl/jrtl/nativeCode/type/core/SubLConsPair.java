@@ -1869,6 +1869,7 @@ abstract public class SubLConsPair extends LispObject implements SubLCons, SubLL
 		return this.countIf(test, key, start, Integer.MAX_VALUE);
 	}
 
+	@Override
 	public SubLSequence deleteItems(boolean[] itemsToDelete, int count) {
 		return AbstractSubLList.deleteItems(this, itemsToDelete, count);
 	}

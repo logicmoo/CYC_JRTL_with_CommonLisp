@@ -60,15 +60,18 @@ public final class psc extends SubLTranslatedFile
         return (SubLObject)psc.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_psc_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_psc_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_psc_file();
     }
     

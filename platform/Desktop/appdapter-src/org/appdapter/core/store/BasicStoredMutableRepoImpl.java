@@ -19,7 +19,8 @@ public class BasicStoredMutableRepoImpl extends BasicRepoImpl implements Repo.St
 {
     private Store myStore;
     
-    public void callLoadingInLock() {
+    @Override
+	public void callLoadingInLock() {
         this.formatRepoIfNeeded();
     }
     
@@ -27,11 +28,13 @@ public class BasicStoredMutableRepoImpl extends BasicRepoImpl implements Repo.St
         this.myStore = aStore;
     }
     
-    public Store getStore() {
+    @Override
+	public Store getStore() {
         return this.myStore;
     }
     
-    public String getUploadHomePath() {
+    @Override
+	public String getUploadHomePath() {
         return ".";
     }
     
@@ -39,7 +42,8 @@ public class BasicStoredMutableRepoImpl extends BasicRepoImpl implements Repo.St
         this.myStore = store;
     }
     
-    public void formatRepoIfNeeded() {
+    @Override
+	public void formatRepoIfNeeded() {
         final Store store = this.getStore();
         if (store == null) {
             throw new RuntimeException("Improperly asked to format store with no store open.");
@@ -60,7 +64,8 @@ public class BasicStoredMutableRepoImpl extends BasicRepoImpl implements Repo.St
         }
     }
     
-    public void importGraphFromURL(final String tgtGraphName, final String sourceURL, final boolean replaceTgtFlag) {
+    @Override
+	public void importGraphFromURL(final String tgtGraphName, final String sourceURL, final boolean replaceTgtFlag) {
         final boolean timingEnabledFlag = true;
         final boolean verboseFlag = true;
         final boolean quietFlag = false;
@@ -68,7 +73,8 @@ public class BasicStoredMutableRepoImpl extends BasicRepoImpl implements Repo.St
         ut.loadOneGraphIntoStoreFromURL(this.myStore, tgtGraphName, sourceURL, replaceTgtFlag);
     }
     
-    public Dataset makeMainQueryDataset() {
+    @Override
+	public Dataset makeMainQueryDataset() {
         final Store store = this.getStore();
         final Dataset ds = DatasetStore.create(store);
         return ds;
@@ -78,12 +84,14 @@ public class BasicStoredMutableRepoImpl extends BasicRepoImpl implements Repo.St
         return SDBFactory.connectNamedModel(this.getStore(), modelID.getAbsUriString());
     }
     
-    public void addNamedModel(final Ident modelID, final Model srcModel) {
+    @Override
+	public void addNamedModel(final Ident modelID, final Model srcModel) {
         final Model connModel = this.connectNamedModel(modelID);
         connModel.add(srcModel);
     }
     
-    public void replaceNamedModel(final Ident modelID, final Model srcModel) {
+    @Override
+	public void replaceNamedModel(final Ident modelID, final Model srcModel) {
         final Model connModel = this.connectNamedModel(modelID);
         connModel.removeAll();
         connModel.add(srcModel);

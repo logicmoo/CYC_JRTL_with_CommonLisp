@@ -41,11 +41,13 @@ public class MouseMotionAdapter extends java.awt.event.MouseMotionAdapter
         JHandler.callLisp(s, mouseevent.getComponent(), mouseevent.paramString(), ai);
     }
 
-    public void mouseDragged(MouseEvent mouseevent) {
+    @Override
+	public void mouseDragged(MouseEvent mouseevent) {
         call("MOUSEDRAGGED", mouseevent);
     }
 
-    public void mouseMoved(MouseEvent mouseevent) {
+    @Override
+	public void mouseMoved(MouseEvent mouseevent) {
         call("MOUSEMOVED", mouseevent);
     }
 

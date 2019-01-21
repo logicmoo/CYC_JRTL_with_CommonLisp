@@ -180,6 +180,7 @@ public class SimpleTemplate
 		return null;
 	}
 
+	@Override
 	public String toString() {
 		return buff.toString();
 	}

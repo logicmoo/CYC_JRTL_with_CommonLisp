@@ -13,15 +13,18 @@ public class OmniLoaderRepo extends SheetRepo implements RepoOper.ReloadableData
         return OmniLoaderRepo$.MODULE$.$lessinit$greater$default$5();
     }
     
-    public void reloadAllModels() {
+    @Override
+	public void reloadAllModels() {
         this.reloadAllModelsFromDir();
     }
     
-    public void reloadSingleModel(final String n) {
+    @Override
+	public void reloadSingleModel(final String n) {
         this.reloadSingleModelByName(n);
     }
     
-    public Dataset getMainQueryDataset() {
+    @Override
+	public Dataset getMainQueryDataset() {
         this.ensureUpdated();
         return super.getMainQueryDataset();
     }

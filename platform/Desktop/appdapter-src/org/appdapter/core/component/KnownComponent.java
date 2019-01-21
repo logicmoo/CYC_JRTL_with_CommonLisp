@@ -5,7 +5,8 @@ import org.appdapter.api.trigger.AnyOper;
 
 public interface KnownComponent extends AnyOper.HasIdent
 {
-    Ident getIdent();
+    @Override
+	Ident getIdent();
     
     String getDescription();
     

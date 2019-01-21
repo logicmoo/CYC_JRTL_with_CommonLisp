@@ -53,17 +53,20 @@ public class JavaException extends LispError
         setFormatArguments(new Cons(new JavaObject(throwable)));
     }
 
+	@Override
 	public LispObject typeOf()
     {
         return Symbol.JAVA_EXCEPTION;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return StandardClass.JAVA_EXCEPTION;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.JAVA_EXCEPTION)
             return T;
@@ -72,7 +75,8 @@ public class JavaException extends LispError
         return super.typep(type);
     }
 
-    public String getMessage()
+    @Override
+	public String getMessage()
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -90,7 +94,8 @@ public class JavaException extends LispError
 "Returns the cause of JAVA-EXCEPTION. (The cause is the Java Throwable\n" +
 "  object that caused JAVA-EXCEPTION to be signalled.)")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             return Symbol.STD_SLOT_VALUE.execute(arg, Symbol.CAUSE);
         }

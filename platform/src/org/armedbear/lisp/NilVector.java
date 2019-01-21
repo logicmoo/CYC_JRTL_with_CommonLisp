@@ -44,7 +44,8 @@ public final class NilVector extends AbstractString
         this.capacity = capacity;
     }
 
-    public char[] charsOld()
+    @Override
+	public char[] charsOld()
     {
         if (capacity != 0)
             accessError();

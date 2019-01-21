@@ -36,12 +36,14 @@ public final class PropertiesMode extends AbstractMode implements Constants, Mod
         return mode;
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new PropertiesFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_F12, 0, "wrapComment");
         // Duplicate mapping to support IBM 1.3 for Linux.

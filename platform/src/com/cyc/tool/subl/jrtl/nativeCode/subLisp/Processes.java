@@ -321,7 +321,7 @@ public class Processes extends SubLTrampolineFile {
 	}
 
 	public static SubLObject print_process(SubLObject process, SubLObject stream) {
-		streams_high.writeString(process.toString(), stream.toOutputTextStream());
+		streams_high.writeString(process.princToString(), stream.toOutputTextStream());
 		return process;
 	}
 

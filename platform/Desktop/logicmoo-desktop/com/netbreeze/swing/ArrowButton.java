@@ -47,12 +47,14 @@ public class ArrowButton extends JButton {
     setPressedIcon(inIcon);
   }
 
-  public Dimension getPreferredSize() {
+  @Override
+public Dimension getPreferredSize() {
     return new Dimension(iconDimension.width + ICON_MARGIN, iconDimension.height + ICON_MARGIN);
   }
 
 
- public boolean isFocusTraversable() {
+ @Override
+public boolean isFocusTraversable() {
   return false;
  }
 
@@ -65,7 +67,8 @@ public class ArrowButton extends JButton {
       this.color = color;
     }
 
-    public void paintIcon(Component c, Graphics g, int x, int y) {
+    @Override
+	public void paintIcon(Component c, Graphics g, int x, int y) {
       g.setColor(color);
       int x1, y1, x2, y2, x3, y3;
       int w1 = 0;
@@ -103,11 +106,13 @@ public class ArrowButton extends JButton {
 
     }
 
-    public int getIconWidth() {
+    @Override
+	public int getIconWidth() {
       return iconDimension.width;
     }
 
-    public int getIconHeight() {
+    @Override
+	public int getIconHeight() {
       return iconDimension.height;
     }
   }

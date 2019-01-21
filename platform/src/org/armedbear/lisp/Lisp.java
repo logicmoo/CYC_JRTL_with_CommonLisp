@@ -195,6 +195,7 @@ public class Lisp
   // End-of-file marker.
 	public static final LispObject EOF = new LispObject()
 	{
+		@Override
 		public String printObjectImpl()
 		{
 			return readableString(Symbol.JCALL, JavaObject.getInstance(Lisp.class), JavaObject.getInstance("EOF"));
@@ -568,9 +569,6 @@ private static SubLException conditionToSubLException(LispObject condition) {
                                       final LispThread thread)
 
   {
-	  boolean wasSubL = Main.isSubLisp();
-	  try {
-		  if(wasSubL)Main.setSubLisp(false);
 
     thread._values = null;
     if (interrupted)
@@ -647,9 +645,6 @@ private static SubLException conditionToSubLException(LispObject condition) {
       }
     else
       return obj;
-	  } finally{
-		 if(wasSubL) Main.setSubLisp(wasSubL);
-	  }
   }
 
   public static final int CALL_REGISTERS_MAX = 8;

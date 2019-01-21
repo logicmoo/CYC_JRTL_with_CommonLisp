@@ -1055,15 +1055,18 @@ public final class noun_compound_caching extends SubLTranslatedFile
         return (SubLObject)noun_compound_caching.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_noun_compound_caching_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_noun_compound_caching_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_noun_compound_caching_file();
     }
     

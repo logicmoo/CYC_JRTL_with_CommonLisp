@@ -126,15 +126,18 @@ public final class cardinal_question extends SubLTranslatedFile
         return (SubLObject)cardinal_question.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cardinal_question_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cardinal_question_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cardinal_question_file();
     }
     

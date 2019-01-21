@@ -85,6 +85,7 @@ public class RemoteSPARQLEndpoint implements SPARQLEndpoint {
 		final RDFXMLGraphResult result = new RDFXMLGraphResult();
 		parser.setRDFHandler(result.getRDFHandler());
 		Runnable task = new Runnable() {
+			@Override
 			public void run() {
 				try {
 					parser.parse(rstr, ORDIConst.DEFAULT_GRAPH);
@@ -113,6 +114,7 @@ public class RemoteSPARQLEndpoint implements SPARQLEndpoint {
 			final SAXParser saxParser = factory.newSAXParser();
 			final SelectXMLVariableBinding result = new SelectXMLVariableBinding();
 			Runnable task = new Runnable() {
+				@Override
 				public void run() {
 					try {
 						saxParser.parse(rstr, result.getDefaultHandler());

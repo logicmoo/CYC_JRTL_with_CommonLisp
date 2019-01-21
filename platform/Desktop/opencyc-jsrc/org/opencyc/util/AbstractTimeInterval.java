@@ -15,7 +15,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @return true iff this interval and the specified interval start
    * simultaneously.
    */
-  public boolean cooriginatesWith(AbstractTimeInterval interval) {
+  @Override
+public boolean cooriginatesWith(AbstractTimeInterval interval) {
     return !startsBeforeStartingOf(interval) && !startsAfterStartingOf(interval);
   }
 
@@ -26,7 +27,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @return true iff this interval and the specified interval end
    * simultaneously.
    */
-  public boolean coterminatesWith(AbstractTimeInterval interval) {
+  @Override
+public boolean coterminatesWith(AbstractTimeInterval interval) {
     return !endsBeforeEndingOf(interval) && !endsAfterEndingOf(interval);
   }
 
@@ -36,7 +38,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param date
    * @return true iff this interval ends after date.
    */
-  public boolean endsAfter(Date date) {
+  @Override
+public boolean endsAfter(Date date) {
     return getEnd().after(date);
   }
 
@@ -46,7 +49,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff this interval ends after the specified interval ends.
    */
-  public boolean endsAfterEndingOf(AbstractTimeInterval interval) {
+  @Override
+public boolean endsAfterEndingOf(AbstractTimeInterval interval) {
     return endsAfter(interval.getEnd()) || (endsOn(interval.getEnd()) && !interval.getIncludesEnd());
   }
 
@@ -56,7 +60,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff this interval ends after the specified interval starts.
    */
-  public boolean endsAfterStartingOf(AbstractTimeInterval interval) {
+  @Override
+public boolean endsAfterStartingOf(AbstractTimeInterval interval) {
     return endsAfter(interval.getStart());
   }
 
@@ -66,7 +71,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param date
    * @return true iff this interval ends before date.
    */
-  public boolean endsBefore(Date date) {
+  @Override
+public boolean endsBefore(Date date) {
     return !endsAfter(date) && !endsOn(date);
   }
 
@@ -76,7 +82,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff this interval ends before the specified interval ends.
    */
-  public boolean endsBeforeEndingOf(AbstractTimeInterval interval) {
+  @Override
+public boolean endsBeforeEndingOf(AbstractTimeInterval interval) {
     if (this.getEnd().before(interval.getEnd())) {
       return true;
     } else if (this.getEnd().equals(interval.getEnd())) {
@@ -92,7 +99,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff this interval ends before the specified interval starts.
    */
-  public boolean endsBeforeStartingOf(AbstractTimeInterval interval) {
+  @Override
+public boolean endsBeforeStartingOf(AbstractTimeInterval interval) {
     return endsBefore(interval.getStart()) || (endsOn(interval.getStart()) && !this.getIncludesEnd());
   }
 
@@ -102,7 +110,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff this interval's end is subsumed by interval.
    */
-  public boolean endsDuring(AbstractTimeInterval interval) {
+  @Override
+public boolean endsDuring(AbstractTimeInterval interval) {
     return interval.subsumes(getEnd()) || coterminatesWith(interval);
   }
 
@@ -112,7 +121,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param date
    * @return true iff this interval ends on date.
    */
-  public boolean endsOn(Date date) {
+  @Override
+public boolean endsOn(Date date) {
     return getEnd().equals(date) && getIncludesEnd();
   }
 
@@ -134,7 +144,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param date
    * @return true iff this interval starts after date.
    */
-  public boolean startsAfter(Date date) {
+  @Override
+public boolean startsAfter(Date date) {
     return !startsBefore(date) && !startsOn(date);
   }
 
@@ -144,7 +155,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff this interval starts after the specified interval ends.
    */
-  public boolean startsAfterEndingOf(AbstractTimeInterval interval) {
+  @Override
+public boolean startsAfterEndingOf(AbstractTimeInterval interval) {
     return startsAfter(interval.getEnd()) || (startsOn(interval.getEnd()) && !interval.getIncludesEnd());
   }
 
@@ -154,7 +166,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff this interval starts after the specified interval starts.
    */
-  public boolean startsAfterStartingOf(AbstractTimeInterval interval) {
+  @Override
+public boolean startsAfterStartingOf(AbstractTimeInterval interval) {
     if (this.getStart().after(interval.getStart())) {
       return true;
     } else if (this.getStart().equals(interval.getStart())) {
@@ -170,7 +183,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param date
    * @return true iff this interval starts before date.
    */
-  public boolean startsBefore(Date date) {
+  @Override
+public boolean startsBefore(Date date) {
     return getStart().before(date);
   }
 
@@ -180,7 +194,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff this interval starts before the specified interval ends.
    */
-  public boolean startsBeforeEndingOf(AbstractTimeInterval interval) {
+  @Override
+public boolean startsBeforeEndingOf(AbstractTimeInterval interval) {
     return startsBefore(interval.getEnd());
   }
 
@@ -190,7 +205,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff this interval starts before the specified interval starts.
    */
-  public boolean startsBeforeStartingOf(AbstractTimeInterval interval) {
+  @Override
+public boolean startsBeforeStartingOf(AbstractTimeInterval interval) {
     return startsBefore(interval.getStart()) || (startsOn(interval.getStart()) && !interval.getIncludesStart());
   }
 
@@ -200,7 +216,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff this interval's start is subsumed by interval.
    */
-  public boolean startsDuring(AbstractTimeInterval interval) {
+  @Override
+public boolean startsDuring(AbstractTimeInterval interval) {
     return interval.subsumes(getStart()) || cooriginatesWith(interval);
   }
 
@@ -210,7 +227,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param date
    * @return true iff this interval starts on date.
    */
-  public boolean startsOn(Date date) {
+  @Override
+public boolean startsOn(Date date) {
     return getStart().equals(date) && getIncludesStart();
   }
 
@@ -220,7 +238,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param date
    * @return true iff date falls within this interval.
    */
-  public boolean subsumes(Date date) {
+  @Override
+public boolean subsumes(Date date) {
     return !startsAfter(date) && !endsBefore(date);
   }
 
@@ -230,7 +249,8 @@ public abstract class AbstractTimeInterval implements TimeInterval {
    * @param interval
    * @return true iff interval starts and ends during this interval.
    */
-  public boolean subsumes(AbstractTimeInterval interval) {
+  @Override
+public boolean subsumes(AbstractTimeInterval interval) {
     return interval.startsDuring(this) && interval.endsDuring(this);
   }
   

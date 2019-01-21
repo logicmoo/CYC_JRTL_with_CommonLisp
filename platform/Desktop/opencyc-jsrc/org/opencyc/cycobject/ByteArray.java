@@ -83,7 +83,8 @@ public class ByteArray extends DefaultCycObject implements Serializable {
      * @param object the <tt>Object</tt> for equality comparison
      * @return equals <tt>boolean</tt> value indicating equality or non-equality.
      */
-    public boolean equals(Object object) {
+    @Override
+	public boolean equals(Object object) {
         if (! (object instanceof ByteArray))
             return false;
         if (bytes.length != ((ByteArray) object).bytes.length)
@@ -99,7 +100,8 @@ public class ByteArray extends DefaultCycObject implements Serializable {
      *
      * @return the representation of the <tt>ByteArray</tt> as a <tt>String</tt>
      */
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer result = new StringBuffer("[ByteArray len:");
         result.append(bytes.length);
         result.append(" ");
@@ -131,7 +133,8 @@ public class ByteArray extends DefaultCycObject implements Serializable {
      * @param indent an int that specifies by how many spaces to indent
      * @param relative a boolean; if true indentation is relative, otherwise absolute
      */
-    public void toXML (XMLWriter xmlWriter, int indent, boolean relative)
+    @Override
+	public void toXML (XMLWriter xmlWriter, int indent, boolean relative)
         throws IOException {
         xmlWriter.printXMLStartTag(byteVectorXMLTag, indent, relative, true);
         xmlWriter.printXMLStartTag(lengthXMLTag, indentLength, true, false);
@@ -145,7 +148,8 @@ public class ByteArray extends DefaultCycObject implements Serializable {
         xmlWriter.printXMLEndTag(byteVectorXMLTag, -indentLength, true);
     }
     
-    public String stringApiValue() {
+    @Override
+	public String stringApiValue() {
       StringBuffer buf = new StringBuffer(bytes.length*4);
       buf.append( "(read-from-string \"#(");
       for (int i = 0; i < bytes.length; i++) {
@@ -184,7 +188,8 @@ public class ByteArray extends DefaultCycObject implements Serializable {
     }
   }
 
-  public int compareTo(Object o){
+  @Override
+public int compareTo(Object o){
     if(!(o instanceof ByteArray)) return this.toString().compareTo(o.toString());
     int thisbound=bytes.length;
     ByteArray cmp=(ByteArray)o;

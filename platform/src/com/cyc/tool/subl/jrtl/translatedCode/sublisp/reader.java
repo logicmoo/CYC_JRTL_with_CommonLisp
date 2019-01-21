@@ -2211,10 +2211,10 @@ public class reader extends SubLTranslatedFile {
 			eof_value = SubLNil.NIL;
 		SubLThread thread = SubLProcess.currentSubLThread();
 		while (true) {
-			SubLObject ch = streams_high.read_char(stream, eof_error_p, SubLNil.NIL, CommonSymbols.UNPROVIDED);
+			final SubLObject ch = streams_high.read_char(stream, eof_error_p, SubLNil.NIL, CommonSymbols.UNPROVIDED);
 			if (SubLNil.NIL == ch)
 				return eof_value;
-			SubLObject func = character_function(ch, CommonSymbols.UNPROVIDED);
+			final SubLObject func = character_function(ch, CommonSymbols.UNPROVIDED);
 			SubLObject the_result = SubLNil.NIL;
 			SubLObject good_p = SubLNil.NIL;
 			if (func == reader.$sym50$CONSTITUENT_RMF) {
@@ -2282,7 +2282,7 @@ public class reader extends SubLTranslatedFile {
 				good_p = goodp;
 			} else {
 				thread.resetMultipleValues();
-				SubLObject result = Functions.funcall(character_function(ch, CommonSymbols.UNPROVIDED), stream, ch);
+				SubLObject result = Functions.funcall(func, stream, ch);
 				SubLObject goodp = thread.secondMultipleValue();
 				thread.resetMultipleValues();
 				the_result = result;

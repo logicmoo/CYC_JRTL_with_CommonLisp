@@ -968,15 +968,18 @@ public final class html_kif extends SubLTranslatedFile
         return (SubLObject)html_kif.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_html_kif_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_html_kif_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_html_kif_file();
     }
     

@@ -200,7 +200,8 @@ public final class DirectoryEntry
         return string;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         String marked = isMarked ? "T " : "  ";
         // Use saved string for native format.

@@ -965,15 +965,18 @@ public final class cb_wordnet_import_comment extends SubLTranslatedFile
         return (SubLObject)cb_wordnet_import_comment.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_wordnet_import_comment_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_wordnet_import_comment_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_wordnet_import_comment_file();
     }
     

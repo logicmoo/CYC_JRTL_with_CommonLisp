@@ -784,15 +784,18 @@ public final class inference_worker_rewrite extends SubLTranslatedFile
         return (SubLObject)inference_worker_rewrite.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_worker_rewrite_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_worker_rewrite_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_worker_rewrite_file();
     }
     
@@ -854,31 +857,38 @@ public final class inference_worker_rewrite extends SubLTranslatedFile
             this.$supports = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$rewrite_link_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$hl_module;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$bindings;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$supports;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$hl_module = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$bindings = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$supports = value;
         }
         
@@ -893,7 +903,8 @@ public final class inference_worker_rewrite extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REWRITE-LINK-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_worker_rewrite.rewrite_link_data_p(arg1);
         }
     }

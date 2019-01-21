@@ -14,7 +14,8 @@ public class DatabaseRepoSpec extends RepoSpec
     private final ClassLoader optConfResCL;
     private final Ident dirGraphID;
     
-    public DatabaseRepo makeRepo() {
+    @Override
+	public DatabaseRepo makeRepo() {
         return FancyRepoLoader$.MODULE$.loadDatabaseRepo(this.configPath, this.optConfResCL, this.dirGraphID);
     }
     

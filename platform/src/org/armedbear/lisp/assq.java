@@ -43,7 +43,8 @@ public final class assq extends Primitive
         super("assq", PACKAGE_EXT, true);
     }
 
-    public LispObject execute(LispObject item, LispObject alist)
+    @Override
+	public LispObject execute(LispObject item, LispObject alist)
 
     {
         return Lisp.assq(item, alist);

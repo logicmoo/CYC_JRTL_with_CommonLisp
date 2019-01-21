@@ -17,7 +17,8 @@ public class JarClassLoader extends MultiClassLoader {
     }
 
 
-    protected byte[] loadClassBytes(String className) {
+    @Override
+	protected byte[] loadClassBytes(String className) {
 	// Support the MultiClassLoader's class name munging facility.
 	className = formatClassName (className);
 

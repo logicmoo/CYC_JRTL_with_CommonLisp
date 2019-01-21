@@ -194,15 +194,18 @@ public final class new_root_tactician_datastructures extends SubLTranslatedFile
         return (SubLObject)new_root_tactician_datastructures.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_new_root_tactician_datastructures_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_new_root_tactician_datastructures_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_new_root_tactician_datastructures_file();
     }
     
@@ -240,15 +243,18 @@ public final class new_root_tactician_datastructures extends SubLTranslatedFile
             this.$new_root_index = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$new_root_strategy_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$new_root_index;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$new_root_index = value;
         }
         
@@ -263,7 +269,8 @@ public final class new_root_tactician_datastructures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NEW-ROOT-STRATEGY-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return new_root_tactician_datastructures.new_root_strategy_data_p(arg1);
         }
     }

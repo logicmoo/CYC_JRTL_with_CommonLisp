@@ -1227,15 +1227,18 @@ public final class sksi_reformulate extends SubLTranslatedFile
         return (SubLObject)sksi_reformulate.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_reformulate_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_reformulate_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_reformulate_file();
     }
     
@@ -1304,7 +1307,8 @@ public final class sksi_reformulate extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NON-SKSI-EVALUATABLE-EXPRESSION?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sksi_reformulate.non_sksi_evaluatable_expressionP(arg1);
         }
     }
@@ -1315,7 +1319,8 @@ public final class sksi_reformulate extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-CMLS-DECODING-TABLE"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return sksi_reformulate.clear_cmls_decoding_table();
         }
     }

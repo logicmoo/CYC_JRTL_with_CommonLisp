@@ -90,10 +90,12 @@ public class DefaultInferenceParameterDescriptions extends HashMap<CycSymbol, In
    *
    * @return the CycAccess
    */
-  public CycAccess getCycAccess() {
+  @Override
+public CycAccess getCycAccess() {
     return cycAccess;
   }
 
+@Override
 public String stringApiValue() {
     return null;
   }
@@ -129,7 +131,8 @@ public String stringApiValue() {
     return inferenceParameterDescriptions;
   }
 
-  public InferenceParameters getDefaultInferenceParameters() {
+  @Override
+public InferenceParameters getDefaultInferenceParameters() {
     DefaultInferenceParameters parameters = new DefaultInferenceParameters(cycAccess);
     Iterator<CycSymbol> iterator = keySet().iterator();
     while (iterator.hasNext()) {

@@ -426,15 +426,18 @@ public final class ontological_similarity extends SubLTranslatedFile
         return (SubLObject)ontological_similarity.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_ontological_similarity_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_ontological_similarity_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_ontological_similarity_file();
     }
     

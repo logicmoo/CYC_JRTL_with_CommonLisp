@@ -29,11 +29,13 @@ public final class RDFSortedWriter extends N3JenaWriterPP
         this.skipWritingPrefixes = !writePfxs;
     }
     
-    protected ResIterator listSubjects(final Model model) {
+    @Override
+	protected ResIterator listSubjects(final Model model) {
         return model.listSubjects();
     }
     
-    protected void processModel(final Model model) {
+    @Override
+	protected void processModel(final Model model) {
         this.prefixMap = model.getNsPrefixMap();
         this.bNodesMap = new HashMap();
         final String base2 = this.prefixMap.get("");
@@ -64,14 +66,16 @@ public final class RDFSortedWriter extends N3JenaWriterPP
         this.bNodesMap = null;
     }
     
-    protected void writeHeader(final Model model) {
+    @Override
+	protected void writeHeader(final Model model) {
         final String baseURIref = this.prefixMap.get("");
         if (baseURIref != null && !baseURIref.equals("")) {
             this.out.println("# Base: " + baseURIref);
         }
     }
     
-    protected void writePrefixes(final Model model) {
+    @Override
+	protected void writePrefixes(final Model model) {
         Graph graph;
         for (graph = model.getGraph(); graph instanceof CheckedGraph; graph = ((CheckedGraph)graph).getDataGraph()) {}
         if (!(graph instanceof GraphMem)) {
@@ -90,7 +94,8 @@ public final class RDFSortedWriter extends N3JenaWriterPP
         }
     }
     
-    protected void writeOneGraphNode(final Resource subject) {
+    @Override
+	protected void writeOneGraphNode(final Resource subject) {
         this.out.incIndent(this.indentProperty);
         this.writeSubject(subject);
         final ClosableIterator<Property> iter = (ClosableIterator<Property>)this.preparePropertiesForSubject(subject);
@@ -99,7 +104,8 @@ public final class RDFSortedWriter extends N3JenaWriterPP
         this.out.println(" .");
     }
     
-    protected void writePropertiesForSubject(final Resource subj, final ClosableIterator<Property> iter0) {
+    @Override
+	protected void writePropertiesForSubject(final Resource subj, final ClosableIterator<Property> iter0) {
         final List<Property> sortMe = new ArrayList<Property>();
         while (iter0.hasNext()) {
             final Property property = (Property)iter0.next();
@@ -117,7 +123,8 @@ public final class RDFSortedWriter extends N3JenaWriterPP
         }
     }
     
-    protected void writeModel(final Model model) {
+    @Override
+	protected void writeModel(final Model model) {
         final List<Resource> sortMe = new ArrayList<Resource>();
         boolean doingFirst = true;
         final ResIterator rIter = this.listSubjects(model);

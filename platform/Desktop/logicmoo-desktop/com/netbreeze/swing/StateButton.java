@@ -41,12 +41,14 @@ abstract public class StateButton extends JButton {
 
   abstract public void initIcons();
 
-  synchronized public void setIcon(Icon icon) {
+  @Override
+synchronized public void setIcon(Icon icon) {
   	if (icon != null)
     	super.setIcon(icon);
   }
 
-  public void addNotify() {
+  @Override
+public void addNotify() {
     super.addNotify();
     if (on == null)
 	    initIcons();
@@ -94,7 +96,8 @@ abstract public class StateButton extends JButton {
     public Blinker () {
     }
 
-	  public void run() {
+	  @Override
+	public void run() {
 	    try {
 	    	while (true) {
       		setIcon(blink1);

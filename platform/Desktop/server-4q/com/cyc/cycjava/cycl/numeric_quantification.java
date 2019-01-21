@@ -758,15 +758,18 @@ public final class numeric_quantification extends SubLTranslatedFile
         return (SubLObject)numeric_quantification.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_numeric_quantification_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_numeric_quantification_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_numeric_quantification_file();
     }
     

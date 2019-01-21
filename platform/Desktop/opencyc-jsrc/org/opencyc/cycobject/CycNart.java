@@ -198,11 +198,13 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    *
    * @return the arguments of the <tt>CycNart</tt>
    */
-  public List getArguments() {
+  @Override
+public List getArguments() {
     return (List) formula.getArgs().rest();
   }
 
-  public Object getArgument(final int argnum) {
+  @Override
+public Object getArgument(final int argnum) {
     return formula.getArg(argnum);
   }
 
@@ -309,7 +311,8 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    *
    * @return a <tt>String</tt> representation of the OpenCyc NART.
    */
-  public String toString() {
+  @Override
+public String toString() {
     if (isInvalid) {
       return "INVALID-NART";
     }
@@ -322,7 +325,8 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    *
    * @return a cyclified <tt>String</tt>.
    */
-  public String cyclify() {
+  @Override
+public String cyclify() {
     if (isInvalid) {
       return "INVALID-NART";
     }
@@ -337,7 +341,8 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    *
    * @return a cyclified <tt>String</tt>.
    */
-  public String cyclifyWithEscapeChars() {
+  @Override
+public String cyclifyWithEscapeChars() {
     if (isInvalid) {
       return "INVALID-NART";
     }
@@ -349,7 +354,8 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    *
    * @return this object in a form suitable for use as an <tt>String</tt> api expression value
    */
-  public String stringApiValue() {
+  @Override
+public String stringApiValue() {
     return "(canonicalize-term '" + cyclifyWithEscapeChars() + ")";
   }
 
@@ -358,7 +364,8 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    *
    * @return this object in a form suitable for use as an <tt>CycList</tt> api expression value
    */
-  public Object cycListApiValue() {
+  @Override
+public Object cycListApiValue() {
     CycList apiValue = new CycList();
     apiValue.add(CycObjectFactory.makeCycSymbol("canonicalize-term"));
     apiValue.addQuoted(this.toCycList());
@@ -432,7 +439,8 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    *
    * @return a hash value for this object
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return formula.hashCode();
   }
 
@@ -442,7 +450,8 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    * @param object the <tt>Object</tt> for equality comparison
    * @return equals <tt>boolean</tt> value indicating equality or non-equality.
    */
-  public boolean equals(Object object) {
+  @Override
+public boolean equals(Object object) {
     if (!(object instanceof CycNart)) {
       return false;
     }
@@ -456,7 +465,8 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    * @param object the <tt>Object</tt> for equality comparison
    * @return equals <tt>boolean</tt> value indicating equality or non-equality.
    */
-  public boolean equalsAtEL(Object object) {
+  @Override
+public boolean equalsAtEL(Object object) {
     return getFormula().equalsAtEL(object);
   }
 
@@ -477,7 +487,8 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    * a symbol or variable will return the empty list.
    * @return a list of all constants refered to by this CycObject
    **/
-  public List getReferencedConstants() {
+  @Override
+public List getReferencedConstants() {
     return getFormula().getReferencedConstants();
   }
 

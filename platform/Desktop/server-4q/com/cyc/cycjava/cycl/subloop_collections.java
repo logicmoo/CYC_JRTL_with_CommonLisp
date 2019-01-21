@@ -6438,15 +6438,18 @@ public final class subloop_collections extends SubLTranslatedFile
         return (SubLObject)subloop_collections.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_subloop_collections_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_subloop_collections_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_subloop_collections_file();
     }
     
@@ -7165,39 +7168,48 @@ public final class subloop_collections extends SubLTranslatedFile
             this.$next = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$double_link_cell_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$owner;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$contents;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$previous;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$next;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$owner = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$contents = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$previous = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$next = value;
         }
         
@@ -7212,7 +7224,8 @@ public final class subloop_collections extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DOUBLE-LINK-CELL-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return subloop_collections.double_link_cell_p(arg1);
         }
     }

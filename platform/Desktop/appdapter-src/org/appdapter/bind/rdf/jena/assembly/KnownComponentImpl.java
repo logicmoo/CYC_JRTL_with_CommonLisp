@@ -12,30 +12,36 @@ public class KnownComponentImpl extends BasicDebugger implements MutableKnownCom
     private String myShortLabel;
     private String myDescription;
     
-    public final void setIdent(final Ident id) {
+    @Override
+	public final void setIdent(final Ident id) {
         JenaLiteralUtils.onSetIdent(this.myIdent = id, (Object)this);
     }
     
-    public Ident getIdent() {
+    @Override
+	public Ident getIdent() {
         return this.myIdent;
     }
     
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return this.myDescription;
     }
     
-    public void setDescription(final String description) {
+    @Override
+	public void setDescription(final String description) {
         this.myDescription = description;
     }
     
-    public String getShortLabel() {
+    @Override
+	public String getShortLabel() {
         if (this.myShortLabel != null && this.myShortLabel.equals("default-label-")) {
             return null;
         }
         return this.myShortLabel;
     }
     
-    public void setShortLabel(final String shortLabel) {
+    @Override
+	public void setShortLabel(final String shortLabel) {
         if (shortLabel.equals("default-label-")) {
             this.myShortLabel = shortLabel;
             return;
@@ -50,7 +56,8 @@ public class KnownComponentImpl extends BasicDebugger implements MutableKnownCom
         return "desc=" + this.myDescription;
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         if (Debuggable.useDebuggableToString) {
             return Debuggable.toInfoStringF((Object)this, true);
         }

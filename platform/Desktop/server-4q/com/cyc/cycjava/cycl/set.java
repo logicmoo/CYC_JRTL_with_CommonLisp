@@ -675,15 +675,18 @@ public final class set extends SubLTranslatedFile
         return (SubLObject)set.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_set_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_set_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_set_file();
     }
     
@@ -779,23 +782,28 @@ public final class set extends SubLTranslatedFile
             this.$test = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$set_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$contents;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$test;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$contents = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$test = value;
         }
         
@@ -810,7 +818,8 @@ public final class set extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SET-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return set.set_p(arg1);
         }
     }
@@ -821,7 +830,8 @@ public final class set extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-SET"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return set.cfasl_input_set(arg1);
         }
     }

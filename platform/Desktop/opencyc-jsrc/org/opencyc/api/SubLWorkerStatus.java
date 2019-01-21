@@ -52,7 +52,8 @@ public class SubLWorkerStatus {
    /** Returns the name of this status as a String.
    * @return the name of this status as a String
    */  
-  public String toString() { return getName(); }
+  @Override
+public String toString() { return getName(); }
   
   /** Indicates that the SubLWorker has not yet been started. */
   public static final SubLWorkerStatus NOT_STARTED_STATUS =

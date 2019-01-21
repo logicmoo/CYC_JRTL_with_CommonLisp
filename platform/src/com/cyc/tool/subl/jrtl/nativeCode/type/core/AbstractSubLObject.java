@@ -116,7 +116,8 @@ public abstract class AbstractSubLObject extends Lisp  implements SubLObject
 	public void checkTypeInternal(SubLSymbol predicate) throws SubLException {
 	}
 
-	  public Object clone()
+	  @Override
+	public Object clone()
 	  {
 		Object result = null;
 		try {
@@ -373,6 +374,7 @@ public abstract class AbstractSubLObject extends Lisp  implements SubLObject
 	}
 
 	// @Override
+	@Override
 	public String getStringValue() {
 		type_error_str(this, "STRING");
 		return "";
@@ -381,7 +383,13 @@ public abstract class AbstractSubLObject extends Lisp  implements SubLObject
 	public String getString() {
 		return getStringValue();
 	}
-
+	
+	@Override
+	public String princToString()
+	{
+		return printObject();
+	}
+	
 	@Override
 	public SubLSymbol getType() {
 		if (false)
@@ -404,6 +412,7 @@ public abstract class AbstractSubLObject extends Lisp  implements SubLObject
 		return this.hashCode(0);
 	}
 
+	@Override
 	public abstract int hashCode(int p0);
 
 	@Override

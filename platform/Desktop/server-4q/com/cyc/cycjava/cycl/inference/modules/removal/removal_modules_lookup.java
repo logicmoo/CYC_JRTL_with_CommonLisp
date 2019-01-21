@@ -1074,15 +1074,18 @@ public final class removal_modules_lookup extends SubLTranslatedFile
         return (SubLObject)removal_modules_lookup.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_lookup_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_lookup_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_lookup_file();
     }
     
@@ -1118,7 +1121,8 @@ public final class removal_modules_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-LOOKUP-POS-COST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_lookup.removal_lookup_pos_cost(arg1, (SubLObject)$removal_lookup_pos_cost$UnaryFunction.UNPROVIDED);
         }
     }
@@ -1129,7 +1133,8 @@ public final class removal_modules_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-LOOKUP-POS-COST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return removal_modules_lookup.removal_lookup_pos_cost(arg1, arg2);
         }
     }
@@ -1140,7 +1145,8 @@ public final class removal_modules_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-COMPLETELY-ASSERTED-ASENT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_lookup.removal_completely_asserted_asentP(arg1);
         }
     }
@@ -1151,7 +1157,8 @@ public final class removal_modules_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-LOOKUP-POS-ITERATOR"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_lookup.removal_lookup_pos_iterator(arg1);
         }
     }
@@ -1162,7 +1169,8 @@ public final class removal_modules_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ASENT-HAS-INDEXED-TERM-ARG-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_lookup.asent_has_indexed_term_arg_p(arg1, (SubLObject)$asent_has_indexed_term_arg_p$UnaryFunction.UNPROVIDED);
         }
     }
@@ -1173,7 +1181,8 @@ public final class removal_modules_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ASENT-HAS-INDEXED-TERM-ARG-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return removal_modules_lookup.asent_has_indexed_term_arg_p(arg1, arg2);
         }
     }

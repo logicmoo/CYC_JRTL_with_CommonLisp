@@ -9676,15 +9676,18 @@ public final class nl_trie extends SubLTranslatedFile
         return (SubLObject)nl_trie.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_nl_trie_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_nl_trie_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_nl_trie_file();
     }
     
@@ -10167,23 +10170,28 @@ public final class nl_trie extends SubLTranslatedFile
             this.$semantic_supports = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$nl_trie_word_struc_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$syntactic_supports;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$semantic_supports;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$syntactic_supports = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$semantic_supports = value;
         }
         
@@ -10198,7 +10206,8 @@ public final class nl_trie extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NL-TRIE-WORD-STRUC-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nl_trie.nl_trie_word_struc_p(arg1);
         }
     }
@@ -10209,7 +10218,8 @@ public final class nl_trie extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-NL-TRIE-WORD-STRUC-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nl_trie.sxhash_nl_trie_word_struc_method(arg1);
         }
     }
@@ -10220,7 +10230,8 @@ public final class nl_trie extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-NL-TRIE-WORD-STRUC"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nl_trie.cfasl_input_nl_trie_word_struc(arg1);
         }
     }
@@ -10231,7 +10242,8 @@ public final class nl_trie extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NL-TRIE-SEMTRANS-PRED-HAS-POS-SPECIFICATION?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nl_trie.nl_trie_semtrans_pred_has_pos_specificationP(arg1);
         }
     }
@@ -10242,7 +10254,8 @@ public final class nl_trie extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NL-TRIE-BREAK-CHAR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nl_trie.nl_trie_break_char_p(arg1);
         }
     }
@@ -10253,7 +10266,8 @@ public final class nl_trie extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NL-TRIE-SYNTACTIC-PRED?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nl_trie.nl_trie_syntactic_predP(arg1);
         }
     }
@@ -10264,7 +10278,8 @@ public final class nl_trie extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NL-TRIE-NAME-STRING-PRED?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nl_trie.nl_trie_name_string_predP(arg1);
         }
     }

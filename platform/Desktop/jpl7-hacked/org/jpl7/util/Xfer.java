@@ -14,6 +14,7 @@ public class Xfer extends Thread {
 		out = s2;
 	}
 
+	@Override
 	public void run() {
 		int c;
 

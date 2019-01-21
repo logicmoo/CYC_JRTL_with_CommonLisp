@@ -76,17 +76,20 @@ public final class RecentFilesTableModel extends AbstractTableModel
         startOfWeek.add(Calendar.DATE, -6);
     }
 
-    public int getColumnCount()
+    @Override
+	public int getColumnCount()
     {
         return columnNames.length;
     }
 
-    public int getRowCount()
+    @Override
+	public int getRowCount()
     {
         return data.size();
     }
 
-    public String getColumnName(int col)
+    @Override
+	public String getColumnName(int col)
     {
         return columnNames[col];
     }
@@ -124,7 +127,8 @@ public final class RecentFilesTableModel extends AbstractTableModel
         return -1;
     }
 
-    public Object getValueAt(int row, int col)
+    @Override
+	public Object getValueAt(int row, int col)
     {
         int i = indexes[row];
         RecentFilesEntry entry = (RecentFilesEntry) data.get(i);
@@ -263,7 +267,8 @@ public final class RecentFilesTableModel extends AbstractTableModel
         indexes[j] = tmp;
     }
 
-    public Class getColumnClass(int col)
+    @Override
+	public Class getColumnClass(int col)
     {
         return String.class;
     }

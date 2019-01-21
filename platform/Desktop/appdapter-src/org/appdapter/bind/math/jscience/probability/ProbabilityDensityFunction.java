@@ -23,11 +23,13 @@ public abstract class ProbabilityDensityFunction<DomainValue, MeasureNumber exte
         this.myVars = vars;
     }
     
-    public final List<Variable<DomainValue>> getVariables() {
+    @Override
+	public final List<Variable<DomainValue>> getVariables() {
         return this.myVars;
     }
     
-    public Text toText() {
+    @Override
+	public Text toText() {
         return new Text(this.getClass().getSimpleName() + "[curVal=" + this.evaluate() + ", curVars=[" + VariableFuncs.dumpVarList((List)this.myVars) + "]]");
     }
     

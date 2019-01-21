@@ -10,32 +10,39 @@ import com.hp.hpl.jena.sparql.core.DatasetGraphQuad;
 
 public abstract class DatasetGraphQuadProc extends DatasetGraphQuad implements DatasetGraph
 {
-    public void addGraph(final Node graphName, final Graph graph) {
+    @Override
+	public void addGraph(final Node graphName, final Graph graph) {
         final Graph g = this.getGraph(graphName);
         GraphUtil.addInto(g, graph);
     }
     
-    public void removeGraph(final Node graphName) {
+    @Override
+	public void removeGraph(final Node graphName) {
         this.deleteAny(graphName, Node.ANY, Node.ANY, Node.ANY);
     }
     
-    public void setDefaultGraph(final Graph g) {
+    @Override
+	public void setDefaultGraph(final Graph g) {
         throw new UnsupportedOperationException("DatasetGraph.setDefaultGraph");
     }
     
-    public void add(final Quad quad) {
+    @Override
+	public void add(final Quad quad) {
         throw new UnsupportedOperationException("DatasetGraph.add(Quad)");
     }
     
-    public void delete(final Quad quad) {
+    @Override
+	public void delete(final Quad quad) {
         throw new UnsupportedOperationException("DatasetGraph.delete(Quad)");
     }
     
-    public Iterator<Quad> find(final Node g, final Node s, final Node p, final Node o) {
+    @Override
+	public Iterator<Quad> find(final Node g, final Node s, final Node p, final Node o) {
         throw new UnsupportedOperationException("DatasetGraph...");
     }
     
-    public Iterator<Quad> findNG(final Node g, final Node s, final Node p, final Node o) {
+    @Override
+	public Iterator<Quad> findNG(final Node g, final Node s, final Node p, final Node o) {
         return this.find(g, s, p, o);
     }
 }

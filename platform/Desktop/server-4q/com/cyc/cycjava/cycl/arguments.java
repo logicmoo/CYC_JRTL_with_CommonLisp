@@ -1192,15 +1192,18 @@ public final class arguments extends SubLTranslatedFile
         return (SubLObject)arguments.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_arguments_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_arguments_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_arguments_file();
     }
     
@@ -1300,7 +1303,8 @@ public final class arguments extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ARGUMENT-TYPE-PROPER-GENLS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return arguments.argument_type_proper_genls(arg1);
         }
     }
@@ -1311,7 +1315,8 @@ public final class arguments extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ASSERTED-ARGUMENT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return arguments.asserted_argument_p(arg1);
         }
     }
@@ -1322,7 +1327,8 @@ public final class arguments extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SUPPORT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return arguments.support_p(arg1);
         }
     }
@@ -1333,7 +1339,8 @@ public final class arguments extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SUPPORT-EQUAL"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return arguments.support_equal(arg1, arg2);
         }
     }
@@ -1344,7 +1351,8 @@ public final class arguments extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SUPPORT-<"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return arguments.support_L(arg1, arg2);
         }
     }
@@ -1355,7 +1363,8 @@ public final class arguments extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SUPPORT-MT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return arguments.support_mt(arg1);
         }
     }
@@ -1366,7 +1375,8 @@ public final class arguments extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("JUSTIFICATION-EQUAL"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return arguments.justification_equal(arg1, arg2);
         }
     }

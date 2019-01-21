@@ -58,7 +58,8 @@ public final class Go extends CatchableThrow
         return tag;
     }
 
-    public LispObject getCondition()
+    @Override
+	public LispObject getCondition()
     {
         StringBuffer sb = new StringBuffer("No tag named ");
         sb.append(tag.princToString());

@@ -40,7 +40,8 @@ public class MethodsPanel extends JPanel implements ActionListener, ListSelectio
     initGUI();
   }
 
-  public void valueChanged(ListSelectionEvent e) {
+  @Override
+public void valueChanged(ListSelectionEvent e) {
     Method current = methodList.getSelectedMethod();
 
     paramPanel.setMethod(current);
@@ -101,7 +102,8 @@ public class MethodsPanel extends JPanel implements ActionListener, ListSelectio
     methodList.addListSelectionListener(this);
   }
 
-  public void actionPerformed(ActionEvent evt) {
+  @Override
+public void actionPerformed(ActionEvent evt) {
     if (evt.getSource() == executeButton) {
       Method method = methodList.getSelectedMethod();
       if (method != null) {

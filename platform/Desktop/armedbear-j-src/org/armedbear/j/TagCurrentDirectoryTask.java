@@ -32,7 +32,8 @@ public final class TagCurrentDirectoryTask extends IdleThreadTask
     }
 
     private final Runnable runnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             long now = System.currentTimeMillis();
             if (lastRun == 0 || now - lastRun > getIdle()) {

@@ -292,7 +292,8 @@ public class CycAssertion extends DefaultCycObject {
    * @return the Ground Atomic Formula (gaf) for this assertion
    * @deprecated cycAccess is not necessary.
    */
-  public CycFormulaSentence getGaf(final CycAccess cycAccess) {
+  @Deprecated
+public CycFormulaSentence getGaf(final CycAccess cycAccess) {
     return getGaf();
   }
     
@@ -348,7 +349,8 @@ public class CycAssertion extends DefaultCycObject {
    * @param indent an int that specifies by how many spaces to indent
    * @param relative a boolean; if true indentation is relative, otherwise absolute
    */
-  public void toXML(XMLWriter xmlWriter, int indent, boolean relative)
+  @Override
+public void toXML(XMLWriter xmlWriter, int indent, boolean relative)
           throws IOException {
     xmlWriter.printXMLStartTag(cycAssertionXMLTag, indent, relative, true);
     hlFormula.toXML(xmlWriter, indent, relative);
@@ -364,7 +366,8 @@ public class CycAssertion extends DefaultCycObject {
    * a symbol or variable will return the empty list.
    * @return a list of all constants refered to by this CycObject
    **/
-  public List getReferencedConstants() {
+  @Override
+public List getReferencedConstants() {
     List result = null;
     if (getFormula() != null) {
       result = DefaultCycObject.getReferencedConstants(getFormula());
@@ -379,7 +382,8 @@ public class CycAssertion extends DefaultCycObject {
     return (result == null) ? new ArrayList() : result;
   }
 
-  public int compareTo(Object o) {
+  @Override
+public int compareTo(Object o) {
     if (!(o instanceof CycAssertion)) {
       return toString().compareTo(o.toString());
     }

@@ -162,6 +162,7 @@ abstract public class BaseDemoNavigatorCtrl implements BrowserPanelGUI, org.appd
 		}
 	}
 
+	@Override
 	public JFrame getFrame() {
 		return myJFrame;
 	}

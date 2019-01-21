@@ -91,7 +91,8 @@ public class NClassLoader extends ClassLoader {
      * @return <code>Class</code> matching the name.
      * @throws <code>ClassNotFoundException</code>
      */
-    public Class loadClass(String name) throws ClassNotFoundException {
+    @Override
+	public Class loadClass(String name) throws ClassNotFoundException {
         return findClass(name);
     }
     /**Loads a class by name from a base directory.
@@ -110,7 +111,8 @@ public class NClassLoader extends ClassLoader {
      * @return <code>Class</code> matching the name.
      * @throws <code>ClassNotFoundException</code>
      */
-    public Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    @Override
+	public Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
         // System.out.println("RESOLVE = '"+resolve+"' NAME = '"+name+"'");
         Class c = findClass(name);
         if (resolve) {
@@ -119,7 +121,8 @@ public class NClassLoader extends ClassLoader {
         // System.out.println("GOT = '"+c+"'");
         return c;
     }
-    public Class findClass(String name) throws ClassNotFoundException {
+    @Override
+	public Class findClass(String name) throws ClassNotFoundException {
       // System.out.println("finding class:  " + name);
         //ClassLoader lod = new ClassLoader();
         //lod.

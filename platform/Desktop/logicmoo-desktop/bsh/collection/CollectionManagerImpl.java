@@ -46,12 +46,14 @@ import bsh.BshIterator;
  */
 public class CollectionManagerImpl extends bsh.CollectionManager
 {
+	@Override
 	public BshIterator getBshIterator( Object obj ) 
 		throws IllegalArgumentException
 	{
 		return new CollectionIterator( obj ); 
 	}
 
+	@Override
 	public boolean isMap( Object obj ) 
 	{
 		if ( obj instanceof Map )
@@ -60,6 +62,7 @@ public class CollectionManagerImpl extends bsh.CollectionManager
 			return super.isMap( obj );
 	}
 
+	@Override
 	public Object getFromMap( Object map, Object key ) 
 	{
 		// Hashtable implements Map
@@ -69,6 +72,7 @@ public class CollectionManagerImpl extends bsh.CollectionManager
 	/*
 	  	Place the raw value into the map... should be unwrapped.
 	 */
+	@Override
 	public Object putInMap( Object map, Object key, Object value ) 
 	{
 		// Hashtable implements Map

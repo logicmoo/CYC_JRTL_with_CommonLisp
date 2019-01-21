@@ -4683,15 +4683,18 @@ public final class defns extends SubLTranslatedFile
         return (SubLObject)defns.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_defns_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_defns_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_defns_file();
     }
     
@@ -4853,7 +4856,8 @@ public final class defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("COL-DEFN-ADMITS?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return defns.col_defn_admitsP(arg1);
         }
     }
@@ -4864,7 +4868,8 @@ public final class defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ADMITTING-DEFN-ASSERTIONS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return defns.admitting_defn_assertions(arg1);
         }
     }

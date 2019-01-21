@@ -60,17 +60,20 @@ public class SimpleCondition extends Condition
         super(message);
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.SIMPLE_CONDITION;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return StandardClass.SIMPLE_CONDITION;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.SIMPLE_CONDITION)
             return T;
@@ -83,7 +86,8 @@ public class SimpleCondition extends Condition
     private static final Primitive SIMPLE_CONDITION_FORMAT_CONTROL =
         new Primitive(Symbol.SIMPLE_CONDITION_FORMAT_CONTROL, "condition")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             return Symbol.STD_SLOT_VALUE.execute(arg, Symbol.FORMAT_CONTROL);
         }
@@ -93,7 +97,8 @@ public class SimpleCondition extends Condition
     private static final Primitive SIMPLE_CONDITION_FORMAT_ARGUMENTS =
         new Primitive(Symbol.SIMPLE_CONDITION_FORMAT_ARGUMENTS, "condition")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             return Symbol.STD_SLOT_VALUE.execute(arg, Symbol.FORMAT_ARGUMENTS);
         }

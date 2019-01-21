@@ -241,15 +241,18 @@ public final class abnormal extends SubLTranslatedFile
         return (SubLObject)abnormal.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_abnormal_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_abnormal_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_abnormal_file();
     }
     

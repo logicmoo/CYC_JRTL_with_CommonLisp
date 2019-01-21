@@ -1442,15 +1442,18 @@ public final class sksi_conjunctive_removal_modules_applicability extends SubLTr
         return (SubLObject)sksi_conjunctive_removal_modules_applicability.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_conjunctive_removal_modules_applicability_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_conjunctive_removal_modules_applicability_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_conjunctive_removal_modules_applicability_file();
     }
     
@@ -1521,7 +1524,8 @@ public final class sksi_conjunctive_removal_modules_applicability extends SubLTr
             super(SubLTranslatedFile.extractFunctionNamed("POS-SUBCLAUSE-SPEC->"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return sksi_conjunctive_removal_modules_applicability.pos_subclause_spec_G(arg1, arg2);
         }
     }

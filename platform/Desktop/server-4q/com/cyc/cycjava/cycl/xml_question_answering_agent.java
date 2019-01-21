@@ -1103,15 +1103,18 @@ public final class xml_question_answering_agent extends SubLTranslatedFile
         return (SubLObject)xml_question_answering_agent.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_xml_question_answering_agent_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_xml_question_answering_agent_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_xml_question_answering_agent_file();
     }
     

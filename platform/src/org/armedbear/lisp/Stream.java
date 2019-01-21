@@ -46,6 +46,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.BitSet;
 import java.util.LinkedList;
@@ -157,11 +158,13 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	}
 
 
+
+
     private boolean pastEnd = false;
 	//private boolean interactive;
     private boolean open = true;
 
-    protected int offset;
+    //protected long offset;
     protected int lineNumber;
 
     // Character output.
@@ -311,26 +314,202 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	}
 
 	//@Override
+	@Override
 	final public SubLSymbol getName() {
 		return getType();
 	}
 
 
-	protected void initAsCharacterInputStream(Reader reader) {
-        if (! (reader instanceof PushbackReader))
-            this.reader = new PushbackReader(reader, 5);
-        else
-            this.reader = (PushbackReader)reader;
+	protected void initAsCharacterInputStream(final Reader bear) {
+		final Reader lockObject = wrapStream(bear);
+		if (!(bear instanceof PushbackReader) || true)
+		{
 
-       // if(elementType==null)elementType = (LispObject) Symbol.CHARACTER;
+			this.reader = new PushbackReader(lockObject, 5)
+			{
+				{
+					super.in = bear;
+				}
+			};
+
+		}
+		else
+			this.reader = (PushbackReader) bear;
+
+	       // if(elementType==null)elementType = (LispObject) Symbol.CHARACTER;
         if(direction==null)direction = Keyword.INPUT_KEYWORD;
         if(pushbackStream==null)
         {
-        	pushbackStream = new PushbackInputStream(new ReaderInputStream(reader));
+        	pushbackStream = new PushbackInputStream(new ReaderInputStream(lockObject));
         }
         isInputStream = true;
         isCharacterStream = true;
     }
+
+
+	public static Reader wrapStream(final Reader bear)
+	{
+		final Reader lockObject = new Reader()
+		{
+			@Override
+			public long skip(long n) throws IOException
+			{
+				return bear.skip(n);
+			}
+			@Override
+			public int read(char[] cbuf) throws IOException
+			{
+				return bear.read(cbuf);
+			}
+			@Override
+			public int read(CharBuffer target) throws IOException
+			{
+				return bear.read(target);
+			}
+			@Override
+			public int read(char[] cbuf, int off, int len) throws IOException
+			{
+				return bear.read(cbuf, off, len);
+			}
+			@Override
+			public void close() throws IOException
+			{
+				bear.close();
+			}
+			@Override
+			public void mark(int readAheadLimit) throws IOException
+			{
+				bear.mark(readAheadLimit);
+			}
+			@Override
+			public boolean markSupported()
+			{
+				return bear.markSupported();
+			}
+			@Override
+			public void reset() throws IOException
+			{
+				bear.reset();
+			}
+            @Override
+            public int read() throws IOException
+            {
+            	return bear.read();
+            }
+			@Override
+			public boolean ready() throws IOException
+			{
+				return bear.ready();
+			}
+			@Override
+			public String toString()
+			{
+				return "A Lockfor" + bear;
+			}
+		};
+		return lockObject;
+	}
+	public  static InputStream wrapStream(final InputStream bear)
+	{
+		final InputStream lockObject = new InputStream()
+		{
+			@Override
+			public int available() throws IOException
+			{
+				return bear.available();
+			}
+			@Override
+			public synchronized void mark(int readlimit)
+			{
+				bear.mark(readlimit);
+			}
+			@Override
+			public int read(byte[] b) throws IOException
+			{
+				return bear.read(b);
+			}
+			@Override
+			public int read(byte[] b, int off, int len) throws IOException
+			{
+				return bear.read(b, off, len);
+			}
+			@Override
+			public long skip(long n) throws IOException
+			{
+				return bear.skip(n);
+			}
+			@Override
+			public void close() throws IOException
+			{
+				bear.close();
+			}
+			@Override
+			public boolean markSupported()
+			{
+				return bear.markSupported();
+			}
+			@Override
+			public void reset() throws IOException
+			{
+				bear.reset();
+			}
+            @Override
+            public int read() throws IOException
+            {
+            	return bear.read();
+            }
+			@Override
+			public String toString()
+			{
+				return "A Lockfor" + bear;
+			}
+		};
+		return lockObject;
+	}
+	public  static OutputStream wrapStream(final OutputStream bear)
+	{
+		final OutputStream lockObject = new OutputStream()
+		{
+
+			@Override
+			public void close() throws IOException
+			{
+				bear.close();
+			}
+
+			@Override
+			public void write(int b) throws IOException
+			{
+				bear.write(b);
+	
+			}
+
+			@Override
+			public void flush() throws IOException
+			{
+				bear.flush();
+			}
+
+			@Override
+			public void write(byte[] b) throws IOException
+			{
+				bear.write(b);
+			}
+
+			@Override
+			public void write(byte[] b, int off, int len) throws IOException
+			{
+				bear.write(b, off, len);
+			}
+
+			@Override
+			public String toString()
+			{
+				return "A Lockfor" + bear;
+			}
+		};
+		return lockObject;
+	}
 
     protected void initAsBinaryInputStream(InputStream in) {
         this.in = in;
@@ -360,55 +539,66 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         isBinaryStream = true;
     }
 
-    public boolean isInputStream() {
+    @Override
+	public boolean isInputStream() {
         return isInputStream;
     }
 
-    public boolean isOutputStream() {
+    @Override
+	public boolean isOutputStream() {
         return isOutputStream;
     }
 
-    public boolean isCharacterInputStream() {
+    @Override
+	public boolean isCharacterInputStream() {
     	boolean b1 = (isCharacterStream && isInputStream);
     	if(isText(getStreamElementType()))return direction.toSymbol()!=Keyword.OUTPUT_KEYWORD;
     	return b1;
     }
 
-    public boolean isBinaryInputStream() {
+    @Override
+	public boolean isBinaryInputStream() {
     	boolean b1 = (isBinaryStream && isInputStream);
         if(!isText(getStreamElementType())) return direction.toSymbol()!=Keyword.OUTPUT_KEYWORD;
     	return b1;
     }
 
-    public boolean isCharacterOutputStream() {
+    @Override
+	public boolean isCharacterOutputStream() {
     	boolean b1 =(isCharacterStream && isOutputStream);
     	if(isText(getStreamElementType())) return direction.toSymbol()!=Keyword.INPUT_KEYWORD;
     	return b1;
     }
 
-    public boolean isBinaryOutputStream() {
+    @Override
+	public boolean isBinaryOutputStream() {
     	boolean b1 =( isBinaryStream && isOutputStream);
     	if(!isText(getStreamElementType())) return direction.toSymbol()!=Keyword.INPUT_KEYWORD;
     	return b1;
     }
 
-    public boolean isInteractive() {
+    @Override
+	public boolean isInteractive() {
         return interactive;
     }
 
-    public void setInteractive(boolean b) {
+    @Override
+	public void setInteractive(boolean b) {
         interactive = b;
     }
 
-    public LispObject getExternalFormat() {
+    @Override
+	public LispObject getExternalFormat() {
         return externalFormat;
     }
 
-    public String getEncoding() {
+    @Override
+	public String getEncoding() {
         return encoding;
     }
 
-    public void setExternalFormat(LispObject format) {
+    @Override
+	public void setExternalFormat(LispObject format) {
         // make sure we encode any remaining buffers with the current format
         finishOutput();
 
@@ -481,7 +671,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     pf_stream_external_format() {
       super("stream-external-format", "stream");
     }
-    public LispObject execute(LispObject arg) {
+    @Override
+	public LispObject execute(LispObject arg) {
       if (arg instanceof Stream) {
         return ((Stream)arg).getExternalFormat();
       } else {
@@ -501,7 +692,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         super("%set-stream-external-format",
               PACKAGE_SYS, false, "stream external-format");
     }
-    public LispObject execute(LispObject stream, LispObject format) {
+    @Override
+	public LispObject execute(LispObject stream, LispObject format) {
       Stream s = checkStream(stream);
       s.setExternalFormat(format);
       return format;
@@ -516,7 +708,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     pf_available_encodings() {
       super("available-encodings", PACKAGE_SYS, true);
     }
-    public LispObject execute() {
+    @Override
+	public LispObject execute() {
       LispObject result = NIL;
       for (Symbol encoding : availableEncodings()) {
         result = result.push(encoding);
@@ -536,11 +729,13 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     return result;
   }
 
-    public boolean isOpen() {
+    @Override
+	public boolean isOpen() {
         return open;
     }
 
-    public void setOpen(boolean b) {
+    @Override
+	public void setOpen(boolean b) {
         open = b;
     }
 
@@ -565,17 +760,21 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         return super.typep(typeSpecifier);
     }
 
-    public LispObject getStreamElementType() {
+    @Override
+	public LispObject getStreamElementType() {
 		return elementType;
     }
 
     // Character input.
-    public int getOffset() {
-        return offset;
+    @Override
+	public int getOffset() {
+    	final long offset = getInputIndex();
+        return (int) offset;
     }
 
     // Character input.
-    public final int getLineNumber() {
+    @Override
+	public final int getLineNumber() {
         return lineNumber;
     }
 
@@ -584,12 +783,14 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     }
 
     // Character output.
-    public int getCharPos() {
+    @Override
+	public int getCharPos() {
         return charPos;
     }
 
     // Character output.
-    public void setCharPos(int n) {
+    @Override
+	public void setCharPos(int n) {
         charPos = n;
     }
 
@@ -617,7 +818,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
    public static ReadtableAccessor currentReadtable
         = new ReadtableAccessor()
     {
-      public Readtable rt(LispThread thread)
+      @Override
+	public Readtable rt(LispThread thread)
       {
         return
           (Readtable)Symbol.CURRENT_READTABLE.symbolValue(thread);
@@ -628,14 +830,16 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     public static ReadtableAccessor faslReadtable
         = new ReadtableAccessor()
     {
-      public Readtable rt(LispThread thread)
+      @Override
+	public Readtable rt(LispThread thread)
       {
         return FaslReadtable.getInstance();
       }
     };
 
 
-    public LispObject read(boolean eofError, LispObject eofValue,
+    @Override
+	public LispObject read(boolean eofError, LispObject eofValue,
                            boolean recursive, LispThread thread,
                            ReadtableAccessor rta)
     {
@@ -669,7 +873,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Symbol _SHARP_SHARP_ALIST_ =
         internSpecial("*SHARP-SHARP-ALIST*", PACKAGE_SYS, NIL);
 
-    public LispObject readPreservingWhitespace(boolean eofError,
+    @Override
+	public LispObject readPreservingWhitespace(boolean eofError,
                                                LispObject eofValue,
                                                boolean recursive,
                                                LispThread thread,
@@ -746,7 +951,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         return value;
     }
 
-    public LispObject readPathname(ReadtableAccessor rta) {
+    @Override
+	public LispObject readPathname(ReadtableAccessor rta) {
         LispObject obj = read(true, NIL, false,
                               LispThread.currentThread(), rta);
         if (obj instanceof AbstractString) {
@@ -757,13 +963,15 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         return error(new TypeError("#p requires a string argument."));
     }
 
-    public LispObject readSymbol() {
+    @Override
+	public LispObject readSymbol() {
         final Readtable rt =
             (Readtable) Symbol.CURRENT_READTABLE.symbolValue(LispThread.currentThread());
         return readSymbol(rt);
     }
 
-    public LispObject readSymbol(Readtable rt) {
+    @Override
+	public LispObject readSymbol(Readtable rt) {
         final StringBuilder sb = new StringBuilder();
         final BitSet flags = _readToken(sb, rt);
         return new Symbol(rt.getReadtableCase() == Keyword.INVERT
@@ -771,7 +979,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
                           : sb.toString());
     }
 
-    public LispObject readStructure(ReadtableAccessor rta) {
+    @Override
+	public LispObject readStructure(ReadtableAccessor rta) {
         final LispThread thread = LispThread.currentThread();
         LispObject obj = read(true, NIL, true, thread, rta);
         if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
@@ -813,7 +1022,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
                                      this));
     }
 
-    public LispObject readString(char terminator, ReadtableAccessor rta)
+    @Override
+	public LispObject readString(char terminator, ReadtableAccessor rta)
     {
       final LispThread thread = LispThread.currentThread();
       final Readtable rt = rta.rt(thread);
@@ -849,7 +1059,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
       return new SimpleString(sb);
     }
 
-    public LispObject readList(boolean requireProperList,
+    @Override
+	public LispObject readList(boolean requireProperList,
                                ReadtableAccessor rta)
     {
         final LispThread thread = LispThread.currentThread();
@@ -923,7 +1134,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
     }
 
-    public LispObject readDispatchChar(char dispChar,
+    @Override
+	public LispObject readDispatchChar(char dispChar,
                                        ReadtableAccessor rta)
     {
         int numArg = -1;
@@ -965,7 +1177,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
                                      this));
     }
 
-    public LispObject readSharpLeftParen(char c, int n,
+    @Override
+	public LispObject readSharpLeftParen(char c, int n,
                                          ReadtableAccessor rta)
     {
         final LispThread thread = LispThread.currentThread();
@@ -985,7 +1198,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         return new Cons(_BQ_VECTOR_FLAG_.symbolValue(thread), list);
     }
 
-    public LispObject readSharpStar(char ignored, int n,
+    @Override
+	public LispObject readSharpStar(char ignored, int n,
                                     ReadtableAccessor rta)
     {
         final LispThread thread = LispThread.currentThread();
@@ -1051,7 +1265,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     }
 
 
-    public LispObject readSharpDot(char c, int n,
+    @Override
+	public LispObject readSharpDot(char c, int n,
                                    ReadtableAccessor rta)
     {
         final LispThread thread = LispThread.currentThread();
@@ -1063,7 +1278,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
                         Environment.newEnvironment(), thread);
     }
 
-    public LispObject readCharacterLiteral(Readtable rt, LispThread thread)
+    @Override
+	public LispObject readCharacterLiteral(Readtable rt, LispThread thread)
 
     {
         try {
@@ -1100,7 +1316,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         }
     }
 
-    public void skipBalancedComment() {
+    @Override
+	public void skipBalancedComment() {
         try {
             while (true) {
                 int n = _readChar();
@@ -1125,7 +1342,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         }
     }
 
-    public LispObject readArray(int rank, ReadtableAccessor rta) {
+    @Override
+	public LispObject readArray(int rank, ReadtableAccessor rta) {
         final LispThread thread = LispThread.currentThread();
         LispObject obj = read(true, NIL, true, thread, rta);
         if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
@@ -1146,7 +1364,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         }
     }
 
-    public LispObject readComplex(ReadtableAccessor rta) {
+    @Override
+	public LispObject readComplex(ReadtableAccessor rta) {
         final LispThread thread = LispThread.currentThread();
         LispObject obj = read(true, NIL, true, thread, rta);
         if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
@@ -1644,7 +1863,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         }
     }
 
-    public LispObject readRadix(int radix, ReadtableAccessor rta) {
+    @Override
+	public LispObject readRadix(int radix, ReadtableAccessor rta) {
         StringBuilder sb = new StringBuilder();
         final LispThread thread = LispThread.currentThread();
         final Readtable rt = rta.rt(thread);
@@ -1690,7 +1910,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         }
     }
 
-    public LispObject readDelimitedList(char delimiter)
+    @Override
+	public LispObject readDelimitedList(char delimiter)
 
     {
         final LispThread thread = LispThread.currentThread();
@@ -1714,7 +1935,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // read-line &optional stream eof-error-p eof-value recursive-p
     // => line, missing-newline-p
     // recursive-p is ignored
-    public LispObject readLine(boolean eofError, LispObject eofValue)
+    @Override
+	public LispObject readLine(boolean eofError, LispObject eofValue)
 
     {
         final LispThread thread = LispThread.currentThread();
@@ -1742,7 +1964,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
     // read-char &optional stream eof-error-p eof-value recursive-p => char
     // recursive-p is ignored
-    public LispObject READ_CHAR() {
+    @Override
+	public LispObject READ_CHAR() {
         try {
             int n = _readChar();
             if (n < 0)
@@ -1754,7 +1977,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
     }
 
-    public LispObject readChar(boolean eofError, LispObject eofValue)
+    @Override
+	public LispObject readChar(boolean eofError, LispObject eofValue)
 
     {
         try {
@@ -1773,7 +1997,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
     // read-char-no-hang &optional stream eof-error-p eof-value recursive-p => char
     // recursive-p is ignored
-    public LispObject readCharNoHang(boolean eofError, LispObject eofValue)
+    @Override
+	public LispObject readCharNoHang(boolean eofError, LispObject eofValue)
 
     {
         try {
@@ -1785,7 +2010,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
 
     // unread-char character &optional input-stream => nil
-    public LispObject unreadChar(LispCharacter c) {
+    @Override
+	public LispObject unreadChar(LispCharacter c) {
         try {
             _unreadChar(c.value);
             return NIL;
@@ -1794,36 +2020,42 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         }
     }
 
-    public LispObject finishOutput() {
+    @Override
+	public LispObject finishOutput() {
         _finishOutput();
         return NIL;
     }
 
     // clear-input &optional input-stream => nil
-    public LispObject clearInput() {
+    @Override
+	public LispObject clearInput() {
         _clearInput();
         return NIL;
     }
 
-    public LispObject getFilePosition() {
+    @Override
+	public LispObject getFilePosition() {
         long pos = _getFilePosition();
         return pos >= 0 ? number(pos) : NIL;
     }
 
-    public LispObject setFilePosition(LispObject arg) {
+    @Override
+	public LispObject setFilePosition(LispObject arg) {
         return _setFilePosition(arg) ? T : NIL;
     }
 
     // close stream &key abort => result
     // Must return true if stream was open, otherwise implementation-dependent.
-    public LispObject close(LispObject abort) {
+    @Override
+	public LispObject close(LispObject abort) {
         _close();
         return T;
     }
 
     // read-byte stream &optional eof-error-p eof-value => byte
     // Reads an 8-bit byte.
-    public LispObject readByte(boolean eofError, LispObject eofValue)
+    @Override
+	public LispObject readByte(boolean eofError, LispObject eofValue)
 
     {
         int n = _readByte();
@@ -1836,25 +2068,29 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         return Fixnum.constants[n];
     }
 
-    public LispObject terpri() {
+    @Override
+	public LispObject terpri() {
         _writeChar('\n');
         return NIL;
     }
 
-    public LispObject FRESH_LINE() {
+    @Override
+	public LispObject FRESH_LINE() {
         if (charPos == 0)
             return NIL;
         _writeChar('\n');
         return T;
     }
 
-    public void print(char c) {
+    @Override
+	public void print(char c) {
         _writeChar(c);
     }
 
     // PRIN1 produces output suitable for input to READ.
     // Binds *PRINT-ESCAPE* to true.
-    public void prin1(LispObject obj) {
+    @Override
+	public void prin1(LispObject obj) {
         LispThread thread = LispThread.currentThread();
         final SpecialBindingsMark mark = thread.markSpecialBindings();
         thread.bindSpecial(Symbol.PRINT_ESCAPE, T);
@@ -1865,7 +2101,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         }
     }
 
-    public LispObject listen() {
+    @Override
+	public LispObject listen() {
         if (pastEnd)
             return NIL;
         try {
@@ -1892,11 +2129,13 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         }
     }
 
-    public LispObject fileLength() {
+    @Override
+	public LispObject fileLength() {
         return Lisp.type_error(this, Symbol.FILE_STREAM);
     }
 
-    public LispObject fileStringLength(LispObject arg) {
+    @Override
+	public LispObject fileStringLength(LispObject arg) {
         if (arg instanceof LispCharacter) {
             if (Utilities.isPlatformWindows) {
                 if (((LispCharacter)arg).value == '\n')
@@ -1933,13 +2172,17 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
         lastDirection = Direction.READ;
         int n = reader.read();
-
+        return onRead(n);
+    }
+    
+    @Override
+	protected int onRead(int n) throws IOException
+	{
         if (n < 0) {
             pastEnd = true;
             return -1;
         }
-
-        ++offset;
+		n = super.onRead(n);
         if (n == '\r' && eolStyle == EolStyle.CRLF) {
             n = _readChar();
             if (n != '\n') {
@@ -1953,9 +2196,20 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
             ++lineNumber;
             return '\n';
         }
-
+        return n;	
+	}
+    
+	@Override
+    protected int onUnread(int n)
+	{
+		n = super.onUnread(n);
+        if (n == '\n') {
+            n = eolChar;
+            --lineNumber;
+        }
         return n;
-    }
+	}
+
 
     /** Puts a character back into the (underlying) stream
      *
@@ -1967,15 +2221,14 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
         lastDirection = Direction.READ;
 
-        --offset;
-        if (n == '\n') {
-            n = eolChar;
-            --lineNumber;
-        }
 
+        n = onUnread(n);
+        
         reader.unread(n);
         pastEnd = false;
     }
+
+
 
 
     /** Returns a boolean indicating input readily available
@@ -1999,7 +2252,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
      *
      * @param c
      */
-    public void _writeChar(char c) {
+    @Override
+	public void _writeChar(char c) {
         try {
         	lastDirection = Direction.WRITE;
             if (c == '\n') {
@@ -2030,7 +2284,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
      * @param start
      * @param end
      */
-    public void _writeChars(char[] chars, int start, int end)
+    @Override
+	public void _writeChars(char[] chars, int start, int end)
 
     {
     	lastDirection = Direction.WRITE;
@@ -2076,7 +2331,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
      *
      * @param s
      */
-    public void _writeString(String s) {
+    @Override
+	public void _writeString(String s) {
         try {
             _writeChars(s.toCharArray(), 0, s.length());
         } catch (NullPointerException e) {
@@ -2092,7 +2348,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
      *
      * @param s
      */
-    public void _writeLine(String s) {
+    @Override
+	public void _writeLine(String s) {
         try {
             _writeString(s);
             _writeChar('\n');
@@ -2107,6 +2364,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
      *
      * @return
      */
+    @Override
     public int _readByte() {
         try {
             int n = in.read();
@@ -2125,7 +2383,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
      *
      * @param n
      */
-    public void _writeByte(int n) {
+    @Override
+	public void _writeByte(int n) {
         try {
         	lastDirection = Direction.WRITE;
             out.write(n); // Writes an 8-bit byte.
@@ -2140,7 +2399,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     /** Flushes any buffered output in the (underlying) stream
      *
      */
-    public void _finishOutput() {
+    @Override
+	public void _finishOutput() {
         try {
             if (writer != null)
                 writer.flush();
@@ -2156,7 +2416,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
      * until _charReady() indicates no more input to be available
      *
      */
-    public void _clearInput() {
+    @Override
+	public void _clearInput() {
         if (reader != null) {
             int c = 0;
             try {
@@ -2245,7 +2506,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     /** Closes the stream and underlying streams
      *
      */
-    public void _close() {
+    @Override
+	public void _close() {
         try {
             if (reader != null)
                 reader.close();
@@ -2261,7 +2523,8 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         }
     }
 
-    public void printStackTrace(Throwable t) {
+    @Override
+	public void printStackTrace(Throwable t) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         t.printStackTrace(pw);
@@ -2897,18 +3160,21 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     };
 
 
+	@Override
 	public SubLOutputTextStream toOutputTextStream() {
 		if(this instanceof SubLOutputTextStream) return (SubLOutputTextStream) this;
 		type_error_str(this, "OUTPUT-TEXT-STREAM");
 		return null;
 	}
 
+	@Override
 	public SubLOutputBinaryStream toOutputBinaryStream() {
 		if(this instanceof SubLOutputBinaryStream) return (SubLOutputBinaryStream) this;
 		type_error_str(this, "OUTPUT-BINARY-STREAM");
 		return null;
 	}
 
+	@Override
 	public SubLOutputStream toOutputStream() {
 		if(this instanceof SubLOutputStream) return (SubLOutputStream) this;
 		type_error_str(this, "OUTPUT-STREAM");
@@ -2917,18 +3183,21 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
 
 
+	@Override
 	public SubLInputTextStream toInputTextStream() {
 		if(this instanceof SubLInputTextStream) return (SubLInputTextStream) this;
 		type_error_str(this, "OUTPUT-TEXT-STREAM");
 		return null;
 	}
 
+	@Override
 	public SubLInputBinaryStream toInputBinaryStream() {
 		if(this instanceof SubLInputBinaryStream) return (SubLInputBinaryStream) this;
 		type_error_str(this, "OUTPUT-BINARY-STREAM");
 		return null;
 	}
 
+	@Override
 	public SubLInputStream toInputStream() {
 		if(this instanceof SubLInputStream) return (SubLInputStream) this;
 		type_error_str(this, "OUTPUT-STREAM");
@@ -2936,38 +3205,46 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	}
 
 
-    public InputStream getWrappedInputStream() {
+    @Override
+	public InputStream getWrappedInputStream() {
 	return in;
     }
 
-    public OutputStream getWrappedOutputStream() {
+    @Override
+	public OutputStream getWrappedOutputStream() {
 	return out;
     }
 
-    public Writer getWrappedWriter() {
+    @Override
+	public Writer getWrappedWriter() {
 	return writer;
     }
 
-    public PushbackReader getWrappedReader() {
+    @Override
+	public PushbackReader getWrappedReader() {
 	return reader;
     }
 
+	@Override
 	public boolean freshLine() {
 		return freshLine;
 	}
 
+	@Override
 	public void writeNewline() {
 		writeString(getNewline());
 		freshLine = true;
 		flush();
 	}
 
+	@Override
 	public void writeString(String str) {
 		_writeString(str);
 		lastDirection = Direction.WRITE;
 		freshLine = false;
 	}
 
+	@Override
 	public void writeString(String str, int off, int len) {
 		_writeChars(str.toCharArray(), off, len);
 		lastDirection = Direction.WRITE;

@@ -3201,15 +3201,18 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile
         return (SubLObject)kb_indexing_datastructures.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_indexing_datastructures_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_indexing_datastructures_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_indexing_datastructures_file();
     }
     
@@ -3391,7 +3394,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INDEXED-TERM-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_indexing_datastructures.indexed_term_p(arg1);
         }
     }
@@ -3402,7 +3406,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INVALID-INDEXED-TERM?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_indexing_datastructures.invalid_indexed_termP(arg1);
         }
     }
@@ -3413,7 +3418,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FULLY-INDEXED-TERM-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_indexing_datastructures.fully_indexed_term_p(arg1);
         }
     }

@@ -125,6 +125,7 @@ public class Pipeline {
 				
 				reason.accept(PluginManager.Message.NEXT);
 				reasonOutputQueue.addListener(new QueueListener<InformationSet>() {
+					@Override
 					public void elementAdded(InformationSet is) {
 						if (is != null) {
 							reason.accept(PluginManager.Message.NEXT);

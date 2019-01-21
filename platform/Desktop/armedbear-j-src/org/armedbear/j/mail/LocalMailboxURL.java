@@ -48,14 +48,16 @@ public final class LocalMailboxURL extends MailboxURL
         return file;
     }
 
-    public boolean equals(Object object)
+    @Override
+	public boolean equals(Object object)
     {
         if (!(object instanceof LocalMailboxURL))
             return false;
         return file.equals(((LocalMailboxURL)object).getFile());
     }
 
-    public String getCanonicalName()
+    @Override
+	public String getCanonicalName()
     {
         return file.canonicalPath();
     }

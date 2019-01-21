@@ -2065,15 +2065,18 @@ public final class hlmt extends SubLTranslatedFile
         return (SubLObject)hlmt.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_hlmt_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_hlmt_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_hlmt_file();
     }
     
@@ -2193,7 +2196,8 @@ public final class hlmt extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLOSED-HLMT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hlmt.closed_hlmt_p(arg1);
         }
     }
@@ -2204,7 +2208,8 @@ public final class hlmt extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HLMT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hlmt.hlmtP(arg1);
         }
     }
@@ -2215,7 +2220,8 @@ public final class hlmt extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HLMT-EQUAL"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return hlmt.hlmt_equal(arg1, arg2);
         }
     }
@@ -2226,7 +2232,8 @@ public final class hlmt extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("MT-UNION-MTS-RECURSIVE-INT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hlmt.mt_union_mts_recursive_int(arg1);
         }
     }
@@ -2237,7 +2244,8 @@ public final class hlmt extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SINGLE-DIMENSION-MT-DIMENSION"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hlmt.single_dimension_mt_dimension(arg1);
         }
     }
@@ -2248,7 +2256,8 @@ public final class hlmt extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("MONAD-MT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hlmt.monad_mt_p(arg1);
         }
     }
@@ -2259,7 +2268,8 @@ public final class hlmt extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("MONAD-CYCL-MT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hlmt.monad_cycl_mtP(arg1);
         }
     }
@@ -2270,7 +2280,8 @@ public final class hlmt extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TEMPORAL-DIMENSION-MT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hlmt.temporal_dimension_mt_p(arg1);
         }
     }

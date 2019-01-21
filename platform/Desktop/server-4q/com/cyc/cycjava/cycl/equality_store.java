@@ -402,15 +402,18 @@ public final class equality_store extends SubLTranslatedFile
         return (SubLObject)equality_store.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_equality_store_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_equality_store_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_equality_store_file();
     }
     

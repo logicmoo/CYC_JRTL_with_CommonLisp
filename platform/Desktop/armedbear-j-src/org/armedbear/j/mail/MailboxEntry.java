@@ -439,7 +439,8 @@ public abstract class MailboxEntry implements Serializable
         return s;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return toString(1);
     }

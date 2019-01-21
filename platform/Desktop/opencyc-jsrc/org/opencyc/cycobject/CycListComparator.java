@@ -46,7 +46,8 @@ public class CycListComparator implements Comparator {
      * @exception ClassCastException - if the arguments' types prevent them from
      * being compared by this Comparator
      */
-    public int compare (Object o1, Object o2) {
+    @Override
+	public int compare (Object o1, Object o2) {
         String string1 = o1.toString();
         String string2 = o2.toString();
         return string1.compareTo(string2);
@@ -59,7 +60,8 @@ public class CycListComparator implements Comparator {
      * @return <tt>true</tt> only if the specified object is also a
      * comparator and it imposes the same ordering as this comparator.
      */
-     public boolean equals (Object object) {
+     @Override
+	public boolean equals (Object object) {
         return object instanceof CycListComparator;
      }
 }

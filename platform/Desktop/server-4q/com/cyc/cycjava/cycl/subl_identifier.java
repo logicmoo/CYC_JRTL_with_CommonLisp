@@ -470,15 +470,18 @@ public final class subl_identifier extends SubLTranslatedFile
         return (SubLObject)subl_identifier.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_subl_identifier_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_subl_identifier_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_subl_identifier_file();
     }
     

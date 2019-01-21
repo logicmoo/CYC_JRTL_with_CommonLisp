@@ -60,7 +60,8 @@ public class ArrayContentsPanel extends JPanel implements SmallBeanView.RemoveLi
     buttonPanel.add(new JLabel("To add objects just drag them into the panel below."));
     reloadButton.addActionListener(
       new ActionListener() {
-        public void actionPerformed(ActionEvent event) {
+        @Override
+		public void actionPerformed(ActionEvent event) {
           reloadContents();
         }
       }
@@ -79,7 +80,8 @@ public class ArrayContentsPanel extends JPanel implements SmallBeanView.RemoveLi
     reloadContents();
   }
 
-  public void beanRemoved(Object bean, Collection parent) {
+  @Override
+public void beanRemoved(Object bean, Collection parent) {
     reloadContents();
   }
 
@@ -103,15 +105,19 @@ public class ArrayContentsPanel extends JPanel implements SmallBeanView.RemoveLi
 
 //======= Drag/Drop methods ====================================0
 
-  public void dragEnter(DropTargetDragEvent event) {
+  @Override
+public void dragEnter(DropTargetDragEvent event) {
     event.acceptDrag (DnDConstants.ACTION_MOVE);
   }
 
-  public void dragExit(DropTargetEvent dtde) {
+  @Override
+public void dragExit(DropTargetEvent dtde) {
   }
-  public void dragOver(DropTargetDragEvent dtde) {
+  @Override
+public void dragOver(DropTargetDragEvent dtde) {
   }
-  public void drop(DropTargetDropEvent event) {
+  @Override
+public void drop(DropTargetDropEvent event) {
     throw new RuntimeException("Not yet implemented");
   /*
     Transferable t = event.getTransferable();
@@ -124,6 +130,7 @@ public class ArrayContentsPanel extends JPanel implements SmallBeanView.RemoveLi
     }
     */
   }
-  public void dropActionChanged(DropTargetDragEvent dtde) {
+  @Override
+public void dropActionChanged(DropTargetDragEvent dtde) {
   }
 }

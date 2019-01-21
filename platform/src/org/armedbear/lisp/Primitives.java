@@ -6966,6 +6966,7 @@ public final class Primitives
 		{
 			Finalizer.addFinalizer(obj, new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					fun.execute();

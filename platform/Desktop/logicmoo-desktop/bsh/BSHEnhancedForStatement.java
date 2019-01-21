@@ -19,7 +19,8 @@ class BSHEnhancedForStatement extends SimpleNode implements ParserConstants
 
     BSHEnhancedForStatement(int id) { super(id); }
 
-    public Object eval( CallStack callstack , Interpreter interpreter )
+    @Override
+	public Object eval( CallStack callstack , Interpreter interpreter )
 		throws EvalError 
 	{
 		Class elementType = null;

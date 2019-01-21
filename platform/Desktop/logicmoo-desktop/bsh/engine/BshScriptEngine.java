@@ -43,12 +43,14 @@ public class BshScriptEngine extends AbstractScriptEngine
 		return interpreter;
 	}
 
+	@Override
 	public Object eval( String script, ScriptContext scriptContext )
 		throws ScriptException
 	{
 		return evalSource( script, scriptContext );
 	}
 
+	@Override
 	public Object eval( Reader reader, ScriptContext scriptContext )
 		throws ScriptException
 	{
@@ -125,12 +127,14 @@ public class BshScriptEngine extends AbstractScriptEngine
 		return ns;
 	}
 
+	@Override
 	public Bindings createBindings()
 	{
 		return new SimpleBindings();
 	}
 
-    public ScriptEngineFactory getFactory()
+    @Override
+	public ScriptEngineFactory getFactory()
 	{
 		if ( factory == null )
 			factory = new BshScriptEngineFactory();
@@ -151,6 +155,7 @@ public class BshScriptEngine extends AbstractScriptEngine
 	 * @throws NullPointerException if the argument is null.
 	 */
 
+	@Override
 	public CompiledScript compile( String script ) throws
 		ScriptException
 	{
@@ -171,6 +176,7 @@ public class BshScriptEngine extends AbstractScriptEngine
 	 * @throws ScriptException if compilation fails.
 	 * @throws NullPointerException if argument is null.
 	 */
+	@Override
 	public CompiledScript compile( Reader script ) throws
 		ScriptException
 	{
@@ -251,6 +257,7 @@ public class BshScriptEngine extends AbstractScriptEngine
 		return invoke( getGlobal(), name, args );
 	}
 
+	@Override
 	public Object invokeFunction( String name, Object... args )
 			throws ScriptException, NoSuchMethodException
 		{
@@ -259,6 +266,7 @@ public class BshScriptEngine extends AbstractScriptEngine
 
 
 
+	@Override
 	public Object invokeMethod(Object obj, String name, Object... args )
 			throws ScriptException, NoSuchMethodException
 		{
@@ -280,6 +288,7 @@ public class BshScriptEngine extends AbstractScriptEngine
 	 * @throws IllegalArgumentException if the specified <code>Class</code> object
 	 * does not exist or is not an interface.
 	 */
+	@Override
 	public Object getInterface( Class clasz )
 	{
 		try {
@@ -308,6 +317,7 @@ public class BshScriptEngine extends AbstractScriptEngine
 	 * does not exist or is not an interface, or if the specified Object is null
 	 * or does not represent a scripting object.
 	 */
+	@Override
 	public Object getInterface( Object thiz, Class clasz )
 	{
 		if ( !(thiz instanceof bsh.This) )
@@ -341,16 +351,19 @@ public class BshScriptEngine extends AbstractScriptEngine
 			this.writer = writer;
 		}
 
+		@Override
 		public void write( int b ) throws IOException
 		{
 			writer.write(b);
 		}
 
+		@Override
 		public void flush() throws IOException
 		{
 			writer.flush();
 		}
 
+		@Override
 		public void close() throws IOException
 		{
 			writer.close();

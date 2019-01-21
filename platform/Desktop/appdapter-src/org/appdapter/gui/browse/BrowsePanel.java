@@ -159,6 +159,7 @@ public class BrowsePanel extends javax.swing.JPanel implements IShowObjectMessag
 		SearchableDemo.installSearchable(myTree);
 		myTree.setCellRenderer(new StyledTreeCellRenderer() {
 
+			@Override
 			protected void customizeStyledLabel(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hazFocus) {
 				try {
 					if (value instanceof AbstractScreenBoxTreeNodeImpl) {
@@ -187,6 +188,7 @@ public class BrowsePanel extends javax.swing.JPanel implements IShowObjectMessag
 				// here is the code to customize the StyledLabel for each tree node
 			}
 
+			@Override
 			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hazFocus) {
 
 				Component c = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hazFocus);
@@ -201,6 +203,7 @@ public class BrowsePanel extends javax.swing.JPanel implements IShowObjectMessag
 
 	}
 
+	@Override
 	public void setVisible(final boolean aFlag) {
 		Utility.invokeAndWait(new Runnable() {
 			@Override public void run() {
@@ -212,11 +215,13 @@ public class BrowsePanel extends javax.swing.JPanel implements IShowObjectMessag
 		});
 	}
 
+	@Override
 	public void addNotify() {
 		super.addNotify();
 		checkParent();
 	}
 
+	@Override
 	public void show() {
 		checkParent();
 		super.show();
@@ -348,6 +353,7 @@ public class BrowsePanel extends javax.swing.JPanel implements IShowObjectMessag
 
 		myBoxPanelStatus.setText("Extra text field - used for status display and special console input .   This screen shows a box navigation system.");
 		myBoxPanelStatus.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				myBoxPanelStatusActionPerformed(evt);
 			}
@@ -374,6 +380,7 @@ public class BrowsePanel extends javax.swing.JPanel implements IShowObjectMessag
 
 		myCmdInputTextField.setText("console input - type/paste commands/uris/urls here, and see output in resizable pane below.   NOTE:  The tabs at upper right can hold any Swing GUI components");
 		myCmdInputTextField.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				myCmdInputTextFieldActionPerformed(evt);
 			}
@@ -445,6 +452,7 @@ public class BrowsePanel extends javax.swing.JPanel implements IShowObjectMessag
 		return Utility.getTreeBoxCollection();
 	}
 
+	@Override
 	public UserResult showMessage(String message, Class expected) {
 		myBoxPanelStatus.setText(message);
 		myBoxPanelStatusType = expected;
@@ -467,6 +475,7 @@ public class BrowsePanel extends javax.swing.JPanel implements IShowObjectMessag
 		return myBoxPanelStatus.getText();
 	}
 
+	@Override
 	public UserResult showScreenBox(String title, Object anyObject) {
 
 		try {
@@ -582,6 +591,7 @@ public class BrowsePanel extends javax.swing.JPanel implements IShowObjectMessag
 		return app.getTriggersFromUI(object);
 	}
 
+	@Override
 	public UserResult showError(String msg, Throwable error) {
 		return app.showError(msg, error);
 	}

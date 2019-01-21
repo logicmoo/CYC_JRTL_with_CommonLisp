@@ -2595,15 +2595,18 @@ public final class subl_macros extends SubLTranslatedFile
         return (SubLObject)subl_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_subl_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_subl_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_subl_macros_file();
     }
     

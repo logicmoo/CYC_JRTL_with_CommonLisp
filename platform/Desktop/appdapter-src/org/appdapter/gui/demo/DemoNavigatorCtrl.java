@@ -39,6 +39,7 @@ public class DemoNavigatorCtrl extends BaseDemoNavigatorCtrl implements DisplayC
 		}
 	}
 
+	@Override
 	public void addBoxToRoot(MutableBox childBox, boolean reload) {
 		super.addBoxToRoot(childBox, reload);
 	}
@@ -47,6 +48,7 @@ public class DemoNavigatorCtrl extends BaseDemoNavigatorCtrl implements DisplayC
 		super.addRepo(title, anyObject);
 	}
 
+	@Override
 	public UserResult addObject(String title, Object anyObject, boolean showASAP) {
 		return super.addObject(title, anyObject, showASAP);
 	}
@@ -59,6 +61,7 @@ public class DemoNavigatorCtrl extends BaseDemoNavigatorCtrl implements DisplayC
 		addObject(title, anyObject, false);
 	}
 
+	@Override
 	public JFrame getFrame() {
 		return super.getFrame();
 	}
@@ -90,11 +93,13 @@ public class DemoNavigatorCtrl extends BaseDemoNavigatorCtrl implements DisplayC
 	}
 
 	//@Override
+	@Override
 	public void beanAdded(String named, Object anyObject) {
 		addObject(named, anyObject);
 	}
 
 	//@Override
+	@Override
 	public void beanRemoved(String named, Object obj) {
 		//removeObject(obj);
 

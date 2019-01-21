@@ -120,15 +120,18 @@ public final class removal_modules_set_of_list_with_same_member_in_pos extends S
         return (SubLObject)removal_modules_set_of_list_with_same_member_in_pos.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_set_of_list_with_same_member_in_pos_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_set_of_list_with_same_member_in_pos_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_set_of_list_with_same_member_in_pos_file();
     }
     

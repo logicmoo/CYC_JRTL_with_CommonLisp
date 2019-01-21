@@ -56,7 +56,8 @@ abstract public class LispCharacter extends LispObject
   static
   {
     lispChars = new CharHashMap<SubLCharacter>(SubLCharacter.class,null){
-      public SubLCharacter get(char c) {
+      @Override
+	public SubLCharacter get(char c) {
     	  SubLCharacter lc = super.get(c);
         if (lc==null) {
           lc = new SubLCharacter(c);
@@ -210,7 +211,7 @@ abstract public class LispCharacter extends LispObject
   }
 
   @Override
-  public Object javaInstance(Class c)
+  public Object javaInstanceImpl(Class c)
   {
     return javaInstance();
   }
@@ -673,7 +674,8 @@ abstract public class LispCharacter extends LispObject
   private static final Primitive CHAR_NAME =
     new Primitive(Symbol.CHAR_NAME, "character")
     {
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
         String name = charToName(LispCharacter.getValue(arg));
         return name != null ? new SimpleString(name) : NIL;

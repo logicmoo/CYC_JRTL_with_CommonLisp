@@ -53,14 +53,17 @@ class SimpleNode implements Node
 {
 	public static SimpleNode JAVACODE =
 		new SimpleNode( -1 ) {
+			@Override
 			public String getSourceFile() {
 				return "<Called from Java Code>";
 			}
 
+			@Override
 			public int getLineNumber() {
 				return -1;
 			}
 
+			@Override
 			public String getText()  {
 				return "<Compiled Java Code>";
 			}
@@ -78,13 +81,18 @@ class SimpleNode implements Node
 		id = i;
 	}
 
+	@Override
 	public void jjtOpen() { }
+	@Override
 	public void jjtClose() { }
 
+	@Override
 	public void jjtSetParent(Node n) { parent = n; }
+	@Override
 	public Node jjtGetParent() { return parent; }
 	//public SimpleNode getParent() { return (SimpleNode)parent; }
 
+	@Override
 	public void jjtAddChild(Node n, int i)
 	{
 		if (children == null)
@@ -100,6 +108,7 @@ class SimpleNode implements Node
 		children[i] = n;
 	}
 
+	@Override
 	public Node jjtGetChild(int i) { 
 		return children[i]; 
 	}
@@ -107,6 +116,7 @@ class SimpleNode implements Node
 		return (SimpleNode)jjtGetChild(i);
 	}
 
+	@Override
 	public int jjtGetNumChildren() {
 		return (children == null) ? 0 : children.length;
 	}
@@ -118,6 +128,7 @@ class SimpleNode implements Node
 		toString(String), otherwise overriding toString() is probably all
 		you need to do.
 	*/
+	@Override
 	public String toString() { return ParserTreeConstants.jjtNodeName[id]; }
 	public String toString(String prefix) { return prefix + toString(); }
 

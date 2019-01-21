@@ -29,11 +29,13 @@ final class RETokenChar extends REToken {
     ch[0] = (insens = ins) ? Character.toLowerCase(c) : c;
   }
 
-  int getMinimumLength() {
+  @Override
+int getMinimumLength() {
     return ch.length;
   }
   
-    boolean match(CharIndexed input, REMatch mymatch) {
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) {
 	int z = ch.length;
 	char c;
 	for (int i=0; i<z; i++) {
@@ -48,7 +50,8 @@ final class RETokenChar extends REToken {
     }
 
   // Overrides REToken.chain() to optimize for strings
-  boolean chain(REToken next) {
+  @Override
+boolean chain(REToken next) {
     if (next instanceof RETokenChar) {
       RETokenChar cnext = (RETokenChar) next;
       // assume for now that next can only be one character
@@ -64,7 +67,8 @@ final class RETokenChar extends REToken {
     } else return super.chain(next);
   }
 
-  void dump(StringBuffer os) {
+  @Override
+void dump(StringBuffer os) {
     os.append(ch);
   }
 }

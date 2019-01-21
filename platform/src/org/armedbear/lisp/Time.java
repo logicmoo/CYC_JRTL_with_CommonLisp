@@ -46,7 +46,8 @@ public final class Time
   private static final Primitive _TIME =
     new Primitive("%time", PACKAGE_SYS, false)
     {
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
         Cons.setCount(0);
         long realStart = System.currentTimeMillis();
@@ -80,7 +81,8 @@ public final class Time
   private static final Primitive GET_INTERNAL_REAL_TIME =
     new Primitive("get-internal-real-time", "")
     {
-      public LispObject execute()
+      @Override
+	public LispObject execute()
       {
         return number(System.currentTimeMillis());
       }
@@ -90,7 +92,8 @@ public final class Time
   private static final Primitive GET_INTERNAL_RUN_TIME =
     new Primitive("get-internal-run-time", "")
     {
-      public LispObject execute()
+      @Override
+	public LispObject execute()
       {
         return number(System.currentTimeMillis());
       }
@@ -100,7 +103,8 @@ public final class Time
   private static final Primitive GET_UNIVERSAL_TIME =
     new Primitive("get-universal-time", "")
     {
-      public LispObject execute()
+      @Override
+	public LispObject execute()
       {
         return number(System.currentTimeMillis() / 1000 + 2208988800L);
       }
@@ -110,7 +114,8 @@ public final class Time
   private static final Primitive DEFAULT_TIME_ZONE =
     new Primitive("default-time-zone", PACKAGE_SYS, false)
     {
-      public LispObject execute()
+      @Override
+	public LispObject execute()
       {
         TimeZone tz = TimeZone.getDefault();
         //int offset = tz.getOffset(System.currentTimeMillis());
@@ -137,7 +142,8 @@ public final class Time
     pf_default_time_zone_new() {
       super("default-time-zone-new", PACKAGE_SYS, true);
     }
-    public LispObject execute()
+    @Override
+	public LispObject execute()
     {
       return GET_TIME_ZONE.execute(LispInteger.getInstance(System.currentTimeMillis()));
     }
@@ -154,7 +160,8 @@ public final class Time
       super("get-time-zone", PACKAGE_EXT, true, "time-in-millis");
     }
 
-    public LispObject execute(LispObject unixTimeMillis) {
+    @Override
+	public LispObject execute(LispObject unixTimeMillis) {
       // should be a reference to a singleton for the lifetime of an ABCL process
       TimeZone tz = TimeZone.getDefault();
       // int offset = tz.getOffset(System.currentTimeMillis());

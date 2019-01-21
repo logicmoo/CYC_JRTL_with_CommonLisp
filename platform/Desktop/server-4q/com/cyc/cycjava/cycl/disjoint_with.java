@@ -1034,15 +1034,18 @@ public final class disjoint_with extends SubLTranslatedFile
         return (SubLObject)disjoint_with.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_disjoint_with_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_disjoint_with_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_disjoint_with_file();
     }
     

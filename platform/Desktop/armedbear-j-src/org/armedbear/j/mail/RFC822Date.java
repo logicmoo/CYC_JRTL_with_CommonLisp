@@ -288,7 +288,8 @@ public final class RFC822Date implements Serializable
     private static final SimpleDateFormat toStringFormat =
         new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.US);
 
-    public String toString()
+    @Override
+	public String toString()
     {
         if (date == null)
             return "null";

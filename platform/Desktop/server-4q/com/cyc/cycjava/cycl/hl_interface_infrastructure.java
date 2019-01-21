@@ -997,15 +997,18 @@ public final class hl_interface_infrastructure extends SubLTranslatedFile
         return (SubLObject)hl_interface_infrastructure.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_hl_interface_infrastructure_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_hl_interface_infrastructure_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_hl_interface_infrastructure_file();
     }
     
@@ -1103,7 +1106,8 @@ public final class hl_interface_infrastructure extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-STORE-ITERATOR-DONE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hl_interface_infrastructure.hl_store_iterator_doneP(arg1);
         }
     }
@@ -1114,7 +1118,8 @@ public final class hl_interface_infrastructure extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-STORE-ITERATOR-DESTROY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hl_interface_infrastructure.hl_store_iterator_destroy(arg1);
         }
     }

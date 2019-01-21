@@ -160,6 +160,7 @@ public class RepoFromTurtleEditor extends ModelAsTurtleEditor implements ObjectP
 		super.initSubclassGUI();
 
 		makeButton("Save Repo", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					saveTTL(getFile("Save as..", true));
@@ -170,6 +171,7 @@ public class RepoFromTurtleEditor extends ModelAsTurtleEditor implements ObjectP
 		});
 
 		makeButton("Load Repo", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					loadTTL(getFile("Open Repo", false));
@@ -250,6 +252,7 @@ public class RepoFromTurtleEditor extends ModelAsTurtleEditor implements ObjectP
 			rwd = new OmniLoaderRepo(newDirModel);
 		} else {
 			rwd = new DirectRepo(newDirModel) {
+				@Override
 				public void callLoadingInLock() {
 
 				}

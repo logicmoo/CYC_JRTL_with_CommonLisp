@@ -52,6 +52,7 @@ public class LabelledGroupOfStatementsImpl implements LabelledGroupOfStatements 
 		this.label = label;
 	}
 
+	@Override
 	public boolean excludeStatement(Resource subj, URI pred, Value obj,
 			URI graph) {
 		if (con.deassociateStatements(subj, pred, obj, graph, label)) {
@@ -61,6 +62,7 @@ public class LabelledGroupOfStatementsImpl implements LabelledGroupOfStatements 
 		return false;
 	}
 
+	@Override
 	public boolean excludeStatement(Statement s) {
 		if (s != null && s instanceof URI == false) {
 			return false;
@@ -73,14 +75,17 @@ public class LabelledGroupOfStatementsImpl implements LabelledGroupOfStatements 
 		return false;
 	}
 
+	@Override
 	public URI getLabel() {
 		return label;
 	}
 
+	@Override
 	public RdfStoreConnection getRdfStoreConnection() {
 		return con;
 	}
 
+	@Override
 	public boolean includeStatement(Resource subj, URI pred, Value obj,
 			URI graph) {
 		if (con.associateStatements(subj, pred, obj, graph, label)) {
@@ -90,6 +95,7 @@ public class LabelledGroupOfStatementsImpl implements LabelledGroupOfStatements 
 		return false;
 	}
 
+	@Override
 	public boolean includeStatement(Statement s) {
 		if (con.associateStatements(s.getSubject(), s.getPredicate(), s
 				.getObject(), (URI) s.getContext(), label)) {
@@ -99,10 +105,12 @@ public class LabelledGroupOfStatementsImpl implements LabelledGroupOfStatements 
 		return false;
 	}
 
+	@Override
 	public CloseableIterator<Statement> getStatements() {
 		return con.search(null, null, null, null, label);
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof LabelledGroupOfStatementsImpl == false) {
 			return false;
@@ -113,6 +121,7 @@ public class LabelledGroupOfStatementsImpl implements LabelledGroupOfStatements 
 		return transId == ((LabelledGroupOfStatementsImpl) o).transId;
 	}
 
+	@Override
 	public int hashCode() {
 		// the mutable hashcodes are risky (transId is excluded)
 		return label.hashCode();

@@ -48,6 +48,7 @@ class BSHCastExpression extends SimpleNode {
 	/**
 		@return the result of the cast.
 	*/
+	@Override
 	public Object eval(
 		CallStack callstack, Interpreter interpreter ) throws EvalError
     {

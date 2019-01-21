@@ -30,45 +30,56 @@ public class GraphUploadMonitor implements GraphListener
         (this.myTimer = new Timer()).startTimer();
     }
 
-    public void notifyAddTriple(final Graph g, final Triple t) {
+    @Override
+	public void notifyAddTriple(final Graph g, final Triple t) {
         this.addEvent(t);
     }
 
-    public void notifyAddArray(final Graph g, final Triple[] triples) {
+    @Override
+	public void notifyAddArray(final Graph g, final Triple[] triples) {
         for (final Triple t : triples) {
             this.addEvent(t);
         }
     }
 
-    public void notifyAddList(final Graph g, final List triples) {
+    @Override
+	public void notifyAddList(final Graph g, final List triples) {
         this.notifyAddIterator(g, triples.iterator());
     }
 
-    public void notifyAddIterator(final Graph g, final Iterator it) {
+    @Override
+	public void notifyAddIterator(final Graph g, final Iterator it) {
         while (it.hasNext()) {
             this.addEvent((Triple) it.next());
         }
     }
 
-    public void notifyAddGraph(final Graph g, final Graph added) {
+    @Override
+	public void notifyAddGraph(final Graph g, final Graph added) {
     }
 
-    public void notifyDeleteTriple(final Graph g, final Triple t) {
+    @Override
+	public void notifyDeleteTriple(final Graph g, final Triple t) {
     }
 
-    public void notifyDeleteList(final Graph g, final List L) {
+    @Override
+	public void notifyDeleteList(final Graph g, final List L) {
     }
 
-    public void notifyDeleteArray(final Graph g, final Triple[] triples) {
+    @Override
+	public void notifyDeleteArray(final Graph g, final Triple[] triples) {
     }
 
-    public void notifyDeleteIterator(final Graph g, final Iterator it) {
+    @Override
+	public void notifyDeleteIterator(final Graph g, final Iterator it) {
     }
 
-    public void notifyDeleteGraph(final Graph g, final Graph removed) {
+    @Override
+	public void notifyDeleteGraph(final Graph g, final Graph removed) {
     }
 
-    public void notifyEvent(final Graph source, final Object value) {
+    @Override
+	public void notifyEvent(final Graph source, final Object value) {
     }
 
     private void addEvent(final Triple t) {

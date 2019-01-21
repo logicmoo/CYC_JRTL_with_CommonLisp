@@ -2921,15 +2921,18 @@ public final class uncanonicalizer extends SubLTranslatedFile
         return (SubLObject)uncanonicalizer.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_uncanonicalizer_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_uncanonicalizer_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_uncanonicalizer_file();
     }
     
@@ -3066,7 +3069,8 @@ public final class uncanonicalizer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FAST-FI-NOT-EL-TERM?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return uncanonicalizer.fast_fi_not_el_termP(arg1);
         }
     }
@@ -3077,7 +3081,8 @@ public final class uncanonicalizer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("POTENTIALLY-INTERESTINGLY-UNCANONICALIZABLE-TENSE-TERM?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return uncanonicalizer.potentially_interestingly_uncanonicalizable_tense_termP(arg1);
         }
     }

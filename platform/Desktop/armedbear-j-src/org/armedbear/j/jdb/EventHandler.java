@@ -74,7 +74,8 @@ public final class EventHandler implements Runnable
         eventHandlerThread.start();
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         EventQueue queue = jdb.getVM().eventQueue();
         while (connected) {
@@ -112,7 +113,8 @@ public final class EventHandler implements Runnable
                     jdb.fireContextChanged();
                     jdb.prompt();
                     Runnable r = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             if (!Platform.isPlatformWindows())
                                 Editor.getCurrentFrame().toFront();

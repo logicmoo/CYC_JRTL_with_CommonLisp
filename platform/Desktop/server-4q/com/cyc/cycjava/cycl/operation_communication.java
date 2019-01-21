@@ -3622,15 +3622,18 @@ public final class operation_communication extends SubLTranslatedFile
         return (SubLObject)operation_communication.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_operation_communication_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_operation_communication_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_operation_communication_file();
     }
     

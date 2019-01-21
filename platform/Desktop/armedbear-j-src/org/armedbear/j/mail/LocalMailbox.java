@@ -74,7 +74,8 @@ public class LocalMailbox extends Mailbox
         setInitialized(true);
     }
 
-    public String getName()
+    @Override
+	public String getName()
     {
         Debug.assertTrue(mailboxFile != null);
         return mailboxFile.canonicalPath();
@@ -90,14 +91,16 @@ public class LocalMailbox extends Mailbox
         this.mailboxFile = mailboxFile;
     }
 
-    public int getMessageCount()
+    @Override
+	public int getMessageCount()
     {
         if (entries == null)
             return 0;
         return entries.size();
     }
 
-    public Message getMessage(MailboxEntry entry, ProgressNotifier progressNotifier)
+    @Override
+	public Message getMessage(MailboxEntry entry, ProgressNotifier progressNotifier)
     {
         try {
             RandomAccessFile raf = mailboxFile.getRandomAccessFile("r");
@@ -172,32 +175,38 @@ public class LocalMailbox extends Mailbox
         return new String(bytes);
     }
 
-    public void getNewMessages()
+    @Override
+	public void getNewMessages()
     {
         Log.error("LocalMailbox.getNewMessages is not implemented");
     }
 
-    public void createFolder()
+    @Override
+	public void createFolder()
     {
         Log.error("LocalMailbox.createFolder is not implemented");
     }
 
-    public void deleteFolder()
+    @Override
+	public void deleteFolder()
     {
         Log.error("LocalMailbox.deleteFolder is not implemented");
     }
 
-    public void saveToFolder()
+    @Override
+	public void saveToFolder()
     {
         Log.error("LocalMailbox.saveToFolder is not implemented");
     }
 
-    public void moveToFolder()
+    @Override
+	public void moveToFolder()
     {
         Log.error("LocalMailbox.moveToFolder is not implemented");
     }
 
-    public void delete()
+    @Override
+	public void delete()
     {
         Editor editor = Editor.currentEditor();
         if (lock()) {
@@ -235,7 +244,8 @@ public class LocalMailbox extends Mailbox
             editor.status("Mailbox is locked");
     }
 
-    public void undelete()
+    @Override
+	public void undelete()
     {
         Editor editor = Editor.currentEditor();
         if (lock()) {
@@ -274,7 +284,8 @@ public class LocalMailbox extends Mailbox
             editor.status("Mailbox is locked");
     }
 
-    public void markRead()
+    @Override
+	public void markRead()
     {
         Editor editor = Editor.currentEditor();
         if (lock()) {
@@ -310,7 +321,8 @@ public class LocalMailbox extends Mailbox
             editor.status("Mailbox is locked");
     }
 
-    public void markUnread()
+    @Override
+	public void markUnread()
     {
         Editor editor = Editor.currentEditor();
         if (lock()) {
@@ -346,7 +358,8 @@ public class LocalMailbox extends Mailbox
             editor.status("Mailbox is locked");
     }
 
-    public void flag()
+    @Override
+	public void flag()
     {
         final Editor editor = Editor.currentEditor();
         if (lock()) {
@@ -377,7 +390,8 @@ public class LocalMailbox extends Mailbox
             editor.status("Mailbox is locked");
     }
 
-    public void setAnsweredFlag(MailboxEntry entry)
+    @Override
+	public void setAnsweredFlag(MailboxEntry entry)
     {
         if ((entry.getFlags() & MailboxEntry.ANSWERED) == 0) {
             entry.setFlags(entry.getFlags() | MailboxEntry.ANSWERED);
@@ -386,12 +400,14 @@ public class LocalMailbox extends Mailbox
         }
     }
 
-    public void expunge()
+    @Override
+	public void expunge()
     {
         Log.error("LocalMailbox.expunge is not implemented");
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         if (lock()) {
             setBusy(true);
@@ -403,7 +419,8 @@ public class LocalMailbox extends Mailbox
     }
 
     private Runnable loadRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             try {
                 readMailboxFile(null);
@@ -413,7 +430,8 @@ public class LocalMailbox extends Mailbox
                 unlock();
                 setBusy(false);
                 Runnable completionRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                             Editor ed = it.nextEditor();
@@ -446,12 +464,14 @@ public class LocalMailbox extends Mailbox
         Log.debug("readMailboxFile " + (System.currentTimeMillis() - start) + " ms");
     }
 
-    public void readMessage(Line line)
+    @Override
+	public void readMessage(Line line)
     {
         readMessage(line, false);
     }
 
-    public void readMessageOtherWindow(Line line)
+    @Override
+	public void readMessageOtherWindow(Line line)
     {
         readMessage(line, true);
     }
@@ -611,7 +631,8 @@ public class LocalMailbox extends Mailbox
         return mailboxFile.canonicalPath().startsWith(localPrefix);
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         Log.debug("LocalMailbox.dispose");
         Mbox.cleanup();
@@ -623,7 +644,8 @@ public class LocalMailbox extends Mailbox
             return;
         }
         Runnable disposeRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     Log.debug("disposeRunnable.run() calling acquire()...");
@@ -649,13 +671,15 @@ public class LocalMailbox extends Mailbox
         new Thread(disposeRunnable).start();
     }
 
-    protected void finalize() throws Throwable
+    @Override
+	protected void finalize() throws Throwable
     {
         Log.debug("LocalMailbox.finalize");
         super.finalize();
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         final String name;
         if (isOwned())

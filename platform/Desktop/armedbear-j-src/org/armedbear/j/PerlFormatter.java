@@ -433,7 +433,8 @@ public final class PerlFormatter extends Formatter
         return false;
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         if (line == null) {
             clearSegmentList();
@@ -492,7 +493,8 @@ public final class PerlFormatter extends Formatter
         return segmentList;
     }
 
-    public boolean parseBuffer()
+    @Override
+	public boolean parseBuffer()
     {
         int state = STATE_NEUTRAL;
         Line line = buffer.getFirstLine();
@@ -777,7 +779,8 @@ public final class PerlFormatter extends Formatter
         return functions.contains(s);
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("PerlMode");

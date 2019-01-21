@@ -62,7 +62,8 @@ public class CommandInterpreter extends Buffer
         return false;
     }
 
-    public final boolean isModified()
+    @Override
+	public final boolean isModified()
     {
         return false;
     }
@@ -122,12 +123,14 @@ public class CommandInterpreter extends Buffer
         posEndOfOutput = pos;
     }
 
-    public Icon getIcon()
+    @Override
+	public Icon getIcon()
     {
         return Utilities.getIconFromFile("jpty.png");
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         try {
             lockWrite();
@@ -152,7 +155,8 @@ public class CommandInterpreter extends Buffer
         return true;
     }
 
-    public void enter()
+    @Override
+	public void enter()
     {
         if (!checkProcess())
             return;
@@ -439,7 +443,8 @@ public class CommandInterpreter extends Buffer
     protected void stdOutUpdate(final String s)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 appendString(s);
                 updateDisplayInAllFrames();
@@ -457,7 +462,8 @@ public class CommandInterpreter extends Buffer
     protected void stdErrUpdate(final String s)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 appendString(s);
                 updateDisplayInAllFrames();
@@ -488,12 +494,14 @@ public class CommandInterpreter extends Buffer
             super(stdout);
         }
 
-        public String filter(String s)
+        @Override
+		public String filter(String s)
         {
             return stdOutFilter(s);
         }
 
-        public void update(String s)
+        @Override
+		public void update(String s)
         {
             if (s != null && s.length() > 0)
                 stdOutUpdate(s);
@@ -507,12 +515,14 @@ public class CommandInterpreter extends Buffer
             super(stderr);
         }
 
-        public String filter(String s)
+        @Override
+		public String filter(String s)
         {
             return stdErrFilter(s);
         }
 
-        public void update(String s)
+        @Override
+		public void update(String s)
         {
             if (s != null && s.length() > 0)
                 stdErrUpdate(s);

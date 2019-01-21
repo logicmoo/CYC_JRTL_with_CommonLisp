@@ -71,7 +71,8 @@ public final class BreakpointSpecification
     }
 
     // Only used to generate meaningful trace output.
-    public String toString()
+    @Override
+	public String toString()
     {
         final String separator = System.getProperty("line.separator");
         FastStringBuffer sb = new FastStringBuffer("BreakpointSpecification: ");

@@ -33,14 +33,16 @@ public final class VHDLSyntaxIterator extends DefaultSyntaxIterator
         super(pos);
     }
 
-    public char[] hideSyntacticWhitespace(Line line)
+    @Override
+	public char[] hideSyntacticWhitespace(Line line)
     {
         return hideSyntacticWhitespace(line.getText());
     }
 
     // Returns char array with syntactic whitespace (quotes and comments)
     // replaced with actual space characters.
-    public char[] hideSyntacticWhitespace(String s)
+    @Override
+	public char[] hideSyntacticWhitespace(String s)
     {
         final char[] chars = s.toCharArray();
         int state = STATE_NEUTRAL;

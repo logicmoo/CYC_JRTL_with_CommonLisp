@@ -2837,15 +2837,18 @@ public final class tms extends SubLTranslatedFile
         return (SubLObject)tms.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_tms_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_tms_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_tms_file();
     }
     

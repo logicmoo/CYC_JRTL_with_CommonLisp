@@ -237,7 +237,8 @@ public final class BufferList implements Constants, PreferencesChangeListener
         modified = true;
     }
 
-    public synchronized void preferencesChanged()
+    @Override
+	public synchronized void preferencesChanged()
     {
         Preferences p = Editor.preferences();
         boolean b = p.getBooleanProperty(Property.SORT_BUFFER_LIST);
@@ -306,7 +307,8 @@ public final class BufferList implements Constants, PreferencesChangeListener
         if (alpha) {
             if (comparator == null) {
                 comparator = new Comparator() {
-                    public int compare(Object o1, Object o2)
+                    @Override
+					public int compare(Object o1, Object o2)
                     {
                         return o1.toString().compareToIgnoreCase(o2.toString());
                     }

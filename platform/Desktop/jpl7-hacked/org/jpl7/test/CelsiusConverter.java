@@ -58,6 +58,7 @@ public class CelsiusConverter implements ActionListener {
 		converterFrame.setVisible(true);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		// parse degrees Celsius as a double
 		double tC = (Double.parseDouble(tempCelsius.getText()));
@@ -81,6 +82,7 @@ public class CelsiusConverter implements ActionListener {
 			int x = left;
 			int y = top;
 
+			@Override
 			public void run() {
 				new CelsiusConverter(x, y); // can we be sure this won't be
 											// garbage collected?

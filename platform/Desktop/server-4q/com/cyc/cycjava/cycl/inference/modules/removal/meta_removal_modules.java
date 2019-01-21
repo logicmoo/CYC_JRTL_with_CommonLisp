@@ -85,15 +85,18 @@ public final class meta_removal_modules extends SubLTranslatedFile
         return (SubLObject)meta_removal_modules.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_meta_removal_modules_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_meta_removal_modules_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_meta_removal_modules_file();
     }
     

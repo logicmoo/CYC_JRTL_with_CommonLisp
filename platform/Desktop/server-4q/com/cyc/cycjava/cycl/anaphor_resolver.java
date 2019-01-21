@@ -205,15 +205,18 @@ public final class anaphor_resolver extends SubLTranslatedFile
         return (SubLObject)anaphor_resolver.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_anaphor_resolver_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_anaphor_resolver_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_anaphor_resolver_file();
     }
     

@@ -28,20 +28,24 @@ public class SparqlGraphMultilingual extends SparqlGraph implements GraphWithPer
         this.langs = languages;
     }
     
-    public void add(final Triple arg0) throws AddDeniedException {
+    @Override
+	public void add(final Triple arg0) throws AddDeniedException {
         this.performAdd(arg0);
     }
     
-    public void performAdd(final Triple t) {
+    @Override
+	public void performAdd(final Triple t) {
         super.performAdd(t);
     }
     
-    public ExtendedIterator<Triple> find(final TripleMatch arg0) {
+    @Override
+	public ExtendedIterator<Triple> find(final TripleMatch arg0) {
         final Triple t = arg0.asTriple();
         return this.find(t.getSubject(), t.getPredicate(), t.getObject());
     }
     
-    public ExtendedIterator<Triple> find(final Node subject, final Node predicate, final Node object) {
+    @Override
+	public ExtendedIterator<Triple> find(final Node subject, final Node predicate, final Node object) {
         final long startTime = System.currentTimeMillis();
         final ExtendedIterator<Triple> rawResults = (ExtendedIterator<Triple>)super.find(subject, predicate, object);
         final long rawTime = System.currentTimeMillis() - startTime;

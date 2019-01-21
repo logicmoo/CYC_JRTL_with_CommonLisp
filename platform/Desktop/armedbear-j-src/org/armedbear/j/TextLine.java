@@ -47,22 +47,26 @@ public class TextLine extends AbstractLine implements Line
         text = s;
     }
 
-    public final synchronized int flags()
+    @Override
+	public final synchronized int flags()
     {
         return flags;
     }
 
-    public final synchronized void setFlags(int flags)
+    @Override
+	public final synchronized void setFlags(int flags)
     {
         this.flags = flags;
     }
 
-    public final synchronized String getText()
+    @Override
+	public final synchronized String getText()
     {
         return text != null ? text : "";
     }
 
-    public final synchronized void setText(String s)
+    @Override
+	public final synchronized void setText(String s)
     {
         if (originalText == null)
             originalText = text;
@@ -72,27 +76,32 @@ public class TextLine extends AbstractLine implements Line
         bits &= ~SAVED;
     }
 
-    public final String getOriginalText()
+    @Override
+	public final String getOriginalText()
     {
         return originalText;
     }
 
-    public final void setOriginalText(String s)
+    @Override
+	public final void setOriginalText(String s)
     {
         originalText = s;
     }
 
-    public final boolean isModified()
+    @Override
+	public final boolean isModified()
     {
         return originalText != null || isNew();
     }
 
-    public final boolean isNew()
+    @Override
+	public final boolean isNew()
     {
         return (bits & NEW) == NEW;
     }
 
-    public final void setNew(boolean b)
+    @Override
+	public final void setNew(boolean b)
     {
         if (b)
             bits |= NEW;
@@ -100,12 +109,14 @@ public class TextLine extends AbstractLine implements Line
             bits &= ~NEW;
     }
 
-    public final boolean isSaved()
+    @Override
+	public final boolean isSaved()
     {
         return (bits & SAVED) == SAVED;
     }
 
-    public final void setSaved(boolean b)
+    @Override
+	public final void setSaved(boolean b)
     {
         if (b)
             bits |= SAVED;
@@ -113,43 +124,51 @@ public class TextLine extends AbstractLine implements Line
             bits &= ~SAVED;
     }
 
-    public final void unmodified()
+    @Override
+	public final void unmodified()
     {
         originalText = null;
         bits &= (~SAVED & ~NEW);
     }
 
-    public final char charAt(int i)
+    @Override
+	public final char charAt(int i)
     {
         return getText().charAt(i);
     }
 
-    public final String substring(int beginIndex)
+    @Override
+	public final String substring(int beginIndex)
     {
         return getText().substring(beginIndex);
     }
 
-    public final String substring(int beginIndex, int endIndex)
+    @Override
+	public final String substring(int beginIndex, int endIndex)
     {
         return getText().substring(beginIndex, endIndex);
     }
 
-    public final String trim()
+    @Override
+	public final String trim()
     {
         return getText().trim();
     }
 
-    public final int length()
+    @Override
+	public final int length()
     {
         return getText().length();
     }
 
-    public final int getWidth()
+    @Override
+	public final int getWidth()
     {
         return length() * Display.getCharWidth();
     }
 
-    public final byte[] getBytes(String encoding) throws UnsupportedEncodingException
+    @Override
+	public final byte[] getBytes(String encoding) throws UnsupportedEncodingException
     {
         byte[] bytes = getText().getBytes(encoding);
         if (bytes.length >= 2) {
@@ -165,7 +184,8 @@ public class TextLine extends AbstractLine implements Line
         return bytes;
     }
 
-    public final boolean isBlank()
+    @Override
+	public final boolean isBlank()
     {
         String s = getText();
 
@@ -177,7 +197,8 @@ public class TextLine extends AbstractLine implements Line
     }
 
     // Copies text, original text, and bit flags only.
-    public Line copy()
+    @Override
+	public Line copy()
     {
         TextLine line = new TextLine(text);
         line.originalText = originalText;
@@ -186,7 +207,8 @@ public class TextLine extends AbstractLine implements Line
     }
 
     // Copies text, original text, and bit flags only.
-    public void copy(Line line)
+    @Override
+	public void copy(Line line)
     {
         if (line instanceof TextLine) {
             TextLine textLine = (TextLine) line;

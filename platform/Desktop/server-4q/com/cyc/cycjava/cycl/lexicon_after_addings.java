@@ -1216,15 +1216,18 @@ public final class lexicon_after_addings extends SubLTranslatedFile
         return (SubLObject)lexicon_after_addings.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_lexicon_after_addings_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_lexicon_after_addings_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_lexicon_after_addings_file();
     }
     

@@ -26,7 +26,8 @@ public class DerivedGraphSpec extends BasicDebugger
         this.myInGraphIDs = x$1;
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuilder().append((Object)"DerivedGraphSpec[targetTR=").append((Object)this.myTargetGraphTR()).append((Object)", inGraphs=").append((Object)this.myInGraphIDs()).append((Object)"]").toString();
     }
     

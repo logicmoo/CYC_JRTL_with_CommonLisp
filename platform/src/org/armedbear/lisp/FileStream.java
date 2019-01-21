@@ -132,17 +132,20 @@ public final class FileStream extends Stream
         }
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.FILE_STREAM;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.FILE_STREAM;
     }
 
-    public LispObject typep(LispObject typeSpecifier)
+    @Override
+	public LispObject typep(LispObject typeSpecifier)
     {
         if (typeSpecifier == Symbol.FILE_STREAM)
             return T;
@@ -151,7 +154,8 @@ public final class FileStream extends Stream
         return super.typep(typeSpecifier);
     }
 
-    public void setExternalFormat(LispObject format) {
+    @Override
+	public void setExternalFormat(LispObject format) {
         super.setExternalFormat(format);
 
         if (racf != null)
@@ -164,7 +168,8 @@ public final class FileStream extends Stream
         return pathname;
     }
 
-    public LispObject fileLength()
+    @Override
+	public LispObject fileLength()
     {
         final long length;
         if (isOpen()) {
@@ -191,12 +196,14 @@ public final class FileStream extends Stream
         return number(length / bytesPerUnit);
     }
 
-    protected boolean _charReady()
+    @Override
+	protected boolean _charReady()
     {
         return true;
     }
 
-    public void _clearInput()
+    @Override
+	public void _clearInput()
     {
         try {
 	    if (isInputStream) {
@@ -210,7 +217,8 @@ public final class FileStream extends Stream
         }
     }
 
-    protected long _getFilePosition()
+    @Override
+	protected long _getFilePosition()
     {
         try {
             long pos = racf.position();
@@ -223,7 +231,8 @@ public final class FileStream extends Stream
         }
     }
 
-    protected boolean _setFilePosition(LispObject arg)
+    @Override
+	protected boolean _setFilePosition(LispObject arg)
     {
         try {
             long pos;
@@ -243,7 +252,8 @@ public final class FileStream extends Stream
         return true;
     }
 
-    public void _close()
+    @Override
+	public void _close()
     {
         try {
             racf.close();
@@ -254,7 +264,8 @@ public final class FileStream extends Stream
         }
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         return unreadableString("FILE-STREAM");
     }
@@ -264,7 +275,8 @@ public final class FileStream extends Stream
         new Primitive("make-file-stream", PACKAGE_SYS, true,
                       "pathname namestring element-type direction if-exists external-format")
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth,
                                   LispObject fifth, LispObject sixth)
 

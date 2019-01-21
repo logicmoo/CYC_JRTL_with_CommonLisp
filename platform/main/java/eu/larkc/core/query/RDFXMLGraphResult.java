@@ -18,6 +18,7 @@ public class RDFXMLGraphResult extends GraphResultBase {
 	}
 
 	public class RDFHandlerHelper extends RDFHandlerBase {
+		@Override
 		public void endRDF() throws RDFHandlerException {
 			while (true) {
 				try {
@@ -28,6 +29,7 @@ public class RDFXMLGraphResult extends GraphResultBase {
 			}
 		}
 
+		@Override
 		public void handleStatement(Statement statement)
 				throws RDFHandlerException {
 			while (true) {

@@ -38,7 +38,8 @@ public final class Menu extends JMenu implements Constants
         addMenuListener(MenuBar.getListener());
     }
 
-    public void setPopupMenuVisible(boolean b)
+    @Override
+	public void setPopupMenuVisible(boolean b)
     {
         super.setPopupMenuVisible(b);
     }

@@ -30,16 +30,19 @@ class CharIndexedString implements CharIndexed, Serializable {
 	anchor = index;
     }
 
-    public char charAt(int index) {
+    @Override
+	public char charAt(int index) {
 	int pos = anchor + index;
 	return ((pos < len) && (pos >= 0)) ? s.charAt(pos) : OUT_OF_BOUNDS;
     }
     
-    public boolean isValid() {
+    @Override
+	public boolean isValid() {
 	return (anchor < len);
     }
     
-    public boolean move(int index) {
+    @Override
+	public boolean move(int index) {
 	return ((anchor += index) < len);
     }
 }

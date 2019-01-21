@@ -55,17 +55,20 @@ public final class SlimeOutputStream extends Stream
         this.f = f;
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.SLIME_OUTPUT_STREAM;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.SLIME_OUTPUT_STREAM;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.SLIME_OUTPUT_STREAM)
             return T;
@@ -78,14 +81,16 @@ public final class SlimeOutputStream extends Stream
         return super.typep(type);
     }
 
-    public void _writeChar(char c)
+    @Override
+	public void _writeChar(char c)
     {
         if (getStreamElementType() == NIL)
             writeError();
         super._writeChar(c);
     }
 
-    public void _writeChars(char[] chars, int start, int end)
+    @Override
+	public void _writeChars(char[] chars, int start, int end)
 
     {
         if (getStreamElementType() == NIL)
@@ -93,14 +98,16 @@ public final class SlimeOutputStream extends Stream
         super._writeChars(chars, start, end);
     }
 
-    public void _writeString(String s)
+    @Override
+	public void _writeString(String s)
     {
         if (getStreamElementType() == NIL)
             writeError();
         super._writeString(s);
     }
 
-    public void _writeLine(String s)
+    @Override
+	public void _writeLine(String s)
     {
         if (getStreamElementType() == NIL)
             writeError();
@@ -112,14 +119,16 @@ public final class SlimeOutputStream extends Stream
         error(new TypeError("Attempt to write to a string output stream of element type NIL."));
     }
 
-    protected long _getFilePosition()
+    @Override
+	protected long _getFilePosition()
     {
         if (getStreamElementType() == NIL)
             return 0;
         return stringWriter.toString().length();
     }
 
-    public void _finishOutput()
+    @Override
+	public void _finishOutput()
     {
         super._finishOutput ();
         if (stringWriter.getBuffer().length() > 0) {
@@ -134,7 +143,8 @@ public final class SlimeOutputStream extends Stream
     private static final Primitive MAKE_SLIME_OUTPUT_STREAM =
         new Primitive("make-slime-output-stream", PACKAGE_EXT, true, "function")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             final Function fun;
             if (arg instanceof Symbol)

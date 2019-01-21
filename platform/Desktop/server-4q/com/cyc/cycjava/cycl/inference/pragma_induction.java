@@ -659,15 +659,18 @@ public final class pragma_induction extends SubLTranslatedFile
         return (SubLObject)pragma_induction.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pragma_induction_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pragma_induction_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pragma_induction_file();
     }
     

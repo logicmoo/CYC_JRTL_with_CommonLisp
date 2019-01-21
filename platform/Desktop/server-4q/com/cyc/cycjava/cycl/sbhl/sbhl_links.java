@@ -1154,15 +1154,18 @@ public final class sbhl_links extends SubLTranslatedFile
         return (SubLObject)sbhl_links.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_links_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_links_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_links_file();
     }
     
@@ -1235,23 +1238,28 @@ public final class sbhl_links extends SubLTranslatedFile
             this.$inverse_links = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$sbhl_directed_link_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$predicate_links;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$inverse_links;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$predicate_links = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$inverse_links = value;
         }
         
@@ -1266,7 +1274,8 @@ public final class sbhl_links extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-DIRECTED-LINK-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_links.sbhl_directed_link_p(arg1);
         }
     }
@@ -1280,15 +1289,18 @@ public final class sbhl_links extends SubLTranslatedFile
             this.$links = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$sbhl_undirected_link_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$links;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$links = value;
         }
         
@@ -1303,7 +1315,8 @@ public final class sbhl_links extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-UNDIRECTED-LINK-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_links.sbhl_undirected_link_p(arg1);
         }
     }

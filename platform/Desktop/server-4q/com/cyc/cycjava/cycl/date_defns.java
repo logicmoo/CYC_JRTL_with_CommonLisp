@@ -595,15 +595,18 @@ public final class date_defns extends SubLTranslatedFile
         return (SubLObject)date_defns.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_date_defns_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_date_defns_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_date_defns_file();
     }
     

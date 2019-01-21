@@ -49,7 +49,8 @@ public final class REMatch implements Serializable, Cloneable {
     int[] end;   // end positions for the same
     REMatch next; // other possibility (to avoid having to use arrays)
 
-    public Object clone() {
+    @Override
+	public Object clone() {
 	try {
 	    REMatch copy = (REMatch) super.clone();
 	    copy.next = null;
@@ -122,7 +123,8 @@ public final class REMatch implements Serializable, Cloneable {
      * if (myMatch != null) System.out.println("Regexp found: "+myMatch);
      * </code>
      */
-    public String toString() {
+    @Override
+	public String toString() {
 	return matchedText;
     }
 
@@ -176,7 +178,8 @@ public final class REMatch implements Serializable, Cloneable {
      * @param sub Subexpression index
      * @deprecated Use getStartIndex(int) instead.
      */
-    public int getSubStartIndex(int sub) {
+    @Deprecated
+	public int getSubStartIndex(int sub) {
 	if (sub >= start.length) return -1;
 	int x = start[sub];
 	return (x == -1) ? x : offset + x;
@@ -204,7 +207,8 @@ public final class REMatch implements Serializable, Cloneable {
      * @param sub Subexpression index
      * @deprecated Use getEndIndex(int) instead
      */
-    public int getSubEndIndex(int sub) {
+    @Deprecated
+	public int getSubEndIndex(int sub) {
 	if (sub >= start.length) return -1;
 	int x = end[sub];
 	return (x == -1) ? x : offset + x;

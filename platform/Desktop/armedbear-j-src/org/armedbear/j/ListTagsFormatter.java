@@ -35,7 +35,8 @@ public final class ListTagsFormatter extends Formatter
         this.buffer = buffer;
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         clearSegmentList();
         if (line instanceof TagLine)
@@ -90,7 +91,8 @@ public final class ListTagsFormatter extends Formatter
         return segmentList;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("ListTagsMode");

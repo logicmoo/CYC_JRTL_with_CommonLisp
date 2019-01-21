@@ -42,7 +42,8 @@ public final class CapitalizeFirstStream extends CaseFrobStream
         super(target);
     }
 
-    public void _writeChar(char c)
+    @Override
+	public void _writeChar(char c)
     {
         if (virgin) {
             if (Character.isLetterOrDigit(c)) {
@@ -54,14 +55,16 @@ public final class CapitalizeFirstStream extends CaseFrobStream
         target._writeChar(c);
     }
 
-    public void _writeString(String s)
+    @Override
+	public void _writeString(String s)
     {
         final int length = s.length();
         for (int i = 0; i < length; i++)
             _writeChar(s.charAt(i));
     }
 
-    public void _writeLine(String s)
+    @Override
+	public void _writeLine(String s)
     {
         _writeString(s);
         _writeChar('\n');

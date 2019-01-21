@@ -2916,15 +2916,18 @@ public final class inference_worker_removal extends SubLTranslatedFile
         return (SubLObject)inference_worker_removal.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_worker_removal_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_worker_removal_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_worker_removal_file();
     }
     
@@ -3066,31 +3069,38 @@ public final class inference_worker_removal extends SubLTranslatedFile
             this.$supports = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$removal_link_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$hl_module;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$bindings;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$supports;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$hl_module = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$bindings = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$supports = value;
         }
         
@@ -3105,7 +3115,8 @@ public final class inference_worker_removal extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-LINK-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_worker_removal.removal_link_data_p(arg1);
         }
     }
@@ -3116,7 +3127,8 @@ public final class inference_worker_removal extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-REMOVE-UNIFY-DEFAULT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_worker_removal.inference_remove_unify_default(arg1, (SubLObject)$inference_remove_unify_default$UnaryFunction.UNPROVIDED);
         }
     }
@@ -3127,7 +3139,8 @@ public final class inference_worker_removal extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-REMOVE-UNIFY-DEFAULT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_worker_removal.inference_remove_unify_default(arg1, arg2);
         }
     }

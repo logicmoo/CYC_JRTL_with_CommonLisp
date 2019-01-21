@@ -861,7 +861,8 @@ public class RE extends REToken {
   }
 
   // Overrides REToken.setUncle
-  void setUncle(REToken uncle) {
+  @Override
+void setUncle(REToken uncle) {
       if (lastToken != null) {
 	  lastToken.setUncle(uncle);
       } else super.setUncle(uncle); // to deal with empty subexpressions
@@ -869,7 +870,8 @@ public class RE extends REToken {
 
   // Overrides REToken.chain
 
-  boolean chain(REToken next) {
+  @Override
+boolean chain(REToken next) {
     super.chain(next);
     setUncle(next);
     return true;
@@ -879,7 +881,8 @@ public class RE extends REToken {
    * Returns the minimum number of characters that could possibly
    * constitute a match of this regular expression.
    */
-  public int getMinimumLength() {
+  @Override
+public int getMinimumLength() {
       return minimumLength;
   }
 
@@ -949,7 +952,8 @@ public class RE extends REToken {
   }
   
     /* Implements abstract method REToken.match() */
-    boolean match(CharIndexed input, REMatch mymatch) { 
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) { 
 	if (firstToken == null) return next(input, mymatch);
 
 	// Note the start of this subexpression
@@ -1318,13 +1322,15 @@ public class RE extends REToken {
     * Return a human readable form of the compiled regular expression,
     * useful for debugging.
     */
-   public String toString() {
+   @Override
+public String toString() {
      StringBuffer sb = new StringBuffer();
      dump(sb);
      return sb.toString();
    }
 
-  void dump(StringBuffer os) {
+  @Override
+void dump(StringBuffer os) {
     os.append('(');
     if (subIndex == 0)
       os.append("?:");

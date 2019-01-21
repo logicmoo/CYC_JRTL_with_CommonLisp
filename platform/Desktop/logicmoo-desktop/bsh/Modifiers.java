@@ -81,6 +81,7 @@ public class Modifiers implements java.io.Serializable
 				context + " cannot be declared '"+modifier+"'");
 	}
 
+	@Override
 	public String toString()
 	{
 		return "Modifiers: "+modifiers;

@@ -37,7 +37,8 @@ public final class Folder
         return url;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return displayName;
     }

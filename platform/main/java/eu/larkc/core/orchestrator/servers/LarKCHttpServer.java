@@ -29,7 +29,8 @@ public class LarKCHttpServer extends SubLTranslatedFile
 	 * @author Luka Bradesko
 	 */
 	static class ThreadPerTaskExecutor implements Executor {
-	     public void execute(Runnable r) {
+	     @Override
+		public void execute(Runnable r) {
 	    	 SubLThread t = new SubLThread(r,"SPARQLServer");
 	         t.start();
 	     }
@@ -57,14 +58,17 @@ public class LarKCHttpServer extends SubLTranslatedFile
 	}
 
 	 
+	@Override
 	public void declareFunctions() {
 	    declareFunction(myName, "start_sparql_server", "START-SPARQL-SERVER", 0, 0, false);
 	}
 
 	 
+	@Override
 	public void initializeVariables() {
 	}
 	 
+	@Override
 	public void runTopLevelForms() {
 		//declareFunctions();	
 		//System.out.println("Starting my first test server");

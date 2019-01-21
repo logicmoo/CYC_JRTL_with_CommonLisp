@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -47,8 +48,17 @@ public class SystemCurrent
 	public static InputStream originalSystemIn = System.in;
 	public static PrintStream originalSystemOut = System.out;
 	public static PrintStream originalSystemErr = System.err;
+	public static Thread originalSystemThread = Thread.currentThread();
+	public static InOutErr originalInOutErr = new InOutErr()
+	{
+		{
+			this.in = originalSystemIn;
+			this.out = originalSystemOut;
+			this.err = originalSystemErr;
+		}
+	};
 
-	static InheritableThreadLocal<InOutErr> SystemInOutErr = new InheritableThreadLocal<InOutErr>()
+	static ThreadLocal<InOutErr> SystemInOutErr = new ThreadLocal<InOutErr>()
 	{
 		@Override
 		protected InOutErr initialValue()
@@ -79,24 +89,36 @@ public class SystemCurrent
 	 */
 	public static void setIn(InputStream in)
 	{
-		if (in != null && underlyingStream(in) == null) { return; }
+		if (in instanceof In)
+		{
+			SystemInOutErr.get().in = originalSystemIn;
+			return;
+		}
+		InputStream is2 = underlyingStream(in);
+		if (is2 instanceof In)
+		{
+			SystemInOutErr.get().in = originalSystemIn;
+			return;
+		}
 		SystemInOutErr.get().in = in;
 	}
 
 	private static InputStream currentSystemInput()
 	{
 		InputStream is = SystemCurrent.SystemInOutErr.get().in;
-		InputStream is2 = underlyingStream(in);
-		if (is2 == null)
+		if(is instanceof In) return originalSystemIn;
+		if (is == null)
 		{
-			is = originalSystemIn;
+			if (Thread.currentThread() == originalSystemThread) { return originalSystemIn; }
 		}
+		InputStream is2 = underlyingStream(is);
+		if(is2 instanceof In) return originalSystemIn;
 		return is;
 	}
 
-	private static InputStream underlyingStream(InputStream is)
+	private static InputStream underlyingStream(final InputStream is)
 	{
-		if (is instanceof In || is == null) return null;
+		if (is == null) return null;
 		InputStream is2 = is;
 		Class clz = is.getClass();
 		tryAgain: do
@@ -104,47 +126,50 @@ public class SystemCurrent
 			try
 			{
 				Field f = clz.getDeclaredField("in");
-				f.setAccessible(true);
-				is2 = (InputStream) f.get(is);
-				if (is2 instanceof In || is2 == is || is2 == null)
+				if (InputStream.class.isAssignableFrom(f.getType()))
 				{
-					is2 = null;
+					f.setAccessible(true);
+					is2 = (InputStream) f.get(is);
+					return is2;
 				}
-				return is2;
 			} catch (NoSuchFieldException e)
 			{
 				clz = clz.getSuperclass();
 				if (clz != null) continue tryAgain;
-				return is;
-
 			} catch (Throwable e)
 			{
 				e.printStackTrace();
-				return is;
 			}
-
+			return is;
 		} while (true);
 	}
 
-	private static OutputStream underlyingStream(OutputStream is)
+	private static OutputStream underlyingStream(final OutputStream is)
 	{
-		if (is instanceof Out) return null;
+		if (is == null) return null;
 		OutputStream is2 = is;
-		try
+		Class clz = is.getClass();
+		tryAgain: do
 		{
-			Field f = is.getClass().getField("out");
-			f.setAccessible(true);
-			is2 = (OutputStream) f.get(is);
-			if (is2 instanceof Out || is2 == is || is2 == null)
+			try
 			{
-				is2 = null;
+				Field f = clz.getDeclaredField("out");
+				if ((!Modifier.isStatic(f.getModifiers())) && InputStream.class.isAssignableFrom(f.getType()))
+				{
+					f.setAccessible(true);
+					is2 = (OutputStream) f.get(is);
+					return is2;
+				}
+			} catch (NoSuchFieldException e)
+			{
+				clz = clz.getSuperclass();
+				if (clz != null) continue tryAgain;
+			} catch (Throwable e)
+			{
+				e.printStackTrace();
 			}
-			return is2;
-		} catch (Throwable e)
-		{
-			e.printStackTrace();
 			return is;
-		}
+		} while (true);
 	}
 
 	public static final In in = new SystemCurrent.In("#<System.in>");
@@ -170,20 +195,34 @@ public class SystemCurrent
 	 */
 	public static void setOut(PrintStream out)
 	{
-		if (out != null) if (underlyingStream(out) == null) { return; }
+		if (out instanceof Out)
+		{
+			SystemInOutErr.get().out = originalSystemOut;
+			return;
+		}
+		OutputStream is2 = underlyingStream(out);
+		if (is2 instanceof Out)
+		{
+			SystemInOutErr.get().out = originalSystemOut;
+			return;
+		}
 		SystemInOutErr.get().out = out;
 	}
 
 	public static final ThreadLocalPrintStream tlout = new ThreadLocalPrintStream()
 	{
+		@Override
 		public OutputStream getOutputStream()
 		{
-			PrintStream willBe = SystemCurrent.SystemInOutErr.get().out;
-			if (willBe instanceof Out || willBe == null)
+			OutputStream is = SystemCurrent.SystemInOutErr.get().out;
+			if(is instanceof Out) return originalSystemOut;
+			if (is == null)
 			{
-				willBe = originalSystemOut;
+				if (Thread.currentThread() == originalSystemThread) { return originalSystemOut; }
 			}
-			return willBe;
+			OutputStream is2 = underlyingStream(is);
+			if(is2 instanceof Out) return originalSystemOut;
+			return is;
 		}
 	};
 	public static final Out out = new Out("#<System.out>", tlout);
@@ -209,17 +248,34 @@ public class SystemCurrent
 	 */
 	public static void setErr(PrintStream err)
 	{
-		if (err != null && underlyingStream(err) == null) { return; }
+		if (err instanceof Out)
+		{
+			SystemInOutErr.get().err = originalSystemErr;
+			return;
+		}
+		OutputStream is2 = underlyingStream(err);
+		if (is2 instanceof Out)
+		{
+			SystemInOutErr.get().err = err;
+			return;
+		}
 		SystemInOutErr.get().err = err;
 	}
 
 	public static final ThreadLocalPrintStream tlerr = new ThreadLocalPrintStream()
 	{
+		@Override
 		public OutputStream getOutputStream()
 		{
-			PrintStream willBe = SystemCurrent.SystemInOutErr.get().err;
-			if (willBe instanceof Out || willBe == null) { return originalSystemErr; }
-			return willBe;
+			OutputStream is = SystemCurrent.SystemInOutErr.get().out;
+			if(is instanceof Out) return originalSystemErr;
+			if (is == null)
+			{
+				if (Thread.currentThread() == originalSystemThread) { return originalSystemErr; }
+			}
+			OutputStream is2 = underlyingStream(is);
+			if(is2 instanceof Out) return originalSystemErr;
+			return is;
 		}
 	};
 	public static final Out err = new Out("#<System.err>", tlerr);
@@ -270,21 +326,25 @@ public class SystemCurrent
 			return currentSystemInput().available();
 		}
 
+		@Override
 		public synchronized void mark(final int n)
 		{
 			currentSystemInput().mark(n);
 		}
 
+		@Override
 		public synchronized void reset() throws IOException
 		{
 			currentSystemInput().reset();
 		}
 
+		@Override
 		public boolean markSupported()
 		{
 			return currentSystemInput().markSupported();
 		}
 
+		@Override
 		public void close() throws IOException
 		{
 			currentSystemInput().close();
@@ -319,6 +379,7 @@ public class SystemCurrent
 
 		abstract OutputStream getOutputStream();
 
+		@Override
 		final public void close()
 		{
 			OutputStream redirect = getOutputStream();
@@ -353,10 +414,10 @@ public class SystemCurrent
 
 	public static void setupIO()
 	{
-		if (true) return;
 		if (!(System.in instanceof In) || System.in != in) System.setIn(in);
 		if (!(System.out instanceof Out) || System.out != out) System.setOut(out);
 		if (!(System.err instanceof Out) || System.err != err) System.setErr(err);
+		SystemInOutErr.set(originalInOutErr);
 	}
 }
 

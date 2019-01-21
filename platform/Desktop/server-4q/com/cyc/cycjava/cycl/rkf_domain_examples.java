@@ -1882,15 +1882,18 @@ public final class rkf_domain_examples extends SubLTranslatedFile
         return (SubLObject)rkf_domain_examples.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_domain_examples_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_domain_examples_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_domain_examples_file();
     }
     

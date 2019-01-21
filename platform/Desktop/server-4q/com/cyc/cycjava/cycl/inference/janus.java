@@ -1143,15 +1143,18 @@ public final class janus extends SubLTranslatedFile
         return (SubLObject)janus.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_janus_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_janus_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_janus_file();
     }
     

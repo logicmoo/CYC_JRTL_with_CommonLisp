@@ -3344,16 +3344,19 @@ public final class simplifier extends SubLTranslatedFile
 		return NIL;
 	}
 
+	@Override
 	public void declareFunctions()
 	{
 		declare_simplifier_file();
 	}
 
+	@Override
 	public void initializeVariables()
 	{
 		init_simplifier_file();
 	}
 
+	@Override
 	public void runTopLevelForms()
 	{
 		setup_simplifier_file();
@@ -3430,6 +3433,7 @@ public final class simplifier extends SubLTranslatedFile
 			super(SubLTranslatedFile.extractFunctionNamed("SIMPLIFY-CYCL-SENTENCE-INT"));
 		}
 
+		@Override
 		public SubLObject processItem(final SubLObject arg1)
 		{
 			return simplify_cycl_sentence_int(arg1, UNPROVIDED);
@@ -3443,6 +3447,7 @@ public final class simplifier extends SubLTranslatedFile
 			super(SubLTranslatedFile.extractFunctionNamed("SIMPLIFY-CYCL-SENTENCE-INT"));
 		}
 
+		@Override
 		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2)
 		{
 			return simplify_cycl_sentence_int(arg1, arg2);
@@ -3456,6 +3461,7 @@ public final class simplifier extends SubLTranslatedFile
 			super(SubLTranslatedFile.extractFunctionNamed("NESTED-COLLECTIONSUBSETFN-EXPRESSION?"));
 		}
 
+		@Override
 		public SubLObject processItem(final SubLObject arg1)
 		{
 			return nested_collectionsubsetfn_expressionP(arg1);

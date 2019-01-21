@@ -46,10 +46,12 @@ public class CatchableThrowImpl extends Throw {
 				+ SubLException.getStringForException(new Exception());
 	}
 
+	@Override
 	public SubLObject getResult() {
 		return result;
 	}
 
+	@Override
 	public SubLObject getTarget() {
 		return tag;
 	}

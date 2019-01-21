@@ -63,15 +63,18 @@ public class MultiANewArrayInsnNode extends AbstractInsnNode {
         this.dims = dims;
     }
 
-    public int getType() {
+    @Override
+	public int getType() {
         return MULTIANEWARRAY_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitMultiANewArrayInsn(desc, dims);
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+	public AbstractInsnNode clone(final Map labels) {
         return new MultiANewArrayInsnNode(desc, dims);
     }
 

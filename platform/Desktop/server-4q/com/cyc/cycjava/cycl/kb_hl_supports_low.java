@@ -1253,15 +1253,18 @@ public final class kb_hl_supports_low extends SubLTranslatedFile
         return (SubLObject)kb_hl_supports_low.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_hl_supports_low_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_hl_supports_low_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_hl_supports_low_file();
     }
     
@@ -1320,23 +1323,28 @@ public final class kb_hl_supports_low extends SubLTranslatedFile
             this.$dependents = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$kb_hl_support_content_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$argument;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$dependents;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$argument = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$dependents = value;
         }
         
@@ -1351,7 +1359,8 @@ public final class kb_hl_supports_low extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("KB-HL-SUPPORT-CONTENT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_hl_supports_low.kb_hl_support_content_p(arg1);
         }
     }
@@ -1362,7 +1371,8 @@ public final class kb_hl_supports_low extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("KB-HL-SUPPORT-INDEX-UNINDEXED-TERM?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_hl_supports_low.kb_hl_support_index_unindexed_termP(arg1);
         }
     }

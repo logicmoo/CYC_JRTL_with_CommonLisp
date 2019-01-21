@@ -1,6 +1,6 @@
 
+(in-package :CL-USER)
 (defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
-
 (let ((*PACKAGE* *PACKAGE*))
   (cl:load "e2c/hash-dollar.lisp"))
 
@@ -14,12 +14,13 @@
 ;; Starts AppdapterGUI
 ;; (UI-INSPECTOR)
 
-; (J-DESKTOP)
+;; Start the J IDE
+;; (J-DESKTOP)
 
 ;; Starts BeanShell UI
 ;; (BSH-DESKTOP)
 
-;; Starts of SWI-Prolog Telnet Server
+;; Starts of SWI-Prolog Telnet Server  (implictly already started)
 ;; (swipl-init-server)
 
 (require :abcl-contrib)
@@ -58,28 +59,26 @@
 #+CYC-HTML
 (sl:csetq cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
 
-;; #+CYC-EXTERNAL
 ;; makes constant names slightly friendlier to prolog
+;; #+CYC-EXTERNAL
 ;; (print (let ((*PACKAGE* *PACKAGE*))  (in-package :cyc) (sl:load "e2c/renames-fixed.lisp")))
 
 ;; uses com.cyc.cycjava.cycl.constants_low.lookup_constant_by_guid
-(defun foc (str)
-   (cyc::find-or-create-constant str))
 
 ;; CYC Server
 (let ((*PACKAGE* *PACKAGE*))
    (cyc:init-cyc-server))
 
 
-(cl-imports-cyc)
-(cyc-imports-cl)
+'(ss)
 
+
+(defun osim () (sl:load "e2c/osim.lisp"))
 
 ;; Loads Daydreamer
 #+USE-DD
 (cl:load "e2c/d")
 
-'(ss)
 
 ;; Starts Daydreamer
 (defun dd ()
@@ -89,13 +88,24 @@
   ;;(lisp-eval "(UI-INSPECT ^cx.50)")
   )
 
+(defun cyc::foc (str)
+   (cyc::find-or-create-constant str))
+
+(import 'cyc::foc (find-package :cl-user))
+
+
+(cl-imports-cyc)
+(cyc-imports-cl)
+
+
 ;; ABCL JSS:     (#"setText" my-label "The Larch")
 ;; ABCL JFLI:    (jlabel.settext my-label "The Larch")
 ;; Clojure:      (.setText my-label "The Larch")
+;; JLinker:      (JCALL "aproposList" *PACKAGE* "QUIT-")
 
 ;; (prolog-eval-lobject 'rn)
-
 ;; (prolog-query-once "rn")
 
+'(osim)
 
 

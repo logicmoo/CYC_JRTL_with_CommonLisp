@@ -206,7 +206,8 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements
     // Implementation of the ClassVisitor interface
     // ------------------------------------------------------------------------
 
-    public void visit(
+    @Override
+	public void visit(
         final int version,
         final int access,
         final String name,
@@ -281,7 +282,8 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements
         text.add(buf.toString());
     }
 
-    public void visitSource(final String file, final String debug) {
+    @Override
+	public void visitSource(final String file, final String debug) {
         buf.setLength(0);
         buf.append("cw.visitSource(");
         appendConstant(file);
@@ -291,7 +293,8 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements
         text.add(buf.toString());
     }
 
-    public void visitOuterClass(
+    @Override
+	public void visitOuterClass(
         final String owner,
         final String name,
         final String desc)
@@ -307,7 +310,8 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements
         text.add(buf.toString());
     }
 
-    public void visitInnerClass(
+    @Override
+	public void visitInnerClass(
         final String name,
         final String outerName,
         final String innerName,
@@ -326,7 +330,8 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements
         text.add(buf.toString());
     }
 
-    public FieldVisitor visitField(
+    @Override
+	public FieldVisitor visitField(
         final int access,
         final String name,
         final String desc,
@@ -353,7 +358,8 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements
         return aav;
     }
 
-    public MethodVisitor visitMethod(
+    @Override
+	public MethodVisitor visitMethod(
         final int access,
         final String name,
         final String desc,
@@ -393,7 +399,8 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements
         return new ASMifierMethodVisitor();
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -411,7 +418,8 @@ public class ASMifierClassVisitor extends ASMifierAbstractVisitor implements
         return av;
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         text.add("cw.visitEnd();\n\n");
         text.add("return cw.toByteArray();\n");
         text.add("}\n");

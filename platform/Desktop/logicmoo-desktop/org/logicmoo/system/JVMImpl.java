@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Hashtable;
 
+import org.armedbear.lisp.ControlTransfer;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -147,7 +148,8 @@ public /*abstract*/ class JVMImpl {
             JVMImpl.thrower = (Thrower) JVMImpl.throwerClass.newInstance();
         }
 
-        public synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        @Override
+		public synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
             Class c = (Class) JVMImpl.cache.get(name);
             if (c == null) {
                 c = this.findSystemClass(name);
@@ -178,15 +180,21 @@ public /*abstract*/ class JVMImpl {
     //        return (RuntimeException)doThrowObject(throwable, nullOrOneDeclaredThowableOrArrayOfDeclaredThrowables);
     //    }
 
-    public static RuntimeException doThrow(Object throwable) {
+    public static RuntimeException doThrow(Object throwable) {    	
+        return doThrow((Throwable) throwable);
+    }
+
+    public static RuntimeException doThrow(Throwable throwable) {
+    	if (throwable instanceof ControlTransfer) {
+    		throw (ControlTransfer) throwable;
+    	}	
+    	if (throwable instanceof Error) {
+    		throw (Error) throwable;
+    	}	
         if (throwable instanceof RuntimeException) {
             final RuntimeException runtimeException = (RuntimeException) throwable;
             return doThrow(runtimeException);
         }
-
-        return JVMImpl.getThrower().doThrow((Throwable) throwable);
-    }
-    public static RuntimeException doThrow(Throwable throwable) {
         return JVMImpl.getThrower().doThrow((Throwable) throwable);
     }
 
@@ -197,7 +205,7 @@ public /*abstract*/ class JVMImpl {
 //            final CatchableThrow runtimeException = (CatchableThrow) throwable;
 //            return runtimeException;
 //        }
-        if (throwable instanceof SubLProcess.TerminationRequest) return throwable;
+    	if (throwable instanceof SubLProcess.TerminationRequest) return throwable;
         if (JVMImpl.lastThrowable != throwable) {
             //throwable.printStackTrace();
         }

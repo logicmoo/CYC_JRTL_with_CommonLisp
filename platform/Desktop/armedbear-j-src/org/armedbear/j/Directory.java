@@ -153,7 +153,8 @@ public final class Directory extends Buffer
         return usingNativeFormat;
     }
 
-    public File getCurrentDirectory()
+    @Override
+	public File getCurrentDirectory()
     {
         return getFile();
     }
@@ -163,7 +164,8 @@ public final class Directory extends Buffer
         return sortBy;
     }
 
-    public Position getInitialDotPos()
+    @Override
+	public Position getInitialDotPos()
     {
         Line line = getFirstLine();
         Line upLine = null; // We'll put dot here if directory is empty.
@@ -310,7 +312,8 @@ public final class Directory extends Buffer
         }
     }
 
-    public synchronized void reload()
+    @Override
+	public synchronized void reload()
     {
         ArrayList editors = new ArrayList();
 
@@ -483,7 +486,8 @@ public final class Directory extends Buffer
     {
         Debug.assertTrue(!usingNativeFormat);
         Comparator comparator = new Comparator() {
-            public int compare(Object o1, Object o2)
+            @Override
+			public int compare(Object o1, Object o2)
             {
                 String name1 = ((DirectoryEntry)o1).getName();
                 String name2 = ((DirectoryEntry)o2).getName();
@@ -496,7 +500,8 @@ public final class Directory extends Buffer
     // Called only from sort().
     private void sortByDate() {
         Comparator comparator = new Comparator() {
-            public int compare(Object o1, Object o2)
+            @Override
+			public int compare(Object o1, Object o2)
             {
                 // Most recent dates first.
                 long date1 = ((DirectoryEntry)o1).getDate();
@@ -515,7 +520,8 @@ public final class Directory extends Buffer
     private void sortBySize()
     {
         Comparator comparator = new Comparator() {
-            public int compare(Object o1, Object o2)
+            @Override
+			public int compare(Object o1, Object o2)
             {
                 // Biggest files first.
                 long size1 = ((DirectoryEntry)o1).getSize();
@@ -830,7 +836,8 @@ public final class Directory extends Buffer
         return totalSize;
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         if (!isLoaded()) {
             final Editor editor = Editor.currentEditor();
@@ -1040,11 +1047,13 @@ public final class Directory extends Buffer
                 }
                 setFile(newFile);
                 Runnable reloadRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         load();
                         Runnable updateRunnable = new Runnable() {
-                            public void run()
+                            @Override
+							public void run()
                             {
                                 setBusy(false);
                                 for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -1805,7 +1814,8 @@ public final class Directory extends Buffer
         final long fileSize = getFileSize(dotLine.getText());
         final FtpLoadProcess loadProcess = new FtpLoadProcess(this, sourceFile, session);
         final Runnable successRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 File cache = loadProcess.getCache();
                 if (cache != null)
@@ -1818,7 +1828,8 @@ public final class Directory extends Buffer
             }
         };
         final ErrorRunnable errorRunnable = new ErrorRunnable("Operation failed") {
-            public void run()
+            @Override
+			public void run()
             {
                 File cache = loadProcess.getCache();
                 if (cache != null && cache.isFile())
@@ -1840,12 +1851,14 @@ public final class Directory extends Buffer
         loadProcess.start();
     }
 
-    public boolean isModified()
+    @Override
+	public boolean isModified()
     {
         return false;
     }
 
-    public String getTitle()
+    @Override
+	public String getTitle()
     {
         File dir = getFile();
         title = dir.canonicalPath();
@@ -1981,7 +1994,8 @@ public final class Directory extends Buffer
             final FtpSession session = FtpSession.getSession((FtpFile)file);
             if (session != null) {
                 final Runnable completionRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                             Editor ed = it.nextEditor();
@@ -1991,7 +2005,8 @@ public final class Directory extends Buffer
                     }
                 };
                 final Runnable chmodRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         directory.setBusy(true);
                         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -2013,7 +2028,8 @@ public final class Directory extends Buffer
             final SshSession session = SshSession.getSession((SshFile)file);
             if (session != null) {
                 final Runnable completionRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                             Editor ed = it.nextEditor();
@@ -2023,7 +2039,8 @@ public final class Directory extends Buffer
                     }
                 };
                 final Runnable chmodRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         directory.setBusy(true);
                         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -2105,7 +2122,8 @@ public final class Directory extends Buffer
         return null;
     }
 
-    public final String toString()
+    @Override
+	public final String toString()
     {
         File file = getFile();
         if (file.isRemote()) {
@@ -2129,7 +2147,8 @@ public final class Directory extends Buffer
     }
 
     // For the buffer list.
-    public final Icon getIcon()
+    @Override
+	public final Icon getIcon()
     {
         return Utilities.getIconFromFile("directory.png");
     }

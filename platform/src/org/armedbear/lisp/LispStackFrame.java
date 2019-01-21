@@ -44,7 +44,8 @@ public class LispStackFrame
   private final static class UnavailableArgument extends LispObject
   {
     public UnavailableArgument () { }
-    public String printObjectImpl() {
+    @Override
+	public String printObjectImpl() {
       return unreadableString("unavailable arg", false);
     }
   }
@@ -61,15 +62,18 @@ public class LispStackFrame
     }
   }
 
-   public LispObject typeOf() {
+   @Override
+public LispObject typeOf() {
      return Symbol.LISP_STACK_FRAME;
    }
 
-   public LispObject classOf() {
+   @Override
+public LispObject classOf() {
      return BuiltInClass.LISP_STACK_FRAME;
    }
 
-   public String printObjectImpl()
+   @Override
+public String printObjectImpl()
    {
      String result = "";
      final String LISP_STACK_FRAME = "LISP-STACK-FRAME";
@@ -83,7 +87,8 @@ public class LispStackFrame
      return result;
    }
 
-  public LispObject typep(LispObject typeSpecifier)
+  @Override
+public LispObject typep(LispObject typeSpecifier)
 
   {
     if (typeSpecifier == Symbol.LISP_STACK_FRAME)
@@ -93,7 +98,8 @@ public class LispStackFrame
     return super.typep(typeSpecifier);
    }
 
-  public LispObject toLispList()
+  @Override
+public LispObject toLispList()
 
   {
     LispObject result = argsToLispList();
@@ -122,7 +128,8 @@ public class LispStackFrame
     return result.nreverse();
   }
 
-  public AbstractString toLispString()
+  @Override
+public AbstractString toLispString()
 
   {
     String result;
@@ -145,7 +152,8 @@ public class LispStackFrame
     return operator;
   }
 
-  public LispObject getParts()
+  @Override
+public LispObject getParts()
 
   {
     LispObject result = NIL;

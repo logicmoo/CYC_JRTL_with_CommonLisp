@@ -264,7 +264,8 @@ public class CycConnection implements CycConnectionInterface {
     }
   }
 
-  public int getConnectionType() {
+  @Override
+public int getConnectionType() {
     return CycAccess.PERSISTENT_CONNECTION;
   }
 
@@ -336,19 +337,23 @@ public class CycConnection implements CycConnectionInterface {
     cycLeaseManagerMap.put(key, lease);
   }
 
-  public Map<String, CycLeaseManager> getCycLeaseManagerMap() {
+  @Override
+public Map<String, CycLeaseManager> getCycLeaseManagerMap() {
     return cycLeaseManagerMap;
   }
 
-  public void setCycLeaseManagerMap(Map<String, CycLeaseManager> cycLeaseManagerMap) {
+  @Override
+public void setCycLeaseManagerMap(Map<String, CycLeaseManager> cycLeaseManagerMap) {
     this.cycLeaseManagerMap = cycLeaseManagerMap;
   }
 
-  public Map<InputStream, CycLeaseManager> getCycLeaseManagerCommMap() {
+  @Override
+public Map<InputStream, CycLeaseManager> getCycLeaseManagerCommMap() {
     return cycLeaseManagerCommMap;
   }
 
-  public void setCycLeaseManagerCommMap(Map<InputStream, CycLeaseManager> cycLeaseManagerCommMap) {
+  @Override
+public void setCycLeaseManagerCommMap(Map<InputStream, CycLeaseManager> cycLeaseManagerCommMap) {
     this.cycLeaseManagerCommMap = cycLeaseManagerCommMap;
   }
 
@@ -357,14 +362,16 @@ public class CycConnection implements CycConnectionInterface {
   /**
    * Ensures that the api socket connections are closed when this object is garbage collected.
    */
-  protected void finalize() {
+  @Override
+protected void finalize() {
     close();
   }
 
   /**
    * Close the api sockets and streams.
    */
-  public synchronized void close() {
+  @Override
+public synchronized void close() {
     if (isClosed) {
       return;
     }
@@ -574,7 +581,8 @@ public class CycConnection implements CycConnectionInterface {
    * @throws IOException when a commuications error occurs
    * @throws CycApiException when a Cyc API error occurs
    */
-  public Object[] converse(Object message)
+  @Override
+public Object[] converse(Object message)
           throws IOException, CycApiException {
     return converse(message,
             notimeout);
@@ -599,7 +607,8 @@ public class CycConnection implements CycConnectionInterface {
    * @throws CycApiException when a Cyc api error occurs
    * @throws RuntimeException if CycAccess is not present
    */
-  public Object[] converse(Object message,
+  @Override
+public Object[] converse(Object message,
           Timer timeout)
           throws IOException, TimeOutException, CycApiException {
     CycList messageCycList;
@@ -737,7 +746,8 @@ public class CycConnection implements CycConnectionInterface {
     return result;
   }
 
-  public void cancelCommunication(SubLWorker worker) throws java.io.IOException {
+  @Override
+public void cancelCommunication(SubLWorker worker) throws java.io.IOException {
     Integer id = worker.getId();
     if (id.intValue() < 0) {
       //@note serial communications cannot be canceled right now
@@ -751,7 +761,8 @@ public class CycConnection implements CycConnectionInterface {
     // event, so no need to perform event signaling and cleanup
   }
 
-  public void abortCommunication(SubLWorker worker) throws java.io.IOException {
+  @Override
+public void abortCommunication(SubLWorker worker) throws java.io.IOException {
     Integer id = worker.getId();
     if (id.intValue() < 0) {
       //@note serial communications cannot be canceled right now
@@ -791,7 +802,8 @@ public class CycConnection implements CycConnectionInterface {
    * @throws TimeOutException when the time limit is exceeded
    * @throws CycApiException when a Cyc api error occurs
    */
-  public void converseBinary(final SubLWorker worker)
+  @Override
+public void converseBinary(final SubLWorker worker)
           throws IOException, TimeOutException, CycApiException {
     logger.finest("API request: " + worker.toString());
     if (cycAccess.isClosed() || taskProcessingThreadDead) {
@@ -1003,7 +1015,8 @@ public class CycConnection implements CycConnectionInterface {
   /**
    * Turns on the diagnostic trace of socket messages.
    */
-  public void traceOn() {
+  @Override
+public void traceOn() {
     trace = API_TRACE_MESSAGES;
 //    cfaslInputStream.trace = trace;
     if (this.comm == null) {
@@ -1014,14 +1027,16 @@ public class CycConnection implements CycConnectionInterface {
   /**
    * Turns on the detailed diagnostic trace of socket messages.
    */
-  public void traceOnDetailed() {
+  @Override
+public void traceOnDetailed() {
     setTrace(API_TRACE_DETAILED);
   }
 
   /**
    * Turns off the diagnostic trace of socket messages.
    */
-  public void traceOff() {
+  @Override
+public void traceOff() {
     setTrace(API_TRACE_NONE);
   }
 
@@ -1030,7 +1045,8 @@ public class CycConnection implements CycConnectionInterface {
    *
    * @return the trace value
    */
-  public int getTrace() {
+  @Override
+public int getTrace() {
     return trace;
   }
 
@@ -1039,7 +1055,8 @@ public class CycConnection implements CycConnectionInterface {
    *
    * @param trace the new socket messages diagnostic trace value
    */
-  public void setTrace(int trace) {
+  @Override
+public void setTrace(int trace) {
     this.trace = trace;
 //    cfaslInputStream.trace = trace;
     if (this.comm == null) {
@@ -1112,7 +1129,8 @@ public class CycConnection implements CycConnectionInterface {
    *
    * @return connection information, suitable for diagnostics
    */
-  public String connectionInfo() {
+  @Override
+public String connectionInfo() {
     return "host " + hostName + ", cfaslPort " + cfaslPort;
   }
 

@@ -874,15 +874,18 @@ public final class assertions_interface extends SubLTranslatedFile
         return (SubLObject)assertions_interface.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_assertions_interface_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_assertions_interface_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_assertions_interface_file();
     }
     

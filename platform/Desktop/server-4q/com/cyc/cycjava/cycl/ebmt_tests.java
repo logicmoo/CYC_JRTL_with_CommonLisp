@@ -1641,15 +1641,18 @@ public final class ebmt_tests extends SubLTranslatedFile
         return (SubLObject)ebmt_tests.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_ebmt_tests_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_ebmt_tests_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_ebmt_tests_file();
     }
     

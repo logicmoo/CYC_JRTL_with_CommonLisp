@@ -3319,15 +3319,18 @@ public final class pph_data_structures extends SubLTranslatedFile
         return (SubLObject)pph_data_structures.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_data_structures_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_data_structures_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_data_structures_file();
     }
     
@@ -3629,31 +3632,38 @@ public final class pph_data_structures extends SubLTranslatedFile
             this.$assertion = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$generation_template_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$phrase;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$constraint;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$assertion;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$phrase = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$constraint = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$assertion = value;
         }
         
@@ -3668,7 +3678,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GENERATION-TEMPLATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.generation_template_p(arg1);
         }
     }
@@ -3679,7 +3690,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-GENERATION-TEMPLATE-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.sxhash_generation_template_method(arg1);
         }
     }
@@ -3690,7 +3702,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GET-GEN-TEMPLATE-ASSERTION"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.get_gen_template_assertion(arg1);
         }
     }
@@ -3701,7 +3714,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-GENERATION-TEMPLATE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.cfasl_input_generation_template(arg1);
         }
     }
@@ -3717,23 +3731,28 @@ public final class pph_data_structures extends SubLTranslatedFile
             this.$relative_constraint = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$pph_phrase_agr_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$absolute_constraint;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$relative_constraint;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$absolute_constraint = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$relative_constraint = value;
         }
         
@@ -3748,7 +3767,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-PHRASE-AGR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.pph_phrase_agr_p(arg1);
         }
     }
@@ -3759,7 +3779,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-PPH-PHRASE-AGR"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.cfasl_input_pph_phrase_agr(arg1);
         }
     }
@@ -3783,55 +3804,68 @@ public final class pph_data_structures extends SubLTranslatedFile
             this.$other = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$paraphrase_phrase_info_bundle_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$cycl;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$agr;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$justification;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$output_list;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$arg_position_map;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$other;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$cycl = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$agr = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$justification = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$output_list = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$arg_position_map = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$other = value;
         }
         
@@ -3846,7 +3880,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PARAPHRASE-PHRASE-INFO-BUNDLE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.paraphrase_phrase_info_bundle_p(arg1);
         }
     }
@@ -3870,55 +3905,68 @@ public final class pph_data_structures extends SubLTranslatedFile
             this.$agr = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$pph_phrase_output_item_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$string;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$arg_position;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$cycl;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$html_open_tag;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$html_close_tag;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$agr;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$string = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$arg_position = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$cycl = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$html_open_tag = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$html_close_tag = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$agr = value;
         }
         
@@ -3933,7 +3981,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-PHRASE-OUTPUT-ITEM-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.pph_phrase_output_item_p(arg1);
         }
     }
@@ -3944,7 +3993,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-PHRASE-OUTPUT-ITEM-STRING"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.pph_phrase_output_item_string(arg1);
         }
     }
@@ -3955,7 +4005,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-PHRASE-OUTPUT-ITEM-LOOSE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.pph_phrase_output_item_loose_p(arg1);
         }
     }
@@ -3966,7 +4017,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-PPH-OI"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.cfasl_input_pph_oi(arg1);
         }
     }
@@ -4002,103 +4054,128 @@ public final class pph_data_structures extends SubLTranslatedFile
             this.$arg_position_map = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$pph_phrase_template_generator_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$formula;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$mt;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$focus_arg;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$specified_reln;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$nl_preds;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$doneP;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$search_limit;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$search_level;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$relns_to_use;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$gen_template_sets;
         }
         
-        public SubLObject getField12() {
+        @Override
+		public SubLObject getField12() {
             return this.$gen_templates;
         }
         
-        public SubLObject getField13() {
+        @Override
+		public SubLObject getField13() {
             return this.$arg_position_map;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$formula = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$mt = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$focus_arg = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$specified_reln = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$nl_preds = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$doneP = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$search_limit = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$search_level = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$relns_to_use = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$gen_template_sets = value;
         }
         
-        public SubLObject setField12(final SubLObject value) {
+        @Override
+		public SubLObject setField12(final SubLObject value) {
             return this.$gen_templates = value;
         }
         
-        public SubLObject setField13(final SubLObject value) {
+        @Override
+		public SubLObject setField13(final SubLObject value) {
             return this.$arg_position_map = value;
         }
         
@@ -4113,7 +4190,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-PHRASE-TEMPLATE-GENERATOR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.pph_phrase_template_generator_p(arg1);
         }
     }
@@ -4127,15 +4205,18 @@ public final class pph_data_structures extends SubLTranslatedFile
             this.$item_queue = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$pph_phrase_output_list_iterator_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$item_queue;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$item_queue = value;
         }
         
@@ -4150,7 +4231,8 @@ public final class pph_data_structures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-PHRASE-OUTPUT-LIST-ITERATOR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_data_structures.pph_phrase_output_list_iterator_p(arg1);
         }
     }

@@ -1464,15 +1464,18 @@ public final class inference_datastructures_tactic extends SubLTranslatedFile
         return (SubLObject)inference_datastructures_tactic.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_datastructures_tactic_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_datastructures_tactic_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_datastructures_tactic_file();
     }
     
@@ -1620,103 +1623,128 @@ public final class inference_datastructures_tactic extends SubLTranslatedFile
             this.$properties = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$tactic_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$suid;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$problem;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$type;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$hl_module;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$completeness;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$preference_level_justification;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$productivity;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$original_productivity;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$status;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$progress_iterator;
         }
         
-        public SubLObject getField12() {
+        @Override
+		public SubLObject getField12() {
             return this.$data;
         }
         
-        public SubLObject getField13() {
+        @Override
+		public SubLObject getField13() {
             return this.$properties;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$suid = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$problem = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$type = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$hl_module = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$completeness = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$preference_level_justification = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$productivity = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$original_productivity = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$status = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$progress_iterator = value;
         }
         
-        public SubLObject setField12(final SubLObject value) {
+        @Override
+		public SubLObject setField12(final SubLObject value) {
             return this.$data = value;
         }
         
-        public SubLObject setField13(final SubLObject value) {
+        @Override
+		public SubLObject setField13(final SubLObject value) {
             return this.$properties = value;
         }
         
@@ -1731,7 +1759,8 @@ public final class inference_datastructures_tactic extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TACTIC-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_tactic.tactic_p(arg1);
         }
     }
@@ -1742,7 +1771,8 @@ public final class inference_datastructures_tactic extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-TACTIC-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_tactic.sxhash_tactic_method(arg1);
         }
     }
@@ -1753,7 +1783,8 @@ public final class inference_datastructures_tactic extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TACTIC-POSSIBLE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_tactic.tactic_possibleP(arg1);
         }
     }
@@ -1764,7 +1795,8 @@ public final class inference_datastructures_tactic extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TACTIC-PROGRESS-DONE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_tactic.tactic_progress_doneP(arg1);
         }
     }
@@ -1775,7 +1807,8 @@ public final class inference_datastructures_tactic extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TACTIC-PROGRESS-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_tactic.tactic_progress_next(arg1);
         }
     }
@@ -1786,7 +1819,8 @@ public final class inference_datastructures_tactic extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TACTIC-PROGRESS-FINALIZE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_tactic.tactic_progress_finalize(arg1);
         }
     }

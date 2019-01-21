@@ -20,31 +20,42 @@ import com.hp.hpl.jena.query.Dataset;
 
 public abstract class AbstractDatasetFactory implements UserDatasetFactory
 {
-    public boolean canCreateModelOfType(final String typeOf, final String sharedNameIgnoredPresently) {
+    @Override
+	public boolean canCreateModelOfType(final String typeOf, final String sharedNameIgnoredPresently) {
         return this.canCreateType(typeOf, sharedNameIgnoredPresently);
     }
     
-    public abstract Dataset createDefault();
+    @Override
+	public abstract Dataset createDefault();
     
-    public abstract Dataset createType(final String p0, final String p1);
+    @Override
+	public abstract Dataset createType(final String p0, final String p1);
     
-    public abstract Dataset createRemotePeer();
+    @Override
+	public abstract Dataset createRemotePeer();
     
-    public abstract Dataset create(final Model p0);
+    @Override
+	public abstract Dataset create(final Model p0);
     
-    public abstract Dataset create(final Dataset p0);
+    @Override
+	public abstract Dataset create(final Dataset p0);
     
-    public abstract Dataset create(final DatasetGraph p0);
+    @Override
+	public abstract Dataset create(final DatasetGraph p0);
     
-    public abstract Model createModelOfType(final String p0, final String p1) throws Throwable;
+    @Override
+	public abstract Model createModelOfType(final String p0, final String p1) throws Throwable;
     
-    public abstract String getDatasetType();
+    @Override
+	public abstract String getDatasetType();
     
-    public Dataset createMem() {
+    @Override
+	public Dataset createMem() {
         return this.create(DatasetGraphFactory.createMem());
     }
     
-    public Dataset createMemFixed() {
+    @Override
+	public Dataset createMemFixed() {
         return this.create(DatasetGraphFactory.createMemFixed());
     }
     
@@ -59,15 +70,18 @@ public abstract class AbstractDatasetFactory implements UserDatasetFactory
         return ds;
     }
     
-    public Dataset create(final List<String> uriList) {
+    @Override
+	public Dataset create(final List<String> uriList) {
         return this.create(uriList, null, null, null);
     }
     
-    public Dataset create(final String uri) {
+    @Override
+	public Dataset create(final String uri) {
         return this.create(uri, null, null, null);
     }
     
-    public Dataset create(final List<String> uriList, final FileManager fileManager) {
+    @Override
+	public Dataset create(final List<String> uriList, final FileManager fileManager) {
         return this.create(uriList, null, fileManager, null);
     }
     
@@ -123,7 +137,8 @@ public abstract class AbstractDatasetFactory implements UserDatasetFactory
         return ds;
     }
     
-    public boolean canCreateType(final String typeOf, final String sharedNameIgnoredPresently) {
+    @Override
+	public boolean canCreateType(final String typeOf, final String sharedNameIgnoredPresently) {
         final Map<String, UserDatasetFactory> registeredUserDatasetFactoryByName = (Map<String, UserDatasetFactory>)RepoDatasetFactory.registeredUserDatasetFactoryByName;
         synchronized (registeredUserDatasetFactoryByName) {
             if (typeOf != null && registeredUserDatasetFactoryByName.get(typeOf) == this) {

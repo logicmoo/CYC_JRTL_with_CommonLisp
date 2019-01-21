@@ -3865,15 +3865,18 @@ public final class wff_modules extends SubLTranslatedFile
         return (SubLObject)wff_modules.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_wff_modules_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_wff_modules_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_wff_modules_file();
     }
     

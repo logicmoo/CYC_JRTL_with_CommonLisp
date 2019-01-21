@@ -2700,15 +2700,18 @@ public final class constrained_parsing extends SubLTranslatedFile
         return (SubLObject)constrained_parsing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_constrained_parsing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_constrained_parsing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_constrained_parsing_file();
     }
     
@@ -3065,23 +3068,28 @@ public final class constrained_parsing extends SubLTranslatedFile
             this.$mt = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$parsing_faithfulness_filter_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$type;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$mt;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$type = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$mt = value;
         }
         
@@ -3096,7 +3104,8 @@ public final class constrained_parsing extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PARSING-FAITHFULNESS-FILTER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return constrained_parsing.parsing_faithfulness_filter_p(arg1);
         }
     }
@@ -3114,31 +3123,38 @@ public final class constrained_parsing extends SubLTranslatedFile
             this.$mt = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$parsing_arbitrary_filter_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$type;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$details;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$mt;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$type = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$details = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$mt = value;
         }
         
@@ -3153,7 +3169,8 @@ public final class constrained_parsing extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PARSING-ARBITRARY-FILTER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return constrained_parsing.parsing_arbitrary_filter_p(arg1);
         }
     }

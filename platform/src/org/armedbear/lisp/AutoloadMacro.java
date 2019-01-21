@@ -57,12 +57,14 @@ public final class AutoloadMacro extends Autoload
             symbol.setSymbolFunction(am);
     }
 
-    public void load()
+    @Override
+	public void load()
     {
         Load.loadSystemFile(getFileName(), true);
     }
 
-    protected void extraInfo(StringBuilder sb) {
+    @Override
+	protected void extraInfo(StringBuilder sb) {
         sb.append(" \"");
         sb.append(getFileName());
         sb.append(" \"");
@@ -72,7 +74,8 @@ public final class AutoloadMacro extends Autoload
     private static final Primitive AUTOLOAD_MACRO =
         new Primitive("autoload-macro", PACKAGE_EXT, true)
     {
-        public LispObject execute(LispObject first)
+        @Override
+		public LispObject execute(LispObject first)
         {
             if (first instanceof Symbol) {
                 Symbol symbol = (Symbol) first;
@@ -88,7 +91,8 @@ public final class AutoloadMacro extends Autoload
             }
             return error(new TypeError(first));
         }
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
 
         {
             final String fileName = second.getStringValue();

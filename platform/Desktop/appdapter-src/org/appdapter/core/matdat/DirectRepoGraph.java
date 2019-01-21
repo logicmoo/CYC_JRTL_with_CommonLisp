@@ -27,7 +27,8 @@ public class DirectRepoGraph implements BoundModelProvider, Product, Serializabl
         return (Function1<TypedResrc, Function1<NamedModelProvider, DirectRepoGraph>>)DirectRepoGraph$.MODULE$.curried();
     }
     
-    public Set<Object> assembleModelRoots() {
+    @Override
+	public Set<Object> assembleModelRoots() {
         return (Set<Object>)BoundModelProvider$class.assembleModelRoots((BoundModelProvider)this);
     }
     
@@ -39,11 +40,13 @@ public class DirectRepoGraph implements BoundModelProvider, Product, Serializabl
         return this.myUpstreamNMP;
     }
     
-    public Model getModel() {
+    @Override
+	public Model getModel() {
         return this.myUpstreamNMP().getNamedModel((Ident)this.myUpstreamGraphID());
     }
     
-    public TypedResrc getTypedName() {
+    @Override
+	public TypedResrc getTypedName() {
         return this.myUpstreamGraphID();
     }
     
@@ -59,15 +62,18 @@ public class DirectRepoGraph implements BoundModelProvider, Product, Serializabl
         return this.myUpstreamNMP();
     }
     
-    public String productPrefix() {
+    @Override
+	public String productPrefix() {
         return "DirectRepoGraph";
     }
     
-    public int productArity() {
+    @Override
+	public int productArity() {
         return 2;
     }
     
-    public Object productElement(final int x$1) {
+    @Override
+	public Object productElement(final int x$1) {
         Object o = null;
         switch (x$1) {
             default: {
@@ -85,11 +91,13 @@ public class DirectRepoGraph implements BoundModelProvider, Product, Serializabl
         return o;
     }
     
-    public Iterator<Object> productIterator() {
+    @Override
+	public Iterator<Object> productIterator() {
         return (Iterator<Object>)ScalaRunTime$.MODULE$.typedProductIterator((Product)this);
     }
     
-    public boolean canEqual(final Object x$1) {
+    @Override
+	public boolean canEqual(final Object x$1) {
         return x$1 instanceof DirectRepoGraph;
     }
     

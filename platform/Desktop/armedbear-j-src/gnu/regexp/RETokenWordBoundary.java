@@ -34,7 +34,8 @@ final class RETokenWordBoundary extends REToken {
 	this.negated = negated;
     }
     
-    boolean match(CharIndexed input, REMatch mymatch) {
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) {
 	// Word boundary means input[index-1] was a word character
 	// and input[index] is not, or input[index] is a word character
 	// and input[index-1] was not
@@ -73,7 +74,8 @@ final class RETokenWordBoundary extends REToken {
 	return (doNext ? next(input, mymatch) : false);
     }
     
-    void dump(StringBuffer os) {
+    @Override
+	void dump(StringBuffer os) {
 	if (where == (BEGIN | END)) {
 	    os.append( negated ? "\\B" : "\\b" );
 	} else if (where == BEGIN) {

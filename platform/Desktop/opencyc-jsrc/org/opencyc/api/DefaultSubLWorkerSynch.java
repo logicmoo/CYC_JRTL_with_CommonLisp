@@ -212,7 +212,8 @@ public class DefaultSubLWorkerSynch
    * @throws CycApiException thrown if any other error occurs
    * @return The work produced by this SubLWorkerSynch
    */
-  public Object getWork()
+  @Override
+public Object getWork()
       throws IOException, TimeOutException, CycApiException, OpenCycTaskInterruptedException {
     if (getStatus() == SubLWorkerStatus.NOT_STARTED_STATUS) {
       start();
@@ -272,19 +273,22 @@ public class DefaultSubLWorkerSynch
   /** Ignore.
    * @param event the event object with details about this event
    */
-  public void notifySubLWorkerStarted(SubLWorkerEvent event) {}
+  @Override
+public void notifySubLWorkerStarted(SubLWorkerEvent event) {}
   
   /** Saves any  available work.
    * @param event the event object with details about this event
    */
-  public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
+  @Override
+public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
     appendWork(event.getWork());
   }
   
   /** Make sure to save any applicable exceptions,
    * @param event the event object with details about this event
    */
-  public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
+  @Override
+public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
     setException(event.getException());
     sem.release();
   }
@@ -349,7 +353,8 @@ public class DefaultSubLWorkerSynch
     try {
       final CycAccess access = new CycAccess();
       Thread workerThread = new Thread() {
-        public void run() {
+        @Override
+		public void run() {
           try {
             System.out.println("Starting work.");
             testWorker = new DefaultSubLWorkerSynch("(do-assertions (a))", access);
@@ -372,7 +377,8 @@ public class DefaultSubLWorkerSynch
       
       System.out.println( "\nOk, second round ....\n\n");
       workerThread = new Thread() {
-        public void run() {
+        @Override
+		public void run() {
           try {
             System.out.println("Starting work.");
             testWorker = new DefaultSubLWorkerSynch("(do-assertions (a))", access);
@@ -395,7 +401,8 @@ public class DefaultSubLWorkerSynch
       
       System.out.println( "\nOk, third round ....\n\n");
       workerThread = new Thread() {
-        public void run() {
+        @Override
+		public void run() {
           long timeBefore = 0, timeAfter = 0;
           try {
             System.out.println("Starting work.");

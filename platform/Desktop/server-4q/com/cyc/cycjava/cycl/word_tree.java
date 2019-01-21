@@ -6508,15 +6508,18 @@ public final class word_tree extends SubLTranslatedFile
         return (SubLObject)word_tree.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_word_tree_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_word_tree_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_word_tree_file();
     }
     

@@ -5823,15 +5823,18 @@ public final class sksi_kb_accessors extends SubLTranslatedFile
         return (SubLObject)sksi_kb_accessors.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_kb_accessors_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_kb_accessors_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_kb_accessors_file();
     }
     
@@ -6110,7 +6113,8 @@ public final class sksi_kb_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LOGICAL-FIELD-INDEXICAL-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sksi_kb_accessors.logical_field_indexical_p(arg1);
         }
     }
@@ -6121,7 +6125,8 @@ public final class sksi_kb_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PHYSICAL-FIELD-INDEXICAL-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sksi_kb_accessors.physical_field_indexical_p(arg1);
         }
     }
@@ -6132,7 +6137,8 @@ public final class sksi_kb_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-SKSI-CONTENT-MTS"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return sksi_kb_accessors.clear_sksi_content_mts();
         }
     }

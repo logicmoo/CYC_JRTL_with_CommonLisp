@@ -25,6 +25,7 @@ public class CharHashMap<T> {
 		backing = new HashMap<Character, T>();
 	}
 	
+	@Override
 	public Object clone() {
 		CharHashMap<T> n = new CharHashMap<T>(constants.getClass().getComponentType(),NULL);
 		System.arraycopy(constants,0, n.constants,0,CACHE_SIZE);
@@ -56,14 +57,17 @@ public class CharHashMap<T> {
 		return new Iterator<Character>() {			
 			final Iterator<Character> carIt =  backing.keySet().iterator();
 			int charNum = -1;
+			@Override
 			public boolean hasNext() {
 				if ( charNum<CACHE_SIZE) return true;
 				return carIt.hasNext();
 			}
+			@Override
 			public Character next() {
 				if ( charNum<CACHE_SIZE) return (char)++charNum;
 				return carIt.next();
 			}
+			@Override
 			public void remove() {
 				throw new UnsupportedOperationException();			
 			}

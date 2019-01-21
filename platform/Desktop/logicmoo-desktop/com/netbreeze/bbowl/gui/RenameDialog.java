@@ -43,13 +43,16 @@ public class RenameDialog extends JFrame {
 
     nameField.getDocument().addDocumentListener(
       new DocumentListener() {
-        public void insertUpdate(DocumentEvent evt) {
+        @Override
+		public void insertUpdate(DocumentEvent evt) {
           checkControls();
         }
-        public void changedUpdate(DocumentEvent evt) {
+        @Override
+		public void changedUpdate(DocumentEvent evt) {
           checkControls();
         }
-        public void removeUpdate(DocumentEvent evt) {
+        @Override
+		public void removeUpdate(DocumentEvent evt) {
           checkControls();
         }
       }
@@ -57,7 +60,8 @@ public class RenameDialog extends JFrame {
 
     nameField.addActionListener(
       new ActionListener() {
-        public void actionPerformed(ActionEvent evt) {
+        @Override
+		public void actionPerformed(ActionEvent evt) {
           okPressed();
         }
       }
@@ -65,7 +69,8 @@ public class RenameDialog extends JFrame {
 
     cancelButton.addActionListener(
       new ActionListener() {
-        public void actionPerformed(ActionEvent evt) {
+        @Override
+		public void actionPerformed(ActionEvent evt) {
           dispose();
         }
       }
@@ -73,7 +78,8 @@ public class RenameDialog extends JFrame {
 
     okButton.addActionListener(
       new ActionListener() {
-        public void actionPerformed(ActionEvent evt) {
+        @Override
+		public void actionPerformed(ActionEvent evt) {
           okPressed();
         }
       }

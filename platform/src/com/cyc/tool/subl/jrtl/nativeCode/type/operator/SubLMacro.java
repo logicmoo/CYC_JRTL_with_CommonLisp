@@ -48,6 +48,7 @@ public class SubLMacro extends MacroObject {
 //  }
 
 
+	@Override
 	public SubLObject apply(SubLCons p0, SubLEnvironment p1) {
 		return getMacroExpander().apply(p0, p1);
 	}
@@ -87,6 +88,7 @@ public class SubLMacro extends MacroObject {
 		return false;
 	}
 
+	@Override
 	public boolean isInterpreted() {
 		return ((SubLFunction) macroExpander).isInterpreted();
 	}

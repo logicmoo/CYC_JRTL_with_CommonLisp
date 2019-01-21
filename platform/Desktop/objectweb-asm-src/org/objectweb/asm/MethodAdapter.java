@@ -53,18 +53,21 @@ public class MethodAdapter implements MethodVisitor {
         this.mv = mv;
     }
 
-    public AnnotationVisitor visitAnnotationDefault() {
+    @Override
+	public AnnotationVisitor visitAnnotationDefault() {
         return mv.visitAnnotationDefault();
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
         return mv.visitAnnotation(desc, visible);
     }
 
-    public AnnotationVisitor visitParameterAnnotation(
+    @Override
+	public AnnotationVisitor visitParameterAnnotation(
         final int parameter,
         final String desc,
         final boolean visible)
@@ -72,15 +75,18 @@ public class MethodAdapter implements MethodVisitor {
         return mv.visitParameterAnnotation(parameter, desc, visible);
     }
 
-    public void visitAttribute(final Attribute attr) {
+    @Override
+	public void visitAttribute(final Attribute attr) {
         mv.visitAttribute(attr);
     }
 
-    public void visitCode() {
+    @Override
+	public void visitCode() {
         mv.visitCode();
     }
 
-    public void visitFrame(
+    @Override
+	public void visitFrame(
         final int type,
         final int nLocal,
         final Object[] local,
@@ -90,23 +96,28 @@ public class MethodAdapter implements MethodVisitor {
         mv.visitFrame(type, nLocal, local, nStack, stack);
     }
 
-    public void visitInsn(final int opcode) {
+    @Override
+	public void visitInsn(final int opcode) {
         mv.visitInsn(opcode);
     }
 
-    public void visitIntInsn(final int opcode, final int operand) {
+    @Override
+	public void visitIntInsn(final int opcode, final int operand) {
         mv.visitIntInsn(opcode, operand);
     }
 
-    public void visitVarInsn(final int opcode, final int var) {
+    @Override
+	public void visitVarInsn(final int opcode, final int var) {
         mv.visitVarInsn(opcode, var);
     }
 
-    public void visitTypeInsn(final int opcode, final String type) {
+    @Override
+	public void visitTypeInsn(final int opcode, final String type) {
         mv.visitTypeInsn(opcode, type);
     }
 
-    public void visitFieldInsn(
+    @Override
+	public void visitFieldInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -115,7 +126,8 @@ public class MethodAdapter implements MethodVisitor {
         mv.visitFieldInsn(opcode, owner, name, desc);
     }
 
-    public void visitMethodInsn(
+    @Override
+	public void visitMethodInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -124,23 +136,28 @@ public class MethodAdapter implements MethodVisitor {
         mv.visitMethodInsn(opcode, owner, name, desc);
     }
 
-    public void visitJumpInsn(final int opcode, final Label label) {
+    @Override
+	public void visitJumpInsn(final int opcode, final Label label) {
         mv.visitJumpInsn(opcode, label);
     }
 
-    public void visitLabel(final Label label) {
+    @Override
+	public void visitLabel(final Label label) {
         mv.visitLabel(label);
     }
 
-    public void visitLdcInsn(final Object cst) {
+    @Override
+	public void visitLdcInsn(final Object cst) {
         mv.visitLdcInsn(cst);
     }
 
-    public void visitIincInsn(final int var, final int increment) {
+    @Override
+	public void visitIincInsn(final int var, final int increment) {
         mv.visitIincInsn(var, increment);
     }
 
-    public void visitTableSwitchInsn(
+    @Override
+	public void visitTableSwitchInsn(
         final int min,
         final int max,
         final Label dflt,
@@ -149,7 +166,8 @@ public class MethodAdapter implements MethodVisitor {
         mv.visitTableSwitchInsn(min, max, dflt, labels);
     }
 
-    public void visitLookupSwitchInsn(
+    @Override
+	public void visitLookupSwitchInsn(
         final Label dflt,
         final int[] keys,
         final Label[] labels)
@@ -157,11 +175,13 @@ public class MethodAdapter implements MethodVisitor {
         mv.visitLookupSwitchInsn(dflt, keys, labels);
     }
 
-    public void visitMultiANewArrayInsn(final String desc, final int dims) {
+    @Override
+	public void visitMultiANewArrayInsn(final String desc, final int dims) {
         mv.visitMultiANewArrayInsn(desc, dims);
     }
 
-    public void visitTryCatchBlock(
+    @Override
+	public void visitTryCatchBlock(
         final Label start,
         final Label end,
         final Label handler,
@@ -170,7 +190,8 @@ public class MethodAdapter implements MethodVisitor {
         mv.visitTryCatchBlock(start, end, handler, type);
     }
 
-    public void visitLocalVariable(
+    @Override
+	public void visitLocalVariable(
         final String name,
         final String desc,
         final String signature,
@@ -181,15 +202,18 @@ public class MethodAdapter implements MethodVisitor {
         mv.visitLocalVariable(name, desc, signature, start, end, index);
     }
 
-    public void visitLineNumber(final int line, final Label start) {
+    @Override
+	public void visitLineNumber(final int line, final Label start) {
         mv.visitLineNumber(line, start);
     }
 
-    public void visitMaxs(final int maxStack, final int maxLocals) {
+    @Override
+	public void visitMaxs(final int maxStack, final int maxLocals) {
         mv.visitMaxs(maxStack, maxLocals);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         mv.visitEnd();
     }
 }

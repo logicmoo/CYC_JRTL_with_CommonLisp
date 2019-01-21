@@ -58,7 +58,8 @@ public final class TagFileManager extends Thread
             start();
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         while (true) {
             QueueEntry entry = getEntryFromQueue();
@@ -283,7 +284,8 @@ public final class TagFileManager extends Thread
             this.mode = mode;
         }
 
-        public boolean equals(Object obj)
+        @Override
+		public boolean equals(Object obj)
         {
             if (this == obj)
                 return true;
@@ -406,7 +408,8 @@ public final class TagFileManager extends Thread
             this.lastAccess = System.currentTimeMillis();
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return directory.canonicalPath() + " " + modeName + " " +
                 String.valueOf(lastAccess);

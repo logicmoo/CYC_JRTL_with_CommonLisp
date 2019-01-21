@@ -38,17 +38,20 @@ public final class VerilogMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public String getCommentStart()
+    @Override
+	public String getCommentStart()
     {
         return "// ";
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new VerilogFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_TAB, CTRL_MASK, "insertTab");
         km.mapKey(KeyEvent.VK_TAB, 0, "tab");
@@ -60,22 +63,26 @@ public final class VerilogMode extends AbstractMode implements Constants, Mode
         km.mapKey(0xffc9, 0, "wrapComment"); // F12
     }
 
-    public boolean isTaggable()
+    @Override
+	public boolean isTaggable()
     {
         return true;
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new VerilogTagger(buffer);
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final int indentSize = buffer.getIndentSize();
         final Line model = findModel(line);
@@ -153,12 +160,14 @@ public final class VerilogMode extends AbstractMode implements Constants, Mode
         }
     }
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         return startChars.indexOf(c) >= 0;
     }
 
-    public boolean isIdentifierPart(char c)
+    @Override
+	public boolean isIdentifierPart(char c)
     {
         return partChars.indexOf(c) >= 0;
     }

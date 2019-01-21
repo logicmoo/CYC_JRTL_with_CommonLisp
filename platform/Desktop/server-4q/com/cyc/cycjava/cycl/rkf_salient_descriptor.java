@@ -6167,15 +6167,18 @@ public final class rkf_salient_descriptor extends SubLTranslatedFile
         return (SubLObject)rkf_salient_descriptor.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_salient_descriptor_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_salient_descriptor_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_salient_descriptor_file();
     }
     

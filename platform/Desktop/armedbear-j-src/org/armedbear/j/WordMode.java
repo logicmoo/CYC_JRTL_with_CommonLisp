@@ -41,17 +41,20 @@ public final class WordMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new PlainTextFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_B, CTRL_MASK | ALT_MASK, "binaryMode");
     }
 
-    public void loadFile(Buffer buffer, File toBeLoaded)
+    @Override
+	public void loadFile(Buffer buffer, File toBeLoaded)
     {
         try {
             load(buffer, toBeLoaded.getInputStream());

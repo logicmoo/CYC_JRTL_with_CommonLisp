@@ -20,19 +20,23 @@ abstract class NumberWrapper<NW extends NumberWrapper<NW, JSN>, JSN extends Numb
         this.myJScienceNumber = jsciNum;
     }
 
-    public long longValue() {
+    @Override
+	public long longValue() {
         return this.myJScienceNumber.longValue();
     }
 
-    public double doubleValue() {
+    @Override
+	public double doubleValue() {
         return this.myJScienceNumber.doubleValue();
     }
 
-    public BigDecimal decimalValue() {
+    @Override
+	public BigDecimal decimalValue() {
         return this.myJScienceNumber.decimalValue();
     }
 
-    public int compareTo(final NumberWrapper<NW, JSN> otherNN) {
+    @Override
+	public int compareTo(final NumberWrapper<NW, JSN> otherNN) {
         return this.myJScienceNumber.compareTo((JSN)otherNN.getJScienceNumber());
     }
 }

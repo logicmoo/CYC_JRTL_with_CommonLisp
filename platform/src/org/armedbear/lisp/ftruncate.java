@@ -49,7 +49,8 @@ public final class ftruncate extends Primitive
         super("ftruncate", "number &optional divisor");
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         final LispThread thread = LispThread.currentThread();
         if (arg.zerop()) {
@@ -96,7 +97,8 @@ public final class ftruncate extends Primitive
         return q;
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
 
     {
         final LispThread thread = LispThread.currentThread();

@@ -73,7 +73,8 @@ public final class IList implements BackgroundProcess, Constants
         return buf;
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         if (SwingUtilities.isEventDispatchThread())
             Debug.bug();
@@ -104,7 +105,8 @@ public final class IList implements BackgroundProcess, Constants
         }
     }
 
-    public void cancel()
+    @Override
+	public void cancel()
     {
         cancelled = true;
     }
@@ -209,7 +211,8 @@ public final class IList implements BackgroundProcess, Constants
     }
 
     private Runnable completionRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             Log.debug("completionRunnable.run");
             editor.setDefaultCursor();

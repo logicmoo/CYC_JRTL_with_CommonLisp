@@ -28,7 +28,7 @@ public class PrintLow extends SubLTrampolineFile {
 	}
 
 	public static SubLObject default_jrtl_print_method(SubLObject obj, SubLObject stream) {
-		streams_high.writeString(obj.toString(), stream.toOutputTextStream());
+		streams_high.writeString(obj.princToString(), stream.toOutputTextStream());
 		return obj;
 	}
 

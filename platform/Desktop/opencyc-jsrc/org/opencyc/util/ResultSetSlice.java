@@ -131,7 +131,8 @@ public class ResultSetSlice {
    * Returns the printed representation of this ResultSetSlice.
    * @return the printed representation of this ResultSetSlice.
    */
-  public String toString() {
+  @Override
+public String toString() {
     StringBuffer string = new StringBuffer("(" + first + " (");
     try {
       beforeFirst();

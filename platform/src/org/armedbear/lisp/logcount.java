@@ -46,7 +46,8 @@ public final class logcount extends Primitive
     }
 
     // FIXME Optimize fixnum case!
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         BigInteger n;
         if (arg instanceof Fixnum)

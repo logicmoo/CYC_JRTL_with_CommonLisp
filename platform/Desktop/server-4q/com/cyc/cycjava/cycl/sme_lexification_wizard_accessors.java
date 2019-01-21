@@ -199,15 +199,18 @@ public final class sme_lexification_wizard_accessors extends SubLTranslatedFile
         return (SubLObject)sme_lexification_wizard_accessors.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sme_lexification_wizard_accessors_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sme_lexification_wizard_accessors_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sme_lexification_wizard_accessors_file();
     }
     

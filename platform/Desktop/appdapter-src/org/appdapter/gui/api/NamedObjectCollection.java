@@ -141,6 +141,7 @@ public interface NamedObjectCollection //
 
 	Iterable<BT> getScreenBoxes();
 
+	@Override
 	DisplayContext getDisplayContext();
 
 	/**
@@ -159,16 +160,20 @@ public interface NamedObjectCollection //
 
 	void save(File file) throws NotSerializableException, IOException;
 
+	@Override
 	Iterator getObjects();
 
+	@Override
 	public Object findObjectByName(String name);
 
+	@Override
 	public void renameObject(String oldName, String newName) throws PropertyVetoException;
 
 	/**
 	 * Adds a POJOCollectionListener to this context. The listener will
 	 * find out when objects are added or removed.
 	 */
+	@Override
 	public void addListener(POJOCollectionListener o, boolean catchup);
 
 	/**
@@ -183,6 +188,7 @@ public interface NamedObjectCollection //
 
 	BT asWrapped(Object d);
 
+	@Override
 	Set getLiveCollection();
 
 	Map<String, Object> getLiveMap();

@@ -48,7 +48,8 @@ public final class machine_version extends Primitive
         super("machine-version");
     }
 
-    public LispObject execute()
+    @Override
+	public LispObject execute()
     {
         String osName = System.getProperty("os.name");
         if (osName != null && osName.toLowerCase().startsWith("linux")) {

@@ -218,7 +218,8 @@ public final class Display extends JComponent implements Constants,
         }
     }
 
-    protected void finalize() throws Throwable
+    @Override
+	protected void finalize() throws Throwable
     {
         if (timer != null) {
             timer.stop();
@@ -589,7 +590,8 @@ public final class Display extends JComponent implements Constants,
             caretVisible = !caretVisible;
             final Line line = dot.getLine();
             Runnable r = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     repaintLine(line);
                 }
@@ -638,18 +640,21 @@ public final class Display extends JComponent implements Constants,
     }
 
     // Timer event handler.
-    public void actionPerformed(ActionEvent e)
+    @Override
+	public void actionPerformed(ActionEvent e)
     {
         blinkCaret();
     }
 
-    public synchronized void focusGained(FocusEvent e)
+    @Override
+	public synchronized void focusGained(FocusEvent e)
     {
         if (timer != null)
             timer.start();
     }
 
-    public synchronized void focusLost(FocusEvent e)
+    @Override
+	public synchronized void focusLost(FocusEvent e)
     {
         if (timer != null)
             timer.stop();
@@ -977,7 +982,8 @@ public final class Display extends JComponent implements Constants,
         return (int) totalWidth;
     }
 
-    public void paintComponent(Graphics g)
+    @Override
+	public void paintComponent(Graphics g)
     {
         final Buffer buffer = editor.getBuffer();
         if (!Editor.displayReady()) {
@@ -1951,7 +1957,8 @@ public final class Display extends JComponent implements Constants,
         return 0; // Shouldn't happen.
     }
 
-    public boolean isOpaque()
+    @Override
+	public boolean isOpaque()
     {
         return true;
     }
@@ -1987,7 +1994,8 @@ public final class Display extends JComponent implements Constants,
         }
     }
 
-    public String getToolTipText(MouseEvent e)
+    @Override
+	public String getToolTipText(MouseEvent e)
     {
         return editor.getMode().getToolTipText(editor, e);
     }

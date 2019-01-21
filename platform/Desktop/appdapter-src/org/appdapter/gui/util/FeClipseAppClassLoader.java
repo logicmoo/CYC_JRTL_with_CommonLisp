@@ -147,6 +147,7 @@ public class FeClipseAppClassLoader extends URLClassLoader implements DontAdd, H
 		return rememberClass(name, (Class) callProtectedMethodNullOnUncheck(this, "findBootstrapClassOrNull", name));
 	}
 
+	@Override
 	final protected Class<?> findClass(final String name) throws ClassNotFoundException {
 		return rememberClass(name, findClassLocalMethodologyActuallyDefines(name));
 	}
@@ -371,6 +372,7 @@ public class FeClipseAppClassLoader extends URLClassLoader implements DontAdd, H
 		}
 	}
 
+	@Override
 	public InputStream getResourceAsStream(String name) {
 		for (ClassLoader cl : getClassLoadersToSearch(false)) {
 			try {

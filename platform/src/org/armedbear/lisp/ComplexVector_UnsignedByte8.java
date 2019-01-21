@@ -65,32 +65,38 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         isDisplaced = true;
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return list(Symbol.VECTOR, UNSIGNED_BYTE_8, Fixnum.getInstance(capacity));
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.VECTOR;
     }
 
-    public boolean hasFillPointer()
+    @Override
+	public boolean hasFillPointer()
     {
         return fillPointer >= 0;
     }
 
-    public int getFillPointer()
+    @Override
+	public int getFillPointer()
     {
         return fillPointer;
     }
 
-    public void setFillPointer(int n)
+    @Override
+	public void setFillPointer(int n)
     {
         fillPointer = n;
     }
 
-    public void setFillPointer(LispObject obj)
+    @Override
+	public void setFillPointer(LispObject obj)
     {
         if (obj == T)
             fillPointer = capacity();
@@ -113,12 +119,14 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         }
     }
 
-    public boolean isDisplaced()
+    @Override
+	public boolean isDisplaced()
     {
         return isDisplaced;
     }
 
-    public LispObject arrayDisplacement()
+    @Override
+	public LispObject arrayDisplacement()
     {
         LispObject value1, value2;
         if (array != null) {
@@ -131,27 +139,32 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         return LispThread.currentThread().setValues(value1, value2);
     }
 
-    public LispObject getElementType()
+    @Override
+	public LispObject getElementType()
     {
         return UNSIGNED_BYTE_8;
     }
 
-    public boolean isSimpleVector()
+    @Override
+	public boolean isSimpleVector()
     {
         return false;
     }
 
-    public int capacity()
+    @Override
+	public int capacity()
     {
         return capacity;
     }
 
-    public int length()
+    @Override
+	public int length()
     {
         return fillPointer >= 0 ? fillPointer : capacity;
     }
 
-    public LispObject elt(int index)
+    @Override
+	public LispObject elt(int index)
     {
         final int limit = length();
         if (index < 0 || index >= limit)
@@ -160,7 +173,8 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
     }
 
     // Ignores fill pointer.
-    public LispObject AREF(int index)
+    @Override
+	public LispObject AREF(int index)
     {
         if (elements != null) {
             try {
@@ -178,7 +192,8 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         }
     }
 
-    public void aset(int index, int n)
+    @Override
+	public void aset(int index, int n)
     {
         if (elements != null) {
             try {
@@ -196,7 +211,8 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         }
     }
 
-    public void aset(int index, LispObject newValue)
+    @Override
+	public void aset(int index, LispObject newValue)
     {
         if (elements != null) {
             try {
@@ -209,7 +225,8 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
             array.aset(index + displacement, newValue);
     }
 
-    public LispObject subseq(int start, int end)
+    @Override
+	public LispObject subseq(int start, int end)
     {
         SimpleVector v = new SimpleVector(end - start);
         int i = start, j = 0;
@@ -223,14 +240,16 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         }
     }
 
-    public void fill(LispObject obj)
+    @Override
+	public void fill(LispObject obj)
     {
         byte b = (byte) Fixnum.getValue(obj);
         for (int i = capacity; i-- > 0;)
             elements[i] = b;
     }
 
-    public void shrink(int n)
+    @Override
+	public void shrink(int n)
     {
         if (elements != null) {
             if (n < elements.length) {
@@ -246,7 +265,8 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         error(new LispError());
     }
 
-    public LispObject reverse()
+    @Override
+	public LispObject reverse()
     {
         int length = length();
         BasicVector_UnsignedByte8 result = new BasicVector_UnsignedByte8(length);
@@ -256,7 +276,8 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         return result;
     }
 
-    public LispObject nreverse()
+    @Override
+	public LispObject nreverse()
     {
         if (elements != null) {
             int i = 0;
@@ -285,7 +306,8 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         return this;
     }
 
-    public void vectorPushExtend(LispObject element)
+    @Override
+	public void vectorPushExtend(LispObject element)
     {
         if (fillPointer < 0)
             noFillPointer();
@@ -297,14 +319,16 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         ++fillPointer;
     }
 
-    public LispObject VECTOR_PUSH_EXTEND(LispObject element)
+    @Override
+	public LispObject VECTOR_PUSH_EXTEND(LispObject element)
 
     {
         vectorPushExtend(element);
         return Fixnum.getInstance(fillPointer - 1);
     }
 
-    public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
+    @Override
+	public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
 
     {
         int ext = Fixnum.getValue(extension);
@@ -348,7 +372,8 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         }
     }
 
-    public AbstractVector adjustArray(int newCapacity,
+    @Override
+	public AbstractVector adjustArray(int newCapacity,
                                        LispObject initialElement,
                                        LispObject initialContents)
 
@@ -397,7 +422,8 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         return this;
     }
 
-    public AbstractVector adjustArray(int newCapacity,
+    @Override
+	public AbstractVector adjustArray(int newCapacity,
                                        AbstractArray displacedTo,
                                        int displacement)
 

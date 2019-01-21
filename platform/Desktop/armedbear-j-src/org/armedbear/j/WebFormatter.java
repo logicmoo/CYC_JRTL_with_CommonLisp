@@ -36,7 +36,8 @@ public final class WebFormatter extends Formatter implements WebConstants
         this.buffer = buffer;
     }
 
-    public final LineSegmentList formatLine(Line line)
+    @Override
+	public final LineSegmentList formatLine(Line line)
     {
         if (line instanceof WebLine) {
             LineSegmentList list = ((WebLine)line).getSegmentList();
@@ -64,12 +65,14 @@ public final class WebFormatter extends Formatter implements WebConstants
         return segmentList;
     }
 
-    public final Color getColor(int format)
+    @Override
+	public final Color getColor(int format)
     {
         return super.getColor(format & ~(FORMAT_BOLD | FORMAT_ITALIC));
     }
 
-    public int getStyle(int format)
+    @Override
+	public int getStyle(int format)
     {
         FormatTableEntry entry =
             getFormatTable().lookup(format & ~(FORMAT_BOLD | FORMAT_ITALIC));
@@ -81,12 +84,14 @@ public final class WebFormatter extends Formatter implements WebConstants
         return style;
     }
 
-    public final FormatTableEntry getFormatTableEntry(int format)
+    @Override
+	public final FormatTableEntry getFormatTableEntry(int format)
     {
         return null;
     }
 
-    public final boolean getUnderline(int format)
+    @Override
+	public final boolean getUnderline(int format)
     {
         if ((format & FORMAT_WHITESPACE) != 0)
             return false;
@@ -94,7 +99,8 @@ public final class WebFormatter extends Formatter implements WebConstants
             return (format & FORMAT_LINK) != 0;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("WebMode");

@@ -117,7 +117,8 @@ public final class ImapURL extends MailboxURL
         return list;
     }
 
-    public boolean equals(Object object)
+    @Override
+	public boolean equals(Object object)
     {
         if (!(object instanceof ImapURL))
             return false;
@@ -145,7 +146,8 @@ public final class ImapURL extends MailboxURL
         return true;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer('{');
         if (user != null) {
@@ -162,7 +164,8 @@ public final class ImapURL extends MailboxURL
         return sb.toString();
     }
 
-    public String getCanonicalName()
+    @Override
+	public String getCanonicalName()
     {
         FastStringBuffer sb = new FastStringBuffer('{');
         if (user != null)

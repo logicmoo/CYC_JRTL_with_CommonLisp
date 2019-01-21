@@ -40,7 +40,8 @@ class BSHAssignment extends SimpleNode implements ParserConstants
 
     BSHAssignment(int id) { super(id); }
 
-    public Object eval(
+    @Override
+	public Object eval(
 		CallStack callstack, Interpreter interpreter) 
 		throws EvalError
     {

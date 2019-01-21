@@ -91,16 +91,19 @@ public final class StringOutputStream extends Stream
         return super.typep(type);
     }
 
-    protected long _getFilePosition()
+    @Override
+	protected long _getFilePosition()
     {
         if (getStreamElementType() == NIL)
             return 0;
         // DONT REGRESS (true = OLD-WORKS)
         if(true) return stringWriter.getBuffer().length();
+    	final long offset = getInputIndex();
         return offset;
     }
 
-    protected boolean _setFilePosition(LispObject arg) {
+    @Override
+	protected boolean _setFilePosition(LispObject arg) {
        // DONT REGRESS (true = OLD-WORKS)
         if(true) return super._setFilePosition(arg);
 
@@ -121,7 +124,7 @@ public final class StringOutputStream extends Stream
 
             seekableStringWriter.seek(offset);
 
-            this.offset = offset;
+        	setInputIndex(offset);
         }
         catch (IllegalArgumentException e) {
             error(new StreamError(this, e));
@@ -146,7 +149,8 @@ public final class StringOutputStream extends Stream
         new Primitive("%make-string-output-stream", PACKAGE_SYS, false,
                        "element-type")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             return new StringOutputStream(arg);
         }
@@ -157,7 +161,8 @@ public final class StringOutputStream extends Stream
     private static final Primitive GET_OUTPUT_STREAM_STRING =
         new Primitive("get-output-stream-string", "string-output-stream")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof StringOutputStream)
                 return ((StringOutputStream)arg).getBufferString();

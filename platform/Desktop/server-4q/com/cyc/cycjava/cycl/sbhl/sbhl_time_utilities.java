@@ -1093,15 +1093,18 @@ public final class sbhl_time_utilities extends SubLTranslatedFile
         return (SubLObject)sbhl_time_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_time_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_time_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_time_utilities_file();
     }
     
@@ -1198,15 +1201,18 @@ public final class sbhl_time_utilities extends SubLTranslatedFile
             this.$interval = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$hl_start_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$interval;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$interval = value;
         }
         
@@ -1221,7 +1227,8 @@ public final class sbhl_time_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-START-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_time_utilities.hl_start_p(arg1);
         }
     }
@@ -1232,7 +1239,8 @@ public final class sbhl_time_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-HL-START-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_time_utilities.sxhash_hl_start_method(arg1);
         }
     }
@@ -1246,15 +1254,18 @@ public final class sbhl_time_utilities extends SubLTranslatedFile
             this.$interval = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$hl_end_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$interval;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$interval = value;
         }
         
@@ -1269,7 +1280,8 @@ public final class sbhl_time_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-END-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_time_utilities.hl_end_p(arg1);
         }
     }
@@ -1280,7 +1292,8 @@ public final class sbhl_time_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-HL-END-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_time_utilities.sxhash_hl_end_method(arg1);
         }
     }
@@ -1291,7 +1304,8 @@ public final class sbhl_time_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-TIME-PREDICATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_time_utilities.sbhl_time_predicate_p(arg1);
         }
     }

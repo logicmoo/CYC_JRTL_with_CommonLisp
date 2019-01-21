@@ -189,7 +189,8 @@ public final class FastStringBuffer
     return this;
   }
 
-  public final String toString()
+  @Override
+public final String toString()
   {
     return new String(buffer, 0, used);
   }

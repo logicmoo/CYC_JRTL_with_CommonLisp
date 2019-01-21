@@ -1086,15 +1086,18 @@ public final class pph_html extends SubLTranslatedFile
         return (SubLObject)pph_html.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_html_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_html_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_html_file();
     }
     

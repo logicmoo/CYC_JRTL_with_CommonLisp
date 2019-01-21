@@ -6224,15 +6224,18 @@ public final class kb_mapping_macros extends SubLTranslatedFile
         return (SubLObject)kb_mapping_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_mapping_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_mapping_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_mapping_macros_file();
     }
     
@@ -6633,7 +6636,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GAF-ARG-FINAL-INDEX-SPEC-ITERATOR-DONE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.gaf_arg_final_index_spec_iterator_doneP(arg1);
         }
     }
@@ -6644,7 +6648,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GAF-ARG-FINAL-INDEX-SPEC-ITERATOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.gaf_arg_final_index_spec_iterator_next(arg1);
         }
     }
@@ -6655,7 +6660,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PREDICATE-EXTENT-FINAL-INDEX-SPEC-ITERATOR-DONE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.predicate_extent_final_index_spec_iterator_doneP(arg1);
         }
     }
@@ -6666,7 +6672,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PREDICATE-EXTENT-FINAL-INDEX-SPEC-ITERATOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.predicate_extent_final_index_spec_iterator_next(arg1);
         }
     }
@@ -6677,7 +6684,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NART-ARG-FINAL-INDEX-SPEC-ITERATOR-DONE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.nart_arg_final_index_spec_iterator_doneP(arg1);
         }
     }
@@ -6688,7 +6696,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NART-ARG-FINAL-INDEX-SPEC-ITERATOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.nart_arg_final_index_spec_iterator_next(arg1);
         }
     }
@@ -6699,7 +6708,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PREDICATE-RULE-FINAL-INDEX-SPEC-ITERATOR-DONE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.predicate_rule_final_index_spec_iterator_doneP(arg1);
         }
     }
@@ -6710,7 +6720,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PREDICATE-RULE-FINAL-INDEX-SPEC-ITERATOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.predicate_rule_final_index_spec_iterator_next(arg1);
         }
     }
@@ -6721,7 +6732,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DECONTEXTUALIZED-IST-PREDICATE-RULE-FINAL-INDEX-SPEC-ITERATOR-DONE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.decontextualized_ist_predicate_rule_final_index_spec_iterator_doneP(arg1);
         }
     }
@@ -6732,7 +6744,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DECONTEXTUALIZED-IST-PREDICATE-RULE-FINAL-INDEX-SPEC-ITERATOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.decontextualized_ist_predicate_rule_final_index_spec_iterator_next(arg1);
         }
     }
@@ -6743,7 +6756,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PRED-ARG2-RULE-FINAL-INDEX-SPEC-ITERATOR-DONE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.pred_arg2_rule_final_index_spec_iterator_doneP(arg1);
         }
     }
@@ -6754,7 +6768,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PRED-ARG2-RULE-FINAL-INDEX-SPEC-ITERATOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping_macros.pred_arg2_rule_final_index_spec_iterator_next(arg1);
         }
     }
@@ -6765,7 +6780,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("OTHER-INDEX-ASSERTION-MATCH-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return kb_mapping_macros.other_index_assertion_match_p(arg1, arg2);
         }
     }
@@ -6776,7 +6792,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ASSERTION-SEMANTICALLY-MATCHES-SIMPLE-FINAL-INDEX-SPEC?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return kb_mapping_macros.assertion_semantically_matches_simple_final_index_specP(arg1, arg2);
         }
     }
@@ -6787,7 +6804,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-SIMPLE-TERM-ASSERTION-LIST-FILTERED"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return kb_mapping_macros.clear_simple_term_assertion_list_filtered();
         }
     }
@@ -6798,7 +6816,8 @@ public final class kb_mapping_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX-ASENT-MATCH-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return kb_mapping_macros.decontextualized_ist_predicate_rule_index_asent_match_p(arg1, arg2);
         }
     }

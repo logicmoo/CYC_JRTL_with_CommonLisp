@@ -616,11 +616,13 @@ abstract public class SubLString extends AbstractString  implements SubLObject, 
 	}
 
 	//@Override
+	@Override
 	public final Object[] toArray() {
 		return this.toArray(new SubLCharacter[internalSize()]);
 	}
 
 	//@Override
+	@Override
 	public final Object[] toArray(Object[] a) {
 		int size = internalSize();
 		if (a.length < size)
@@ -811,6 +813,7 @@ abstract public class SubLString extends AbstractString  implements SubLObject, 
 		return AbstractSubLSequence.removeDuplicates(this, isDestructive, test, key, start, end);
 	}
 
+	@Override
 	public final SubLSequence removeDuplicatesFast(BinaryFunction test, int start, int end) {
 		return AbstractSubLSequence.removeDuplicatesFast(this, test, start, end);
 	}
@@ -1108,6 +1111,7 @@ abstract public class SubLString extends AbstractString  implements SubLObject, 
 		return this.removeIf(test, isDestructive, key, start, Integer.MAX_VALUE, Integer.MAX_VALUE);
 	}
 
+	@Override
 	public final SubLSequence removeIf(UnaryFunction test, boolean isDestructive, UnaryFunction key, int start, int end) {
 		return this.removeIf(test, isDestructive, key, start, end, Integer.MAX_VALUE);
 	}
@@ -1918,6 +1922,7 @@ abstract public class SubLString extends AbstractString  implements SubLObject, 
 		return null;
 	}
 
+	@Override
 	public String getString() {
 		return getStringValue();
 	}

@@ -12,7 +12,8 @@ public abstract class DynamicCachingComponentAssembler<MKC extends MutableKnownC
         super(r);
     }
     
-    protected Class<MKC> decideComponentClass(final Ident componentID, final Item componentConfigItem) {
+    @Override
+	protected Class<MKC> decideComponentClass(final Ident componentID, final Item componentConfigItem) {
         final String jfqcn = this.getReader().readConfigValString(componentID, ComponentAssemblyNames.P_javaFQCN, componentConfigItem, (String)null);
         if (jfqcn != null) {
             this.getLogger().debug("Found component class name: {} ", (Object)jfqcn);

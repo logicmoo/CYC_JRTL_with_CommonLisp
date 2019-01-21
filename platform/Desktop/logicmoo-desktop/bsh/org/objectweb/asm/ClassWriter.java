@@ -457,7 +457,8 @@ public class ClassWriter implements ClassVisitor {
   // Implementation of the ClassVisitor interface
   // --------------------------------------------------------------------------
 
-  public void visit (
+  @Override
+public void visit (
     final int access,
     final String name,
     final String superName,
@@ -483,7 +484,8 @@ public class ClassWriter implements ClassVisitor {
     }
   }
 
-  public void visitInnerClass (
+  @Override
+public void visitInnerClass (
     final String name,
     final String outerName,
     final String innerName,
@@ -500,7 +502,8 @@ public class ClassWriter implements ClassVisitor {
     innerClasses.put2(access);
   }
 
-  public void visitField (
+  @Override
+public void visitField (
     final int access,
     final String name,
     final String desc,
@@ -534,7 +537,8 @@ public class ClassWriter implements ClassVisitor {
     }
   }
 
-  public CodeVisitor visitMethod (
+  @Override
+public CodeVisitor visitMethod (
     final int access,
     final String name,
     final String desc,
@@ -545,7 +549,8 @@ public class ClassWriter implements ClassVisitor {
     return cw;
   }
 
-  public void visitEnd () {
+  @Override
+public void visitEnd () {
   }
 
   // --------------------------------------------------------------------------

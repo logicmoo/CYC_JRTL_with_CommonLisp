@@ -44,17 +44,20 @@ public final class FloatingPointInvalidOperation extends ArithmeticError
         initialize(initArgs);
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.FLOATING_POINT_INVALID_OPERATION;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return StandardClass.FLOATING_POINT_INVALID_OPERATION;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.FLOATING_POINT_INVALID_OPERATION)
             return T;

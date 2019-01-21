@@ -1388,15 +1388,18 @@ public final class question extends SubLTranslatedFile
         return (SubLObject)question.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_question_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_question_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_question_file();
     }
     

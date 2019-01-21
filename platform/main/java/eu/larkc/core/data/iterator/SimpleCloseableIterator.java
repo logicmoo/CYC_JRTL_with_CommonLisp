@@ -17,11 +17,13 @@ public class SimpleCloseableIterator<T> implements CloseableIterator<T> {
 		this.isClosed = false;
 	}
 	
+	@Override
 	public void close() {
 		isClosed = true;
 		iterator = null;
 	}
 
+	@Override
 	public boolean hasNext() {
 		if (isClosed) {
 			throw new RuntimeException("Iterator is closed!");
@@ -29,6 +31,7 @@ public class SimpleCloseableIterator<T> implements CloseableIterator<T> {
 		return iterator.hasNext();
 	}
 
+	@Override
 	public T next() {
 		if (isClosed) {
 			throw new RuntimeException("Iterator is closed!");
@@ -36,6 +39,7 @@ public class SimpleCloseableIterator<T> implements CloseableIterator<T> {
 		return iterator.next();
 	}
 
+	@Override
 	public void remove() {
 		if (isClosed) {
 			throw new RuntimeException("Iterator is closed!");
@@ -43,6 +47,7 @@ public class SimpleCloseableIterator<T> implements CloseableIterator<T> {
 		iterator.remove();
 	}
 	
+	@Override
 	public boolean isClosed() {
 		return isClosed;
 	}

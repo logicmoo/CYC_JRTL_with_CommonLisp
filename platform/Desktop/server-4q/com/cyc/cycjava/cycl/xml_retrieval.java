@@ -165,15 +165,18 @@ public final class xml_retrieval extends SubLTranslatedFile
         return (SubLObject)xml_retrieval.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_xml_retrieval_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_xml_retrieval_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_xml_retrieval_file();
     }
     

@@ -1673,10 +1673,12 @@ abstract public class ReflectUtils implements UtilClass {
 	}
 
 	final public static Object WILDCARD = new Number() {
+		@Override
 		public String toString() {
 			return "?";
 		}
 
+		@Override
 		public boolean equals(Object obj) {
 			return true;
 		}
@@ -1700,10 +1702,12 @@ abstract public class ReflectUtils implements UtilClass {
 
 
 	final public static Object BREAK_LOOP = new Number() {
+		@Override
 		public String toString() {
 			return "/*BREAK_LOOP*/";
 		}
 
+		@Override
 		public boolean equals(Object obj) {
 			return BREAK_LOOP==obj;
 		}
@@ -1751,10 +1755,12 @@ abstract public class ReflectUtils implements UtilClass {
 			return this.b;
 		}
 
+		@Override
 		public int hashCode() {
 			return Lib.hashCodeObject(car()) ^ Lib.hashCodeObject(cdr()) << 1;
 		}
 
+		@Override
 		public boolean equals(Object other) {
 			if (this == other)
 				return true;
@@ -1767,6 +1773,7 @@ abstract public class ReflectUtils implements UtilClass {
 			return eq(nullIfSelf(car()), nullIfSelf(p2.car()), false) && eq(nullIfSelf(cdr()), nullIfSelf(p2.cdr()), false);
 		}
 
+		@Override
 		public String toString() {
 			return new StringBuilder().append("(").append(org.apache.jena.atlas.lib.StrUtils.str(this.a)).append(" . ").append(org.apache.jena.atlas.lib.StrUtils.str(this.b)).append(")").toString();
 		}
@@ -2382,10 +2389,12 @@ abstract public class ReflectUtils implements UtilClass {
 		 *     underlying array type's component type refers to a
 		 *     parameterized type that cannot be instantiated for any reason
 		 */
+		@Override
 		public Type getGenericComponentType() {
 			return this.genericComponentType;
 		}
 
+		@Override
 		public String toString() {
 			return getName();
 		}
@@ -2398,10 +2407,12 @@ abstract public class ReflectUtils implements UtilClass {
 			return sbuf;
 		}
 
+		@Override
 		public boolean equals(Object pther) {
 			return toString().equals(pther.toString());
 		}
 
+		@Override
 		public int hashCode() {
 			return (this.genericComponentType == null ? 0 : this.genericComponentType.hashCode());
 		}
@@ -2439,6 +2450,7 @@ abstract public class ReflectUtils implements UtilClass {
 
 
 ////		@Override
+		@Override
 		public java.lang.reflect.AnnotatedType[] getAnnotatedBounds() {
 			notImplemented();
 			return null;
@@ -3143,6 +3155,7 @@ abstract public class ReflectUtils implements UtilClass {
 	}
 
 	static NoLeakThreadLocal<SetObject> objectKey = new NoLeakThreadLocal<SetObject>() {
+		@Override
 		protected SetObject<?> initialValue() {
 			return new KeyReference(CLASS0);
 		}

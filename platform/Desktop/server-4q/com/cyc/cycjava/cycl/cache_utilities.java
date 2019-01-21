@@ -1999,15 +1999,18 @@ public final class cache_utilities extends SubLTranslatedFile
         return (SubLObject)cache_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cache_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cache_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cache_utilities_file();
     }
     
@@ -2189,23 +2192,28 @@ public final class cache_utilities extends SubLTranslatedFile
             this.$miss_count = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$cache_metrics_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$hit_count;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$miss_count;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$hit_count = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$miss_count = value;
         }
         
@@ -2220,7 +2228,8 @@ public final class cache_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CACHE-METRICS-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cache_utilities.cache_metrics_p(arg1);
         }
     }
@@ -2236,23 +2245,28 @@ public final class cache_utilities extends SubLTranslatedFile
             this.$metrics = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$metered_cache_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$cache;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$metrics;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$cache = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$metrics = value;
         }
         
@@ -2267,7 +2281,8 @@ public final class cache_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("METERED-CACHE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cache_utilities.metered_cache_p(arg1);
         }
     }
@@ -2285,31 +2300,38 @@ public final class cache_utilities extends SubLTranslatedFile
             this.$timestamper = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$recording_cache_strategy_facade_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$cache_strategy;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$records;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$timestamper;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$cache_strategy = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$records = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$timestamper = value;
         }
         
@@ -2324,7 +2346,8 @@ public final class cache_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RECORDING-CACHE-STRATEGY-FACADE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cache_utilities.recording_cache_strategy_facade_p(arg1);
         }
     }

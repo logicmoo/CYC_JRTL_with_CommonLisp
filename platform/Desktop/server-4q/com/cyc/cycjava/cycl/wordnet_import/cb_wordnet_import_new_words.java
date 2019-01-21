@@ -830,15 +830,18 @@ public final class cb_wordnet_import_new_words extends SubLTranslatedFile
         return (SubLObject)cb_wordnet_import_new_words.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_wordnet_import_new_words_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_wordnet_import_new_words_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_wordnet_import_new_words_file();
     }
     

@@ -8,7 +8,8 @@ import java.beans.*;
  * for static methods and constructors as well.
 */
 public class ClassBeanInfo extends SimpleBeanInfo {
-  public BeanDescriptor getBeanDescriptor() {
+  @Override
+public BeanDescriptor getBeanDescriptor() {
     return new BeanDescriptor(Class.class, ClassCustomizer.class);
   }
 }

@@ -373,15 +373,18 @@ public final class obsolete extends SubLTranslatedFile
         return (SubLObject)obsolete.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_obsolete_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_obsolete_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_obsolete_file();
     }
     

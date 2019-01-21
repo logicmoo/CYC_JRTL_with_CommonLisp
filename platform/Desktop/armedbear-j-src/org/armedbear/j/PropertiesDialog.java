@@ -458,7 +458,8 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
         return true;
     }
 
-    protected void ok()
+    @Override
+	protected void ok()
     {
         if (save()) {
             buffer.saveProperties();

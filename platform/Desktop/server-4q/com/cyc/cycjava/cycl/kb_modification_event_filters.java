@@ -2566,15 +2566,18 @@ public final class kb_modification_event_filters extends SubLTranslatedFile
         return (SubLObject)kb_modification_event_filters.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_modification_event_filters_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_modification_event_filters_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_modification_event_filters_file();
     }
     
@@ -2809,23 +2812,28 @@ public final class kb_modification_event_filters extends SubLTranslatedFile
             this.$pattern = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$event_filter_description_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$id;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$pattern;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$id = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$pattern = value;
         }
         
@@ -2840,7 +2848,8 @@ public final class kb_modification_event_filters extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EVENT-FILTER-DESCRIPTION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_modification_event_filters.event_filter_description_p(arg1);
         }
     }
@@ -2854,15 +2863,18 @@ public final class kb_modification_event_filters extends SubLTranslatedFile
             this.$address = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$message_mailbox_listener_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$address;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$address = value;
         }
         
@@ -2877,7 +2889,8 @@ public final class kb_modification_event_filters extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("MESSAGE-MAILBOX-LISTENER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_modification_event_filters.message_mailbox_listener_p(arg1);
         }
     }

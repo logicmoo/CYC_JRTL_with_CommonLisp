@@ -486,15 +486,18 @@ public final class hlmt_czer extends SubLTranslatedFile
         return (SubLObject)hlmt_czer.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_hlmt_czer_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_hlmt_czer_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_hlmt_czer_file();
     }
     

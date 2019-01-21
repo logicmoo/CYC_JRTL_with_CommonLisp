@@ -18,31 +18,38 @@ public class SparqlDataset extends DatasetImpl
         this.g = g;
     }
     
-    public DatasetGraph asDatasetGraph() {
+    @Override
+	public DatasetGraph asDatasetGraph() {
         return (DatasetGraph)this.g;
     }
     
-    public void close() {
+    @Override
+	public void close() {
         this.g.close();
     }
     
-    public boolean containsNamedModel(final String arg0) {
+    @Override
+	public boolean containsNamedModel(final String arg0) {
         return this.g.containsGraph(Node.createURI(arg0));
     }
     
-    public Model getDefaultModel() {
+    @Override
+	public Model getDefaultModel() {
         return ModelFactory.createModelForGraph(this.g.getDefaultGraph());
     }
     
-    public Lock getLock() {
+    @Override
+	public Lock getLock() {
         return this.g.getLock();
     }
     
-    public Model getNamedModel(final String arg0) {
+    @Override
+	public Model getNamedModel(final String arg0) {
         return ModelFactory.createModelForGraph(this.g.getGraph(Node.createURI(arg0)));
     }
     
-    public Iterator<String> listNames() {
+    @Override
+	public Iterator<String> listNames() {
         final ArrayList<String> nameList = new ArrayList<String>();
         final Iterator<Node> nodeIt = (Iterator<Node>)this.g.listGraphNodes();
         while (nodeIt.hasNext()) {

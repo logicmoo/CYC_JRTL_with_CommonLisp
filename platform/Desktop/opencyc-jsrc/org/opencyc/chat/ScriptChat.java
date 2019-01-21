@@ -136,6 +136,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	/**
 	 * Connects Bot to an IRC server
 	 */
+	@Override
 	public void ircConnect()
 	{
 		Log.makeLog();
@@ -182,6 +183,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	/**
 	 * Disconnct Bot from an IRC server
 	 */
+	@Override
 	public void ircDisconnect()
 	{
 		try
@@ -212,6 +214,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 		}
 	}
 
+	@Override
 	public void run()
 	{
 		ircConnect();
@@ -226,12 +229,14 @@ public class ScriptChat extends IrcChat implements ChatSender
 			}
 	}
 
+	@Override
 	public void restartChatterBot()
 	{
 		terminateChatterBot();
 		startChatterBot();
 	}
 
+	@Override
 	public void terminateChatterBot()
 	{
 		if (chatterBot != null)
@@ -247,6 +252,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 		}
 	}
 
+	@Override
 	public void startChatterBot()
 	{
 		if (chatterBot == null)
@@ -262,6 +268,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 		}
 	}
 
+	@Override
 	public void serviceLoop() throws Exception
 	{
 		serviceIRCServer();
@@ -270,6 +277,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	/**
 	 * Sends a raw string to the IRC server
 	 */
+	@Override
 	public boolean ircSend(String message)
 	{
 		System.out.println("irc: '" + message + "'");
@@ -285,11 +293,13 @@ public class ScriptChat extends IrcChat implements ChatSender
 		return true;
 	}
 
+	@Override
 	public void ircJoin(String channel)
 	{
 		ircSend("JOIN " + channel);
 	}
 
+	@Override
 	public void ircPart(String channel)
 	{
 		ircSend("PART " + channel);
@@ -300,6 +310,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	 * @param destination String
 	 * @param message String
 	 */
+	@Override
 	public void sendNotice(String destination, String message)
 	{
 		ircSend("notice " + destination + " :" + message);
@@ -310,6 +321,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	 * @param destination String
 	 * @param message String
 	 */
+	@Override
 	public boolean sendMessage(String destination, Object post)
 	{
 		if (post == null || destination == null) return false;
@@ -360,6 +372,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 		return ircSend("privmsg " + destination + " :" + message);
 	}
 
+	@Override
 	public String attemptParaphrase(Object post)
 	{
 		//Log.current.println("attemptParaphrase=" + post);
@@ -396,6 +409,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	/**
 	 * Receives and parses IRC Server messages
 	 */
+	@Override
 	public void serviceIRCServer() throws Exception
 	{
 		// Wait a 1/10th sec
@@ -421,6 +435,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	/**
 	 * Receives and parses IRC Session messages
 	 */
+	@Override
 	public void serviceIRCSession(String message)
 	{
 		String prefix = null;
@@ -463,6 +478,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	 *     or
 	 *     <my nick> <message>
 	 */
+	@Override
 	public void serviceIRCTransaction(String from, String hostmask, String command, String destination, String params)
 	{
 		if (hostmask.startsWith(ircNick)) return;
@@ -478,6 +494,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	or
 	<my nick> <message>
 	 */
+	@Override
 	public void servicePublicMessage(String from, String hostmask, String returnpath, String params)
 	{
 		if (!returnpath.startsWith("#")) returnpath = from;
@@ -506,6 +523,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	 *     or
 	 *     <my nick> <message>
 	 */
+	@Override
 	public boolean serviceToken(String from, String hostmask, String returnpath, String token, String params)
 	{
 		System.out.println("token: '" + token + "' params: '" + params + "'");
@@ -738,6 +756,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 		return false;
 	}
 
+	@Override
 	public boolean servicePlugin(String from, String hostmask, String returnpath, String token, String params)
 	{
 		return false;
@@ -748,6 +767,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	public Method bshSet;
 	public Class bshcls;*/
 
+	@Override
 	public void startPlugins()
 	{
 		try
@@ -765,6 +785,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 		return;
 	}
 
+	@Override
 	public void addObj(String name, Object val)
 	{
 		try
@@ -775,6 +796,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 		}
 	}
 
+	@Override
 	public void sendHelp(String returnpath, String params)
 	{
 		sendMessage(returnpath, "usage: help <hello|time|desc|ask|query|assert|cyclify>");
@@ -792,6 +814,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	 * or
 	 * <my nick> <message>
 	 */
+	@Override
 	public void serviceSubL(String cyclist, String returnpath, String subl)
 	{
 		try
@@ -987,6 +1010,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	 *     or
 	 *     <my nick> <message>
 	 */
+	@Override
 	public void serviceQuery(String cyclist, String returnpath, String query)
 	{
 		try
@@ -1023,6 +1047,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	 * or
 	 * <my nick> <message>
 	 */
+	@Override
 	public void serviceProve(String cyclist, String returnpath, String query)
 	{
 		try
@@ -1043,6 +1068,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	 * or
 	 * <my nick> <message>
 	 */
+	@Override
 	public void serviceQueryUser(String cyclist, String returnpath, String query)
 	{
 		try
@@ -1063,6 +1089,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	 * or
 	 * <my nick>  <message>
 	 */
+	@Override
 	public void serviceAssert(String cyclist, String returnpath, String sentence)
 	{
 		serviceSubL(cyclist, returnpath, "(cyc-assert '" + toCycListString(sentence) + " " + mtForUser(cyclist).stringApiValue() + ")");
@@ -1077,6 +1104,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	*  or
 	*  <my nick>  <message>
 	*/
+	@Override
 	public void serviceChatter(String cyclist, String identity, String message, String returnpath)
 	{
 		ircDestination = returnpath;
@@ -1095,6 +1123,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	/**
 	 * Returns a Mt for a user
 	 */
+	@Override
 	public CycFort mtForUser(String cyclist)
 	{
 		CycConstant mt = (CycConstant) mtUser.get(cyclist);
@@ -1920,6 +1949,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	/**
 	 * Returns true if Paraphrased for a destination/returnpath
 	 */
+	@Override
 	public boolean isParaphrased(String destination)
 	{
 		return (paraphrased.contains(destination));
@@ -1928,6 +1958,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	/**
 	 * Cyclifys a sentence a string
 	 */
+	@Override
 	public CycList toCycList(String sentence)
 	{
 		try
@@ -1942,6 +1973,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	/**
 	 * Cyclifys a sentence to a string
 	 */
+	@Override
 	public String toCycListString(String sentence)
 	{
 		try
@@ -1958,6 +1990,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	/**
 	 * Sends the Answer message from Cyc to returnpath
 	 */
+	@Override
 	public void sendAnswers(String returnpath, Object results)
 	{
 
@@ -1996,6 +2029,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 		sendMessage(returnpath, results);
 	}
 
+	@Override
 	public void sendDebug(String message)
 	{
 		sendMessage(ircDebug, message);
@@ -2005,6 +2039,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 	 * Sends the chat message from Cyc into the chat system.
 	 */
 
+	@Override
 	public void sendChatMessage(String chatMessage)
 	{
 		// sendMessage(ircDestination,chatMessage);
@@ -2024,6 +2059,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 		System.out.print("recievedConsoleMsg " + client + ": " + message);
 	}
 
+	@Override
 	public void listenForConnections(int port)
 	{
 		try
@@ -2052,6 +2088,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 			this.start();
 		}
 
+		@Override
 		public void run()
 		{
 			try
@@ -2094,6 +2131,7 @@ public class ScriptChat extends IrcChat implements ChatSender
 			out.println(message);
 		}
 
+		@Override
 		public void run()
 		{
 			String inputLine = null;

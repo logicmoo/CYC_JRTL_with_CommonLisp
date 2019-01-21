@@ -70,7 +70,8 @@ public final class StackPanel implements ContextListener, MouseListener
         return scrollPane;
     }
 
-    public void contextChanged()
+    @Override
+	public void contextChanged()
     {
         ThreadReference threadRef = jdb.getCurrentThread();
         if (threadRef != null) {
@@ -125,7 +126,8 @@ public final class StackPanel implements ContextListener, MouseListener
                 final int finalSelectedIndex = selectedIndex;
                 // Update UI in event dispatch thread.
                 Runnable r = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         list.setListData(v);
                         list.setSelectedIndex(finalSelectedIndex);
@@ -149,7 +151,8 @@ public final class StackPanel implements ContextListener, MouseListener
             return name;
     }
 
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         if (!jdb.isSuspended())
             return;
@@ -207,11 +210,15 @@ public final class StackPanel implements ContextListener, MouseListener
         dialog.requestDefaultFocus();
     }
 
-    public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
 
-    public void mouseClicked(MouseEvent e) {}
+    @Override
+	public void mouseClicked(MouseEvent e) {}
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e) {}
+    @Override
+	public void mouseExited(MouseEvent e) {}
 }

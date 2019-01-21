@@ -27,6 +27,7 @@ public class SwingGadget extends JFrame {
 		JButton button = new JButton("I'm a Swing button!");
 
 		button.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				inc();
 			}
@@ -48,6 +49,7 @@ public class SwingGadget extends JFrame {
 		getContentPane().add(pane, BorderLayout.CENTER);
 
 		addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				// System.exit(0);
 				setVisible(false);

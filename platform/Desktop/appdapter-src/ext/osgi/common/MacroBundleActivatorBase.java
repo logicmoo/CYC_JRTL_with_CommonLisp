@@ -284,7 +284,8 @@ public abstract class MacroBundleActivatorBase implements BundleActivator, Frame
         return key;
     }
 
-    public void frameworkEvent(final FrameworkEvent fe) {
+    @Override
+	public void frameworkEvent(final FrameworkEvent fe) {
         final int eventType = fe.getType();
         if (eventType == 1) {
             this.getLogger().info("********  OSGi Framework has STARTED, calling dispatchFrameworkStartedEvent()");
@@ -309,7 +310,8 @@ public abstract class MacroBundleActivatorBase implements BundleActivator, Frame
         }
     }
 
-    public void start(final BundleContext bundleCtx) throws Exception {
+    @Override
+	public void start(final BundleContext bundleCtx) throws Exception {
         this.m_context = bundleCtx;
         synchronized (MacroBundleActivatorBase.startedBundles) {
             if (MacroBundleActivatorBase.startedBundles.contains(this)) {
@@ -392,7 +394,8 @@ public abstract class MacroBundleActivatorBase implements BundleActivator, Frame
         });
     }
 
-    public void stop(final BundleContext bundleCtx) throws Exception {
+    @Override
+	public void stop(final BundleContext bundleCtx) throws Exception {
         synchronized (MacroBundleActivatorBase.macroStartupSettings) {
             if (MacroBundleActivatorBase.classLoaderUtils != null) {
                 MacroBundleActivatorBase.classLoaderUtils.unregisterClassLoader((BundleActivator)this, bundleCtx);
@@ -1010,7 +1013,8 @@ public abstract class MacroBundleActivatorBase implements BundleActivator, Frame
 
         public void possiblyStart(final MacroBundleActivatorBase bundleActivatorBase) {
             bundleActivatorBase.m_context.addFrameworkListener((FrameworkListener)new FrameworkListener() {
-                public void frameworkEvent(final FrameworkEvent fe) {
+                @Override
+				public void frameworkEvent(final FrameworkEvent fe) {
                     final int eventType = fe.getType();
                     if (eventType == 1) {
                         MacroStartupSettings.this.launchPhases();

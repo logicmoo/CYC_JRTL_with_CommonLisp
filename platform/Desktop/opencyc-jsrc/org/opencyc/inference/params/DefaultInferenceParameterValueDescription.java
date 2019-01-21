@@ -58,19 +58,23 @@ implements InferenceParameterValueDescription {
     init(value, shortDescription, longDescription);
   }
   
-  public Object getValue() {
+  @Override
+public Object getValue() {
     return value;
   }
 
-  public void setValue(final Object value) {
+  @Override
+public void setValue(final Object value) {
     this.value = value;
   }
   
-  public String getLongDescription() {
+  @Override
+public String getLongDescription() {
     return longDescription;
   }
   
-  public String getShortDescription() {
+  @Override
+public String getShortDescription() {
     return shortDescription;
   }
   
@@ -85,7 +89,8 @@ implements InferenceParameterValueDescription {
    *
    * @param obj An instance of type DefaultInferenceParameterValueDescription
    */
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     if (obj instanceof DefaultInferenceParameterValueDescription) {
       return ((DefaultInferenceParameterValueDescription)obj).getValue().equals(getValue());
     } else {
@@ -93,11 +98,13 @@ implements InferenceParameterValueDescription {
     }
   }
   
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return getValue().hashCode();
   }
   
-  public String toString() {
+  @Override
+public String toString() {
     return getShortDescription();
     //return getValue().toString();
   }

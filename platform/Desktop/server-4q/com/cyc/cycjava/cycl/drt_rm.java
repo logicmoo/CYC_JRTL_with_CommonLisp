@@ -710,15 +710,18 @@ public final class drt_rm extends SubLTranslatedFile
         return (SubLObject)drt_rm.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_drt_rm_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_drt_rm_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_drt_rm_file();
     }
     

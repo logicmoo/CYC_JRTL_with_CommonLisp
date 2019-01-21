@@ -28,7 +28,8 @@ import javax.swing.JDialog;
 
 public final class CustomFocusManager extends DefaultFocusManager
 {
-    public void processKeyEvent(Component focusedComponent, KeyEvent e)
+    @Override
+	public void processKeyEvent(Component focusedComponent, KeyEvent e)
     {
         if (e.getID() == KeyEvent.KEY_PRESSED) {
             if (isComponentHookable(focusedComponent)) {

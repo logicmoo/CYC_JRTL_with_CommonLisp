@@ -9522,15 +9522,18 @@ public final class inference_datastructures_problem_store extends SubLTranslated
         return (SubLObject)inference_datastructures_problem_store.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_datastructures_problem_store_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_datastructures_problem_store_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_datastructures_problem_store_file();
     }
     
@@ -10026,83 +10029,103 @@ public final class inference_datastructures_problem_store extends SubLTranslated
             this.$proof_keeping_index = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$problem_store_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$guid;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$suid;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$lock;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$creation_time;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$inference_id_index;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$strategy_id_index;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$problem_id_index;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$link_id_index;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$proof_id_index;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$problems_by_query_index;
         }
         
-        public SubLObject getField12() {
+        @Override
+		public SubLObject getField12() {
             return this.$rejected_proofs;
         }
         
-        public SubLObject getField13() {
+        @Override
+		public SubLObject getField13() {
             return this.$processed_proofs;
         }
         
-        public SubLObject getField14() {
+        @Override
+		public SubLObject getField14() {
             return this.$potentially_processed_problems;
         }
         
-        public SubLObject getField15() {
+        @Override
+		public SubLObject getField15() {
             return this.$non_explanatory_subproofs_possibleP;
         }
         
-        public SubLObject getField16() {
+        @Override
+		public SubLObject getField16() {
             return this.$non_explanatory_subproofs_index;
         }
         
-        public SubLObject getField17() {
+        @Override
+		public SubLObject getField17() {
             return this.$most_recent_tactic_executed;
         }
         
-        public SubLObject getField18() {
+        @Override
+		public SubLObject getField18() {
             return this.$min_proof_depth_index;
         }
         
-        public SubLObject getField19() {
+        @Override
+		public SubLObject getField19() {
             return this.$min_transformation_depth_index;
         }
         
-        public SubLObject getField20() {
+        @Override
+		public SubLObject getField20() {
             return this.$min_transformation_depth_signature_index;
         }
         
@@ -10222,79 +10245,98 @@ public final class inference_datastructures_problem_store extends SubLTranslated
             return this.$proof_keeping_index;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$guid = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$suid = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$lock = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$creation_time = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$inference_id_index = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$strategy_id_index = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$problem_id_index = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$link_id_index = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$proof_id_index = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$problems_by_query_index = value;
         }
         
-        public SubLObject setField12(final SubLObject value) {
+        @Override
+		public SubLObject setField12(final SubLObject value) {
             return this.$rejected_proofs = value;
         }
         
-        public SubLObject setField13(final SubLObject value) {
+        @Override
+		public SubLObject setField13(final SubLObject value) {
             return this.$processed_proofs = value;
         }
         
-        public SubLObject setField14(final SubLObject value) {
+        @Override
+		public SubLObject setField14(final SubLObject value) {
             return this.$potentially_processed_problems = value;
         }
         
-        public SubLObject setField15(final SubLObject value) {
+        @Override
+		public SubLObject setField15(final SubLObject value) {
             return this.$non_explanatory_subproofs_possibleP = value;
         }
         
-        public SubLObject setField16(final SubLObject value) {
+        @Override
+		public SubLObject setField16(final SubLObject value) {
             return this.$non_explanatory_subproofs_index = value;
         }
         
-        public SubLObject setField17(final SubLObject value) {
+        @Override
+		public SubLObject setField17(final SubLObject value) {
             return this.$most_recent_tactic_executed = value;
         }
         
-        public SubLObject setField18(final SubLObject value) {
+        @Override
+		public SubLObject setField18(final SubLObject value) {
             return this.$min_proof_depth_index = value;
         }
         
-        public SubLObject setField19(final SubLObject value) {
+        @Override
+		public SubLObject setField19(final SubLObject value) {
             return this.$min_transformation_depth_index = value;
         }
         
-        public SubLObject setField20(final SubLObject value) {
+        @Override
+		public SubLObject setField20(final SubLObject value) {
             return this.$min_transformation_depth_signature_index = value;
         }
         
@@ -10425,7 +10467,8 @@ public final class inference_datastructures_problem_store extends SubLTranslated
             super(SubLTranslatedFile.extractFunctionNamed("PROBLEM-STORE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_problem_store.problem_store_p(arg1);
         }
     }
@@ -10443,31 +10486,38 @@ public final class inference_datastructures_problem_store extends SubLTranslated
             this.$staleP = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$problem_store_janitor_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$store;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$indestructible_problems;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$staleP;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$store = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$indestructible_problems = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$staleP = value;
         }
         
@@ -10482,7 +10532,8 @@ public final class inference_datastructures_problem_store extends SubLTranslated
             super(SubLTranslatedFile.extractFunctionNamed("PROBLEM-STORE-JANITOR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_problem_store.problem_store_janitor_p(arg1);
         }
     }

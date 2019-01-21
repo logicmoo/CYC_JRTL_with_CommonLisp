@@ -4566,15 +4566,18 @@ public final class sbhl_cache extends SubLTranslatedFile
         return (SubLObject)sbhl_cache.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_cache_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_cache_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_cache_file();
     }
     
@@ -4713,7 +4716,8 @@ public final class sbhl_cache extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VALID-FORT-TYPE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_cache.valid_fort_typeP(arg1);
         }
     }

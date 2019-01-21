@@ -313,15 +313,18 @@ public final class deductions_interface extends SubLTranslatedFile
         return (SubLObject)deductions_interface.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_deductions_interface_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_deductions_interface_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_deductions_interface_file();
     }
     

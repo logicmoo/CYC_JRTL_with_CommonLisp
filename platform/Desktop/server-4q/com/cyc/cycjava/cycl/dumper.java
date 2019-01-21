@@ -23418,15 +23418,18 @@ public final class dumper extends SubLTranslatedFile
         return (SubLObject)dumper.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_dumper_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_dumper_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_dumper_file();
     }
 
@@ -24217,7 +24220,8 @@ public final class dumper extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LOAD-DEDUCTION-DEF-FROM-CACHE"));
         }
 
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return dumper.load_deduction_def_from_cache(arg1, arg2);
         }
     }
@@ -24228,7 +24232,8 @@ public final class dumper extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LOAD-ASSERTION-DEF-FROM-CACHE"));
         }
 
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return dumper.load_assertion_def_from_cache(arg1, arg2);
         }
     }
@@ -24256,71 +24261,88 @@ public final class dumper extends SubLTranslatedFile
             this.$dump_fn = (SubLObject)CommonSymbols.NIL;
         }
 
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$index_writer_native.structDecl;
         }
 
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$directory;
         }
 
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$fvector;
         }
 
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$index_file;
         }
 
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$index_label;
         }
 
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$complex_fvector;
         }
 
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$complex_index_file;
         }
 
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$complex_index_label;
         }
 
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$dump_fn;
         }
 
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$directory = value;
         }
 
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$fvector = value;
         }
 
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$index_file = value;
         }
 
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$index_label = value;
         }
 
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$complex_fvector = value;
         }
 
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$complex_index_file = value;
         }
 
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$complex_index_label = value;
         }
 
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$dump_fn = value;
         }
 
@@ -24335,7 +24357,8 @@ public final class dumper extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INDEX-WRITER-P"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return dumper.index_writer_p(arg1);
         }
     }
@@ -24346,7 +24369,8 @@ public final class dumper extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LOAD-NART-HL-FORMULA-FROM-CACHE"));
         }
 
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return dumper.load_nart_hl_formula_from_cache(arg1, arg2);
         }
     }

@@ -658,15 +658,18 @@ public final class rtp_madlibs extends SubLTranslatedFile
         return (SubLObject)rtp_madlibs.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rtp_madlibs_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rtp_madlibs_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rtp_madlibs_file();
     }
     

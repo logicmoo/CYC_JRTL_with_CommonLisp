@@ -127,7 +127,8 @@ public class JarOptimizer {
 
         String owner;
 
-        public void visit(
+        @Override
+		public void visit(
             final int version,
             final int access,
             final String name,
@@ -141,7 +142,8 @@ public class JarOptimizer {
             }
         }
 
-        public FieldVisitor visitField(
+        @Override
+		public FieldVisitor visitField(
             final int access,
             final String name,
             final String desc,
@@ -154,7 +156,8 @@ public class JarOptimizer {
             return null;
         }
 
-        public MethodVisitor visitMethod(
+        @Override
+		public MethodVisitor visitMethod(
             final int access,
             final String name,
             final String desc,
@@ -173,7 +176,8 @@ public class JarOptimizer {
         String owner;
         String method;
 
-        public void visit(
+        @Override
+		public void visit(
             final int version,
             final int access,
             final String name,
@@ -184,7 +188,8 @@ public class JarOptimizer {
             owner = name;
         }
 
-        public MethodVisitor visitMethod(
+        @Override
+		public MethodVisitor visitMethod(
             final int access,
             final String name,
             final String desc,
@@ -195,7 +200,8 @@ public class JarOptimizer {
             return this;
         }
 
-        public void visitFieldInsn(
+        @Override
+		public void visitFieldInsn(
             final int opcode,
             final String owner,
             final String name,
@@ -204,7 +210,8 @@ public class JarOptimizer {
             check(owner, name);
         }
 
-        public void visitMethodInsn(
+        @Override
+		public void visitMethodInsn(
             final int opcode,
             final String owner,
             final String name,

@@ -47,12 +47,14 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         return mode;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new LispShellFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_HOME, 0, "shellHome");
         km.mapKey(KeyEvent.VK_BACK_SPACE, 0, "shellBackspace");
@@ -76,7 +78,8 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         km.mapKey(VK_MOUSE_2, 0, "mouseCopyToInput");
     }
 
-    public void populateModeMenu(Editor editor, Menu menu)
+    @Override
+	public void populateModeMenu(Editor editor, Menu menu)
     {
         menu.add(editor, "Reset Lisp", 'L', "resetLisp", true);
         menu.addSeparator();
@@ -86,17 +89,20 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         menu.add(editor, "Goto Next Prompt", 'T', "shellNextPrompt", true);
     }
 
-    public boolean isTaggable()
+    @Override
+	public boolean isTaggable()
     {
         return false;
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return null;
     }
 
-    public boolean acceptsLinePaste(Editor editor)
+    @Override
+	public boolean acceptsLinePaste(Editor editor)
     {
         if (editor.getBuffer() instanceof LispShell) {
             Position pos = ((LispShell)editor.getBuffer()).getEndOfOutput();

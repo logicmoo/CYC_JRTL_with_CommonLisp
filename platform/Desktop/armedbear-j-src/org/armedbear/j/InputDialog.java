@@ -76,7 +76,8 @@ public class InputDialog extends JDialog implements KeyListener
         return showInputDialog(editor, prompt, title, null);
     }
 
-    public void show()
+    @Override
+	public void show()
     {
         if (defaultValue != null && defaultValue.length() > 0) {
             textField.setText(defaultValue);
@@ -118,7 +119,8 @@ public class InputDialog extends JDialog implements KeyListener
         dispose();
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         final int keyCode = e.getKeyCode();
         final int modifiers = e.getModifiers();
@@ -154,11 +156,14 @@ public class InputDialog extends JDialog implements KeyListener
         }
     }
 
-    public void keyReleased(KeyEvent e) {}
+    @Override
+	public void keyReleased(KeyEvent e) {}
 
-    public void keyTyped(KeyEvent e) {}
+    @Override
+	public void keyTyped(KeyEvent e) {}
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         super.dispose();
         editor.restoreFocus();

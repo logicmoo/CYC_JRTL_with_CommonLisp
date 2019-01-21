@@ -40,7 +40,8 @@ public class ShareSpecImpl implements Runnable, ShareSpec
         this.taskState = taskState;
     }
     
-    public Runnable requiredWork(final Repo.DatasetProvider local, final ShareSpec goalShareSpec, final RemoteDatasetProviderSpec remoteDatasetProvider) {
+    @Override
+	public Runnable requiredWork(final Repo.DatasetProvider local, final ShareSpec goalShareSpec, final RemoteDatasetProviderSpec remoteDatasetProvider) {
         if (goalShareSpec.getTaskState() != BasicRepoImpl.TaskState.TaskNeedsStart) {
             return null;
         }
@@ -52,7 +53,8 @@ public class ShareSpecImpl implements Runnable, ShareSpec
         return this;
     }
     
-    public boolean sameOutcome(final ShareSpec shareSpec0) {
+    @Override
+	public boolean sameOutcome(final ShareSpec shareSpec0) {
         if (shareSpec0 == null) {
             return false;
         }
@@ -100,7 +102,8 @@ public class ShareSpecImpl implements Runnable, ShareSpec
         }
     }
     
-    public String getGlobalName() {
+    @Override
+	public String getGlobalName() {
         final String plString = this.remoteSpec.getProviderBase();
         return plString + "-" + this.shareName + "@" + this.localModelID.getAbsUriString();
     }
@@ -164,11 +167,13 @@ public class ShareSpecImpl implements Runnable, ShareSpec
         return this.remoteSpec.getNamedModel((Ident)new FreeIdent(remoteModelID), true);
     }
     
-    public BasicRepoImpl.TaskState getTaskState() {
+    @Override
+	public BasicRepoImpl.TaskState getTaskState() {
         return this.taskState;
     }
     
-    public Ident getLocalModelId() {
+    @Override
+	public Ident getLocalModelId() {
         return this.localModelID;
     }
 }

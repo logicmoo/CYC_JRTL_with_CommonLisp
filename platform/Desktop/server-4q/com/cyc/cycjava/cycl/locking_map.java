@@ -535,15 +535,18 @@ public final class locking_map extends SubLTranslatedFile
         return (SubLObject)locking_map.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_locking_map_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_locking_map_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_locking_map_file();
     }
     
@@ -605,23 +608,28 @@ public final class locking_map extends SubLTranslatedFile
             this.$lock = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$locking_map_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$map;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$lock;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$map = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$lock = value;
         }
         
@@ -636,7 +644,8 @@ public final class locking_map extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LOCKING-MAP-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return locking_map.locking_map_p(arg1);
         }
     }

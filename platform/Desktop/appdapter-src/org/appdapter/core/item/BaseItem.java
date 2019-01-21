@@ -25,18 +25,21 @@ public abstract class BaseItem implements Item
     
     protected abstract List<Item> getLinkedItems(final Ident p0, final Item.LinkDirection p1);
     
-    public int getLinkedItemCount(final Ident linkName, final Item.LinkDirection linkDir) {
+    @Override
+	public int getLinkedItemCount(final Ident linkName, final Item.LinkDirection linkDir) {
         final Collection<Item> linkedItems = this.getLinkedItems(linkName, linkDir);
         return linkedItems.size();
     }
     
-    public Set<Item> getLinkedItemSet(final Ident linkName, final Item.LinkDirection linkDir) {
+    @Override
+	public Set<Item> getLinkedItemSet(final Ident linkName, final Item.LinkDirection linkDir) {
         final Collection<Item> linkedItems = this.getLinkedItems(linkName, linkDir);
         final Set s = new HashSet(linkedItems);
         return (Set<Item>)s;
     }
     
-    public Item getSingleLinkedItem(final Ident linkName, final Item.LinkDirection linkDir) {
+    @Override
+	public Item getSingleLinkedItem(final Ident linkName, final Item.LinkDirection linkDir) {
         final Collection<Item> linkedItems = this.getLinkedItems(linkName, linkDir);
         final int size = linkedItems.size();
         if (size == 1) {
@@ -52,7 +55,8 @@ public abstract class BaseItem implements Item
         throw rtException;
     }
     
-    public Item getOptionalSingleLinkedItem(final Ident linkName, final Item.LinkDirection linkDir) {
+    @Override
+	public Item getOptionalSingleLinkedItem(final Ident linkName, final Item.LinkDirection linkDir) {
         final Collection<Item> linkedItems = this.getLinkedItems(linkName, linkDir);
         final int size = linkedItems.size();
         if (size > 0) {
@@ -63,7 +67,8 @@ public abstract class BaseItem implements Item
         return null;
     }
     
-    public List<Item> getLinkedItemsSorted(final Ident linkName, final Item.LinkDirection linkDir, final List<Item.SortKey> sortFieldNames) {
+    @Override
+	public List<Item> getLinkedItemsSorted(final Ident linkName, final Item.LinkDirection linkDir, final List<Item.SortKey> sortFieldNames) {
         if (sortFieldNames != null && sortFieldNames.size() > 0) {
             BaseItem.theLogger.warn("Who actually uses sorting?  These items are not yet really sorted by: {}", (Object)sortFieldNames);
         }
@@ -79,11 +84,13 @@ public abstract class BaseItem implements Item
         return lit.getDatatypeURI();
     }
     
-    public Date getValDate(final Ident fieldID, final Date defaultVal) {
+    @Override
+	public Date getValDate(final Ident fieldID, final Date defaultVal) {
         throw new UnsupportedOperationException("Date literals not supported yet.");
     }
     
-    public Double getValDouble(final Ident fieldID, final Double defaultVal) {
+    @Override
+	public Double getValDouble(final Ident fieldID, final Double defaultVal) {
         final Literal lit = this.getLiteralVal(fieldID, false);
         if (lit != null) {
             return lit.getDouble();
@@ -91,7 +98,8 @@ public abstract class BaseItem implements Item
         return defaultVal;
     }
     
-    public Long getValLong(final Ident fieldID, final Long defaultVal) {
+    @Override
+	public Long getValLong(final Ident fieldID, final Long defaultVal) {
         final Literal lit = this.getLiteralVal(fieldID, false);
         if (lit != null) {
             return lit.getLong();
@@ -99,7 +107,8 @@ public abstract class BaseItem implements Item
         return defaultVal;
     }
     
-    public Integer getValInteger(final Ident fieldID, final Integer defaultVal) {
+    @Override
+	public Integer getValInteger(final Ident fieldID, final Integer defaultVal) {
         final Literal lit = this.getLiteralVal(fieldID, false);
         if (lit != null) {
             return lit.getInt();
@@ -107,7 +116,8 @@ public abstract class BaseItem implements Item
         return defaultVal;
     }
     
-    public String getValString(final Ident fieldID, final String defaultVal) {
+    @Override
+	public String getValString(final Ident fieldID, final String defaultVal) {
         final Literal lit = this.getLiteralVal(fieldID, false);
         if (lit != null) {
             return lit.getString();
@@ -115,7 +125,8 @@ public abstract class BaseItem implements Item
         return defaultVal;
     }
     
-    public Boolean getValBoolean(final Ident fieldID, final Boolean defaultVal) {
+    @Override
+	public Boolean getValBoolean(final Ident fieldID, final Boolean defaultVal) {
         final Literal lit = this.getLiteralVal(fieldID, false);
         if (lit != null) {
             return lit.getBoolean();

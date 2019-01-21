@@ -9235,15 +9235,18 @@ public final class kb_utilities extends SubLTranslatedFile
         return (SubLObject)kb_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_utilities_file();
     }
     
@@ -9771,7 +9774,8 @@ public final class kb_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-EXTERNAL-ID-STRING-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_utilities.hl_external_id_string_p(arg1);
         }
     }
@@ -9782,7 +9786,8 @@ public final class kb_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TERM-<"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return kb_utilities.term_L(arg1, arg2, (SubLObject)$term_L$BinaryFunction.UNPROVIDED, (SubLObject)$term_L$BinaryFunction.UNPROVIDED, (SubLObject)$term_L$BinaryFunction.UNPROVIDED);
         }
     }
@@ -9793,7 +9798,8 @@ public final class kb_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FORM-SORT-PRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return kb_utilities.form_sort_pred(arg1, arg2);
         }
     }
@@ -9804,7 +9810,8 @@ public final class kb_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FORT-<"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return kb_utilities.fort_L(arg1, arg2);
         }
     }
@@ -9815,7 +9822,8 @@ public final class kb_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-CACHED-UNION-ALL-SPECS-COUNT"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return kb_utilities.clear_cached_union_all_specs_count();
         }
     }
@@ -9826,7 +9834,8 @@ public final class kb_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-FORBIDDEN-KB-COVERING-COLLECTIONS-SET"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return kb_utilities.clear_forbidden_kb_covering_collections_set();
         }
     }

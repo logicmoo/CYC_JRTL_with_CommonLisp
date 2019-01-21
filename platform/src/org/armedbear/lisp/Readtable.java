@@ -170,17 +170,20 @@ public class Readtable extends LispObject
       to.readtableCase = from.readtableCase;
   }
 
-  public final LispObject typeOf()
+  @Override
+public final LispObject typeOf()
   {
     return Symbol.READTABLE;
   }
 
-  public final LispObject classOf()
+  @Override
+public final LispObject classOf()
   {
     return BuiltInClass.READTABLE;
   }
 
-  public final LispObject typep(LispObject type)
+  @Override
+public final LispObject typep(LispObject type)
   {
     if (type == Symbol.READTABLE)
       return T;
@@ -324,7 +327,8 @@ public class Readtable extends LispObject
   private static final Primitive READTABLEP =
     new Primitive("readtablep", "object")
     {
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
         return arg instanceof Readtable ? T : NIL;
       }
@@ -334,17 +338,20 @@ public class Readtable extends LispObject
   private static final Primitive COPY_READTABLE =
     new Primitive("copy-readtable", "&optional from-readtable to-readtable")
     {
-      public LispObject execute()
+      @Override
+	public LispObject execute()
       {
         return new Readtable(currentReadtable());
       }
 
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
         return new Readtable(arg);
       }
 
-      public LispObject execute(LispObject first, LispObject second)
+      @Override
+	public LispObject execute(LispObject first, LispObject second)
 
       {
         Readtable from = designator_readtable(first);
@@ -361,14 +368,16 @@ public class Readtable extends LispObject
   private static final Primitive GET_MACRO_CHARACTER =
     new Primitive("get-macro-character", "char &optional readtable")
     {
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
         char c = LispCharacter.getValue(arg);
         Readtable rt = currentReadtable();
         return rt.getMacroCharacter(c);
       }
 
-      public LispObject execute(LispObject first, LispObject second)
+      @Override
+	public LispObject execute(LispObject first, LispObject second)
 
       {
         char c = LispCharacter.getValue(first);
@@ -383,20 +392,23 @@ public class Readtable extends LispObject
     new Primitive("set-macro-character",
                   "char new-function &optional non-terminating-p readtable")
     {
-      public LispObject execute(LispObject first, LispObject second)
+      @Override
+	public LispObject execute(LispObject first, LispObject second)
 
       {
         return execute(first, second, NIL, currentReadtable());
       }
 
-      public LispObject execute(LispObject first, LispObject second,
+      @Override
+	public LispObject execute(LispObject first, LispObject second,
                                 LispObject third)
 
       {
         return execute(first, second, third, currentReadtable());
       }
 
-      public LispObject execute(LispObject first, LispObject second,
+      @Override
+	public LispObject execute(LispObject first, LispObject second,
                                 LispObject third, LispObject fourth)
 
       {
@@ -429,7 +441,8 @@ public class Readtable extends LispObject
     new Primitive("make-dispatch-macro-character",
                   "char &optional non-terminating-p readtable")
     {
-      public LispObject execute(LispObject[] args)
+      @Override
+	public LispObject execute(LispObject[] args)
       {
         if (args.length < 1 || args.length > 3)
           return error(new WrongNumberOfArgumentsException(this, 1, 3));
@@ -455,7 +468,8 @@ public class Readtable extends LispObject
     new Primitive("get-dispatch-macro-character",
                   "disp-char sub-char &optional readtable")
     {
-      public LispObject execute(LispObject[] args)
+      @Override
+	public LispObject execute(LispObject[] args)
       {
         if (args.length < 2 || args.length > 3)
           return error(new WrongNumberOfArgumentsException(this, 1, 3));
@@ -476,7 +490,8 @@ public class Readtable extends LispObject
     new Primitive("set-dispatch-macro-character",
                   "disp-char sub-char new-function &optional readtable")
     {
-      public LispObject execute(LispObject[] args)
+      @Override
+	public LispObject execute(LispObject[] args)
       {
         if (args.length < 3 || args.length > 4)
           return error(new WrongNumberOfArgumentsException(this, 3, 4));
@@ -499,7 +514,8 @@ public class Readtable extends LispObject
     new Primitive("set-syntax-from-char",
                   "to-char from-char &optional to-readtable from-readtable")
     {
-      public LispObject execute(LispObject[] args)
+      @Override
+	public LispObject execute(LispObject[] args)
       {
         if (args.length < 2 || args.length > 4)
           return error(new WrongNumberOfArgumentsException(this, 2, 4));
@@ -536,7 +552,8 @@ public class Readtable extends LispObject
   private static final Primitive READTABLE_CASE =
     new Primitive("readtable-case", "readtable")
     {
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
           return checkReadtable(arg).readtableCase;
       }
@@ -547,7 +564,8 @@ public class Readtable extends LispObject
     new Primitive("%set-readtable-case", PACKAGE_SYS, false,
                   "readtable new-mode")
     {
-      public LispObject execute(LispObject first, LispObject second)
+      @Override
+	public LispObject execute(LispObject first, LispObject second)
 
       {
             final Readtable readtable = checkReadtable(first);

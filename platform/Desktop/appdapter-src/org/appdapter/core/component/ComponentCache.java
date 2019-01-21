@@ -25,7 +25,8 @@ public class ComponentCache<MKC extends MutableKnownComponent> implements GetObj
         return this.myCompCache;
     }
     
-    public Object getValue() {
+    @Override
+	public Object getValue() {
         return this.myCompCache;
     }
 }

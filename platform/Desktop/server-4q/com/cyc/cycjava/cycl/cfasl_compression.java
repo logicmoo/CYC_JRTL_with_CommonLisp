@@ -481,15 +481,18 @@ public final class cfasl_compression extends SubLTranslatedFile
         return (SubLObject)cfasl_compression.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cfasl_compression_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cfasl_compression_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cfasl_compression_file();
     }
     

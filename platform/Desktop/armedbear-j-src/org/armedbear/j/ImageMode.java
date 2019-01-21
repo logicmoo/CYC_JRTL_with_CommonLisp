@@ -39,7 +39,8 @@ public final class ImageMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey('c', "imageCycleBackground");
         km.mapKey('f', "imageFit");
@@ -48,12 +49,14 @@ public final class ImageMode extends AbstractMode implements Constants, Mode
         km.mapKey('-', "imageZoomOut");
     }
 
-    public String getMenuName()
+    @Override
+	public String getMenuName()
     {
         return MENU_NAME;
     }
 
-    public MenuBar createMenuBar(Frame frame)
+    @Override
+	public MenuBar createMenuBar(Frame frame)
     {
         MenuBar menuBar = new MenuBar(MENU_NAME);
         menuBar.add(new Menu("File", 'F'));
@@ -63,7 +66,8 @@ public final class ImageMode extends AbstractMode implements Constants, Mode
         return menuBar;
     }
 
-    public void populateMenu(Editor editor, Menu menu)
+    @Override
+	public void populateMenu(Editor editor, Menu menu)
     {
         final String text = menu.getText();
         if (text == "File") {
@@ -93,7 +97,8 @@ public final class ImageMode extends AbstractMode implements Constants, Mode
             super.populateMenu(editor, menu);
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return null;
     }

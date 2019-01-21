@@ -601,15 +601,18 @@ public final class object_monitor extends SubLTranslatedFile
         return (SubLObject)object_monitor.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_object_monitor_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_object_monitor_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_object_monitor_file();
     }
     

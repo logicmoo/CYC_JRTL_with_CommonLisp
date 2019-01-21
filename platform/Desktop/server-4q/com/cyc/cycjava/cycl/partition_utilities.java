@@ -512,15 +512,18 @@ public final class partition_utilities extends SubLTranslatedFile
         return (SubLObject)partition_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_partition_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_partition_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_partition_utilities_file();
     }
     

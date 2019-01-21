@@ -46,12 +46,14 @@ abstract public class ToFromKeyConverterImpl<VALUECLASS, KEYCLASS> implements Co
 		return (T) fromKey((KEYCLASS) obj, objNeedsToBe);
 	}
 
+	@Override
 	public abstract VALUECLASS fromKey(KEYCLASS title, Class specializedMaybe);
 
 	public KEYCLASS toKeyFromObject(Object toBecomeAKey) {
 		return toKey((VALUECLASS) toBecomeAKey);
 	}
 
+	@Override
 	public abstract KEYCLASS toKey(VALUECLASS toBecomeAKey);
 
 	public Object fromKeySearch(KEYCLASS title) throws ClassCastException {

@@ -562,15 +562,18 @@ public final class shop_mt_world_state extends SubLTranslatedFile
         return (SubLObject)shop_mt_world_state.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_shop_mt_world_state_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_shop_mt_world_state_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_shop_mt_world_state_file();
     }
     

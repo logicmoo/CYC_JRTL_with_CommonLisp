@@ -89,13 +89,15 @@ public class ConfirmDialog extends MessageDialog implements Constants
         return d.result;
     }
 
-    protected void initialize(String text, String title)
+    @Override
+	protected void initialize(String text, String title)
     {
         super.initialize(text, title);
         yesButton.requestFocus();
     }
 
-    protected void addButtons()
+    @Override
+	protected void addButtons()
     {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setAlignmentX(LEFT_ALIGNMENT);
@@ -148,13 +150,15 @@ public class ConfirmDialog extends MessageDialog implements Constants
         dispose();
     }
 
-    protected void cancel()
+    @Override
+	protected void cancel()
     {
         result = RESPONSE_CANCEL;
         dispose();
     }
 
-    public void actionPerformed(ActionEvent e)
+    @Override
+	public void actionPerformed(ActionEvent e)
     {
         if (e.getActionCommand().equals("Yes"))
             yes();
@@ -166,7 +170,8 @@ public class ConfirmDialog extends MessageDialog implements Constants
             cancel();
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         int keyCode = e.getKeyCode();
         if (confirmAll) {

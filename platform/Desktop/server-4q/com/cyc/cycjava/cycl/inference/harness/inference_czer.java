@@ -2046,15 +2046,18 @@ public final class inference_czer extends SubLTranslatedFile
         return (SubLObject)inference_czer.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_czer_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_czer_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_czer_file();
     }
     
@@ -2145,7 +2148,8 @@ public final class inference_czer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-CONTEXTUALIZED-ASENT-<"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_czer.inference_contextualized_asent_L(arg1, arg2);
         }
     }
@@ -2156,7 +2160,8 @@ public final class inference_czer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NON-FIXED-VARIABLE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_czer.non_fixed_variable_p(arg1);
         }
     }
@@ -2167,7 +2172,8 @@ public final class inference_czer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VARIABLE-TOKEN"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return inference_czer.variable_token((SubLObject)$variable_token$ZeroArityFunction.UNPROVIDED);
         }
     }
@@ -2178,7 +2184,8 @@ public final class inference_czer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VARIABLE-TOKEN"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_czer.variable_token(arg1);
         }
     }
@@ -2189,7 +2196,8 @@ public final class inference_czer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NON-CONTIGUOUS-HL-VAR?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_czer.non_contiguous_hl_varP(arg1);
         }
     }
@@ -2200,7 +2208,8 @@ public final class inference_czer extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("POSSIBLY-NOTE-HL-VAR-CONTIGUITY-PAIR"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_czer.possibly_note_hl_var_contiguity_pair(arg1);
         }
     }

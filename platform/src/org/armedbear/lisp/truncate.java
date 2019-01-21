@@ -41,12 +41,14 @@ public final class truncate extends Primitive
         super("truncate", "number &optional divisor");
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         return arg.truncate(Fixnum.ONE);
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
 
     {
         return first.truncate(second);

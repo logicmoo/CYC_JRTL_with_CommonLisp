@@ -113,6 +113,7 @@ public class Variable extends Term
 		}
 	}
 
+	@Override
 	public final Term[] args()
 	{
 		throw new JPLException("args() is undefined for Variable");
@@ -123,6 +124,7 @@ public class Variable extends Term
 	 *
 	 * @return the arity of a Term
 	 */
+	@Override
 	public int arity()
 	{
 		throw new JPLException("arity() is undefined for Variable");
@@ -136,6 +138,7 @@ public class Variable extends Term
 	 *            The Object to compare.
 	 * @return true if the Object is a Variable and the above condition apply.
 	 */
+	@Override
 	public final boolean equals(Object obj)
 	{
 		return obj instanceof Variable && !this.name.equals("_") && this.name.equals(((Variable) obj).name);
@@ -153,6 +156,7 @@ public class Variable extends Term
 	 * @param vars_to_Vars
 	 *            A Map from Prolog variables to JPL Variables.
 	 */
+	@Override
 	protected final void getSubst(Map<String, Term> varnames_to_Terms, Map<term_t, Variable> vars_to_Vars)
 	{
 		// NB a Variable.name cannot be "" i.e. of 0 length
@@ -167,6 +171,7 @@ public class Variable extends Term
 	/* (non-Javadoc)
 	 * @see org.jpl7.Term#hasFunctor(java.math.BigInteger, int)
 	 */
+	@Override
 	public boolean hasFunctor(BigInteger value, int arity)
 	{
 		throw new JPLException("hasFunctor() is undefined for Variable");
@@ -175,6 +180,7 @@ public class Variable extends Term
 	/* (non-Javadoc)
 	 * @see org.jpl7.Term#hasFunctor(java.lang.String, int)
 	 */
+	@Override
 	public boolean hasFunctor(String name, int arity)
 	{
 		throw new JPLException("hasFunctor() is undefined for Variable");
@@ -183,6 +189,7 @@ public class Variable extends Term
 	/* (non-Javadoc)
 	 * @see org.jpl7.Term#hasFunctor(long, int)
 	 */
+	@Override
 	public boolean hasFunctor(long value, int arity)
 	{
 		throw new JPLException("hasFunctor() is undefined for Variable");
@@ -191,6 +198,7 @@ public class Variable extends Term
 	/* (non-Javadoc)
 	 * @see org.jpl7.Term#hasFunctor(double, int)
 	 */
+	@Override
 	public boolean hasFunctor(double value, int arity)
 	{
 		throw new JPLException("hasFunctor() is undefined for Variable");
@@ -201,6 +209,7 @@ public class Variable extends Term
 	 *
 	 * @return the lexical name of this Variable
 	 */
+	@Override
 	public final String name()
 	{
 		return this.name;
@@ -222,6 +231,7 @@ public class Variable extends Term
 	 *            A (previously created) term_t which is to be set to a (new or
 	 *            reused) Prolog variable.
 	 */
+	@Override
 	protected final void put(Map<String, term_t> varnames_to_vars, term_t term)
 	{
 		term_t var;
@@ -262,6 +272,7 @@ public class Variable extends Term
 	 *
 	 * @return a Prolog source text representation of this Variable
 	 */
+	@Override
 	public String toString()
 	{
 		return this.name;
@@ -272,6 +283,7 @@ public class Variable extends Term
 	 *
 	 * @return the type of this subclass of Term, i.e. Prolog.VARIABLE
 	 */
+	@Override
 	public final int type()
 	{
 		return Prolog.VARIABLE;
@@ -282,6 +294,7 @@ public class Variable extends Term
 	 *
 	 * @return the typeName of this subclass of Term, i.e. "Variable"
 	 */
+	@Override
 	public String typeName()
 	{
 		return "Variable";

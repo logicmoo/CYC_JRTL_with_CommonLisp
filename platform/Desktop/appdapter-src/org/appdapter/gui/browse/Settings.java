@@ -54,6 +54,7 @@ public class Settings implements AnyOper.Singleton, AnyOper.Autoload, java.io.Se
 		}
 	}
 
+	@Override
 	protected void finalize() {
 		try {
 			saveToFile();

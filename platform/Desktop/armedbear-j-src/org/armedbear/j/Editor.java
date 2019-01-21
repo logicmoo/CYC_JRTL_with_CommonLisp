@@ -433,7 +433,8 @@ public final class Editor extends JPanel implements Constants,
             Server.startServer();
 
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 currentEditor.getFrame().setVisible(true);
                 Sidebar sidebar = currentEditor.getSidebar();
@@ -844,7 +845,8 @@ public final class Editor extends JPanel implements Constants,
         ed.updateDisplay();
         display.repaint();
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 currentEditor.setFocusToDisplay();
             }
@@ -4264,7 +4266,8 @@ public final class Editor extends JPanel implements Constants,
     public static final void restoreFocus()
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 if (currentEditor != null)
                     currentEditor.setFocusToDisplay();
@@ -4273,24 +4276,29 @@ public final class Editor extends JPanel implements Constants,
         SwingUtilities.invokeLater(r);
     }
 
-    public void componentHidden(ComponentEvent e)
+    @Override
+	public void componentHidden(ComponentEvent e)
     {
     }
 
-    public void componentMoved(ComponentEvent e)
+    @Override
+	public void componentMoved(ComponentEvent e)
     {
     }
 
-    public void componentResized(ComponentEvent e)
+    @Override
+	public void componentResized(ComponentEvent e)
     {
         updateScrollBars();
     }
 
-    public void componentShown(ComponentEvent e)
+    @Override
+	public void componentShown(ComponentEvent e)
     {
     }
 
-    public void mouseWheelMoved(MouseWheelEvent e)
+    @Override
+	public void mouseWheelMoved(MouseWheelEvent e)
     {
         // Without this, focus ends up in the location bar textfield if you use
         // the mouse wheel in the edit window after using the openFile
@@ -4502,7 +4510,8 @@ public final class Editor extends JPanel implements Constants,
         AWTEvent e = dispatcher.getLastEvent();
         if (e != null && e.getSource() instanceof MenuItem) {
             Runnable r = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     setFocusToTextField();
                 }
@@ -4523,7 +4532,8 @@ public final class Editor extends JPanel implements Constants,
         {
           Runnable r = new Runnable()
             {
-              public void run()
+              @Override
+			public void run()
               {
                 frame.setFocus(ed.getLocationBar().getTextField());
               }
@@ -6177,7 +6187,8 @@ public final class Editor extends JPanel implements Constants,
     private void requestFocusLater()
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 Editor.this.requestFocus();
             }
@@ -6341,7 +6352,8 @@ public final class Editor extends JPanel implements Constants,
           AWTEvent e = dispatcher.getLastEvent();
           if (e != null && e.getSource() instanceof MenuItem) {
             Runnable r = new Runnable() {
-              public void run()
+              @Override
+			public void run()
               {
                 setFocusToTextField();
               }
@@ -6411,7 +6423,8 @@ public final class Editor extends JPanel implements Constants,
             final String command = array[0];
             final String parameters = array[1];
             Runnable r = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     try {
                         StatusBar statusBar = getStatusBar();
@@ -7021,7 +7034,8 @@ public final class Editor extends JPanel implements Constants,
     public void updateDisplayLater()
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 updateDisplay();
             }
@@ -7033,7 +7047,8 @@ public final class Editor extends JPanel implements Constants,
     public static void updateDisplayLater(final Buffer buf)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 for (int i = 0; i < getEditorCount(); i++) {
                     Editor ed = getEditor(i);
@@ -7128,7 +7143,8 @@ public final class Editor extends JPanel implements Constants,
         display.setCursor(cursor);
     }
 
-    public final void setCursor(Cursor cursor)
+    @Override
+	public final void setCursor(Cursor cursor)
     {
         display.setCursor(cursor);
     }

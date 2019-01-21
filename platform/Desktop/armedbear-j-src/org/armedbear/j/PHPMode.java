@@ -51,41 +51,48 @@ public final class PHPMode extends JavaMode implements Constants, Mode
         return mode;
     }
 
-    public void populateModeMenu(Editor editor, Menu menu)
+    @Override
+	public void populateModeMenu(Editor editor, Menu menu)
     {
         // No mode menu yet.
     }
 
-    public SyntaxIterator getSyntaxIterator(Position pos)
+    @Override
+	public SyntaxIterator getSyntaxIterator(Position pos)
     {
         return new PHPSyntaxIterator(pos);
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new PHPFormatter(buffer);
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new PHPTagger(buffer);
     }
 
-    public final boolean isIdentifierStart(char c)
+    @Override
+	public final boolean isIdentifierStart(char c)
     {
         if (c > 255)
             return false;
         return values[c] == 1;
     }
 
-    public final boolean isIdentifierPart(char c)
+    @Override
+	public final boolean isIdentifierPart(char c)
     {
         if (c > 255)
             return false;
         return values[c] != 0;
     }
 
-    public boolean isInQuote(Buffer buffer, Position pos)
+    @Override
+	public boolean isInQuote(Buffer buffer, Position pos)
     {
         if (buffer.getMode() != this)
             Debug.bug();

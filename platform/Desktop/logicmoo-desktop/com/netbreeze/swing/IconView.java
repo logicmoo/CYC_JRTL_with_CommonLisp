@@ -33,14 +33,16 @@ public class IconView extends Canvas {
     return icon;
   }
 
-  public Dimension getPreferredSize() {
+  @Override
+public Dimension getPreferredSize() {
     if (icon == null)
       return new Dimension(0, 0);
     else
       return new Dimension(icon.getIconWidth(), icon.getIconHeight());
   }
 
-  public void paint(Graphics g) {
+  @Override
+public void paint(Graphics g) {
     if (icon != null)
       icon.paintIcon(this, g, 0, 0);
   }

@@ -154,7 +154,8 @@ public final class Region implements Constants
         return beginOffset == 0 && endOffset == 0;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         if (beginLine == endLine)
             return beginLine.substring(beginOffset, endOffset);

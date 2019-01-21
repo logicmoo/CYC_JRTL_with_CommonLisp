@@ -44,17 +44,20 @@ public class WebLine extends AbstractLine implements Line
         this.sourceOffset = sourceOffset;
     }
 
-    public final int flags()
+    @Override
+	public final int flags()
     {
         return flags;
     }
 
-    public final void setFlags(int flags)
+    @Override
+	public final void setFlags(int flags)
     {
         this.flags = flags;
     }
 
-    public final String getText()
+    @Override
+	public final String getText()
     {
         if (text == null) {
             if (segmentList != null) {
@@ -89,42 +92,50 @@ public class WebLine extends AbstractLine implements Line
         return null;
     }
 
-    public final void setText(String s)
+    @Override
+	public final void setText(String s)
     {
         text = s;
     }
 
-    public final char charAt(int i)
+    @Override
+	public final char charAt(int i)
     {
         return getText().charAt(i);
     }
 
-    public final String substring(int beginIndex)
+    @Override
+	public final String substring(int beginIndex)
     {
         return getText().substring(beginIndex);
     }
 
-    public final String substring(int beginIndex, int endIndex)
+    @Override
+	public final String substring(int beginIndex, int endIndex)
     {
         return getText().substring(beginIndex, endIndex);
     }
 
-    public final String trim()
+    @Override
+	public final String trim()
     {
         return getText().trim();
     }
 
-    public final int length()
+    @Override
+	public final int length()
     {
         return getText().length();
     }
 
-    public final byte[] getBytes(String encoding) throws UnsupportedEncodingException
+    @Override
+	public final byte[] getBytes(String encoding) throws UnsupportedEncodingException
     {
         return getText().getBytes(encoding);
     }
 
-    public final boolean isBlank()
+    @Override
+	public final boolean isBlank()
     {
         if (text == null)
             text = getText();

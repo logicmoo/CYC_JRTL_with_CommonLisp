@@ -2723,15 +2723,18 @@ public final class recognition extends SubLTranslatedFile
         return (SubLObject)recognition.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_recognition_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_recognition_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_recognition_file();
     }
     

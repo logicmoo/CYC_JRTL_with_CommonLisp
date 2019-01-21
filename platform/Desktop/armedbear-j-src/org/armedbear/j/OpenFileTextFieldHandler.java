@@ -94,7 +94,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         checkSourcePath = b;
     }
 
-    public void enter()
+    @Override
+	public void enter()
     {
         final Buffer buffer = editor.getBuffer();
         String entry = textField.getText();
@@ -347,7 +348,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         }
     }
 
-    public void escape()
+    @Override
+	public void escape()
     {
         if (popup != null) {
             Debug.bug();
@@ -366,12 +368,14 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         }
     }
 
-    public boolean wantTab()
+    @Override
+	public boolean wantTab()
     {
         return true;
     }
 
-    public void tab()
+    @Override
+	public void tab()
     {
         final String entry = textField.getText();
         if (entry.startsWith("http:") || entry.startsWith("https:") ||
@@ -419,7 +423,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     String s = (String) completions.get(0);
                     textField.setText(s);
                     Runnable r = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             textField.setCaretPosition(textField.getText().length());
                         }
@@ -455,7 +460,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         editor.setDefaultCursor();
     }
 
-    public List getCompletions(String prefix)
+    @Override
+	public List getCompletions(String prefix)
     {
         final File dir = editor.getCompletionDirectory();
         ArrayList completions = new ArrayList();
@@ -644,7 +650,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         popup.show(textField, 0, textField.getHeight());
         final String completion = (String) completions.get(0);
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 updateTextField(completion);
             }
@@ -757,7 +764,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     private void end()
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 textField.setCaretPosition(textField.getText().length());
                 textField.getCaret().setVisible(true);
@@ -777,7 +785,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             pos = Math.max(0, textField.getCaretPosition() - 1);
         textField.requestFocus();
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 textField.setCaretPosition(pos);
                 textField.getCaret().setVisible(true);
@@ -786,7 +795,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         SwingUtilities.invokeLater(r);
     }
 
-    protected void reset()
+    @Override
+	protected void reset()
     {
         if (popup != null) {
             popup.setVisible(false);
@@ -809,10 +819,12 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             listbox.addMouseListener(this);
         }
 
-        public void processMouseEvent(MouseEvent e, MenuElement[] path,
+        @Override
+		public void processMouseEvent(MouseEvent e, MenuElement[] path,
             MenuSelectionManager manager) {}
 
-        public void processKeyEvent(KeyEvent e, MenuElement[] path,
+        @Override
+		public void processKeyEvent(KeyEvent e, MenuElement[] path,
             MenuSelectionManager manager)
         {
             final int keyCode = e.getKeyCode();
@@ -881,24 +893,29 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             super.processKeyEvent(e);
         }
 
-        public void menuSelectionChanged(boolean isIncluded) {}
+        @Override
+		public void menuSelectionChanged(boolean isIncluded) {}
 
-        public MenuElement[] getSubElements()
+        @Override
+		public MenuElement[] getSubElements()
         {
             return new MenuElement[0];
         }
 
-        public Component getComponent()
+        @Override
+		public Component getComponent()
         {
             return this;
         }
 
-        public void mouseClicked(MouseEvent e)
+        @Override
+		public void mouseClicked(MouseEvent e)
         {
             enterPopup();
         }
 
-        public void mousePressed(MouseEvent e)
+        @Override
+		public void mousePressed(MouseEvent e)
         {
             // Mask off the bits we don't care about (Java 1.4).
             int modifiers = e.getModifiers() & 0x1f;
@@ -909,14 +926,18 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             }
         }
 
-        public void mouseReleased(MouseEvent e) {}
+        @Override
+		public void mouseReleased(MouseEvent e) {}
 
-        public void mouseEntered(MouseEvent e) {}
+        @Override
+		public void mouseEntered(MouseEvent e) {}
 
-        public void mouseExited(MouseEvent e) {}
+        @Override
+		public void mouseExited(MouseEvent e) {}
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         if (popup != null) {
             int modifiers = e.getModifiers();
@@ -980,7 +1001,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         super.keyPressed(e);
     }
 
-    public void keyTyped(KeyEvent e)
+    @Override
+	public void keyTyped(KeyEvent e)
     {
         char c = e.getKeyChar();
         if (c == 8) {
@@ -1021,7 +1043,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             textField.setText(sb.toString());
             textField.requestFocus();
             Runnable r = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     int caretPos;
                     final String s = textField.getText();
@@ -1038,18 +1061,23 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         e.consume();
     }
 
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         Editor.setCurrentEditor(editor);
         originalText = null;
         originalPrefix = null;
     }
 
-    public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
 
-    public void mouseClicked(MouseEvent e) {}
+    @Override
+	public void mouseClicked(MouseEvent e) {}
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e) {}
+    @Override
+	public void mouseExited(MouseEvent e) {}
 }

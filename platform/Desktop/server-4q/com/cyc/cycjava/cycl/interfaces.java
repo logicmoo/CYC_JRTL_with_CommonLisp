@@ -1664,15 +1664,18 @@ public final class interfaces extends SubLTranslatedFile
         return (SubLObject)interfaces.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_interfaces_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_interfaces_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_interfaces_file();
     }
     

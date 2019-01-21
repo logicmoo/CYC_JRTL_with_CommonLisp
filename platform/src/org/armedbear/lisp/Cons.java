@@ -49,11 +49,13 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 	public LispObject car;
 	public LispObject cdr;
 
+	@Override
 	public LispObject car()
 	{
 		return car;
 	}
 
+	@Override
 	public LispObject cdr()
 	{
 		return cdr;
@@ -86,16 +88,19 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 		++count;
 	}
 
+	@Override
 	public SubLObject first()
 	{
 		return car;
 	}
 
+	@Override
 	public SubLObject rest()
 	{
 		return cdr;
 	}
 
+	@Override
 	public LispObject cddr()
 	{
 		return cdr.cdr();
@@ -123,6 +128,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 		return new Cons(result.car(), result.cdr());
 	}
 
+	@Override
 	public int hashCode()
 	{
 		return superHash();
@@ -509,6 +515,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 		return type_error(this, list(Symbol.OR, Symbol.FUNCTION, Symbol.SYMBOL));
 	}
 
+	@Override
 	public String printObjectImpl()
 	{
 		final LispThread thread = LispThread.currentThread();
@@ -614,6 +621,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 		count = n;
 	}
 
+	@Override
 	public Term toProlog(java.util.List skip)
 	{
 		if (this.termRef != null) return termRef;

@@ -3182,15 +3182,18 @@ public final class hl_transcripts extends SubLTranslatedFile
         return (SubLObject)hl_transcripts.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_hl_transcripts_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_hl_transcripts_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_hl_transcripts_file();
     }
     

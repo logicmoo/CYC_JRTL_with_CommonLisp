@@ -285,15 +285,18 @@ public final class cb_wordnet_import_semtrans extends SubLTranslatedFile
         return (SubLObject)cb_wordnet_import_semtrans.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_wordnet_import_semtrans_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_wordnet_import_semtrans_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_wordnet_import_semtrans_file();
     }
     

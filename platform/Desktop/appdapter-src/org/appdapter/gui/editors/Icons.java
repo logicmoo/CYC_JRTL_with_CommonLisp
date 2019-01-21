@@ -72,14 +72,17 @@ public class Icons {
 	}
 
 	static class DummyIcon implements Icon, java.io.Serializable {
+		@Override
 		public int getIconWidth() {
 			return 16;
 		}
 
+		@Override
 		public int getIconHeight() {
 			return 16;
 		}
 
+		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			g.setColor(Color.blue);
 			g.setFont(new Font("serif", Font.BOLD, 12));

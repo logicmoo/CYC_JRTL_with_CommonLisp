@@ -52,7 +52,8 @@ public final class JavaTag extends LocalTag
         return parent;
     }
 
-    public String getMethodName()
+    @Override
+	public String getMethodName()
     {
         return getShortName();
     }
@@ -66,7 +67,8 @@ public final class JavaTag extends LocalTag
             return name;
     }
 
-    public String getLongName()
+    @Override
+	public String getLongName()
     {
         if (name.startsWith("class "))
             return name;
@@ -92,7 +94,8 @@ public final class JavaTag extends LocalTag
         return s;
     }
 
-    public String getClassName()
+    @Override
+	public String getClassName()
     {
         if (parent != null)
             return parent.getName();
@@ -187,7 +190,8 @@ public final class JavaTag extends LocalTag
         }
     }
 
-    public String getSidebarText()
+    @Override
+	public String getSidebarText()
     {
         switch (getType()) {
             case TAG_EXTENDS:
@@ -199,7 +203,8 @@ public final class JavaTag extends LocalTag
         }
     }
 
-    public String getToolTipText()
+    @Override
+	public String getToolTipText()
     {
         switch (getType()) {
             case TAG_EXTENDS:
@@ -211,7 +216,8 @@ public final class JavaTag extends LocalTag
         }
     }
 
-    public void gotoTag(Editor editor)
+    @Override
+	public void gotoTag(Editor editor)
     {
         switch (getType()) {
             case TAG_EXTENDS:

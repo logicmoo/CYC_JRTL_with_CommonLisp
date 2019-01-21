@@ -54,7 +54,8 @@ public class CheckAnnotationAdapter implements AnnotationVisitor {
         this.named = named;
     }
 
-    public void visit(final String name, final Object value) {
+    @Override
+	public void visit(final String name, final Object value) {
         checkEnd();
         checkName(name);
         if (!(value instanceof Byte || value instanceof Boolean
@@ -74,7 +75,8 @@ public class CheckAnnotationAdapter implements AnnotationVisitor {
         }
     }
 
-    public void visitEnum(
+    @Override
+	public void visitEnum(
         final String name,
         final String desc,
         final String value)
@@ -90,7 +92,8 @@ public class CheckAnnotationAdapter implements AnnotationVisitor {
         }
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String name,
         final String desc)
     {
@@ -102,7 +105,8 @@ public class CheckAnnotationAdapter implements AnnotationVisitor {
                 : av.visitAnnotation(name, desc));
     }
 
-    public AnnotationVisitor visitArray(final String name) {
+    @Override
+	public AnnotationVisitor visitArray(final String name) {
         checkEnd();
         checkName(name);
         return new CheckAnnotationAdapter(av == null
@@ -110,7 +114,8 @@ public class CheckAnnotationAdapter implements AnnotationVisitor {
                 : av.visitArray(name), false);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         checkEnd();
         end = true;
         if (av != null) {

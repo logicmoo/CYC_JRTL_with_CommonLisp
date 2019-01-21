@@ -523,15 +523,18 @@ public final class message_mailboxes extends SubLTranslatedFile
         return (SubLObject)message_mailboxes.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_message_mailboxes_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_message_mailboxes_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_message_mailboxes_file();
     }
     
@@ -603,23 +606,28 @@ public final class message_mailboxes extends SubLTranslatedFile
             this.$mailboxes = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$message_mailbox_suite_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$lock;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$mailboxes;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$lock = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$mailboxes = value;
         }
         
@@ -634,7 +642,8 @@ public final class message_mailboxes extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("MESSAGE-MAILBOX-SUITE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return message_mailboxes.message_mailbox_suite_p(arg1);
         }
     }

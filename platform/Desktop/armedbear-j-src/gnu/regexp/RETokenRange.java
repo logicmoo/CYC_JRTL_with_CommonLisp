@@ -29,11 +29,13 @@ final class RETokenRange extends REToken {
     this.hi = ins ? Character.toLowerCase(hi) : hi;
   }
 
-  int getMinimumLength() {
+  @Override
+int getMinimumLength() {
     return 1;
   }
 
-    boolean match(CharIndexed input, REMatch mymatch) {
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) {
 	char c = input.charAt(mymatch.index);
 	if (c == CharIndexed.OUT_OF_BOUNDS) return false;
 	if (insens) c = Character.toLowerCase(c);
@@ -44,7 +46,8 @@ final class RETokenRange extends REToken {
 	return false;
     }
     
-  void dump(StringBuffer os) {
+  @Override
+void dump(StringBuffer os) {
     os.append(lo).append('-').append(hi);
   }
 }

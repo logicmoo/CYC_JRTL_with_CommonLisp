@@ -145,10 +145,12 @@ public class This implements java.io.Serializable, Runnable
 		return namespace;
 	}
 
+	@Override
 	public String toString() {
 		return "'this' reference to Bsh object: " + namespace;
 	}
 
+	@Override
 	public void run() {
 		try {
 			invokeMethod( "run", new Object[0] );

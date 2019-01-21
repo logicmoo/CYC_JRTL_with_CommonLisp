@@ -211,6 +211,7 @@ ListCellRenderer, TableCellRenderer, TreeCellRenderer {
 		return this;
 	}
 
+	@Override
 	public void setValue(Object value) {
 		//String str = getTextName(value, render_row, render_col);
 		super.setValue(value);

@@ -700,15 +700,18 @@ public final class ebl extends SubLTranslatedFile
         return (SubLObject)ebl.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_ebl_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_ebl_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_ebl_file();
     }
     

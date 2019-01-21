@@ -76,7 +76,8 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         keyMap.addMappingsForCommand("escape", buffer.getKeyMapForMode());
     }
 
-    public void escape()
+    @Override
+	public void escape()
     {
         restoreInitialState();
         editor.ensureActive();
@@ -100,7 +101,8 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         editor.updateDisplay();
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         final char keyChar = e.getKeyChar();
         final int keyCode = e.getKeyCode();
@@ -255,13 +257,15 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         editor.updateLocation();
     }
 
-    public void keyReleased(KeyEvent e)
+    @Override
+	public void keyReleased(KeyEvent e)
     {
         textField.setText(search.getPattern());
         textField.setCaretPosition(search.getPatternLength());
     }
 
-    public void keyTyped(KeyEvent e)
+    @Override
+	public void keyTyped(KeyEvent e)
     {
         // Mask off the bits we don't care about (Java 1.4).
         final int modifiers = e.getModifiers() & 0x0f;
@@ -394,7 +398,8 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
     }
 
     private final Runnable foundRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             if (dirty) {
                 editor.markFoundPattern(search);

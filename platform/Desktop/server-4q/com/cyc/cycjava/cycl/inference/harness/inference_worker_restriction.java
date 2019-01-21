@@ -683,15 +683,18 @@ public final class inference_worker_restriction extends SubLTranslatedFile
         return (SubLObject)inference_worker_restriction.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_worker_restriction_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_worker_restriction_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_worker_restriction_file();
     }
     
@@ -769,23 +772,28 @@ public final class inference_worker_restriction extends SubLTranslatedFile
             this.$hl_module = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$restriction_link_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$bindings;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$hl_module;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$bindings = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$hl_module = value;
         }
         
@@ -800,7 +808,8 @@ public final class inference_worker_restriction extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RESTRICTION-LINK-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_worker_restriction.restriction_link_data_p(arg1);
         }
     }
@@ -818,31 +827,38 @@ public final class inference_worker_restriction extends SubLTranslatedFile
             this.$listeners = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$restriction_listening_link_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$bindings;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$hl_module;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$listeners;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$bindings = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$hl_module = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$listeners = value;
         }
         
@@ -857,7 +873,8 @@ public final class inference_worker_restriction extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RESTRICTION-LISTENING-LINK-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_worker_restriction.restriction_listening_link_data_p(arg1);
         }
     }

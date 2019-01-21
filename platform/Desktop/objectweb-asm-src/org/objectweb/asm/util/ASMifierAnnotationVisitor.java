@@ -60,7 +60,8 @@ public class ASMifierAnnotationVisitor extends AbstractVisitor implements
     // Implementation of the AnnotationVisitor interface
     // ------------------------------------------------------------------------
 
-    public void visit(final String name, final Object value) {
+    @Override
+	public void visit(final String name, final Object value) {
         buf.setLength(0);
         buf.append("av").append(id).append(".visit(");
         ASMifierAbstractVisitor.appendConstant(buf, name);
@@ -70,7 +71,8 @@ public class ASMifierAnnotationVisitor extends AbstractVisitor implements
         text.add(buf.toString());
     }
 
-    public void visitEnum(
+    @Override
+	public void visitEnum(
         final String name,
         final String desc,
         final String value)
@@ -86,7 +88,8 @@ public class ASMifierAnnotationVisitor extends AbstractVisitor implements
         text.add(buf.toString());
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String name,
         final String desc)
     {
@@ -105,7 +108,8 @@ public class ASMifierAnnotationVisitor extends AbstractVisitor implements
         return av;
     }
 
-    public AnnotationVisitor visitArray(final String name) {
+    @Override
+	public AnnotationVisitor visitArray(final String name) {
         buf.setLength(0);
         buf.append("{\n");
         buf.append("AnnotationVisitor av").append(id + 1).append(" = av");
@@ -119,7 +123,8 @@ public class ASMifierAnnotationVisitor extends AbstractVisitor implements
         return av;
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         buf.setLength(0);
         buf.append("av").append(id).append(".visitEnd();\n");
         text.add(buf.toString());

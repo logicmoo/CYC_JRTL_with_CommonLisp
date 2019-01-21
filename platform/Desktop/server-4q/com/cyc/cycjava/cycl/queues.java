@@ -1951,15 +1951,18 @@ public final class queues extends SubLTranslatedFile
         return (SubLObject)queues.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_queues_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_queues_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_queues_file();
     }
     
@@ -2131,31 +2134,38 @@ public final class queues extends SubLTranslatedFile
             this.$last = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$queue_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$num;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$elements;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$last;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$num = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$elements = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$last = value;
         }
         
@@ -2170,7 +2180,8 @@ public final class queues extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("QUEUE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return queues.queue_p(arg1);
         }
     }
@@ -2192,47 +2203,58 @@ public final class queues extends SubLTranslatedFile
             this.$tree = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$priority_queue_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$num;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$max_size;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$rank_func;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$comp_func;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$tree;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$num = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$max_size = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$rank_func = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$comp_func = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$tree = value;
         }
         
@@ -2247,7 +2269,8 @@ public final class queues extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PRIORITY-QUEUE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return queues.priority_queue_p(arg1);
         }
     }
@@ -2258,7 +2281,8 @@ public final class queues extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PQ-COLLISION-ENTER"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return queues.pq_collision_enter(arg1, arg2);
         }
     }
@@ -2269,7 +2293,8 @@ public final class queues extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PQ-COLLISION-REMOVE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return queues.pq_collision_remove(arg1, arg2);
         }
     }
@@ -2280,7 +2305,8 @@ public final class queues extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PQ-COLLISION-EMPTY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return queues.pq_collision_empty(arg1);
         }
     }
@@ -2296,23 +2322,28 @@ public final class queues extends SubLTranslatedFile
             this.$new_items = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$lazy_priority_queue_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$ordered_items;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$new_items;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$ordered_items = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$new_items = value;
         }
         
@@ -2327,7 +2358,8 @@ public final class queues extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LAZY-PRIORITY-QUEUE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return queues.lazy_priority_queue_p(arg1);
         }
     }
@@ -2343,23 +2375,28 @@ public final class queues extends SubLTranslatedFile
             this.$queue = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$locked_queue_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$lock;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$queue;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$lock = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$queue = value;
         }
         
@@ -2374,7 +2411,8 @@ public final class queues extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LOCKED-QUEUE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return queues.locked_queue_p(arg1);
         }
     }
@@ -2390,23 +2428,28 @@ public final class queues extends SubLTranslatedFile
             this.$priority_queue = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$locked_p_queue_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$lock;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$priority_queue;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$lock = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$priority_queue = value;
         }
         
@@ -2421,7 +2464,8 @@ public final class queues extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LOCKED-P-QUEUE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return queues.locked_p_queue_p(arg1);
         }
     }

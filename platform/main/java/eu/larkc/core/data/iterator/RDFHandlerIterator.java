@@ -25,31 +25,38 @@ public class RDFHandlerIterator extends RDFHandlerBase implements
 		this.graph = graph;
 	}
 
+	@Override
 	public void close() {
 		iter.close();
 	}
 
+	@Override
 	public synchronized boolean hasNext() {
 		return iter.hasNext();
 	}
 
+	@Override
 	public Statement next() {
 		return iter.next();
 	}
 
+	@Override
 	public void remove() {
 		iter.remove();
 	}
 
+	@Override
 	public boolean isClosed() {
 		return isClosed;
 	}
 
+	@Override
 	public void handleStatement(Statement st) throws RDFHandlerException {
 		statements.add(new ContextStatementImpl(st.getSubject(), st
 				.getPredicate(), st.getObject(), graph));
 	}
 
+	@Override
 	public void endRDF() {
 		iter = new SimpleCloseableIterator<Statement>(statements.iterator());
 	}

@@ -1622,15 +1622,18 @@ public final class simple_db extends SubLTranslatedFile
         return (SubLObject)simple_db.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_simple_db_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_simple_db_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_simple_db_file();
     }
     

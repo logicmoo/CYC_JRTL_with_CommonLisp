@@ -3439,15 +3439,18 @@ public final class cardinality_estimates extends SubLTranslatedFile
         return (SubLObject)cardinality_estimates.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cardinality_estimates_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cardinality_estimates_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cardinality_estimates_file();
     }
     
@@ -3547,7 +3550,8 @@ public final class cardinality_estimates extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GENERALITY-ESTIMATE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cardinality_estimates.generality_estimate(arg1);
         }
     }

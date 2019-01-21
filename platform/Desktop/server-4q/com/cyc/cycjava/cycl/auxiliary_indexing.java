@@ -688,15 +688,18 @@ public final class auxiliary_indexing extends SubLTranslatedFile
         return (SubLObject)auxiliary_indexing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_auxiliary_indexing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_auxiliary_indexing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_auxiliary_indexing_file();
     }
     

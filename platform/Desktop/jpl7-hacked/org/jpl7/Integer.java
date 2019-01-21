@@ -95,6 +95,7 @@ public class Integer extends Term {
 		}
 	}
 
+	@Override
 	public Term[] args() {
 		return new Term[] {};
 	}
@@ -104,6 +105,7 @@ public class Integer extends Term {
 	 *
 	 * @return the value of this Integer as a java.math.BigInteger, whether or not it fits in a long
 	 */
+	@Override
 	public final BigInteger bigValue() {
 		if (bigValue == null) {
 			// cannot construct directly from a long
@@ -120,6 +122,7 @@ public class Integer extends Term {
 	 * @return the value of this Integer converted to a double (perhaps Double.NEGATIVE_INFINITY or
 	 *         Double.POSITIVE_INFINITY)
 	 */
+	@Override
 	public final double doubleValue() {
 		if (bigValue == null) {
 			return value;
@@ -135,6 +138,7 @@ public class Integer extends Term {
 	 *            The Object to compare (not necessarily an Integer)
 	 * @return true if the Object satisfies the above condition
 	 */
+	@Override
 	public final boolean equals(Object obj) {
 		if (this == obj) { // the very same Integer
 			return true; // necessarily equal
@@ -162,6 +166,7 @@ public class Integer extends Term {
 	 *
 	 * @return the value of this Integer converted to a float
 	 */
+	@Override
 	public final float floatValue() {
 		if (bigValue == null) {
 			return value;
@@ -175,6 +180,7 @@ public class Integer extends Term {
 	 *
 	 * @return whether this Integer's functor has (long) 'name' and 'arity'
 	 */
+	@Override
 	public final boolean hasFunctor(long val, int arity) {
 		return this.value == val && this.bigValue == null && arity == 0;
 	}
@@ -184,6 +190,7 @@ public class Integer extends Term {
 	 *
 	 * @return whether this Integer's functor has (BigInteger) 'name' and 'arity'
 	 */
+	@Override
 	public final boolean hasFunctor(BigInteger val, int arity) {
 		return this.bigValue != null && arity == 0 && this.bigValue.equals(val);
 	}
@@ -195,6 +202,7 @@ public class Integer extends Term {
 	 *             if the value of this Integer is too great to be represented as a Java int
 	 * @return the int value of this Integer
 	 */
+	@Override
 	public final int intValue() {
 		if (bigValue != null || value < java.lang.Integer.MIN_VALUE || value > java.lang.Integer.MAX_VALUE) {
 			throw new JPLException("cannot represent value as an int");
@@ -206,6 +214,7 @@ public class Integer extends Term {
 	/**
 	 * @return whether this Integer's value is too big to represent as a long
 	 */
+	@Override
 	public final boolean isBig() {
 		return bigValue != null; // always canonical
 	}
@@ -215,6 +224,7 @@ public class Integer extends Term {
 	 *
 	 * @return the value of this org.jpl7.Integer as a long
 	 */
+	@Override
 	public final long longValue() {
 		if (bigValue != null) { // iff value too big for a long (always
 								// canonical)
@@ -232,6 +242,7 @@ public class Integer extends Term {
 	 * @param term
 	 *            A (previously created) term_t which is to be set to a Prolog integer
 	 */
+	@Override
 	protected final void put(Map<String, term_t> varnames_to_vars, term_t term) {
 		if (isBig()) {
 			Prolog.put_integer_big(term, bigValue.toString());
@@ -245,6 +256,7 @@ public class Integer extends Term {
 	 *
 	 * @return a Prolog source text representation of this Integer's value
 	 */
+	@Override
 	public String toString() {
 		if (bigValue == null) {
 			return Long.toString(value);
@@ -258,6 +270,7 @@ public class Integer extends Term {
 	 *
 	 * @return the type of this term, as "Prolog.INTEGER"
 	 */
+	@Override
 	public final int type() {
 		return Prolog.INTEGER;
 	}
@@ -267,6 +280,7 @@ public class Integer extends Term {
 	 *
 	 * @return the name of the type of this term, as "Integer"
 	 */
+	@Override
 	public String typeName() {
 		return "Integer";
 	}

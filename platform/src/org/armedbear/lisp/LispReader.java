@@ -42,7 +42,8 @@ public final class LispReader
         new ReaderMacroFunction("read-comment", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char ignored)
+        @Override
+		public LispObject execute(Stream stream, char ignored)
 
         {
           try
@@ -67,7 +68,8 @@ public final class LispReader
         new ReaderMacroFunction("read-string", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char terminator)
+        @Override
+		public LispObject execute(Stream stream, char terminator)
 
         {
             return stream.readString(terminator, Stream.currentReadtable);
@@ -79,7 +81,8 @@ public final class LispReader
         new ReaderMacroFunction("read-list", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char ignored)
+        @Override
+		public LispObject execute(Stream stream, char ignored)
 
         {
             return stream.readList(false, Stream.currentReadtable);
@@ -91,7 +94,8 @@ public final class LispReader
         new ReaderMacroFunction("read-right-paren", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char ignored)
+        @Override
+		public LispObject execute(Stream stream, char ignored)
 
         {
             return error(new ReaderError("Unmatched right parenthesis.", stream));
@@ -103,7 +107,8 @@ public final class LispReader
         new ReaderMacroFunction("read-quote", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char ignored)
+        @Override
+		public LispObject execute(Stream stream, char ignored)
 
         {
             return new Cons(Symbol.QUOTE,
@@ -118,7 +123,8 @@ public final class LispReader
         new ReaderMacroFunction("read-dispatch-char", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char c)
+        @Override
+		public LispObject execute(Stream stream, char c)
 
         {
             return stream.readDispatchChar(c, Stream.currentReadtable);
@@ -130,7 +136,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-left-paren", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
           return stream.readSharpLeftParen(c, n, Stream.currentReadtable);
@@ -142,7 +149,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-star", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char ignored, int n)
+        @Override
+		public LispObject execute(Stream stream, char ignored, int n)
 
         {
           return stream.readSharpStar(ignored, n, Stream.currentReadtable);
@@ -154,7 +162,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-dot", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
           return stream.readSharpDot(c, n, Stream.currentReadtable);
@@ -166,7 +175,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-colon", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readSymbol();
@@ -178,7 +188,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-a", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readArray(n, Stream.currentReadtable);
@@ -190,7 +201,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-b", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readRadix(2, Stream.currentReadtable);
@@ -202,7 +214,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-c", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readComplex(Stream.currentReadtable);
@@ -214,7 +227,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-o", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readRadix(8, Stream.currentReadtable);
@@ -226,7 +240,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-p", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readPathname(Stream.currentReadtable);
@@ -238,7 +253,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-r", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readRadix(n, Stream.currentReadtable);
@@ -250,7 +266,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-s", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readStructure(Stream.currentReadtable);
@@ -262,7 +279,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-x", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readRadix(16, Stream.currentReadtable);
@@ -274,7 +292,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-quote", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return new Cons(Symbol.FUNCTION,
@@ -289,7 +308,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-backslash", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             final LispThread thread = LispThread.currentThread();
@@ -303,7 +323,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-vertical-bar", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             stream.skipBalancedComment();
@@ -316,7 +337,8 @@ public final class LispReader
         new DispatchMacroFunction("sharp-illegal", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             StringBuilder sb = new StringBuilder("Illegal # macro character: #\\");

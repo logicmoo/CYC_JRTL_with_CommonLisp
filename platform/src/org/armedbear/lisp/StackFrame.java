@@ -38,7 +38,8 @@ import static org.armedbear.lisp.Lisp.*;
 public abstract class StackFrame 
   extends LispObject
 {
-    public LispObject typep(LispObject typeSpecifier) 
+    @Override
+	public LispObject typep(LispObject typeSpecifier) 
 
    {
      if (typeSpecifier == Symbol.STACK_FRAME)

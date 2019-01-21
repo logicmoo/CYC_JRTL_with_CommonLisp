@@ -81,12 +81,14 @@ public class ImageBuffer extends Buffer implements Constants
             return null;
     }
 
-    public final Position getInitialDotPos()
+    @Override
+	public final Position getInitialDotPos()
     {
         return null;
     }
 
-    public final boolean needsParsing()
+    @Override
+	public final boolean needsParsing()
     {
         return false;
     }
@@ -96,7 +98,8 @@ public class ImageBuffer extends Buffer implements Constants
         return currentImage;
     }
 
-    public final int getDisplayHeight()
+    @Override
+	public final int getDisplayHeight()
     {
         if (getModeId() == IMAGE_MODE)
             return currentImage.getHeight(null) + Display.getImageBorderHeight() * 2;
@@ -104,7 +107,8 @@ public class ImageBuffer extends Buffer implements Constants
             return super.getDisplayHeight();
     }
 
-    public final int getDisplayWidth()
+    @Override
+	public final int getDisplayWidth()
     {
         if (getModeId() == IMAGE_MODE)
             return currentImage.getWidth(null) + Display.getImageBorderWidth() * 2;
@@ -112,7 +116,8 @@ public class ImageBuffer extends Buffer implements Constants
             return super.getDisplayWidth();
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         if (!isLoaded()) {
             Debug.assertTrue(loader == null);
@@ -131,7 +136,8 @@ public class ImageBuffer extends Buffer implements Constants
         return LOAD_COMPLETED;
     }
 
-    public void reload()
+    @Override
+	public void reload()
     {
         switch (getModeId()) {
             case BINARY_MODE:
@@ -188,7 +194,8 @@ public class ImageBuffer extends Buffer implements Constants
         }
         final LoadProcess loadProcess = p;
         Runnable successRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 final File cache = getCache();
                 if (cache != null && cache.isFile())
@@ -364,29 +371,34 @@ public class ImageBuffer extends Buffer implements Constants
         editor.status(String.valueOf(percent) + '%');
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         if (loader != null)
             loader.dispose();
         super.dispose();
     }
 
-    public Cursor getDefaultCursor()
+    @Override
+	public Cursor getDefaultCursor()
     {
         return Cursor.getDefaultCursor();
     }
 
-    public Cursor getDefaultCursor(Position pos)
+    @Override
+	public Cursor getDefaultCursor(Position pos)
     {
         return Cursor.getDefaultCursor();
     }
 
-    public void saveView(Editor editor)
+    @Override
+	public void saveView(Editor editor)
     {
         // Nothing to do.
     }
 
-    public String getStatusText(Editor editor)
+    @Override
+	public String getStatusText(Editor editor)
     {
         FastStringBuffer sb = new FastStringBuffer(String.valueOf(getImageWidth()));
         sb.append('x');

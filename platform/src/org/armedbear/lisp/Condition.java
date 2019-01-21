@@ -156,7 +156,8 @@ protected void initialize(LispObject initArgs)
     return null;
   }
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     LispObject c = getLispClass();
     if (c instanceof LispClass)
@@ -166,7 +167,8 @@ protected void initialize(LispObject initArgs)
     return Symbol.CONDITION;
   }
 
-  public LispObject classOf()
+  @Override
+public LispObject classOf()
   {
     LispObject c = getLispClass();
     if (c != null)
@@ -174,7 +176,8 @@ protected void initialize(LispObject initArgs)
     return StandardClass.CONDITION;
   }
 
-  public LispObject typep(LispObject type)
+  @Override
+public LispObject typep(LispObject type)
   {
     if (type == Symbol.CONDITION)
       return T;
@@ -196,7 +199,8 @@ protected void initialize(LispObject initArgs)
     return unreadableString(typeOf().princToString());
   }
 
-  public final String printObjectImpl()
+  @Override
+public final String printObjectImpl()
   {
     final LispThread thread = LispThread.currentThread();
     if (Symbol.PRINT_ESCAPE.symbolValue(thread) == NIL)

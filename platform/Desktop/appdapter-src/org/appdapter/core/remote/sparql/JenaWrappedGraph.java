@@ -10,7 +10,8 @@ import com.hp.hpl.jena.graph.Graph;
 
 public abstract class JenaWrappedGraph implements Graph
 {
-    public void clear() {
+    @Override
+	public void clear() {
         final ExtendedIterator<Triple> allTriples = this.getMatches(Node.ANY, Node.ANY, Node.ANY);
         for (final Triple t : allTriples.toList()) {
             this.delete(t);
@@ -18,7 +19,8 @@ public abstract class JenaWrappedGraph implements Graph
         this.getEventManager().notifyEvent((Graph)this, (Object)GraphEvents.removeAll);
     }
     
-    public void remove(final Node s, final Node p, final Node o) {
+    @Override
+	public void remove(final Node s, final Node p, final Node o) {
         final ExtendedIterator<Triple> allTriples = this.find(s, p, o);
         for (final Triple t : allTriples.toList()) {
             this.delete(t);
@@ -30,9 +32,11 @@ public abstract class JenaWrappedGraph implements Graph
         return this.find(s, p, o);
     }
     
-    public abstract void delete(final Triple p0) throws DeleteDeniedException;
+    @Override
+	public abstract void delete(final Triple p0) throws DeleteDeniedException;
     
-    public abstract ExtendedIterator<Triple> find(final Node p0, final Node p1, final Node p2);
+    @Override
+	public abstract ExtendedIterator<Triple> find(final Node p0, final Node p1, final Node p2);
 }
 
 /*

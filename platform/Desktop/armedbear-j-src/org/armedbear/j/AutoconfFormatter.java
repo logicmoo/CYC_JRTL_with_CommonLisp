@@ -45,7 +45,8 @@ public final class AutoconfFormatter extends Formatter
             functions = new StringSet(autoconfFunctions);
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         clearSegmentList();
         if (line == null || line.length() == 0) {
@@ -216,7 +217,8 @@ public final class AutoconfFormatter extends Formatter
         endToken(state);
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("AutoconfMode");

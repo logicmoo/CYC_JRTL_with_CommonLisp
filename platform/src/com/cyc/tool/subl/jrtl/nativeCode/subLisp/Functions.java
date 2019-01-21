@@ -320,7 +320,7 @@ public class Functions extends SubLTrampolineFile {
 	}
 
 	public static SubLObject print_function(SubLObject function, SubLObject stream) {
-		stream.toOutputTextStream().writeString(function.toString());
+		stream.toOutputTextStream().writeString(function.princToString());
 		return function;
 	}
 

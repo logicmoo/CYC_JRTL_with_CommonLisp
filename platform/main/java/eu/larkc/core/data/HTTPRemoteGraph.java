@@ -43,12 +43,14 @@ public class HTTPRemoteGraph extends RdfGraphBase {
 		}
 	}
 
+	@Override
 	public CloseableIterator<Statement> getStatements() {
 		RDFHandlerIterator iter = new RDFHandlerIterator(getName());
 		processData(iter);
 		return iter;
 	}
 	
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof HTTPRemoteGraph == false) {
 			return false;
@@ -56,6 +58,7 @@ public class HTTPRemoteGraph extends RdfGraphBase {
 		return url.equals(((HTTPRemoteGraph) o).url);
 	}
 	
+	@Override
 	public int hashCode() {
 		return url.hashCode();
 	}

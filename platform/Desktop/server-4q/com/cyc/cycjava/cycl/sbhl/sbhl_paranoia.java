@@ -349,15 +349,18 @@ public final class sbhl_paranoia extends SubLTranslatedFile
         return (SubLObject)sbhl_paranoia.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_paranoia_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_paranoia_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_paranoia_file();
     }
     

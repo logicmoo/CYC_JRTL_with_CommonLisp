@@ -58,6 +58,7 @@ public class LocalSelectFromCollectionInformationSetManager extends LocalPluginM
 			super("Selecter");
 		}
 
+		@Override
 		public void run() {
 			mSelecter.initialise();
 			Context context = mSelecter.createContext();

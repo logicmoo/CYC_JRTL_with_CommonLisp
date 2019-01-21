@@ -115,7 +115,8 @@ public abstract class AbstractString extends AbstractVector
         return printObject(0, length());
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
     	int length = length();
 	    StringBuilder sb = new StringBuilder(length);
 	    for(int i = 0; i < length; ++i) {

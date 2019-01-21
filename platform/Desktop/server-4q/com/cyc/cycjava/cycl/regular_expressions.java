@@ -385,15 +385,18 @@ public final class regular_expressions extends SubLTranslatedFile
         return (SubLObject)regular_expressions.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_regular_expressions_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_regular_expressions_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_regular_expressions_file();
     }
     

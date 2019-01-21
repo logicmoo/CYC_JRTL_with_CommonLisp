@@ -27,7 +27,8 @@ public class ItemAssemblyReaderImpl extends BasicDebugger implements ItemAssembl
         return infoSource;
     }
     
-    public Ident getConfigPropertyIdent(final Item infoSource, final Ident compID, final String fieldName_absUri) {
+    @Override
+	public Ident getConfigPropertyIdent(final Item infoSource, final Ident compID, final String fieldName_absUri) {
         final Ident infoSourceID = infoSource.getIdent();
         this.logDebug("infoSourceID=" + infoSourceID + ", compID=" + compID);
         ModelIdent someModelIdent = null;
@@ -47,7 +48,8 @@ public class ItemAssemblyReaderImpl extends BasicDebugger implements ItemAssembl
         return propertyIdent;
     }
     
-    public String readConfigValString(final Ident compID, final String fieldName_absUri, final Item optionalItem, final String defaultVal) {
+    @Override
+	public String readConfigValString(final Ident compID, final String fieldName_absUri, final Item optionalItem, final String defaultVal) {
         String resultVal = null;
         final Item infoSource = this.chooseBestConfigItem(compID, optionalItem);
         final Ident propertyIdent = this.getConfigPropertyIdent(infoSource, compID, fieldName_absUri);
@@ -58,7 +60,8 @@ public class ItemAssemblyReaderImpl extends BasicDebugger implements ItemAssembl
         return resultVal;
     }
     
-    public Long readConfigValLong(final Ident compID, final String fieldName_absUri, final Item optionalItem, final Long defaultVal) {
+    @Override
+	public Long readConfigValLong(final Ident compID, final String fieldName_absUri, final Item optionalItem, final Long defaultVal) {
         Long resultVal = null;
         final Item infoSource = this.chooseBestConfigItem(compID, optionalItem);
         final Ident propertyIdent = this.getConfigPropertyIdent(infoSource, compID, fieldName_absUri);
@@ -69,7 +72,8 @@ public class ItemAssemblyReaderImpl extends BasicDebugger implements ItemAssembl
         return resultVal;
     }
     
-    public Double readConfigValDouble(final Ident compID, final String fieldName_absUri, final Item optionalItem, final Double defaultVal) {
+    @Override
+	public Double readConfigValDouble(final Ident compID, final String fieldName_absUri, final Item optionalItem, final Double defaultVal) {
         Double resultVal = null;
         final Item infoSource = this.chooseBestConfigItem(compID, optionalItem);
         final Ident propertyIdent = this.getConfigPropertyIdent(infoSource, compID, fieldName_absUri);
@@ -80,14 +84,16 @@ public class ItemAssemblyReaderImpl extends BasicDebugger implements ItemAssembl
         return resultVal;
     }
     
-    public List<Item> readLinkedItemSeq(final Item configItem, final String collectionLinkName_absUri) {
+    @Override
+	public List<Item> readLinkedItemSeq(final Item configItem, final String collectionLinkName_absUri) {
         final Ident linkNameID = this.getConfigPropertyIdent(configItem, configItem.getIdent(), collectionLinkName_absUri);
         final List<Item> linkedItems = (List<Item>)((JenaResourceItem)configItem).getLinkedOrderedList(linkNameID);
         this.logDebug("Got linkedItem collection at [" + collectionLinkName_absUri + "=" + linkNameID + "] = " + linkedItems);
         return linkedItems;
     }
     
-    public List<Object> findOrMakeLinkedObjects(final Item configItem, final String linkName_absUri, final Assembler asmblr, final Mode mode, final List<Item.SortKey> sortFieldNames) {
+    @Override
+	public List<Object> findOrMakeLinkedObjects(final Item configItem, final String linkName_absUri, final Assembler asmblr, final Mode mode, final List<Item.SortKey> sortFieldNames) {
         List<Object> resultList = new ArrayList<Object>();
         final Ident linkNameID = this.getConfigPropertyIdent(configItem, configItem.getIdent(), linkName_absUri);
         final List<Item> linkedItems = (List<Item>)configItem.getLinkedItemsSorted(linkNameID, Item.LinkDirection.FORWARD, (List)sortFieldNames);
@@ -95,7 +101,8 @@ public class ItemAssemblyReaderImpl extends BasicDebugger implements ItemAssembl
         return resultList;
     }
     
-    public List<Object> findOrMakeLinkedObjSeq(final Item configItem, final String collectionLinkName_absUri, final Assembler asmblr, final Mode mode) {
+    @Override
+	public List<Object> findOrMakeLinkedObjSeq(final Item configItem, final String collectionLinkName_absUri, final Assembler asmblr, final Mode mode) {
         List<Object> resultList = new ArrayList<Object>();
         final List<Item> linkedItems = this.readLinkedItemSeq(configItem, collectionLinkName_absUri);
         resultList = this.resultListFromItems(linkedItems, asmblr, mode);
@@ -103,7 +110,8 @@ public class ItemAssemblyReaderImpl extends BasicDebugger implements ItemAssembl
         return resultList;
     }
     
-    public List<Object> resultListFromItems(final Collection<Item> linkedItems, final Assembler assmblr, final Mode mode) {
+    @Override
+	public List<Object> resultListFromItems(final Collection<Item> linkedItems, final Assembler assmblr, final Mode mode) {
         final List<Object> resultList = new ArrayList<Object>();
         for (final Item linkedItem : linkedItems) {
             if (linkedItem instanceof JenaResourceItem) {

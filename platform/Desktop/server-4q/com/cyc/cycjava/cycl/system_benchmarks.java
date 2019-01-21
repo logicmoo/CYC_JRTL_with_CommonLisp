@@ -2035,15 +2035,18 @@ public final class system_benchmarks extends SubLTranslatedFile
         return (SubLObject)system_benchmarks.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_system_benchmarks_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_system_benchmarks_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_system_benchmarks_file();
     }
     

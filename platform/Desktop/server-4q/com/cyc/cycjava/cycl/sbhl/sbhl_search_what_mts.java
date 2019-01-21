@@ -2664,15 +2664,18 @@ public final class sbhl_search_what_mts extends SubLTranslatedFile
         return (SubLObject)sbhl_search_what_mts.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_search_what_mts_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_search_what_mts_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_search_what_mts_file();
     }
     
@@ -2764,7 +2767,8 @@ public final class sbhl_search_what_mts extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-MAX-FLOOR-MTS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_search_what_mts.sbhl_max_floor_mts(arg1);
         }
     }

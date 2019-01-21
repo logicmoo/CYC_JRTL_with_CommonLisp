@@ -5558,15 +5558,18 @@ public final class partitions extends SubLTranslatedFile
         return (SubLObject)partitions.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_partitions_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_partitions_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_partitions_file();
     }
     

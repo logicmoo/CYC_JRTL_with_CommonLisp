@@ -77,7 +77,8 @@ public class SubLInteractorPanel extends javax.swing.JPanel {
   private void displayOutput(final Color color, final String output) {
     SwingUtilities.invokeLater(new Runnable() {
 
-      public void run() {
+      @Override
+	public void run() {
         outputField.append("\n==============================================\n");
         outputField.append("Input: " + inputField.getText());
         outputField.append("\n\nResult:\n");
@@ -127,14 +128,16 @@ public class SubLInteractorPanel extends javax.swing.JPanel {
       SubLInteractorPanel interactorPanel = new SubLInteractorPanel(interactor);
       interactorPanel.addComponentListener(new ComponentAdapter() {
 
-        public void componentHidden(ComponentEvent e) {
+        @Override
+		public void componentHidden(ComponentEvent e) {
           System.exit(0);
         }
       });
       frame.getContentPane().add(interactorPanel);
       frame.addWindowListener(new WindowAdapter() {
 
-        public void windowClosing(WindowEvent e) {
+        @Override
+		public void windowClosing(WindowEvent e) {
           System.exit(0);
         }
       });
@@ -187,7 +190,8 @@ public class SubLInteractorPanel extends javax.swing.JPanel {
 
     evalCancelButton.setText("Eval");
     evalCancelButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
+      @Override
+	public void actionPerformed(java.awt.event.ActionEvent evt) {
         evalCancelButtonActionPerformed(evt);
       }
     });
@@ -195,7 +199,8 @@ public class SubLInteractorPanel extends javax.swing.JPanel {
 
     clearButton.setText("Clear");
     clearButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
+      @Override
+	public void actionPerformed(java.awt.event.ActionEvent evt) {
         clearButtonActionPerformed(evt);
       }
     });
@@ -206,7 +211,8 @@ public class SubLInteractorPanel extends javax.swing.JPanel {
 
     timeoutComboBox.setModel(makeTimeoutComboBoxModel());
     timeoutComboBox.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
+      @Override
+	public void actionPerformed(java.awt.event.ActionEvent evt) {
         timeoutComboBoxActionPerformed(evt);
       }
     });
@@ -214,7 +220,8 @@ public class SubLInteractorPanel extends javax.swing.JPanel {
 
     quitButton.setText("Quit");
     quitButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
+      @Override
+	public void actionPerformed(java.awt.event.ActionEvent evt) {
         quitButtonActionPerformed(evt);
       }
     });
@@ -279,7 +286,8 @@ private void evalCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//
     setGUIToRunningMode();
     new Thread() {
 
-      public void run() {
+      @Override
+	public void run() {
         try {
           final List result = interactor.submitSubL(inputField.getText());
           displayResult(result);

@@ -60,7 +60,8 @@ public final class zip extends Primitive
     }
     
 
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
     {
         Pathname zipfilePathname = coerceToPathname(first);
         if (second instanceof org.armedbear.lisp.protocol.Hashtable) {
@@ -100,7 +101,8 @@ public final class zip extends Primitive
 
     
 
-    public LispObject execute(LispObject first, LispObject second, LispObject third)
+    @Override
+	public LispObject execute(LispObject first, LispObject second, LispObject third)
     {
         Pathname zipfilePathname = coerceToPathname(first);
         try {

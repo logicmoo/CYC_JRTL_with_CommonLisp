@@ -148,6 +148,7 @@ public class FromManyClassLoader extends URLClassLoaderBase {
 		return vect.elements();
 	}
 
+	@Override
 	public InputStream getResourceAsStream(String name) {
 		for (ClassLoader cl : getClassLoadersToSearch(false)) {
 			try {
@@ -164,6 +165,7 @@ public class FromManyClassLoader extends URLClassLoaderBase {
 		return getParent().getResourceAsStream(name);
 	}
 
+	@Override
 	public Class<?> findLoadedClassLocalMethodology(String name) throws ClassNotFoundException {
 		Class pl = findLoadedClassByName(name);
 		if (pl != null)

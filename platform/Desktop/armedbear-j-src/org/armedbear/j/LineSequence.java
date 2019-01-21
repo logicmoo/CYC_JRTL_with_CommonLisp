@@ -76,7 +76,8 @@ public final class LineSequence
         ++size;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer();
         for (Line line = first; line != null; line = line.next()) {

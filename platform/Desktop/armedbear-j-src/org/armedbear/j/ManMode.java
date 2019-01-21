@@ -41,19 +41,22 @@ public final class ManMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public JPopupMenu getContextMenu(Editor editor)
+    @Override
+	public JPopupMenu getContextMenu(Editor editor)
     {
         return null;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         if (buffer.getType() != Buffer.TYPE_MAN)
             return null;
         return new ManFormatter(buffer, ((Man)buffer).isApropos());
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "manFollowLink");
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "manFollowLink");
@@ -61,12 +64,14 @@ public final class ManMode extends AbstractMode implements Constants, Mode
         km.mapKey(VK_MOUSE_2, 0, "manFollowLink");
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new ManTagger(buffer);
     }
 
-    public boolean isTaggable()
+    @Override
+	public boolean isTaggable()
     {
         return true;
     }

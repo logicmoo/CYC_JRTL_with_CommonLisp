@@ -4329,15 +4329,18 @@ public final class kb_mapping extends SubLTranslatedFile
         return (SubLObject)kb_mapping.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_mapping_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_mapping_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_mapping_file();
     }
     
@@ -4466,7 +4469,8 @@ public final class kb_mapping extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ASSERTION-WITH-SEARCH-TERM"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping.assertion_with_search_term(arg1);
         }
     }
@@ -4477,7 +4481,8 @@ public final class kb_mapping extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GATHER-ASSERTIONS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_mapping.gather_assertions(arg1);
         }
     }

@@ -302,15 +302,18 @@ public final class constant_index_manager extends SubLTranslatedFile
         return (SubLObject)constant_index_manager.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_constant_index_manager_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_constant_index_manager_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_constant_index_manager_file();
     }
     

@@ -346,15 +346,18 @@ public final class cycl_string extends SubLTranslatedFile
         return (SubLObject)cycl_string.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cycl_string_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cycl_string_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cycl_string_file();
     }
     

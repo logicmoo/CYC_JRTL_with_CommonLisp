@@ -37,7 +37,8 @@ public class SpecialRepoLoader extends BasicDebugger implements Thread.UncaughtE
     public int workrNum;
     private boolean alwaysSingleThreaded;
 
-    public void logWarning(final String msg) {
+    @Override
+	public void logWarning(final String msg) {
         this.getLogger().warn(msg);
     }
 
@@ -92,7 +93,8 @@ public class SpecialRepoLoader extends BasicDebugger implements Thread.UncaughtE
         }
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString();
     }
 
@@ -191,7 +193,8 @@ public class SpecialRepoLoader extends BasicDebugger implements Thread.UncaughtE
         task.future = (Future<Task>)this.executor.submit((Runnable)task);
     }
 
-    public void uncaughtException(final Thread t, final Throwable e) {
+    @Override
+	public void uncaughtException(final Thread t, final Throwable e) {
         this.logError(" uncaughtException on " + t, e);
         e.printStackTrace();
     }

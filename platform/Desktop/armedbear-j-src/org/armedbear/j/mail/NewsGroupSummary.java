@@ -73,12 +73,14 @@ public final class NewsGroupSummary extends Mailbox
         return session;
     }
 
-    public final String getName()
+    @Override
+	public final String getName()
     {
         return groupName;
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         setBusy(true);
         new Thread(loadRunnable).start();
@@ -87,7 +89,8 @@ public final class NewsGroupSummary extends Mailbox
     }
 
     private Runnable loadRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             if (!session.connect())
             {
@@ -108,7 +111,8 @@ public final class NewsGroupSummary extends Mailbox
             }
             if (count > 100) {
                 Runnable confirmRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         Editor editor = Editor.currentEditor();
                         editor.setDefaultCursor();
@@ -153,7 +157,8 @@ public final class NewsGroupSummary extends Mailbox
     };
 
     private Runnable updateDisplayRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             setBusy(false);
             invalidate();
@@ -171,7 +176,8 @@ public final class NewsGroupSummary extends Mailbox
     };
 
     private Runnable errorRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             Editor editor = Editor.currentEditor();
             editor.setDefaultCursor();
@@ -264,7 +270,8 @@ public final class NewsGroupSummary extends Mailbox
         }
     }
 
-    public Position getInitialDotPos()
+    @Override
+	public Position getInitialDotPos()
     {
         return getFirstLine() != null ? new Position(getFirstLine(), 0) : null;
     }
@@ -307,11 +314,13 @@ public final class NewsGroupSummary extends Mailbox
         }
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         if (session != null) {
             Runnable r = new Runnable(){
-                public void run()
+                @Override
+				public void run()
                 {
                     session.disconnect();
                 }
@@ -321,65 +330,80 @@ public final class NewsGroupSummary extends Mailbox
     }
 
     // For the buffer list.
-    public Icon getIcon()
+    @Override
+	public Icon getIcon()
     {
         return Utilities.getIconFromFile("mailbox.png");
     }
 
-    public void getNewMessages()
+    @Override
+	public void getNewMessages()
     {
     }
 
-    public void readMessage(Line line)
+    @Override
+	public void readMessage(Line line)
     {
     }
 
-    public void createFolder()
+    @Override
+	public void createFolder()
     {
     }
 
-    public void deleteFolder()
+    @Override
+	public void deleteFolder()
     {
     }
 
-    public void saveToFolder()
+    @Override
+	public void saveToFolder()
     {
     }
 
-    public void moveToFolder()
+    @Override
+	public void moveToFolder()
     {
     }
 
-    public void delete()
+    @Override
+	public void delete()
     {
     }
 
-    public void undelete()
+    @Override
+	public void undelete()
     {
     }
 
-    public void markRead()
+    @Override
+	public void markRead()
     {
     }
 
-    public void markUnread()
+    @Override
+	public void markUnread()
     {
     }
 
-    public void setAnsweredFlag(MailboxEntry entry)
+    @Override
+	public void setAnsweredFlag(MailboxEntry entry)
     {
     }
 
-    public void expunge()
+    @Override
+	public void expunge()
     {
     }
 
-    public int getMessageCount()
+    @Override
+	public int getMessageCount()
     {
         return 0;
     }
 
-    public void saveView(Editor editor)
+    @Override
+	public void saveView(Editor editor)
     {
         final View view = saveViewInternal(editor);
         editor.setView(this, view);

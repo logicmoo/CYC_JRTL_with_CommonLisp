@@ -1654,15 +1654,18 @@ public final class simple_indexing extends SubLTranslatedFile
         return (SubLObject)simple_indexing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_simple_indexing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_simple_indexing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_simple_indexing_file();
     }
     
@@ -1716,7 +1719,8 @@ public final class simple_indexing extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("MATCHES-PRAGMA-RULE-INDEX-TEST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return simple_indexing.matches_pragma_rule_index_test(arg1, arg2);
         }
     }

@@ -237,6 +237,7 @@ abstract public class RowTableModel<T> extends DefaultTableModel2 implements Lis
 	 *  @param column  the column being queried
 	 *  @return the Class of the column being queried
 	*/
+	@Override
 	public Class getColumnClass(int column) {
 		Class columnClass = null;
 
@@ -263,6 +264,7 @@ abstract public class RowTableModel<T> extends DefaultTableModel2 implements Lis
 	 *
 	 * @return the number of columns in the model
 	 */
+	@Override
 	public int getColumnCount() {
 		return columnIdentifiers.size();
 	}
@@ -275,6 +277,7 @@ abstract public class RowTableModel<T> extends DefaultTableModel2 implements Lis
 	 * <code>columnNames</code> does not have an entry for this index
 	 * then the default name provided by the superclass is returned
 	 */
+	@Override
 	public String getColumnName(int column) {
 		Object columnName = null;
 
@@ -290,6 +293,7 @@ abstract public class RowTableModel<T> extends DefaultTableModel2 implements Lis
 	 *
 	 * @return the number of rows in the model
 	 */
+	@Override
 	public int getRowCount() {
 		if (modelData == null)
 			return 0;
@@ -303,6 +307,7 @@ abstract public class RowTableModel<T> extends DefaultTableModel2 implements Lis
 	 * @param   column		the column whose value is to be queried
 	 * @return				  true
 	 */
+	@Override
 	public boolean isCellEditable(int row, int column) {
 		Boolean isEditable = null;
 
@@ -436,6 +441,7 @@ abstract public class RowTableModel<T> extends DefaultTableModel2 implements Lis
 	 *					  if any of the elements would be moved out
 	 *					  of the table's range
 	 */
+	@Override
 	public void moveRow(int start, int end, int to) {
 		if (start < 0) {
 			String message = "Start index must be positive: " + start;
@@ -621,6 +627,7 @@ abstract public class RowTableModel<T> extends DefaultTableModel2 implements Lis
 	 *
 	 * @param l the <code>ListDataListener</code> to be added
 	 */
+	@Override
 	public void addListDataListener(ListDataListener l) {
 		listenerList.add(ListDataListener.class, l);
 	}
@@ -631,6 +638,7 @@ abstract public class RowTableModel<T> extends DefaultTableModel2 implements Lis
 	 *
 	 * @param l the <code>ListDataListener</code> to be removed
 	 */
+	@Override
 	public void removeListDataListener(ListDataListener l) {
 		listenerList.remove(ListDataListener.class, l);
 	}
@@ -772,6 +780,7 @@ abstract public class RowTableModel<T> extends DefaultTableModel2 implements Lis
 	 *
 	 * @since 1.3
 	 */
+	@Override
 	public <T extends EventListener> T[] getListeners(Class<T> listenerType) {
 		return (T[]) listenerList.getListeners(listenerType);
 	}

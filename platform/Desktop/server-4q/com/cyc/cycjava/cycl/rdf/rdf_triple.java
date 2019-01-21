@@ -136,15 +136,18 @@ public final class rdf_triple extends SubLTranslatedFile
         return (SubLObject)rdf_triple.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rdf_triple_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rdf_triple_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rdf_triple_file();
     }
     

@@ -27,7 +27,8 @@ public class MakableObjectHelpFuncs
 
     public static <OT> OT findOrMakeUniqueNamedObjectWithDefCons(final VerySimpleRegistry vsr, final Class<OT> objClaz, final String objName) {
         return findOrMakeUniqueNamedObject(vsr, objClaz, objName, (org.appdapter.api.facade.Maker<OT>)new BasicMaker<OT>() {
-            public OT makeObj() {
+            @Override
+			public OT makeObj() {
                 try {
                     MakableObjectHelpFuncs.theLogger.info("Making new object named " + objName + " using default constructor of " + objClaz);
                     return objClaz.newInstance();

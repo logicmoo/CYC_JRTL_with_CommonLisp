@@ -1613,15 +1613,18 @@ public final class quirk_removal_module extends SubLTranslatedFile
         return (SubLObject)quirk_removal_module.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_quirk_removal_module_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_quirk_removal_module_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_quirk_removal_module_file();
     }
     
@@ -1767,7 +1770,8 @@ public final class quirk_removal_module extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-QUIRK-GURUQA-REQUIRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return quirk_removal_module.removal_quirk_guruqa_required(arg1, (SubLObject)$removal_quirk_guruqa_required$UnaryFunction.UNPROVIDED);
         }
     }
@@ -1778,7 +1782,8 @@ public final class quirk_removal_module extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-QUIRK-GURUQA-REQUIRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return quirk_removal_module.removal_quirk_guruqa_required(arg1, arg2);
         }
     }
@@ -1789,7 +1794,8 @@ public final class quirk_removal_module extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-QUIRK-GURUQA-CONJUNCTIVE-APPLICABILITY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return quirk_removal_module.removal_quirk_guruqa_conjunctive_applicability(arg1);
         }
     }

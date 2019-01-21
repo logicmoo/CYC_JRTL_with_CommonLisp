@@ -651,6 +651,7 @@ public abstract class Debuggable extends BasicDebugger {
 	@SuppressWarnings("serial")
 	static public class DebuggableFrame extends Throwable {
 
+		@Override
 		public String getMessage() {
 			return super.getMessage() + " vars=" + vars;
 		}

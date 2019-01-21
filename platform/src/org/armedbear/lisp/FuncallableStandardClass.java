@@ -48,17 +48,20 @@ public class FuncallableStandardClass extends StandardClass
             symbol, directSuperclasses);
   }
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     return Symbol.FUNCALLABLE_STANDARD_CLASS;
   }
 
-  public LispObject classOf()
+  @Override
+public LispObject classOf()
   {
     return StandardClass.FUNCALLABLE_STANDARD_CLASS;
   }
 
-  public LispObject typep(LispObject type)
+  @Override
+public LispObject typep(LispObject type)
   {
     if (type == Symbol.FUNCALLABLE_STANDARD_CLASS)
       return T;
@@ -67,7 +70,8 @@ public class FuncallableStandardClass extends StandardClass
     return super.typep(type);
   }
 
-  public String printObjectUnreadable()
+  @Override
+public String printObjectUnreadable()
     {
     StringBuilder sb =
       new StringBuilder(Symbol.FUNCALLABLE_STANDARD_CLASS.printObject());

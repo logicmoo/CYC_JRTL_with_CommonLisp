@@ -75,7 +75,8 @@ public class NameNodeFilter
      * the org.w3c.dom.Node class.
      *
      */
-    public short acceptNode (Node node) throws DOMException {
+    @Override
+	public short acceptNode (Node node) throws DOMException {
         String name = node.getLocalName();
         if (null == name) {
             throw  new DOMException(DOMException.NOT_FOUND_ERR, "DOM Node doesn't have a local name!");

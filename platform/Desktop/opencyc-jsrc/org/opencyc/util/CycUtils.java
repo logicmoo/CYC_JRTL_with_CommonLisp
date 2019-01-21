@@ -65,7 +65,8 @@ public class CycUtils {
    * null if an error occurred.
    * @deprecated use SubLWorker instead
    **/
-  public static synchronized Object evalSubL(CycAccess connection, String subl) {
+  @Deprecated
+public static synchronized Object evalSubL(CycAccess connection, String subl) {
     Object result = null;
     try {
       if (CycConnection.inAWTEventThread()) {
@@ -135,11 +136,13 @@ public class CycUtils {
    * @see CycWorkerListener
    * @deprecated use SubLWorker instead
    */
-  public static CycWorker evalSubLInBackground(final CycAccess conn,
+  @Deprecated
+public static CycWorker evalSubLInBackground(final CycAccess conn,
 					       final String subl,
 					       final CycWorkerListener cwl) {
     CycWorker worker = new CycWorker() {
-      public Object construct() throws Exception {
+      @Override
+	public Object construct() throws Exception {
         return evalSubL(conn, subl); 
       }
     };

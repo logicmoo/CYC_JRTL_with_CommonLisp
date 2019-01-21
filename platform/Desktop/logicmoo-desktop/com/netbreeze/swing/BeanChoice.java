@@ -40,11 +40,13 @@ public class BeanChoice extends JPanel implements BeansContextListener, MouseLis
       context.addListener(this);
   }
 
-  public void addPropertyChangeListener(PropertyChangeListener p) {
+  @Override
+public void addPropertyChangeListener(PropertyChangeListener p) {
     propSupport.addPropertyChangeListener(p);
   }
 
-  public void removePropertyChangeListener(PropertyChangeListener p) {
+  @Override
+public void removePropertyChangeListener(PropertyChangeListener p) {
     propSupport.removePropertyChangeListener(p);
   }
 
@@ -53,11 +55,13 @@ public class BeanChoice extends JPanel implements BeansContextListener, MouseLis
   }
 
 
-  public void beanAdded(String named, Object obj) {
+  @Override
+public void beanAdded(String named, Object obj) {
     model.reload();
   }
 
-  public void beanRemoved(String named, Object obj) {
+  @Override
+public void beanRemoved(String named, Object obj) {
     model.reload();
   }
 
@@ -70,28 +74,33 @@ public class BeanChoice extends JPanel implements BeansContextListener, MouseLis
     combo.addMouseListener(this);
   }
 
-  public void mouseClicked(MouseEvent e) {
+  @Override
+public void mouseClicked(MouseEvent e) {
     if (e.isPopupTrigger()) {
       showMenu(e.getX() + 5, e.getY() + 5);
     }
   }
-  public void mousePressed(MouseEvent e) {
+  @Override
+public void mousePressed(MouseEvent e) {
     if (e.isPopupTrigger()) {
       showMenu(e.getX() + 5, e.getY() + 5);
     }
   }
 
-  public void mouseReleased(MouseEvent e) {
+  @Override
+public void mouseReleased(MouseEvent e) {
     if (e.isPopupTrigger()) {
       showMenu(e.getX() + 5, e.getY() + 5);
     }
   }
 
-  public void mouseEntered(MouseEvent e) {
+  @Override
+public void mouseEntered(MouseEvent e) {
     //@temp
     //label.setForeground(Color.blue);
   }
-  public void mouseExited(MouseEvent e) {
+  @Override
+public void mouseExited(MouseEvent e) {
     //label.setForeground(Color.black);
   }
 
@@ -121,7 +130,8 @@ public class BeanChoice extends JPanel implements BeansContextListener, MouseLis
       values.add("<null>");
     }
 
-    public synchronized void setSelectedItem(Object anItem) {
+    @Override
+	public synchronized void setSelectedItem(Object anItem) {
       Object old = selected;
       selected = anItem;
 
@@ -136,7 +146,8 @@ public class BeanChoice extends JPanel implements BeansContextListener, MouseLis
       }
     }
 
-    public Object getSelectedItem() {
+    @Override
+	public Object getSelectedItem() {
       if (selected == null)
         return "<null>";
       else
@@ -147,11 +158,13 @@ public class BeanChoice extends JPanel implements BeansContextListener, MouseLis
       return selected;
     }
 
-    public int getSize() {
+    @Override
+	public int getSize() {
       return values.size();
     }
 
-    public Object getElementAt(int index) {
+    @Override
+	public Object getElementAt(int index) {
       try {
         return values.get(index);
       } catch (Exception err) {

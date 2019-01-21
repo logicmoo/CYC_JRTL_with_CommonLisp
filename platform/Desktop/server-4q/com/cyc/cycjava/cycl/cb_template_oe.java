@@ -2875,15 +2875,18 @@ public final class cb_template_oe extends SubLTranslatedFile
         return (SubLObject)cb_template_oe.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_template_oe_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_template_oe_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_template_oe_file();
     }
     

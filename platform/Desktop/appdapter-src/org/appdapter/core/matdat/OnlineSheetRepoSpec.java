@@ -13,11 +13,13 @@ public class OnlineSheetRepoSpec extends RepoSpecForDirectory
     private final int namespaceSheetNum;
     private final int dirSheetNum;
     
-    public Model getDirectoryModel() {
+    @Override
+	public Model getDirectoryModel() {
         return GoogSheetRepoLoader$.MODULE$.readModelFromGoog(this.sheetKey, this.namespaceSheetNum, this.dirSheetNum);
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuilder().append((Object)"goog:/").append((Object)this.sheetKey).append((Object)"/").append((Object)BoxesRunTime.boxToInteger(this.namespaceSheetNum)).append((Object)"/").append((Object)BoxesRunTime.boxToInteger(this.dirSheetNum)).toString();
     }
     

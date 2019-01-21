@@ -232,6 +232,7 @@ public class SPARQLServlet extends HttpServlet
 		}
 	}
 	
+	@Override
 	public void doPost(
 			HttpServletRequest req,
             HttpServletResponse res)

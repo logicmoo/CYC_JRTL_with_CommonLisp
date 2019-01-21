@@ -1592,15 +1592,18 @@ public final class red_api extends SubLTranslatedFile
         return (SubLObject)red_api.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_red_api_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_red_api_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_red_api_file();
     }
     
@@ -1769,15 +1772,18 @@ public final class red_api extends SubLTranslatedFile
             this.$cobj = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$red_struct_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$cobj;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$cobj = value;
         }
         
@@ -1792,7 +1798,8 @@ public final class red_api extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RED-STRUCT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return red_api.red_struct_p(arg1);
         }
     }
@@ -1806,15 +1813,18 @@ public final class red_api extends SubLTranslatedFile
             this.$filename = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$red_repository_struct_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$filename;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$filename = value;
         }
         
@@ -1829,7 +1839,8 @@ public final class red_api extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RED-REPOSITORY-STRUCT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return red_api.red_repository_struct_p(arg1);
         }
     }
@@ -1843,15 +1854,18 @@ public final class red_api extends SubLTranslatedFile
             this.$type = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$red_repository_list_struct_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$type;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$type = value;
         }
         
@@ -1866,7 +1880,8 @@ public final class red_api extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RED-REPOSITORY-LIST-STRUCT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return red_api.red_repository_list_struct_p(arg1);
         }
     }
@@ -1882,23 +1897,28 @@ public final class red_api extends SubLTranslatedFile
             this.$key_string = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$red_element_struct_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$repository_list;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$key_string;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$repository_list = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$key_string = value;
         }
         
@@ -1913,7 +1933,8 @@ public final class red_api extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RED-ELEMENT-STRUCT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return red_api.red_element_struct_p(arg1);
         }
     }

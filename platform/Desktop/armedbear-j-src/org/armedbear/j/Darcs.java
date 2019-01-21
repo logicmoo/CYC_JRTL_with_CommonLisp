@@ -58,13 +58,15 @@ public class Darcs implements Constants
     final Buffer parentBuffer = editor.getBuffer();
     Runnable commandRunnable = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           final String output =
             command(cmd, editor.getCurrentDirectory());
           Runnable completionRunnable = new Runnable()
             {
-              public void run()
+              @Override
+			public void run()
               {
                 darcsCompleted(editor, parentBuffer, cmd, output);
               }

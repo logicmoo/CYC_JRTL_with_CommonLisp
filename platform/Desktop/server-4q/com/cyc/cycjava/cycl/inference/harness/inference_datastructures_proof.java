@@ -1075,15 +1075,18 @@ public final class inference_datastructures_proof extends SubLTranslatedFile
         return (SubLObject)inference_datastructures_proof.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_datastructures_proof_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_datastructures_proof_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_datastructures_proof_file();
     }
     
@@ -1180,55 +1183,68 @@ public final class inference_datastructures_proof extends SubLTranslatedFile
             this.$processedP = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$proof_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$suid;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$bindings;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$link;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$subproofs;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$dependents;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$processedP;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$suid = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$bindings = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$link = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$subproofs = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$dependents = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$processedP = value;
         }
         
@@ -1243,7 +1259,8 @@ public final class inference_datastructures_proof extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PROOF-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_proof.proof_p(arg1);
         }
     }
@@ -1254,7 +1271,8 @@ public final class inference_datastructures_proof extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-PROOF-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_proof.sxhash_proof_method(arg1);
         }
     }
@@ -1265,7 +1283,8 @@ public final class inference_datastructures_proof extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PROOF-PROVEN?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_proof.proof_provenP(arg1);
         }
     }

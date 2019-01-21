@@ -40,7 +40,8 @@ public final class DirectoryTreeElement
         return file.canonicalPath();
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         if (file.canonicalPath().equals("/")) {
             if (file.isRemote())

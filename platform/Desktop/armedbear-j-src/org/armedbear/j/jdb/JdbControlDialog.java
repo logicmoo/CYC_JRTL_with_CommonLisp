@@ -145,7 +145,8 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
         toolBar.addSeparator();
     }
 
-    public void show()
+    @Override
+	public void show()
     {
         int width = sessionProperties.getIntegerProperty("jdb.width", 425);
         int height = sessionProperties.getIntegerProperty("jdb.height", 250);
@@ -177,7 +178,8 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
         super.show();
     }
 
-    public void contextChanged()
+    @Override
+	public void contextChanged()
     {
         if (jdb.getVM() == null) {
             suspendButton.setEnabled(false);
@@ -191,12 +193,14 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
         }
     }
 
-    public void actionPerformed(ActionEvent e)
+    @Override
+	public void actionPerformed(ActionEvent e)
     {
         Editor.currentEditor().getDispatcher().actionPerformed(e);
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             // Mask off the bits we don't care about (Java 1.4).
@@ -214,26 +218,32 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
         }
     }
 
-    public void keyReleased(KeyEvent e) {}
+    @Override
+	public void keyReleased(KeyEvent e) {}
 
-    public void keyTyped(KeyEvent e) {}
+    @Override
+	public void keyTyped(KeyEvent e) {}
 
-    public void componentResized(ComponentEvent e)
+    @Override
+	public void componentResized(ComponentEvent e)
     {
         saveWindowPlacement();
     }
 
-    public void componentMoved(ComponentEvent e)
+    @Override
+	public void componentMoved(ComponentEvent e)
     {
         saveWindowPlacement();
     }
 
-    public void componentShown(ComponentEvent e)
+    @Override
+	public void componentShown(ComponentEvent e)
     {
         saveWindowPlacement();
     }
 
-    public void componentHidden(ComponentEvent e) {}
+    @Override
+	public void componentHidden(ComponentEvent e) {}
 
     private void saveWindowPlacement()
     {
@@ -246,7 +256,8 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
 
     private class WindowMonitor extends WindowAdapter
     {
-        public void windowClosing(WindowEvent e)
+        @Override
+		public void windowClosing(WindowEvent e)
         {
             setVisible(false);
             dispose();
@@ -261,17 +272,20 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
             super(textField);
         }
 
-        public void enter()
+        @Override
+		public void enter()
         {
             commandHistory.append(textField.getText());
         }
 
-        public void escape()
+        @Override
+		public void escape()
         {
             textField.setText("");
         }
 
-        public Expansion getExpansion(String prefix)
+        @Override
+		public Expansion getExpansion(String prefix)
         {
             Expansion expansion = new Expansion(jdb, prefix, prefix);
             EditorIterator iter = new EditorIterator();

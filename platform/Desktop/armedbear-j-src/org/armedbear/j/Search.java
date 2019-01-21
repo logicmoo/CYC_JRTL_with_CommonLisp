@@ -609,7 +609,8 @@ public class Search implements Cloneable
         editor.status(sb.toString());
     }
 
-    public boolean equals(Object object)
+    @Override
+	public boolean equals(Object object)
     {
         if (this == object)
             return true;
@@ -637,7 +638,8 @@ public class Search implements Cloneable
         return false;
     }
 
-    public Object clone()
+    @Override
+	public Object clone()
     {
         try {
             return super.clone();

@@ -33,6 +33,7 @@ public class ScreenModelBox<TrigType extends Trigger<? extends ScreenBoxImpl<Tri
 		return myModel;
 	}
 
+	@Override
 	public void reallySetValue(Object newObject) throws UnsupportedOperationException {
 		myModel = (Model) newObject;
 	}

@@ -1247,4 +1247,10 @@ public class SubLDigestInputTextStream extends LispObject implements SubLStream,
 		wrapped.unread(c);
 		buffer.position(buffer.position() - 1);
 	}
+
+	@Override
+	public int getLineNumber()
+	{
+		return wrapped.getLineNumber();
+	}
 }

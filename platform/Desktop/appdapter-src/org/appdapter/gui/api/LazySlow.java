@@ -76,6 +76,7 @@ public interface LazySlow<T> extends Future<T> {
 			m_done = true;
 		}
 
+		@Override
 		public void setReady(T repo) {
 			m_val = repo;
 			m_done = true;

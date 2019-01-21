@@ -37,6 +37,7 @@ public class VariableBindingBase implements VariableBinding {
 		this.results = new ArrayBlockingQueue<BindingSet>(1024);
 	}
 
+	@Override
 	public synchronized List<String> getVariables() {
 		if (bindNames == null) {
 			try {
@@ -47,6 +48,7 @@ public class VariableBindingBase implements VariableBinding {
 		return Collections.unmodifiableList(Arrays.asList(bindNames));
 	}
 
+	@Override
 	public synchronized CloseableIterator<Binding> iterator() {
 		if (iterator == null) {
 			iterator = new BindingIterator();
@@ -65,6 +67,7 @@ public class VariableBindingBase implements VariableBinding {
 
 		private BindingSet next;
 
+		@Override
 		public synchronized boolean hasNext() {
 			while (next == null) {
 				try {
@@ -78,6 +81,7 @@ public class VariableBindingBase implements VariableBinding {
 			return true;
 		}
 
+		@Override
 		public synchronized Binding next() {
 			if (hasNext() == false) {
 				throw new NoSuchElementException();
@@ -87,13 +91,16 @@ public class VariableBindingBase implements VariableBinding {
 			return result;
 		}
 
+		@Override
 		public void remove() {
 		}
 
+		@Override
 		public synchronized void close() {
 			isClosed = true;
 		}
 
+		@Override
 		public synchronized boolean isClosed() {
 			return isClosed;
 		}
@@ -125,10 +132,12 @@ public class VariableBindingBase implements VariableBinding {
 			this.values = values;
 		}
 
+		@Override
 		public List<Value> getValues() {
 			return Collections.unmodifiableList(values);
 		}
 
+		@Override
 		public String toString() {
 			return values.toString();
 		}
@@ -142,26 +151,32 @@ public class VariableBindingBase implements VariableBinding {
 	 */
 	public class FinalBindingSet implements BindingSet {
 
+		@Override
 		public Iterator<org.openrdf.query.Binding> iterator() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Set<String> getBindingNames() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public org.openrdf.query.Binding getBinding(String s) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public boolean hasBinding(String s) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Value getValue(String s) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public int size() {
 			throw new UnsupportedOperationException();
 		}

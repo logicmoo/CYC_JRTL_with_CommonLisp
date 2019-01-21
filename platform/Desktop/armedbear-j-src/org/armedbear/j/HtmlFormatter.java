@@ -70,7 +70,8 @@ public final class HtmlFormatter extends Formatter implements Constants
         }
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         if (line == null) {
             clearSegmentList();
@@ -186,7 +187,8 @@ public final class HtmlFormatter extends Formatter implements Constants
         endToken(state);
     }
 
-    public boolean parseBuffer()
+    @Override
+	public boolean parseBuffer()
     {
         Line line = buffer.getFirstLine();
         if (line == null)
@@ -282,7 +284,8 @@ public final class HtmlFormatter extends Formatter implements Constants
         return changed;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = javaFormatter.getFormatTable();
@@ -300,7 +303,8 @@ public final class HtmlFormatter extends Formatter implements Constants
         return formatTable;
     }
 
-    public void reset()
+    @Override
+	public void reset()
     {
         javaFormatter.reset();
         super.reset();

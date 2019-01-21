@@ -15,71 +15,88 @@ public class Reals
             super(jsciNum);
         }
 
-        public FieldNumberWrapper<Real64, Float64> abs() {
+        @Override
+		public FieldNumberWrapper<Real64, Float64> abs() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public FieldNumberWrapper<Real64, Float64> copy() {
+        @Override
+		public FieldNumberWrapper<Real64, Float64> copy() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public FieldNumberWrapper<Real64, Float64> times(final FieldNumberWrapper<Real64, Float64> r) {
+        @Override
+		public FieldNumberWrapper<Real64, Float64> times(final FieldNumberWrapper<Real64, Float64> r) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public FieldNumberWrapper<Real64, Float64> plus(final FieldNumberWrapper<Real64, Float64> g) {
+        @Override
+		public FieldNumberWrapper<Real64, Float64> plus(final FieldNumberWrapper<Real64, Float64> g) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public FieldNumberWrapper<Real64, Float64> opposite() {
+        @Override
+		public FieldNumberWrapper<Real64, Float64> opposite() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public FieldNumberWrapper<Real64, Float64> inverse() {
+        @Override
+		public FieldNumberWrapper<Real64, Float64> inverse() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public boolean isScalar() {
+        @Override
+		public boolean isScalar() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public boolean isZero() {
+        @Override
+		public boolean isZero() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public boolean isPositive() {
+        @Override
+		public boolean isPositive() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public boolean isNonnegative() {
+        @Override
+		public boolean isNonnegative() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public boolean isFinite() {
+        @Override
+		public boolean isFinite() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public NonnegativeReal64 asNonnegative() {
+        @Override
+		public NonnegativeReal64 asNonnegative() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public PositiveReal64 asPositive() {
+        @Override
+		public PositiveReal64 asPositive() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public Numeric.Zero<FieldNumberWrapper<Real64, Float64>> asZero() {
+        @Override
+		public Numeric.Zero<FieldNumberWrapper<Real64, Float64>> asZero() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public Numeric.Finite<FieldNumberWrapper<Real64, Float64>> asFinite() {
+        @Override
+		public Numeric.Finite<FieldNumberWrapper<Real64, Float64>> asFinite() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public boolean isRealNumeric() {
+        @Override
+		public boolean isRealNumeric() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        public Real64 asRealNumeric() {
+        @Override
+		public Real64 asRealNumeric() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }

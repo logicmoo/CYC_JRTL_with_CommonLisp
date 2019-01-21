@@ -47,7 +47,8 @@ public class InvalidConstantGuidException extends Exception {
   
   //// Public Area
   
-  public String getMessage() {
+  @Override
+public String getMessage() {
     StringBuffer buf = new StringBuffer("Invalid constant GUID(s): ");
     if (getInvalidConstantNames() != null) {
       for (Iterator iter = getInvalidConstantNames().iterator(); iter.hasNext(); ) {

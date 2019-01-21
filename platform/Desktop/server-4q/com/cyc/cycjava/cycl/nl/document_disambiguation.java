@@ -279,15 +279,18 @@ public final class document_disambiguation extends SubLTranslatedFile
         return (SubLObject)document_disambiguation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_document_disambiguation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_document_disambiguation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_document_disambiguation_file();
     }
     
@@ -333,15 +336,18 @@ public final class document_disambiguation extends SubLTranslatedFile
             this.$min_strength = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$simple_disambiguator_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$min_strength;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$min_strength = value;
         }
         
@@ -356,7 +362,8 @@ public final class document_disambiguation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SIMPLE-DISAMBIGUATOR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return document_disambiguation.simple_disambiguator_p(arg1);
         }
     }

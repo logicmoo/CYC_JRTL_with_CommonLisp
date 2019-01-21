@@ -126,7 +126,8 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
             Editor.lookAndFeel == null);
     }
 
-    public void actionPerformed(ActionEvent e)
+    @Override
+	public void actionPerformed(ActionEvent e)
     {
         final Editor editor = frame.getCurrentEditor();
         editor.setFocusToDisplay();
@@ -165,7 +166,8 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
             this.toolBar = toolBar;
         }
 
-        public void startElement(String uri, String localName, String qName,
+        @Override
+		public void startElement(String uri, String localName, String qName,
             Attributes attributes) throws SAXException
         {
             if (localName.equals("button") || qName.equals("button")) {

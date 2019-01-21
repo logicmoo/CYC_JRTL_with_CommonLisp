@@ -330,15 +330,18 @@ public final class inference_viewer extends SubLTranslatedFile
         return (SubLObject)inference_viewer.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_viewer_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_viewer_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_viewer_file();
     }
     

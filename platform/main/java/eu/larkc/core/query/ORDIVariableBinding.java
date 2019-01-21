@@ -26,11 +26,13 @@ public class ORDIVariableBinding extends VariableBindingBase implements
 
 	private final static long serialVersionUID = 1L;
 
+	@Override
 	public synchronized void startQueryResult(List<String> list) {
 		bindNames = list.toArray(new String[list.size()]);
 		super.notifyAll();
 	}
 
+	@Override
 	public void endQueryResult() {
 		while (true) {
 			try {
@@ -41,6 +43,7 @@ public class ORDIVariableBinding extends VariableBindingBase implements
 		}
 	}
 
+	@Override
 	public synchronized void handleSolution(BindingSet bindingset)
 			throws TupleQueryResultHandlerException {
 		if (isClosed) {

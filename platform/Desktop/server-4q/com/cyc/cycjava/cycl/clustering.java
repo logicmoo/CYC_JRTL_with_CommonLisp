@@ -420,15 +420,18 @@ public final class clustering extends SubLTranslatedFile
         return (SubLObject)clustering.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_clustering_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_clustering_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_clustering_file();
     }
     
@@ -476,23 +479,28 @@ public final class clustering extends SubLTranslatedFile
             this.$subclusters = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$cluster_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$elements;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$subclusters;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$elements = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$subclusters = value;
         }
         
@@ -507,7 +515,8 @@ public final class clustering extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLUSTER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return clustering.cluster_p(arg1);
         }
     }

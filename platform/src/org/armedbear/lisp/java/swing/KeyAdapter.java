@@ -39,15 +39,18 @@ public class KeyAdapter extends java.awt.event.KeyAdapter {
         JHandler.callLisp(s, keyevent.getComponent(), keyevent.paramString(), ai);
     }
 
-    public void keyPressed(KeyEvent keyevent) {
+    @Override
+	public void keyPressed(KeyEvent keyevent) {
         call("KEYPRESSED", keyevent);
     }
 
-    public void keyReleased(KeyEvent keyevent) {
+    @Override
+	public void keyReleased(KeyEvent keyevent) {
         call("KEYRELEASED", keyevent);
     }
 
-    public void keyTyped(KeyEvent keyevent) {
+    @Override
+	public void keyTyped(KeyEvent keyevent) {
         call("KEYTYPED", keyevent);
     }
 }

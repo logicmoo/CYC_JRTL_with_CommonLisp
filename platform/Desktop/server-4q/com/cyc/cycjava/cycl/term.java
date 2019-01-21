@@ -714,15 +714,18 @@ public final class term extends SubLTranslatedFile
         return (SubLObject)term.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_term_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_term_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_term_file();
     }
 
@@ -762,7 +765,8 @@ public final class term extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("KB-ASSERTION?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return term.kb_assertionP(arg1);
         }
     }
@@ -773,7 +777,8 @@ public final class term extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REIFIED-SKOLEM-CONSTANT-TERM?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return term.reified_skolem_constant_termP(arg1);
         }
     }
@@ -784,7 +789,8 @@ public final class term extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SKOLEM-CONSTANT?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return term.skolem_constantP(arg1);
         }
     }
@@ -795,7 +801,8 @@ public final class term extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FAST-REIFIED-SKOLEM?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return term.fast_reified_skolemP(arg1);
         }
     }
@@ -806,7 +813,8 @@ public final class term extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FAST-SKOLEM-NAT?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return term.fast_skolem_natP(arg1);
         }
     }
@@ -817,7 +825,8 @@ public final class term extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("UNREIFIED-SKOLEM-TERM?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return term.unreified_skolem_termP(arg1);
         }
     }
@@ -828,7 +837,8 @@ public final class term extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLOSED-NAUT?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return term.closed_nautP(arg1, (SubLObject)UNPROVIDED);
         }
     }
@@ -839,7 +849,8 @@ public final class term extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLOSED-NAUT?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return term.closed_nautP(arg1, arg2);
         }
     }
@@ -850,7 +861,8 @@ public final class term extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VAR-SPEC?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return term.var_specP(arg1);
         }
     }

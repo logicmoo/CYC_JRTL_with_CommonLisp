@@ -2563,15 +2563,18 @@ public final class kb_query extends SubLTranslatedFile
         return (SubLObject)kb_query.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_query_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_query_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_query_file();
     }
     

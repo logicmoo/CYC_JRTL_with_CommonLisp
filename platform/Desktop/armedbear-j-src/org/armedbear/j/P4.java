@@ -77,13 +77,15 @@ public class P4 extends VersionControl implements Constants
     final Buffer parentBuffer = editor.getBuffer();
     Runnable commandRunnable = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           final String output =
             command(cmd, editor.getCurrentDirectory());
           Runnable completionRunnable = new Runnable()
             {
-              public void run()
+              @Override
+			public void run()
               {
                 p4Completed(editor, parentBuffer, cmd, output);
               }
@@ -125,12 +127,14 @@ public class P4 extends VersionControl implements Constants
     final String cmd = sb.toString();
     Runnable commandRunnable = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           final String output = command(cmd, buffer.getCurrentDirectory());
           Runnable completionRunnable = new Runnable()
             {
-              public void run()
+              @Override
+			public void run()
               {
                 OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
                 buf.setTitle(cmd);
@@ -161,12 +165,14 @@ public class P4 extends VersionControl implements Constants
     final String cmd = sb.toString();
     Runnable commandRunnable = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           final String output = command(cmd, buffer.getCurrentDirectory());
           Runnable completionRunnable = new Runnable()
             {
-              public void run()
+              @Override
+			public void run()
               {
                 editCompleted(editor, buffer, cmd, output);
               }
@@ -263,12 +269,14 @@ public class P4 extends VersionControl implements Constants
     final String cmd = "p4 revert " + maybeQuote(file.getName());
     Runnable commandRunnable = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           final String output = command(cmd, buffer.getCurrentDirectory());
           Runnable completionRunnable = new Runnable()
             {
-              public void run()
+              @Override
+			public void run()
               {
                 if (output.trim().endsWith(" - was edit, reverted"))
                   editor.status("File reverted");
@@ -346,13 +354,15 @@ public class P4 extends VersionControl implements Constants
         final String cmd = baseCmd + maybeQuote(file.canonicalPath());
         Runnable commandRunnable = new Runnable()
           {
-            public void run()
+            @Override
+			public void run()
             {
               final String output =
                 command(cmd, parentBuffer.getCurrentDirectory());
               Runnable completionRunnable = new Runnable()
                 {
-                  public void run()
+                  @Override
+				public void run()
                   {
                     diffCompleted(editor, parentBuffer, title, output, VC_P4);
                   }
@@ -394,12 +404,14 @@ public class P4 extends VersionControl implements Constants
     buf.setBusy(true);
     Runnable commandRunnable = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           final String output = command(cmd, directory);
           Runnable completionRunnable = new Runnable()
             {
-              public void run()
+              @Override
+			public void run()
               {
                 processCompleted(buf, output);
               }
@@ -465,12 +477,14 @@ public class P4 extends VersionControl implements Constants
     ed.setWaitCursor();
     Runnable commandRunnable = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           final String output = command(cmd, parentBuffer.getCurrentDirectory());
           Runnable completionRunnable = new Runnable()
             {
-              public void run()
+              @Override
+			public void run()
               {
                 processCompleted(outputBuffer, output);
               }
@@ -557,12 +571,14 @@ public class P4 extends VersionControl implements Constants
       new ShellCommand(sb.toString(), parentBuffer.getCurrentDirectory());
     Runnable commandRunnable = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           shellCommand.run();
           Runnable completionRunnable = new Runnable()
             {
-              public void run()
+              @Override
+			public void run()
               {
                 checkinBuffer.setText(shellCommand.getOutput());
                 Position dot = findStartOfComment(checkinBuffer);
@@ -700,12 +716,14 @@ public class P4 extends VersionControl implements Constants
             new ShellCommand(sb.toString(), parentBuffer.getCurrentDirectory());
         Runnable commandRunnable = new Runnable()
           {
-            public void run()
+            @Override
+			public void run()
             {
               shellCommand.run();
               Runnable completionRunnable = new Runnable()
                 {
-                  public void run()
+                  @Override
+				public void run()
                   {
                     checkinBuffer.setText(shellCommand.getOutput());
                     Position dot = findStartOfComment(checkinBuffer);
@@ -916,7 +934,8 @@ public class P4 extends VersionControl implements Constants
       new ShellCommand(cmd, parentBuffer.getCurrentDirectory(), input);
     Runnable commandRunnable = new Runnable()
       {
-        public void run()
+        @Override
+		public void run()
         {
           shellCommand.run();
           if (shellCommand.exitValue() != 0)
@@ -926,7 +945,8 @@ public class P4 extends VersionControl implements Constants
             }
           Runnable completionRunnable = new Runnable()
             {
-              public void run()
+              @Override
+			public void run()
               {
                 finishCompleted(editor, checkinBuffer, title, editOnly, shellCommand);
               }

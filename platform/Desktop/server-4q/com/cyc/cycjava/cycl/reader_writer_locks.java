@@ -150,15 +150,18 @@ public final class reader_writer_locks extends SubLTranslatedFile
         return (SubLObject)reader_writer_locks.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_reader_writer_locks_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_reader_writer_locks_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_reader_writer_locks_file();
     }
     

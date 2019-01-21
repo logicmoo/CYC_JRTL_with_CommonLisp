@@ -66,6 +66,7 @@ public class ArrayContentsPanel extends BaseCollectionContentsPanel implements V
 		this(Utility.getCurrentContext(), array);
 	}
 
+	@Override
 	public void addObject(Object o, int index) {
 		Class componentType = objectValue.getClass().getComponentType();
 		final int len = Array.getLength(objectValue);
@@ -81,6 +82,7 @@ public class ArrayContentsPanel extends BaseCollectionContentsPanel implements V
 		setObject(newArray);
 	}
 
+	@Override
 	public void reloadContents00() {
 		panel.removeAll();
 		if (objectValue != null) {

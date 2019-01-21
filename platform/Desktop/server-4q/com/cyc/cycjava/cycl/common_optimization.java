@@ -1076,15 +1076,18 @@ public final class common_optimization extends SubLTranslatedFile
         return (SubLObject)common_optimization.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_common_optimization_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_common_optimization_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_common_optimization_file();
     }
     

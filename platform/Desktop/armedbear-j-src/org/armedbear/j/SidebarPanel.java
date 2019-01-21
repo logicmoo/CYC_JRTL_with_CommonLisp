@@ -46,7 +46,8 @@ public final class SidebarPanel extends JPanel implements MouseListener
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
 
-    public void removeAll()
+    @Override
+	public void removeAll()
     {
         label = null;
         scrollPane = null;
@@ -91,13 +92,17 @@ public final class SidebarPanel extends JPanel implements MouseListener
         add(scrollPane);
     }
 
-    public void mouseClicked(MouseEvent e) {}
+    @Override
+	public void mouseClicked(MouseEvent e) {}
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e) {}
+    @Override
+	public void mouseExited(MouseEvent e) {}
 
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         if (scrollPane != null) {
             if (scrollPane.getViewport() != null) {
@@ -108,7 +113,8 @@ public final class SidebarPanel extends JPanel implements MouseListener
         }
     }
 
-    public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
 
     private static class Label extends JLabel
     {
@@ -118,7 +124,8 @@ public final class SidebarPanel extends JPanel implements MouseListener
             setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
         }
 
-        public void paintComponent(Graphics g)
+        @Override
+		public void paintComponent(Graphics g)
         {
             Display.setRenderingHints(g);
             super.paintComponent(g);

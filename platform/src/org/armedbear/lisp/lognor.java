@@ -44,7 +44,8 @@ public final class lognor extends Primitive
         super("lognor", "integer-1 integer-2");
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
 
     {
         if (first instanceof Fixnum) {

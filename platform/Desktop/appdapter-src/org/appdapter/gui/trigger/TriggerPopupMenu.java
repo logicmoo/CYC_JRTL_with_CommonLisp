@@ -36,6 +36,7 @@ public class TriggerPopupMenu extends JPopupMenu {
 	 * @return the new menu item
 	 * @see Action
 	 */
+	@Override
 	public JMenuItem add(Action a) {
 		JMenuItem mi = createActionComponent(a);
 		mi.setAction(a);
@@ -60,6 +61,7 @@ public class TriggerPopupMenu extends JPopupMenu {
 	 */
 	protected JMenuItem createActionComponent(Action a, Object ctx) {
 		JMenuItem mi = new SafeJMenuItem(ctx, true) {
+			@Override
 			protected PropertyChangeListener createActionPropertyChangeListener(Action a) {
 				PropertyChangeListener pcl = createActionChangeListener(this);
 				if (pcl == null) {

@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.Main;
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
@@ -17,6 +21,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLCompiledFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLInterpretedFunction;
@@ -66,7 +71,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 				else
 					Errors.error("'" + place + "' is not a valid setf place. Cannot set to the value: " + value + ".");
 			}
-		} else
+		}
+		else
 			Errors.error("'" + place + "' is not a valid setf place. Cannot set to the value: " + value + ".");
 	}
 
@@ -81,8 +87,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 			while (iter.hasNext())
 			{
 				item = iter.nextSubLObject();
-				if (item.eval(env) == SubLNil.NIL)
-					return SubLNil.NIL;
+				if (item.eval(env) == SubLNil.NIL) return SubLNil.NIL;
 			}
 		} finally
 		{
@@ -93,8 +98,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 
 	public static SubLObject ccatch(SubLCons specialForm, SubLEnvironment env)
 	{
-		if (specialForm.size() < 3)
-			Errors.error("ccatch expects at least 2 arguments, got: " + (specialForm.size() - 1));
+		if (specialForm.size() < 3) Errors.error("ccatch expects at least 2 arguments, got: " + (specialForm.size() - 1));
 		SubLListListIterator iter = null;
 		Resourcer resourcer = Resourcer.getInstance();
 		try
@@ -128,8 +132,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 	{
 		SubLObject place = forms.second();
 		SubLObject delta = forms.third().eval(env);
-		if (delta == SubLNil.NIL)
-			delta = CommonSymbols.ONE_INTEGER;
+		if (delta == SubLNil.NIL) delta = CommonSymbols.ONE_INTEGER;
 		SubLObject value = Numbers.subtract(place.eval(env), delta);
 		csetf_internal(place, value, env);
 		return value;
@@ -279,12 +282,10 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 		try
 		{
 			iter = resourcer.acquireSubLListListIterator(forms, 1);
-			if (!iter.hasNext())
-				throw new InvalidSubLExpressionException("CDOTIMES was not passed enough arguments.");
+			if (!iter.hasNext()) throw new InvalidSubLExpressionException("CDOTIMES was not passed enough arguments.");
 			SubLList varDeclList = iter.nextSubLObject().toList();
 			int declSize = varDeclList.size();
-			if (declSize < 2 || declSize > 3)
-				throw new InvalidSubLExpressionException("CDOTIMES var declaration was not passed 2-3 arguments.");
+			if (declSize < 2 || declSize > 3) throw new InvalidSubLExpressionException("CDOTIMES var declaration was not passed 2-3 arguments.");
 			SubLSymbol varSymbol = varDeclList.first().toSymbol();
 			int size = varDeclList.second().eval(env).intValue();
 			SubLObject oldDynamicValue = newEnv.noteBinding(varSymbol, CommonSymbols.ZERO_INTEGER);
@@ -313,8 +314,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 	{
 		SubLObject place = forms.second();
 		SubLObject delta = forms.third().eval(env);
-		if (delta == SubLNil.NIL)
-			delta = CommonSymbols.ONE_INTEGER;
+		if (delta == SubLNil.NIL) delta = CommonSymbols.ONE_INTEGER;
 		SubLObject value = Numbers.add(place.eval(env), delta);
 		csetf_internal(place, value, env);
 		return value;
@@ -340,14 +340,25 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 				{
 					var = binding.first().toSymbol();
 					initialization = binding.second();
-				} else
+				}
+				else
 				{
 					var = binding.toSymbol();
 					initialization = SubLNil.NIL;
 				}
-				SubLObject initialValue = initialization.eval(newEnv);
-				SubLObject oldDynamicValue = newEnv.noteBinding(var, initialValue);
-				oldDynamicValues = possiblyNoteOldDynamicValue(var, oldDynamicValue, oldDynamicValues);
+				try
+				{
+					SubLObject initialValue = initialization.eval(newEnv);
+					SubLObject oldDynamicValue = newEnv.noteBinding(var, initialValue);
+					oldDynamicValues = possiblyNoteOldDynamicValue(var, oldDynamicValue, oldDynamicValues);
+				} catch (SubLException e)
+				{
+
+					SubLObject initialValue = initialization.eval(newEnv);
+					SubLObject oldDynamicValue = newEnv.noteBinding(var, initialValue);
+					oldDynamicValues = possiblyNoteOldDynamicValue(var, oldDynamicValue, oldDynamicValues);
+
+				}
 			}
 			resourcer.releaseSubLListListIterator(iter);
 			iter = resourcer.acquireSubLListListIterator(specialForm, 2);
@@ -363,8 +374,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 
 	public static SubLObject cmultiple_value_bind(SubLCons specialForm, SubLEnvironment env)
 	{
-		if (specialForm.size() < 3)
-			Errors.error("cmultiple-value-bind expects at least 2 arguments, got: " + (specialForm.size() - 1));
+		if (specialForm.size() < 3) Errors.error("cmultiple-value-bind expects at least 2 arguments, got: " + (specialForm.size() - 1));
 		SubLListListIterator iter = null;
 		SubLListListIterator iter2 = null;
 		Resourcer resourcer = Resourcer.getInstance();
@@ -421,8 +431,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 			{
 				item = iter.nextSubLObject();
 				item = item.eval(env);
-				if (item != SubLNil.NIL)
-					return CommonSymbols.T;
+				if (item != SubLNil.NIL) return CommonSymbols.T;
 			}
 		} finally
 		{
@@ -471,8 +480,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 		SubLObject place = forms.third();
 		SubLList placeList = place.eval(env).toList();
 		SubLCons value = placeList.push(item);
-		if (value != placeList)
-			csetf_internal(place, value, env);
+		if (value != placeList) csetf_internal(place, value, env);
 		return value;
 	}
 
@@ -486,16 +494,14 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 		BinaryFunction testFunc = SubLTrampolineFile.extractBinaryFunc(test);
 		UnaryFunction keyFunc = SubLTrampolineFile.extractUnaryFunc(key);
 		SubLCons value = placeList.pushNew(item, testFunc, keyFunc);
-		if (value != placeList)
-			csetf_internal(place, value, env);
+		if (value != placeList) csetf_internal(place, value, env);
 		return value;
 	}
 
 	public static SubLObject csetf(SubLCons specialForm, SubLEnvironment env)
 	{
 		int size = specialForm.size();
-		if (specialForm.size() != 3)
-			Errors.error("csetf expects 2 arguments, got: " + size + ". \nForm: " + specialForm + ".");
+		if (specialForm.size() != 3) Errors.error("csetf expects 2 arguments, got: " + size + ". \nForm: " + specialForm + ".");
 		SubLObject place = specialForm.second();
 		SubLObject value = specialForm.third().eval(env);
 		csetf_internal(place, value, env);
@@ -510,13 +516,11 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 		try
 		{
 			iter = resourcer.acquireSubLListListIterator(specialForm, 1);
-			if (!iter.hasNext())
-				Errors.error("CSETQ expects at least 2 arguments\nit was given " + iter.itemsRemaining() + "arguments.");
+			if (!iter.hasNext()) Errors.error("CSETQ expects at least 2 arguments\nit was given " + iter.itemsRemaining() + "arguments.");
 			while (iter.hasNext())
 			{
 				SubLSymbol var = (SubLSymbol) iter.nextSubLObject();
-				if (!iter.hasNext())
-					Errors.error("CSETQ requires an even number of arguments.");
+				if (!iter.hasNext()) Errors.error("CSETQ requires an even number of arguments.");
 				SubLObject valueForm = iter.nextSubLObject();
 				value = valueForm.eval(env);
 				env.setBinding(var, value);
@@ -638,7 +642,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 		SubLSymbol variable = specialForm.second().toSymbol();
 		SubLObject initialization = specialForm.third();
 		SubLObject documentation = specialForm.fourth();
-		SubLFiles.defconstant(null, variable.toString(), initialization.eval(env));
+		SubLFiles.defconstant(null, variable.getName(), initialization.eval(env));
 		return variable;
 	}
 
@@ -647,8 +651,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 		if (specialForm.size() < 4)
 			//if(false)
 			Errors.error("define expects at least 3 arguments, got: " + (specialForm.size() - 1));
-		if (specialForm.size() < 2)
-			Errors.error("define expects at least 2 arguments, got: " + (specialForm.size()));
+		if (specialForm.size() < 2) Errors.error("define expects at least 2 arguments, got: " + (specialForm.size()));
 		SubLListListIterator iter = null;
 		Resourcer resourcer = Resourcer.getInstance();
 		try
@@ -671,7 +674,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 		SubLObject variable = specialForm.second().toSymbol();
 		SubLObject initialization = specialForm.third();
 		SubLObject documentation = specialForm.fourth();
-		SubLFiles.deflexical(null, variable.toString(), initialization.eval(env));
+		SubLFiles.deflexical(null, variable.princToString(), initialization.eval(env));
 		return variable;
 	}
 
@@ -700,7 +703,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 		SubLObject variable = specialForm.second().toSymbol();
 		SubLObject initialization = specialForm.third();
 		SubLObject documentation = specialForm.fourth();
-		SubLFiles.defparameter(null, variable.toString(), initialization.eval(env));
+		final String varname = variable.princToString();
+		SubLFiles.defparameter(null, varname, initialization.eval(env));
 		return variable;
 	}
 
@@ -709,7 +713,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 		SubLObject variable = specialForm.second().toSymbol();
 		SubLObject initialization = specialForm.third();
 		SubLObject documentation = specialForm.fourth();
-		SubLFiles.defvar(null, variable.toString(), initialization.eval(env));
+		SubLFiles.defvar(null, variable.princToString(), initialization.eval(env));
 		return variable;
 	}
 
@@ -730,8 +734,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 				Errors.error(formatString, specialForm.fourth().eval(env), specialForm.fifth().eval(env), specialForm.sixth().eval(env));
 			else
 			{
-				if (nargs < 0)
-					Errors.error("Got invalid enforce must construct: " + specialForm);
+				if (nargs < 0) Errors.error("Got invalid enforce must construct: " + specialForm);
 				SubLObject[] args = null;
 				SubLListListIterator iter = null;
 				Resourcer resourcer = Resourcer.getInstance();
@@ -778,15 +781,11 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 	{
 		SubLFunction function = null;
 		int size = specialForm.size();
-		if (size != 2)
-			throw new InvalidSubLExpressionException("Got incorrect number of arguments to FUNCTION: " + specialForm);
+		if (size != 2) throw new InvalidSubLExpressionException("Got incorrect number of arguments to FUNCTION: " + specialForm);
 		SubLObject object = specialForm.second();
-		if (SubLInterpretedFunction.isPossiblyLambdaExpression(object, true))
-			return SubLObjectFactory.makeInterpretedFunction(null, object.toCons(), env);
-		if (object.isFunction())
-			return object;
-		if (object.isSymbol())
-			return object.toSymbol().getFunction();
+		if (SubLInterpretedFunction.isPossiblyLambdaExpression(object, true)) return SubLObjectFactory.makeInterpretedFunction(null, object.toCons(), env);
+		if (object.isFunction()) return object;
+		if (object.isSymbol()) return object.toSymbol().getFunction();
 		return Symbols.symbol_function(object.eval(env));
 	}
 
@@ -821,15 +820,15 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 	{
 		SubLObject form = specialForm.second();
 		Values.resetMultipleValues();
-		SubLList result = Values.multiple_value_list(form.eval(env));
+		final SubLObject retForm = form.eval(env);
+		SubLList result = Values.multiple_value_list(retForm);
 		Values.resetMultipleValues();
 		return result;
 	}
 
 	public static SubLObject must(SubLCons specialForm, SubLEnvironment env)
 	{
-		if (Errors.$ignore_mustsP$.getValue() == SubLNil.NIL)
-			return enforce_must(specialForm, env);
+		if (Errors.$ignore_mustsP$.getValue() == SubLNil.NIL) return enforce_must(specialForm, env);
 		return SubLNil.NIL;
 	}
 
@@ -863,7 +862,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 					return list_progn(evaluatableCode, env);
 				}
 				continue;
-			} else
+			}
+			else
 			{
 				if (key == CommonSymbols.T || key == CommonSymbols.OTHERWISE)
 				{
@@ -896,8 +896,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 				{
 					resourcer.releaseSubLListListIterator(iter);
 					iter = resourcer.acquireSubLListListIterator(clause, 1);
-					if (iter.hasNext())
-						return list_progn(iter, env);
+					if (iter.hasNext()) return list_progn(iter, env);
 					return value;
 				}
 			}
@@ -917,8 +916,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 	{
 		if (variable.isDynamic())
 		{
-			if (oldDynamicValues == null)
-				oldDynamicValues = new ArrayList<SubLSymbol>();
+			if (oldDynamicValues == null) oldDynamicValues = new ArrayList<SubLSymbol>();
 			oldDynamicValues.add(variable);
 			oldDynamicValues.add(value);
 		}
@@ -960,9 +958,11 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 						symbols = symbols.rest();
 						symbol = symbols.first();
 					}
-				} else
+				}
+				else
 					Errors.warn(SubLObjectFactory.makeString("~S is not a known ~S visibility type."), visibility, functor);
-			} else if (SubLNil.NIL != conses_high.member(functor, SubLSpecialOperatorDeclarations.inlineTypes, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED))
+			}
+			else if (SubLNil.NIL != conses_high.member(functor, SubLSpecialOperatorDeclarations.inlineTypes, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED))
 			{
 				SubLObject symbols2 = declSpec.rest();
 				SubLObject symbol2 = SubLNil.NIL;
@@ -973,7 +973,8 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 					symbols2 = symbols2.rest();
 					symbol2 = symbols2.first();
 				}
-			} else if (functor == SubLSpecialOperatorDeclarations.optimizeFuncall)
+			}
+			else if (functor == SubLSpecialOperatorDeclarations.optimizeFuncall)
 			{
 				SubLObject symbols2 = declSpec.rest();
 				SubLObject symbol2 = SubLNil.NIL;
@@ -1043,7 +1044,15 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 
 	public static SubLObject quit()
 	{
-		SubLMain.getMainReader().exitReadloop();
+		boolean was = Main.isSubLisp();
+		SubLReader o = SubLMain.getMainReader();
+
+		if (o != null) o.exitReadloop();
+		if (!was)
+		{
+			Interpreter interpreter = BeanShellCntrl.currentLisp();
+			if (interpreter != null) interpreter.kill(0);
+		}
 		return SubLNil.NIL;
 	}
 
@@ -1055,8 +1064,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 	public static SubLObject ret(SubLCons specialForm, SubLEnvironment env)
 	{
 		int size = specialForm.size();
-		if (size != 2)
-			throw new InvalidSubLExpressionException("Got incorrect number of arguments to RET: " + specialForm);
+		if (size != 2) throw new InvalidSubLExpressionException("Got incorrect number of arguments to RET: " + specialForm);
 		SubLObject form = specialForm.second();
 		SubLObject returnValue = form.eval(env);
 		return Dynamic.sublisp_throw(CommonSymbols.RETURN_TAG, returnValue);
@@ -1155,7 +1163,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 	{
 		try
 		{
-			Class[] parameterArray = {SubLCons.class, SubLEnvironment.class};
+			Class[] parameterArray = { SubLCons.class, SubLEnvironment.class };
 			Method method = this.getClass().getMethod(methodName, parameterArray);
 			SubLSymbol operatorSymbol = SubLObjectFactory.makeSublispSymbol(symbolName);
 			SubLCompiledFunction evaluationFunction = SubLObjectFactory.makeCompiledFunction(method, operatorSymbol, 2, 0, false);

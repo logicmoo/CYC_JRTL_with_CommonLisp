@@ -41,7 +41,8 @@ public class CTagger extends JavaTagger
     super(buffer);
   }
 
-  public void run()
+  @Override
+public void run()
   {
     ArrayList tags = new ArrayList();
     pos = new Position(buffer.getFirstLine(), 0);

@@ -4,6 +4,7 @@
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
@@ -96,7 +97,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	protected boolean interactive;
 	protected String newline;
 	public volatile boolean isClosed;
-	private long inputIndex;
+	private long offset;
 
 	protected Socket socket;
 
@@ -118,7 +119,18 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		return writer;
 	}
 
-
+	protected int onRead(int result) throws IOException
+	{
+		if (result >= 0)
+			incrementInputIndex(1L);
+		return result;
+	}
+	protected int onUnread(int result) 
+	{
+		if (result >= 0)
+			incrementInputIndex(-1L);
+		return result;
+	}
 
 	public AbstractSubLStream() {
 		this(Symbol.SYSTEM_STREAM);
@@ -129,7 +141,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		interactive = false;
 		newline = SubLStream.DEFAULT_NEWLINE;
 		isClosed = false;
-		inputIndex = 0L;
+		offset = 0L;
 	}
 
 
@@ -211,7 +223,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	}
 
 	public long getInputIndex() {
-		return inputIndex;
+		return offset;
 	}
 
 	@Override
@@ -288,13 +300,14 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	}
 
 	protected void incrementInputIndex(long incAmount) {
-		inputIndex += incAmount;
+		offset += incAmount;
 	}
 
 	protected void setInputIndex(long newIndex) {
-		inputIndex = newIndex;
+		offset = newIndex;
 	}
 
+	@Override
 	final public Stream toLispObject() {
 		return (Stream) this;
 	}
@@ -352,7 +365,8 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	public void checkTypeInternal(SubLSymbol predicate) throws SubLException {
 	}
 
-	  public Object clone()
+	  @Override
+	public Object clone()
 	  {
 		  Object result = null;
 	      try {
@@ -403,6 +417,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		return this;
 	}
 
+	@Override
 	public SubLObject getField(int fieldNum) {
 		lisp_type_error(this, "STRUCT");
 		return SubLNil.NIL;
@@ -416,6 +431,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	}
 
 	//@Override
+	@Override
 	public String getStringValue() {
 		lisp_type_error(this, "STRING");
 		return "";
@@ -425,6 +441,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		return getStringValue();
 	}
 
+	@Override
 	public SubLObject makeCopy() {
 		Errors.unimplementedMethod("makeCopy()");
 		return null;

@@ -37,7 +37,8 @@ public class FollowContextTask extends IdleThreadTask implements Constants
     }
 
     private final Runnable runnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             final Editor editor = Editor.currentEditor();
             if (editor == null)
@@ -57,7 +58,8 @@ public class FollowContextTask extends IdleThreadTask implements Constants
                 final Tag tag = findMatchingTag(editor, expression);
                 if (tag != null) {
                     Runnable r = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             if (tag instanceof LocalTag)
                                 TagCommands.gotoLocalTag(editor, (LocalTag)tag, true);

@@ -44,7 +44,8 @@ public class ConciseLoggingFormatter extends SimpleFormatter {
   /**
    * Formats the given log record.
    */
-  public String format (LogRecord logRecord) {
+  @Override
+public String format (LogRecord logRecord) {
     StringBuffer stringBuffer = new StringBuffer();
     if (logRecord == null)
       stringBuffer.append("null logRecord received by ConciseLoggingFormatter");

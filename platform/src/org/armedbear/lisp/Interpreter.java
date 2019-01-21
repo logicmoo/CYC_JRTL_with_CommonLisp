@@ -532,8 +532,7 @@ public final class Interpreter implements Runnable
 				}
 
 				else if (arg.equals("--compile-system"))
-				{
-					if (i + 1 < args.length)
+				{				
 					{
 						try
 						{
@@ -545,7 +544,7 @@ public final class Interpreter implements Runnable
 							sb.append(separator);
 							sb.append("Caught ");
 							sb.append(c.getCondition().typeOf().printObject());
-							sb.append(" while processing --eval option \"" + args[i + 1] + "\":");
+							sb.append(" while processing --compile-system");
 							sb.append(separator);
 							sb.append("  ");
 							final LispThread thread = LispThread.currentThread();
@@ -556,12 +555,6 @@ public final class Interpreter implements Runnable
 							exit(2); // FIXME
 						}
 						++i;
-					}
-					else
-					{
-						// Shouldn't happen.
-						System.err.println("No argument supplied to --eval");
-						exit(1); // FIXME
 					}
 				}
 
@@ -626,6 +619,7 @@ public final class Interpreter implements Runnable
 		}
 	}
 
+	@Override
 	@SuppressWarnings("CallToThreadDumpStack")
 	public void run()
 	{
@@ -662,18 +656,19 @@ public final class Interpreter implements Runnable
 		final LispThread thread = LispThread.currentThread();
 		// We only arrive here if something went wrong and we weren't able
 		// to load top-level.lisp and run the normal top-level loop.
-		Stream out = getStandardOutput();
+		Stream standardOut = getStandardOutput();
+		Stream standardInput = getStandardOutput();
 		while (true)
 		{
 			try
 			{
 				thread.resetStack();
 				thread.clearSpecialBindings();
-				out._writeString("* ");
-				out._finishOutput();
-				LispObject object = getStandardInput().read(false, EOF, false, thread, Stream.currentReadtable);
+				standardOut._writeString("* ");
+				standardOut._finishOutput();
+				LispObject object = standardInput.read(false, EOF, false, thread, Stream.currentReadtable);
 				if (object == EOF) break;
-				out.setCharPos(0);
+				standardOut.setCharPos(0);
 				Symbol.MINUS.setSymbolValue(object);
 				LispObject result = Lisp.eval(object, Environment.newEnvironment(), thread);
 				Debug.assertTrue(result != null);
@@ -683,8 +678,8 @@ public final class Interpreter implements Runnable
 				Symbol.PLUS_PLUS_PLUS.setSymbolValue(Symbol.PLUS_PLUS.getSymbolValue());
 				Symbol.PLUS_PLUS.setSymbolValue(Symbol.PLUS.getSymbolValue());
 				Symbol.PLUS.setSymbolValue(Symbol.MINUS.getSymbolValue());
-				out = getStandardOutput();
-				out.FRESH_LINE();
+				standardOut = getStandardOutput();
+				standardOut.FRESH_LINE();
 				LispObject[] values = thread.getValues();
 				Symbol.SLASH_SLASH_SLASH.setSymbolValue(Symbol.SLASH_SLASH.getSymbolValue());
 				Symbol.SLASH_SLASH.setSymbolValue(Symbol.SLASH.getSymbolValue());
@@ -695,18 +690,18 @@ public final class Interpreter implements Runnable
 						slash = new Cons(values[i], slash);
 					Symbol.SLASH.setSymbolValue(slash);
 					for (int i = 0; i < values.length; i++)
-						out._writeLine(values[i].printObject());
+						standardOut._writeLine(values[i].printObject());
 				}
 				else
 				{
 					Symbol.SLASH.setSymbolValue(new Cons(result));
-					out._writeLine(result.printObject());
+					standardOut._writeLine(result.printObject());
 				}
-				out._finishOutput();
+				standardOut._finishOutput();
 			} catch (StackOverflowError e)
 			{
-				getStandardInput().clearInput();
-				out._writeLine("Stack overflow");
+				standardInput.clearInput();
+				standardOut._writeLine("Stack overflow");
 			} catch (ControlTransfer c)
 			{
 				// We're on the toplevel, if this occurs,
@@ -720,8 +715,8 @@ public final class Interpreter implements Runnable
 				return;
 			} catch (Throwable t)
 			{
-				getStandardInput().clearInput();
-				out.printStackTrace(t);
+				standardInput.clearInput();
+				standardOut.printStackTrace(t);
 				thread.printBacktrace();
 			}
 		}
@@ -782,6 +777,7 @@ public final class Interpreter implements Runnable
 		globalInterpreter = null;
 	}
 
+	@Override
 	protected void finalize() throws Throwable
 	{
 		System.err.println("Interpreter.finalize");
@@ -801,6 +797,7 @@ public final class Interpreter implements Runnable
 			return condition;
 		}
 
+		@Override
 		public String getMessage()
 		{
 			String conditionText;
@@ -825,6 +822,7 @@ public final class Interpreter implements Runnable
 
 	private static final Primitive _DEBUGGER_HOOK_FUNCTION = new Primitive("%debugger-hook-function", PACKAGE_SYS, false)
 	{
+		@Override
 		public LispObject execute(LispObject first, LispObject second)
 		{
 			final LispObject condition = first;

@@ -175,15 +175,18 @@ public final class physical_quantity_question extends SubLTranslatedFile
         return (SubLObject)physical_quantity_question.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_physical_quantity_question_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_physical_quantity_question_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_physical_quantity_question_file();
     }
     

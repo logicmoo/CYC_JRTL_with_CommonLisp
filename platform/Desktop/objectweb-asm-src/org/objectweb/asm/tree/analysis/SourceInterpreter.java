@@ -47,11 +47,13 @@ import org.objectweb.asm.tree.MethodInsnNode;
  */
 public class SourceInterpreter implements Opcodes, Interpreter {
 
-    public Value newValue(final Type type) {
+    @Override
+	public Value newValue(final Type type) {
         return new SourceValue(type == null ? 1 : type.getSize());
     }
 
-    public Value newOperation(final AbstractInsnNode insn) {
+    @Override
+	public Value newOperation(final AbstractInsnNode insn) {
         int size;
         switch (insn.getOpcode()) {
             case LCONST_0:
@@ -73,11 +75,13 @@ public class SourceInterpreter implements Opcodes, Interpreter {
         return new SourceValue(size, insn);
     }
 
-    public Value copyOperation(final AbstractInsnNode insn, final Value value) {
+    @Override
+	public Value copyOperation(final AbstractInsnNode insn, final Value value) {
         return new SourceValue(value.getSize(), insn);
     }
 
-    public Value unaryOperation(final AbstractInsnNode insn, final Value value)
+    @Override
+	public Value unaryOperation(final AbstractInsnNode insn, final Value value)
     {
         int size;
         switch (insn.getOpcode()) {
@@ -100,7 +104,8 @@ public class SourceInterpreter implements Opcodes, Interpreter {
         return new SourceValue(size, insn);
     }
 
-    public Value binaryOperation(
+    @Override
+	public Value binaryOperation(
         final AbstractInsnNode insn,
         final Value value1,
         final Value value2)
@@ -133,7 +138,8 @@ public class SourceInterpreter implements Opcodes, Interpreter {
         return new SourceValue(size, insn);
     }
 
-    public Value ternaryOperation(
+    @Override
+	public Value ternaryOperation(
         final AbstractInsnNode insn,
         final Value value1,
         final Value value2,
@@ -142,7 +148,8 @@ public class SourceInterpreter implements Opcodes, Interpreter {
         return new SourceValue(1, insn);
     }
 
-    public Value naryOperation(final AbstractInsnNode insn, final List values) {
+    @Override
+	public Value naryOperation(final AbstractInsnNode insn, final List values) {
         int size;
         if (insn.getOpcode() == MULTIANEWARRAY) {
             size = 1;
@@ -152,7 +159,8 @@ public class SourceInterpreter implements Opcodes, Interpreter {
         return new SourceValue(size, insn);
     }
 
-    public Value merge(final Value v, final Value w) {
+    @Override
+	public Value merge(final Value v, final Value w) {
         SourceValue dv = (SourceValue) v;
         SourceValue dw = (SourceValue) w;
         if (dv.insns instanceof SmallSet && dw.insns instanceof SmallSet) {

@@ -28,7 +28,8 @@ public final class ForthTagger extends Tagger
     super(buffer);
   }
 
-  public void run()
+  @Override
+public void run()
   {
     ArrayList tags = new ArrayList();
     Line line = buffer.getFirstLine();

@@ -1735,15 +1735,18 @@ public final class cyc_testing_utilities extends SubLTranslatedFile
         return (SubLObject)cyc_testing_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cyc_testing_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cyc_testing_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cyc_testing_utilities_file();
     }
     

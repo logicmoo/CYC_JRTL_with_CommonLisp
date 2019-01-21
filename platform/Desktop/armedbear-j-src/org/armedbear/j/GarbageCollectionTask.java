@@ -42,7 +42,8 @@ public final class GarbageCollectionTask extends IdleThreadTask
     }
 
     private final Runnable runnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             // Only do gc if there has been a user event since the last time
             // we did gc.

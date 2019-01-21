@@ -1273,15 +1273,18 @@ public final class extended_numbers extends SubLTranslatedFile
         return (SubLObject)extended_numbers.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_extended_numbers_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_extended_numbers_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_extended_numbers_file();
     }
     

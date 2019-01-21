@@ -70,7 +70,8 @@ public class ListBox extends JPanel {
         removeButton.setEnabled(false);
         list.setVisibleRowCount(rowCount);
         list.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent ev) {
+            @Override
+			public void valueChanged(ListSelectionEvent ev) {
                 int idx = ev.getFirstIndex();
 
                 if (idx == -1)

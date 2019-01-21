@@ -672,6 +672,7 @@ public class PrologSync extends SubLTrampolineFile
 		}
 
 		// @Override
+		@Override
 		public void put(Map<String, term_t> varnames_to_vars, term_t term)
 		{
 			// TODO Auto-generated method stub
@@ -690,6 +691,7 @@ public class PrologSync extends SubLTrampolineFile
 		}
 
 		// @Override
+		@Override
 		public String typeName()
 		{
 			return "SyncState";
@@ -740,8 +742,10 @@ public class PrologSync extends SubLTrampolineFile
 			setName("doReadyList");
 		}
 
+		@Override
 		public void run()
 		{
+			SystemCurrent.setupIO();
 			while (true)
 			{
 				if (needsDone == 0 || !prologReady)

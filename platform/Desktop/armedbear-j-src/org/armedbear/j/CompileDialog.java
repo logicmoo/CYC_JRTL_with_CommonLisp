@@ -61,7 +61,8 @@ public final class CompileDialog extends JDialog implements KeyListener
         return command;
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         final int keyCode = e.getKeyCode();
         switch (keyCode) {
@@ -81,11 +82,14 @@ public final class CompileDialog extends JDialog implements KeyListener
         }
     }
 
-    public void keyReleased(KeyEvent e) {}
+    @Override
+	public void keyReleased(KeyEvent e) {}
 
-    public void keyTyped(KeyEvent e) {}
+    @Override
+	public void keyTyped(KeyEvent e) {}
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         super.dispose();
         editor.restoreFocus();

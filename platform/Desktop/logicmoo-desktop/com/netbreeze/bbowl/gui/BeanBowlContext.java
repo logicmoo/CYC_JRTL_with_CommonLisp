@@ -55,26 +55,32 @@ public class BeanBowlContext implements BeansContext {
 
 	// ==== Implementation of BeansContext interface ============
 
+	@Override
 	public Collection getBeansOfType(Class c) {
 		return getBowl().getBeansOfType(c);
 	}
 
+	@Override
 	public boolean containsBean(Object o) {
 		return getBowl().containsBean(o);
 	}
 
+	@Override
 	public void addListener(BeansContextListener l) {
 		getBowl().addListener(l);
 	}
 
+	@Override
 	public void removeListener(BeansContextListener l) {
 		getBowl().removeListener(l);
 	}
 
+	@Override
 	public Object findBean(String name) {
 		return getBowl().findBean(name);
 	}
 
+	@Override
 	public String getBeanName(Object o) {
 		if (o == null)
 			return "bean is null";
@@ -99,6 +105,7 @@ public class BeanBowlContext implements BeansContext {
 	 *
 	 * @returns true if the bean was added, false if the bean was already there
 	 */
+	@Override
 	public boolean addBean(Object bean) {
 		return getBowl().addBean(bean);
 	}
@@ -114,6 +121,7 @@ public class BeanBowlContext implements BeansContext {
 	 * @returns true if the bean was removed, false if that bean wasn't in this
 	 *          context
 	 */
+	@Override
 	public boolean removeBean(Object bean) {
 		return getBowl().removeBean(bean);
 	}
@@ -121,6 +129,7 @@ public class BeanBowlContext implements BeansContext {
 	/**
 	 * Returns all actions that can be carried out on the given bean
 	 */
+	@Override
 	public Collection getActions(Object bean) {
 		Collection actions = new LinkedList();
 		if (getBowl().containsBean(bean)) {
@@ -139,6 +148,7 @@ public class BeanBowlContext implements BeansContext {
 	/**
 	 * Opens up a GUI to show the details of the given bean
 	 */
+	@Override
 	public void showBeanDetails(Object bean) throws Exception {
 		JInternalFrame existing = (JInternalFrame) beanFrames.findBrother(bean);
 
@@ -273,6 +283,7 @@ public class BeanBowlContext implements BeansContext {
 		}
 	}
 
+	@Override
 	public void showError(String msg, Throwable error) {
 		try {
 			if (error == null) {
@@ -314,6 +325,7 @@ public class BeanBowlContext implements BeansContext {
 			this.bean = bean;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt) {
 			BeanWrapper wrapper = getBowl().getWrapper(bean);
 			if (wrapper != null) {
@@ -331,6 +343,7 @@ public class BeanBowlContext implements BeansContext {
 			this.bean = bean;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt) {
 			removeBean(bean);
 		}
@@ -344,6 +357,7 @@ public class BeanBowlContext implements BeansContext {
 			this.bean = bean;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt) {
 			showBeanGUI((Component) bean);
 		}
@@ -357,6 +371,7 @@ public class BeanBowlContext implements BeansContext {
 			this.bean = bean;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt) {
 			addBean(bean);
 		}
@@ -370,6 +385,7 @@ public class BeanBowlContext implements BeansContext {
 			this.bean = bean;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt) {
 			try {
 				showBeanDetails(bean);
@@ -385,6 +401,7 @@ public class BeanBowlContext implements BeansContext {
 	 * Window event adapter class, used to find out when child windows close
 	 */
 	class Adapter extends WindowAdapter implements InternalFrameListener {
+		@Override
 		public void windowClosing(WindowEvent e) {
 			Object source = e.getSource();
 			if (source == classBrowser) {
@@ -399,12 +416,15 @@ public class BeanBowlContext implements BeansContext {
 			}
 		}
 
+		@Override
 		public void internalFrameActivated(InternalFrameEvent e) {
 		}
 
+		@Override
 		public void internalFrameClosed(InternalFrameEvent e) {
 		}
 
+		@Override
 		public void internalFrameClosing(InternalFrameEvent e) {
 			Object source = e.getSource();
 			if (source == classBrowser) {
@@ -419,15 +439,19 @@ public class BeanBowlContext implements BeansContext {
 			}
 		}
 
+		@Override
 		public void internalFrameDeactivated(InternalFrameEvent e) {
 		}
 
+		@Override
 		public void internalFrameDeiconified(InternalFrameEvent e) {
 		}
 
+		@Override
 		public void internalFrameIconified(InternalFrameEvent e) {
 		}
 
+		@Override
 		public void internalFrameOpened(InternalFrameEvent e) {
 		}
 	}

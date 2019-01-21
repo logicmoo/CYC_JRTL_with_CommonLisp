@@ -1164,15 +1164,18 @@ public final class scenario extends SubLTranslatedFile
         return (SubLObject)scenario.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_scenario_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_scenario_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_scenario_file();
     }
     

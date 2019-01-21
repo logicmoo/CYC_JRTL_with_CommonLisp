@@ -158,6 +158,7 @@ public class TriggerForMember<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		return false;
 	}
 
+	@Override
 	public void applySalience(UISalient uiSalient) {
 		if (uiSalient == null)
 			return;
@@ -215,6 +216,7 @@ public class TriggerForMember<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		return labelDif;
 	}
 
+	@Override
 	public TriggerForInstance createTrigger(String menuFmt, DisplayContext ctx, Object poj) {
 		if (menuFmt == null)
 			menuFmt = this.menuFormat;
@@ -326,6 +328,7 @@ public class TriggerForMember<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		return isPasteAtPopup;
 	}
 
+	@Override
 	public Class getDeclaringClass() {
 		if (arg0Clazz != null)
 			return arg0Clazz;
@@ -356,6 +359,7 @@ public class TriggerForMember<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		return member;
 	}
 
+	@Override
 	public String getMenuPath() {
 		boolean was = Debuggable.isNotShowingExceptions();
 		Debuggable.setDoNotShowExceptions(true);
@@ -376,6 +380,7 @@ public class TriggerForMember<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		return getMissingParametersAtPopup() == 0;
 	}
 
+	@Override
 	public String makeMenuPath() {
 		if (menuFormat != null && !menuFormat.contains("%") && menuFormat.length() > 1)
 			// pre-named?
@@ -720,6 +725,7 @@ public class TriggerForMember<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		return params;
 	}
 
+	@Override
 	public Class getReturnType() {
 		if (propDesc != null) {
 			return propDesc.getField().getType();
@@ -833,6 +839,7 @@ public class TriggerForMember<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		return params.length < 2;
 	}
 
+	@Override
 	public void setMenuInfo() {
 		if (jmi == null) {
 			jmi = makeMenuItem(null, _object);
@@ -880,6 +887,7 @@ public class TriggerForMember<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		}
 	}
 
+	@Override
 	public Object valueOf(Object targetBox, ActionEvent actevt, boolean wantSideEffect, boolean isPaste) throws InvocationTargetException {
 		boolean was = Debuggable.isNotShowingExceptions();
 		if (!wantSideEffect) {
@@ -1085,6 +1093,7 @@ public class TriggerForMember<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		return optionalArgSpec;
 	}
 
+	@Override
 	public boolean isSideEffectSafe() {
 		if (creator != null && !creator.isSideEffectSafe())
 			return false;

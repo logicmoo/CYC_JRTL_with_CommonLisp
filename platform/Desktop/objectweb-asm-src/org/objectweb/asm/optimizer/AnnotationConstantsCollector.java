@@ -52,7 +52,8 @@ public class AnnotationConstantsCollector implements AnnotationVisitor {
         this.cp = cp;
     }
 
-    public void visit(final String name, final Object value) {
+    @Override
+	public void visit(final String name, final Object value) {
         if (name != null) {
             cp.newUTF8(name);
         }
@@ -112,7 +113,8 @@ public class AnnotationConstantsCollector implements AnnotationVisitor {
         av.visit(name, value);
     }
 
-    public void visitEnum(
+    @Override
+	public void visitEnum(
         final String name,
         final String desc,
         final String value)
@@ -125,7 +127,8 @@ public class AnnotationConstantsCollector implements AnnotationVisitor {
         av.visitEnum(name, desc, value);
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String name,
         final String desc)
     {
@@ -137,14 +140,16 @@ public class AnnotationConstantsCollector implements AnnotationVisitor {
                 cp);
     }
 
-    public AnnotationVisitor visitArray(final String name) {
+    @Override
+	public AnnotationVisitor visitArray(final String name) {
         if (name != null) {
             cp.newUTF8(name);
         }
         return new AnnotationConstantsCollector(av.visitArray(name), cp);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         av.visitEnd();
     }
 }

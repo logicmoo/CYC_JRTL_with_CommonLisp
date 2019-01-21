@@ -1727,15 +1727,18 @@ public final class cb_system_health extends SubLTranslatedFile
         return (SubLObject)cb_system_health.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_system_health_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_system_health_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_system_health_file();
     }
     

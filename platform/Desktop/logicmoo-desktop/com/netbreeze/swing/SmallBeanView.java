@@ -69,7 +69,8 @@ public class SmallBeanView extends BeanView implements PropertyChangeListener, M
     this.removeListener = l;
   }
 
-  public void propertyChange(PropertyChangeEvent evt) {
+  @Override
+public void propertyChange(PropertyChangeEvent evt) {
     if (label != null) {
       if (context == null) {
         label.setText(getBean().toString());
@@ -90,7 +91,8 @@ public class SmallBeanView extends BeanView implements PropertyChangeListener, M
     //}
   }
 
-  public void mouseClicked(MouseEvent e) {
+  @Override
+public void mouseClicked(MouseEvent e) {
     if (e.isPopupTrigger()) {
       showMenu(e.getX() + 5, e.getY() + 5);
     } else {
@@ -99,27 +101,32 @@ public class SmallBeanView extends BeanView implements PropertyChangeListener, M
       } catch (Exception err) {}*/
     }
   }
-  public void mousePressed(MouseEvent e) {
+  @Override
+public void mousePressed(MouseEvent e) {
     if (e.isPopupTrigger()) {
       showMenu(e.getX() + 5, e.getY() + 5);
     } else {
     }
   }
 
-  public void mouseReleased(MouseEvent e) {
+  @Override
+public void mouseReleased(MouseEvent e) {
     if (e.isPopupTrigger()) {
       showMenu(e.getX() + 5, e.getY() + 5);
     }
   }
 
-  public void mouseEntered(MouseEvent e) {
+  @Override
+public void mouseEntered(MouseEvent e) {
     //label.setForeground(Color.blue);
   }
-  public void mouseExited(MouseEvent e) {
+  @Override
+public void mouseExited(MouseEvent e) {
     //label.setForeground(Color.black);
   }
 
-  public void actionPerformed(ActionEvent evt) {
+  @Override
+public void actionPerformed(ActionEvent evt) {
     if (evt.getSource() == propButton) {
       if (context != null) {
         try {
@@ -138,12 +145,14 @@ public class SmallBeanView extends BeanView implements PropertyChangeListener, M
 
 //==== Drag/drop methods ==========================
 
-  public void dragGestureRecognized( DragGestureEvent event) {
+  @Override
+public void dragGestureRecognized( DragGestureEvent event) {
     cat.debug("source dragGestureRecognized");
     dragSource.startDrag (event, DragSource.DefaultMoveDrop, this, this);
   }
 
-  public DataFlavor[] getTransferDataFlavors() {
+  @Override
+public DataFlavor[] getTransferDataFlavors() {
     try {
       return new DataFlavor[] {
         new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType)
@@ -154,33 +163,41 @@ public class SmallBeanView extends BeanView implements PropertyChangeListener, M
     }
   }
 
-  public boolean isDataFlavorSupported(DataFlavor flavor) {
+  @Override
+public boolean isDataFlavorSupported(DataFlavor flavor) {
     return flavor.getMimeType().equals(DataFlavor.javaJVMLocalObjectMimeType);
   }
 
-  public Object getTransferData(DataFlavor flavor)
+  @Override
+public Object getTransferData(DataFlavor flavor)
                        throws UnsupportedFlavorException {
     return getBean();
   }
 
-  public void dragEnter(DragSourceDragEvent dsde) {
+  @Override
+public void dragEnter(DragSourceDragEvent dsde) {
   }
 
-  public void dragOver(DragSourceDragEvent dsde) {
+  @Override
+public void dragOver(DragSourceDragEvent dsde) {
   }
 
-  public void dropActionChanged(DragSourceDragEvent dsde) {
+  @Override
+public void dropActionChanged(DragSourceDragEvent dsde) {
   }
 
-  public void dragExit(DragSourceEvent dse) {
+  @Override
+public void dragExit(DragSourceEvent dse) {
   }
 
-  public void dragDropEnd(DragSourceDropEvent dsde) {
+  @Override
+public void dragDropEnd(DragSourceDropEvent dsde) {
   }
 
 //=================================================================
 
-  protected void beanChanged(Object oldBean, Object newBean) {
+  @Override
+protected void beanChanged(Object oldBean, Object newBean) {
     removeAll();
     initGUI();
   }
@@ -256,10 +273,12 @@ public class SmallBeanView extends BeanView implements PropertyChangeListener, M
       setToolTipText("Open a property window for this object");
     }
 
-    public Dimension getPreferredSize() {
+    @Override
+	public Dimension getPreferredSize() {
       return new Dimension(16,16);
     }
-    public Dimension getMinimumSize() {
+    @Override
+	public Dimension getMinimumSize() {
       return getPreferredSize();
     }
   }
@@ -277,10 +296,12 @@ public class SmallBeanView extends BeanView implements PropertyChangeListener, M
       setToolTipText("Removes this object from its parent collection");
     }
 
-    public Dimension getPreferredSize() {
+    @Override
+	public Dimension getPreferredSize() {
       return new Dimension(16,16);
     }
-    public Dimension getMinimumSize() {
+    @Override
+	public Dimension getMinimumSize() {
       return getPreferredSize();
     }
   }

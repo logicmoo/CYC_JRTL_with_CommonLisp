@@ -4421,15 +4421,18 @@ public final class translator_utilities extends SubLTranslatedFile
         return (SubLObject)translator_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_translator_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_translator_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_translator_utilities_file();
     }
     

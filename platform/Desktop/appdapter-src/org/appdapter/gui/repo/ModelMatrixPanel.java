@@ -136,11 +136,13 @@ public class ModelMatrixPanel<BoxType extends Box> extends GenericBeansPanel
 				// Add listener to the model
 				this.listener = new StatementListener()
 				{
+					@Override
 					public void addedStatement(Statement s)
 					{
 						notifyConcurrentChange();
 					}
 
+					@Override
 					public void removedStatement(Statement s)
 					{
 						notifyConcurrentChange();
@@ -179,6 +181,7 @@ public class ModelMatrixPanel<BoxType extends Box> extends GenericBeansPanel
 		cj.attempt();
 	}
 
+	@Override
 	public List listFromHolder(Object o)
 	{
 		if (o == null)
@@ -187,6 +190,7 @@ public class ModelMatrixPanel<BoxType extends Box> extends GenericBeansPanel
 		return model.listStatements().toList();
 	}
 
+	@Override
 	public ToFromKeyConverter getCellConverter(Class valueClazz)
 	{
 		if (RDFNode.class.isAssignableFrom(valueClazz))

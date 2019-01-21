@@ -54,33 +54,39 @@ public abstract class AbstractMode implements Constants, Mode
         }
     }
 
-    public final int getId()
+    @Override
+	public final int getId()
     {
         return id;
     }
 
-    public final String getDisplayName()
+    @Override
+	public final String getDisplayName()
     {
         return displayName;
     }
 
-    public Buffer createBuffer(File file)
+    @Override
+	public Buffer createBuffer(File file)
     {
         return null;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new PlainTextFormatter(buffer);
     }
 
-    public final String toString()
+    @Override
+	public final String toString()
     {
         return displayName;
     }
 
     // Should never return null.
-    public synchronized final KeyMap getKeyMap()
+    @Override
+	public synchronized final KeyMap getKeyMap()
     {
         if (keyMap == null) {
             if (Editor.isLispInitialized()) {
@@ -135,28 +141,33 @@ public abstract class AbstractMode implements Constants, Mode
         // Default implementation just leaves keymap empty.
     }
 
-    public File getKeyMapFile()
+    @Override
+	public File getKeyMapFile()
     {
         return keyMapFile;
     }
 
-    public synchronized final void useDefaultKeyMap()
+    @Override
+	public synchronized final void useDefaultKeyMap()
     {
         keyMap = new KeyMap();
         setKeyMapDefaults(keyMap);
     }
 
-    public synchronized final void deleteKeyMap()
+    @Override
+	public synchronized final void deleteKeyMap()
     {
         keyMap = null;
     }
 
-    public String getMenuName()
+    @Override
+	public String getMenuName()
     {
         return "Default";
     }
 
-    public MenuBar createMenuBar(Frame frame)
+    @Override
+	public MenuBar createMenuBar(Frame frame)
     {
         MenuBar menuBar = new MenuBar("Default");
         menuBar.add(new Menu("File", 'F'));
@@ -171,7 +182,8 @@ public abstract class AbstractMode implements Constants, Mode
         return menuBar;
     }
 
-    public void populateMenu(Editor editor, Menu menu)
+    @Override
+	public void populateMenu(Editor editor, Menu menu)
     {
         final String text = menu.getText();
         if (text == "File")
@@ -318,7 +330,8 @@ public abstract class AbstractMode implements Constants, Mode
         menu.add(editor, "Pop Position", 'P', "popPosition");
     }
 
-    public void populateModeMenu(Editor editor, Menu menu)
+    @Override
+	public void populateModeMenu(Editor editor, Menu menu)
     {
     }
 
@@ -344,7 +357,8 @@ public abstract class AbstractMode implements Constants, Mode
         menu.add(editor, "About J", 'O', "about");
     }
 
-    public JPopupMenu getContextMenu(Editor editor)
+    @Override
+	public JPopupMenu getContextMenu(Editor editor)
     {
         final JPopupMenu popup = new JPopupMenu();
         addDefaultContextMenuItems(editor, popup);
@@ -458,7 +472,8 @@ public abstract class AbstractMode implements Constants, Mode
         return menuItem;
     }
 
-    public ToolBar getToolBar(Frame frame)
+    @Override
+	public ToolBar getToolBar(Frame frame)
     {
         ToolBar tb = getCustomToolBar(frame);
         if (tb != null)
@@ -486,7 +501,8 @@ public abstract class AbstractMode implements Constants, Mode
         return frame.getDefaultToolBar();
     }
 
-    public NavigationComponent getSidebarComponent(Editor editor)
+    @Override
+	public NavigationComponent getSidebarComponent(Editor editor)
     {
         if (isTaggable())
             return new SidebarTagList(editor.getSidebar(), editor);
@@ -494,62 +510,74 @@ public abstract class AbstractMode implements Constants, Mode
             return null;
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return null;
     }
 
-    public boolean isTaggable()
+    @Override
+	public boolean isTaggable()
     {
         return false;
     }
 
-    public boolean hasQualifiedNames()
+    @Override
+	public boolean hasQualifiedNames()
     {
         return false;
     }
 
-    public boolean isQualifiedName(String s)
+    @Override
+	public boolean isQualifiedName(String s)
     {
         return s.indexOf('.') >= 0 || s.indexOf("::") >= 0;
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return false;
     }
 
-    public boolean canIndentPaste()
+    @Override
+	public boolean canIndentPaste()
     {
         return canIndent();
     }
 
-    public boolean acceptsLinePaste(Editor editor)
+    @Override
+	public boolean acceptsLinePaste(Editor editor)
     {
         return true;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         return 0;
     }
 
-    public SyntaxIterator getSyntaxIterator(Position pos)
+    @Override
+	public SyntaxIterator getSyntaxIterator(Position pos)
     {
         return new DefaultSyntaxIterator(pos);
     }
 
-    public String getCommentStart()
+    @Override
+	public String getCommentStart()
     {
         return null;
     }
 
-    public String getCommentEnd()
+    @Override
+	public String getCommentEnd()
     {
         return null;
     }
 
-    public boolean getBooleanProperty(Property property)
+    @Override
+	public boolean getBooleanProperty(Property property)
     {
         String key = property.key();
 
@@ -584,7 +612,8 @@ public abstract class AbstractMode implements Constants, Mode
         return ((Boolean)getDefaultValue(property)).booleanValue();
     }
 
-    public int getIntegerProperty(Property property)
+    @Override
+	public int getIntegerProperty(Property property)
     {
         String key = property.key();
 
@@ -618,7 +647,8 @@ public abstract class AbstractMode implements Constants, Mode
         return ((Integer)getDefaultValue(property)).intValue();
     }
 
-    public String getStringProperty(Property property)
+    @Override
+	public String getStringProperty(Property property)
     {
         String key = property.key();
 
@@ -648,7 +678,8 @@ public abstract class AbstractMode implements Constants, Mode
         return (String) getDefaultValue(property); // May be null.
     }
 
-    public Color getColorProperty(Property property)
+    @Override
+	public Color getColorProperty(Property property)
     {
         String key = property.key();
 
@@ -669,21 +700,24 @@ public abstract class AbstractMode implements Constants, Mode
             return null;
     }
 
-    public void setProperty(Property property, String value)
+    @Override
+	public void setProperty(Property property, String value)
     {
         if (properties == null)
             properties = new PropertyList();
         properties.setProperty(property, value);
     }
 
-    public void setProperty(Property property, boolean value)
+    @Override
+	public void setProperty(Property property, boolean value)
     {
         if (properties == null)
             properties = new PropertyList();
         properties.setProperty(property, value);
     }
 
-    public void setProperty(Property property, int value)
+    @Override
+	public void setProperty(Property property, int value)
     {
         if (properties == null)
             properties = new PropertyList();
@@ -695,7 +729,8 @@ public abstract class AbstractMode implements Constants, Mode
         return property.getDefaultValue();
     }
 
-    public final boolean accepts(String filename)
+    @Override
+	public final boolean accepts(String filename)
     {
         return Editor.getModeList().modeAccepts(id, filename);
     }
@@ -714,17 +749,20 @@ public abstract class AbstractMode implements Constants, Mode
             return fullKey;
     }
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         return Character.isJavaIdentifierStart(c);
     }
 
-    public boolean isIdentifierPart(char c)
+    @Override
+	public boolean isIdentifierPart(char c)
     {
         return Character.isJavaIdentifierPart(c);
     }
 
-    public boolean isDelimited(Position pos, int length)
+    @Override
+	public boolean isDelimited(Position pos, int length)
     {
         final Line line = pos.getLine();
         final int offset = pos.getOffset();
@@ -738,7 +776,8 @@ public abstract class AbstractMode implements Constants, Mode
         return true;
     }
 
-    public boolean isInQuote(Buffer buffer, Position pos)
+    @Override
+	public boolean isInQuote(Buffer buffer, Position pos)
     {
         // The default implementation considers both single and double quotes
         // (which is wrong for Lisp) and only looks at the current line (which
@@ -765,22 +804,26 @@ public abstract class AbstractMode implements Constants, Mode
         return inQuote;
     }
 
-    public boolean isInComment(Buffer buffer, Position pos)
+    @Override
+	public boolean isInComment(Buffer buffer, Position pos)
     {
         return false;
     }
 
-    public boolean isCommentLine(Line line)
+    @Override
+	public boolean isCommentLine(Line line)
     {
         return false;
     }
 
-    public char fixCase(Editor editor, char c)
+    @Override
+	public char fixCase(Editor editor, char c)
     {
         return c;
     }
 
-    public String getContextString(Editor editor, boolean verbose)
+    @Override
+	public String getContextString(Editor editor, boolean verbose)
     {
         final List tags = editor.getBuffer().getTags();
         if (tags != null) {
@@ -804,21 +847,25 @@ public abstract class AbstractMode implements Constants, Mode
         return null;
     }
 
-    public String getMouseMovedContextString(Editor editor, Position pos)
+    @Override
+	public String getMouseMovedContextString(Editor editor, Position pos)
     {
         return null;
     }
 
-    public String getToolTipText(Editor editor, MouseEvent e)
+    @Override
+	public String getToolTipText(Editor editor, MouseEvent e)
     {
         return null;
     }
 
-    public void loadFile(Buffer buffer, File file)
+    @Override
+	public void loadFile(Buffer buffer, File file)
     {
     }
 
-    public boolean confirmClose(Editor editor, Buffer buffer)
+    @Override
+	public boolean confirmClose(Editor editor, Buffer buffer)
     {
         if (!buffer.isModified())
             return true;
@@ -827,14 +874,16 @@ public abstract class AbstractMode implements Constants, Mode
         return CloseBufferConfirmationDialog.confirmClose(editor, buffer);
     }
 
-    public boolean isKeyword(String s)
+    @Override
+	public boolean isKeyword(String s)
     {
         if (keywords != null)
             return keywords.isKeyword(s);
         return false;
     }
 
-    public Expression getExpressionAtDot(Editor editor, boolean exact)
+    @Override
+	public Expression getExpressionAtDot(Editor editor, boolean exact)
     {
         if (editor.getDot() == null)
             return null;
@@ -874,12 +923,14 @@ public abstract class AbstractMode implements Constants, Mode
         return null;
     }
 
-    public final String getIdentifier(Position pos)
+    @Override
+	public final String getIdentifier(Position pos)
     {
         return getIdentifier(pos.getLine(), pos.getOffset());
     }
 
-    public String getIdentifier(Line line, int offset)
+    @Override
+	public String getIdentifier(Line line, int offset)
     {
         final int limit = line.length();
         if (offset < limit) {
@@ -911,7 +962,8 @@ public abstract class AbstractMode implements Constants, Mode
         return null;
     }
 
-    public Position findIdentifierStart(Line line, int offset)
+    @Override
+	public Position findIdentifierStart(Line line, int offset)
     {
         if (!isIdentifierPart(line.charAt(offset)))
             return null;

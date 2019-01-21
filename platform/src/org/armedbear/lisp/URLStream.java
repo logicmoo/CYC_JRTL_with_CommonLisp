@@ -85,17 +85,20 @@ public final class URLStream extends Stream
         }
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.URL_STREAM;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.URL_STREAM;
     }
 
-    public LispObject typep(LispObject typeSpecifier)
+    @Override
+	public LispObject typep(LispObject typeSpecifier)
     {
         if (typeSpecifier == Symbol.URL_STREAM)
             return T;
@@ -104,7 +107,8 @@ public final class URLStream extends Stream
         return super.typep(typeSpecifier);
     }
 
-    public void setExternalFormat(LispObject format) {
+    @Override
+	public void setExternalFormat(LispObject format) {
         super.setExternalFormat(format);
     }
 
@@ -113,7 +117,8 @@ public final class URLStream extends Stream
         return pathname;
     }
 
-    public void _close()
+    @Override
+	public void _close()
     {
         try {
             if (input != null) {
@@ -129,7 +134,8 @@ public final class URLStream extends Stream
         }
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         StringBuffer sb = new StringBuffer();
         sb.append(Symbol.URL_STREAM.printObject());

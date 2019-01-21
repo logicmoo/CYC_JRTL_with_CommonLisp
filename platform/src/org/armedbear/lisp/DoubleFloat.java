@@ -239,7 +239,7 @@ public final class DoubleFloat extends SubLDoubleFloat
     }
 
     @Override
-    public Object javaInstance(Class c)
+    public Object javaInstanceImpl(Class c)
     {
         String cn = c.getName();
         if (cn.equals("java.lang.Float") || cn.equals("float"))
@@ -568,7 +568,8 @@ public final class DoubleFloat extends SubLDoubleFloat
             return (hashCode() & 0x7fffffff);
     }
 
-    final public String printObjectImpl()
+    @Override
+	final public String printObjectImpl()
     {
         if (value == Double.POSITIVE_INFINITY) {
             StringBuilder sb = new StringBuilder("#.");

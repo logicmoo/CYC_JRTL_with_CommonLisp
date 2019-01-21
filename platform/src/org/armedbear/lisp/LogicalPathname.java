@@ -178,17 +178,20 @@ public final class LogicalPathname extends Pathname
         return result.nreverse();
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.LOGICAL_PATHNAME;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.LOGICAL_PATHNAME;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.LOGICAL_PATHNAME)
             return T;
@@ -197,7 +200,8 @@ public final class LogicalPathname extends Pathname
         return super.typep(type);
     }
 
-    protected String getDirectoryNamestring()
+    @Override
+	protected String getDirectoryNamestring()
     {
         StringBuilder sb = new StringBuilder();
         // "If a pathname is converted to a namestring, the symbols NIL and
@@ -234,7 +238,8 @@ public final class LogicalPathname extends Pathname
         return sb.toString();
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         final LispThread thread = LispThread.currentThread();
         boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
@@ -282,7 +287,8 @@ public final class LogicalPathname extends Pathname
         canonicalize_logical_host() {
             super("canonicalize-logical-host", PACKAGE_SYS, true, "host");
         }
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             AbstractString s = checkString(arg);
             if (s.length() == 0) {
@@ -301,7 +307,8 @@ public final class LogicalPathname extends Pathname
         _make_logical_pathname() {
             super("%make-logical-pathname", PACKAGE_SYS, true, "namestring");
         }
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
 
         {
             // Check for a logical pathname host.
@@ -323,7 +330,8 @@ public final class LogicalPathname extends Pathname
         }
     }
 
-    public long getLastModified() {
+    @Override
+	public long getLastModified() {
         Pathname p = translateLogicalPathname(this);
         return p.getLastModified();
     }

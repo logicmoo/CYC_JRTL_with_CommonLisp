@@ -64,7 +64,8 @@ public class ManFormatter extends Formatter
         }
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         clearSegmentList();
         if (line == null || line.length() == 0) {
@@ -200,7 +201,8 @@ public class ManFormatter extends Formatter
         endToken(state);
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("ManMode");

@@ -36,7 +36,8 @@ public final class ButtonUI extends MetalButtonUI
         return buttonUI;
     }
 
-    protected void paintText(Graphics g, AbstractButton b, Rectangle textRect,
+    @Override
+	protected void paintText(Graphics g, AbstractButton b, Rectangle textRect,
                              String text)
     {
         Display.setRenderingHints(g);

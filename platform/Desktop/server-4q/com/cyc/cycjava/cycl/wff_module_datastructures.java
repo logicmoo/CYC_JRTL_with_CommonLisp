@@ -410,15 +410,18 @@ public final class wff_module_datastructures extends SubLTranslatedFile
         return (SubLObject)wff_module_datastructures.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_wff_module_datastructures_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_wff_module_datastructures_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_wff_module_datastructures_file();
     }
     
@@ -483,23 +486,28 @@ public final class wff_module_datastructures extends SubLTranslatedFile
             this.$plist = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$wff_module_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$name;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$plist;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$name = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$plist = value;
         }
         
@@ -514,7 +522,8 @@ public final class wff_module_datastructures extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("WFF-MODULE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return wff_module_datastructures.wff_module_p(arg1);
         }
     }

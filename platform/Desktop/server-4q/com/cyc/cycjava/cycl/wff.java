@@ -4883,15 +4883,18 @@ public final class wff extends SubLTranslatedFile
         return (SubLObject)wff.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_wff_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_wff_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_wff_file();
     }
     
@@ -5087,7 +5090,8 @@ public final class wff extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-MAL-ACTUAL-ARITY-CACHED?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return wff.clear_mal_actual_arity_cachedP();
         }
     }

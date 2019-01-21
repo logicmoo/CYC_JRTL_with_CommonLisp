@@ -45,7 +45,8 @@ public final class NewsGroupsMode extends AbstractMode implements Constants,
         return mode;
     }
 
-    protected final void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected final void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "openGroupAtDot");
     }

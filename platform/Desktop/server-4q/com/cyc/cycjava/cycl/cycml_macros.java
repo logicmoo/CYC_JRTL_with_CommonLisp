@@ -124,15 +124,18 @@ public final class cycml_macros extends SubLTranslatedFile
         return (SubLObject)cycml_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cycml_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cycml_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cycml_macros_file();
     }
     

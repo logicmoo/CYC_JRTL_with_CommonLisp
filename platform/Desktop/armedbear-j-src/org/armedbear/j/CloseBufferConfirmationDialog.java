@@ -56,7 +56,8 @@ public final class CloseBufferConfirmationDialog extends ConfirmDialog
     }
 
     // Save the changes.
-    protected void yes()
+    @Override
+	protected void yes()
     {
         setVisible(false);
         editor.save(buffer);
@@ -70,13 +71,15 @@ public final class CloseBufferConfirmationDialog extends ConfirmDialog
     }
 
     // Don't save the changes.
-    protected void no()
+    @Override
+	protected void no()
     {
         confirmed = true;
         dispose();
     }
 
-    protected void cancel()
+    @Override
+	protected void cancel()
     {
         cancelled = true;
         dispose();

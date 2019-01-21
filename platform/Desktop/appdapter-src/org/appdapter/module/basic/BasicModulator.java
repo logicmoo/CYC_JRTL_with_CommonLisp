@@ -36,7 +36,8 @@ public class BasicModulator<Ctx> extends BasicDebugger implements Modulator<Ctx>
         this.myDefaultCtx = ctx;
     }
 
-    public synchronized void attachModule(final Module<Ctx> m) {
+    @Override
+	public synchronized void attachModule(final Module<Ctx> m) {
         final Ctx prevCtx = (Ctx)m.getContext();
         if (prevCtx != null) {
             throw new RuntimeException("[" + this + "] cannot attach module [" + m + "] with existing context [" + prevCtx + "]");
@@ -49,7 +50,8 @@ public class BasicModulator<Ctx> extends BasicDebugger implements Modulator<Ctx>
         this.myModuleList.add(m);
     }
 
-    public synchronized void detachModule(final Module<Ctx> m) {
+    @Override
+	public synchronized void detachModule(final Module<Ctx> m) {
         if (!this.myModuleList.contains(m)) {
             throw new RuntimeException("[" + this + "] cannot detach from module [" + m + "], it is not currently attached!");
         }
@@ -61,11 +63,13 @@ public class BasicModulator<Ctx> extends BasicDebugger implements Modulator<Ctx>
         this.myModuleList.remove(m);
     }
 
-    public int getAttachedModuleCount() {
+    @Override
+	public int getAttachedModuleCount() {
         return this.myModuleList.size();
     }
 
-    public synchronized void processOneBatch() {
+    @Override
+	public synchronized void processOneBatch() {
         this.dumpModules();
         this.processFinishedModules();
         this.processStoppingModules();

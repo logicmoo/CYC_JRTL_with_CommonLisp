@@ -35,6 +35,7 @@ public class BeanShellBSFEngine extends BSFEngineImpl
 	Interpreter interpreter;
 	boolean installedApplyMethod;
 
+	@Override
 	public void initialize ( BSFManager mgr, String lang, Vector declaredBeans)
 	throws BSFException
 	{
@@ -67,6 +68,7 @@ public class BeanShellBSFEngine extends BSFEngineImpl
 		interpreter.
 		@param object may be null for the global namespace.
 	*/
+	@Override
 	public Object call( Object object, String name, Object[] args )
 		throws BSFException
 	{
@@ -127,6 +129,7 @@ public class BeanShellBSFEngine extends BSFEngineImpl
 		Note: the apply() method may be supported directly in BeanShell in an
 		upcoming release and would not require special support here.
 	*/
+	@Override
 	public Object apply (
 		String source, int lineNo, int columnNo, Object funcBody,
 		Vector namesVec, Vector argsVec )
@@ -174,6 +177,7 @@ public class BeanShellBSFEngine extends BSFEngineImpl
 		}
 	}
 
+	@Override
 	public Object eval (
 		String source, int lineNo, int columnNo, Object expr)
 		throws BSFException
@@ -203,6 +207,7 @@ public class BeanShellBSFEngine extends BSFEngineImpl
 	}
 
 
+	@Override
 	public void exec (String source, int lineNo, int columnNo, Object script)
 		throws BSFException
 	{
@@ -236,6 +241,7 @@ public class BeanShellBSFEngine extends BSFEngineImpl
 		Object script, CodeBuffer cb) throws BSFException;
 */
 
+	@Override
 	public void declareBean (BSFDeclaredBean bean)
 		throws BSFException
 	{
@@ -247,6 +253,7 @@ public class BeanShellBSFEngine extends BSFEngineImpl
 		}
 	}
 
+	@Override
 	public void undeclareBean (BSFDeclaredBean bean)
 		throws BSFException
 	{
@@ -257,6 +264,7 @@ public class BeanShellBSFEngine extends BSFEngineImpl
 		}
 	}
 
+	@Override
 	public void terminate () { }
 
 

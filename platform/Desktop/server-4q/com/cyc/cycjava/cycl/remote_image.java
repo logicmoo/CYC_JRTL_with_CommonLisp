@@ -570,15 +570,18 @@ public final class remote_image extends SubLTranslatedFile
         return (SubLObject)remote_image.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_remote_image_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_remote_image_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_remote_image_file();
     }
     
@@ -665,31 +668,38 @@ public final class remote_image extends SubLTranslatedFile
             this.$protocol = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$remote_image_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$machine;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$port;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$protocol;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$machine = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$port = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$protocol = value;
         }
         
@@ -704,7 +714,8 @@ public final class remote_image extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOTE-IMAGE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return remote_image.remote_image_p(arg1);
         }
     }
@@ -720,23 +731,28 @@ public final class remote_image extends SubLTranslatedFile
             this.$channel = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$remote_image_connection_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$image;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$channel;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$image = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$channel = value;
         }
         
@@ -751,7 +767,8 @@ public final class remote_image extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOTE-IMAGE-CONNECTION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return remote_image.remote_image_connection_p(arg1);
         }
     }

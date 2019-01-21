@@ -91,7 +91,8 @@ public final class MailAddress implements Serializable
         return address;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer();
         if (personal != null && personal.length() > 0) {
@@ -130,7 +131,8 @@ public final class MailAddress implements Serializable
         return sb.toString();
     }
 
-    public boolean equals(Object o)
+    @Override
+	public boolean equals(Object o)
     {
         if (this == o)
             return true;

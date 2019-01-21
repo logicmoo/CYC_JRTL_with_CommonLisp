@@ -65,7 +65,8 @@ public class LispObject extends AbstractSubLObject
 		return this;
 	}
 
-	  public Object clone()
+	  @Override
+	public Object clone()
 	  {
 		  Object result = null;
 	      try {
@@ -180,27 +181,31 @@ public class LispObject extends AbstractSubLObject
     return true;
   }
 
-  public Object javaInstance()
-  {
-        return this;
-  }
+	@Override
+	public Object javaInstance()
+	{
+		return this;
+	}
 
-  public Object javaInstance(Class<?> c)
-  {
-    if (c.isAssignableFrom(getClass())) {
-      return this;
-    }
+	public Object javaInstanceImpl(Class<?> c)
+	{
+		return javaInstance();
+	}
 
-    String cn = c.getName();
-    if (cn != null) {
-      if (cn.equals("java.lang.Boolean") || cn.equals("boolean")) {
-        return Boolean.TRUE;
-      }
-    }
-
-    return error(new LispError("The value " + princToString() +
-				 " is not of class " + c.getName()));
-  }
+	final public Object javaInstance(Class<?> c)
+	{
+		if (c.isAssignableFrom(getClass())) { return this; }
+		Object offer2 = javaInstance();
+		if (c.isInstance(offer2)) { return offer2; }
+		Object offer = javaInstanceImpl(c);
+		if (c.isInstance(offer)) { return offer; }
+		String cn = c.getName();
+		if (cn != null)
+		{
+			if (cn.equals("java.lang.Boolean") || cn.equals("boolean")) { return Boolean.TRUE; }
+		}
+		return error(new LispError("The value " + princToString() + " is not of class " + cn));
+	}
 
   /** This method returns 'this' by default, but allows
    * objects to return different values to increase Java
@@ -885,11 +890,13 @@ public class LispObject extends AbstractSubLObject
 	}
 
 	protected final static ThreadLocal<List> printingObjectR = new ThreadLocal<List>() {
+		@Override
 		protected List initialValue() {
 			return new LinkedIdentityHashSet();
 		};
 	};
 
+	@Override
 	public String printObject()
 	{
 
@@ -927,6 +934,7 @@ public class LispObject extends AbstractSubLObject
 		}
 	}
 
+	@Override
 	public String toString()
 	{
 		if (Lisp.insideToString > 3)
@@ -1239,14 +1247,16 @@ public class LispObject extends AbstractSubLObject
       }
   }
 
-  public int intValue()
+  @Override
+public int intValue()
   {
     type_error(this, Symbol.INTEGER);
     // Not reached.
     return 0;
   }
 
-  public long longValue()
+  @Override
+public long longValue()
   {
     type_error(this, Symbol.INTEGER);
     // Not reached.
@@ -1260,7 +1270,8 @@ public class LispObject extends AbstractSubLObject
     return 0;
   }
 
-  public double doubleValue()
+  @Override
+public double doubleValue()
   {
     type_error(this, Symbol.DOUBLE_FLOAT);
     // Not reached
@@ -1541,7 +1552,8 @@ public class LispObject extends AbstractSubLObject
    *
    * Throws an error if the instance isn't a string designator.
    */
-  public String getStringValue()
+  @Override
+public String getStringValue()
   {
     type_error(this, Symbol.STRING);
     // Not reached.

@@ -1055,15 +1055,18 @@ public final class cb_process_inspector extends SubLTranslatedFile
         return (SubLObject)cb_process_inspector.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_process_inspector_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_process_inspector_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_process_inspector_file();
     }
     

@@ -43,6 +43,7 @@ public class BooleanXmlVariableBinding {
 
 		private boolean inBoolean = false;
 
+		@Override
 		public void startElement(String uri, String localName, String qname,
 				Attributes attr) {
 			if (qname.equals("boolean")) {
@@ -50,6 +51,7 @@ public class BooleanXmlVariableBinding {
 			}
 		}
 
+		@Override
 		public void characters(char[] ch, int start, int length) {
 			if (inBoolean && result != null) {
 				return;

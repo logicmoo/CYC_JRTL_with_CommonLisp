@@ -601,7 +601,8 @@ public final class ImapSession
         echo = b;
     }
 
-    protected void finalize() throws Throwable
+    @Override
+	protected void finalize() throws Throwable
     {
         Log.debug("ImapSession.finalize " + host);
         super.finalize();

@@ -207,15 +207,18 @@ public final class rewrite_modules extends SubLTranslatedFile
         return (SubLObject)rewrite_modules.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rewrite_modules_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rewrite_modules_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rewrite_modules_file();
     }
     

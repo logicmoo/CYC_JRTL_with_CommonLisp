@@ -981,7 +981,8 @@ public class Buffer extends SystemBuffer
         renumberOriginal();
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         if (!isLoaded()) {
             try {
@@ -1123,7 +1124,8 @@ public class Buffer extends SystemBuffer
         FtpSession session = FtpSession.getSession(file);
         final FtpLoadProcess ftpLoadProcess = new FtpLoadProcess(this, file, session);
         Runnable successRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 File newCache = ftpLoadProcess.getCache();
                 if (newCache != null) {
@@ -1141,7 +1143,8 @@ public class Buffer extends SystemBuffer
             }
         };
         ErrorRunnable errorRunnable = new ErrorRunnable("Reload failed") {
-            public void run()
+            @Override
+			public void run()
             {
                 setBusy(false);
                 reloadFailed();
@@ -1159,7 +1162,8 @@ public class Buffer extends SystemBuffer
         Debug.assertTrue(SwingUtilities.isEventDispatchThread());
         final HttpLoadProcess httpLoadProcess = new HttpLoadProcess(this, file);
         Runnable successRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 File newCache = httpLoadProcess.getCache();
                 if (newCache != null) {
@@ -1177,7 +1181,8 @@ public class Buffer extends SystemBuffer
             }
         };
         ErrorRunnable errorRunnable = new ErrorRunnable("Reload failed") {
-            public void run()
+            @Override
+			public void run()
             {
                 setBusy(false);
                 reloadFailed();
@@ -1598,7 +1603,8 @@ public class Buffer extends SystemBuffer
         saveProcess.setConfirmIfDestinationChanged(true);
         saveProcess.setTitle("Save");
         final Runnable successRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 saved();
                 setListing(saveProcess.getListing());
@@ -1780,7 +1786,8 @@ public class Buffer extends SystemBuffer
         saveProcess.setConfirmOverwrite(true);
         saveProcess.setTitle("Save As");
         final Runnable successRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 saved();
                 changeFile(destination);
@@ -1878,7 +1885,8 @@ public class Buffer extends SystemBuffer
             return;
         }
         final Runnable successRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                     Editor ed = it.nextEditor();
@@ -1970,7 +1978,8 @@ public class Buffer extends SystemBuffer
     }
 
     private final Runnable autosaveRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             try {
                 lockRead();
@@ -2014,7 +2023,8 @@ public class Buffer extends SystemBuffer
             autosaveFile.delete();
     }
 
-    public void setFirstLine(Line line)
+    @Override
+	public void setFirstLine(Line line)
     {
         if (!rwlock.isWriteLocked()) {
             Log.error("----- setFirstLine() called without write lock -----");
@@ -2538,7 +2548,8 @@ public class Buffer extends SystemBuffer
     }
 
     // For the buffer list.
-    public String toString()
+    @Override
+	public String toString()
     {
         if (title != null)
             return title;
@@ -2659,7 +2670,8 @@ public class Buffer extends SystemBuffer
 
     private boolean folded;
 
-    public final void renumber()
+    @Override
+	public final void renumber()
     {
         folded = false;
         lineCount = 0;
@@ -2767,7 +2779,8 @@ public class Buffer extends SystemBuffer
         }
     }
 
-    protected void finalize() throws Throwable
+    @Override
+	protected void finalize() throws Throwable
     {
         try {
             lockWrite();

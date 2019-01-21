@@ -78,7 +78,8 @@ public class SocketData {
     return initCos;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "Socket with Host: " + hostName + " Port: " + port;
   }
 }

@@ -46,7 +46,8 @@ public class CheckFieldAdapter implements FieldVisitor {
         this.fv = fv;
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -55,7 +56,8 @@ public class CheckFieldAdapter implements FieldVisitor {
         return new CheckAnnotationAdapter(fv.visitAnnotation(desc, visible));
     }
 
-    public void visitAttribute(final Attribute attr) {
+    @Override
+	public void visitAttribute(final Attribute attr) {
         checkEnd();
         if (attr == null) {
             throw new IllegalArgumentException("Invalid attribute (must not be null)");
@@ -63,7 +65,8 @@ public class CheckFieldAdapter implements FieldVisitor {
         fv.visitAttribute(attr);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         checkEnd();
         end = true;
         fv.visitEnd();

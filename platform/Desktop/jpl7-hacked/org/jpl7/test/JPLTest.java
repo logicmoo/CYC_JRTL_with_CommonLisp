@@ -26,6 +26,7 @@ public class JPLTest extends TestCase {
 		super(testName);
 	}
 
+	@Override
 	protected void setUp() throws Exception {
 		/*
 		 * Prolog file can be an empty file. The JVM seems to crash with a
@@ -86,6 +87,7 @@ class AddWithThreads extends Thread {
 		return namespace;
 	}
 
+	@Override
 	public void run() {
 		for (int i = 0; i < REPS; i++) {
 			// System.out.println("Asserting test('" + i + "')");

@@ -86,7 +86,8 @@ public final class ImapMailbox extends Mailbox
         Log.debug("ImapMailbox constructor ".concat(url.getCanonicalName()));
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         FastStringBuffer sb = new FastStringBuffer(64);
         sb.append(url.toString());
@@ -98,7 +99,8 @@ public final class ImapMailbox extends Mailbox
         return sb.toString();
     }
 
-    public String getName()
+    @Override
+	public String getName()
     {
         FastStringBuffer sb = new FastStringBuffer();
         sb.append('{');
@@ -127,12 +129,14 @@ public final class ImapMailbox extends Mailbox
         return uidValidity;
     }
 
-    public final int getMessageCount()
+    @Override
+	public final int getMessageCount()
     {
         return messageCount;
     }
 
-    public synchronized long getLastErrorMillis()
+    @Override
+	public synchronized long getLastErrorMillis()
     {
         return session.getLastErrorMillis();
     }
@@ -141,7 +145,8 @@ public final class ImapMailbox extends Mailbox
     {
         Log.debug("alert = " + s);
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 Editor.currentEditor().status(s);
             }
@@ -153,7 +158,8 @@ public final class ImapMailbox extends Mailbox
     {
         Log.debug("status = " + s);
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 Editor.currentEditor().status(s);
             }
@@ -167,10 +173,12 @@ public final class ImapMailbox extends Mailbox
         messageCount = -1;
     }
 
-    public void expunge()
+    @Override
+	public void expunge()
     {
         Runnable expungeRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     if (session.verifyConnected() && session.verifySelected(folderName)) {
@@ -221,7 +229,8 @@ public final class ImapMailbox extends Mailbox
         }
     }
 
-    public synchronized int load()
+    @Override
+	public synchronized int load()
     {
         if (isLoaded()) {
             return LOAD_COMPLETED;
@@ -239,7 +248,8 @@ public final class ImapMailbox extends Mailbox
     }
 
     private BackgroundProcess loadProcess = new BackgroundProcess() {
-        public void run()
+        @Override
+		public void run()
         {
             Runnable completionRunnable = null;
             try {
@@ -249,7 +259,8 @@ public final class ImapMailbox extends Mailbox
                 if (getAllMessageHeaders()) {
                     refreshBuffer();
                     completionRunnable = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             setBusy(false);
                             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -267,7 +278,8 @@ public final class ImapMailbox extends Mailbox
                 } else {
                     // Error or user cancelled.
                     completionRunnable = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             if (Editor.getBufferList().contains(ImapMailbox.this))
                                 kill();
@@ -286,7 +298,8 @@ public final class ImapMailbox extends Mailbox
             }
         }
 
-        public void cancel()
+        @Override
+		public void cancel()
         {
             abort();
         }
@@ -301,7 +314,8 @@ public final class ImapMailbox extends Mailbox
         session.disconnect();
     }
 
-    public final void getNewMessages()
+    @Override
+	public final void getNewMessages()
     {
         if (lock())
             getNewMessages(true);
@@ -309,7 +323,8 @@ public final class ImapMailbox extends Mailbox
             Editor.currentEditor().status("Mailbox is locked");
     }
 
-    public void getNewMessages(boolean interactive)
+    @Override
+	public void getNewMessages(boolean interactive)
     {
         Debug.assertTrue(isLocked());
         setBusy(true);
@@ -329,7 +344,8 @@ public final class ImapMailbox extends Mailbox
             this.interactive = interactive;
         }
 
-        public void run()
+        @Override
+		public void run()
         {
             cancelled = false;
             setBackgroundProcess(this);
@@ -404,13 +420,15 @@ public final class ImapMailbox extends Mailbox
             }
         }
 
-        public void cancel()
+        @Override
+		public void cancel()
         {
             abort();
         }
     }
 
-    public void createFolder()
+    @Override
+	public void createFolder()
     {
         final Editor editor = Editor.currentEditor();
         final String input =
@@ -421,7 +439,8 @@ public final class ImapMailbox extends Mailbox
         if (name == null)
             return;
         Runnable createRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 boolean succeeded = false;
                 try {
@@ -451,7 +470,8 @@ public final class ImapMailbox extends Mailbox
         }
     }
 
-    public void deleteFolder()
+    @Override
+	public void deleteFolder()
     {
         final Editor editor = Editor.currentEditor();
         final String input =
@@ -465,7 +485,8 @@ public final class ImapMailbox extends Mailbox
         if (!editor.confirm("Delete Folder", message))
             return;
         Runnable deleteFolderRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 boolean succeeded = false;
                 try {
@@ -495,7 +516,8 @@ public final class ImapMailbox extends Mailbox
         }
     }
 
-    public void saveToFolder()
+    @Override
+	public void saveToFolder()
     {
         final Editor editor = Editor.currentEditor();
         boolean advanceDot = false;
@@ -527,7 +549,8 @@ public final class ImapMailbox extends Mailbox
             return;
         final Line dotLine = advanceDot ? editor.getDotLine() : null;
         Runnable saveRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 boolean succeeded = false;
                 try {
@@ -573,7 +596,8 @@ public final class ImapMailbox extends Mailbox
         }
     }
 
-    public void moveToFolder()
+    @Override
+	public void moveToFolder()
     {
         final Editor editor = Editor.currentEditor();
         boolean advanceDot = false;
@@ -605,7 +629,8 @@ public final class ImapMailbox extends Mailbox
             return;
         final Line dotLine = advanceDot ? editor.getDotLine() : null;
         Runnable moveRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 boolean succeeded = false;
                 String errorText = "Move failed";
@@ -755,7 +780,8 @@ public final class ImapMailbox extends Mailbox
         }
     }
 
-    public void delete()
+    @Override
+	public void delete()
     {
         final Editor editor = Editor.currentEditor();
         boolean advanceDot = false;
@@ -771,7 +797,8 @@ public final class ImapMailbox extends Mailbox
         final List toBeDeleted = list;
         final Line dotLine = advanceDot ? editor.getDotLine() : null;
         Runnable deleteRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 boolean succeeded = false;
                 String errorText = "Delete failed";
@@ -828,17 +855,20 @@ public final class ImapMailbox extends Mailbox
         return succeeded;
     }
 
-    public void undelete()
+    @Override
+	public void undelete()
     {
         storeFlagsInternal(ACTION_UNDELETE);
     }
 
-    public void markRead()
+    @Override
+	public void markRead()
     {
         storeFlagsInternal(ACTION_MARK_READ);
     }
 
-    public void markUnread()
+    @Override
+	public void markUnread()
     {
         storeFlagsInternal(ACTION_MARK_UNREAD);
     }
@@ -866,7 +896,8 @@ public final class ImapMailbox extends Mailbox
         final List entriesToBeProcessed = list;
         final Line dotLine = advanceDot ? editor.getDotLine() : null;
         Runnable storeFlagsRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     if (session.verifyConnected() && session.verifySelected(folderName)) {
@@ -935,7 +966,8 @@ public final class ImapMailbox extends Mailbox
         }
     }
 
-    public void flag()
+    @Override
+	public void flag()
     {
         final Editor editor = Editor.currentEditor();
         boolean advanceDot = false;
@@ -959,7 +991,8 @@ public final class ImapMailbox extends Mailbox
         }
         final Line dotLine = advanceDot ? editor.getDotLine() : null;
         Runnable flagRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     if (session.verifyConnected() && session.verifySelected(folderName)) {
@@ -1015,10 +1048,12 @@ public final class ImapMailbox extends Mailbox
         }
     }
 
-    public void setAnsweredFlag(final MailboxEntry entry)
+    @Override
+	public void setAnsweredFlag(final MailboxEntry entry)
     {
         Runnable setAnsweredFlagRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     if (session.verifyConnected() && session.verifySelected(folderName)) {
@@ -1153,7 +1188,8 @@ public final class ImapMailbox extends Mailbox
     public void readOnlyError()
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 MessageDialog.showMessageDialog("Mailbox is read-only",
                     "Error");
@@ -1165,7 +1201,8 @@ public final class ImapMailbox extends Mailbox
     private void fatal(final String text, final String title)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 MessageDialog.showMessageDialog(Editor.currentEditor(),
                     text, title);
@@ -1179,7 +1216,8 @@ public final class ImapMailbox extends Mailbox
     private boolean getAllMessageHeaders()
     {
         Thread t = new Thread() {
-            public void run()
+            @Override
+			public void run()
             {
                 mailboxCache = ImapMailboxCache.readCache(ImapMailbox.this);
             }
@@ -1444,12 +1482,14 @@ public final class ImapMailbox extends Mailbox
             (float)elapsed/cachedEntries.size() + " ms per entry");
     }
 
-    public void readMessage(Line line)
+    @Override
+	public void readMessage(Line line)
     {
         readMessage(line, false);
     }
 
-    public void readMessageOtherWindow(Line line)
+    @Override
+	public void readMessageOtherWindow(Line line)
     {
         readMessage(line, true);
     }
@@ -1504,7 +1544,8 @@ public final class ImapMailbox extends Mailbox
     private void markRead(final ImapMailboxEntry entry)
     {
         Runnable markReadRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     if (session.verifyConnected() && session.verifySelected(folderName)) {
@@ -1543,7 +1584,8 @@ public final class ImapMailbox extends Mailbox
         return null;
     }
 
-    public Message getMessage(MailboxEntry entry,
+    @Override
+	public Message getMessage(MailboxEntry entry,
         ProgressNotifier progressNotifier)
     {
         if (!(entry instanceof ImapMailboxEntry))
@@ -1707,12 +1749,14 @@ public final class ImapMailbox extends Mailbox
         return sb.toString();
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         Log.debug("ImapMailbox.dispose " + folderName + " on " +
             session.getHost());
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 session.logout();
             }
@@ -1721,7 +1765,8 @@ public final class ImapMailbox extends Mailbox
         MailboxProperties.saveProperties(this);
     }
 
-    protected void finalize() throws Throwable
+    @Override
+	protected void finalize() throws Throwable
     {
         Log.debug("ImapMailbox.finalize " + folderName + " on " +
             session.getHost());
@@ -1780,7 +1825,8 @@ public final class ImapMailbox extends Mailbox
         return sb.toString();
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         int newMessageCount = getNewMessageCount();
         if (newMessageCount > 0) {
@@ -1793,7 +1839,8 @@ public final class ImapMailbox extends Mailbox
             return url.toString();
     }
 
-    public String getTitle()
+    @Override
+	public String getTitle()
     {
         return toString();
     }

@@ -90,7 +90,8 @@ public final class RandomState extends LispObject
         return super.typep(type);
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         return unreadableString("RANDOM-STATE");
     }

@@ -9389,15 +9389,18 @@ public final class pph_methods_formulas extends SubLTranslatedFile
         return (SubLObject)pph_methods_formulas.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_methods_formulas_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_methods_formulas_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_methods_formulas_file();
     }
     
@@ -9930,7 +9933,8 @@ public final class pph_methods_formulas extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-EXISTENTIAL-RMP-SENTENCE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_methods_formulas.pph_existential_rmp_sentenceP(arg1);
         }
     }
@@ -9941,7 +9945,8 @@ public final class pph_methods_formulas extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("POSSIBLY-NEW-EXCEPTIONAL-VAR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_methods_formulas.possibly_new_exceptional_var_p(arg1);
         }
     }
@@ -9952,7 +9957,8 @@ public final class pph_methods_formulas extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-EXISTENTIAL-FORMULA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_methods_formulas.pph_existential_formula_p(arg1);
         }
     }

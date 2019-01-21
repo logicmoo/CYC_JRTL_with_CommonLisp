@@ -265,7 +265,8 @@ public final class MakefileFormatter extends Formatter
     endToken(state);
   }
 
-  public LineSegmentList formatLine(Line line)
+  @Override
+public LineSegmentList formatLine(Line line)
   {
     if (line == null) 
       {
@@ -288,7 +289,8 @@ public final class MakefileFormatter extends Formatter
     return segmentList;
   }
 
-  public FormatTable getFormatTable()
+  @Override
+public FormatTable getFormatTable()
   {
     if (formatTable == null) 
       {

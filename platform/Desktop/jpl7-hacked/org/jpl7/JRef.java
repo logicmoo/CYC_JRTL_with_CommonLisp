@@ -61,6 +61,7 @@ public class JRef extends Term {
 		}
 	}
 
+	@Override
 	public final String atomType() {
 		return "jref";
 	}
@@ -72,10 +73,12 @@ public class JRef extends Term {
 	 *
 	 * @return true if the Object satisfies the above condition
 	 */
+	@Override
 	public final boolean equals(Object obj) {
 		return this == obj || (obj instanceof JRef && ((JRef) obj).object == this.object);
 	}
 
+	@Override
 	public boolean hasFunctor(String name, int arity) {
 		return false; // according to functor/3, a <jref>(0x01d8000)'s functor
 						// name is the blob itself
@@ -85,6 +88,7 @@ public class JRef extends Term {
 	 * @deprecated Use org.jpl7.JRef.object()
 	 * @see org.jpl7.JRef#object()
 	 */
+	@Override
 	@Deprecated
 	public Object jrefToObject() {
 		return object;
@@ -95,6 +99,7 @@ public class JRef extends Term {
 	 *
 	 * @return the object of the JREF term
 	 */
+	@Override
 	public Object object() {
 		return object;
 	}
@@ -108,6 +113,7 @@ public class JRef extends Term {
 	 *            A (newly created) term_t which is to be set to a Prolog &lt;jref&gt;(0x01DF800) blob denoting the .ref of this JRef
 	 *            instance
 	 */
+	@Override
 	protected final void put(Map<String, term_t> varnames_to_vars, term_t term) {
 		Prolog.put_jref(term, object);
 	}
@@ -116,6 +122,7 @@ public class JRef extends Term {
 	 * @deprecated Use org.jpl7.JRef.object()
 	 * @see org.jpl7.JRef#object()
 	 */
+	@Override
 	@Deprecated
 	public Object ref() {
 		return object;
@@ -126,6 +133,7 @@ public class JRef extends Term {
 	 *
 	 * @return a Prolog source text representation of this JRef
 	 */
+	@Override
 	public String toString() {
 		if (object==this)
 		// org.jpl7.fli.Prolog.object_to_tag(ref)
@@ -134,10 +142,12 @@ public class JRef extends Term {
 		return "<jref "+object+">";
 	}
 
+	@Override
 	public final int type() {
 		return Prolog.JREF;
 	}
 
+	@Override
 	public String typeName() {
 		return "JRef";
 	}

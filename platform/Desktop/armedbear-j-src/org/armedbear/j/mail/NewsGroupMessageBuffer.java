@@ -138,7 +138,8 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
     {
         private ProgressNotifier progressNotifier;
 
-        public void run()
+        @Override
+		public void run()
         {
             setBackgroundProcess(this);
             progressNotifier =
@@ -150,7 +151,8 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
             setBackgroundProcess(null);
         }
 
-        public void cancel()
+        @Override
+		public void cancel()
         {
             cancelled = true;
             progressNotifier.cancel();
@@ -160,7 +162,8 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         }
     };
 
-    protected void loadMessage(ProgressNotifier progressNotifier)
+    @Override
+	protected void loadMessage(ProgressNotifier progressNotifier)
     {
         final String rawText =
             summary.getArticle(((NewsGroupSummaryEntry)entry).getArticleNumber(),
@@ -185,7 +188,8 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         final MailboxLine mailboxLine =
             summary.findLineForEntry(entry);
         Runnable completionRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 setBusy(false);
                 if (rawText != null) {
@@ -427,7 +431,8 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         }
     }
 
-    public void toggleHeaders()
+    @Override
+	public void toggleHeaders()
     {
         showFullHeaders = !showFullHeaders;
         empty();
@@ -444,7 +449,8 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         }
     }
 
-    public void toggleRaw()
+    @Override
+	public void toggleRaw()
     {
         showRawText = !showRawText;
         empty();
@@ -462,7 +468,8 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         Editor.currentEditor().status("Raw mode ".concat((showRawText ? "on" : "off")));
     }
 
-    protected void setText()
+    @Override
+	protected void setText()
     {
         empty();
         if (showRawText) {

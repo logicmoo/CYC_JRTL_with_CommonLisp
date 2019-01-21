@@ -170,7 +170,8 @@ public class AnalyzerAdapter extends MethodAdapter {
         }
     }
 
-    public void visitFrame(
+    @Override
+	public void visitFrame(
         final int type,
         final int nLocal,
         final Object[] local,
@@ -211,7 +212,8 @@ public class AnalyzerAdapter extends MethodAdapter {
         }
     }
 
-    public void visitInsn(final int opcode) {
+    @Override
+	public void visitInsn(final int opcode) {
         if (mv != null) {
             mv.visitInsn(opcode);
         }
@@ -224,21 +226,24 @@ public class AnalyzerAdapter extends MethodAdapter {
         }
     }
 
-    public void visitIntInsn(final int opcode, final int operand) {
+    @Override
+	public void visitIntInsn(final int opcode, final int operand) {
         if (mv != null) {
             mv.visitIntInsn(opcode, operand);
         }
         execute(opcode, operand, null);
     }
 
-    public void visitVarInsn(final int opcode, final int var) {
+    @Override
+	public void visitVarInsn(final int opcode, final int var) {
         if (mv != null) {
             mv.visitVarInsn(opcode, var);
         }
         execute(opcode, var, null);
     }
 
-    public void visitTypeInsn(final int opcode, final String type) {
+    @Override
+	public void visitTypeInsn(final int opcode, final String type) {
         if (opcode == Opcodes.NEW) {
             if (labels == null) {
                 Label l = new Label();
@@ -258,7 +263,8 @@ public class AnalyzerAdapter extends MethodAdapter {
         execute(opcode, 0, type);
     }
 
-    public void visitFieldInsn(
+    @Override
+	public void visitFieldInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -270,7 +276,8 @@ public class AnalyzerAdapter extends MethodAdapter {
         execute(opcode, 0, desc);
     }
 
-    public void visitMethodInsn(
+    @Override
+	public void visitMethodInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -305,7 +312,8 @@ public class AnalyzerAdapter extends MethodAdapter {
         labels = null;
     }
 
-    public void visitJumpInsn(final int opcode, final Label label) {
+    @Override
+	public void visitJumpInsn(final int opcode, final Label label) {
         if (mv != null) {
             mv.visitJumpInsn(opcode, label);
         }
@@ -316,7 +324,8 @@ public class AnalyzerAdapter extends MethodAdapter {
         }
     }
 
-    public void visitLabel(final Label label) {
+    @Override
+	public void visitLabel(final Label label) {
         if (mv != null) {
             mv.visitLabel(label);
         }
@@ -326,7 +335,8 @@ public class AnalyzerAdapter extends MethodAdapter {
         labels.add(label);
     }
 
-    public void visitLdcInsn(final Object cst) {
+    @Override
+	public void visitLdcInsn(final Object cst) {
         if (mv != null) {
             mv.visitLdcInsn(cst);
         }
@@ -350,14 +360,16 @@ public class AnalyzerAdapter extends MethodAdapter {
         labels = null;
     }
 
-    public void visitIincInsn(final int var, final int increment) {
+    @Override
+	public void visitIincInsn(final int var, final int increment) {
         if (mv != null) {
             mv.visitIincInsn(var, increment);
         }
         execute(Opcodes.IINC, var, null);
     }
 
-    public void visitTableSwitchInsn(
+    @Override
+	public void visitTableSwitchInsn(
         final int min,
         final int max,
         final Label dflt,
@@ -371,7 +383,8 @@ public class AnalyzerAdapter extends MethodAdapter {
         this.stack = null;
     }
 
-    public void visitLookupSwitchInsn(
+    @Override
+	public void visitLookupSwitchInsn(
         final Label dflt,
         final int[] keys,
         final Label[] labels)
@@ -384,14 +397,16 @@ public class AnalyzerAdapter extends MethodAdapter {
         this.stack = null;
     }
 
-    public void visitMultiANewArrayInsn(final String desc, final int dims) {
+    @Override
+	public void visitMultiANewArrayInsn(final String desc, final int dims) {
         if (mv != null) {
             mv.visitMultiANewArrayInsn(desc, dims);
         }
         execute(Opcodes.MULTIANEWARRAY, dims, desc);
     }
 
-    public void visitMaxs(final int maxStack, final int maxLocals) {
+    @Override
+	public void visitMaxs(final int maxStack, final int maxLocals) {
         if (mv != null) {
             this.maxStack = Math.max(this.maxStack, maxStack);
             this.maxLocals = Math.max(this.maxLocals, maxLocals);

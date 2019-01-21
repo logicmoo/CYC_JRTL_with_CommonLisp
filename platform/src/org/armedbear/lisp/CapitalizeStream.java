@@ -42,7 +42,8 @@ public final class CapitalizeStream extends CaseFrobStream
         super(target);
     }
 
-    public void _writeChar(char c)
+    @Override
+	public void _writeChar(char c)
     {
         if (inWord) {
             if (Character.isUpperCase(c)) {
@@ -64,14 +65,16 @@ public final class CapitalizeStream extends CaseFrobStream
         target._writeChar(c);
     }
 
-    public void _writeString(String s)
+    @Override
+	public void _writeString(String s)
     {
         final int limit = s.length();
         for (int i = 0; i < limit; i++)
             _writeChar(s.charAt(i));
     }
 
-    public void _writeLine(String s)
+    @Override
+	public void _writeLine(String s)
     {
         target._writeString(s);
         target._writeChar('\n');

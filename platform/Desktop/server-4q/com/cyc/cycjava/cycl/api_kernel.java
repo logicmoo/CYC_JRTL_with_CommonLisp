@@ -10,6 +10,14 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
+
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.Main;
+import org.globus.cog.abstraction.impl.common.set.SetImpl;
+import org.logicmoo.system.JVMImpl;
+import org.logicmoo.system.SystemCurrent;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic;
@@ -23,8 +31,11 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
@@ -121,8 +132,26 @@ public final class api_kernel extends SubLTranslatedFile
     
     @SubLTranslatedFile.SubL(source = "cycl/api-kernel.lisp", position = 894L)
     public static SubLObject api_server_handler(final SubLObject in_stream, final SubLObject out_stream) {
-        return api_server_top_level(in_stream, out_stream);
+		boolean wasSetSubLisp = Main.isSubLisp();
+		SubLPackage prevPackage = Lisp.getCurrentPackage();
+		try
+		{
+			Main.setSubLisp(true);
+			SubLPackage.setCurrentPackage("CYC");
+			SubLInputStream inputStream = in_stream.toInputTextStream();
+			SubLOutputStream outputStream = out_stream.toOutputStream();
+			
+			//SystemCurrent.setIn(inputStream.);
+			{
+				return api_server_top_level(in_stream, out_stream);
+			}
+		} finally
+		{
+			SubLPackage.setCurrentPackage(prevPackage);
+			Main.setSubLisp(wasSetSubLisp);
+		}
     }
+        
     
     @SubLTranslatedFile.SubL(source = "cycl/api-kernel.lisp", position = 1161L)
     public static SubLObject api_server_top_level(final SubLObject in_stream, final SubLObject out_stream) {
@@ -908,15 +937,18 @@ public final class api_kernel extends SubLTranslatedFile
         return (SubLObject)api_kernel.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_api_kernel_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_api_kernel_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_api_kernel_file();
     }
     

@@ -39,7 +39,8 @@ public final class PlainTextMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_F12, CTRL_MASK | SHIFT_MASK,
                   "wrapParagraphsInRegion");

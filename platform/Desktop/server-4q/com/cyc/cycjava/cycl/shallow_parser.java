@@ -341,15 +341,18 @@ public final class shallow_parser extends SubLTranslatedFile
         return (SubLObject)shallow_parser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_shallow_parser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_shallow_parser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_shallow_parser_file();
     }
     

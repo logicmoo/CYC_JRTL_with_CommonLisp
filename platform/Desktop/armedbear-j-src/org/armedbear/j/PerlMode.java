@@ -40,27 +40,32 @@ public final class PerlMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public final boolean canIndent()
+    @Override
+	public final boolean canIndent()
     {
         return true;
     }
 
-    public final String getCommentStart()
+    @Override
+	public final String getCommentStart()
     {
         return "# ";
     }
 
-    public final SyntaxIterator getSyntaxIterator(Position pos)
+    @Override
+	public final SyntaxIterator getSyntaxIterator(Position pos)
     {
         return new PerlSyntaxIterator(pos);
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new PerlFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey('{', "electricOpenBrace");
         km.mapKey('}', "electricCloseBrace");
@@ -94,27 +99,32 @@ public final class PerlMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_CLOSE_BRACKET, CTRL_MASK, "unfold");
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new PerlTagger(buffer);
     }
 
-    public boolean isTaggable()
+    @Override
+	public boolean isTaggable()
     {
         return true;
     }
 
-    public boolean hasQualifiedNames()
+    @Override
+	public boolean hasQualifiedNames()
     {
         return true;
     }
 
-    public boolean isQualifiedName(String s)
+    @Override
+	public boolean isQualifiedName(String s)
     {
         return s.indexOf("::") >= 0;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         String trim = line.trim();
         if (trim.length() > 0) {
@@ -318,17 +328,20 @@ public final class PerlMode extends AbstractMode implements Constants, Mode
         return (validChars.indexOf(c) >= 0);
     }
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         return isIdentifierChar(c);
     }
 
-    public boolean isIdentifierPart(char c)
+    @Override
+	public boolean isIdentifierPart(char c)
     {
         return isIdentifierChar(c);
     }
 
-    public boolean isCommentLine(Line line)
+    @Override
+	public boolean isCommentLine(Line line)
     {
         return line.trim().startsWith("#");
     }

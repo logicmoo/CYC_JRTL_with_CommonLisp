@@ -1380,15 +1380,18 @@ public final class sksi_csql_sparql_interpretation extends SubLTranslatedFile
         return (SubLObject)sksi_csql_sparql_interpretation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_csql_sparql_interpretation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_csql_sparql_interpretation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_csql_sparql_interpretation_file();
     }
     

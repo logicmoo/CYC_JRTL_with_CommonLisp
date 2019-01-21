@@ -30,7 +30,8 @@ public class SparqlGraphBulkUpdater extends SimpleBulkUpdateHandler
         this.graph = graph;
     }
     
-    public void add(final Triple[] arg0) {
+    @Override
+	public void add(final Triple[] arg0) {
         final Graph g = GraphFactory.createPlainGraph();
         for (int i = 0; i < arg0.length; ++i) {
             g.add(arg0[i]);
@@ -38,7 +39,8 @@ public class SparqlGraphBulkUpdater extends SimpleBulkUpdateHandler
         this.add(g);
     }
     
-    public void add(final List<Triple> arg0) {
+    @Override
+	public void add(final List<Triple> arg0) {
         final Graph g = GraphFactory.createPlainGraph();
         for (final Triple t : arg0) {
             g.add(t);
@@ -46,7 +48,8 @@ public class SparqlGraphBulkUpdater extends SimpleBulkUpdateHandler
         this.add(g);
     }
     
-    public void add(final Iterator<Triple> arg0) {
+    @Override
+	public void add(final Iterator<Triple> arg0) {
         final Graph g = GraphFactory.createPlainGraph();
         while (arg0.hasNext()) {
             final Triple t = arg0.next();
@@ -55,11 +58,13 @@ public class SparqlGraphBulkUpdater extends SimpleBulkUpdateHandler
         this.add(g);
     }
     
-    public void add(final Graph arg0) {
+    @Override
+	public void add(final Graph arg0) {
         this.add(arg0, false);
     }
     
-    public void add(final Graph g, final boolean arg1) {
+    @Override
+	public void add(final Graph g, final boolean arg1) {
         SparqlGraphBulkUpdater.log.info((Object)"adding graph");
         final Model[] model = this.separateStatementsWithBlankNodes(g);
         this.addModel(model[1]);
@@ -84,11 +89,13 @@ public class SparqlGraphBulkUpdater extends SimpleBulkUpdateHandler
         return result;
     }
     
-    public void delete(final Graph g, final boolean withReifications) {
+    @Override
+	public void delete(final Graph g, final boolean withReifications) {
         this.delete(g);
     }
     
-    public void delete(final Graph g) {
+    @Override
+	public void delete(final Graph g) {
         final Model[] model = this.separateStatementsWithBlankNodes(g);
         this.deleteModel(model[1]);
         final StringBuffer patternBuff = new StringBuffer();
@@ -158,16 +165,19 @@ public class SparqlGraphBulkUpdater extends SimpleBulkUpdateHandler
         }
     }
     
-    public void removeAll() {
+    @Override
+	public void removeAll() {
         removeAll((Graph)this.graph);
         this.notifyRemoveAll();
     }
     
-    protected void notifyRemoveAll() {
+    @Override
+	protected void notifyRemoveAll() {
         this.manager.notifyEvent((Graph)this.graph, (Object)GraphEvents.removeAll);
     }
     
-    public void remove(final Node s, final Node p, final Node o) {
+    @Override
+	public void remove(final Node s, final Node p, final Node o) {
         removeAll((Graph)this.graph, s, p, o);
         this.manager.notifyEvent((Graph)this.graph, (Object)GraphEvents.remove(s, p, o));
     }

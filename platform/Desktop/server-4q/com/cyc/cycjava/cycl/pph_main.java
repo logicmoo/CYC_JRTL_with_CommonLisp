@@ -11595,15 +11595,18 @@ public final class pph_main extends SubLTranslatedFile
         return (SubLObject)pph_main.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_main_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_main_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_main_file();
     }
 

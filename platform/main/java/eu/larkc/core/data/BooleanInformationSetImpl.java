@@ -9,6 +9,7 @@ public class BooleanInformationSetImpl implements BooleanInformationSet {
 		mValue = value;
 	}
 
+	@Override
 	public boolean getValue() {
 		return mValue;
 	}

@@ -335,7 +335,8 @@ public final class Log
 
     private static final PreferencesChangeListener preferencesChangeListener =
         new PreferencesChangeListener() {
-        public void preferencesChanged()
+        @Override
+		public void preferencesChanged()
         {
             boolean logWasEnabled = logEnabled;
             loadPreferences();

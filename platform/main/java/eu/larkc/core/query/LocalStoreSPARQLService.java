@@ -86,6 +86,7 @@ public class LocalStoreSPARQLService implements SPARQLEndpoint {
 	private void startQuery(final SPARQLQuery query,
 			final TupleQueryResultHandler result) {
 		Thread t = new Thread() {
+			@Override
 			public void run() {
 				synchronized(LocalStoreSPARQLService.class) {
 				try {

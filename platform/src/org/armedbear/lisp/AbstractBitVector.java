@@ -44,7 +44,8 @@ public abstract class AbstractBitVector extends AbstractVector
     // For non-displaced bit-vectors.
     protected long[] bits;
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.BIT_VECTOR)
             return T;
@@ -53,22 +54,26 @@ public abstract class AbstractBitVector extends AbstractVector
         return super.typep(type);
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.BIT_VECTOR;
     }
 
-    public final int capacity()
+    @Override
+	public final int capacity()
     {
         return capacity;
     }
 
-    public final LispObject getElementType()
+    @Override
+	public final LispObject getElementType()
     {
         return Symbol.BIT;
     }
 
-    public boolean equal(LispObject obj)
+    @Override
+	public boolean equal(LispObject obj)
     {
         if (this == obj)
             return true;
@@ -85,7 +90,8 @@ public abstract class AbstractBitVector extends AbstractVector
         return false;
     }
 
-    public boolean equalp(LispObject obj)
+    @Override
+	public boolean equalp(LispObject obj)
     {
         if (this == obj)
             return true;
@@ -106,7 +112,8 @@ public abstract class AbstractBitVector extends AbstractVector
         return false;
     }
 
-    public void fill(LispObject obj)
+    @Override
+	public void fill(LispObject obj)
     {
         if (obj instanceof Fixnum) {
             switch (((Fixnum)obj).value) {
@@ -134,7 +141,8 @@ public abstract class AbstractBitVector extends AbstractVector
         type_error(obj, Symbol.BIT);
     }
 
-    public LispObject subseq(int start, int end)
+    @Override
+	public LispObject subseq(int start, int end)
     {
         SimpleBitVector v = new SimpleBitVector(end - start);
         int i = start, j = 0;
@@ -152,7 +160,8 @@ public abstract class AbstractBitVector extends AbstractVector
         }
     }
 
-    public int hashCode()
+    @Override
+	public int hashCode()
     {
         int hashCode = 1;
         // Consider first 64 bits only.
@@ -162,7 +171,8 @@ public abstract class AbstractBitVector extends AbstractVector
         return hashCode;
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         final LispThread thread = LispThread.currentThread();
         final int length = length();
@@ -181,7 +191,8 @@ public abstract class AbstractBitVector extends AbstractVector
         }
     }
 
-    public LispObject reverse()
+    @Override
+	public LispObject reverse()
     {
         int length = length();
         SimpleBitVector result = new SimpleBitVector(length);

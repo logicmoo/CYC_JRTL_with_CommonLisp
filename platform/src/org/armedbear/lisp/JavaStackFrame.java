@@ -48,19 +48,23 @@ public class JavaStackFrame
     this.javaFrame = javaFrame;
   }
 
-  public LispObject typeOf() { 
+  @Override
+public LispObject typeOf() { 
     return Symbol.JAVA_STACK_FRAME; 
   }
 
-  public LispObject classOf()   { return BuiltInClass.JAVA_STACK_FRAME; }
+  @Override
+public LispObject classOf()   { return BuiltInClass.JAVA_STACK_FRAME; }
 
-  public String printObjectImpl() { 
+  @Override
+public String printObjectImpl() { 
     final String JAVA_STACK_FRAME = "JAVA-STACK-FRAME";
     return unreadableString(JAVA_STACK_FRAME + " "
 				+ toLispString().toString());
   }
 
-  public LispObject typep(LispObject typeSpecifier) 
+  @Override
+public LispObject typep(LispObject typeSpecifier) 
 
   {
      if (typeSpecifier == Symbol.JAVA_STACK_FRAME)
@@ -76,7 +80,8 @@ public class JavaStackFrame
   static final Symbol LINE = internKeyword("LINE");
   static final Symbol NATIVE_METHOD = internKeyword("NATIVE-METHOD");
 
-  public LispObject toLispList()
+  @Override
+public LispObject toLispList()
   {
     LispObject result = Lisp.NIL;
     
@@ -99,13 +104,15 @@ public class JavaStackFrame
     return result.nreverse();
   }
 
-  public AbstractString toLispString() 
+  @Override
+public AbstractString toLispString() 
 
   {
     return new SimpleString(javaFrame.toString());
   }
 
-  public LispObject getParts() 
+  @Override
+public LispObject getParts() 
 
   { 
     LispObject result = NIL;

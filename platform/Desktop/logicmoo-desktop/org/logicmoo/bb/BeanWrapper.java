@@ -185,7 +185,8 @@ public class BeanWrapper implements java.io.Serializable {
   /**
    * Returns the name of this bean
    */
-  public String toString() {
+  @Override
+public String toString() {
     return getName();
   }
 
@@ -218,15 +219,18 @@ public class BeanWrapper implements java.io.Serializable {
    * where there is no known icon for the bean.
    */
   class UnknownIcon implements Icon, java.io.Serializable {
-    public int getIconWidth() {
+    @Override
+	public int getIconWidth() {
       return 16;
     }
 
-    public int getIconHeight() {
+    @Override
+	public int getIconHeight() {
       return 16;
     }
 
-    public void paintIcon(Component c,
+    @Override
+	public void paintIcon(Component c,
                                 Graphics g,
                                 int x,
                                 int y) {

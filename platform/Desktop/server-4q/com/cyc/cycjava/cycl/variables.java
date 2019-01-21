@@ -691,15 +691,18 @@ public final class variables extends SubLTranslatedFile
         return (SubLObject)variables.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_variables_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_variables_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_variables_file();
     }
     
@@ -806,15 +809,18 @@ public final class variables extends SubLTranslatedFile
             this.$id = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$variable_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$id;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$id = value;
         }
         
@@ -829,7 +835,8 @@ public final class variables extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VARIABLE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return variables.variable_p(arg1);
         }
     }
@@ -840,7 +847,8 @@ public final class variables extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-VARIABLE-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return variables.sxhash_variable_method(arg1);
         }
     }
@@ -851,7 +859,8 @@ public final class variables extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VARIABLE-<"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return variables.variable_L(arg1, arg2);
         }
     }
@@ -862,7 +871,8 @@ public final class variables extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FULLY-BOUND-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return variables.fully_bound_p(arg1);
         }
     }
@@ -873,7 +883,8 @@ public final class variables extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NOT-FULLY-BOUND-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return variables.not_fully_bound_p(arg1);
         }
     }

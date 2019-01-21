@@ -124,15 +124,18 @@ public final class rtp_initialize extends SubLTranslatedFile
         return (SubLObject)rtp_initialize.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rtp_initialize_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rtp_initialize_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rtp_initialize_file();
     }
     

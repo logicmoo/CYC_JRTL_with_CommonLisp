@@ -358,15 +358,18 @@ public final class term_classification_tree extends SubLTranslatedFile
         return (SubLObject)term_classification_tree.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_term_classification_tree_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_term_classification_tree_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_term_classification_tree_file();
     }
     

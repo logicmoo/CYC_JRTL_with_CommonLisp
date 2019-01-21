@@ -4687,15 +4687,18 @@ public final class rkf_text_processors extends SubLTranslatedFile
         return (SubLObject)rkf_text_processors.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_text_processors_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_text_processors_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_text_processors_file();
     }
 
@@ -4971,47 +4974,58 @@ public final class rkf_text_processors extends SubLTranslatedFile
             this.$solutions = (SubLObject)CommonSymbols.NIL;
         }
 
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$parse_result_native.structDecl;
         }
 
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$original;
         }
 
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$constituents;
         }
 
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$eliminated;
         }
 
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$problems;
         }
 
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$solutions;
         }
 
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$original = value;
         }
 
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$constituents = value;
         }
 
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$eliminated = value;
         }
 
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$problems = value;
         }
 
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$solutions = value;
         }
 
@@ -5026,7 +5040,8 @@ public final class rkf_text_processors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PARSE-RESULT-P"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return rkf_text_processors.parse_result_p(arg1);
         }
     }
@@ -5052,63 +5067,78 @@ public final class rkf_text_processors extends SubLTranslatedFile
             this.$supplants = (SubLObject)CommonSymbols.NIL;
         }
 
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$parse_module_definition_native.structDecl;
         }
 
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$name;
         }
 
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$category;
         }
 
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$quality;
         }
 
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$entry_point;
         }
 
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$cost;
         }
 
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$expected_expansions;
         }
 
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$supplants;
         }
 
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$name = value;
         }
 
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$category = value;
         }
 
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$quality = value;
         }
 
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$entry_point = value;
         }
 
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$cost = value;
         }
 
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$expected_expansions = value;
         }
 
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$supplants = value;
         }
 
@@ -5123,7 +5153,8 @@ public final class rkf_text_processors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PARSE-MODULE-DEFINITION-P"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return rkf_text_processors.parse_module_definition_p(arg1);
         }
     }
@@ -5139,23 +5170,28 @@ public final class rkf_text_processors extends SubLTranslatedFile
             this.$tools = (SubLObject)CommonSymbols.NIL;
         }
 
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$parse_module_group_native.structDecl;
         }
 
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$category;
         }
 
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$tools;
         }
 
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$category = value;
         }
 
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$tools = value;
         }
 
@@ -5170,7 +5206,8 @@ public final class rkf_text_processors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PARSE-MODULE-GROUP-P"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return rkf_text_processors.parse_module_group_p(arg1);
         }
     }

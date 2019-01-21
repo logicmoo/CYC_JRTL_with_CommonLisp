@@ -589,15 +589,18 @@ public final class rkf_string_weeders extends SubLTranslatedFile
         return (SubLObject)rkf_string_weeders.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_string_weeders_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_string_weeders_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_string_weeders_file();
     }
     

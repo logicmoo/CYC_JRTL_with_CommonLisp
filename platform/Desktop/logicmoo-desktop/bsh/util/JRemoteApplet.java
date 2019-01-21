@@ -47,6 +47,7 @@ public class JRemoteApplet extends JApplet
 	OutputStream out;
 	InputStream in;
 
+	@Override
 	public void init() 
 	{
 		getContentPane().setLayout(new BorderLayout());

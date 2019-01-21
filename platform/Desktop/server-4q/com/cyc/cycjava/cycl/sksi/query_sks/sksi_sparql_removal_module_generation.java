@@ -445,15 +445,18 @@ public final class sksi_sparql_removal_module_generation extends SubLTranslatedF
         return (SubLObject)sksi_sparql_removal_module_generation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_sparql_removal_module_generation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_sparql_removal_module_generation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_sparql_removal_module_generation_file();
     }
     

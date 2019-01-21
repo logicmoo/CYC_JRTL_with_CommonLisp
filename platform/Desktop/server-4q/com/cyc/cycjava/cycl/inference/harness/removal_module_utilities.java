@@ -298,15 +298,18 @@ public final class removal_module_utilities extends SubLTranslatedFile
         return (SubLObject)removal_module_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_module_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_module_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_module_utilities_file();
     }
     

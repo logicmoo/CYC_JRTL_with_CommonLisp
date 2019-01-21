@@ -40,7 +40,8 @@ public final class CppTagger extends CTagger implements Constants
     super(buffer);
   }
 
-  public void run()
+  @Override
+public void run()
   {
     ArrayList tags = new ArrayList();
     String className = null;

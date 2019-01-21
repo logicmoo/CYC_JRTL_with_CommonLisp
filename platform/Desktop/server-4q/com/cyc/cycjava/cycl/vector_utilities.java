@@ -1331,15 +1331,18 @@ public final class vector_utilities extends SubLTranslatedFile
         return (SubLObject)vector_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_vector_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_vector_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_vector_utilities_file();
     }
     

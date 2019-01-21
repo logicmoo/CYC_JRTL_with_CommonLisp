@@ -87,7 +87,8 @@ public final class Sort
     {
         SortLinesComparator() {}
 
-        public final int compare(Object o1, Object o2)
+        @Override
+		public final int compare(Object o1, Object o2)
         {
             return ((String)o1).compareTo((String)o2);
         }

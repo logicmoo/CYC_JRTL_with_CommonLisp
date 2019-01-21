@@ -934,15 +934,18 @@ public final class open_cyc_simple_inference_api extends SubLTranslatedFile
         return (SubLObject)open_cyc_simple_inference_api.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_open_cyc_simple_inference_api_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_open_cyc_simple_inference_api_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_open_cyc_simple_inference_api_file();
     }
     

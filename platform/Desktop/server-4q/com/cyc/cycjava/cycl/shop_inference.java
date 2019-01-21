@@ -577,15 +577,18 @@ public final class shop_inference extends SubLTranslatedFile
         return (SubLObject)shop_inference.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_shop_inference_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_shop_inference_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_shop_inference_file();
     }
 
@@ -657,7 +660,8 @@ public final class shop_inference extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SHOP-EFFECT-REQUIRED"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return shop_inference.shop_effect_required(arg1, (SubLObject)UNPROVIDED);
         }
     }
@@ -668,7 +672,8 @@ public final class shop_inference extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SHOP-EFFECT-REQUIRED"));
         }
 
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return shop_inference.shop_effect_required(arg1, arg2);
         }
     }

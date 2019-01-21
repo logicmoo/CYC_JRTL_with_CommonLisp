@@ -695,15 +695,18 @@ public final class google_charts extends SubLTranslatedFile
         return (SubLObject)google_charts.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_google_charts_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_google_charts_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_google_charts_file();
     }
     

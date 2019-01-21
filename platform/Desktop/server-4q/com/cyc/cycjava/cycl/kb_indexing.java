@@ -9068,14 +9068,17 @@ public final class kb_indexing extends SubLTranslatedFile {
 		return (SubLObject) kb_indexing.NIL;
 	}
 
+	@Override
 	public void declareFunctions() {
 		declare_kb_indexing_file();
 	}
 
+	@Override
 	public void initializeVariables() {
 		init_kb_indexing_file();
 	}
 
+	@Override
 	public void runTopLevelForms() {
 		setup_kb_indexing_file();
 	}
@@ -9498,6 +9501,7 @@ public final class kb_indexing extends SubLTranslatedFile {
 			super(SubLTranslatedFile.extractFunctionNamed("CLEAR-KEY-GAF-ARG-INDEX-CACHED"));
 		}
 
+		@Override
 		public SubLObject processItem() {
 			return kb_indexing.clear_key_gaf_arg_index_cached();
 		}
@@ -9508,6 +9512,7 @@ public final class kb_indexing extends SubLTranslatedFile {
 			super(SubLTranslatedFile.extractFunctionNamed("NUM-PREDICATE-EXTENT-INDEX"));
 		}
 
+		@Override
 		public SubLObject processItem(final SubLObject arg1) {
 			return kb_indexing.num_predicate_extent_index(arg1,
 					(SubLObject) $num_predicate_extent_index$UnaryFunction.UNPROVIDED);
@@ -9519,6 +9524,7 @@ public final class kb_indexing extends SubLTranslatedFile {
 			super(SubLTranslatedFile.extractFunctionNamed("NUM-PREDICATE-EXTENT-INDEX"));
 		}
 
+		@Override
 		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
 			return kb_indexing.num_predicate_extent_index(arg1, arg2);
 		}
@@ -9529,6 +9535,7 @@ public final class kb_indexing extends SubLTranslatedFile {
 			super(SubLTranslatedFile.extractFunctionNamed("NUM-INDEX"));
 		}
 
+		@Override
 		public SubLObject processItem(final SubLObject arg1) {
 			return kb_indexing.num_index(arg1);
 		}

@@ -9,6 +9,7 @@ import org.appdapter.core.debug.NoLeakThreadLocal;
 public class AggregateConverter implements Converter {
 
 	static NoLeakThreadLocal<List> curretnConversions = new NoLeakThreadLocal<List>() {
+		@Override
 		protected List initialValue() {
 			return null;
 		};
@@ -167,6 +168,7 @@ public class AggregateConverter implements Converter {
 			return this.b;
 		}
 
+		@Override
 		public int hashCode() {
 			return hashCodeObject(car()) ^ hashCodeObject(cdr()) << 1;
 		}
@@ -180,6 +182,7 @@ public class AggregateConverter implements Converter {
 	            return nullHashCode ; 
 	        return obj.hashCode() ;
 	    }
+		@Override
 		public boolean equals(Object other) {
 			if (this == other)
 				return true;
@@ -197,6 +200,7 @@ public class AggregateConverter implements Converter {
 			return l.equals(r);
 		}
 
+		@Override
 		public String toString() {
 			return new StringBuilder().append("(").append(org.apache.jena.atlas.lib.StrUtils.str(this.a)).append(", ").append(org.apache.jena.atlas.lib.StrUtils.str(this.b)).append(")").toString();
 		}

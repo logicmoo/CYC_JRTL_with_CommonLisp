@@ -1432,15 +1432,18 @@ public final class html_script_utilities extends SubLTranslatedFile
         return (SubLObject)html_script_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_html_script_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_html_script_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_html_script_utilities_file();
     }
     

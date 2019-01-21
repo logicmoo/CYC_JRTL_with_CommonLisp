@@ -3917,15 +3917,18 @@ public final class sbhl_search_utilities extends SubLTranslatedFile
         return (SubLObject)sbhl_search_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_search_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_search_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_search_utilities_file();
     }
     
@@ -4027,7 +4030,8 @@ public final class sbhl_search_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-PUSH-ONTO-RESULT-IF"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_search_utilities.sbhl_push_onto_result_if(arg1);
         }
     }
@@ -4038,7 +4042,8 @@ public final class sbhl_search_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-CHECK-CUTOFF"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_search_utilities.sbhl_check_cutoff(arg1);
         }
     }
@@ -4049,7 +4054,8 @@ public final class sbhl_search_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-CONSIDER-ANY-NODE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_search_utilities.sbhl_consider_any_node(arg1);
         }
     }
@@ -4060,7 +4066,8 @@ public final class sbhl_search_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-NODE-LOCALLY-DISJOINT-WITH-SELF-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_search_utilities.sbhl_node_locally_disjoint_with_self_p(arg1);
         }
     }
@@ -4071,7 +4078,8 @@ public final class sbhl_search_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-STEP-GATHER-DISJOINS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_search_utilities.sbhl_step_gather_disjoins(arg1);
         }
     }

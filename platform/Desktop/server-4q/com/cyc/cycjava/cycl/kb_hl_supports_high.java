@@ -2770,15 +2770,18 @@ public final class kb_hl_supports_high extends SubLTranslatedFile
         return (SubLObject)kb_hl_supports_high.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_hl_supports_high_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_hl_supports_high_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_hl_supports_high_file();
     }
     

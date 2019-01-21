@@ -41,7 +41,8 @@ public final class floor extends Primitive
         super("floor", "number &optional divisor");
     }
 
-    public LispObject execute(LispObject number)
+    @Override
+	public LispObject execute(LispObject number)
 
     {
         LispObject quotient = number.truncate(Fixnum.ONE);
@@ -58,7 +59,8 @@ public final class floor extends Primitive
         return quotient;
     }
 
-    public LispObject execute(LispObject number, LispObject divisor)
+    @Override
+	public LispObject execute(LispObject number, LispObject divisor)
 
     {
         LispObject quotient = number.truncate(divisor);

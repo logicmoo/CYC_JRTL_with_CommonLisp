@@ -57,6 +57,7 @@ public class DiskDumper extends SubLTrampolineFile
 		{
 			objStack.add(new WeakReference<Object>(abstractSubLStruct)
 			{
+				@Override
 				public String toString()
 				{
 					return String.valueOf(get());
@@ -225,16 +226,19 @@ public class DiskDumper extends SubLTrampolineFile
 		return NIL;
 	}
 
+	@Override
 	public void declareFunctions()
 	{
 		SubLFiles.declareFunction(me, "save_image_file", "SAVE-IMAGE-FILE", 1, 0, false);
 		SubLFiles.declareFunction(me, "load_image_file", "LOAD-IMAGE-FILE", 1, 0, false);
 	}
 
+	@Override
 	public void initializeVariables()
 	{
 	}
 
+	@Override
 	public void runTopLevelForms()
 	{
 	}

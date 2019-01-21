@@ -1918,15 +1918,18 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
         return (SubLObject)inference_strategic_heuristics.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_strategic_heuristics_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_strategic_heuristics_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_strategic_heuristics_file();
     }
     
@@ -2079,7 +2082,8 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGIC-HEURISTIC-SHALLOW-AND-CHEAP"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_strategic_heuristics.strategic_heuristic_shallow_and_cheap(arg1, arg2);
         }
     }
@@ -2090,7 +2094,8 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGIC-HEURISTIC-COMPLETENESS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_strategic_heuristics.strategic_heuristic_completeness(arg1, arg2);
         }
     }
@@ -2101,7 +2106,8 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGIC-HEURISTIC-OCCAMS-RAZOR"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_strategic_heuristics.strategic_heuristic_occams_razor(arg1, arg2);
         }
     }
@@ -2112,7 +2118,8 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGIC-HEURISTIC-MAGIC-WAND"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_strategic_heuristics.strategic_heuristic_magic_wand(arg1, arg2);
         }
     }
@@ -2123,7 +2130,8 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGIC-HEURISTIC-BACKCHAIN-REQUIRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_strategic_heuristics.strategic_heuristic_backchain_required(arg1, arg2);
         }
     }
@@ -2134,7 +2142,8 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGIC-HEURISTIC-RULE-A-PRIORI-UTILITY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_strategic_heuristics.strategic_heuristic_rule_a_priori_utility(arg1, arg2);
         }
     }
@@ -2145,7 +2154,8 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGIC-HEURISTIC-RELEVANT-TERM"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_strategic_heuristics.strategic_heuristic_relevant_term(arg1, arg2);
         }
     }
@@ -2156,7 +2166,8 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGIC-HEURISTIC-RULE-HISTORICAL-UTILITY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_strategic_heuristics.strategic_heuristic_rule_historical_utility(arg1, arg2);
         }
     }
@@ -2167,7 +2178,8 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STRATEGIC-HEURISTIC-RULE-LITERAL-COUNT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return inference_strategic_heuristics.strategic_heuristic_rule_literal_count(arg1, arg2);
         }
     }

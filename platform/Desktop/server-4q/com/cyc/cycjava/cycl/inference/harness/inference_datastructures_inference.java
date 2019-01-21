@@ -7714,15 +7714,18 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
         return (SubLObject)inference_datastructures_inference.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_datastructures_inference_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_datastructures_inference_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_datastructures_inference_file();
     }
     
@@ -8477,83 +8480,103 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
             this.$properties = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$inference_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$suid;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$problem_store;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$forward_propagate;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$input_mt;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$input_el_query;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$input_non_explanatory_el_query;
         }
         
-        public SubLObject getField8() {
+        @Override
+		public SubLObject getField8() {
             return this.$input_query_properties;
         }
         
-        public SubLObject getField9() {
+        @Override
+		public SubLObject getField9() {
             return this.$mt;
         }
         
-        public SubLObject getField10() {
+        @Override
+		public SubLObject getField10() {
             return this.$el_query;
         }
         
-        public SubLObject getField11() {
+        @Override
+		public SubLObject getField11() {
             return this.$el_bindings;
         }
         
-        public SubLObject getField12() {
+        @Override
+		public SubLObject getField12() {
             return this.$hl_query;
         }
         
-        public SubLObject getField13() {
+        @Override
+		public SubLObject getField13() {
             return this.$explanatory_subquery;
         }
         
-        public SubLObject getField14() {
+        @Override
+		public SubLObject getField14() {
             return this.$non_explanatory_subquery;
         }
         
-        public SubLObject getField15() {
+        @Override
+		public SubLObject getField15() {
             return this.$free_hl_vars;
         }
         
-        public SubLObject getField16() {
+        @Override
+		public SubLObject getField16() {
             return this.$hypothetical_bindings;
         }
         
-        public SubLObject getField17() {
+        @Override
+		public SubLObject getField17() {
             return this.$answer_id_index;
         }
         
-        public SubLObject getField18() {
+        @Override
+		public SubLObject getField18() {
             return this.$answer_bindings_index;
         }
         
-        public SubLObject getField19() {
+        @Override
+		public SubLObject getField19() {
             return this.$new_answer_id_start;
         }
         
-        public SubLObject getField20() {
+        @Override
+		public SubLObject getField20() {
             return this.$new_answer_justifications;
         }
         
@@ -8765,79 +8788,98 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
             return this.$properties;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$suid = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$problem_store = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$forward_propagate = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$input_mt = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$input_el_query = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$input_non_explanatory_el_query = value;
         }
         
-        public SubLObject setField8(final SubLObject value) {
+        @Override
+		public SubLObject setField8(final SubLObject value) {
             return this.$input_query_properties = value;
         }
         
-        public SubLObject setField9(final SubLObject value) {
+        @Override
+		public SubLObject setField9(final SubLObject value) {
             return this.$mt = value;
         }
         
-        public SubLObject setField10(final SubLObject value) {
+        @Override
+		public SubLObject setField10(final SubLObject value) {
             return this.$el_query = value;
         }
         
-        public SubLObject setField11(final SubLObject value) {
+        @Override
+		public SubLObject setField11(final SubLObject value) {
             return this.$el_bindings = value;
         }
         
-        public SubLObject setField12(final SubLObject value) {
+        @Override
+		public SubLObject setField12(final SubLObject value) {
             return this.$hl_query = value;
         }
         
-        public SubLObject setField13(final SubLObject value) {
+        @Override
+		public SubLObject setField13(final SubLObject value) {
             return this.$explanatory_subquery = value;
         }
         
-        public SubLObject setField14(final SubLObject value) {
+        @Override
+		public SubLObject setField14(final SubLObject value) {
             return this.$non_explanatory_subquery = value;
         }
         
-        public SubLObject setField15(final SubLObject value) {
+        @Override
+		public SubLObject setField15(final SubLObject value) {
             return this.$free_hl_vars = value;
         }
         
-        public SubLObject setField16(final SubLObject value) {
+        @Override
+		public SubLObject setField16(final SubLObject value) {
             return this.$hypothetical_bindings = value;
         }
         
-        public SubLObject setField17(final SubLObject value) {
+        @Override
+		public SubLObject setField17(final SubLObject value) {
             return this.$answer_id_index = value;
         }
         
-        public SubLObject setField18(final SubLObject value) {
+        @Override
+		public SubLObject setField18(final SubLObject value) {
             return this.$answer_bindings_index = value;
         }
         
-        public SubLObject setField19(final SubLObject value) {
+        @Override
+		public SubLObject setField19(final SubLObject value) {
             return this.$new_answer_id_start = value;
         }
         
-        public SubLObject setField20(final SubLObject value) {
+        @Override
+		public SubLObject setField20(final SubLObject value) {
             return this.$new_answer_justifications = value;
         }
         
@@ -9060,7 +9102,8 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_inference.inference_p(arg1);
         }
     }
@@ -9071,7 +9114,8 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-INFERENCE-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_inference.sxhash_inference_method(arg1);
         }
     }
@@ -9095,55 +9139,68 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
             this.$step_count = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$inference_answer_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$suid;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$inference;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$bindings;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$justifications;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$elapsed_creation_time;
         }
         
-        public SubLObject getField7() {
+        @Override
+		public SubLObject getField7() {
             return this.$step_count;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$suid = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$inference = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$bindings = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$justifications = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$elapsed_creation_time = value;
         }
         
-        public SubLObject setField7(final SubLObject value) {
+        @Override
+		public SubLObject setField7(final SubLObject value) {
             return this.$step_count = value;
         }
         
@@ -9158,7 +9215,8 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-ANSWER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_inference.inference_answer_p(arg1);
         }
     }
@@ -9178,39 +9236,48 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
             this.$proofs = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$inference_answer_justification_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$answer;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$supports;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$pragma_supports;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$proofs;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$answer = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$supports = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$pragma_supports = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$proofs = value;
         }
         
@@ -9225,7 +9292,8 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-ANSWER-JUSTIFICATION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_inference.inference_answer_justification_p(arg1);
         }
     }
@@ -9236,7 +9304,8 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-ANSWER-JUSTIFICATION-SUPPORTS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_inference.inference_answer_justification_supports(arg1);
         }
     }

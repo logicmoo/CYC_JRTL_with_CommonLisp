@@ -42,10 +42,12 @@ public class atom_t extends LongHolder {
 	 * 
 	 * @return atom's name
 	 */
+	@Override
 	public String toString() {
 		return Prolog.atom_chars(this);
 	}
 
+	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();
 		Prolog.unregister_atom(this);

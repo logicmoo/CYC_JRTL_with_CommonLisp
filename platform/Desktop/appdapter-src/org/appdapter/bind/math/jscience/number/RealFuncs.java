@@ -100,23 +100,28 @@ public class RealFuncs
     
     public static NumberFactory<Real> getRealNumberFactory() {
         return new NumberFactory<Real>() {
-            public Real getZero() {
+            @Override
+			public Real getZero() {
                 return Real.ZERO;
             }
             
-            public Real getOne() {
+            @Override
+			public Real getOne() {
                 return Real.ONE;
             }
             
-            public Real getOneHalf() {
+            @Override
+			public Real getOneHalf() {
                 throw new RuntimeException("need to replace code for Real.valueOf() for compat with latest Javolution");
             }
             
-            public Real makeNumberFromDouble(final double d) {
+            @Override
+			public Real makeNumberFromDouble(final double d) {
                 return RealFuncs.makeReal(d);
             }
             
-            public Real[] makeArray(final int size) {
+            @Override
+			public Real[] makeArray(final int size) {
                 return (Real[])makeArrayForClass((Class)Real.class, size);
             }
         };

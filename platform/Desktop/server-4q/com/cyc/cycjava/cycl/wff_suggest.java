@@ -1196,15 +1196,18 @@ public final class wff_suggest extends SubLTranslatedFile
         return (SubLObject)wff_suggest.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_wff_suggest_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_wff_suggest_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_wff_suggest_file();
     }
     

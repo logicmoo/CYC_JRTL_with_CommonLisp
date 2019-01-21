@@ -159,15 +159,18 @@ public final class pph_methods_rdf extends SubLTranslatedFile
         return (SubLObject)pph_methods_rdf.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_methods_rdf_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_methods_rdf_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_methods_rdf_file();
     }
     

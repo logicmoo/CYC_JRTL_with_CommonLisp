@@ -983,15 +983,18 @@ public final class gt_vars extends SubLTranslatedFile
         return (SubLObject)gt_vars.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_gt_vars_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_gt_vars_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_gt_vars_file();
     }
     

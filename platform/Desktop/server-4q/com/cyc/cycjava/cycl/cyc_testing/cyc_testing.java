@@ -2283,15 +2283,18 @@ public final class cyc_testing extends SubLTranslatedFile
         return (SubLObject)cyc_testing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cyc_testing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cyc_testing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cyc_testing_file();
     }
     
@@ -2505,23 +2508,28 @@ public final class cyc_testing extends SubLTranslatedFile
             this.$guts = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$cyc_test_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$file;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$guts;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$file = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$guts = value;
         }
         
@@ -2536,7 +2544,8 @@ public final class cyc_testing extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-TEST-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cyc_testing.cyc_test_p(arg1);
         }
     }
@@ -2552,23 +2561,28 @@ public final class cyc_testing extends SubLTranslatedFile
             this.$kb = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$cyc_test_file_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$filename;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$kb;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$filename = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$kb = value;
         }
         
@@ -2583,7 +2597,8 @@ public final class cyc_testing extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-TEST-FILE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cyc_testing.cyc_test_file_p(arg1);
         }
     }

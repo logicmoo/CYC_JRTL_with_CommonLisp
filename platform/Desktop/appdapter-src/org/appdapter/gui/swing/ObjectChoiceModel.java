@@ -47,6 +47,7 @@ public class ObjectChoiceModel extends SortedComboBoxModel implements ComboBoxMo
 		refeshComponet = comp;
 		propSupport = ps;
 		selectedObject = new Object() {
+			@Override
 			public String toString() {
 				return "No selected object for " + title + " of type " + type;
 			}

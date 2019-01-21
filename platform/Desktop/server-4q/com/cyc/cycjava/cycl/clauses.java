@@ -467,15 +467,18 @@ public final class clauses extends SubLTranslatedFile
         return (SubLObject)clauses.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_clauses_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_clauses_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_clauses_file();
     }
     

@@ -271,7 +271,8 @@ public final class JdbSession extends Properties
 
     private class Handler extends DefaultHandler implements ContentHandler
     {
-        public void startElement(String uri, String localName, String qName,
+        @Override
+		public void startElement(String uri, String localName, String qName,
             Attributes attributes) throws SAXException
         {
             if (localName.equals("session") || qName.equals("session")) {

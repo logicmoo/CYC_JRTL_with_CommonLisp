@@ -49,7 +49,8 @@ public class SparqlDatasetProvider extends JenaSDBWrappedDatasetFactory implemen
         return (Graph)new GraphDistinctDataBag((ThresholdPolicy)thresholdPolicy);
     }
     
-    public Dataset createRemotePeer() {
+    @Override
+	public Dataset createRemotePeer() {
         final String newID = createNewName();
         return SparqlDatasetGraph.SINGLETON.createDataset("DatasetRemote-" + newID).toDataset();
     }
@@ -63,21 +64,25 @@ public class SparqlDatasetProvider extends JenaSDBWrappedDatasetFactory implemen
         return ModelFactory.createModelForGraph((Graph)createGraphMem());
     }
     
-    public Dataset create(final DatasetGraph dsg) {
+    @Override
+	public Dataset create(final DatasetGraph dsg) {
         Debuggable.notImplemented(new Object[] { "create", this, dsg });
         return DatasetFactory.create(dsg);
     }
     
-    public Dataset createMem() {
+    @Override
+	public Dataset createMem() {
         final String newID = createNewName();
         return SparqlDatasetGraph.SINGLETON.createDataset("Dataset" + newID).toDataset();
     }
     
-    public String getDatasetType() {
+    @Override
+	public String getDatasetType() {
         return "sparql";
     }
     
-    public Dataset create(final Model model) {
+    @Override
+	public Dataset create(final Model model) {
         Debuggable.notImplemented(new Object[] { "create", this, model });
         final Dataset remote = this.createRemotePeer();
         final Model remoteModel = remote.getDefaultModel();
@@ -90,25 +95,30 @@ public class SparqlDatasetProvider extends JenaSDBWrappedDatasetFactory implemen
         return remote;
     }
     
-    public Dataset createDefault() {
+    @Override
+	public Dataset createDefault() {
         return this.createRemotePeer();
     }
     
-    public Dataset create(final Dataset peer) {
+    @Override
+	public Dataset create(final Dataset peer) {
         Debuggable.notImplemented(new Object[] { "create", this, peer });
         return peer;
     }
     
-    public Model createModelOfType(final String typeOf, final String shareName) throws Throwable {
+    @Override
+	public Model createModelOfType(final String typeOf, final String shareName) throws Throwable {
         Debuggable.notImplemented(new Object[] { "createModelOfType", this, typeOf, shareName });
         return this.createModelOfType(typeOf, null, shareName);
     }
     
-    public Dataset createType(final String typeOf, final String shareName) {
+    @Override
+	public Dataset createType(final String typeOf, final String shareName) {
         return SparqlDatasetGraph.SINGLETON.getRemoteDataset(shareName);
     }
     
-    public Model createModelOfType(final String typeOf, final String modelName, final String shareName) {
+    @Override
+	public Model createModelOfType(final String typeOf, final String modelName, final String shareName) {
         return SparqlDatasetGraph.SINGLETON.createGraph(RepoDatasetFactory.getGlobalName(modelName, shareName)).toModel();
     }
     

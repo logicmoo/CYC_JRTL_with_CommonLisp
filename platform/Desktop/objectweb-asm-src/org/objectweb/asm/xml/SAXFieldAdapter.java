@@ -46,7 +46,8 @@ public class SAXFieldAdapter extends SAXAdapter implements FieldVisitor {
         addStart("field", att);
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -57,7 +58,8 @@ public class SAXFieldAdapter extends SAXAdapter implements FieldVisitor {
                 desc);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         addEnd("field");
     }
 }

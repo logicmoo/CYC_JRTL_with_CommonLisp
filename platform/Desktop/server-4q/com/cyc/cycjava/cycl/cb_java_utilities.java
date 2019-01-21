@@ -234,15 +234,18 @@ public final class cb_java_utilities extends SubLTranslatedFile
         return (SubLObject)cb_java_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_java_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_java_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_java_utilities_file();
     }
     

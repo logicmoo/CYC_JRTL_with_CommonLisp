@@ -42,7 +42,8 @@ public final class FaslReader
         new ReaderMacroFunction("fasl-read-string", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char terminator)
+        @Override
+		public LispObject execute(Stream stream, char terminator)
 
         {
             return stream.readString(terminator, Stream.faslReadtable);
@@ -54,7 +55,8 @@ public final class FaslReader
         new ReaderMacroFunction("fasl-read-list", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char ignored)
+        @Override
+		public LispObject execute(Stream stream, char ignored)
 
         {
             return stream.readList(false, Stream.faslReadtable);
@@ -66,7 +68,8 @@ public final class FaslReader
         new ReaderMacroFunction("fasl-read-quote", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char ignored)
+        @Override
+		public LispObject execute(Stream stream, char ignored)
 
         {
             return new Cons(Symbol.QUOTE,
@@ -81,7 +84,8 @@ public final class FaslReader
         new ReaderMacroFunction("fasl-read-dispatch-char", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char c)
+        @Override
+		public LispObject execute(Stream stream, char c)
 
         {
             return stream.readDispatchChar(c, Stream.faslReadtable);
@@ -93,7 +97,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-left-paren", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
           return stream.readSharpLeftParen(c, n, Stream.faslReadtable);
@@ -105,7 +110,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-star", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char ignored, int n)
+        @Override
+		public LispObject execute(Stream stream, char ignored, int n)
 
         {
           return stream.readSharpStar(ignored, n, Stream.faslReadtable);
@@ -117,7 +123,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-dot", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
           return stream.readSharpDot(c, n, Stream.faslReadtable);
@@ -129,7 +136,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-colon", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             LispThread thread = LispThread.currentThread();
@@ -142,7 +150,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-a", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readArray(n, Stream.faslReadtable);
@@ -154,7 +163,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-b", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readRadix(2, Stream.faslReadtable);
@@ -166,7 +176,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-c", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readComplex(Stream.faslReadtable);
@@ -178,7 +189,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-o", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readRadix(8, Stream.faslReadtable);
@@ -190,7 +202,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-p", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readPathname(Stream.faslReadtable);
@@ -202,7 +215,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-r", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readRadix(n, Stream.faslReadtable);
@@ -214,7 +228,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-s", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readStructure(Stream.faslReadtable);
@@ -226,7 +241,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-x", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return stream.readRadix(16, Stream.faslReadtable);
@@ -238,7 +254,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-quote", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
 
         {
             return new Cons(Symbol.FUNCTION,
@@ -253,7 +270,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-backslash", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
         {
             return stream.readCharacterLiteral(FaslReadtable.getInstance(),
                                                LispThread.currentThread());
@@ -265,7 +283,8 @@ public final class FaslReader
         new DispatchMacroFunction("fasl-sharp-question-mark", PACKAGE_SYS,
                                   false, "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        @Override
+		public LispObject execute(Stream stream, char c, int n)
         {
             return Load.getUninternedSymbol(n);
         }

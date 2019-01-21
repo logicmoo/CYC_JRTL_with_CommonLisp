@@ -59,6 +59,7 @@ public class Bignum extends AbstractSubLInteger
 {
   public final BigInteger value;
 
+	@Override
 	public BigInteger bigIntegerValue() {
 		return value;
 	}
@@ -99,12 +100,14 @@ public class Bignum extends AbstractSubLInteger
     value = n;
   }
 
-  public Object javaInstance()
+  @Override
+public Object javaInstance()
   {
     return value;
   }
 
-  public Object javaInstance(Class c) {
+  @Override
+public Object javaInstanceImpl(Class c) {
     String cn = c.getName();
     if (cn.equals("java.lang.Byte") || cn.equals("byte"))
       return Byte.valueOf((byte)value.intValue());
@@ -118,7 +121,8 @@ public class Bignum extends AbstractSubLInteger
   }
 
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     if (value.signum() > 0)
       return list(Symbol.INTEGER,
@@ -331,22 +335,26 @@ public class Bignum extends AbstractSubLInteger
         return null;
   }
 
-  public final LispObject incr()
+  @Override
+public final LispObject incr()
   {
     return number(value.add(BigInteger.ONE));
   }
 
-  public final LispObject decr()
+  @Override
+public final LispObject decr()
   {
     return number(value.subtract(BigInteger.ONE));
   }
 
-  public LispObject add(int n)
+  @Override
+public LispObject add(int n)
   {
     return number(value.add(BigInteger.valueOf(n)));
   }
 
-  public LispObject add(LispObject obj)
+  @Override
+public LispObject add(LispObject obj)
   {
     if (obj instanceof Fixnum)
       return number(value.add(Fixnum.getBigInteger(obj)));
@@ -371,7 +379,8 @@ public class Bignum extends AbstractSubLInteger
     return type_error(obj, Symbol.NUMBER);
   }
 
-  public LispObject subtract(LispObject obj)
+  @Override
+public LispObject subtract(LispObject obj)
   {
     if (obj instanceof Fixnum)
       return number(value.subtract(Fixnum.getBigInteger(obj)));
@@ -397,7 +406,8 @@ public class Bignum extends AbstractSubLInteger
     return type_error(obj, Symbol.NUMBER);
   }
 
-  public LispObject multiplyBy(int n)
+  @Override
+public LispObject multiplyBy(int n)
   {
     if (n == 0)
       return Fixnum.ZERO;
@@ -406,7 +416,8 @@ public class Bignum extends AbstractSubLInteger
     return getInstance(value.multiply(BigInteger.valueOf(n)));
   }
 
-  public LispObject multiplyBy(LispObject obj)
+  @Override
+public LispObject multiplyBy(LispObject obj)
   {
     if (obj instanceof Fixnum)
       {
@@ -437,7 +448,8 @@ public class Bignum extends AbstractSubLInteger
     return type_error(obj, Symbol.NUMBER);
   }
 
-  public LispObject divideBy(LispObject obj)
+  @Override
+public LispObject divideBy(LispObject obj)
   {
     if (obj instanceof Fixnum)
       return number(value, Fixnum.getBigInteger(obj));
@@ -465,7 +477,8 @@ public class Bignum extends AbstractSubLInteger
     return type_error(obj, Symbol.NUMBER);
   }
 
-  public boolean isEqualTo(LispObject obj)
+  @Override
+public boolean isEqualTo(LispObject obj)
   {
     if (obj instanceof Bignum)
       return value.equals(((Bignum)obj).value);
@@ -480,7 +493,8 @@ public class Bignum extends AbstractSubLInteger
     return false;
   }
 
-  public boolean isNotEqualTo(LispObject obj)
+  @Override
+public boolean isNotEqualTo(LispObject obj)
   {
     if (obj instanceof Bignum)
       return !value.equals(((Bignum)obj).value);
@@ -495,7 +509,8 @@ public class Bignum extends AbstractSubLInteger
     return false;
   }
 
-  public boolean isLessThan(LispObject obj)
+  @Override
+public boolean isLessThan(LispObject obj)
   {
     if (obj instanceof Fixnum)
       return value.compareTo(Fixnum.getBigInteger(obj)) < 0;
@@ -515,7 +530,8 @@ public class Bignum extends AbstractSubLInteger
     return false;
   }
 
-  public boolean isGreaterThan(LispObject obj)
+  @Override
+public boolean isGreaterThan(LispObject obj)
   {
     if (obj instanceof Fixnum)
       return value.compareTo(Fixnum.getBigInteger(obj)) > 0;
@@ -535,7 +551,8 @@ public class Bignum extends AbstractSubLInteger
     return false;
   }
 
-  public boolean isLessThanOrEqualTo(LispObject obj)
+  @Override
+public boolean isLessThanOrEqualTo(LispObject obj)
   {
     if (obj instanceof Fixnum)
       return value.compareTo(Fixnum.getBigInteger(obj)) <= 0;
@@ -555,7 +572,8 @@ public class Bignum extends AbstractSubLInteger
     return false;
   }
 
-  public boolean isGreaterThanOrEqualTo(LispObject obj)
+  @Override
+public boolean isGreaterThanOrEqualTo(LispObject obj)
   {
     if (obj instanceof Fixnum)
       return value.compareTo(Fixnum.getBigInteger(obj)) >= 0;
@@ -575,7 +593,8 @@ public class Bignum extends AbstractSubLInteger
     return false;
   }
 
-  public LispObject truncate(LispObject obj)
+  @Override
+public LispObject truncate(LispObject obj)
   {
     final LispThread thread = LispThread.currentThread();
     LispObject value1, value2;
@@ -636,7 +655,8 @@ public class Bignum extends AbstractSubLInteger
     return thread.setValues(value1, value2);
   }
 
-  public LispObject ash(LispObject obj)
+  @Override
+public LispObject ash(LispObject obj)
   {
     BigInteger n = value;
     if (obj instanceof Fixnum)
@@ -662,12 +682,14 @@ public class Bignum extends AbstractSubLInteger
     return type_error(obj, Symbol.INTEGER);
   }
 
-  public LispObject LOGNOT()
+  @Override
+public LispObject LOGNOT()
   {
     return number(value.not());
   }
 
-  public LispObject LOGAND(int n)
+  @Override
+public LispObject LOGAND(int n)
   {
     if (n >= 0)
       return Fixnum.getInstance(value.intValue() & n);
@@ -675,7 +697,8 @@ public class Bignum extends AbstractSubLInteger
       return number(value.and(BigInteger.valueOf(n)));
   }
 
-  public LispObject LOGAND(LispObject obj)
+  @Override
+public LispObject LOGAND(LispObject obj)
   {
     if (obj instanceof Fixnum)
       {
@@ -694,12 +717,14 @@ public class Bignum extends AbstractSubLInteger
       return type_error(obj, Symbol.INTEGER);
   }
 
-  public LispObject LOGIOR(int n)
+  @Override
+public LispObject LOGIOR(int n)
   {
     return number(value.or(BigInteger.valueOf(n)));
   }
 
-  public LispObject LOGIOR(LispObject obj)
+  @Override
+public LispObject LOGIOR(LispObject obj)
   {
     if (obj instanceof Fixnum)
       {
@@ -715,12 +740,14 @@ public class Bignum extends AbstractSubLInteger
       return type_error(obj, Symbol.INTEGER);
   }
 
-  public LispObject LOGXOR(int n)
+  @Override
+public LispObject LOGXOR(int n)
   {
     return number(value.xor(BigInteger.valueOf(n)));
   }
 
-  public LispObject LOGXOR(LispObject obj)
+  @Override
+public LispObject LOGXOR(LispObject obj)
   {
     final BigInteger n;
     if (obj instanceof Fixnum)
@@ -732,7 +759,8 @@ public class Bignum extends AbstractSubLInteger
     return number(value.xor(n));
   }
 
-  public LispObject LDB(int size, int position)
+  @Override
+public LispObject LDB(int size, int position)
   {
     BigInteger n = value.shiftRight(position);
     BigInteger mask = BigInteger.ONE.shiftLeft(size).subtract(BigInteger.ONE);
@@ -740,19 +768,22 @@ public class Bignum extends AbstractSubLInteger
   }
 
 
-  public int hashCode()
+  @Override
+public int hashCode()
   {
       long bits = value.longValue();
       return (int) (bits ^ (bits >>> 32));
   }
 
-  public int psxhash()
+  @Override
+public int psxhash()
   {
       return (hashCode() & 0x7fffffff);
   }
 
 
-  final public String printObjectImpl()
+  @Override
+final public String printObjectImpl()
   {
     final LispThread thread = LispThread.currentThread();
     final int base = Fixnum.getValue(Symbol.PRINT_BASE.symbolValue(thread));
@@ -790,40 +821,49 @@ public class Bignum extends AbstractSubLInteger
     return s;
   }
 
-  public Number getNativeNumber() {
+  @Override
+public Number getNativeNumber() {
   	return (Number) javaInstance();
   }
 
-  public boolean greaterThanInternal(SubLObject p0) {
+  @Override
+public boolean greaterThanInternal(SubLObject p0) {
   	return bigIntegerValue().compareTo(p0.bigIntegerValue())>0;
   }
 
-  public boolean greaterThanOrEqualInternal(SubLObject p0) {
+  @Override
+public boolean greaterThanOrEqualInternal(SubLObject p0) {
   	return bigIntegerValue().compareTo(p0.bigIntegerValue())>=0;
   }
 
-  public boolean lessThanInternal(SubLObject p0) {
+  @Override
+public boolean lessThanInternal(SubLObject p0) {
   	return bigIntegerValue().compareTo(p0.bigIntegerValue())<0;
   }
 
-  public boolean lessThanOrEqualInternal(SubLObject p0) {
+  @Override
+public boolean lessThanOrEqualInternal(SubLObject p0) {
   	return bigIntegerValue().compareTo(p0.bigIntegerValue())<=0;
   }
 
-  public boolean numericallyEqualInternal(SubLObject p0) {
+  @Override
+public boolean numericallyEqualInternal(SubLObject p0) {
   	return bigIntegerValue().compareTo(p0.bigIntegerValue())==0;
   }
 
 
+	@Override
 	public SubLSymbol getType() {
 		return Types.$dtp_bignum$;
 	}
 
+	@Override
 	public String toTypeName() {
 		return SubLBigIntBignum.BIG_INT_TYPE_NAME;
 	}
 
 
+	@Override
 	public SubLFixnum getTypeCode() {
 		return CommonSymbols.THIRTY_FOUR_INTEGER;
 	}

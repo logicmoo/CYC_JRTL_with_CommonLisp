@@ -3172,15 +3172,18 @@ public final class inference_proof_spec extends SubLTranslatedFile
         return (SubLObject)inference_proof_spec.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_proof_spec_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_proof_spec_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_proof_spec_file();
     }
     

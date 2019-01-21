@@ -792,15 +792,18 @@ public final class subl_promotions extends SubLTranslatedFile
         return (SubLObject)subl_promotions.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_subl_promotions_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_subl_promotions_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_subl_promotions_file();
     }
     
@@ -857,7 +860,8 @@ public final class subl_promotions extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NON-NEGATIVE-INTEGER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return subl_promotions.non_negative_integer_p(arg1);
         }
     }

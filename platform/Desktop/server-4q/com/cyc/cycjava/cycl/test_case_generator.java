@@ -1101,15 +1101,18 @@ public final class test_case_generator extends SubLTranslatedFile
         return (SubLObject)test_case_generator.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_test_case_generator_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_test_case_generator_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_test_case_generator_file();
     }
     

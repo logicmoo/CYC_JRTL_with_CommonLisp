@@ -46,7 +46,8 @@ public final class FtpLoadProcess extends LoadProcess implements BackgroundProce
         return fileIsDirectory;
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         Debug.assertTrue(buffer != null);
         buffer.setBackgroundProcess(this);

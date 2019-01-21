@@ -50,22 +50,26 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public String getCommentStart()
+    @Override
+	public String getCommentStart()
     {
         return ";; ";
     }
 
-    public final SyntaxIterator getSyntaxIterator(Position pos)
+    @Override
+	public final SyntaxIterator getSyntaxIterator(Position pos)
     {
         return new LispSyntaxIterator(pos);
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new LispFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_TAB, 0, "tab");
         km.mapKey(KeyEvent.VK_TAB, CTRL_MASK, "insertTab");
@@ -93,7 +97,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_SPACE, CTRL_MASK | SHIFT_MASK, "justOneSpace");
     }
 
-    public void populateModeMenu(Editor editor, Menu menu)
+    @Override
+	public void populateModeMenu(Editor editor, Menu menu)
     {
         boolean enabled = LispShell.findLisp(null) != null;
         if (isSlimeLoaded()) {
@@ -128,12 +133,14 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return false;
     }
 
-    public boolean isTaggable()
+    @Override
+	public boolean isTaggable()
     {
         return true;
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new LispTagger(buffer);
     }
@@ -141,19 +148,22 @@ public class LispMode extends AbstractMode implements Constants, Mode
     private static final String validChars =
         "!$%&*+-./0123456789<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{}~";
 
-    public final boolean isIdentifierStart(char c)
+    @Override
+	public final boolean isIdentifierStart(char c)
     {
         return validChars.indexOf(c) >= 0;
     }
 
-    public final boolean isIdentifierPart(char c)
+    @Override
+	public final boolean isIdentifierPart(char c)
     {
         return validChars.indexOf(c) >= 0;
     }
 
     // This needs to pick out a keyword (":FOO"), but should ignore embedded
     // colons ("FOO:BAR").
-    public String getIdentifier(Line line, int offset)
+    @Override
+	public String getIdentifier(Line line, int offset)
     {
         final int limit = line.length();
         if (offset < limit) {
@@ -230,7 +240,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return null;
     }
 
-    public boolean isDelimited(Position pos, int length)
+    @Override
+	public boolean isDelimited(Position pos, int length)
     {
         final Line line = pos.getLine();
         final int offset = pos.getOffset();
@@ -297,7 +308,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return null;
     }
 
-    public boolean isInQuote(Buffer buffer, Position pos)
+    @Override
+	public boolean isInQuote(Buffer buffer, Position pos)
     {
         final Line line = pos.getLine();
         final int offset = pos.getOffset();
@@ -317,7 +329,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return inQuote;
     }
 
-    public boolean isInComment(Buffer buffer, Position pos)
+    @Override
+	public boolean isInComment(Buffer buffer, Position pos)
     {
         if (buffer.needsParsing()) {
             if (buffer.getFormatter().parseBuffer())
@@ -351,7 +364,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return state == STATE_COMMENT;
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
@@ -381,7 +395,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return -1;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final Line model = findModel(line);
         if (model == null)

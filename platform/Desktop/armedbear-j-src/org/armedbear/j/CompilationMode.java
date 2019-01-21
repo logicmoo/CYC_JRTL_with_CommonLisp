@@ -40,7 +40,8 @@ public final class CompilationMode extends AbstractMode implements Constants, Mo
         return mode;
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_F9, 0, "compile");
         km.mapKey(KeyEvent.VK_F9, CTRL_MASK, "recompile");
@@ -51,7 +52,8 @@ public final class CompilationMode extends AbstractMode implements Constants, Mo
         km.mapKey('q', "tempBufferQuit");
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new PlainTextFormatter(buffer);
     }

@@ -6,7 +6,8 @@ import org.appdapter.core.math.number.RealNumeric;
 
 public interface EuclideanSet<V, DistN extends RealNumeric.Nonnegative<? super DistN>, MeasN extends RealNumeric.Nonnegative<? super MeasN>, DimN extends IntegNumeric.Natural<? super DimN>> extends MetricSet<V, DistN>, MeasurableSet<V, MeasN>, DimensionalSet<V, DimN>
 {
-    DimN getDimension();
+    @Override
+	DimN getDimension();
     
     public abstract static class Basic<V, MeasAndDistRN extends RealNumeric.Nonnegative<? super MeasAndDistRN>, DimN extends IntegNumeric.Natural<? super DimN>> extends MetricSet.Basic<V, MeasAndDistRN> implements EuclideanSet<V, MeasAndDistRN, MeasAndDistRN, DimN>
     {
@@ -16,7 +17,8 @@ public interface EuclideanSet<V, DistN extends RealNumeric.Nonnegative<? super D
             this.myDimension = dim;
         }
         
-        public DimN getDimension() {
+        @Override
+		public DimN getDimension() {
             return this.myDimension;
         }
     }

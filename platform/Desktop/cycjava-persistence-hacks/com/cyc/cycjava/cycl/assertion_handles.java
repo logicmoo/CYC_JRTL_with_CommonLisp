@@ -984,15 +984,18 @@ public final class assertion_handles extends SubLTranslatedFile
         return (SubLObject)assertion_handles.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_assertion_handles_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_assertion_handles_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_assertion_handles_file();
     }
     
@@ -1091,7 +1094,8 @@ public final class assertion_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ASSERTION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return assertion_handles.assertion_p(arg1);
         }
     }
@@ -1102,7 +1106,8 @@ public final class assertion_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-ASSERTION-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return assertion_handles.sxhash_assertion_method(arg1);
         }
     }
@@ -1113,7 +1118,8 @@ public final class assertion_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FIND-ASSERTION-BY-ID"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return assertion_handles.find_assertion_by_id(arg1);
         }
     }

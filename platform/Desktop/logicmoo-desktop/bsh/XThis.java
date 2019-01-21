@@ -71,6 +71,7 @@ public class XThis extends This
 		super( namespace, declaringInterp ); 
 	}
 
+	@Override
 	public String toString() {
 		return "'this' reference (XThis) to Bsh object: " + namespace;
 	}
@@ -78,6 +79,7 @@ public class XThis extends This
 	/**
 		Get dynamic proxy for interface, caching those it creates.
 	*/
+	@Override
 	public Object getInterface( Class clas ) 
 	{
 		return getInterface( new Class[] { clas } );
@@ -86,6 +88,7 @@ public class XThis extends This
 	/**
 		Get dynamic proxy for interface, caching those it creates.
 	*/
+	@Override
 	public Object getInterface( Class [] ca ) 
 	{
 		if ( interfaces == null )
@@ -124,6 +127,7 @@ public class XThis extends This
 	*/
 	class Handler implements InvocationHandler, java.io.Serializable 
 	{
+		@Override
 		public Object invoke( Object proxy, Method method, Object[] args ) 
 			throws Throwable
 		{

@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.armedbear.lisp.ReaderInputStream;
+import org.logicmoo.system.SystemCurrent;
 
 import bsh.EvalError;
 import bsh.Interpreter;
@@ -21,6 +22,7 @@ public class JDemoApplet extends JApplet {
 	boolean initedApplet = false;
 	static boolean initedStaticApplet = false;
 	static Interpreter interp = null;
+	@Override
 	public void init() {
 		if(initedApplet) return;
 		initedApplet = true;
@@ -67,9 +69,9 @@ public class JDemoApplet extends JApplet {
 	 * @param i
 	 */
 	static void setInterpReader(Interpreter i) {
-		System.setErr(i.getErr());
-		System.setOut(i.getOut());
-		System.setIn(new ReaderInputStream(i.getIn()));
+		SystemCurrent.setErr(i.getErr());
+		SystemCurrent.setOut(i.getOut());
+		SystemCurrent.setIn(new ReaderInputStream(i.getIn()));
 		i.setShowResults(true);
 	}
 
@@ -85,6 +87,7 @@ public class JDemoApplet extends JApplet {
 		if(initedStaticApplet) return;
 		initedStaticApplet = true;
 		Runnable r = new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Interpreter.DEBUG = true;

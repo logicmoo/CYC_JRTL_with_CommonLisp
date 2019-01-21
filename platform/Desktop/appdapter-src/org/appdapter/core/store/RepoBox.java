@@ -6,7 +6,8 @@ import org.appdapter.api.trigger.Trigger;
 
 public interface RepoBox<TT extends Trigger<? extends RepoBox<TT>>> extends Box<TT>
 {
-    Repo getValue();
+    @Override
+	Repo getValue();
     
     List<Repo.GraphStat> getAllGraphStats();
     

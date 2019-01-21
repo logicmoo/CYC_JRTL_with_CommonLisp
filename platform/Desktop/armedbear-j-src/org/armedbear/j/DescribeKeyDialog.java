@@ -59,7 +59,8 @@ public final class DescribeKeyDialog extends AbstractDialog
         textField.requestFocus();
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         final int keycode = e.getKeyCode();
         // Ignore modifier keystrokes.
@@ -82,7 +83,8 @@ public final class DescribeKeyDialog extends AbstractDialog
             report(command);
     }
 
-    public void keyTyped(KeyEvent e)
+    @Override
+	public void keyTyped(KeyEvent e)
     {
         if (!eventHandled) {
             final char c = e.getKeyChar();
@@ -106,7 +108,8 @@ public final class DescribeKeyDialog extends AbstractDialog
         }
     }
 
-    public void keyReleased(KeyEvent e)
+    @Override
+	public void keyReleased(KeyEvent e)
     {
         final int keycode = e.getKeyCode();
         if (keycode == KeyEvent.VK_SHIFT || keycode == KeyEvent.VK_CONTROL ||
@@ -118,7 +121,8 @@ public final class DescribeKeyDialog extends AbstractDialog
                 keyStrokeText = lastKeyText;
             // Use invokeLater() so message dialog will get focus.
             Runnable r = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     MessageDialog.showMessageDialog(
                         editor,
@@ -187,7 +191,8 @@ public final class DescribeKeyDialog extends AbstractDialog
         dispose();
         // Use invokeLater() so message dialog will get focus.
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 MessageDialog.showMessageDialog(editor, sb.toString(),
                                                 "Describe Key");
@@ -196,7 +201,8 @@ public final class DescribeKeyDialog extends AbstractDialog
         SwingUtilities.invokeLater(r);
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         disposed = true;
         super.dispose();

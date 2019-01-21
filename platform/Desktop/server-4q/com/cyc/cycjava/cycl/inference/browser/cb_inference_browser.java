@@ -16632,15 +16632,18 @@ public final class cb_inference_browser extends SubLTranslatedFile
         return (SubLObject)cb_inference_browser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_inference_browser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_inference_browser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_inference_browser_file();
     }
     

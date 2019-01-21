@@ -341,15 +341,18 @@ public final class kb_health_statistics extends SubLTranslatedFile
         return (SubLObject)kb_health_statistics.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_health_statistics_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_health_statistics_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_health_statistics_file();
     }
     

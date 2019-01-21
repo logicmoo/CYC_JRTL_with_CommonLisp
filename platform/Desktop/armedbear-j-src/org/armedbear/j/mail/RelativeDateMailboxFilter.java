@@ -112,7 +112,8 @@ public final class RelativeDateMailboxFilter extends MailboxFilter
         initMillis = System.currentTimeMillis();
     }
 
-    public boolean accept(MailboxEntry entry)
+    @Override
+	public boolean accept(MailboxEntry entry)
     {
         if (initMillis == 0 || System.currentTimeMillis() - initMillis > 60000)
             init();

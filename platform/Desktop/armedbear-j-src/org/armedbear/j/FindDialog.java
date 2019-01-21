@@ -128,7 +128,8 @@ public final class FindDialog extends AbstractDialog implements ActionListener,
         return searchFromStart;
     }
 
-    protected void ok()
+    @Override
+	protected void ok()
     {
         search.setPattern(patternControl.getText());
         search.setIgnoreCase(ignoreCaseCheckBox.isSelected());
@@ -159,19 +160,22 @@ public final class FindDialog extends AbstractDialog implements ActionListener,
         dispose();
     }
 
-    protected void cancel()
+    @Override
+	protected void cancel()
     {
         cancelled = true;
         search = null;
         dispose();
     }
 
-    public void textValueChanged(TextEvent e)
+    @Override
+	public void textValueChanged(TextEvent e)
     {
         setIgnoreCaseDefault();
     }
 
-    public void actionPerformed(ActionEvent e)
+    @Override
+	public void actionPerformed(ActionEvent e)
     {
         String cmd = e.getActionCommand();
         if (cmd != null && cmd.equals(regularExpressionCheckBox.getText())) {

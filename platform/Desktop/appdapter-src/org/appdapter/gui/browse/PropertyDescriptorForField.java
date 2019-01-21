@@ -110,6 +110,7 @@ public class PropertyDescriptorForField extends PropertyDescriptor implements Co
 			this.setTargetObject(sourceObject);
 		}
 
+		@Override
 		public String[] getTags() {
 			String[] tags = super.getTags();
 			/*if (editor != null) {
@@ -272,6 +273,7 @@ public class PropertyDescriptorForField extends PropertyDescriptor implements Co
 	 *
 	 * @param readMethod The new read method.
 	 */
+	@Override
 	public synchronized void setReadMethod(Method readMethod) throws IntrospectionException {
 		readMethodOr = readMethod;
 	}
@@ -303,6 +305,7 @@ public class PropertyDescriptorForField extends PropertyDescriptor implements Co
 		}
 	}
 
+	@Override
 	public void setPropertyEditorClass(Class<?> propertyEditorClass) {
 		super.setPropertyEditorClass(propertyEditorClass);
 	}
@@ -325,6 +328,7 @@ public class PropertyDescriptorForField extends PropertyDescriptor implements Co
 		}
 	}
 
+	@Override
 	public synchronized java.lang.Class<?> getPropertyType() {
 		return f.getType();
 	}
@@ -337,10 +341,12 @@ public class PropertyDescriptorForField extends PropertyDescriptor implements Co
 		return "" + f;
 	}
 
+	@Override
 	public synchronized Method getReadMethod() {
 		return readMethodOr;
 	}
 
+	@Override
 	public synchronized Method getWriteMethod() {
 		return writeMethodOr;
 	}
@@ -354,6 +360,7 @@ public class PropertyDescriptorForField extends PropertyDescriptor implements Co
 	 *
 	 * @param writeMethod The new write method.
 	 */
+	@Override
 	public synchronized void setWriteMethod(Method writeMethod) throws IntrospectionException {
 		writeMethodOr = writeMethod;
 	}

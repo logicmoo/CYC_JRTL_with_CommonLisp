@@ -82,27 +82,32 @@ public class JavaMode extends AbstractMode implements Constants, Mode
     jdb = obj;
   }
 
-  public boolean canIndent()
+  @Override
+public boolean canIndent()
   {
     return true;
   }
 
-  public SyntaxIterator getSyntaxIterator(Position pos)
+  @Override
+public SyntaxIterator getSyntaxIterator(Position pos)
   {
     return new JavaSyntaxIterator(pos);
   }
 
-  public String getCommentStart()
+  @Override
+public String getCommentStart()
   {
     return "// ";
   }
 
-  public Formatter getFormatter(Buffer buffer)
+  @Override
+public Formatter getFormatter(Buffer buffer)
   {
     return new JavaFormatter(buffer);
   }
 
-  protected void setKeyMapDefaults(KeyMap km)
+  @Override
+protected void setKeyMapDefaults(KeyMap km)
   {
     km.mapKey('{', "electricOpenBrace");
     km.mapKey('}', "electricCloseBrace");
@@ -160,7 +165,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
       }
   }
 
-  public void populateModeMenu(Editor editor, Menu menu)
+  @Override
+public void populateModeMenu(Editor editor, Menu menu)
   {
     menu.add(editor, "Compile...", 'C', "compile");
     menu.add(editor, "Recompile", 'R', "recompile");
@@ -186,7 +192,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
       }
   }
 
-  public JPopupMenu getContextMenu(Editor editor)
+  @Override
+public JPopupMenu getContextMenu(Editor editor)
   {
     final JPopupMenu popup = new JPopupMenu();
     if (jdb != null)
@@ -218,7 +225,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
     return popup;
   }
 
-  public NavigationComponent getSidebarComponent(Editor editor)
+  @Override
+public NavigationComponent getSidebarComponent(Editor editor)
   {
     if (getId() == JAVA_MODE)
       {
@@ -233,27 +241,32 @@ public class JavaMode extends AbstractMode implements Constants, Mode
     return super.getSidebarComponent(editor);
   }
 
-  public Tagger getTagger(SystemBuffer buffer)
+  @Override
+public Tagger getTagger(SystemBuffer buffer)
   {
     return new JavaTagger(buffer);
   }
 
-  public boolean isTaggable()
+  @Override
+public boolean isTaggable()
   {
     return true;
   }
 
-  public boolean hasQualifiedNames()
+  @Override
+public boolean hasQualifiedNames()
   {
     return true;
   }
 
-  public boolean isQualifiedName(String s)
+  @Override
+public boolean isQualifiedName(String s)
   {
     return s.indexOf('.') >= 0;
   }
 
-  public int getCorrectIndentation(final Line line, final Buffer buffer)
+  @Override
+public int getCorrectIndentation(final Line line, final Buffer buffer)
   {
     if (line.flags() == STATE_COMMENT)
       return indentComment(line, buffer);
@@ -1052,17 +1065,20 @@ loop:
     return new String(it.hideSyntacticWhitespace(s)).trim();
   }
 
-  public boolean isIdentifierStart(char c)
+  @Override
+public boolean isIdentifierStart(char c)
   {
     return Character.isJavaIdentifierStart(c);
   }
 
-  public boolean isIdentifierPart(char c)
+  @Override
+public boolean isIdentifierPart(char c)
   {
     return Character.isJavaIdentifierPart(c);
   }
 
-  public boolean isInComment(Buffer buffer, Position pos)
+  @Override
+public boolean isInComment(Buffer buffer, Position pos)
   {
     if (buffer == null || pos == null)
       {
@@ -1142,7 +1158,8 @@ loop:
     return state == STATE_COMMENT;
   }
 
-  public boolean isCommentLine(Line line)
+  @Override
+public boolean isCommentLine(Line line)
   {
     return line.trim().startsWith("//");
   }
@@ -1238,7 +1255,8 @@ loop:
     buffer.endCompoundEdit(compoundEdit);
   }
 
-  public String getToolTipText(Editor editor, MouseEvent e)
+  @Override
+public String getToolTipText(Editor editor, MouseEvent e)
   {
     if (editor.getModeId() == JAVA_MODE)
       {
@@ -1312,7 +1330,8 @@ loop:
     return null;
   }
 
-  public Expression getExpressionAtDot(final Editor editor, final boolean exact)
+  @Override
+public Expression getExpressionAtDot(final Editor editor, final boolean exact)
   {
     if (editor.getModeId() == OBJC_MODE)
       return super.getExpressionAtDot(editor, exact);

@@ -51,43 +51,51 @@ public final class CppMode extends CMode implements Constants, Mode
     return mode;
   }
 
-  public final String getCommentStart()
+  @Override
+public final String getCommentStart()
   {
     return "// ";
   }
 
-  public final String getCommentEnd()
+  @Override
+public final String getCommentEnd()
   {
     return null;
   }
 
-  public final Formatter getFormatter(Buffer buffer)
+  @Override
+public final Formatter getFormatter(Buffer buffer)
   {
     return new CFormatter(buffer, LANGUAGE_CPP);
   }
 
-  protected void setKeyMapDefaults(KeyMap km)
+  @Override
+protected void setKeyMapDefaults(KeyMap km)
   {
     super.setKeyMapDefaults(km);
     km.unmapKey(':'); // No electric ':'.
   }
 
-  public Tagger getTagger(SystemBuffer buffer)
+  @Override
+public Tagger getTagger(SystemBuffer buffer)
   {
     return new CppTagger(buffer);
   }
 
-  public boolean hasQualifiedNames()
+  @Override
+public boolean hasQualifiedNames()
   {
     return true;
   }
 
-  public boolean isQualifiedName(String s)
+  @Override
+public boolean isQualifiedName(String s)
   {
     return s.indexOf("::") >= 0;
   }
 
-  public int getCorrectIndentation(Line line, Buffer buffer)
+  @Override
+public int getCorrectIndentation(Line line, Buffer buffer)
   {
     String trim = line.trim();
     final char trimFirstChar = trim.length() > 0 ? trim.charAt(0) : 0;
@@ -118,7 +126,8 @@ public final class CppMode extends CMode implements Constants, Mode
     return indent;
   }
 
-  protected int indentClosingBrace(Line line, Buffer buffer)
+  @Override
+protected int indentClosingBrace(Line line, Buffer buffer)
   {
     Position pos = matchClosingBrace(new Position(line, 0));
     if (!pos.getLine().trim().startsWith("{"))

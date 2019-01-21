@@ -24,6 +24,7 @@ public class ShowPanelTrigger<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		return true;
 	}
 
+	@Override
 	public boolean isSideEffectSafe() {
 		return false;
 	}
@@ -39,6 +40,7 @@ public class ShowPanelTrigger<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		setShortLabel(getMenuName());
 	}
 
+	@Override
 	public String makeMenuPath() {
 		return "* Panels|Show " + Utility.spaceCase(Utility.getShortClassName(panelClass));
 	}
@@ -51,6 +53,7 @@ public class ShowPanelTrigger<BT extends Box<TriggerImpl<BT>>> extends TriggerFo
 		return panelClass;
 	}
 
+	@Override
 	public Object valueOf(Object targetBox, ActionEvent actevt, boolean wantSideEffect, boolean isPaste) {
 		if (!wantSideEffect)
 			return null;

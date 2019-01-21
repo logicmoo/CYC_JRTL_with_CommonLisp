@@ -4228,15 +4228,18 @@ public final class cycl_utilities extends SubLTranslatedFile
         return (SubLObject)cycl_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cycl_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cycl_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cycl_utilities_file();
     }
     
@@ -4373,7 +4376,8 @@ public final class cycl_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("OPAQUE-ARG-WRT-QUOTING?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return cycl_utilities.opaque_arg_wrt_quotingP(arg1, arg2);
         }
     }
@@ -4384,7 +4388,8 @@ public final class cycl_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-TERM-WITH-EL-COUNTERPART-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_utilities.hl_term_with_el_counterpart_p(arg1);
         }
     }
@@ -4395,7 +4400,8 @@ public final class cycl_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-TERM-TO-EL-TERM"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_utilities.hl_term_to_el_term(arg1);
         }
     }
@@ -4406,7 +4412,8 @@ public final class cycl_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RENAMED-DEFAULT-EL-VAR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_utilities.renamed_default_el_var_p(arg1);
         }
     }
@@ -4417,7 +4424,8 @@ public final class cycl_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ATOMIC-SENTENCE-PREDICATE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_utilities.atomic_sentence_predicate(arg1);
         }
     }

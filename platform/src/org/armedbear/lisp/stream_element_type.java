@@ -43,7 +43,8 @@ public final class stream_element_type extends Primitive
         super("stream-element-type", "stream");
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         return checkStream(arg).getStreamElementType();
     }

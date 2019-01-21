@@ -91,7 +91,8 @@ public final class RecentFilesEntry
         return ignoreCase ? location.equalsIgnoreCase(file.getParent()) : location.equals(file.getParent());
     }
 
-    public boolean equals(Object obj)
+    @Override
+	public boolean equals(Object obj)
     {
         if (!(obj instanceof RecentFilesEntry))
             return false;
@@ -108,7 +109,8 @@ public final class RecentFilesEntry
         return false;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer(name);
         if (sb.length() == 0)

@@ -291,7 +291,8 @@ public final class SendMail extends Buffer
         setInitialized(true);
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         super.load();
         title = getSubject();
@@ -300,7 +301,8 @@ public final class SendMail extends Buffer
         return LOAD_COMPLETED;
     }
 
-    public boolean save()
+    @Override
+	public boolean save()
     {
         boolean result = super.save();
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
@@ -535,7 +537,8 @@ public final class SendMail extends Buffer
         return HEADER_SEPARATOR;
     }
 
-    public void modified()
+    @Override
+	public void modified()
     {
         super.modified();
         setTitle();
@@ -579,7 +582,8 @@ public final class SendMail extends Buffer
                 return;
         }
         Runnable sendRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 boolean succeeded = false;
                 if (smtp != null)
@@ -734,7 +738,8 @@ public final class SendMail extends Buffer
     }
 
     private Runnable succeededRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             unmodified();
             if (reply && mailbox != null && entryRepliedTo != null)
@@ -761,7 +766,8 @@ public final class SendMail extends Buffer
     };
 
     private Runnable errorRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             setBusy(false);
             final Editor editor = Editor.currentEditor();
@@ -1252,7 +1258,8 @@ public final class SendMail extends Buffer
         return sb != null ? sb.toString() : null;
     }
 
-    public Position getInitialDotPos()
+    @Override
+	public Position getInitialDotPos()
     {
         if (reply) {
             for (Line line = getFirstLine(); line != null; line = line.next()) {
@@ -1379,25 +1386,29 @@ public final class SendMail extends Buffer
         }
     }
 
-    public File getCurrentDirectory()
+    @Override
+	public File getCurrentDirectory()
     {
         return Directories.getUserHomeDirectory();
     }
 
-    public File getCompletionDirectory()
+    @Override
+	public File getCompletionDirectory()
     {
         return Directories.getUserHomeDirectory();
     }
 
     // For the buffer list.
-    public Icon getIcon()
+    @Override
+	public Icon getIcon()
     {
         if (isModified())
             return Utilities.getIconFromFile("compose_modified.png");
         return Utilities.getIconFromFile("compose.png");
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         return "";
     }
@@ -1566,7 +1577,8 @@ public final class SendMail extends Buffer
         }
     }
 
-    public Expansion getExpansion(Position dot)
+    @Override
+	public Expansion getExpansion(Position dot)
     {
         int endOfHeaders = -1;
         for (Line line = getFirstLine(); line != null; line = line.next()) {

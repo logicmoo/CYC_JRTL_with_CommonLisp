@@ -7159,15 +7159,18 @@ public final class document_annotation_widgets extends SubLTranslatedFile
         return (SubLObject)document_annotation_widgets.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_document_annotation_widgets_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_document_annotation_widgets_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_document_annotation_widgets_file();
     }
     
@@ -7684,7 +7687,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-GET-TREATED-CONDITION"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return document_annotation_widgets.clear_get_treated_condition();
         }
     }
@@ -7695,7 +7699,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-GET-TREATMENTS-FOR-CONDITION"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return document_annotation_widgets.clear_get_treatments_for_condition();
         }
     }
@@ -7706,7 +7711,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-GET-AFFECTED-PARTS"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return document_annotation_widgets.clear_get_affected_parts();
         }
     }
@@ -7717,7 +7723,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-GET-COOCCURRING-CONDITIONS"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return document_annotation_widgets.clear_get_cooccurring_conditions();
         }
     }

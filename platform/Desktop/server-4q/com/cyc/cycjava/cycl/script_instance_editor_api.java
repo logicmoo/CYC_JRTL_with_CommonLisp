@@ -712,15 +712,18 @@ public final class script_instance_editor_api extends SubLTranslatedFile
         return (SubLObject)script_instance_editor_api.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_script_instance_editor_api_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_script_instance_editor_api_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_script_instance_editor_api_file();
     }
     

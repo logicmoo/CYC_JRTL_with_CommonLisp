@@ -814,6 +814,7 @@ public abstract class Term {
 	 */
 	public abstract String typeName();
 
+	@Override
 	abstract public String toString();
 	//abstract public Object toJavaObject();
 

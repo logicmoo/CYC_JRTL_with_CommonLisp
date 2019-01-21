@@ -44,7 +44,8 @@ public class CycConstantSentence extends CycConstant implements CycSentence {
     return false;
   }
 
-  public boolean isConjunction() {
+  @Override
+public boolean isConjunction() {
     return false;
   }
  

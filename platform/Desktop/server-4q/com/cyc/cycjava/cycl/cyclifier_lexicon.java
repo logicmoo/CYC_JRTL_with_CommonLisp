@@ -364,15 +364,18 @@ public final class cyclifier_lexicon extends SubLTranslatedFile
         return (SubLObject)cyclifier_lexicon.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cyclifier_lexicon_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cyclifier_lexicon_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cyclifier_lexicon_file();
     }
     

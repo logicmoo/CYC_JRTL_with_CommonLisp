@@ -122,7 +122,8 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
      * Detects a JSR instruction and sets a flag to indicate we will need to do
      * inlining.
      */
-    public void visitJumpInsn(final int opcode, final Label lbl) {
+    @Override
+	public void visitJumpInsn(final int opcode, final Label lbl) {
         super.visitJumpInsn(opcode, lbl);
         LabelNode ln = ((JumpInsnNode) instructions.getLast()).label;
         if (opcode == JSR && !subroutineHeads.containsKey(ln)) {
@@ -134,7 +135,8 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
      * If any JSRs were seen, triggers the inlining process. Otherwise, forwards
      * the byte codes untouched.
      */
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         if (!subroutineHeads.isEmpty()) {
             markSubroutines();
             if (LOGGING) {
@@ -549,7 +551,8 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
             return instructions.get(idx);
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return "Subroutine: " + instructions;
         }
     }
@@ -717,11 +720,13 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
 
         // AbstractMap implementation
 
-        public Set entrySet() {
+        @Override
+		public Set entrySet() {
             return null;
         }
 
-        public Object get(final Object o) {
+        @Override
+		public Object get(final Object o) {
             return gotoLabel((LabelNode) o);
         }
     }

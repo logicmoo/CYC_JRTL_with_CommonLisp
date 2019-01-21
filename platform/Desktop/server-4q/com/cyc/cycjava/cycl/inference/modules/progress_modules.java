@@ -483,15 +483,18 @@ public final class progress_modules extends SubLTranslatedFile
         return (SubLObject)progress_modules.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_progress_modules_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_progress_modules_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_progress_modules_file();
     }
     

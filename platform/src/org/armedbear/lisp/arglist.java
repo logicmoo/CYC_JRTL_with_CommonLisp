@@ -68,7 +68,8 @@ public final class arglist
     private static final Primitive ARGLIST =
         new Primitive("arglist", PACKAGE_EXT, true, "extended-function-designator")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             LispThread thread = LispThread.currentThread();
             Operator operator = getOperator(arg);
@@ -107,7 +108,8 @@ public final class arglist
     private static final Primitive _SET_ARGLIST =
         new Primitive("%set-arglist", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
 
         {
             Operator operator = null;

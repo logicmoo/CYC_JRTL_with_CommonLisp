@@ -281,15 +281,18 @@ public final class rdf_n_triples_writer extends SubLTranslatedFile
         return (SubLObject)rdf_n_triples_writer.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rdf_n_triples_writer_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rdf_n_triples_writer_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rdf_n_triples_writer_file();
     }
     

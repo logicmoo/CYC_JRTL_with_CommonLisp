@@ -41,7 +41,8 @@ public class CheckinMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_P, CTRL_MASK, "previousComment");
         km.mapKey(KeyEvent.VK_N, CTRL_MASK, "nextComment");

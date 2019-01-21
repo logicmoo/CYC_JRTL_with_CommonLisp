@@ -230,6 +230,7 @@ abstract public class Layout extends LispObject
 		return ht;
 	}
 
+	@Override
 	public LispObject getParts()
 	{
 		LispObject result = NIL;
@@ -272,6 +273,7 @@ abstract public class Layout extends LispObject
 		return sharedSlots;
 	}
 
+	@Override
 	public String printObjectImpl()
 	{
 		return unreadableString("LAYOUT " + this.getStructName());
@@ -290,6 +292,7 @@ abstract public class Layout extends LispObject
 	// ### make-layout
 	private static final Primitive MAKE_LAYOUT = new Primitive("make-layout", PACKAGE_SYS, true, "class instance-slots class-slots")
 	{
+		@Override
 		public LispObject execute(LispObject first, LispObject second, LispObject third)
 
 		{
@@ -301,6 +304,7 @@ abstract public class Layout extends LispObject
 	// ### layout-class
 	private static final Primitive LAYOUT_CLASS = new Primitive("layout-class", PACKAGE_SYS, true, "layout")
 	{
+		@Override
 		public LispObject execute(LispObject arg)
 		{
 			return checkLayout(arg).getLispClass();
@@ -310,6 +314,7 @@ abstract public class Layout extends LispObject
 	// ### layout-length
 	private static final Primitive LAYOUT_LENGTH = new Primitive("layout-length", PACKAGE_SYS, true, "layout")
 	{
+		@Override
 		public LispObject execute(LispObject arg)
 		{
 			return Fixnum.getInstance(checkLayout(arg).slotNames.length);
@@ -339,6 +344,7 @@ abstract public class Layout extends LispObject
 	// ### layout-slot-index layout slot-name => index
 	private static final Primitive LAYOUT_SLOT_INDEX = new Primitive("layout-slot-index", PACKAGE_SYS, true)
 	{
+		@Override
 		public LispObject execute(LispObject first, LispObject second)
 
 		{
@@ -354,6 +360,7 @@ abstract public class Layout extends LispObject
 	// ### layout-slot-location layout slot-name => location
 	private static final Primitive LAYOUT_SLOT_LOCATION = new Primitive("layout-slot-location", PACKAGE_SYS, true, "layout slot-name")
 	{
+		@Override
 		public LispObject execute(LispObject first, LispObject second)
 
 		{
@@ -379,6 +386,7 @@ abstract public class Layout extends LispObject
 	// ### %make-instances-obsolete class => class
 	private static final Primitive _MAKE_INSTANCES_OBSOLETE = new Primitive("%make-instances-obsolete", PACKAGE_SYS, true, "class")
 	{
+		@Override
 		public LispObject execute(LispObject arg)
 		{
 			final LispObject lispClass = arg;

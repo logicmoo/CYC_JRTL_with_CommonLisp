@@ -78,15 +78,18 @@ public final class cb_html_parameters extends SubLTranslatedFile
         return (SubLObject)cb_html_parameters.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_html_parameters_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_html_parameters_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_html_parameters_file();
     }
     

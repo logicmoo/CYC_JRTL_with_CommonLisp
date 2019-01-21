@@ -505,15 +505,18 @@ public final class constant_completion_high extends SubLTranslatedFile
         return (SubLObject)constant_completion_high.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_constant_completion_high_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_constant_completion_high_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_constant_completion_high_file();
     }
 
@@ -601,7 +604,8 @@ public final class constant_completion_high extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INVALID-CONSTANT-NAME-CHAR-P"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return constant_completion_high.invalid_constant_name_char_p(arg1);
         }
     }

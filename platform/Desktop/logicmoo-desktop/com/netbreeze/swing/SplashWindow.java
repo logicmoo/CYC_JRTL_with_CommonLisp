@@ -53,7 +53,8 @@ public class SplashWindow extends JWindow {
   }
 
   class Adapter extends MouseAdapter {
-    public void mouseClicked(MouseEvent e) {
+    @Override
+	public void mouseClicked(MouseEvent e) {
       if (closeOnClick)
         dispose();
     }

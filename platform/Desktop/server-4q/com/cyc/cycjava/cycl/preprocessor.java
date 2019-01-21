@@ -308,15 +308,18 @@ public final class preprocessor extends SubLTranslatedFile
         return (SubLObject)preprocessor.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_preprocessor_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_preprocessor_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_preprocessor_file();
     }
     

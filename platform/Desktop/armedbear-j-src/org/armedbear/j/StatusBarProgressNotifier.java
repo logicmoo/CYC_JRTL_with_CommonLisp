@@ -39,17 +39,20 @@ public class StatusBarProgressNotifier implements Cancellable, ProgressNotifier,
         this.buffer = buffer;
     }
 
-    public void cancel()
+    @Override
+	public void cancel()
     {
         cancelled = true;
     }
 
-    public boolean cancelled()
+    @Override
+	public boolean cancelled()
     {
         return cancelled;
     }
 
-    public void progressStart()
+    @Override
+	public void progressStart()
     {
         if (updaterThread == null) {
             updaterThread = new Thread(this);
@@ -58,24 +61,28 @@ public class StatusBarProgressNotifier implements Cancellable, ProgressNotifier,
         }
     }
 
-    public void progressStop()
+    @Override
+	public void progressStop()
     {
         go = false;
     }
 
-    public void progress(String prefix, long totalBytes, long fileSize)
+    @Override
+	public void progress(String prefix, long totalBytes, long fileSize)
     {
         this.prefix = prefix;
         this.totalBytes = totalBytes;
         this.fileSize = fileSize;
     }
 
-    public void progress(String progressText)
+    @Override
+	public void progress(String progressText)
     {
         this.progressText = progressText;
     }
 
-    public void setText(final String s)
+    @Override
+	public void setText(final String s)
     {
         progressText = s;
         if (s != null)
@@ -85,7 +92,8 @@ public class StatusBarProgressNotifier implements Cancellable, ProgressNotifier,
     private void update()
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                     Editor ed = it.nextEditor();
@@ -97,7 +105,8 @@ public class StatusBarProgressNotifier implements Cancellable, ProgressNotifier,
         SwingUtilities.invokeLater(r);
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         long start = System.currentTimeMillis();
         while (go) {

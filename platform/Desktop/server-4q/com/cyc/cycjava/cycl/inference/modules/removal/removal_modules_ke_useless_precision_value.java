@@ -186,15 +186,18 @@ public final class removal_modules_ke_useless_precision_value extends SubLTransl
         return (SubLObject)removal_modules_ke_useless_precision_value.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_ke_useless_precision_value_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_ke_useless_precision_value_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_ke_useless_precision_value_file();
     }
     

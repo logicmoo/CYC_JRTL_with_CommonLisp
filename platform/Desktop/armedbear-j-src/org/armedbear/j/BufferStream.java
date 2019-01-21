@@ -45,7 +45,8 @@ public final class BufferStream extends Stream
         return buffer;
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return LispAPI.BUFFER_STREAM;
     }
@@ -57,14 +58,16 @@ public final class BufferStream extends Stream
 //     }
 
     // FIXME
-    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
+    @Override
+	public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == LispAPI.BUFFER_STREAM)
             return T;
         return super.typep(typeSpecifier);
     }
 
-    public void _writeChar(char c) throws ConditionThrowable
+    @Override
+	public void _writeChar(char c) throws ConditionThrowable
     {
         try {
             buffer.lockWrite();
@@ -99,13 +102,15 @@ public final class BufferStream extends Stream
         }
     }
 
-    public void _writeChars(char[] chars, int start, int end)
+    @Override
+	public void _writeChars(char[] chars, int start, int end)
         throws ConditionThrowable
     {
         _writeString(new String(chars, start, end - start));
     }
 
-    public void _writeString(String s) throws ConditionThrowable
+    @Override
+	public void _writeString(String s) throws ConditionThrowable
     {
         try {
             buffer.lockWrite();
@@ -125,7 +130,8 @@ public final class BufferStream extends Stream
         }
     }
 
-    public void _writeLine(String s) throws ConditionThrowable
+    @Override
+	public void _writeLine(String s) throws ConditionThrowable
     {
         try {
             buffer.lockWrite();
@@ -145,14 +151,16 @@ public final class BufferStream extends Stream
         }
     }
 
-    public void _finishOutput()
+    @Override
+	public void _finishOutput()
     {
         if (buffer.needsRenumbering())
             buffer.renumber();
         buffer.repaint();
     }
 
-    public void _close()
+    @Override
+	public void _close()
     {
         _finishOutput();
         setOpen(false);

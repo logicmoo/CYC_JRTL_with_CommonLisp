@@ -4784,15 +4784,18 @@ public final class genl_predicates extends SubLTranslatedFile
         return (SubLObject)genl_predicates.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_genl_predicates_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_genl_predicates_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_genl_predicates_file();
     }
     

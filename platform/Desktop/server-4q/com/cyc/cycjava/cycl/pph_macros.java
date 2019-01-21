@@ -3049,15 +3049,18 @@ public final class pph_macros extends SubLTranslatedFile
         return (SubLObject)pph_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_macros_file();
     }
     
@@ -3515,15 +3518,18 @@ public final class pph_macros extends SubLTranslatedFile
             this.$store = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$pph_problem_store_pointer_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$store;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$store = value;
         }
         
@@ -3538,7 +3544,8 @@ public final class pph_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-PROBLEM-STORE-POINTER-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_macros.pph_problem_store_pointer_p(arg1);
         }
     }

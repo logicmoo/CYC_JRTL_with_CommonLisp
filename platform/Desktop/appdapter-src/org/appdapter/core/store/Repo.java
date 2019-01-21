@@ -30,7 +30,8 @@ public interface Repo extends QueryProcessor
         public String graphURI;
         private GetObject<Model> model;
 
-        public Ident getKey() {
+        @Override
+		public Ident getKey() {
             return (Ident)new FreeIdent(this.graphURI);
         }
 
@@ -39,15 +40,18 @@ public interface Repo extends QueryProcessor
             this.model = mdl;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return "[GraphStat uri=" + this.graphURI + ", stmtCnt=" + this.getStatementCount() + "]";
         }
 
-        public Model getValue() {
+        @Override
+		public Model getValue() {
             return (Model)this.model.getValue();
         }
 
-        public Model setValue(final Model value) {
+        @Override
+		public Model setValue(final Model value) {
             final Model mdl = (Model)this.model.getValue();
             if (mdl == value) {
                 return mdl;

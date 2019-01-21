@@ -113,15 +113,18 @@ public final class inference_worker_answer extends SubLTranslatedFile
         return (SubLObject)inference_worker_answer.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_worker_answer_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_worker_answer_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_worker_answer_file();
     }
     

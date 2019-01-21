@@ -170,7 +170,8 @@ public final class View implements Cloneable
             sidebarComponent = null;
     }
 
-    protected Object clone()
+    @Override
+	protected Object clone()
     {
         View view = new View();
         if (dot != null)

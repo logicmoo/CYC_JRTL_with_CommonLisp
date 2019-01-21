@@ -40,7 +40,8 @@ class BSHSwitchStatement
 
 	public BSHSwitchStatement(int id) { super(id); }
 
-    public Object eval( CallStack callstack, Interpreter interpreter )
+    @Override
+	public Object eval( CallStack callstack, Interpreter interpreter )
 		throws EvalError
 	{
 		int numchild = jjtGetNumChildren();

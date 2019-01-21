@@ -47,7 +47,8 @@ public final class XmlTreeElement
     }
 
     // This is used for the text in the sidebar tree.
-    public String toString()
+    @Override
+	public String toString()
     {
         return getStatusText();
     }

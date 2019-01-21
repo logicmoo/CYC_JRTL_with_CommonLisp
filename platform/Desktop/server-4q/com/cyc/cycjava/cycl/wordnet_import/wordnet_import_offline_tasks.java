@@ -1353,15 +1353,18 @@ public final class wordnet_import_offline_tasks extends SubLTranslatedFile
         return (SubLObject)wordnet_import_offline_tasks.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_wordnet_import_offline_tasks_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_wordnet_import_offline_tasks_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_wordnet_import_offline_tasks_file();
     }
     

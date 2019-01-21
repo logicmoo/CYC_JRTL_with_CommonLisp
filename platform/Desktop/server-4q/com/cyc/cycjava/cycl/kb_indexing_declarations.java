@@ -240,15 +240,18 @@ public final class kb_indexing_declarations extends SubLTranslatedFile
         return (SubLObject)kb_indexing_declarations.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_indexing_declarations_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_indexing_declarations_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_indexing_declarations_file();
     }
     

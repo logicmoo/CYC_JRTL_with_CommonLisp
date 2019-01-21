@@ -26,6 +26,7 @@ public class SpecialQueue extends BasicDebugger implements UncaughtExceptionHand
 		Pending, Loading, Loaded, Unloading, Unloaded, Cancelling, Cancelled, Error
 	}
 
+	@Override
 	public void logWarning(String msg) {
 		getLogger().warn(msg);
 	}
@@ -164,6 +165,7 @@ public class SpecialQueue extends BasicDebugger implements UncaughtExceptionHand
 					@Override
 					public Thread newThread(final Runnable r) {
 						return new Thread("Worker " + ++workrNum + " for " + loaderFor) {
+							@Override
 							public void run() {
 								try {
 										r.run();
@@ -237,6 +239,7 @@ public class SpecialQueue extends BasicDebugger implements UncaughtExceptionHand
 			return this;
 		}
 
+		@Override
 		public Task call() {
 			postLoadStatus(SheetLoadStatus.Loading, false);
 			try {

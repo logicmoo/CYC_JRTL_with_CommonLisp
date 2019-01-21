@@ -18,6 +18,7 @@ public interface CloseableIterator<T> extends Iterator<T> {
 	 * 
 	 * @return whether a next item is available
 	 */
+	@Override
 	public boolean hasNext();
 
 	/**
@@ -25,12 +26,14 @@ public interface CloseableIterator<T> extends Iterator<T> {
 	 * 
 	 * @return the next item
 	 */
+	@Override
 	public T next();
 
 	/**
 	 * Removes the current item from the iterated collection. This method may be
 	 * not implemented.
 	 */
+	@Override
 	public void remove();
 
 	/**

@@ -739,7 +739,8 @@ public final class SshSession implements Constants
     }
 
     private Runnable getPasswordRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             final Editor editor = Editor.currentEditor();
             editor.setDefaultCursor();
@@ -750,7 +751,8 @@ public final class SshSession implements Constants
     };
 
     private Runnable getPassphraseRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             final Editor editor = Editor.currentEditor();
             editor.setDefaultCursor();
@@ -1016,7 +1018,8 @@ public final class SshSession implements Constants
     private void writeToOutputBuffer(final String s)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 // Avoid race (and NPE) if setOutputBuffer(null) gets called in
                 // another thread.
@@ -1108,7 +1111,8 @@ public final class SshSession implements Constants
     }
 
     private static final Runnable cleanupRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             cleanup();
         }
@@ -1171,12 +1175,14 @@ public final class SshSession implements Constants
             super(process.getInputStream());
         }
 
-        public String filter(String s)
+        @Override
+		public String filter(String s)
         {
             return stdOutFilter(s);
         }
 
-        public void update(String s)
+        @Override
+		public void update(String s)
         {
             stdOutUpdate(s);
         }
@@ -1190,12 +1196,14 @@ public final class SshSession implements Constants
             super(process.getErrorStream());
         }
 
-        public String filter(String s)
+        @Override
+		public String filter(String s)
         {
             return stdErrFilter(s);
         }
 
-        public void update(String s)
+        @Override
+		public void update(String s)
         {
             stdErrUpdate(s);
         }

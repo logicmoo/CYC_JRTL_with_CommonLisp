@@ -229,7 +229,8 @@ public class FindInFilesDialog extends AbstractDialog implements Constants,
         return findInFiles;
     }
 
-    protected void ok()
+    @Override
+	protected void ok()
     {
         findInFiles = new FindInFiles(editor);
 
@@ -313,12 +314,14 @@ public class FindInFilesDialog extends AbstractDialog implements Constants,
         dispose();
     }
 
-    public void textValueChanged(TextEvent e)
+    @Override
+	public void textValueChanged(TextEvent e)
     {
         setIgnoreCaseDefault();
     }
 
-    public void actionPerformed(ActionEvent e)
+    @Override
+	public void actionPerformed(ActionEvent e)
     {
         String cmd = e.getActionCommand();
         if (cmd != null && cmd.equals(wholeWordsOnlyCheckBox.getText()))
@@ -327,9 +330,11 @@ public class FindInFilesDialog extends AbstractDialog implements Constants,
             super.actionPerformed(e);
     }
 
-    public void focusGained(FocusEvent e) {}
+    @Override
+	public void focusGained(FocusEvent e) {}
 
-    public void focusLost(FocusEvent e)
+    @Override
+	public void focusLost(FocusEvent e)
     {
         if (e.getComponent() == filesControl)
             updateModeControl();

@@ -475,6 +475,7 @@ public class ModelAsTurtleEditor extends ScreenBoxPanel implements ObjectPanel {
 		// clicks OK, so we better show the dialog in another
 		// thread
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				JOptionPane.showMessageDialog(ModelAsTurtleEditor.this.window, "The model has been changed by another part of the system.\n"
 						+ "Re-fetch the contents of the model to get the latest changes.", "Concurrent Change", JOptionPane.WARNING_MESSAGE);
@@ -514,33 +515,39 @@ public class ModelAsTurtleEditor extends ScreenBoxPanel implements ObjectPanel {
 
 		// buttons
 		makeButton("Add To model", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				addTurtleToModel();
 			}
 		});
 		makeButton("Remove From model", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				removeTurtleFromModel();
 			}
 		});
 		makeButton("Fetch Model", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				fetchTurtleFromModel();
 			}
 		});
 		makeButton("Replace Model", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				replaceModelWithTurtle();
 			}
 		});
 
 		makeButton("Save Model", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				turtleTextArea.fileSaveAs();
 			}
 		});
 
 		makeButton("Load Model", new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				turtleTextArea.fileOpenAndRead();
 			}
@@ -566,6 +573,7 @@ public class ModelAsTurtleEditor extends ScreenBoxPanel implements ObjectPanel {
 
 		// Hack to prevent resizing the window below a minimum size
 		this.window.addComponentListener(new ComponentAdapter() {
+			@Override
 			public void componentResized(ComponentEvent e) {
 				int width = ModelAsTurtleEditor.this.window.getWidth();
 				int height = ModelAsTurtleEditor.this.window.getHeight();
@@ -633,6 +641,7 @@ public class ModelAsTurtleEditor extends ScreenBoxPanel implements ObjectPanel {
 			this.turtleTextArea = new SimpleTextEditor();
 			this.turtleTextArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 			this.turtleTextArea.addCaretListener(new CaretListener() {
+				@Override
 				public void caretUpdate(CaretEvent e) {
 					// update cursor position label
 					notifyCursorPositionChanged();
@@ -654,6 +663,7 @@ public class ModelAsTurtleEditor extends ScreenBoxPanel implements ObjectPanel {
 			// Try to cover the whole width of its parent container.
 			// We use this because we want all buttons to have the
 			// same width.
+			@Override
 			public Dimension getMaximumSize() {
 				Dimension dim = super.getMaximumSize();
 				return new Dimension(Short.MAX_VALUE, (int) dim.getHeight());
@@ -693,10 +703,12 @@ public class ModelAsTurtleEditor extends ScreenBoxPanel implements ObjectPanel {
 
 		// Add listener to the model
 		this.listener = new StatementListener() {
+			@Override
 			public void addedStatement(Statement s) {
 				notifyConcurrentChange(boundModel, s);
 			}
 
+			@Override
 			public void removedStatement(Statement s) {
 				notifyConcurrentChange(boundModel, s);
 			}
@@ -727,10 +739,12 @@ public class ModelAsTurtleEditor extends ScreenBoxPanel implements ObjectPanel {
 			StatementListener sl = listeners.get(m);
 			if (sl == null) {
 				sl = new StatementListener() {
+					@Override
 					public void addedStatement(Statement s) {
 						notifyConcurrentChange(m, s);
 					}
 
+					@Override
 					public void removedStatement(Statement s) {
 						notifyConcurrentChange(m, s);
 					}

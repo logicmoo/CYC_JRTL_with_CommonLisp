@@ -185,15 +185,18 @@ public final class rkf_argument_communicator extends SubLTranslatedFile
         return (SubLObject)rkf_argument_communicator.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_argument_communicator_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_argument_communicator_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_argument_communicator_file();
     }
     

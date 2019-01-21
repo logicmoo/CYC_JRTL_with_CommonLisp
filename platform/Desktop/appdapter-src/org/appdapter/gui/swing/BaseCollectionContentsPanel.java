@@ -207,6 +207,7 @@ extends ScreenBoxPanel<BoxType> implements ValueChangeListener, DropTargetListen
 		return named;
 	}
 
+	@Override
 	public void setTitle(String title) {
 		titleString = title;
 		//defaultScrollBorder = new Defa

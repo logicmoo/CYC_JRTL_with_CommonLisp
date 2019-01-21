@@ -21,27 +21,33 @@ public class InitialBindingImpl implements InitialBinding
         return this.mySolutionMap;
     }
     
-    public QuerySolutionMap getQSMap() {
+    @Override
+	public QuerySolutionMap getQSMap() {
         return this.mySolutionMap();
     }
     
-    public void bindNode(final String vName, final RDFNode node) {
+    @Override
+	public void bindNode(final String vName, final RDFNode node) {
         this.mySolutionMap().add(vName, node);
     }
     
-    public void bindQName(final String vName, final String resQName) {
+    @Override
+	public void bindQName(final String vName, final String resQName) {
         this.bindNode(vName, (RDFNode)this.myModelClient().makeResourceForQName(resQName));
     }
     
-    public void bindURI(final String vName, final String resURI) {
+    @Override
+	public void bindURI(final String vName, final String resURI) {
         this.bindNode(vName, (RDFNode)this.myModelClient().makeResourceForURI(resURI));
     }
     
-    public void bindIdent(final String vName, final Ident id) {
+    @Override
+	public void bindIdent(final String vName, final Ident id) {
         this.bindNode(vName, (RDFNode)this.myModelClient().makeResourceForIdent(id));
     }
     
-    public void bindLiteralString(final String vName, final String litString) {
+    @Override
+	public void bindLiteralString(final String vName, final String litString) {
         this.bindNode(vName, (RDFNode)this.myModelClient().makeStringLiteral(litString));
     }
     

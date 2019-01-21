@@ -51,6 +51,7 @@ public class PopupMenuDemo extends JFrame implements ActionListener {
 		return false;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		source = (JMenuItem) (e.getSource());
 		// output.append("action event source: " + source.getText()

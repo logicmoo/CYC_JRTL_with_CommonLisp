@@ -41,12 +41,14 @@ public final class ceiling extends Primitive
         super("ceiling", "number &optional divisor");
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         return execute(arg, Fixnum.ONE);
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
 
     {
         LispObject quotient = first.truncate(second);

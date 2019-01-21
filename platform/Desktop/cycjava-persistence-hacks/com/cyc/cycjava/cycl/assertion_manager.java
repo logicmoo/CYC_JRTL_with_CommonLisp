@@ -293,15 +293,18 @@ public final class assertion_manager extends SubLTranslatedFile
         return (SubLObject)assertion_manager.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_assertion_manager_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_assertion_manager_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_assertion_manager_file();
     }
     

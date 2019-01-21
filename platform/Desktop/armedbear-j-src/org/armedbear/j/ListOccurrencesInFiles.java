@@ -49,12 +49,14 @@ public final class ListOccurrencesInFiles extends ListOccurrences
         return lastDotPos != null ? lastDotPos : getInitialDotPos();
     }
 
-    public final File getCurrentDirectory()
+    @Override
+	public final File getCurrentDirectory()
     {
         return Directories.getUserHomeDirectory();
     }
 
-    public void findOccurrenceAtDot(Editor editor, boolean killList)
+    @Override
+	public void findOccurrenceAtDot(Editor editor, boolean killList)
     {
         Position pos = editor.getDotCopy();
         if (pos == null)
@@ -155,7 +157,8 @@ public final class ListOccurrencesInFiles extends ListOccurrences
         appendLine(new FileLine(file, listEachOccurrence));
     }
 
-    protected String getOptions()
+    @Override
+	protected String getOptions()
     {
         String s = super.getOptions();
         if (search instanceof FindInFiles)
@@ -164,7 +167,8 @@ public final class ListOccurrencesInFiles extends ListOccurrences
         return s;
     }
 
-    public Position getInitialDotPos()
+    @Override
+	public Position getInitialDotPos()
     {
         final boolean listEachOccurrence;
         if (search instanceof FindInFiles)
@@ -225,7 +229,8 @@ public final class ListOccurrencesInFiles extends ListOccurrences
         return best;
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         return "";
     }

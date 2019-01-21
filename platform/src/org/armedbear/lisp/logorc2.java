@@ -47,7 +47,8 @@ public final class logorc2 extends Primitive
         super("logorc2", "integer-1 integer-2");
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
 
     {
         if (first instanceof Fixnum) {

@@ -60,6 +60,7 @@ import org.appdapter.gui.swing.VerticalLayout;
  */
 public class MapContentsPanel extends BaseCollectionContentsPanel implements ValueChangeListener, DropTargetListener, Customizer {
 
+	@Override
 	public Map getValue() {
 		return getMap();
 	}
@@ -106,6 +107,7 @@ public class MapContentsPanel extends BaseCollectionContentsPanel implements Val
 		this(Utility.getCurrentContext(), array);
 	}
 
+	@Override
 	public void addObject(Object o, int index) {
 		Class componentType = objectValue.getClass().getComponentType();
 		final int len = Array.getLength(objectValue);
@@ -121,6 +123,7 @@ public class MapContentsPanel extends BaseCollectionContentsPanel implements Val
 		setObject(newArray);
 	}
 
+	@Override
 	public void reloadContents00() {
 		panel.removeAll();
 		final Map map = getMap();

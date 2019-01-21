@@ -146,7 +146,8 @@ public class CycVariable extends DefaultCycObject implements Serializable {
    * @return the OpenCyc representation of the <tt>CycVariable</tt> as a
    * <tt>String</tt> prefixed by "?"
    */
-  public String cyclify() {
+  @Override
+public String cyclify() {
     if (isMetaVariable) {
       return META_VARIABLE_PREFIX + name;
     } else {
@@ -159,7 +160,8 @@ public class CycVariable extends DefaultCycObject implements Serializable {
    *
    * @return this object in a form suitable for use as an <tt>String</tt> api expression value
    */
-  public String stringApiValue() {
+  @Override
+public String stringApiValue() {
     if (isHLVariable()) {
       return SubLAPIHelper.makeSubLStmt("GET-VARIABLE", this.hlVariableId);
     } else {
@@ -172,7 +174,8 @@ public class CycVariable extends DefaultCycObject implements Serializable {
    *
    * @return this object in a form suitable for use as an <tt>CycList</tt> api expression value
    */
-  public Object cycListApiValue() {
+  @Override
+public Object cycListApiValue() {
     return this;
   }
 
@@ -184,7 +187,8 @@ public class CycVariable extends DefaultCycObject implements Serializable {
    * @param object the <tt>Object</tt> for equality comparison
    * @return equals <tt>boolean</tt> value indicating equality or non-equality.
    */
-  public boolean equals(Object object) {
+  @Override
+public boolean equals(Object object) {
     if (object == null) {
       return false;
     }
@@ -210,7 +214,8 @@ public class CycVariable extends DefaultCycObject implements Serializable {
    *
    * @return the hash code appropriate for this object
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return name.hashCode();
   }
 
@@ -223,7 +228,8 @@ public class CycVariable extends DefaultCycObject implements Serializable {
    * @return a negative integer, zero, or a positive integer as this
    * object is less than, equal to, or greater than the specified object
    */
-  public int compareTo(Object object) {
+  @Override
+public int compareTo(Object object) {
     if (!(object instanceof CycVariable)) {
       throw new ClassCastException("Must be a CycVariable object");
     }
@@ -248,7 +254,8 @@ public class CycVariable extends DefaultCycObject implements Serializable {
    * @param indent an int that specifies by how many spaces to indent
    * @param relative a boolean; if true indentation is relative, otherwise absolute
    */
-  public void toXML(XMLWriter xmlWriter, int indent, boolean relative)
+  @Override
+public void toXML(XMLWriter xmlWriter, int indent, boolean relative)
           throws IOException {
     xmlWriter.printXMLStartTag(cycVariableXMLTag, indent, relative, false);
     xmlWriter.print(TextUtil.doEntityReference(name));

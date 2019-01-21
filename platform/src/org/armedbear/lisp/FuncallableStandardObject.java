@@ -73,7 +73,8 @@ public class FuncallableStandardObject extends StandardObject
     super(cls);
   }
 
-  public LispObject typep(LispObject type)
+  @Override
+public LispObject typep(LispObject type)
   {
     if (type == Symbol.COMPILED_FUNCTION)
       {
@@ -95,37 +96,43 @@ public class FuncallableStandardObject extends StandardObject
     return super.typep(type);
   }
 
-  public LispObject execute()
+  @Override
+public LispObject execute()
   {
     return function.execute();
   }
 
-  public LispObject execute(LispObject arg)
+  @Override
+public LispObject execute(LispObject arg)
   {
     return function.execute(arg);
   }
 
-  public LispObject execute(LispObject first, LispObject second)
+  @Override
+public LispObject execute(LispObject first, LispObject second)
 
   {
     return function.execute(first, second);
   }
 
-  public LispObject execute(LispObject first, LispObject second,
+  @Override
+public LispObject execute(LispObject first, LispObject second,
                             LispObject third)
 
   {
     return function.execute(first, second, third);
   }
 
-  public LispObject execute(LispObject first, LispObject second,
+  @Override
+public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth)
 
   {
     return function.execute(first, second, third, fourth);
   }
 
-  public LispObject execute(LispObject first, LispObject second,
+  @Override
+public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
                             LispObject fifth)
 
@@ -134,7 +141,8 @@ public class FuncallableStandardObject extends StandardObject
                             fifth);
   }
 
-  public LispObject execute(LispObject first, LispObject second,
+  @Override
+public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
                             LispObject fifth, LispObject sixth)
 
@@ -143,7 +151,8 @@ public class FuncallableStandardObject extends StandardObject
                             fifth, sixth);
   }
 
-  public LispObject execute(LispObject first, LispObject second,
+  @Override
+public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
                             LispObject fifth, LispObject sixth,
                             LispObject seventh)
@@ -153,7 +162,8 @@ public class FuncallableStandardObject extends StandardObject
                             fifth, sixth, seventh);
   }
 
-  public LispObject execute(LispObject first, LispObject second,
+  @Override
+public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
                             LispObject fifth, LispObject sixth,
                             LispObject seventh, LispObject eighth)
@@ -163,7 +173,8 @@ public class FuncallableStandardObject extends StandardObject
                             fifth, sixth, seventh, eighth);
   }
 
-  public LispObject execute(LispObject[] args)
+  @Override
+public LispObject execute(LispObject[] args)
   {
     return function.execute(args);
   }
@@ -179,7 +190,8 @@ public class FuncallableStandardObject extends StandardObject
     {
       super("%allocate-funcallable-instance", PACKAGE_SYS, true, "class");
     }
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
       if (arg.typep(StandardClass.FUNCALLABLE_STANDARD_CLASS) != NIL) {
         LispObject l = Symbol.CLASS_LAYOUT.execute(arg);
@@ -206,7 +218,8 @@ public class FuncallableStandardObject extends StandardObject
       super("set-funcallable-instance-function", PACKAGE_MOP, true,
             "funcallable-instance function");
     }
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
     {
       checkFuncallableStandardObject(first).function = second;
       return second;
@@ -225,7 +238,8 @@ public class FuncallableStandardObject extends StandardObject
       super("funcallable-instance-function", PACKAGE_MOP, false,
             "funcallable-instance");
     }
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
       return checkFuncallableStandardObject(arg).function;
     }
@@ -236,32 +250,38 @@ public class FuncallableStandardObject extends StandardObject
   private int callCount;
   private int hotCount;
 
-  public final int getCallCount()
+  @Override
+public final int getCallCount()
   {
     return callCount;
   }
 
-  public void setCallCount(int n)
+  @Override
+public void setCallCount(int n)
   {
     callCount = n;
   }
 
-  public final void incrementCallCount()
+  @Override
+public final void incrementCallCount()
   {
     ++callCount;
   }
 
-  public final int getHotCount()
+  @Override
+public final int getHotCount()
   {
     return hotCount;
   }
 
-  public void setHotCount(int n)
+  @Override
+public void setHotCount(int n)
   {
     hotCount = n;
   }
 
-  public final void incrementHotCount()
+  @Override
+public final void incrementHotCount()
   {
     ++hotCount;
   }

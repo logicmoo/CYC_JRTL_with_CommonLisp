@@ -172,7 +172,8 @@ public class Autoload extends Function
 		return symbol;
 	}
 
-    public LispObject execute()
+    @Override
+	public LispObject execute()
     {
 
         return loadSymbol().execute();
@@ -231,7 +232,8 @@ public class Autoload extends Function
         return loadSymbol().execute(first, second, third, fourth, fifth, sixth);
     }
 
-    public LispObject execute(LispObject first, LispObject second,
+    @Override
+	public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth,
                               LispObject fifth, LispObject sixth,
                               LispObject seventh)
@@ -261,6 +263,7 @@ public class Autoload extends Function
         return loadSymbol().execute(args);
     }
 
+	@Override
 	protected void extraInfo(StringBuilder sb) 
     {
     	sb.append(" ");

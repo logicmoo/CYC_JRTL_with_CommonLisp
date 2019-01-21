@@ -1166,15 +1166,18 @@ public final class access_macros extends SubLTranslatedFile
         return (SubLObject)access_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_access_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_access_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_access_macros_file();
     }
     

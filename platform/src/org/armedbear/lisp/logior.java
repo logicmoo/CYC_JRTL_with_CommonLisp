@@ -43,25 +43,29 @@ public final class logior extends Primitive
         super("logior", "&rest integers");
     }
 
-    public LispObject execute()
+    @Override
+	public LispObject execute()
     {
         return Fixnum.ZERO;
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         if (arg instanceof Fixnum || arg instanceof Bignum)
             return arg;
         return type_error(arg, Symbol.INTEGER);
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
 
     {
         return first.LOGIOR(second);
     }
 
-    public LispObject execute(LispObject[] args)
+    @Override
+	public LispObject execute(LispObject[] args)
     {
         LispObject result = Fixnum.ZERO;
         for (int i = 0; i < args.length; i++)

@@ -30,6 +30,7 @@ public class TriplePattern implements Serializable {
 		return obj;
 	}
 	
+	@Override
 	public String toString() {
 		String subjectRepresentation = "*";
 		if (subj != null){

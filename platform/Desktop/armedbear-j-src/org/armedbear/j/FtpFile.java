@@ -80,7 +80,8 @@ public final class FtpFile extends File
         return file;
     }
 
-    public File getRoot()
+    @Override
+	public File getRoot()
     {
         FtpFile file = new FtpFile();
 
@@ -94,17 +95,20 @@ public final class FtpFile extends File
         return file;
     }
 
-    public final String getSeparator()
+    @Override
+	public final String getSeparator()
     {
         return "/";
     }
 
-    public final char getSeparatorChar()
+    @Override
+	public final char getSeparatorChar()
     {
         return '/';
     }
 
-    public File getParentFile()
+    @Override
+	public File getParentFile()
     {
         if (canonicalPath() == null || canonicalPath.equals("/"))
             return null; // No parent.
@@ -120,7 +124,8 @@ public final class FtpFile extends File
         return new FtpFile(hostName, canonicalPath.substring(0, index), userName, password, port);
     }
 
-    public boolean isDirectory()
+    @Override
+	public boolean isDirectory()
     {
         if (type == TYPE_UNKNOWN) {
             FtpSession session = FtpSession.getSession(this);
@@ -133,17 +138,20 @@ public final class FtpFile extends File
         return type == TYPE_DIRECTORY;
     }
 
-    public boolean isLink()
+    @Override
+	public boolean isLink()
     {
         return type == TYPE_LINK;
     }
 
-    public String getDirectoryListing()
+    @Override
+	public String getDirectoryListing()
     {
         return getDirectoryListing(false);
     }
     
-    public String getDirectoryListing(boolean forceRefresh)
+    @Override
+	public String getDirectoryListing(boolean forceRefresh)
     {
         if (!forceRefresh) {
             String listing =
@@ -161,7 +169,8 @@ public final class FtpFile extends File
         return listing;
     }
 
-    public String netPath()
+    @Override
+	public String netPath()
     {
         FastStringBuffer sb = new FastStringBuffer(256);
         sb.append(PREFIX_FTP);

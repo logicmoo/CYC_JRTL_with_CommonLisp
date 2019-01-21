@@ -35,12 +35,14 @@ public final class AutoconfMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public final String getCommentStart()
+    @Override
+	public final String getCommentStart()
     {
         return "dnl ";
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new AutoconfFormatter(buffer);
     }
@@ -48,12 +50,14 @@ public final class AutoconfMode extends AbstractMode implements Constants, Mode
     private static final String validChars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789";
 
-    public final boolean isIdentifierStart(char c)
+    @Override
+	public final boolean isIdentifierStart(char c)
     {
         return (validChars.indexOf(c) >= 0);
     }
 
-    public final boolean isIdentifierPart(char c)
+    @Override
+	public final boolean isIdentifierPart(char c)
     {
         return (validChars.indexOf(c) >= 0);
     }

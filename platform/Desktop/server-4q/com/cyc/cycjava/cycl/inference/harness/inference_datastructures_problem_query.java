@@ -708,15 +708,18 @@ public final class inference_datastructures_problem_query extends SubLTranslated
         return (SubLObject)inference_datastructures_problem_query.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_datastructures_problem_query_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_datastructures_problem_query_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_datastructures_problem_query_file();
     }
     
@@ -770,7 +773,8 @@ public final class inference_datastructures_problem_query extends SubLTranslated
             super(SubLTranslatedFile.extractFunctionNamed("FORMULA-TERM-SIGNATURE-VISIT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_datastructures_problem_query.formula_term_signature_visit(arg1);
         }
     }

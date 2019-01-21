@@ -449,15 +449,18 @@ public final class mt_vars extends SubLTranslatedFile
         return (SubLObject)mt_vars.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_mt_vars_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_mt_vars_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_mt_vars_file();
     }
     
@@ -574,7 +577,8 @@ public final class mt_vars extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CORE-MICROTHEORY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return mt_vars.core_microtheory_p(arg1);
         }
     }
@@ -585,7 +589,8 @@ public final class mt_vars extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SPECIAL-CORE-LOOP-MT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return mt_vars.special_core_loop_mt_p(arg1);
         }
     }

@@ -50,7 +50,8 @@ public class JavaTagger extends Tagger implements Constants
     super(buffer);
   }
 
-  public synchronized void run()
+  @Override
+public synchronized void run()
   {
     pos = new Position(buffer.getFirstLine(), 0);
     token = null;

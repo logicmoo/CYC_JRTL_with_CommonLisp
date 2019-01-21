@@ -383,15 +383,18 @@ public final class nimd_parser extends SubLTranslatedFile
         return (SubLObject)nimd_parser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_nimd_parser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_nimd_parser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_nimd_parser_file();
     }
     

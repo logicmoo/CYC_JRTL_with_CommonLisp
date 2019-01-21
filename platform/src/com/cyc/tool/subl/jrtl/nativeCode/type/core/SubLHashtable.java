@@ -3,958 +3,48 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import org.armedbear.lisp.HashTable;
+import org.armedbear.lisp.LispHashTable;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLDoubleFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumber;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLMacro;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputBinaryStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputTextStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputBinaryStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputTextStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackageIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class SubLHashtable extends FromSubLisp implements SubLObject {
-	public static class SubLEqHashtableKeyEntryImpl extends FromSubLisp implements SubLHashtableKeyEntry {
-		private SubLObject key;
-
-		@Override
-		public boolean canFastHash() {
-			return key.canFastHash();
-		}
-
-		@Override
-		public void clear() {
-			key = null;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			return key == obj;
-		}
-
-		@Override
-		public SubLObject getKey() {
-			return key;
-		}
-
-		@Override
-		public int hashCode(int currentDepth) {
-			return key.hashCode(currentDepth);
-		}
-
-		@Override
-		public void init(SubLObject key) {
-			this.key = key;
-		}
-
-		@Override
-		public void init(SubLObject key, BinaryFunction test) {
-			Errors.error("Ugh.");
-		}
-
-		@Override
-		public boolean isAlien() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isAtom() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBigIntegerBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBoolean() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isChar() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isCons() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isDouble() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isEnvironment() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isError() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFixnum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFunction() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFunctionSpec() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isGuid() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isHashtable() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isHashtableIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isIntBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isInteger() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyhash() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyhashIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyword() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isList() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isLock() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isLongBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isMacroOperator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isNil() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isNumber() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isPackage() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isPackageIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isProcess() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isReadWriteLock() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isRegexPattern() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSemaphore() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSequence() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isStream() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isString() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isStructure() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSymbol() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isVector() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-	}
-
-	public static class SubLEqlHashtableKeyEntryImpl extends FromSubLisp implements SubLHashtableKeyEntry {
-		private SubLObject key;
-
-		@Override
-		public boolean canFastHash() {
-			return key.canFastHash();
-		}
-
-		@Override
-		public void clear() {
-			key = null;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			return key.eql((SubLObject) obj);
-		}
-
-		@Override
-		public SubLObject getKey() {
-			return key;
-		}
-
-		@Override
-		public int hashCode(int currentDepth) {
-			return key.hashCode(currentDepth);
-		}
-
-		@Override
-		public void init(SubLObject key) {
-			this.key = key;
-		}
-
-		@Override
-		public void init(SubLObject key, BinaryFunction test) {
-			Errors.error("Ugh.");
-		}
-
-		@Override
-		public boolean isAlien() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isAtom() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBigIntegerBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBoolean() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isChar() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isCons() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isDouble() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isEnvironment() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isError() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFixnum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFunction() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFunctionSpec() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isGuid() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isHashtable() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isHashtableIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isIntBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isInteger() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyhash() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyhashIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyword() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isList() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isLock() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isLongBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isMacroOperator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isNil() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isNumber() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isPackage() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isPackageIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isProcess() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isReadWriteLock() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isRegexPattern() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSemaphore() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSequence() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isStream() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isString() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isStructure() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSymbol() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isVector() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-	}
-
-	public static class SubLEqualHashtableKeyEntryImpl extends FromSubLisp implements SubLHashtableKeyEntry {
-		private SubLObject key;
-
-		@Override
-		public boolean canFastHash() {
-			return key.canFastHash();
-		}
-
-		@Override
-		public void clear() {
-			key = null;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			return key.equal((SubLObject) obj);
-		}
-
-		@Override
-		public SubLObject getKey() {
-			return key;
-		}
-
-		@Override
-		public int hashCode(int currentDepth) {
-			return key.hashCode(currentDepth);
-		}
-
-		@Override
-		public void init(SubLObject key) {
-			this.key = key;
-		}
-
-		@Override
-		public void init(SubLObject key, BinaryFunction test) {
-			Errors.error("Ugh.");
-		}
-
-		@Override
-		public boolean isAlien() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isAtom() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBigIntegerBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBoolean() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isChar() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isCons() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isDouble() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isEnvironment() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isError() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFixnum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFunction() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFunctionSpec() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isGuid() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isHashtable() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isHashtableIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isIntBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isInteger() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyhash() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyhashIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyword() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isList() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isLock() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isLongBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isMacroOperator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isNil() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isNumber() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isPackage() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isPackageIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isProcess() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isReadWriteLock() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isRegexPattern() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSemaphore() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSequence() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isStream() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isString() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isStructure() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSymbol() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isVector() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-	}
-
-	public static class SubLEqualpHashtableKeyEntryImpl extends FromSubLisp implements SubLHashtableKeyEntry {
-		private SubLObject key;
-
-		@Override
-		public boolean canFastHash() {
-			return key.canFastHash();
-		}
-
-		@Override
-		public void clear() {
-			key = null;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			return key.equalp((SubLObject) obj);
-		}
-
-		@Override
-		public SubLObject getKey() {
-			return key;
-		}
-
-		@Override
-		public int hashCode(int currentDepth) {
-			return key.hashCode(currentDepth);
-		}
-
-		@Override
-		public void init(SubLObject key) {
-			this.key = key;
-		}
-
-		@Override
-		public void init(SubLObject key, BinaryFunction test) {
-			Errors.error("Ugh.");
-		}
-
-		@Override
-		public boolean isAlien() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isAtom() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBigIntegerBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBoolean() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isChar() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isCons() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isDouble() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isEnvironment() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isError() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFixnum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFunction() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFunctionSpec() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isGuid() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isHashtable() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isHashtableIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isIntBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isInteger() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyhash() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyhashIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyword() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isList() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isLock() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isLongBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isMacroOperator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isNil() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isNumber() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isPackage() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isPackageIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isProcess() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isReadWriteLock() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isRegexPattern() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSemaphore() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSequence() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isStream() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isString() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isStructure() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSymbol() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isVector() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-	}
-
-	public interface SubLHashtableKeyEntry extends SubLObject {
+public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTable
+{
+
+	public interface SubLHashtableKeyEntry extends SubLObject
+	{
 		void clear();
 
 		SubLObject getKey();
@@ -964,259 +54,143 @@ public class SubLHashtable extends FromSubLisp implements SubLObject {
 		void init(SubLObject p0, BinaryFunction p1);
 	}
 
-	public static class SubLHashtableKeyEntryImpl extends FromSubLisp implements SubLHashtableKeyEntry {
-		private SubLObject key;
-		private BinaryFunction test;
+	public abstract static class SomeSubLHashtableKeyEntryImpl extends UnsupportedObjectImpl implements SubLHashtableKeyEntry
+	{
 
 		@Override
-		public boolean canFastHash() {
+		public SubLObject getKey()
+		{
+			return key;
+		}
+
+		protected SubLObject key;
+
+		@Override
+		abstract public boolean equals(Object obj);
+
+		@Override
+		public boolean canFastHash()
+		{
 			return key.canFastHash();
 		}
 
 		@Override
-		public void clear() {
+		public void clear()
+		{
 			key = null;
-			test = null;
 		}
 
 		@Override
-		public boolean equals(Object obj) {
+		public int hashCode(int currentDepth)
+		{
+			return key.hashCode(currentDepth);
+		}
+
+		@Override
+		public void init(SubLObject key)
+		{
+			this.key = key;
+		}
+
+		@Override
+		public void init(SubLObject key, BinaryFunction test)
+		{
+			Errors.error("Ugh.");
+		}
+
+	}
+
+	public static class SubLEqHashtableKeyEntryImpl extends SomeSubLHashtableKeyEntryImpl implements SubLHashtableKeyEntry
+	{
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			return key == obj;
+		}
+
+	}
+
+	public static class SubLEqlHashtableKeyEntryImpl extends SomeSubLHashtableKeyEntryImpl implements SubLHashtableKeyEntry
+	{
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			return key.eql((SubLObject) obj);
+		}
+
+	}
+
+	public static class SubLEqualHashtableKeyEntryImpl extends SomeSubLHashtableKeyEntryImpl implements SubLHashtableKeyEntry
+	{
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			return key.equal((SubLObject) obj);
+		}
+
+	}
+
+	public static class SubLEqualpHashtableKeyEntryImpl extends SomeSubLHashtableKeyEntryImpl implements SubLHashtableKeyEntry
+	{
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			return key.equalp((SubLObject) obj);
+		}
+
+	}
+
+	public static class SubLHashtableKeyEntryImpl extends SomeSubLHashtableKeyEntryImpl implements SubLHashtableKeyEntry
+	{
+		private BinaryFunction test;
+
+		@Override
+		public boolean equals(Object obj)
+		{
 			boolean result = SubLNil.NIL != test.processItem(key, (SubLObject) obj);
 			return result;
 		}
 
 		@Override
-		public SubLObject getKey() {
-			return key;
-		}
-
-		@Override
-		public int hashCode(int currentDepth) {
-			return key.hashCode(currentDepth);
-		}
-
-		@Override
-		public void init(SubLObject key) {
+		public void init(SubLObject key)
+		{
 			Errors.error("Ugh.");
 		}
 
 		@Override
-		public void init(SubLObject key, BinaryFunction test) {
+		public void init(SubLObject key, BinaryFunction test)
+		{
 			this.key = key;
 			this.test = test;
 		}
 
-		@Override
-		public boolean isAlien() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isAtom() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBigIntegerBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isBoolean() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isChar() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isCons() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isDouble() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isEnvironment() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isError() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFixnum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFunction() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isFunctionSpec() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isGuid() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isHashtable() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isHashtableIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isIntBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isInteger() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyhash() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyhashIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isKeyword() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isList() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isLock() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isLongBignum() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isMacroOperator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isNil() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isNumber() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isPackage() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isPackageIterator() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isProcess() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isReadWriteLock() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isRegexPattern() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSemaphore() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSequence() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isStream() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isString() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isStructure() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isSymbol() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public boolean isVector() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
 	}
 
-	interface SubLKeyEntryFactory {
+	interface SubLKeyEntryFactory
+	{
 		SubLHashtableKeyEntry makeKeyEntry();
 	}
 
-	SubLHashtable() {
+	protected SubLHashtable()
+	{
 		this(128, BinaryFunction.EQL_TEST);
 	}
 
-	SubLHashtable(int size) {
+	SubLHashtable(int size)
+	{
 		this(size, BinaryFunction.EQL_TEST);
 	}
 
-	SubLHashtable(int size, BinaryFunction test) {
-		hash = ConcurrentSubLHashtableFactory.factory.createMap((int) (size * 1.5) + 1);
+	SubLHashtable(int size, BinaryFunction test)
+	{
+		//super((HashTable.HTComparator)null,size,null,NIL);
+		hashWas = ConcurrentSubLHashtableFactory.factory.createMap((int) (size * 1.5) + 1);
 		this.test = test;
+
 		if (test == BinaryFunction.EQ_TEST)
 			keyFactory = SubLHashtable.EQ_KEY_FACTORY;
 		else if (test == BinaryFunction.EQL_TEST)
@@ -1225,397 +199,408 @@ public class SubLHashtable extends FromSubLisp implements SubLObject {
 			keyFactory = SubLHashtable.EQUAL_KEY_FACTORY;
 		else if (test == BinaryFunction.EQUALP_TEST)
 			keyFactory = SubLHashtable.EQUALP_KEY_FACTORY;
-		else {
+		else
+		{
 			Errors.error("Got non-equality test for hashtable: " + test);
 			keyFactory = null;
 		}
 	}
 
+	private Map<SubLObject, SubLObject> hashMe()
+	{
+		return (Map<SubLObject, SubLObject>) hashWas;
+	}
+
 	private BinaryFunction test;
-	private Map<SubLObject, SubLObject> hash;
+	//private Map<SubLObject, SubLObject>
+	private final Map<SubLObject, SubLObject> hashWas; // = (SubLHashtable) (Map<SubLObject, SubLObject>) (Object) this;
 	private SubLKeyEntryFactory keyFactory;
+
 	public static String HASHTABLE_TYPE_NAME = "HASHTABLE";
-	static SubLKeyEntryFactory EQ_KEY_FACTORY;
-	static SubLKeyEntryFactory EQL_KEY_FACTORY;
-	static SubLKeyEntryFactory EQUAL_KEY_FACTORY;
-	static SubLKeyEntryFactory EQUALP_KEY_FACTORY;
-	static {
-		EQ_KEY_FACTORY = new SubLKeyEntryFactory() {
-			@Override
-			public SubLHashtableKeyEntry makeKeyEntry() {
-				return SubLProcess.currentSubLThread().hashtableEqKeyEntry;
-			}
-		};
-		EQL_KEY_FACTORY = new SubLKeyEntryFactory() {
-			@Override
-			public SubLHashtableKeyEntry makeKeyEntry() {
-				return SubLProcess.currentSubLThread().hashtableEqlKeyEntry;
-			}
-		};
-		EQUAL_KEY_FACTORY = new SubLKeyEntryFactory() {
-			@Override
-			public SubLHashtableKeyEntry makeKeyEntry() {
-				return SubLProcess.currentSubLThread().hashtableEqualKeyEntry;
-			}
-		};
-		EQUALP_KEY_FACTORY = new SubLKeyEntryFactory() {
-			@Override
-			public SubLHashtableKeyEntry makeKeyEntry() {
-				return SubLProcess.currentSubLThread().hashtableEqualpKeyEntry;
-			}
-		};
-	}
 
-	@Override
-	public boolean canFastHash() {
-		return false;
-	}
+	static final SubLKeyEntryFactory EQ_KEY_FACTORY = new SubLKeyEntryFactory()
+	{
+		@Override
+		public SubLHashtableKeyEntry makeKeyEntry()
+		{
+			return SubLProcess.currentSubLThread().hashtableEqKeyEntry;
+		}
+	};
+	static final SubLKeyEntryFactory EQL_KEY_FACTORY = new SubLKeyEntryFactory()
+	{
+		@Override
+		public SubLHashtableKeyEntry makeKeyEntry()
+		{
+			return SubLProcess.currentSubLThread().hashtableEqlKeyEntry;
+		}
+	};
+	static final SubLKeyEntryFactory EQUAL_KEY_FACTORY = new SubLKeyEntryFactory()
+	{
+		@Override
+		public SubLHashtableKeyEntry makeKeyEntry()
+		{
+			return SubLProcess.currentSubLThread().hashtableEqualKeyEntry;
+		}
+	};
+	static final SubLKeyEntryFactory EQUALP_KEY_FACTORY = new SubLKeyEntryFactory()
+	{
+		@Override
+		public SubLHashtableKeyEntry makeKeyEntry()
+		{
+			return SubLProcess.currentSubLThread().hashtableEqualpKeyEntry;
+		}
+	};
 
-	public void clear() {
+	public void clear()
+	{
+		Map<SubLObject, SubLObject> hash = hashMe();
 		hash.clear();
 	}
 
-	public boolean containsKey(Object obj) {
+	public boolean containsKey(Object obj)
+	{
 		SubLHashtableKeyEntryImpl key = null;
-		try {
+		try
+		{
 			key = Resourcer.getInstance().acquireHashtableKeyEntry();
 			key.init((SubLObject) obj, test);
+			Map<SubLObject, SubLObject> hash = hashMe();
 			boolean result = hash.containsKey(key);
 			return result;
-		} finally {
+		} finally
+		{
 			Resourcer.getInstance().releaseHashtableKeyEntry(key);
 		}
 	}
 
-	public boolean containsValue(Object obj) {
+	public boolean containsValue(Object obj)
+	{
+		Map<SubLObject, SubLObject> hash = hashMe();
 		return hash.containsValue(obj);
 	}
 
-	public Set entrySet() {
+	public Set entrySet()
+	{
 		Errors.unimplementedMethod("SubLHashtable.entrySet()");
 		return null;
 	}
 
 	@Override
-	public SubLObject get(SubLObject obj) {
-		if (test == BinaryFunction.EQ_TEST) {
+	public SubLObject get(SubLObject obj)
+	{
+		if (test == BinaryFunction.EQ_TEST)
+		{
 			SubLHashtableKeyEntry key = SubLProcess.currentSubLThread().hashtableEqKeyEntry;
 			key.init(obj);
+			Map<SubLObject, SubLObject> hash = hashMe();
 			return hash.get(key);
 		}
-		if (obj.canFastHash()) {
+		if (obj.canFastHash())
+		{
 			SubLHashtableKeyEntry key = keyFactory.makeKeyEntry();
 			key.init(obj);
+			Map<SubLObject, SubLObject> hash = hashMe();
 			return hash.get(key);
 		}
 		SubLHashtableKeyEntryImpl key2 = null;
 		Resourcer resourcer = Resourcer.getInstance();
-		try {
+		try
+		{
 			key2 = resourcer.acquireHashtableKeyEntry();
 			key2.init(obj, test);
+			Map<SubLObject, SubLObject> hash = hashMe();
 			return hash.get(key2);
-		} finally {
+		} finally
+		{
 			resourcer.releaseHashtableKeyEntry(key2);
 		}
 	}
 
-	public int getCurrentCapacity() {
+	public int getCurrentCapacity()
+	{
+		Map<SubLObject, SubLObject> hash = hashMe();
 		return (int) (hash.size() * 1.3) + 1;
 	}
 
-	public Iterator getEntrySetIterator() {
-		return hash.entrySet().iterator();
-	}
-
-	public BinaryFunction getTest() {
-		return test;
-	}
-
-	@Override
-	public SubLSymbol getType() {
-		return Types.$dtp_hash_table$;
-	}
-
-	@Override
-	public SubLFixnum getTypeCode() {
-		return CommonSymbols.NINE_INTEGER;
-	}
-
-	@Override
-	public int hashCode(int currentDepth) {
-		if (currentDepth < 8)
-			return 0;
-		return 0;
-	}
-
-	@Override
-	public boolean isAlien() {
-		return false;
-	}
-
-	@Override
-	public boolean isAtom() {
-		return true;
-	}
-
-	@Override
-	public boolean isBigIntegerBignum() {
-		return false;
-	}
-
-	@Override
-	public boolean isBignum() {
-		return false;
-	}
-
-	@Override
-	public boolean isBoolean() {
-		return false;
-	}
-
-	@Override
-	public boolean isChar() {
-		return false;
-	}
-
-	@Override
-	public boolean isCons() {
-		return false;
-	}
-
-	@Override
-	public boolean isDouble() {
-		return false;
-	}
-
-	public boolean isEmpty() {
+	public boolean isEmpty()
+	{
+		Map<SubLObject, SubLObject> hash = hashMe();
 		return hash.isEmpty();
 	}
 
-	@Override
-	public boolean isEnvironment() {
-		return false;
-	}
-
-	@Override
-	public boolean isError() {
-		return false;
-	}
-
-	@Override
-	public boolean isFixnum() {
-		return false;
-	}
-
-	@Override
-	public boolean isFunction() {
-		return false;
-	}
-
-	@Override
-	public boolean isFunctionSpec() {
-		return false;
-	}
-
-	@Override
-	public boolean isGuid() {
-		return false;
-	}
-
-	@Override
-	public boolean isHashtable() {
-		return true;
-	}
-
-	@Override
-	public boolean isHashtableIterator() {
-		return false;
-	}
-
-	@Override
-	public boolean isIntBignum() {
-		return false;
-	}
-
-	@Override
-	public boolean isInteger() {
-		return false;
-	}
-
-	@Override
-	public boolean isKeyhash() {
-		return false;
-	}
-
-	@Override
-	public boolean isKeyhashIterator() {
-		return false;
-	}
-
-	@Override
-	public boolean isKeyword() {
-		return false;
-	}
-
-	@Override
-	public boolean isList() {
-		return false;
-	}
-
-	@Override
-	public boolean isLock() {
-		return false;
-	}
-
-	@Override
-	public boolean isLongBignum() {
-		return false;
-	}
-
-	@Override
-	public boolean isMacroOperator() {
-		return false;
-	}
-
-	@Override
-	public boolean isNil() {
-		return false;
-	}
-
-	@Override
-	public boolean isNumber() {
-		return false;
-	}
-
-	@Override
-	public boolean isPackage() {
-		return false;
-	}
-
-	@Override
-	public boolean isPackageIterator() {
-		return false;
-	}
-
-	@Override
-	public boolean isProcess() {
-		return false;
-	}
-
-	@Override
-	public boolean isReadWriteLock() {
-		return false;
-	}
-
-	@Override
-	public boolean isRegexPattern() {
-		return false;
-	}
-
-	@Override
-	public boolean isSemaphore() {
-		return false;
-	}
-
-	@Override
-	public boolean isSequence() {
-		return false;
-	}
-
-	@Override
-	public boolean isStream() {
-		return false;
-	}
-
-	@Override
-	public boolean isString() {
-		return false;
-	}
-
-	@Override
-	public boolean isStructure() {
-		return false;
-	}
-
-	@Override
-	public boolean isSymbol() {
-		return false;
-	}
-
-	@Override
-	public boolean isVector() {
-		return false;
-	}
-
-	public Set keySet() {
+	public Set keySet()
+	{
 		Errors.unimplementedMethod("SubLHashtable.keySet()");
 		return null;
 	}
 
+	public Iterator getEntrySetIterator()
+	{
+		Map<SubLObject, SubLObject> hash = hashMe();
+		return hash.entrySet().iterator();
+	}
+
 	@Override
-	public SubLObject put(SubLObject key, SubLObject value) {
-		if (test == BinaryFunction.EQUALP_TEST) {
+	public SubLObject put(SubLObject key, SubLObject value)
+	{
+		if (test == BinaryFunction.EQUALP_TEST)
+		{
 			boolean knownKey = containsKey(key);
-			if (knownKey)
-				remove(key);
+			if (knownKey) remove(key);
+			Map<SubLObject, SubLObject> hash = hashMe();
 			return hash.put(key, value);
 		}
+		Map<SubLObject, SubLObject> hash = hashMe();
 		return hash.put(key, value);
 	}
 
-	public void putAll(Map map) {
-		Errors.unimplementedMethod("SubLHashtable.putAll()");
+	@Override
+	public int size()
+	{
+		Map<SubLObject, SubLObject> hash = hashMe();
+		return hash.size();
+	}
+
+	public Collection values()
+	{
+		Map<SubLObject, SubLObject> hash = hashMe();
+		return hash.values();
 	}
 
 	@Override
-	public SubLObject remove(SubLObject obj) {
-		if (test == BinaryFunction.EQ_TEST) {
+	public SubLObject remove(SubLObject obj)
+	{
+		if (test == BinaryFunction.EQ_TEST)
+		{
 			SubLHashtableKeyEntry key = SubLProcess.currentSubLThread().hashtableEqKeyEntry;
 			key.init(obj);
+			Map<SubLObject, SubLObject> hash = hashMe();
 			return hash.remove(key);
 		}
-		if (obj.canFastHash()) {
+		if (obj.canFastHash())
+		{
 			SubLHashtableKeyEntry key = keyFactory.makeKeyEntry();
 			key.init(obj);
+			Map<SubLObject, SubLObject> hash = hashMe();
 			return hash.remove(key);
 		}
 		SubLHashtableKeyEntryImpl key2 = null;
 		Resourcer resourcer = Resourcer.getInstance();
-		try {
+		try
+		{
 			key2 = resourcer.acquireHashtableKeyEntry();
 			key2.init(obj, test);
+			Map<SubLObject, SubLObject> hash = hashMe();
 			return hash.remove(key2);
-		} finally {
+		} finally
+		{
 			resourcer.releaseHashtableKeyEntry(key2);
 		}
 	}
 
-	@Override
-	public int size() {
-		return hash.size();
+	public void putAll(Map map)
+	{
+		Errors.unimplementedMethod("SubLHashtable.putAll()");
 	}
 
 	@Override
-	public SubLHashtable toHashtable() {
+	public boolean canFastHash()
+	{
+		return false;
+	}
+
+	public BinaryFunction getTest()
+	{
+		return test;
+	}
+
+	@Override
+	public SubLSymbol getType()
+	{
+		return Types.$dtp_hash_table$;
+	}
+
+	@Override
+	public SubLFixnum getTypeCode()
+	{
+		return CommonSymbols.NINE_INTEGER;
+	}
+
+	@Override
+	public int hashCode(int currentDepth)
+	{
+		if (currentDepth < 8) return 0;
+		return 0;
+	}
+
+	@Override
+	public boolean isAtom()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isHashtable()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isHashtableIterator()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isKeyhash()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isKeyhashIterator()
+	{
+		return false;
+	}
+
+	@Override
+	public SubLHashtable toHashtable()
+	{
 		return this;
 	}
 
 	@Override
-	public String printObjectImpl() {
-		return "#<HASH-TABLE " + test.getFunction().getFunctionSymbol() + " " + toTypeName() + " with " + this.size()
-				+ " entries @ " + super.toString() + ">";
+	public String printObjectImpl()
+	{
+		return "#<HASH-TABLE " + test.getFunction().getFunctionSymbol() + " " + toTypeName() + " with " + this.size() + " entries @ " + super.toString() + ">";
 	}
 
-	public String toStringComplete() {
+	public String toStringComplete()
+	{
 		return toString();
 	}
 
 	@Override
-	public String toTypeName() {
+	public String toTypeName()
+	{
 		return "HASHTABLE";
 	}
 
-	public Collection values() {
-		return hash.values();
+	@Override
+	public Symbol getTestSymbol()
+	{
+		return getTest().getFunction().getFunctionSymbol().toLispObject();
 	}
+
+	public LispObject getRehashThreshold()
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public LispObject getRehashSize()
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public int getSize()
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return 0;
+	}
+
+	@Override
+	public int getCount()
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return 0;
+	}
+
+	@Override
+	public LispObject gethash(LispObject key)
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public LispObject gethash(LispObject key, LispObject defaultValue)
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public LispObject gethash1(LispObject key)
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public LispObject puthash(LispObject key, LispObject newValue)
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public LispObject remhash(LispObject key)
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public LispObject get(LispObject key)
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public void put(LispObject key, LispObject value)
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+
+	}
+
+	@Override
+	public LispObject remove(LispObject key)
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+
+	}
+
+	@Override
+	public LispObject ENTRIES()
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public LispObject getEntries()
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public LispObject MAPHASH(LispObject function)
+	{
+		if (true) throw new UnsupportedOperationException("Not supported yet.");
+		return null;
+	}
+
+	@Override
+	public LispObject getWeakness()
+	{
+		return CommonSymbols.NIL.toLispObject();
+	}
+
 }

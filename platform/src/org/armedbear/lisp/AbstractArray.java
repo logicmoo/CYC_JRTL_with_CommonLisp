@@ -46,6 +46,12 @@ public abstract class AbstractArray extends AbstractSubLVector implements java.i
 	{
 		
 	}
+    
+    @Override
+    public AbstractArray toLispObject()
+    {
+    	return this;
+    }
 
 		@Override
     public LispObject typep(LispObject type)
@@ -131,11 +137,13 @@ public abstract class AbstractArray extends AbstractSubLVector implements java.i
     public void set(int index, SubLObject val) {
     	aset(index,(LispObject)val);
     }
-    public int size() {
+    @Override
+	public int size() {
     	return getTotalSize();
     }
 
-    public void shrink(int newSize)
+    @Override
+	public void shrink(int newSize)
     {
     // TODO Auto-generated method stub
     if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractArray.shrink");
@@ -343,7 +351,8 @@ public abstract class AbstractArray extends AbstractSubLVector implements java.i
         return (int) (result & 0x7fffffff);
     }
 
-    public int sxhash()
+    @Override
+	public int sxhash()
     {
       return superHash() & 0x7fffffff;
     }

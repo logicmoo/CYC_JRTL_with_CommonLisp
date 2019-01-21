@@ -14,23 +14,28 @@ public abstract class BasicModule<Ctx> extends KnownComponentImpl implements Mod
         this.myStopRequestedFlag = false;
     }
     
-    public Module.State getState() {
+    @Override
+	public Module.State getState() {
         return this.myState;
     }
     
-    public void markStopRequested() {
+    @Override
+	public void markStopRequested() {
         this.myStopRequestedFlag = true;
     }
     
-    public boolean isStopRequested() {
+    @Override
+	public boolean isStopRequested() {
         return this.myStopRequestedFlag;
     }
     
-    public Ctx getContext() {
+    @Override
+	public Ctx getContext() {
         return this.myContext;
     }
     
-    public synchronized void setContext(final Ctx m) {
+    @Override
+	public synchronized void setContext(final Ctx m) {
         this.myContext = m;
     }
     
@@ -52,7 +57,8 @@ public abstract class BasicModule<Ctx> extends KnownComponentImpl implements Mod
         this.notifyStateViolation(checkingMethod, allowedStates.toString(), throExcept);
     }
     
-    public synchronized void failDuringInitOrStartup() {
+    @Override
+	public synchronized void failDuringInitOrStartup() {
         this.verifyStoredState("failDuringInitOrStartup", true, Module.State.PRE_INIT, Module.State.IN_INIT, Module.State.WAIT_TO_START, Module.State.IN_START);
         this.myState = Module.State.FAILED_STARTUP;
     }
@@ -109,7 +115,8 @@ public abstract class BasicModule<Ctx> extends KnownComponentImpl implements Mod
         this.verifyStoredState("exitBasicReleaseModule", true, Module.State.POST_STOP, Module.State.FAILED_STARTUP);
     }
     
-    public String getFieldSummary() {
+    @Override
+	public String getFieldSummary() {
         return super.getFieldSummary() + ", state=" + this.myState + ", stopRQ=" + this.myStopRequestedFlag;
     }
 }

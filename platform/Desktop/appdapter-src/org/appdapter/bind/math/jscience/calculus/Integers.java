@@ -14,27 +14,33 @@ public class Integers
             super((Integer64)jsciNum);
         }
 
-        public boolean isScalar() {
+        @Override
+		public boolean isScalar() {
             return true;
         }
 
-        public boolean isZero() {
+        @Override
+		public boolean isZero() {
             return ((Integer64)this.getJScienceNumber()).equals((Object)Integer64.ZERO);
         }
 
-        public boolean isPositive() {
+        @Override
+		public boolean isPositive() {
             return ((Integer64)this.getJScienceNumber()).isGreaterThan((Integer64)Integer64.ZERO);
         }
 
-        public boolean isNonnegative() {
+        @Override
+		public boolean isNonnegative() {
             return ((Integer64)this.getJScienceNumber()).isLessThan((Integer64)Integer64.ZERO);
         }
 
-        public boolean isFinite() {
+        @Override
+		public boolean isFinite() {
             return true;
         }
 
-        public Whole64 asNonnegative() {
+        @Override
+		public Whole64 asNonnegative() {
             if (this instanceof Whole64) {
                 return (Whole64)this;
             }
@@ -44,7 +50,8 @@ public class Integers
             throw this.downcastFailureException((Class)Whole64.class);
         }
 
-        public Natural64 asPositive() {
+        @Override
+		public Natural64 asPositive() {
             if (this instanceof Natural64) {
                 return (Natural64)this;
             }
@@ -54,7 +61,8 @@ public class Integers
             throw this.downcastFailureException((Class)Natural64.class);
         }
 
-        public Zero64 asZero() {
+        @Override
+		public Zero64 asZero() {
             if (this instanceof Zero64) {
                 return (Zero64)this;
             }
@@ -64,30 +72,36 @@ public class Integers
             throw this.downcastFailureException((Class)Zero64.class);
         }
 
-        public Int64 asFinite() {
+        @Override
+		public Int64 asFinite() {
             return this;
         }
 
-        public Whole64 abs() {
+        @Override
+		public Whole64 abs() {
             if (this.isNonnegative()) {
                 return this.asNonnegative();
             }
             return new Whole64(((Integer64)this.getJScienceNumber()).abs());
         }
 
-        public Int64 copy() {
+        @Override
+		public Int64 copy() {
             return new Int64((Integer64)this.getJScienceNumber());
         }
 
-        public Int64 times(final NumberWrapper<Int64, Integer64> other) {
+        @Override
+		public Int64 times(final NumberWrapper<Int64, Integer64> other) {
             return new Int64(((Integer64)this.getJScienceNumber()).times((Integer64)other.getJScienceNumber()));
         }
 
-        public Int64 plus(final NumberWrapper<Int64, Integer64> other) {
+        @Override
+		public Int64 plus(final NumberWrapper<Int64, Integer64> other) {
             return new Int64(((Integer64)this.getJScienceNumber()).plus((Integer64)other.getJScienceNumber()));
         }
 
-        public Int64 opposite() {
+        @Override
+		public Int64 opposite() {
             return new Int64(((Integer64)this.getJScienceNumber()).opposite());
         }
     }

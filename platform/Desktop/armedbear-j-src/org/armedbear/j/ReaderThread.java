@@ -55,7 +55,8 @@ public class ReaderThread extends Thread
         timeOut = n;
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         while (!done) {
             String s = read();

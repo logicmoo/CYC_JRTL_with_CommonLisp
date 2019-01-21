@@ -39,17 +39,20 @@ public final class ShellScriptMode extends AbstractMode implements Constants,
         return mode;
     }
 
-    public final String getCommentStart()
+    @Override
+	public final String getCommentStart()
     {
         return "# ";
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new ShellScriptFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
     }
@@ -57,12 +60,14 @@ public final class ShellScriptMode extends AbstractMode implements Constants,
     private static final String validChars =
         "-./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         return validChars.indexOf(c) >= 0;
     }
 
-    public boolean isIdentifierPart(char c)
+    @Override
+	public boolean isIdentifierPart(char c)
     {
         return validChars.indexOf(c) >= 0;
     }

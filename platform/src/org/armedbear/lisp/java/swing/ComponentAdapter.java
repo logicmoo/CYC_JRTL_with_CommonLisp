@@ -34,19 +34,23 @@ public class ComponentAdapter extends java.awt.event.ComponentAdapter {
         JHandler.callLisp(s, componentevent.getComponent(), componentevent.paramString());
     }
 
-    public void componentHidden(ComponentEvent componentevent) {
+    @Override
+	public void componentHidden(ComponentEvent componentevent) {
         call("COMPONENTHIDDEN", componentevent);
     }
 
-    public void componentMoved(ComponentEvent componentevent) {
+    @Override
+	public void componentMoved(ComponentEvent componentevent) {
         call("COMPONENTMOVED", componentevent);
     }
 
-    public void componentResized(ComponentEvent componentevent) {
+    @Override
+	public void componentResized(ComponentEvent componentevent) {
         call("COMPONENTRESIZED", componentevent);
     }
 
-    public void componentShown(ComponentEvent componentevent) {
+    @Override
+	public void componentShown(ComponentEvent componentevent) {
         call("COMPONENTSHOWN", componentevent);
     }
 }

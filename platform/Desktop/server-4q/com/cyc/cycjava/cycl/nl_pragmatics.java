@@ -44,15 +44,18 @@ public final class nl_pragmatics extends SubLTranslatedFile
         return (SubLObject)nl_pragmatics.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_nl_pragmatics_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_nl_pragmatics_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_nl_pragmatics_file();
     }
     

@@ -1977,15 +1977,18 @@ public final class clausifier extends SubLTranslatedFile
         return (SubLObject)clausifier.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_clausifier_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_clausifier_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_clausifier_file();
     }
     
@@ -2082,7 +2085,8 @@ public final class clausifier extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DO-IMPLICATIONS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return clausifier.do_implications(arg1);
         }
     }
@@ -2093,7 +2097,8 @@ public final class clausifier extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DO-NEGATIONS-DESTRUCTIVE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return clausifier.do_negations_destructive(arg1);
         }
     }
@@ -2104,7 +2109,8 @@ public final class clausifier extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RECURSIVELY-STANDARDIZE-VARIABLES"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return clausifier.recursively_standardize_variables(arg1);
         }
     }
@@ -2115,7 +2121,8 @@ public final class clausifier extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("UNIVERSALS-OUT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return clausifier.universals_out(arg1);
         }
     }
@@ -2126,7 +2133,8 @@ public final class clausifier extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CONJUNCTIONS-IN"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return clausifier.conjunctions_in(arg1);
         }
     }

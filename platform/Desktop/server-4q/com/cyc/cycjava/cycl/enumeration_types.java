@@ -406,15 +406,18 @@ public final class enumeration_types extends SubLTranslatedFile
         return (SubLObject)enumeration_types.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_enumeration_types_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_enumeration_types_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_enumeration_types_file();
     }
     

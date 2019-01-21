@@ -1958,15 +1958,18 @@ public final class removal_modules_nearest_isa extends SubLTranslatedFile
         return (SubLObject)removal_modules_nearest_isa.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_nearest_isa_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_nearest_isa_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_nearest_isa_file();
     }
     

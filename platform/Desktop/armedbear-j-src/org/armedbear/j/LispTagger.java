@@ -39,7 +39,8 @@ public final class LispTagger extends Tagger
         super(buffer);
     }
 
-    public synchronized void run()
+    @Override
+	public synchronized void run()
     {
         tags = new ArrayList();
         Position pos = new Position(buffer.getFirstLine(), 0);

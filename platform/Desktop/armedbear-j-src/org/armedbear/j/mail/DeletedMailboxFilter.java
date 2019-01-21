@@ -23,7 +23,8 @@ package org.armedbear.j.mail;
 
 public final class DeletedMailboxFilter extends MailboxFilter
 {
-    public final boolean accept(MailboxEntry entry)
+    @Override
+	public final boolean accept(MailboxEntry entry)
     {
         return entry.isDeleted();
     }

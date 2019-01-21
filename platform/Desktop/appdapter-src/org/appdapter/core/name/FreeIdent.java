@@ -39,11 +39,13 @@ public class FreeIdent implements Ident
         this.myAbsUri = previousURI(absUriWithOneHash);
     }
     
-    public String getAbsUriString() {
+    @Override
+	public String getAbsUriString() {
         return this.myAbsUri;
     }
     
-    public String getLocalName() {
+    @Override
+	public String getLocalName() {
         return this.myLocalName;
     }
     
@@ -66,7 +68,8 @@ public class FreeIdent implements Ident
         return "FreeIdent[absUri=" + this.myAbsUri + "]";
     }
     
-    public Ident getIdent() {
+    @Override
+	public Ident getIdent() {
         return (Ident)this;
     }
     

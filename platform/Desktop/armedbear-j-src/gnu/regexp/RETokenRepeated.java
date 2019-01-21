@@ -47,7 +47,8 @@ final class RETokenRepeated extends REToken {
      * of the token multiplied by the minimum number of times it must
      * match.
      */
-    int getMinimumLength() {
+    @Override
+	int getMinimumLength() {
 	return (min * token.getMinimumLength());
     }
 
@@ -59,7 +60,8 @@ final class RETokenRepeated extends REToken {
     // 3 times, 5 times, but not 2 times or 4 times?  Does having
     // the subexpression back-reference operator allow that?
 
-    boolean match(CharIndexed input, REMatch mymatch) {
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) {
 	// number of times we've matched so far
 	int numRepeats = 0; 
 	
@@ -186,7 +188,8 @@ final class RETokenRepeated extends REToken {
 	return doneIndex;
     }
 
-    void dump(StringBuffer os) {
+    @Override
+	void dump(StringBuffer os) {
 	os.append("(?:");
 	token.dumpAll(os);
 	os.append(')');

@@ -91,8 +91,11 @@ public class AWTConsole extends TextArea
 	private InputStream in;
 	private PrintStream out;
 
+	@Override
 	public Reader getIn() { return new InputStreamReader(in); }
+	@Override
 	public PrintStream getOut() { return out; }
+	@Override
 	public PrintStream getErr() { return out; }
 
 	private StringBuffer line = new StringBuffer();
@@ -124,6 +127,7 @@ public class AWTConsole extends TextArea
 		requestFocus();
 	}
 
+	@Override
 	public void keyPressed( KeyEvent e ) {
 		type( e.getKeyCode(), e.getKeyChar(), e.getModifiers() );
 		e.consume();
@@ -219,6 +223,7 @@ public class AWTConsole extends TextArea
 		let us set us set a caret position greater than the text length.
 		Great.  What a piece of crap.
 	*/
+	@Override
 	public void setCaretPosition( int pos ) {
 		super.setCaretPosition(pos);
 		/*
@@ -282,10 +287,12 @@ public class AWTConsole extends TextArea
 			}
 	}
 
+	@Override
 	public void println( Object o ) {
 		print( String.valueOf(o)+"\n" );
 	}
 
+	@Override
 	public void error( Object o ) {
 		print( o, Color.red );
 	}
@@ -295,6 +302,7 @@ public class AWTConsole extends TextArea
 		print( "*** " + String.valueOf(o));
 	}
 
+	@Override
 	synchronized public void print( Object o ) {
 		append(String.valueOf(o));
 		textLength = getText().length(); // sync for safety
@@ -314,6 +322,7 @@ public class AWTConsole extends TextArea
 		println("Console: Input closed...");
 	}
 
+	@Override
 	public void run() {
 		try {
 			inPipeWatcher();
@@ -329,6 +338,7 @@ public class AWTConsole extends TextArea
 		f.pack();
 		f.show();
 		f.addWindowListener( new WindowAdapter() {
+			@Override
 			public void windowClosing( WindowEvent e ) {
 				f.dispose();
 			}
@@ -338,11 +348,14 @@ public class AWTConsole extends TextArea
 		interpreter.run();
 	}
 
+	@Override
 	public String toString() {
 		return "BeanShell AWTConsole";
 	}
 
 	// unused
+	@Override
 	public void keyTyped(KeyEvent e) { }
-    public void keyReleased(KeyEvent e) { }
+    @Override
+	public void keyReleased(KeyEvent e) { }
 }

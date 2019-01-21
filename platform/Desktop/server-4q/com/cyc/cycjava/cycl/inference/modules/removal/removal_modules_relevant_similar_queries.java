@@ -590,15 +590,18 @@ public final class removal_modules_relevant_similar_queries extends SubLTranslat
         return (SubLObject)removal_modules_relevant_similar_queries.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_relevant_similar_queries_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_relevant_similar_queries_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_relevant_similar_queries_file();
     }
     

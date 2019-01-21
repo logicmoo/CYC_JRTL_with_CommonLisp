@@ -258,7 +258,8 @@ public class CheckClassAdapter extends ClassAdapter {
     // Implementation of the ClassVisitor interface
     // ------------------------------------------------------------------------
 
-    public void visit(
+    @Override
+	public void visit(
         final int version,
         final int access,
         final String name,
@@ -303,7 +304,8 @@ public class CheckClassAdapter extends ClassAdapter {
         cv.visit(version, access, name, signature, superName, interfaces);
     }
 
-    public void visitSource(final String file, final String debug) {
+    @Override
+	public void visitSource(final String file, final String debug) {
         checkState();
         if (source) {
             throw new IllegalStateException("visitSource can be called only once.");
@@ -312,7 +314,8 @@ public class CheckClassAdapter extends ClassAdapter {
         cv.visitSource(file, debug);
     }
 
-    public void visitOuterClass(
+    @Override
+	public void visitOuterClass(
         final String owner,
         final String name,
         final String desc)
@@ -331,7 +334,8 @@ public class CheckClassAdapter extends ClassAdapter {
         cv.visitOuterClass(owner, name, desc);
     }
 
-    public void visitInnerClass(
+    @Override
+	public void visitInnerClass(
         final String name,
         final String outerName,
         final String innerName,
@@ -353,7 +357,8 @@ public class CheckClassAdapter extends ClassAdapter {
         cv.visitInnerClass(name, outerName, innerName, access);
     }
 
-    public FieldVisitor visitField(
+    @Override
+	public FieldVisitor visitField(
         final int access,
         final String name,
         final String desc,
@@ -378,7 +383,8 @@ public class CheckClassAdapter extends ClassAdapter {
         return new CheckFieldAdapter(av);
     }
 
-    public MethodVisitor visitMethod(
+    @Override
+	public MethodVisitor visitMethod(
         final int access,
         final String name,
         final String desc,
@@ -410,7 +416,8 @@ public class CheckClassAdapter extends ClassAdapter {
                 exceptions));
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -419,7 +426,8 @@ public class CheckClassAdapter extends ClassAdapter {
         return new CheckAnnotationAdapter(cv.visitAnnotation(desc, visible));
     }
 
-    public void visitAttribute(final Attribute attr) {
+    @Override
+	public void visitAttribute(final Attribute attr) {
         checkState();
         if (attr == null) {
             throw new IllegalArgumentException("Invalid attribute (must not be null)");
@@ -427,7 +435,8 @@ public class CheckClassAdapter extends ClassAdapter {
         cv.visitAttribute(attr);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         checkState();
         end = true;
         cv.visitEnd();

@@ -2522,15 +2522,18 @@ public final class wff_utilities extends SubLTranslatedFile
         return (SubLObject)wff_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_wff_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_wff_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_wff_utilities_file();
     }
     
@@ -2629,7 +2632,8 @@ public final class wff_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NON-WF-FORT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return wff_utilities.non_wf_fort_p(arg1);
         }
     }
@@ -2640,7 +2644,8 @@ public final class wff_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NON-WF-VARIABLE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return wff_utilities.non_wf_variable_p(arg1);
         }
     }

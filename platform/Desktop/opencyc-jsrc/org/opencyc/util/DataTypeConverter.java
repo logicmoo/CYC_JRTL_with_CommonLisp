@@ -44,7 +44,8 @@ abstract public class DataTypeConverter<E> {
    * is non-null, and returns null.
    * @deprecated Use CycObject version.
    */
-  protected E parse(final CycList cycList, final boolean shouldReportFailure) {
+  @Deprecated
+protected E parse(final CycList cycList, final boolean shouldReportFailure) {
     final Object naut = CycNaut.convertIfPromising(cycList);
     if (naut instanceof CycNaut) {
       return parse((CycNaut) naut, shouldReportFailure);
@@ -72,7 +73,8 @@ abstract public class DataTypeConverter<E> {
    * Prints stack trace and returns null if the parse fails.
    * @deprecated Use CycObject version.
    */
-  protected E parse(final CycList cycList) {
+  @Deprecated
+protected E parse(final CycList cycList) {
     return parse(cycList, true);
   }
 

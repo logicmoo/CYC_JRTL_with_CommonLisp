@@ -48,29 +48,34 @@ public class RemappingAnnotationAdapter implements AnnotationVisitor {
         this.renamer = renamer;
     }
 
-    public void visit(String name, Object value) {
+    @Override
+	public void visit(String name, Object value) {
         av.visit(name, renamer.mapValue(value));
     }
 
-    public void visitEnum(String name, String desc, String value) {
+    @Override
+	public void visitEnum(String name, String desc, String value) {
         av.visitEnum(name, renamer.mapType(desc), value);
     }
 
-    public AnnotationVisitor visitAnnotation(String name, String desc) {
+    @Override
+	public AnnotationVisitor visitAnnotation(String name, String desc) {
         AnnotationVisitor v = av.visitAnnotation(name, renamer.mapType(desc));
         return v == null ? null : (v == av
                 ? this
                 : new RemappingAnnotationAdapter(v, renamer));
     }
 
-    public AnnotationVisitor visitArray(String name) {
+    @Override
+	public AnnotationVisitor visitArray(String name) {
         AnnotationVisitor v = av.visitArray(name);
         return v == null ? null : (v == av
                 ? this
                 : new RemappingAnnotationAdapter(v, renamer));
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         av.visitEnd();
     }
 }

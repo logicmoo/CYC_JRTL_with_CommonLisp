@@ -40,17 +40,20 @@ public final class SchemeMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public final String getCommentStart()
+    @Override
+	public final String getCommentStart()
     {
         return "; ";
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new SchemeFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
         km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
@@ -59,12 +62,14 @@ public final class SchemeMode extends AbstractMode implements Constants, Mode
         km.mapKey(')', "closeParen");
     }
 
-    public boolean isTaggable()
+    @Override
+	public boolean isTaggable()
     {
         return true;
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new SchemeTagger(buffer);
     }
@@ -72,17 +77,20 @@ public final class SchemeMode extends AbstractMode implements Constants, Mode
     private static final String validChars =
         "!$%&*+-./0123456789:<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{}~";
 
-    public final boolean isIdentifierStart(char c)
+    @Override
+	public final boolean isIdentifierStart(char c)
     {
         return validChars.indexOf(c) >= 0;
     }
 
-    public final boolean isIdentifierPart(char c)
+    @Override
+	public final boolean isIdentifierPart(char c)
     {
         return validChars.indexOf(c) >= 0;
     }
 
-    public boolean isInQuote(Buffer buffer, Position pos)
+    @Override
+	public boolean isInQuote(Buffer buffer, Position pos)
     {
         // This implementation only considers the current line.
         Line line = pos.getLine();

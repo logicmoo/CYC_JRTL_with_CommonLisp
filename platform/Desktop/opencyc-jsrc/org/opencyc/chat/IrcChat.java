@@ -212,6 +212,7 @@ public class IrcChat extends Thread implements ChatSender
 		}
 	}
 
+	@Override
 	public void run()
 	{
 		ircConnect();
@@ -901,6 +902,7 @@ public class IrcChat extends Thread implements ChatSender
 	 * Sends the chat message from Cyc into the chat system.
 	 */
 
+	@Override
 	public void sendChatMessage(String chatMessage)
 	{
 		// sendMessage(ircDestination,chatMessage);
@@ -948,6 +950,7 @@ public class IrcChat extends Thread implements ChatSender
 			this.start();
 		}
 
+		@Override
 		public void run()
 		{
 			try
@@ -990,6 +993,7 @@ public class IrcChat extends Thread implements ChatSender
 			out.println(message);
 		}
 
+		@Override
 		public void run()
 		{
 			String inputLine = null;

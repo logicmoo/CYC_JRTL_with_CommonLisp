@@ -409,15 +409,18 @@ public final class sxsw_widgets extends SubLTranslatedFile
         return (SubLObject)sxsw_widgets.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sxsw_widgets_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sxsw_widgets_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sxsw_widgets_file();
     }
     

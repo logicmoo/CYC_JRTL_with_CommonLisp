@@ -111,7 +111,8 @@ public class IdleThread extends Thread
         tasks.remove(task);
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         while (true) {
             try {
@@ -136,7 +137,8 @@ public class IdleThread extends Thread
     }
 
     private Runnable updateSidebarRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             Sidebar.refreshSidebarInAllFrames();
         }
@@ -147,7 +149,8 @@ public class IdleThread extends Thread
 
     private Runnable parseBuffersRunnable = new Runnable()
     {
-        public void run()
+        @Override
+		public void run()
         {
             synchronized (Editor.getBufferList()) {
                 for (BufferIterator iter = new BufferIterator(); iter.hasNext();) {
@@ -179,7 +182,8 @@ public class IdleThread extends Thread
         new IdleThreadTask(parseBuffersRunnable, 500, false);
 
     private Runnable updateHorizontalScrollBarsRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                 Editor ed = it.nextEditor();
@@ -198,7 +202,8 @@ public class IdleThread extends Thread
         new IdleThreadTask(updateHorizontalScrollBarsRunnable, 500, true);
 
     private Runnable autosaveRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             Editor editor = Editor.currentEditor();
             if (editor == null)
@@ -214,7 +219,8 @@ public class IdleThread extends Thread
 
     private Runnable saveStateRunnable = new Runnable() {
         private long lastRun = 0;
-        public void run()
+        @Override
+		public void run()
         {
             Debug.assertTrue(SwingUtilities.isEventDispatchThread());
             if (Dispatcher.getLastEventMillis() > lastRun) {
@@ -241,7 +247,8 @@ public class IdleThread extends Thread
     {
         Runnable listThreadsRunnable = new Runnable() {
             private long lastRun = 0;
-            public void run()
+            @Override
+			public void run()
             {
                 int minutes = Editor.preferences().getIntegerProperty(
                     Property.LIST_THREADS);

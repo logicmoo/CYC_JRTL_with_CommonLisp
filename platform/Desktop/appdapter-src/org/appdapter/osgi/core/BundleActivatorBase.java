@@ -12,13 +12,15 @@ public abstract class BundleActivatorBase extends MacroBundleActivatorBase imple
         ClassLoaderUtils.registerClassLoader((Object)this, (BundleContext)null);
     }
 
-    public void start(final BundleContext bundleCtx) throws Exception {
+    @Override
+	public void start(final BundleContext bundleCtx) throws Exception {
         super.start(bundleCtx);
         ClassLoaderUtils.registerClassLoader((Object)this, bundleCtx);
         this.getLogger().info(this.describe("start<BundleActivatorBase>", bundleCtx));
         this.scheduleFrameworkStartEventHandler(bundleCtx);
     }
 
+	@Override
 	public void stop(final BundleContext bundleCtx) throws Exception {
         super.stop(bundleCtx);
         ClassLoaderUtils.unregisterClassLoader((Object)this, bundleCtx);

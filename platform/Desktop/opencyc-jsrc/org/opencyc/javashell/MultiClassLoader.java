@@ -35,11 +35,13 @@ public abstract class MultiClassLoader extends ClassLoader {
 	 * will always want the class resolved before it is returned
 	 * to them.
 	 */
+	@Override
 	public Class loadClass(String className) throws ClassNotFoundException {
 		return loadClass(className, true);
 	}
 
 
+	@Override
 	public synchronized Class loadClass(String className, boolean resolveIt) throws ClassNotFoundException {
 		Class result;
 		byte[] classBytes;

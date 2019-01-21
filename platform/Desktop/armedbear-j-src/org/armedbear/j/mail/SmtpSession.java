@@ -286,37 +286,44 @@ public final class SmtpSession extends Writer
         }
     }
 
-    public void write(int c) throws IOException
+    @Override
+	public void write(int c) throws IOException
     {
         writer.write(c);
     }
 
-    public void write(char[] chars) throws IOException
+    @Override
+	public void write(char[] chars) throws IOException
     {
         writer.write(chars);
     }
 
-    public void write(char[] chars, int offset, int length) throws IOException
+    @Override
+	public void write(char[] chars, int offset, int length) throws IOException
     {
         writer.write(chars, offset, length);
     }
 
-    public void write(String s) throws IOException
+    @Override
+	public void write(String s) throws IOException
     {
         writer.write(s);
     }
 
-    public void write(String s, int offset, int length) throws IOException
+    @Override
+	public void write(String s, int offset, int length) throws IOException
     {
         writer.write(s, offset, length);
     }
 
-    public void flush() throws IOException
+    @Override
+	public void flush() throws IOException
     {
         writer.flush();
     }
 
-    public void close() throws IOException
+    @Override
+	public void close() throws IOException
     {
         writer.close();
     }

@@ -63,6 +63,7 @@ public class LocalReasonManagerFromCollectionInformationSetManager extends Local
 			super("Reason");
 		}
 
+		@Override
 		public void run() {
 			mReasoner.initialise();
 			Context context = mReasoner.createContext();

@@ -77,6 +77,7 @@ public class TargetError extends EvalError
 			return target;
 	}
 
+	@Override
 	public String toString() 
 	{
 		return super.toString() 
@@ -84,11 +85,13 @@ public class TargetError extends EvalError
 			printTargetError( target );
 	}
 
-    public void printStackTrace() { 
+    @Override
+	public void printStackTrace() { 
 		printStackTrace( false, System.err );
 	}
 
-    public void printStackTrace( PrintStream out ) { 
+    @Override
+	public void printStackTrace( PrintStream out ) { 
 		printStackTrace( false, out );
 	}
 

@@ -38,7 +38,8 @@ public class UndoDeleteRegion extends AbstractUndoableEdit
         lines = new LineSequence(r.getBeginLine(), r.getEndLine());
     }
 
-    public void undo()
+    @Override
+	public void undo()
     {
         super.undo();
         final Editor editor = Editor.currentEditor();
@@ -56,7 +57,8 @@ public class UndoDeleteRegion extends AbstractUndoableEdit
         }
     }
 
-    public void redo()
+    @Override
+	public void redo()
     {
         super.redo();
         final Editor editor = Editor.currentEditor();

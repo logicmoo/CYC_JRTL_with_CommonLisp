@@ -767,15 +767,18 @@ public final class standard_tokenization extends SubLTranslatedFile
         return (SubLObject)standard_tokenization.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_standard_tokenization_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_standard_tokenization_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_standard_tokenization_file();
     }
     
@@ -856,39 +859,48 @@ public final class standard_tokenization extends SubLTranslatedFile
             this.$state = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$dot_analysis_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$found;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$remains;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$accumulator;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$state;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$found = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$remains = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$accumulator = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$state = value;
         }
         
@@ -903,7 +915,8 @@ public final class standard_tokenization extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DOT-ANALYSIS-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return standard_tokenization.dot_analysis_p(arg1);
         }
     }

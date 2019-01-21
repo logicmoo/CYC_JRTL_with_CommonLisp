@@ -80,15 +80,18 @@ public final class apps_shared extends SubLTranslatedFile
         return (SubLObject)apps_shared.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_apps_shared_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_apps_shared_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_apps_shared_file();
     }
     

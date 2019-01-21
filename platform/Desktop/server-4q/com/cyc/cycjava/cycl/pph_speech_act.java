@@ -146,15 +146,18 @@ public final class pph_speech_act extends SubLTranslatedFile
         return (SubLObject)pph_speech_act.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_speech_act_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_speech_act_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_speech_act_file();
     }
     
@@ -174,7 +177,8 @@ public final class pph_speech_act extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-DISCOURSE-PARTICIPANT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_speech_act.pph_discourse_participant_p(arg1);
         }
     }

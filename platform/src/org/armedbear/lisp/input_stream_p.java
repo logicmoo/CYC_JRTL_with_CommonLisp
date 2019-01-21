@@ -43,7 +43,8 @@ public final class input_stream_p extends Primitive
         super("input-stream-p");
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
             return checkStream(arg).isInputStream() ? T : NIL;
     }

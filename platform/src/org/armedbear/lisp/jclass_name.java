@@ -48,7 +48,8 @@ public final class jclass_name extends Primitive
 
     // When called with one argument, JCLASS-NAME returns the name of the class
     // referenced by CLASS-REF.
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
 
     {
         if (arg instanceof AbstractString) {
@@ -70,7 +71,8 @@ public final class jclass_name extends Primitive
 
     // When called with two arguments, JCLASS-NAME tests whether CLASS-REF
     // matches NAME.
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
 
     {
         String className = null;

@@ -2327,15 +2327,18 @@ public final class sdc extends SubLTranslatedFile
         return (SubLObject)sdc.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sdc_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sdc_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sdc_file();
     }
 
@@ -2405,7 +2408,8 @@ public final class sdc extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-MARK-SD-GENLS-ISAS"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sdc.sbhl_mark_sd_genls_isas(arg1);
         }
     }
@@ -2416,7 +2420,8 @@ public final class sdc extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-GATHER-SD-CANDIDATES"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sdc.sbhl_gather_sd_candidates(arg1);
         }
     }
@@ -2427,7 +2432,8 @@ public final class sdc extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-DETERMINE-SD-AND-STORE-CANDIDATES"));
         }
 
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sdc.sbhl_determine_sd_and_store_candidates(arg1);
         }
     }
@@ -2438,7 +2444,8 @@ public final class sdc extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ANY-SDC-WRT?"));
         }
 
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return sdc.any_sdc_wrtP(arg1, arg2, (SubLObject)UNPROVIDED);
         }
     }

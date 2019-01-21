@@ -98,7 +98,8 @@ public class SAXAnnotationAdapter extends SAXAdapter implements
         addStart(elementName, att);
     }
 
-    public void visit(final String name, final Object value) {
+    @Override
+	public void visit(final String name, final Object value) {
         Class c = value.getClass();
         if (c.isArray()) {
             AnnotationVisitor av = visitArray(name);
@@ -160,7 +161,8 @@ public class SAXAnnotationAdapter extends SAXAdapter implements
         }
     }
 
-    public void visitEnum(
+    @Override
+	public void visitEnum(
         final String name,
         final String desc,
         final String value)
@@ -168,7 +170,8 @@ public class SAXAnnotationAdapter extends SAXAdapter implements
         addValueElement("annotationValueEnum", name, desc, value);
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String name,
         final String desc)
     {
@@ -179,7 +182,8 @@ public class SAXAnnotationAdapter extends SAXAdapter implements
                 desc);
     }
 
-    public AnnotationVisitor visitArray(final String name) {
+    @Override
+	public AnnotationVisitor visitArray(final String name) {
         return new SAXAnnotationAdapter(getContentHandler(),
                 "annotationValueArray",
                 0,
@@ -187,7 +191,8 @@ public class SAXAnnotationAdapter extends SAXAdapter implements
                 null);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         addEnd(elementName);
     }
 

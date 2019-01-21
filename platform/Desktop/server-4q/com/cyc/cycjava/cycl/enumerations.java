@@ -1066,15 +1066,18 @@ public final class enumerations extends SubLTranslatedFile
         return (SubLObject)enumerations.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_enumerations_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_enumerations_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_enumerations_file();
     }
     
@@ -1226,31 +1229,38 @@ public final class enumerations extends SubLTranslatedFile
             this.$values_vector = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$enumeration_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$type_name;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$cardinality;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$values_vector;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$type_name = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$cardinality = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$values_vector = value;
         }
         
@@ -1265,7 +1275,8 @@ public final class enumerations extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ENUMERATION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return enumerations.enumeration_p(arg1);
         }
     }

@@ -40,7 +40,8 @@ public final class ShellMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_HOME, 0, "shellHome");
         km.mapKey(KeyEvent.VK_BACK_SPACE, 0, "shellBackspace");
@@ -57,7 +58,8 @@ public final class ShellMode extends AbstractMode implements Constants, Mode
         km.mapKey(')', "closeParen");
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new ShellFormatter(buffer);
     }

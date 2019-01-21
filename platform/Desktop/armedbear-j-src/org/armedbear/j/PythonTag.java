@@ -28,7 +28,8 @@ public final class PythonTag extends LocalTag
         super(name, pos, type);
     }
 
-    public String getLongName()
+    @Override
+	public String getLongName()
     {
         if (name.startsWith("class "))
             return name;

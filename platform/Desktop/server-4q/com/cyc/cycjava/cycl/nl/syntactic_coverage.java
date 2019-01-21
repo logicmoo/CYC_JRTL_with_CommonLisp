@@ -482,15 +482,18 @@ public final class syntactic_coverage extends SubLTranslatedFile
         return (SubLObject)syntactic_coverage.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_syntactic_coverage_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_syntactic_coverage_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_syntactic_coverage_file();
     }
     

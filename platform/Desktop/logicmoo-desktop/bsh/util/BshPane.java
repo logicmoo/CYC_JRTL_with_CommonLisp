@@ -35,6 +35,7 @@ public class BshPane extends JConsole {
 		f.pack();
 		f.show();
 		f.addWindowListener( new WindowAdapter() {
+			@Override
 			public void windowClosing( WindowEvent e ) {
 				f.dispose();
 			}

@@ -699,15 +699,18 @@ public final class inference_abduction_utilities extends SubLTranslatedFile
         return (SubLObject)inference_abduction_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_abduction_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_abduction_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_abduction_utilities_file();
     }
     

@@ -203,6 +203,7 @@ public class SubLMain
 	private static class MemoryListener implements NotificationListener
 	{
 		//@Override
+		@Override
 		public void handleNotification(Notification notification, Object handback)
 		{
 			String notifType = notification.getType();
@@ -291,9 +292,9 @@ public class SubLMain
 	// sometimes called when this was started from a interface like telnet
 	public static void captureStreams()
 	{
-		ORIGINAL_IN_STREAM = System.in;
-		ORIGINAL_OUT_STREAM = SystemCurrent.out;
-		ORIGINAL_ERR_STREAM = System.err;
+		ORIGINAL_IN_STREAM = SystemCurrent.originalSystemIn;
+		ORIGINAL_OUT_STREAM = SystemCurrent.originalSystemOut;
+		ORIGINAL_ERR_STREAM = SystemCurrent.originalSystemErr;
 	}
 
 	public static void embeddedMain(String[] args)
@@ -342,7 +343,8 @@ public class SubLMain
 	public static SubLReader getMainReader()
 	{
 		SubLReader locally = mainReader.get();
-		if (locally != null) return locally;
+		if (locally != null)
+			return locally;
 		return trueMainReader;
 	}
 

@@ -187,7 +187,8 @@ public interface SubLWorker extends Cancelable {
    * Returns a string representation of the SubLWorker.
    * @return a string representation of the SubLWorker
    */  
-  String toString();
+  @Override
+String toString();
   
   /**
    * Returns a string representation of the SubLWorker.

@@ -36,6 +36,7 @@ public class DataFactoryImpl implements DataFactory {
 	 *            collection of the statements
 	 * @return the graph
 	 */
+	@Override
 	public RdfGraph createRdfGraph(Iterable<Statement> sts, URI graph) {
 		return new RdfGraphInMemory(graph, sts);
 	}
@@ -49,6 +50,7 @@ public class DataFactoryImpl implements DataFactory {
 	 *            to be resolved
 	 * @return the constructed rdf graph
 	 */
+	@Override
 	public RdfGraph createRemoteRdfGraph(URI uri) {
 		return new HTTPRemoteGraph(uri);
 	}
@@ -58,6 +60,7 @@ public class DataFactoryImpl implements DataFactory {
 	 * 
 	 * @return a connection to the local store
 	 */
+	@Override
 	public RdfStoreConnection createRdfStoreConnection() {
 		if (DataLayerService.getORDI() == null) {
 			throw new UnsupportedOperationException(
@@ -76,6 +79,7 @@ public class DataFactoryImpl implements DataFactory {
 	 * @param uri
 	 * @return
 	 */
+	@Override
 	public SPARQLEndpoint createSPARQLEndpoint(URI uri) {
 		throw new UnsupportedOperationException(
 				"The execution of remote SPARQL endpoints "
@@ -83,16 +87,19 @@ public class DataFactoryImpl implements DataFactory {
 						+ "createRdfStoreConnection() method instead!");
 	}
 
+	@Override
 	public SPARQLQuery createSPARQLQuery(String query) {
 		return new SPARQLQueryImpl(query);
 	}
 
+	@Override
 	public SPARQLQuery createSPARQLQuery(String query, URI label) {
 		SPARQLQuery sparql = createSPARQLQuery(query);
 		sparql.setLabelledGroup(label);
 		return sparql;
 	}
 
+	@Override
 	public SPARQLQuery createSPARQLQuery(String query, String ns, URI label) {
 		SPARQLQuery sparql = new SPARQLQueryImpl(query, ns);
 		sparql.setLabelledGroup(label);

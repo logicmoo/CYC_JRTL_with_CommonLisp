@@ -85,7 +85,8 @@ public final class Position implements Constants
         return line.previous();
     }
 
-    public final boolean equals(Object obj)
+    @Override
+	public final boolean equals(Object obj)
     {
         if (!(obj instanceof Position))
             return false;
@@ -305,7 +306,8 @@ public final class Position implements Constants
         return line.substring(begin, end);
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer("line ");
         if (line != null)

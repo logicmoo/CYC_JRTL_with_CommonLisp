@@ -36,7 +36,8 @@ public interface RealInterval<RN extends RealNumeric<? super RN>, MDRN extends R
             return this.isLessThan(this.getUpperBound(), v);
         }
 
-        public boolean containsElement(final RN v) {
+        @Override
+		public boolean containsElement(final RN v) {
             return !this.isBelowLowerBound(v) && !this.isAboveUpperBound(v);
         }
     }

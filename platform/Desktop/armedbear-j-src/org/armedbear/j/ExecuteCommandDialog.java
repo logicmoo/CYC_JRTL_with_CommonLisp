@@ -33,7 +33,8 @@ public final class ExecuteCommandDialog extends InputDialog
         setDefaultValue(history.getPrevious());
     }
 
-    protected final List getCompletions(String prefix)
+    @Override
+	protected final List getCompletions(String prefix)
     {
         return CommandTable.getCompletionsForPrefix(prefix);
     }

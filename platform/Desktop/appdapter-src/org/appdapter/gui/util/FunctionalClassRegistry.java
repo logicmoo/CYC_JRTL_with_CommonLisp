@@ -81,6 +81,7 @@ class FunctionalClassRegistry<RSLTCLASS> extends FunctionalRegistryMap<Class, Cl
 		return sn.replace("Bean", "").replace("Info", "").replace("CustomizerClass", "").replace("Customizer", "").replace("Editor", "");
 	}
 
+	@Override
 	@SuppressWarnings("unchecked") public Class<RSLTCLASS> tryFirst(Class c) {
 		BeanInfo objectInfo;
 		try {

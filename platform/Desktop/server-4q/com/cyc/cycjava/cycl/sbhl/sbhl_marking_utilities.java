@@ -1086,15 +1086,18 @@ public final class sbhl_marking_utilities extends SubLTranslatedFile
         return (SubLObject)sbhl_marking_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_marking_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_marking_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_marking_utilities_file();
     }
     
@@ -1141,7 +1144,8 @@ public final class sbhl_marking_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-PREDICATE-UNMARKING-FN"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_marking_utilities.sbhl_predicate_unmarking_fn(arg1, (SubLObject)$sbhl_predicate_unmarking_fn$UnaryFunction.UNPROVIDED);
         }
     }
@@ -1152,7 +1156,8 @@ public final class sbhl_marking_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-PREDICATE-UNMARKING-FN"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return sbhl_marking_utilities.sbhl_predicate_unmarking_fn(arg1, arg2);
         }
     }
@@ -1163,7 +1168,8 @@ public final class sbhl_marking_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SBHL-MARKED-IN-TARGET-SPACE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_marking_utilities.sbhl_marked_in_target_space_p(arg1);
         }
     }

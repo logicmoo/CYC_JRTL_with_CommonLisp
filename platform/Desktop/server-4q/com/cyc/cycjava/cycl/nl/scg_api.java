@@ -382,15 +382,18 @@ public final class scg_api extends SubLTranslatedFile
         return (SubLObject)scg_api.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_scg_api_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_scg_api_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_scg_api_file();
     }
     

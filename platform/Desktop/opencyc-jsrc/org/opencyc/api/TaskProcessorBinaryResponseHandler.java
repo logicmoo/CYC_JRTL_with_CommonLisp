@@ -118,7 +118,8 @@ class TaskProcessorBinaryResponseHandler extends Thread {
    * response is available, then awakens the client thread that made the
    * request.
    */
-  public void run() {
+  @Override
+public void run() {
     Thread.currentThread().setName("TaskProcessorBinaryResponseHandler");
     Exception closingException = null;
     try {

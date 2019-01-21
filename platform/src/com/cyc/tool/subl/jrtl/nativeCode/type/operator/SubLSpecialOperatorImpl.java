@@ -57,6 +57,7 @@ public class SubLSpecialOperatorImpl extends SpecialOperator implements SubLOper
 		return evaluationFunction.getArglist();
 	}
 
+	@Override
 	public SubLFunction getEvaluationFunction() {
 		if(evaluationFunction==null) {
 			return null;

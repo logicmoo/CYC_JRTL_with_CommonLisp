@@ -61,6 +61,7 @@ public class StaticMethodList extends JList {
 			}
 		}
 
+		@Override
 		public Object getElementAt(int index) {
 			try {
 				return getMethodAt(index).getName();
@@ -69,12 +70,14 @@ public class StaticMethodList extends JList {
 			}
 		}
 
+		@Override
 		public int getSize() {
 			return methods.size();
 		}
 	}
 
 	class MethodComparator implements Comparator {
+		@Override
 		public int compare(Object first, Object second) {
 			Method a = (Method) first;
 			Method b = (Method) second;
@@ -83,6 +86,7 @@ public class StaticMethodList extends JList {
 			return nameA.compareTo(nameB);
 		}
 
+		@Override
 		public boolean equals(Object o) {
 			return (o instanceof MethodComparator);
 		}

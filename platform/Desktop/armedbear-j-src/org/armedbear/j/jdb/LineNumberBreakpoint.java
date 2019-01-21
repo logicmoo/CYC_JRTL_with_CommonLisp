@@ -74,7 +74,8 @@ public final class LineNumberBreakpoint extends ResolvableBreakpoint
         return lineNumber;
     }
 
-    public EventRequest resolveEventRequest(ReferenceType refType)
+    @Override
+	public EventRequest resolveEventRequest(ReferenceType refType)
         throws Exception
     {
         Log.debug("LineNumberBreakpoint.resolveEventRequest");
@@ -104,7 +105,8 @@ public final class LineNumberBreakpoint extends ResolvableBreakpoint
         return null;
     }
 
-    public void resolved()
+    @Override
+	public void resolved()
     {
         if (line != null) {
             line.setAnnotation(new BreakpointAnnotation(this));
@@ -129,7 +131,8 @@ public final class LineNumberBreakpoint extends ResolvableBreakpoint
         jdb.log("Breakpoint resolved: " + getLocationString());
     }
 
-    public String getLocationString()
+    @Override
+	public String getLocationString()
     {
         FastStringBuffer sb = new FastStringBuffer();
         if (file != null) {
@@ -142,7 +145,8 @@ public final class LineNumberBreakpoint extends ResolvableBreakpoint
         return sb.toString();
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer();
         if (file != null) {

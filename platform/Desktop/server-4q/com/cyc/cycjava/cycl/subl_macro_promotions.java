@@ -495,15 +495,18 @@ public final class subl_macro_promotions extends SubLTranslatedFile
         return (SubLObject)subl_macro_promotions.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_subl_macro_promotions_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_subl_macro_promotions_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_subl_macro_promotions_file();
     }
     

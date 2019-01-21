@@ -1073,6 +1073,7 @@ class Name implements java.io.Serializable
 	// end compound name routines
 
 
+	@Override
 	public String toString() { return value; }
 
 }

@@ -110,6 +110,7 @@ public class Variable implements java.io.Serializable
 		return modifiers != null && modifiers.hasModifier(name);
 	}
 
+	@Override
 	public String toString() { 
 		return "Variable: "+super.toString()+" "+name+", type:"+type
 			+", value:"+value +", lhs = "+lhs;

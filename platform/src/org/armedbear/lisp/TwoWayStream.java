@@ -45,10 +45,12 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
     //public final Stream inStream;
     //public final Stream outStream;
 //
+	@Override
 	public SubLInputStream toInputStream() {
 		return (SubLInputStream) inStream;
 	}
 
+	@Override
 	public SubLOutputStream toOutputStream() {
 		return (SubLOutputStream) outStream;
 	}
@@ -78,7 +80,8 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
         setInteractive(interactive);
     }
 
-    public LispObject getStreamElementType()
+    @Override
+	public LispObject getStreamElementType()
     {
         LispObject itype = inStream.getStreamElementType();
         LispObject otype = outStream.getStreamElementType();
@@ -97,37 +100,44 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
         return outStream;
     }
 
-    public boolean isCharacterInputStream()
+    @Override
+	public boolean isCharacterInputStream()
     {
         return inStream.isCharacterInputStream();
     }
 
-    public boolean isBinaryInputStream()
+    @Override
+	public boolean isBinaryInputStream()
     {
         return inStream.isBinaryInputStream();
     }
 
-    public boolean isCharacterOutputStream()
+    @Override
+	public boolean isCharacterOutputStream()
     {
         return outStream.isCharacterOutputStream();
     }
 
-    public boolean isBinaryOutputStream()
+    @Override
+	public boolean isBinaryOutputStream()
     {
         return outStream.isBinaryOutputStream();
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.TWO_WAY_STREAM;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.TWO_WAY_STREAM;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.TWO_WAY_STREAM)
             return T;
@@ -137,75 +147,89 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
     }
 
     // Returns -1 at end of file.
-    protected int _readChar() throws java.io.IOException
+    @Override
+	protected int _readChar() throws java.io.IOException
     {
         return inStream._readChar();
     }
 
-    protected void _unreadChar(int n) throws java.io.IOException
+    @Override
+	protected void _unreadChar(int n) throws java.io.IOException
     {
         inStream._unreadChar(n);
     }
 
-    protected boolean _charReady() throws java.io.IOException
+    @Override
+	protected boolean _charReady() throws java.io.IOException
     {
         return inStream._charReady();
     }
 
-    public void _writeChar(char c)
+    @Override
+	public void _writeChar(char c)
     {
         outStream._writeChar(c);
     }
 
-    public void _writeChars(char[] chars, int start, int end)
+    @Override
+	public void _writeChars(char[] chars, int start, int end)
 
     {
         outStream._writeChars(chars, start, end);
     }
 
-    public void _writeString(String s)
+    @Override
+	public void _writeString(String s)
     {
         outStream._writeString(s);
     }
 
-    public void _writeLine(String s)
+    @Override
+	public void _writeLine(String s)
     {
         outStream._writeLine(s);
     }
 
     // Reads an 8-bit byte.
-    public int _readByte()
+    @Override
+	public int _readByte()
     {
         return inStream._readByte();
     }
 
     // Writes an 8-bit byte.
-    public void _writeByte(int n)
+    @Override
+	public void _writeByte(int n)
     {
         outStream._writeByte(n);
     }
 
-    public void _finishOutput()
+    @Override
+	public void _finishOutput()
     {
         outStream._finishOutput();
     }
 
-    public void _clearInput()
+    @Override
+	public void _clearInput()
     {
         inStream._clearInput();
     }
 
-    public LispObject listen()
+    @Override
+	public LispObject listen()
     {
         return inStream.listen();
     }
 
-    public LispObject FRESH_LINE()
+    @Override
+	public LispObject FRESH_LINE()
     {
         return outStream.FRESH_LINE();
     }
 
-    public LispObject close(LispObject abort)
+    @Override
+	public LispObject close(LispObject abort)
     {
         // "The effect of CLOSE on a constructed stream is to close the
         // argument stream only. There is no effect on the constituents of
@@ -214,7 +238,8 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
         return T;
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         return unreadableString("TWO-WAY-STREAM");
     }
@@ -223,7 +248,8 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
     private static final Primitive MAKE_TWO_WAY_STREAM =
         new Primitive(Symbol.MAKE_TWO_WAY_STREAM, "input-stream output-stream")
     {
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
 
         {
             final Stream in = checkStream(first);
@@ -242,7 +268,8 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
     private static final Primitive TWO_WAY_STREAM_INPUT_STREAM =
         new Primitive(Symbol.TWO_WAY_STREAM_INPUT_STREAM, "two-way-stream")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
            if (arg instanceof TwoWayStream)
                return ((TwoWayStream)arg).inStream;
@@ -254,7 +281,8 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
     private static final Primitive TWO_WAY_STREAM_OUTPUT_STREAM =
         new Primitive(Symbol.TWO_WAY_STREAM_OUTPUT_STREAM, "two-way-stream")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
            if (arg instanceof TwoWayStream)
                return ((TwoWayStream)arg).outStream;

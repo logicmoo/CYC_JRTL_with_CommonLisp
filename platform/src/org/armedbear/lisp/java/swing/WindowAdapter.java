@@ -34,39 +34,48 @@ public class WindowAdapter extends java.awt.event.WindowAdapter
         window.addWindowListener(new WindowAdapter());
     }
 
-    public void windowOpened(WindowEvent windowevent) {
+    @Override
+	public void windowOpened(WindowEvent windowevent) {
         call("WINDOWOPENED", windowevent);
     }
 
-    public void windowClosed(WindowEvent windowevent) {
+    @Override
+	public void windowClosed(WindowEvent windowevent) {
         call("WINDOWCLOSED", windowevent);
     }
 
-    public void windowClosing(WindowEvent windowevent) {
+    @Override
+	public void windowClosing(WindowEvent windowevent) {
         call("WINDOWCLOSING", windowevent);
     }
 
-    public void windowActivated(WindowEvent windowevent) {
+    @Override
+	public void windowActivated(WindowEvent windowevent) {
         call("WINDOWACTIVATED", windowevent);
     }
 
-    public void windowDeactivated(WindowEvent windowevent) {
+    @Override
+	public void windowDeactivated(WindowEvent windowevent) {
         call("WINDOWDEACTIVATED", windowevent);
     }
 
-    public void windowIconified(WindowEvent windowevent) {
+    @Override
+	public void windowIconified(WindowEvent windowevent) {
         call("WINDOWICONIFIED", windowevent);
     }
 
-    public void windowDeiconified(WindowEvent windowevent) {
+    @Override
+	public void windowDeiconified(WindowEvent windowevent) {
         call("WINDOWDEICONIFIED", windowevent);
     }
 
-    public void windowGainedFocus(WindowEvent windowevent) {
+    @Override
+	public void windowGainedFocus(WindowEvent windowevent) {
         call("WINDOWGAINEDFOCUS", windowevent);
     }
 
-    public void windowLostFocus(WindowEvent windowevent) {
+    @Override
+	public void windowLostFocus(WindowEvent windowevent) {
         call("WINDOWLOSTFOCUS", windowevent);
     }
 }

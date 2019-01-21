@@ -22,6 +22,7 @@ public class JTabbedPaneWithCloseIcons extends DnDTabbedPane implements MouseLis
 		addMouseListener(this);
 	}
 
+	@Override
 	public void addTab(String title, Component component) {
 		this.addTab(title, component, null);
 	}
@@ -30,6 +31,7 @@ public class JTabbedPaneWithCloseIcons extends DnDTabbedPane implements MouseLis
 		super.addTab(title, new CloseTabIcon(extraIcon), component);
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		try {
 			int tabNumber = getUI().tabForCoordinate(this, e.getX(), e.getY());
@@ -49,15 +51,19 @@ public class JTabbedPaneWithCloseIcons extends DnDTabbedPane implements MouseLis
 		}
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		this.show();
 	}
@@ -124,6 +130,7 @@ class CloseTabIcon implements Icon {
 		height = 18;
 	}
 
+	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y) {
 		this.x_pos = x;
 		this.y_pos = y;
@@ -146,10 +153,12 @@ class CloseTabIcon implements Icon {
 		}
 	}
 
+	@Override
 	public int getIconWidth() {
 		return width + (fileIcon != null ? fileIcon.getIconWidth() : 0);
 	}
 
+	@Override
 	public int getIconHeight() {
 		return height;
 	}

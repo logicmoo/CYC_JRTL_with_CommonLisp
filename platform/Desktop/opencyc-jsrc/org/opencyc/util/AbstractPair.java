@@ -68,7 +68,8 @@ public abstract class AbstractPair
      * @return <code>true</code> if the given object is also a pair with the same
      * components, <code>false</code> otherwise.
      */
-    public boolean equals (Object o) {
+    @Override
+	public boolean equals (Object o) {
         return  (o.getClass().equals(this.getClass()) && (((((AbstractPair)o).component1 == null) &&
                 (this.component1 == null)) || ((this.component1 != null) && ((AbstractPair)o).component1.equals(this.component1)))
                 && (((((AbstractPair)o).component2 == null) && (this.component2 == null)) || ((this.component2
@@ -84,7 +85,8 @@ public abstract class AbstractPair
      *
      * @return a hash code value of this pair.
      */
-    public int hashCode () {
+    @Override
+	public int hashCode () {
         return  (component1 == null ? 0 : component1.hashCode()) + (component2 == null ? 1 : component2.hashCode());
     }
 
@@ -93,7 +95,8 @@ public abstract class AbstractPair
      *
      * @return a string representation of this pair.
      */
-    public String toString () {
+    @Override
+	public String toString () {
         return  beginChar + component1 + separatorChar + component2 + endChar;
     }
 }

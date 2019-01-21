@@ -471,15 +471,18 @@ public final class upward_ontology_closure extends SubLTranslatedFile
         return (SubLObject)upward_ontology_closure.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_upward_ontology_closure_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_upward_ontology_closure_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_upward_ontology_closure_file();
     }
     

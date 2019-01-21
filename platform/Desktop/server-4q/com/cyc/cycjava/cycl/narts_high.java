@@ -1126,15 +1126,18 @@ public final class narts_high extends SubLTranslatedFile
         return (SubLObject)narts_high.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_narts_high_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_narts_high_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_narts_high_file();
     }
     
@@ -1210,7 +1213,8 @@ public final class narts_high extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NART-HL-FORMULA"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return narts_high.nart_hl_formula(arg1);
         }
     }
@@ -1221,7 +1225,8 @@ public final class narts_high extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FIND-NART"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return narts_high.find_nart(arg1);
         }
     }

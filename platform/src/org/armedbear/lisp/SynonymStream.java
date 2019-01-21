@@ -59,47 +59,56 @@ public class SynonymStream extends Stream
 
 	}
 
-    public boolean isInputStream()
+    @Override
+	public boolean isInputStream()
     {
         return checkStream(streamSymbol.symbolValue()).isInputStream();
     }
 
-    public boolean isOutputStream()
+    @Override
+	public boolean isOutputStream()
     {
         return checkStream(streamSymbol.symbolValue()).isOutputStream();
     }
 
-    public boolean isCharacterInputStream()
+    @Override
+	public boolean isCharacterInputStream()
     {
         return checkStream(streamSymbol.symbolValue()).isCharacterInputStream();
     }
 
-    public boolean isBinaryInputStream()
+    @Override
+	public boolean isBinaryInputStream()
     {
         return checkStream(streamSymbol.symbolValue()).isBinaryInputStream();
     }
 
-    public boolean isCharacterOutputStream()
+    @Override
+	public boolean isCharacterOutputStream()
     {
         return checkStream(streamSymbol.symbolValue()).isCharacterOutputStream();
     }
 
-    public boolean isBinaryOutputStream()
+    @Override
+	public boolean isBinaryOutputStream()
     {
         return checkStream(streamSymbol.symbolValue()).isBinaryOutputStream();
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.SYNONYM_STREAM;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.SYNONYM_STREAM;
     }
 
-    public LispObject typep(LispObject typeSpecifier)
+    @Override
+	public LispObject typep(LispObject typeSpecifier)
     {
         if (typeSpecifier == Symbol.SYNONYM_STREAM)
             return T;
@@ -108,100 +117,119 @@ public class SynonymStream extends Stream
         return super.typep(typeSpecifier);
     }
 
-    public LispObject getStreamElementType()
+    @Override
+	public LispObject getStreamElementType()
     {
         return checkStream(streamSymbol.symbolValue()).getStreamElementType();
     }
 
-    public LispObject listen()
+    @Override
+	public LispObject listen()
     {
         return checkStream(streamSymbol.symbolValue()).listen();
     }
 
-    public LispObject fileLength()
+    @Override
+	public LispObject fileLength()
     {
         return checkStream(streamSymbol.symbolValue()).fileLength();
     }
 
-    public LispObject fileStringLength(LispObject arg)
+    @Override
+	public LispObject fileStringLength(LispObject arg)
     {
         return checkStream(streamSymbol.symbolValue()).fileStringLength(arg);
     }
 
-    protected int _readChar() throws java.io.IOException
+    @Override
+	protected int _readChar() throws java.io.IOException
     {
         return checkStream(streamSymbol.symbolValue())._readChar();
     }
 
-    protected void _unreadChar(int n) throws java.io.IOException
+    @Override
+	protected void _unreadChar(int n) throws java.io.IOException
     {
         checkStream(streamSymbol.symbolValue())._unreadChar(n);
     }
 
-    protected boolean _charReady() throws java.io.IOException
+    @Override
+	protected boolean _charReady() throws java.io.IOException
     {
         return checkStream(streamSymbol.symbolValue())._charReady();
     }
 
-    public void _writeChar(char c)
+    @Override
+	public void _writeChar(char c)
     {
         checkStream(streamSymbol.symbolValue())._writeChar(c);
     }
 
-    public void _writeChars(char[] chars, int start, int end)
+    @Override
+	public void _writeChars(char[] chars, int start, int end)
 
     {
         checkStream(streamSymbol.symbolValue())._writeChars(chars, start, end);
     }
 
-    public void _writeString(String s)
+    @Override
+	public void _writeString(String s)
     {
         checkStream(streamSymbol.symbolValue())._writeString(s);
     }
 
-    public void _writeLine(String s)
+    @Override
+	public void _writeLine(String s)
     {
         checkStream(streamSymbol.symbolValue())._writeLine(s);
     }
 
     // Reads an 8-bit byte.
-    public int _readByte()
+    @Override
+	public int _readByte()
     {
         return checkStream(streamSymbol.symbolValue())._readByte();
     }
 
     // Writes an 8-bit byte.
-    public void _writeByte(int n)
+    @Override
+	public void _writeByte(int n)
     {
         checkStream(streamSymbol.symbolValue())._writeByte(n);
     }
 
-    public void _finishOutput()
+    @Override
+	public void _finishOutput()
     {
         checkStream(streamSymbol.symbolValue())._finishOutput();
     }
 
-    public void _clearInput()
+    @Override
+	public void _clearInput()
     {
         checkStream(streamSymbol.symbolValue())._clearInput();
     }
 
-    protected long _getFilePosition()
+    @Override
+	protected long _getFilePosition()
     {
         return checkStream(streamSymbol.symbolValue())._getFilePosition();
     }
 
-    protected boolean _setFilePosition(LispObject arg)
+    @Override
+	protected boolean _setFilePosition(LispObject arg)
     {
         return checkStream(streamSymbol.symbolValue())._setFilePosition(arg);
     }
 
-    public void _close()
+    @Override
+	public void _close()
     {
         checkStream(streamSymbol.symbolValue())._close();
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         StringBuffer sb = new StringBuffer("SYNONYM-STREAM ");
         sb.append(streamSymbol.printObject());
@@ -212,7 +240,8 @@ public class SynonymStream extends Stream
     private static final Primitive MAKE_SYNONYM_STREAM =
         new Primitive("make-synonym-stream", "symbol")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             return new SynonymStream(checkSymbol(arg));
         }
@@ -222,7 +251,8 @@ public class SynonymStream extends Stream
     private static final Primitive SYNONYM_STREAM_STREAMS =
         new Primitive("synonym-stream-symbol", "synonym-stream")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof SynonymStream)
                 return ((SynonymStream)arg).streamSymbol;

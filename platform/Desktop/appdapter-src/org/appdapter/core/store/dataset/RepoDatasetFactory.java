@@ -100,12 +100,14 @@ public class RepoDatasetFactory implements AnyOper, UIAnnotations.UtilClass
         }
         RepoDatasetFactory.theLogger.error("Invalidating model: " + m);
         m.register((ModelChangedListener)new StatementListener() {
-            public void addedStatement(final Statement s) {
+            @Override
+			public void addedStatement(final Statement s) {
                 super.addedStatement(s);
                 throw new RuntimeException("addNoMods: Dead Model " + m);
             }
             
-            public void removedStatement(final Statement s) {
+            @Override
+			public void removedStatement(final Statement s) {
                 super.removedStatement(s);
                 throw new RuntimeException("addNoMods: Dead Model " + m);
             }

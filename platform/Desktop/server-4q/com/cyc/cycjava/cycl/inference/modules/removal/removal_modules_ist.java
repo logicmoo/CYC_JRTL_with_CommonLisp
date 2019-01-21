@@ -1890,15 +1890,18 @@ public final class removal_modules_ist extends SubLTranslatedFile
         return (SubLObject)removal_modules_ist.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_ist_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_ist_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_ist_file();
     }
     

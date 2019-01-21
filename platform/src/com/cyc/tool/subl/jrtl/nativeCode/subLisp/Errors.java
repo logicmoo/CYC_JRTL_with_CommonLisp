@@ -208,7 +208,7 @@ public class Errors extends SubLTrampolineFile {
 	public static SubLObject cerror(SubLObject continue_string, SubLObject formatString, SubLObject[] arguments) {
 		synchronized (Errors.cerrorLock) {
 			if (false && !SubLMain.isInitialized()) {
-				RuntimeException re = new RuntimeException(formatString.toString());
+				RuntimeException re = new RuntimeException(formatString.princToString());
 				re.printStackTrace();
 				throw re;
 			}
@@ -246,18 +246,23 @@ public class Errors extends SubLTrampolineFile {
 	}
 
 	public static SubLObject error(String str) {
-		final boolean noDebug = Main.isNoDebug();
-		if(noDebug) {
-			throw new SubLException(str);
-		}
 		error(str, null);
 		throw SubLObjectFactory.makeException("Unexpected situation: " + str);
 	}
 
 	public static SubLObject error(String errorString, Throwable e) {
 		if (e instanceof ControlTransfer)
-			throw (Error) e;
-		if (!Main.isSubLisp()) {
+			throw (ControlTransfer) e;
+		if (e instanceof java.lang.reflect.InvocationTargetException)
+		{
+			Throwable e2 = ((java.lang.reflect.InvocationTargetException) e).getTargetException();
+			if (e2 != null)
+			{
+				return error(errorString, e2);
+			}
+		}
+		final boolean isSubLisp = Main.isSubLisp();
+		if (!isSubLisp) {
 			if (e==null) return Lisp.error(new LispError(errorString));
 			return Lisp.error(new JavaException(e));
 		}
@@ -272,15 +277,22 @@ public class Errors extends SubLTrampolineFile {
 				System.err.flush();
 			}
 		}
-		if (e instanceof Error)
-			throw (Error) e;
 		if (e instanceof Unhandleable)
 			throw (Unhandleable) e;
-		errorString = possiblyCallErrorHandler(errorString, e);
+		if (e instanceof Error)
+			throw (Error) e;
+		
+		errorString = possiblyCallErrorHandler(errorString, e);		
 		SubLException se = createErrorException(errorString, e);
+		
 		SubLErrorHistory.me.add(se);
-		if(SubLMain.isInitialized())if (!isInitializedAndReaderThreadAndOriginalErrorStream())
-			throw se;
+		final boolean noDebug = Main.isNoDebug();
+		if (noDebug) { throw se; }
+		if (SubLMain.isInitialized())
+		{
+			if (!isInitializedAndReaderThreadAndOriginalErrorStream()) 
+				throw se;
+		}
 		SubLReader reader = getReaderForCurrentThread();
 		if(reader==null) {
 			reader = BeanShellCntrl.ensureMainReader();
@@ -315,7 +327,11 @@ public class Errors extends SubLTrampolineFile {
 		error(errorString, e);
 		throw SubLObjectFactory.makeException("Unexpected situation.");
 	}
-
+	public static SubLObject error(SubLObject formatString, Throwable e) {
+		String errorString = PrintLow.format(SubLNil.NIL, formatString).getStringValue();
+		error(errorString, e);
+		throw SubLObjectFactory.makeException("Unexpected situation.");
+	}
 	public static SubLObject error(SubLObject formatString, SubLObject arg1) {
 		SubLObject[] args = null;
 		Resourcer resourcer = Resourcer.getInstance();
@@ -377,13 +393,27 @@ public class Errors extends SubLTrampolineFile {
 	public static void handleError(Exception e) {
 		handleError(null, e);
 	}
+	public static void handleError(Throwable e) {
+		handleError(null, e);
+	}
 
-	public static void handleError(String description, Throwable e) {
-		if (e instanceof NullPointerException) {
+	public static void handleError(String description,Throwable  e) {
+		if (e instanceof NullPointerException)
+		{
 			e.printStackTrace();
 		}
-		if (e instanceof Error) {
-
+		if (e instanceof java.lang.reflect.InvocationTargetException)
+		{
+			Throwable e2 = ((java.lang.reflect.InvocationTargetException) e).getTargetException();
+			if (e2 != null)
+			{
+				handleError(description, e2);
+				return;
+			}
+		}
+		if (e instanceof ControlTransfer) { throw (ControlTransfer) e; }
+		if (e instanceof Error)
+		{
 			e.printStackTrace();
 		}
 		synchronized (Errors.handleErrorLock) {

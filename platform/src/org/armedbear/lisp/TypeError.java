@@ -61,7 +61,8 @@ public class TypeError extends LispError
         initialize(initArgs);
     }
 
-    protected void initialize(LispObject initArgs)
+    @Override
+	protected void initialize(LispObject initArgs)
     {
         super.initialize(initArgs);
         LispObject datum = null;
@@ -103,17 +104,20 @@ public class TypeError extends LispError
         setExpectedType(expectedType);
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.TYPE_ERROR;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return StandardClass.TYPE_ERROR;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.TYPE_ERROR)
             return T;
@@ -122,7 +126,8 @@ public class TypeError extends LispError
         return super.typep(type);
     }
 
-    public String getMessage()
+    @Override
+	public String getMessage()
     {
         final LispThread thread = LispThread.currentThread();
         final SpecialBindingsMark mark = thread.markSpecialBindings();
@@ -183,7 +188,8 @@ public class TypeError extends LispError
     private static final Primitive TYPE_ERROR_DATUM =
         new Primitive(Symbol.TYPE_ERROR_DATUM, "condition")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             final StandardObject obj;
             if (arg instanceof StandardObject) {
@@ -200,7 +206,8 @@ public class TypeError extends LispError
     private static final Primitive TYPE_ERROR_EXPECTED_TYPE =
         new Primitive(Symbol.TYPE_ERROR_EXPECTED_TYPE, "condition")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             final StandardObject obj;
             if (arg instanceof StandardObject) {

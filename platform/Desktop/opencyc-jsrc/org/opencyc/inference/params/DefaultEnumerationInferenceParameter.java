@@ -57,7 +57,8 @@ public class DefaultEnumerationInferenceParameter extends AbstractInferenceParam
   }
 
   //// Public Area
-  public boolean isValidValue(Object potentialValue) {
+  @Override
+public boolean isValidValue(Object potentialValue) {
     if (isAlternateValue(potentialValue)) {
       return true;
     }
@@ -67,7 +68,8 @@ public class DefaultEnumerationInferenceParameter extends AbstractInferenceParam
     return false;
   }
 
-  public List<InferenceParameterValueDescription> getPotentialValues() {
+  @Override
+public List<InferenceParameterValueDescription> getPotentialValues() {
     return potentialValues;
   }
 
@@ -101,7 +103,8 @@ public class DefaultEnumerationInferenceParameter extends AbstractInferenceParam
   }
 
  
-  public Object parameterValueCycListApiValue(final Object val) {
+  @Override
+public Object parameterValueCycListApiValue(final Object val) {
     return val;
   }
 

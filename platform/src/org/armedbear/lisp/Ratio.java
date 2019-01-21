@@ -544,7 +544,8 @@ public final class Ratio extends LispObject
         return numerator.hashCode() ^ denominator.hashCode();
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         final LispThread thread = LispThread.currentThread();
         int base = Fixnum.getValue(Symbol.PRINT_BASE.symbolValue(thread));

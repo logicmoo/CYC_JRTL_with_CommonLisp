@@ -79,6 +79,7 @@ public class PrologShell extends Shell
 		//slime = title.startsWith("slime ");
 	}
 
+	@Override
 	public final boolean isProlog()
 	{
 		return true;
@@ -103,6 +104,7 @@ public class PrologShell extends Shell
 		return prolog;
 	}
 
+	@Override
 	protected void startProcess()
 	{
 		if (!BeanShellCntrl.started_from_prolog)
@@ -146,11 +148,13 @@ public class PrologShell extends Shell
 		}
 	}
 
+	@Override
 	protected void initializeHistory()
 	{
 		history = new History("prolog.history", 30);
 	}
 
+	@Override
 	public void enter()
 	{
 		//if (!checkProcess()) return;
@@ -309,6 +313,7 @@ public class PrologShell extends Shell
 		sendInputToProlog(command);
 	}
 
+	@Override
 	protected void stdOutUpdate(final String s)
 	{
 		String prompt;
@@ -338,6 +343,7 @@ public class PrologShell extends Shell
 			output = prompt;
 		Runnable r = new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				Position pos = getEnd();
@@ -362,10 +368,12 @@ public class PrologShell extends Shell
 		SwingUtilities.invokeLater(r);
 	}
 
+	@Override
 	protected void stdErrUpdate(final String s)
 	{
 		Runnable r = new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				appendString(s);
@@ -377,6 +385,7 @@ public class PrologShell extends Shell
 		SwingUtilities.invokeLater(r);
 	}
 
+	@Override
 	protected void appendString(String s)
 	{
 		try
@@ -517,6 +526,7 @@ public class PrologShell extends Shell
 		}
 	}
 
+	@Override
 	public void dispose()
 	{
 		if (!checkProcess())
@@ -526,6 +536,7 @@ public class PrologShell extends Shell
 		}
 		Thread t = new Thread("PrologShell dispose")
 		{
+			@Override
 			public void run()
 			{
 				try
@@ -557,21 +568,25 @@ public class PrologShell extends Shell
 		t.start();
 	}
 
+	@Override
 	public File getCurrentDirectory()
 	{
 		return currentDirectory;
 	}
 
+	@Override
 	public File getCompletionDirectory()
 	{
 		return currentDirectory;
 	}
 
+	@Override
 	public String getFileNameForDisplay()
 	{
 		return title;
 	}
 
+	@Override
 	public String toString()
 	{
 		return title;

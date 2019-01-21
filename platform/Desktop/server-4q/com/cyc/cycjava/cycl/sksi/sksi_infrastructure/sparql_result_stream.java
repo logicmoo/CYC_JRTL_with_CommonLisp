@@ -646,15 +646,18 @@ public final class sparql_result_stream extends SubLTranslatedFile
         return (SubLObject)sparql_result_stream.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sparql_result_stream_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sparql_result_stream_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sparql_result_stream_file();
     }
     

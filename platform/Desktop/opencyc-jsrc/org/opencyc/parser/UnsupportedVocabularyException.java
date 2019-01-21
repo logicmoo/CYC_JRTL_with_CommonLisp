@@ -40,7 +40,8 @@ public class UnsupportedVocabularyException extends Exception {
   
   //// Public Area
   
-  public String getMessage() {
+  @Override
+public String getMessage() {
     return "The following vocabulary is not supported: '" + invalidConstant.cyclify() + "'.";
   }
   

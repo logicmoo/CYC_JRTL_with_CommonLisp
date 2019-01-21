@@ -44,6 +44,7 @@ public class DataSetImpl implements DataSet {
 		}
 	}
 
+	@Override
 	public void addAll(DataSet ds) {
 		if (ds.getSPARQLEndpoint().equals(endpoint) == false) {
 			throw new IllegalArgumentException(
@@ -52,6 +53,7 @@ public class DataSetImpl implements DataSet {
 
 	}
 
+	@Override
 	public Set<RdfGraph> getDefaultGraphs() {
 		Set<RdfGraph> result = new HashSet<RdfGraph>();
 		for (URI u : dataset.getDefaultGraphs()) {
@@ -60,6 +62,7 @@ public class DataSetImpl implements DataSet {
 		return result;
 	}
 
+	@Override
 	public Set<RdfGraph> getNamedGraphs() {
 		Set<RdfGraph> result = new HashSet<RdfGraph>();
 		for (URI u : dataset.getNamedGraphs()) {
@@ -68,10 +71,12 @@ public class DataSetImpl implements DataSet {
 		return result;
 	}
 
+	@Override
 	public SPARQLEndpoint getSPARQLEndpoint() {
 		return endpoint;
 	}
 
+	@Override
 	public CloseableIterator<Statement> getStatements() {
 		String q = "construct {?s ?p ?o} WHERE {?s ?p ?o}";
 		SPARQLQuery query = new SPARQLQueryImpl(q);
@@ -79,6 +84,7 @@ public class DataSetImpl implements DataSet {
 		return endpoint.executeConstruct(query).getStatements();
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof DataSetImpl == false) {
 			return false;
@@ -93,6 +99,7 @@ public class DataSetImpl implements DataSet {
 		return true;
 	}
 
+	@Override
 	public int hashCode() {
 		// the mutable hashcodes are risky (timeStamp)
 		return dataset.toString().hashCode();

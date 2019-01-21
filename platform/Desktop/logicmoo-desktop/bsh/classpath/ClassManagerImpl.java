@@ -146,6 +146,7 @@ public class ClassManagerImpl extends BshClassManager
 	/**
 		@return the class or null
 	*/
+	@Override
 	public Class classForName( String name )
 	{
 		// check positive cache
@@ -241,6 +242,7 @@ public class ClassManagerImpl extends BshClassManager
 		Get a resource URL using the BeanShell classpath
 		@param path should be an absolute path
 	*/
+	@Override
 	public URL getResource( String path ) 
 	{
 		URL url = null;
@@ -256,6 +258,7 @@ public class ClassManagerImpl extends BshClassManager
 		Get a resource stream using the BeanShell classpath
 		@param path should be an absolute path
 	*/
+	@Override
 	public InputStream getResourceAsStream( String path ) 
 	{
 		InputStream in = null;
@@ -279,6 +282,7 @@ public class ClassManagerImpl extends BshClassManager
 
 	/**
 	*/
+	@Override
 	public void addClassPath( URL path ) 
 		throws IOException 
 	{
@@ -296,6 +300,7 @@ public class ClassManagerImpl extends BshClassManager
 		Clear all classloading behavior and class caches and reset to 
 		initial state.
 	*/
+	@Override
 	public void reset()
 	{
 		baseClassPath = new BshClassPath("baseClassPath");
@@ -308,6 +313,7 @@ public class ClassManagerImpl extends BshClassManager
 		Set a new base classpath and create a new base classloader.
 		This means all types change. 
 	*/
+	@Override
 	public void setClassPath( URL [] cp ) {
 		baseClassPath.setPath( cp );
 		initBaseLoader();
@@ -321,6 +327,7 @@ public class ClassManagerImpl extends BshClassManager
 
 		No point in including the boot class path (can't reload thos).
 	*/
+	@Override
 	public void reloadAllClasses() throws ClassPathException 
 	{
 		BshClassPath bcp = new BshClassPath("temp");
@@ -343,6 +350,7 @@ public class ClassManagerImpl extends BshClassManager
 		whenever we are asked for classes in the appropriate space.
 		For this we use a DiscreteFilesClassLoader
 	*/
+	@Override
 	public void reloadClasses( String [] classNames ) 
 		throws ClassPathException
 	{
@@ -403,6 +411,7 @@ public class ClassManagerImpl extends BshClassManager
 		The special package name "<unpackaged>" can be used to refer 
 		to unpackaged classes.
 	*/
+	@Override
 	public void reloadPackage( String pack ) 
 		throws ClassPathException 
 	{
@@ -456,6 +465,7 @@ public class ClassManagerImpl extends BshClassManager
 		Support for "import *;"
 		Hide details in here as opposed to NameSpace.
 	*/
+	@Override
 	public void doSuperImport() 
 		throws UtilEvalError
 	{
@@ -476,18 +486,21 @@ public class ClassManagerImpl extends BshClassManager
 		superImport = true;
 	}
 
+	@Override
 	protected boolean hasSuperImport() { return superImport; }
 
 	/**
 		Return the name or null if none is found,
 		Throw an ClassPathException containing detail if name is ambigous.
 	*/
+	@Override
 	public String getClassNameByUnqName( String name ) 
 		throws ClassPathException
 	{
 		return getClassPath().getClassNameByUnqName( name );
 	}
 
+	@Override
 	public void addListener( Listener l ) {
 		listeners.addElement( new WeakReference( l, refQueue) );
 
@@ -504,6 +517,7 @@ public class ClassManagerImpl extends BshClassManager
 		}
 	}
 
+	@Override
 	public void removeListener( Listener l ) {
 		throw new Error("unimplemented");
 	}
@@ -526,6 +540,7 @@ public class ClassManagerImpl extends BshClassManager
 
 		@exception ClassPathException can be thrown by reloadClasses
 	*/
+	@Override
 	public Class defineClass( String name, byte [] code ) 
 	{
 //System.out.println( "defineClass: "+name );
@@ -545,6 +560,7 @@ public class ClassManagerImpl extends BshClassManager
 		The listener list is implemented with weak references so that we 
 		will not keep every namespace in existence forever.
 	*/
+	@Override
 	protected void classLoaderChanged() 
 	{
 		// clear the static caches in BshClassManager
@@ -564,6 +580,7 @@ public class ClassManagerImpl extends BshClassManager
 			listeners.removeElement( e.nextElement() );
 	}
 
+	@Override
 	public void dump( PrintWriter i ) 
 	{
 		i.println("Bsh Class Manager Dump: ");

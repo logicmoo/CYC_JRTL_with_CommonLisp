@@ -12,6 +12,7 @@ public interface OptionalArg {
 
 	OptionalArg NONE = new OptionalArg() {
 
+		@Override
 		public String toString() {
 			return "OptionalArg.NONE";
 		}
@@ -28,6 +29,7 @@ public interface OptionalArg {
 
 	OptionalArg JUST_NULLS = new OptionalArg() {
 
+		@Override
 		public String toString() {
 			return "OptionalArg.JUST_NULLS";
 		}

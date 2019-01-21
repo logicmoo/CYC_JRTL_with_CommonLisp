@@ -70,7 +70,8 @@ public class SignatureWriter implements SignatureVisitor {
     // Implementation of the SignatureVisitor interface
     // ------------------------------------------------------------------------
 
-    public void visitFormalTypeParameter(final String name) {
+    @Override
+	public void visitFormalTypeParameter(final String name) {
         if (!hasFormals) {
             hasFormals = true;
             buf.append('<');
@@ -79,25 +80,30 @@ public class SignatureWriter implements SignatureVisitor {
         buf.append(':');
     }
 
-    public SignatureVisitor visitClassBound() {
+    @Override
+	public SignatureVisitor visitClassBound() {
         return this;
     }
 
-    public SignatureVisitor visitInterfaceBound() {
+    @Override
+	public SignatureVisitor visitInterfaceBound() {
         buf.append(':');
         return this;
     }
 
-    public SignatureVisitor visitSuperclass() {
+    @Override
+	public SignatureVisitor visitSuperclass() {
         endFormals();
         return this;
     }
 
-    public SignatureVisitor visitInterface() {
+    @Override
+	public SignatureVisitor visitInterface() {
         return this;
     }
 
-    public SignatureVisitor visitParameterType() {
+    @Override
+	public SignatureVisitor visitParameterType() {
         endFormals();
         if (!hasParameters) {
             hasParameters = true;
@@ -106,7 +112,8 @@ public class SignatureWriter implements SignatureVisitor {
         return this;
     }
 
-    public SignatureVisitor visitReturnType() {
+    @Override
+	public SignatureVisitor visitReturnType() {
         endFormals();
         if (!hasParameters) {
             buf.append('(');
@@ -115,40 +122,47 @@ public class SignatureWriter implements SignatureVisitor {
         return this;
     }
 
-    public SignatureVisitor visitExceptionType() {
+    @Override
+	public SignatureVisitor visitExceptionType() {
         buf.append('^');
         return this;
     }
 
-    public void visitBaseType(final char descriptor) {
+    @Override
+	public void visitBaseType(final char descriptor) {
         buf.append(descriptor);
     }
 
-    public void visitTypeVariable(final String name) {
+    @Override
+	public void visitTypeVariable(final String name) {
         buf.append('T');
         buf.append(name);
         buf.append(';');
     }
 
-    public SignatureVisitor visitArrayType() {
+    @Override
+	public SignatureVisitor visitArrayType() {
         buf.append('[');
         return this;
     }
 
-    public void visitClassType(final String name) {
+    @Override
+	public void visitClassType(final String name) {
         buf.append('L');
         buf.append(name);
         argumentStack *= 2;
     }
 
-    public void visitInnerClassType(final String name) {
+    @Override
+	public void visitInnerClassType(final String name) {
         endArguments();
         buf.append('.');
         buf.append(name);
         argumentStack *= 2;
     }
 
-    public void visitTypeArgument() {
+    @Override
+	public void visitTypeArgument() {
         if (argumentStack % 2 == 0) {
             ++argumentStack;
             buf.append('<');
@@ -156,7 +170,8 @@ public class SignatureWriter implements SignatureVisitor {
         buf.append('*');
     }
 
-    public SignatureVisitor visitTypeArgument(final char wildcard) {
+    @Override
+	public SignatureVisitor visitTypeArgument(final char wildcard) {
         if (argumentStack % 2 == 0) {
             ++argumentStack;
             buf.append('<');
@@ -167,7 +182,8 @@ public class SignatureWriter implements SignatureVisitor {
         return this;
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         endArguments();
         buf.append(';');
     }
@@ -177,7 +193,8 @@ public class SignatureWriter implements SignatureVisitor {
      * 
      * @return the signature that was built by this signature writer.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return buf.toString();
     }
 

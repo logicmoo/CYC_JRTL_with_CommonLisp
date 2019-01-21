@@ -436,15 +436,18 @@ public final class sksi_external_mt_contents_browser extends SubLTranslatedFile
         return (SubLObject)sksi_external_mt_contents_browser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_external_mt_contents_browser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_external_mt_contents_browser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_external_mt_contents_browser_file();
     }
     

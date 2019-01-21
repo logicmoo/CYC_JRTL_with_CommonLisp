@@ -43,7 +43,8 @@ public final class get_properties extends Primitive
     super(Symbol.GET_PROPERTIES, "plist indicator-list");
   }
 
-  public LispObject execute(LispObject first, LispObject second)
+  @Override
+public LispObject execute(LispObject first, LispObject second)
 
   {
     final LispThread thread = LispThread.currentThread();

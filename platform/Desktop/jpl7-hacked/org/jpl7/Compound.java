@@ -152,6 +152,7 @@ public class Compound extends Term
 	 * @throws ArrayIndexOutOfBoundsException
 	 *             if i is inappropriate
 	 */
+	@Override
 	public final Term arg(int i)
 	{
 		return args[i - 1];
@@ -162,6 +163,7 @@ public class Compound extends Term
 	 *
 	 * @return the arguments of this Compound as a Term[0..arity-1] array.
 	 */
+	@Override
 	public final Term[] args()
 	{
 		return args;
@@ -172,6 +174,7 @@ public class Compound extends Term
 	 *
 	 * @return the arity (0+) of this Compound
 	 */
+	@Override
 	public final int arity()
 	{
 		return args.length;
@@ -185,6 +188,7 @@ public class Compound extends Term
 	 *            the Object to compare (not necessarily another Compound)
 	 * @return true if the Object satisfies the above condition
 	 */
+	@Override
 	public final boolean equals(Object obj)
 	{
 		return (this == obj || (obj instanceof Compound && name.equals(((Compound) obj).name) && Term.terms_equals(args, ((Compound) obj).args)));
@@ -198,6 +202,7 @@ public class Compound extends Term
 	 * @param vars_to_Vars
 	 *            A Map from Prolog variables to JPL Variables
 	 */
+	@Override
 	protected final void getSubst(Map<String, Term> varnames_to_Terms, Map<term_t, Variable> vars_to_Vars)
 	{
 		try
@@ -218,6 +223,7 @@ public class Compound extends Term
 	 *
 	 * @return whether this Compound's functor has (String) 'name' and 'arity'
 	 */
+	@Override
 	public final boolean hasFunctor(String name, int arity)
 	{
 		return name.equals(this.name) && arity == args.length;
@@ -228,6 +234,7 @@ public class Compound extends Term
 	 *
 	 * @return whether this Term is a 'jboolean' structure denoting Java's false, i.e. @(false)
 	 */
+	@Override
 	public boolean isJFalse()
 	{
 		return hasFunctor("@", 1) && arg(1).isAtomOfNameType("false", "text");
@@ -238,6 +245,7 @@ public class Compound extends Term
 	 *
 	 * @return whether this Term is a 'jnull' structure, i.e. @(null)
 	 */
+	@Override
 	public boolean isJNull()
 	{
 		return hasFunctor("@", 1) && arg(1).isAtomOfNameType("null", "text");
@@ -248,6 +256,7 @@ public class Compound extends Term
 	 *
 	 * @return whether this Term is a 'jboolean' structure denoting Java's true, i.e. @(true)
 	 */
+	@Override
 	public boolean isJTrue()
 	{
 		return hasFunctor("@", 1) && arg(1).isAtomOfNameType("true", "text");
@@ -258,6 +267,7 @@ public class Compound extends Term
 	 *
 	 * @return whether this Term is a 'jvoid' structure, i.e. @(void)
 	 */
+	@Override
 	public boolean isJVoid()
 	{
 		return hasFunctor("@", 1) && arg(1).isAtomOfNameType("void", "text");
@@ -268,6 +278,7 @@ public class Compound extends Term
 	 *
 	 * @return whether this Term denotes (syntax-specifically) a list cell
 	 */
+	@Override
 	public final boolean isListPair()
 	{
 		return hasFunctor(JPL.LIST_PAIR, 2);
@@ -278,6 +289,7 @@ public class Compound extends Term
 	 *
 	 * @return the name (unquoted) of this Compound
 	 */
+	@Override
 	public final String name()
 	{
 		return name;
@@ -419,6 +431,7 @@ public class Compound extends Term
 	 *
 	 * @return string representation of an Compound
 	 */
+	@Override
 	public String toString()
 	{
 
@@ -467,6 +480,7 @@ public class Compound extends Term
 	 *
 	 * @return the type of this term, as jpl.fli.Prolog.COMPOUND
 	 */
+	@Override
 	public int type()
 	{
 		return Prolog.COMPOUND;
@@ -477,6 +491,7 @@ public class Compound extends Term
 	 *
 	 * @return the name of the type of this term, as "Compound"
 	 */
+	@Override
 	public String typeName()
 	{
 		return "Compound";

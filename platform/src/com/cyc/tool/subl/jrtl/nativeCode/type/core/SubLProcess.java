@@ -51,7 +51,7 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
 {
 
 	@Override
-	public LispObject toLispObject()
+	public SubLProcess toLispObject()
 	{
 		return this;
 	}

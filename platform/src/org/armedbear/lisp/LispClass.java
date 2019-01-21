@@ -39,11 +39,13 @@ import static org.armedbear.lisp.Lisp.*;
 public abstract class LispClass extends StandardObject
 {
 
-	  final public String printObject()
+	  @Override
+	final public String printObject()
 	  {
 	    return readableString(Symbol.FIND_CLASS, getLispClassName());
 	  }
-	  final public String printObjectImpl()
+	  @Override
+	final public String printObjectImpl()
 	  {
 	    return readableString(Symbol.FIND_CLASS, getLispClassName());
 	  }
@@ -138,7 +140,8 @@ public abstract class LispClass extends StandardObject
     setDirectSuperclasses(directSuperclasses);
   }
 
-  public LispObject getParts()
+  @Override
+public LispObject getParts()
   {
     LispObject result = NIL;
     result = result.push(new Cons("NAME", name != null ? name : NIL));
@@ -154,7 +157,8 @@ public abstract class LispClass extends StandardObject
     return result.nreverse();
   }
 
-  public final int sxhash()
+  @Override
+public final int sxhash()
   {
     return sxhash;
   }
@@ -180,14 +184,16 @@ public abstract class LispClass extends StandardObject
     this.name = name;
   }
 
-  public final LispObject getPropertyList()
+  @Override
+public final LispObject getPropertyList()
   {
     if (propertyList == null)
       propertyList = NIL;
     return propertyList;
   }
 
-  public final void setPropertyList(LispObject obj)
+  @Override
+public final void setPropertyList(LispObject obj)
   {
     if (obj == null)
       throw new NullPointerException();
@@ -288,17 +294,20 @@ public abstract class LispClass extends StandardObject
     documentation = doc;
   }
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     return Symbol.CLASS;
   }
 
-  public LispObject classOf()
+  @Override
+public LispObject classOf()
   {
     return StandardClass.CLASS;
   }
 
-  public LispObject typep(LispObject type)
+  @Override
+public LispObject typep(LispObject type)
   {
     if (type == Symbol.CLASS)
       return T;
@@ -334,16 +343,19 @@ public abstract class LispClass extends StandardObject
   private static final Primitive FIND_CLASS =
     new Primitive(Symbol.FIND_CLASS, "symbol &optional errorp environment")
     {
-      public LispObject execute(LispObject arg)
+      @Override
+	public LispObject execute(LispObject arg)
       {
         return findClass(arg, true);
       }
-      public LispObject execute(LispObject first, LispObject second)
+      @Override
+	public LispObject execute(LispObject first, LispObject second)
 
       {
         return findClass(first, second != NIL);
       }
-      public LispObject execute(LispObject first, LispObject second,
+      @Override
+	public LispObject execute(LispObject first, LispObject second,
                                 LispObject third)
 
       {
@@ -356,7 +368,8 @@ public abstract class LispClass extends StandardObject
   private static final Primitive _SET_FIND_CLASS =
     new Primitive("%set-find-class", PACKAGE_SYS, true)
     {
-      public LispObject execute(LispObject first, LispObject second)
+      @Override
+	public LispObject execute(LispObject first, LispObject second)
 
       {
         final Symbol name = checkSymbol(first);
@@ -374,7 +387,8 @@ public abstract class LispClass extends StandardObject
   private static final Primitive SUBCLASSP =
     new Primitive(Symbol.SUBCLASSP, "class")
     {
-      public LispObject execute(LispObject first, LispObject second)
+      @Override
+	public LispObject execute(LispObject first, LispObject second)
 
       {
         return LispClass.subclassp(first, second) ? T : NIL;

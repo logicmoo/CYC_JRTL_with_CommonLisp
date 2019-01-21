@@ -35,7 +35,8 @@ public class ClassSelectionComboBoxModel extends DefaultComboBoxModel {
     List classList = new LinkedList(classSet);
 
     Comparator classComparator = new Comparator() {
-      public int compare(Object a, Object b) {
+      @Override
+	public int compare(Object a, Object b) {
         return a.toString().compareTo(b.toString());
       }
     };

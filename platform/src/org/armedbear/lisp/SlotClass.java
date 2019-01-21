@@ -62,7 +62,8 @@ abstract public class SlotClass extends LispClass
         super(layout, symbol, directSuperclasses);
     }
 
-    public LispObject getParts()
+    @Override
+	public LispObject getParts()
     {
         LispObject result = super.getParts().nreverse();
         result = result.push(new Cons("DIRECT-SLOTS",
@@ -75,7 +76,8 @@ abstract public class SlotClass extends LispClass
         return result.nreverse();
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         return super.typep(type);
     }
@@ -190,7 +192,8 @@ abstract public class SlotClass extends LispClass
         {
             super("%class-direct-slots", PACKAGE_SYS, true);
         }
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
 
         {
             if (arg instanceof SlotClass)
@@ -211,7 +214,8 @@ abstract public class SlotClass extends LispClass
             super("%set-class-direct-slots", PACKAGE_SYS, true);
         }
 
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
         {
             if (second instanceof SlotClass) {
                   ((SlotClass)second).setDirectSlotDefinitions(first);
@@ -233,7 +237,8 @@ abstract public class SlotClass extends LispClass
             super(Symbol._CLASS_SLOTS, "class");
         }
 
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof SlotClass)
                 return ((SlotClass)arg).getSlotDefinitions();
@@ -253,7 +258,8 @@ abstract public class SlotClass extends LispClass
         {
             super(Symbol._SET_CLASS_SLOTS, "class slot-definitions");
         }
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
         {
             if (second instanceof SlotClass) {
               ((SlotClass)second).setSlotDefinitions(first);
@@ -273,7 +279,8 @@ abstract public class SlotClass extends LispClass
         {
             super("%class-direct-default-initargs", PACKAGE_SYS, true);
         }
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof SlotClass)
                 return ((SlotClass)arg).getDirectDefaultInitargs();
@@ -292,7 +299,8 @@ abstract public class SlotClass extends LispClass
         {
             super("%set-class-direct-default-initargs", PACKAGE_SYS, true);
         }
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
         {
             if (second instanceof SlotClass) {
                 ((SlotClass)second).setDirectDefaultInitargs(first);
@@ -311,7 +319,8 @@ abstract public class SlotClass extends LispClass
         {
             super("%class-default-initargs", PACKAGE_SYS, true);
         }
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof SlotClass)
                 return ((SlotClass)arg).getDefaultInitargs();
@@ -331,7 +340,8 @@ abstract public class SlotClass extends LispClass
         {
             super("%set-class-default-initargs", PACKAGE_SYS, true);
         }
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
         {
             if (second instanceof SlotClass) {
                 ((SlotClass)second).setDefaultInitargs(first);

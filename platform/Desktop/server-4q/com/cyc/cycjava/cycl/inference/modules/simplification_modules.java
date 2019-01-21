@@ -616,15 +616,18 @@ public final class simplification_modules extends SubLTranslatedFile
         return (SubLObject)simplification_modules.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_simplification_modules_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_simplification_modules_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_simplification_modules_file();
     }
     
@@ -660,7 +663,8 @@ public final class simplification_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SIMPLIFICATION-DUPLICATE-LITERALS-VIA-FUNCTIONALITY-POS-LITS-APPLICABILITY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return simplification_modules.simplification_duplicate_literals_via_functionality_pos_lits_applicability(arg1);
         }
     }

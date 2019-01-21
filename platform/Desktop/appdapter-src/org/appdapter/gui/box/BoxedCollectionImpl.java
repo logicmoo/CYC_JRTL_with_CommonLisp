@@ -213,11 +213,13 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 		return false;
 	}
 
+	@Override
 	public boolean addValueBoxed(Object val, BT wrapper) {
 		boolean notify = addNameValueBoxed(null, val, wrapper);
 		return notify;
 	}
 
+	@Override
 	public boolean addTitleBoxed(String title, BT wrapper) {
 		boolean notify = addNameValueBoxed(title, null, wrapper);
 		return notify;
@@ -283,6 +285,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	/**
 	 * Listeners will find out when objects are added or removed
 	 */
+	@Override
 	public void addListener(POJOCollectionListener l, boolean catchup) {
 		synchronized (syncObject) {
 			colListeners.add(l);
@@ -324,6 +327,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	 * Listeners will be notifed when the currently value selection
 	 * is changed.
 	 */
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener p) {
 		synchronized (syncObject) {
 			propSupport.addPropertyChangeListener(p);
@@ -362,6 +366,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	 *
 	 * @returns the newly created ScreenBox
 	 */
+	@Override
 	public synchronized Object createAndAddObject(Class cl) throws InstantiationException, IllegalAccessException {
 		//Create the value
 		Object value = cl.newInstance();
@@ -403,6 +408,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	 * the ScreenBox who's value corresponds to the given one.
 	 * Returns null if the BoxedCollection does not contain the given value.
 	 */
+	@Override
 	public BT findBoxByObject(Object value) {
 
 		if (value == null)
@@ -437,6 +443,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	/**
 	 * Returns the value with the given name, or null if none.
 	 */
+	@Override
 	public Object findObjectByName(String name) {
 		BT wrapper = findBoxByName(name);
 		if (wrapper == null) {
@@ -450,6 +457,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	 * Returns all objects representing objects that are an instance of the given class
 	 * or interface, either directly or indirectly.
 	 */
+	@Override
 	public Collection findObjectsByType(Class type) {
 		if (type == null)
 			return getLiveCollection();
@@ -494,6 +502,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	 *
 	 * @returns true if the value was added, i.e. if it didn't already exist.
 	 */
+	@Override
 	public BT findOrCreateBox(String title, Object value) throws PropertyVetoException {
 		BT wrapper = Utility.asBTNoCreate(value);
 		if (wrapper != null) {
@@ -590,6 +599,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 		}
 	}
 
+	@Override
 	public DisplayContext getDisplayContext() {
 		if (displayContext != null)
 			return displayContext;
@@ -627,6 +637,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	/**
 	 * Returns an iterator over all the objects
 	 */
+	@Override
 	public Iterator getObjects() {
 		synchronized (syncObject) {
 			synchronized (objectsToWrappers) {
@@ -635,6 +646,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 		}
 	}
 
+	@Override
 	public Iterable<BT> getScreenBoxes() {
 		synchronized (syncObject) {
 			return (Iterable<BT>) ReflectUtils.copyOf(boxList);
@@ -666,6 +678,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 		return Utility.generateUniqueName(wrapper.getValue(), this.nameIndex);
 	}
 
+	@Override
 	public String getTitleOf(Object value) {
 		if (value == null)
 			return "<null>";
@@ -701,6 +714,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	 * transient instance variables that were "lost" during the
 	 * serialization, and add itself as listener to all the objects.
 	 */
+	@Override
 	public void initAfterLoading() {
 		synchronized (syncObject) {
 			if (colListeners == null) {
@@ -737,6 +751,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	 * such as "name" or "selected" has changed. The NamedObjectCollection will update
 	 * its state as necessary.
 	 */
+	@Override
 	public synchronized void propertyChange(PropertyChangeEvent evt) {
 		synchronized (syncObject) {
 			propertyChange0(evt);
@@ -809,6 +824,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	 * will be notified. <p>
 	 *
 	 */
+	@Override
 	public synchronized boolean removeObject(Object value) {
 
 		//Find the wrapper
@@ -909,6 +925,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	 * Listeners will be notifed when the currently value selection
 	 * is changed.
 	 */
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener p) {
 		synchronized (syncObject) {
 			propSupport.removePropertyChangeListener(p);
@@ -996,6 +1013,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 	 * This would happen, for example, if someone is trying to rename a value to a
 	 * name that another value within this namedObjects already has.
 	 */
+	@Override
 	public void vetoableChange(PropertyChangeEvent evt) throws PropertyVetoException {
 		if (evt.getPropertyName().equals("name")) {
 			//The name of a wrapper has changed. Make sure there are no name collisions
@@ -1100,6 +1118,7 @@ VetoableChangeListener, PropertyChangeListener, Serializable, Set {
 
 	BoxMap boxMap = new BoxMap();
 
+	@Override
 	public Map<String, Object> getLiveMap() {
 		return boxMap;
 	}

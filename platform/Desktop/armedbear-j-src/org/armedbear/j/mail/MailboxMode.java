@@ -64,7 +64,8 @@ public class MailboxMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public NavigationComponent getSidebarComponent(Editor editor)
+    @Override
+	public NavigationComponent getSidebarComponent(Editor editor)
     {
         View view = editor.getCurrentView();
         if (view == null)
@@ -74,12 +75,14 @@ public class MailboxMode extends AbstractMode implements Constants, Mode
         return view.getSidebarComponent();
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new MailboxFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_HOME, 0, "bol");
         km.mapKey(KeyEvent.VK_END, CTRL_MASK, "mailboxLastMessage");
@@ -107,7 +110,8 @@ public class MailboxMode extends AbstractMode implements Constants, Mode
         km.mapKey('F', "mailboxFlag");
     }
 
-    public void populateMenu(Editor editor, Menu menu)
+    @Override
+	public void populateMenu(Editor editor, Menu menu)
     {
         final String text = menu.getText();
         if (text == "View") {
@@ -143,12 +147,14 @@ public class MailboxMode extends AbstractMode implements Constants, Mode
             super.populateMenu(editor, menu);
     }
 
-    protected ToolBar getDefaultToolBar(Frame frame)
+    @Override
+	protected ToolBar getDefaultToolBar(Frame frame)
     {
         return new MailboxModeToolBar(frame);
     }
 
-    public String getContextString(Editor editor, boolean verbose)
+    @Override
+	public String getContextString(Editor editor, boolean verbose)
     {
         Position dot = editor.getDot();
         if (dot != null) {

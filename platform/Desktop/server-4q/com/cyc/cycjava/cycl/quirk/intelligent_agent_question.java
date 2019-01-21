@@ -244,15 +244,18 @@ public final class intelligent_agent_question extends SubLTranslatedFile
         return (SubLObject)intelligent_agent_question.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_intelligent_agent_question_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_intelligent_agent_question_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_intelligent_agent_question_file();
     }
     

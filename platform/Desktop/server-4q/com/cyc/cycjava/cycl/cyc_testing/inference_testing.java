@@ -2337,15 +2337,18 @@ public final class inference_testing extends SubLTranslatedFile
         return (SubLObject)inference_testing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_testing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_testing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_testing_file();
     }
     

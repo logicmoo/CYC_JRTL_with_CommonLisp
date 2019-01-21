@@ -4267,15 +4267,18 @@ public final class nl_trie_accessors extends SubLTranslatedFile
         return (SubLObject)nl_trie_accessors.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_nl_trie_accessors_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_nl_trie_accessors_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_nl_trie_accessors_file();
     }
     
@@ -4477,7 +4480,8 @@ public final class nl_trie_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NL-TRIE-INAPPROPRIATE-ENTRY?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nl_trie_accessors.nl_trie_inappropriate_entryP(arg1, (SubLObject)$nl_trie_inappropriate_entryP$UnaryFunction.UNPROVIDED);
         }
     }
@@ -4488,7 +4492,8 @@ public final class nl_trie_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NL-TRIE-INAPPROPRIATE-ENTRY?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return nl_trie_accessors.nl_trie_inappropriate_entryP(arg1, arg2);
         }
     }
@@ -4506,31 +4511,38 @@ public final class nl_trie_accessors extends SubLTranslatedFile
             this.$mt = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$nl_trie_index_item_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$term;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$phrase;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$mt;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$term = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$phrase = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$mt = value;
         }
         
@@ -4545,7 +4557,8 @@ public final class nl_trie_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NL-TRIE-INDEX-ITEM-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return nl_trie_accessors.nl_trie_index_item_p(arg1);
         }
     }

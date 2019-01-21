@@ -14,15 +14,18 @@ public class SimplistRepoSpec extends RepoSpec
         return this.wd;
     }
     
-    public Model getDirectoryModel() {
+    @Override
+	public Model getDirectoryModel() {
         return this.wd().getDirectoryModel();
     }
     
-    public Repo.WithDirectory makeRepo() {
+    @Override
+	public Repo.WithDirectory makeRepo() {
         return this.wd();
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuilder().append((Object)"SimplestSpec[").append((Object)this.wd()).append((Object)"]").toString();
     }
     

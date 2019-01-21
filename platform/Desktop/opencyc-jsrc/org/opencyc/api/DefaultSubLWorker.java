@@ -285,7 +285,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @return the SubL command that will be evaluated to execute the
    * work requested by this SubLWorker
    */
-  public CycList getSubLCommand() {
+  @Override
+public CycList getSubLCommand() {
     return subLCommand;
   }
   
@@ -305,7 +306,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * The Cyc server that should do the work.
    * @return the Cyc server that should do the work
    */
-  public CycAccess getCycServer() {
+  @Override
+public CycAccess getCycServer() {
     return access;
   }
   
@@ -315,7 +317,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @return the unique id for this communication. It typically won't
    * be valid until the start event has been sent out.
    */
-  public Integer getId() {
+  @Override
+public Integer getId() {
     return id;
   }
   
@@ -325,7 +328,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @throws TimeOutException if the communication with Cyc takes too long
    * @throws CycApiException all other errors
    */
-  public synchronized void start() 
+  @Override
+public synchronized void start() 
   throws IOException, TimeOutException, CycApiException {
     if (getStatus() != SubLWorkerStatus.NOT_STARTED_STATUS) { 
       throw new RuntimeException("This communication has already been started.");
@@ -341,7 +345,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * the natural termination event messaging infracture.
    * @throws IOException if communications with the Cyc server fails
    */
-  public void cancel() throws java.io.IOException {
+  @Override
+public void cancel() throws java.io.IOException {
     if (!(getStatus() == SubLWorkerStatus.WORKING_STATUS)) { return; }
     CycAccess cycAccess = getCycServer();
      synchronized (cycAccess) {
@@ -355,7 +360,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * no new messages being sent back to the Java client.
    * @throws IOException throws IO exception if communication with Cyc server fails
    */
-  public void abort() throws java.io.IOException {
+  @Override
+public void abort() throws java.io.IOException {
     if (!(getStatus() == SubLWorkerStatus.WORKING_STATUS)) { return; }
     CycAccess cycAccess = getCycServer();
      synchronized (cycAccess) {
@@ -363,7 +369,8 @@ public class DefaultSubLWorker implements SubLWorker {
     }
   }
   
-  public void cancelTask() {
+  @Override
+public void cancelTask() {
     try {
      abort();
     } catch (java.io.IOException e) {
@@ -381,7 +388,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @see CycConnection#MIN_PRIORITY
    * @return the priority of the process
    */
-  public Integer getPriority() {
+  @Override
+public Integer getPriority() {
     return priority;
   }
   
@@ -389,7 +397,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * Returns the current status of this SubLWorker.
    * @return the current status of this SubLWorker
    */
-  public SubLWorkerStatus getStatus() { 
+  @Override
+public SubLWorkerStatus getStatus() { 
     return status;
   }
   
@@ -399,7 +408,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @return a boolean indicating whether communications with the Cyc server
    * on behalf of this SubLWorker have terminated
    */
-  public boolean isDone() {
+  @Override
+public boolean isDone() {
     SubLWorkerStatus status = getStatus();
     return !((status == SubLWorkerStatus.NOT_STARTED_STATUS) 
       || (status == SubLWorkerStatus.WORKING_STATUS));
@@ -411,14 +421,16 @@ public class DefaultSubLWorker implements SubLWorker {
    * @return the number of msecs that this communication will wait before 
    * throwing a TimeOutException
    */
-  public long getTimeoutMsecs() { 
+  @Override
+public long getTimeoutMsecs() { 
     return timeoutMsecs;
   }
   
   /** Returns wether this communication should expect incremental results.
    * @return wether this communication should expect incremental results
    */
-  public boolean expectIncrementalResults() {
+  @Override
+public boolean expectIncrementalResults() {
     return expectIncrementalResults;
   }
   
@@ -428,7 +440,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @return all the SubLWorkerListeners listening in on this
    * SubLWorker's events
    */
-  public Object[] getListeners() {
+  @Override
+public Object[] getListeners() {
     return listeners.getListeners(listenerClass);
   }
   
@@ -437,7 +450,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @param listener the listener that wishes to listen
    * for events sent out by this SubLWorker
    */
-  public void addListener(SubLWorkerListener listener) {
+  @Override
+public void addListener(SubLWorkerListener listener) {
     listeners.add(listenerClass, listener);
   }
   
@@ -446,12 +460,14 @@ public class DefaultSubLWorker implements SubLWorker {
    * @param listener the listener that no longer wishes
    * to receive events from this SubLWorker
    */
-  public void removeListener(SubLWorkerListener listener) {
+  @Override
+public void removeListener(SubLWorkerListener listener) {
      listeners.remove(listenerClass, listener);
   }
   
   /** Removes all listeners from this SubLWorker. */
-  public void removeAllListeners() { 
+  @Override
+public void removeAllListeners() { 
     Object[] listenerArray = listeners.getListenerList();
     for (int i = 0, size = listenerArray.length; i < size; i += 2) {
       listeners.remove((Class)listenerArray[i], 
@@ -463,7 +479,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * Returns a string representation of the SubLWorker.
    * @return a string representation of the SubLWorker
    */
-  public String toString() {
+  @Override
+public String toString() {
     return toString(2);
   }
   
@@ -472,7 +489,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @param indentLength the number of spaces to preceed each line of 
    * output String
    */
-  public String toString(int indentLength) {
+  @Override
+public String toString(int indentLength) {
     StringBuffer nlBuff = new StringBuffer();
     nlBuff.append(System.getProperty("line.separator"));
     for (int i = 1; i < indentLength; i++) { nlBuff.append(" "); }
@@ -496,7 +514,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @param event The start event that should be transmitted to
    * listeners of this SubLWorker
    */
-  public void fireSubLWorkerStartedEvent(SubLWorkerEvent event) {
+  @Override
+public void fireSubLWorkerStartedEvent(SubLWorkerEvent event) {
     if (event.getEventType() != SubLWorkerEvent.STARTING_EVENT_TYPE) {
       throw new RuntimeException("Got bad event type; " + 
         event.getEventType().getName());
@@ -522,7 +541,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @param event The data available event that should be transmitted to
    * listeners of this SubLWorker
    */
-  public void fireSubLWorkerDataAvailableEvent(SubLWorkerEvent event) {
+  @Override
+public void fireSubLWorkerDataAvailableEvent(SubLWorkerEvent event) {
     if (event.getEventType() != SubLWorkerEvent.DATA_AVAILABLE_EVENT_TYPE) {
       throw new RuntimeException("Got bad event type; " + 
         event.getEventType().getName());
@@ -548,7 +568,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * @param event The termination event that should be transmitted to
    * listeners of this SubLWorker
    */
-  public void fireSubLWorkerTerminatedEvent(SubLWorkerEvent event) {
+  @Override
+public void fireSubLWorkerTerminatedEvent(SubLWorkerEvent event) {
     if (event.getEventType() != SubLWorkerEvent.TERMINATION_EVENT_TYPE) {
       throw new RuntimeException("Got bad event type; " + 
         event.getEventType().getName());
@@ -572,7 +593,8 @@ public class DefaultSubLWorker implements SubLWorker {
    * Indicates whether this communication should be attempted even if
    * the current lease to the Cyc image has expired.
    */  
-  public boolean shouldIgnoreInvalidLeases() {
+  @Override
+public boolean shouldIgnoreInvalidLeases() {
     return shouldIgnoreInvalidLeases;
   }
   
@@ -597,7 +619,8 @@ public class DefaultSubLWorker implements SubLWorker {
     this.status = status;
   }
   
-  public BlockingQueue<NotificationTask> getNotificationQueue() {
+  @Override
+public BlockingQueue<NotificationTask> getNotificationQueue() {
     return notificationQueue;
   }
   
@@ -649,13 +672,16 @@ public class DefaultSubLWorker implements SubLWorker {
       CycAccess access = new CycAccess("localhost", 3600);
       SubLWorker worker = new DefaultSubLWorker("(+ 1 1)", access);
       worker.addListener(new SubLWorkerListener() {
-        public void notifySubLWorkerStarted(SubLWorkerEvent event) {
+        @Override
+		public void notifySubLWorkerStarted(SubLWorkerEvent event) {
           System.out.println("Received SubL Worker Event: \n" + event.toString(2) + "\n");
         }
-        public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
+        @Override
+		public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
           System.out.println("Received SubL Worker Event: \n" + event.toString(2) + "\n");
         }
-        public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
+        @Override
+		public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
           System.out.println("Received SubL Worker Event: \n" + event.toString(2) + "\n");
           System.exit(0);
         }

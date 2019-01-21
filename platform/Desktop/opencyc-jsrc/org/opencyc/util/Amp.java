@@ -112,7 +112,8 @@ public class Amp
      *
      * @return the AMP message string
      */
-    public String toString () {
+    @Override
+	public String toString () {
         if (ampString == "")
             generateAmpString();
         return  ampString;

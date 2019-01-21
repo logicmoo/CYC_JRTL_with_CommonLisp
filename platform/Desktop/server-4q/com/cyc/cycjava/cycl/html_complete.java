@@ -2917,15 +2917,18 @@ public final class html_complete extends SubLTranslatedFile
         return (SubLObject)html_complete.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_html_complete_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_html_complete_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_html_complete_file();
     }
     

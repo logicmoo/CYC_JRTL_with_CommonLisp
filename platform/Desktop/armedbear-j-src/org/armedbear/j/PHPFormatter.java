@@ -533,7 +533,8 @@ public final class PHPFormatter extends Formatter implements Constants
         }
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         clearSegmentList();
         if (line == null) {
@@ -544,7 +545,8 @@ public final class PHPFormatter extends Formatter implements Constants
         return segmentList;
     }
 
-    public boolean parseBuffer()
+    @Override
+	public boolean parseBuffer()
     {
         Line line = buffer.getFirstLine();
         if (line == null)
@@ -790,7 +792,8 @@ public final class PHPFormatter extends Formatter implements Constants
         return opchars.indexOf(c) >= 0;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("PHPMode");

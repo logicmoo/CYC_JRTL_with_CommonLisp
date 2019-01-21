@@ -44,6 +44,7 @@ public class ScreenBoxTreeNodeImpl extends AbstractScreenBoxTreeNodeImpl impleme
 		}
 	}
 
+	@Override
 	public Object getUserObject() {
 		Object userObject = super.getUserObject();
 		if (userObject instanceof WrapperValue) {
@@ -117,6 +118,7 @@ public class ScreenBoxTreeNodeImpl extends AbstractScreenBoxTreeNodeImpl impleme
 		return Utility.getBoxPanelTabPane();
 	}
 
+	@Override
 	final public DisplayContext findDisplayContext(Box b) {
 		return super.findTreeNodeDisplayContext(b);
 	}
@@ -145,6 +147,7 @@ public class ScreenBoxTreeNodeImpl extends AbstractScreenBoxTreeNodeImpl impleme
 		setUserObject(box);
 	}
 
+	@Override
 	public Iterable<BT> getTreeChildren() {
 		List<BT> results = new ArrayList<BT>();
 		ScreenBoxTreeNode parentNode = (ScreenBoxTreeNode) this;

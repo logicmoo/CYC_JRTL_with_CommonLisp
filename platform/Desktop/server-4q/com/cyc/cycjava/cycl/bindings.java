@@ -1185,15 +1185,18 @@ public final class bindings extends SubLTranslatedFile
         return (SubLObject)bindings.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_bindings_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_bindings_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_bindings_file();
     }
     
@@ -1285,7 +1288,8 @@ public final class bindings extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("BINDING-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return bindings.binding_p(arg1);
         }
     }
@@ -1296,7 +1300,8 @@ public final class bindings extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INFERENCE-BINDING-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return bindings.inference_binding_p(arg1);
         }
     }
@@ -1307,7 +1312,8 @@ public final class bindings extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SUBST-BINDINGS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return bindings.subst_bindings(arg1, arg2);
         }
     }
@@ -1318,7 +1324,8 @@ public final class bindings extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VARIABLE-BINDING-VARIABLE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return bindings.variable_binding_variable(arg1);
         }
     }
@@ -1329,7 +1336,8 @@ public final class bindings extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VARIABLE-BINDING-VALUE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return bindings.variable_binding_value(arg1);
         }
     }

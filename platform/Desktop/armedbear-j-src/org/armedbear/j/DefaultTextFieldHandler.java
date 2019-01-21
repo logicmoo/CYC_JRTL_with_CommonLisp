@@ -57,11 +57,13 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         this(Editor.currentEditor(), textField);
     }
 
-    public void enter()
+    @Override
+	public void enter()
     {
     }
 
-    public void escape()
+    @Override
+	public void escape()
     {
         Container c = textField.getParent();
         while (true) {
@@ -79,12 +81,14 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         editor.updateLocation();
     }
 
-    public boolean wantTab()
+    @Override
+	public boolean wantTab()
     {
         return false;
     }
 
-    public void tab()
+    @Override
+	public void tab()
     {
         if (textField != null) {
             String prefix = textField.getText();
@@ -96,7 +100,8 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         }
     }
 
-    public void shiftTab()
+    @Override
+	public void shiftTab()
     {
         if (textField != null) {
             String s = getPreviousCompletion();
@@ -110,7 +115,8 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         }
     }
 
-    public void resetCompletions()
+    @Override
+	public void resetCompletions()
     {
         completions = null;
     }
@@ -139,7 +145,8 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         return null;
     }
 
-    public List getCompletions(String prefix)
+    @Override
+	public List getCompletions(String prefix)
     {
         return null;
     }
@@ -179,7 +186,8 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         head = null;
     }
 
-    public Expansion getExpansion(String prefix)
+    @Override
+	public Expansion getExpansion(String prefix)
     {
         return new Expansion(editor.getBuffer(), prefix, prefix);
     }
@@ -190,7 +198,8 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         textField.getHandler().resetCompletions();
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         TextFieldHandler handler = textField.getHandler();
         if (handler == null)
@@ -292,14 +301,16 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         resetExpansion();
     }
 
-    public void keyReleased(KeyEvent e)
+    @Override
+	public void keyReleased(KeyEvent e)
     {
         TextListener textListener = textField.getTextListener();
         if (textListener != null)
             textListener.textValueChanged(new TextEvent(this, TextEvent.TEXT_VALUE_CHANGED));
     }
 
-    public void keyTyped(KeyEvent e) {}
+    @Override
+	public void keyTyped(KeyEvent e) {}
 
     private void showPopup()
     {
@@ -327,7 +338,8 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
     }
 
     private ActionListener popupActionListener = new ActionListener() {
-        public void actionPerformed(ActionEvent e)
+        @Override
+		public void actionPerformed(ActionEvent e)
         {
             textField.setText(e.getActionCommand());
             enter();

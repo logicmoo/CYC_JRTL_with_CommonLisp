@@ -55,12 +55,14 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new HtmlFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_TAB, 0, "tab");
         km.mapKey(KeyEvent.VK_TAB, CTRL_MASK, "insertTab");
@@ -83,17 +85,20 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
         km.mapKey(0x7e, CTRL_MASK | SHIFT_MASK, "htmlEndTag");
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
 
-    public boolean canIndentPaste()
+    @Override
+	public boolean canIndentPaste()
     {
         return false;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         if (line.flags() == STATE_SCRIPT)
             return JavaScriptMode.getMode().getCorrectIndentation(line, buffer);
@@ -226,7 +231,8 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
         return model;
     }
 
-    public char fixCase(Editor editor, char c)
+    @Override
+	public char fixCase(Editor editor, char c)
     {
         if (!editor.getBuffer().getBooleanProperty(Property.FIX_CASE))
             return c;

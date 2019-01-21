@@ -18,7 +18,8 @@ class ConnectionTimer extends Thread {
 
   /** Waits for either the CycConnection constructor thread to set the done indicator, or kills the
    * connection after the timeout is exceeded. */
-  public void run() {
+  @Override
+public void run() {
     try {
       while (!isCycConnectionEstablished) {
         Thread.sleep(WAIT_TIME_INCREMENT);

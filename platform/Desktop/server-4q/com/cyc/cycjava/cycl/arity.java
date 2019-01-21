@@ -1151,15 +1151,18 @@ public final class arity extends SubLTranslatedFile
         return (SubLObject)arity.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_arity_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_arity_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_arity_file();
     }
     
@@ -1225,7 +1228,8 @@ public final class arity extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ARITY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return arity.arity(arg1);
         }
     }

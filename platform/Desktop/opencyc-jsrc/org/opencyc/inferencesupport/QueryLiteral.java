@@ -84,7 +84,8 @@ public class QueryLiteral extends Literal implements Comparable{
      *
      * @return a clone of this instance
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         return new QueryLiteral((CycList) this.formula.clone());
     }
 

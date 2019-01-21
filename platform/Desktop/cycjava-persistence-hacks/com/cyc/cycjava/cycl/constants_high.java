@@ -157,6 +157,7 @@ public final class constants_high extends SubLTranslatedFile
     private static final SubLSymbol $sym104$_CONSTANT_NAME_OBFUSCATION_FN_;
     private static final SubLInteger $int105$100;
     private static final SubLSymbol $sym106$FIND_CONSTANT_BY_SUID;
+	private static final boolean $find_renamed$ = false;
     
     @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 1074L)
     public static SubLObject do_recent_constants(final SubLObject macroform, final SubLObject environment) {
@@ -348,7 +349,11 @@ public final class constants_high extends SubLTranslatedFile
     @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 5869L)
     public static SubLObject find_constant(final SubLObject name) {
         enforceType(name, constants_high.$sym20$STRINGP);
-        return constants_interface.kb_lookup_constant_by_name(name);
+        SubLObject constant = constants_interface.kb_lookup_constant_by_name(name);
+        if($find_renamed$ && constant==NIL) {
+        	
+        }
+        return constant;
     }
     
     @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 6116L)
@@ -979,15 +984,18 @@ public final class constants_high extends SubLTranslatedFile
         return (SubLObject)constants_high.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_constants_high_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_constants_high_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_constants_high_file();
     }
     

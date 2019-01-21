@@ -19,6 +19,7 @@ import org.appdapter.gui.browse.Utility;
 
 public class SimplePOJOInfo extends SimpleBeanInfo {
 
+	@Override
 	final public BeanDescriptor getBeanDescriptor() {
 		if (normalBeanInfo != null) {
 			BeanDescriptor bd = normalBeanInfo.getBeanDescriptor();
@@ -82,6 +83,7 @@ public class SimplePOJOInfo extends SimpleBeanInfo {
 	 *		"wombat.gif".
 	 * @return  an image object.  May be null if the load failed.
 	 */
+	@Override
 	public java.awt.Image loadImage(final String resourceName) {
 		java.awt.Image img = Utility.loadImage(getClass(), resourceName);
 		if (img != null)
@@ -132,6 +134,7 @@ public class SimplePOJOInfo extends SimpleBeanInfo {
 		return normalBeanInfo;
 	}
 
+	@Override
 	final public BeanInfo[] getAdditionalBeanInfo() {
 		if (true)
 			return null;

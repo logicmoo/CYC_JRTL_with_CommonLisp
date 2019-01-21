@@ -146,6 +146,7 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 	 * <code>columnNames</code> does not have an entry for this index
 	 * then the default name provided by the superclass is returned
 	 */
+	@Override
 	public String getColumnName(int column) {
 		Object columnName = null;
 
@@ -452,6 +453,7 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 	 *  @exception  IndexOutOfBoundsException  if an invalid column
 	 *	            was given
 	 */
+	@Override
 	public void setColumnName(int column, String name) {
 		ColumnInformation ci = (ColumnInformation) columns.get(column);
 		ci.setName(name);
@@ -528,6 +530,7 @@ public class BeanTableModel<T> extends RowTableModel<T> {
 		/*
 		 *  Implement the natural sort order for this class
 		 */
+		@Override
 		public int compareTo(ColumnInformation o) {
 			return getName().compareTo(o.getName());
 		}

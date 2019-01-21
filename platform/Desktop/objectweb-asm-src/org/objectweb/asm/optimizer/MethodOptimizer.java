@@ -58,12 +58,14 @@ public class MethodOptimizer extends RemappingMethodAdapter {
     // Overridden methods
     // ------------------------------------------------------------------------
 
-    public AnnotationVisitor visitAnnotationDefault() {
+    @Override
+	public AnnotationVisitor visitAnnotationDefault() {
         // remove annotations
         return null;
     }
 
-    public AnnotationVisitor visitParameterAnnotation(
+    @Override
+	public AnnotationVisitor visitParameterAnnotation(
         final int parameter,
         final String desc,
         final boolean visible)
@@ -72,7 +74,8 @@ public class MethodOptimizer extends RemappingMethodAdapter {
         return null;
     }
 
-    public void visitLocalVariable(
+    @Override
+	public void visitLocalVariable(
         final String name,
         final String desc,
         final String signature,
@@ -83,11 +86,13 @@ public class MethodOptimizer extends RemappingMethodAdapter {
         // remove debug info
     }
 
-    public void visitLineNumber(final int line, final Label start) {
+    @Override
+	public void visitLineNumber(final int line, final Label start) {
         // remove debug info
     }
     
-    public void visitFrame(
+    @Override
+	public void visitFrame(
         int type,
         int local,
         Object[] local2,
@@ -97,7 +102,8 @@ public class MethodOptimizer extends RemappingMethodAdapter {
         // remove frame info
     }
     
-    public void visitAttribute(Attribute attr) {
+    @Override
+	public void visitAttribute(Attribute attr) {
         // remove non standard attributes
     }
 }

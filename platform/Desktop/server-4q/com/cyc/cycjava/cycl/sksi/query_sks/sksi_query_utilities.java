@@ -2570,15 +2570,18 @@ public final class sksi_query_utilities extends SubLTranslatedFile
         return (SubLObject)sksi_query_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_query_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_query_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_query_utilities_file();
     }
     
@@ -2676,7 +2679,8 @@ public final class sksi_query_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SKSI-COST-RECORDING-ITERATOR-DONE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sksi_query_utilities.sksi_cost_recording_iterator_done(arg1);
         }
     }

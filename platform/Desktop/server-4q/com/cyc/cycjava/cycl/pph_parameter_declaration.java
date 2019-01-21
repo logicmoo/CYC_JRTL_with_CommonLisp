@@ -358,15 +358,18 @@ public final class pph_parameter_declaration extends SubLTranslatedFile
         return (SubLObject)pph_parameter_declaration.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_parameter_declaration_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_parameter_declaration_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_parameter_declaration_file();
     }
     

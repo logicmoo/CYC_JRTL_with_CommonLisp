@@ -1198,15 +1198,18 @@ public final class removal_tactician_uninterestingness extends SubLTranslatedFil
         return (SubLObject)removal_tactician_uninterestingness.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_tactician_uninterestingness_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_tactician_uninterestingness_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_tactician_uninterestingness_file();
     }
     

@@ -539,15 +539,18 @@ public final class instances extends SubLTranslatedFile
         return (SubLObject)instances.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_instances_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_instances_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_instances_file();
     }
     

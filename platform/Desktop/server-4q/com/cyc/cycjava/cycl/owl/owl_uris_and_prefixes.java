@@ -449,15 +449,18 @@ public final class owl_uris_and_prefixes extends SubLTranslatedFile
         return (SubLObject)owl_uris_and_prefixes.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_owl_uris_and_prefixes_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_owl_uris_and_prefixes_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_owl_uris_and_prefixes_file();
     }
     

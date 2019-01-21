@@ -55,7 +55,8 @@ public final class AsynchronousShellCommand implements Constants, Runnable
         thread.start();
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         if (!Platform.isPlatformUnix()) {
             Debug.bug();
@@ -125,7 +126,8 @@ public final class AsynchronousShellCommand implements Constants, Runnable
     private void appendLater(final String s)
     {
         Runnable runnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 outputBuffer.insertString(posEndOfBuffer, s);
                 if (outputBuffer.needsRenumbering())
@@ -152,7 +154,8 @@ public final class AsynchronousShellCommand implements Constants, Runnable
             super(inputStream);
         }
 
-        public void update(final String s)
+        @Override
+		public void update(final String s)
         {
             appendLater(s);
         }
@@ -198,22 +201,26 @@ public final class AsynchronousShellCommand implements Constants, Runnable
             this.shellCommand = shellCommand;
         }
 
-        public int load()
+        @Override
+		public int load()
         {
             return LOAD_COMPLETED;
         }
 
-        public String getFileNameForDisplay()
+        @Override
+		public String getFileNameForDisplay()
         {
             return title != null ? title : "";
         }
 
-        public boolean isModified()
+        @Override
+		public boolean isModified()
         {
             return false;
         }
 
-        public void dispose()
+        @Override
+		public void dispose()
         {
             if (shellCommand != null)
                 shellCommand.interrupt();

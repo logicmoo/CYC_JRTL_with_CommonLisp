@@ -1444,15 +1444,18 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
         return (SubLObject)cfasl_kb_methods.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cfasl_kb_methods_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cfasl_kb_methods_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cfasl_kb_methods_file();
     }
     
@@ -1607,7 +1610,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-CONSTANT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_constant(arg1);
         }
     }
@@ -1618,7 +1622,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-NART"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_nart(arg1);
         }
     }
@@ -1629,7 +1634,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-ASSERTION"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_assertion(arg1);
         }
     }
@@ -1640,7 +1646,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-DEDUCTION"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_deduction(arg1);
         }
     }
@@ -1651,7 +1658,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-KB-HL-SUPPORT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_kb_hl_support(arg1);
         }
     }
@@ -1662,7 +1670,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-CLAUSE-STRUC"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_clause_struc(arg1);
         }
     }
@@ -1673,7 +1682,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-VARIABLE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_variable(arg1);
         }
     }
@@ -1684,7 +1694,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-SBHL-DIRECTED-LINK"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_sbhl_directed_link(arg1);
         }
     }
@@ -1695,7 +1706,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-SBHL-UNDIRECTED-LINK"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_sbhl_undirected_link(arg1);
         }
     }
@@ -1706,7 +1718,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-HL-START"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_hl_start(arg1);
         }
     }
@@ -1717,7 +1730,8 @@ public final class cfasl_kb_methods extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-HL-END"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cfasl_kb_methods.cfasl_input_hl_end(arg1);
         }
     }

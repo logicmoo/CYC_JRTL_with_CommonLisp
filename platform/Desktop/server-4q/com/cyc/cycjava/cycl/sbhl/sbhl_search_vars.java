@@ -2041,15 +2041,18 @@ public final class sbhl_search_vars extends SubLTranslatedFile
         return (SubLObject)sbhl_search_vars.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_search_vars_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_search_vars_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_search_vars_file();
     }
     
@@ -2310,7 +2313,8 @@ public final class sbhl_search_vars extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RELEVANT-SBHL-TV-IS-GENERAL-TV"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return sbhl_search_vars.relevant_sbhl_tv_is_general_tv(arg1);
         }
     }

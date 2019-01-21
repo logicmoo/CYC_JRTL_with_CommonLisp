@@ -1173,15 +1173,18 @@ public final class pph_noun_compound extends SubLTranslatedFile
         return (SubLObject)pph_noun_compound.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_noun_compound_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_noun_compound_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_noun_compound_file();
     }
     

@@ -57,22 +57,26 @@ public final class ByteArrayOutputStream extends Stream
         // we want to prevent buffer resizing
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.STREAM; //TODO
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.STREAM; //TODO
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         return super.typep(type); //TODO
     }
 
-    protected long _getFilePosition()
+    @Override
+	protected long _getFilePosition()
     {
         if (getStreamElementType() == NIL)
             return 0;
@@ -95,11 +99,13 @@ public final class ByteArrayOutputStream extends Stream
                        "&optional element-type")
     {
 
-        public LispObject execute() {
+        @Override
+		public LispObject execute() {
             return new ByteArrayOutputStream();
         }
 
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             return new ByteArrayOutputStream(arg);
         }
@@ -111,7 +117,8 @@ public final class ByteArrayOutputStream extends Stream
         new Primitive("%get-output-stream-bytes", PACKAGE_SYS, false,
                        "byte-array-output-stream")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof ByteArrayOutputStream) {
                 return JavaObject.getInstance(((ByteArrayOutputStream)arg).getByteArray());
@@ -124,7 +131,8 @@ public final class ByteArrayOutputStream extends Stream
         new Primitive("%get-output-stream-array", PACKAGE_SYS, false,
                       "byte-array-output-stream")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof ByteArrayOutputStream)
                 return new BasicVector_UnsignedByte8(((ByteArrayOutputStream)arg).getByteArray());

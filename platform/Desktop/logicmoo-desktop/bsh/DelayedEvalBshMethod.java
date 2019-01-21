@@ -79,6 +79,7 @@ public class DelayedEvalBshMethod extends BshMethod
 
 	public String getReturnTypeDescriptor() { return returnTypeDescriptor; }
 
+	@Override
 	public Class getReturnType() 
 	{ 
 		if ( returnTypeNode == null )
@@ -94,6 +95,7 @@ public class DelayedEvalBshMethod extends BshMethod
 
 	public String [] getParamTypeDescriptors() { return paramTypeDescriptors; }
 
+	@Override
 	public Class [] getParameterTypes() 
 	{ 
 		// BSHFormalParameters will cache the type for us

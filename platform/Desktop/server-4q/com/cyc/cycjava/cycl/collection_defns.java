@@ -2285,15 +2285,18 @@ public final class collection_defns extends SubLTranslatedFile
         return (SubLObject)collection_defns.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_collection_defns_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_collection_defns_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_collection_defns_file();
     }
     
@@ -2554,7 +2557,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-INDIVIDUAL-NECESSARY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_individual_necessary(arg1);
         }
     }
@@ -2565,7 +2569,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-TYPICALITY-REFERENCE-SET-PROPERTY?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_typicality_reference_set_propertyP(arg1);
         }
     }
@@ -2576,7 +2581,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYCL-SENTENCE-ASSERTIBLE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cycl_sentence_assertibleP(arg1);
         }
     }
@@ -2587,7 +2593,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYCL-CANONICALIZER-DIRECTIVE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cycl_canonicalizer_directiveP(arg1);
         }
     }
@@ -2598,7 +2605,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-LIST-OF-TYPE-NECESSARY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_list_of_type_necessary(arg1);
         }
     }
@@ -2609,7 +2617,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-LIST-OF-TYPE-SUFFICIENT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_list_of_type_sufficient(arg1);
         }
     }
@@ -2620,7 +2629,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-EXTENSIONAL-SET?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return collection_defns.clear_extensional_setP();
         }
     }
@@ -2631,7 +2641,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-NUMERIC-STRING-NECESSARY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_numeric_string_necessary(arg1);
         }
     }
@@ -2642,7 +2653,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-ZIP-CODE-FIVE-DIGIT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_zip_code_five_digit(arg1);
         }
     }
@@ -2653,7 +2665,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-ZIP-CODE-NINE-DIGIT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_zip_code_nine_digit(arg1);
         }
     }
@@ -2664,7 +2677,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-GUID-STRING-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_guid_string_p(arg1);
         }
     }
@@ -2675,7 +2689,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-ASCII-STRING-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_ascii_string_p(arg1);
         }
     }
@@ -2686,7 +2701,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-LIST-OF-LISTS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_list_of_lists(arg1);
         }
     }
@@ -2697,7 +2713,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-STRING-IS-LENGTH"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_string_is_length(arg1);
         }
     }
@@ -2708,7 +2725,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-STRING-IS-MINIMUM-LENGTH"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_string_is_minimum_length(arg1);
         }
     }
@@ -2719,7 +2737,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-STRING-IS-MAXIMUM-LENGTH"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_string_is_maximum_length(arg1);
         }
     }
@@ -2730,7 +2749,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-SUBL-QUERY-PROPERTY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_subl_query_property_p(arg1);
         }
     }
@@ -2741,7 +2761,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-SUBL-TV-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_subl_tv_p(arg1);
         }
     }
@@ -2752,7 +2773,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-SUBL-HL-SUPPORT-MODULE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_subl_hl_support_module_p(arg1);
         }
     }
@@ -2763,7 +2785,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-8-BYTE-INTEGER"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_8_byte_integer(arg1);
         }
     }
@@ -2774,7 +2797,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-4-BYTE-INTEGER"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_4_byte_integer(arg1);
         }
     }
@@ -2785,7 +2809,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-2-BYTE-INTEGER"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_2_byte_integer(arg1);
         }
     }
@@ -2796,7 +2821,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-1-BYTE-INTEGER"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_1_byte_integer(arg1);
         }
     }
@@ -2807,7 +2833,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-BIT-DATATYPE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_bit_datatype(arg1);
         }
     }
@@ -2818,7 +2845,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-IP4-ADDRESS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_ip4_address(arg1);
         }
     }
@@ -2829,7 +2857,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-IP4-NETWORK-ADDRESS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_ip4_network_address(arg1);
         }
     }
@@ -2840,7 +2869,8 @@ public final class collection_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-LIST-IS-MINIMUM-LENGTH"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return collection_defns.cyc_list_is_minimum_length(arg1);
         }
     }

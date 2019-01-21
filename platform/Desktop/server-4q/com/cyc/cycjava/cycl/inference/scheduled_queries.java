@@ -3244,15 +3244,18 @@ public final class scheduled_queries extends SubLTranslatedFile
         return (SubLObject)scheduled_queries.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_scheduled_queries_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_scheduled_queries_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_scheduled_queries_file();
     }
     

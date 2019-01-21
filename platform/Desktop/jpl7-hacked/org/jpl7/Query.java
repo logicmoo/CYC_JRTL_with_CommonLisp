@@ -226,6 +226,7 @@ public class Query implements Iterable<Map<String, Term>>, Iterator<Map<String, 
 	 *
 	 * @see java.lang.Iterable#iterator()
 	 */
+	@Override
 	public Iterator<Map<String, Term>> iterator() {
 		return this;
 	}
@@ -236,6 +237,7 @@ public class Query implements Iterable<Map<String, Term>>, Iterator<Map<String, 
      *
      * @see java.util.Iterator#hasNext()
      */
+	@Override
 	public boolean hasNext() {
 	    return hasMoreSolutions();
 	}
@@ -246,6 +248,7 @@ public class Query implements Iterable<Map<String, Term>>, Iterator<Map<String, 
 	 *
 	 * @see java.util.Iterator#next()
 	 */
+	@Override
 	public Map<String, Term> next() {
 		return nextSolution();
 	}
@@ -255,6 +258,7 @@ public class Query implements Iterable<Map<String, Term>>, Iterator<Map<String, 
 	 *
 	 * @see java.util.Iterator#remove()
 	 */
+	@Override
 	public void remove() {
 		// no op
 	}
@@ -950,6 +954,7 @@ public class Query implements Iterable<Map<String, Term>>, Iterator<Map<String, 
 	 *
 	 * @return a crude String representation of a Query
 	 */
+	@Override
 	public String toString() {
 		return goal_.name() + "( " + Term.toString(goal_.args()) + " )";
 	}

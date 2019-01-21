@@ -44,7 +44,8 @@ public final class SshLoadProcess extends LoadProcess implements BackgroundProce
         return fileIsDirectory;
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         buffer.setBackgroundProcess(this);
         _run();
@@ -117,7 +118,8 @@ public final class SshLoadProcess extends LoadProcess implements BackgroundProce
             final File parent = file.getParentFile();
             if (parent != null) {
                 Thread t = new Thread() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         ((SshFile)parent).getDirectoryListing(true);
                     }

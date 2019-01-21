@@ -50,7 +50,8 @@ public class JavaClassLoader extends URLClassLoader {
 
     public static boolean checkPreCompiledClassLoader = true;
     
-    public Class<?> loadClass(String name) throws ClassNotFoundException {
+    @Override
+	public Class<?> loadClass(String name) throws ClassNotFoundException {
         if (checkPreCompiledClassLoader) {
             Class<?> c = findPrecompiledClassOrNull(name);
             if (c != null) {

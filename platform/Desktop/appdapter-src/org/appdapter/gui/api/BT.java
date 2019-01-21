@@ -188,6 +188,7 @@ public interface BT<TT extends Trigger<? extends ScreenBox<TT>>> //
 	/**
 	 * Returns the name of this value
 	 */
+	@Override
 	public String toString();
 
 	//public Object setValue(Object newValue);
@@ -196,6 +197,7 @@ public interface BT<TT extends Trigger<? extends ScreenBox<TT>>> //
 
 	public abstract Object getValueOrThis();
 
+	@Override
 	public abstract Object setValue(Object newValue);
 
 	public abstract void addValue(Object newValue);

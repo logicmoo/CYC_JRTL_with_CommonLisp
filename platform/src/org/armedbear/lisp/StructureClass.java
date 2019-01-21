@@ -47,17 +47,20 @@ public class StructureClass extends SlotClass
         super(symbol, directSuperclasses);
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.STRUCTURE_CLASS;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
       return LispClass.findClass(Symbol.STRUCTURE_CLASS);
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.STRUCTURE_CLASS)
             return T;
@@ -66,12 +69,14 @@ public class StructureClass extends SlotClass
         return super.typep(type);
     }
 
-    public LispObject getDescription()
+    @Override
+	public LispObject getDescription()
     {
         return new SimpleString(princToString());
     }
 
-    public String printObjectUnreadable()
+    @Override
+	public String printObjectUnreadable()
     {
         StringBuilder sb = new StringBuilder("STRUCTURE-CLASS ");
         sb.append(getLispClassName().princToString());
@@ -82,7 +87,8 @@ public class StructureClass extends SlotClass
     private static final Primitive MAKE_STRUCTURE_CLASS =
         new Primitive("make-structure-class", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
 
         {

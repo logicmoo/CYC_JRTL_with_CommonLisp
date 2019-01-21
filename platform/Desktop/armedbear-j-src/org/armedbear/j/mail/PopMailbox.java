@@ -72,7 +72,8 @@ public final class PopMailbox extends LocalMailbox
         setInitialized(true);
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         FastStringBuffer sb = new FastStringBuffer(64);
         sb.append(url.toString());
@@ -84,12 +85,14 @@ public final class PopMailbox extends LocalMailbox
         return sb.toString();
     }
 
-    public final String getName()
+    @Override
+	public final String getName()
     {
         return url.toString();
     }
 
-    public synchronized int load()
+    @Override
+	public synchronized int load()
     {
         if (isLoaded())
             return LOAD_COMPLETED;
@@ -106,7 +109,8 @@ public final class PopMailbox extends LocalMailbox
     }
 
     private BackgroundProcess loadProcess = new BackgroundProcess() {
-        public void run()
+        @Override
+		public void run()
         {
             // Mailbox is already locked at this point.
             boolean abort = false;
@@ -136,7 +140,8 @@ public final class PopMailbox extends LocalMailbox
             finally {
                 if (abort) {
                     Runnable r = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             kill();
                             for (EditorIterator it = new EditorIterator(); it.hasNext();)
@@ -147,7 +152,8 @@ public final class PopMailbox extends LocalMailbox
                 } else {
                     refreshBuffer();
                     Runnable r = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             setBusy(false);
                             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -175,7 +181,8 @@ public final class PopMailbox extends LocalMailbox
             }
         }
 
-        public void cancel()
+        @Override
+		public void cancel()
         {
             Log.debug("loadProcess.cancel");
             cancelled = true;
@@ -187,7 +194,8 @@ public final class PopMailbox extends LocalMailbox
         }
     };
 
-    public void getNewMessages()
+    @Override
+	public void getNewMessages()
     {
         if (session.getPassword() == null) {
             String password =
@@ -203,7 +211,8 @@ public final class PopMailbox extends LocalMailbox
             Editor.currentEditor().status("Mailbox is locked");
     }
 
-    public void getNewMessages(boolean userInitiated)
+    @Override
+	public void getNewMessages(boolean userInitiated)
     {
         Debug.assertTrue(isLocked());
         // This method can get called in the background so we can't put up a
@@ -230,7 +239,8 @@ public final class PopMailbox extends LocalMailbox
             this.userInitiated = userInitiated;
         }
 
-        public void run()
+        @Override
+		public void run()
         {
             try {
                 boolean changed = false;
@@ -268,7 +278,8 @@ public final class PopMailbox extends LocalMailbox
             }
         }
 
-        public void cancel()
+        @Override
+		public void cancel()
         {
             Log.debug("GetNewMessagesProcess.cancel");
             cancelled = true;
@@ -625,7 +636,8 @@ public final class PopMailbox extends LocalMailbox
         return true;
     }
 
-    public void expunge()
+    @Override
+	public void expunge()
     {
         if (lock()) {
             setBusy(true);
@@ -637,7 +649,8 @@ public final class PopMailbox extends LocalMailbox
     }
 
     private Runnable expungeProcess = new BackgroundProcess() {
-        public void run()
+        @Override
+		public void run()
         {
             try {
                 setBackgroundProcess(this);
@@ -661,7 +674,8 @@ public final class PopMailbox extends LocalMailbox
             }
         }
 
-        public void cancel()
+        @Override
+		public void cancel()
         {
             Log.debug("expungeProcess.cancel");
             cancelled = true;
@@ -924,11 +938,13 @@ public final class PopMailbox extends LocalMailbox
         }
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         Log.debug("PopMailbox.dispose");
         Runnable disposeRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     Log.debug("disposeRunnable.run() calling acquire()...");
@@ -957,13 +973,15 @@ public final class PopMailbox extends LocalMailbox
         MailboxProperties.saveProperties(this);
     }
 
-    protected void finalize() throws Throwable
+    @Override
+	protected void finalize() throws Throwable
     {
         Log.debug("PopMailbox.finalize");
         super.finalize();
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         int newMessageCount = getNewMessageCount();
         if (newMessageCount > 0) {
@@ -976,7 +994,8 @@ public final class PopMailbox extends LocalMailbox
             return url.toString();
     }
 
-    public String getTitle()
+    @Override
+	public String getTitle()
     {
         return toString();
     }

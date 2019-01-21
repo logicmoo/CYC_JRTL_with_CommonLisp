@@ -92,5 +92,6 @@ class BSHVariableDeclarator extends SimpleNode
         return value;
     }
 
+	@Override
 	public String toString() { return "BSHVariableDeclarator "+name; }
 }

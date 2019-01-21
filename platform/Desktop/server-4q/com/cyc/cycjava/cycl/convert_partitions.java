@@ -249,15 +249,18 @@ public final class convert_partitions extends SubLTranslatedFile
         return (SubLObject)convert_partitions.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_convert_partitions_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_convert_partitions_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_convert_partitions_file();
     }
     

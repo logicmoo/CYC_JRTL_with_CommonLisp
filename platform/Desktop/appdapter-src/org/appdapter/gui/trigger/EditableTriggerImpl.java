@@ -84,6 +84,7 @@ public class EditableTriggerImpl extends TriggerImpl implements EditableTrigger,
 		return menuFmt;
 	}
 
+	@Override
 	public String getMenuPath() {
 		return checkMenuPath(menuPath);
 	}

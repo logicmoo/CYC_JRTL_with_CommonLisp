@@ -29,17 +29,20 @@ public final class Mailbox extends LispObject
 {
   private LinkedList box = new LinkedList();
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     return Symbol.MAILBOX;
   }
 
-  public LispObject classOf()
+  @Override
+public LispObject classOf()
   {
     return BuiltInClass.MAILBOX;
   }
 
-  public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
+  @Override
+public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
   {
     if (typeSpecifier == Symbol.MAILBOX)
       return T;
@@ -96,7 +99,8 @@ public final class Mailbox extends LispObject
     return box.isEmpty() ? T : NIL;
   }
 
-  public String writeToString() throws ConditionThrowable
+  @Override
+public String writeToString() throws ConditionThrowable
   {
     return super.unreadableString(Symbol.MAILBOX);
   }
@@ -105,7 +109,8 @@ public final class Mailbox extends LispObject
   private static final Primitive MAKE_MAILBOX =
     new Primitive("make-mailbox", PACKAGE_EXT, true, "")
     {
-      public LispObject execute() throws ConditionThrowable
+      @Override
+	public LispObject execute() throws ConditionThrowable
       {
         return new Mailbox();
       }
@@ -115,7 +120,8 @@ public final class Mailbox extends LispObject
   private static final Primitive MAILBOX_SEND =
     new Primitive("mailbox-send", PACKAGE_EXT, true, "mailbox object")
     {
-      public LispObject execute(LispObject first, LispObject second)
+      @Override
+	public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
         if (first instanceof Mailbox)
@@ -133,7 +139,8 @@ public final class Mailbox extends LispObject
   private static final Primitive MAILBOX_READ =
     new Primitive("mailbox-read", PACKAGE_EXT, true, "mailbox")
     {
-      public LispObject execute(LispObject arg) throws ConditionThrowable
+      @Override
+	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         if (arg instanceof Mailbox)
           {
@@ -149,7 +156,8 @@ public final class Mailbox extends LispObject
   private static final Primitive MAILBOX_PEEK =
     new Primitive("mailbox-peek", PACKAGE_EXT, true, "mailbox")
     {
-      public LispObject execute(LispObject arg) throws ConditionThrowable
+      @Override
+	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         if (arg instanceof Mailbox)
           {
@@ -165,7 +173,8 @@ public final class Mailbox extends LispObject
   private static final Primitive MAILBOX_EMPTY_P =
     new Primitive("mailbox-empty-p", PACKAGE_EXT, true, "mailbox")
     {
-      public LispObject execute(LispObject arg) throws ConditionThrowable
+      @Override
+	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         if (arg instanceof Mailbox)
           {

@@ -46,6 +46,7 @@ public class ClassIdentifier
 		return clas;
 	}
 
+	@Override
 	public String toString() {
 		return "Class Identifier: "+clas.getName();
 	}

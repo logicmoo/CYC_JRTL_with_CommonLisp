@@ -57,7 +57,8 @@ public final class Man extends Buffer
         return apropos;
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         if (!isLoaded()) {
             try {
@@ -167,7 +168,8 @@ public final class Man extends Buffer
         }
     }
 
-    public final void appendLine(String s)
+    @Override
+	public final void appendLine(String s)
     {
         appendLine(new ManLine(s));
     }
@@ -182,12 +184,14 @@ public final class Man extends Buffer
             next.setPrevious(prev);
     }
 
-    public final File getCurrentDirectory()
+    @Override
+	public final File getCurrentDirectory()
     {
         return Directories.getUserHomeDirectory();
     }
 
-    public final String getFileNameForDisplay()
+    @Override
+	public final String getFileNameForDisplay()
     {
         return "";
     }

@@ -403,7 +403,8 @@ implements java.io.Serializable, Comparable {
    *
    * @return  a string representation of this <tt>UUID</tt>.
    */
-  public String toString() {
+  @Override
+public String toString() {
     return (digits(mostSigBits >> 32, 8) + "-" +
     digits(mostSigBits >> 16, 4) + "-" +
     digits(mostSigBits, 4) + "-" +
@@ -422,7 +423,8 @@ implements java.io.Serializable, Comparable {
    *
    * @return  a hash code value for this <tt>UUID</tt>.
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     if (hashCode == -1) {
       hashCode = (int)((mostSigBits >> 32) ^
       mostSigBits ^
@@ -442,7 +444,8 @@ implements java.io.Serializable, Comparable {
    * @return  <code>true</code> if the objects are the same;
    *          <code>false</code> otherwise.
    */
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     if (!(obj instanceof OldCycUUID))
       return false;
     if (((OldCycUUID)obj).variant() != this.variant())
@@ -464,7 +467,8 @@ implements java.io.Serializable, Comparable {
    * @return -1, 0 or 1 as this <tt>UUID</tt> is less than, equal
    *         to, or greater than <tt>val</tt>.
    */
-  public int compareTo(Object obj) {
+  @Override
+public int compareTo(Object obj) {
     if ((obj == null) || (!(obj instanceof OldCycUUID))) {
       throw new RuntimeException("Can't compare UUIDs to non-UUIDs: " + obj);
     }

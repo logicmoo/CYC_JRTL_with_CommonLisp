@@ -98,7 +98,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
     // Implementation of the MethodVisitor interface
     // ------------------------------------------------------------------------
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -109,7 +110,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         return av;
     }
 
-    public void visitAttribute(final Attribute attr) {
+    @Override
+	public void visitAttribute(final Attribute attr) {
         buf.setLength(0);
         buf.append(tab).append("ATTRIBUTE ");
         appendDescriptor(-1, attr.type);
@@ -126,7 +128,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public AnnotationVisitor visitAnnotationDefault() {
+    @Override
+	public AnnotationVisitor visitAnnotationDefault() {
         text.add(tab2 + "default=");
         TraceAnnotationVisitor tav = createTraceAnnotationVisitor();
         text.add(tav.getText());
@@ -137,7 +140,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         return tav;
     }
 
-    public AnnotationVisitor visitParameterAnnotation(
+    @Override
+	public AnnotationVisitor visitParameterAnnotation(
         final int parameter,
         final String desc,
         final boolean visible)
@@ -158,13 +162,15 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         return tav;
     }
 
-    public void visitCode() {
+    @Override
+	public void visitCode() {
         if (mv != null) {
             mv.visitCode();
         }
     }
 
-    public void visitFrame(
+    @Override
+	public void visitFrame(
         final int type,
         final int nLocal,
         final Object[] local,
@@ -207,7 +213,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitInsn(final int opcode) {
+    @Override
+	public void visitInsn(final int opcode) {
         buf.setLength(0);
         buf.append(tab2).append(OPCODES[opcode]).append('\n');
         text.add(buf.toString());
@@ -217,7 +224,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitIntInsn(final int opcode, final int operand) {
+    @Override
+	public void visitIntInsn(final int opcode, final int operand) {
         buf.setLength(0);
         buf.append(tab2)
                 .append(OPCODES[opcode])
@@ -233,7 +241,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitVarInsn(final int opcode, final int var) {
+    @Override
+	public void visitVarInsn(final int opcode, final int var) {
         buf.setLength(0);
         buf.append(tab2)
                 .append(OPCODES[opcode])
@@ -247,7 +256,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitTypeInsn(final int opcode, final String type) {
+    @Override
+	public void visitTypeInsn(final int opcode, final String type) {
         buf.setLength(0);
         buf.append(tab2).append(OPCODES[opcode]).append(' ');
         appendDescriptor(INTERNAL_NAME, type);
@@ -259,7 +269,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitFieldInsn(
+    @Override
+	public void visitFieldInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -278,7 +289,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitMethodInsn(
+    @Override
+	public void visitMethodInsn(
         final int opcode,
         final String owner,
         final String name,
@@ -297,7 +309,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitJumpInsn(final int opcode, final Label label) {
+    @Override
+	public void visitJumpInsn(final int opcode, final Label label) {
         buf.setLength(0);
         buf.append(tab2).append(OPCODES[opcode]).append(' ');
         appendLabel(label);
@@ -309,7 +322,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitLabel(final Label label) {
+    @Override
+	public void visitLabel(final Label label) {
         buf.setLength(0);
         buf.append(ltab);
         appendLabel(label);
@@ -321,7 +335,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitLdcInsn(final Object cst) {
+    @Override
+	public void visitLdcInsn(final Object cst) {
         buf.setLength(0);
         buf.append(tab2).append("LDC ");
         if (cst instanceof String) {
@@ -339,7 +354,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitIincInsn(final int var, final int increment) {
+    @Override
+	public void visitIincInsn(final int var, final int increment) {
         buf.setLength(0);
         buf.append(tab2)
                 .append("IINC ")
@@ -354,7 +370,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitTableSwitchInsn(
+    @Override
+	public void visitTableSwitchInsn(
         final int min,
         final int max,
         final Label dflt,
@@ -377,7 +394,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitLookupSwitchInsn(
+    @Override
+	public void visitLookupSwitchInsn(
         final Label dflt,
         final int[] keys,
         final Label[] labels)
@@ -399,7 +417,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitMultiANewArrayInsn(final String desc, final int dims) {
+    @Override
+	public void visitMultiANewArrayInsn(final String desc, final int dims) {
         buf.setLength(0);
         buf.append(tab2).append("MULTIANEWARRAY ");
         appendDescriptor(FIELD_DESCRIPTOR, desc);
@@ -411,7 +430,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitTryCatchBlock(
+    @Override
+	public void visitTryCatchBlock(
         final Label start,
         final Label end,
         final Label handler,
@@ -434,7 +454,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitLocalVariable(
+    @Override
+	public void visitLocalVariable(
         final String name,
         final String desc,
         final String signature,
@@ -470,7 +491,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitLineNumber(final int line, final Label start) {
+    @Override
+	public void visitLineNumber(final int line, final Label start) {
         buf.setLength(0);
         buf.append(tab2).append("LINENUMBER ").append(line).append(' ');
         appendLabel(start);
@@ -482,7 +504,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitMaxs(final int maxStack, final int maxLocals) {
+    @Override
+	public void visitMaxs(final int maxStack, final int maxLocals) {
         buf.setLength(0);
         buf.append(tab2).append("MAXSTACK = ").append(maxStack).append('\n');
         text.add(buf.toString());
@@ -496,7 +519,8 @@ public class TraceMethodVisitor extends TraceAbstractVisitor implements
         }
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         super.visitEnd();
 
         if (mv != null) {

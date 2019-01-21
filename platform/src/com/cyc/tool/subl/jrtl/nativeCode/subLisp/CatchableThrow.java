@@ -28,6 +28,7 @@ public abstract class CatchableThrow extends ControlTransfer {
 
 	abstract public SubLObject getTarget();
 
+	@Override
 	abstract public LispObject getCondition();
 
 	public static boolean dequeContains(Deque<SubLObject> deque, SubLObject elem) {

@@ -53,7 +53,8 @@ public class DefaultIntegerInferenceParameter extends AbstractInferenceParameter
   }
 
   //// Public Area
-  public boolean isValidValue(Object potentialValue) {
+  @Override
+public boolean isValidValue(Object potentialValue) {
     if (isAlternateValue(potentialValue)) {
       return true;
     } else if (DefaultInferenceParameters.isInfiniteValue(potentialValue)) {
@@ -80,11 +81,13 @@ public class DefaultIntegerInferenceParameter extends AbstractInferenceParameter
     }
   }
 
-  public long getMaxValue() {
+  @Override
+public long getMaxValue() {
     return maxValue;
   }
 
-  public long getMinValue() {
+  @Override
+public long getMinValue() {
     return minValue;
   }
 
@@ -94,7 +97,8 @@ public class DefaultIntegerInferenceParameter extends AbstractInferenceParameter
   }
 
 
-  public Object parameterValueCycListApiValue(Object val) {
+  @Override
+public Object parameterValueCycListApiValue(Object val) {
     if (DefaultInferenceParameters.isInfiniteValue(val)) {
       return getInfiniteValueCycListApiValue();
     } else {

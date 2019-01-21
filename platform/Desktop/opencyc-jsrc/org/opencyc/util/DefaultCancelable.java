@@ -35,11 +35,13 @@ public class DefaultCancelable implements Cancelable {
   
   //// Public Area
   
-  public void cancelTask() {
+  @Override
+public void cancelTask() {
     System.out.println("Task " + taskName + " canceled!");
   }
   
-  public String toString() {
+  @Override
+public String toString() {
     return taskName;
   }
   //// Protected Area

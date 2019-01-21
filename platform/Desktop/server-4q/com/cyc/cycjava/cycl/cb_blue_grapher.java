@@ -1760,15 +1760,18 @@ public final class cb_blue_grapher extends SubLTranslatedFile
         return (SubLObject)cb_blue_grapher.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_blue_grapher_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_blue_grapher_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_blue_grapher_file();
     }
     

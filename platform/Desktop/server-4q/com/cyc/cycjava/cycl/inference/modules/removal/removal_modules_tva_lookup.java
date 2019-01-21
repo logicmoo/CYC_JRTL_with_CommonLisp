@@ -3064,15 +3064,18 @@ public final class removal_modules_tva_lookup extends SubLTranslatedFile
         return (SubLObject)removal_modules_tva_lookup.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_tva_lookup_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_tva_lookup_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_tva_lookup_file();
     }
     
@@ -3168,7 +3171,8 @@ public final class removal_modules_tva_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-TVA-UNIFY-COST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_tva_lookup.removal_tva_unify_cost(arg1, (SubLObject)$removal_tva_unify_cost$UnaryFunction.UNPROVIDED);
         }
     }
@@ -3179,7 +3183,8 @@ public final class removal_modules_tva_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-TVA-UNIFY-COST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return removal_modules_tva_lookup.removal_tva_unify_cost(arg1, arg2);
         }
     }
@@ -3190,7 +3195,8 @@ public final class removal_modules_tva_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-TVA-UNIFY-CLOSURE-REQUIRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_tva_lookup.removal_tva_unify_closure_required(arg1, (SubLObject)$removal_tva_unify_closure_required$UnaryFunction.UNPROVIDED);
         }
     }
@@ -3201,7 +3207,8 @@ public final class removal_modules_tva_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-TVA-UNIFY-CLOSURE-REQUIRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return removal_modules_tva_lookup.removal_tva_unify_closure_required(arg1, arg2);
         }
     }
@@ -3212,7 +3219,8 @@ public final class removal_modules_tva_lookup extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REMOVAL-TVA-UNIFY-CLOSURE-CONJUNCTION-APPLICABILITY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_tva_lookup.removal_tva_unify_closure_conjunction_applicability(arg1);
         }
     }

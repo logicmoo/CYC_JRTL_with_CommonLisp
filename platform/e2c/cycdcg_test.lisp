@@ -118,7 +118,7 @@
     (#$ConcatenatePhrasesFn 
       (#$TermParaphraseFn-NP :arg2) 
       (#$BestHeadVerbForInitialSubjectFn #$Be-TheWord) 
-      (#$BestNLPhraseOfStringFn "full #$of") 
+      (#$BestNLPhraseOfStringFn "full of") 
       (#$TermParaphraseFn :arg1)))
 (s2t-test  #$TourDayFn 
     (#$GenTemplateRecipeOmitsArgFn :arg1 

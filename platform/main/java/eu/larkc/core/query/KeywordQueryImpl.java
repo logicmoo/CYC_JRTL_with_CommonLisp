@@ -15,10 +15,12 @@ public class KeywordQueryImpl implements KeywordQuery {
 		mKeywords = Arrays.asList(keywords);
 	}
 
+	@Override
 	public List<String> getKeywords() {
 		return mKeywords;
 	}
 
+	@Override
 	public String toString() {
 		return mKeywords.toString();
 	}

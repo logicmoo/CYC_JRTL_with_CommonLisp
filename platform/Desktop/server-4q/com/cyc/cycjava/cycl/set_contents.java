@@ -852,15 +852,18 @@ public final class set_contents extends SubLTranslatedFile
         return (SubLObject)set_contents.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_set_contents_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_set_contents_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_set_contents_file();
     }
     
@@ -932,7 +935,8 @@ public final class set_contents extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SET-CONTENTS-SIZE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return set_contents.set_contents_size(arg1);
         }
     }

@@ -999,15 +999,18 @@ public final class english_quantity_parser extends SubLTranslatedFile
         return (SubLObject)english_quantity_parser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_english_quantity_parser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_english_quantity_parser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_english_quantity_parser_file();
     }
     

@@ -1072,15 +1072,18 @@ public final class pph_sksi extends SubLTranslatedFile
         return (SubLObject)pph_sksi.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_sksi_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_sksi_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_sksi_file();
     }
     

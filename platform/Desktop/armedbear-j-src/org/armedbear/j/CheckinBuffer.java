@@ -61,7 +61,8 @@ public final class CheckinBuffer extends Buffer implements Constants
         setInitialized(true);
     }
 
-    public final File getCurrentDirectory()
+    @Override
+	public final File getCurrentDirectory()
     {
         if (parentBuffer != null)
             return parentBuffer.getCurrentDirectory();
@@ -78,7 +79,8 @@ public final class CheckinBuffer extends Buffer implements Constants
         return editOnly;
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         return title != null ? title : "";
     }
@@ -152,7 +154,8 @@ public final class CheckinBuffer extends Buffer implements Constants
         }
     }
 
-    public Expansion getExpansion(Position dot)
+    @Override
+	public Expansion getExpansion(Position dot)
     {
         Expansion e =
             new Expansion(dot, Editor.getModeList().getMode(PLAIN_TEXT_MODE));

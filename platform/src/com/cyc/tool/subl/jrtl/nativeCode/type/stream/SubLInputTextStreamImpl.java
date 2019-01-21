@@ -50,10 +50,11 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 	SubLInputTextStreamImpl(InputStream inStream) {
 		super(Keyword.TEXT_KEYWORD_CHARACTER, Keyword.INPUT_KEYWORD, Keyword.ERROR,
 				Keyword.ERROR);
-		this.in = inStream;
-		InputStream javaBufferedInStream = inStream;//		javaBufferedInStream = new BufferedInputStream(inStream);
+		
+		this.in = wrapStream(inStream);
+		InputStream javaBufferedInStream = wrapStream(inStream);//		javaBufferedInStream = new BufferedInputStream(inStream);
 		pushbackStream = new PushbackInputStream(javaBufferedInStream);
-		reader = new PushbackReader(new InputStreamReader(inStream));
+		reader = new PushbackReader(wrapStream(new InputStreamReader(wrapStream(inStream))));
 	}
 
 	SubLInputTextStreamImpl(InputStream inStream, int start) {
@@ -71,8 +72,8 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 			Errors.error("Unable to open stream for socket; " + socket, ioe);
 		}
 		InputStream javaBufferedInStream = in;//javaBufferedInStream = new BufferedInputStream(in);
-		pushbackStream = new PushbackInputStream(javaBufferedInStream);
-		reader = new PushbackReader(new InputStreamReader(javaBufferedInStream));
+		pushbackStream = new PushbackInputStream(wrapStream(javaBufferedInStream));
+		reader = new PushbackReader(new InputStreamReader(wrapStream(javaBufferedInStream)));
 	}
 
 	SubLInputTextStreamImpl(String filename, SubLSymbol ifExists, SubLSymbol ifNotExists) {
@@ -105,8 +106,7 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 		while (!isClosed())
 			try {
 				int curByte = pushbackStream.read();
-				if (curByte >= 0)
-					incrementInputIndex(1L);
+				onRead(curByte);
 				return curByte;
 			} catch (SocketTimeoutException ste) {
 				Threads.possiblyHandleInterrupts(true);
@@ -140,6 +140,7 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 		return this;
 	}
 
+	
 	@Override
 	public int read() {
 		if (shouldParentDoWork())
@@ -157,8 +158,7 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 			if (ready)
 				try {
 					int result = pushbackStream.read();
-					if (result >= 0)
-						incrementInputIndex(1L);
+					onRead(result);
 					return result;
 				} catch (Exception e) {
 					Errors.error("Unable to read character from stream: " + this, e);
@@ -308,7 +308,7 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 		this.ensureOpen("UNREAD");
 		try {
 			pushbackStream.unread(c);
-			incrementInputIndex(-1L);
+			onUnread(c);
 		} catch (Exception e) {
 			Errors.error("Unable to unread character from stream.", e);
 		}

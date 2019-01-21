@@ -1815,15 +1815,18 @@ public final class pph_types extends SubLTranslatedFile
         return (SubLObject)pph_types.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_types_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_types_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_types_file();
     }
     
@@ -1955,7 +1958,8 @@ public final class pph_types extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-NAUT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_types.pph_nautP(arg1);
         }
     }
@@ -1966,7 +1970,8 @@ public final class pph_types extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-GPE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_types.pph_gpeP(arg1);
         }
     }
@@ -1977,7 +1982,8 @@ public final class pph_types extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-HYPOTHETICAL?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_types.pph_hypotheticalP(arg1);
         }
     }
@@ -1988,7 +1994,8 @@ public final class pph_types extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-LEXICAL-WORD?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_types.pph_lexical_wordP(arg1);
         }
     }

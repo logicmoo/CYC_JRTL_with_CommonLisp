@@ -112,15 +112,18 @@ public final class external_inference extends SubLTranslatedFile
         return (SubLObject)external_inference.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_external_inference_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_external_inference_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_external_inference_file();
     }
     

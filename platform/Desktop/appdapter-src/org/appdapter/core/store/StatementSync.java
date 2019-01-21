@@ -384,14 +384,16 @@ public class StatementSync
             this.srcModel = src;
         }
 
-        public void addedStatement(final Statement s) {
+        @Override
+		public void addedStatement(final Statement s) {
             if (this.isDeaf()) {
                 return;
             }
             this.addTodo(s, new StatementEvent(this.srcModel, s, WhatToDo.Add));
         }
 
-        public void addedStatements(final Model dataModel) {
+        @Override
+		public void addedStatements(final Model dataModel) {
             if (this.isDeaf()) {
                 return;
             }
@@ -410,21 +412,24 @@ public class StatementSync
             return this.isDeaf || StatementSync.this.isDisabled();
         }
 
-        public void notifyEvent(final Model dataModel, final Object event) {
+        @Override
+		public void notifyEvent(final Model dataModel, final Object event) {
             if (this.isDeaf()) {
                 return;
             }
             this.addTodo(dataModel, new NotifyEvent(this.srcModel, event, dataModel));
         }
 
-        public void removedStatement(final Statement s) {
+        @Override
+		public void removedStatement(final Statement s) {
             if (this.isDeaf()) {
                 return;
             }
             this.addTodo(s, new StatementEvent(this.srcModel, s, WhatToDo.Remove));
         }
 
-        public void removedStatements(final Model dataModel) {
+        @Override
+		public void removedStatements(final Model dataModel) {
             this.addTodo(dataModel, new BulkStatement(this.srcModel, dataModel, WhatToDo.Remove));
         }
 

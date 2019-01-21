@@ -36,7 +36,8 @@ public final class CheckBox extends JCheckBox
         super(text, selected);
     }
 
-    public void paintComponent(Graphics g)
+    @Override
+	public void paintComponent(Graphics g)
     {
         Display.setRenderingHints(g);
         super.paintComponent(g);

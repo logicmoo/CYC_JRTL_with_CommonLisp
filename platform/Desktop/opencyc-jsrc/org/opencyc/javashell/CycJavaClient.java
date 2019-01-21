@@ -51,7 +51,8 @@ public class CycJavaClient extends Thread {
     out = client.getOutputStream();
     }
 
-    public void run() {
+    @Override
+	public void run() {
     PrintStream outstream = new PrintStream(out);
     CycListParser cyclp = new CycListParser(cycAccess);
     while( !this.interrupted() && in!=null && out!=null ) {

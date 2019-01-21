@@ -69,7 +69,8 @@ public class Money implements Serializable, Comparable<Money> {
     return getCurrency().equals(m.getCurrency());
   }
   
-  public int compareTo(Money o) {
+  @Override
+public int compareTo(Money o) {
     if ((o == null) || (!isSameCurrencyAs(o)))
       throw new ClassCastException();
     return getQuantity().compareTo(o.getQuantity());

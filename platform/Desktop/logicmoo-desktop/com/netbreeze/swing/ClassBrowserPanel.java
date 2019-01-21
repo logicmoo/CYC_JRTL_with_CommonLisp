@@ -58,7 +58,8 @@ public class ClassBrowserPanel extends JPanel implements ActionListener {
     //setSize(300, 200);
   }
 
-  public void actionPerformed(ActionEvent evt) {
+  @Override
+public void actionPerformed(ActionEvent evt) {
     showClass();
   }
 

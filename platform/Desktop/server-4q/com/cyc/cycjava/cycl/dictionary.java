@@ -842,15 +842,18 @@ public final class dictionary extends SubLTranslatedFile
         return (SubLObject)dictionary.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_dictionary_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_dictionary_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_dictionary_file();
     }
     
@@ -933,23 +936,28 @@ public final class dictionary extends SubLTranslatedFile
             this.$test = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$dictionary_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$database;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$test;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$database = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$test = value;
         }
         
@@ -964,7 +972,8 @@ public final class dictionary extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DICTIONARY-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return dictionary.dictionary_p(arg1);
         }
     }
@@ -975,7 +984,8 @@ public final class dictionary extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CFASL-INPUT-DICTIONARY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return dictionary.cfasl_input_dictionary(arg1);
         }
     }

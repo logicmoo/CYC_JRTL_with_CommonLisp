@@ -503,15 +503,18 @@ public final class dictionary_contents extends SubLTranslatedFile
         return (SubLObject)dictionary_contents.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_dictionary_contents_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_dictionary_contents_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_dictionary_contents_file();
     }
     

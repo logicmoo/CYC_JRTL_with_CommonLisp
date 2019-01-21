@@ -650,15 +650,18 @@ public final class transitivity extends SubLTranslatedFile
         return (SubLObject)transitivity.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_transitivity_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_transitivity_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_transitivity_file();
     }
     

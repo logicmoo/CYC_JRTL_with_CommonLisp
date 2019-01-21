@@ -152,7 +152,8 @@ public class ListOccurrences extends Buffer
         return sourceBuffer;
     }
 
-    public File getCurrentDirectory()
+    @Override
+	public File getCurrentDirectory()
     {
         if (sourceBuffer != null)
             return sourceBuffer.getCurrentDirectory();
@@ -266,7 +267,8 @@ public class ListOccurrences extends Buffer
         return search;
     }
 
-    public Position getInitialDotPos()
+    @Override
+	public Position getInitialDotPos()
     {
         for (Line line = getFirstLine(); line != null; line = line.next()) {
             if (line instanceof OccurrenceLine)
@@ -291,7 +293,8 @@ public class ListOccurrences extends Buffer
         return getInitialDotPos();
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         if (sourceBuffer == null || sourceBuffer.getFile() == null)
             return "";

@@ -40,35 +40,43 @@ public class SparqlDatasetGraph extends DatasetGraphQuadProc implements DatasetG
         return (Graph)((g == Node.ANY) ? new SparqlGraph(this.endpointURI) : new SparqlGraph(this.endpointURI, g.getURI()));
     }
     
-    public void add(final Quad arg0) {
+    @Override
+	public void add(final Quad arg0) {
         this.getGraphFor(arg0).add(new Triple(arg0.getSubject(), arg0.getPredicate(), arg0.getObject()));
     }
     
-    public boolean contains(final Quad arg0) {
+    @Override
+	public boolean contains(final Quad arg0) {
         return this.getGraphFor(arg0).contains(new Triple(arg0.getSubject(), arg0.getPredicate(), arg0.getObject()));
     }
     
-    public boolean contains(final Node arg0, final Node arg1, final Node arg2, final Node arg3) {
+    @Override
+	public boolean contains(final Node arg0, final Node arg1, final Node arg2, final Node arg3) {
         return this.getGraphFor(arg0).contains(arg1, arg2, arg3);
     }
     
-    public void delete(final Quad arg0) {
+    @Override
+	public void delete(final Quad arg0) {
         this.getGraphFor(arg0).delete(new Triple(arg0.getSubject(), arg0.getPredicate(), arg0.getObject()));
     }
     
-    public void deleteAny(final Node arg0, final Node arg1, final Node arg2, final Node arg3) {
+    @Override
+	public void deleteAny(final Node arg0, final Node arg1, final Node arg2, final Node arg3) {
         this.getGraphFor(arg0).delete(new Triple(arg1, arg2, arg3));
     }
     
-    public Iterator<Quad> find() {
+    @Override
+	public Iterator<Quad> find() {
         return this.find(Node.ANY, Node.ANY, Node.ANY, Node.ANY);
     }
     
-    public Iterator<Quad> find(final Quad arg0) {
+    @Override
+	public Iterator<Quad> find(final Quad arg0) {
         return this.find(arg0.getSubject(), arg0.getPredicate(), arg0.getObject(), arg0.getGraph());
     }
     
-    public Iterator<Quad> find(final Node graph, final Node subject, final Node predicate, final Node object) {
+    @Override
+	public Iterator<Quad> find(final Node graph, final Node subject, final Node predicate, final Node object) {
         if (this.isVar(subject) || this.isVar(predicate) || this.isVar(object) || this.isVar(graph)) {
             final StringBuffer findQuery = new StringBuffer("SELECT * WHERE { \n");
             final String graphURI = this.isVar(graph) ? null : graph.getURI();
@@ -98,27 +106,33 @@ public class SparqlDatasetGraph extends DatasetGraphQuadProc implements DatasetG
         return (Iterator<Quad>)WrappedIterator.create((Iterator)Collections.EMPTY_LIST.iterator());
     }
     
-    public Iterator<Quad> findNG(final Node arg0, final Node arg1, final Node arg2, final Node arg3) {
+    @Override
+	public Iterator<Quad> findNG(final Node arg0, final Node arg1, final Node arg2, final Node arg3) {
         return this.find(arg0, arg1, arg2, arg3);
     }
     
-    public Graph getDefaultGraph() {
+    @Override
+	public Graph getDefaultGraph() {
         return (Graph)new SparqlGraph(this.endpointURI);
     }
     
-    public Graph getGraph(final Node arg0) {
+    @Override
+	public Graph getGraph(final Node arg0) {
         return (Graph)new SparqlGraph(this.endpointURI, arg0.getURI());
     }
     
-    public Lock getLock() {
+    @Override
+	public Lock getLock() {
         return this.lock;
     }
     
-    public boolean isEmpty() {
+    @Override
+	public boolean isEmpty() {
         return false;
     }
     
-    public Iterator<Node> listGraphNodes() {
+    @Override
+	public Iterator<Node> listGraphNodes() {
         final List<Node> graphNodeList = new ArrayList<Node>();
         try {
             final SparqlEndpointClient conn = this.getConnection();

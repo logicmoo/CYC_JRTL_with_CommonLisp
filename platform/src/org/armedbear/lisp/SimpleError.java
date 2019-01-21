@@ -58,17 +58,20 @@ public final class SimpleError extends LispError
         setFormatArguments(NIL);
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.SIMPLE_ERROR;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return StandardClass.SIMPLE_ERROR;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.SIMPLE_ERROR)
             return T;

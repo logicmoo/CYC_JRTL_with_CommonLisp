@@ -249,15 +249,18 @@ public final class format_cycl_expression extends SubLTranslatedFile
         return (SubLObject)format_cycl_expression.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_format_cycl_expression_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_format_cycl_expression_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_format_cycl_expression_file();
     }
     

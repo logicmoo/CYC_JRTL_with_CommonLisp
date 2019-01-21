@@ -103,15 +103,18 @@ public final class removal_modules_non_wff extends SubLTranslatedFile
         return (SubLObject)removal_modules_non_wff.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_non_wff_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_non_wff_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_non_wff_file();
     }
     

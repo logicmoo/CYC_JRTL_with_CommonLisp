@@ -111,15 +111,18 @@ public final class textual_inference_lexicon extends SubLTranslatedFile
         return (SubLObject)textual_inference_lexicon.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_textual_inference_lexicon_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_textual_inference_lexicon_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_textual_inference_lexicon_file();
     }
     

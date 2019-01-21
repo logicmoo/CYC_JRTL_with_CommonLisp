@@ -389,15 +389,18 @@ public final class yahoo_movies_widgets extends SubLTranslatedFile
         return (SubLObject)yahoo_movies_widgets.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_yahoo_movies_widgets_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_yahoo_movies_widgets_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_yahoo_movies_widgets_file();
     }
     

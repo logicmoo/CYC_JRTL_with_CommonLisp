@@ -92,7 +92,8 @@ public final class WebBuffer extends Buffer implements WebConstants
         return maxChars;
     }
 
-    public Position getInitialDotPos()
+    @Override
+	public Position getInitialDotPos()
     {
         if (ref != null) {
             Position pos = findRef(ref);
@@ -189,7 +190,8 @@ public final class WebBuffer extends Buffer implements WebConstants
 
     private boolean empty = true;
 
-    public int load()
+    @Override
+	public int load()
     {
         if (getFirstLine() == null)
             setText("");
@@ -198,7 +200,8 @@ public final class WebBuffer extends Buffer implements WebConstants
         return LOAD_COMPLETED;
     }
 
-    protected void loadFile(File localFile)
+    @Override
+	protected void loadFile(File localFile)
     {
         WebLoader loader = new WebLoader(localFile);
         LineSequence lines = loader.load();
@@ -227,7 +230,8 @@ public final class WebBuffer extends Buffer implements WebConstants
         setLoaded(true);
     }
 
-    public Cursor getDefaultCursor(Position pos)
+    @Override
+	public Cursor getDefaultCursor(Position pos)
     {
         if (pos != null && pos.getLine() instanceof WebLine) {
             HtmlLineSegment segment =
@@ -238,7 +242,8 @@ public final class WebBuffer extends Buffer implements WebConstants
         return super.getDefaultCursor();
     }
 
-    public final int getMaximumColumns()
+    @Override
+	public final int getMaximumColumns()
     {
         return maxChars();
     }
@@ -344,7 +349,8 @@ public final class WebBuffer extends Buffer implements WebConstants
             final HttpLoadProcess httpLoadProcess =
                 new HttpLoadProcess(wb, (HttpFile) destination);
             Runnable successRunnable = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     final String contentType = httpLoadProcess.getContentType();
                     Log.debug("content-type = " + contentType);
@@ -395,7 +401,8 @@ public final class WebBuffer extends Buffer implements WebConstants
                 }
             };
             ErrorRunnable errorRunnable = new ErrorRunnable("Operation failed") {
-                public void run()
+                @Override
+				public void run()
                 {
                     Log.debug("followLink errorRunnable.run");
                     String errorText = httpLoadProcess.getErrorText();
@@ -487,7 +494,8 @@ public final class WebBuffer extends Buffer implements WebConstants
     }
 
     // BUG!! Optimize this - containsImageLine flag
-    public int getDisplayHeight()
+    @Override
+	public int getDisplayHeight()
     {
         int height = 0;
         for (Line line = getFirstLine(); line != null; line = line.nextVisible())
@@ -740,7 +748,8 @@ public final class WebBuffer extends Buffer implements WebConstants
             } else {
                 // Error!
                 Runnable errorRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         if (empty && Editor.getBufferList().contains(WebBuffer.this))
                             kill();
@@ -798,7 +807,8 @@ public final class WebBuffer extends Buffer implements WebConstants
         setFile(destination);
         final HttpLoadProcess httpLoadProcess = new HttpLoadProcess(this, httpFile);
         Runnable httpSuccessRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 File localCache = httpLoadProcess.getCache();
                 if (localCache != null && localCache.isFile()) {
@@ -812,7 +822,8 @@ public final class WebBuffer extends Buffer implements WebConstants
             }
         };
         Runnable httpCancelRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 setFile(oldFile);
                 setBusy(false);
@@ -830,7 +841,8 @@ public final class WebBuffer extends Buffer implements WebConstants
             }
         };
         ErrorRunnable httpErrorRunnable = new ErrorRunnable("Load failed") {
-            public void run()
+            @Override
+			public void run()
             {
                 setFile(oldFile);
                 setBusy(false);
@@ -881,7 +893,8 @@ public final class WebBuffer extends Buffer implements WebConstants
         Editor.currentEditor().status("Loading complete");
     }
 
-    public boolean isTransient()
+    @Override
+	public boolean isTransient()
     {
         if (super.isTransient())
             return true;
@@ -896,7 +909,8 @@ public final class WebBuffer extends Buffer implements WebConstants
         return false;
     }
 
-    public boolean save()
+    @Override
+	public boolean save()
     {
         // We shouldn't be trying to save a WebBuffer.
         Debug.bug();

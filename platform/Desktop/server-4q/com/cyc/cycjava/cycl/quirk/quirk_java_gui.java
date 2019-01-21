@@ -939,15 +939,18 @@ public final class quirk_java_gui extends SubLTranslatedFile
         return (SubLObject)quirk_java_gui.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_quirk_java_gui_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_quirk_java_gui_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_quirk_java_gui_file();
     }
     
@@ -1072,39 +1075,48 @@ public final class quirk_java_gui extends SubLTranslatedFile
             this.$research_done = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$gui_enabled_question_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$question_object;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$answers;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$focus_entities;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$research_done;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$question_object = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$answers = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$focus_entities = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$research_done = value;
         }
         
@@ -1119,7 +1131,8 @@ public final class quirk_java_gui extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GUI-ENABLED-QUESTION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return quirk_java_gui.gui_enabled_question_p(arg1);
         }
     }

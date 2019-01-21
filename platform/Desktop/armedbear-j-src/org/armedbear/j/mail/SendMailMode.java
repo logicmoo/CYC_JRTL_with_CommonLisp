@@ -65,12 +65,14 @@ public final class SendMailMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public Buffer createBuffer(File file)
+    @Override
+	public Buffer createBuffer(File file)
     {
         return new SendMail(file);
     }
 
-    public NavigationComponent getSidebarComponent(Editor editor)
+    @Override
+	public NavigationComponent getSidebarComponent(Editor editor)
     {
         View view = editor.getCurrentView();
         if (view == null)
@@ -80,12 +82,14 @@ public final class SendMailMode extends AbstractMode implements Constants, Mode
         return view.getSidebarComponent();
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new MessageFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
         km.mapKey(':', "sendMailElectricColon");
@@ -96,22 +100,26 @@ public final class SendMailMode extends AbstractMode implements Constants, Mode
                   "wrapParagraphsInRegion");
     }
 
-    protected ToolBar getDefaultToolBar(Frame frame)
+    @Override
+	protected ToolBar getDefaultToolBar(Frame frame)
     {
         return new SendMailModeToolBar(frame);
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
 
-    public boolean canIndentPaste()
+    @Override
+	public boolean canIndentPaste()
     {
         return false;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         if (buffer instanceof SendMail)
             if (((SendMail)buffer).isHeaderLine(line))
@@ -120,7 +128,8 @@ public final class SendMailMode extends AbstractMode implements Constants, Mode
         return 0;
     }
 
-    public boolean confirmClose(Editor editor, Buffer buffer)
+    @Override
+	public boolean confirmClose(Editor editor, Buffer buffer)
     {
         if (buffer instanceof SendMail) {
             if (((SendMail)buffer).hasBeenSent())

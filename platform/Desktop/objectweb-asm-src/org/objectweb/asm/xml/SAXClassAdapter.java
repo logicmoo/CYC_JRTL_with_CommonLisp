@@ -82,7 +82,8 @@ public final class SAXClassAdapter extends SAXAdapter implements ClassVisitor {
         }
     }
 
-    public void visitSource(final String source, final String debug) {
+    @Override
+	public void visitSource(final String source, final String debug) {
         AttributesImpl att = new AttributesImpl();
         if (source != null) {
             att.addAttribute("", "file", "file", "", encode(source));
@@ -94,7 +95,8 @@ public final class SAXClassAdapter extends SAXAdapter implements ClassVisitor {
         addElement("source", att);
     }
 
-    public void visitOuterClass(
+    @Override
+	public void visitOuterClass(
         final String owner,
         final String name,
         final String desc)
@@ -111,7 +113,8 @@ public final class SAXClassAdapter extends SAXAdapter implements ClassVisitor {
         addElement("outerclass", att);
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String desc,
         final boolean visible)
     {
@@ -122,7 +125,8 @@ public final class SAXClassAdapter extends SAXAdapter implements ClassVisitor {
                 desc);
     }
 
-    public void visit(
+    @Override
+	public void visit(
         final int version,
         final int access,
         final String name,
@@ -171,7 +175,8 @@ public final class SAXClassAdapter extends SAXAdapter implements ClassVisitor {
         addEnd("interfaces");
     }
 
-    public FieldVisitor visitField(
+    @Override
+	public FieldVisitor visitField(
         final int access,
         final String name,
         final String desc,
@@ -199,7 +204,8 @@ public final class SAXClassAdapter extends SAXAdapter implements ClassVisitor {
         return new SAXFieldAdapter(getContentHandler(), att);
     }
 
-    public MethodVisitor visitMethod(
+    @Override
+	public MethodVisitor visitMethod(
         final int access,
         final String name,
         final String desc,
@@ -231,7 +237,8 @@ public final class SAXClassAdapter extends SAXAdapter implements ClassVisitor {
         return new SAXCodeAdapter(getContentHandler(), access);
     }
 
-    public final void visitInnerClass(
+    @Override
+	public final void visitInnerClass(
         final String name,
         final String outerName,
         final String innerName,
@@ -254,7 +261,8 @@ public final class SAXClassAdapter extends SAXAdapter implements ClassVisitor {
         addElement("innerclass", att);
     }
 
-    public final void visitEnd() {
+    @Override
+	public final void visitEnd() {
         addEnd("class");
         if (!singleDocument) {
             addDocumentEnd();

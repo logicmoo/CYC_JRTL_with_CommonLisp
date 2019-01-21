@@ -88,11 +88,13 @@ public class LookupSwitchInsnNode extends AbstractInsnNode {
         }
     }
 
-    public int getType() {
+    @Override
+	public int getType() {
         return LOOKUPSWITCH_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         int[] keys = new int[this.keys.size()];
         for (int i = 0; i < keys.length; ++i) {
             keys[i] = ((Integer) this.keys.get(i)).intValue();
@@ -104,7 +106,8 @@ public class LookupSwitchInsnNode extends AbstractInsnNode {
         mv.visitLookupSwitchInsn(dflt.getLabel(), keys, labels);
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+	public AbstractInsnNode clone(final Map labels) {
         LookupSwitchInsnNode clone = new LookupSwitchInsnNode(clone(dflt,
                 labels), null, clone(this.labels, labels));
         clone.keys.addAll(keys);

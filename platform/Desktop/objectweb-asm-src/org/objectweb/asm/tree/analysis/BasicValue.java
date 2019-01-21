@@ -64,7 +64,8 @@ public class BasicValue implements Value {
         return type;
     }
 
-    public int getSize() {
+    @Override
+	public int getSize() {
         return type == Type.LONG_TYPE || type == Type.DOUBLE_TYPE ? 2 : 1;
     }
 
@@ -73,7 +74,8 @@ public class BasicValue implements Value {
                 && (type.getSort() == Type.OBJECT || type.getSort() == Type.ARRAY);
     }
 
-    public boolean equals(final Object value) {
+    @Override
+	public boolean equals(final Object value) {
         if (value == this) {
             return true;
         } else if (value instanceof BasicValue) {
@@ -87,11 +89,13 @@ public class BasicValue implements Value {
         }
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return type == null ? 0 : type.hashCode();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         if (this == UNINITIALIZED_VALUE) {
             return ".";
         } else if (this == RETURNADDRESS_VALUE) {

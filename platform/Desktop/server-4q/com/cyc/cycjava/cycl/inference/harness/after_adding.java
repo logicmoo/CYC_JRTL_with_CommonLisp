@@ -963,15 +963,18 @@ public final class after_adding extends SubLTranslatedFile
         return (SubLObject)after_adding.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_after_adding_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_after_adding_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_after_adding_file();
     }
     

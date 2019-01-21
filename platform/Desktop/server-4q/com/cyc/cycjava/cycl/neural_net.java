@@ -484,15 +484,18 @@ public final class neural_net extends SubLTranslatedFile
         return (SubLObject)neural_net.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_neural_net_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_neural_net_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_neural_net_file();
     }
     
@@ -567,15 +570,18 @@ public final class neural_net extends SubLTranslatedFile
             this.$input_nodes = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$neural_net_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$input_nodes;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$input_nodes = value;
         }
         
@@ -590,7 +596,8 @@ public final class neural_net extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NEURAL-NET-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return neural_net.neural_net_p(arg1);
         }
     }
@@ -606,23 +613,28 @@ public final class neural_net extends SubLTranslatedFile
             this.$weights = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$nn_input_node_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$value;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$weights;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$value = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$weights = value;
         }
         
@@ -637,7 +649,8 @@ public final class neural_net extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NN-INPUT-NODE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return neural_net.nn_input_node_p(arg1);
         }
     }

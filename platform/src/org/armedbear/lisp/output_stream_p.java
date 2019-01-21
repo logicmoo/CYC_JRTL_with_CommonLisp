@@ -43,7 +43,8 @@ public final class output_stream_p extends Primitive
         super("output-stream-p");
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
     	Stream s = checkStream(arg);
         return s.isOutputStream() ? T : NIL;

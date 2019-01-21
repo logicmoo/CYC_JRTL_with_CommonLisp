@@ -72,7 +72,8 @@ public class DateConverter extends DataTypeConverter<Date> {
    * @see TimeZone#getDefault
    * @deprecated Use CycNaut version.
    */
-  static public Date parseCycDate(final CycList cycList,
+  @Deprecated
+static public Date parseCycDate(final CycList cycList,
           final boolean shouldReportFailure) {
     final Object naut = CycNaut.convertIfPromising(cycList);
     if (naut instanceof CycNaut) {
@@ -109,7 +110,8 @@ public class DateConverter extends DataTypeConverter<Date> {
    *
    * @deprecated Use CycNaut version.
    */
-  static public Date parseCycDate(final CycList cycList, final TimeZone timeZone,
+  @Deprecated
+static public Date parseCycDate(final CycList cycList, final TimeZone timeZone,
           final boolean shouldReportFailure) {
     final Object naut = CycNaut.convertIfPromising(cycList);
     if (naut instanceof CycNaut) {
@@ -153,7 +155,8 @@ public class DateConverter extends DataTypeConverter<Date> {
    * @see TimeZone#getDefault
    * @deprecated Use CycNaut version.
    */
-  static public Date parseCycDate(final CycList cycList) {
+  @Deprecated
+static public Date parseCycDate(final CycList cycList) {
     return getInstance().parse(cycList);
   }
 
@@ -176,7 +179,8 @@ public class DateConverter extends DataTypeConverter<Date> {
   /** @return the precision of <tt>cycDate</tt> as a Calendar constant int.
    * @deprecated Use CycNaut version.
    */
-  public static int getCycDatePrecision(CycList cycDate) {
+  @Deprecated
+public static int getCycDatePrecision(CycList cycDate) {
     return getCycDatePrecision(new CycNaut(cycDate));
   }
 

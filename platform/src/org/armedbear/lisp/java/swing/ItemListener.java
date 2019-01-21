@@ -35,7 +35,8 @@ import org.armedbear.lisp.JHandler;
 
 public class ItemListener implements java.awt.event.ItemListener
 {
-    public void itemStateChanged(ItemEvent itemevent)
+    @Override
+	public void itemStateChanged(ItemEvent itemevent)
     {
         String as[] = { itemevent.paramString(), itemevent.getItem().toString() };
         int ai[] = { itemevent.getStateChange() != ItemEvent.SELECTED ? 0 : 1 };

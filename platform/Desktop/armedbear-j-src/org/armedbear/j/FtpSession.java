@@ -95,7 +95,8 @@ public class FtpSession implements Constants
         sessionList.remove(session);
     }
 
-    protected Object clone()
+    @Override
+	protected Object clone()
     {
         FtpSession session = new FtpSession();
         session.host = host;
@@ -1036,7 +1037,8 @@ public class FtpSession implements Constants
     }
 
     private static final Runnable cleanupRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             cleanup();
         }
@@ -1079,7 +1081,8 @@ public class FtpSession implements Constants
             final Editor editor = Editor.currentEditor();
             editor.setWaitCursor();
             Runnable r = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     try {
                         if (echo)

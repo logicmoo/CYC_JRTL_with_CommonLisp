@@ -66,15 +66,18 @@ public interface CycLTerm extends Serializable {
 
   abstract String cyclify();
 
-  abstract String toString();
+  @Override
+abstract String toString();
 
   abstract String toXMLString() throws IOException;
 
   abstract void toXML(XMLWriter xmlWriter, int indent, boolean relative) 
     throws IOException;
   
-  boolean equals(Object object);
+  @Override
+boolean equals(Object object);
 
-  int hashCode();
+  @Override
+int hashCode();
 
 }

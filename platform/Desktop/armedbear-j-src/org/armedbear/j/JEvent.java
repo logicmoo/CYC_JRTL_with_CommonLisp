@@ -102,7 +102,8 @@ public final class JEvent
         return Utilities.getKeyText(keyChar, keyCode, modifiers);
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer();
         switch (id) {

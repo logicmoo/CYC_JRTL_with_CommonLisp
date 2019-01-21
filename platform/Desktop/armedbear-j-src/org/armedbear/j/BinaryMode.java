@@ -39,13 +39,15 @@ public final class BinaryMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    protected final void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected final void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_B, CTRL_MASK | ALT_MASK, "defaultMode");
     }
 
     // For the status bar.
-    public String getContextString(Editor editor, boolean verbose /*ignored*/)
+    @Override
+	public String getContextString(Editor editor, boolean verbose /*ignored*/)
     {
         if (editor.getMode() instanceof BinaryMode) {
             final Line dotLine = editor.getDotLine();

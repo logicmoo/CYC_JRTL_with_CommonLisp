@@ -39,7 +39,8 @@ public final class AndTerm extends MailboxFilter
         filters.add(filter);
     }
 
-    public final boolean accept(MailboxEntry entry)
+    @Override
+	public final boolean accept(MailboxEntry entry)
     {
         for (int i = 0; i < filters.size(); i++) {
             MailboxFilter filter = (MailboxFilter) filters.get(i);

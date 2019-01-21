@@ -383,14 +383,17 @@ public class JAutoResizingTextArea extends JEditorPane {
 	 * Listens to document change events and updates the row count appropriately.
 	 */
 	private class ResizingDocumentListener implements DocumentListener {
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			updateSize();
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			updateSize();
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			updateSize();
 		}

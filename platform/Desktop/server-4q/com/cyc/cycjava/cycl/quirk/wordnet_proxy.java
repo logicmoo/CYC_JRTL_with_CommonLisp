@@ -1413,15 +1413,18 @@ public final class wordnet_proxy extends SubLTranslatedFile
         return (SubLObject)wordnet_proxy.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_wordnet_proxy_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_wordnet_proxy_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_wordnet_proxy_file();
     }
     

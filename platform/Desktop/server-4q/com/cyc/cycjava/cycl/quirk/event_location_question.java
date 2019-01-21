@@ -124,15 +124,18 @@ public final class event_location_question extends SubLTranslatedFile
         return (SubLObject)event_location_question.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_event_location_question_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_event_location_question_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_event_location_question_file();
     }
     

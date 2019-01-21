@@ -183,7 +183,8 @@ public class RepoOper implements AnyOper, UIAnnotations.UtilClass
         final String[] modelName = { "" };
         final Map<String, Model> constits = new HashMap<String, Model>();
         loaderModel.register((ModelChangedListener)new StatementListener() {
-            public void addedStatement(final Statement arg0) {
+            @Override
+			public void addedStatement(final Statement arg0) {
                 System.out.println("Adding statement: " + arg0);
                 final String subjStr = "" + arg0.getSubject();
                 if (subjStr.equals("self")) {
@@ -805,7 +806,8 @@ public class RepoOper implements AnyOper, UIAnnotations.UtilClass
             this.m_repo = repo;
         }
         
-        public void fire(final RB targetBox) {
+        @Override
+		public void fire(final RB targetBox) {
             final String resolvedQueryURL = DemoResources.QUERY_PATH;
             ClassLoader optCL = this.getClass().getClassLoader();
             if (targetBox != null) {
@@ -833,7 +835,8 @@ public class RepoOper implements AnyOper, UIAnnotations.UtilClass
             this.m_repo = repo;
         }
         
-        public void fire(final RB targetBox) {
+        @Override
+		public void fire(final RB targetBox) {
             this.m_repo.reloadSingleModel(this.graphURI);
         }
     }
@@ -857,7 +860,8 @@ public class RepoOper implements AnyOper, UIAnnotations.UtilClass
     @UIAnnotations.UISalient
     public interface ISeeToString
     {
-        @UIAnnotations.UISalient(MenuName = "Call ToString")
+        @Override
+		@UIAnnotations.UISalient(MenuName = "Call ToString")
         String toString();
     }
 }

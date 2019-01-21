@@ -39,12 +39,14 @@ public final class BufferIterator implements Iterator
         this.it = it;
     }
 
-    public boolean hasNext()
+    @Override
+	public boolean hasNext()
     {
         return it.hasNext();
     }
 
-    public Object next()
+    @Override
+	public Object next()
     {
         return it.next();
     }
@@ -54,7 +56,8 @@ public final class BufferIterator implements Iterator
         return (Buffer) it.next();
     }
 
-    public void remove()
+    @Override
+	public void remove()
     {
         it.remove();
     }

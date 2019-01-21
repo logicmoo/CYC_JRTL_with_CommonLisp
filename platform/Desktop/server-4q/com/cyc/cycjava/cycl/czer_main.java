@@ -5480,15 +5480,18 @@ public final class czer_main extends SubLTranslatedFile
         return (SubLObject)czer_main.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_czer_main_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_czer_main_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_czer_main_file();
     }
     
@@ -5638,7 +5641,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CANONICALIZE-CLAUSE-QUOTED-TERMS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_main.canonicalize_clause_quoted_terms(arg1);
         }
     }
@@ -5649,7 +5653,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CANONICALIZE-CLAUSE-SENTENCE-TERMS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_main.canonicalize_clause_sentence_terms(arg1);
         }
     }
@@ -5660,7 +5665,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CANONICALIZE-LITERAL-SENTENCE-TERMS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_main.canonicalize_literal_sentence_terms(arg1, (SubLObject)$canonicalize_literal_sentence_terms$UnaryFunction.UNPROVIDED);
         }
     }
@@ -5671,7 +5677,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CANONICALIZE-LITERAL-SENTENCE-TERMS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return czer_main.canonicalize_literal_sentence_terms(arg1, arg2);
         }
     }
@@ -5682,7 +5689,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CANONICALIZE-CLAUSE-COMMUTATIVE-TERMS-DESTRUCTIVE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_main.canonicalize_clause_commutative_terms_destructive(arg1);
         }
     }
@@ -5693,7 +5701,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CANONICALIZE-LITERAL-COMMUTATIVE-TERMS-DESTRUCTIVE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_main.canonicalize_literal_commutative_terms_destructive(arg1);
         }
     }
@@ -5704,7 +5713,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("COMMUTATIVE-TERMS-IN-ORDER?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return czer_main.commutative_terms_in_orderP(arg1, arg2);
         }
     }
@@ -5715,7 +5725,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LITERAL-QUANTIFIED-FN-TERMS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_main.literal_quantified_fn_terms(arg1);
         }
     }
@@ -5726,7 +5737,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LITERAL-TERMS-TO-REIFY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_main.literal_terms_to_reify(arg1, (SubLObject)$literal_terms_to_reify$UnaryFunction.UNPROVIDED);
         }
     }
@@ -5737,7 +5749,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LITERAL-TERMS-TO-REIFY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return czer_main.literal_terms_to_reify(arg1, arg2);
         }
     }
@@ -5748,7 +5761,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SORT-CLAUSE-LITERALS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_main.sort_clause_literals(arg1, (SubLObject)$sort_clause_literals$UnaryFunction.UNPROVIDED);
         }
     }
@@ -5759,7 +5773,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SORT-CLAUSE-LITERALS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return czer_main.sort_clause_literals(arg1, arg2);
         }
     }
@@ -5770,7 +5785,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LIT-<"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return czer_main.lit_L(arg1, arg2);
         }
     }
@@ -5781,7 +5797,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RENAME-CLAUSE-VARS-INT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return czer_main.rename_clause_vars_int(arg1, arg2, (SubLObject)$rename_clause_vars_int$BinaryFunction.UNPROVIDED);
         }
     }
@@ -5792,7 +5809,8 @@ public final class czer_main extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("INITIALIZE-SUFFIX-TABLE-FOR-VAR"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_main.initialize_suffix_table_for_var(arg1);
         }
     }

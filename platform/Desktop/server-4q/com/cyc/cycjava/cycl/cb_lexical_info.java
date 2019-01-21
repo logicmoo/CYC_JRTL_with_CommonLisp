@@ -4292,15 +4292,18 @@ public final class cb_lexical_info extends SubLTranslatedFile
         return (SubLObject)cb_lexical_info.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_lexical_info_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_lexical_info_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_lexical_info_file();
     }
     

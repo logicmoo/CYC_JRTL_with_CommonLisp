@@ -218,7 +218,8 @@ public class BindingSet implements Comparable {
      * @param object the object for comparison
      * @return <tt>boolean</tt> indicating equality of an object with this object.
      */
-    public boolean equals(Object object) {
+    @Override
+	public boolean equals(Object object) {
         if (! (object instanceof BindingSet))
             return false;
         QueryLiteral thatQueryLiteral = ((BindingSet) object).getQueryLiteral();
@@ -234,7 +235,8 @@ public class BindingSet implements Comparable {
      * @return a negative integer, zero, or a positive integer as this
      * object is less than, equal to, or greater than the specified object
      */
-     public int compareTo (Object object) {
+     @Override
+	public int compareTo (Object object) {
         if (! (object instanceof BindingSet))
             throw new ClassCastException("Must be a BindingSet object");
         return (new Integer(this.size())).compareTo(new Integer(((BindingSet) object).size()));
@@ -245,7 +247,8 @@ public class BindingSet implements Comparable {
      *
      * @return a <tt>String</tt> representation of the <tt>BindingSet</tt> object.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         if (bindingValues != null)
             return queryLiteral.cyclify() + " with estimated size " + this.getNbrInstances() +
                 " and actual size " + this.size();

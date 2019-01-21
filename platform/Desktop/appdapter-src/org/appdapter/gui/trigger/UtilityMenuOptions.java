@@ -280,6 +280,7 @@ abstract public class UtilityMenuOptions implements UtilClass {
 		Class classOfBox;
 		boolean hasNoSideEffects = false;
 		Callable<Trigger> howto = new Callable<Trigger>() {
+			@Override
 			public Trigger call() throws IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException {
 				return createTrigger(cls);
 			}

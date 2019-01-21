@@ -36,7 +36,8 @@ public final class ToMailboxFilter extends MailboxFilter
         ignoreCase = Utilities.isLowerCase(pattern);
     }
 
-    public boolean accept(MailboxEntry entry)
+    @Override
+	public boolean accept(MailboxEntry entry)
     {
         MailAddress[] to = entry.getTo();
         if (to != null) {

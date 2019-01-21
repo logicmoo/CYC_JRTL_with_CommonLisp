@@ -77,11 +77,13 @@ public class SourceValue implements Value {
         this.insns = insns;
     }
 
-    public int getSize() {
+    @Override
+	public int getSize() {
         return size;
     }
 
-    public boolean equals(final Object value) {
+    @Override
+	public boolean equals(final Object value) {
         if (!(value instanceof SourceValue)) {
         	return false;
         }
@@ -89,7 +91,8 @@ public class SourceValue implements Value {
         return size == v.size && insns.equals(v.insns);
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return insns.hashCode();
     }
 }

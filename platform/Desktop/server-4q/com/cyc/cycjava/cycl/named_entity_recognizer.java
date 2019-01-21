@@ -1802,15 +1802,18 @@ public final class named_entity_recognizer extends SubLTranslatedFile
         return (SubLObject)named_entity_recognizer.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_named_entity_recognizer_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_named_entity_recognizer_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_named_entity_recognizer_file();
     }
     

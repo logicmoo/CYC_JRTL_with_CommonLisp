@@ -52,7 +52,8 @@ public final class PrintPainter implements Printable
         endLine = region.getEndLine();
     }
 
-    public int print(Graphics g, java.awt.print.PageFormat pf, int pageIndex) throws PrinterException
+    @Override
+	public int print(Graphics g, java.awt.print.PageFormat pf, int pageIndex) throws PrinterException
     {
         if (pageIndex != currentPage) {
             currentPage = pageIndex;

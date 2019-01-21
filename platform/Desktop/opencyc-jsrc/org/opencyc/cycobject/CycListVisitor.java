@@ -60,7 +60,8 @@ public class CycListVisitor implements Enumeration {
      *           contains at least one more element to provide;
      *          <tt>false</tt> otherwise.
      */
-    public boolean hasMoreElements() {
+    @Override
+	public boolean hasMoreElements() {
         return nextElement != null;
     }
 
@@ -71,7 +72,8 @@ public class CycListVisitor implements Enumeration {
      * @return     the next element of this <tt>Enumeration</tt>.
      * @exception  NoSuchElementException  if no more elements exist.
      */
-    public Object nextElement() {
+    @Override
+	public Object nextElement() {
         if (nextElement == null)
             throw new NoSuchElementException();
         Object answer = nextElement;

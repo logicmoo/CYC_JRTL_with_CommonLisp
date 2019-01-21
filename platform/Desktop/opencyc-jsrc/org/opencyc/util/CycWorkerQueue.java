@@ -78,7 +78,8 @@ public class CycWorkerQueue {
   //// Internal Rep
   private BlockingQueue<CycWorker> workerQueue = new LinkedBlockingQueue<CycWorker>();
   private final Thread thread = new Thread() {
-    public void run() {
+    @Override
+	public void run() {
       processQueue();
     }
   };

@@ -207,15 +207,18 @@ public final class api_remote_objects extends SubLTranslatedFile
         return (SubLObject)api_remote_objects.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_api_remote_objects_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_api_remote_objects_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_api_remote_objects_file();
     }
     

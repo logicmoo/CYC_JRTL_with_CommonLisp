@@ -535,15 +535,18 @@ public final class formula_pattern_match extends SubLTranslatedFile
         return (SubLObject)formula_pattern_match.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_formula_pattern_match_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_formula_pattern_match_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_formula_pattern_match_file();
     }
     
@@ -574,7 +577,8 @@ public final class formula_pattern_match extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PATTERN-MATCHES-FORMULA"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return formula_pattern_match.pattern_matches_formula(arg1, arg2);
         }
     }
@@ -585,7 +589,8 @@ public final class formula_pattern_match extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PATTERN-MATCHES-FORMULA-NAT-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return formula_pattern_match.pattern_matches_formula_nat_method(arg1, arg2);
         }
     }

@@ -90,7 +90,8 @@ public class Shell extends CommandInterpreter implements Constants
         return Platform.isPlatformWindows() ? "cmd.exe /q" : "bash -i";
     }
 
-    protected void initializeHistory()
+    @Override
+	protected void initializeHistory()
     {
         history = new History("shell.history", 30);
     }
@@ -185,14 +186,16 @@ public class Shell extends CommandInterpreter implements Constants
         }
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         if (!checkProcess()) {
             Log.debug("checkProcess returned false");
             return;
         }
         Thread thread = new Thread("shell dispose") {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     stdin.write(3);
@@ -218,7 +221,8 @@ public class Shell extends CommandInterpreter implements Constants
         thread.start();
     }
 
-    protected void enter(final String s)
+    @Override
+	protected void enter(final String s)
     {
         super.enter(s);
         // If it's a local shell (i.e. not telnet or ssh), keep track of the
@@ -247,7 +251,8 @@ public class Shell extends CommandInterpreter implements Constants
         }
     }
 
-    protected boolean checkProcess()
+    @Override
+	protected boolean checkProcess()
     {
         Process p = getProcess();
         if (p == null)
@@ -264,7 +269,8 @@ public class Shell extends CommandInterpreter implements Constants
     final protected void startWatcherThread()
     {
         Thread thread = new Thread("shell watcher") {
-            public void run()
+            @Override
+			public void run()
             {
                 try {
                     Process p = getProcess();
@@ -280,7 +286,8 @@ public class Shell extends CommandInterpreter implements Constants
                     Log.error(e);
                 }
                 Runnable processExitedRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         appendString("\nProcess exited\n");
                         setBusy(false);
@@ -446,28 +453,33 @@ public class Shell extends CommandInterpreter implements Constants
         return sb.toString();
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         return (currentDir != null) ? currentDir.canonicalPath() : "";
     }
 
     // For the buffer list.
-    public String toString()
+    @Override
+	public String toString()
     {
         return shellCommand != null ? shellCommand : "";
     }
 
-    public File getCurrentDirectory()
+    @Override
+	public File getCurrentDirectory()
     {
         return currentDir;
     }
 
-    public File getCompletionDirectory()
+    @Override
+	public File getCompletionDirectory()
     {
         return currentDir;
     }
 
-    protected void appendString(String s)
+    @Override
+	protected void appendString(String s)
     {
         if (s.indexOf(0x1b) >= 0) {
             // Strip escape sequences used for ls colorization.
@@ -488,10 +500,12 @@ public class Shell extends CommandInterpreter implements Constants
         super.appendString(s);
     }
 
-    protected void stdOutUpdate(final String s)
+    @Override
+	protected void stdOutUpdate(final String s)
     {
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 if (s.length() > 0) {
                     updateDirectory(s);
@@ -506,7 +520,8 @@ public class Shell extends CommandInterpreter implements Constants
         SwingUtilities.invokeLater(r);
     }
 
-    protected void stdErrUpdate(final String s)
+    @Override
+	protected void stdErrUpdate(final String s)
     {
         if (promptIsStderr) {
             REMatch match = promptRE.getMatch(s);
@@ -522,7 +537,8 @@ public class Shell extends CommandInterpreter implements Constants
             }
         }
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 appendString(s);
                 updateLineFlags();

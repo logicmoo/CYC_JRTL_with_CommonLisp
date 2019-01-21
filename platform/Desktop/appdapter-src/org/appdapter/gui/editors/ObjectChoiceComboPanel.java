@@ -86,6 +86,7 @@ public class ObjectChoiceComboPanel extends JJPanel implements PropertyEditor, P
 
 		private boolean layingOut = false;
 
+		@Override
 		public void doLayout() {
 			try {
 				layingOut = true;
@@ -95,6 +96,7 @@ public class ObjectChoiceComboPanel extends JJPanel implements PropertyEditor, P
 			}
 		}
 
+		@Override
 		public Dimension getSize() {
 			Dimension dim = super.getSize();
 			if (!layingOut)
@@ -126,6 +128,7 @@ public class ObjectChoiceComboPanel extends JJPanel implements PropertyEditor, P
 			invalidate();
 		}
 
+		@Override
 		public void setSelectedIndex(int anIndex) {
 			int size = model.getSize();
 
@@ -406,6 +409,7 @@ public class ObjectChoiceComboPanel extends JJPanel implements PropertyEditor, P
 		return val;
 	}
 
+	@Override
 	public TableCellEditor getCellEditor() {
 		PropertyEditor editor = null;
 		if (editor != null)
@@ -451,6 +455,7 @@ public class ObjectChoiceComboPanel extends JJPanel implements PropertyEditor, P
 		return tags;
 	}
 
+	@Override
 	public TreeCellEditor getTreeCellEditor() {
 		return (TreeCellEditor) getCellEditor();
 	}
@@ -556,6 +561,7 @@ public class ObjectChoiceComboPanel extends JJPanel implements PropertyEditor, P
 			return getBoundValue();
 		}
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		Object object = evt.getNewValue();
 		Object oldValue = evt.getOldValue();

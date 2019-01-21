@@ -50,7 +50,8 @@ public class LabelNode extends AbstractInsnNode {
         this.label = label;
     }
 
-    public int getType() {
+    @Override
+	public int getType() {
         return LABEL;
     }
 
@@ -61,11 +62,13 @@ public class LabelNode extends AbstractInsnNode {
         return label;
     }
 
-    public void accept(final MethodVisitor cv) {
+    @Override
+	public void accept(final MethodVisitor cv) {
         cv.visitLabel(getLabel());
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+	public AbstractInsnNode clone(final Map labels) {
         return (LabelNode) labels.get(this);
     }
 

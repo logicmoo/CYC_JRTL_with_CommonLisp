@@ -23,8 +23,10 @@ package org.armedbear.j;
 
 public interface ProgressNotifier extends Cancellable
 {
-    public void cancel();
-    public boolean cancelled();
+    @Override
+	public void cancel();
+    @Override
+	public boolean cancelled();
     public void progressStart();
     public void progressStop();
     public void progress(String prefix, long totalBytes, long fileSize);

@@ -81,7 +81,8 @@ public class AnnotationNode implements AnnotationVisitor {
     // Implementation of the AnnotationVisitor interface
     // ------------------------------------------------------------------------
 
-    public void visit(final String name, final Object value) {
+    @Override
+	public void visit(final String name, final Object value) {
         if (values == null) {
             values = new ArrayList(this.desc != null ? 2 : 1);
         }
@@ -91,7 +92,8 @@ public class AnnotationNode implements AnnotationVisitor {
         values.add(value);
     }
 
-    public void visitEnum(
+    @Override
+	public void visitEnum(
         final String name,
         final String desc,
         final String value)
@@ -105,7 +107,8 @@ public class AnnotationNode implements AnnotationVisitor {
         values.add(new String[] { desc, value });
     }
 
-    public AnnotationVisitor visitAnnotation(
+    @Override
+	public AnnotationVisitor visitAnnotation(
         final String name,
         final String desc)
     {
@@ -120,7 +123,8 @@ public class AnnotationNode implements AnnotationVisitor {
         return annotation;
     }
 
-    public AnnotationVisitor visitArray(final String name) {
+    @Override
+	public AnnotationVisitor visitArray(final String name) {
         if (values == null) {
             values = new ArrayList(this.desc != null ? 2 : 1);
         }
@@ -132,7 +136,8 @@ public class AnnotationNode implements AnnotationVisitor {
         return new AnnotationNode(array);
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
     }
 
     // ------------------------------------------------------------------------

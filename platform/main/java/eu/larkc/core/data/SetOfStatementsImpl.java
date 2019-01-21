@@ -40,10 +40,12 @@ public class SetOfStatementsImpl implements SetOfStatements {
 		this.data = new ArrayList<Statement>(data);
 	}
 
+	@Override
 	public CloseableIterator<Statement> getStatements() {
 		return new SimpleCloseableIterator<Statement>(data.iterator());
 	}
 	
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof SetOfStatementsImpl == false) {
 			return false;
@@ -51,6 +53,7 @@ public class SetOfStatementsImpl implements SetOfStatements {
 		return data.equals(((SetOfStatementsImpl) o).data);
 	}
 	
+	@Override
 	public int hashCode() {
 		return data.hashCode();
 	}

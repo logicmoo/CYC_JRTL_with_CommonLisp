@@ -1123,15 +1123,18 @@ public final class evaluatable_relation_tests extends SubLTranslatedFile
         return (SubLObject)evaluatable_relation_tests.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_evaluatable_relation_tests_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_evaluatable_relation_tests_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_evaluatable_relation_tests_file();
     }
     
@@ -1268,47 +1271,58 @@ public final class evaluatable_relation_tests extends SubLTranslatedFile
             this.$owner = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$evaluatable_relation_test_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$relation;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$id;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$sentence;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$kb;
         }
         
-        public SubLObject getField6() {
+        @Override
+		public SubLObject getField6() {
             return this.$owner;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$relation = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$id = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$sentence = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$kb = value;
         }
         
-        public SubLObject setField6(final SubLObject value) {
+        @Override
+		public SubLObject setField6(final SubLObject value) {
             return this.$owner = value;
         }
         
@@ -1323,7 +1337,8 @@ public final class evaluatable_relation_tests extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EVALUATABLE-RELATION-TEST-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return evaluatable_relation_tests.evaluatable_relation_test_p(arg1);
         }
     }
@@ -1334,7 +1349,8 @@ public final class evaluatable_relation_tests extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ERT-ID"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return evaluatable_relation_tests.ert_id(arg1);
         }
     }

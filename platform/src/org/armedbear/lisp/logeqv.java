@@ -47,12 +47,14 @@ public final class logeqv extends Primitive
         super("logeqv", "&rest integers");
     }
 
-    public LispObject execute()
+    @Override
+	public LispObject execute()
     {
         return Fixnum.MINUS_ONE;
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         if (arg instanceof Fixnum)
             return arg;
@@ -61,7 +63,8 @@ public final class logeqv extends Primitive
         return type_error(arg, Symbol.INTEGER);
     }
 
-    public LispObject execute(LispObject[] args)
+    @Override
+	public LispObject execute(LispObject[] args)
     {
         BigInteger result = null;
         for (int i = 0; i < args.length; i++) {

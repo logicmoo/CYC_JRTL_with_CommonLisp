@@ -816,15 +816,18 @@ public final class psp_parse_tree_generator extends SubLTranslatedFile
         return (SubLObject)psp_parse_tree_generator.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_psp_parse_tree_generator_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_psp_parse_tree_generator_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_psp_parse_tree_generator_file();
     }
     
@@ -895,23 +898,28 @@ public final class psp_parse_tree_generator extends SubLTranslatedFile
             this.$edges = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$psp_edge_equivalence_set_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$choice_dtr_num;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$edges;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$choice_dtr_num = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$edges = value;
         }
         
@@ -926,7 +934,8 @@ public final class psp_parse_tree_generator extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PSP-EDGE-EQUIVALENCE-SET-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return psp_parse_tree_generator.psp_edge_equivalence_set_p(arg1);
         }
     }

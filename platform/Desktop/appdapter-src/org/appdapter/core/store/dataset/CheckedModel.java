@@ -46,11 +46,13 @@ public class CheckedModel extends ModelCom implements Model
         this(CheckedGraph.ensure(modelGraph, makeNonAdd, makeNonDelete, makeNameSpaceChecked));
     }
     
-    public Statement createStatement(final Resource s, final Property p, final RDFNode o) {
+    @Override
+	public Statement createStatement(final Resource s, final Property p, final RDFNode o) {
         return super.createStatement(s, p, o);
     }
     
-    public Literal createTypedLiteral(final Object v, final RDFDatatype dtype) {
+    @Override
+	public Literal createTypedLiteral(final Object v, final RDFDatatype dtype) {
         return this.createTypedLiteralObject(v, dtype);
     }
     
@@ -59,7 +61,8 @@ public class CheckedModel extends ModelCom implements Model
         return this.checkDataType(lit, dtype);
     }
     
-    public Literal createTypedLiteral(final String lex, final RDFDatatype dtype) throws DatatypeFormatException {
+    @Override
+	public Literal createTypedLiteral(final String lex, final RDFDatatype dtype) throws DatatypeFormatException {
         Literal lit = null;
         try {
             lit = super.createTypedLiteral(lex, dtype);
@@ -89,7 +92,8 @@ public class CheckedModel extends ModelCom implements Model
         return lit;
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         return "<CheckedModel=" + this.debuggingName + " " + this.getGraph() + " | " + this.reifiedToString() + ">";
     }
     
@@ -97,31 +101,37 @@ public class CheckedModel extends ModelCom implements Model
         return (CheckedGraph)this.getGraph();
     }
     
-    public Resource createResource(String uri) {
+    @Override
+	public Resource createResource(String uri) {
         uri = RepoDatasetFactory.fixURI(uri);
         final Resource r = super.createResource(uri);
         return r;
     }
     
-    public Resource getResource(String uri) {
+    @Override
+	public Resource getResource(String uri) {
         uri = RepoDatasetFactory.fixURI(uri);
         final Resource r = super.getResource(uri);
         return r;
     }
     
-    public void close() {
+    @Override
+	public void close() {
         this.modelGraph.close();
     }
     
-    public boolean isClosed() {
+    @Override
+	public boolean isClosed() {
         return this.modelGraph.isClosed();
     }
     
-    public boolean isEmpty() {
+    @Override
+	public boolean isEmpty() {
         return this.modelGraph.isEmpty();
     }
     
-    public long size() {
+    @Override
+	public long size() {
         return this.modelGraph.size();
     }
     

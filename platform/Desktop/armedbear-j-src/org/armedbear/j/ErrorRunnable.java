@@ -37,7 +37,8 @@ public class ErrorRunnable implements Runnable
         message = s;
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
             Editor ed = it.nextEditor();

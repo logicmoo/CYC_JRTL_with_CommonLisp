@@ -11,15 +11,18 @@ public class ClientModelProvider implements NamedModelProvider
 {
     private final RepoClient myRepoClient;
     
-    public BoundModelProvider makeDirectBoundModelProvider(final Ident graphID, final ModelClient dirModelClient) {
+    @Override
+	public BoundModelProvider makeDirectBoundModelProvider(final Ident graphID, final ModelClient dirModelClient) {
         return NamedModelProvider$class.makeDirectBoundModelProvider((NamedModelProvider)this, graphID, dirModelClient);
     }
     
-    public Model getNamedModel(final Ident graphID) {
+    @Override
+	public Model getNamedModel(final Ident graphID) {
         return this.myRepoClient.getRepo().getNamedModel(graphID);
     }
     
-    public BoundModelProvider makeDirectBoundModelProvider(final Ident graphID) {
+    @Override
+	public BoundModelProvider makeDirectBoundModelProvider(final Ident graphID) {
         final ModelClient dirModelClient = this.myRepoClient.getRepo().getDirectoryModelClient();
         return this.makeDirectBoundModelProvider(graphID, dirModelClient);
     }

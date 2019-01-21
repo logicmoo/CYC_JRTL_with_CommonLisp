@@ -91,11 +91,13 @@ public class TableSwitchInsnNode extends AbstractInsnNode {
         }
     }
 
-    public int getType() {
+    @Override
+	public int getType() {
         return TABLESWITCH_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         Label[] labels = new Label[this.labels.size()];
         for (int i = 0; i < labels.length; ++i) {
             labels[i] = ((LabelNode) this.labels.get(i)).getLabel();
@@ -103,7 +105,8 @@ public class TableSwitchInsnNode extends AbstractInsnNode {
         mv.visitTableSwitchInsn(min, max, dflt.getLabel(), labels);
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+	public AbstractInsnNode clone(final Map labels) {
         return new TableSwitchInsnNode(min,
                 max,
                 clone(dflt, labels),

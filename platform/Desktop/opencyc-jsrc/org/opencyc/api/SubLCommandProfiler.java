@@ -66,7 +66,8 @@ public class SubLCommandProfiler implements SubLWorkerListener {
    * processing of a SubL task.
    * @param event the event object with details about this event
    */    
-  public void notifySubLWorkerStarted(SubLWorkerEvent event) {
+  @Override
+public void notifySubLWorkerStarted(SubLWorkerEvent event) {
     //// Preconditions 
     assert event != null : "event must not be null";
     assert subLWorkerStartTimeDictionary != null : "subLWorkerStartTimeDictionary must not be null";
@@ -79,14 +80,16 @@ public class SubLCommandProfiler implements SubLWorkerListener {
    * the processing of a SubL task.
    * @param event the event object with details about this event
    */
-  public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
+  @Override
+public void notifySubLWorkerDataAvailable(SubLWorkerEvent event) {
   }
   
   /** This event is fired when a SubL task has been terminated
    * for any reason.
    * @param event the event object with details about this event
    */
-  public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
+  @Override
+public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
     //// Preconditions 
     assert event != null : "event must not be null";
     assert subLWorkerStartTimeDictionary != null : "subLWorkerStartTimeDictionary must not be null";
@@ -159,7 +162,8 @@ public class SubLCommandProfiler implements SubLWorkerListener {
      *
      * @param obj the object for comparision with this object
      */
-    public int compareTo(Object obj) {
+    @Override
+	public int compareTo(Object obj) {
       final SubLCommandInfo that = (SubLCommandInfo) obj;
       if (this.durationMillis < that.durationMillis)
         return -1;
@@ -173,7 +177,8 @@ public class SubLCommandProfiler implements SubLWorkerListener {
      *
      * @return 
      */
-    public String toString() {
+    @Override
+	public String toString() {
       final StringBuffer stringBuffer = new StringBuffer(1000);
       stringBuffer.append(durationMillisToString());
       stringBuffer.append('\n');
@@ -253,7 +258,8 @@ public class SubLCommandProfiler implements SubLWorkerListener {
     try {
       final CycAccess access = new CycAccess();
       Thread workerThread = new Thread() {
-        public void run() {
+        @Override
+		public void run() {
           try {
             System.out.println("Starting work.");
             testWorker = new DefaultSubLWorkerSynch("(do-assertions (a))", access);
@@ -276,7 +282,8 @@ public class SubLCommandProfiler implements SubLWorkerListener {
 
       System.out.println( "\nOk, second round ....\n\n");      
       workerThread = new Thread() {
-        public void run() {
+        @Override
+		public void run() {
           try {
             System.out.println("Starting work.");
             testWorker = new DefaultSubLWorkerSynch("(do-assertions (a))", access);
@@ -299,7 +306,8 @@ public class SubLCommandProfiler implements SubLWorkerListener {
 
       System.out.println( "\nOk, third round ....\n\n");
       workerThread = new Thread() {
-        public void run() {
+        @Override
+		public void run() {
           long timeBefore = 0, timeAfter = 0;
           try {
             System.out.println("Starting work.");

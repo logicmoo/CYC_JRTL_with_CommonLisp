@@ -269,15 +269,18 @@ public final class constants_interface extends SubLTranslatedFile
         return (SubLObject)constants_interface.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_constants_interface_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_constants_interface_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_constants_interface_file();
     }
     

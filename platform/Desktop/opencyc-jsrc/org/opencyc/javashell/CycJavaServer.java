@@ -42,7 +42,8 @@ public class CycJavaServer extends Thread {
 	allShells.put("localhost",jshell);
 	serverSocket = new ServerSocket(port);
     }
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	public void run() {
 	while( !Thread.interrupted() ) {
 	    try {

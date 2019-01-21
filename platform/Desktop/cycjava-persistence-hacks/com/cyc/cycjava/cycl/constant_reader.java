@@ -163,15 +163,18 @@ public final class constant_reader extends SubLTranslatedFile
         return (SubLObject)constant_reader.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_constant_reader_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_constant_reader_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_constant_reader_file();
     }
     

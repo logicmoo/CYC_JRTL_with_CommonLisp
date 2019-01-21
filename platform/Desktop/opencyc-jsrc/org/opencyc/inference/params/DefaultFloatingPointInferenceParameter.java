@@ -45,7 +45,8 @@ public class DefaultFloatingPointInferenceParameter extends AbstractInferencePar
   }
 
   //// Public Area
-  public boolean isValidValue(Object potentialValue) {
+  @Override
+public boolean isValidValue(Object potentialValue) {
     if (isAlternateValue(potentialValue)) {
       return true;
     } else if (DefaultInferenceParameters.isInfiniteValue(potentialValue)) {
@@ -63,15 +64,18 @@ public class DefaultFloatingPointInferenceParameter extends AbstractInferencePar
     }
   }
 
-  public double getMaxValue() {
+  @Override
+public double getMaxValue() {
     return maxValue;
   }
 
-  public double getMinValue() {
+  @Override
+public double getMinValue() {
     return minValue;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return super.toString() + " min=" + minValue + " max=" + maxValue;
   }
 
@@ -86,7 +90,8 @@ public class DefaultFloatingPointInferenceParameter extends AbstractInferencePar
   }
 
 
-  public Object parameterValueCycListApiValue(Object val) {
+  @Override
+public Object parameterValueCycListApiValue(Object val) {
     return val;
   }
 

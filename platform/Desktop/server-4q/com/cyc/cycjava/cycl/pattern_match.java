@@ -900,15 +900,18 @@ public final class pattern_match extends SubLTranslatedFile
         return (SubLObject)pattern_match.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pattern_match_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pattern_match_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pattern_match_file();
     }
     
@@ -985,7 +988,8 @@ public final class pattern_match extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PATTERN-MATCHES-TREE-RECURSIVE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return pattern_match.pattern_matches_tree_recursive(arg1, arg2);
         }
     }

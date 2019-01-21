@@ -1892,15 +1892,18 @@ public final class hl_transcript_tracing extends SubLTranslatedFile
         return (SubLObject)hl_transcript_tracing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_hl_transcript_tracing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_hl_transcript_tracing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_hl_transcript_tracing_file();
     }
     

@@ -84,7 +84,8 @@ public final class SocketConnection
     }
 
     private final Thread connectThread = new Thread("connect") {
-        public void run()
+        @Override
+		public void run()
         {
             try {
                 socket = new Socket(hostName, port);

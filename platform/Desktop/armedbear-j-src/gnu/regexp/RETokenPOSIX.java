@@ -58,11 +58,13 @@ final class RETokenPOSIX extends REToken {
     this.negated = negated;
   }
 
-    int getMinimumLength() {
+    @Override
+	int getMinimumLength() {
 	return 1;
     }
 
-    boolean match(CharIndexed input, REMatch mymatch) {
+    @Override
+	boolean match(CharIndexed input, REMatch mymatch) {
     char ch = input.charAt(mymatch.index);
     if (ch == CharIndexed.OUT_OF_BOUNDS)
       return false;
@@ -118,7 +120,8 @@ final class RETokenPOSIX extends REToken {
     else return false;
   }
 
-  void dump(StringBuffer os) {
+  @Override
+void dump(StringBuffer os) {
     if (negated) os.append('^');
     os.append("[:" + s_nameTable[type] + ":]");
   }

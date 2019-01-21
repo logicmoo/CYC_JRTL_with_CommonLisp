@@ -142,10 +142,12 @@ public class TriggerMouseAdapter extends MouseAdapter implements PopupMenuListen
 				putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl A"));
 			}
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				component.selectAll();
 			}
 
+			@Override
 			public boolean isEnabled() {
 				return component.isEnabled() && component.getText().length() > 0;
 			}
@@ -550,6 +552,7 @@ public class TriggerMouseAdapter extends MouseAdapter implements PopupMenuListen
 		return source;
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		mouseEvent(e);
 	}
@@ -687,10 +690,12 @@ public class TriggerMouseAdapter extends MouseAdapter implements PopupMenuListen
 		}
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		mouseEvent(e);
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		mouseEvent(e);
 	}

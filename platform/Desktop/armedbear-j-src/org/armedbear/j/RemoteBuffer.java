@@ -63,7 +63,8 @@ public final class RemoteBuffer extends Buffer implements Constants
     private int initialLineNumber;
     private int initialOffset;
 
-    public void setInitialDotPos(int lineNumber, int offset)
+    @Override
+	public void setInitialDotPos(int lineNumber, int offset)
     {
         // We just want to store the paraemters we're called with here, so we
         // can call setInitialDotPos() on the "real" buffer later.
@@ -71,7 +72,8 @@ public final class RemoteBuffer extends Buffer implements Constants
         initialOffset = offset;
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         setLoaded(true);
         mode = Editor.getModeList().getMode(PLAIN_TEXT_MODE);
@@ -110,7 +112,8 @@ public final class RemoteBuffer extends Buffer implements Constants
     }
 
     private Runnable ftpLoadSuccessRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             File file = ftpLoadProcess.getFile();
             String listing = ftpLoadProcess.getListing();
@@ -129,7 +132,8 @@ public final class RemoteBuffer extends Buffer implements Constants
     };
 
     private ErrorRunnable ftpLoadErrorRunnable = new ErrorRunnable("Load failed") {
-        public void run()
+        @Override
+		public void run()
         {
             kill();
             super.run();
@@ -138,7 +142,8 @@ public final class RemoteBuffer extends Buffer implements Constants
 
     private Runnable httpLoadSuccessRunnable = new Runnable()
     {
-        public void run()
+        @Override
+		public void run()
         {
             File cache = httpLoadProcess.getCache();
             if (cache != null) {
@@ -171,7 +176,8 @@ public final class RemoteBuffer extends Buffer implements Constants
     };
 
     private ErrorRunnable httpLoadErrorRunnable = new ErrorRunnable("Load failed") {
-        public void run()
+        @Override
+		public void run()
         {
             Log.debug("httpLoadErrorRunnable.run");
             Editor editor = Editor.currentEditor();
@@ -185,7 +191,8 @@ public final class RemoteBuffer extends Buffer implements Constants
     };
 
     private Runnable sshLoadSuccessRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             File file = sshLoadProcess.getFile();
             String listing = sshLoadProcess.getListing();
@@ -202,7 +209,8 @@ public final class RemoteBuffer extends Buffer implements Constants
     };
 
     private Runnable replaceBufferRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             if (Editor.getBufferList().contains(RemoteBuffer.this)) {
                 int result;
@@ -215,7 +223,8 @@ public final class RemoteBuffer extends Buffer implements Constants
                     buffer.kill();
                     RemoteBuffer.this.kill();
                     Runnable r = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             MessageDialog.showMessageDialog(
                                 Editor.currentEditor(),
@@ -236,7 +245,8 @@ public final class RemoteBuffer extends Buffer implements Constants
     };
 
     private ErrorRunnable sshLoadErrorRunnable = new ErrorRunnable("Load failed") {
-        public void run()
+        @Override
+		public void run()
         {
             if (Editor.getBufferList().contains(RemoteBuffer.this)) {
                 if (isEmpty())
@@ -253,25 +263,29 @@ public final class RemoteBuffer extends Buffer implements Constants
         }
     };
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         if (progressNotifier != null)
             progressNotifier.cancel();
         super.dispose();
     }
 
-    public String getTitle()
+    @Override
+	public String getTitle()
     {
         return getFile().getHostName();
     }
 
     // For the buffer list.
-    public String toString()
+    @Override
+	public String toString()
     {
         return getFile().getHostName();
     }
 
-    public File getCurrentDirectory()
+    @Override
+	public File getCurrentDirectory()
     {
         return Directories.getUserHomeDirectory();
     }

@@ -828,7 +828,8 @@ public final class numeral_parser extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NUMERAL-PARSER-STRING="));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return numeral_parser.numeral_parser_stringE(arg1, arg2);
         }
     }
@@ -1008,15 +1009,18 @@ public final class numeral_parser extends SubLTranslatedFile
         return (SubLObject)numeral_parser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_numeral_parser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_numeral_parser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_numeral_parser_file();
     }
     

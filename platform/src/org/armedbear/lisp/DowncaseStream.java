@@ -40,17 +40,20 @@ public final class DowncaseStream extends CaseFrobStream
         super(target);
     }
 
-    public void _writeChar(char c)
+    @Override
+	public void _writeChar(char c)
     {
         target._writeChar(LispCharacter.toLowerCase(c));
     }
 
-    public void _writeString(String s)
+    @Override
+	public void _writeString(String s)
     {
         target._writeString(s.toLowerCase());
     }
 
-    public void _writeLine(String s)
+    @Override
+	public void _writeLine(String s)
     {
         target._writeLine(s.toLowerCase());
     }

@@ -10,7 +10,8 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 public class JenaSDBWrappedDatasetFactory extends AbstractDatasetFactory implements UserDatasetFactory
 {
-    public Dataset create(final Model model) {
+    @Override
+	public Dataset create(final Model model) {
         final Dataset remote = this.createRemotePeer();
         final Model remoteModel = remote.getDefaultModel();
         if (remoteModel != null) {
@@ -22,39 +23,47 @@ public class JenaSDBWrappedDatasetFactory extends AbstractDatasetFactory impleme
         return remote;
     }
     
-    public Dataset create(final DatasetGraph dataset) {
+    @Override
+	public Dataset create(final DatasetGraph dataset) {
         return DatasetImpl.wrap(dataset);
     }
     
-    public String getDatasetType() {
+    @Override
+	public String getDatasetType() {
         return "instance";
     }
     
-    public Dataset createDefault() {
+    @Override
+	public Dataset createDefault() {
         return this.createRemotePeer();
     }
     
-    public Dataset create(final Dataset peer) {
+    @Override
+	public Dataset create(final Dataset peer) {
         final Dataset remote = this.createRemotePeer();
         RepoDatasetFactory.addDatasetSync(peer, remote);
         return peer;
     }
     
-    public Dataset createType(final String typeOf, final String sharedNameIgnoredPresently) {
+    @Override
+	public Dataset createType(final String typeOf, final String sharedNameIgnoredPresently) {
         return this.createDefault();
     }
     
-    public Dataset createRemotePeer() {
+    @Override
+	public Dataset createRemotePeer() {
         final Store store = SDBFactory.connectStore(RepoDatasetFactory.STORE_CONFIG_PATH);
         final Dataset ds = SDBFactory.connectDataset(store);
         return ds;
     }
     
-    public Model createModelOfType(final String typeOf, final String sharedNameIgnoredPresently) throws Throwable {
+    @Override
+	public Model createModelOfType(final String typeOf, final String sharedNameIgnoredPresently) throws Throwable {
         return this.createModelOfType(typeOf, null, sharedNameIgnoredPresently);
     }
     
-    public Model createModelOfType(final String typeOf, final String modelName, final String shareName) {
+    @Override
+	public Model createModelOfType(final String typeOf, final String modelName, final String shareName) {
         final Store store = SDBFactory.connectStore(RepoDatasetFactory.STORE_CONFIG_PATH);
         return SDBFactory.connectNamedModel(store, RepoDatasetFactory.getGlobalName(modelName, shareName));
     }

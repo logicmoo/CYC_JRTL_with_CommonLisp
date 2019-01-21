@@ -29,7 +29,8 @@ public class JenaResourceItem extends BaseItem implements ModelIdent
         this.myResource = r;
     }
     
-    public boolean equals(final Object o) {
+    @Override
+	public boolean equals(final Object o) {
         if (o != null && o instanceof Ident) {
             final String absUri = this.getAbsUriString();
             if (absUri != null) {
@@ -43,7 +44,8 @@ public class JenaResourceItem extends BaseItem implements ModelIdent
         return false;
     }
     
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         final String uriString = this.getAbsUriString();
         if (uriString != null) {
             return this.getAbsUriString().hashCode();
@@ -51,24 +53,29 @@ public class JenaResourceItem extends BaseItem implements ModelIdent
         return this.myResource.hashCode();
     }
     
-    public Ident getIdent() {
+    @Override
+	public Ident getIdent() {
         return (Ident)this;
     }
     
-    public final String toString() {
+    @Override
+	public final String toString() {
         return "JenaResourceItem[res=" + this.myResource.toString() + "]";
     }
     
-    public Ident getIdentInSameModel(final String absURI) {
+    @Override
+	public Ident getIdentInSameModel(final String absURI) {
         final Resource res = this.myResource.getModel().createResource(absURI);
         return (Ident)new JenaResourceItem(res);
     }
     
-    public String getAbsUriString() {
+    @Override
+	public String getAbsUriString() {
         return this.myResource.getURI();
     }
     
-    public String getLocalName() {
+    @Override
+	public String getLocalName() {
         return this.myResource.getLocalName();
     }
     
@@ -140,7 +147,8 @@ public class JenaResourceItem extends BaseItem implements ModelIdent
         return null;
     }
     
-    protected Literal getLiteralVal(final Ident fieldID, final boolean throwOnFailure) {
+    @Override
+	protected Literal getLiteralVal(final Ident fieldID, final boolean throwOnFailure) {
         Literal resultLit = null;
         final RDFNode resultNode = this.getSinglePropertyVal(fieldID, throwOnFailure);
         if (resultNode != null) {
@@ -149,7 +157,8 @@ public class JenaResourceItem extends BaseItem implements ModelIdent
         return resultLit;
     }
     
-    protected List<Item> getLinkedItems(final Ident linkName, final Item.LinkDirection linkDir) {
+    @Override
+	protected List<Item> getLinkedItems(final Ident linkName, final Item.LinkDirection linkDir) {
         final List<RDFNode> linkedNodes = this.getPropertyValues(linkName, linkDir);
         final List<Item> results = new ArrayList<Item>();
         for (final RDFNode rn : linkedNodes) {
@@ -160,7 +169,8 @@ public class JenaResourceItem extends BaseItem implements ModelIdent
         return results;
     }
     
-    public List<Item> getLinkedOrderedList(final Ident linkName) {
+    @Override
+	public List<Item> getLinkedOrderedList(final Ident linkName) {
         final List<Item> results = new ArrayList<Item>();
         final RDFNode resultNode = this.getSinglePropertyVal(linkName, false);
         if (resultNode != null) {
@@ -177,7 +187,8 @@ public class JenaResourceItem extends BaseItem implements ModelIdent
         return results;
     }
     
-    public Resource getJenaResource() {
+    @Override
+	public Resource getJenaResource() {
         return this.myResource;
     }
 }

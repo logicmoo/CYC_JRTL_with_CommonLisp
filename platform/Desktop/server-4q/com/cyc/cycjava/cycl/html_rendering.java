@@ -664,15 +664,18 @@ public final class html_rendering extends SubLTranslatedFile
         return (SubLObject)html_rendering.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_html_rendering_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_html_rendering_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_html_rendering_file();
     }
     

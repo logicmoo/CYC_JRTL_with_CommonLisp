@@ -47,79 +47,95 @@ public class RemappingSignatureAdapter implements SignatureVisitor {
         this.remapper = remapper;
     }
 
-    public void visitClassType(String name) {
+    @Override
+	public void visitClassType(String name) {
         className = name;
         v.visitClassType(remapper.mapType(name));
     }
 
-    public void visitInnerClassType(String name) {
+    @Override
+	public void visitInnerClassType(String name) {
         className = className + '$' + name;
         String remappedName = remapper.mapType(className);
         v.visitInnerClassType(remappedName.substring(remappedName.lastIndexOf('$') + 1));
     }
 
-    public void visitFormalTypeParameter(String name) {
+    @Override
+	public void visitFormalTypeParameter(String name) {
         v.visitFormalTypeParameter(name);
     }
 
-    public void visitTypeVariable(String name) {
+    @Override
+	public void visitTypeVariable(String name) {
         v.visitTypeVariable(name);
     }
 
-    public SignatureVisitor visitArrayType() {
+    @Override
+	public SignatureVisitor visitArrayType() {
         v.visitArrayType();
         return this;
     }
 
-    public void visitBaseType(char descriptor) {
+    @Override
+	public void visitBaseType(char descriptor) {
         v.visitBaseType(descriptor);
     }
 
-    public SignatureVisitor visitClassBound() {
+    @Override
+	public SignatureVisitor visitClassBound() {
         v.visitClassBound();
         return this;
     }
 
-    public SignatureVisitor visitExceptionType() {
+    @Override
+	public SignatureVisitor visitExceptionType() {
         v.visitExceptionType();
         return this;
     }
 
-    public SignatureVisitor visitInterface() {
+    @Override
+	public SignatureVisitor visitInterface() {
         v.visitInterface();
         return this;
     }
 
-    public SignatureVisitor visitInterfaceBound() {
+    @Override
+	public SignatureVisitor visitInterfaceBound() {
         v.visitInterfaceBound();
         return this;
     }
 
-    public SignatureVisitor visitParameterType() {
+    @Override
+	public SignatureVisitor visitParameterType() {
         v.visitParameterType();
         return this;
     }
 
-    public SignatureVisitor visitReturnType() {
+    @Override
+	public SignatureVisitor visitReturnType() {
         v.visitReturnType();
         return this;
     }
 
-    public SignatureVisitor visitSuperclass() {
+    @Override
+	public SignatureVisitor visitSuperclass() {
         v.visitSuperclass();
         return this;
     }
 
-    public void visitTypeArgument() {
+    @Override
+	public void visitTypeArgument() {
         v.visitTypeArgument();
     }
 
-    public SignatureVisitor visitTypeArgument(char wildcard) {
+    @Override
+	public SignatureVisitor visitTypeArgument(char wildcard) {
         v.visitTypeArgument(wildcard);
         return this;
     }
 
-    public void visitEnd() {
+    @Override
+	public void visitEnd() {
         v.visitEnd();
     }
 

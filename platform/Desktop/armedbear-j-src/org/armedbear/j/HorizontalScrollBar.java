@@ -33,12 +33,14 @@ public final class HorizontalScrollBar extends JScrollBar
         this.editor = editor;
     }
 
-    public int getUnitIncrement(int direction)
+    @Override
+	public int getUnitIncrement(int direction)
     {
         return editor.getDisplay().getCharWidth();
     }
 
-    public int getBlockIncrement(int direction)
+    @Override
+	public int getBlockIncrement(int direction)
     {
         return editor.getDisplay().getWidth();
     }

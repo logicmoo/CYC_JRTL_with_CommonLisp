@@ -1114,15 +1114,18 @@ public final class morphological_word_parser extends SubLTranslatedFile
         return (SubLObject)morphological_word_parser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_morphological_word_parser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_morphological_word_parser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_morphological_word_parser_file();
     }
     

@@ -47,7 +47,8 @@ public final class JavaTreePopupMenu extends JPopupMenu implements ActionListene
         add(item);
     }
 
-    public void actionPerformed(ActionEvent e)
+    @Override
+	public void actionPerformed(ActionEvent e)
     {
         Object object = e.getSource();
         if (object instanceof JCheckBoxMenuItem) {

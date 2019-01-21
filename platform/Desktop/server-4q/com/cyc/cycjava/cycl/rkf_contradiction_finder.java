@@ -182,15 +182,18 @@ public final class rkf_contradiction_finder extends SubLTranslatedFile
         return (SubLObject)rkf_contradiction_finder.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_contradiction_finder_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_contradiction_finder_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_contradiction_finder_file();
     }
     

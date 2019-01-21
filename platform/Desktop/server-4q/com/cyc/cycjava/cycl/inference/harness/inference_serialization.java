@@ -1538,15 +1538,18 @@ public final class inference_serialization extends SubLTranslatedFile
         return (SubLObject)inference_serialization.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_serialization_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_serialization_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_serialization_file();
     }
     

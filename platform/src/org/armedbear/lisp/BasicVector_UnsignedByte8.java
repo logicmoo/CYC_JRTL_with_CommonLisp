@@ -64,17 +64,20 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
       elements[i] = coerceLispObjectToJavaByte(array[i]);
   }
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     return list(Symbol.SIMPLE_ARRAY, UNSIGNED_BYTE_8, new Cons(Fixnum.getInstance(capacity)));
   }
 
-  public LispObject classOf()
+  @Override
+public LispObject classOf()
   {
     return BuiltInClass.VECTOR;
   }
 
-  public LispObject typep(LispObject type)
+  @Override
+public LispObject typep(LispObject type)
   {
     if (type == Symbol.SIMPLE_ARRAY)
       return T;
@@ -83,37 +86,44 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     return super.typep(type);
   }
 
-  public LispObject getElementType()
+  @Override
+public LispObject getElementType()
   {
     return UNSIGNED_BYTE_8;
   }
 
-  public boolean isSimpleVector()
+  @Override
+public boolean isSimpleVector()
   {
     return false;
   }
 
-  public boolean hasFillPointer()
+  @Override
+public boolean hasFillPointer()
   {
     return false;
   }
 
-  public boolean isAdjustable()
+  @Override
+public boolean isAdjustable()
   {
     return false;
   }
 
-  public int capacity()
+  @Override
+public int capacity()
   {
     return capacity;
   }
 
-  public int length()
+  @Override
+public int length()
   {
     return capacity;
   }
 
-  public LispObject elt(int index)
+  @Override
+public LispObject elt(int index)
   {
     try
       {
@@ -126,7 +136,8 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
       }
   }
 
-  public int aref(int index)
+  @Override
+public int aref(int index)
   {
     try
       {
@@ -140,7 +151,8 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
       }
   }
 
-  public LispObject AREF(int index)
+  @Override
+public LispObject AREF(int index)
   {
     try
       {
@@ -153,7 +165,8 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
       }
   }
 
-  public void aset(int index, int n)
+  @Override
+public void aset(int index, int n)
   {
     try
       {
@@ -165,7 +178,8 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
       }
   }
 
-  public void aset(int index, LispObject value)
+  @Override
+public void aset(int index, LispObject value)
   {
     try
       {
@@ -177,7 +191,8 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
       }
   }
 
-  public LispObject subseq(int start, int end)
+  @Override
+public LispObject subseq(int start, int end)
   {
     BasicVector_UnsignedByte8 v = new BasicVector_UnsignedByte8(end - start);
     int i = start, j = 0;
@@ -193,14 +208,16 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
       }
   }
 
-  public void fill(LispObject obj)
+  @Override
+public void fill(LispObject obj)
   {
     byte b = coerceLispObjectToJavaByte(obj);
     for (int i = capacity; i-- > 0;)
       elements[i] = b;
   }
 
-  public void shrink(int n)
+  @Override
+public void shrink(int n)
   {
     if (n < capacity)
       {
@@ -215,7 +232,8 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     error(new LispError());
   }
 
-  public LispObject reverse()
+  @Override
+public LispObject reverse()
   {
     BasicVector_UnsignedByte8 result = new BasicVector_UnsignedByte8(capacity);
     int i, j;
@@ -224,7 +242,8 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     return result;
   }
 
-  public LispObject nreverse()
+  @Override
+public LispObject nreverse()
   {
     int i = 0;
     int j = capacity - 1;
@@ -239,7 +258,8 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     return this;
   }
 
-  public AbstractVector adjustArray(int newCapacity,
+  @Override
+public AbstractVector adjustArray(int newCapacity,
                                      LispObject initialElement,
                                      LispObject initialContents)
 
@@ -281,7 +301,8 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
     return this;
   }
 
-  public AbstractVector adjustArray(int newCapacity,
+  @Override
+public AbstractVector adjustArray(int newCapacity,
                                      AbstractArray displacedTo,
                                      int displacement)
   {

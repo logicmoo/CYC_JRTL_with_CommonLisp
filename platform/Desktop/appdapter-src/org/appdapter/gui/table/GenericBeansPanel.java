@@ -50,6 +50,7 @@ abstract public class GenericBeansPanel extends ScreenBoxPanel implements CellCo
 
 	static Logger theLogger = LoggerFactory.getLogger(GenericBeansPanel.class);
 
+	@Override
 	public ToFromKeyConverter getCellConverter(Class valueClazz) {
 
 		return Utility.getToFromStringConverter(valueClazz);
@@ -260,6 +261,7 @@ abstract public class GenericBeansPanel extends ScreenBoxPanel implements CellCo
 	public void addAction(String label, final CallableWithParameters callableWithParameters) {
 		JButton myAddButton = new JButton(label);
 		myAddButton.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				callableWithParameters.call(evt);
 			}
@@ -281,6 +283,7 @@ abstract public class GenericBeansPanel extends ScreenBoxPanel implements CellCo
 		return true;
 	}
 
+	@Override
 	public List listFromHolder(Object o) {
 		if (listFromH != null && listFromH != this) {
 			return listFromH.listFromHolder(o);

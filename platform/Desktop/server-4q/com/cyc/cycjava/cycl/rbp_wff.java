@@ -3748,15 +3748,18 @@ public final class rbp_wff extends SubLTranslatedFile
         return (SubLObject)rbp_wff.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rbp_wff_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rbp_wff_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rbp_wff_file();
     }
     

@@ -329,6 +329,7 @@ public class BshClassPath
 		return unqNameTable;
 	}
 
+	@Override
 	public String [] getAllNames()
 	{
 		insureInitialized();
@@ -432,6 +433,7 @@ public class BshClassPath
 		nameSpaceChanged();
 	}
 
+	@Override
 	public void classPathChanged() {
 		clearCachedStructures();
 		notifyListeners();
@@ -714,9 +716,11 @@ public class BshClassPath
 			BshClassLoader can natively load from a JAR because it is a
 			URLClassLoader... so it may be better to allow it to do it.
 		*/
+		@Override
 		public byte [] getCode( String className ) {
 			throw new Error("Unimplemented");
 		}
+		@Override
 		public String toString() { return "Jar: "+source; }
 	}
 
@@ -724,8 +728,10 @@ public class BshClassPath
 	{
 		DirClassSource( File dir ) { source = dir; }
 		public File getDir() { return (File)source; }
+		@Override
 		public String toString() { return "Dir: "+source; }
 
+		@Override
 		public byte [] getCode( String className ) {
 			return readBytesFromFile( getDir(), className );
 		}
@@ -759,6 +765,7 @@ public class BshClassPath
 	public static class GeneratedClassSource extends ClassSource
 	{
 		GeneratedClassSource( byte [] bytecode ) { source = bytecode; }
+		@Override
 		public byte [] getCode( String className ) {
 			return (byte [])source;
 		}
@@ -771,6 +778,7 @@ public class BshClassPath
 		BshClassPath bcp = new BshClassPath( "Test", urls );
 	}
 
+	@Override
 	public String toString() {
 		return "BshClassPath "+name+"("+super.toString()+") path= "+path +"\n"
 			+ "compPaths = {" + compPaths +" }";
@@ -830,6 +838,7 @@ public class BshClassPath
 		Implements NameSource
 		Add a listener who is notified upon changes to names in this space.
 	*/
+	@Override
 	public void addNameSourceListener( NameSource.Listener listener ) {
 		if ( nameSourceListeners == null )
 			nameSourceListeners = new ArrayList();

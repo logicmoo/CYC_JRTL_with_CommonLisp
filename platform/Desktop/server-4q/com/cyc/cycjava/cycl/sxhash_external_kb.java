@@ -177,15 +177,18 @@ public final class sxhash_external_kb extends SubLTranslatedFile
         return (SubLObject)sxhash_external_kb.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sxhash_external_kb_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sxhash_external_kb_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sxhash_external_kb_file();
     }
     

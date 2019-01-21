@@ -62,65 +62,78 @@ public final class ImageLine extends AbstractLine implements Line
         return imageWidth;
     }
 
-    public final int getHeight()
+    @Override
+	public final int getHeight()
     {
         return height;
     }
 
-    public final int getWidth()
+    @Override
+	public final int getWidth()
     {
         return getImageWidth();
     }
 
-    public final int flags()
+    @Override
+	public final int flags()
     {
         return 0;
     }
 
-    public final void setFlags(int flags)
+    @Override
+	public final void setFlags(int flags)
     {
     }
 
-    public String getText()
+    @Override
+	public String getText()
     {
         return null;
     }
 
-    public final void setText(String s)
+    @Override
+	public final void setText(String s)
     {
     }
 
-    public final char charAt(int i)
+    @Override
+	public final char charAt(int i)
     {
         return '\0';
     }
 
-    public final String substring(int beginIndex)
+    @Override
+	public final String substring(int beginIndex)
     {
         return null;
     }
 
-    public final String substring(int beginIndex, int endIndex)
+    @Override
+	public final String substring(int beginIndex, int endIndex)
     {
         return null;
     }
 
-    public final String trim()
+    @Override
+	public final String trim()
     {
         return null;
     }
 
-    public final int length()
+    @Override
+	public final int length()
     {
         return 0;
     }
 
-    public final byte[] getBytes(String encoding)
+    @Override
+	public final byte[] getBytes(String encoding)
     {
         return null;
     }
 
-    public final boolean isBlank()
+    @Override
+	public final boolean isBlank()
     {
         return false;
     }
@@ -133,7 +146,8 @@ public final class ImageLine extends AbstractLine implements Line
         }        
     }
     
-    protected void finalize() throws Throwable
+    @Override
+	protected void finalize() throws Throwable
     {
         flushImage();
         super.finalize();

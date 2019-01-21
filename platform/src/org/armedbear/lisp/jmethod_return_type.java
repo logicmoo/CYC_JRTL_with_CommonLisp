@@ -46,7 +46,8 @@ public final class jmethod_return_type extends Primitive
 "Returns a reference to the Class object that represents the formal return type of METHOD.");
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
 
     {
         if (arg instanceof JavaObject) {

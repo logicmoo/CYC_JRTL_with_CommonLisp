@@ -85,7 +85,8 @@ public final class GlobalTag extends Tag
     return new GlobalTag(name, signature, filename, canonicalSignature);
   }
 
-  public String getClassName()
+  @Override
+public String getClassName()
   {
     // Java.
     int index = name.indexOf('.');
@@ -99,7 +100,8 @@ public final class GlobalTag extends Tag
     return null;
   }
 
-  public String getMethodName()
+  @Override
+public String getMethodName()
   {
     // Java
     int index = name.indexOf('.');
@@ -112,7 +114,8 @@ public final class GlobalTag extends Tag
     return name;
   }
 
-  public String getLongName()
+  @Override
+public String getLongName()
   {
     String s = signature.trim();
     if (s.startsWith("DEFUN"))
@@ -213,7 +216,8 @@ public final class GlobalTag extends Tag
     return s;
   }
 
-  public String toString()
+  @Override
+public String toString()
   {
     // JavaScript.
     if (signature.trim().startsWith("function "))
@@ -222,7 +226,8 @@ public final class GlobalTag extends Tag
       return super.toString();
   }
 
-  public void gotoTag(Editor editor)
+  @Override
+public void gotoTag(Editor editor)
   {
     editor.setWaitCursor();
     Buffer buf = Editor.getBuffer(File.getInstance(filename));

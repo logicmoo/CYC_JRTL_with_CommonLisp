@@ -420,15 +420,18 @@ public final class special_variable_state extends SubLTranslatedFile
         return (SubLObject)special_variable_state.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_special_variable_state_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_special_variable_state_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_special_variable_state_file();
     }
     
@@ -485,23 +488,28 @@ public final class special_variable_state extends SubLTranslatedFile
             this.$values = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$special_variable_state_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$variables;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$values;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$variables = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$values = value;
         }
         
@@ -516,7 +524,8 @@ public final class special_variable_state extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SPECIAL-VARIABLE-STATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return special_variable_state.special_variable_state_p(arg1);
         }
     }

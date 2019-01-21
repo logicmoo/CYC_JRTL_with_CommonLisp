@@ -69,7 +69,8 @@ public class REMatchEnumeration implements Enumeration, Serializable {
   }
 
   /** Returns true if there are more matches in the input text. */
-  public boolean hasMoreElements() {
+  @Override
+public boolean hasMoreElements() {
     return hasMoreMatches(null);
   }
 
@@ -96,7 +97,8 @@ public class REMatchEnumeration implements Enumeration, Serializable {
   }
 
   /** Returns the next match in the input text. */
-  public Object nextElement() throws NoSuchElementException {
+  @Override
+public Object nextElement() throws NoSuchElementException {
     return nextMatch();
   }
 

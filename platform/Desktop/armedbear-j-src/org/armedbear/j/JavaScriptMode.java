@@ -40,23 +40,27 @@ public final class JavaScriptMode extends JavaMode implements Constants, Mode
         return mode;
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    @Override
+	public final Formatter getFormatter(Buffer buffer)
     {
         return new JavaFormatter(buffer, LANGUAGE_JAVASCRIPT);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         super.setKeyMapDefaults(km);
         km.mapKey(KeyEvent.VK_ENTER, CTRL_MASK, "newline");
     }
 
-    public void populateModeMenu(Editor editor, Menu menu)
+    @Override
+	public void populateModeMenu(Editor editor, Menu menu)
     {
         // No mode menu yet.
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final int indentSize = buffer.getIndentSize();
         int indent = 0;

@@ -73,15 +73,18 @@ public class VarInsnNode extends AbstractInsnNode {
         this.opcode = opcode;
     }
 
-    public int getType() {
+    @Override
+	public int getType() {
         return VAR_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitVarInsn(opcode, var);
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+	public AbstractInsnNode clone(final Map labels) {
         return new VarInsnNode(opcode, var);
     }
 }

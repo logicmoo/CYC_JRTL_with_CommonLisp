@@ -33,7 +33,8 @@ public class UndoMove extends AbstractUndoableEdit implements Constants
         preState = new State(editor);
     }
 
-    public void undo()
+    @Override
+	public void undo()
     {
         super.undo();
         final Editor editor = Editor.currentEditor();
@@ -42,7 +43,8 @@ public class UndoMove extends AbstractUndoableEdit implements Constants
         editor.setUpdateFlag(REFRAME);
     }
 
-    public void redo()
+    @Override
+	public void redo()
     {
         super.redo();
         final Editor editor = Editor.currentEditor();

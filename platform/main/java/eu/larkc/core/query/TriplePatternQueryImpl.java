@@ -15,26 +15,32 @@ public class TriplePatternQueryImpl implements TriplePatternQuery {
 		this.patterns.addAll(thePatterns);
 	}
 	
+	@Override
 	public void add(TriplePattern theTriplePattern){
 		this.patterns.add(theTriplePattern);
 	}
 	
+	@Override
 	public void remove(TriplePattern theTriplePattern){
 		this.patterns.remove(theTriplePattern);
 	}
 	
+	@Override
 	public void clear(){
 		this.patterns.clear();
 	}
 	
+	@Override
 	public boolean isEmpty(){
 		return this.patterns.isEmpty();
 	}
 	
+	@Override
 	public Collection<TriplePattern> getTriplePatterns() {
 		return patterns;
 	}
 	
+	@Override
 	public String toString(){
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");

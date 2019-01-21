@@ -63,15 +63,18 @@ public class IincInsnNode extends AbstractInsnNode {
         this.incr = incr;
     }
 
-    public int getType() {
+    @Override
+	public int getType() {
         return IINC_INSN;
     }
 
-    public void accept(final MethodVisitor mv) {
+    @Override
+	public void accept(final MethodVisitor mv) {
         mv.visitIincInsn(var, incr);
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+	public AbstractInsnNode clone(final Map labels) {
         return new IincInsnNode(var, incr);
     }
 }

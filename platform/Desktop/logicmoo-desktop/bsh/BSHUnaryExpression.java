@@ -41,7 +41,8 @@ class BSHUnaryExpression extends SimpleNode implements ParserConstants
 
     BSHUnaryExpression(int id) { super(id); }
 
-    public Object eval( CallStack callstack, Interpreter interpreter)  
+    @Override
+	public Object eval( CallStack callstack, Interpreter interpreter)  
 		throws EvalError
     {
         SimpleNode node = (SimpleNode)jjtGetChild(0);

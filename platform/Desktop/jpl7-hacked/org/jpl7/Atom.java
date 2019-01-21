@@ -110,11 +110,13 @@ public class Atom extends Term
 		}
 	}
 
+	@Override
 	public Term[] args()
 	{
 		return new Term[] {};
 	}
 
+	@Override
 	public final String atomType()
 	{
 		return this.type;
@@ -127,6 +129,7 @@ public class Atom extends Term
 	 *            the Object to compare (not necessarily another Atom)
 	 * @return true if the Object satisfies the above condition
 	 */
+	@Override
 	public final boolean equals(Object obj)
 	{
 		return (this == obj || obj instanceof Atom && name.equals(((Atom) obj).name) && type.equals(((Atom) obj).type));
@@ -137,6 +140,7 @@ public class Atom extends Term
 	 *
 	 * @return whether this Compound's functor has (String) 'name' and 'arity'
 	 */
+	@Override
 	public final boolean hasFunctor(String name, int arity)
 	{
 		return name.equals(this.name) && arity == 0;
@@ -151,6 +155,7 @@ public class Atom extends Term
 	 *            an Atom (blob) type, e.g. "text", "reserved_symbol"
 	 * @return whether this Term instance is an Atom with name and type
 	 */
+	@Override
 	public final boolean isAtomOfNameType(String name, String type)
 	{
 		return name != null && type != null && name.equals(this.name) && type.equals(this.type);
@@ -159,6 +164,7 @@ public class Atom extends Term
 	/**
 	 * whether this Term denotes (syntax-specifically) an empty list
 	 */
+	@Override
 	public final boolean isListNil()
 	{
 		return this.equals(JPL.LIST_NIL);
@@ -169,6 +175,7 @@ public class Atom extends Term
 	 *
 	 * @return the name (unquoted) of this Compound
 	 */
+	@Override
 	public final String name()
 	{
 		return name;
@@ -184,6 +191,7 @@ public class Atom extends Term
 	 *            A (previously created) term_t which is to be set to a Prolog term corresponding to the Term subtype
 	 *            (Atom, Variable, Compound, etc.) on which the method is invoked.
 	 */
+	@Override
 	protected void put(Map<String, term_t> varnames_to_vars, term_t term)
 	{
 		if (this.equals(JPL.LIST_NIL))
@@ -203,6 +211,7 @@ public class Atom extends Term
 	 * @return string representation of an Atom
 	 */
 	
+	@Override
 	public String toString()
 	{
 		String value = this.name.replace("\\", "\\\\") //				
@@ -223,6 +232,7 @@ public class Atom extends Term
 	 *
 	 * @return the type of this term, as "Prolog.ATOM"
 	 */
+	@Override
 	public final int type()
 	{
 		return Prolog.ATOM;
@@ -233,6 +243,7 @@ public class Atom extends Term
 	 *
 	 * @return the name of the type of this term, as "Atom"
 	 */
+	@Override
 	public String typeName()
 	{ // overrides same in jpl.Term
 		return "Atom";

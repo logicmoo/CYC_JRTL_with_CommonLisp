@@ -4,6 +4,7 @@
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.armedbear.lisp.Main;
+import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -54,6 +56,11 @@ public class Tcp extends SubLTrampolineFile {
 				Dynamic.bind(Tcp.$remote_address$, ipAddress);
 				Dynamic.bind(Tcp.$retain_client_socketP$, SubLNil.NIL);
 				socketStream = SubLObjectFactory.makeSocketStream(connectionSocket);
+				connectionSocket.setSoTimeout(0);
+				SystemCurrent.setIn(connectionSocket.getInputStream());
+				SystemCurrent.setOut(new PrintStream(connectionSocket.getOutputStream()));
+				SystemCurrent.setErr(new PrintStream(connectionSocket.getOutputStream()));
+				
 				Functions.funcall(func, socketStream, socketStream);
 			} catch (Exception e) {
 				Errors.error("Error detected on socket connection: " + socketStream, e);
@@ -117,6 +124,7 @@ public class Tcp extends SubLTrampolineFile {
 
 		@Override
 		public void safeRun() {
+			SystemCurrent.setupIO();
 			Socket socket = null;
 			try {
 				while (true) {

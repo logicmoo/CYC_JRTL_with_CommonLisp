@@ -1953,15 +1953,18 @@ public final class butler_inference_store extends SubLTranslatedFile
         return (SubLObject)butler_inference_store.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_butler_inference_store_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_butler_inference_store_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_butler_inference_store_file();
     }
     

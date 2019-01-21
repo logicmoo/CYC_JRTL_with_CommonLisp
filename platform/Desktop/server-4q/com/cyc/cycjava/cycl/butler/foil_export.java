@@ -6753,15 +6753,18 @@ public final class foil_export extends SubLTranslatedFile
         return (SubLObject)foil_export.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_foil_export_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_foil_export_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_foil_export_file();
     }
     

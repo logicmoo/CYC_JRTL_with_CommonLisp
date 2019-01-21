@@ -506,15 +506,18 @@ public final class metadata_parser extends SubLTranslatedFile
         return (SubLObject)metadata_parser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_metadata_parser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_metadata_parser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_metadata_parser_file();
     }
     

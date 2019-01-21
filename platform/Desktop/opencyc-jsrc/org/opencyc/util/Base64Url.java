@@ -88,7 +88,8 @@ final public class Base64Url extends Base64 {
         -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9         // Decimal 244 - 255 */
     };
 
-  protected byte[] getDecodabet() {
+  @Override
+protected byte[] getDecodabet() {
     return BASE_64_URL_DECODABET;
   }
 

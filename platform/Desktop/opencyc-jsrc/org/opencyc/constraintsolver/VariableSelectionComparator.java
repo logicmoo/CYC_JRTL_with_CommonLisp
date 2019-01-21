@@ -47,7 +47,8 @@ public class VariableSelectionComparator implements Comparator {
      * @exception ClassCastException - if the arguments' types prevent them from
      * being compared by this Comparator
      */
-    public int compare (Object o1, Object o2) {
+    @Override
+	public int compare (Object o1, Object o2) {
         Object[] annotation1 = (Object[]) o1;
         Object[] annotation2 = (Object[]) o2;
         Integer remainingDomainSize1 = (Integer) annotation1[1];
@@ -70,7 +71,8 @@ public class VariableSelectionComparator implements Comparator {
      * @return <tt>true</tt> only if the specified object is also a
      * comparator and it imposes the same ordering as this comparator.
      */
-     public boolean equals (Object object) {
+     @Override
+	public boolean equals (Object object) {
         return object instanceof VariableSelectionComparator;
      }
 }

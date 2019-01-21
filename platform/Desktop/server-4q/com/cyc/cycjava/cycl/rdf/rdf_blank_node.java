@@ -200,15 +200,18 @@ public final class rdf_blank_node extends SubLTranslatedFile
         return (SubLObject)rdf_blank_node.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rdf_blank_node_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rdf_blank_node_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rdf_blank_node_file();
     }
     
@@ -246,15 +249,18 @@ public final class rdf_blank_node extends SubLTranslatedFile
             this.$id = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$rdf_blank_node_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$id;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$id = value;
         }
         
@@ -269,7 +275,8 @@ public final class rdf_blank_node extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("RDF-BLANK-NODE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return rdf_blank_node.rdf_blank_node_p(arg1);
         }
     }

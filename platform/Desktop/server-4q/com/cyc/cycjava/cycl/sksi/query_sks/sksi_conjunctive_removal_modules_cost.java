@@ -466,15 +466,18 @@ public final class sksi_conjunctive_removal_modules_cost extends SubLTranslatedF
         return (SubLObject)sksi_conjunctive_removal_modules_cost.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_conjunctive_removal_modules_cost_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_conjunctive_removal_modules_cost_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_conjunctive_removal_modules_cost_file();
     }
     

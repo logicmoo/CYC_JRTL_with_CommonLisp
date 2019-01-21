@@ -29,27 +29,32 @@ public abstract class AbstractLine implements Line
     private int hidden;
     private Annotation annotation;
 
-    public final synchronized Line previous()
+    @Override
+	public final synchronized Line previous()
     {
         return prev;
     }
 
-    public final synchronized void setPrevious(Line line)
+    @Override
+	public final synchronized void setPrevious(Line line)
     {
         prev = line;
     }
 
-    public final synchronized Line next()
+    @Override
+	public final synchronized Line next()
     {
         return next;
     }
 
-    public final synchronized void setNext(Line line)
+    @Override
+	public final synchronized void setNext(Line line)
     {
         next = line;
     }
 
-    public final synchronized void insertAfter(Line line)
+    @Override
+	public final synchronized void insertAfter(Line line)
     {
         if (line != null) {
             Line n = line.next();
@@ -62,92 +67,108 @@ public abstract class AbstractLine implements Line
             Debug.bug();
     }
 
-    public final synchronized int lineNumber()
+    @Override
+	public final synchronized int lineNumber()
     {
         return lineNumber;
     }
 
-    public final synchronized void setLineNumber(int n)
+    @Override
+	public final synchronized void setLineNumber(int n)
     {
         lineNumber = n;
     }
 
-    public final synchronized int originalLineNumber()
+    @Override
+	public final synchronized int originalLineNumber()
     {
         return originalLineNumber;
     }
 
-    public final synchronized void setOriginalLineNumber(int n)
+    @Override
+	public final synchronized void setOriginalLineNumber(int n)
     {
         originalLineNumber = n;
     }
 
-    public int getHeight()
+    @Override
+	public int getHeight()
     {
         return Display.getCharHeight();
     }
 
-    public int getWidth()
+    @Override
+	public int getWidth()
     {
         return 0;
     }
 
     // Derived classes override this!
-    public String getText()
+    @Override
+	public String getText()
     {
         return null;
     }
 
     // Derived classes override this!
-    public String getOriginalText()
+    @Override
+	public String getOriginalText()
     {
         return null;
     }
 
     // Derived classes override this!
-    public void setOriginalText(String s)
+    @Override
+	public void setOriginalText(String s)
     {
         // Do nothing.
     }
 
     // Derived classes override this!
-    public boolean isModified()
+    @Override
+	public boolean isModified()
     {
         return false;
     }
 
     // Derived classes override this!
-    public boolean isNew()
+    @Override
+	public boolean isNew()
     {
         return false;
     }
 
     // Derived classes override this!
-    public void setNew(boolean b)
+    @Override
+	public void setNew(boolean b)
     {
         // Do nothing.
     }
 
     // Derived classes override this!
-    public boolean isSaved()
+    @Override
+	public boolean isSaved()
     {
         return false;
     }
 
     // Derived classes override this!
-    public void setSaved(boolean b)
+    @Override
+	public void setSaved(boolean b)
     {
         // Do nothing.
     }
 
     // Derived classes override this!
-    public void unmodified()
+    @Override
+	public void unmodified()
     {
         // Do nothing.
     }
 
     // Returns offset (not column) of first non-whitespace character.
-    public int getIndentation()
+    @Override
+	public int getIndentation()
     {
         String text = getText();
         if (text == null)
@@ -159,39 +180,46 @@ public abstract class AbstractLine implements Line
         return limit;
     }
 
-    public final boolean isHidden()
+    @Override
+	public final boolean isHidden()
     {
         return hidden > 0;
     }
 
-    public final void hide()
+    @Override
+	public final void hide()
     {
         ++hidden;
     }
 
-    public final void unhide()
+    @Override
+	public final void unhide()
     {
         --hidden;
         if (Editor.isDebugEnabled() && hidden < 0)
             Debug.bug("hidden < 0");
     }
 
-    public final void show()
+    @Override
+	public final void show()
     {
         hidden = 0;
     }
 
-    public final int getHidden()
+    @Override
+	public final int getHidden()
     {
         return hidden;
     }
 
-    public final void setHidden(int hidden)
+    @Override
+	public final void setHidden(int hidden)
     {
         this.hidden = hidden;
     }
 
-    public final synchronized Line previousVisible()
+    @Override
+	public final synchronized Line previousVisible()
     {
         Line line = previous();
         while (line != null && line.isHidden())
@@ -199,7 +227,8 @@ public abstract class AbstractLine implements Line
         return line;
     }
 
-    public final synchronized Line nextVisible()
+    @Override
+	public final synchronized Line nextVisible()
     {
         Line line = next();
         while (line != null && line.isHidden())
@@ -207,34 +236,40 @@ public abstract class AbstractLine implements Line
         return line;
     }
 
-    public final boolean isBefore(Line line)
+    @Override
+	public final boolean isBefore(Line line)
     {
         return lineNumber < line.lineNumber();
     }
 
     // Derived classes override this!
-    public Line copy()
+    @Override
+	public Line copy()
     {
         return null;
     }
 
     // Derived classes override this!
-    public void copy(Line line)
+    @Override
+	public void copy(Line line)
     {
         // Do nothing.
     }
 
-    public final Annotation getAnnotation()
+    @Override
+	public final Annotation getAnnotation()
     {
         return annotation;
     }
 
-    public final void setAnnotation(Annotation annotation)
+    @Override
+	public final void setAnnotation(Annotation annotation)
     {
         this.annotation = annotation;
     }
 
-    public final String toString()
+    @Override
+	public final String toString()
     {
         FastStringBuffer sb = new FastStringBuffer();
         sb.append("line ");

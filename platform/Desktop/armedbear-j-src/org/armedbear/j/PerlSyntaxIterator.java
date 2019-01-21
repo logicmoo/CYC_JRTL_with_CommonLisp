@@ -43,7 +43,8 @@ public class PerlSyntaxIterator extends DefaultSyntaxIterator
 
     // Returns char array with syntactic whitespace (quotes and comments)
     // replaced with actual space characters.
-    public char[] hideSyntacticWhitespace(String s)
+    @Override
+	public char[] hideSyntacticWhitespace(String s)
     {
         char[] chars = s.toCharArray();
         char quoteChar = 0;

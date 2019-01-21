@@ -63,6 +63,7 @@ public class ScreenBoxContextImpl extends BoxContextImpl implements DisplayConte
 		myRootNode = rootNode;
 	}
 
+	@Override
 	public Box getRootBox() {
 		Box result = null;
 		if (myRootNode != null) {
@@ -75,6 +76,7 @@ public class ScreenBoxContextImpl extends BoxContextImpl implements DisplayConte
 		return (ScreenBoxTreeNodeImpl) myRootNode.findTreeNodeDisplayContext(b);
 	}
 
+	@Override
 	public Box getParentBox(Box child) {
 		ScreenBoxTreeNode childNode = findNodeForBox(child);
 		Object parent = childNode.getParent();
@@ -87,6 +89,7 @@ public class ScreenBoxContextImpl extends BoxContextImpl implements DisplayConte
 	}
 
 	// TODO:  Pass in the class parent of the expected children
+	@Override
 	public List<Box> getOpenChildBoxes(Box parent) {
 		List<Box> results = new ArrayList<Box>();
 		ScreenBoxTreeNode parentNode = (ScreenBoxTreeNode) findNodeForBox(parent);
@@ -99,6 +102,7 @@ public class ScreenBoxContextImpl extends BoxContextImpl implements DisplayConte
 		return results;
 	}
 
+	@Override
 	public DisplayContext findDisplayContext(Box viewable) {
 		ScreenBoxTreeNode btn = findNodeForBox(viewable);
 		if(btn==null)  {
@@ -152,6 +156,7 @@ public class ScreenBoxContextImpl extends BoxContextImpl implements DisplayConte
 		return null;
 	}
 
+	@Override
 	public ScreenBoxTreeNodeImpl findNodeForBox(Box parentBox, Box childBox) {
 		ScreenBoxTreeNodeImpl parentNode = findNodeForBox(parentBox);
 		if (parentNode == null) {
@@ -160,6 +165,7 @@ public class ScreenBoxContextImpl extends BoxContextImpl implements DisplayConte
 		return (ScreenBoxTreeNodeImpl) parentNode.findDescendantNodeForBox(childBox);
 	}
 
+	@Override
 	public void contextualizeAndAttachChildBox(Box parentBox, MutableBox childBox) {
 		ScreenBoxTreeNodeImpl parentNode = findNodeForBox(parentBox);
 		if (parentNode == null) {
@@ -171,6 +177,7 @@ public class ScreenBoxContextImpl extends BoxContextImpl implements DisplayConte
 		((ScreenBox) childBox).setDisplayContextProvider(this);
 	}
 
+	@Override
 	public void contextualizeAndDetachChildBox(Box parentBox, MutableBox childBox) {
 		ScreenBoxTreeNodeImpl parentNode = findNodeForBox(parentBox);
 		if (parentNode == null) {

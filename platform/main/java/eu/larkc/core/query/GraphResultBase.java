@@ -36,6 +36,7 @@ public abstract class GraphResultBase implements SetOfStatements {
 		isClosed = true;
 	}
 
+	@Override
 	public synchronized CloseableIterator<Statement> getStatements() {
 		if (iterator == null) {
 			iterator = new BlockingQueueIterator();
@@ -54,6 +55,7 @@ public abstract class GraphResultBase implements SetOfStatements {
 
 		private Statement next;
 
+		@Override
 		public synchronized boolean hasNext() {
 			while (next == null) {
 				try {
@@ -67,6 +69,7 @@ public abstract class GraphResultBase implements SetOfStatements {
 			return true;
 		}
 
+		@Override
 		public synchronized Statement next() {
 			if (hasNext() == false) {
 				throw new NoSuchElementException();
@@ -76,13 +79,16 @@ public abstract class GraphResultBase implements SetOfStatements {
 			return result;
 		}
 
+		@Override
 		public void remove() {
 		}
 
+		@Override
 		public synchronized void close() {
 			isClosed = true;
 		}
 
+		@Override
 		public synchronized boolean isClosed() {
 			return isClosed;
 		}
@@ -98,18 +104,22 @@ public abstract class GraphResultBase implements SetOfStatements {
 
 		private static final long serialVersionUID = 1L;
 
+		@Override
 		public Resource getSubject() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public URI getPredicate() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Value getObject() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Resource getContext() {
 			throw new UnsupportedOperationException();
 		}

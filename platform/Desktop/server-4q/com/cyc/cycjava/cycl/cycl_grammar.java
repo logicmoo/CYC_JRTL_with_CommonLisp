@@ -1399,15 +1399,18 @@ public final class cycl_grammar extends SubLTranslatedFile
         return (SubLObject)cycl_grammar.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cycl_grammar_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cycl_grammar_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cycl_grammar_file();
     }
     
@@ -1510,7 +1513,8 @@ public final class cycl_grammar extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYCL-QUOTED-TERM-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_grammar.cycl_quoted_term_p(arg1);
         }
     }
@@ -1521,7 +1525,8 @@ public final class cycl_grammar extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("QUASI-QUOTE-SYNTAX-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_grammar.quasi_quote_syntax_p(arg1);
         }
     }
@@ -1532,7 +1537,8 @@ public final class cycl_grammar extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ESCAPE-QUOTE-SYNTAX-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_grammar.escape_quote_syntax_p(arg1);
         }
     }
@@ -1543,7 +1549,8 @@ public final class cycl_grammar extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYCL-GENERALIZED-TENSED-LITERAL-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_grammar.cycl_generalized_tensed_literal_p(arg1);
         }
     }
@@ -1554,7 +1561,8 @@ public final class cycl_grammar extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYCL-VARIABLE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_grammar.cycl_variable_p(arg1);
         }
     }
@@ -1565,7 +1573,8 @@ public final class cycl_grammar extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EL-VARIABLE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_grammar.el_variable_p(arg1);
         }
     }
@@ -1576,7 +1585,8 @@ public final class cycl_grammar extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-VARIABLE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return cycl_grammar.hl_variable_p(arg1);
         }
     }

@@ -58,9 +58,11 @@ public class TestJUnit extends TestCase {
 		junit.textui.TestRunner.run(suite());
 	}
 
+	@Override
 	protected void setUp() {
 	}
 
+	@Override
 	protected void tearDown() {
 		// cleanup code
 	}

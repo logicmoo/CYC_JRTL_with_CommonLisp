@@ -978,15 +978,18 @@ public final class deduction_handles extends SubLTranslatedFile
         return NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_deduction_handles_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_deduction_handles_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_deduction_handles_file();
     }
     
@@ -1087,15 +1090,18 @@ public final class deduction_handles extends SubLTranslatedFile
             this.$id = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$deduction_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$id;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$id = value;
         }
         
@@ -1110,7 +1116,8 @@ public final class deduction_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DEDUCTION-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return deduction_handles.deduction_p(arg1);
         }
     }
@@ -1121,7 +1128,8 @@ public final class deduction_handles extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SXHASH-DEDUCTION-METHOD"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return deduction_handles.sxhash_deduction_method(arg1);
         }
     }

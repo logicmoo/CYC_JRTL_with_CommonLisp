@@ -238,7 +238,8 @@ public final class CSSFormatter extends Formatter implements Constants
         endToken(text, i, state);
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         clearSegmentList();
         if (line == null) {
@@ -249,7 +250,8 @@ public final class CSSFormatter extends Formatter implements Constants
         return segmentList;
     }
 
-    public boolean parseBuffer()
+    @Override
+	public boolean parseBuffer()
     {
         int state = 0;
         Line line = buffer.getFirstLine();
@@ -315,7 +317,8 @@ public final class CSSFormatter extends Formatter implements Constants
         return changed;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("CSSMode");

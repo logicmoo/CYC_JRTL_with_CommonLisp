@@ -56,18 +56,21 @@ public final class JLisp extends LispShell
         setInitialized(true);
     }
 
-    protected void initializeHistory()
+    @Override
+	protected void initializeHistory()
     {
         history = new History("jlisp.history", 30);
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return title;
     }
 
     // Returns true if underlying process is alive and well.
-    protected boolean checkProcess()
+    @Override
+	protected boolean checkProcess()
     {
         return true;
     }
@@ -76,10 +79,12 @@ public final class JLisp extends LispShell
     	startServer();    	
     }
     
-    protected void startProcess()
+    @Override
+	protected void startProcess()
     {
         thread = new Thread("JLisp interpreter: " + title) {
-            public void run()
+            @Override
+			public void run()
             {
             	Main.setSubLisp(false);
                 try {
@@ -96,7 +101,8 @@ public final class JLisp extends LispShell
                 Log.debug("interpreter thread exiting");
                 Lisp.resetIO();
                 Runnable processExitedRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         appendString("\nProcess exited\n");
                         setBusy(false);
@@ -157,11 +163,13 @@ public final class JLisp extends LispShell
         }
     	}
 
-    public synchronized void dispose()
+    @Override
+	public synchronized void dispose()
     	{
 
         Thread disposeThread = new Thread("JLisp dispose: " + title) {
-            public void run()
+            @Override
+			public void run()
             {
                 Log.debug("JLisp.dispose");
                 if (interpreter != null)

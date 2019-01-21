@@ -108,7 +108,8 @@ public class SocketCommRoundRobin extends AbstractComm implements Comm {
     socketList.clear();
   }
 
-  public void setCycConnection(CycConnectionInterface conn) {
+  @Override
+public void setCycConnection(CycConnectionInterface conn) {
     isInitialized = false;
     super.setCycConnection(conn);
   }

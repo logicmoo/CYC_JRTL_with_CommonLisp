@@ -62,7 +62,8 @@ public class Guid implements Serializable {
      *
      * @return <tt>boolean</tt> indicating equality of an object with this object.
      */
-    public boolean equals(Object object) {
+    @Override
+	public boolean equals(Object object) {
         if (object instanceof Guid &&
             this.guid.equals(((Guid) object).guid)) {
             return true;
@@ -76,7 +77,8 @@ public class Guid implements Serializable {
      *
      * @return the hash code for this object
      */
-    public int hashCode () {
+    @Override
+	public int hashCode () {
         return guid.hashCode();
     }
     
@@ -85,7 +87,8 @@ public class Guid implements Serializable {
      *
      * @return the <tt>Guid</tt> formated as a <tt>String</tt>.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return getGuidString();
     }
 
@@ -143,7 +146,8 @@ public class Guid implements Serializable {
      * The GUID in string form.
      * @deprecated @see getGuidString()
      */
-    public  final String guidString;
+    @Deprecated
+	public  final String guidString;
     private final UUID   guid;
     
     

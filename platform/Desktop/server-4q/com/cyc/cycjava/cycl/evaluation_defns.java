@@ -6009,15 +6009,18 @@ public final class evaluation_defns extends SubLTranslatedFile
         return (SubLObject)evaluation_defns.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_evaluation_defns_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_evaluation_defns_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_evaluation_defns_file();
     }
     
@@ -6435,7 +6438,8 @@ public final class evaluation_defns extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CYC-DIFFERENT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return evaluation_defns.cyc_different(arg1);
         }
     }

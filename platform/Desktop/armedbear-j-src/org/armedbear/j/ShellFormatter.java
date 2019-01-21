@@ -36,7 +36,8 @@ public final class ShellFormatter extends Formatter
         this.buffer = buffer;
     }
 
-    public LineSegmentList formatLine(final Line line)
+    @Override
+	public LineSegmentList formatLine(final Line line)
     {
         clearSegmentList();
         if (line == null) {
@@ -95,7 +96,8 @@ public final class ShellFormatter extends Formatter
         return segmentList;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("ShellMode");

@@ -79,7 +79,8 @@ public class DefaultBooleanInferenceParameter extends AbstractInferenceParameter
   }
 
 
-  public Object parameterValueCycListApiValue(Object val) {
+  @Override
+public Object parameterValueCycListApiValue(Object val) {
     if (((Boolean) val).booleanValue()) {
       return (CycObjectFactory.t);
     } else {

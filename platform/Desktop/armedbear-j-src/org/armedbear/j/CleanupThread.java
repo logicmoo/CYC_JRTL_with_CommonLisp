@@ -34,7 +34,8 @@ public final class CleanupThread extends Thread
         runnable = r;
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         while (true) {
             try {

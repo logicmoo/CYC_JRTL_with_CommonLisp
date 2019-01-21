@@ -2340,15 +2340,18 @@ public final class morphology extends SubLTranslatedFile
         return (SubLObject)morphology.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_morphology_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_morphology_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_morphology_file();
     }
     
@@ -2595,7 +2598,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-ADD-E-BEFORE-S"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_add_e_before_s(arg1, arg2);
         }
     }
@@ -2606,7 +2610,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-CHANGE-Y-TO-I"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_change_y_to_i(arg1, arg2);
         }
     }
@@ -2617,7 +2622,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-BLE-TO-BIL-BEFORE-ITY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_ble_to_bil_before_ity(arg1, arg2);
         }
     }
@@ -2628,7 +2634,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-CHANGE-AIC-TO-AC"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_change_aic_to_ac(arg1, arg2);
         }
     }
@@ -2639,7 +2646,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-STRIP-FINAL-E"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_strip_final_e(arg1, arg2);
         }
     }
@@ -2650,7 +2658,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-STRIP-FINAL-VOWELS-BEFORE-IC"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_strip_final_vowels_before_ic(arg1, arg2);
         }
     }
@@ -2661,7 +2670,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-CHANGE-IE-TO-Y"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_change_ie_to_y(arg1, arg2);
         }
     }
@@ -2672,7 +2682,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-CHANGE-ISM-TO-IST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_change_ism_to_ist(arg1, arg2);
         }
     }
@@ -2683,7 +2694,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-CHANGE-CEIVE-TO-CEPT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_change_ceive_to_cept(arg1, arg2);
         }
     }
@@ -2694,7 +2706,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-REMOVE-ABLE-LE-BEFORE-LY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_remove_able_le_before_ly(arg1, arg2);
         }
     }
@@ -2705,7 +2718,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-GEMINATE-LAST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_geminate_last(arg1, arg2);
         }
     }
@@ -2716,7 +2730,8 @@ public final class morphology extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AES-ABLE-TO-ATE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return morphology.aes_able_to_ate(arg1, arg2);
         }
     }

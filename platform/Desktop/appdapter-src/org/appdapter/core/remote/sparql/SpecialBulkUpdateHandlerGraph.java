@@ -24,75 +24,93 @@ public class SpecialBulkUpdateHandlerGraph extends JenaWrappedGraph implements G
         this.b = b;
     }
     
-    public void add(final Triple arg0) throws AddDeniedException {
+    @Override
+	public void add(final Triple arg0) throws AddDeniedException {
         this.g.add(arg0);
     }
     
-    public void close() {
+    @Override
+	public void close() {
         this.g.close();
     }
     
-    public boolean contains(final Node arg0, final Node arg1, final Node arg2) {
+    @Override
+	public boolean contains(final Node arg0, final Node arg1, final Node arg2) {
         return this.g.contains(arg0, arg1, arg2);
     }
     
-    public boolean contains(final Triple arg0) {
+    @Override
+	public boolean contains(final Triple arg0) {
         return this.g.contains(arg0);
     }
     
-    public void delete(final Triple arg0) throws DeleteDeniedException {
+    @Override
+	public void delete(final Triple arg0) throws DeleteDeniedException {
         this.g.delete(arg0);
     }
     
-    public boolean dependsOn(final Graph arg0) {
+    @Override
+	public boolean dependsOn(final Graph arg0) {
         return this.g.dependsOn(arg0);
     }
     
-    public ExtendedIterator<Triple> find(final Node arg0, final Node arg1, final Node arg2) {
+    @Override
+	public ExtendedIterator<Triple> find(final Node arg0, final Node arg1, final Node arg2) {
         return (ExtendedIterator<Triple>)this.g.find(arg0, arg1, arg2);
     }
     
-    public ExtendedIterator<Triple> find(final TripleMatch arg0) {
+    @Override
+	public ExtendedIterator<Triple> find(final TripleMatch arg0) {
         return (ExtendedIterator<Triple>)this.g.find(arg0);
     }
     
-    public BulkUpdateHandler getBulkUpdateHandler() {
+    @Override
+	public BulkUpdateHandler getBulkUpdateHandler() {
         return this.b;
     }
     
-    public Capabilities getCapabilities() {
+    @Override
+	public Capabilities getCapabilities() {
         return this.g.getCapabilities();
     }
     
-    public GraphEventManager getEventManager() {
+    @Override
+	public GraphEventManager getEventManager() {
         return this.g.getEventManager();
     }
     
-    public PrefixMapping getPrefixMapping() {
+    @Override
+	public PrefixMapping getPrefixMapping() {
         return this.g.getPrefixMapping();
     }
     
-    public GraphStatisticsHandler getStatisticsHandler() {
+    @Override
+	public GraphStatisticsHandler getStatisticsHandler() {
         return this.g.getStatisticsHandler();
     }
     
-    public TransactionHandler getTransactionHandler() {
+    @Override
+	public TransactionHandler getTransactionHandler() {
         return this.g.getTransactionHandler();
     }
     
-    public boolean isClosed() {
+    @Override
+	public boolean isClosed() {
         return this.g.isClosed();
     }
     
-    public boolean isEmpty() {
+    @Override
+	public boolean isEmpty() {
         return this.g.isEmpty();
     }
     
-    public boolean isIsomorphicWith(final Graph arg0) {
+    @Override
+	public boolean isIsomorphicWith(final Graph arg0) {
         return this.g.isIsomorphicWith(arg0);
     }
     
-    public int size() {
+    @Override
+	public int size() {
         return this.g.size();
     }
 }

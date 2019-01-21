@@ -111,6 +111,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 * @return an array of two objects, the first is an Integer response code, and the second is the
 	 * response object or error string.
 	 */
+	@Override
 	public Object[] converse(final Object message) throws IOException, CycApiException
 	{
 		return converse(message, notimeout);
@@ -128,6 +129,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 * @return an array of two objects, the first is an Integer response code, and the second is the
 	 * response object or error string.
 	 */
+	@Override
 	public Object[] converse(final Object message, final Timer timeout) throws IOException, TimeOutException, CycApiException
 	{
 		CycList messageCycList;
@@ -160,6 +162,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 * @throws TimeOutException when the time limit is exceeded
 	 * @throws CycApiException when a Cyc api error occurs
 	 */
+	@Override
 	public void converseBinary(final SubLWorker worker) throws IOException, TimeOutException, CycApiException
 	{
 
@@ -198,6 +201,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	}
 
 	/** Closes the api sockets and streams */
+	@Override
 	public void close()
 	{
 	}
@@ -206,6 +210,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 *
 	 * @return the trace value
 	 */
+	@Override
 	public int getTrace()
 	{
 		return trace;
@@ -215,24 +220,28 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 *
 	 * @param trace the trace value
 	 */
+	@Override
 	public void setTrace(final int trace)
 	{
 		this.trace = trace;
 	}
 
 	/** Turns on the diagnostic trace of socket messages. */
+	@Override
 	public void traceOn()
 	{
 		trace = API_TRACE_MESSAGES;
 	}
 
 	/** Turns on the detailed diagnostic trace of socket messages. */
+	@Override
 	public void traceOnDetailed()
 	{
 		trace = API_TRACE_DETAILED;
 	}
 
 	/** Turns off the diagnostic trace of socket messages. */
+	@Override
 	public void traceOff()
 	{
 		trace = API_TRACE_NONE;
@@ -242,6 +251,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 *
 	 * @return connection information, suitable for diagnostics
 	 */
+	@Override
 	public String connectionInfo()
 	{
 		return "Cyc API Web Service at " + endpointURL.toString();
@@ -252,6 +262,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 * @return the UUID that identifies this java api client connection
 	 *
 	 */
+	@Override
 	public UUID getUuid()
 	{
 		return null;
@@ -261,6 +272,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 * @return <code>int</code> of this connection's base port.
 	 *
 	 */
+	@Override
 	public int getBasePort()
 	{
 		return basePort;
@@ -268,6 +280,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 
 	/** @return the http port of the server this connection is connected to.
 	 */
+	@Override
 	public int getHttpPort()
 	{
 		return basePort + 2;
@@ -277,11 +290,13 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 * @return <code>String</code> denoting this hostname.
 	 *
 	 */
+	@Override
 	public String getHostName()
 	{
 		return hostName;
 	}
 
+	@Override
 	public void cancelCommunication(final SubLWorker worker) throws IOException
 	{
 		final Integer id = worker.getId();
@@ -297,6 +312,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 		// event, so no need to perform event signaling and cleanup
 	}
 
+	@Override
 	public void abortCommunication(final SubLWorker worker) throws IOException
 	{
 		final Integer id = worker.getId();
@@ -322,6 +338,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 *
 	 * @return the connection type
 	 */
+	@Override
 	public int getConnectionType()
 	{
 		return CycAccess.PERSISTENT_CONNECTION;
@@ -374,6 +391,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	 * @return an array of two objects, the first is an Integer response code, and the second is the
 	 * response object or error string.
 	 */
+	@Override
 	public Object[] converseBinary(final CycList message, final Timer timeout) throws IOException, TimeOutException, CycApiException
 	{
 		DefaultSubLWorkerSynch worker = new DefaultSubLWorkerSynch(message, cycAccess);
@@ -498,6 +516,7 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 		}
 
 		/** Runs this process. */
+		@Override
 		public void run()
 		{
 			final CycSymbol taskProcessorRequestSymbol = CycObjectFactory.makeCycSymbol("task-processor-request");

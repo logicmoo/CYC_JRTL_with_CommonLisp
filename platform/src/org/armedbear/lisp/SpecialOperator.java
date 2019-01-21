@@ -126,12 +126,14 @@ abstract public class SpecialOperator extends SubLSpecialOperator
 	}
 
 
+	@Override
 	public SubLFunction getEvaluationFunction() {
 		return (SubLFunction) this;
 	}
 
 	// Special operator
-    abstract public LispObject execute(LispObject args, Environment env);
+    @Override
+	abstract public LispObject execute(LispObject args, Environment env);
 //    return error(new LispError("Special operator"));
 
 	@Override
@@ -142,7 +144,8 @@ abstract public class SpecialOperator extends SubLSpecialOperator
      	 return execute(cons, Environment.currentLispEnvironment());
     }
 
-    public LispObject execute(LispObject[] args)
+    @Override
+	public LispObject execute(LispObject[] args)
     {
   	  if(Lisp.loopCheck != this)
   	  {
@@ -236,6 +239,7 @@ abstract public class SpecialOperator extends SubLSpecialOperator
         ++hotCount;
     }
 
+	@Override
 	public boolean isSpecialRestOnly() {
 		return true;
 	}

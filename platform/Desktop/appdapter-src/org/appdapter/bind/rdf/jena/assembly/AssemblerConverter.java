@@ -40,7 +40,8 @@ public class AssemblerConverter implements Converter
         return "{" + Debuggable.toInfoStringArgV(new Object[] { "Assember=", this.targetClass, this.getClass() }) + "}";
     }
     
-    public <T> T convert(final Object obj, final Class<T> objNeedsToBe, final List maxConverts) throws NoSuchConversionException {
+    @Override
+	public <T> T convert(final Object obj, final Class<T> objNeedsToBe, final List maxConverts) throws NoSuchConversionException {
         try {
             final Object eval = JenaLiteralUtils.convertOrNull(obj, (Class)objNeedsToBe);
             if (objNeedsToBe.isInstance(eval)) {
@@ -130,7 +131,8 @@ public class AssemblerConverter implements Converter
         }
     }
     
-    public Integer declaresConverts(final Object obj, final Class objClass, final Class objNeedsToBe, final List maxConverts) {
+    @Override
+	public Integer declaresConverts(final Object obj, final Class objClass, final Class objNeedsToBe, final List maxConverts) {
         if (obj instanceof RDFNode || obj instanceof AnyOper.HasIdent) {
             return 0;
         }

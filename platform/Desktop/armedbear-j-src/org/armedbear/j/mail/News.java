@@ -61,7 +61,8 @@ public final class News extends Buffer
         return session.getHost();
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         setBusy(true);
         new Thread(loadRunnable).start();
@@ -70,7 +71,8 @@ public final class News extends Buffer
     }
 
     private Runnable loadRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             try {
                 lockWrite();
@@ -164,7 +166,8 @@ public final class News extends Buffer
     }
 
     private Runnable errorRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             kill();
             String errorText = session.getErrorText();
@@ -174,7 +177,8 @@ public final class News extends Buffer
     };
 
     private Runnable updateDisplayRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             setBusy(false);
             invalidate();

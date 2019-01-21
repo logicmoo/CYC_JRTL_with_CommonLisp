@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 */
 public class ClassGeneratorImpl extends ClassGenerator
 {
+	@Override
 	public Class generateClass( 
 		String name, Modifiers modifiers, 
 		Class [] interfaces, Class superClass, BSHBlock block, 
@@ -26,6 +27,7 @@ public class ClassGeneratorImpl extends ClassGenerator
 			block, isInterface, callstack, interpreter );
 	}
 
+	@Override
 	public Object invokeSuperclassMethod(
 		BshClassManager bcm, Object instance, String methodName, Object [] args
 	)
@@ -41,6 +43,7 @@ public class ClassGeneratorImpl extends ClassGenerator
 		Note: This method will likely be removed in the future.
 	*/
 	// This could be static
+	@Override
 	public void setInstanceNameSpaceParent( 
 		Object instance, String className, NameSpace parent )
 	{
@@ -285,6 +288,7 @@ public class ClassGeneratorImpl extends ClassGenerator
 
 		private ClassNodeFilter( int context ) { this.context = context; }
 
+		@Override
 		public boolean isVisible( SimpleNode node ) 
 		{
 			if ( context == CLASSES )

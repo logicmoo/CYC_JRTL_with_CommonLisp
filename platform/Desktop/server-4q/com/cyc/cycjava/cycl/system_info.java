@@ -390,15 +390,18 @@ public final class system_info extends SubLTranslatedFile
         return (SubLObject)system_info.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_system_info_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_system_info_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_system_info_file();
     }
     

@@ -76,7 +76,8 @@ class CharIndexedInputStream implements CharIndexed {
 	return true;
     }
     
-    public char charAt(int index) {
+    @Override
+	public char charAt(int index) {
 	if (index == 0) {
 	    return cached;
 	} else if (index >= end) {
@@ -117,14 +118,16 @@ class CharIndexedInputStream implements CharIndexed {
 	return ch;
     }
     
-    public boolean move(int index) {
+    @Override
+	public boolean move(int index) {
 	// move read position [index] clicks from 'charAt(0)'
 	boolean retval = true;
 	while (retval && (index-- > 0)) retval = next();
 	return retval;
     }
     
-    public boolean isValid() {
+    @Override
+	public boolean isValid() {
 	return (cached != OUT_OF_BOUNDS);
     }
 }

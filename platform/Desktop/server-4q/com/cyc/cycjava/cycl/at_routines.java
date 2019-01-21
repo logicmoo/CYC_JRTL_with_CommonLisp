@@ -4863,15 +4863,18 @@ public final class at_routines extends SubLTranslatedFile
         return (SubLObject)at_routines.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_at_routines_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_at_routines_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_at_routines_file();
     }
     
@@ -5013,7 +5016,8 @@ public final class at_routines extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-ARG-COLLECTIONS"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return at_routines.clear_arg_collections();
         }
     }

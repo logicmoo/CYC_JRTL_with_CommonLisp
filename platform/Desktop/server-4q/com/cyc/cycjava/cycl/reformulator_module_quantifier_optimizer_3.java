@@ -187,15 +187,18 @@ public final class reformulator_module_quantifier_optimizer_3 extends SubLTransl
         return (SubLObject)reformulator_module_quantifier_optimizer_3.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_reformulator_module_quantifier_optimizer_3_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_reformulator_module_quantifier_optimizer_3_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_reformulator_module_quantifier_optimizer_3_file();
     }
     

@@ -76,8 +76,11 @@ public class CollectionIterator implements bsh.BshIterator
 			CollectionManager.BasicBshIterator(iterateOverMe);
 
 		return new Iterator() {
+			@Override
 			public boolean hasNext() { return bbi.hasNext(); } 
+			@Override
 			public Object next() { return bbi.next(); }
+			@Override
 			public void remove() {
 				throw new UnsupportedOperationException( 
 					"remove() is not supported");
@@ -120,6 +123,7 @@ public class CollectionIterator implements bsh.BshIterator
 	 *
 	 * @return The next object
 	 */	
+	@Override
 	public Object next() {
 		return iterator.next();
 	}
@@ -130,6 +134,7 @@ public class CollectionIterator implements bsh.BshIterator
 	 *
 	 * @return The next object
 	 */	
+	@Override
 	public boolean hasNext() {
 		return iterator.hasNext();	
 	}

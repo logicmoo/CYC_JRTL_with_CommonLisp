@@ -60,7 +60,8 @@ abstract public class ControlTransfer extends Error
      * Overridden in order to make ControlTransfer construct
      * faster. This avoids gathering stack trace information.
      */
-    public Throwable fillInStackTrace()
+    @Override
+	public Throwable fillInStackTrace()
     {
         return this;
     }

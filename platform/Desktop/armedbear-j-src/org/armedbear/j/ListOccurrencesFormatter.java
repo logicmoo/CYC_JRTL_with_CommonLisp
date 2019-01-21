@@ -41,7 +41,8 @@ public final class ListOccurrencesFormatter extends Formatter
         parentMode = ((ListOccurrences)buffer).getParentMode();
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         clearSegmentList();
         if (line instanceof OccurrenceLine)
@@ -115,7 +116,8 @@ public final class ListOccurrencesFormatter extends Formatter
         return segmentList;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("ListOccurrencesMode");

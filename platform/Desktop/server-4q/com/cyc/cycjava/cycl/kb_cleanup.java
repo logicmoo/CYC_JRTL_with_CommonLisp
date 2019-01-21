@@ -4270,15 +4270,18 @@ public final class kb_cleanup extends SubLTranslatedFile
         return (SubLObject)kb_cleanup.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_cleanup_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_cleanup_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_cleanup_file();
     }
     

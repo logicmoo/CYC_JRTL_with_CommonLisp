@@ -36,17 +36,20 @@ public final class AsmMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public String getCommentStart()
+    @Override
+	public String getCommentStart()
     {
         return "; ";
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new AsmFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
         km.mapKey(KeyEvent.VK_F9, 0, "compile");
@@ -55,27 +58,32 @@ public final class AsmMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_PERIOD, ALT_MASK, "findTagAtDot");
     }
 
-    public Tagger getTagger(SystemBuffer buffer)
+    @Override
+	public Tagger getTagger(SystemBuffer buffer)
     {
         return new AsmTagger(buffer);
     }
 
-    public boolean isTaggable()
+    @Override
+	public boolean isTaggable()
     {
         return true;
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
 
-    public boolean canIndentPaste()
+    @Override
+	public boolean canIndentPaste()
     {
         return false;
     }
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         if (c >= 'a' && c <= 'z')
             return true;
@@ -89,7 +97,8 @@ public final class AsmMode extends AbstractMode implements Constants, Mode
         return false;
     }
 
-    public boolean isIdentifierPart(char c)
+    @Override
+	public boolean isIdentifierPart(char c)
     {
         if (c >= 'a' && c <= 'z')
             return true;
@@ -105,7 +114,8 @@ public final class AsmMode extends AbstractMode implements Constants, Mode
         return false;
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final int indentSize = buffer.getIndentSize();
         final Line model = findModel(line);

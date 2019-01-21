@@ -65,6 +65,7 @@ public class Server implements Runnable
 		Editor.portfile.delete();
 	}
 
+	@Override
 	public void run()
 	{
 		while (true)
@@ -105,6 +106,7 @@ public class Server implements Runnable
 			this.v = v;
 		}
 
+		@Override
 		public void run()
 		{
 			Editor editor = Editor.currentEditor();

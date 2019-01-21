@@ -2632,15 +2632,18 @@ public final class html_create_term extends SubLTranslatedFile
         return (SubLObject)html_create_term.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_html_create_term_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_html_create_term_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_html_create_term_file();
     }
     

@@ -53,6 +53,7 @@ public class ReflectManagerImpl extends ReflectManager
 		@return true if the object was accessible or false if it was not.
 	*/
 // Arrays incomplete... need to use the array setter
+	@Override
 	public boolean setAccessible( Object obj ) 
 	{
 		if ( obj instanceof AccessibleObject ) {

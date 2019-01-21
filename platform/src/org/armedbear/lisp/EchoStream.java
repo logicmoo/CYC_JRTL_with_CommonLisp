@@ -57,7 +57,8 @@ public final class EchoStream extends Stream
         setInteractive(interactive);
     }
 
-    public LispObject getStreamElementType()
+    @Override
+	public LispObject getStreamElementType()
     {
         LispObject itype = inStream.getStreamElementType();
         LispObject otype = outStream.getStreamElementType();
@@ -76,17 +77,20 @@ public final class EchoStream extends Stream
         return outStream;
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.ECHO_STREAM;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.ECHO_STREAM;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.ECHO_STREAM)
             return T;
@@ -95,38 +99,45 @@ public final class EchoStream extends Stream
         return super.typep(type);
     }
 
-    public boolean isInputStream()
+    @Override
+	public boolean isInputStream()
     {
         return true;
     }
 
-    public boolean isOutputStream()
+    @Override
+	public boolean isOutputStream()
     {
         return true;
     }
 
-    public boolean isCharacterInputStream()
+    @Override
+	public boolean isCharacterInputStream()
     {
         return inStream.isCharacterInputStream();
     }
 
-    public boolean isBinaryInputStream()
+    @Override
+	public boolean isBinaryInputStream()
     {
         return inStream.isBinaryInputStream();
     }
 
-    public boolean isCharacterOutputStream()
+    @Override
+	public boolean isCharacterOutputStream()
     {
         return outStream.isCharacterOutputStream();
     }
 
-    public boolean isBinaryOutputStream()
+    @Override
+	public boolean isBinaryOutputStream()
     {
         return outStream.isBinaryOutputStream();
     }
 
     // Returns -1 at end of file.
-    protected int _readChar() throws java.io.IOException
+    @Override
+	protected int _readChar() throws java.io.IOException
     {
     	lastDirection = Direction.READ;
         int n = inStream._readChar();
@@ -140,45 +151,52 @@ public final class EchoStream extends Stream
         return n;
     }
 
-    protected void _unreadChar(int n) throws java.io.IOException
+    @Override
+	protected void _unreadChar(int n) throws java.io.IOException
     {
     	lastDirection = Direction.READ;
         inStream._unreadChar(n);
         unreadChar = n;
     }
 
-    protected boolean _charReady() throws java.io.IOException
+    @Override
+	protected boolean _charReady() throws java.io.IOException
     {
         return inStream._charReady();
     }
 
-    public void _writeChar(char c)
+    @Override
+	public void _writeChar(char c)
     {
     	lastDirection = Direction.WRITE;
         outStream._writeChar(c);
     }
 
-    public void _writeChars(char[] chars, int start, int end)
+    @Override
+	public void _writeChars(char[] chars, int start, int end)
 
     {
     	lastDirection = Direction.WRITE;
         outStream._writeChars(chars, start, end);
     }
 
-    public void _writeString(String s)
+    @Override
+	public void _writeString(String s)
     {
     	lastDirection = Direction.WRITE;
     	outStream._writeString(s);
     }
 
-    public void _writeLine(String s)
+    @Override
+	public void _writeLine(String s)
     {
     	lastDirection = Direction.WRITE;
     	outStream._writeLine(s);
     }
 
     // Reads an 8-bit byte.
-    public int _readByte()
+    @Override
+	public int _readByte()
     {
         int n = inStream._readByte();
         if (n >= 0)
@@ -187,24 +205,28 @@ public final class EchoStream extends Stream
     }
 
     // Writes an 8-bit byte.
-    public void _writeByte(int n)
+    @Override
+	public void _writeByte(int n)
     {
     	lastDirection = Direction.WRITE;
     	outStream._writeByte(n);
     }
 
-    public void _finishOutput()
+    @Override
+	public void _finishOutput()
     {
     	lastDirection = Direction.WRITE;
     	outStream._finishOutput();
     }
 
-    public void _clearInput()
+    @Override
+	public void _clearInput()
     {
         inStream._clearInput();
     }
 
-    public LispObject close(LispObject abort)
+    @Override
+	public LispObject close(LispObject abort)
     {
         // "The effect of CLOSE on a constructed stream is to close the
         // argument stream only. There is no effect on the constituents of
@@ -213,13 +235,15 @@ public final class EchoStream extends Stream
         return T;
     }
 
-    public LispObject listen()
+    @Override
+	public LispObject listen()
     {
     	lastDirection = Direction.READ;
         return inStream.listen();
     }
 
-    public LispObject FRESH_LINE()
+    @Override
+	public LispObject FRESH_LINE()
     {
     	lastDirection = Direction.WRITE;
         return outStream.FRESH_LINE();
@@ -230,7 +254,8 @@ public final class EchoStream extends Stream
     private static final Primitive MAKE_ECHO_STREAM =
         new Primitive("make-echo-stream", "input-stream output-stream")
     {
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
 
         {
             if (!(first instanceof Stream))
@@ -246,7 +271,8 @@ public final class EchoStream extends Stream
     private static final Primitive ECHO_STREAM_INPUT_STREAM =
         new Primitive("echo-stream-input-stream", "echo-stream")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof EchoStream)
                 return ((EchoStream)arg).getInputStream();
@@ -259,7 +285,8 @@ public final class EchoStream extends Stream
     private static final Primitive ECHO_STREAM_OUTPUT_STREAM =
         new Primitive("echo-stream-output-stream", "echo-stream")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof EchoStream)
                 return ((EchoStream)arg).getOutputStream();

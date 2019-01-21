@@ -140,7 +140,8 @@ public abstract class AbstractVector extends AbstractArray
     return this;
   }
 
-  public abstract void shrink(int n);
+  @Override
+public abstract void shrink(int n);
 
   public int checkIndex(int index)
   {
@@ -169,12 +170,14 @@ public abstract class AbstractVector extends AbstractArray
 
   }
 
-  public void setFillPointer(int n)
+  @Override
+public void setFillPointer(int n)
   {
     noFillPointer();
   }
 
-  public void setFillPointer(LispObject obj)
+  @Override
+public void setFillPointer(LispObject obj)
   {
     noFillPointer();
   }
@@ -294,14 +297,16 @@ public abstract class AbstractVector extends AbstractArray
    ;
 
 
-  public AbstractArray adjustArray(int[] dims,
+  @Override
+public AbstractArray adjustArray(int[] dims,
                                               LispObject initialElement,
                                               LispObject initialContents)
     {
       return adjustArray(dims[0], initialElement, initialContents);
   }
 
-  public AbstractArray adjustArray(int[] dims,
+  @Override
+public AbstractArray adjustArray(int[] dims,
                                               AbstractArray displacedTo,
                                               int displacement)
     {

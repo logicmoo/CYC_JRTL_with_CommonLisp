@@ -67,9 +67,11 @@ public final class FolderTree extends JTree implements NavigationComponent,
         return tree;
     }
 
-    public void refresh() {}
+    @Override
+	public void refresh() {}
 
-    public void updatePosition()
+    @Override
+	public void updatePosition()
     {
         int row = -1;
         final Buffer buf = frame.getCurrentEditor().getBuffer();
@@ -114,16 +116,20 @@ public final class FolderTree extends JTree implements NavigationComponent,
         repaint();
     }
 
-    public final String getLabelText()
+    @Override
+	public final String getLabelText()
     {
         return "Folders";
     }
 
-    public void mousePressed(MouseEvent e) {}
+    @Override
+	public void mousePressed(MouseEvent e) {}
 
-    public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
 
-    public void mouseClicked(MouseEvent e)
+    @Override
+	public void mouseClicked(MouseEvent e)
     {
         final Editor editor = frame.getCurrentEditor();
         final int modifiers = e.getModifiers();
@@ -151,9 +157,11 @@ public final class FolderTree extends JTree implements NavigationComponent,
         editor.setFocusToDisplay();
     }
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e)
+    @Override
+	public void mouseExited(MouseEvent e)
     {
         updatePosition();
         frame.getCurrentEditor().setFocusToDisplay();
@@ -177,7 +185,8 @@ public final class FolderTree extends JTree implements NavigationComponent,
             setLeafIcon(Utilities.getIconFromFile("mailbox.png"));
         }
 
-        public Component getTreeCellRendererComponent(
+        @Override
+		public Component getTreeCellRendererComponent(
             JTree tree,
             Object value,
             boolean selected,
@@ -199,7 +208,8 @@ public final class FolderTree extends JTree implements NavigationComponent,
             return this;
         }
 
-        public void paintComponent(Graphics g)
+        @Override
+		public void paintComponent(Graphics g)
         {
             Display.setRenderingHints(g);
             super.paintComponent(g);

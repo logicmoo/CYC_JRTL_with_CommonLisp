@@ -62,7 +62,8 @@ public final class CompilationBuffer extends CompilationErrorBuffer
         posEndOfBuffer = new Position(getFirstLine(), 0);
     }
 
-    public synchronized final void initialize()
+    @Override
+	public synchronized final void initialize()
     {
         setTitle(expandedCommand = expandCommand(command));
         setInitialized(true);
@@ -78,7 +79,8 @@ public final class CompilationBuffer extends CompilationErrorBuffer
         return exitValue;
     }
 
-    public void empty()
+    @Override
+	public void empty()
     {
         try {
             lockWrite();
@@ -108,7 +110,8 @@ public final class CompilationBuffer extends CompilationErrorBuffer
         }
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         long start = System.currentTimeMillis();
         if (expandedCommand.startsWith("(")) {
@@ -304,7 +307,8 @@ public final class CompilationBuffer extends CompilationErrorBuffer
         }
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         killProcess();
     }
@@ -312,7 +316,8 @@ public final class CompilationBuffer extends CompilationErrorBuffer
     private void appendLater(final String s)
     {
         Runnable runnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 Position pos = posEndOfBuffer;
                 insertString(pos, s);
@@ -333,12 +338,14 @@ public final class CompilationBuffer extends CompilationErrorBuffer
         SwingUtilities.invokeLater(runnable);
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         return getTitle();
     }
 
-    public File getCurrentDirectory()
+    @Override
+	public File getCurrentDirectory()
     {
         return currentDir;
     }
@@ -349,7 +356,8 @@ public final class CompilationBuffer extends CompilationErrorBuffer
     }
 
     // For the buffer list.
-    public String toString()
+    @Override
+	public String toString()
     {
         return command;
     }
@@ -361,7 +369,8 @@ public final class CompilationBuffer extends CompilationErrorBuffer
             super(inputStream);
         }
 
-        public void update(final String s)
+        @Override
+		public void update(final String s)
         {
             appendLater(s);
         }

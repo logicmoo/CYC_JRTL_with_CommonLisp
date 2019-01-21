@@ -40,29 +40,34 @@ public final class MakefileMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public boolean canIndent()
+    @Override
+	public boolean canIndent()
     {
         return true;
     }
 
-    public String getCommentStart()
+    @Override
+	public String getCommentStart()
     {
         return "# ";
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new MakefileFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
         km.mapKey(KeyEvent.VK_F9, 0, "compile");
         km.mapKey(KeyEvent.VK_F9, InputEvent.CTRL_MASK, "recompile");
     }
 
-    public int getCorrectIndentation(Line line, Buffer buffer)
+    @Override
+	public int getCorrectIndentation(Line line, Buffer buffer)
     {
         Line model = getModel(line);
         if (model == null)
@@ -85,12 +90,14 @@ public final class MakefileMode extends AbstractMode implements Constants, Mode
     private static final String validChars =
         "-./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 
-    public boolean isIdentifierStart(char c)
+    @Override
+	public boolean isIdentifierStart(char c)
     {
         return validChars.indexOf(c) >= 0;
     }
 
-    public boolean isIdentifierPart(char c)
+    @Override
+	public boolean isIdentifierPart(char c)
     {
         return validChars.indexOf(c) >= 0;
     }

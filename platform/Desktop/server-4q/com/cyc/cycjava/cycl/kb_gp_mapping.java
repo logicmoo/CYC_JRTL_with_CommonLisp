@@ -1351,15 +1351,18 @@ public final class kb_gp_mapping extends SubLTranslatedFile
         return (SubLObject)kb_gp_mapping.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_gp_mapping_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_gp_mapping_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_gp_mapping_file();
     }
     

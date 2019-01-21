@@ -54,12 +54,14 @@ public class PropertyEditorToCellEditor extends AbstractCellEditor implements Ta
 	private Component hookTo;
 
 	class CommitEditing implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			stopCellEditing();
 		}
 	}
 
 	class CancelEditing implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			PropertyEditorToCellEditor.this.cancelCellEditing();
 		}
@@ -69,20 +71,24 @@ public class PropertyEditorToCellEditor extends AbstractCellEditor implements Ta
 	 * Select all text when focus gained, deselect when focus lost.
 	 */
 	class SelectOnFocus implements FocusListener {
+		@Override
 		public void focusGained(final FocusEvent e) {
 			if (!(e.getSource() instanceof JTextField))
 				return;
 			Utility.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					((JTextField) e.getSource()).selectAll();
 				}
 			});
 		}
 
+		@Override
 		public void focusLost(final FocusEvent e) {
 			if (!(e.getSource() instanceof JTextField))
 				return;
 			Utility.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					((JTextField) e.getSource()).select(0, 0);
 				}
@@ -121,16 +127,19 @@ public class PropertyEditorToCellEditor extends AbstractCellEditor implements Ta
 
 		// when the editor notifies a change, commit the changes
 		editor.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				stopCellEditing();
 			}
 		});
 	}
 
+	@Override
 	public Component getTreeCellEditorComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row) {
 		return getEditor(value);
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean selected, int row, int column) {
 		return getEditor(value);
 	}
@@ -143,10 +152,12 @@ public class PropertyEditorToCellEditor extends AbstractCellEditor implements Ta
 		return clickCountToStart;
 	}
 
+	@Override
 	public Object getCellEditorValue() {
 		return editor.getValue();
 	}
 
+	@Override
 	public boolean isCellEditable(EventObject event) {
 		if (event instanceof MouseEvent) {
 			return ((MouseEvent) event).getClickCount() >= clickCountToStart;
@@ -154,15 +165,18 @@ public class PropertyEditorToCellEditor extends AbstractCellEditor implements Ta
 		return true;
 	}
 
+	@Override
 	public boolean shouldSelectCell(EventObject event) {
 		return true;
 	}
 
+	@Override
 	public boolean stopCellEditing() {
 		fireEditingStopped();
 		return true;
 	}
 
+	@Override
 	public void cancelCellEditing() {
 		fireEditingCanceled();
 	}
@@ -175,6 +189,7 @@ public class PropertyEditorToCellEditor extends AbstractCellEditor implements Ta
 		// request focus later so the editor can be used to enter value as soon as
 		// made visible
 		Utility.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				cellEditor.requestFocus();
 			}

@@ -86,7 +86,8 @@ public final class PopURL extends MailboxURL
         }
     }
 
-    public boolean equals(Object object)
+    @Override
+	public boolean equals(Object object)
     {
         if (!(object instanceof PopURL))
             return false;
@@ -108,7 +109,8 @@ public final class PopURL extends MailboxURL
         return true;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer("pop://");
         if (user != null) {
@@ -128,7 +130,8 @@ public final class PopURL extends MailboxURL
         return sb.toString();
     }
 
-    public String getCanonicalName()
+    @Override
+	public String getCanonicalName()
     {
         FastStringBuffer sb = new FastStringBuffer("pop://");
         String s = user != null ? user : System.getProperty("user.name");

@@ -3148,15 +3148,18 @@ public final class web_utilities extends SubLTranslatedFile
         return (SubLObject)web_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_web_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_web_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_web_utilities_file();
     }
     
@@ -3429,7 +3432,8 @@ public final class web_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HTML-URL-EXPAND-CHAR"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return web_utilities.html_url_expand_char(arg1);
         }
     }
@@ -3440,7 +3444,8 @@ public final class web_utilities extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("URL-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return web_utilities.url_p(arg1);
         }
     }

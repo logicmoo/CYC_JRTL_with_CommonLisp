@@ -73,17 +73,20 @@ public final class StringInputStream extends Stream
         initAsCharacterInputStream(stringReader);
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.STRING_INPUT_STREAM;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.STRING_INPUT_STREAM;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.STRING_INPUT_STREAM)
             return T;
@@ -96,19 +99,23 @@ public final class StringInputStream extends Stream
         return super.typep(type);
     }
 
-    public int getOffset() {
+    @Override
+	public int getOffset() {
        // DONT REGRESS (true = OLD-WORKS)
         if(true) {return start + super.getOffset();}
-        return start + offset;
+    	final long offset = getInputIndex();
+        return (int) (start + offset);
     }
 
-    protected long _getFilePosition() {
+    @Override
+	protected long _getFilePosition() {
        // DONT REGRESS (true = OLD-WORKS)
        if(true) { return super._getFilePosition(); }
        return getOffset();
     }
 
-    protected boolean _setFilePosition(LispObject arg) {
+    @Override
+	protected boolean _setFilePosition(LispObject arg) {
         // DONT REGRESS (true = OLD-WORKS)
         if(true) { return super._setFilePosition(arg); }
         try {
@@ -129,7 +136,7 @@ public final class StringInputStream extends Stream
             stringReader.skip(offset);
             initAsCharacterInputStream(stringReader);
 
-            this.offset = offset;
+        	setInputIndex(offset);
         }
         catch (IOException e) {
             error(new StreamError(this, e));
@@ -143,12 +150,14 @@ public final class StringInputStream extends Stream
     private static final Primitive MAKE_STRING_INPUT_STREAM =
         new Primitive("make-string-input-stream", "string &optional start end")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             return new StringInputStream(arg.getStringValue());
         }
 
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
 
         {
             String s = first.getStringValue();
@@ -156,7 +165,8 @@ public final class StringInputStream extends Stream
             return new StringInputStream(s, start);
         }
 
-        public LispObject execute(LispObject first, LispObject second,
+        @Override
+		public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
@@ -173,7 +183,8 @@ public final class StringInputStream extends Stream
     private static final Primitive STRING_INPUT_STREAM_CURRENT =
         new Primitive("string-input-stream-current", PACKAGE_EXT, true, "stream")
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             if (arg instanceof StringInputStream)
                 return Fixnum.getInstance(((StringInputStream)arg).getOffset());

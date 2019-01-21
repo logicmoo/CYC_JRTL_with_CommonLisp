@@ -62,7 +62,8 @@ public final class AliasDialog extends AbstractDialog implements FocusListener
             keyTextField.requestFocus();
     }
 
-    protected void ok()
+    @Override
+	protected void ok()
     {
         dispose();
         String key = getKey();
@@ -91,11 +92,13 @@ public final class AliasDialog extends AbstractDialog implements FocusListener
         return value != null ? value.trim() : "";
     }
 
-    public void focusGained(FocusEvent e)
+    @Override
+	public void focusGained(FocusEvent e)
     {
     }
 
-    public void focusLost(FocusEvent e)
+    @Override
+	public void focusLost(FocusEvent e)
     {
         String value = editor.getAlias(getKey());
         if (value != null)

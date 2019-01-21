@@ -66,7 +66,8 @@ public final class DateSentMailboxFilter extends MailboxFilter
         return null;
     }
 
-    public boolean accept(MailboxEntry entry)
+    @Override
+	public boolean accept(MailboxEntry entry)
     {
         RFC822Date date = entry.getDate();
         if (begin != null)

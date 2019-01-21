@@ -55,17 +55,20 @@ public  abstract  class SocketStream extends TwoWayStream
 		this(null, null);
 	}
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         return Symbol.SOCKET_STREAM;
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.SOCKET_STREAM;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.SOCKET_STREAM)
             return T;
@@ -74,7 +77,8 @@ public  abstract  class SocketStream extends TwoWayStream
         return super.typep(type);
     }
 
-    public LispObject close(LispObject abort)
+    @Override
+	public LispObject close(LispObject abort)
     {
 	try {
 	    socket.close();

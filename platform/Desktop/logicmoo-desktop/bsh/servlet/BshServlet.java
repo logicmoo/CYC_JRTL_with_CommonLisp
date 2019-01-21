@@ -42,7 +42,8 @@ public class BshServlet extends HttpServlet
 		return bshVersion;
 	}
 
-    public void doGet(
+    @Override
+	public void doGet(
 		HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException 
 	{
@@ -208,7 +209,8 @@ public class BshServlet extends HttpServlet
 
 		return sb.toString();
 	}
-    public void doPost(
+    @Override
+	public void doPost(
 		HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException 
 	{	

@@ -88,50 +88,62 @@ public class LRUCache<K, V> implements Map<K, V> {
 	}
 
 	// // Public Area
+	@Override
 	public void clear() {
 		cache.clear();
 	}
 
+	@Override
 	public boolean containsKey(Object key) {
 		return cache.containsKey((K) key);
 	}
 
+	@Override
 	public boolean containsValue(Object value) {
 		return cache.containsValue((V) value);
 	}
 
+	@Override
 	public Set<Map.Entry<K, V>> entrySet() {
 		return cache.entrySet();
 	}
 
+	@Override
 	public V get(Object key) {
 		return cache.get((K) key);
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return cache.isEmpty();
 	}
 
+	@Override
 	public Set<K> keySet() {
 		return cache.keySet();
 	}
 
+	@Override
 	public V put(K key, V value) {
 		return cache.put(key, value);
 	}
 
+	@Override
 	public void putAll(Map<? extends K, ? extends V> m) {
 		cache.putAll(m);
 	}
 
+	@Override
 	public V remove(Object key) {
 		return cache.remove((K) key);
 	}
 
+	@Override
 	public int size() {
 		return cache.size();
 	}
 
+	@Override
 	public Collection<V> values() {
 		return cache.values();
 	}

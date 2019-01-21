@@ -2482,15 +2482,18 @@ public final class fact_sheet_logs extends SubLTranslatedFile
         return (SubLObject)fact_sheet_logs.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_fact_sheet_logs_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_fact_sheet_logs_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_fact_sheet_logs_file();
     }
     

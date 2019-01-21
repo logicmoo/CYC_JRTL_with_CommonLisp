@@ -9501,15 +9501,18 @@ public final class kb_accessors extends SubLTranslatedFile
         return (SubLObject)kb_accessors.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_kb_accessors_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_kb_accessors_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_kb_accessors_file();
     }
     
@@ -9931,7 +9934,8 @@ public final class kb_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("FAST-NON-SKOLEM-INDETERMINATE-TERM?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return kb_accessors.fast_non_skolem_indeterminate_termP(arg1);
         }
     }
@@ -9942,7 +9946,8 @@ public final class kb_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-GUESS-THE-CYCLIST-FROM-USER-NAME"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return kb_accessors.clear_guess_the_cyclist_from_user_name();
         }
     }

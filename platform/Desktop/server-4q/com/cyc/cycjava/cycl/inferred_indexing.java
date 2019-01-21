@@ -875,15 +875,18 @@ public final class inferred_indexing extends SubLTranslatedFile
         return (SubLObject)inferred_indexing.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inferred_indexing_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inferred_indexing_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inferred_indexing_file();
     }
     

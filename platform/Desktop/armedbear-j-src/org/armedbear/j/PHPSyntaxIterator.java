@@ -33,7 +33,8 @@ public final class PHPSyntaxIterator extends DefaultSyntaxIterator
 
     // Caller must make sure parseBuffer() has been called so flags will be
     // correct.
-    public char[] hideSyntacticWhitespace(Line line)
+    @Override
+	public char[] hideSyntacticWhitespace(Line line)
     {
         int initialState = PHPFormatter.getState(line.flags());
         switch (initialState) {
@@ -50,7 +51,8 @@ public final class PHPSyntaxIterator extends DefaultSyntaxIterator
         return hideSyntacticWhitespace(line.getText(), initialState);
     }
 
-    public char[] hideSyntacticWhitespace(String s)
+    @Override
+	public char[] hideSyntacticWhitespace(String s)
     {
         return hideSyntacticWhitespace(s, STATE_NEUTRAL);
     }

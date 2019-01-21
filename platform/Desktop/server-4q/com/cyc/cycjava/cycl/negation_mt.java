@@ -738,15 +738,18 @@ public final class negation_mt extends SubLTranslatedFile
         return (SubLObject)negation_mt.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_negation_mt_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_negation_mt_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_negation_mt_file();
     }
     

@@ -865,15 +865,18 @@ public final class rkf_term_agglomerator extends SubLTranslatedFile
         return (SubLObject)rkf_term_agglomerator.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_term_agglomerator_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_term_agglomerator_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_term_agglomerator_file();
     }
     
@@ -936,31 +939,38 @@ public final class rkf_term_agglomerator extends SubLTranslatedFile
             this.$agglomerations_used = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$agglomeration_state_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$uncovered_terms;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$agglomerations_available;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$agglomerations_used;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$uncovered_terms = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$agglomerations_available = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$agglomerations_used = value;
         }
         
@@ -975,7 +985,8 @@ public final class rkf_term_agglomerator extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("AGGLOMERATION-STATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return rkf_term_agglomerator.agglomeration_state_p(arg1);
         }
     }

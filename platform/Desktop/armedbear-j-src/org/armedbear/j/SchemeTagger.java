@@ -39,7 +39,8 @@ public final class SchemeTagger extends Tagger
         super(buffer);
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         Vector tags = new Vector();
         pos = new Position(buffer.getFirstLine(), 0);

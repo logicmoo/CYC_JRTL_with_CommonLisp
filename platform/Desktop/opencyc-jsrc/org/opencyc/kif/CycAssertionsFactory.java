@@ -111,6 +111,7 @@ public class CycAssertionsFactory extends CycAccess {
 	/**
 	 * Returns a with-bookkeeping-info macro expresssion.
 	 */
+	@Override
 	public String withBookkeepingInfo() {
 		try {
 			return "(with-bookkeeping-info (new-bookkeeping-info "
@@ -129,6 +130,7 @@ public class CycAssertionsFactory extends CycAccess {
 	 * @param <tt>CycFort</tt> mt2 the parent Microtheory that lends it's
 	 *            assertions to the child
 	 */
+	@Override
 	public void assertGenlMt(CycFort mt1, CycFort mt2) throws IOException,
 			CycApiException {
 		assertGafNoWff((CycFort) baseKB, genlMt, mt1, mt2);
@@ -160,6 +162,7 @@ public class CycAssertionsFactory extends CycAccess {
 	 *            (public CycConstant makeCycConstantError)
 	 */
 
+	@Override
 	public CycConstant makeCycConstant(String name) {
 
 		String tryName = name;

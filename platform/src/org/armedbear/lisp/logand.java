@@ -45,25 +45,29 @@ public final class logand extends Primitive
         super("logand", "&rest integers");
     }
 
-    public LispObject execute()
+    @Override
+	public LispObject execute()
     {
         return Fixnum.MINUS_ONE;
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         if (arg instanceof Fixnum || arg instanceof Bignum)
             return arg;
         return type_error(arg, Symbol.INTEGER);
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    @Override
+	public LispObject execute(LispObject first, LispObject second)
 
     {
         return first.LOGAND(second);
     }
 
-    public LispObject execute(LispObject[] args)
+    @Override
+	public LispObject execute(LispObject[] args)
     {
         LispObject result = Fixnum.MINUS_ONE;
         for (int i = 0; i < args.length; i++)

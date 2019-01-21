@@ -1303,15 +1303,18 @@ public final class object extends SubLTranslatedFile
         return (SubLObject)object.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_object_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_object_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_object_file();
     }
     

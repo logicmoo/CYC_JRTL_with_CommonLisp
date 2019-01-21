@@ -120,7 +120,8 @@ public final class DirectoryCache
         }
 
         private final Runnable runnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 // Only check every 5 minutes.
                 if (System.currentTimeMillis() - lastRun > 300000) {

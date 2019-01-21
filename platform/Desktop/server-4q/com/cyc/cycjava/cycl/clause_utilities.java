@@ -1257,15 +1257,18 @@ public final class clause_utilities extends SubLTranslatedFile
         return (SubLObject)clause_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_clause_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_clause_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_clause_utilities_file();
     }
     

@@ -4937,15 +4937,18 @@ public final class eval_in_api extends SubLTranslatedFile
         return (SubLObject)eval_in_api.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_eval_in_api_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_eval_in_api_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_eval_in_api_file();
     }
     

@@ -61,20 +61,23 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
 	}
 
 
+	@Override
 	final public Operator toLispObject() {
 		return  this;
 	}
 
 	//abstract public SubLOperator toSubLObject();
 	//public abstract SubLSymbol getFunctionSymbol();
-    public LispObject execute(LispObject[] args)
+    @Override
+	public LispObject execute(LispObject[] args)
     {
         if (args.length<9) return dispatch(args);
         	return funcallCL(args);
 	}
 
 //    abstract public LispObject execute(LispObject[] args);
-    abstract public LispObject arrayify(LispObject... args);
+    @Override
+	abstract public LispObject arrayify(LispObject... args);
 
 	//protected LispObject lambdaName;
 
@@ -107,7 +110,8 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
 		lambdaList = obj;
 	}
 
-    public LispObject getParts()
+    @Override
+	public LispObject getParts()
     {
         LispObject result = NIL;
         result = result.push(new Cons("lambda-name", lambdaName));
@@ -115,6 +119,7 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
         return result.nreverse();
     }
 
+	@Override
 	public SubLList getArglist() {
 		if (argList == null) {
 			LispObject ll = getLambdaList();
@@ -128,6 +133,7 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
 
 	protected SubLList argList;
 
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
@@ -137,7 +143,8 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
 		return super.toString();
 	}
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
 		final LispThread thread = LispThread.currentThread();
 		final SpecialBindingsMark mark = thread.markSpecialBindings();
@@ -179,8 +186,10 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
 		return unreadableString(sb.toString());
     }
 
-    protected void extraInfo(StringBuilder sb) {    }
+    @Override
+	protected void extraInfo(StringBuilder sb) {    }
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
@@ -192,10 +201,12 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
     abstract public LispObject funcallCL(LispObject... args);
 
 
+	@Override
 	public SubLSymbol getType() {
 		return Types.$dtp_function$;
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
 		return CommonSymbols.FIVE_INTEGER;
 	}
@@ -204,10 +215,12 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
 	//public static String SPECIAL_OPERATOR_NAME = "SPECIAL-OPERATOR";
 
 
+	@Override
 	public boolean canFastHash() {
 		return true;
 	}
 
+	@Override
 	public SubLSymbol getFunctionSymbol() {
         if(this.lambdaName!=null) return (SubLSymbol) this.lambdaName;
 		LispObject lambdaName = getLambdaName();
@@ -215,15 +228,18 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
 		return lambdaName.toSymbol();
 	}
 
+	@Override
 	public boolean isSpecial() {
 		return (this instanceof SubLSpecialOperator);
 	}
+	@Override
 	public SubLSpecialOperator toSpecialOperator() {
 		if(this instanceof SubLSpecialOperator) return (SubLSpecialOperator) this;
 		org.armedbear.lisp.Lisp.lisp_type_error(this,"SPECIAL-OPERATOR");
 		return null;
 	}
 
+	@Override
 	public String toTypeName() {
 		return SPECIAL_OPERATOR_NAME;
 	}

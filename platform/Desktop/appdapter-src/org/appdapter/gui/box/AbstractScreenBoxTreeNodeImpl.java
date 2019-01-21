@@ -54,6 +54,7 @@ import org.appdapter.gui.util.Annotations.UIProvider;
 @SuppressWarnings("serial")
 abstract public class AbstractScreenBoxTreeNodeImpl extends DefaultMutableTreeNode implements GetSetObject, UIProvider, PopupAdder, DisplayContextProvider, DisplayContext {
 
+	@Override
 	abstract public String toString();
 
 	protected DisplayContext myDisplayContext;
@@ -124,6 +125,7 @@ abstract public class AbstractScreenBoxTreeNodeImpl extends DefaultMutableTreeNo
 	 *						is out of bounds
 	 * @return	the TreeNode in this node's child array at  the specified index
 	 */
+	@Override
 	public TreeNode getChildAt(int index) {
 		if (children == null) {
 			throw new ArrayIndexOutOfBoundsException("node has no children");
@@ -240,6 +242,7 @@ abstract public class AbstractScreenBoxTreeNodeImpl extends DefaultMutableTreeNo
 		return null;
 	}
 
+	@Override
 	public void insert(MutableTreeNode newChild, int childIndex) {
 		super.insert(newChild, childIndex);
 		Collections.sort(this.children, nodeComparator);
@@ -247,10 +250,12 @@ abstract public class AbstractScreenBoxTreeNodeImpl extends DefaultMutableTreeNo
 
 	//It also looks better if you're ignoring case sensitivity:
 	protected static Comparator nodeComparator = new Comparator() {
+		@Override
 		public int compare(Object o1, Object o2) {
 			return o1.toString().compareToIgnoreCase(o2.toString());
 		}
 
+		@Override
 		public boolean equals(Object obj) {
 			return false;
 		}
@@ -294,6 +299,7 @@ abstract public class AbstractScreenBoxTreeNodeImpl extends DefaultMutableTreeNo
 		return getLocalBoxedChildren().getTitleOf(value);
 	}
 
+	@Override
 	public void addLocalContributions(JPopupMenu popup) {
 		if (children != null && children.size() > 0) {
 			popup.add(new AbstractAction("Prune children") {
@@ -349,6 +355,7 @@ abstract public class AbstractScreenBoxTreeNodeImpl extends DefaultMutableTreeNo
 			return super.getValue(key);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			removeAllChildren();
 			NamedObjectCollection localBoxedChildren = getLocalBoxedChildren();
@@ -375,6 +382,7 @@ abstract public class AbstractScreenBoxTreeNodeImpl extends DefaultMutableTreeNo
 			this.object = ofobj;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			removeAllChildren();
 			for (Object o : object) {
@@ -395,6 +403,7 @@ abstract public class AbstractScreenBoxTreeNodeImpl extends DefaultMutableTreeNo
 			this.object = ofobj;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			AbstractScreenBoxTreeNodeImpl.this.removeAllChildren();
 			int arrayLen = Array.getLength(object);

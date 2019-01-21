@@ -2132,15 +2132,18 @@ public final class cb_rtv extends SubLTranslatedFile
         return (SubLObject)cb_rtv.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_rtv_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_rtv_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_rtv_file();
     }
     

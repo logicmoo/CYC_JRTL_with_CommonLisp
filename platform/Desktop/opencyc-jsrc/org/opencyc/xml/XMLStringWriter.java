@@ -52,7 +52,8 @@ public class XMLStringWriter extends XMLWriter {
      * to the current indentation level, if <code>false</code> is indented with respect to
      * the beginning of the line.
      */
-    public void indentPrint (String string, int indent, boolean relative) {
+    @Override
+	public void indentPrint (String string, int indent, boolean relative) {
         this.setIndent(indent, relative);
         writer.write(indentString + string);
     }
@@ -62,28 +63,32 @@ public class XMLStringWriter extends XMLWriter {
      *
      * @param string the string to be printed.
      */
-    public void print (String string) {
+    @Override
+	public void print (String string) {
         writer.write(string);
     }
 
     /**
      * Flushes the <code>StringWriter</code> in the field @see #writer.
      */
-    public void flush () {
+    @Override
+	public void flush () {
         writer.flush();
     }
 
     /**
      * Closes the <code>StringWriter</code> in the field @see #writer.
      */
-    public void close () throws IOException {
+    @Override
+	public void close () throws IOException {
         writer.close();
     }
 
     /**
      * Return the buffer's current value as a string.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return writer.toString();
     }
 }

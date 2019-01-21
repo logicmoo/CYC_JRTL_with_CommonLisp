@@ -702,15 +702,18 @@ public final class cyc_kernel extends SubLTranslatedFile
         return (SubLObject)cyc_kernel.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cyc_kernel_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cyc_kernel_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cyc_kernel_file();
     }
     

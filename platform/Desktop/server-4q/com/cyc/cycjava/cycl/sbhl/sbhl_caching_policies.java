@@ -771,15 +771,18 @@ public final class sbhl_caching_policies extends SubLTranslatedFile
         return (SubLObject)sbhl_caching_policies.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_caching_policies_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_caching_policies_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_caching_policies_file();
     }
     

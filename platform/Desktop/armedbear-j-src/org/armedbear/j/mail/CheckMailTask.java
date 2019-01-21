@@ -51,7 +51,8 @@ public final class CheckMailTask extends IdleThreadTask
 
     private final Runnable runnable = new Runnable()
     {
-        public void run()
+        @Override
+		public void run()
         {
             if (!Editor.preferences().getBooleanProperty(Property.CHECK_ENABLED))
                 return;

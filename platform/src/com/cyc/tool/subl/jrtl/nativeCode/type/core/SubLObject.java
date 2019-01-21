@@ -33,7 +33,7 @@ public interface SubLObject extends Cloneable {
 	public static int MAX_HASH_LENGTH = 8;
 	public static int MAX_HASH_DEPTH = 8;
 	public static int DEFAULT_EXCEEDED_HASH_VALUE = 0;
-
+	
 	SubLObject add(SubLObject p0);
 
 	void addKey(SubLObject p0);
@@ -419,5 +419,7 @@ public interface SubLObject extends Cloneable {
 	BigDecimal bigDecimalValue();
 
 	Object javaInstance();
+	
+	String princToString();
 
 }

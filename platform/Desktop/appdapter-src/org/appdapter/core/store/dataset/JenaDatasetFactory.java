@@ -11,19 +11,23 @@ import com.hp.hpl.jena.query.Dataset;
 
 public class JenaDatasetFactory extends AbstractDatasetFactory implements UserDatasetFactory
 {
-    public String getDatasetType() {
+    @Override
+	public String getDatasetType() {
         return "memory";
     }
     
-    public Dataset createDefault() {
+    @Override
+	public Dataset createDefault() {
         return this.createMemFixed();
     }
     
-    public Dataset createMem() {
+    @Override
+	public Dataset createMem() {
         return this.create(DatasetGraphFactory.createMem());
     }
     
-    public Dataset createMemFixed() {
+    @Override
+	public Dataset createMemFixed() {
         return this.create(DatasetGraphFactory.createMemFixed());
     }
     
@@ -31,39 +35,46 @@ public class JenaDatasetFactory extends AbstractDatasetFactory implements UserDa
         return this.create(DatasetFactory.createMemFixed());
     }
     
-    public Dataset create(final Model model) {
+    @Override
+	public Dataset create(final Model model) {
         return (Dataset)new DatasetImpl(model);
     }
     
-    public Dataset create(final Dataset dataset) {
+    @Override
+	public Dataset create(final Dataset dataset) {
         if (RepoDatasetFactory.datasetNoDeleteModels) {
             return (Dataset)new CheckedDataset(dataset);
         }
         return (Dataset)new DatasetImpl(dataset);
     }
     
-    public Dataset create(final DatasetGraph dataset) {
+    @Override
+	public Dataset create(final DatasetGraph dataset) {
         if (RepoDatasetFactory.datasetNoDeleteModels) {
             return (Dataset)new CheckedDataset(dataset);
         }
         return DatasetImpl.wrap(dataset);
     }
     
-    public Dataset createRemotePeer() {
+    @Override
+	public Dataset createRemotePeer() {
         final Store store = SDBFactory.connectStore(RepoDatasetFactory.STORE_CONFIG_PATH);
         final Dataset ds = SDBFactory.connectDataset(store);
         return ds;
     }
     
-    public Dataset createType(final String typeOf, final String sharedNameIgnoredPresently) {
+    @Override
+	public Dataset createType(final String typeOf, final String sharedNameIgnoredPresently) {
         return this.createDefault();
     }
     
-    public Model createModelOfType(final String typeOf, final String sharedNameIgnoredPresently) throws Throwable {
+    @Override
+	public Model createModelOfType(final String typeOf, final String sharedNameIgnoredPresently) throws Throwable {
         return this.createModelOfType(typeOf, null, sharedNameIgnoredPresently);
     }
     
-    public Model createModelOfType(final String typeOf, final String modelName, final String shareName) {
+    @Override
+	public Model createModelOfType(final String typeOf, final String modelName, final String shareName) {
         return RepoDatasetFactory.createDefaultModel();
     }
 }

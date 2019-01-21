@@ -981,15 +981,18 @@ public final class deep_inference_generator extends SubLTranslatedFile
         return (SubLObject)deep_inference_generator.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_deep_inference_generator_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_deep_inference_generator_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_deep_inference_generator_file();
     }
     

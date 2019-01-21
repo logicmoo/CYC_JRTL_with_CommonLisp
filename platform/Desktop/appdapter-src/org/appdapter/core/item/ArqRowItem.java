@@ -18,7 +18,8 @@ public class ArqRowItem extends ResultItem
         (this.mySolutionCopy = new QuerySolutionMap()).addAll(soln);
     }
     
-    protected Literal getLiteralVal(final Ident fieldID, final boolean throwOnFailure) {
+    @Override
+	protected Literal getLiteralVal(final Ident fieldID, final boolean throwOnFailure) {
         final String varName = fieldID.getLocalName();
         final Literal lit = this.mySolutionCopy.getLiteral(varName);
         if (lit != null) {
@@ -27,7 +28,8 @@ public class ArqRowItem extends ResultItem
         throw new RuntimeException("Cannot locate literal value for varName: " + varName + " extracted from fieldID: " + fieldID);
     }
     
-    protected List<Item> getLinkedItems(final Ident linkName, final Item.LinkDirection linkDir) {
+    @Override
+	protected List<Item> getLinkedItems(final Ident linkName, final Item.LinkDirection linkDir) {
         if (linkDir != Item.LinkDirection.FORWARD) {
             throw new UnsupportedOperationException("Only FORWARD link direction is supported for ArqRowItem");
         }
@@ -41,11 +43,13 @@ public class ArqRowItem extends ResultItem
         return result;
     }
     
-    public Ident getIdent() {
+    @Override
+	public Ident getIdent() {
         throw new UnsupportedOperationException("ArqRowItem doesn't have an ident yet");
     }
     
-    public List<Item> getLinkedOrderedList(final Ident listLinkName) {
+    @Override
+	public List<Item> getLinkedOrderedList(final Ident listLinkName) {
         throw new UnsupportedOperationException("ArqRowItem doesn't know how to access RDF-Lists, yet.");
     }
 }

@@ -1250,15 +1250,18 @@ public final class subloop_processes extends SubLTranslatedFile
         return (SubLObject)subloop_processes.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_subloop_processes_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_subloop_processes_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_subloop_processes_file();
     }
     

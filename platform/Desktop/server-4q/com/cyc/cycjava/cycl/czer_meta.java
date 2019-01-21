@@ -1708,15 +1708,18 @@ public final class czer_meta extends SubLTranslatedFile
         return (SubLObject)czer_meta.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_czer_meta_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_czer_meta_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_czer_meta_file();
     }
     
@@ -1765,7 +1768,8 @@ public final class czer_meta extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-META-RELATION-SOMEWHERE?"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return czer_meta.clear_meta_relation_somewhereP();
         }
     }
@@ -1776,7 +1780,8 @@ public final class czer_meta extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-POSSIBLY-META-RELATION-SOMEWHERE?-CACHED"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return czer_meta.clear_possibly_meta_relation_somewhereP_cached();
         }
     }
@@ -1787,7 +1792,8 @@ public final class czer_meta extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EL-META-FORMULA?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_meta.el_meta_formulaP(arg1, (SubLObject)$el_meta_formulaP$UnaryFunction.UNPROVIDED);
         }
     }
@@ -1798,7 +1804,8 @@ public final class czer_meta extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("EL-META-FORMULA?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return czer_meta.el_meta_formulaP(arg1, arg2);
         }
     }
@@ -1809,7 +1816,8 @@ public final class czer_meta extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GROUND-EL-META-FORMULA?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return czer_meta.ground_el_meta_formulaP(arg1, (SubLObject)$ground_el_meta_formulaP$UnaryFunction.UNPROVIDED, (SubLObject)$ground_el_meta_formulaP$UnaryFunction.UNPROVIDED);
         }
     }
@@ -1820,7 +1828,8 @@ public final class czer_meta extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GROUND-EL-META-FORMULA?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return czer_meta.ground_el_meta_formulaP(arg1, arg2, (SubLObject)$ground_el_meta_formulaP$BinaryFunction.UNPROVIDED);
         }
     }

@@ -29,15 +29,18 @@ public class DefaultQueryResult implements QueryResult {
     this(null, null);
   }
 
-  public List<Binding> getBindings() {
+  @Override
+public List<Binding> getBindings() {
     return Collections.unmodifiableList(bindings);
   }
 
-  public Integer getAnswerID() {
+  @Override
+public Integer getAnswerID() {
     return answerID;
   }
 
-  public Object getBindingForVar(final CycVariable var) {
+  @Override
+public Object getBindingForVar(final CycVariable var) {
     for (final Binding binding : getBindings()) {
       if (binding.getVariable().equals(var)) {
         return binding.getValue();
@@ -46,7 +49,8 @@ public class DefaultQueryResult implements QueryResult {
     return null;
   }
 
-  public int compareTo(final QueryResult o) {
+  @Override
+public int compareTo(final QueryResult o) {
     if (o == null) {
       return -1;
     } else {

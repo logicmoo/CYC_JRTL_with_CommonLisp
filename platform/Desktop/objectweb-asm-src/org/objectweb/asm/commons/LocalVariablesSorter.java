@@ -99,7 +99,8 @@ public class LocalVariablesSorter extends MethodAdapter {
         firstLocal = nextLocal;
     }
 
-    public void visitVarInsn(final int opcode, final int var) {
+    @Override
+	public void visitVarInsn(final int opcode, final int var) {
         Type type;
         switch (opcode) {
             case Opcodes.LLOAD:
@@ -134,15 +135,18 @@ public class LocalVariablesSorter extends MethodAdapter {
         mv.visitVarInsn(opcode, remap(var, type));
     }
 
-    public void visitIincInsn(final int var, final int increment) {
+    @Override
+	public void visitIincInsn(final int var, final int increment) {
         mv.visitIincInsn(remap(var, Type.INT_TYPE), increment);
     }
 
-    public void visitMaxs(final int maxStack, final int maxLocals) {
+    @Override
+	public void visitMaxs(final int maxStack, final int maxLocals) {
         mv.visitMaxs(maxStack, nextLocal);
     }
 
-    public void visitLocalVariable(
+    @Override
+	public void visitLocalVariable(
         final String name,
         final String desc,
         final String signature,
@@ -154,7 +158,8 @@ public class LocalVariablesSorter extends MethodAdapter {
         mv.visitLocalVariable(name, desc, signature, start, end, newIndex);
     }
 
-    public void visitFrame(
+    @Override
+	public void visitFrame(
         final int type,
         final int nLocal,
         final Object[] local,

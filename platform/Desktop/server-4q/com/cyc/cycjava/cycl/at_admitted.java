@@ -1888,15 +1888,18 @@ public final class at_admitted extends SubLTranslatedFile
         return (SubLObject)at_admitted.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_at_admitted_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_at_admitted_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_at_admitted_file();
     }
     
@@ -1948,7 +1951,8 @@ public final class at_admitted extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GENERIC-ARG-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return at_admitted.generic_arg_p(arg1);
         }
     }

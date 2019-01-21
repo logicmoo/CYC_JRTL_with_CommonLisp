@@ -35,7 +35,8 @@ public final class CheckPathFormatter extends Formatter
         this.buffer = buffer;
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         clearSegmentList();
         if (line == null) {
@@ -79,7 +80,8 @@ public final class CheckPathFormatter extends Formatter
         addSegment(text, FORMAT_TEXT);
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             // Currently there's no CheckPathMode...

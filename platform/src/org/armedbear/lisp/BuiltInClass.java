@@ -42,22 +42,26 @@ public class BuiltInClass extends LispClass
     super(symbol);
   }
 
-  public LispObject typeOf()
+  @Override
+public LispObject typeOf()
   {
     return Symbol.BUILT_IN_CLASS;//.toLispObject();
   }
 
-  public LispObject classOf()
+  @Override
+public LispObject classOf()
   {
     return StandardClass.BUILT_IN_CLASS;// .toLispObject();
   }
 
-  public boolean isFinalized()
+  @Override
+public boolean isFinalized()
   {
     return true;
   }
 
-  public LispObject typep(LispObject type)
+  @Override
+public LispObject typep(LispObject type)
   {
     if (type == Symbol.BUILT_IN_CLASS)
       return T;
@@ -66,12 +70,14 @@ public class BuiltInClass extends LispClass
     return super.typep(type);
   }
 
-  public LispObject getDescription()
+  @Override
+public LispObject getDescription()
   {
     return new SimpleString(princToString());
   }
 
-  public String printObjectUnreadable()
+  @Override
+public String printObjectUnreadable()
   {
     return unreadableString(getLispClassName().princToString());
   }

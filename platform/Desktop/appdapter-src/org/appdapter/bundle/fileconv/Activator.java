@@ -5,7 +5,8 @@ import ext.osgi.common.ExtBundleActivatorBase;
 
 public class Activator extends ExtBundleActivatorBase
 {
-    public void ensureExtClassesAreFindable() {
+    @Override
+	public void ensureExtClassesAreFindable() {
         if (isOSGIProperty("osgi-tests", (Object)true)) {
             FileStreamUtils.canLoadWorkbooks();
         }

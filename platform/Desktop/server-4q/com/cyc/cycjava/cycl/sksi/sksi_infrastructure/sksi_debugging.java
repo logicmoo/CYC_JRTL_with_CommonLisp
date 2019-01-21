@@ -923,15 +923,18 @@ public final class sksi_debugging extends SubLTranslatedFile
         return (SubLObject)sksi_debugging.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_debugging_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_debugging_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_debugging_file();
     }
     

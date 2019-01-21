@@ -43,7 +43,8 @@ public final class assql extends Primitive
         super("assql", PACKAGE_EXT);
     }
 
-    public LispObject execute(LispObject item, LispObject alist)
+    @Override
+	public LispObject execute(LispObject item, LispObject alist)
 
     {
         while (alist != NIL) {

@@ -23,15 +23,18 @@ public class ColorEditor extends PropertyEditorSupport  {
     model = new ComboModel();
   }
 
-  public void setAsText(String text) throws IllegalArgumentException {
+  @Override
+public void setAsText(String text) throws IllegalArgumentException {
     setValue(model.getColor(text));
   }
 
-  public String getAsText() {
+  @Override
+public String getAsText() {
     return model.getColorName(model.getSelectedColor());
   }
 
-  public void setValue(Object value) {
+  @Override
+public void setValue(Object value) {
     if (value instanceof Color) {
       super.setValue(value);
       if (gui != null)
@@ -47,14 +50,16 @@ public class ColorEditor extends PropertyEditorSupport  {
     }
   }
 
-  public Component getCustomEditor() {
+  @Override
+public Component getCustomEditor() {
     if (gui == null) {
       gui = new GUI(model);
     }
     return gui;
   }
 
-  public boolean supportsCustomEditor() {
+  @Override
+public boolean supportsCustomEditor() {
     return true;
   }
 
@@ -99,7 +104,8 @@ public class ColorEditor extends PropertyEditorSupport  {
 
     }
 
-    public synchronized void setSelectedItem(Object anItem) {
+    @Override
+	public synchronized void setSelectedItem(Object anItem) {
       Color old = selected;
       if (anItem == null) {
         selected = null;
@@ -115,7 +121,8 @@ public class ColorEditor extends PropertyEditorSupport  {
       }
     }
 
-    public Object getSelectedItem() {
+    @Override
+	public Object getSelectedItem() {
       return table.findBrother(selected);
     }
 
@@ -131,11 +138,13 @@ public class ColorEditor extends PropertyEditorSupport  {
       return (String) table.findBrother(color);
     }
 
-    public int getSize() {
+    @Override
+	public int getSize() {
       return names.size();
     }
 
-    public Object getElementAt(int index) {
+    @Override
+	public Object getElementAt(int index) {
       try {
         return names.elementAt(index);
       } catch (Exception err) {

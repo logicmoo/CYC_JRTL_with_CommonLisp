@@ -2561,15 +2561,18 @@ public final class plausibility_utilities extends SubLTranslatedFile
         return (SubLObject)plausibility_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_plausibility_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_plausibility_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_plausibility_utilities_file();
     }
     

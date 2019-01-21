@@ -70,7 +70,8 @@ public final class ThreadPanel implements ContextListener, MouseListener
         return scrollPane;
     }
 
-    public void contextChanged()
+    @Override
+	public void contextChanged()
     {
         final Vector v = new Vector();
         int index = -1;
@@ -115,7 +116,8 @@ public final class ThreadPanel implements ContextListener, MouseListener
         // Update UI in event dispatch thread.
         final int finalIndex = index;
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 list.setListData(v);
                 list.setSelectedIndex(finalIndex);
@@ -124,7 +126,8 @@ public final class ThreadPanel implements ContextListener, MouseListener
         SwingUtilities.invokeLater(r);
     }
 
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         if (!jdb.isSuspended())
             return;
@@ -189,11 +192,15 @@ public final class ThreadPanel implements ContextListener, MouseListener
         dialog.requestDefaultFocus();
     }
 
-    public void mouseReleased(MouseEvent e) {}
+    @Override
+	public void mouseReleased(MouseEvent e) {}
 
-    public void mouseClicked(MouseEvent e) {}
+    @Override
+	public void mouseClicked(MouseEvent e) {}
 
-    public void mouseEntered(MouseEvent e) {}
+    @Override
+	public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e) {}
+    @Override
+	public void mouseExited(MouseEvent e) {}
 }

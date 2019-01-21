@@ -3599,15 +3599,18 @@ public final class transformation_modules extends SubLTranslatedFile
         return (SubLObject)transformation_modules.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_transformation_modules_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_transformation_modules_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_transformation_modules_file();
     }
     
@@ -3731,7 +3734,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-POS-REQUIRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return transformation_modules.trans_predicate_pos_required(arg1);
         }
     }
@@ -3742,7 +3746,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-POS-COST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return transformation_modules.trans_predicate_pos_cost(arg1);
         }
     }
@@ -3753,7 +3758,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-POS-RULE-SELECT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return transformation_modules.trans_predicate_pos_rule_select(arg1);
         }
     }
@@ -3764,7 +3770,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-POS-RULE-FILTER"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return transformation_modules.trans_predicate_pos_rule_filter(arg1, arg2);
         }
     }
@@ -3775,7 +3782,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-POS-EXPAND"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return transformation_modules.trans_predicate_pos_expand(arg1, arg2);
         }
     }
@@ -3786,7 +3794,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-GENLPREDS-POS-REQUIRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return transformation_modules.trans_predicate_genlpreds_pos_required(arg1);
         }
     }
@@ -3797,7 +3806,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-GENLPREDS-POS-COST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return transformation_modules.trans_predicate_genlpreds_pos_cost(arg1);
         }
     }
@@ -3808,7 +3818,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-GENLPREDS-POS-RULE-SELECT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return transformation_modules.trans_predicate_genlpreds_pos_rule_select(arg1);
         }
     }
@@ -3819,7 +3830,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-SYMMETRY-POS-COST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return transformation_modules.trans_predicate_symmetry_pos_cost(arg1);
         }
     }
@@ -3830,7 +3842,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-SYMMETRY-POS-RULE-SELECT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return transformation_modules.trans_predicate_symmetry_pos_rule_select(arg1);
         }
     }
@@ -3841,7 +3854,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-SYMMETRY-POS-RULE-FILTER"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return transformation_modules.trans_predicate_symmetry_pos_rule_filter(arg1, arg2);
         }
     }
@@ -3852,7 +3866,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-PREDICATE-SYMMETRY-POS-EXPAND"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return transformation_modules.trans_predicate_symmetry_pos_expand(arg1, arg2);
         }
     }
@@ -3863,7 +3878,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-UNBOUND-PREDICATE-POS-REQUIRED"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return transformation_modules.trans_unbound_predicate_pos_required(arg1);
         }
     }
@@ -3874,7 +3890,8 @@ public final class transformation_modules extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANS-UNBOUND-PREDICATE-POS-COST"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return transformation_modules.trans_unbound_predicate_pos_cost(arg1);
         }
     }

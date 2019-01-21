@@ -555,15 +555,18 @@ public final class forward_propagate_assertions extends SubLTranslatedFile
         return (SubLObject)forward_propagate_assertions.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_forward_propagate_assertions_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_forward_propagate_assertions_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_forward_propagate_assertions_file();
     }
     

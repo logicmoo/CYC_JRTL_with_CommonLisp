@@ -54,7 +54,8 @@ public final class ZeroRankArray extends AbstractArray
         this.adjustable = adjustable;
     }
 
-    public LispObject typeOf()
+    @Override
+	public LispObject typeOf()
     {
         if (adjustable)
             return list(Symbol.ARRAY, elementType, NIL);
@@ -62,46 +63,54 @@ public final class ZeroRankArray extends AbstractArray
             return list(Symbol.SIMPLE_ARRAY, elementType, NIL);
     }
 
-    public LispObject classOf()
+    @Override
+	public LispObject classOf()
     {
         return BuiltInClass.ARRAY;
     }
 
-    public LispObject typep(LispObject type)
+    @Override
+	public LispObject typep(LispObject type)
     {
         if (type == Symbol.SIMPLE_ARRAY)
             return adjustable ? NIL : T;
         return super.typep(type);
     }
 
-    public int getRank()
+    @Override
+	public int getRank()
     {
         return 0;
     }
 
-    public LispObject getDimensions()
+    @Override
+	public LispObject getDimensions()
     {
         return NIL;
     }
 
-    public int getDimension(int n)
+    @Override
+	public int getDimension(int n)
     {
         error(new TypeError("Bad array dimension (" + n + ") for array of rank 0."));
         // Not reached.
         return -1;
     }
 
-    public LispObject getElementType()
+    @Override
+	public LispObject getElementType()
     {
         return elementType;
     }
 
-    public int getTotalSize()
+    @Override
+	public int getTotalSize()
     {
         return 1;
     }
 
-    public LispObject AREF(int index)
+    @Override
+	public LispObject AREF(int index)
     {
         if (index == 0)
             return data;
@@ -109,7 +118,8 @@ public final class ZeroRankArray extends AbstractArray
             return error(new TypeError("Bad row major index " + index + "."));
     }
 
-    public void aset(int index, LispObject obj)
+    @Override
+	public void aset(int index, LispObject obj)
     {
         if (obj.typep(elementType) == NIL)
             type_error(obj, elementType);
@@ -119,14 +129,16 @@ public final class ZeroRankArray extends AbstractArray
             error(new TypeError("Bad row major index " + index + "."));
     }
 
-    public void fill(LispObject obj)
+    @Override
+	public void fill(LispObject obj)
     {
         if (obj.typep(elementType) == NIL)
             type_error(obj, elementType);
         data = obj;
     }
 
-    public String printObjectImpl()
+    @Override
+	public String printObjectImpl()
     {
         final LispThread thread = LispThread.currentThread();
         boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
@@ -157,7 +169,8 @@ public final class ZeroRankArray extends AbstractArray
         return unreadableString(sb.toString());
     }
 
-  public AbstractArray adjustArray(int[] dims,
+  @Override
+public AbstractArray adjustArray(int[] dims,
                                               LispObject initialElement,
                                               LispObject initialContents)
     {
@@ -174,7 +187,8 @@ public final class ZeroRankArray extends AbstractArray
       }
   }
 
-  public AbstractArray adjustArray(int[] dims,
+  @Override
+public AbstractArray adjustArray(int[] dims,
                                               AbstractArray displacedTo,
                                               int displacement)
     {

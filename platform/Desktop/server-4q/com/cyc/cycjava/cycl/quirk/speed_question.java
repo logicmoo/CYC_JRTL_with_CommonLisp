@@ -122,15 +122,18 @@ public final class speed_question extends SubLTranslatedFile
         return (SubLObject)speed_question.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_speed_question_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_speed_question_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_speed_question_file();
     }
     

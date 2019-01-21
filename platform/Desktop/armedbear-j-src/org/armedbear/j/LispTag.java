@@ -33,7 +33,8 @@ public final class LispTag extends LocalTag
         super(name, pos, type);
     }
 
-    public String getLongName()
+    @Override
+	public String getLongName()
     {
         String s = signature.trim();
 

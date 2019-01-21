@@ -69,6 +69,7 @@ public final class EnumPropertyEditor extends GoodPropertyEditorSupport {
 		model = new ComboModel();
 	}
 
+	@Override
 	public String[] getTags() {
 		try {
 			Object[] values = (Object[]) c.getMethod("values").invoke(null); // NOI18N
@@ -82,6 +83,7 @@ public final class EnumPropertyEditor extends GoodPropertyEditorSupport {
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked") public void setAsText(String text) throws IllegalArgumentException {
 		if (false)
 			setValue(model.getEnum(text));
@@ -93,6 +95,7 @@ public final class EnumPropertyEditor extends GoodPropertyEditorSupport {
 		}
 	}
 
+	@Override
 	public String getJavaInitializationString() {
 		Enum e = (Enum) getValue();
 		return e != null ? c.getName().replace('$', '.') + '.' + e.name() : "null"; // NOI18N

@@ -48,6 +48,7 @@ public class SetOfStatementsMerger extends LabelledGroupOfStatementsImpl {
 		}
 	}
 
+	@Override
 	protected void finalize() {
 		try {
 			if (getRdfStoreConnection() != null) {

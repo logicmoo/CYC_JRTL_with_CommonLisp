@@ -3682,15 +3682,18 @@ public final class sbhl_time_modules extends SubLTranslatedFile
         return (SubLObject)sbhl_time_modules.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sbhl_time_modules_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sbhl_time_modules_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sbhl_time_modules_file();
     }
     

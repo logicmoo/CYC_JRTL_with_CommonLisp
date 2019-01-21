@@ -796,15 +796,18 @@ public final class information_extraction extends SubLTranslatedFile
         return (SubLObject)information_extraction.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_information_extraction_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_information_extraction_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_information_extraction_file();
     }
     

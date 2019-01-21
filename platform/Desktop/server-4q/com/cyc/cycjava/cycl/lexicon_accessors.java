@@ -9582,15 +9582,18 @@ public final class lexicon_accessors extends SubLTranslatedFile
         return (SubLObject)lexicon_accessors.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_lexicon_accessors_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_lexicon_accessors_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_lexicon_accessors_file();
     }
     
@@ -9944,7 +9947,8 @@ public final class lexicon_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SPEECH-PART-PRED?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return lexicon_accessors.speech_part_predP(arg1, (SubLObject)$speech_part_predP$UnaryFunction.UNPROVIDED);
         }
     }
@@ -9955,7 +9959,8 @@ public final class lexicon_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("SPEECH-PART-PRED?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return lexicon_accessors.speech_part_predP(arg1, arg2);
         }
     }
@@ -9966,7 +9971,8 @@ public final class lexicon_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("GENL-POS-PRED?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return lexicon_accessors.genl_pos_predP(arg1, arg2, (SubLObject)$genl_pos_predP$BinaryFunction.UNPROVIDED);
         }
     }
@@ -9977,7 +9983,8 @@ public final class lexicon_accessors extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-POS-TO-SEMTRANS-PRED-CACHED"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return lexicon_accessors.clear_pos_to_semtrans_pred_cached();
         }
     }

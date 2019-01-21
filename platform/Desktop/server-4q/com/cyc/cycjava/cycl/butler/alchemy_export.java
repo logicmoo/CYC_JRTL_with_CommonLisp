@@ -4468,15 +4468,18 @@ public final class alchemy_export extends SubLTranslatedFile
         return (SubLObject)alchemy_export.NIL;
     }
 
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_alchemy_export_file();
     }
 
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_alchemy_export_file();
     }
 
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_alchemy_export_file();
     }
 }

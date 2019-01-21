@@ -639,15 +639,18 @@ public final class unification extends SubLTranslatedFile
         return (SubLObject)unification.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_unification_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_unification_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_unification_file();
     }
     
@@ -682,7 +685,8 @@ public final class unification extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("BASE-VARIABLE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return unification.base_variable_p(arg1);
         }
     }
@@ -693,7 +697,8 @@ public final class unification extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("VARIABLE-NON-BASE-VERSION"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return unification.variable_non_base_version(arg1);
         }
     }

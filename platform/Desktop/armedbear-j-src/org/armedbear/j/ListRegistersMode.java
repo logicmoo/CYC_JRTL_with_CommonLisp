@@ -41,12 +41,14 @@ public class ListRegistersMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new ListRegistersFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "ListRegistersMode._editRegister");
         km.mapKey(KeyEvent.VK_ENTER, CTRL_MASK,

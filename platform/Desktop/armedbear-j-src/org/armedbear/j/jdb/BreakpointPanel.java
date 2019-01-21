@@ -54,13 +54,15 @@ public final class BreakpointPanel implements BreakpointListener, KeyListener
         return scrollPane;
     }
 
-    public void breakpointChanged()
+    @Override
+	public void breakpointChanged()
     {
         list.setListData(new Vector(jdb.getBreakpoints()));
         list.setSelectedIndex(-1);
     }
 
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         final int keyCode = e.getKeyCode();
         // Mask off the bits we don't care about (Java 1.4).
@@ -91,7 +93,9 @@ public final class BreakpointPanel implements BreakpointListener, KeyListener
         }
     }
 
-    public void keyTyped(KeyEvent e) {}
+    @Override
+	public void keyTyped(KeyEvent e) {}
 
-    public void keyReleased(KeyEvent e) {}
+    @Override
+	public void keyReleased(KeyEvent e) {}
 }

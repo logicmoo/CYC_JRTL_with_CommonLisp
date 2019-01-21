@@ -1311,15 +1311,18 @@ public final class removal_modules_conjunctive_pruning extends SubLTranslatedFil
         return (SubLObject)removal_modules_conjunctive_pruning.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_conjunctive_pruning_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_conjunctive_pruning_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_conjunctive_pruning_file();
     }
     
@@ -1384,7 +1387,8 @@ public final class removal_modules_conjunctive_pruning extends SubLTranslatedFil
             super(SubLTranslatedFile.extractFunctionNamed("PRUNE-NON-WFF-CONJUNCTION-APPLICABILITY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_conjunctive_pruning.prune_non_wff_conjunction_applicability(arg1);
         }
     }
@@ -1395,7 +1399,8 @@ public final class removal_modules_conjunctive_pruning extends SubLTranslatedFil
             super(SubLTranslatedFile.extractFunctionNamed("THING-TUPLE?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_conjunctive_pruning.thing_tupleP(arg1);
         }
     }
@@ -1406,7 +1411,8 @@ public final class removal_modules_conjunctive_pruning extends SubLTranslatedFil
             super(SubLTranslatedFile.extractFunctionNamed("PRUNE-UNKNOWN-SENTENCE-LITERAL-INCONSISTENCY-APPLICABILITY"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_conjunctive_pruning.prune_unknown_sentence_literal_inconsistency_applicability(arg1);
         }
     }

@@ -14,7 +14,8 @@ public interface MetricSet<V, Distance extends RealNumeric.Nonnegative<? super D
     
     public abstract static class Basic<V, D extends RealNumeric.Nonnegative<? super D>> implements MetricSet<V, D>
     {
-        public boolean isCompact() {
+        @Override
+		public boolean isCompact() {
             return this.isClosed() && this.isTotallyBounded();
         }
     }

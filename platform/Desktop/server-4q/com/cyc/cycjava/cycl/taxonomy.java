@@ -1395,15 +1395,18 @@ public final class taxonomy extends SubLTranslatedFile
         return (SubLObject)taxonomy.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_taxonomy_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_taxonomy_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_taxonomy_file();
     }
     

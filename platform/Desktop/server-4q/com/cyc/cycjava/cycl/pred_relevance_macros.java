@@ -794,15 +794,18 @@ public final class pred_relevance_macros extends SubLTranslatedFile
         return (SubLObject)pred_relevance_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pred_relevance_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pred_relevance_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pred_relevance_macros_file();
     }
     
@@ -900,23 +903,28 @@ public final class pred_relevance_macros extends SubLTranslatedFile
             this.$relevance_function = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$pred_info_object_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$pred;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$relevance_function;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$pred = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$relevance_function = value;
         }
         
@@ -931,7 +939,8 @@ public final class pred_relevance_macros extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PRED-INFO-OBJECT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pred_relevance_macros.pred_info_object_p(arg1);
         }
     }

@@ -797,15 +797,18 @@ public final class removal_modules_parse_trees extends SubLTranslatedFile
         return (SubLObject)removal_modules_parse_trees.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_removal_modules_parse_trees_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_removal_modules_parse_trees_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_removal_modules_parse_trees_file();
     }
     
@@ -854,7 +857,8 @@ public final class removal_modules_parse_trees extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PREDICATE-WITH-PARSE-TREE-SUPPORT-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return removal_modules_parse_trees.predicate_with_parse_tree_support_p(arg1);
         }
     }

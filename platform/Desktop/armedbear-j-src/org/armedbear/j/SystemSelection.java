@@ -56,7 +56,8 @@ public final class SystemSelection implements ClipboardOwner, Constants
         }
     }
 
-    public void lostOwnership(Clipboard clipboard, Transferable contents)
+    @Override
+	public void lostOwnership(Clipboard clipboard, Transferable contents)
     {
         primarySelection = null;
     }

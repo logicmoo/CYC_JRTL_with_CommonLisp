@@ -60,7 +60,8 @@ public class REFilterReader extends FilterReader {
    * Reads the next character from the stream per the general contract of
    * Reader.read().  Returns -1 on error or end of stream.
    */
-  public int read() {
+  @Override
+public int read() {
     // If we have buffered replace data, use it.
     if ((buffer != null) && (bufpos < buffer.length())) {
       return (int) buffer.charAt(bufpos++);
@@ -93,12 +94,14 @@ public class REFilterReader extends FilterReader {
    * Returns false.  REFilterReader does not support mark() and
    * reset() methods. 
    */
-  public boolean markSupported() {
+  @Override
+public boolean markSupported() {
     return false;
   }
 
   /** Reads from the stream into the provided array. */
-  public int read(char[] b, int off, int len) {
+  @Override
+public int read(char[] b, int off, int len) {
     int i;
     int ok = 0;
     while (len-- > 0) {
@@ -111,7 +114,8 @@ public class REFilterReader extends FilterReader {
   }
 
   /** Reads from the stream into the provided array. */
-  public int read(char[] b) {
+  @Override
+public int read(char[] b) {
     return read(b,0,b.length);
   }
 }

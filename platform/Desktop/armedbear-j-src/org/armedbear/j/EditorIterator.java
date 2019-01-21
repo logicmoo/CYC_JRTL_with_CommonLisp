@@ -40,12 +40,14 @@ public final class EditorIterator implements Iterator
         this.it = it;
     }
 
-    public boolean hasNext()
+    @Override
+	public boolean hasNext()
     {
         return it.hasNext();
     }
 
-    public Object next()
+    @Override
+	public Object next()
     {
         return it.next();
     }
@@ -55,7 +57,8 @@ public final class EditorIterator implements Iterator
         return (Editor) it.next();
     }
 
-    public void remove()
+    @Override
+	public void remove()
     {
         throw new UnsupportedOperationException();
     }

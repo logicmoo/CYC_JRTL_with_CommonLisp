@@ -332,7 +332,8 @@ public final class Session extends DefaultHandler implements Constants
         return false;
     }
 
-    public void startElement(String uri, String localName, String qName,
+    @Override
+	public void startElement(String uri, String localName, String qName,
         Attributes attributes) throws SAXException
     {
         if (localName.equals("buffer") || qName.equals("buffer")) {
@@ -364,7 +365,8 @@ public final class Session extends DefaultHandler implements Constants
         }
     }
 
-    public void endElement(String uri, String localName, String qName)
+    @Override
+	public void endElement(String uri, String localName, String qName)
     {
         if (localName.equals("buffer") || qName.equals("buffer")) {
             if (bufferEntries == null)

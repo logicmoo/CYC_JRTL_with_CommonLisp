@@ -7370,15 +7370,18 @@ public final class pph_phrase extends SubLTranslatedFile
         return (SubLObject)pph_phrase.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_phrase_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_phrase_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_phrase_file();
     }
     
@@ -7736,7 +7739,8 @@ public final class pph_phrase extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-PHRASE-OUTPUT-LIST-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return pph_phrase.pph_phrase_output_list_p(arg1);
         }
     }
@@ -7747,7 +7751,8 @@ public final class pph_phrase extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-PHRASE-SET-SUID"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return pph_phrase.pph_phrase_set_suid(arg1, arg2);
         }
     }
@@ -7758,7 +7763,8 @@ public final class pph_phrase extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PPH-ANCESTOR-PHRASE-OR-SELF-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return pph_phrase.pph_ancestor_phrase_or_self_p(arg1, arg2);
         }
     }

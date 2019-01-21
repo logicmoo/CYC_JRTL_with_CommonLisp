@@ -3687,15 +3687,18 @@ public final class lexicon_cache extends SubLTranslatedFile
         return (SubLObject)lexicon_cache.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_lexicon_cache_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_lexicon_cache_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_lexicon_cache_file();
     }
     
@@ -3887,7 +3890,8 @@ public final class lexicon_cache extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REGULAR-GENERATION-ANSWER-STRING-PLUS-SUPPORTS"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return lexicon_cache.regular_generation_answer_string_plus_supports(arg1);
         }
     }
@@ -3898,7 +3902,8 @@ public final class lexicon_cache extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PREFER-POS-PRED?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1, final SubLObject arg2) {
             return lexicon_cache.prefer_pos_predP(arg1, arg2, (SubLObject)$prefer_pos_predP$BinaryFunction.UNPROVIDED);
         }
     }

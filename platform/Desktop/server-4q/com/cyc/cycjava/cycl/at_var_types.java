@@ -5606,15 +5606,18 @@ public final class at_var_types extends SubLTranslatedFile
         return (SubLObject)at_var_types.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_at_var_types_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_at_var_types_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_at_var_types_file();
     }
     
@@ -5709,7 +5712,8 @@ public final class at_var_types extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CONTEXTUALIZED-ISA-X-Y-LIT?"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return at_var_types.contextualized_isa_x_y_litP(arg1);
         }
     }
@@ -5720,7 +5724,8 @@ public final class at_var_types extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("CLEAR-AT-ARGN-INT-CACHED"));
         }
         
-        public SubLObject processItem() {
+        @Override
+		public SubLObject processItem() {
             return at_var_types.clear_at_argn_int_cached();
         }
     }

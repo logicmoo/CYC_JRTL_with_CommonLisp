@@ -23,26 +23,31 @@ public class ClassSelectionField extends JPanel {
 
     text.getDocument().addDocumentListener(
       new DocumentListener() {
-        public void insertUpdate(DocumentEvent e) {
+        @Override
+		public void insertUpdate(DocumentEvent e) {
           checkControls();
         }
 
-        public void removeUpdate(DocumentEvent e) {
+        @Override
+		public void removeUpdate(DocumentEvent e) {
           checkControls();
         }
 
-        public void changedUpdate(DocumentEvent e) {
+        @Override
+		public void changedUpdate(DocumentEvent e) {
           checkControls();
         }
       }
     );
   }
 
-  public void addPropertyChangeListener(PropertyChangeListener p) {
+  @Override
+public void addPropertyChangeListener(PropertyChangeListener p) {
     propSupport.addPropertyChangeListener(p);
   }
 
-  public void removePropertyChangeListener(PropertyChangeListener p) {
+  @Override
+public void removePropertyChangeListener(PropertyChangeListener p) {
     propSupport.removePropertyChangeListener(p);
   }
 

@@ -45,17 +45,20 @@ public final class ListTagsMode extends AbstractMode implements Constants, Mode
         return mode;
     }
 
-    public JPopupMenu getContextMenu(Editor editor)
+    @Override
+	public JPopupMenu getContextMenu(Editor editor)
     {
         return null;
     }
 
-    public Formatter getFormatter(Buffer buffer)
+    @Override
+	public Formatter getFormatter(Buffer buffer)
     {
         return new ListTagsFormatter(buffer);
     }
 
-    protected void setKeyMapDefaults(KeyMap km)
+    @Override
+	protected void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_UP, 0, "tagUp");
         km.mapKey(KeyEvent.VK_KP_UP, 0, "tagUp");

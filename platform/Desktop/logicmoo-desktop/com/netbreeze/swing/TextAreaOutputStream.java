@@ -25,17 +25,20 @@ public class TextAreaOutputStream extends OutputStream {
   }
 
 
-  public void write(int b) throws IOException {
+  @Override
+public void write(int b) throws IOException {
     if (area != null)
       area.append(new String(new byte[] {(byte) b}));
   }
 
-  public void write(byte b[]) throws IOException {
+  @Override
+public void write(byte b[]) throws IOException {
     if (area != null)
       area.append(new String(b));
   }
 
-  public void write(byte b[], int off, int len) throws IOException {
+  @Override
+public void write(byte b[], int off, int len) throws IOException {
     if (area != null) {
       byte b2[] = new byte[len];
       System.arraycopy(b, off, b2, 0, len);
@@ -43,10 +46,12 @@ public class TextAreaOutputStream extends OutputStream {
     }
   }
 
-  public void flush() throws IOException {
+  @Override
+public void flush() throws IOException {
   }
 
-  public void close() throws IOException {
+  @Override
+public void close() throws IOException {
     setTextArea(null);
   }
 }

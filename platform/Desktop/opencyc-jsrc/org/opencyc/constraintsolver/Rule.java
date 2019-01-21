@@ -210,7 +210,8 @@ public class Rule  implements Comparable{
      * @param object the object for comparison
      * @return <tt>boolean</tt> indicating equality of an object with this object.
      */
-    public boolean equals(Object object) {
+    @Override
+	public boolean equals(Object object) {
         if (! (object instanceof Rule))
             return false;
         Rule thatRule = (Rule) object;
@@ -226,7 +227,8 @@ public class Rule  implements Comparable{
      * @return a negative integer, zero, or a positive integer as this
      * object is less than, equal to, or greater than the specified object
      */
-     public int compareTo (Object object) {
+     @Override
+	public int compareTo (Object object) {
         if (! (object instanceof Rule))
             throw new ClassCastException("Must be a Rule object");
         return (new Integer(this.getArity())).compareTo(new Integer(((Rule) object).getArity()));
@@ -335,7 +337,8 @@ public class Rule  implements Comparable{
      *
      * @return a clone of this instance
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         return new Rule((CycList) this.formula.clone());
     }
 
@@ -607,7 +610,8 @@ public class Rule  implements Comparable{
      *
      * @return the rule's formula formated as a <tt>String</tt>.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return formula.toString();
     }
 

@@ -293,15 +293,18 @@ public final class denots_of_string_lexicon extends SubLTranslatedFile
         return (SubLObject)denots_of_string_lexicon.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_denots_of_string_lexicon_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_denots_of_string_lexicon_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_denots_of_string_lexicon_file();
     }
     

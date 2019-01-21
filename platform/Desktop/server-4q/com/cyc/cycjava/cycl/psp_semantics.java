@@ -4019,15 +4019,18 @@ public final class psp_semantics extends SubLTranslatedFile
         return (SubLObject)psp_semantics.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_psp_semantics_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_psp_semantics_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_psp_semantics_file();
     }
     
@@ -4277,23 +4280,28 @@ public final class psp_semantics extends SubLTranslatedFile
             this.$weight = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$phrase_structure_parser_weighted_cycl_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$cycl;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$weight;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$cycl = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$weight = value;
         }
         
@@ -4308,7 +4316,8 @@ public final class psp_semantics extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("PHRASE-STRUCTURE-PARSER-WEIGHTED-CYCL-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return psp_semantics.phrase_structure_parser_weighted_cycl_p(arg1);
         }
     }

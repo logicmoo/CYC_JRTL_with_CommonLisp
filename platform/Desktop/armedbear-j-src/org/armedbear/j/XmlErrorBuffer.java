@@ -50,7 +50,8 @@ public final class XmlErrorBuffer extends CompilationErrorBuffer
         }
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         if (file != null) {
             FastStringBuffer sb = new FastStringBuffer();

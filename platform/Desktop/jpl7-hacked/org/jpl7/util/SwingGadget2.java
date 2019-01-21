@@ -14,6 +14,7 @@ public class SwingGadget2 extends JFrame {
 	public JPanel pane;
 
 	public ActionListener al = new ActionListener() {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			inc(e);
 		}

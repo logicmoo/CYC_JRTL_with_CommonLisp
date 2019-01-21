@@ -60,6 +60,7 @@ public class SelectXMLVariableBinding extends VariableBindingBase {
 		private int pos;
 		private StringBuffer buffer = new StringBuffer();
 
+		@Override
 		public void startElement(String uri, String localName, String qname,
 				Attributes attr) {
 			if (qname.equals("variable")) {
@@ -78,6 +79,7 @@ public class SelectXMLVariableBinding extends VariableBindingBase {
 			}
 		}
 
+		@Override
 		public void endElement(String uri, String localName, String qname) {
 			if (qname.equals("head")) {
 				bindNames = varNames.toArray(new String[varNames.size()]);
@@ -107,6 +109,7 @@ public class SelectXMLVariableBinding extends VariableBindingBase {
 			}
 		}
 
+		@Override
 		public void characters(char[] ch, int start, int length) {
 			if (bindType == null) {
 				return;
@@ -119,6 +122,7 @@ public class SelectXMLVariableBinding extends VariableBindingBase {
 			buffer.append(s);
 		}
 
+		@Override
 		public void endDocument() {
 			while (true) {
 				try {

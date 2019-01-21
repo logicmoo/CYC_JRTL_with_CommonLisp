@@ -15,7 +15,8 @@ public class QueryStatus {
 
   protected QueryStatus(String s) { text = s; }
 
-  public String toString() { 
+  @Override
+public String toString() { 
     return text;
   }
   public final static QueryStatus READY = new QueryStatus("Ready");

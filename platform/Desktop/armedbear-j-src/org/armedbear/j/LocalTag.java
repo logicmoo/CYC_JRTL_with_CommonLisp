@@ -62,17 +62,20 @@ public class LocalTag extends Tag implements Constants
         this.type = type;
     }
 
-    public String getMethodName()
+    @Override
+	public String getMethodName()
     {
         return name;
     }
 
-    public String getLongName()
+    @Override
+	public String getLongName()
     {
         return name;
     }
 
-    public String getClassName()
+    @Override
+	public String getClassName()
     {
         return null;
     }
@@ -174,7 +177,8 @@ public class LocalTag extends Tag implements Constants
         return new OverlayIcon(base, overlay);
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return getMethodName();
     }
@@ -189,7 +193,8 @@ public class LocalTag extends Tag implements Constants
         return getLongName();
     }
 
-    public void gotoTag(Editor editor)
+    @Override
+	public void gotoTag(Editor editor)
     {
         if (editor.getBuffer().contains(pos.getLine())) {
             CompoundEdit compoundEdit = editor.beginCompoundEdit();
@@ -214,7 +219,8 @@ public class LocalTag extends Tag implements Constants
             this.overlay = overlay;
         }
 
-        public synchronized void paintIcon(Component c, Graphics g, int x, int y)
+        @Override
+		public synchronized void paintIcon(Component c, Graphics g, int x, int y)
         {
             if (base != null)
                 base.paintIcon(c, g, x, y);
@@ -222,12 +228,14 @@ public class LocalTag extends Tag implements Constants
                 overlay.paintIcon(c, g, x, y);
         }
 
-        public final int getIconWidth()
+        @Override
+		public final int getIconWidth()
         {
             return base.getIconWidth();
         }
 
-        public final int getIconHeight()
+        @Override
+		public final int getIconHeight()
         {
             return base.getIconHeight();
         }

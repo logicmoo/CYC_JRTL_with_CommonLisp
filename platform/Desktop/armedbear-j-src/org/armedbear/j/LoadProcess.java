@@ -70,7 +70,8 @@ public abstract class LoadProcess implements BackgroundProcess, Runnable, Cancel
         return cache;
     }
 
-    public final boolean cancelled()
+    @Override
+	public final boolean cancelled()
     {
         return cancelled;
     }
@@ -97,7 +98,8 @@ public abstract class LoadProcess implements BackgroundProcess, Runnable, Cancel
         thread.start();
     }
 
-    public void cancel()
+    @Override
+	public void cancel()
     {
         if (thread != null)
             thread.interrupt();
@@ -111,7 +113,8 @@ public abstract class LoadProcess implements BackgroundProcess, Runnable, Cancel
 
     // Can be overridden.
     protected Runnable cancelRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             buffer.setBusy(false);
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {

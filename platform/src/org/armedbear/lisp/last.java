@@ -43,7 +43,8 @@ public final class last extends Primitive
     super("last", "list &optional n");
   }
 
-  public LispObject execute(LispObject arg)
+  @Override
+public LispObject execute(LispObject arg)
   {
     if (arg == NIL)
       return NIL;
@@ -61,7 +62,8 @@ public final class last extends Primitive
       return type_error(arg, Symbol.LIST);
   }
 
-  public LispObject execute(LispObject first, LispObject second)
+  @Override
+public LispObject execute(LispObject first, LispObject second)
 
   {
     LispObject list = checkList(first);

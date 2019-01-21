@@ -47,6 +47,7 @@ public class LocalCollectionQueryTransformManager extends LocalPluginManager <Co
 			super("Query Transformer");
 		}
 
+		@Override
 		public void run() {
 			mTransformer.initialise();
 			Context context = mTransformer.createContext();

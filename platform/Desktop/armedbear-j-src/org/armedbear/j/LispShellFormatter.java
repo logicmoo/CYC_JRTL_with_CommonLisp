@@ -41,7 +41,8 @@ public final class LispShellFormatter extends Formatter
     this.buffer = buffer;
   }
 
-  public LineSegmentList formatLine(Line line)
+  @Override
+public LineSegmentList formatLine(Line line)
   {
     clearSegmentList();
     if (line == null)
@@ -125,7 +126,8 @@ public final class LispShellFormatter extends Formatter
     return 0;
   }
 
-  public FormatTable getFormatTable()
+  @Override
+public FormatTable getFormatTable()
   {
     if (formatTable == null)
       {

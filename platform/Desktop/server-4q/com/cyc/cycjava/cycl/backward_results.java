@@ -76,15 +76,18 @@ public final class backward_results extends SubLTranslatedFile
         return (SubLObject)backward_results.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_backward_results_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_backward_results_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_backward_results_file();
     }
     

@@ -28,6 +28,7 @@ public class RdfStoreConnectionImpl extends LocalStoreSPARQLService implements
 		super(con);
 	}
 
+	@Override
 	public Statement addStatement(Resource subj, URI pred, Value obj, URI graph) {
 		try {
 			return con.addStatement(subj, pred, obj, graph);
@@ -36,6 +37,7 @@ public class RdfStoreConnectionImpl extends LocalStoreSPARQLService implements
 		}
 	}
 
+	@Override
 	public Statement addStatement(Resource subj, URI pred, Value obj,
 			URI graph, URI... label) {
 		try {
@@ -45,12 +47,14 @@ public class RdfStoreConnectionImpl extends LocalStoreSPARQLService implements
 		}
 	}
 
+	@Override
 	public boolean associateStatements(Resource subj, URI pred, Value obj,
 			URI graph, URI... labels) {
 		int count = con.associateTripleset(subj, pred, obj, graph, labels);
 		return count <= 0 ? false : true;
 	}
 
+	@Override
 	public boolean associateStatements(SPARQLQuery query, URI... ts) {
 		if (query.isDescribe() == false && query.isConstruct() == false) {
 			throw new IllegalArgumentException(
@@ -70,6 +74,7 @@ public class RdfStoreConnectionImpl extends LocalStoreSPARQLService implements
 		return count <= 0 ? false : true;
 	}
 
+	@Override
 	public void close() {
 		try {
 			con.close();
@@ -78,28 +83,34 @@ public class RdfStoreConnectionImpl extends LocalStoreSPARQLService implements
 		}
 	}
 
+	@Override
 	public boolean isClosed() {
 		return con.isOpen() == true ? false : true;
 	}
 
+	@Override
 	public LabelledGroupOfStatements createLabelledGroupOfStatements(URI label) {
 		return new LabelledGroupOfStatementsImpl(label, this, true);
 	}
 
+	@Override
 	public LabelledGroupOfStatements createLabelledGroupOfStatements() {
 		return new LabelledGroupOfStatementsImpl(this);
 	}
 
+	@Override
 	public boolean deassociateStatements(Resource subj, URI pred, Value obj,
 			URI graph, URI label) {
 		int count = con.deassociateTripleset(subj, pred, obj, graph, label);
 		return count <= 0 ? false : true;
 	}
 
+	@Override
 	public ValueFactory getValueFactory() {
 		return ((TSource) con.getDataSource()).getTriplesetFactory();
 	}
 
+	@Override
 	public int removeStatement(Resource subj, URI pred, Value obj, URI graph) {
 		try {
 			return con.removeStatement(subj, pred, obj, graph);
@@ -108,6 +119,7 @@ public class RdfStoreConnectionImpl extends LocalStoreSPARQLService implements
 		}
 	}
 
+	@Override
 	public CloseableIterator<Statement> search(Resource subj, URI pred,
 			Value obj, URI graph, URI label) {
 		try {

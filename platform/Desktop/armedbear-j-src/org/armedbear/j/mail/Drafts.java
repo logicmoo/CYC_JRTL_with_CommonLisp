@@ -64,42 +64,50 @@ public final class Drafts extends Mailbox
         return directory;
     }
 
-    public String getName()
+    @Override
+	public String getName()
     {
         return directory.canonicalPath();
     }
 
-    public int getMessageCount()
+    @Override
+	public int getMessageCount()
     {
         return 0;
     }
 
-    public void getNewMessages()
+    @Override
+	public void getNewMessages()
     {
         reload();
     }
 
-    public void createFolder()
+    @Override
+	public void createFolder()
     {
         notImplemented("Drafts.createFolder");
     }
 
-    public void deleteFolder()
+    @Override
+	public void deleteFolder()
     {
         notImplemented("Drafts.deleteFolder");
     }
 
-    public void saveToFolder()
+    @Override
+	public void saveToFolder()
     {
         notImplemented("Drafts.saveToFolder");
     }
 
-    public void moveToFolder()
+    @Override
+	public void moveToFolder()
     {
         notImplemented("Drafts.moveToFolder");
     }
 
-    public void delete()
+    @Override
+	public void delete()
     {
         final Editor editor = Editor.currentEditor();
         boolean advanceDot = false;
@@ -143,7 +151,8 @@ public final class Drafts extends Mailbox
             advanceDot(editor.getDotLine());
     }
 
-    public void undelete()
+    @Override
+	public void undelete()
     {
         final Editor editor = Editor.currentEditor();
         boolean advanceDot = false;
@@ -187,27 +196,32 @@ public final class Drafts extends Mailbox
             advanceDot(editor.getDotLine());
     }
 
-    public void markRead()
+    @Override
+	public void markRead()
     {
         notImplemented("Drafts.markRead");
     }
 
-    public void markUnread()
+    @Override
+	public void markUnread()
     {
         notImplemented("Drafts.markUnread");
     }
 
-    public void flag()
+    @Override
+	public void flag()
     {
         notImplemented("Drafts.flag");
     }
 
-    public void setAnsweredFlag(MailboxEntry entry)
+    @Override
+	public void setAnsweredFlag(MailboxEntry entry)
     {
         notImplemented("Drafts.setAnsweredFlag");
     }
 
-    public void expunge()
+    @Override
+	public void expunge()
     {
         if (lock()) {
             setBusy(true);
@@ -221,7 +235,8 @@ public final class Drafts extends Mailbox
     }
 
     private Runnable expungeRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             try {
                 if (expungeInternal())
@@ -255,7 +270,8 @@ public final class Drafts extends Mailbox
         return result;
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         if (lock()) {
             setBusy(true);
@@ -266,7 +282,8 @@ public final class Drafts extends Mailbox
             return LOAD_FAILED;
     }
 
-    public void reload()
+    @Override
+	public void reload()
     {
         if (lock()) {
             setBusy(true);
@@ -280,7 +297,8 @@ public final class Drafts extends Mailbox
     }
 
     private Runnable loadRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             try {
                 loadInternal();
@@ -289,7 +307,8 @@ public final class Drafts extends Mailbox
                 unlock();
                 setBusy(false);
                 Runnable completionRunnable = new Runnable() {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                             Editor ed = it.nextEditor();
@@ -309,7 +328,8 @@ public final class Drafts extends Mailbox
     };
 
     private Runnable reloadRunnable = new Runnable() {
-        public void run()
+        @Override
+		public void run()
         {
             try {
                 loadInternal();
@@ -341,7 +361,8 @@ public final class Drafts extends Mailbox
         refreshBuffer();
     }
 
-    public MailboxEntry getInitialEntry()
+    @Override
+	public MailboxEntry getInitialEntry()
     {
         Line line = getFirstLine();
         if (line == null)
@@ -354,12 +375,14 @@ public final class Drafts extends Mailbox
         return ((MailboxLine)line).getMailboxEntry();
     }
 
-    public void readMessage(Line line)
+    @Override
+	public void readMessage(Line line)
     {
         readMessage(line, false);
     }
 
-    public void readMessageOtherWindow(Line line)
+    @Override
+	public void readMessageOtherWindow(Line line)
     {
         readMessage(line, true);
     }
@@ -391,12 +414,14 @@ public final class Drafts extends Mailbox
         editor.switchToBuffer(buf);
     }
 
-    public File getCurrentDirectory()
+    @Override
+	public File getCurrentDirectory()
     {
         return directory;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return "drafts";
     }

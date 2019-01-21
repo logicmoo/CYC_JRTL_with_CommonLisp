@@ -782,15 +782,18 @@ public final class json extends SubLTranslatedFile
         return (SubLObject)json.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_json_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_json_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_json_file();
     }
     

@@ -1119,15 +1119,18 @@ public final class pph_sentence extends SubLTranslatedFile
         return (SubLObject)pph_sentence.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_pph_sentence_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_pph_sentence_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_pph_sentence_file();
     }
     

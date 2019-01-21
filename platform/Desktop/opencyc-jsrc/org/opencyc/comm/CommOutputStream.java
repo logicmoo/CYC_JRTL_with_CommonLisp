@@ -90,7 +90,8 @@ public interface CommOutputStream extends Closeable, Flushable {
      *
      * @exception  IOException  if an I/O error occurs.
      */
-    public void flush() throws IOException;
+    @Override
+	public void flush() throws IOException;
 
     /**
      * Closes this output stream and releases any system resources
@@ -102,5 +103,6 @@ public interface CommOutputStream extends Closeable, Flushable {
      *
      * @exception  IOException  if an I/O error occurs.
      */
-    public void close() throws IOException;
+    @Override
+	public void close() throws IOException;
 }

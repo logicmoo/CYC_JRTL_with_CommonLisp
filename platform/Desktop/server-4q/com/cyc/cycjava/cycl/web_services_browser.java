@@ -3672,15 +3672,18 @@ public final class web_services_browser extends SubLTranslatedFile
         return (SubLObject)web_services_browser.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_web_services_browser_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_web_services_browser_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_web_services_browser_file();
     }
     

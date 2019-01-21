@@ -208,7 +208,8 @@ public final class SchemeFormatter extends Formatter
         endToken(state);
     }
 
-    public LineSegmentList formatLine(Line line)
+    @Override
+	public LineSegmentList formatLine(Line line)
     {
         if (line == null) {
             clearSegmentList();
@@ -239,7 +240,8 @@ public final class SchemeFormatter extends Formatter
         return segmentList;
     }
 
-    public boolean parseBuffer()
+    @Override
+	public boolean parseBuffer()
     {
         int state = STATE_NEUTRAL;
         boolean changed = false;
@@ -291,7 +293,8 @@ public final class SchemeFormatter extends Formatter
         return changed;
     }
 
-    public FormatTable getFormatTable()
+    @Override
+	public FormatTable getFormatTable()
     {
         if (formatTable == null) {
             formatTable = new FormatTable("SchemeMode");

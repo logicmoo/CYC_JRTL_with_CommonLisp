@@ -2339,15 +2339,18 @@ public final class ke_text extends SubLTranslatedFile
         return (SubLObject)ke_text.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_ke_text_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_ke_text_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_ke_text_file();
     }
     

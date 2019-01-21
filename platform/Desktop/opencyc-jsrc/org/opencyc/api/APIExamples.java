@@ -183,20 +183,24 @@ public class APIExamples {
               inferencePSC, null, access, 10000);
       worker.addInferenceListener(new InferenceWorkerListener() {
 
-        public void notifyInferenceCreated(InferenceWorker inferenceWorker) {
+        @Override
+		public void notifyInferenceCreated(InferenceWorker inferenceWorker) {
           System.out.println("GOT CREATED EVENT\n" + inferenceWorker);
         }
 
-        public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus,
+        @Override
+		public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus,
                 InferenceSuspendReason suspendReason, InferenceWorker inferenceWorker) {
           System.out.println("GOT STATUS CHANGED EVENT\n" + inferenceWorker);
         }
 
-        public void notifyInferenceAnswersAvailable(InferenceWorker inferenceWorker, List newAnswers) {
+        @Override
+		public void notifyInferenceAnswersAvailable(InferenceWorker inferenceWorker, List newAnswers) {
           System.out.println("GOT NEW ANSWERS EVENT\n" + inferenceWorker);
         }
 
-        public void notifyInferenceTerminated(InferenceWorker inferenceWorker, Exception e) {
+        @Override
+		public void notifyInferenceTerminated(InferenceWorker inferenceWorker, Exception e) {
           System.out.println("GOT TERMINATED EVENT\n" + inferenceWorker);
           if (e != null) {
             e.printStackTrace();

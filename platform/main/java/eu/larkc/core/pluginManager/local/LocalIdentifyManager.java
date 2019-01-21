@@ -50,6 +50,7 @@ public class LocalIdentifyManager extends LocalPluginManager <Query, Collection<
 			super("Identifier");
 		}
 
+		@Override
 		public void run() {
 			mIdentifier.initialise();
 			Context context = mIdentifier.createContext();

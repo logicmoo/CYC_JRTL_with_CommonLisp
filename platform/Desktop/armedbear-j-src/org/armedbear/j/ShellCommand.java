@@ -67,7 +67,8 @@ public final class ShellCommand implements Runnable
         output.append(s);
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         Process process = null;
         try {
@@ -155,7 +156,8 @@ public final class ShellCommand implements Runnable
             super(inputStream);
         }
 
-        public void update(final String s)
+        @Override
+		public void update(final String s)
         {
             appendOutput(s);
         }

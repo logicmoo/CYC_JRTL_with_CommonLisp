@@ -2856,15 +2856,18 @@ public final class iteration extends SubLTranslatedFile
         return (SubLObject)iteration.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_iteration_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_iteration_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_iteration_file();
     }
     
@@ -3068,39 +3071,48 @@ public final class iteration extends SubLTranslatedFile
             this.$finalize = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$iterator_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$state;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$done;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$next;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$finalize;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$state = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$done = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$next = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$finalize = value;
         }
         
@@ -3115,7 +3127,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ITERATOR-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.iterator_p(arg1);
         }
     }
@@ -3126,7 +3139,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ITERATE-NON-NULL-SINGLETON-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.iterate_non_null_singleton_next(arg1);
         }
     }
@@ -3137,7 +3151,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ITERATE-NUMBER-DONE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.iterate_number_done(arg1);
         }
     }
@@ -3148,7 +3163,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ITERATE-LIST-DONE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.iterate_list_done(arg1);
         }
     }
@@ -3159,7 +3175,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ITERATE-LIST-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.iterate_list_next(arg1);
         }
     }
@@ -3170,7 +3187,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ITERATE-VECTOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.iterate_vector_next(arg1);
         }
     }
@@ -3181,7 +3199,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ITERATOR-ITERATOR-DONE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.iterator_iterator_done(arg1);
         }
     }
@@ -3192,7 +3211,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("ITERATOR-ITERATOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.iterator_iterator_next(arg1);
         }
     }
@@ -3203,7 +3223,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REUSABLE-ITERATOR-DONE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.reusable_iterator_done(arg1);
         }
     }
@@ -3214,7 +3235,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REUSABLE-ITERATOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.reusable_iterator_next(arg1);
         }
     }
@@ -3225,7 +3247,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REUSABLE-ITERATOR-CARTESIAN-ITERATOR-DONE"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.reusable_iterator_cartesian_iterator_done(arg1);
         }
     }
@@ -3236,7 +3259,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("REUSABLE-ITERATOR-CARTESIAN-ITERATOR-NEXT"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.reusable_iterator_cartesian_iterator_next(arg1);
         }
     }
@@ -3247,7 +3271,8 @@ public final class iteration extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("DEFAULT-ITERATOR-DONE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return iteration.default_iterator_done_p(arg1);
         }
     }

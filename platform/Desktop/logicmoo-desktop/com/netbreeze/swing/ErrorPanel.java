@@ -62,7 +62,8 @@ public class ErrorPanel extends JPanel {
       buttonPanel.add(viewButton);
       viewButton.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent evt) {
+          @Override
+		public void actionPerformed(ActionEvent evt) {
             try {
               context.showBeanDetails(error);
             } catch (Throwable err) {

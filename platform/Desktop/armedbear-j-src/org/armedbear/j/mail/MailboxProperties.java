@@ -242,7 +242,8 @@ public final class MailboxProperties
     {
         private Entry currentEntry = null;
 
-        public void startElement(String uri, String localName, String qName,
+        @Override
+		public void startElement(String uri, String localName, String qName,
             Attributes attributes) throws SAXException
         {
             if (localName.equals("mailboxes") || qName.equals("mailboxes")) {
@@ -275,7 +276,8 @@ public final class MailboxProperties
             }
         }
 
-        public void endElement(String uri, String localName, String qName)
+        @Override
+		public void endElement(String uri, String localName, String qName)
         {
             if (localName.equals("mailbox") || qName.equals("mailbox")) {
                 MailboxProperties.add(currentEntry);

@@ -129,6 +129,7 @@ public class RepoManagerPanel extends ScreenBoxPanel<MutableRepoBox> implements 
 
 		myTF_graphName.setText("jTextField1");
 		myTF_graphName.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				myTF_graphNameActionPerformed(evt);
 			}
@@ -136,6 +137,7 @@ public class RepoManagerPanel extends ScreenBoxPanel<MutableRepoBox> implements 
 
 		myBut_chooseFile.setText("choose file");
 		myBut_chooseFile.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				myBut_chooseFileActionPerformed(evt);
 			}

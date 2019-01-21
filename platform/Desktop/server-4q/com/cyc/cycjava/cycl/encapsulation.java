@@ -329,15 +329,18 @@ public final class encapsulation extends SubLTranslatedFile
         return (SubLObject)encapsulation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_encapsulation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_encapsulation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_encapsulation_file();
     }
     

@@ -86,6 +86,7 @@ public class ExternalNameSpace extends NameSpace
 
 	/**
 	*/
+	@Override
 	public void unsetVariable( String name )
 	{
 		super.unsetVariable( name );
@@ -94,6 +95,7 @@ public class ExternalNameSpace extends NameSpace
 
 	/**
 	*/
+	@Override
 	public String [] getVariableNames() 
 	{
 		// union of the names in the enclosing namespace and external map
@@ -119,6 +121,7 @@ public class ExternalNameSpace extends NameSpace
 		more control here to change the import precedence and remove variables
 		if they are removed via the extenal map.
 	*/
+		@Override
 		protected Variable getVariableImpl( String name, boolean recurse )
 		throws UtilEvalError
 	{
@@ -153,6 +156,7 @@ public class ExternalNameSpace extends NameSpace
 		return var;
     }
 
+	@Override
 	public Variable createVariable(
 		String name, Class type, Object value, Modifiers mods )
 	{
@@ -171,6 +175,7 @@ public class ExternalNameSpace extends NameSpace
 		Clear all variables, methods, and imports from this namespace and clear
 		all values from the external map (via Map clear()).
 	*/
+	@Override
 	public void clear() 
 	{
 		super.clear();

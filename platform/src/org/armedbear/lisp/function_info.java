@@ -48,7 +48,8 @@ public final class function_info
     private static final Primitive FUNCTION_INFO =
         new Primitive("function-info", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject arg)
+        @Override
+		public LispObject execute(LispObject arg)
         {
             LispObject info = symbolToFunctionMap.get(arg);
             return info != null ? info : NIL;
@@ -59,7 +60,8 @@ public final class function_info
     private static final Primitive _SET_FUNCTION_INFO =
         new Primitive("%set-function-info", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject name, LispObject info)
+        @Override
+		public LispObject execute(LispObject name, LispObject info)
 
         {
             if (info == NIL)
@@ -75,7 +77,8 @@ public final class function_info
         new Primitive("get-function-info-value", PACKAGE_SYS, true,
                       "name indicator")
     {
-        public LispObject execute(LispObject name, LispObject indicator)
+        @Override
+		public LispObject execute(LispObject name, LispObject indicator)
 
         {
             // info is an alist
@@ -102,7 +105,8 @@ public final class function_info
         new Primitive("set-function-info-value", PACKAGE_SYS, true,
                       "name indicator value")
     {
-        public LispObject execute(LispObject name, LispObject indicator,
+        @Override
+		public LispObject execute(LispObject name, LispObject indicator,
                                   LispObject value)
 
         {

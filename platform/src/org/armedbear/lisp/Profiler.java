@@ -44,7 +44,8 @@ public class Profiler
     public static final Primitive _START_PROFILER =
         new Primitive("%start-profiler", PACKAGE_PROF, false)
     {
-        public LispObject execute(LispObject first, LispObject second)
+        @Override
+		public LispObject execute(LispObject first, LispObject second)
 
         {
             final LispThread thread = LispThread.currentThread();
@@ -91,7 +92,8 @@ public class Profiler
                 if (sampling) {
                     sleep = Fixnum.getValue(second);
                     Runnable profilerRunnable = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             profiling = true; // make sure we don't fall through on the first iteration
                             while (profiling) {
@@ -122,7 +124,8 @@ public class Profiler
     public static final Primitive STOP_PROFILER =
         new Primitive("stop-profiler", PACKAGE_PROF, true)
     {
-        public LispObject execute()
+        @Override
+		public LispObject execute()
         {
             Stream out = getStandardOutput();
             out.FRESH_LINE();

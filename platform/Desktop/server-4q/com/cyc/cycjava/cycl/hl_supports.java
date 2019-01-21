@@ -6705,15 +6705,18 @@ public final class hl_supports extends SubLTranslatedFile
         return (SubLObject)hl_supports.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_hl_supports_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_hl_supports_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_hl_supports_file();
     }
     
@@ -6979,7 +6982,8 @@ public final class hl_supports extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("NON-HL-PREDICATE-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hl_supports.non_hl_predicate_p(arg1);
         }
     }
@@ -6990,7 +6994,8 @@ public final class hl_supports extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-JUSTIFY-EVAL"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return hl_supports.hl_justify_eval(arg1);
         }
     }

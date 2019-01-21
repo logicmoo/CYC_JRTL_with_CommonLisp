@@ -71,6 +71,7 @@ public class BshClassLoader extends URLClassLoader
 	}
 
 	// public version of addURL
+	@Override
 	public void addURL( URL url ) {
 		super.addURL( url );
 	}
@@ -83,6 +84,7 @@ public class BshClassLoader extends URLClassLoader
 		An exception is for BeanShell core classes which are always loaded from
 		the same classloader as the interpreter.
 	*/
+	@Override
 	public Class loadClass(String name, boolean resolve)
         throws ClassNotFoundException
     {
@@ -129,6 +131,7 @@ public class BshClassLoader extends URLClassLoader
 		Try system ???
 	*/
 	// add some caching for not found classes?
+	@Override
 	protected Class findClass( String name ) 
 		throws ClassNotFoundException 
 	{

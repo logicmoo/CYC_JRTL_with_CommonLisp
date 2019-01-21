@@ -2129,15 +2129,18 @@ public final class sksi_sks_structure_importer_utilities extends SubLTranslatedF
         return (SubLObject)sksi_sks_structure_importer_utilities.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_sksi_sks_structure_importer_utilities_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_sksi_sks_structure_importer_utilities_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_sksi_sks_structure_importer_utilities_file();
     }
     

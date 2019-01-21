@@ -15,7 +15,8 @@ public class CycCommunication extends CycWorker {
   CycAccess conn = null;
 
   /** @deprecated use SubLWorker */
-  public CycCommunication(CycAccess theConn, String subLExp, 
+  @Deprecated
+public CycCommunication(CycAccess theConn, String subLExp, 
 			  int theTimeOutMS, CycWorkerListener cwl) {
     conn = theConn;
     subL = subLExp;
@@ -24,7 +25,8 @@ public class CycCommunication extends CycWorker {
   }
     
   /** @deprecated use SubLWorker */
-  public CycCommunication(CycAccess theConn, String subLExp, 
+  @Deprecated
+public CycCommunication(CycAccess theConn, String subLExp, 
 			  int theTimeOutMS) {
     conn = theConn;
     subL = subLExp;
@@ -32,7 +34,8 @@ public class CycCommunication extends CycWorker {
   }
 
   //Need to modify this to handle timeouts!!!!!!!!!!!
-  public Object construct() throws IOException, CycApiException { 
+  @Override
+public Object construct() throws IOException, CycApiException { 
     return CycUtils.evalSubLWithWorker(conn, subL); 
   }
 
@@ -61,7 +64,8 @@ public class CycCommunication extends CycWorker {
   
   //Need to updated this to send kill message to KB as well as
   //kill background thread!!!!!!!!
-  public void interrupt() { super.interrupt(); }
+  @Override
+public void interrupt() { super.interrupt(); }
 
 }
   

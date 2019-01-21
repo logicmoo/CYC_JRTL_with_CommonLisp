@@ -406,6 +406,7 @@ public class Interpreter
 				&& System.getProperty("java.version").startsWith("1.1."))
 			{
 				src = new FilterInputStream(SystemCurrent.in) {
+					@Override
 					public int available() throws IOException {
 						return 0;
 					}
@@ -434,7 +435,8 @@ public class Interpreter
 	/**
 		Run interactively.  (printing prompts, etc.)
 	*/
-    public void run()
+    @Override
+	public void run()
 	{
         if(evalOnly)
             throw new RuntimeException("bsh Interpreter: No stream");
@@ -779,7 +781,8 @@ public class Interpreter
 		associated with this interpreter. On the GUI console this will appear
 		in red, etc.
 	*/
-    public final void error( Object o ) {
+    @Override
+	public final void error( Object o ) {
 		if ( console != null )
 				console.error( "// Error: " + o +"\n" );
 		else {
@@ -797,27 +800,32 @@ public class Interpreter
 		Get the input stream associated with this interpreter.
 		This may be be stdin or the GUI console.
 	*/
+	@Override
 	public Reader getIn() { return in; }
 
 	/**
 		Get the outptut stream associated with this interpreter.
 		This may be be stdout or the GUI console.
 	*/
+	@Override
 	public PrintStream getOut() { return out; }
 
 	/**
 		Get the error output stream associated with this interpreter.
 		This may be be stderr or the GUI console.
 	*/
+	@Override
 	public PrintStream getErr() { return err; }
 
-    public final void println( Object arg )
+    @Override
+	public final void println( Object arg )
     {
         print(arg);
         print(systemLineSeparator);
     }
 
-    public final void print( Object o )
+    @Override
+	public final void print( Object o )
     {
 		if (console != null) {
             console.print(o);

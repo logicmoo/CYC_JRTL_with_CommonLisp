@@ -465,15 +465,18 @@ public final class related_concepts extends SubLTranslatedFile
         return (SubLObject)related_concepts.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_related_concepts_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_related_concepts_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_related_concepts_file();
     }
     

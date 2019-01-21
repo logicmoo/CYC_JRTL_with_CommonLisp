@@ -22,6 +22,7 @@ public class ORDICloseableIterator implements CloseableIterator<Statement> {
 		isClosed = false;
 	}
 
+	@Override
 	public boolean hasNext() {
 		if (isClosed) {
 			throw new IllegalStateException("Iterator is closed!");
@@ -29,6 +30,7 @@ public class ORDICloseableIterator implements CloseableIterator<Statement> {
 		return iter.hasNext();
 	}
 
+	@Override
 	public Statement next() {
 		if (hasNext() == false) {
 			throw new NoSuchElementException();
@@ -36,15 +38,18 @@ public class ORDICloseableIterator implements CloseableIterator<Statement> {
 		return (Statement) iter.next();
 	}
 
+	@Override
 	public void remove() {
 		iter.remove();
 	}
 
+	@Override
 	public void close() {
 		iter.close();
 		iter = null;
 	}
 
+	@Override
 	public boolean isClosed() {
 		return isClosed;
 	}

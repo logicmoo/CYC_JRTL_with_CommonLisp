@@ -557,15 +557,18 @@ public final class rkf_relationship_suggestor extends SubLTranslatedFile
         return (SubLObject)rkf_relationship_suggestor.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_relationship_suggestor_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_relationship_suggestor_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_relationship_suggestor_file();
     }
     

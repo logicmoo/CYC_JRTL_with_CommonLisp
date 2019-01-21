@@ -4106,15 +4106,18 @@ public final class cb_frames extends SubLTranslatedFile
         return (SubLObject)cb_frames.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_frames_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_frames_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_frames_file();
     }
     

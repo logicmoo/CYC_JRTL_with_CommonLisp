@@ -1626,15 +1626,18 @@ public final class focus_entity extends SubLTranslatedFile
         return (SubLObject)focus_entity.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_focus_entity_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_focus_entity_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_focus_entity_file();
     }
     

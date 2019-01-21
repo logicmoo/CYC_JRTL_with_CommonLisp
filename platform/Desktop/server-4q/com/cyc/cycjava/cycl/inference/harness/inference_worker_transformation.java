@@ -2725,15 +2725,18 @@ public final class inference_worker_transformation extends SubLTranslatedFile
         return (SubLObject)inference_worker_transformation.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_inference_worker_transformation_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_inference_worker_transformation_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_inference_worker_transformation_file();
     }
     
@@ -2863,39 +2866,48 @@ public final class inference_worker_transformation extends SubLTranslatedFile
             this.$non_explanatory_subquery = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$transformation_link_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$hl_module;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$bindings;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$supports;
         }
         
-        public SubLObject getField5() {
+        @Override
+		public SubLObject getField5() {
             return this.$non_explanatory_subquery;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$hl_module = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$bindings = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$supports = value;
         }
         
-        public SubLObject setField5(final SubLObject value) {
+        @Override
+		public SubLObject setField5(final SubLObject value) {
             return this.$non_explanatory_subquery = value;
         }
         
@@ -2910,7 +2922,8 @@ public final class inference_worker_transformation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANSFORMATION-LINK-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_worker_transformation.transformation_link_data_p(arg1);
         }
     }
@@ -2921,7 +2934,8 @@ public final class inference_worker_transformation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("TRANSFORMATION-TACTIC-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_worker_transformation.transformation_tactic_p(arg1);
         }
     }
@@ -2932,7 +2946,8 @@ public final class inference_worker_transformation extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("HL-VARIABLE-NOT-MENTIONED-IN-RULE-DNF-BUT-MENTIONED-IN-MERGE-DNF"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return inference_worker_transformation.hl_variable_not_mentioned_in_rule_dnf_but_mentioned_in_merge_dnf(arg1);
         }
     }

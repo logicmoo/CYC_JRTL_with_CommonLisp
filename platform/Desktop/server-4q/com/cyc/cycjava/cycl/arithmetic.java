@@ -274,15 +274,18 @@ public final class arithmetic extends SubLTranslatedFile
         return (SubLObject)arithmetic.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_arithmetic_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_arithmetic_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_arithmetic_file();
     }
     

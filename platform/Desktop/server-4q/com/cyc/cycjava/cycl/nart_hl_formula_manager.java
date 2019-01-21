@@ -242,15 +242,18 @@ public final class nart_hl_formula_manager extends SubLTranslatedFile
         return (SubLObject)nart_hl_formula_manager.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_nart_hl_formula_manager_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_nart_hl_formula_manager_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_nart_hl_formula_manager_file();
     }
     

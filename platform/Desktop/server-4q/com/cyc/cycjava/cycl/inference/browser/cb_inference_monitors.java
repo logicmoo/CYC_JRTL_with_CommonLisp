@@ -1391,15 +1391,18 @@ public final class cb_inference_monitors extends SubLTranslatedFile
         return (SubLObject)cb_inference_monitors.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_cb_inference_monitors_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_cb_inference_monitors_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_cb_inference_monitors_file();
     }
     

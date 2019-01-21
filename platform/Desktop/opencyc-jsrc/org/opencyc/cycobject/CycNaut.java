@@ -53,11 +53,13 @@ public class CycNaut extends CycFormula implements CycNonAtomicTerm, CycDenotati
   }
 
   //// Public Area
-  public CycFort getFunctor() {
+  @Override
+public CycFort getFunctor() {
     return (CycFort) getOperator();
   }
 
-  public CycNaut getFormula() {
+  @Override
+public CycNaut getFormula() {
     return this;
   }
 
@@ -157,7 +159,8 @@ public class CycNaut extends CycFormula implements CycNonAtomicTerm, CycDenotati
     return cycList;
   }
 
-  public Object getArgument(int argnum) {
+  @Override
+public Object getArgument(int argnum) {
     return getArg(argnum);
   }
 

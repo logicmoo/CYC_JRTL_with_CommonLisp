@@ -74,7 +74,8 @@ public final class Return extends CatchableThrow
         return block;
     }
 
-    public LispObject getResult()
+    @Override
+	public LispObject getResult()
     {
         return result;
     }

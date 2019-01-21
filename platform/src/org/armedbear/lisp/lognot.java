@@ -43,7 +43,8 @@ public final class lognot extends Primitive
         super(name, arglist);
     }
 
-    public LispObject execute(LispObject arg)
+    @Override
+	public LispObject execute(LispObject arg)
     {
         return arg.LOGNOT();
     }

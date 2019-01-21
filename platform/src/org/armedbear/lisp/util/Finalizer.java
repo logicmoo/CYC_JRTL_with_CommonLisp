@@ -114,7 +114,8 @@ public class Finalizer {
             Thread handler =
                     new Thread(new Runnable() {
 
-                public void run() {
+                @Override
+				public void run() {
                     while (true) {
                         try {
                             FinalizingWeakReference ref =

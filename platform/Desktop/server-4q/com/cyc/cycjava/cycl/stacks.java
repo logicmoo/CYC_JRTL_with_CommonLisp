@@ -666,15 +666,18 @@ public final class stacks extends SubLTranslatedFile
         return (SubLObject)stacks.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_stacks_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_stacks_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_stacks_file();
     }
     
@@ -747,23 +750,28 @@ public final class stacks extends SubLTranslatedFile
             this.$elements = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$stack_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$num;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$elements;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$num = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$elements = value;
         }
         
@@ -778,7 +786,8 @@ public final class stacks extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("STACK-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return stacks.stack_p(arg1);
         }
     }
@@ -794,23 +803,28 @@ public final class stacks extends SubLTranslatedFile
             this.$stack = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$locked_stack_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$lock;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$stack;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$lock = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$stack = value;
         }
         
@@ -825,7 +839,8 @@ public final class stacks extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("LOCKED-STACK-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return stacks.locked_stack_p(arg1);
         }
     }

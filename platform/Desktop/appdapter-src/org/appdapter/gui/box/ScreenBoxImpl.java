@@ -154,6 +154,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		theLogger.info("DUMP-DUMP-DE-DUMP");
 	}
 
+	@Override
 	public DisplayContext findDisplayContext(Box b) {
 		if (b instanceof GetDisplayContext) {
 			return ((GetDisplayContext) b).getDisplayContext();
@@ -178,6 +179,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 	 * @param kind
 	 * @return
 	 */
+	@Override
 	public JPanel findOrCreateBoxPanel(Object kind) {
 		JPanel bp = findExistingBoxPanel(kind);
 		if (bp == null) {
@@ -186,6 +188,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		return bp;
 	}
 
+	@Override
 	public BT getBox() {
 		return (BT) this;
 	}
@@ -200,6 +203,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		return findOrCreateBoxPanel(getDisplayType());
 	}
 
+	@Override
 	public Component getComponent(DisplayType attachType) {
 		return getDisplayTarget(getDisplayType());
 	}
@@ -216,6 +220,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		}
 	}
 
+	@Override
 	public DisplayContext getDisplayContext() {
 		DisplayContext dc = m_displayContext;
 		if (dc == null) {
@@ -228,10 +233,12 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		return Utility.browserPanel.getDisplayContext();
 	}
 
+	@Override
 	public Container getDisplayTarget(DisplayType attachType) {
 		return findOrCreateBoxPanel(attachType);
 	}
 
+	@Override
 	public DisplayType getDisplayType() {
 		return m_displayType;
 	}
@@ -285,6 +292,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		return false;
 	}
 
+	@Override
 	public <T, E extends T> Iterable getObjects(Class<T> type) {
 		if (type == null)
 			return (Iterable) getObjects();
@@ -301,6 +309,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		return objs;
 	}
 
+	@Override
 	final public JPanel getPropertiesPanel() {
 		Map myPanelMap = Utility.getPanelMap(getValueOrThis());
 		Object m_largeview = myPanelMap.get(Kind.OBJECT_PROPERTIES);
@@ -319,6 +328,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		return pnl;
 	}
 
+	@Override
 	public List<TrigType> getTriggers() {
 		List<TrigType> tgs = super.getTriggers();
 		DisplayContext dc = getDisplayContext();
@@ -346,6 +356,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 	/**
 	 * Returns the name of this value
 	 */
+	@Override
 	public String getKey() {
 		String sl = super_getShortLabel();
 		if (sl != null)
@@ -361,6 +372,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 	/**
 	 * Returns the name of this object
 	 */
+	@Override
 	final public String generateUniqueName(Map checkAgainst) {
 		//String _uname = null;
 		String name = super_getShortLabel();
@@ -385,6 +397,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		return super.getShortLabel();
 	}
 
+	@Override
 	public Object getValue() {
 		if (valueSetAs == null)
 			return this;
@@ -425,6 +438,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 	/**
 	 * Returns the object that this object wrapper represents
 	 */
+	@Override
 	public Object getValueOrThis() {
 		Object value = getValue();
 		if (value != null) {
@@ -448,6 +462,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 	 * When these mechanisms mature, we will look at more than just local names
 	 * @return
 	 */
+	@Override
 	public boolean isNamed(String... test) {
 		if (test.length == 1) {
 			String stest = test[0];
@@ -561,6 +576,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		return null;
 	}
 
+	@Override
 	public boolean isTypeOf(Class type) {
 		for (Class c : getTypes()) {
 			if (type.isAssignableFrom(c)) {
@@ -819,6 +835,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		}
 	*/
 
+	@Override
 	public boolean representsObject(Object test) {
 		if (test == null) {
 			return false;
@@ -845,6 +862,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		return false;
 	}
 
+	@Override
 	public void setDisplayContextProvider(DisplayContextProvider dcp) {
 		myDCP = dcp;
 	}
@@ -877,6 +895,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		}
 	}
 
+	@Override
 	public void setObject(Object value) throws InvocationTargetException {
 		Object oldObject = getValue();
 		if (oldObject == value) {
@@ -901,6 +920,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		return super_getShortLabel();
 	}
 
+	@Override
 	public void setShortLabel(String shortLabel) {
 		BoxedCollectionImpl.labelCheck(shortLabel);
 		super.setShortLabel(shortLabel);
@@ -911,6 +931,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 	 *
 	 * @throws PropertyVetoException if someone refused to allow the name to change
 	 */
+	@Override
 	public void setUniqueName(String newName) throws PropertyVetoException {
 		setUniqueName(newName, Utility.uiObjects.getNameToBoxIndex());
 	}
@@ -923,6 +944,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 	 * @throws PropertyVetoException
 	 *             if someone refused to allow the name to change
 	 */
+	@Override
 	public void setUniqueName(String newName, Map checkAgainst) throws PropertyVetoException {
 		final String name = generateUniqueName(checkAgainst);
 		if (!newName.equals(name)) {
@@ -934,6 +956,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 		}
 	}
 
+	@Override
 	public Object setValue(Object obj) {
 		try {
 			setObject(obj);
@@ -966,6 +989,7 @@ public class ScreenBoxImpl<TrigType extends Trigger<? extends ScreenBoxImpl<Trig
 	}
 
 	// the jtree label uses this .. so supply someting good!
+	@Override
 	public String toString() {
 		String sl = getShortLabel();
 		if (sl != null) {

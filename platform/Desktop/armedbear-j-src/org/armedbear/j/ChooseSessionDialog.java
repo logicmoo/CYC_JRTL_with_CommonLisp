@@ -34,7 +34,8 @@ public final class ChooseSessionDialog extends InputDialog
         editor.centerDialog(this);
     }
 
-    protected List getCompletions(String prefix)
+    @Override
+	protected List getCompletions(String prefix)
     {
         ArrayList list = null;
         if (prefix != null) {

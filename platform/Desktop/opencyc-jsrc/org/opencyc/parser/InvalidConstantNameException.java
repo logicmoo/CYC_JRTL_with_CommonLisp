@@ -46,7 +46,8 @@ public class InvalidConstantNameException extends Exception {
   
   //// Public Area
   
-  public String getMessage() {
+  @Override
+public String getMessage() {
     StringBuffer buf = new StringBuffer("Invalid constant name(s): ");
     if (getInvalidConstantNames() != null) {
       for (Iterator iter = invalidConstantNames.iterator(); iter.hasNext(); ) {

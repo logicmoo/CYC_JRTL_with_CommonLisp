@@ -1269,15 +1269,18 @@ public final class balancing_tactician extends SubLTranslatedFile
         return (SubLObject)balancing_tactician.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_balancing_tactician_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_balancing_tactician_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_balancing_tactician_file();
     }
     
@@ -1391,31 +1394,38 @@ public final class balancing_tactician extends SubLTranslatedFile
             this.$removal_substrategies = (SubLObject)CommonSymbols.NIL;
         }
         
-        public SubLStructDecl getStructDecl() {
+        @Override
+		public SubLStructDecl getStructDecl() {
             return (SubLStructDecl)$balancing_tactician_data_native.structDecl;
         }
         
-        public SubLObject getField2() {
+        @Override
+		public SubLObject getField2() {
             return this.$new_root_substrategy;
         }
         
-        public SubLObject getField3() {
+        @Override
+		public SubLObject getField3() {
             return this.$transformation_substrategy;
         }
         
-        public SubLObject getField4() {
+        @Override
+		public SubLObject getField4() {
             return this.$removal_substrategies;
         }
         
-        public SubLObject setField2(final SubLObject value) {
+        @Override
+		public SubLObject setField2(final SubLObject value) {
             return this.$new_root_substrategy = value;
         }
         
-        public SubLObject setField3(final SubLObject value) {
+        @Override
+		public SubLObject setField3(final SubLObject value) {
             return this.$transformation_substrategy = value;
         }
         
-        public SubLObject setField4(final SubLObject value) {
+        @Override
+		public SubLObject setField4(final SubLObject value) {
             return this.$removal_substrategies = value;
         }
         
@@ -1430,7 +1440,8 @@ public final class balancing_tactician extends SubLTranslatedFile
             super(SubLTranslatedFile.extractFunctionNamed("BALANCING-TACTICIAN-DATA-P"));
         }
         
-        public SubLObject processItem(final SubLObject arg1) {
+        @Override
+		public SubLObject processItem(final SubLObject arg1) {
             return balancing_tactician.balancing_tactician_data_p(arg1);
         }
     }

@@ -133,15 +133,18 @@ public final class corba_storage_module_macros extends SubLTranslatedFile
         return (SubLObject)corba_storage_module_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_corba_storage_module_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_corba_storage_module_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_corba_storage_module_macros_file();
     }
     

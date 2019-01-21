@@ -895,15 +895,18 @@ public final class rkf_concept_harvester extends SubLTranslatedFile
         return (SubLObject)rkf_concept_harvester.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_rkf_concept_harvester_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_rkf_concept_harvester_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_rkf_concept_harvester_file();
     }
     

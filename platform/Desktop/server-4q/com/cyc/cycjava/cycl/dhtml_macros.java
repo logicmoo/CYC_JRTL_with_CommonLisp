@@ -2356,15 +2356,18 @@ public final class dhtml_macros extends SubLTranslatedFile
         return (SubLObject)dhtml_macros.NIL;
     }
     
-    public void declareFunctions() {
+    @Override
+	public void declareFunctions() {
         declare_dhtml_macros_file();
     }
     
-    public void initializeVariables() {
+    @Override
+	public void initializeVariables() {
         init_dhtml_macros_file();
     }
     
-    public void runTopLevelForms() {
+    @Override
+	public void runTopLevelForms() {
         setup_dhtml_macros_file();
     }
     

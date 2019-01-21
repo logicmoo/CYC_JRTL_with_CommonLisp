@@ -108,28 +108,32 @@ public class MessageBuffer extends Buffer
         setInitialized(true);
     }
 
-    public final boolean isPrimary()
+    @Override
+	public final boolean isPrimary()
     {
         if (mailbox == null)
             return true;
         return mailbox.getPreviewBuffer() != this;
     }
 
-    public final boolean isSecondary()
+    @Override
+	public final boolean isSecondary()
     {
         if (mailbox == null)
             return false;
         return mailbox.getPreviewBuffer() == this;
     }
 
-    public final Buffer getPrimary()
+    @Override
+	public final Buffer getPrimary()
     {
         if (mailbox != null && mailbox.getPreviewBuffer() == this)
             return mailbox;
         return null;
     }
 
-    public final void promote()
+    @Override
+	public final void promote()
     {
         if (mailbox != null && mailbox.getPreviewBuffer() == this)
             mailbox.setPreviewBuffer(null);
@@ -140,7 +144,8 @@ public class MessageBuffer extends Buffer
         return headerLineCount;
     }
 
-    public int getDisplayHeight()
+    @Override
+	public int getDisplayHeight()
     {
         int height = 0;
         for (Line line = getFirstLine(); line != null; line = line.nextVisible())
@@ -148,7 +153,8 @@ public class MessageBuffer extends Buffer
         return height;
     }
 
-    public int getDisplayWidth()
+    @Override
+	public int getDisplayWidth()
     {
         int width = 0;
         for (Line line = getFirstLine(); line != null; line = line.nextVisible()) {
@@ -160,7 +166,8 @@ public class MessageBuffer extends Buffer
     }
 
     // Returns cumulative height to top of target line.
-    public int getY(Line target)
+    @Override
+	public int getY(Line target)
     {
         int y = 0;
         for (Line line = getFirstLine(); line != null && line != target; line = line.nextVisible())
@@ -203,7 +210,8 @@ public class MessageBuffer extends Buffer
         }
     }
 
-    public int load()
+    @Override
+	public int load()
     {
         Debug.assertTrue(false); // Shouldn't be called.
         return LOAD_COMPLETED;
@@ -234,7 +242,8 @@ public class MessageBuffer extends Buffer
             mailbox.countMessages();
         }
         Runnable r = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 setBusy(false);
                 for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -416,7 +425,8 @@ public class MessageBuffer extends Buffer
             setBusy(true);
             setEntry(nextEntry);
             Runnable r = new Runnable() {
-                public void run()
+                @Override
+				public void run()
                 {
                     try {
                         loadMessage(null);
@@ -524,7 +534,8 @@ public class MessageBuffer extends Buffer
         if (to == null)
             return;
         Runnable bounceRunnable = new Runnable() {
-            public void run()
+            @Override
+			public void run()
             {
                 Log.debug("MessageBuffer bounceRunnable.run()");
                 boolean succeeded = false;
@@ -537,7 +548,8 @@ public class MessageBuffer extends Buffer
                 }
                 if (succeeded) {
                     Runnable successRunnable = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             editor.status("Message bounced");
                         }
@@ -545,7 +557,8 @@ public class MessageBuffer extends Buffer
                     SwingUtilities.invokeLater(successRunnable);
                 } else {
                     Runnable errorRunnable = new Runnable() {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             MessageDialog.showMessageDialog(editor, "Failed",
                                 "Bounce Message");
@@ -1097,18 +1110,21 @@ public class MessageBuffer extends Buffer
         appendLine(new MessageHeaderLine(s));
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return title;
     }
 
     // For the buffer list.
-    public Icon getIcon()
+    @Override
+	public Icon getIcon()
     {
         return Utilities.getIconFromFile("message.png");
     }
 
-    public String getFileNameForDisplay()
+    @Override
+	public String getFileNameForDisplay()
     {
         return "";
     }
@@ -1128,12 +1144,14 @@ public class MessageBuffer extends Buffer
         }
     }
 
-    public float getSplit()
+    @Override
+	public float getSplit()
     {
         return Editor.getSessionProperties().getFloatProperty(SPLIT_KEY, 0.5F);
     }
 
-    public void windowClosing()
+    @Override
+	public void windowClosing()
     {
         Editor editor = Editor.currentEditor();
         if (editor.getBuffer() == this)
@@ -1145,14 +1163,16 @@ public class MessageBuffer extends Buffer
         }
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         if (mailbox != null && mailbox.getPreviewBuffer() == this)
             mailbox.setPreviewBuffer(null);
         flushImages();
     }
 
-    public void empty()
+    @Override
+	public void empty()
     {
         flushImages();
         super.empty();
