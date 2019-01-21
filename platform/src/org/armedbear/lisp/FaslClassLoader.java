@@ -40,7 +40,7 @@ import static org.armedbear.lisp.Lisp.*;
 public class FaslClassLoader extends JavaClassLoader {
 
     private final String baseName;
-    private final JavaObject boxedThis = new JavaObject(this);
+    private final JavaObject boxedThis = JavaObject.createJavaObject(this);
 
     public FaslClassLoader(String baseName) {
         this.baseName = baseName;

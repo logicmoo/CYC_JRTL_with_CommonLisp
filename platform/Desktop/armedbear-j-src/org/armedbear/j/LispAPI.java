@@ -194,7 +194,7 @@ public static final void eventHandled()
       @Override
 	public LispObject execute()
       {
-        return new JavaObject(Editor.currentEditor());
+        return JavaObject.createJavaObject(Editor.currentEditor());
       }
     };
 
@@ -219,7 +219,7 @@ public static final void eventHandled()
 	public LispObject execute()
       {
         Editor otherEditor = Editor.currentEditor().getOtherEditor();
-        return otherEditor != null ? new JavaObject(otherEditor) : NIL;
+        return otherEditor != null ? JavaObject.createJavaObject(otherEditor) : NIL;
       }
     };
 
@@ -230,7 +230,7 @@ public static final void eventHandled()
       @Override
 	public LispObject execute()
       {
-        return new JavaObject(Editor.currentEditor().getBuffer());
+        return JavaObject.createJavaObject(Editor.currentEditor().getBuffer());
       }
     };
 
@@ -241,7 +241,7 @@ public static final void eventHandled()
       @Override
 	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
-        return new JavaObject(checkEditor(arg).getBuffer());
+        return JavaObject.createJavaObject(checkEditor(arg).getBuffer());
       }
     };
 
@@ -294,7 +294,7 @@ public static final void eventHandled()
               {
                 Buffer buffer = iterator.nextBuffer();
                 if (buffer.getTitle().equals(name))
-                  return new JavaObject(buffer);
+                  return JavaObject.createJavaObject(buffer);
               }
             return NIL;
           }
@@ -442,7 +442,7 @@ public static final void eventHandled()
           }
         else
           editor.moveDotTo(checkMark(arg));
-        return new JavaObject(editor.getDot());
+        return JavaObject.createJavaObject(editor.getDot());
       }
     };
 
@@ -482,7 +482,7 @@ public static final void eventHandled()
       {
         Position dot = Editor.currentEditor().getDot();
         if (dot != null)
-          return new JavaObject(dot.copy());
+          return JavaObject.createJavaObject(dot.copy());
         return NIL;
       }
     };
@@ -498,7 +498,7 @@ public static final void eventHandled()
         if (mark == null)
           mark = Editor.currentBuffer().getMark();
         if (mark != null)
-          return new JavaObject(mark.copy());
+          return JavaObject.createJavaObject(mark.copy());
         return NIL;
       }
     };
@@ -514,7 +514,7 @@ public static final void eventHandled()
         final Position mark = checkBuffer(arg).getMark();
         if (mark == null)
           return NIL;
-        return new JavaObject(mark.copy());
+        return JavaObject.createJavaObject(mark.copy());
       }
     };
 
@@ -546,7 +546,7 @@ public static final void eventHandled()
         final Position mark = checkEditor(arg).getMark();
         if (mark == null)
           return NIL;
-        return new JavaObject(mark.copy());
+        return JavaObject.createJavaObject(mark.copy());
       }
     };
 
@@ -577,7 +577,7 @@ public static final void eventHandled()
         final Line line = Editor.currentBuffer().getFirstLine();
         if (line == null)
           return NIL;
-        return new JavaObject(new Position(line, 0));
+        return JavaObject.createJavaObject(new Position(line, 0));
       }
     };
 
@@ -591,7 +591,7 @@ public static final void eventHandled()
         Position pos = Editor.currentBuffer().getEnd();
         if (pos == null)
           return NIL;
-        return new JavaObject(pos);
+        return JavaObject.createJavaObject(pos);
       }
     };
 
@@ -605,7 +605,7 @@ public static final void eventHandled()
       {
         Line line = checkLine(first);
         int offset = Fixnum.getValue(second);
-        return new JavaObject(new Position(line, offset));
+        return JavaObject.createJavaObject(new Position(line, offset));
       }
     };
 
@@ -616,7 +616,7 @@ public static final void eventHandled()
       @Override
 	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
-        return new JavaObject(checkMark(arg).getLine());
+        return JavaObject.createJavaObject(checkMark(arg).getLine());
       }
     };
 
@@ -641,7 +641,7 @@ public static final void eventHandled()
         Editor editor = Editor.currentEditor();
         Position dot = editor.getDot();
         if (dot != null)
-          return new JavaObject(dot.getLine());
+          return JavaObject.createJavaObject(dot.getLine());
         return NIL;
       }
     };
@@ -654,7 +654,7 @@ public static final void eventHandled()
 	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         Line next = checkLine(arg).next();
-        return next != null ? new JavaObject(next) : NIL;
+        return next != null ? JavaObject.createJavaObject(next) : NIL;
       }
     };
 
@@ -666,7 +666,7 @@ public static final void eventHandled()
 	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         Line prev = checkLine(arg).previous();
-        return prev != null ? new JavaObject(prev) : NIL;
+        return prev != null ? JavaObject.createJavaObject(prev) : NIL;
       }
     };
 
@@ -946,7 +946,7 @@ public static final void eventHandled()
       @Override
 	public LispObject execute()
       {
-        return new JavaObject(new KeyMap());
+        return JavaObject.createJavaObject(new KeyMap());
       }
     };
 
@@ -1230,7 +1230,7 @@ public static final void eventHandled()
         throws ConditionThrowable
       {
         return execute(first, second,
-                       new JavaObject(Editor.currentEditor().getBuffer()));
+                       JavaObject.createJavaObject(Editor.currentEditor().getBuffer()));
       }
       @Override
 	public LispObject execute(LispObject first, LispObject second,
@@ -1319,7 +1319,7 @@ public static final void eventHandled()
 	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         return execute(arg,
-                       new JavaObject(Editor.currentEditor().getBuffer()));
+                       JavaObject.createJavaObject(Editor.currentEditor().getBuffer()));
       }
       @Override
 	public LispObject execute(LispObject first, LispObject second)
@@ -1428,7 +1428,7 @@ public static final void eventHandled()
 	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         Position pos = checkMark(arg);
-        return new JavaObject(new Position(pos.getLine(), pos.getOffset()));
+        return JavaObject.createJavaObject(new Position(pos.getLine(), pos.getOffset()));
       }
     };
 
@@ -1481,7 +1481,7 @@ public static final void eventHandled()
       @Override
 	public LispObject execute()
       {
-        return new JavaObject(Editor.currentEditor().beginCompoundEdit());
+        return JavaObject.createJavaObject(Editor.currentEditor().beginCompoundEdit());
       }
     };
 
@@ -1537,7 +1537,7 @@ public static final void eventHandled()
     	if(INVOKE_HOOK.fboundp())
         Primitives.FUNCALL.execute(INVOKE_HOOK,
         		PACKAGE_J.intern("OPEN-FILE-HOOK"),
-                                   new JavaObject(buffer));
+                                   JavaObject.createJavaObject(buffer));
       }
     catch (Throwable t)
       {
@@ -1565,7 +1565,7 @@ public static void invokeBufferActivatedHook(Buffer buffer)
         	if(INVOKE_HOOK.fboundp())
             Primitives.FUNCALL.execute(INVOKE_HOOK,
                                        PACKAGE_J.intern("BUFFER-ACTIVATED-HOOK"),
-                                       new JavaObject(buffer));
+                                       JavaObject.createJavaObject(buffer));
           }
         catch (Throwable t)
           {
@@ -1581,7 +1581,7 @@ public static void invokeBufferActivatedHook(Buffer buffer)
     	if(INVOKE_HOOK.fboundp())
         Primitives.FUNCALL.execute(INVOKE_HOOK,
                                    PACKAGE_J.intern("AFTER-SAVE-HOOK"),
-                                   new JavaObject(buffer));
+                                   JavaObject.createJavaObject(buffer));
       }
     catch (Throwable t)
       {
@@ -1596,7 +1596,7 @@ public static void invokeBufferActivatedHook(Buffer buffer)
     	if(INVOKE_HOOK.fboundp())
         Primitives.FUNCALL.execute(INVOKE_HOOK,
                                    PACKAGE_J.intern("LISP-SHELL-STARTUP-HOOK"),
-                                   new JavaObject(buffer),
+                                   JavaObject.createJavaObject(buffer),
                                    new SimpleString(command));
       }
     catch (Throwable t)
@@ -1666,7 +1666,7 @@ public static void invokeBufferActivatedHook(Buffer buffer)
 	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         if (arg instanceof BufferStream)
-          return new JavaObject(((BufferStream)arg).getBuffer());
+          return JavaObject.createJavaObject(((BufferStream)arg).getBuffer());
         return error(new LispError(arg.writeToString() +
                                    "does not designate a buffer stream."));
       }
@@ -1848,7 +1848,7 @@ public static void invokeBufferActivatedHook(Buffer buffer)
             else
               pos = search.findString(buffer, start);
           }
-        return pos != null ? new JavaObject(pos) : NIL;
+        return pos != null ? JavaObject.createJavaObject(pos) : NIL;
       }
     };
 
@@ -1866,7 +1866,7 @@ public static void invokeBufferActivatedHook(Buffer buffer)
             final Editor editor = Editor.currentEditor();
             final Buffer buffer = editor.getBuffer(File.getInstance(namestring));
             if (buffer != null)
-              return new JavaObject(buffer);
+              return JavaObject.createJavaObject(buffer);
           }
         return NIL;
       }
@@ -1881,13 +1881,13 @@ public static void invokeBufferActivatedHook(Buffer buffer)
       {
         Position pos =
           LispMode.findBeginningOfDefun(Editor.currentEditor().getDot());
-        return pos != null ? new JavaObject(pos) : NIL;
+        return pos != null ? JavaObject.createJavaObject(pos) : NIL;
       }
       @Override
 	public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         Position pos = LispMode.findBeginningOfDefun(checkMark(arg));
-        return pos != null ? new JavaObject(pos) : NIL;
+        return pos != null ? JavaObject.createJavaObject(pos) : NIL;
       }
     };
 

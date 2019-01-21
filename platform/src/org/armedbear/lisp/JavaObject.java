@@ -100,7 +100,7 @@ public final class JavaObject extends LispObject {
         if(obj == null) {
                 return BuiltInClass.JAVA_OBJECT;
         } else {
-            return ENSURE_JAVA_CLASS.execute(new JavaObject(obj.getClass()));
+            return ENSURE_JAVA_CLASS.execute(createJavaObject(obj.getClass()));
         }
     }
 
@@ -154,12 +154,12 @@ public final class JavaObject extends LispObject {
      */
     public final static LispObject getInstance(Object obj) {
         if (obj == null)
-            return new JavaObject(null);
+            return createJavaObject(null);
 
         if (obj instanceof LispObject)
             return (LispObject)obj;
 
-        return new JavaObject(obj);
+        return createJavaObject(obj);
     }
 
     /** Encapsulates obj, if required.
@@ -172,7 +172,7 @@ public final class JavaObject extends LispObject {
      */
     public final static LispObject getInstance(Object obj, Class<?> intendedClass) {
         if (obj == null)
-            return new JavaObject(null, intendedClass);
+            return new JavaObject(null);
 
         if (obj instanceof LispObject)
             return (LispObject)obj;
@@ -277,7 +277,7 @@ public final class JavaObject extends LispObject {
     }
 
     @Override
-    public Object javaInstanceImpl(Class<?> c) {
+    public Object javaInstance(Class<?> c) {
         if(obj == null) {
             if(c.isPrimitive()) {
                 throw new NullPointerException("Cannot assign null to " + c);
@@ -365,7 +365,7 @@ public final class JavaObject extends LispObject {
     public String printObjectImpl()
     {
         if (obj instanceof ControlTransfer)
-            return obj.toString();
+            return ((ControlTransfer)obj).toString();
         String s = "ERROR_Unseen";
         if (obj != null) {
             Class<?> c = obj.getClass();
@@ -415,7 +415,7 @@ public final class JavaObject extends LispObject {
         if(obj != null) {
             LispObject parts = NIL;
             parts = parts.push(new Cons("Java class",
-                                        new JavaObject(obj.getClass())));
+                                        createJavaObject(obj.getClass())));
             if (intendedClass != null) {
                 parts = parts.push(new Cons("intendedClass", new SimpleString(intendedClass.getCanonicalName())));
             }
@@ -694,7 +694,7 @@ public final class JavaObject extends LispObject {
 
     private static final Primitive _FIND_JAVA_CLASS = new Primitive("%find-java-class", PACKAGE_JAVA, false, "class-name-or-class") {
             @Override
-			public LispObject execute(LispObject arg) {
+            public LispObject execute(LispObject arg) {
                 try {
                     if(arg instanceof AbstractString) {
                         return findJavaClass(Class.forName((String) arg.getStringValue()));
@@ -710,7 +710,7 @@ public final class JavaObject extends LispObject {
 
     private static final Primitive _REGISTER_JAVA_CLASS = new Primitive("%register-java-class", PACKAGE_JAVA, false, "jclass class-metaobject") {
             @Override
-			public LispObject execute(LispObject jclass, LispObject classMetaObject) {
+            public LispObject execute(LispObject jclass, LispObject classMetaObject) {
                 return registerJavaClass((Class<?>) jclass.javaInstance(), classMetaObject);
             }
 
@@ -718,21 +718,21 @@ public final class JavaObject extends LispObject {
 
     // ### +null+
     public final static Symbol NULL
-        = Lisp.exportConstant("+NULL+", PACKAGE_JAVA, new JavaObject(null));
+        = Lisp.exportConstant("+NULL+", PACKAGE_JAVA, createJavaObject(null));
     static {
         String doc = "The JVM null object reference.";
         NULL.setDocumentation(Symbol.VARIABLE, new SimpleString(doc));
     }
     // ### +true+
     public final static Symbol TRUE
-        = Lisp.exportConstant("+TRUE+", PACKAGE_JAVA, new JavaObject(true));
+        = Lisp.exportConstant("+TRUE+", PACKAGE_JAVA, createJavaObject(true));
     static {
         String doc = "The JVM primitive value for boolean true.";
         TRUE.setDocumentation(Symbol.VARIABLE, new SimpleString(doc));
     }
     // ### +false+
     public final static Symbol FALSE
-        = Lisp.exportConstant("+FALSE+", PACKAGE_JAVA, new JavaObject(false));
+        = Lisp.exportConstant("+FALSE+", PACKAGE_JAVA, createJavaObject(false));
     static {
         String doc = "The JVM primitive value for boolean false.";
         FALSE.setDocumentation(Symbol.VARIABLE, new SimpleString(doc));

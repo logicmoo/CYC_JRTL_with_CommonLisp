@@ -1,5 +1,4 @@
 /*
-
  * Java.java
  *
  * Copyright (C) 2002-2006 Peter Graves, Andras Simon
@@ -44,11 +43,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.*;
-
-import org.appdapter.core.convert.Converter;
-import org.appdapter.core.convert.NoSuchConversionException;
-
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 
 public final class Java
 {
@@ -416,9 +410,61 @@ public final class Java
 	{
 		if (strict && args.length < 2) error(new WrongNumberOfArgumentsException(fun, 2, -1));
 		try
-		{			
-			Method m = findMethod(true, args[0], args[1], args, 2);
-			final Object result = invokeLM(null, 2, m, args);
+		{
+			Method m = null;
+			final LispObject methodRef = args[0];
+			if (methodRef instanceof JavaObject)
+			{
+				final Object obj = ((JavaObject) methodRef).getObject();
+				if (obj instanceof Method) m = (Method) obj;
+			}
+			else if (methodRef instanceof AbstractString)
+			{
+				final Class c = javaClass(args[1]);
+				if (c != null)
+				{
+					final String methodName = methodRef.getStringValue();
+					final Method[] methods = c.getMethods();
+					final List<Method> staticMethods = new ArrayList<Method>();
+					final int argCount = args.length - 2;
+					for (final Method m1 : methods)
+					{
+						if (Modifier.isStatic(m1.getModifiers()))
+						{
+							staticMethods.add(m1);
+						}
+					}
+					if (staticMethods.size() > 0)
+					{
+						m = findMethod(staticMethods.toArray(new Method[staticMethods.size()]), methodName, args, 2);
+					}
+					if (m == null) error(new LispError("no such method"));
+				}
+			}
+			else
+			{
+				type_error(methodRef, Symbol.STRING);
+			}
+			final Object[] methodArgs = new Object[args.length - 2];
+			final Class[] argTypes = m.getParameterTypes();
+			for (int i = 2; i < args.length; i++)
+			{
+				final LispObject arg = args[i];
+				if (arg.equals(NIL))
+				{
+					methodArgs[i - 2] = false;
+				}
+				else if (arg.equals(T))
+				{
+					methodArgs[i - 2] = true;
+				}
+				else
+				{
+					methodArgs[i - 2] = arg.javaInstance(argTypes[i - 2]);
+				}
+			}
+			m.setAccessible(true);
+			final Object result = m.invoke(null, methodArgs);
 			return JavaObject.getInstance(result, translate, m.getReturnType());
 		} catch (final ControlTransfer c)
 		{
@@ -436,140 +482,6 @@ public final class Java
 		return NIL;
 	}
 
-	private static Method findMethod(boolean statik, LispObject methodRef, LispObject classRef, LispObject[] args, int offset)
-	{
-		final Object obj = methodRef.javaInstance();
-		if (obj instanceof Method) return (Method) obj;
-		if (obj instanceof Number) { return classMethods(statik, javaClass(classRef))[((Number) obj).intValue()]; }
-		String methodName;
-		if (obj instanceof CharSequence)
-		{
-			methodName = obj.toString();
-		}
-		else
-		{
-			methodName = methodRef.getStringValue();
-		}
-		Method m = findMethod(classMethods(statik, javaClass(classRef)), methodName, args, offset);
-		if (m == null) error(new LispError("no such method"));
-		return m;
-	}
-
-	private static Method[] classMethods(boolean statik, final Class c)
-	{
-		final Method[] methods = c.getMethods();
-		if (!statik) return methods;
-		final List<Method> staticMethods = new ArrayList<Method>();
-		for (final Method m1 : methods)
-		{
-			if (Modifier.isStatic(m1.getModifiers()))
-			{
-				staticMethods.add(m1);
-			}
-		}
-		return staticMethods.toArray(new Method[staticMethods.size()]);
-	}
-
-	private static Object[] makeCallArgs(int offset, LispObject[] args, final Class[] argTypes, Object method)
-	{
-		final Object[] methodArgs = new Object[argTypes.length];
-		int i = offset;
-		int methodTypeI = 0;
-		int argsRemain = args.length - offset;
-		while (argsRemain > 0)
-		{
-			// @TODO actually finish this code to deal with Lists and array spreadings over VarArgs
-			Class argClass = argTypes[methodTypeI];
-			final LispObject arg = args[i];
-			methodArgs[methodTypeI] = Java.tryCoerce(arg, argClass);
-			i++;
-			argsRemain--;
-			methodTypeI++;
-		}
-		if (argsRemain > 0) { error(new WrongNumberOfArgumentsException("Wrong number of arguments for " + method + ": expected " + argTypes.length + ", got " + (args.length - offset)));
-		 return null; }
-		return methodArgs;
-	}
-
-	private static Object invokeLM(int offset, Constructor method, LispObject[] args) throws IllegalAccessException, InvocationTargetException, InstantiationException, IllegalArgumentException
-	{
-		final int modifiers = method.getModifiers();
-		boolean was = method.isAccessible();
-		if (!was)
-		{
-			// Possible for static member classes: see #229
-			if (Modifier.isPublic(modifiers))
-			{
-				method.setAccessible(true);
-			}
-		}
-		final Object result;
-		Object[] methodArgs = makeCallArgs(offset, args, method.getParameterTypes(), method);
-		try
-		{
-			result = method.newInstance(methodArgs);
-		} finally
-		{
-			if (!was) method.setAccessible(false);
-		}
-
-		return result;
-	}
-	private static Object invokeLM(Object instance, int offset, Method method, LispObject[] args) throws IllegalAccessException, InvocationTargetException
-	{
-		final int modifiers = method.getModifiers();
-		boolean was = method.isAccessible();
-		if (!was)
-		{
-			// Possible for static member classes: see #229
-			if (Modifier.isPublic(modifiers))
-			{
-				method.setAccessible(true);
-			}
-		}
-		final Object result;
-		Object[] methodArgs = makeCallArgs(offset, args, method.getParameterTypes(), method);
-		try
-		{
-			if (Modifier.isStatic(modifiers))
-			{
-				result = method.invoke(null, methodArgs);
-			}
-			else
-			{
-				result = method.invoke(instance, methodArgs);
-			}
-		} finally
-		{
-			if (!was) method.setAccessible(false);
-		}
-		return result;
-	}
-
-	private static Object tryCoerce(LispObject arg, Class argClass)
-	{
-		if (arg instanceof JavaObject) { return ((JavaObject) arg).javaInstance(argClass); }
-		if (arg == null) return null;
-		if (argClass.isInstance(arg)) return arg;
-		Object o = arg.javaInstance(argClass);
-		if (o == null && arg.isNil()) return null;
-		if (argClass.isInstance(o)) return o;
-		List maxConverts = new LinkedList();
-		List<Converter> cvts = org.appdapter.core.convert.ReflectUtils.getConverters(arg, arg.getClass(), argClass);
-		for (Iterator iterator = cvts.iterator(); iterator.hasNext();)
-		{
-			Converter converter = (Converter) iterator.next();
-			Object o2;
-			try
-			{
-				o2 = converter.convert(o, argClass, maxConverts);
-				if (argClass.isInstance(o2)) return o2;
-			} catch (NoSuchConversionException e)
-			{
-			}
-		}
-		return o;
-	}
 	private static final Primitive JSTATIC = new pf_jstatic();
 
 	@DocString(name = "jstatic", args = "method class &rest args", doc = "Invokes the static method METHOD on class CLASS with ARGS.")
@@ -939,14 +851,6 @@ public final class Java
 			else
 			{
 				instance = instanceArg.javaInstance();
-				if (instance != instanceArg)
-				{
-
-				}
-				else
-				{
-					intendedClass = instanceArg.getClass();
-				}
 			}
 			if (instance == null) { throw new NullPointerException(); //Handled below
 			}
@@ -962,7 +866,6 @@ public final class Java
 						final String msg = MessageFormat.format("No instance method named {0} found for type {1}", methodName, instance.getClass().getName());
 						throw new NoSuchMethodException(msg);
 					}
-
 					String classes = intendedClass.getName();
 					final Class<?> actualClass = instance.getClass();
 					if (actualClass != intendedClass)
@@ -974,8 +877,34 @@ public final class Java
 			}
 			else
 				method = (Method) JavaObject.getObject(methodArg);
-
-			return JavaObject.getInstance(invokeLM(instance, 2, method, args), translate, method.getReturnType());
+			final Class<?>[] argTypes = (Class<?>[]) method.getParameterTypes();
+			if (argTypes.length != args.length - 2) { return error(new WrongNumberOfArgumentsException("Wrong number of arguments for " + method + ": expected " + argTypes.length + ", got " + (args.length - 2))); }
+			methodArgs = new Object[argTypes.length];
+			for (int i = 2; i < args.length; i++)
+			{
+				final LispObject arg = args[i];
+				if (arg.equals(NIL))
+				{
+					methodArgs[i - 2] = false;
+				}
+				else if (arg.equals(T))
+				{
+					methodArgs[i - 2] = true;
+				}
+				else
+				{
+					methodArgs[i - 2] = arg.javaInstance(argTypes[i - 2]);
+				}
+			}
+			if (!method.isAccessible())
+			{
+				// Possible for static member classes: see #229
+				if (Modifier.isPublic(method.getModifiers()))
+				{
+					method.setAccessible(true);
+				}
+			}
+			return JavaObject.getInstance(method.invoke(instance, methodArgs), translate, method.getReturnType());
 		} catch (final ControlTransfer t)
 		{
 			throw t;
@@ -990,11 +919,6 @@ public final class Java
 		}
 		// Not reached.
 		return null;
-	}
-
-	private static Object invokeM(final Object instance, Method method, Object[] methodArgs) throws IllegalAccessException, InvocationTargetException
-	{
-		return method.invoke(instance, methodArgs);
 	}
 
 	private static Object[] translateMethodArguments(LispObject[] args)
@@ -1040,32 +964,12 @@ public final class Java
 			{
 				continue;
 			}
-			final Class<?>[] methodTypes = method.getParameterTypes();
+			final Class<?>[] methodTypes = (Class<?>[]) method.getParameterTypes();
 			if (!isApplicableMethod(methodTypes, javaArgs))
 			{
 				continue;
 			}
 			if (result == null || isMoreSpecialized(methodTypes, result.getParameterTypes()))
-			{
-				result = method;
-			}
-		}
-		if (result == null) { return findMethodPass2(methods, methodName, javaArgs); }
-		return result;
-	}
-
-	private static Method findMethodPass2(Method[] methods, String methodName, Object[] javaArgs)
-	{
-		Method result = null;
-		for (int i = methods.length; i-- > 0;)
-		{
-			final Method method = methods[i];
-			if (!method.getName().equals(methodName))
-			{
-				continue;
-			}
-			final Class<?>[] methodTypes = method.getParameterTypes();
-			if (result == null || !isMoreSpecialized(methodTypes, result.getParameterTypes()))
 			{
 				result = method;
 			}
@@ -1134,7 +1038,7 @@ public final class Java
 			{
 				continue;
 			}
-			final Class<?>[] methodTypes = ctor.getParameterTypes();
+			final Class<?>[] methodTypes = (Class<?>[]) ctor.getParameterTypes();
 			if (!isApplicableMethod(methodTypes, javaArgs))
 			{
 				continue;
@@ -1205,36 +1109,24 @@ public final class Java
 		{
 			final Class<?> methodType = methodTypes[i];
 			final Object arg = args[i];
-
 			if (arg == null)
 			{
 				if (methodType.isPrimitive()) return false;
+
 				continue;
 
 			}
 			if (methodType.isInstance(arg)) continue;
-
-			final Class<? extends Object> class1 = arg.getClass();
-
-			if (isAssignable(class1, methodType)) continue;
-
+			if (isAssignable(arg.getClass(), methodType)) continue;
 			if (arg instanceof LispObject)
 			{
 				final Object jo = ((LispObject) arg).javaInstance();
 				if (jo == null) continue;
 				if (methodType.isInstance(jo)) continue;
 			}
-			final Object cv = getConverterOrNull(methodType, class1);
-			if (cv != null) continue;
 			return false;
 		}
 		return true;
-	}
-
-	private static Object getConverterOrNull(Class<?> methodType, Class<? extends Object> class1)
-	{
-
-		return null;
 	}
 
 	public static boolean isMoreSpecialized(Class<?>[] xtypes, Class<?>[] ytypes)
@@ -1414,8 +1306,8 @@ public final class Java
 		@Override
 		public LispObject execute(LispObject javaObject, LispObject intendedClass)
 		{
-			final Class<?> c = javaClass(intendedClass);
 			final Object o = javaObject.javaInstance();
+			final Class<?> c = javaClass(intendedClass);
 			try
 			{
 				return JavaObject.getInstance(o, c);

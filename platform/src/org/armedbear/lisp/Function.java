@@ -245,7 +245,7 @@ public abstract class Function extends Operator  implements SubLFunction
     public final void setClassBytes(byte[] bytes)
     {
         propertyList = putf(propertyList, Symbol.CLASS_BYTES,
-                            new JavaObject(bytes));
+                            JavaObject.createJavaObject(bytes));
     }
 
     public final LispObject getClassBytes() {
@@ -259,7 +259,7 @@ public abstract class Function extends Operator  implements SubLFunction
 		SpecialBindingsMark mark = thread.markSpecialBindings();
 		try {
 		    thread.bindSpecial(Symbol.LOAD_TRUENAME, loadedFrom);
-		    return new JavaObject(((FaslClassLoader) c).getFunctionClassBytes(this));
+		    return JavaObject.createJavaObject(((FaslClassLoader) c).getFunctionClassBytes(this));
 		} catch(Throwable t) {
 		    //This is because unfortunately getFunctionClassBytes uses
 		    //Debug.assertTrue(false) to signal errors

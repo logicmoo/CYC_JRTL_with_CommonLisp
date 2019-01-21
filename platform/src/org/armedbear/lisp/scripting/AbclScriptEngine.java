@@ -88,7 +88,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
             //System.out.println("ABCL: loading configuration from " + getClass().getResource("/abcl-script-config.lisp"));
 	    loadFromClasspath("/abcl-script-config.lisp");
 	}
-	((Function) interpreter.eval("#'abcl-script:configure-abcl")).execute(new JavaObject(this));
+	((Function) interpreter.eval("#'abcl-script:configure-abcl")).execute(JavaObject.createJavaObject(this));
         //System.out.println("ABCL: configured");
 	evalScript = (Function) this.findSymbol("EVAL-SCRIPT", "ABCL-SCRIPT").getSymbolFunction();
 	compileScript = (Function) this.findSymbol("COMPILE-SCRIPT", "ABCL-SCRIPT").getSymbolFunction();
@@ -198,7 +198,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 		if (value instanceof JavaObject) {
 			jo = (JavaObject) value;
 		} else {
-			jo = new JavaObject(value);
+			jo = JavaObject.createJavaObject(value);
 		}
 		s.setSymbolValue(jo);
 		return jo;
@@ -259,7 +259,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 	    retVal = evaluator.execute(makeBindings(ctx.getBindings(ScriptContext.GLOBAL_SCOPE)),
 				       makeBindings(ctx.getBindings(ScriptContext.ENGINE_SCOPE)),
 				       inStream, outStream,
-				       code, new JavaObject(ctx));
+				       code, JavaObject.createJavaObject(ctx));
 	    return retVal.javaInstance();
     }
 
@@ -306,7 +306,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 	@SuppressWarnings("unchecked")
 	public Object getInterface(Object thiz, Class clasz) {
 	    Symbol s = findSymbol("jmake-proxy", "JAVA");
-	    JavaObject iface = new JavaObject(clasz);
+	    JavaObject iface = JavaObject.createJavaObject(clasz);
 	    return  ((JavaObject) s.execute(iface, (LispObject) thiz)).javaInstance();
 	}
 

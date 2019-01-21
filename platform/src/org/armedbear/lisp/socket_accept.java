@@ -54,7 +54,7 @@ public final class socket_accept extends Primitive
             (ServerSocket) ((JavaObject)first).getObject();
 	 try {
             Socket socket = serverSocket.accept();
-            return new JavaObject(socket);
+            return JavaObject.createJavaObject(socket);
         }
         catch (Exception e) {
             return error(new LispError(e.getMessage()));

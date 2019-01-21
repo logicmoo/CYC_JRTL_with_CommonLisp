@@ -2339,7 +2339,7 @@ public class Pathname extends LispObject {
     @Override
     public LispObject execute(LispObject pathname) {
       Pathname p = (Pathname) coerceToPathname(pathname);
-      return new JavaObject(p.getInputStream());
+      return JavaObject.createJavaObject(p.getInputStream());
     }
   };
 

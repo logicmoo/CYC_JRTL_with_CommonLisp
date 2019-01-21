@@ -52,7 +52,7 @@ public final class make_server_socket extends Primitive
         int port = Fixnum.getValue(first);
         try {
             ServerSocket socket = new ServerSocket(port);
-            return new JavaObject(socket);
+            return JavaObject.createJavaObject(socket);
         }
         catch (Exception e) {
             return error(new LispError(e.getMessage()));

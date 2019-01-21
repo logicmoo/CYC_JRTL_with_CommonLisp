@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.JavaLink;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
@@ -185,6 +186,7 @@ public class LispObject extends AbstractSubLObject
 	public Object javaInstance()
 	{
 		return this;
+		
 	}
 
 	public Object javaInstanceImpl(Class<?> c)
@@ -192,19 +194,21 @@ public class LispObject extends AbstractSubLObject
 		return javaInstance();
 	}
 
-	final public Object javaInstance(Class<?> c)
+	public Object javaInstance(Class<?> cIn)
 	{
-		if (c.isAssignableFrom(getClass())) { return this; }
+		if (cIn == null) return javaInstance();
+		if (cIn.isAssignableFrom(getClass())) { return this; }
 		Object offer2 = javaInstance();
+		Class c = Java.maybeBoxClass(cIn);
 		if (c.isInstance(offer2)) { return offer2; }
 		Object offer = javaInstanceImpl(c);
 		if (c.isInstance(offer)) { return offer; }
 		String cn = c.getName();
 		if (cn != null)
 		{
-			if (cn.equals("java.lang.Boolean") || cn.equals("boolean")) { return Boolean.TRUE; }
+			if (cn.equals("java.lang.Boolean")) { return Boolean.TRUE; }
 		}
-		return error(new LispError("The value " + princToString() + " is not of class " + cn));
+		return error(new LispError("The value " + princToString() + " is not of class " + cIn));
 	}
 
   /** This method returns 'this' by default, but allows

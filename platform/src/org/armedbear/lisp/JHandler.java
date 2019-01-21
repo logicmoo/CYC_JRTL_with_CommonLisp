@@ -85,7 +85,7 @@ public final class JHandler
                 LispObject[] args =
                     new LispObject[] //FIXME: count -> seq_num
                     { data,
-                      new JavaObject(o),
+                      JavaObject.createJavaObject(o),
                       lispAiVector,
                       lispAsVector,
                       internKeyword(s),

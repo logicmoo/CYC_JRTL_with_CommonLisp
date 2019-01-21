@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.armedbear.lisp.JavaObject;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLAlienObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
@@ -53,7 +55,7 @@ public class JavaLink extends SubLTrampolineFile {
 			else if (object.getClass().equals(classForName("I")) || object instanceof Integer)
 				result = SubLObjectFactory.makeInteger(object.toString());
 			else
-				result = new SubLAlienObject(object);
+				result = new JavaObject(object);
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
 		}
@@ -181,10 +183,6 @@ public class JavaLink extends SubLTrampolineFile {
 			result = String.class;
 		else if (subLObject instanceof SubLCharacter)
 			result = Character.TYPE;
-		else if (subLObject instanceof AbstractSubLFloat)
-			result = Double.TYPE;
-		else if (subLObject instanceof AbstractSubLIntegerBignum)
-			result = Integer.TYPE;
 		else if (subLObject instanceof SubLLongBignum)
 			result = Long.TYPE;
 		else if (subLObject instanceof SubLBigIntBignum)
@@ -193,6 +191,10 @@ public class JavaLink extends SubLTrampolineFile {
 			result = BigDecimal.class;
 		else if (subLObject instanceof SubLVector)
 			result = ArrayList.class;
+		else if (subLObject instanceof AbstractSubLFloat)
+			result = Double.TYPE;
+		else if (subLObject instanceof AbstractSubLIntegerBignum)
+			result = Integer.TYPE;
 		else if (subLObject instanceof AbstractSubLList)
 			result = ArrayList.class;
 		else {

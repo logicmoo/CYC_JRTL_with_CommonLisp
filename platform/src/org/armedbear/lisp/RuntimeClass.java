@@ -150,7 +150,7 @@ public class RuntimeClass
 
     public static final LispObject makeLispObject(Object obj)
     {
-        return new JavaObject(obj);
+        return JavaObject.createJavaObject(obj);
     }
 
     public static final Fixnum makeLispObject(byte i)

@@ -66,7 +66,7 @@ public final class JProxy
                                               new Class[] { iface },
                                               new LispHandler(table));
         table.put(proxy, new Entry(iface, lispDefinedMethods));
-        return new JavaObject(proxy);
+        return JavaObject.createJavaObject(proxy);
       }
     };
 
@@ -101,7 +101,7 @@ public final class JProxy
               if (args != null)
                 {
                   for (int i = args.length - 1 ; 0 <= i  ; i--)
-                    lispArgs = lispArgs.push(new JavaObject(args[i]));
+                    lispArgs = lispArgs.push(JavaObject.createJavaObject(args[i]));
                 }
               LispObject result = evalCall(f, lispArgs, Environment.newEnvironment(),
                                            LispThread.currentThread());
@@ -207,7 +207,7 @@ public final class JProxy
 	      		if(!(args[0] instanceof Function)) {
 	      			return type_error(args[0], Symbol.FUNCTION);
 	      		}
-	      		return new JavaObject(new LispInvocationHandler((Function) args[0]));
+	      		return JavaObject.createJavaObject(new LispInvocationHandler((Function) args[0]));
 	      	}
 	    };
 
@@ -238,12 +238,12 @@ public final class JProxy
 	      		synchronized(proxyMap) {
 	      			proxyMap.put(proxy, args[2]);
 	      		}
-	      		return new JavaObject(proxy);
+	      		return JavaObject.createJavaObject(proxy);
 	      	}
 	    };    
 	    
 	static LispObject toLispObject(Object obj) {
-		return (obj instanceof LispObject) ? (LispObject) obj : new JavaObject(obj);
+		return (obj instanceof LispObject) ? (LispObject) obj : JavaObject.createJavaObject(obj);
 	}
 	    
 }

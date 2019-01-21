@@ -2984,6 +2984,12 @@ public static void checkOutput(Symbol standardOutput, LispObject stdout2) {
 
     cold = false;
   }
+  
+  public static JavaObject createJavaObject(Object obj)
+	{
+		return new JavaObject(obj);
+	}
+
 
 	public static Object printingObject;
 

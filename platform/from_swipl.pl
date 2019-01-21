@@ -391,7 +391,7 @@ call_jmain(Class,Args):- jpl,
   main_args_to_jref(Args, JRef),
   jpl_call(Class,main,[JRef],_Out).
 
-call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--eval','(init-j)','--eval','(init-cyc)','--load','abclc-rc.lisp'| Args]).
+call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--eval','(init-cyc)','--load','cyc'| Args]).
 call_main(Args):- call_jmain('org.armedbear.lisp.Main',['--load','abclc-rc.lisp'| Args]).
 call_main(Args):- call_jmain('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',['--load','abclc-rc.lisp'| Args]).
 
