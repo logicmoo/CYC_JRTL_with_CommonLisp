@@ -1008,11 +1008,11 @@ public class Pathname extends LispObject {
     }
     // A logical host is represented as the string that names it.
     // (defvar *logical-pathname-translations* (make-hash-table :test 'equal))
-    public static HashTable LOGICAL_PATHNAME_TRANSLATIONS =
+    public static LispHashTable LOGICAL_PATHNAME_TRANSLATIONS =
       HashTable.newEqualHashTable(64, NIL, NIL);
     private static final Symbol _LOGICAL_PATHNAME_TRANSLATIONS_ =
       exportSpecial("*LOGICAL-PATHNAME-TRANSLATIONS*", PACKAGE_SYS,
-      LOGICAL_PATHNAME_TRANSLATIONS);
+      (LispObject) LOGICAL_PATHNAME_TRANSLATIONS);
 
     public static Pathname parseNamestring(String s) {
         return new Pathname(s);

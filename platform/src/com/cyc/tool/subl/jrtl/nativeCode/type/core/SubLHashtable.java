@@ -8,9 +8,10 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
-import org.armedbear.lisp.HashTable;
+import org.armedbear.lisp.Cons;
 import org.armedbear.lisp.LispHashTable;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Symbol;
@@ -18,6 +19,7 @@ import org.armedbear.lisp.Symbol;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
@@ -279,10 +281,10 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
 		return hash.containsValue(obj);
 	}
 
-	public Set entrySet()
+	public Set<Entry<SubLObject, SubLObject>> entrySet()
 	{
-		Errors.unimplementedMethod("SubLHashtable.entrySet()");
-		return null;
+		Map<SubLObject, SubLObject> hash = hashMe();
+		return hash.entrySet();
 	}
 
 	@Override
@@ -334,10 +336,9 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
 		return null;
 	}
 
-	public Iterator getEntrySetIterator()
+	public Iterator<Map.Entry<SubLObject, SubLObject>> getEntrySetIterator()
 	{
-		Map<SubLObject, SubLObject> hash = hashMe();
-		return hash.entrySet().iterator();
+		return entrySet().iterator();
 	}
 
 	@Override
@@ -400,6 +401,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
 
 	public void putAll(Map map)
 	{
+
 		Errors.unimplementedMethod("SubLHashtable.putAll()");
 	}
 
@@ -470,6 +472,12 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
 	}
 
 	@Override
+	public SubLHashtable toLispObject()
+	{
+		return this;
+	}
+
+	@Override
 	public String printObjectImpl()
 	{
 		return "#<HASH-TABLE " + test.getFunction().getFunctionSymbol() + " " + toTypeName() + " with " + this.size() + " entries @ " + super.toString() + ">";
@@ -492,8 +500,120 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
 		return getTest().getFunction().getFunctionSymbol().toLispObject();
 	}
 
+	@Override
+	public int getSize()
+	{
+		return getCurrentCapacity();
+	}
+
+	@Override
+	public int getCount()
+	{
+		return size();
+	}
+
+	@Override
+	public LispObject gethash(LispObject key)
+	{
+		return (LispObject) Hashtables.gethash(key, this);
+	}
+
+	@Override
+	public LispObject gethash(LispObject key, LispObject defaultValue)
+	{
+		return (LispObject) Hashtables.gethash(key, this, defaultValue);
+	}
+
+	@Override
+	public LispObject puthash(LispObject key, LispObject newValue)
+	{
+		return (LispObject) Hashtables.sethash(key, this, newValue);
+	}
+
+	@Override
+	public LispObject remhash(LispObject key)
+	{
+		return (LispObject) Hashtables.remhash(key, this);
+	}
+
+	@Override
+	public LispObject get(LispObject key)
+	{
+		return (LispObject) this.get((SubLObject) key);
+	}
+
+	public LispObject gethash1(LispObject key)
+	{
+		final LispObject value = get(key);
+		return value != null ? value : NIL;
+	}
+
+	@Override
+	public void put(LispObject key, LispObject value)
+	{
+		this.put((SubLObject) key, (SubLObject) value);
+	}
+
+	@Override
+	public LispObject remove(LispObject key)
+	{
+		return (LispObject) this.remove((SubLObject) key);
+	}
+
+	@Override
+	public LispObject getWeakness()
+	{
+		return CommonSymbols.NIL.toLispObject();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispHashTable#ENTRIES()
+	 */
+	@Override
+	public LispObject ENTRIES()
+	{
+		return getEntries();
+	}
+
+	// Returns a list of (key . value) pairs.
+	@Override
+	public LispObject getEntries()
+	{
+		// No need to take out a read lock, for the same reason as MAPHASH
+		Iterator it = getEntrySetIterator();
+		LispObject list = NIL;
+		for (Iterator iterator = entrySet().iterator(); iterator.hasNext();)
+		{
+			Entry e = (Entry) iterator.next();
+			while (e != null)
+			{
+				list = new Cons(new Cons((SubLObject) e.getKey(), (SubLObject) e.getValue()), list);
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public LispObject MAPHASH(LispObject function)
+	{
+		// Don't take out a read lock: it can't be upgraded to a write
+		// lock, which would block the scenario where put() is called to
+		// set the value of the current entry
+		Iterator it = getEntrySetIterator();
+		for (Iterator iterator = entrySet().iterator(); iterator.hasNext();)
+		{
+			Entry e = (Entry) iterator.next();
+			while (e != null)
+			{
+				function.execute((LispObject) e.getKey(), (LispObject) e.getValue());
+			}
+		}
+		return NIL;
+	}
+
 	public LispObject getRehashThreshold()
 	{
+		Map<SubLObject, SubLObject> hash = hashMe();
 		if (true) throw new UnsupportedOperationException("Not supported yet.");
 		return null;
 	}
@@ -501,106 +621,10 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
 	@Override
 	public LispObject getRehashSize()
 	{
+	 
+		Map<SubLObject, SubLObject> hash = hashMe();
 		if (true) throw new UnsupportedOperationException("Not supported yet.");
 		return null;
-	}
-
-	@Override
-	public int getSize()
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return 0;
-	}
-
-	@Override
-	public int getCount()
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return 0;
-	}
-
-	@Override
-	public LispObject gethash(LispObject key)
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return null;
-	}
-
-	@Override
-	public LispObject gethash(LispObject key, LispObject defaultValue)
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return null;
-	}
-
-	@Override
-	public LispObject gethash1(LispObject key)
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return null;
-	}
-
-	@Override
-	public LispObject puthash(LispObject key, LispObject newValue)
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return null;
-	}
-
-	@Override
-	public LispObject remhash(LispObject key)
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return null;
-	}
-
-	@Override
-	public LispObject get(LispObject key)
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return null;
-	}
-
-	@Override
-	public void put(LispObject key, LispObject value)
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-
-	}
-
-	@Override
-	public LispObject remove(LispObject key)
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return null;
-
-	}
-
-	@Override
-	public LispObject ENTRIES()
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return null;
-	}
-
-	@Override
-	public LispObject getEntries()
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return null;
-	}
-
-	@Override
-	public LispObject MAPHASH(LispObject function)
-	{
-		if (true) throw new UnsupportedOperationException("Not supported yet.");
-		return null;
-	}
-
-	@Override
-	public LispObject getWeakness()
-	{
-		return CommonSymbols.NIL.toLispObject();
 	}
 
 }

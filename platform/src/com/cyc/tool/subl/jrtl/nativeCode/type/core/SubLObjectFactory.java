@@ -16,10 +16,10 @@ import java.util.Map;
 import java.util.Random;
 
 import org.armedbear.lisp.Cons;
-import org.armedbear.lisp.HashTable;
 import org.armedbear.lisp.Java;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispHashTable;
 import org.armedbear.lisp.SimpleString;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;

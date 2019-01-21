@@ -32,13 +32,19 @@ final public class SubLCharacter extends LispCharacter implements SubLObject, Co
 		return Character.toUpperCase(theChar);
 	}
 
-	public static SubLCharacter getCharFromName(SubLString name) {
+	public static SubLCharacter getCharFromName(SubLString name)
+	{
 		Object myChar = null;
 		myChar = LarKCCharacter.charNameToSubLCharacterMap_CaseSensitive.get(name);
-		if (myChar == null)
-			myChar = LarKCCharacter.charNameToSubLCharacterMap_CaseInsensitive.get(name.toLowerCase());
-		if (myChar == null)
-			Errors.error("Invalid character " + name);
+		if (myChar != null) return (SubLCharacter) myChar;
+		myChar = LarKCCharacter.charNameToSubLCharacterMap_CaseInsensitive.get(name.toLowerCase());
+		if (myChar != null) return (SubLCharacter) myChar;
+		int n = nameToChar(name.getStringValue());
+		if (n >= 0)
+		{
+			myChar = LispCharacter.getInstance((char) n);
+		}
+		if (myChar == null) Errors.error("Invalid character " + name);
 		return (SubLCharacter) myChar;
 	}
 
@@ -396,7 +402,9 @@ final public class SubLCharacter extends LispCharacter implements SubLObject, Co
 	}
 
 	//@Override
-	public String toStringSubL() {
+	public String toStringSubL()
+	{
+		if (mainName == null) { return charToName(value); }
 		return "#\\" + mainName;
 	}
 

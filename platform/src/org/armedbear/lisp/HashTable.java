@@ -251,7 +251,7 @@ public class HashTable
     /* (non-Javadoc)
 	 * @see org.armedbear.lisp.LispHashTable#gethash1(org.armedbear.lisp.LispObject)
 	 */
-    @Override
+  //  @Override
 	public LispObject gethash1(LispObject key) {
         final LispObject value = get(key);
         return value != null ? value : NIL;

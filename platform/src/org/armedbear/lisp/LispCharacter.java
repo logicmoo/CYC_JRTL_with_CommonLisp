@@ -666,9 +666,14 @@ abstract public class LispCharacter extends LispObject
     	return lc.name;
     }
     int i = (int)c;
-    if(i>0xffff) return String.format("U%08x",i).toUpperCase();
-    return String.format("U%04x",i).toUpperCase();
+    return charToHex(i);
   }
+
+    protected static String charToHex(int i)
+    {
+    	if(i>0xffff) return String.format("U%08x",i).toUpperCase();
+        return String.format("U%04x",i).toUpperCase();
+    }
 
   // ### char-name
   private static final Primitive CHAR_NAME =

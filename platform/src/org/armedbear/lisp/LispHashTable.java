@@ -1,6 +1,8 @@
 package org.armedbear.lisp;
 
-public interface LispHashTable
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+
+public interface LispHashTable //extends SubLObject
 {
 
 	LispObject getRehashSize();
@@ -19,7 +21,7 @@ public interface LispHashTable
 	// gethash key hash-table &optional default => value, present-p
 	LispObject gethash(LispObject key, LispObject defaultValue);
 
-	LispObject gethash1(LispObject key);
+//	LispObject gethash1(LispObject key);
 
 	LispObject puthash(LispObject key, LispObject newValue);
 

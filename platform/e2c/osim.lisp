@@ -17,6 +17,7 @@ tmpfs                 3.9G  272K  3.9G   1% /dev/shm
 (csetq *SMT* #$EverythingPSC)
 
 
+
 ;;;; use (sl:load "e2c/osim.lisp")
 (define FORCE-PRINT (string) 
  (print string) (force-output))
@@ -39,6 +40,10 @@ tmpfs                 3.9G  272K  3.9G   1% /dev/shm
 ;;; modifications to the knowledge base.  If T, any user is allowed to
 ;;; modify the knowledge base.
 (csetq *ALLOW-GUEST-TO-EDIT?* T)
+
+(INITIALIZE-OLD-CONSTANT-NAMES)
+
+
 
 ;;; Possible values: The name of a constant representing a Cyclist.  This is the
 ;;; default Cyclist initially logged into the system.
@@ -511,6 +516,11 @@ assertions in situations where two incompatible hypotheses will be constructed."
 (sim-assert `(#$comment ,(sim-col "Location") "An Instanced #$BPVLocation") *VocabularyMt*)
 (sim-assert `(#$comment ,(sim-col "Artifact") "An Instanced #$BPVArtifact") *VocabularyMt*)
 (sim-assert `(#$comment ,(sim-col "Item") "An Instanced #$BPVItem") *VocabularyMt*)
+
+(foc "simPropertyValue")
+
+(define sim-eval (&rest all) (format t "~&~s~&" (cons 'sim-eval all))
+    (ret `((#$simPropertyValue 1 2 4)(#$simPropertyValue 1 2 5))))
 
 (define defsim-function (name visibleMt)
     (clet ((const (sim-func name))
@@ -1088,7 +1098,6 @@ Also (#$simGenls ?CLASS (#$SimFacetFn \"classname\" ?STRING)") *VocabularyMt*)
      (ret result))))
 
 
-;;(define sim-eval (&rest all) (format t "~&~s~&" (cons 'sim-eval all))(ret `((#$simPropertyValue 1 2 4)(#$simPropertyValue 1 2 5))))
 
 (defparameter *WorldVocabularyMt* *VocabularyMt*) ;; CreationMt
 (defparameter *WorldStaticStateMt* *StaticStateMt*)

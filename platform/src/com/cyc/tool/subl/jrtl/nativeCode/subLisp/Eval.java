@@ -274,18 +274,16 @@ public class Eval implements SubLFile
 			{
 				Values.resetMultipleValues();
 				SubLObject pos = streams_high.file_position(stream, CommonSymbols.UNPROVIDED);
-				if(formCouunt>195) {
-					form = reader.read_ignoring_errors(digestStream, SubLNil.NIL, Eval.EOF_KEYWORD);
-					
-				} else {
-					
-					form = reader.read_ignoring_errors(digestStream, SubLNil.NIL, Eval.EOF_KEYWORD);
-				}
+				form = reader.read_ignoring_errors(digestStream, SubLNil.NIL, Eval.EOF_KEYWORD);
+
 				formCouunt++;
 				if (verbose > 0)
 				{
 
-					System.err.format(";;; %s(%d): %s%n", String.valueOf(SubLPackage.getCurrentPackage()), formCouunt, String.valueOf(form));
+					org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
+					String s = "null";
+					if(p!=null) s = p.getName();
+					System.err.format(";;; %s(%d): %s%n", s, formCouunt, String.valueOf(form));
 				}
 				{
 					SubLObject error = SubLProcess.nthMultipleValue(CommonSymbols.ONE_INTEGER);

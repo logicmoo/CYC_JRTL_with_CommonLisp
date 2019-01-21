@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.armedbear.lisp.LispObject;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -118,11 +120,11 @@ public class Hashtables implements SubLFile {
 			test = CommonSymbols.EQL;
 		SubLFunction func = test.getFunc();
 		BinaryFunction bff = BinaryFunction.makeInstance(func);
-		return SubLObjectFactory.makeHashtable(size.intValue(), bff);
+		return (LispObject) SubLObjectFactory.makeHashtable(size.intValue(), bff);
 	}
 
 	public static SubLObject maphash(SubLObject function, SubLObject table) {
-		return Errors.unimplementedMethod("Hashtables.maphash()");
+		return table.toHashtable().MAPHASH(function.toLispObject());
 	}
 
 	public static SubLObject next_hash_index(SubLObject table, SubLObject index) {

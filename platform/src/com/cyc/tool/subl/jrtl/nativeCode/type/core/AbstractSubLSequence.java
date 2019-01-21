@@ -6,6 +6,9 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.armedbear.lisp.LispHashTable;
+import org.armedbear.lisp.LispObject;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
@@ -301,7 +304,7 @@ public abstract class AbstractSubLSequence extends FromSubLisp implements SubLSe
 
 	public static SubLSequence removeDuplicatesFast(SubLSequence seq, BinaryFunction test, int start, int end) {
 		int size = seq.size();
-		SubLHashtable cache = SubLObjectFactory.makeHashtable((int) (size * 1.25) + 2, test);
+		LispHashTable cache = SubLObjectFactory.makeHashtable((int) (size * 1.25) + 2, test);
 		if (start < 0)
 			start = 0;
 		if (end < start)
@@ -317,11 +320,11 @@ public abstract class AbstractSubLSequence extends FromSubLisp implements SubLSe
 			int itemsToDeleteCount = 0;
 			for (int i = end - 1; i >= start; --i) {
 				cur = seq.get(i);
-				if (cache.get(cur) != null) {
+				if (cache.get((LispObject) cur) != null) {
 					itemsToDelete[i] = true;
 					++itemsToDeleteCount;
 				} else
-					cache.put(cur, cur);
+					cache.put((LispObject)cur, (LispObject)cur);
 			}
 			seq.deleteItems(itemsToDelete, itemsToDeleteCount);
 			itemsToDelete = null;
@@ -330,7 +333,7 @@ public abstract class AbstractSubLSequence extends FromSubLisp implements SubLSe
 			SubLList prevCons = SubLNil.NIL;
 			while (curCons != SubLNil.NIL) {
 				SubLObject cur2 = curCons.first();
-				if (cache.get(cur2) != null) {
+				if (cache.get((LispObject)cur2) != null) {
 					if (curCons == seq)
 						seq = curCons;
 					else if (prevCons != SubLNil.NIL)
@@ -338,7 +341,7 @@ public abstract class AbstractSubLSequence extends FromSubLisp implements SubLSe
 					else
 						Errors.error("We should never bet here");
 				} else {
-					cache.put(cur2, cur2);
+					cache.put((LispObject)cur2, (LispObject)cur2);
 					prevCons = curCons;
 				}
 				curCons = curCons.rest().toList();

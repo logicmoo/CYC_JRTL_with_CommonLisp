@@ -58,7 +58,7 @@ import org.armedbear.lisp.HashTable.HTComparator;
 // XXX individuals are invited to figure out how to use Java generics
 // to simplify/beautify things here, but I couldn't get the
 // WeakHashTable type to be parameterized on an enclosed type.
-public class WeakHashTable
+class WeakHashTable
     extends LispObject
     implements org.armedbear.lisp.protocol.Hashtable, LispHashTable
 {
@@ -330,7 +330,7 @@ public class WeakHashTable
     /* (non-Javadoc)
 	 * @see org.armedbear.lisp.WLispHashTable#gethash1(org.armedbear.lisp.LispObject)
 	 */
-    @Override
+    //@Override
 	public LispObject gethash1(LispObject key) {
         final LispObject value = get(key);
         return value != null ? value : NIL;

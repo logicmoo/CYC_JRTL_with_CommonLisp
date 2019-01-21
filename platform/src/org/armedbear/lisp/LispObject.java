@@ -943,7 +943,7 @@ public class LispObject extends AbstractSubLObject
 		}
 		if (Lisp.insideToString > 1) { return easyToString(); }
 		final Object o = Lisp.printingObject;
-		if (o == this) return "OVERFLOW: " + easyToString();
+		//if (o == this) return "OVERFLOW: " + easyToString();
 		final LispThread thread = LispThread.currentThread();
 		final SpecialBindingsMark mark = thread.markSpecialBindings();
 		try

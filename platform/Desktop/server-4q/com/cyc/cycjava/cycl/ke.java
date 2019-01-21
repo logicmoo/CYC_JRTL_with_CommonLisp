@@ -46,7 +46,7 @@ public final class ke extends SubLTranslatedFile
     @SubLTranslatedFile.SubL(source = "cycl/ke.lisp", position = 36314L)
     private static SubLSymbol $ke_add_assertion_original_textP$;
     @SubLTranslatedFile.SubL(source = "cycl/ke.lisp", position = 49504L)
-    private static SubLSymbol $old_constant_names_table$;
+    static SubLSymbol $old_constant_names_table$;
     @SubLTranslatedFile.SubL(source = "cycl/ke.lisp", position = 51634L)
     private static SubLSymbol $ke_assertion_edit_formula_find_func$;
     @SubLTranslatedFile.SubL(source = "cycl/ke.lisp", position = 51766L)

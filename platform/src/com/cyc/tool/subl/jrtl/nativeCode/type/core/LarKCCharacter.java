@@ -3,6 +3,8 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
+import org.armedbear.lisp.LispHashTable;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
@@ -191,19 +193,26 @@ public class LarKCCharacter {
 		int process(int p0, int p1, int p2);
 	}
 
-	private static void initChars() {
+	private static void initChars() {		
 		for (int i = 0, size = SubLCharacter.constants.length; i < size; ++i) {
 			SubLCharacter curChar = SubLCharacter.constants[i];
 			String[] curNames = SubLCharacter.constants[i].charNames;
 			boolean caseSensitive = i >= 65 && i <= 90 || i >= 97 && i <= 122;
-			SubLHashtable charMap = caseSensitive ? charNameToSubLCharacterMap_CaseSensitive
+			LispHashTable charMap = caseSensitive ? charNameToSubLCharacterMap_CaseSensitive
 					: charNameToSubLCharacterMap_CaseInsensitive;
+			String cnmae = curChar.toStringSubL();
+			if(cnmae!=null) {
+				SubLString mainName = SubLObjectFactory.makeString(caseSensitive ? cnmae : cnmae.toLowerCase());
+				charMap.put(mainName, curChar);
+			}
 			for (int j = 0, size2 = curNames.length; j < size2; ++j) {
 				SubLString curName = SubLObjectFactory
 						.makeString(caseSensitive ? curNames[j] : curNames[j].toLowerCase());
 				charMap.put(curName, curChar);
 			}
 		}
+		charNameToSubLCharacterMap_CaseSensitive.put(SubLObjectFactory.makeString("Space"),SubLCharacter.constants[32]);
+		charNameToSubLCharacterMap_CaseInsensitive.put(SubLObjectFactory.makeString("space"),SubLCharacter.constants[32]);
 	}
 
 	public static SubLCharacter getCharFromName(SubLString name) {
@@ -227,8 +236,8 @@ public class LarKCCharacter {
 	public static CharCompareDesc charLEIgnoringCaseDesc;
 	public static CharCompareDesc charGIgnoringCaseDesc;
 	public static CharCompareDesc charGEIgnoringCaseDesc;
-	static SubLHashtable charNameToSubLCharacterMap_CaseSensitive;
-	static SubLHashtable charNameToSubLCharacterMap_CaseInsensitive;
+	static LispHashTable charNameToSubLCharacterMap_CaseSensitive;
+	static LispHashTable charNameToSubLCharacterMap_CaseInsensitive;
 	public static int MAX_CHAR_CODE = 255;
 	static {
 		charE_Desc = new CharE_Desc();

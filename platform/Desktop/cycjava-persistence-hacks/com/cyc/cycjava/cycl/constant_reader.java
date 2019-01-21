@@ -131,6 +131,15 @@ public final class constant_reader extends SubLTranslatedFile
         if (constant_reader.NIL == constant) {
             constant = constant_handles.find_invalid_constant(name);
         }
+        if (constant_reader.NIL == constant) {
+        	  if (ke.NIL == ke.$old_constant_names_table$.getGlobalValue()) {
+        		  ke.initialize_old_constant_names();
+        	  }
+            constant = ke.old_constant_names(name).first();
+            if (constant_reader.NIL != constant) {
+                System.err.println(";;; using old constant! " + constant + " for " + name);
+            }
+        }
         return constant;
     }
     
