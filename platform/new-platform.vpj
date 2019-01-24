@@ -26635,9 +26635,12 @@
 		<F N="com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Main.launch"/>
 		<F N="COPYING"/>
 		<F N="customizations.lisp.in"/>
+		<F N="cyc.lisp"/>
 		<F N="easye-build.xml"/>
 		<F N="ec-build.xml"/>
 		<F N="Editor.launch"/>
+		<F N="From_Prolog.sh"/>
+		<F N="from_swipl.pl"/>
 		<F N="go-cyc.bat"/>
 		<F N="install-sh"/>
 		<F N="larkc-build.xml"/>

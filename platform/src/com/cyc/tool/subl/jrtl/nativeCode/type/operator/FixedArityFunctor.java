@@ -210,7 +210,7 @@ public abstract class FixedArityFunctor implements CommonSymbols {
 			return null;
 		}
 		if (targetFunction.isInterpreted()) {
-			return null;
+			//return null;
 		}
 		final int required = targetFunction.getRequiredArgCount();
 		if (required > arity) {
@@ -235,7 +235,8 @@ public abstract class FixedArityFunctor implements CommonSymbols {
 		final Method method = subLFunctionTyped.getMethod();
 
 		final String signature = "arity=" + arity + " req=" + required + " opt=" + optional + " &rest=" + allowsRest;
-		if(false) {
+		if(method==null) {
+			return null;
 		}
 		final ClassWriter cw = new ClassWriter(3);
 		final String cname = method.getName() + nextSerial();

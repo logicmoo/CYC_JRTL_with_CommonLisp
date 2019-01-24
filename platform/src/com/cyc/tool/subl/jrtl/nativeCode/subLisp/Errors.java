@@ -533,9 +533,13 @@ public class Errors extends SubLTrampolineFile {
 			return SubLNil.NIL;
 		if (SubLNil.NIL != Errors.$break_on_warnP$.getDynamicValue())
 			return sublisp_break(formatString);
+		try {
 		SubLObject warnString = PrintLow.format(SubLNil.NIL, formatString);
 		SubLString warnStringTyped = (SubLString) warnString;
 		showWarnMessage(warnStringTyped);
+		} catch (Throwable e) {
+			// TODO: handle exception
+		}
 		return SubLNil.NIL;
 	}
 
@@ -604,7 +608,7 @@ public class Errors extends SubLTrampolineFile {
 	public static Object cerrorLock;
 	private static List<Restarter> ERROR_RESTARTS;
 	private static boolean SHOW_WARNING_STACK_TRACES = false;
-	public static boolean isReady;
+	public static boolean isReady = false;
 	static {
 		me = new Errors();
 		errorLock = new Object();

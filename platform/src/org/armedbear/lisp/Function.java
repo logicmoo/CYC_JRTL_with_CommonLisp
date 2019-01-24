@@ -294,8 +294,9 @@ public abstract class Function extends Operator  implements SubLFunction
 
 	@Override
 	public SubLObject apply(SubLCons p0, SubLEnvironment p1) {
-		return getBinaryFunction().processItem(p0, p1);
-		//return Lisp.eval(cons, env);
+		final BinaryFunction binaryFunction = getBinaryFunction();
+		if (binaryFunction != null) { return binaryFunction.processItem(p0, p1); }
+		return execute((LispObject) p0, (Environment) p1);
 		//Errors.unimplementedMethod("Auto-generated method stub:  SubLFunction.apply");
 		//return null;
 	}

@@ -68,7 +68,7 @@ public final class Java
 		@Override
 		public LispObject execute(LispObject obj)
 		{
-			return obj instanceof JavaObject ? obj : new JavaObject(obj);
+			return obj instanceof JavaObject ? obj : JavaObject.createJavaObject(obj);
 		}
 	};
 
@@ -1306,8 +1306,8 @@ public final class Java
 		@Override
 		public LispObject execute(LispObject javaObject, LispObject intendedClass)
 		{
-			final Object o = javaObject.javaInstance();
 			final Class<?> c = javaClass(intendedClass);
+			final Object o = javaObject.javaInstance();
 			try
 			{
 				return JavaObject.getInstance(o, c);

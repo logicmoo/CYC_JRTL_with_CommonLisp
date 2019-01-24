@@ -56,10 +56,14 @@ public class Tcp extends SubLTrampolineFile {
 				Dynamic.bind(Tcp.$remote_address$, ipAddress);
 				Dynamic.bind(Tcp.$retain_client_socketP$, SubLNil.NIL);
 				socketStream = SubLObjectFactory.makeSocketStream(connectionSocket);
-				connectionSocket.setSoTimeout(0);
-				SystemCurrent.setIn(connectionSocket.getInputStream());
-				SystemCurrent.setOut(new PrintStream(connectionSocket.getOutputStream()));
-				SystemCurrent.setErr(new PrintStream(connectionSocket.getOutputStream()));
+				connectionSocket.setSoTimeout(500);
+				if((connectionSocket.getLocalPort()%100)==1) {
+					connectionSocket.setSoTimeout(0);
+					SystemCurrent.setIn(connectionSocket.getInputStream());
+					SystemCurrent.setOut(new PrintStream(connectionSocket.getOutputStream()));
+					SystemCurrent.setErr(new PrintStream(connectionSocket.getOutputStream()));
+				}
+
 				
 				Functions.funcall(func, socketStream, socketStream);
 			} catch (Exception e) {

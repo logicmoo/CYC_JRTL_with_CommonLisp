@@ -81,7 +81,7 @@ public class Parser/*@bgen(jjtree)*/implements ParserTreeConstants, ParserConsta
                 }
                 for(; i< args.length; i++) {
                         Reader in = new FileReader(args[i]);
-                        Parser parser = new Parser(in);
+                        Parser parser = new Parser(in, false);
                         parser.setRetainComments(true);
                         while( !parser.Line()/*eof*/ )
                                 if ( print )
@@ -5867,8 +5867,8 @@ void VariableDeclaratorId() #VariableDeclaratorId :
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
-  public Parser(java.io.InputStream stream) {
-    jj_input_stream = new JavaCharStream(stream, 1, 1);
+  public Parser(java.io.InputStream stream, boolean closeable) {
+    jj_input_stream = new JavaCharStream(stream, 1, 1, closeable);
     token_source = new ParserTokenManager(jj_input_stream);
     token = new Token();
     jj_ntk = -1;
@@ -5888,8 +5888,8 @@ void VariableDeclaratorId() #VariableDeclaratorId :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  public Parser(java.io.Reader stream) {
-    jj_input_stream = new JavaCharStream(stream, 1, 1);
+  public Parser(java.io.Reader stream, boolean closeable) {
+    jj_input_stream = new JavaCharStream(stream, 1, 1, closeable);
     token_source = new ParserTokenManager(jj_input_stream);
     token = new Token();
     jj_ntk = -1;

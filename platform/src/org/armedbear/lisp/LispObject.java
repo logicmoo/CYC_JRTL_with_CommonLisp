@@ -813,7 +813,6 @@ public class LispObject extends AbstractSubLObject
    */
   public String princToString()
   {
-	  //if(Main.isNoDebug()) return null;
       LispThread thread = LispThread.currentThread();
       SpecialBindingsMark mark = thread.markSpecialBindings();
       try {
@@ -908,7 +907,7 @@ public class LispObject extends AbstractSubLObject
 		final SpecialBindingsMark mark = thread.markSpecialBindings();
 		List set = printingObjectR.get();
 		int index = set.indexOf(this);
-		if (index >= 0) { return "#=(" + index + "#|" + easyToString() + "|#)=#"; }
+		if (index >= 0) { return "#=( " + index + " #|" + easyToString() + "|#)=#"; }
 		try
 		{
 			//Symbol.PRINT_CIRCLE.setSymbolValue(T);

@@ -712,7 +712,7 @@ abstract public class SubLString extends AbstractString  implements SubLObject, 
 
 	@Override
 	public String toString() {
-		return super.toString();
+		return getStringValue();
 	}
 
 	@Override

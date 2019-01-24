@@ -395,6 +395,8 @@ call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--eval','
 call_main(Args):- call_jmain('org.armedbear.lisp.Main',['--load','abclc-rc.lisp'| Args]).
 call_main(Args):- call_jmain('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',['--load','abclc-rc.lisp'| Args]).
 
+:- dynamic(user:sync/3).
+
 /*
 */
 bshwc:-  

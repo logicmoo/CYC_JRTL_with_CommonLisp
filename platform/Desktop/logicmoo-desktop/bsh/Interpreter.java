@@ -156,6 +156,7 @@ public class Interpreter
 
 	/** Control the verbose printing of results for the show() command. */
 	private boolean showResults = true;
+	private Object ret;
 
 	/* --- End instance data --- */
 
@@ -180,7 +181,8 @@ public class Interpreter
     {
 		//System.out.println("New Interpreter: "+this +", sourcefile = "+sourceFileInfo );
 
-		parser = new Parser( in );
+    	boolean closeable = false;
+		parser = new Parser( in , closeable);
 		long t1=System.currentTimeMillis();
         this.in = in;
         this.out = out;
@@ -479,7 +481,7 @@ public class Interpreter
                     if(DEBUG)
                         node.dump(">");
 
-                    Object ret = node.eval( callstack, this );
+                    this.ret = node.eval( callstack, this );
 
 					// sanity check during development
 					if ( callstack.depth() > 1 )

@@ -76,6 +76,7 @@ public class JavaCharStream
   protected int maxNextCharInd = 0;
   protected int nextCharInd = -1;
   protected int inBuf = 0;
+private boolean closeable;
 
   protected void ExpandBuff(boolean wrapAround)
   {
@@ -135,7 +136,7 @@ public class JavaCharStream
         if ((i = inputStream.read(nextCharBuf, maxNextCharInd,
                                             4096 - maxNextCharInd)) == -1)
         {
-           inputStream.close();
+           if(this.closeable) inputStream.close();
            throw new java.io.IOException();
         }
         else
@@ -380,12 +381,12 @@ public int getLine() {
   }
 
   public JavaCharStream(java.io.Reader dstream,
-                 int startline, int startcolumn, int buffersize)
+                 int startline, int startcolumn, int buffersize, boolean closeable)
   {
     inputStream = dstream;
     line = startline;
     column = startcolumn - 1;
-
+    this.closeable = closeable;
     available = bufsize = buffersize;
     buffer = new char[buffersize];
     bufline = new int[buffersize];
@@ -394,14 +395,14 @@ public int getLine() {
   }
 
   public JavaCharStream(java.io.Reader dstream,
-                                        int startline, int startcolumn)
+                                        int startline, int startcolumn, boolean closeable)
   {
-     this(dstream, startline, startcolumn, 4096);
+     this(dstream, startline, startcolumn, 4096, closeable);
   }
 
-  public JavaCharStream(java.io.Reader dstream)
+  public JavaCharStream(java.io.Reader dstream, boolean closeable)
   {
-     this(dstream, 1, 1, 4096);
+     this(dstream, 1, 1, 4096, closeable);
   }
   public void ReInit(java.io.Reader dstream,
                  int startline, int startcolumn, int buffersize)
@@ -434,20 +435,20 @@ public int getLine() {
      ReInit(dstream, 1, 1, 4096);
   }
   public JavaCharStream(java.io.InputStream dstream, int startline,
-  int startcolumn, int buffersize)
+  int startcolumn, int buffersize, boolean closeable)
   {
-     this(new java.io.InputStreamReader(dstream), startline, startcolumn, 4096);
+     this(new java.io.InputStreamReader(dstream), startline, startcolumn, 4096, closeable);
   }
 
   public JavaCharStream(java.io.InputStream dstream, int startline,
-                                                           int startcolumn)
+                                                           int startcolumn, boolean closeable)
   {
-     this(dstream, startline, startcolumn, 4096);
+     this(dstream, startline, startcolumn, 4096, closeable);
   }
 
-  public JavaCharStream(java.io.InputStream dstream)
+  public JavaCharStream(java.io.InputStream dstream, boolean closeable)
   {
-     this(dstream, 1, 1, 4096);
+     this(dstream, 1, 1, 4096, closeable);
   }
 
   public void ReInit(java.io.InputStream dstream, int startline,

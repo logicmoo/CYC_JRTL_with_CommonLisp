@@ -106,6 +106,6 @@
 ;; (prolog-eval-lobject 'rn)
 ;; (prolog-query-once "rn")
 
-(osim)
+'(osim)
 
 

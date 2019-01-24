@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
@@ -67,6 +68,7 @@ import org.armedbear.lisp.Nil;
 import org.armedbear.lisp.Operator;
 import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Packages;
+import org.armedbear.lisp.ProcessingTerminated;
 import org.armedbear.lisp.SimpleString;
 import org.armedbear.lisp.SpecialOperator;
 import org.armedbear.lisp.Symbol;
@@ -413,6 +415,35 @@ public class BeanShellCntrl
 	static public Object bsh_eval(String statements) throws EvalError
 	{
 		return ensureBSH().eval(statements);
+	}
+
+	@LispMethod
+	static public Object bsh_repl() throws EvalError
+	{
+		bsh.Interpreter interp = ensureBSH();
+		interp = new bsh.Interpreter(new InputStreamReader(SystemCurrent.in)
+		{
+			@Override
+			public void close() throws IOException
+			{
+				// TODO Auto-generated method stub
+				//	super.close();
+			}
+
+		}, SystemCurrent.out, SystemCurrent.err, true, //
+				masterNamespace(), interp, "bsh_repl");
+		interp.setExitOnEOF(false);
+		Main.noExit = true;
+		try
+		{
+			interp.run();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+
+		return true;
 	}
 
 	@LispMethod
@@ -1349,8 +1380,16 @@ public class BeanShellCntrl
 		boolean was_noExit = Main.noExit;
 		try
 		{
-
-			org.armedbear.lisp.Interpreter.createNewLispInstance(System.in, System.out, new File(".").getAbsolutePath(), Version.getVersion(), false).run();
+			try
+			{
+				Main.noExit = true;
+				org.armedbear.lisp.Interpreter.createNewLispInstance(System.in, System.out, // 
+						new File(".").getAbsolutePath(), Version.getVersion(), false).run();
+			} catch ( org.armedbear.lisp.ProcessingTerminated e)
+			{
+				//e.printStackTrace();
+				// TODO: handle exception
+			}
 			return Symbol.STAR.getSymbolValue();
 			// return Lisp.PACKAGE_TPL.findAccessibleSymbol("TOP-LEVEL-LOOP").execute();
 		} finally
