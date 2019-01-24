@@ -42,7 +42,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLAlienObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLBigDecimal;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 
@@ -55,17 +54,6 @@ public final class JavaObject extends LispObject {
         this.intendedClass =
             obj != null ? Java.maybeBoxClass(obj.getClass()) : null;
     }
-
-
-	@Override
-	public boolean isAlien() {
-		return true;
-	}
-
-	@Override
-	public Object getAlien() {
-		return obj;
-	}
 
     public static final Symbol JAVA_CLASS_JCLASS = PACKAGE_JAVA.intern("JAVA-CLASS-JCLASS");
     public static final Symbol JAVA_CLASS = PACKAGE_JAVA.intern("JAVA-CLASS");
@@ -184,7 +172,7 @@ public final class JavaObject extends LispObject {
      */
     public final static LispObject getInstance(Object obj, Class<?> intendedClass) {
         if (obj == null)
-            return new JavaObject(null, intendedClass);
+            return new JavaObject(null);
 
         if (obj instanceof LispObject)
             return (LispObject)obj;
