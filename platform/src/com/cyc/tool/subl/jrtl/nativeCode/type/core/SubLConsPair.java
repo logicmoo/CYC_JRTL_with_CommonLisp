@@ -1467,7 +1467,12 @@ abstract public class SubLConsPair extends LispObject implements SubLCons, SubLL
 				SubLOperator operator = operatorSymbol.toSymbol().getFunction();
 				if (operator.isSpecial()) {
 					SpecialOperator func = (SpecialOperator) operator.toSpecialOperator();
-					SubLObject result = func.execute((LispObject) cons, (Environment) env);
+					SubLObject useCons = cons; 
+					boolean wasSubLispMacro = func.isSubLispFunction();
+					if(!wasSubLispMacro) {
+						useCons = cons.rest();
+					}
+					SubLObject result = func.execute((LispObject) useCons, (Environment) env);
 					return result;
 				} else if (operator.isMacroOperator()) {
 					SubLMacro expander = operator.toMacro();

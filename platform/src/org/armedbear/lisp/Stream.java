@@ -349,6 +349,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
 	public static Reader wrapStream(final Reader bear)
 	{
+		if (true) return bear;
 		final Reader lockObject = new Reader()
 		{
 			@Override
@@ -411,6 +412,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	}
 	public  static InputStream wrapStream(final InputStream bear)
 	{
+		if (true) return bear;
 		final InputStream lockObject = new InputStream()
 		{
 			@Override
@@ -468,6 +470,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	}
 	public  static OutputStream wrapStream(final OutputStream bear)
 	{
+		if (true) return bear;
 		final OutputStream lockObject = new OutputStream()
 		{
 

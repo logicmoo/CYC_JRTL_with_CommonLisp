@@ -53,7 +53,7 @@ public final class jmethod_return_type extends Primitive
         if (arg instanceof JavaObject) {
             Object method = ((JavaObject)arg).getObject();
             if (method instanceof Method)
-            return JavaObject.createJavaObject(((Method)method).getReturnType());
+            return new JavaObject(((Method)method).getReturnType());
         }
         return error(new LispError(arg.princToString() + " does not designate a Java method."));
     }

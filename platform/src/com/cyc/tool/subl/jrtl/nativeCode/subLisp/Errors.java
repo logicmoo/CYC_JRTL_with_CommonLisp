@@ -608,7 +608,7 @@ public class Errors extends SubLTrampolineFile {
 	public static Object cerrorLock;
 	private static List<Restarter> ERROR_RESTARTS;
 	private static boolean SHOW_WARNING_STACK_TRACES = false;
-	public static boolean isReady = false;
+	public static boolean isReady;
 	static {
 		me = new Errors();
 		errorLock = new Object();

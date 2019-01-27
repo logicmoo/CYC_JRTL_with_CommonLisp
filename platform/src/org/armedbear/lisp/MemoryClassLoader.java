@@ -41,7 +41,7 @@ import java.util.*;
 public class MemoryClassLoader extends JavaClassLoader {
 
     private final HashMap<String, JavaObject> hashtable = new HashMap<String, JavaObject>();
-    private final JavaObject boxedThis = JavaObject.createJavaObject(this);
+    private final JavaObject boxedThis = new JavaObject(this);
     private final String internalNamePrefix;
 
     public MemoryClassLoader() {

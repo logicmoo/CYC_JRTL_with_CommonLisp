@@ -31,6 +31,11 @@ public class SubLSpecialOperatorImpl extends SpecialOperator implements SubLOper
 //		this.evaluationFunction = null;
 //	}
 
+
+	public boolean isSubLispFunction() {
+		return true;
+	}
+	
 	@Override
 	public boolean isSpecialRestOnly() {
 		return false;

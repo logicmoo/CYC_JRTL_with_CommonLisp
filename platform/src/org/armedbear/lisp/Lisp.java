@@ -52,8 +52,10 @@ import org.jpl7.JPL;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
@@ -553,6 +555,9 @@ private static SubLException conditionToSubLException(LispObject condition) {
   public static final LispObject eval(LispObject obj)
 
   {
+	  if (Main.isSubLisp()) {
+		  return (LispObject) obj.eval(SubLEnvironment.currentEnvironment());
+	  }
     return eval(obj, Environment.newEnvironment(), LispThread.currentThread());
   }
 
@@ -607,7 +612,8 @@ private static SubLException conditionToSubLException(LispObject condition) {
     else if (obj instanceof Cons)
       {
         LispObject first = ((Cons)obj).car;
-        if (first instanceof Symbol)
+        final LispObject cdr = ((Cons)obj).cdr;
+		if (first instanceof Symbol)
           {
             LispObject fun = env.lookupFunction(first);
 
@@ -617,7 +623,7 @@ private static SubLException conditionToSubLException(LispObject condition) {
                   if (!sampling)
                     fun.incrementCallCount();
                 // Don't eval args!
-                return  ((Symbol)first).execute(((Cons)obj).cdr, env);
+                return  ((Symbol)first).execute(cdr, env);
                 		//fun.execute(((Cons)obj).cdr, env);
               }
             if (fun instanceof MacroObject)
@@ -629,14 +635,14 @@ private static SubLException conditionToSubLException(LispObject condition) {
                 return eval(obj, env, thread);
               }
             return evalCall(fun != null ? fun : first,
-                            ((Cons)obj).cdr, env, thread);
+                            cdr, env, thread);
           }
         else
           {
             if (first instanceof Cons && first.car() == Symbol.LAMBDA)
               {
                 Closure closure = new LambdaClosure((Cons) first, env);
-                return evalCall(closure, ((Cons)obj).cdr, env, thread);
+                return evalCall(closure, cdr, env, thread);
               }
             else
               return program_error("Illegal function object: "

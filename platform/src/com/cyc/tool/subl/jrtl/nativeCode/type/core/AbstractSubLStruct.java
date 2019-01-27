@@ -32,11 +32,6 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	//public org.jpl7.Term termRef;
 	public AbstractSubLStruct()
 	{
-		Object thiz = this;
-		if (thiz instanceof Condition) return;
-		if (thiz instanceof Stream) return;
-		if (thiz instanceof GenericFunction) return;
-
 	}
 
 	protected Layout layout;
@@ -393,6 +388,13 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	public boolean isVector()
 	{
 		return false;
+	}
+
+	public boolean isTracked()
+	{
+		if(layout==null) return false;
+		SubLStructDecl decl = getStructDecl();
+		return (decl.isTrackStructInstance());
 	}
 
 }

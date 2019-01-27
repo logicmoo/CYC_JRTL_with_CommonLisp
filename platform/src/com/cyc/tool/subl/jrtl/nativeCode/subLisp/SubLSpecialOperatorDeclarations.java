@@ -1133,7 +1133,10 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 	{
 		SubLObject result = SubLNil.NIL;
 		while (forms.hasNext())
-			result = forms.nextSubLObject().eval(env);
+		{
+			final SubLObject nextForm = forms.nextSubLObject();
+			result = nextForm.eval(env);
+		}
 		return result;
 	}
 

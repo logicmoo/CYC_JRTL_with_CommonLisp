@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import org.armedbear.lisp.SocketStream;
@@ -27,10 +28,7 @@ public class SubLSocketStream extends SocketStream implements SubLOutputBinarySt
 		this.socket = socket;
 		host = socket.getInetAddress().getCanonicalHostName();
 		try {
-			socket.setSoLinger(true, 50);
-			socket.setReceiveBufferSize(4194304);
-			socket.setTcpNoDelay(true);
-			socket.setSoTimeout(250);
+			setDefaultSocketOptions();
 		} catch (IOException ioe) {
 			Errors.error("Unable to open socket " + socket + ".", ioe);
 		}
@@ -45,16 +43,21 @@ public class SubLSocketStream extends SocketStream implements SubLOutputBinarySt
 			this.host = host;
 			SocketAddress sockAddr = new InetSocketAddress(host, port);
 			(socket = new Socket()).connect(sockAddr, timeout);
-			socket.setSoLinger(true, 50);
-			socket.setReceiveBufferSize(4194304);
-			socket.setTcpNoDelay(true);
-			socket.setSoTimeout(250);
+			setDefaultSocketOptions();
 		} catch (UnknownHostException uhe) {
 			Errors.error("Got unknown host: " + host, uhe);
 		} catch (IOException ioe) {
 			Errors.error("Unable to open socket " + host + "@" + port + ".", ioe);
 		}
 		init();
+	}
+
+	private void setDefaultSocketOptions() throws SocketException
+	{
+		socket.setSoLinger(true, 50);
+		socket.setReceiveBufferSize(4194304);
+		socket.setTcpNoDelay(true);
+		socket.setSoTimeout(250);
 	}
 
 	public static void main(String[] args) {

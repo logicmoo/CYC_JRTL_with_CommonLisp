@@ -71,6 +71,7 @@ import org.armedbear.lisp.Packages;
 import org.armedbear.lisp.ProcessingTerminated;
 import org.armedbear.lisp.SimpleString;
 import org.armedbear.lisp.SpecialOperator;
+import org.armedbear.lisp.SpecialOperators;
 import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.Version;
 import org.globus.cog.abstraction.impl.file.webdav.InteractiveWebDAVSecurityContextImpl;
@@ -723,7 +724,7 @@ public class BeanShellCntrl
 			@Override
 			public SubLObject call() throws Exception
 			{
-				return cyc_eval_progn(new Cons(str), SubLEnvironment.currentEnvironment());
+				return cyc_progn(new Cons(str), SubLEnvironment.currentEnvironment());
 			}
 		});
 	}
@@ -762,7 +763,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public SubLObject cyc_eval_progn(SubLCons specialForm, SubLEnvironment env)
+	static public SubLObject cyc_progn(SubLCons specialForm, SubLEnvironment env)
 	{
 		init_subl();
 		if (!SubLMain.commonSymbolsOK) throw new RuntimeException("SubLMain not yet started");
@@ -814,6 +815,20 @@ public class BeanShellCntrl
 
 	@LispMethod
 	static public LispObject cyc_repl() throws InterruptedException
+	{
+		SystemCurrent.setupIO();
+		Thread takenFrom = SystemCurrent.takeOwnerShip();
+		try
+		{
+			return cyc_repl_no_suspend();
+		} finally
+		{
+			SystemCurrent.releaseOwnerShip();
+		}
+	}
+
+	@LispMethod
+	static public LispObject cyc_repl_no_suspend() throws InterruptedException
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		init_subl();
@@ -1116,31 +1131,33 @@ public class BeanShellCntrl
 			if (inited_cyc) return;
 			inited_cyc = true;
 		}
-
-		boolean wasSubLisp = Main.isSubLisp();
-		Main.setSubLisp(true);
-		try
+		synchronized (StartupInitLock)
 		{
-			SubLPackage prevPackage = Lisp.getCurrentPackage();
+			boolean wasSubLisp = Main.isSubLisp();
+			Main.setSubLisp(true);
 			try
 			{
-				init_subl();
-				SubLMain.handleInits();
-				SubLMain.initializeTranslatedSystems();
-				inited_cyc = true;
-				inited_cyc_complete = true;
-			} catch (Throwable e)
-			{
-				inited_cyc_complete = false;
-				throw JVMImpl.doThrow(e);
+				SubLPackage prevPackage = Lisp.getCurrentPackage();
+				try
+				{
+					init_subl();
+					SubLMain.handleInits();
+					SubLMain.initializeTranslatedSystems();
+					inited_cyc = true;
+					inited_cyc_complete = true;
+				} catch (Throwable e)
+				{
+					inited_cyc_complete = false;
+					throw JVMImpl.doThrow(e);
+				} finally
+				{
+
+					SubLPackage.setCurrentPackage(prevPackage);
+				}
 			} finally
 			{
-
-				SubLPackage.setCurrentPackage(prevPackage);
+				Main.setSubLisp(wasSubLisp);
 			}
-		} finally
-		{
-			Main.setSubLisp(wasSubLisp);
 		}
 
 	}
@@ -1148,8 +1165,11 @@ public class BeanShellCntrl
 	@LispMethod
 	static public void init_cyc_server()
 	{
-		init_kb();
-		init_server();
+		synchronized (StartupInitLock)
+		{
+			init_kb();
+			init_server();
+		}
 	}
 
 	@LispMethod
@@ -1160,28 +1180,31 @@ public class BeanShellCntrl
 			if (inited_kb) return;
 			inited_kb = true;
 		}
-
-		boolean wasSubLisp = Main.isSubLisp();
-		Main.setSubLisp(true);
-		try
+		synchronized (StartupInitLock)
 		{
-			SubLPackage prevPackage = Lisp.getCurrentPackage();
+			boolean wasSubLisp = Main.isSubLisp();
+			Main.setSubLisp(true);
 			try
 			{
-				init_cyc();
-				SubLPackage.setCurrentPackage("CYC");
-				Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
-			} catch (Throwable e)
-			{
-				throw JVMImpl.doThrow(e);
+				SubLPackage prevPackage = Lisp.getCurrentPackage();
+				try
+				{
+					init_cyc();
+					SubLPackage.setCurrentPackage("CYC");
+					Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
+				} catch (Throwable e)
+				{
+					throw JVMImpl.doThrow(e);
+				} finally
+				{
+					SubLPackage.setCurrentPackage(prevPackage);
+				}
 			} finally
 			{
-				SubLPackage.setCurrentPackage(prevPackage);
+				Main.setSubLisp(wasSubLisp);
 			}
-		} finally
-		{
-			Main.setSubLisp(wasSubLisp);
 		}
+
 	}
 
 	@LispMethod
@@ -1191,31 +1214,35 @@ public class BeanShellCntrl
 		{
 			if (inited_cyc_server) return;
 		}
-		boolean wasSubLisp = Main.isSubLisp();
-		Main.setSubLisp(true);
-		try
+		synchronized (StartupInitLock)
 		{
-			SubLPackage prevPackage = Lisp.getCurrentPackage();
+			boolean wasSubLisp = Main.isSubLisp();
+			Main.setSubLisp(true);
 			try
 			{
-				init_cyc();
-				SubLPackage.setCurrentPackage("CYC");
-				Eval.eval("(sl:load \"init/services-init.lisp\")");
-				SubLFiles.initialize("eu.larkc.core.orchestrator.LarkcInit");
-				SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
-				LarkcInit.initializeLarkc();
-				LarKCHttpServer.start_sparql_server();
-				inited_cyc_server = true;
-			} catch (Throwable e)
-			{
-				throw JVMImpl.doThrow(e);
+				SubLPackage prevPackage = Lisp.getCurrentPackage();
+				try
+				{
+					init_cyc();
+					SubLPackage.setCurrentPackage("CYC");
+					Eval.eval("(sl:load \"init/services-init.lisp\")");
+					SubLFiles.initialize("eu.larkc.core.orchestrator.LarkcInit");
+					SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
+					LarkcInit.initializeLarkc();
+					LarKCHttpServer.start_sparql_server();
+					inited_cyc_server = true;
+					PrologSync.setPrologReady(true);
+				} catch (Throwable e)
+				{
+					throw JVMImpl.doThrow(e);
+				} finally
+				{
+					SubLPackage.setCurrentPackage(prevPackage);
+				}
 			} finally
 			{
-				SubLPackage.setCurrentPackage(prevPackage);
+				Main.setSubLisp(wasSubLisp);
 			}
-		} finally
-		{
-			Main.setSubLisp(wasSubLisp);
 		}
 	}
 
@@ -1227,26 +1254,29 @@ public class BeanShellCntrl
 			if (inited_subl) return;
 			inited_subl = true;
 		}
-		init_swipl();
-		SubLMain.commonSymbolsOK = true;
-		boolean b = SubLMain.isInitialized();
-		if (b) { return; }
-		boolean wasSubLisp = Main.isSubLisp();
-		boolean wasshouldRunInBackground = SubLMain.shouldRunInBackground;
-		SubLMain me = SubLMain.me;
-		SubLPackage prevPackage = Lisp.getCurrentPackage();
-		SubLPackage.initPackages();
-		Main.setSubLisp(true);
-		try
+		synchronized (StartupInitLock)
 		{
-			SubLMain.shouldRunInBackground = true;
-			SubLMain.initializeSubL(new String[0]);
-			ensureMainReader();
-		} finally
-		{
-			SubLPackage.setCurrentPackage(prevPackage);
-			Main.setSubLisp(wasSubLisp);
-			SubLMain.shouldRunInBackground = wasshouldRunInBackground;
+			init_swipl();
+			SubLMain.commonSymbolsOK = true;
+			boolean b = SubLMain.isInitialized();
+			if (b) { return; }
+			boolean wasSubLisp = Main.isSubLisp();
+			boolean wasshouldRunInBackground = SubLMain.shouldRunInBackground;
+			SubLMain me = SubLMain.me;
+			SubLPackage prevPackage = Lisp.getCurrentPackage();
+			SubLPackage.initPackages();
+			Main.setSubLisp(true);
+			try
+			{
+				SubLMain.shouldRunInBackground = true;
+				SubLMain.initializeSubL(new String[0]);
+				ensureMainReader();
+			} finally
+			{
+				SubLPackage.setCurrentPackage(prevPackage);
+				Main.setSubLisp(wasSubLisp);
+				SubLMain.shouldRunInBackground = wasshouldRunInBackground;
+			}
 		}
 		return;
 	}
@@ -1300,27 +1330,31 @@ public class BeanShellCntrl
 	static public LispObject j_desktop()
 	{
 
-		if (editor == null) editor = Editor.currentEditor();
+		synchronized (StartupInitLock)
+		{
 
-		if (noGUI) return org.armedbear.lisp.JavaObject.getInstance(editor);
-		//if (true && false) return org.armedbear.lisp.JavaObject.getInstance(editor);
+			if (editor == null) editor = Editor.currentEditor();
 
-		if (editor == null) Editor.startJ(new String[] { "--no-session", "--debug", "--force-new-instance" }, false, false);
-		if (editor == null) editor = Editor.currentEditor();
-		if (editor == null) Errors.unimplementedMethod("BeanShellCntrl.j_desktop");
-		addSingleton(editor);
-		return org.armedbear.lisp.JavaObject.getInstance(editor);
+			if (noGUI) return org.armedbear.lisp.JavaObject.getInstance(editor);
+			//if (true && false) return org.armedbear.lisp.JavaObject.getInstance(editor);
+
+			if (editor == null) Editor.startJ(new String[] { "--no-session", "--debug", "--force-new-instance" }, false, false);
+			if (editor == null) editor = Editor.currentEditor();
+			if (editor == null) Errors.unimplementedMethod("BeanShellCntrl.j_desktop");
+			addSingleton(editor);
+			return org.armedbear.lisp.JavaObject.getInstance(editor);
+		}
 	}
 
 	@LispMethod
 	static public LispObject lisp_eval(LispObject args)
 	{
 		Environment env = Environment.currentLispEnvironment();
-		return lisp_eval_progn(args, env);
+		return lisp_progn(args, env);
 	}
 
 	@LispMethod
-	static public LispObject lisp_eval_progn(LispObject args, Environment env)
+	static public LispObject lisp_progn(LispObject args, Environment env)
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		Main.setSubLisp(false);
@@ -1357,7 +1391,7 @@ public class BeanShellCntrl
 		}
 		try
 		{
-			return lisp_eval_progn(args, env);
+			return lisp_progn(args, env);
 		} finally
 		{
 			if (!wasNoDebug)
@@ -1385,7 +1419,7 @@ public class BeanShellCntrl
 				Main.noExit = true;
 				org.armedbear.lisp.Interpreter.createNewLispInstance(System.in, System.out, // 
 						new File(".").getAbsolutePath(), Version.getVersion(), false).run();
-			} catch ( org.armedbear.lisp.ProcessingTerminated e)
+			} catch (org.armedbear.lisp.ProcessingTerminated e)
 			{
 				//e.printStackTrace();
 				// TODO: handle exception
@@ -1433,6 +1467,13 @@ public class BeanShellCntrl
 	{
 		return (new org.jpl7.Query("call", arg)).oneSolution();
 
+	}
+
+	@LispMethod
+	static public LispObject prolog_unify(LispObject arg) throws InterruptedException
+	{
+		cyc_repl();
+		return Lisp.list(arg);
 	}
 
 	@LispMethod
@@ -1729,6 +1770,7 @@ public class BeanShellCntrl
 				{
 					oneSolution("assert(swicli:is_ikvm)");
 				}
+				PrologSync.setPrologReady(true);
 			} catch (UnsatisfiedLinkError e)
 			{
 				noPrologJNI = true;

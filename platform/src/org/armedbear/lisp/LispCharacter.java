@@ -48,7 +48,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 
 abstract public class LispCharacter extends LispObject
 {
-
+	
 
   public static final SubLCharacter[] constants;
   public static final CharHashMap<SubLCharacter> lispChars;

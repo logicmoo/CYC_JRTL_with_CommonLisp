@@ -48,6 +48,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil.NIL;
 
 public class PrologSync extends SubLTrampolineFile
 {
@@ -71,48 +72,7 @@ public class PrologSync extends SubLTrampolineFile
 		synchronized (PrologSync.laterList)
 		{
 
-			PrologSync.laterList.add(new Map.Entry()
-			{
-				@Override
-				public boolean equals(Object obj)
-				{
-					return obj == struct;
-				}
-
-				@Override
-				public Object getKey()
-				{
-					// TODO Auto-generated method stub
-					if (true)
-					{
-						Errors.unimplementedMethod("Auto-generated method stub:  PrologSync.$local$.getKey");
-					}
-					return null;
-				}
-
-				@Override
-				public Object getValue()
-				{
-					return struct;
-				}
-
-				@Override
-				public int hashCode()
-				{
-					return System.identityHashCode(struct);
-				}
-
-				@Override
-				public Object setValue(Object value)
-				{
-					// TODO Auto-generated method stub
-					if (true)
-					{
-						Errors.unimplementedMethod("Auto-generated method stub:  PrologSync.$local$.setValue");
-					}
-					return null;
-				}
-			});
+			PrologSync.laterList.add(new SyncSoon(struct));
 		}
 	}
 
@@ -269,7 +229,10 @@ public class PrologSync extends SubLTrampolineFile
 	{
 		// if (Main.noBSH) return;
 		final String className = getClassName(struct);
-		if (!isTracked(className)) { return IGNORED; }
+		if (!isTracked(className))
+		{ //
+			return IGNORED;
+		}
 		if (className == null) { return UNREADY; }
 
 		final int fc = struct.getFieldCount();
@@ -278,7 +241,7 @@ public class PrologSync extends SubLTrampolineFile
 		{
 			final SubLObject fv = struct.getSlotArrayElement(i);
 			if (fv == null) { return UNREADY; }
-			if (fv == NIL)
+			if (fv == SubLNil.NIL)
 			{
 				numNils++;
 			}
@@ -310,7 +273,6 @@ public class PrologSync extends SubLTrampolineFile
 
 	}
 
-
 	private static Term extractedProlog(AbstractSubLStruct struct, final String className, long serial)
 
 	{
@@ -320,6 +282,7 @@ public class PrologSync extends SubLTrampolineFile
 			try
 			{
 				final Term shouldBe = toProlog(className, struct, new LinkedList());
+				//String s = shouldBe.toString();
 				if (was != shouldBe)
 				{
 					struct.termRef = shouldBe;
@@ -328,7 +291,7 @@ public class PrologSync extends SubLTrampolineFile
 				try
 				{
 					prologAssert(className, serial, shouldBe);
-					String s = shouldBe.toString();
+
 				} catch (Throwable e)
 				{
 					e.printStackTrace();
@@ -559,14 +522,17 @@ public class PrologSync extends SubLTrampolineFile
 	private static void doReadyListNow()
 	{
 		needsDone = 0;
-		List doNow = new LinkedList();
+		List doNow;
+		int start;
 		synchronized (PrologSync.laterList)
 		{
+			start = laterList.size();
+			if (start == 0) return;
+			 doNow = new LinkedList();
 			laterList.addAll(doNow);
 			laterList.clear();
 		}
 
-		int start = doNow.size();
 		int addLater = 0;
 		for (Iterator iterator = doNow.iterator(); iterator.hasNext();)
 		{
@@ -582,6 +548,7 @@ public class PrologSync extends SubLTrampolineFile
 
 	private static boolean doSyncStruct(AbstractSubLStruct struct)
 	{
+		if (true) return false;
 		if (Lisp.cold || !Lisp.initialized || !prologReady || !Main.trackStructs || Main.disablePrologSync)
 		{
 			addLater(struct);
@@ -619,21 +586,67 @@ public class PrologSync extends SubLTrampolineFile
 		{
 			if (false)
 			{
-				PrologSync.syncedTypes.add("CONSTANT");
-				PrologSync.syncedTypes.add("ASSERTION-CONTENT");
-				// PrologSync.syncedTypes.add("ASSERTION-HANDLES");
-				PrologSync.syncedTypes.add("NART");
-				PrologSync.syncedTypes.add("DEDUCTION");
+				addSyncedType("CONSTANT");
+				// addSyncedType("ASSERTION-HANDLES");
+				addSyncedType("NART");
+				addSyncedType("DEDUCTION");
 			}
-			PrologSync.syncedTypes.add("CX");
-			PrologSync.syncedTypes.add("EPISODE");
-			PrologSync.syncedTypes.add("EPISODIC-RULE");
-			PrologSync.syncedTypes.add("OB");
-			PrologSync.syncedTypes.add("OBR");
+			addSyncedType("ASSERTION-CONTENT");
+			addSyncedType("CX");
+			addSyncedType("EPISODE");
+			addSyncedType("EPISODIC-RULE");
+			addSyncedType("OB");
+			addSyncedType("OBR");
 
-			PrologSync.syncedTypes.add("SUBLFILE");
+			addSyncedType("SUBLFILE");
 		}
 
+	}
+
+	protected static final class SyncSoon implements Map.Entry
+	{
+		private final AbstractSubLStruct struct;
+
+		protected SyncSoon(AbstractSubLStruct struct)
+		{
+			this.struct = struct;
+		}
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (obj instanceof SyncSoon) { return ((SyncSoon) obj).struct == struct; }
+			return obj == struct;
+		}
+
+		@Override
+		public Object getKey()
+		{
+			return struct;
+		}
+
+		@Override
+		public Object getValue()
+		{
+			return struct;
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return System.identityHashCode(struct);
+		}
+
+		@Override
+		public Object setValue(Object value)
+		{
+			// TODO Auto-generated method stub
+			if (true)
+			{
+				Errors.unimplementedMethod("Auto-generated method stub:  PrologSync.$local$.setValue");
+			}
+			return null;
+		}
 	}
 
 	public interface IPrologifiable
@@ -781,12 +794,19 @@ public class PrologSync extends SubLTrampolineFile
 
 			if (was == value || value == SubLNil.NIL) return;
 		}
+		if (was == value && was == SubLNil.NIL) return;
+		if (!structureObject.isTracked()) return;
 		if (slotNum != pingAt && slotNum == 0)
 		{
 			if (was == value) return;
 		}
 		doSyncStruct(structureObject);
 
+	}
+
+	private static void addSyncedType(String string)
+	{
+		PrologSync.syncedTypes.add(string);
 	}
 
 	static
@@ -828,7 +848,7 @@ public class PrologSync extends SubLTrampolineFile
 	{
 
 		if (o == null) return JPL.JNULL;
-		if (o == Lisp.NIL) return JPL.LIST_NIL;
+		if (o == SubLNil.NIL) return JPL.LIST_NIL;
 		AbstractSubLObject ass = null;
 		if (o instanceof AbstractSubLObject)
 		{

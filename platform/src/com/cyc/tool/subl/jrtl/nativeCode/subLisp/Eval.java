@@ -13,6 +13,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
 import org.armedbear.lisp.Keyword;
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Main;
 import org.globus.cog.gridface.impl.desktop.interfaces.AccessActionProxy;
 import org.logicmoo.system.BeanShellCntrl;
@@ -151,7 +153,7 @@ public class Eval implements SubLFile
 				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED));
 	}
 
-	public static SubLObject eval(SubLObject form)
+	public static SubLObject eval_as_sublisp(SubLObject form)
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		try
@@ -167,6 +169,12 @@ public class Eval implements SubLFile
 
 		}
 
+	}
+	public static SubLObject eval(SubLObject form)
+	{
+		boolean wasSubLisp = Main.isSubLisp();
+		if(wasSubLisp) return form.eval(SubLEnvironment.currentEnvironment());
+		return Lisp.eval((LispObject) form);
 	}
 
 	public static SubLObject function_information(SubLObject function, SubLObject environment)

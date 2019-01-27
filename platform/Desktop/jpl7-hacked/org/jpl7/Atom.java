@@ -222,7 +222,7 @@ public class Atom extends Term
 		if ("string".equals(type)) return "\"" + value.replace("\"", "\\\"") + "\"";
 
 		if ("text".equals(type)) { return (JPL.isSimpleName(value) ? value : "'" + value.replaceAll("'", "\\'") + "'"); }
-
+		if(isListNil()) return "[]";
 		return "BLOB?" + type + " " + (JPL.isSimpleName(value) ? value : "'" + value.replaceAll("'", "\\'") + "'");
 
 	}

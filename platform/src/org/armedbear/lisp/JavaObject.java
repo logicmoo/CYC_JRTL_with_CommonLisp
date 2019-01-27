@@ -42,10 +42,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLAlienObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLBigDecimal;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 
-public final class JavaObject extends LispObject {
+public final class JavaObject extends SubLAlienObject {
     final Object obj;
     private final Class<?> intendedClass;
 
@@ -172,7 +173,7 @@ public final class JavaObject extends LispObject {
      */
     public final static LispObject getInstance(Object obj, Class<?> intendedClass) {
         if (obj == null)
-            return new JavaObject(null);
+            return new JavaObject(null, intendedClass);
 
         if (obj instanceof LispObject)
             return (LispObject)obj;

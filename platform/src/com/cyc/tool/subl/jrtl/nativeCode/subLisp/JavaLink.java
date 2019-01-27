@@ -184,6 +184,10 @@ public class JavaLink extends SubLTrampolineFile {
 			result = String.class;
 		else if (subLObject instanceof SubLCharacter)
 			result = Character.TYPE;
+		else if (subLObject instanceof AbstractSubLFloat)
+			result = Double.TYPE;
+		else if (subLObject instanceof AbstractSubLIntegerBignum)
+			result = Integer.TYPE;
 		else if (subLObject instanceof SubLLongBignum)
 			result = Long.TYPE;
 		else if (subLObject instanceof SubLBigIntBignum)
@@ -192,10 +196,6 @@ public class JavaLink extends SubLTrampolineFile {
 			result = BigDecimal.class;
 		else if (subLObject instanceof SubLVector)
 			result = ArrayList.class;
-		else if (subLObject instanceof AbstractSubLFloat)
-			result = Double.TYPE;
-		else if (subLObject instanceof AbstractSubLIntegerBignum)
-			result = Integer.TYPE;
 		else if (subLObject instanceof AbstractSubLList)
 			result = ArrayList.class;
 		else {

@@ -210,7 +210,7 @@ public abstract class FixedArityFunctor implements CommonSymbols {
 			return null;
 		}
 		if (targetFunction.isInterpreted()) {
-			//return null;
+			return null;
 		}
 		final int required = targetFunction.getRequiredArgCount();
 		if (required > arity) {

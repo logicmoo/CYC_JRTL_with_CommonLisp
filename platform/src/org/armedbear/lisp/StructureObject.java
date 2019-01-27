@@ -49,6 +49,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 public class StructureObject extends SubLStructInterpreted implements SubLStruct
 {
 
+
 	@Override
 	public boolean equalp(SubLObject obj)
 	{
@@ -71,7 +72,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	protected void setStructureClass(Symbol symbol)
 	{
 
-		StructureClass structureClass = (StructureClass) LispClass.findClass(symbol/*, true*/); // Might return null.
+		SlotClass structureClass = (SlotClass) LispClass.findClass(symbol/*, true*/); // Might return null.
 		setName(symbol);
 		if (structureClass == null)
 		{
@@ -82,10 +83,6 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		else
 		{
 			this.structureClass = structureClass;
-			if (Main.trackStructs)
-			{
-				PrologSync.addThis(this);
-			}
 		}
 	}
 

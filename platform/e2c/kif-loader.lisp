@@ -39,7 +39,9 @@
 ;; cunwind-protect hozed multiple-value-lists so thats the reason for the 'prognvals' weirdness
 
 
-(defvar *kif-to-cycl-table-plist* '("Nima-Gns-KS" #$NGA-Gns-KS "forall" #$forAll "exists" #$thereExists "=>" #$implies "<=>" #$equiv "isa" #$isa "instance-of" #$isa "listof" #$TheList "true" #$True "false" #$False))
+(defvar *kif-to-cycl-table-plist* '("Nima-Gns-KS" #$NGA-Gns-KS "forall" #$forAll "exists" #$thereExists
+        "=>" #$implies "<=>" #$equiv "isa" #$isa "instance-of" #$isa "listof" #$TheList
+                                      "true" #$True "false" #$False))
 ;;(defvar *T-PACKAGE* (make-package :T))
 
 (define kif-break (&rest data)

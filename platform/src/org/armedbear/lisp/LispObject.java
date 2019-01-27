@@ -967,7 +967,8 @@ public class LispObject extends AbstractSubLObject
 		}
 	}
 
-	public String printReadableObject(boolean quoted) {
+	public String printReadableObject(boolean quoted) {		
+		
 		/*
 		 *  if *print-readably* is true, 
 		 *  printing proceeds as if *print-escape*, *print-array*, and *print-gensym* were also true, 

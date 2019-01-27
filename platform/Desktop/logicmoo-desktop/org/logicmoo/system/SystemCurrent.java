@@ -49,21 +49,20 @@ public class SystemCurrent
 	public static PrintStream originalSystemOut = System.out;
 	public static PrintStream originalSystemErr = System.err;
 	public static Thread originalSystemThread = Thread.currentThread();
-	public static InOutErr originalInOutErr = new InOutErr()
+	public static InOutErr originalInOutErr = new InOutErr("originalInOutErr " + originalSystemThread.getName());
+	static
 	{
-		{
-			this.in = originalSystemIn;
-			this.out = originalSystemOut;
-			this.err = originalSystemErr;
-		}
-	};
+		originalInOutErr.in = originalSystemIn;
+		originalInOutErr.out = originalSystemOut;
+		originalInOutErr.err = originalSystemErr;
+	}
 
 	static ThreadLocal<InOutErr> SystemInOutErr = new ThreadLocal<InOutErr>()
 	{
 		@Override
 		protected InOutErr initialValue()
 		{
-			return new InOutErr();
+			return new InOutErr(Thread.currentThread().getName());
 		}
 	};
 
@@ -91,29 +90,123 @@ public class SystemCurrent
 	{
 		if (in instanceof In)
 		{
-			SystemInOutErr.get().in = originalSystemIn;
+			currentIO().in = originalSystemIn;
 			return;
 		}
 		InputStream is2 = underlyingStream(in);
 		if (is2 instanceof In)
 		{
-			SystemInOutErr.get().in = originalSystemIn;
+			currentIO().in = originalSystemIn;
 			return;
 		}
-		SystemInOutErr.get().in = in;
+		currentIO().in = in;
 	}
+
+	public static Thread takeOwnerShip()
+	{
+		final Thread currentThread = Thread.currentThread();
+		final InOutErr inOutErr = currentIO();
+		if (inOutErr.in != null && inOutErr.in != originalSystemIn) { return currentThread; }
+		Thread was;
+		synchronized (justSuspended)
+		{
+			was = currentOwner;
+			if (currentOwner == null)
+			{
+				currentOwner = currentThread;
+			}
+			else if (currentOwner == currentThread)
+			{
+
+			}
+			else
+			{
+				currentOwner.suspend();
+				justSuspended.set(currentOwner);
+				currentOwner = currentThread;
+			}
+		}
+		return was;
+	}
+
+	public static void releaseOwnerShip()
+	{
+		final Thread currentThread = Thread.currentThread();
+		final InOutErr inOutErr = currentIO();
+		if (inOutErr.in != originalSystemIn) { return; }
+
+		synchronized (justSuspended)
+		{
+			final Thread suspendedWhom = justSuspended.get();
+			if (currentOwner == null)
+			{
+				if (suspendedWhom != null)
+				{
+					suspendedWhom.resume();
+					currentOwner = suspendedWhom;
+				}
+				return;
+			}
+			else if (currentOwner == currentThread)
+			{
+				currentOwner = null;
+				if (suspendedWhom != null)
+				{
+					suspendedWhom.resume();
+					currentOwner = suspendedWhom;
+				}
+				return;
+			}
+			else
+			{
+				if (suspendedWhom != null)
+				{
+					suspendedWhom.resume();
+					currentOwner = suspendedWhom;
+				}
+				return;
+			}
+
+		}
+	}
+
+	static Thread currentOwner = null;
+	static ThreadLocal<Thread> justSuspended = new ThreadLocal<Thread>();
 
 	private static InputStream currentSystemInput()
 	{
-		InputStream is = SystemCurrent.SystemInOutErr.get().in;
-		if(is instanceof In) return originalSystemIn;
+		final Thread currentThread = Thread.currentThread();
+		final InOutErr inOutErr = currentIO();
+
+		if (originalInOutErr == inOutErr)
+		{
+			synchronized (justSuspended)
+			{
+				if (currentOwner == null)
+				{
+					currentOwner = currentThread;
+				}
+				else if (currentOwner != currentThread)
+				{
+					//
+					throw new Error("Take owership first!");
+				}
+			}
+		}
+		InputStream is = inOutErr.in;
+		if (is instanceof In) return originalSystemIn;
 		if (is == null)
 		{
-			if (Thread.currentThread() == originalSystemThread) { return originalSystemIn; }
+			if (currentThread == originalSystemThread) { return originalSystemIn; }
 		}
 		InputStream is2 = underlyingStream(is);
-		if(is2 instanceof In) return originalSystemIn;
+		if (is2 instanceof In) return originalSystemIn;
 		return is;
+	}
+
+	private static InOutErr currentIO()
+	{
+		return SystemInOutErr.get();
 	}
 
 	private static InputStream underlyingStream(final InputStream is)
@@ -197,16 +290,16 @@ public class SystemCurrent
 	{
 		if (out instanceof Out)
 		{
-			SystemInOutErr.get().out = originalSystemOut;
+			currentIO().out = originalSystemOut;
 			return;
 		}
 		OutputStream is2 = underlyingStream(out);
 		if (is2 instanceof Out)
 		{
-			SystemInOutErr.get().out = originalSystemOut;
+			currentIO().out = originalSystemOut;
 			return;
 		}
-		SystemInOutErr.get().out = out;
+		currentIO().out = out;
 	}
 
 	public static final ThreadLocalPrintStream tlout = new ThreadLocalPrintStream()
@@ -214,14 +307,14 @@ public class SystemCurrent
 		@Override
 		public OutputStream getOutputStream()
 		{
-			OutputStream is = SystemCurrent.SystemInOutErr.get().out;
-			if(is instanceof Out) return originalSystemOut;
+			OutputStream is = currentIO().out;
+			if (is instanceof Out) return originalSystemOut;
 			if (is == null)
 			{
 				if (Thread.currentThread() == originalSystemThread) { return originalSystemOut; }
 			}
 			OutputStream is2 = underlyingStream(is);
-			if(is2 instanceof Out) return originalSystemOut;
+			if (is2 instanceof Out) return originalSystemOut;
 			return is;
 		}
 	};
@@ -250,16 +343,16 @@ public class SystemCurrent
 	{
 		if (err instanceof Out)
 		{
-			SystemInOutErr.get().err = originalSystemErr;
+			currentIO().err = originalSystemErr;
 			return;
 		}
 		OutputStream is2 = underlyingStream(err);
 		if (is2 instanceof Out)
 		{
-			SystemInOutErr.get().err = err;
+			currentIO().err = err;
 			return;
 		}
-		SystemInOutErr.get().err = err;
+		currentIO().err = err;
 	}
 
 	public static final ThreadLocalPrintStream tlerr = new ThreadLocalPrintStream()
@@ -267,14 +360,14 @@ public class SystemCurrent
 		@Override
 		public OutputStream getOutputStream()
 		{
-			OutputStream is = SystemCurrent.SystemInOutErr.get().out;
-			if(is instanceof Out) return originalSystemErr;
+			OutputStream is = currentIO().out;
+			if (is instanceof Out) return originalSystemErr;
 			if (is == null)
 			{
 				if (Thread.currentThread() == originalSystemThread) { return originalSystemErr; }
 			}
 			OutputStream is2 = underlyingStream(is);
-			if(is2 instanceof Out) return originalSystemErr;
+			if (is2 instanceof Out) return originalSystemErr;
 			return is;
 		}
 	};
@@ -423,6 +516,19 @@ public class SystemCurrent
 
 class InOutErr
 {
+	private String name;
+
+	public InOutErr(String name)
+	{
+		this.name = name;
+	}
+
+	@Override
+	public String toString()
+	{
+		return name;
+	}
+
 	transient InputStream in;
 	transient PrintStream out;
 	transient PrintStream err;

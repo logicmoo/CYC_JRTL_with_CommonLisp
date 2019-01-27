@@ -217,7 +217,7 @@ public class JavaClassLoader extends URLClassLoader {
     private static final Primitive GET_DEFAULT_CLASSLOADER = new pf_get_default_classloader();
     private static final class pf_get_default_classloader extends Primitive {
         
-        private final LispObject defaultClassLoader = JavaObject.createJavaObject(new JavaClassLoader());
+        private final LispObject defaultClassLoader = new JavaObject(new JavaClassLoader());
 
         pf_get_default_classloader() {
             super("get-default-classloader", PACKAGE_JAVA, true, "");
@@ -240,12 +240,12 @@ public class JavaClassLoader extends URLClassLoader {
 
         @Override
         public LispObject execute() {
-            return JavaObject.createJavaObject(new JavaClassLoader(getCurrentClassLoader()));
+            return new JavaObject(new JavaClassLoader(getCurrentClassLoader()));
         }
 
         @Override
         public LispObject execute(LispObject parent) {
-            return JavaObject.createJavaObject(new JavaClassLoader((ClassLoader) parent.javaInstance(ClassLoader.class)));
+            return new JavaObject(new JavaClassLoader((ClassLoader) parent.javaInstance(ClassLoader.class)));
         }
     };
 
@@ -260,7 +260,7 @@ public class JavaClassLoader extends URLClassLoader {
 
         @Override
         public LispObject execute() {
-            return execute(JavaObject.createJavaObject(getCurrentClassLoader()));
+            return execute(new JavaObject(getCurrentClassLoader()));
         }
 
         @Override
@@ -284,7 +284,7 @@ public class JavaClassLoader extends URLClassLoader {
         }
         @Override 
         public LispObject execute() {
-            return JavaObject.createJavaObject(getCurrentClassLoader());
+            return new JavaObject(getCurrentClassLoader());
         }
     };
         
@@ -300,7 +300,7 @@ public class JavaClassLoader extends URLClassLoader {
 
         @Override
         public LispObject execute(LispObject jarOrJars) {
-            return execute(jarOrJars, JavaObject.createJavaObject(getCurrentClassLoader()));
+            return execute(jarOrJars, new JavaObject(getCurrentClassLoader()));
         }
 
         @Override
@@ -340,9 +340,9 @@ public class JavaClassLoader extends URLClassLoader {
             for(URL u : ((URLClassLoader) o).getURLs()) {
                 list = list.push(new Pathname(u));
             }
-            return new Cons(JavaObject.createJavaObject(o), list.nreverse());
+            return new Cons(new JavaObject(o), list.nreverse());
         } else {
-            return JavaObject.createJavaObject(o);
+            return new JavaObject(o);
         }
     }
 

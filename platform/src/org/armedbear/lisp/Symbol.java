@@ -38,6 +38,7 @@ import static org.armedbear.lisp.Lisp.*;
 import org.semanticweb.kaon2.api.owl.axioms.SubObjectPropertyOf;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -87,7 +88,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	//boolean slValueMode = !clValueMode;
 	private int subLID = INVALID_BINDING_INDEX;
 	protected SubLFiles.VariableAccessMode accessModeVar = VariableAccessMode.UNDECLARED;
-	private transient SubLObject value = SubLSymbol.UNBOUND;
+	protected transient SubLObject value = SubLSymbol.UNBOUND;
 	private transient ThreadLocal<SubLObject> threadLocalValue = null;
 	private int identityHashCode = -1;
     ///boolean barrier = true;
@@ -147,7 +148,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 		setTLValue(newValue);
 	}
 
-	public SubLObject getTLValue()
+	public SubLObject getTLValue0()
 	{
 		if(USE_THREAD_LOCALS)if (threadLocalValue != null)
 		{
@@ -156,7 +157,15 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 		}
 		return value;
 	}
-
+	
+	private SubLObject getTLValue()
+	{
+		if(!SubLMain.commonSymbolsOK) {
+			return getTLValue0();
+		}
+		return getValueSL(false);
+	}
+	
 	private void checkChange(SubLObject value)
 	{
 		SubLObject waz = getTLValue();
@@ -268,7 +277,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	}
 
 
-	private SubLObject getValueSL(boolean throh) {
+	protected SubLObject getValueSL(boolean canThrow) {
 		if (accessModeVar == VariableAccessMode.UNDECLARED) {
 			SubLEnvironment slenv = SubLEnvironment.currentEnvironment();
 			if(slenv!=null)
@@ -281,10 +290,11 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 			SubLObject result = SubLProcess.currentSubLThread().bindingsList[subLID];
 			if (result != SubLSymbol.UNBOUND) return result;
 		}
+		
 		//SubLObject result = isConstantSymbol() ? value : value;
-		SubLObject result = this.getTLValue();
+		SubLObject result = this.getTLValue0();
 		if (result != SubLSymbol.UNBOUND) return result;
-		if(!throh) return null;
+		if(!canThrow) return null;
 		unboundError();
 		return null;
 
@@ -301,13 +311,10 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	}
 
 	@Override
-	public boolean isFunctionSpec() {
-		if ((function != null && function.isFunction()))
-			return true;
-		if ((function != null && function.isFunction()))
-			return true;
-
-			return false;
+	public boolean isFunctionSpec()
+	{
+		if ((function != null && function.isFunction())) return true;
+		return false;
 	}
 
 	@Override

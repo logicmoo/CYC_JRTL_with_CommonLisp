@@ -109,6 +109,9 @@ abstract public class Layout extends LispObject
 	protected SubLSymbol testFunction;
 	public static Map<SubLSymbol, Integer> structNameToIDMap;
 	public static int idCounter;
+	
+	public boolean isTracked;
+
 
 	public static int getTypeID(SubLSymbol typeName)
 	{

@@ -70,7 +70,7 @@ public final class Java_v1
 
         @Override
         public LispObject execute(LispObject obj) {
-            return obj instanceof JavaObject ? obj : JavaObject.createJavaObject(obj);
+            return obj instanceof JavaObject ? obj : new JavaObject(obj);
         }
     };
 

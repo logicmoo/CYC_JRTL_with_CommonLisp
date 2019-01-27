@@ -56,15 +56,15 @@ public class Tcp extends SubLTrampolineFile {
 				Dynamic.bind(Tcp.$remote_address$, ipAddress);
 				Dynamic.bind(Tcp.$retain_client_socketP$, SubLNil.NIL);
 				socketStream = SubLObjectFactory.makeSocketStream(connectionSocket);
-				connectionSocket.setSoTimeout(500);
-				if((connectionSocket.getLocalPort()%100)==1) {
+				final int port100 = connectionSocket.getLocalPort() % 20;
+				if(port100==1) {
 					connectionSocket.setSoTimeout(0);
 					SystemCurrent.setIn(connectionSocket.getInputStream());
 					SystemCurrent.setOut(new PrintStream(connectionSocket.getOutputStream()));
 					SystemCurrent.setErr(new PrintStream(connectionSocket.getOutputStream()));
+				} else {
+					connectionSocket.setSoTimeout(30000);
 				}
-
-				
 				Functions.funcall(func, socketStream, socketStream);
 			} catch (Exception e) {
 				Errors.error("Error detected on socket connection: " + socketStream, e);
@@ -235,10 +235,10 @@ public class Tcp extends SubLTrampolineFile {
 	@Override
 	public void runTopLevelForms() {
 	}
-
-	public static SubLObject open_tcp_stream(SubLObject globalValue, SubLObject globalValue2) {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  Tcp.open_tcp_stream");
-		return null;
-	}
+//
+//	public static SubLObject open_tcp_stream(SubLObject globalValue, SubLObject globalValue2) {
+//		// TODO Auto-generated method stub
+//		if(true) Errors.unimplementedMethod("Auto-generated method stub:  Tcp.open_tcp_stream");
+//		return null;
+//	}
 }

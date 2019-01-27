@@ -65,6 +65,8 @@ abstract public class SubLNil extends Symbol implements SubLList, SubLSymbol, Su
 
 	public SubLNil() {
 		super("NIL",Lisp.PACKAGE_CL);
+		value = this;
+		initializeConstant(this);
 	}
 
 	public static boolean toBool(SubLObject object) {
@@ -651,6 +653,9 @@ abstract public class SubLNil extends Symbol implements SubLList, SubLSymbol, Su
 	public void setAccessMode(SubLFiles.VariableAccessMode accessMode) {
 	}
 
+    protected SubLObject getValueSL(boolean canThrow) {
+    	return this;
+    }
 	@Override
 	public void setConstantValue(SubLObject value) {
 		Errors.error("Nihil ex nihil; can't set NIL.");

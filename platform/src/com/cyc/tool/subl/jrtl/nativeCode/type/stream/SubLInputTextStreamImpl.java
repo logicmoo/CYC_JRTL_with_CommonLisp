@@ -50,11 +50,11 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 	SubLInputTextStreamImpl(InputStream inStream) {
 		super(Keyword.TEXT_KEYWORD_CHARACTER, Keyword.INPUT_KEYWORD, Keyword.ERROR,
 				Keyword.ERROR);
-		
-		this.in = wrapStream(inStream);
-		InputStream javaBufferedInStream = wrapStream(inStream);//		javaBufferedInStream = new BufferedInputStream(inStream);
+		inStream = wrapStream(inStream);
+		this.in = inStream;
+		InputStream javaBufferedInStream = inStream;//		javaBufferedInStream = new BufferedInputStream(inStream);
 		pushbackStream = new PushbackInputStream(javaBufferedInStream);
-		reader = new PushbackReader(wrapStream(new InputStreamReader(wrapStream(inStream))));
+		reader = new PushbackReader(new InputStreamReader(inStream));
 	}
 
 	SubLInputTextStreamImpl(InputStream inStream, int start) {
@@ -72,8 +72,8 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 			Errors.error("Unable to open stream for socket; " + socket, ioe);
 		}
 		InputStream javaBufferedInStream = in;//javaBufferedInStream = new BufferedInputStream(in);
-		pushbackStream = new PushbackInputStream(wrapStream(javaBufferedInStream));
-		reader = new PushbackReader(new InputStreamReader(wrapStream(javaBufferedInStream)));
+		pushbackStream = new PushbackInputStream(javaBufferedInStream);
+		reader = new PushbackReader(new InputStreamReader(javaBufferedInStream));
 	}
 
 	SubLInputTextStreamImpl(String filename, SubLSymbol ifExists, SubLSymbol ifNotExists) {
@@ -152,6 +152,9 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 		while (!isClosed()) {
 			try {
 				ready = pushbackStream.available() > 0;
+				if(!ready && isWindows()) {
+					ready = true;
+				}
 			} catch (Exception e) {
 				return -1;
 			}
@@ -175,6 +178,13 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 				return -1;
 		}
 		return -1;
+	}
+
+	private boolean isWindows()
+	{
+		// TODO Auto-generated method stub
+		String os = System.getProperty("os.name");
+		return os.contains("Win");
 	}
 
 	@Override

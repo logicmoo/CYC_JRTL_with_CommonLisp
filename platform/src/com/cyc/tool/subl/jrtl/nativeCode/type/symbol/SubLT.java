@@ -31,7 +31,7 @@ public class SubLT extends Symbol implements SubLObject, SubLBoolean, SubLSymbol
 		super(T_SYMBOL_NAME, Lisp.PACKAGE_CL);
 		Symbol.T = this;
 		Lisp.PACKAGE_CL.addSymbol(this);
-		Lisp.PACKAGE_CL.export(this);
+		Lisp.PACKAGE_CL.export(this);		
 		initializeConstant(this);
 	}
 
@@ -126,7 +126,9 @@ public class SubLT extends Symbol implements SubLObject, SubLBoolean, SubLSymbol
 	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
 		return this;
 	}
-
+    protected SubLObject getValueSL(boolean canThrow) {
+    	return this;
+    }
 	@Override
 	public void forceGlobalValue(SubLObject newValue) {
 		Errors.error("T is immutable.");

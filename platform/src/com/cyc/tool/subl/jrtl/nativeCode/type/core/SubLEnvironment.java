@@ -127,7 +127,7 @@ abstract public class SubLEnvironment extends FromSubLisp {
 				return currentBinding.getValue();
 		}
 		if (outerEnvironment == null)
-			return ((Symbol)var).getTLValue();
+			return ((Symbol)var).getTLValue0();
 		return outerEnvironment.lookupBinding(var);
 	}
 

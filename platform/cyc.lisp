@@ -56,8 +56,6 @@
      (cyc:init-server) ;; Starts All of CYC
  )
 
-#+CYC-HTML
-(sl:csetq cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
 
 ;; makes constant names slightly friendlier to prolog
 ;; #+CYC-EXTERNAL
@@ -68,6 +66,10 @@
 ;; CYC Server
 (let ((*PACKAGE* *PACKAGE*))
    (cyc:init-cyc-server))
+
+#+CYC-HTML
+(sl:csetq cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
+(defparameter cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
 
 
 '(ss)
@@ -96,6 +98,13 @@
 
 (cl-imports-cyc)
 (cyc-imports-cl)
+
+
+
+
+;;#+USE-CYC
+;;(let ((*PACKAGE* (find-package :CYC))) (sl:load "e2c/larkc_prolog.lisp"))
+
 
 
 ;; ABCL JSS:     (#"setText" my-label "The Larch")

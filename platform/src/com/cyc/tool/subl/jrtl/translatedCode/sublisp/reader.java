@@ -2187,7 +2187,6 @@ public class reader extends SubLTranslatedFile {
 					reader.$throw_end_of_file_p$.rebind(_prev_bind_0, thread);
 				}
 			} catch (Throwable ccatch_env_var) {
-				
 				reader_error_p = Errors.handleThrowable(ccatch_env_var, reader.$sym106$READER_ERROR);
 			} finally {
 				thread.throwStack.pop();

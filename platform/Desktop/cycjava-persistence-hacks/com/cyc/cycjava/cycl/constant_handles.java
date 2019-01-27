@@ -1100,6 +1100,9 @@ public final class constant_handles extends SubLTranslatedFile
     public static SubLObject reader_make_constant_shell(final SubLObject constant_name) {
         return make_constant_shell(constant_name, (SubLObject)constant_handles.T);
     }
+    public static SubLObject reader_make_constant_shell(final String constant_name) {
+        return reader_make_constant_shell(SubLObjectFactory.makeString(constant_name));
+    }
     
     @SubLTranslatedFile.SubL(source = "cycl/constant-handles.lisp", position = 17339L)
     public static SubLObject make_bogus_constant_shell(final SubLObject name) {

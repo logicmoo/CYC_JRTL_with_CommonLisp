@@ -137,8 +137,9 @@ public class JRef extends Term {
 	public String toString() {
 		if (object==this)
 		// org.jpl7.fli.Prolog.object_to_tag(ref)
-		return "<jref>(0x???????)"+System.identityHashCode(this); // WRONG
+			return "<jref>(0x???????)"+System.identityHashCode(this); // WRONG
 		// org.jpl7.fli.Prolog.object_to_tag(ref)
+		if(true) return "<jref>(0x???????)"+System.identityHashCode(this); // WRONG
 		return "<jref "+object+">";
 	}
 

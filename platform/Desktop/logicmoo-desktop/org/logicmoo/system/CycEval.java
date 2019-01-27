@@ -74,7 +74,7 @@ public final class CycEval
 		@Override
 		public LispObject execute(LispObject args, Environment env)
 		{
-			return BeanShellCntrl.lisp_eval_progn(args, env);
+			return BeanShellCntrl.lisp_progn(args, env);
 		}
 	}
 
@@ -98,11 +98,11 @@ public final class CycEval
 			SubLCons cons = args.toCons();
 			return apply(cons, SubLEnvironment.currentEnvironment()).toLispObject();
 		}
-
+		
 		@Override
 		public SubLObject apply(SubLCons specialForm, SubLEnvironment env)
 		{
-			return BeanShellCntrl.cyc_eval_progn(specialForm, env);
+			return BeanShellCntrl.cyc_progn(specialForm, env);
 		}
 
 		//

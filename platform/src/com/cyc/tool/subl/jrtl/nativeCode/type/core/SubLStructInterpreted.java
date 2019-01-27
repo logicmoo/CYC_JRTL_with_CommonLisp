@@ -239,7 +239,12 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		@Override
 		public SubLSymbol getName()
 		{
-			return slotsStart[1].toSymbol();
+			SubLObject name = slotsStart[1];
+			if (name == null)
+			{
+				name = slotsStart[1] = getStructDecl().getStructName();
+			}
+			return name.toSymbol();
 		}
 
 		protected SubLObject[] slotsStart = new SubLObject[2];
@@ -261,9 +266,8 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		{
 			this(layout.getLength());
 			setLayout(layout);
-			if (Main.trackStructs)
-			{
-				PrologSync.addThis(this);
+			if(layout.isTracked) {
+				PrologSync.addLater(this);
 			}
 		}
 
