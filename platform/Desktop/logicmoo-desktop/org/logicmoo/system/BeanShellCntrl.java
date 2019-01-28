@@ -95,6 +95,7 @@ import com.cyc.cycjava.cycl.constant_reader;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.JavaLink;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLListListIterator;
@@ -1139,7 +1140,7 @@ public class BeanShellCntrl
 			{
 				SubLPackage prevPackage = Lisp.getCurrentPackage();
 				try
-				{					
+				{
 					init_subl();
 					SubLMain.handleInits();
 					SubLPackage.setCurrentPackage("CYC");
@@ -1284,9 +1285,11 @@ public class BeanShellCntrl
 
 	static public Object invokeM(Method m, Object object, Object... methodArgs)
 	{
+		Class[] methodArgClasses = m.getParameterTypes();
+		Object[] methodUseArgs = recastArgs(methodArgClasses, methodArgs);
 		try
 		{
-			return m.invoke(object, methodArgs);
+			return m.invoke(object, methodUseArgs);
 		} catch (ControlTransfer t)
 		{
 			throw t;
@@ -1322,6 +1325,11 @@ public class BeanShellCntrl
 		}
 	}
 
+	private static Object[] recastArgs(Class[] methodArgClasses, Object[] methodArgs)
+	{
+		return JavaLink.tryRecast(methodArgClasses, methodArgs);
+	}
+
 	static boolean isIKVM()
 	{
 		return (System.getProperty("java.vm.name").toUpperCase().contains("IKVM"));
@@ -1353,23 +1361,25 @@ public class BeanShellCntrl
 		Environment env = Environment.currentLispEnvironment();
 		return lisp_progn(args, env);
 	}
-	
+
 	@LispMethod
 	static public LispObject lo2lo(LispObject arg)
 	{
 		return arg;
 	}
+
 	@LispMethod
 	static public Object lo2o(LispObject arg)
 	{
 		return arg;
 	}
+
 	@LispMethod
 	static public Object o2o(Object arg)
 	{
 		return arg;
 	}
-	
+
 	@LispMethod
 	static public LispObject lisp_progn(LispObject args, Environment env)
 	{
@@ -2022,12 +2032,11 @@ public class BeanShellCntrl
 	@SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 3066L)
 	public static SubLObject find_constant_by_name(final SubLObject name)
 	{
-		
-		
+
 		final SubLThread thread = SubLProcess.currentSubLThread();
 		final SubLNil localNil = SubLNil.NIL;
 		SubLObject constant = localNil;
-		if(!inited_cyc_complete ) return constant; 
+		if (!inited_cyc_complete) return constant;
 		final SubLObject _prev_bind_0 = constant_completion_low.$require_valid_constants$.currentBinding(thread);
 		try
 		{

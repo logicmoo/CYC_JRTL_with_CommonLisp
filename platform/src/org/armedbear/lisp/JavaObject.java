@@ -278,7 +278,7 @@ public final class JavaObject extends SubLAlienObject {
     }
 
     @Override
-    public Object javaInstance(Class<?> c) {
+    public Object javaInstanceImpl(Class<?> c) {
         if(obj == null) {
             if(c.isPrimitive()) {
                 throw new NullPointerException("Cannot assign null to " + c);

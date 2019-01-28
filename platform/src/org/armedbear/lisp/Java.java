@@ -1140,6 +1140,9 @@ public final class Java
 				continue;
 			}
 			if (isAssignable(xtype, ytype)) { return true; }
+			if (LispObject.class.isAssignableFrom(ytype) && //
+					!LispObject.class.isAssignableFrom(xtype))
+				return true;
 		}
 		return false;
 	}

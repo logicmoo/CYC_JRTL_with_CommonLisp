@@ -216,12 +216,6 @@ abstract public class LispCharacter extends LispObject
   }
 
   @Override
-  public Object javaInstance(Class c)
-  {
-    return javaInstance();
-  }
-
-  @Override
   public int sxhash()
   {
     return value;
