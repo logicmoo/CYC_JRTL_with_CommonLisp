@@ -10,6 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.armedbear.lisp.Keyword;
+import org.armedbear.lisp.Lisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -80,7 +81,7 @@ public class SubLFiles {
 
 		@Override
 		public String toString() {
-			if (true)
+			if (toStr!=null)
 				return toStr;
 			return toSymbol().princToString();
 		}
@@ -323,6 +324,9 @@ public class SubLFiles {
 	}
 
 	public static void initialize(String className) {
+		org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
+		try {
+			if (p != Lisp.PACKAGE_SUBLISP && p != Lisp.PACKAGE_CYC) SubLPackage.setCurrentPackage("CYC");
 		try {
 			Class clazz = PatchFileLoader.PATCH_FILE_LOADER.loadClass(className);
 			ClassLoader loader = clazz.getClassLoader();
@@ -334,7 +338,10 @@ public class SubLFiles {
 		} catch (Throwable e) {
 			e.printStackTrace();
 			Errors.cerror("Continue.", "Error initializing SubL file: " + className, e);
-		}
+		}}
+		finally {
+			SubLPackage.setCurrentPackage(p);
+		}		
 	}
 
 	public static void initialize(SubLFile file) {

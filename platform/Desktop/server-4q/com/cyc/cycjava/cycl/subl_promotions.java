@@ -707,7 +707,8 @@ public final class subl_promotions extends SubLTranslatedFile
             try {
                 Errors.$error_handler$.bind(Symbols.symbol_function((SubLObject)subl_promotions.$sym35$IGNORE_ERRORS_HANDLER), thread);
                 try {
-                    tempdir = Strings.string(JavaLink.java_static((SubLObject)subl_promotions.$str36$getProperty, (SubLObject)subl_promotions.$str37$java_lang_System, new SubLObject[] { subl_promotions.$str38$java_io_tmpdir }));
+                    final SubLObject wjava_static = JavaLink.java_static((SubLObject)subl_promotions.$str36$getProperty, (SubLObject)subl_promotions.$str37$java_lang_System, new SubLObject[] { subl_promotions.$str38$java_io_tmpdir });
+					tempdir = Strings.string(wjava_static);
                 }
                 catch (Throwable catch_var) {
                     Errors.handleThrowable(catch_var, (SubLObject)subl_promotions.NIL);

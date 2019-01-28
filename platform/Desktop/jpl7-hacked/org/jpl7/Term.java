@@ -699,11 +699,11 @@ public abstract class Term {
 		// First create a sequence of term_ts.
 		// The 0th term_t will be a org.jpl7.fli.term_t.
 		// Successive Prolog term_t references will reside in the Prolog engine, and can be obtained by term0.value+i.
-		term_t term0 = Prolog.new_term_refs(args.length);
+		final term_t term0 = Prolog.new_term_refs(args.length);
 		// For each new term ref, construct a Prolog term by putting an appropriate Prolog type into the ref.
 		long ith_term_t = term0.value;
 		for (int i = 0; i < args.length; ++i, ++ith_term_t) {
-			term_t term = new term_t();
+			final term_t term = new term_t();
 			term.value = ith_term_t;
 			args[i].put(varnames_to_vars, term); // each subclass defines its own put()
 		}

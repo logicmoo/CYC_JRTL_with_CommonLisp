@@ -33,12 +33,29 @@
 
 package org.armedbear.lisp;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.jpl7.Term;
+
 import static org.armedbear.lisp.Lisp.*;
 
 public abstract class LispClass extends StandardObject
 {
 
+	@Override
+	final public Term toProlog(List s)
+	{
+		if(name==null) name = getLispClassName();
+		if (findClass((Symbol) name) == this)
+		{ ///
+			final String printReadableObject = printObject();
+			return new org.jpl7.Atom(printReadableObject);
+		}
+
+		return super.toProlog(s);
+	}
+	
 	  @Override
 	final public String printObject()
 	  {

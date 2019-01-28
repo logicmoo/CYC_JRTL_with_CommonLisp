@@ -27,11 +27,7 @@ public class SubLSocketStream extends SocketStream implements SubLOutputBinarySt
 		super();
 		this.socket = socket;
 		host = socket.getInetAddress().getCanonicalHostName();
-		try {
-			setDefaultSocketOptions();
-		} catch (IOException ioe) {
-			Errors.error("Unable to open socket " + socket + ".", ioe);
-		}
+	    setDefaultSocketOptions(socket);
 		init();
 	}
 
@@ -43,7 +39,7 @@ public class SubLSocketStream extends SocketStream implements SubLOutputBinarySt
 			this.host = host;
 			SocketAddress sockAddr = new InetSocketAddress(host, port);
 			(socket = new Socket()).connect(sockAddr, timeout);
-			setDefaultSocketOptions();
+			setDefaultSocketOptions(socket);
 		} catch (UnknownHostException uhe) {
 			Errors.error("Got unknown host: " + host, uhe);
 		} catch (IOException ioe) {
@@ -52,12 +48,18 @@ public class SubLSocketStream extends SocketStream implements SubLOutputBinarySt
 		init();
 	}
 
-	private void setDefaultSocketOptions() throws SocketException
+	private static void setDefaultSocketOptions(Socket socket)
 	{
-		socket.setSoLinger(true, 50);
-		socket.setReceiveBufferSize(4194304);
-		socket.setTcpNoDelay(true);
-		socket.setSoTimeout(250);
+		try
+		{
+			socket.setSoLinger(true, 50);
+			socket.setReceiveBufferSize(4*1024*1024);
+			socket.setTcpNoDelay(true);
+			socket.setSoTimeout(250);
+		} catch (SocketException ioe)
+		{
+			Errors.error("Unable to setup socket " + socket + ".", ioe);
+		}
 	}
 
 	public static void main(String[] args) {

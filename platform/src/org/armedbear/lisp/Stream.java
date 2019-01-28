@@ -46,7 +46,6 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigInteger;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.BitSet;
 import java.util.LinkedList;
@@ -158,13 +157,11 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	}
 
 
-
-
     private boolean pastEnd = false;
 	//private boolean interactive;
     private boolean open = true;
 
-    //protected long offset;
+    protected int offset;
     protected int lineNumber;
 
     // Character output.
@@ -320,199 +317,21 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	}
 
 
-	protected void initAsCharacterInputStream(final Reader bear) {
-		final Reader lockObject = wrapStream(bear);
-		if (!(bear instanceof PushbackReader) || true)
-		{
+	protected void initAsCharacterInputStream(Reader reader) {
+        if (! (reader instanceof PushbackReader))
+            this.reader = new PushbackReader(reader, 5);
+        else
+            this.reader = (PushbackReader)reader;
 
-			this.reader = new PushbackReader(lockObject, 5)
-			{
-				{
-					super.in = bear;
-				}
-			};
-
-		}
-		else
-			this.reader = (PushbackReader) bear;
-
-	       // if(elementType==null)elementType = (LispObject) Symbol.CHARACTER;
+       // if(elementType==null)elementType = (LispObject) Symbol.CHARACTER;
         if(direction==null)direction = Keyword.INPUT_KEYWORD;
         if(pushbackStream==null)
         {
-        	pushbackStream = new PushbackInputStream(new ReaderInputStream(lockObject));
+        	pushbackStream = new PushbackInputStream(new ReaderInputStream(reader));
         }
         isInputStream = true;
         isCharacterStream = true;
     }
-
-
-	public static Reader wrapStream(final Reader bear)
-	{
-		if (true) return bear;
-		final Reader lockObject = new Reader()
-		{
-			@Override
-			public long skip(long n) throws IOException
-			{
-				return bear.skip(n);
-			}
-			@Override
-			public int read(char[] cbuf) throws IOException
-			{
-				return bear.read(cbuf);
-			}
-			@Override
-			public int read(CharBuffer target) throws IOException
-			{
-				return bear.read(target);
-			}
-			@Override
-			public int read(char[] cbuf, int off, int len) throws IOException
-			{
-				return bear.read(cbuf, off, len);
-			}
-			@Override
-			public void close() throws IOException
-			{
-				bear.close();
-			}
-			@Override
-			public void mark(int readAheadLimit) throws IOException
-			{
-				bear.mark(readAheadLimit);
-			}
-			@Override
-			public boolean markSupported()
-			{
-				return bear.markSupported();
-			}
-			@Override
-			public void reset() throws IOException
-			{
-				bear.reset();
-			}
-            @Override
-            public int read() throws IOException
-            {
-            	return bear.read();
-            }
-			@Override
-			public boolean ready() throws IOException
-			{
-				return bear.ready();
-			}
-			@Override
-			public String toString()
-			{
-				return "A Lockfor" + bear;
-			}
-		};
-		return lockObject;
-	}
-	public  static InputStream wrapStream(final InputStream bear)
-	{
-		if (true) return bear;
-		final InputStream lockObject = new InputStream()
-		{
-			@Override
-			public int available() throws IOException
-			{
-				return bear.available();
-			}
-			@Override
-			public synchronized void mark(int readlimit)
-			{
-				bear.mark(readlimit);
-			}
-			@Override
-			public int read(byte[] b) throws IOException
-			{
-				return bear.read(b);
-			}
-			@Override
-			public int read(byte[] b, int off, int len) throws IOException
-			{
-				return bear.read(b, off, len);
-			}
-			@Override
-			public long skip(long n) throws IOException
-			{
-				return bear.skip(n);
-			}
-			@Override
-			public void close() throws IOException
-			{
-				bear.close();
-			}
-			@Override
-			public boolean markSupported()
-			{
-				return bear.markSupported();
-			}
-			@Override
-			public void reset() throws IOException
-			{
-				bear.reset();
-			}
-            @Override
-            public int read() throws IOException
-            {
-            	return bear.read();
-            }
-			@Override
-			public String toString()
-			{
-				return "A Lockfor" + bear;
-			}
-		};
-		return lockObject;
-	}
-	public  static OutputStream wrapStream(final OutputStream bear)
-	{
-		if (true) return bear;
-		final OutputStream lockObject = new OutputStream()
-		{
-
-			@Override
-			public void close() throws IOException
-			{
-				bear.close();
-			}
-
-			@Override
-			public void write(int b) throws IOException
-			{
-				bear.write(b);
-	
-			}
-
-			@Override
-			public void flush() throws IOException
-			{
-				bear.flush();
-			}
-
-			@Override
-			public void write(byte[] b) throws IOException
-			{
-				bear.write(b);
-			}
-
-			@Override
-			public void write(byte[] b, int off, int len) throws IOException
-			{
-				bear.write(b, off, len);
-			}
-
-			@Override
-			public String toString()
-			{
-				return "A Lockfor" + bear;
-			}
-		};
-		return lockObject;
-	}
 
     protected void initAsBinaryInputStream(InputStream in) {
         this.in = in;
@@ -771,8 +590,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // Character input.
     @Override
 	public int getOffset() {
-    	final long offset = getInputIndex();
-        return (int) offset;
+        return offset;
     }
 
     // Character input.
@@ -2175,17 +1993,13 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
         lastDirection = Direction.READ;
         int n = reader.read();
-        return onRead(n);
-    }
-    
-    @Override
-	protected int onRead(int n) throws IOException
-	{
+
         if (n < 0) {
             pastEnd = true;
             return -1;
         }
-		n = super.onRead(n);
+
+        ++offset;
         if (n == '\r' && eolStyle == EolStyle.CRLF) {
             n = _readChar();
             if (n != '\n') {
@@ -2199,20 +2013,9 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
             ++lineNumber;
             return '\n';
         }
-        return n;	
-	}
-    
-	@Override
-    protected int onUnread(int n)
-	{
-		n = super.onUnread(n);
-        if (n == '\n') {
-            n = eolChar;
-            --lineNumber;
-        }
-        return n;
-	}
 
+        return n;
+    }
 
     /** Puts a character back into the (underlying) stream
      *
@@ -2224,14 +2027,15 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 
         lastDirection = Direction.READ;
 
+        --offset;
+        if (n == '\n') {
+            n = eolChar;
+            --lineNumber;
+        }
 
-        n = onUnread(n);
-        
         reader.unread(n);
         pastEnd = false;
     }
-
-
 
 
     /** Returns a boolean indicating input readily available
@@ -2368,7 +2172,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
      * @return
      */
     @Override
-    public int _readByte() {
+	public int _readByte() {
         try {
             int n = in.read();
             if (n < 0)

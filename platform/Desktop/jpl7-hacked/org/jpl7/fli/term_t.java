@@ -49,6 +49,9 @@ public class term_t extends LongHolder {
 		value = l;
 	}
 
+	public String toString() {
+		return toString(1, this);
+	}
 	/**
 	 * This static method converts a term_t, which is assumed to contain a
 	 * reference to a *consecutive* list of term_t references to a String

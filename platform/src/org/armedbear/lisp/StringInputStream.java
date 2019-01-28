@@ -103,8 +103,7 @@ public final class StringInputStream extends Stream
 	public int getOffset() {
        // DONT REGRESS (true = OLD-WORKS)
         if(true) {return start + super.getOffset();}
-    	final long offset = getInputIndex();
-        return (int) (start + offset);
+        return start + offset;
     }
 
     @Override
@@ -136,7 +135,7 @@ public final class StringInputStream extends Stream
             stringReader.skip(offset);
             initAsCharacterInputStream(stringReader);
 
-        	setInputIndex(offset);
+            this.offset = offset;
         }
         catch (IOException e) {
             error(new StreamError(this, e));

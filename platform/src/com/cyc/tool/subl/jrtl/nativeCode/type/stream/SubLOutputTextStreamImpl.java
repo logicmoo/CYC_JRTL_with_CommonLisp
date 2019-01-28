@@ -35,7 +35,6 @@ public class SubLOutputTextStreamImpl extends AbstractSubLTextStream implements 
 		super(TEXT_KEYWORD_CHARACTER, OUTPUT_KEYWORD, ERROR_KEYWORD,
 				ERROR_KEYWORD);
 		freshLine = true;
-		outStream = wrapStream(outStream);
 		this.out = outStream;
 		writer = new OutputStreamWriter(outStream, SubLStream.DEFAULT_CHARSET);
 		writer = asBuffredWriter(writer);

@@ -913,7 +913,7 @@ public class LispObject extends AbstractSubLObject
 			//Symbol.PRINT_CIRCLE.setSymbolValue(T);
 			set.add(this);
 			return printObjectImpl();
-		} catch (IOException e)
+		} catch (Throwable e)
 		{			
 			e.printStackTrace();
 			return "#=(" + index + "#|" + easyToString() + "|#)=#";
@@ -925,7 +925,7 @@ public class LispObject extends AbstractSubLObject
 
 	}
 
-	public String printObjectImpl() throws IOException 
+	public String printObjectImpl() // throws IOException 
 	{
 		try
 		{
@@ -981,6 +981,7 @@ public class LispObject extends AbstractSubLObject
 			thread.bindSpecial(Symbol.PRINT_READABLY, T);
 			thread.bindSpecial(Symbol.PRINT_ESCAPE, T);
 			thread.bindSpecial(Symbol.PRINT_ARRAY, T);
+			thread.bindSpecial(Symbol._PACKAGE_, Lisp._KEYWORD_PACKAGE_);
 			thread.bindSpecial(Symbol.PRINT_LENGTH, NIL);
 			thread.bindSpecial(Symbol.PRINT_LEVEL, NIL);
 			thread.bindSpecial(Symbol.PRINT_LINES, NIL);
@@ -1032,7 +1033,7 @@ public class LispObject extends AbstractSubLObject
 	public final String readableString(LispObject func, LispObject... identity)
 	{
 		StringBuilder sb = new StringBuilder("#");
-		final boolean asUnreadable = !Lisp.initialized || Symbol.PRINT_READABLY.symbolValue() == NIL;
+		final boolean asUnreadable = !Lisp.initialized;
 
 		if (asUnreadable)
 		{
@@ -1059,9 +1060,9 @@ public class LispObject extends AbstractSubLObject
 		sb.append(")");
 		return sb.toString();
 	}
-	public String unreadableString(Symbol mailbox)
+	public String unreadableString(Symbol typename)
 	{
-		return unreadableString(mailbox.printObject(), true);
+		return unreadableString(typename.printObject(), true);
 	}
 
 	protected void extraInfo(StringBuilder sb)

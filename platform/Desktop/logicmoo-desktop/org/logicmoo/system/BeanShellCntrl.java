@@ -1139,9 +1139,10 @@ public class BeanShellCntrl
 			{
 				SubLPackage prevPackage = Lisp.getCurrentPackage();
 				try
-				{
+				{					
 					init_subl();
 					SubLMain.handleInits();
+					SubLPackage.setCurrentPackage("CYC");
 					SubLMain.initializeTranslatedSystems();
 					inited_cyc = true;
 					inited_cyc_complete = true;
@@ -1352,7 +1353,23 @@ public class BeanShellCntrl
 		Environment env = Environment.currentLispEnvironment();
 		return lisp_progn(args, env);
 	}
-
+	
+	@LispMethod
+	static public LispObject lo2lo(LispObject arg)
+	{
+		return arg;
+	}
+	@LispMethod
+	static public Object lo2o(LispObject arg)
+	{
+		return arg;
+	}
+	@LispMethod
+	static public Object o2o(Object arg)
+	{
+		return arg;
+	}
+	
 	@LispMethod
 	static public LispObject lisp_progn(LispObject args, Environment env)
 	{
@@ -2005,9 +2022,12 @@ public class BeanShellCntrl
 	@SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 3066L)
 	public static SubLObject find_constant_by_name(final SubLObject name)
 	{
+		
+		
 		final SubLThread thread = SubLProcess.currentSubLThread();
 		final SubLNil localNil = SubLNil.NIL;
 		SubLObject constant = localNil;
+		if(!inited_cyc_complete ) return constant; 
 		final SubLObject _prev_bind_0 = constant_completion_low.$require_valid_constants$.currentBinding(thread);
 		try
 		{

@@ -1845,7 +1845,7 @@ public class Pathname extends LispObject {
             Cons d = (Cons) directory;
             while (true) {
                 if (d.car() instanceof AbstractString) {
-                    String s = d.car().printObject();
+                    String s = d.car().princToString();
                     if (s.contains("*")) {
                         return true;
                     }

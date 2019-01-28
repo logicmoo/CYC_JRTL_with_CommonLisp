@@ -379,8 +379,8 @@ public class SubLStructDeclNative extends SubLStructDecl
 	@Override
 	public void setTrackStructInstance(boolean track, int pingAt)
 	{
-		this.trackStructInstance = track;
-		if (trackStructInstance)
+		this.isTracked = track;
+		if (isTracked)
 		{
 			listenToAllFields(fieldDecls, pingAt);
 		}

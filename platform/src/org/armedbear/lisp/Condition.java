@@ -33,10 +33,20 @@
 
 package org.armedbear.lisp;
 
+import java.util.List;
+
+import org.jpl7.Term;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
 public class Condition extends StandardObject
 {
+	@Override
+	public Term toProlog(List s)
+	{
+		return new org.jpl7.Atom(printReadableObject(true));
+	}
+	
   protected String message;
 
   protected void assertSlotsLength(int i) {

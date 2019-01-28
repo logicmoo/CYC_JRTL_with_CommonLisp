@@ -63,7 +63,8 @@ public class SubLInputBinaryStreamImpl extends AbstractSubLBinaryStream implemen
 			if (ready)
 				try {
 					int result = pushbackStream.read();
-					onUnread(result);
+					if (result >= 0)
+						incrementInputIndex(1L);
 					return result;
 				} catch (SocketTimeoutException ste) {
 					Threads.possiblyHandleInterrupts(false);

@@ -15,7 +15,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 abstract public class SubLAlienObject extends FromSubLisp implements SubLObject {
-	
+
 	//public final Object obj;
     //protected final Class<?> intendedClass;
 
@@ -55,13 +55,20 @@ abstract public class SubLAlienObject extends FromSubLisp implements SubLObject 
 //            obj != null ? Java.maybeBoxClass(obj.getClass()) : null;
 //	}
 
+	public String toString() {
+		final Object alien = getAlien(); 
+		if (alien instanceof CharSequence)
+			return alien.toString();
+		return super.printObjectImpl();		
+	}
 	@Override
 	public String printObjectImpl() {
 		final Object alien = getAlien(); 
 		if (alien != null)
 			return alien.toString();
-		return super.printObject();
+		return super.printObjectImpl();
 	}
+
 	@Override
 	public boolean equalp(SubLObject obj) {
 		final Object alien = getAlien(); 
@@ -132,7 +139,6 @@ abstract public class SubLAlienObject extends FromSubLisp implements SubLObject 
 	public Object clone() {
 		return makeCopy();
 	}
-
 
 	@Override
 	public SubLSymbol getType() {

@@ -601,6 +601,13 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
     name = string;
     checkSymbol();
   }
+  
+  public Symbol(SubLString string)
+  {
+    name = string.toLispObject();
+    checkSymbol();
+  }
+
 
   public Symbol(String s, Package pkg)
   {
@@ -615,6 +622,12 @@ public Symbol(AbstractString string, Package pkg)
     this.pkg = pkg;
     checkSymbol();
   }
+public Symbol(SubLString string, Package pkg)
+{
+	  name =  string.toLispObject();
+  this.pkg = pkg;
+  checkSymbol();
+}
 
   public Symbol(AbstractString string, int hash, Package pkg)
   {
@@ -1513,7 +1526,8 @@ public final LispObject getSymbolFunctionOrDie()
     }
     // "Package prefixes are printed if necessary." (22.1.3.3.1)
     // Here we also use a package-local nickname if appropriate.
-    final Package currentPackage = (Package) _PACKAGE_.symbolValue(thread);
+    final LispObject currentPackageLispObject = _PACKAGE_.symbolValue(thread);
+	final Package currentPackage = (currentPackageLispObject instanceof Package) ? (Package) currentPackageLispObject : Lisp.PACKAGE_KEYWORD;
     if (pkg == currentPackage) {
       return symbolName;
     }

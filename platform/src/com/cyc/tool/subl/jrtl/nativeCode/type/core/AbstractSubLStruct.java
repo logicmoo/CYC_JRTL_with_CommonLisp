@@ -18,13 +18,14 @@ import org.jpl7.Term;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync.IPrologifiable;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class AbstractSubLStruct extends LispObject implements SubLStruct
+public abstract class AbstractSubLStruct extends LispObject implements SubLStruct, IPrologifiable
 {
 	@Override
 	abstract public void setLayout(Layout structdecl);
@@ -32,6 +33,14 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	//public org.jpl7.Term termRef;
 	public AbstractSubLStruct()
 	{
+	}
+
+	@Override
+	public SubLObject getField(int slotNum)
+	{
+		if (slotNum == 0) return getField0();
+		if (slotNum == 1) return getField1();
+		return getSlotValue(slotNum - 2);
 	}
 
 	protected Layout layout;
@@ -301,7 +310,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	}
 
 	@Override
-	abstract public String printObjectImpl() throws IOException;
+	abstract public String printObjectImpl();
 
 	@Override
 	public SubLStruct toStruct()
@@ -336,7 +345,12 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 
 	public Term toProlog(List s)
 	{
-		return PrologSync.toProlog(getType().getName(), this, s);
+		if (termRef == null)
+		{
+			termRef = PrologSync.toProlog(getType().getName(), this, s);
+		}
+		return termRef;
+
 	}
 
 	@Override
@@ -392,7 +406,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 
 	public boolean isTracked()
 	{
-		if(layout==null) return false;
+		if (layout == null) return false;
 		SubLStructDecl decl = getStructDecl();
 		return (decl.isTrackStructInstance());
 	}

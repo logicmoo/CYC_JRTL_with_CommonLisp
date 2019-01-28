@@ -40,6 +40,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
@@ -1402,6 +1403,7 @@ public final class constant_handles extends SubLTranslatedFile
     }
     
     public static SubLObject declare_constant_handles_file() {
+    	SubLPackage.setCurrentPackage("CYC");
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.constant_handles", "new_constants_iterator", "NEW-CONSTANTS-ITERATOR", 0, 0, false);
         SubLFiles.declareMacro("com.cyc.cycjava.cycl.constant_handles", "do_constants", "DO-CONSTANTS");
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.constant_handles", "do_constants_table", "DO-CONSTANTS-TABLE", 0, 0, false);

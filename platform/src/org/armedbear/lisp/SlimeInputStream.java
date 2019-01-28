@@ -35,8 +35,6 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-import java.io.IOException;
-
 public class SlimeInputStream extends Stream
 {
     String s;
@@ -93,37 +91,40 @@ public class SlimeInputStream extends Stream
     @Override
     public LispObject listen()
     {
-    	final long offset = getInputIndex();
         return offset < length ? T : NIL;
     }
 
     @Override
-    protected int _readChar() throws IOException
+    protected int _readChar()
     {
-    	final long offset = getInputIndex();
         if (offset >= length) {
             ostream.finishOutput();
             s = LispThread.currentThread().execute(f).getStringValue();
             if (s.length() == 0)
                 return -1;
-            setInputIndex(0);
+            offset = 0;
             length = s.length();
         }
-        int n = s.charAt((int) offset);
-        onRead(n);
+        int n = s.charAt(offset);
+        ++offset;
+        if (n == '\n')
+            ++lineNumber;
         return n;
     }
 
     @Override
     protected void _unreadChar(int n)
     {
-        onUnread(n);
+        if (offset > 0) {
+            --offset;
+            if (n == '\n')
+                --lineNumber;
+        }
     }
 
     @Override
     protected boolean _charReady()
     {
-    	final long offset = getInputIndex();
         return offset < length ? true : false;
     }
 
@@ -133,7 +134,7 @@ public class SlimeInputStream extends Stream
     {
         super._clearInput();
         s = "";
-    	setInputIndex(0);
+        offset = 0;
         length = 0;
         lineNumber = 0;
     }

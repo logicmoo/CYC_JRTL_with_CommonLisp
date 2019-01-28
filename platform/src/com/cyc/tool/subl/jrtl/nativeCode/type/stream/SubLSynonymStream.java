@@ -179,11 +179,4 @@ public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
 	public SubLOutputTextStream toOutputTextStream() {
 		return getStream(true).toOutputTextStream();
 	}
-	
-	@Override
-	public int getLineNumber()
-	{
-		return getStream(true).getLineNumber();
-	}
-
 }

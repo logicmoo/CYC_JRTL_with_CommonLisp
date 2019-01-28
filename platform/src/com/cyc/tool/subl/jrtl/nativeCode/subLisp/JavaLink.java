@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.armedbear.lisp.JavaObject;
-import org.armedbear.lisp.LispObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLAlienObject;
@@ -56,7 +55,7 @@ public class JavaLink extends SubLTrampolineFile {
 			else if (object.getClass().equals(classForName("I")) || object instanceof Integer)
 				result = SubLObjectFactory.makeInteger(object.toString());
 			else
-				result = new JavaObject(object);
+				result = JavaObject.getInstance(object, true);
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
 		}
@@ -314,9 +313,10 @@ public class JavaLink extends SubLTrampolineFile {
 		Object result;
 		if (object instanceof SubLAlienObject)
 			result = ((SubLAlienObject) object).getAlien();
-		else if (object instanceof JavaObject)
-			result = ((JavaObject) object).javaInstance();
 		else
+			if (object instanceof JavaObject)
+				result = ((JavaObject) object).javaInstance();
+			else			
 			result = object;
 		if (JavaLink.DEBUG)
 			System.out.println("JavaLink.possiblyUnbox((" + object.getClass() + ")" + object + ") --> " + "("
@@ -336,8 +336,6 @@ public class JavaLink extends SubLTrampolineFile {
 		Object result;
 		if (subLObject instanceof SubLAlienObject)
 			result = ((SubLAlienObject) subLObject).getAlien();
-		else if (subLObject instanceof JavaObject)
-			result = ((JavaObject) subLObject).javaInstance();
 		else
 			result = subLObject;
 		if (JavaLink.DEBUG)
@@ -484,15 +482,7 @@ public class JavaLink extends SubLTrampolineFile {
 								"arg " + j + " = [" + argObjects[j] + "], is of type " + argObjects[j].getClass());
 					argClasses[j] = getJavaClass(argObjects[j]);
 				}
-				{
-					Object o = unbox(_method(classObject, methodObject, (Object[]) argClasses));
-				  if(o instanceof Method) {
-					  method = (Method)o;
-				  } else {
-					  o = ((LispObject)o).javaInstance(Method.class);
-					  method = (Method)o;
-				  }
-				}				
+				method = (Method) unbox(_method(classObject, methodObject, (Object[]) argClasses));
 			} else
 				method = (Method) unbox(_method(classObject, methodObject, new Object[0]));
 			Object[] args = null;
@@ -502,7 +492,8 @@ public class JavaLink extends SubLTrampolineFile {
 				for (int k = 0; k < argsCount; ++k)
 					args[k] = getJavaObject(method.getParameterTypes()[k], argObjects[k]);
 			}
-			return box(method.invoke((Object) null, args));
+			final Object result = method.invoke((Object) null, args);
+			return box(result);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
 		} catch (IllegalArgumentException e2) {
@@ -592,7 +583,7 @@ public class JavaLink extends SubLTrampolineFile {
 	}
 
 	public static SubLObject java_object_p(SubLObject object) {
-		return box(object instanceof SubLAlienObject || object instanceof JavaObject);
+		return box(object instanceof SubLAlienObject);
 	}
 
 	public static SubLObject java_static(SubLObject methodObject, SubLObject classObject, SubLObject... args) {

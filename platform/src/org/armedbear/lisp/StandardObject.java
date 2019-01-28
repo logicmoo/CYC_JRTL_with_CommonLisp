@@ -217,7 +217,7 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 	}
 
 	@Override
-	public String printObjectImpl() throws IOException
+	public String printObjectImpl()
 	{
 		final LispThread thread = LispThread.currentThread();
 		int maxLevel = Integer.MAX_VALUE;

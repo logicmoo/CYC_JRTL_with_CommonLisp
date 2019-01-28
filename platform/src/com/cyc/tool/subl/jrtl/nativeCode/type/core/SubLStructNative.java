@@ -7,9 +7,11 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.armedbear.lisp.Layout;
 import org.armedbear.lisp.Main;
+import org.jpl7.Term;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -28,6 +30,7 @@ import sun.reflect.FieldAccessor;
 
 public abstract class SubLStructNative extends AbstractSubLStruct implements SubLStruct
 {
+
 
 	@Override
 	public void setLayout(Layout structdecl)

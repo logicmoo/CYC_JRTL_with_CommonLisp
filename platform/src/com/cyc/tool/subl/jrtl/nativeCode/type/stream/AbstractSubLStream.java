@@ -4,7 +4,6 @@
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
@@ -97,7 +96,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	protected boolean interactive;
 	protected String newline;
 	public volatile boolean isClosed;
-	private long offset;
+	private long inputIndex;
 
 	protected Socket socket;
 
@@ -119,18 +118,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		return writer;
 	}
 
-	protected int onRead(int result) throws IOException
-	{
-		if (result >= 0)
-			incrementInputIndex(1L);
-		return result;
-	}
-	protected int onUnread(int result) 
-	{
-		if (result >= 0)
-			incrementInputIndex(-1L);
-		return result;
-	}
+
 
 	public AbstractSubLStream() {
 		this(Symbol.SYSTEM_STREAM);
@@ -141,7 +129,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 		interactive = false;
 		newline = SubLStream.DEFAULT_NEWLINE;
 		isClosed = false;
-		offset = 0L;
+		inputIndex = 0L;
 	}
 
 
@@ -223,7 +211,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	}
 
 	public long getInputIndex() {
-		return offset;
+		return inputIndex;
 	}
 
 	@Override
@@ -300,11 +288,11 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	}
 
 	protected void incrementInputIndex(long incAmount) {
-		offset += incAmount;
+		inputIndex += incAmount;
 	}
 
 	protected void setInputIndex(long newIndex) {
-		offset = newIndex;
+		inputIndex = newIndex;
 	}
 
 	@Override

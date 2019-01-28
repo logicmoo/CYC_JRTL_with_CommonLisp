@@ -3,7 +3,6 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.armedbear.lisp.Keyword;
@@ -33,9 +32,8 @@ public abstract class AbstractSubLTextStream extends Stream {
 	public AbstractSubLTextStream(Symbol twoWayStream) {
 		super(twoWayStream);
 		setElementType(Keyword.TEXT_KEYWORD_CHARACTER);
-	}
-	
 
+	}
 //
 //	@Override
 //	public SubLSymbol getName() {

@@ -32,8 +32,6 @@ public interface SubLStream extends SubLObject {
 	File getFile();
 
 	long getFilePointer();
-	
-	int getLineNumber();
 
 	long getFlushCount();
 

@@ -26,6 +26,14 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 
 abstract public class SubLStructInterpreted extends AbstractSubLStruct implements SubLStruct
 {
+	@Override
+	public SubLObject getField(int slotNum)
+	{
+		if (slotNum == 0) return getField0();
+		if (slotNum == 1) return getField1();
+		return getSlotValue(slotNum-2);
+	}
+
 
 	@Override
 	public void setName(SubLSymbol type)

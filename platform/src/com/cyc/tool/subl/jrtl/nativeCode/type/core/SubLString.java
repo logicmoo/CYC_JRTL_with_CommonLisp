@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.armedbear.lisp.AbstractArray;
 import org.armedbear.lisp.AbstractString;
+import org.armedbear.lisp.AbstractVector;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 
@@ -43,9 +44,14 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.ComparatorGenericKey;
 import com.cyc.tool.subl.util.ComparatorIdentityKey;
 
-abstract public class SubLString extends AbstractString  implements SubLObject, SubLSequence, Cloneable, CharSequence {
+abstract public class SubLString extends AbstractVector  implements SubLObject, SubLSequence, Cloneable, CharSequence {
 	private SubLString(char[] chars) {
 		this.chars = chars;
+	}
+	@Override
+	public AbstractString toLispObject()
+	{
+		return (AbstractString) this;
 	}
     protected SubLString(){}
 	private SubLString(char[] chars, int length) {
@@ -1926,77 +1932,5 @@ abstract public class SubLString extends AbstractString  implements SubLObject, 
 	public String getString() {
 		return getStringValue();
 	}
-
-	@Override
-	public void fill(char c) {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractString.fill");
-
-	}
-
-	@Override
-	public void setCharAt(int index, char c) {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractString.setCharAt");
-
-	}
-
-	@Override
-	public int capacity() {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractVector.capacity");
-		return 0;
-	}
-
-	@Override
-	public LispObject subseq(int start, int end) {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractVector.subseq");
-		return null;
-	}
-
-	@Override
-	public void shrink(int n) {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractVector.shrink");
-
-	}
-
-	@Override
-	public LispObject reverse() {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractVector.reverse");
-		return null;
-	}
-
-	@Override
-	public AbstractArray adjustArray(int size, LispObject initialElement, LispObject initialContents) {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractVector.adjustArray");
-		return null;
-	}
-
-	@Override
-	public AbstractArray adjustArray(int size, AbstractArray displacedTo, int displacement) {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractVector.adjustArray");
-		return null;
-	}
-
-	@Override
-	public void aset(int index, LispObject newValue) {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractArray.aset");
-
-	}
-
-	@Override
-	public void fill(LispObject obj) {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  AbstractArray.fill");
-
-	}
-
-
 
 }

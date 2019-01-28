@@ -306,7 +306,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 						try {
 							raf.close();
 						} catch (Exception ex2) {
-						}					
+						}
 					raf = new RandomAccessFile(theFile, correctFileMode(theFile, fileMode));
 					(fileChannel = raf.getChannel()).position(pos);
 					underlyingFilePos = pos;
@@ -997,8 +997,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 				try {
 					if (canWrite())
 					{
-						int result = fileChannel.write(writeByteBuffer);
-						underlyingFilePos += result;
+					int result = fileChannel.write(writeByteBuffer);
+					underlyingFilePos += result;
 					}
 				} finally {
 					if (needsInterruption)

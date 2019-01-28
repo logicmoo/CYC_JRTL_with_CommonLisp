@@ -3,6 +3,8 @@ package org.jpl7;
 import java.util.Map;
 
 import org.jpl7.fli.Prolog;
+import org.jpl7.fli.atom_t;
+import org.jpl7.fli.functor_t;
 import org.jpl7.fli.term_t;
 import org.logicmoo.system.BeanShellCntrl;
 
@@ -306,39 +308,41 @@ public class Compound extends Term
 	 *            (Atom, Variable, Compound, etc.) on which the method is invoked.
 	 */
 
-	long did = 0;
+	long did = -1;
 
 	@Override
 	protected void put(Map<String, term_t> varnames_to_vars, term_t term)
 	{
+		if(isJFalse() || isJNull() || isJTrue() || isJVoid()) {
+			did = -1;
+		}
+		final String name = name();
 		if (true)
 		{
-			long saved = did;
-			try
+			long at = term.value;
+			if (did >= 0)
 			{
-				long at = term.value;
-				if (saved != 0)
-				{
-					if (saved == at) { return; }
-					term_t was = new term_t();
-					was.value = saved;
-
-					Prolog.put_term(term, was);
-					return;
-				}
+				if (did == at) { return; }
+				term_t was = new term_t(did);
+				Prolog.put_term(term, was);
+				return ;
+			}
+			else
+			{
 				did = at;
-				Prolog.cons_functor_v(term, Prolog.new_functor(Prolog.new_atom(name), args.length), Term.putTerms(varnames_to_vars, args));
-			} finally
-			{
-				did = saved;
+				final term_t t_args = putTerms(varnames_to_vars, args);
+				final atom_t new_atom = Prolog.new_atom(name);
+				final functor_t new_functor = Prolog.new_functor(new_atom, args.length);
+				Prolog.cons_functor_v(term, new_functor, t_args);
 			}
 			return;
 		}
 		if (true)
 		{
-			term_t t_args;
-			t_args = putTerms(varnames_to_vars, args);
-			Prolog.cons_functor_v(term, Prolog.new_functor(Prolog.new_atom(name()), args.length), t_args);
+			final term_t t_args = putTerms(varnames_to_vars, args);
+			final atom_t new_atom = Prolog.new_atom(name);
+			final functor_t new_functor = Prolog.new_functor(new_atom, args.length);
+			Prolog.cons_functor_v(term, new_functor, t_args);
 			return;
 		}
 		//		if (isListNil())

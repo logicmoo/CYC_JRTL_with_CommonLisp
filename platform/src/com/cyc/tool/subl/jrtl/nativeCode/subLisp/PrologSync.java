@@ -26,6 +26,7 @@ import org.jpl7.Atom;
 import org.jpl7.Compound;
 import org.jpl7.JPL;
 import org.jpl7.JPLException;
+import org.jpl7.JRef;
 import org.jpl7.Query;
 import org.jpl7.Term;
 import org.jpl7.Variable;
@@ -528,7 +529,7 @@ public class PrologSync extends SubLTrampolineFile
 		{
 			start = laterList.size();
 			if (start == 0) return;
-			 doNow = new LinkedList();
+			doNow = new LinkedList();
 			laterList.addAll(doNow);
 			laterList.clear();
 		}
@@ -853,7 +854,12 @@ public class PrologSync extends SubLTrampolineFile
 		if (o instanceof AbstractSubLObject)
 		{
 			ass = (AbstractSubLObject) o;
-			if (ass.termRef != null && !(ass.termRef instanceof SyncState)) { return ass.termRef; }
+			if (ass.termRef != null && !(ass.termRef instanceof SyncState) //
+					&& !(ass.termRef instanceof JRef)//
+					&& !(ass.termRef instanceof Atom)//
+					&& !(ass.termRef instanceof Variable)
+			//
+			) { return ass.termRef; }
 			do
 			{
 				//				if (ass.termRef == null)
@@ -917,6 +923,11 @@ public class PrologSync extends SubLTrampolineFile
 					return term = new org.jpl7.Integer(bigIntegerValue);
 				}
 				return term = new org.jpl7.Integer(o.longValue());
+			}
+			if (o instanceof LispObject)
+			{
+				final String printReadableObject = ((LispObject) o).printReadableObject(false);
+				return term = new org.jpl7.Atom(printReadableObject);
 			}
 			int idx = indexOfById(skipped, o);
 			if (idx >= 0) { return term = toPrologFromJava(o); }

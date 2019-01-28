@@ -210,8 +210,13 @@ abstract public class LispCharacter extends LispObject
     return Character.valueOf(value);
   }
 
-  @Override
   public Object javaInstanceImpl(Class c)
+  {
+    return javaInstance();
+  }
+
+  @Override
+  public Object javaInstance(Class c)
   {
     return javaInstance();
   }

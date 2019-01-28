@@ -48,7 +48,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 
 public class StructureObject extends SubLStructInterpreted implements SubLStruct
 {
-
+	
 
 	@Override
 	public boolean equalp(SubLObject obj)

@@ -163,14 +163,12 @@ public class SubLStructDecl extends Layout
 
 	public boolean isTrackStructInstance()
 	{
-		return trackStructInstance;
+		return isTracked;
 	}
 
 	public void setTrackStructInstance(boolean trackStructInstance, int flagAt)
 	{
-		this.trackStructInstance = trackStructInstance;
+		this.isTracked = trackStructInstance;
 	}
-
-	protected boolean trackStructInstance;
 
 }

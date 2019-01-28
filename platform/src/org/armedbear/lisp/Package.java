@@ -51,6 +51,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.jpl7.Term;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -305,6 +307,12 @@ public class Package extends SubLPackage implements java.io.Serializable
 	// Returns null if symbol is not accessible in this package.
 	@Override
 	public Symbol findAccessibleSymbol(AbstractString name)
+
+	{
+		return findAccessibleSymbol(name.getStringValue());
+	}
+
+	public Symbol findAccessibleSymbol(SubLString name)
 
 	{
 		return findAccessibleSymbol(name.getStringValue());
@@ -1223,7 +1231,7 @@ public Package findPackage(String name)
     {
 		return (Symbol[]) getLocalSymbols().toArray();
 	}
-
+	
     @Override
 	public String printObject()
     {

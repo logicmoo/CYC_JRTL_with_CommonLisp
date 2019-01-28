@@ -44,7 +44,7 @@ import java.util.Arrays;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
-public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString
+public final class SimpleString extends AbstractString
 {
 	//private String string;
     private int capacity;

@@ -50,7 +50,6 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 	SubLInputTextStreamImpl(InputStream inStream) {
 		super(Keyword.TEXT_KEYWORD_CHARACTER, Keyword.INPUT_KEYWORD, Keyword.ERROR,
 				Keyword.ERROR);
-		inStream = wrapStream(inStream);
 		this.in = inStream;
 		InputStream javaBufferedInStream = inStream;//		javaBufferedInStream = new BufferedInputStream(inStream);
 		pushbackStream = new PushbackInputStream(javaBufferedInStream);
@@ -106,7 +105,8 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 		while (!isClosed())
 			try {
 				int curByte = pushbackStream.read();
-				onRead(curByte);
+				if (curByte >= 0)
+					incrementInputIndex(1L);
 				return curByte;
 			} catch (SocketTimeoutException ste) {
 				Threads.possiblyHandleInterrupts(true);
@@ -140,7 +140,6 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 		return this;
 	}
 
-	
 	@Override
 	public int read() {
 		if (shouldParentDoWork())
@@ -152,16 +151,14 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 		while (!isClosed()) {
 			try {
 				ready = pushbackStream.available() > 0;
-				if(!ready && isWindows()) {
-					ready = true;
-				}
 			} catch (Exception e) {
 				return -1;
 			}
 			if (ready)
 				try {
 					int result = pushbackStream.read();
-					onRead(result);
+					if (result >= 0)
+						incrementInputIndex(1L);
 					return result;
 				} catch (Exception e) {
 					Errors.error("Unable to read character from stream: " + this, e);
@@ -178,13 +175,6 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 				return -1;
 		}
 		return -1;
-	}
-
-	private boolean isWindows()
-	{
-		// TODO Auto-generated method stub
-		String os = System.getProperty("os.name");
-		return os.contains("Win");
 	}
 
 	@Override
@@ -318,7 +308,7 @@ public class SubLInputTextStreamImpl extends AbstractSubLTextStream implements S
 		this.ensureOpen("UNREAD");
 		try {
 			pushbackStream.unread(c);
-			onUnread(c);
+			incrementInputIndex(-1L);
 		} catch (Exception e) {
 			Errors.error("Unable to unread character from stream.", e);
 		}
