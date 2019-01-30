@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
@@ -47,6 +48,8 @@ import org.appdapter.gui.browse.Utility;
 import org.appdapter.gui.demo.DemoBrowser;
 import org.armedbear.j.Editor;
 import org.armedbear.j.JLisp;
+import org.armedbear.j.LispAPI;
+import org.armedbear.j.LispMode;
 import org.armedbear.j.Log;
 import org.armedbear.j.ReaderThread;
 import org.armedbear.lisp.Cons;
@@ -54,6 +57,7 @@ import org.armedbear.lisp.ControlTransfer;
 import org.armedbear.lisp.Debug;
 //import org.armedbear.lisp.CycEval;
 import org.armedbear.lisp.Environment;
+import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.Interpreter.UnhandledCondition;
 import org.armedbear.lisp.Java;
 import org.armedbear.lisp.JavaObject;
@@ -68,6 +72,7 @@ import org.armedbear.lisp.Nil;
 import org.armedbear.lisp.Operator;
 import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Packages;
+import org.armedbear.lisp.Pathname;
 import org.armedbear.lisp.ProcessingTerminated;
 import org.armedbear.lisp.SimpleString;
 import org.armedbear.lisp.SpecialOperator;
@@ -396,21 +401,62 @@ public class BeanShellCntrl
 	@LispMethod
 	static public Object bsh_eval(Object form) throws EvalError
 	{
-		if (form instanceof String) return ensureBSH().eval((String) form);
-		if (form instanceof File)
+		Object lastResult = Lisp.T;
+		startOver: do
 		{
-			try
+			if (form instanceof Term)
 			{
-				return ensureBSH().source(((File) form).getPath());
-			} catch (FileNotFoundException e)
-			{
-				throw JVMImpl.doThrow(e);
-			} catch (IOException e)
-			{
-				throw JVMImpl.doThrow(e);
+				final Term atom = (Term) form;
+				if (atom.isListNil())
+				{
+					return lastResult;
+				}
+				else if (atom.isListPair())
+				{
+					lastResult = bsh_eval(atom.arg(1));
+					form = atom.arg(2);
+					continue startOver;
+				}
+				form = term_to_lobject(atom);
 			}
-		}
-		return ensureBSH().eval(String.valueOf(form));
+			if (form instanceof LispObject)
+			{
+				form = ((LispObject) form).javaInstance();
+			}
+			if (form instanceof Pathname)
+			{
+				form = ((Pathname) form).getInputStream();
+			}
+			if (form instanceof InputStream)
+			{
+				form = new InputStreamReader(((InputStream) form));
+			}
+			if (form == null) { return lastResult; }
+			if (form instanceof Reader)
+			{
+				lastResult = ensureBSH().eval((Reader) form);
+				return lastResult;
+			}
+			if (form instanceof CharSequence)
+			{
+				lastResult = ensureBSH().eval(form.toString());
+				return lastResult;
+			}
+			if (form instanceof File)
+			{
+				try
+				{
+					return ensureBSH().source(((File) form).getPath());
+				} catch (FileNotFoundException e)
+				{
+					throw JVMImpl.doThrow(e);
+				} catch (IOException e)
+				{
+					throw JVMImpl.doThrow(e);
+				}
+			}
+			return ensureBSH().eval(String.valueOf(form));
+		} while (true);
 	}
 
 	@LispMethod
@@ -766,9 +812,9 @@ public class BeanShellCntrl
 	@LispMethod
 	static public SubLObject cyc_progn(SubLCons specialForm, SubLEnvironment env)
 	{
+		boolean wasSubLisp = Main.isSubLisp();
 		init_subl();
 		if (!SubLMain.commonSymbolsOK) throw new RuntimeException("SubLMain not yet started");
-		boolean wasSubLisp = Main.isSubLisp();
 		Main.setSubLisp(true);
 		try
 		{
@@ -807,14 +853,14 @@ public class BeanShellCntrl
 		return Lisp.EOF;
 	}
 
-	@LispMethod
+	@LispMethod(prologName = "fg_repl")
 	static public LispObject fg_repl()
 	{
 		repl_in_bg = false;
 		return Lisp.EOF;
 	}
 
-	@LispMethod
+	@LispMethod(prologName = "cyc_repl")
 	static public LispObject cyc_repl() throws InterruptedException
 	{
 		SystemCurrent.setupIO();
@@ -832,7 +878,7 @@ public class BeanShellCntrl
 	static public LispObject cyc_repl_no_suspend() throws InterruptedException
 	{
 		boolean wasSubLisp = Main.isSubLisp();
-		init_subl();
+		init_cyc();
 		SubLReader SLR = SubLMain.getMainReader();
 		if (SLR == null)
 		{
@@ -946,13 +992,14 @@ public class BeanShellCntrl
 
 	}
 
-	/**
-	 *
-	 */
+	//	/**
+	//	 *
+	//	 */
 	static public SubLReader ensureMainReader()
 	{
 		SubLReader SLR = SubLMain.getMainReader();
 		if (SLR == null)
+
 		{
 			SLR = new SubLReader();
 			SubLMain.setMainReader(SLR);
@@ -960,17 +1007,22 @@ public class BeanShellCntrl
 		return SLR;
 	}
 
-	static public void exportInCyc(Operator cyc_eval2)
+	static public void importEverywhere(Operator oper, boolean reexport)
 	{
-		exportInCyc(cyc_eval2.getLambdaName().toSymbol().toLispObject());
+		final Symbol lispObject = oper.getLambdaName().toSymbol().toLispObject();
+		importEverywhere(lispObject, reexport);
 	}
 
-	static public void exportInCyc(Symbol symbol)
+	static public void importEverywhere(Symbol symbol, boolean reexport)
 	{
-		Lisp.PACKAGE_SUBLISP.importSymbol(symbol);
 		Lisp.PACKAGE_CYC.importSymbol(symbol);
-		Lisp.PACKAGE_CYC.export(symbol);
+		if (reexport) Lisp.PACKAGE_CYC.export(symbol);
+
+		Lisp.PACKAGE_SUBLISP.importSymbol(symbol);
+
 		Lisp.PACKAGE_EXT.importSymbol(symbol);
+		if (reexport) Lisp.PACKAGE_EXT.export(symbol);
+
 		Lisp.PACKAGE_CL_USER.importSymbol(symbol);
 	}
 
@@ -1060,38 +1112,80 @@ public class BeanShellCntrl
 	 * @param js
 	 * @return
 	 */
-	static public Symbol findOrCreateSymbol(String js)
+	static public Symbol findOrCreateSymbol(String js, LispMethod lm)
 	{
 
 		Package pkg = null;
-		if (js.startsWith("pkg_"))
-		{
-			js = js.substring(3);
+		String suggest = null;
+		String suggestPackage = null;
+		boolean exported = true;
 
-			int i = js.indexOf('_');
-			String srch4 = js.substring(0, i);
-			pkg = Packages.findPackage(srch4).toPackage().toLispObject();
-			js = js.substring(i);
-			/*
-			 * if (js.startsWith("ext_")) { pkg = Lisp.PACKAGE_EXT; js =
-			 * js.substring(4); } else if (js.startsWith("usr_")) { pkg =
-			 * Lisp.PACKAGE_CL_USER; js = js.substring(4); }
-			 */
+		if (lm != null)
+		{
+			suggestPackage = lm.packageName();
+			if (suggestPackage != null && suggestPackage.length() == 0) suggestPackage = null;
+			suggest = lm.symbolName();
+			if (suggest != null && suggest.length() == 0) suggest = null;
 		}
 
-		js = js.replace("_", "-");
-		js = js.replace("$", "*");
-		js = js.replace("**", "$");
-
-		if (js.startsWith("-") && js.endsWith("-"))
+		if (suggest != null)
 		{
-			js = "+" + js.substring(1, js.length() - 2) + "+";
+			js = suggest;
 		}
+		else
+		{
+			if (js.startsWith("pkg_"))
+			{
+				js = js.substring(3);
+
+				if (js.startsWith("ext_"))
+				{
+					js = js.substring(3);
+					pkg = Lisp.PACKAGE_EXT;
+				}
+				if (js.startsWith("cl_"))
+				{
+					js = js.substring(2);
+					pkg = Lisp.PACKAGE_CL;
+				}
+				if (js.startsWith("user_"))
+				{
+					js = js.substring(4);
+					pkg = Lisp.PACKAGE_CL_USER;
+				}
+				else
+				{
+					int i = js.indexOf('_');
+					suggestPackage = js.substring(0, i);
+					js = js.substring(i);
+				}
+			}
+
+			js = js.replace("_", "-");
+			js = js.replace("$", "*");
+			js = js.replace("**", "$");
+
+			if (js.startsWith("-") && js.endsWith("-"))
+			{
+				js = "+" + js.substring(1, js.length() - 2) + "+";
+			}
+
+		}
+
 		js = js.toUpperCase();
+		pkg = Packages.findPackage(suggestPackage).toPackage().toLispObject();
 		if (pkg == null) pkg = Lisp.getCurrentPackage();
-		Symbol sym = pkg.internAndExport(js);
+		Symbol sym = null;
+		if (!exported)
+		{
+			sym = pkg.intern(js);
+		}
+		else
+		{
+			sym = pkg.internAndExport(js);
+		}
 
-		exportInCyc(sym);
+		importEverywhere(sym, exported);
 		return sym;
 	}
 
@@ -1272,7 +1366,7 @@ public class BeanShellCntrl
 			{
 				SubLMain.shouldRunInBackground = true;
 				SubLMain.initializeSubL(new String[0]);
-				ensureMainReader();
+				//ensureMainReader();
 			} finally
 			{
 				SubLPackage.setCurrentPackage(prevPackage);
@@ -1444,8 +1538,9 @@ public class BeanShellCntrl
 			try
 			{
 				Main.noExit = true;
-				org.armedbear.lisp.Interpreter.createNewLispInstance(System.in, System.out, // 
-						new File(".").getAbsolutePath(), Version.getVersion(), false).run();
+				final Interpreter lispInstance = org.armedbear.lisp.Interpreter.createNewLispInstance(System.in, System.out, // 
+						new File(".").getAbsolutePath(), Version.getVersion(), false);
+				lispInstance.run();
 			} catch (org.armedbear.lisp.ProcessingTerminated e)
 			{
 				//e.printStackTrace();
@@ -1499,15 +1594,15 @@ public class BeanShellCntrl
 	@LispMethod
 	static public LispObject prolog_unify(LispObject arg) throws InterruptedException
 	{
-		cyc_repl();
-		return Lisp.list(arg);
+		final LispObject prolog_eval_lobject = prolog_eval_lobject(arg);
+		return Lisp.list(prolog_eval_lobject);
 	}
 
 	@LispMethod
 	static public LispObject prolog_eval_lobject(LispObject arg)
 	{
 		Term term = lobject_to_term(arg);
-		return prolog_eval_term(term);
+		return prolog_eval_term(new Compound("called_from_cyc", term));
 	}
 
 	@LispMethod
@@ -1516,7 +1611,7 @@ public class BeanShellCntrl
 		Query q = new Query(term);
 		LispObject answers = Lisp.NIL;
 		LispObject tailPointer = null;
-		while (!q.hasNext())
+		while (q.hasNext())
 		{
 			q.next();
 			Term next = q.goal();
@@ -1574,8 +1669,9 @@ public class BeanShellCntrl
 			evalArgsFirst = false;
 			js = js.substring(3);
 		}
-		Symbol sym = findOrCreateSymbol(js);
-		String prologName = symbolToPrologName(sym);
+		LispMethod lm = m.getAnnotation(LispMethod.class);
+		Symbol sym = findOrCreateSymbol(js, lm);
+		String prologName = symbolToPrologName(sym, lm);
 		registerPrologMethod(prologName, sym, m);
 		SpecialMethod cf = setSpecialMethod(sym);
 		//if (cf == null) return;
@@ -1624,7 +1720,7 @@ public class BeanShellCntrl
 				params = "(" + args + ")";
 			}
 			String Head = prologName + params;
-			prologAssertString(Head + ":- call_ctrl(" + Head + ")");
+			prologAssertString("system:" + Head + ":- call_ctrl(" + Head + ")");
 		}
 		else
 		{
@@ -1640,7 +1736,7 @@ public class BeanShellCntrl
 				Head = prologName + "(" + args + ",RT)";
 				Body = prologName + "(" + args + ")";
 			}
-			prologAssertString(Head + ":- call_ctrl(" + Body + ", RT)");
+			prologAssertString("system:" + Head + ":- call_ctrl(" + Body + ", RT)");
 		}
 	}
 
@@ -1846,8 +1942,13 @@ public class BeanShellCntrl
 		}
 	}
 
-	private static String symbolToPrologName(Symbol sym)
+	private static String symbolToPrologName(Symbol sym, LispMethod lm)
 	{
+		if (lm != null)
+		{
+			String suggest = lm.prologName();
+			if (suggest != null && suggest.length() > 0) { return suggest; }
+		}
 		Package p = (Package) sym.getPackage();
 		String prologName = (p == null ? ":"
 				: (p == Lisp.PACKAGE_CL_USER ? "cl_" : (p.showShortName() + "_")) // 
@@ -1865,6 +1966,7 @@ public class BeanShellCntrl
 		return prologName;
 	}
 
+	@ConverterMethod
 	@LispMethod
 	static public LispObject term_to_lobject(Term term)
 	{
@@ -1874,12 +1976,17 @@ public class BeanShellCntrl
 		return JavaObject.getInstance(o, true);
 	}
 
+	@ConverterMethod
 	@LispMethod
 	static public Object term_to_object(Term term)
 	{
 		if (term == null) return null;
 		try
 		{
+			if (term.hasFunctor("called_from_cyc", 1))
+			{
+				term = term.arg(1);
+			}
 			Object tag = term.getTag();
 			if (tag != null || term instanceof JRef)
 			{
@@ -1987,6 +2094,7 @@ public class BeanShellCntrl
 		return o;
 	}
 
+	@ConverterMethod
 	static public Object atom_to_object(Atom thiz)
 	{
 		String value = thiz.name();
@@ -2000,6 +2108,7 @@ public class BeanShellCntrl
 
 	}
 
+	@ConverterMethod
 	private static LispObject atom_to_lobject(Atom term)
 	{
 		if (term.isListNil()) return Lisp.NIL;
@@ -2330,6 +2439,20 @@ public class BeanShellCntrl
 	@Retention(RetentionPolicy.RUNTIME)
 	static public @interface LispMethod
 	{
+		// Guess based on method name
+		String prologName() default "";
+
+		String symbolName() default "";
+
+		String packageName() default "CYC";
+
+		boolean exported() default true;
+
+		// use false is symbol macro
+		boolean evalArgs() default true;
+
+		// Arg has method name 
+		boolean popFront() default false;
 
 	}
 
@@ -2415,7 +2538,7 @@ public class BeanShellCntrl
 		public PrimitiveEverywhere(String string)
 		{
 			super(string, Lisp.PACKAGE_CYC, true);
-			exportInCyc(this);
+			importEverywhere(this, true);
 		}
 
 	}
@@ -2448,7 +2571,8 @@ public class BeanShellCntrl
 	static public class SpecialMethod extends SpecialOperator
 	{
 
-		boolean evalArgs;
+		boolean evalArgs = true;
+		// LispMethod lispMethod;
 
 		Method[] methodByArity;
 
@@ -2466,12 +2590,22 @@ public class BeanShellCntrl
 
 		synchronized public void addMethod(Method m)
 		{
+			LispMethod lm = m.getAnnotation(LispMethod.class);
+			if (lm != null)
+			{
+				if (!lm.evalArgs())
+				{
+					evalArgs = false;
+				}
+			}
+
 			Class[] pt = m.getParameterTypes();
 			int paramLen = pt.length;
 			if (paramLen == 2 && (pt[1] == Environment.class || pt[1] == SubLEnvironment.class))
 			{
 				evalArgs = false;
 				macro = m;
+				return;
 			}
 			if (methodByArity == null)
 			{

@@ -156,7 +156,8 @@ public class Interpreter
 
 	/** Control the verbose printing of results for the show() command. */
 	private boolean showResults = true;
-	private Object ret;
+	public Object ret;
+	public boolean eof;
 
 	/* --- End instance data --- */
 
@@ -459,7 +460,7 @@ public class Interpreter
 		// init the callstack.
 		CallStack callstack = new CallStack( globalNameSpace );
 
-        boolean eof = false;
+        this.eof = false;
         while( !eof )
         {
             try

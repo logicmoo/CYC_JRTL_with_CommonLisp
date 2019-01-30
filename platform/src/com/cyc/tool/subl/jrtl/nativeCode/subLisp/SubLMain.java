@@ -343,8 +343,7 @@ public class SubLMain
 	public static SubLReader getMainReader()
 	{
 		SubLReader locally = mainReader.get();
-		if (locally != null)
-			return locally;
+		if (locally != null) return locally;
 		return trueMainReader;
 	}
 
@@ -717,6 +716,7 @@ public class SubLMain
 
 		preInitLisp();
 		trueMainReader = new SubLReader();
+		setMainReader(trueMainReader);
 		if (args == null || args.length == 0)
 		{
 			args = new String[] { "--moo" };
@@ -786,6 +786,7 @@ public class SubLMain
 	public static void setMainReader(SubLReader reader)
 	{
 		mainReader.set(reader);
+		if (trueMainReader == null) trueMainReader = reader;
 	}
 
 	public static boolean shouldQuitAfterExecutingInitializationForm()

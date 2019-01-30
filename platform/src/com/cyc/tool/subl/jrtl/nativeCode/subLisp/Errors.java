@@ -294,7 +294,8 @@ public class Errors extends SubLTrampolineFile {
 				throw se;
 		}
 		SubLReader reader = getReaderForCurrentThread();
-		if(reader==null) {
+		if (reader == null)
+		{
 			reader = BeanShellCntrl.ensureMainReader();
 		}
 		RestartMethod restartMethod = null;

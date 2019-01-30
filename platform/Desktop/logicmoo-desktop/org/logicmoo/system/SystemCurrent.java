@@ -409,8 +409,43 @@ public class SystemCurrent
 		@Override
 		public int read(byte[] array, int n, int n2) throws IOException
 		{
+			final Thread currentThread = Thread.currentThread();
 			InputStream is = currentSystemInput();
-			return is.read(array, n, n2);
+			boolean interrupted = false;
+			do
+			{
+				try
+				{
+					if (interrupted)
+					{
+						Thread.sleep(100);
+						interrupted = false;
+						continue;
+					}
+					if (currentOwner != null && currentThread != currentOwner)
+					{
+						Thread.sleep(100);
+						continue;
+					}
+					int available = available();
+					if (available == 0)
+					{
+						Thread.sleep(100);
+						continue;
+					}
+					if (currentOwner != null && currentThread != currentOwner)
+					{
+						continue;
+					}
+					int retval = is.read(array, n, n2);
+					return retval;
+				} catch (InterruptedException e)
+				{
+					interrupted = true;
+				}
+
+			} while (true);
+
 		}
 
 		@Override

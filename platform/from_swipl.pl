@@ -3,16 +3,14 @@
 :- load_files(library(prolog_stack)).
 prolog_stack:stack_guard(none).
 
-dmiles_machine:- gethostname('gitlab.logicmoo.org') ; gethostname('i74930k').
+dmiles_machine:- fail, gethostname('gitlab.logicmoo.org') ; gethostname('i74930k').
 
 ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(false)]).
 
-:- maplist(ensure_updated_pack, 
-[ predicate_streams,multimodal_dcg,eggdrop,
-gvar_syntax,dictoo,logicmoo_utils,
-instant_prolog_docs,pfc,logicmoo_base,
-prologmud,s_expression,
-wam_common_lisp,prologmud_samples]).
+% :- use_module(library(yall)).
+:- maplist(([P] >> pack_install(P,[upgrade(true),git(true),interactive(false)])), [ 
+   predicate_streams,multimodal_dcg,eggdrop,gvar_syntax,dictoo,logicmoo_utils, 
+   instant_prolog_docs,pfc,logicmoo_base,prologmud,s_expression, wam_common_lisp,prologmud_samples]).
 
 
 :- dmiles_machine -> (getenv('DISPLAY',_)->true;setenv('DISPLAY','10.0.0.122:0.0')) ; true.
@@ -439,6 +437,7 @@ p_rn(B,A):- atom_string(B,BS),atom_string(A,AS),format('(safely-rename-or-merge 
 do_rn(B,A):- atom_string(B,BS),atom_string(A,AS),cl_eval(['safely-rename-or-merge',BS,AS], _O),!.
 
 
+called_from_cyc(_G).
 %%cl_eval_string('*package*').
 test_e:- cl_eval('*package*').
 test_e:- cl_eval([+,1,2], O),po(O).
@@ -453,6 +452,9 @@ test_x:- jpl:jpl_class_to_methods('org.logicmoo.system.BeanShellCntrl',C),dmsg(C
 
 %:- if((app_argv('--irc'))).
 :- if(exists_source(library(eggdrop))).
+:- if(exists_source(library(pfc))).
+:- user:use_module(library(pfc)).
+:- endif.
 :- dmsg("Eggdrop Server").
 :- user:use_module(library(eggdrop)).
 :- egg_go.

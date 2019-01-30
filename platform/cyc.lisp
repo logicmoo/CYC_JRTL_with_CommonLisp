@@ -103,7 +103,7 @@
 
 
 ;;#+USE-CYC
-;;(let ((*PACKAGE* (find-package :CYC))) (sl:load "e2c/larkc_prolog.lisp"))
+(let ((*PACKAGE* (find-package :CYC))) (sl:load "e2c/larkc_prolog.lisp"))
 
 
 

@@ -932,7 +932,7 @@ public class SubLSpecialOperatorDeclarations extends SubLTrampolineFile
 			while (i < size)
 			{
 				SubLSymbol dynamicVariable = (SubLSymbol) oldDynamicValues.get(i++);
-				SubLObject oldDynamicValue = (SubLSymbol) oldDynamicValues.get(i++);
+				SubLObject oldDynamicValue = (SubLObject) oldDynamicValues.get(i++);
 				dynamicVariable.rebind(oldDynamicValue, SubLProcess.currentSubLThread().bindingsList);
 			}
 		}

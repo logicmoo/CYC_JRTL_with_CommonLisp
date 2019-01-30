@@ -14,7 +14,7 @@ import java.util.List;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Primitive;
 import org.armedbear.lisp.Symbol;
-import org.logicmoo.system.BeanShellCntrl.LispMethod;
+import org.logicmoo.system.BeanShellCntrl.LispSlot;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -66,14 +66,14 @@ public class SubLStructDeclNative extends SubLStructDecl
 	{
 		Field[] actualFields = structClass.getDeclaredFields();
 		List useFields = new ArrayList();
-		boolean annotationRequired = structClass.isAnnotationPresent(LispMethod.class);
+		boolean annotationRequired = structClass.isAnnotationPresent(LispSlot.class);
 
 		for (int i = 0; i < actualFields.length; i++)
 		{
 			Field f = actualFields[i];
 			if (annotationRequired)
 			{
-				if (!f.isAnnotationPresent(LispMethod.class))
+				if (!f.isAnnotationPresent(LispSlot.class))
 				{
 					continue;
 				}
@@ -82,7 +82,7 @@ public class SubLStructDeclNative extends SubLStructDecl
 			{
 				if (Modifier.isStatic(f.getModifiers()))
 				{
-					if (!f.isAnnotationPresent(LispMethod.class))
+					if (!f.isAnnotationPresent(LispSlot.class))
 					{
 						continue;
 					}
