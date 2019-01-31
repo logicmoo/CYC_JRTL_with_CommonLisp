@@ -259,8 +259,8 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	public int getFieldCount()
 	{
 		SubLStructDecl decl = getStructDecl();
-		if (decl == null) return 0;
-		return decl.getFieldCount();
+		if (decl != null) return decl.getFieldCount();
+		return layout.getLength();
 	}
 
 	@Override

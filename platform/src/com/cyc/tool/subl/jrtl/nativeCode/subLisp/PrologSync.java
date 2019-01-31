@@ -284,7 +284,7 @@ public class PrologSync extends SubLTrampolineFile
 		{
 			try
 			{
-				final Term shouldBe = toProlog(className, struct, new LinkedList());
+				final Term shouldBe = toProlog(null, struct, new LinkedList());
 				//String s = shouldBe.toString();
 				if (was != shouldBe)
 				{
@@ -826,9 +826,8 @@ public class PrologSync extends SubLTrampolineFile
 
 		if (name == null)
 		{
-			name = getClassName(s);
+			name = toProlog(s.getType(), l).name();
 		}
-		name = toProlog(s.getType(), l).name();
 		final int arity = s.getFieldCount();
 		if (arity == 0)
 		{

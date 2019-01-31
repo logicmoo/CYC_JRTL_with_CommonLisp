@@ -51,6 +51,7 @@ abstract public class Layout extends LispObject
 
 	public int getFieldCount()
 	{
+		assert (getterNames.length == slotNames.length);
 		return getterNames.length;
 	}
 
@@ -270,6 +271,7 @@ abstract public class Layout extends LispObject
 
 	public int getLength()
 	{
+		assert (getterNames.length == slotNames.length);
 		return slotNames.length;
 	}
 
