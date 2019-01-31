@@ -17,6 +17,7 @@ import org.armedbear.lisp.Main;
 import org.armedbear.lisp.Symbol;
 import org.jpl7.Term;
 
+import com.cyc.cycjava.cycl.cb_adornments.$adornment_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -36,6 +37,9 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 {
 
 	@Override
+	abstract public SubLStructDecl getStructDecl();
+
+	@Override
 	public LispObject getSlotValue(int index)
 	{
 		return (LispObject) getField(index + 2);
@@ -45,7 +49,11 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 	public LispObject SLOT_VALUE(LispObject slotName)
 	{
 		LispObject value;
-
+		if (slotName instanceof SubLSymbol)
+		{
+			value = (LispObject) ((SubLStructDeclNative) getStructDecl()).getFieldFromName(this, (SubLSymbol) slotName);
+			return value;
+		}
 		final int index = getSlotIndex(slotName);
 		if (index >= 0)
 		{
@@ -70,6 +78,11 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 	@Override
 	public void setSlotValue(LispObject slotName, LispObject newValue)
 	{
+		if (slotName instanceof SubLSymbol)
+		{
+			((SubLStructDeclNative) getStructDecl()).setFieldFromName(this, (SubLSymbol) slotName, newValue);
+			return;
+		}
 		final int index = getSlotIndex(slotName);
 		if (index >= 0)
 		{
@@ -131,7 +144,7 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		{
 			SubLObject currentField = ConsesLow.car(next);
 			SubLObject currentValue = conses_high.cadr(next);
-			structDecl.setFieldFromName(currentField.toSymbol(), currentValue);
+			structDecl.setFieldFromName(this, currentField.toSymbol(), currentValue);
 		}
 	}
 

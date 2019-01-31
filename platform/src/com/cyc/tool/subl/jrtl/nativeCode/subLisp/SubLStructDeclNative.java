@@ -166,10 +166,10 @@ public class SubLStructDeclNative extends SubLStructDecl
 			Errors.error("Got invalid struct field declaration.", e);
 		}
 	}
-
-	public static void main(String[] args)
-	{
-	}
+	//
+	//	public static void main(String[] args)
+	//	{
+	//	}
 
 	@Override
 	public SubLStruct newInstance()
@@ -197,7 +197,7 @@ public class SubLStructDeclNative extends SubLStructDecl
 	private Field[] fieldDecls;
 	private Class structClass;
 	private String[] actualFieldNames;
-	private Hashtable declaredFieldNameToFieldHash;
+	private Hashtable<SubLSymbol, Field> declaredFieldNameToFieldHash;
 	private int pongAt;
 
 	public Field getFieldDecl(int i)
@@ -205,17 +205,33 @@ public class SubLStructDeclNative extends SubLStructDecl
 		return fieldDecls[i];
 	}
 
-	public void setFieldFromName(SubLSymbol declaredFieldName, SubLObject value)
+	public void setFieldFromName(Object thiz, SubLSymbol declaredFieldName, SubLObject value)
 	{
 		Field field = (Field) declaredFieldNameToFieldHash.get(declaredFieldName);
 		if (field == null) Errors.error("Can't find field: " + declaredFieldName + " on object: " + this + ".");
 		try
 		{
-			field.set(this, value);
+			field.set(thiz, value);
 		} catch (Exception e)
 		{
-			Errors.error("Unable to set field on: " + this + ".", e);
+			Errors.error("Unable to set field on: " + this + " using name " + declaredFieldName + ".", e);
 		}
+	}
+
+	public SubLObject getFieldFromName(Object thiz, SubLSymbol declaredFieldName)
+	{
+		Field field = (Field) declaredFieldNameToFieldHash.get(declaredFieldName);
+		if (field == null) Errors.error("Can't find field: " + declaredFieldName + " on object: " + this + ".");
+		SubLObject value;
+		try
+		{
+			value = (SubLObject) field.get(thiz);
+			return value;
+		} catch (Exception e)
+		{
+			return Errors.error("Unable to get field on: " + this + " using name " + declaredFieldName + ".", e);
+		}
+
 	}
 
 	public class SpyFA implements FieldAccessor

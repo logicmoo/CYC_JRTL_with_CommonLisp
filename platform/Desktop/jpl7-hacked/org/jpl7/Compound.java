@@ -313,19 +313,20 @@ public class Compound extends Term
 	@Override
 	protected void put(Map<String, term_t> varnames_to_vars, term_t term)
 	{
-		if(isJFalse() || isJNull() || isJTrue() || isJVoid()) {
+		if (isJFalse() || isJNull() || isJTrue() || isJVoid())
+		{
 			did = -1;
 		}
 		final String name = name();
 		if (true)
 		{
 			long at = term.value;
-			if (did >= 0)
+			if (did >= 0 && false)
 			{
 				if (did == at) { return; }
 				term_t was = new term_t(did);
 				Prolog.put_term(term, was);
-				return ;
+				return;
 			}
 			else
 			{
