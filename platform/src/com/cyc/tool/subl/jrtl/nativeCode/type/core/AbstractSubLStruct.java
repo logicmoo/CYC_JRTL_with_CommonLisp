@@ -6,12 +6,6 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 import java.io.IOException;
 import java.util.List;
 
-import org.armedbear.lisp.Condition;
-import org.armedbear.lisp.Fixnum;
-import org.armedbear.lisp.GenericFunction;
-import org.armedbear.lisp.Layout;
-import org.armedbear.lisp.LispObject;
-import org.armedbear.lisp.Stream;
 import org.armedbear.lisp.*;
 import org.jpl7.Term;
 
@@ -27,6 +21,14 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractSubLStruct extends LispObject implements SubLStruct, IPrologifiable
 {
+	abstract public void setSlotValue(int index, LispObject value);
+
+	abstract public LispObject getSlotValue(int index);
+
+	abstract public LispObject SLOT_VALUE(LispObject slotName);
+
+	abstract public void setSlotValue(LispObject slotName, LispObject newValue);
+
 	@Override
 	abstract public void setLayout(Layout structdecl);
 
@@ -51,6 +53,41 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 		if (layout != null) return (SubLStructDecl) layout;
 		if (true) Errors.unimplementedMethod("Auto-generated method stub:  SubLStruct.getStructDecl");
 		return null;
+	}
+
+	protected int getSlotIndex(LispObject slotName)
+	{
+		layout = getStructDecl();
+		if (layout.isInvalid())
+		{
+			// Update instance.
+			layout = updateLayout();
+		}
+		int index = layout.getSlotIndex(slotName);
+		if (index >= 0) return index;
+
+		StructureClass structureClass = (StructureClass) layout.getLispClass();
+		LispObject effectiveSlots = structureClass.getSlotDefinitions();
+		LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
+		int len = effectiveSlotsArray.length;
+		for (int i = 0; i < len; i++)
+		{
+			SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
+			LispObject candidateSlotName = slotDefinition.AREF(1);
+			if (slotName == candidateSlotName) { return i; }
+		}
+
+		if (slotName.isInteger())
+		{
+			Errors.warn("WORKARROUND using slotnum" + this);
+			return slotName.intValue();
+		}
+		return -1;
+	}
+
+	protected Layout updateLayout()
+	{
+		return layout;
 	}
 
 	@Override

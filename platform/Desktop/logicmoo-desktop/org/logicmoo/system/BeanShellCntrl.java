@@ -79,6 +79,10 @@ import org.armedbear.lisp.ProcessingTerminated;
 import org.armedbear.lisp.SimpleString;
 import org.armedbear.lisp.SpecialOperator;
 import org.armedbear.lisp.SpecialOperators;
+import org.armedbear.lisp.StandardClass;
+import org.armedbear.lisp.StandardObject;
+import org.armedbear.lisp.StructureClass;
+import org.armedbear.lisp.StructureObject;
 import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.Version;
 import org.globus.cog.abstraction.impl.file.webdav.InteractiveWebDAVSecurityContextImpl;
@@ -109,6 +113,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLListListIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLReader;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
@@ -1523,8 +1528,6 @@ public class BeanShellCntrl
 	@LispMethod
 	static public LispObject lisp_eval(Term term)
 	{
-		LispObject args = term_to_lobject(term);
-		Environment env = Environment.currentLispEnvironment();
 		boolean wasNoDebug = Main.isNoDebug();
 		if (!wasNoDebug)
 		{
@@ -1532,6 +1535,8 @@ public class BeanShellCntrl
 		}
 		try
 		{
+			LispObject args = term_to_lobject(term);
+			Environment env = Environment.currentLispEnvironment();
 			return lisp_progn(args, env);
 		} finally
 		{
@@ -2192,7 +2197,7 @@ public class BeanShellCntrl
 
 	static public Object toJavaObject(Variable thiz)
 	{
-		Object object = thiz.getTag();
+		final Object object = thiz.getTag();
 		if (object == null)
 		{
 			String name = thiz.name;
@@ -2211,7 +2216,7 @@ public class BeanShellCntrl
 
 	static public Object compound_to_object(Compound term, String value, Term[] args)
 	{
-		Object o = term.getTag();
+		final Object o = term.getTag();
 		if (o != null) return o;
 
 		Term arg1 = null;
@@ -2254,17 +2259,49 @@ public class BeanShellCntrl
 			if (args.length == 1) { return term_to_object(arg1); }
 		}
 
-		LispObject lo = atom_to_lisp_object(term.name());
-		LispClass c = LispClass.findClass(Lisp.checkSymbol(lo));
+		LispObject lo;
 		if (o instanceof LispObject)
 		{
-			lo = (LispObject) o;
+			return lo = (LispObject) o;
 		}
 		else
 		{
-			lo = JavaObject.getInstance(o, true);
+			LispObject cl = atom_to_lisp_object(value);
+			Symbol cn = Lisp.checkSymbol(cl);
+
+			LispClass c = LispClass.findClass(cn);
+			if (c instanceof StructureClass)
+			{
+				LispObject[] slots = terms_to_lisp_objects(args);
+				return lo = new StructureObject(cn.toSymbol().toLispObject(), slots);
+			}
+
+			if (c instanceof StandardClass)
+			{
+				LispObject[] slots = terms_to_lisp_objects(args);
+				lo = StandardObject._STD_ALLOCATE_INSTANCE.execute(c);
+				for (int i = 0; i < slots.length; i++)
+				{
+					LispObject lispObject = slots[i];
+					lo.setSlotValue(i, lispObject);
+				}
+				return lo;
+			}
+
+			SubLStructDecl dec = SubLStructDecl.getStructDecl(cn);
+			if (dec != null)
+			{
+				LispObject[] slots = terms_to_lisp_objects(args);
+				lo = (LispObject) dec.newInstance();
+				for (int i = 0; i < slots.length; i++)
+				{
+					LispObject lispObject = slots[i];
+					lo.setSlotValue(i, lispObject);
+				}
+				return lo;
+			}
+			return lo = JavaObject.getInstance(o, true);
 		}
-		return lo;
 	}
 
 	static public LispObject[] terms_to_lisp_objects(Term[] args)

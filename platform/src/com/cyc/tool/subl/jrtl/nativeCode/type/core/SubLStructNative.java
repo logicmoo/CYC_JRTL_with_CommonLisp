@@ -9,8 +9,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.Layout;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Main;
+import org.armedbear.lisp.Symbol;
 import org.jpl7.Term;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -32,8 +36,71 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 {
 
 	@Override
+	public LispObject getSlotValue(int index)
+	{
+		return (LispObject) getField(index + 2);
+	}
+
+	@Override
+	public LispObject SLOT_VALUE(LispObject slotName)
+	{
+		LispObject value;
+
+		final int index = getSlotIndex(slotName);
+		if (index >= 0)
+		{
+			// Found instance slot.
+			value = getSlotValue(index);
+		}
+		else
+		{
+			// Check for shared slot.
+			LispObject location = layout.getSharedSlotLocation(slotName);
+			if (location == null) return Symbol.SLOT_MISSING.execute(getLispClass(), this, slotName, Symbol.SLOT_VALUE);
+			value = location.cdr();
+		}
+		if (value == UNBOUND_VALUE)
+		{
+			value = Symbol.SLOT_UNBOUND.execute(getLispClass(), this, slotName);
+			LispThread.currentThread()._values = null;
+		}
+		return value;
+	}
+
+	@Override
+	public void setSlotValue(LispObject slotName, LispObject newValue)
+	{
+		final int index = getSlotIndex(slotName);
+		if (index >= 0)
+		{
+			// Found instance slot.
+			setSlotValue(index, newValue);
+			return;
+		}
+		// Check for shared slot.
+		LispObject location = layout.getSharedSlotLocation(slotName);
+		if (location != null)
+		{
+			location.setCdr(newValue);
+			return;
+		}
+		LispObject[] args = new LispObject[5];
+		args[0] = getLispClass();
+		args[1] = this;
+		args[2] = slotName;
+		args[3] = Symbol.SETF;
+		args[4] = newValue;
+		Symbol.SLOT_MISSING.execute(args);
+	}
+
+	public void setSlotValue(int index, LispObject newValue)
+	{
+		setField(index + 2, newValue);
+	}
+
+	@Override
 	public void setLayout(Layout structdecl)
-	{		
+	{
 		if (layout == structdecl) return;
 		if (layout == null)
 		{
@@ -42,13 +109,14 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		else
 		{
 			Errors.unimplementedMethod("SublStructNative.setLayout(.)");
-		}		
+		}
 	}
 
 	protected SubLStructNative()
 	{
 		layout = getStructDecl();
-		if(isTracked()) {
+		if (isTracked())
+		{
 			PrologSync.addThis(this);
 		}
 	}

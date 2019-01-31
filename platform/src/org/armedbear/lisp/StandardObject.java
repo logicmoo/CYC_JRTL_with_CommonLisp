@@ -46,6 +46,41 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 public class StandardObject extends SubLStructInterpreted implements SubLStruct
 {
 
+	public static LispObject allocateInstance(LispObject arg)
+	{
+		if (arg == StandardClass.FUNCALLABLE_STANDARD_CLASS)
+		{
+			return new FuncallableStandardClass();
+		}
+		else if (arg == StandardClass.STANDARD_CLASS)
+		{
+			return new StandardClass();
+		}
+		else if (arg instanceof StandardClass)
+		{
+			StandardClass cls = (StandardClass) arg;
+			Layout layout = cls.getClassLayout();
+			if (layout == null)
+			{
+				program_error("No layout for class " + cls.princToString() + ".");
+			}
+			return new StandardObject(cls, layout.getLength());
+		}
+		else if (arg.typep(StandardClass.STANDARD_CLASS) != NIL)
+		{
+			LispObject l = Symbol.CLASS_LAYOUT.execute(arg);
+			if (!(l instanceof Layout))
+			{
+				program_error("Invalid standard class layout for class " + arg.princToString() + ".");
+			}
+			return new StandardObject((Layout) l);
+		}
+		else
+		{
+			return type_error(arg, Symbol.STANDARD_CLASS);
+		}
+	}
+
 	@Override
 	public boolean equalp(SubLObject obj)
 	{
@@ -693,37 +728,7 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 		@Override
 		public LispObject execute(LispObject arg)
 		{
-			if (arg == StandardClass.FUNCALLABLE_STANDARD_CLASS)
-			{
-				return new FuncallableStandardClass();
-			}
-			else if (arg == StandardClass.STANDARD_CLASS)
-			{
-				return new StandardClass();
-			}
-			else if (arg instanceof StandardClass)
-			{
-				StandardClass cls = (StandardClass) arg;
-				Layout layout = cls.getClassLayout();
-				if (layout == null)
-				{
-					program_error("No layout for class " + cls.princToString() + ".");
-				}
-				return new StandardObject(cls, layout.getLength());
-			}
-			else if (arg.typep(StandardClass.STANDARD_CLASS) != NIL)
-			{
-				LispObject l = Symbol.CLASS_LAYOUT.execute(arg);
-				if (!(l instanceof Layout))
-				{
-					program_error("Invalid standard class layout for class " + arg.princToString() + ".");
-				}
-				return new StandardObject((Layout) l);
-			}
-			else
-			{
-				return type_error(arg, Symbol.STANDARD_CLASS);
-			}
+			return allocateInstance(arg);
 		}
 	}
 
