@@ -52,6 +52,8 @@ import org.armedbear.j.LispAPI;
 import org.armedbear.j.LispMode;
 import org.armedbear.j.Log;
 import org.armedbear.j.ReaderThread;
+import org.armedbear.lisp.Condition;
+import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.Cons;
 import org.armedbear.lisp.ControlTransfer;
 import org.armedbear.lisp.Debug;
@@ -502,7 +504,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public Object call_ctrl(Term list, Term result)
+	static public Term call_ctrl(Term list, Term result)
 	{
 		String atom = list.name();
 		int arity = list.arity();
@@ -525,7 +527,14 @@ public class BeanShellCntrl
 		if (op instanceof SpecialMethod)
 		{
 			SpecialMethod mf = (SpecialMethod) op;
-			return mf.invokeFromProlog(list, result);
+			final Object invokeFromProlog = mf.invokeFromProlog(list, result);
+			try
+			{
+				return object_to_term(invokeFromProlog);
+			} catch (StackOverflowError e)
+			{
+				throw new JPLException("Stack Overflow!");
+			}
 		}
 		boolean wasNoDebug = Main.isNoDebug();
 		try
@@ -557,6 +566,15 @@ public class BeanShellCntrl
 		{
 			Main.setNoDebug(wasNoDebug);
 		}
+	}
+
+	private static Term object_to_term(Object o)
+	{
+		if (o instanceof Term) return (Term) o;
+		if (o instanceof LispObject) return lobject_to_term((LispObject) o);
+		Term term = PrologSync.toProlog(o);
+		//o.termRef = term;
+		return term;
 	}
 
 	static public LispObject call_lisp2(Symbol found, Term[] args)
@@ -863,14 +881,23 @@ public class BeanShellCntrl
 	@LispMethod(prologName = "cyc_repl")
 	static public LispObject cyc_repl() throws InterruptedException
 	{
-		SystemCurrent.setupIO();
-		Thread takenFrom = SystemCurrent.takeOwnerShip();
+		boolean wasSubLisp = Main.isSubLisp();
+		Main.setSubLisp(true);
 		try
 		{
-			return cyc_repl_no_suspend();
+			init_cyc();
+			ensureMainReader();
+			try
+			{
+				SystemCurrent.takeOwnerShip();
+				return cyc_repl_no_suspend();
+			} finally
+			{
+				SystemCurrent.releaseOwnerShip();
+			}
 		} finally
 		{
-			SystemCurrent.releaseOwnerShip();
+			Main.setSubLisp(wasSubLisp);
 		}
 	}
 
@@ -879,13 +906,7 @@ public class BeanShellCntrl
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		init_cyc();
-		SubLReader SLR = SubLMain.getMainReader();
-		if (SLR == null)
-		{
-			//boolean quitOnExit, InputStream is, OutputStream os
-			SLR = new SubLReader();
-			SubLMain.setMainReader(SLR);
-		}
+		SubLReader SLR = ensureMainReader();
 		boolean wasQuitOnExit = SLR.quitOnExit;
 		boolean was_shouldReadloopExit = SLR.shouldReadloopExit;
 		boolean was_noExit = Main.noExit;
@@ -1544,6 +1565,14 @@ public class BeanShellCntrl
 			} catch (org.armedbear.lisp.ProcessingTerminated e)
 			{
 				//e.printStackTrace();
+				// TODO: handle exception
+			} catch (ConditionThrowable e)
+			{
+				throw e;
+
+			} catch (Throwable e)
+			{
+				e.printStackTrace();
 				// TODO: handle exception
 			}
 			return Symbol.STAR.getSymbolValue();
@@ -2404,6 +2433,7 @@ public class BeanShellCntrl
 		init_swipl_server();
 		start_lisp_from_prolog();
 		Runnable runnable = Main.mainRunnable(argsNew, null);
+		scanForExports(BeanShellCntrl.class);
 		runnable.run();
 	}
 
@@ -2906,7 +2936,7 @@ public class BeanShellCntrl
 
 	public static org.armedbear.lisp.Interpreter currentLisp()
 	{
-		return null;
+		return Interpreter.getInstance();
 
 	}
 

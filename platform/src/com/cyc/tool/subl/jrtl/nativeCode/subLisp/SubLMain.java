@@ -344,7 +344,7 @@ public class SubLMain
 	{
 		SubLReader locally = mainReader.get();
 		if (locally != null) return locally;
-		return trueMainReader;
+		return null;
 	}
 
 	public static SubLString getWorldFileName()
@@ -786,7 +786,7 @@ public class SubLMain
 	public static void setMainReader(SubLReader reader)
 	{
 		mainReader.set(reader);
-		if (trueMainReader == null) trueMainReader = reader;
+		// if (trueMainReader == null) trueMainReader = reader;
 	}
 
 	public static boolean shouldQuitAfterExecutingInitializationForm()

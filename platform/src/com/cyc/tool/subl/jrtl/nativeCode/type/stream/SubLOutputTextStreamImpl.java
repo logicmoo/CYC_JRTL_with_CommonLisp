@@ -94,7 +94,8 @@ public class SubLOutputTextStreamImpl extends AbstractSubLTextStream implements 
 		if (!(obj instanceof SubLOutputTextStreamImpl))
 			return false;
 		SubLOutputTextStreamImpl imp2 = (SubLOutputTextStreamImpl) obj;
-		return out == imp2.out;
+		final OutputStream out2 = imp2.out;
+		return out == out2;
 	}
 
 	@Override

@@ -91,6 +91,7 @@ public class Errors extends SubLTrampolineFile {
 
 	private static boolean isInitializedAndReaderThreadAndOriginalErrorStream() {
 		SubLReader reader = getReaderForCurrentThread();
+		if(reader==null) return false;
 		SubLOutputTextStream stream1 = StreamsLow.$error_output$.getDynamicValue().toOutputTextStream();
 		SubLOutputTextStream stream2 = StreamsLow.originalErrorStream;
 		return SubLMain.isInitialized() && reader != null && stream1.equals(stream2);
@@ -290,7 +291,8 @@ public class Errors extends SubLTrampolineFile {
 		if (noDebug) { throw se; }
 		if (SubLMain.isInitialized())
 		{
-			if (!isInitializedAndReaderThreadAndOriginalErrorStream()) 
+			final boolean initializedAndReaderThreadAndOriginalErrorStream = isInitializedAndReaderThreadAndOriginalErrorStream();
+			if (!initializedAndReaderThreadAndOriginalErrorStream) 
 				throw se;
 		}
 		SubLReader reader = getReaderForCurrentThread();

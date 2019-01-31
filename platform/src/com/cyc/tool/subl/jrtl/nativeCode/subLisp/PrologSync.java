@@ -758,8 +758,8 @@ public class PrologSync extends SubLTrampolineFile
 
 		@Override
 		public void run()
-		{
-			SystemCurrent.setupIO();
+		{			
+			SystemCurrent.attachConsole();
 			while (true)
 			{
 				if (needsDone == 0 || !prologReady)

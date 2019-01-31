@@ -74,7 +74,7 @@ public class SystemCurrent
 	 *  to see if it's ok to reassign the "standard" input stream.
 	 * <p>
 	 *
-	 * @param in the new standard input stream.
+	 * @param s the new standard input stream.
 	 *
 	 * @throws SecurityException
 	 *        if a security manager exists and its
@@ -86,27 +86,33 @@ public class SystemCurrent
 	 *
 	 * @since   JDK1.1
 	 */
-	public static void setIn(InputStream in)
+	public static void setIn(InputStream s)
 	{
-		if (in instanceof In)
+		final InputStream wasIn = currentIO().in;
+		if (wasIn == s) return;
+		if (s == null)
 		{
-			currentIO().in = originalSystemIn;
+			currentIO().in = null;
 			return;
 		}
-		InputStream is2 = underlyingStream(in);
-		if (is2 instanceof In)
+		if (s instanceof In)
 		{
-			currentIO().in = originalSystemIn;
+			if (wasIn == null)
+			{
+				currentIO().in = originalSystemIn;
+			}
 			return;
 		}
-		currentIO().in = in;
+		InputStream underI = underlyingStream(s);
+		if (underI instanceof In) { return; }
+		currentIO().in = s;
 	}
 
 	public static Thread takeOwnerShip()
 	{
 		final Thread currentThread = Thread.currentThread();
-		final InOutErr inOutErr = currentIO();
-		if (inOutErr.in != null && inOutErr.in != originalSystemIn) { return currentThread; }
+		//final InOutErr inOutErr = currentIO();
+		//if (inOutErr.in != null && inOutErr.in != originalSystemIn) { return currentThread; }
 		Thread was;
 		synchronized (justSuspended)
 		{
@@ -121,7 +127,7 @@ public class SystemCurrent
 			}
 			else
 			{
-				currentOwner.suspend();
+				//currentOwner.suspend();
 				justSuspended.set(currentOwner);
 				currentOwner = currentThread;
 			}
@@ -189,7 +195,7 @@ public class SystemCurrent
 				else if (currentOwner != currentThread)
 				{
 					//
-					throw new Error("Take owership first!");
+					//throw new Error("Take owership first!");
 				}
 			}
 		}
@@ -286,20 +292,26 @@ public class SystemCurrent
 	 *
 	 * @since   JDK1.1
 	 */
-	public static void setOut(PrintStream out)
+	public static void setOut(PrintStream s)
 	{
-		if (out instanceof Out)
+		final OutputStream wasOut = currentIO().out;
+		if (wasOut == s) return;
+		if (s == null)
 		{
-			currentIO().out = originalSystemOut;
+			currentIO().out = null;
 			return;
 		}
-		OutputStream is2 = underlyingStream(out);
-		if (is2 instanceof Out)
+		if (s instanceof Out)
 		{
-			currentIO().out = originalSystemOut;
+			if (wasOut == null)
+			{
+				currentIO().out = originalSystemOut;
+			}
 			return;
 		}
-		currentIO().out = out;
+		OutputStream underI = underlyingStream(s);
+		if (underI instanceof Out) { return; }
+		currentIO().out = s;
 	}
 
 	public static final ThreadLocalPrintStream tlout = new ThreadLocalPrintStream()
@@ -341,18 +353,25 @@ public class SystemCurrent
 	 */
 	public static void setErr(PrintStream err)
 	{
+		final OutputStream wasOut = currentIO().err;
+		if (wasOut == err) return;
+		if (err == null)
+		{
+			currentIO().err = null;
+			return;
+		}
 		if (err instanceof Out)
 		{
-			currentIO().err = originalSystemErr;
+			if (wasOut == null)
+			{
+				currentIO().err = originalSystemErr;
+			}
 			return;
 		}
-		OutputStream is2 = underlyingStream(err);
-		if (is2 instanceof Out)
-		{
-			currentIO().err = err;
-			return;
-		}
+		OutputStream underI = underlyingStream(err);
+		if (underI instanceof Out) { return; }
 		currentIO().err = err;
+
 	}
 
 	public static final ThreadLocalPrintStream tlerr = new ThreadLocalPrintStream()
@@ -378,7 +397,7 @@ public class SystemCurrent
 		setupIO();
 	}
 
-	static public class In extends InputStream
+	static public class In extends BufferedInputStream
 	{
 		private String named;
 
@@ -389,27 +408,70 @@ public class SystemCurrent
 
 		public In(String n)
 		{
+			super(originalSystemIn);
 			this.named = n;
 		}
 
 		@Override
 		public String toString()
 		{
-			return named;
+			final InOutErr inOutErr = currentIO();
+			return named + " @ " + inOutErr;
 		}
 
 		@Override
 		public int read() throws IOException
 		{
-			InputStream is = currentSystemInput();
-			if (is.available() < 1) { return is.read(); }
-			return is.read();
+			//if (available() < 1) { return -1; }
+			boolean interrupted = false;
+			do
+			{
+				InputStream is = currentSystemInput();
+				try
+				{
+					if (interrupted)
+					{
+						Thread.sleep(100);
+						interrupted = false;
+						continue;
+					}
+					if (!canAccessConsole(false))
+					{
+						Thread.sleep(100);
+						continue;
+					}
+					int available = available();
+					if (available == 0)
+					{
+						Thread.sleep(100);
+						continue;
+					}
+					if (!canAccessConsole(true))
+					{
+						continue;
+					}
+					int retval = is.read();
+					return retval;
+				} catch (InterruptedException e)
+				{
+					interrupted = true;
+				}
+
+			} while (true);
+		}
+
+		public boolean canAccessConsole(boolean expectedTo)
+		{
+			if (currentOwner == null) return true;
+			final Thread currentThread = Thread.currentThread();
+			if (currentThread == currentOwner) return true;
+			if (!expectedTo) { return false; }
+			return false;
 		}
 
 		@Override
 		public int read(byte[] array, int n, int n2) throws IOException
 		{
-			final Thread currentThread = Thread.currentThread();
 			InputStream is = currentSystemInput();
 			boolean interrupted = false;
 			do
@@ -422,7 +484,7 @@ public class SystemCurrent
 						interrupted = false;
 						continue;
 					}
-					if (currentOwner != null && currentThread != currentOwner)
+					if (!canAccessConsole(false))
 					{
 						Thread.sleep(100);
 						continue;
@@ -433,7 +495,7 @@ public class SystemCurrent
 						Thread.sleep(100);
 						continue;
 					}
-					if (currentOwner != null && currentThread != currentOwner)
+					if (!canAccessConsole(true))
 					{
 						continue;
 					}
@@ -479,7 +541,7 @@ public class SystemCurrent
 		}
 	}
 
-	static public class Out extends PrintStream
+	final static public class Out extends PrintStream
 	{
 		private String named;
 
@@ -492,7 +554,7 @@ public class SystemCurrent
 		@Override
 		public String toString()
 		{
-			return named;
+			return named + " @ " + currentIO();
 		}
 	}
 
@@ -503,6 +565,12 @@ public class SystemCurrent
 		{
 			OutputStream redirect = getOutputStream();
 			if (redirect != null) redirect.write(b);
+		}
+
+		@Override
+		public String toString()
+		{
+			return "TLPS: " + getOutputStream();
 		}
 
 		abstract OutputStream getOutputStream();
@@ -542,9 +610,29 @@ public class SystemCurrent
 
 	public static void setupIO()
 	{
-		if (!(System.in instanceof In) || System.in != in) System.setIn(in);
-		if (!(System.out instanceof Out) || System.out != out) System.setOut(out);
-		if (!(System.err instanceof Out) || System.err != err) System.setErr(err);
+		final InputStream wasIn = System.in;
+		if (!(wasIn instanceof In) || wasIn != in)
+		{
+			System.setIn(in);
+			setIn(wasIn);
+		}
+		final PrintStream wasOut = System.out;
+		if (!(wasOut instanceof Out) || wasOut != out)
+		{
+			System.setOut(out);
+			setOut(wasOut);
+		}
+		final PrintStream wasErr = System.err;
+		if (!(wasErr instanceof Out) || wasErr != err)
+		{
+			System.setErr(err);
+			setErr(wasErr);
+		}
+	}
+
+	public static void attachConsole()
+	{
+		setupIO();
 		SystemInOutErr.set(originalInOutErr);
 	}
 }
@@ -561,7 +649,7 @@ class InOutErr
 	@Override
 	public String toString()
 	{
-		return name;
+		return name + " in=" + in + " out=" + out;
 	}
 
 	transient InputStream in;

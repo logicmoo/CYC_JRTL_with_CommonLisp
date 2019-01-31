@@ -441,7 +441,7 @@ public final class api_kernel extends SubLTranslatedFile
                 thread.throwStack.pop();
             }
         }
-        if (api_request.first() == api_kernel.$sym16$TASK_PROCESSOR_REQUEST) {
+        if (api_request.isList() && api_request.first() == api_kernel.$sym16$TASK_PROCESSOR_REQUEST) {
             SubLObject release = (SubLObject)api_kernel.NIL;
             try {
                 release = Locks.seize_lock(task_processor.$api_task_process_pool_lock$.getGlobalValue());

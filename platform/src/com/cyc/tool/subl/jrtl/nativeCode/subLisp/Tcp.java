@@ -51,14 +51,14 @@ public class Tcp extends SubLTrampolineFile {
 			SubLObject oldRemoteHostname = Dynamic.currentBinding(Tcp.$remote_hostname$);
 			SubLObject oldRemoteAddress = Dynamic.currentBinding(Tcp.$remote_address$);
 			SubLObject oldRetainClientSocket = Dynamic.currentBinding(Tcp.$retain_client_socketP$);
-			try {
+			try {				
 				Dynamic.bind(Tcp.$remote_hostname$, host);
 				Dynamic.bind(Tcp.$remote_address$, ipAddress);
 				Dynamic.bind(Tcp.$retain_client_socketP$, SubLNil.NIL);
 				socketStream = SubLObjectFactory.makeSocketStream(connectionSocket);
 				final int port100 = connectionSocket.getLocalPort() % 20;
 				if(port100==1) {
-					connectionSocket.setSoTimeout(0);
+					connectionSocket.setSoTimeout(0);					
 					SystemCurrent.setIn(connectionSocket.getInputStream());
 					SystemCurrent.setOut(new PrintStream(connectionSocket.getOutputStream()));
 					SystemCurrent.setErr(new PrintStream(connectionSocket.getOutputStream()));
@@ -66,7 +66,7 @@ public class Tcp extends SubLTrampolineFile {
 					connectionSocket.setSoTimeout(30000);
 				}
 				Functions.funcall(func, socketStream, socketStream);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				Errors.error("Error detected on socket connection: " + socketStream, e);
 				try {
 					if (socketStream != null && Tcp.$retain_client_socketP$.getValue() == SubLNil.NIL)
@@ -128,7 +128,7 @@ public class Tcp extends SubLTrampolineFile {
 
 		@Override
 		public void safeRun() {
-			SystemCurrent.setupIO();
+			SystemCurrent.attachConsole();
 			Socket socket = null;
 			try {
 				while (true) {

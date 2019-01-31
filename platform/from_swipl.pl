@@ -3,7 +3,7 @@
 :- load_files(library(prolog_stack)).
 prolog_stack:stack_guard(none).
 
-dmiles_machine:- fail, gethostname('gitlab.logicmoo.org') ; gethostname('i74930k').
+dmiles_machine:- gethostname('gitlab.logicmoo.org') ; gethostname('i74930k').
 
 ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(false)]).
 
@@ -78,7 +78,7 @@ invoke_ctrl(Name,Args,O):-jpl_call('org.logicmoo.system.BeanShellCntrl',Name,Arg
  ps -ef | grep  pts\/1 | grep -v grep | awk '{print "sudo kill -9", $2}' | h
 */
 
-:- debug.
+%:- debug.
 :- nodebug(_).
 %:- Six = 6, set_prolog_stack(global, limit(Six*10**9)),set_prolog_stack(local, limit(Six*10**9)),set_prolog_stack(trail, limit(Six*10**9)).
 %:- set_prolog_flag(gc,false).

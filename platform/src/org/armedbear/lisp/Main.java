@@ -79,7 +79,10 @@ public final class Main
 	public static void main(String[] args) throws InterruptedException
 	{
 		SystemCurrent.setupIO();
+		SystemCurrent.attachConsole();
 		assert (System.in instanceof In);
+		SystemCurrent.attachConsole();
+		SystemCurrent.takeOwnerShip();
 		abclProcessArgs = true;
 		Main.noBSH = true;
 		Main.noExit = false;
