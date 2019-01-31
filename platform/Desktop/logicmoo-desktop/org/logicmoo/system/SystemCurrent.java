@@ -207,7 +207,9 @@ public class SystemCurrent
 		}
 		InputStream is2 = underlyingStream(is);
 		if (is2 instanceof In) return originalSystemIn;
-		return is;
+		if(is2 !=null) return is2;
+		if(is !=null) return is;
+		return originalSystemIn;
 	}
 
 	private static InOutErr currentIO()

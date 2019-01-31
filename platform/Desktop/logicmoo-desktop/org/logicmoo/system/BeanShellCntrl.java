@@ -1194,7 +1194,7 @@ public class BeanShellCntrl
 		}
 
 		js = js.toUpperCase();
-		pkg = Packages.findPackage(suggestPackage).toPackage().toLispObject();
+		if (suggestPackage != null) pkg = Packages.findPackage(suggestPackage).toPackage().toLispObject();
 		if (pkg == null) pkg = Lisp.getCurrentPackage();
 		Symbol sym = null;
 		if (!exported)
@@ -2474,7 +2474,7 @@ public class BeanShellCntrl
 
 		String symbolName() default "";
 
-		String packageName() default "CYC";
+		String packageName() default "";
 
 		boolean exported() default true;
 
