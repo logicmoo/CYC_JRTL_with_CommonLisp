@@ -242,16 +242,19 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 	}
 
 	@Override
-	public void setLayout(Layout structdecl)
+	final public void setLayout(Layout structdecl)
 	{
 		if (layout == null)
 		{
-			layout = structdecl;
+			layout = structdecl;			
 		}
 		else if (structdecl != layout)
 		{
 			layout = structdecl;
 			updateLayoutSync();
+		}
+		if(isTracked()) {
+			PrologSync.addThis(this);
 		}
 	}
 

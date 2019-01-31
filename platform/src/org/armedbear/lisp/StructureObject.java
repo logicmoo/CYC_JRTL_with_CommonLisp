@@ -67,6 +67,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	protected StructureObject()
 	{
+
 	}
 
 	protected void setStructureClass(Symbol symbol)
@@ -84,6 +85,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		{
 			this.structureClass = structureClass;
 		}
+
 	}
 
 	@Override
@@ -809,7 +811,10 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 			}
 			//updateLayoutSync();
 			SubLSymbol sym = layout.getStructName();
-			if (sym != null) setName(sym);
+			if (sym != null) setName(sym);			
+		}
+		if(isTracked()) {
+			PrologSync.addThis(this);
 		}
 	}
 

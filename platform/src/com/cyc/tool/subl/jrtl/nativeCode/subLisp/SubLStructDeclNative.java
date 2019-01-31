@@ -198,6 +198,7 @@ public class SubLStructDeclNative extends SubLStructDecl
 	private Class structClass;
 	private String[] actualFieldNames;
 	private Hashtable declaredFieldNameToFieldHash;
+	private int pongAt;
 
 	public Field getFieldDecl(int i)
 	{
@@ -379,8 +380,8 @@ public class SubLStructDeclNative extends SubLStructDecl
 	@Override
 	public void setTrackStructInstance(boolean track, int pingAt)
 	{
-		this.isTracked = track;
-		if (isTracked)
+		this.izTracked = track;
+		if (izTracked)
 		{
 			listenToAllFields(fieldDecls, pingAt);
 		}
@@ -396,6 +397,7 @@ public class SubLStructDeclNative extends SubLStructDecl
 			}
 
 			if (pingAt < 0) { return; }
+			this.pongAt = pingAt;
 			Field f = fields[pingAt];
 
 			FieldAccessor before;

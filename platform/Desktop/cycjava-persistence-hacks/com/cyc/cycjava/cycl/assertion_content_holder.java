@@ -39,109 +39,110 @@ public final class assertion_content_holder
 	static
 	{
 
-		if (true) structDecl = SubLStructDecl.makeStructDeclInterpreted( //
-				new String[] { "$formula_data", "$mt", "$flags", "$arguments", "$plist" }, // 
-				assertions_low.$sym0$ASSERTION_CONTENT, "AS-CONTENT", "_CSETF-");
-		structDecl.setTrackStructInstance(true, -1);
-		//		else
-		//			structDecl = SubLStructDeclNative.makeStructDeclNative($assertion_content_native1.class, 
-		//					 assertions_low.$sym0$ASSERTION_CONTENT, "AS-CONTENT", "_CSETF-");
-		//	}
-		//
-		//	static public final class $assertion_content_native1 extends SubLStructNative implements SubLStruct
-		//	{
-		//		public SubLObject $formula_data;
-		//		public SubLObject $mt;
-		//		public SubLObject $flags;
-		//		public SubLObject $arguments;
-		//		public SubLObject $plist;
-		//
-		//		public $assertion_content_native1()
-		//		{
-		//			$formula_data = NIL;
-		//			$mt = NIL;
-		//			$flags = NIL;
-		//			$arguments = NIL;
-		//			$plist = NIL;
-		//			layout = assertion_content_holder.structDecl;
-		//		}
-		//
-		//		@Override
-		//		public SubLStructDecl getStructDecl()
-		//		{
-		//			return structDecl;
-		//		}
-		//
-		//		@Override
-		//		public SubLObject getField2()
-		//		{
-		//			return $formula_data;
-		//		}
-		//
-		//		@Override
-		//		public SubLObject getField3()
-		//		{
-		//			return $mt;
-		//		}
-		//
-		//		@Override
-		//		public SubLObject getField4()
-		//		{
-		//			return $flags;
-		//		}
-		//
-		//		@Override
-		//		public SubLObject getField5()
-		//		{
-		//			return $arguments;
-		//		}
-		//
-		//		@Override
-		//		public SubLObject getField6()
-		//		{
-		//			return $plist;
-		//		}
-		//
-		//		@Override
-		//		public SubLObject setField2(final SubLObject value)
-		//		{
-		//			return $formula_data = value;
-		//		}
-		//
-		//		@Override
-		//		public SubLObject setField3(final SubLObject value)
-		//		{
-		//			return $mt = value;
-		//		}
-		//
-		//		@Override
-		//		public SubLObject setField4(final SubLObject value)
-		//		{
-		//			return $flags = value;
-		//		}
-		//
-		//		@Override
-		//		public SubLObject setField5(final SubLObject value)
-		//		{
-		//			return $arguments = value;
-		//		}
-		//
-		//		@Override
-		//		public SubLObject setField6(final SubLObject value)
-		//		{
-		//			return $plist = value;
-		//		}
-		//
-		//		@Override
-		//		public String toString()
-		//		{
-		//			try
-		//			{
-		//				return print_high.princ_to_string(this).getStringValue();
-		//			} catch (Exception e)
-		//			{
-		//				return "#<" + toTypeName() + " " + getName() + " @ " + System.identityHashCode(this) + ">";
-		//			}
-		//		}
+		if (false)
+			structDecl = SubLStructDecl.makeStructDeclInterpreted( //
+					new String[] { "$formula_data", "$mt", "$flags", "$arguments", "$plist" }, // 
+					assertions_low.$sym0$ASSERTION_CONTENT, "AS-CONTENT", "_CSETF-");
+		else
+			structDecl = SubLStructDeclNative.makeStructDeclNative($assertion_content_native.class, assertions_low.$sym0$ASSERTION_CONTENT, "AS-CONTENT", "_CSETF-");
+		//structDecl.setTrackStructInstance(true, -1);
+	}
+
+	static public final class $assertion_content_native extends SubLStructNative implements SubLStruct
+	{
+		public SubLObject $formula_data;
+		public SubLObject $mt;
+		public SubLObject $flags;
+		public SubLObject $arguments;
+		public SubLObject $plist;
+
+		public $assertion_content_native()
+		{
+			$formula_data = NIL;
+			$mt = NIL;
+			$flags = NIL;
+			$arguments = NIL;
+			$plist = NIL;
+			layout = assertion_content_holder.structDecl;
+		}
+
+		@Override
+		public SubLStructDecl getStructDecl()
+		{
+			return structDecl;
+		}
+
+		@Override
+		public SubLObject getField2()
+		{
+			return $formula_data;
+		}
+
+		@Override
+		public SubLObject getField3()
+		{
+			return $mt;
+		}
+
+		@Override
+		public SubLObject getField4()
+		{
+			return $flags;
+		}
+
+		@Override
+		public SubLObject getField5()
+		{
+			return $arguments;
+		}
+
+		@Override
+		public SubLObject getField6()
+		{
+			return $plist;
+		}
+
+		@Override
+		public SubLObject setField2(final SubLObject value)
+		{
+			return $formula_data = value;
+		}
+
+		@Override
+		public SubLObject setField3(final SubLObject value)
+		{
+			return $mt = value;
+		}
+
+		@Override
+		public SubLObject setField4(final SubLObject value)
+		{
+			return $flags = value;
+		}
+
+		@Override
+		public SubLObject setField5(final SubLObject value)
+		{
+			return $arguments = value;
+		}
+
+		@Override
+		public SubLObject setField6(final SubLObject value)
+		{
+			return $plist = value;
+		}
+
+		@Override
+		public String toString()
+		{
+			try
+			{
+				return print_high.princ_to_string(this).getStringValue();
+			} catch (Exception e)
+			{
+				return super.princToString();
+				//"#<" + toTypeName() + " " + getName() + " @ " + System.identityHashCode(this) + ">";
+			}
+		}
 	}
 }

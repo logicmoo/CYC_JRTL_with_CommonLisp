@@ -148,9 +148,10 @@ public class Eval implements SubLFile
 
 	public static SubLObject evalInCurrentThread(final String str)
 	{
-		return eval(reader.read_from_string(SubLObjectFactory.makeString(str), //
+		final SubLObject from_string = reader.read_from_string(SubLObjectFactory.makeString(str), //
 				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, //
-				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED));
+				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
+		return eval(from_string);
 	}
 
 	public static SubLObject eval_as_sublisp(SubLObject form)

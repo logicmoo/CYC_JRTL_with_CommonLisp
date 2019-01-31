@@ -856,7 +856,6 @@ public final class hl_supports extends SubLTranslatedFile
     
     @SubLTranslatedFile.SubL(source = "cycl/hl-supports.lisp", position = 13151L)
     public static SubLObject find_assertion_or_make_support(final SubLObject sentence, SubLObject mt) {
-    	PrologSync.bp();
         if (mt == hl_supports.UNPROVIDED) {
             mt = (SubLObject)hl_supports.NIL;
         }
@@ -880,6 +879,7 @@ public final class hl_supports extends SubLTranslatedFile
             mt_relevance_macros.$mt$.rebind(_prev_bind_2, thread);
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
+    	PrologSync.bp();
         return result;
     }
     

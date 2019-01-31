@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.appdapter.core.convert.Converter.ConverterMethod;
 import org.armedbear.lisp.Go;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispClass;
@@ -157,12 +159,12 @@ public class PrologSync extends SubLTrampolineFile
 		}
 	}
 
-	public static void addThis(SubLSymbol structName, SubLObject id, SubLObject kb_object_content)
+	private static void addThis(SubLSymbol structName, SubLObject id, SubLObject kb_object_content)
 	{
 		sync_println("ADD-", structName, " id =", id, ": ", kb_object_content);
 	}
 
-	public static void addThis0(AbstractSubLStruct struct)
+	private static void addThis0(AbstractSubLStruct struct)
 	{
 
 		if (Lisp.cold || !Lisp.initialized)
@@ -198,7 +200,7 @@ public class PrologSync extends SubLTrampolineFile
 	 * @param typeOf
 	 * @param struct
 	 */
-	public static void addTypeThing(String typeOf, Object struct)
+	private static void addTypeThing(String typeOf, Object struct)
 	{
 		LinkedList<WeakItem> objStack;
 		synchronized (PrologSync.mapClass2Refs)
@@ -226,7 +228,7 @@ public class PrologSync extends SubLTrampolineFile
 		BeanShellCntrl.bp();
 	}
 
-	public static Term checkReady(AbstractSubLStruct struct)
+	private static Term checkReady(AbstractSubLStruct struct)
 	{
 		// if (Main.noBSH) return;
 		final String className = getClassName(struct);
@@ -458,7 +460,7 @@ public class PrologSync extends SubLTrampolineFile
 
 	private static void sync_println(Object... string)
 	{
-		// System.out.println(Arrays.toString(string));
+	 System.out.println(Arrays.toString(string));
 	}
 
 	public static void updThis(SubLSymbol structName, SubLObject id, SubLObject content)
@@ -549,7 +551,6 @@ public class PrologSync extends SubLTrampolineFile
 
 	private static boolean doSyncStruct(AbstractSubLStruct struct)
 	{
-		if (true) return false;
 		if (Lisp.cold || !Lisp.initialized || !prologReady || !Main.trackStructs || Main.disablePrologSync)
 		{
 			addLater(struct);
@@ -591,8 +592,9 @@ public class PrologSync extends SubLTrampolineFile
 				// addSyncedType("ASSERTION-HANDLES");
 				addSyncedType("NART");
 				addSyncedType("DEDUCTION");
+				//addSyncedType("ASSERTION-CONTENT");
 			}
-			addSyncedType("ASSERTION-CONTENT");
+			addSyncedType("ASSERTION");
 			addSyncedType("CX");
 			addSyncedType("EPISODE");
 			addSyncedType("EPISODIC-RULE");
@@ -758,7 +760,7 @@ public class PrologSync extends SubLTrampolineFile
 
 		@Override
 		public void run()
-		{			
+		{
 			SystemCurrent.attachConsole();
 			while (true)
 			{
@@ -786,6 +788,8 @@ public class PrologSync extends SubLTrampolineFile
 
 	public static void wasSetField(AbstractSubLStruct structureObject, int slotNum, int pingAt, Object was, Object value)
 	{
+		if (!structureObject.isTracked()) return;
+		
 		if (was == null)
 		{
 			if (Lisp.UNBOUND_VALUE == value || was == value || value == SubLNil.NIL) return;
@@ -796,7 +800,7 @@ public class PrologSync extends SubLTrampolineFile
 			if (was == value || value == SubLNil.NIL) return;
 		}
 		if (was == value && was == SubLNil.NIL) return;
-		if (!structureObject.isTracked()) return;
+
 		if (slotNum != pingAt && slotNum == 0)
 		{
 			if (was == value) return;
@@ -886,7 +890,7 @@ public class PrologSync extends SubLTrampolineFile
 			term_t tt;
 			if (o.isString())
 			{ //
-				return term = toPrologFromJava(o.getStringValue());
+				return term = immediateTerm(o.getStringValue());
 			}
 			if (o.isSymbol())
 			{
@@ -930,7 +934,7 @@ public class PrologSync extends SubLTrampolineFile
 				return term = new org.jpl7.Atom(printReadableObject);
 			}
 			int idx = indexOfById(skipped, o);
-			if (idx >= 0) { return term = toPrologFromJava(o); }
+			if (idx >= 0) { return term = immediateTerm(o); }
 			skipped.add(o);
 			if (o instanceof SubLStruct)
 			{
@@ -938,7 +942,7 @@ public class PrologSync extends SubLTrampolineFile
 					return term = toProlog(null, (SubLStruct) o, skipped);
 				}
 			}
-			return term = toPrologFromJava(o);
+			return term = immediateTerm(o);
 		} finally
 
 		{
@@ -957,10 +961,10 @@ public class PrologSync extends SubLTrampolineFile
 		if (o instanceof Term) { return (Term) o; }
 		if (o instanceof IPrologifiable) { return ((IPrologifiable) o).toProlog(new LinkedList()); }
 		if (o instanceof SubLObject) { return toProlog((SubLObject) o, new LinkedList()); }
-		return toPrologFromJava(o);
+		return immediateTerm(o);
 	}
 
-	public static Term toPrologFromJava(Object o)
+	public static Term immediateTerm(Object o)
 	{
 		if (o == null) return JPL.JNULL;
 		if (o instanceof Void) return JPL.JVOID;
@@ -989,7 +993,7 @@ public class PrologSync extends SubLTrampolineFile
 		if (o instanceof SubLObject)
 		{
 			Object oo = ((SubLObject) o).javaInstance();
-			if (oo != o && oo != null) { return toPrologFromJava(oo); }
+			if (oo != o && oo != null) { return immediateTerm(oo); }
 			//return Atom.objectToJRef(o);
 		}
 		return Atom.objectToJRef(o);
@@ -1004,6 +1008,12 @@ public class PrologSync extends SubLTrampolineFile
 
 		return value.replace(quote, "\\" + quote);
 
+	}
+
+	public static void removeThis(AbstractSubLStruct assertion)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

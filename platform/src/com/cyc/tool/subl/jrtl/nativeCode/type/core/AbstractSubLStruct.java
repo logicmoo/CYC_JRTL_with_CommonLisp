@@ -408,7 +408,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	{
 		if (layout == null) return false;
 		SubLStructDecl decl = getStructDecl();
-		return (decl.isTrackStructInstance());
+		return (decl.isTracked());
 	}
 
 }

@@ -274,9 +274,6 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		{
 			this(layout.getLength());
 			setLayout(layout);
-			if(layout.isTracked) {
-				PrologSync.addLater(this);
-			}
 		}
 
 		@Override

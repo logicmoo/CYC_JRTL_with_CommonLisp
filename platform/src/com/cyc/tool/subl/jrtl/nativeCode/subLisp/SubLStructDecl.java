@@ -26,6 +26,11 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
 public class SubLStructDecl extends Layout
 {
+	public SubLStruct newInstance()
+	{
+		return new SubLStructInterpreted.SubLStructInterpretedImpl(this);
+	}
+	
 	protected SubLStructDecl(SubLSymbol structName, SubLSymbol[] getterNames, SubLSymbol[] setterNames, SubLSymbol[] slotKeywords, SubLSymbol printFunction, SubLSymbol hashFunction, SubLSymbol testFunction, boolean isInterned)
 	{
 		super(structName, getterNames, setterNames, slotKeywords, printFunction, hashFunction, testFunction, isInterned);
@@ -161,14 +166,16 @@ public class SubLStructDecl extends Layout
 				printFunction, null, predicateName, false);
 	}
 
-	public boolean isTrackStructInstance()
+	@Override
+	public boolean isTracked()
 	{
-		return isTracked;
+		return izTracked;
 	}
 
+	@Override
 	public void setTrackStructInstance(boolean trackStructInstance, int flagAt)
 	{
-		this.isTracked = trackStructInstance;
+		this.izTracked = trackStructInstance;
 	}
 
 }

@@ -31,28 +31,26 @@ import sun.reflect.FieldAccessor;
 public abstract class SubLStructNative extends AbstractSubLStruct implements SubLStruct
 {
 
-
 	@Override
 	public void setLayout(Layout structdecl)
-	{
+	{		
 		if (layout == structdecl) return;
 		if (layout == null)
 		{
 			layout = structdecl;
-			if (Main.trackStructs)
-			{
-				PrologSync.addThis(this);
-			}
 		}
 		else
 		{
 			Errors.unimplementedMethod("SublStructNative.setLayout(.)");
-		}
+		}		
 	}
 
 	protected SubLStructNative()
 	{
 		layout = getStructDecl();
+		if(isTracked()) {
+			PrologSync.addThis(this);
+		}
 	}
 
 	protected SubLStructNative(SubLObject initValues)

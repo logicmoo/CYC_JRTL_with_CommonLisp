@@ -568,10 +568,9 @@ public class BeanShellCntrl
 		}
 	}
 
+	@ConverterMethod
 	private static Term object_to_term(Object o)
 	{
-		if (o instanceof Term) return (Term) o;
-		if (o instanceof LispObject) return lobject_to_term((LispObject) o);
 		Term term = PrologSync.toProlog(o);
 		//o.termRef = term;
 		return term;
@@ -1607,14 +1606,14 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public Object prolog_call_n(Term arg, long n)
+	static public Map<String, Term>[] prolog_call_n(Term arg, long n)
 	{
 		return (new org.jpl7.Query("call", arg)).nSolutions(n);
 
 	}
 
 	@LispMethod
-	static public Object prolog_call_1(Term arg, long n)
+	static public Map<String, Term> prolog_call_1(Term arg, long n)
 	{
 		return (new org.jpl7.Query("call", arg)).oneSolution();
 
@@ -2862,7 +2861,7 @@ public class BeanShellCntrl
 					}
 					else if (type == Term.class)
 					{
-						methodArgs[i] = BeanShellCntrl.lobject_to_term(arg);
+						methodArgs[i] = BeanShellCntrl.object_to_term(arg);
 					}
 					else
 					{
