@@ -171,10 +171,11 @@ public class Eval implements SubLFile
 		}
 
 	}
+
 	public static SubLObject eval(SubLObject form)
 	{
 		boolean wasSubLisp = Main.isSubLisp();
-		if(wasSubLisp) return form.eval(SubLEnvironment.currentEnvironment());
+		if (wasSubLisp) return form.eval(SubLEnvironment.currentEnvironment());
 		return Lisp.eval((LispObject) form);
 	}
 
@@ -244,14 +245,14 @@ public class Eval implements SubLFile
 
 	public static SubLObject load(final SubLObject filename)
 	{
-		return BeanShellCntrl.with_sublisp(true, new Callable<SubLObject>()
+		return BeanShellCntrl.with_sublisp(true, new BeanShellCntrl.SCallable<SubLObject>()
 		{
 			@Override
-			public SubLObject call() throws Exception
+			public SubLObject call()
 			{
 				return load_sublisp(filename);
 			}
-		});
+		}).call();
 	}
 
 	public static SubLObject load_sublisp(SubLObject filename)
@@ -291,7 +292,7 @@ public class Eval implements SubLFile
 
 					org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
 					String s = "null";
-					if(p!=null) s = p.getName();
+					if (p != null) s = p.getName();
 					System.err.format(";;; %s(%d): %s%n", s, formCouunt, String.valueOf(form));
 				}
 				{

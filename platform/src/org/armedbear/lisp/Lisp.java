@@ -49,6 +49,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jpl7.JPL;
+import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -443,7 +444,7 @@ public class Lisp
   public static final LispObject error(LispObject condition)
   {
 	  if (Main.isNoDebug()) {
-		  throw conditionToSubLException(condition);
+		  throw BeanShellCntrl.doThrow(conditionToSubLException(condition));		  
 	  }
     if(Main.isSubLisp()) {
     	if(SubLMain.commonSymbolsOK)

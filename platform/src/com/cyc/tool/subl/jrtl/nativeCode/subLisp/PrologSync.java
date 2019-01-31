@@ -460,7 +460,7 @@ public class PrologSync extends SubLTrampolineFile
 
 	private static void sync_println(Object... string)
 	{
-	 System.out.println(Arrays.toString(string));
+		System.out.println(Arrays.toString(string));
 	}
 
 	public static void updThis(SubLSymbol structName, SubLObject id, SubLObject content)
@@ -789,7 +789,7 @@ public class PrologSync extends SubLTrampolineFile
 	public static void wasSetField(AbstractSubLStruct structureObject, int slotNum, int pingAt, Object was, Object value)
 	{
 		if (!structureObject.isTracked()) return;
-		
+
 		if (was == null)
 		{
 			if (Lisp.UNBOUND_VALUE == value || was == value || value == SubLNil.NIL) return;
@@ -820,19 +820,21 @@ public class PrologSync extends SubLTrampolineFile
 		BeanShellCntrl.addObject("mapClass2Refs", PrologSync.mapClass2Refs);
 	}
 
-	public static Term toProlog(String name, SubLStruct s, java.util.List l)
+	public static Term toProlog(String name, AbstractSubLStruct s, java.util.List l)
 	{
-		if (s instanceof AbstractSubLStruct)
-		{
-			AbstractSubLStruct ass = (AbstractSubLStruct) s;
-			if (ass.termRef != null && !(ass.termRef instanceof SyncState)) { return ass.termRef; }
-		}
+		//if (s.termRef != null && !(s.termRef instanceof SyncState)) { return s.termRef; }
 
 		if (name == null)
 		{
-			name = getClassName((AbstractSubLStruct) s);
+			name = getClassName(s);
 		}
-		final int arity = s.toStruct().getFieldCount();
+		name = toProlog(s.getType(), l).name();
+		final int arity = s.getFieldCount();
+		if (arity == 0)
+		{
+			String str = s.printReadableObject(false);
+			return new Atom(str);
+		}
 		final Term[] args = new Term[arity];
 		int argN = 0;
 		for (int i = 0; i < arity; i++)
@@ -860,6 +862,7 @@ public class PrologSync extends SubLTrampolineFile
 			ass = (AbstractSubLObject) o;
 			if (ass.termRef != null && !(ass.termRef instanceof SyncState) //
 					&& !(ass.termRef instanceof JRef)//
+					&& !(ass.termRef instanceof Compound)//
 					&& !(ass.termRef instanceof Atom)//
 					&& !(ass.termRef instanceof Variable)
 			//
@@ -936,10 +939,10 @@ public class PrologSync extends SubLTrampolineFile
 			int idx = indexOfById(skipped, o);
 			if (idx >= 0) { return term = immediateTerm(o); }
 			skipped.add(o);
-			if (o instanceof SubLStruct)
+			if (o instanceof AbstractSubLStruct)
 			{
 				{
-					return term = toProlog(null, (SubLStruct) o, skipped);
+					return term = toProlog(null, (AbstractSubLStruct) o, skipped);
 				}
 			}
 			return term = immediateTerm(o);
@@ -1013,7 +1016,7 @@ public class PrologSync extends SubLTrampolineFile
 	public static void removeThis(AbstractSubLStruct assertion)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

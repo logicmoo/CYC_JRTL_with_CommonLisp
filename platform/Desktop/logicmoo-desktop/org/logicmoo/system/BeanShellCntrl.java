@@ -43,6 +43,7 @@ import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 import org.appdapter.core.convert.Converter.ConverterMethod;
+import org.appdapter.core.jvm.CallableWithParameters;
 import org.appdapter.gui.api.BoxPanelSwitchableView;
 import org.appdapter.gui.browse.Utility;
 import org.appdapter.gui.demo.DemoBrowser;
@@ -123,6 +124,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructInterpreted.SubLStructInterpretedImpl;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
@@ -152,10 +154,6 @@ import sun.misc.Unsafe;
 //import static org.slf4j.spi.LocationAwareLogger.log;
 public class BeanShellCntrl
 {
-	static
-	{
-		SystemCurrent.setupIO();
-	}
 
 	public static final Object StartupLock = new Object()
 	{
@@ -406,7 +404,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public Object bsh_eval(Object form) throws EvalError
+	static public Object bsh_eval(Object form) throws Exception, EvalError
 	{
 		Object lastResult = Lisp.T;
 		startOver: do
@@ -456,10 +454,10 @@ public class BeanShellCntrl
 					return ensureBSH().source(((File) form).getPath());
 				} catch (FileNotFoundException e)
 				{
-					throw JVMImpl.doThrow(e);
+					throw doThrow(e);
 				} catch (IOException e)
 				{
-					throw JVMImpl.doThrow(e);
+					throw doThrow(e);
 				}
 			}
 			return ensureBSH().eval(String.valueOf(form));
@@ -581,7 +579,7 @@ public class BeanShellCntrl
 		return term;
 	}
 
-	static public LispObject call_lisp2(Symbol found, Term[] args)
+	static public LispObject call_lisp2(Symbol found, Term[] args) throws Exception
 	{
 		LispObject[] largs = terms_to_lisp_objects(args);
 		LispObject ret = found.execute(largs);
@@ -664,7 +662,7 @@ public class BeanShellCntrl
 				} catch (IOException e)
 				{
 					MsgBox.error(e);
-					throw JVMImpl.doThrow(e);
+					throw doThrow(e);
 				}
 			}
 
@@ -714,7 +712,7 @@ public class BeanShellCntrl
 					} catch (IOException e)
 					{
 						e.printStackTrace();
-						throw JVMImpl.doThrow(e);
+						throw doThrow(e);
 					}
 				}
 			};
@@ -754,7 +752,7 @@ public class BeanShellCntrl
 		};
 		string.append("" + t.getClass() + ": " + t);
 		t.printStackTrace(new PrintStream(outputStream));
-		string.append("" + t.getClass() + ": " + t);
+		string.append("" + t.getClass() + ": " + t.getMessage() + " " + t);
 		return string.toString();
 	}
 
@@ -773,62 +771,124 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public SubLObject cyc_eval(final String str)
+	static public SubLObject cyc_eval(final String str) throws InterruptedException
 	{
-		return while_not_changing_package(new Callable<SubLObject>()
+		return while_not_changing_package(new SCallable<SubLObject>()
 		{
 			@Override
-			public SubLObject call() throws Exception
+			public SubLObject call()
 			{
 				return cyc_eval_string(str);
 			}
-		});
+		}).call();
 	}
 
 	@LispMethod
-	static public SubLObject cyc_eval(final LispObject str)
+	static public SubLObject cyc_eval(final LispObject str) throws InterruptedException
 	{
-		return while_not_changing_package(new Callable<SubLObject>()
+		return while_not_changing_package(new SCallable<SubLObject>()
 		{
 			@Override
-			public SubLObject call() throws Exception
+			public SubLObject call()
 			{
 				return cyc_progn(new Cons(str), SubLEnvironment.currentEnvironment());
 			}
-		});
+		}).call();
 	}
 
 	@LispMethod
-	static public <T> T while_not_changing_package(Callable<T> str)
+	static public <T> SCallable<T> while_not_changing_package(final Callable<T> str)
 	{
-		SubLPackage prevPackage = Lisp.getCurrentPackage();
-		try
+		return new SCallable<T>()
 		{
-			return str.call();
-		} catch (Exception e)
-		{
-			throw JVMImpl.doThrow(e);
-		} finally
-		{
-			SubLPackage.setCurrentPackage(prevPackage);
-		}
+			public T call()
+			{
+				SubLPackage prevPackage = Lisp.getCurrentPackage();
+				try
+				{
+					return str.call();
+				} catch (Throwable e)
+				{
+					throw doThrow(e);
+				} finally
+				{
+					SubLPackage.setCurrentPackage(prevPackage);
+				}
+			}
+		};
 	}
 
 	@LispMethod
-	static public <T> T with_sublisp(boolean tf, Callable<T> str)
+	static public <T> SCallable<T> with_sublisp(final boolean tf, final Callable<T> str)
 	{
-		boolean wasSubLisp = Main.isSubLisp();
-		Main.setSubLisp(tf);
-		try
+		return new SCallable<T>()
 		{
-			return str.call();
-		} catch (Exception e)
+			public T call()
+			{
+				boolean wasSubLisp = Main.isSubLisp();
+				Main.setSubLisp(tf);
+
+				try
+				{
+					return str.call();
+				} catch (Throwable e)
+				{
+					throw doThrow(e);
+				} finally
+				{
+					Main.setSubLisp(wasSubLisp);
+				}
+
+			}
+		};
+	}
+
+	@LispMethod
+	static public <T> SCallable<T> with_nodebug(final boolean tf, final Callable<T> str)
+	{
+		return new SCallable<T>()
 		{
-			throw JVMImpl.doThrow(e);
-		} finally
+			public T call()
+			{
+				boolean wasNoDebug = Main.isNoDebug();
+				Main.setNoDebug(tf);
+				try
+				{
+					return str.call();
+				} catch (Throwable e)
+				{
+					throw doThrow(e);
+				} finally
+				{
+					Main.setNoDebug(wasNoDebug);
+				}
+
+			}
+		};
+	}
+
+	@LispMethod
+	static public <T> SCallable<T> with_jpl_catcher(final Callable<T> str)
+	{
+		return new SCallable<T>()
 		{
-			Main.setSubLisp(wasSubLisp);
-		}
+			public T call()
+			{
+				final ECatcher oldCatcher = getCatcher();
+				setCatcher(jplCatcher);
+				try
+				{
+					return str.call();
+				} catch (Throwable e)
+				{
+					throw doThrow(e);
+				} finally
+				{
+					setCatcher(oldCatcher);
+				}
+
+			}
+		};
 	}
 
 	@LispMethod
@@ -885,28 +945,28 @@ public class BeanShellCntrl
 	@LispMethod(prologName = "cyc_repl")
 	static public LispObject cyc_repl() throws InterruptedException
 	{
-		boolean wasSubLisp = Main.isSubLisp();
-		Main.setSubLisp(true);
-		try
+		return BeanShellCntrl.with_sublisp(true, new BeanShellCntrl.SCallable<LispObject>()
 		{
-			init_cyc();
-			ensureMainReader();
-			try
+			@Override
+			public LispObject call()
 			{
-				SystemCurrent.takeOwnerShip();
-				return cyc_repl_no_suspend();
-			} finally
-			{
-				SystemCurrent.releaseOwnerShip();
+				init_cyc();
+				ensureMainReader();
+				try
+				{
+					SystemCurrent.takeOwnerShip();
+					return cyc_repl_no_suspend();
+				} finally
+				{
+					SystemCurrent.releaseOwnerShip();
+				}
 			}
-		} finally
-		{
-			Main.setSubLisp(wasSubLisp);
-		}
+		}).call();
+
 	}
 
 	@LispMethod
-	static public LispObject cyc_repl_no_suspend() throws InterruptedException
+	static public LispObject cyc_repl_no_suspend()
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		init_cyc();
@@ -1237,9 +1297,9 @@ public class BeanShellCntrl
 			Field field = Unsafe.class.getDeclaredField("theUnsafe");
 			field.setAccessible(true);
 			return (Unsafe) field.get(null);
-		} catch (Exception e)
+		} catch (Throwable e)
 		{
-			throw new RuntimeException(e);
+			throw doThrow(e);
 		}
 	}
 
@@ -1269,7 +1329,7 @@ public class BeanShellCntrl
 				} catch (Throwable e)
 				{
 					inited_cyc_complete = false;
-					throw JVMImpl.doThrow(e);
+					throw doThrow(e);
 				} finally
 				{
 
@@ -1315,7 +1375,7 @@ public class BeanShellCntrl
 					Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
 				} catch (Throwable e)
 				{
-					throw JVMImpl.doThrow(e);
+					throw doThrow(e);
 				} finally
 				{
 					SubLPackage.setCurrentPackage(prevPackage);
@@ -1355,7 +1415,7 @@ public class BeanShellCntrl
 					PrologSync.setPrologReady(true);
 				} catch (Throwable e)
 				{
-					throw JVMImpl.doThrow(e);
+					throw doThrow(e);
 				} finally
 				{
 					SubLPackage.setCurrentPackage(prevPackage);
@@ -1535,7 +1595,14 @@ public class BeanShellCntrl
 		}
 		try
 		{
-			LispObject args = term_to_lobject(term);
+			LispObject args;
+			try
+			{
+				args = term_to_lobject(term);
+			} catch (Throwable e)
+			{
+				throw getCatcher().doThrow(e);
+			}
 			Environment env = Environment.currentLispEnvironment();
 			return lisp_progn(args, env);
 		} finally
@@ -1544,6 +1611,54 @@ public class BeanShellCntrl
 			{
 				Main.setNoDebug(false);
 			}
+		}
+	}
+
+	public static interface SCallable<T> extends Callable<T>
+	{
+		@Override
+		T call();
+	}
+
+	static
+	{
+		SystemCurrent.setupIO();
+	}
+
+	public static void setCatcher(ECatcher isNoDebug)
+	{
+		ThrowFunc.set(isNoDebug);
+	}
+
+	public static ECatcher getCatcher()
+	{
+		return ThrowFunc.get();
+	}
+
+	public static interface ECatcher
+	{
+		RuntimeException doThrow(Throwable t);
+	}
+
+	public static InheritableThreadLocal<ECatcher> ThrowFunc = new InheritableThreadLocal<ECatcher>()
+	{
+
+		@Override
+		protected ECatcher initialValue()
+		{
+			return defaultCatcher;
+		}
+
+	};
+	public static ECatcher jplCatcher = new Catcher();
+	public static ECatcher defaultCatcher = new Catcher();
+
+	public static final class Catcher implements ECatcher
+	{
+		@Override
+		public RuntimeException doThrow(Throwable box)
+		{
+			return BeanShellCntrl.doThrow(box);
 		}
 	}
 
@@ -1625,21 +1740,21 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public LispObject prolog_unify(LispObject arg) throws InterruptedException
+	static public LispObject prolog_unify(LispObject arg) throws Exception, InterruptedException
 	{
 		final LispObject prolog_eval_lobject = prolog_eval_lobject(arg);
 		return Lisp.list(prolog_eval_lobject);
 	}
 
 	@LispMethod
-	static public LispObject prolog_eval_lobject(LispObject arg)
+	static public LispObject prolog_eval_lobject(LispObject arg) throws Exception
 	{
 		Term term = lobject_to_term(arg);
 		return prolog_eval_term(new Compound("called_from_cyc", term));
 	}
 
 	@LispMethod
-	static public LispObject prolog_eval_term(Term term)
+	static public LispObject prolog_eval_term(Term term) throws Exception
 	{
 		Query q = new Query(term);
 		LispObject answers = Lisp.NIL;
@@ -2001,7 +2116,7 @@ public class BeanShellCntrl
 
 	@ConverterMethod
 	@LispMethod
-	static public LispObject term_to_lobject(Term term)
+	static public LispObject term_to_lobject(Term term) throws Exception
 	{
 		if (term instanceof Atom) { return atom_to_lobject((Atom) term); }
 		Object o = term_to_object(term);
@@ -2011,7 +2126,7 @@ public class BeanShellCntrl
 
 	@ConverterMethod
 	@LispMethod
-	static public Object term_to_object(Term term)
+	static public Object term_to_object(Term term) throws Exception
 	{
 		if (term == null) return null;
 		try
@@ -2070,7 +2185,7 @@ public class BeanShellCntrl
 		return Lisp.readObjectFromString(s);
 	}
 
-	private static LispObject atom_to_lisp_object(String s)
+	private static LispObject atom_to_lisp_object(String s) throws Exception
 	{
 		SubLObject found;
 		//String s = a.name();
@@ -2088,7 +2203,8 @@ public class BeanShellCntrl
 			if (found instanceof SubLStruct) return found.toLispObject();
 			found = null;
 		}
-		if (s.startsWith("?") || s.contains("#$"))
+		boolean readAsSubLisp = s.startsWith("?") || s.contains("#$") || (Main.isSubLisp() && s.contains(":"));
+		if (readAsSubLisp)
 		{
 			if (!inited_cyc_complete)
 			{
@@ -2107,24 +2223,33 @@ public class BeanShellCntrl
 			found = find_constant_by_name(ss);
 			if (found instanceof SubLStruct) return found.toLispObject();
 		}
-
-		boolean caseMatters = (!s.toLowerCase().equals(s));
-		if (s.contains(":"))
-		{
-			caseMatters = false;
-		}
 		// boolean caseMattersU = (!s.toUpperCase().equals(s));
 
-		LispObject o;
-		if (caseMatters)
+		final String sF = s;
+		return with_jpl_catcher((SCallable<LispObject>) new SCallable<LispObject>()
 		{
-			o = read_lisp(s);
-		}
-		else
-		{
-			o = org.armedbear.lisp.Interpreter.readFromString(s);
-		}
-		return o;
+
+			@Override
+			public LispObject call()
+			{
+				boolean caseMatters = (!sF.toLowerCase().equals(sF));
+				if (sF.contains(":"))
+				{
+					caseMatters = false;
+				}
+
+				LispObject o;
+				if (caseMatters)
+				{
+					o = read_lisp(sF);
+				}
+				else
+				{
+					o = org.armedbear.lisp.Interpreter.readFromString(sF);
+				}
+				return o;
+			}
+		}).call();
 	}
 
 	@ConverterMethod
@@ -2147,15 +2272,53 @@ public class BeanShellCntrl
 		if (term.isListNil()) return Lisp.NIL;
 		String atomType = term.atomType();
 		LispObject lo;
+		final String name = term.name();
 		if ("string".equals(atomType))
 		{
-			lo = string_string(term.name());
+			lo = string_string(name);
 		}
 		else
 		{
-			lo = atom_to_lisp_object(term.name());
+			boolean wasNoDebug = Main.isNoDebug();
+			try
+			{
+				Main.setNoDebug(true);
+				lo = atom_to_lisp_object(name);
+			} catch (Throwable e)
+			{
+				throw doThrow(e);
+			} finally
+			{
+				Main.setNoDebug(wasNoDebug);
+			}
 		}
 		return lo;
+	}
+
+	public static RuntimeException doThrow(Throwable throwable)
+	{
+		if (throwable instanceof ControlTransfer) { throw (ControlTransfer) throwable; }
+
+		ECatcher catcher = getCatcher();
+		if (catcher != null && catcher == jplCatcher)
+		{
+			if (throwable instanceof JPLException) { throw (JPLException) throwable; }
+			throw new JPLException(BeanShellCntrl.createStackTraceString(throwable));
+		}
+		if (catcher != null && catcher != defaultCatcher) { return catcher.doThrow(throwable); }
+
+		if (throwable instanceof Error) { throw (Error) throwable; }
+
+		if (throwable instanceof JPLException) { throw (JPLException) throwable; }
+
+		if (throwable instanceof SubLException) { throw (SubLException) throwable; }
+
+		if (throwable instanceof RuntimeException)
+		{
+			final RuntimeException runtimeException = (RuntimeException) throwable;
+			return JVMImpl.doThrow(runtimeException);
+		}
+		return JVMImpl.getThrower().doThrow((Throwable) throwable);
 	}
 
 	static LispObject string_string(String text)
@@ -2197,7 +2360,7 @@ public class BeanShellCntrl
 
 	static public Object toJavaObject(Variable thiz)
 	{
-		final Object object = thiz.getTag();
+		Object object = thiz.getTag();
 		if (object == null)
 		{
 			String name = thiz.name;
@@ -2209,12 +2372,12 @@ public class BeanShellCntrl
 			{
 				name = "?" + name.substring(1);
 			}
-			SubLObject form = BeanShellCntrl.read_sublisp("?" + name);
+			object = BeanShellCntrl.read_sublisp("?" + name);
 		}
 		return object;
 	}
 
-	static public Object compound_to_object(Compound term, String value, Term[] args)
+	static public Object compound_to_object(Compound term, String value, Term[] args) throws Exception
 	{
 		final Object o = term.getTag();
 		if (o != null) return o;
@@ -2304,7 +2467,7 @@ public class BeanShellCntrl
 		}
 	}
 
-	static public LispObject[] terms_to_lisp_objects(Term[] args)
+	static public LispObject[] terms_to_lisp_objects(Term[] args) throws Exception
 	{
 		if (args.length == 0) return EMPTY_LISP_OBJECT;
 		LispObject[] largs = new LispObject[args.length];
@@ -2506,16 +2669,26 @@ public class BeanShellCntrl
 	static public @interface LispMethod
 	{
 		// Guess based on method name
-		String prologName() default "";
+		String prologName()
 
-		String symbolName() default "";
+		default "";
 
-		String packageName() default "";
+		String symbolName()
 
-		boolean exported() default true;
+		default "";
+
+		String packageName()
+
+		default "";
+
+		boolean exported()
+
+		default true;
 
 		// use false is symbol macro
-		boolean evalArgs() default true;
+		boolean evalArgs()
+
+		default true;
 
 		// Arg has method name 
 		boolean popFront() default false;
@@ -2748,7 +2921,21 @@ public class BeanShellCntrl
 			return executeEVA(Environment.currentLispEnvironment(), args);
 		}
 
-		public Object invokeFromProlog(Term list, Term result)
+		public Object invokeFromProlog(final Term list, final Term result)
+		{
+			return with_jpl_catcher(new Callable<Object>()
+			{
+				@Override
+				public Object call() throws Exception
+				{
+					return invokeFromProlog0(list, result);
+				}
+
+			}).call();
+
+		}
+
+		public Object invokeFromProlog0(Term list, Term result)
 		{
 			boolean wasNoDebug = Main.isNoDebug();
 			try
@@ -2785,6 +2972,7 @@ public class BeanShellCntrl
 				{
 					Main.setNoDebug(true);
 				}
+
 				Object o = BeanShellCntrl.invokeM(m, null, javaArgs);
 				if (!result.isVariable()) { return result; }
 				Class rt = m.getReturnType();
@@ -2794,17 +2982,15 @@ public class BeanShellCntrl
 				}
 				else if (LispObject.class.isAssignableFrom(rt) || SubLObject.class.isAssignableFrom(rt))
 				{
-					Term t = BeanShellCntrl.lobject_to_term((LispObject) o);
+					Term t = object_to_term(o);
 					return t;
 				}
 				else
 				{
-					Term t = PrologSync.toProlog(o);
+					Term t = object_to_term(o);
 					return t;
 				}
-			} catch (
-
-			Throwable e)
+			} catch (Throwable e)
 			{
 				if (!wasNoDebug)
 				{
@@ -2813,7 +2999,7 @@ public class BeanShellCntrl
 				e.printStackTrace();
 				System.err.println("" + e.getMessage());
 				if (e instanceof JPLException) { throw (JPLException) e; }
-				return new JPLException(BeanShellCntrl.createStackTraceString(e));
+				throw new JPLException(BeanShellCntrl.createStackTraceString(e));
 			} finally
 			{
 				Main.setNoDebug(wasNoDebug);

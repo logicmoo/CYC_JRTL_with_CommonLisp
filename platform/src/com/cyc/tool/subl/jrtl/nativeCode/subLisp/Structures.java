@@ -45,7 +45,8 @@ public class Structures implements SubLFile
 		SubLSymbol[] slotKeywordNamesArray = (SubLSymbol[]) slotKeywordNames.toArray(new SubLSymbol[slotKeywordNames.size()]);
 		SubLSymbol[] getterNamesArray = (SubLSymbol[]) getterNames.toArray(new SubLSymbol[getterNames.size()]);
 		SubLSymbol[] setterNamesArray = (SubLSymbol[]) setterNames.toArray(new SubLSymbol[setterNames.size()]);
-		return new SubLStructDeclNative(structClass, typeName, predicateName, slotNamesArray, slotKeywordNamesArray, actualFieldNames, getterNamesArray, setterNamesArray, printFunction, null, false);
+		SubLStructDeclNative nativ =  new SubLStructDeclNative(structClass, typeName, predicateName, slotNamesArray, slotKeywordNamesArray, actualFieldNames, getterNamesArray, setterNamesArray, printFunction, null, false);
+		return nativ;
 	}
 
 	public static SubLObject method_func(SubLObject object, SubLObject methodTable)

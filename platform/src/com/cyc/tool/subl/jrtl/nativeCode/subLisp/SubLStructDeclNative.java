@@ -38,6 +38,11 @@ public class SubLStructDeclNative extends SubLStructDecl
 		return was ? SubLT.T : SubLNil.NIL;
 	}
 
+	public LispObject getLispClass()
+	{
+		return lispClass;
+	}
+
 	public static final class is_instance_of_foriegn_class extends Primitive
 	{
 		private Class clazz;

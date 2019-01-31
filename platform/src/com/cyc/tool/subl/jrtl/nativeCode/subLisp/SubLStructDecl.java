@@ -53,13 +53,15 @@ public class SubLStructDecl extends Layout
 
 	public static SubLStructDecl getStructDecl(SubLSymbol structName)
 	{
+		final Symbol symbol = structName.toLispObject();
 		SubLStructDecl structDecl = SubLStructDecl.structNameToStructDeclMap.get(structName);
 		if (structDecl == null)
 		{
-			LispClass lispClass = LispClass.findClass(structName.toLispObject());
+			LispClass lispClass = LispClass.findClass(symbol);
 			if (lispClass == null)
 			{
-				Errors.error("Invalid struct name: " + structName.getName());
+				final String qualifiedName = symbol.getQualifiedName();
+				Errors.error("Invalid struct name: " + qualifiedName);
 			}
 			return (SubLStructDecl) lispClass.getClassLayout();
 		}

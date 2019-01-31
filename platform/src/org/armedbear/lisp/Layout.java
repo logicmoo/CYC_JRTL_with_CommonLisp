@@ -76,7 +76,12 @@ abstract public class Layout extends LispObject
 	{
 		if (structName == null)
 		{
-			if (lispClass instanceof LispClass) { return ((LispClass) lispClass).getName(); }
+			if (lispClass instanceof LispClass)
+			{
+				final SubLSymbol name = ((LispClass) lispClass).getName();
+				structName = name;
+				return name;
+			}
 		}
 		return structName;
 	}
@@ -85,6 +90,7 @@ abstract public class Layout extends LispObject
 	{
 		return isInterned;
 	}
+
 	public static Map<SubLSymbol, SubLStructDecl> structNameToStructDeclMap;
 
 	public void setStructName(SubLSymbol newStructName)
@@ -109,9 +115,8 @@ abstract public class Layout extends LispObject
 	protected SubLSymbol testFunction;
 	public static Map<SubLSymbol, Integer> structNameToIDMap;
 	public static int idCounter;
-	
-	protected boolean izTracked;
 
+	protected boolean izTracked;
 
 	public static int getTypeID(SubLSymbol typeName)
 	{
@@ -178,7 +183,7 @@ abstract public class Layout extends LispObject
 
 	abstract public SubLStruct newInstance();
 
-	private final LispObject lispClass;
+	public LispObject lispClass;
 	public final ConcurrentHashMap<LispObject, LispObject> slotTable;
 
 	protected final LispObject[] slotNames;
@@ -419,5 +424,6 @@ abstract public class Layout extends LispObject
 	};
 
 	abstract public boolean isTracked();
+
 	abstract public void setTrackStructInstance(boolean trackStructInstance, int flagAt);
 }

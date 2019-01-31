@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.util.List;
 
 import org.armedbear.lisp.*;
+import org.jpl7.Atom;
 import org.jpl7.Term;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync.IPrologifiable;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync.SyncState;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
@@ -21,12 +23,16 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractSubLStruct extends LispObject implements SubLStruct, IPrologifiable
 {
+	@Override
 	abstract public void setSlotValue(int index, LispObject value);
 
+	@Override
 	abstract public LispObject getSlotValue(int index);
 
+	@Override
 	abstract public LispObject SLOT_VALUE(LispObject slotName);
 
+	@Override
 	abstract public void setSlotValue(LispObject slotName, LispObject newValue);
 
 	@Override
@@ -94,6 +100,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	public LispObject classOf()
 	{
 		//	if(structureClass!=null) return structureClass;
+
 		Symbol name = (Symbol) typeOf();
 		// The proper name of a class is "a symbol that names the class whose
 		// name is that symbol".
@@ -104,6 +111,15 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 			// dmiles sayz that the above line isnt right
 			final LispClass c2 = (LispClass) LispClass.findClass(name);
 			if (c2 != null) { return c2; }
+		}
+		if (true)
+		{
+			final SubLStructDecl structDecl = getStructDecl();
+			if (structDecl != null)
+			{
+				final LispObject lispClass = structDecl.getLispClass();
+				if (lispClass != null) return lispClass;
+			}
 		}
 		return super.classOf();
 	}
@@ -382,9 +398,9 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 
 	public Term toProlog(List s)
 	{
-		if (termRef == null)
+		if (termRef == null || termRef instanceof SyncState)
 		{
-			termRef = PrologSync.toProlog(getType().getName(), this, s);
+			termRef = PrologSync.toProlog(null, this, s);
 		}
 		return termRef;
 

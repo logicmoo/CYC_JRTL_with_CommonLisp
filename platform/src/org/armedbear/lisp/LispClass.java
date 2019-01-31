@@ -47,7 +47,8 @@ public abstract class LispClass extends StandardObject
 	final public Term toProlog(List s)
 	{
 		if(name==null) name = getLispClassName();
-		if (findClass((Symbol) name) == this)
+		final LispClass foundClass = findClass((Symbol) name);
+		if (foundClass == this)
 		{ ///
 			final String printReadableObject = printObject();
 			return new org.jpl7.Atom(printReadableObject);
