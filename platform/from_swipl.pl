@@ -3,7 +3,7 @@
 :- load_files(library(prolog_stack)).
 prolog_stack:stack_guard(none).
 
-dmiles_machine:- gethostname('gitlab.logicmoo.org') ; gethostname('i74930k').
+dmiles_machine:- fail, gethostname('gitlab.logicmoo.org') ; gethostname('i74930k').
 
 ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(false)]).
 
