@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 // ### copy-list list => copy
 public final class copy_list extends Primitive
 {

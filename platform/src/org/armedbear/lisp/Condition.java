@@ -37,8 +37,6 @@ import java.util.List;
 
 import org.jpl7.Term;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-
 public class Condition extends StandardObject
 {
 	@Override

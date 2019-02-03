@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 public class CellError extends LispError
 {
     protected CellError(LispClass cls)

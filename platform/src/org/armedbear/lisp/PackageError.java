@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 public final class PackageError extends LispError
 {
     public PackageError(LispObject initArgs)

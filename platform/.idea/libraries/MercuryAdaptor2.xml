@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="MercuryAdaptor2">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/platform/ext/GAT/Adaptors/MercuryAdaptor/MercuryAdaptor.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

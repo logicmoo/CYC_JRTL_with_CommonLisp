@@ -33,9 +33,6 @@
 
 package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLSynonymStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SynonymStream extends Stream

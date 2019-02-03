@@ -5,8 +5,6 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.number;
 
 import java.util.List;
 
-import org.armedbear.lisp.Lisp;
-
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;

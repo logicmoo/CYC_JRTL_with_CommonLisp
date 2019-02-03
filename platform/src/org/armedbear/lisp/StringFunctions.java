@@ -34,7 +34,10 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.checkString;
+import static org.armedbear.lisp.Lisp.error;
+
 import java.util.Arrays;
 public final class StringFunctions {
     final static class StringIndicesAndChars {

@@ -3,10 +3,7 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import java.util.Deque;
-
 import org.armedbear.lisp.ControlError;
-import org.armedbear.lisp.ControlTransfer;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Throw;

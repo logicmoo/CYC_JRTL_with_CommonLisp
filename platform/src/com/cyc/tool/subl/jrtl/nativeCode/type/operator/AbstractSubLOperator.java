@@ -5,8 +5,6 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.operator;
 
 import org.armedbear.lisp.LispObject;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractSubLOperator extends LispObject implements SubLOperator {

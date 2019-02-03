@@ -33,15 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
-import static org.armedbear.lisp.Lisp.T;
-import static org.armedbear.lisp.Lisp.checkEnvironment;
-import static org.armedbear.lisp.Lisp.checkSymbol;
-import static org.armedbear.lisp.Lisp.parseBody;
-import static org.armedbear.lisp.Lisp.parseSpecials;
-import static org.armedbear.lisp.Lisp.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 
 public class Environment extends SubLEnvironment

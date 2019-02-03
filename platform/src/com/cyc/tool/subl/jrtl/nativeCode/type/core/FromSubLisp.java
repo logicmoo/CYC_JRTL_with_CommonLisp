@@ -1,6 +1,5 @@
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
-import org.armedbear.lisp.Cons;
 import org.armedbear.lisp.LispObject;
 
 abstract public class FromSubLisp extends LispObject {

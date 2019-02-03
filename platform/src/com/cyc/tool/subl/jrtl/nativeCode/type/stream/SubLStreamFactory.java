@@ -3,7 +3,6 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;

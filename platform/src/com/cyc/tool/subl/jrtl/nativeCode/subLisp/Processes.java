@@ -34,14 +34,6 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-import static org.armedbear.lisp.Keyword.BINARY_KEYWORD;
-import static org.armedbear.lisp.Keyword.ERROR_KEYWORD;
-import static org.armedbear.lisp.Keyword.OUTPUT_KEYWORD;
-import static org.armedbear.lisp.Keyword.INPUT_KEYWORD;
-import static org.armedbear.lisp.Keyword.*;
-import static org.armedbear.lisp.Symbol.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-
 public class Processes extends SubLTrampolineFile {
 	private static class ExternalProcessErrorHandler extends ExternalProcessHandler implements Runnable {
 		ExternalProcessErrorHandler(Process proc, SubLInputStream inStream, SubLOutputStream outStream,

@@ -41,7 +41,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrowImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;

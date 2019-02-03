@@ -3,7 +3,6 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
-import java.io.BufferedInputStream;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -13,11 +12,8 @@ import java.io.PushbackReader;
 import java.net.SocketTimeoutException;
 
 import org.armedbear.lisp.Keyword;
-import org.armedbear.lisp.Stream;
-import org.armedbear.lisp.Symbol;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;

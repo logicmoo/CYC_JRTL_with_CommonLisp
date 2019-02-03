@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 

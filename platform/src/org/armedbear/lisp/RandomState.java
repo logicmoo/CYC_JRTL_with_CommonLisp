@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;

@@ -42,7 +42,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionExc
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperatorFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputBinaryStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputTextStream;

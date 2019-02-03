@@ -33,7 +33,33 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.EOF;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.PACKAGE_CL_USER;
+import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
+import static org.armedbear.lisp.Lisp.STANDARD_READTABLE;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp._AUTOLOAD_VERBOSE_;
+import static org.armedbear.lisp.Lisp._BACKQUOTE_COUNT_;
+import static org.armedbear.lisp.Lisp._DEBUG_;
+import static org.armedbear.lisp.Lisp._EXPLAIN_;
+import static org.armedbear.lisp.Lisp._LISP_FILE_TYPE_;
+import static org.armedbear.lisp.Lisp._LOAD_DEPTH_;
+import static org.armedbear.lisp.Lisp._LOAD_STREAM_;
+import static org.armedbear.lisp.Lisp._SAFETY_;
+import static org.armedbear.lisp.Lisp._SOURCE_;
+import static org.armedbear.lisp.Lisp._SOURCE_POSITION_;
+import static org.armedbear.lisp.Lisp._SPACE_;
+import static org.armedbear.lisp.Lisp._SPEED_;
+import static org.armedbear.lisp.Lisp._WARN_ON_REDEFINITION_;
+import static org.armedbear.lisp.Lisp.checkCharacterOutputStream;
+import static org.armedbear.lisp.Lisp.coerceToPathname;
+import static org.armedbear.lisp.Lisp.error;
+import static org.armedbear.lisp.Lisp.eval;
+import static org.armedbear.lisp.Lisp.exportConstant;
+import static org.armedbear.lisp.Lisp.getStandardOutput;
+import static org.armedbear.lisp.Lisp.internConstant;
+import static org.armedbear.lisp.Lisp.internSpecial;
 
 import java.io.IOException;
 import java.io.InputStream;

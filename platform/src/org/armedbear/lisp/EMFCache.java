@@ -32,8 +32,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class EMFCache extends LispObject

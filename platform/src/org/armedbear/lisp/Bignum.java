@@ -33,23 +33,12 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.T;
-import static org.armedbear.lisp.Lisp.UNSIGNED_BYTE_32;
-import static org.armedbear.lisp.Lisp.UNSIGNED_BYTE_32_MAX_VALUE;
-import static org.armedbear.lisp.Lisp.UNSIGNED_BYTE_8;
-import static org.armedbear.lisp.Lisp.error;
-import static org.armedbear.lisp.Lisp.list;
-import static org.armedbear.lisp.Lisp.number;
-import static org.armedbear.lisp.Lisp.type_error;
-
 import java.math.BigInteger;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLIntegerBignum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLBigIntBignum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;

@@ -33,10 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
-import org.semanticweb.kaon2.api.owl.axioms.SubObjectPropertyOf;
-
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

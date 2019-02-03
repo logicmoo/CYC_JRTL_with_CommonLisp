@@ -4,14 +4,6 @@
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
 
 import java.math.BigInteger;
-import static org.armedbear.lisp.Keyword.BINARY_KEYWORD;
-import static org.armedbear.lisp.Keyword.ERROR_KEYWORD;
-import static org.armedbear.lisp.Keyword.OUTPUT_KEYWORD;
-import static org.armedbear.lisp.Keyword.INPUT_KEYWORD;
-import static org.armedbear.lisp.Keyword.*;
-import static org.armedbear.lisp.Symbol.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -34,7 +26,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStreamFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;

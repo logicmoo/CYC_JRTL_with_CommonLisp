@@ -3,19 +3,14 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.operator;
 
-import org.armedbear.lisp.Environment;
-import org.armedbear.lisp.Function;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.MacroObject;
-import org.armedbear.lisp.SpecialOperator;
-import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SubLMacro extends MacroObject {
 	SubLMacro(SubLFunction macroExpander) {

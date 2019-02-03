@@ -12,7 +12,6 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import org.armedbear.lisp.JavaException;
-import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

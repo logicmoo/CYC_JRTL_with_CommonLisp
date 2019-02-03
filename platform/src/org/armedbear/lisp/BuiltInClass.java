@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 public class BuiltInClass extends LispClass
 {
   private BuiltInClass(Symbol symbol)

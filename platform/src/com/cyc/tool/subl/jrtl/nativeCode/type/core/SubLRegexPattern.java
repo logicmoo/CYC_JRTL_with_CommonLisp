@@ -3,33 +3,14 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.armedbear.lisp.LispObject;
-
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
-import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
-import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLDoubleFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumber;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLMacro;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputBinaryStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputTextStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputBinaryStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputTextStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackageIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SubLRegexPattern extends FromSubLisp implements SubLObject {

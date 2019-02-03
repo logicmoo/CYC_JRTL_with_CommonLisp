@@ -5,7 +5,6 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.armedbear.lisp.Java;
 import org.armedbear.lisp.JavaObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;

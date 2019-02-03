@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 public abstract class AbstractString extends com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString
 {
     @Override

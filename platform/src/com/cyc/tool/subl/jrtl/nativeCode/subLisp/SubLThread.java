@@ -9,11 +9,9 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 
+import org.armedbear.lisp.Environment;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispThread;
-import org.armedbear.lisp.Main;
-import org.armedbear.lisp.*;
-import org.armedbear.lisp.Environment;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
@@ -27,8 +25,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.ComparatorGenericKey;
 import com.cyc.tool.subl.util.ComparatorIdentityKey;
 import com.cyc.tool.subl.util.PatchFileLoader;
-
-import sun.nio.ch.Interruptible;
 
 final public class SubLThread extends Thread
 {

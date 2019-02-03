@@ -33,8 +33,10 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.error;
+
 import java.io.InputStream;
-import static org.armedbear.lisp.Lisp.*;
 
 
 public class FaslClassLoader extends JavaClassLoader {

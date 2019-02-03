@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.io.Writer;
 
 public final class SeekableStringWriter extends Writer {

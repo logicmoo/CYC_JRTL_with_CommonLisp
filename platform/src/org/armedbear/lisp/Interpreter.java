@@ -48,7 +48,6 @@ import static org.armedbear.lisp.Lisp.getStandardInput;
 import static org.armedbear.lisp.Lisp.getStandardOutput;
 import static org.armedbear.lisp.Lisp.initialized;
 import static org.armedbear.lisp.Lisp.intern;
-import static org.armedbear.lisp.Lisp.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -56,21 +55,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintStream;
 
-import javax.swing.JFrame;
-
-import org.armedbear.lisp.java.swing.REPLConsole;
 import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
-
-import bsh.ConsoleInterface;
 
 public final class Interpreter implements Runnable
 {

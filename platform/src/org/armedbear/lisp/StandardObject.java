@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import java.io.IOException;
-
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;

@@ -15,7 +15,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.ComparatorGenericKey;
 import com.cyc.tool.subl.util.ComparatorIdentityKey;

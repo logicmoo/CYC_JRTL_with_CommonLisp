@@ -33,7 +33,12 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp.error;
+import static org.armedbear.lisp.Lisp.javaString;
+import static org.armedbear.lisp.Lisp.list;
+import static org.armedbear.lisp.Lisp.type_error;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -42,7 +47,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class Java
 {

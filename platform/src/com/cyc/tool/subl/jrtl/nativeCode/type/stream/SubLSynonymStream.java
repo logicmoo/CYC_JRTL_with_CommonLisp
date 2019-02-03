@@ -7,11 +7,8 @@ import java.io.File;
 import java.io.FileDescriptor;
 
 import org.armedbear.lisp.Keyword;
-import org.armedbear.lisp.Stream;
 import org.armedbear.lisp.Symbol;
-import org.armedbear.lisp.SynonymStream;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 

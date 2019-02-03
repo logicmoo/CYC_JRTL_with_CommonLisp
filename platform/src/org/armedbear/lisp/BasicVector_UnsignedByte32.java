@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 // A basic vector is a specialized vector that is not displaced to another
 // array, has no fill pointer, and is not expressly adjustable.
 public final class BasicVector_UnsignedByte32 extends AbstractVector

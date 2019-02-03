@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.math.BigInteger;
 
 // ### logtest integer-1 integer-2 => generalized-boolean

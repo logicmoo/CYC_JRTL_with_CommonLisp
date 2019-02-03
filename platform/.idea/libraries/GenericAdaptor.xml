@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="GenericAdaptor">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/platform/ext/GAT/Adaptors/GenericAdaptor/GenericAdaptor.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

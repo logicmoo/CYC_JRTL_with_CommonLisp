@@ -40,7 +40,6 @@ import org.jpl7.Term;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync.IPrologifiable;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync.SyncState;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLConsPair;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 

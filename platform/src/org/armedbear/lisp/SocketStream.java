@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.net.Socket;
 
 public  abstract  class SocketStream extends TwoWayStream

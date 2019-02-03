@@ -16,7 +16,6 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.FileChannel;
 
 import org.armedbear.lisp.Keyword;
-import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;

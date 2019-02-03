@@ -33,9 +33,10 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp.exportSpecial;
 
 public final class Debug
 {

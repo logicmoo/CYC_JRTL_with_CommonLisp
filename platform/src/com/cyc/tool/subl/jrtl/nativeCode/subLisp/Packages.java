@@ -7,7 +7,6 @@ import java.util.Iterator;
 import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.SimpleString;
-import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;

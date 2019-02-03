@@ -3,7 +3,6 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -26,7 +25,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
-import scala.reflect.internal.AnnotationInfos.Annotatable;
 import sun.reflect.FieldAccessor;
 
 public class SubLStructDeclNative extends SubLStructDecl

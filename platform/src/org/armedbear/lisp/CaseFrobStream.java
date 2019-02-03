@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 public abstract class CaseFrobStream extends Stream
 {
     protected final Stream target;

@@ -3,8 +3,6 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -22,24 +20,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
-import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
-import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLDoubleFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumber;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLMacro;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputBinaryStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputTextStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputBinaryStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputTextStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackageIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTable

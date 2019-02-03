@@ -3,18 +3,12 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence.EQL_TEST;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence.IDENTITY_UNARY_FUNC;
-
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import org.armedbear.lisp.AbstractArray;
 import org.armedbear.lisp.AbstractString;
 import org.armedbear.lisp.AbstractVector;
-import org.armedbear.lisp.Lisp;
-import org.armedbear.lisp.LispObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;

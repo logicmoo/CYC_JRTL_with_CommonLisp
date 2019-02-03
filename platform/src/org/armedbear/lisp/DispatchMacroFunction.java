@@ -33,11 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-
 public abstract class DispatchMacroFunction extends Function
 {
     public DispatchMacroFunction(String name)

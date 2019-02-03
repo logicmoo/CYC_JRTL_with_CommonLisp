@@ -4,7 +4,6 @@
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.armedbear.lisp.Layout;
 import org.armedbear.lisp.LispClass;
@@ -13,8 +12,6 @@ import org.armedbear.lisp.Primitive;
 import org.armedbear.lisp.SlotClass;
 import org.armedbear.lisp.Symbol;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative.is_instance_of_foriegn_class;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructInterpreted;
@@ -22,7 +19,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
 public class SubLStructDecl extends Layout
 {

@@ -33,13 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.T;
-import static org.armedbear.lisp.Lisp.error;
-import static org.armedbear.lisp.Lisp.list;
-import static org.armedbear.lisp.Lisp.randomStringHashBase;
-import static org.armedbear.lisp.Lisp.type_error;
-
 import java.util.Arrays;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

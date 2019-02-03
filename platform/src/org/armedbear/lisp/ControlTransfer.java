@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
-
 /** This class is the parent class of all non-local transfer of
  * control events in ABCL. The classes inheriting from this class each
  * represent a transfer of control event as it is available in the

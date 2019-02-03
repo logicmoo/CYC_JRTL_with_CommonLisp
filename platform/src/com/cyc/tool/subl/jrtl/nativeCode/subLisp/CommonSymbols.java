@@ -3,8 +3,6 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import org.armedbear.lisp.Main;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLDoubleFloat;

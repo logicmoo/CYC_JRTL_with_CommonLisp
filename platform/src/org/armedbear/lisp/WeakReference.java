@@ -32,8 +32,6 @@
  */
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 public class WeakReference extends LispObject {
 
     java.lang.ref.WeakReference<LispObject> ref;

@@ -4,7 +4,6 @@
 package com.cyc.tool.subl.jrtl.nativeCode.type.number;
 
 import org.armedbear.lisp.Fixnum;
-import org.armedbear.lisp.Lisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;

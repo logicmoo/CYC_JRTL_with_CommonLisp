@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="ext.bundle.xml.dom4j_161-1.2.4-SNAPSHOT">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.xml.dom4j/target/ext.bundle.xml.dom4j_161-1.2.4-SNAPSHOT.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

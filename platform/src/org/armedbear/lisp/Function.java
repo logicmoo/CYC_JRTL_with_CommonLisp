@@ -32,24 +32,12 @@
  */
 
 package org.armedbear.lisp;
-import static org.armedbear.lisp.Lisp.*;
-
-
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.QuataryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.QuintaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.TernaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ZeroArityFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.AbstractSubLFunction;
 //import com.cyc.tool.subl.jrtl.nativeCode.type.operator.AbstractSubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLSpecialOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 

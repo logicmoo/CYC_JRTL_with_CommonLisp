@@ -33,11 +33,8 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.math.BigInteger;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLNumber;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLDoubleFloat;
 
 public final class SingleFloat extends SubLDoubleFloat

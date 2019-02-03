@@ -32,8 +32,7 @@
  */
 package org.armedbear.lisp;
 
-import org.armedbear.lisp.util.HttpHead;
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.error;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,6 +47,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+
+import org.armedbear.lisp.util.HttpHead;
 
 /**
  * A cache for all zip/jar file accesses by URL that uses the last

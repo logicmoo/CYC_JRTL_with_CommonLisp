@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="ext.bundle.semweb4j.jena-1.2.4-SNAPSHOT">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.semweb4j.jena/target/ext.bundle.semweb4j.jena-1.2.4-SNAPSHOT.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

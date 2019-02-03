@@ -4,19 +4,17 @@
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
 
-import static org.armedbear.lisp.Keyword.*;
+import static org.armedbear.lisp.Keyword.APPEND_KEYWORD;
+import static org.armedbear.lisp.Keyword.CREATE_KEYWORD;
+import static org.armedbear.lisp.Keyword.ERROR_KEYWORD;
+import static org.armedbear.lisp.Keyword.OUTPUT_KEYWORD;
+import static org.armedbear.lisp.Keyword.TEXT_KEYWORD_CHARACTER;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 
-import org.armedbear.lisp.Stream;
-import org.armedbear.lisp.Symbol;
-
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;

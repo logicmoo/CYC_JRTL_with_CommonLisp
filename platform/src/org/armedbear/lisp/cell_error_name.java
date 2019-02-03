@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 // ### cell-error-name
 public final class cell_error_name extends Primitive
 {

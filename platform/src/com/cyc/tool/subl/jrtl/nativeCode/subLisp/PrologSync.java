@@ -16,42 +16,34 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.appdapter.core.convert.Converter.ConverterMethod;
 import org.armedbear.lisp.Go;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispClass;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Main;
-import org.armedbear.lisp.StructureObject;
 import org.armedbear.lisp.Symbol;
 import org.jpl7.Atom;
 import org.jpl7.Compound;
 import org.jpl7.JPL;
-import org.jpl7.JPLException;
 import org.jpl7.JRef;
 import org.jpl7.Query;
 import org.jpl7.Term;
 import org.jpl7.Variable;
-import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
 import org.logicmoo.bb.BeanBowl;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.cycjava.cycl.constants_high;
-import com.cyc.cycjava.cycl.constants_interface;
-import com.cyc.cycjava.cycl.constants_low;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil.NIL;
 
 public class PrologSync extends SubLTrampolineFile
 {

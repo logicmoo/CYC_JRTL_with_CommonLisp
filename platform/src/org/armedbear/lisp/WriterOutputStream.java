@@ -1,8 +1,8 @@
 package org.armedbear.lisp;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.io.OutputStream;
+import java.io.Writer;
 
 public class WriterOutputStream extends OutputStream {
 	protected final Writer _writer;

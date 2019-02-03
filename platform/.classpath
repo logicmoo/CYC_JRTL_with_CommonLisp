@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry including="**/*.*|META-INF/|com/|org/" kind="src" path="src">
+	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
@@ -291,5 +291,11 @@
 	<classpathentry exported="true" kind="lib" path="ext/ordi-trree-adapter-3.1.a6.jar"/>
 	<classpathentry exported="true" kind="lib" path="ext/owlim-big-3.1.a7.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path="build/classes"/>
+	<classpathentry kind="src" path=".apt_generated">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="build/classes"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -7,13 +7,9 @@ import java.util.Arrays;
 
 import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.Layout;
-import org.armedbear.lisp.LispClass;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.LispObject;
-import org.armedbear.lisp.LispThread;
-import org.armedbear.lisp.Main;
 import org.armedbear.lisp.StructureObject;
-import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;

@@ -12,7 +12,6 @@ import org.armedbear.lisp.ControlTransfer;
 import org.armedbear.lisp.Function;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
-import org.armedbear.lisp.WrongNumberOfArgumentsException;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -25,7 +24,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.Unhandleable;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.PatchFileLoader;
-import static org.armedbear.lisp.Lisp.*;
 public class SubLCompiledFunction extends Function implements SubLFunction {
 	public class FuncallCounts {
 		FuncallCounts() {

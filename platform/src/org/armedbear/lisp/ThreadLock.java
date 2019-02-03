@@ -20,7 +20,6 @@
  */
 
 package org.armedbear.lisp;
-import static org.armedbear.lisp.Lisp.*;
 
 public final class ThreadLock extends LispObject
 {

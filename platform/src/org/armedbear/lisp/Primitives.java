@@ -34,20 +34,17 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
 import static org.armedbear.lisp.Lisp.NIL;
 import static org.armedbear.lisp.Lisp.PACKAGE_CL;
 import static org.armedbear.lisp.Lisp._SOURCE_;
 import static org.armedbear.lisp.Lisp._WARN_ON_REDEFINITION_;
-import static org.armedbear.lisp.Lisp.eval;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 
 import org.armedbear.lisp.util.Finalizer;
-import org.logicmoo.system.BeanShellCntrl.*;
+import org.logicmoo.system.BeanShellCntrl.SpecialMethod;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLMacro;
 import com.cyc.tool.subl.util.SubLFiles.VariableAccessMode;
 
 public final class Primitives

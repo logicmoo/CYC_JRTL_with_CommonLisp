@@ -5,21 +5,12 @@
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.List;
 
-import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.Layout;
-import org.armedbear.lisp.LispClass;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
-import org.armedbear.lisp.Main;
-import org.armedbear.lisp.StructureClass;
 import org.armedbear.lisp.Symbol;
-import org.jpl7.Term;
 
-import com.cyc.cycjava.cycl.cb_adornments.$adornment_native;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -31,9 +22,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
-
-import sun.misc.Unsafe;
-import sun.reflect.FieldAccessor;
 
 public abstract class SubLStructNative extends AbstractSubLStruct implements SubLStruct
 {

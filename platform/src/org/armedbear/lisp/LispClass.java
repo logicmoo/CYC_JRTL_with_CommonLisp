@@ -38,8 +38,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.jpl7.Term;
 
-import static org.armedbear.lisp.Lisp.*;
-
 public abstract class LispClass extends StandardObject
 {
 

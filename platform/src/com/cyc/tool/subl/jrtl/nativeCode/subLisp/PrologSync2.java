@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -19,7 +18,6 @@ import java.util.Set;
 
 import org.jpl7.Compound;
 import org.jpl7.Term;
-import org.jpl7.fli.Prolog;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;

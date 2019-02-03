@@ -6,7 +6,6 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.number;
 import java.math.BigInteger;
 
 import org.armedbear.lisp.Bignum;
-import org.armedbear.lisp.Lisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;

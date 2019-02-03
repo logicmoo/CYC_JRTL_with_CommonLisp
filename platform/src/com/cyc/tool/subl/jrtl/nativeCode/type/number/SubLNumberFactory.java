@@ -6,7 +6,6 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.number;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.armedbear.lisp.Bignum;
 import org.armedbear.lisp.DoubleFloat;
 import org.armedbear.lisp.Fixnum;
 

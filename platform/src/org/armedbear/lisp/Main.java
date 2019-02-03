@@ -32,18 +32,14 @@
  */
 package org.armedbear.lisp;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.cli.Option;
-import org.appdapter.core.jvm.CallableWithParameters;
 import org.logicmoo.system.JVMImpl;
 import org.logicmoo.system.SystemCurrent;
 import org.logicmoo.system.SystemCurrent.In;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;

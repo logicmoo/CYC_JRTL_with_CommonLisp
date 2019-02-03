@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import org.armedbear.lisp.Function;
 import org.armedbear.lisp.LispObject;
-import org.armedbear.lisp.WrongNumberOfArgumentsException;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;

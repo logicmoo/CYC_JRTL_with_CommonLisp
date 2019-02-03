@@ -33,15 +33,12 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.AbstractSubLFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 //import com.cyc.tool.subl.jrtl.nativeCode.type.operator.AbstractSubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLSpecialOperator;

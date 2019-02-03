@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.lang.reflect.Method;
 
 // ### jmethod-return-type method => class

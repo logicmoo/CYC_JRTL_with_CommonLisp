@@ -3,7 +3,6 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,13 +11,9 @@ import org.armedbear.lisp.LispObject;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.ComparatorGenericKey;
 import com.cyc.tool.subl.util.ComparatorIdentityKey;
 

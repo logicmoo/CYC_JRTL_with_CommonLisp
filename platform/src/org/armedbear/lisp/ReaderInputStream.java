@@ -1,8 +1,8 @@
 package org.armedbear.lisp;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.InputStream;
+import java.io.Reader;
 
 public class ReaderInputStream extends InputStream
 {

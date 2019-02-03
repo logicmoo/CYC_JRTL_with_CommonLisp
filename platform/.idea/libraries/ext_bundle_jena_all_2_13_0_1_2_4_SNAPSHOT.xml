@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="ext.bundle.jena_all_2_13_0-1.2.4-SNAPSHOT">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.jena.full/target/ext.bundle.jena_all_2_13_0-1.2.4-SNAPSHOT.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

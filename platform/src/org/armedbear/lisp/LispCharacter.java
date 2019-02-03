@@ -33,14 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.LISP_NOT_JAVA;
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
-import static org.armedbear.lisp.Lisp.T;
-import static org.armedbear.lisp.Lisp.checkCharacter;
-import static org.armedbear.lisp.Lisp.list;
-import static org.armedbear.lisp.Lisp.type_error;
-
 import java.util.HashMap;
 import java.util.Map;
 

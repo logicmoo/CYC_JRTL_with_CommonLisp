@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 
 abstract public class SlotClass extends LispClass

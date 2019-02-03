@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
-import java.lang.management.MemoryNotificationInfo;
 import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.MemoryType;
 import java.util.ArrayList;
@@ -52,7 +51,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
-import com.cyc.tool.subl.ui.SubLReaderPanel;
 import com.cyc.tool.subl.util.PatchFileLoader;
 import com.cyc.tool.subl.util.SubLFiles;
 

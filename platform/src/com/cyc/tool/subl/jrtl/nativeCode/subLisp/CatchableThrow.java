@@ -7,12 +7,9 @@ import java.util.Deque;
 
 import org.armedbear.lisp.ControlTransfer;
 import org.armedbear.lisp.LispObject;
-import org.armedbear.lisp.LispThread;
-import org.armedbear.lisp.Throw;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 
 public abstract class CatchableThrow extends ControlTransfer {
 

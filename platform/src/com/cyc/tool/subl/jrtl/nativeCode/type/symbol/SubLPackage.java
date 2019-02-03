@@ -6,13 +6,8 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
 import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.armedbear.lisp.AbstractString;
@@ -37,7 +32,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLMacro;
 import com.cyc.tool.subl.util.SubLFiles;
 
 abstract public class SubLPackage extends LispObject implements SubLObject {

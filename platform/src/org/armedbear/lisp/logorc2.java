@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.math.BigInteger;
 
 // logorc2 integer-1 integer-2 => result-integer

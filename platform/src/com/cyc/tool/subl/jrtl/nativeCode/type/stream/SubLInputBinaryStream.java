@@ -3,7 +3,6 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
 public interface SubLInputBinaryStream extends SubLInputStream {

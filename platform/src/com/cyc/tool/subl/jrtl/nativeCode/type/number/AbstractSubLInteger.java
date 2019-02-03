@@ -3,7 +3,6 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.number;
 
-import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispInteger;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

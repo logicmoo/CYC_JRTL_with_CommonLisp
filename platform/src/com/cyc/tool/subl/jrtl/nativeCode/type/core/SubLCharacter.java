@@ -4,7 +4,6 @@
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import org.armedbear.lisp.LispCharacter;
-import org.armedbear.lisp.LispObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

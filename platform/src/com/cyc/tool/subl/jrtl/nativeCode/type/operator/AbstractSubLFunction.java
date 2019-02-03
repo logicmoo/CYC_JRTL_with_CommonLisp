@@ -3,11 +3,6 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.operator;
 
-import org.armedbear.lisp.LispObject;
-import org.armedbear.lisp.Operator;
-import org.armedbear.lisp.*;
-import org.armedbear.lisp.Symbol;
-
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

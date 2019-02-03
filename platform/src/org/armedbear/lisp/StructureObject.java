@@ -34,17 +34,13 @@
 package org.armedbear.lisp;
 
 import java.util.List;
-import java.util.Set;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructInterpreted;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 
 public class StructureObject extends SubLStructInterpreted implements SubLStruct
 {

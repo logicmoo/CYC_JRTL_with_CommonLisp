@@ -9,11 +9,9 @@ import java.io.FileDescriptor;
 import org.armedbear.lisp.BroadcastStream;
 import org.armedbear.lisp.Stream;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SubLBroadcastStream extends BroadcastStream implements SubLOutputTextStream, SubLOutputBinaryStream {
 	SubLBroadcastStream() {

@@ -33,14 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.PACKAGE_KEYWORD;
-import static org.armedbear.lisp.Lisp.T;
-import static org.armedbear.lisp.Lisp._PRINT_FASL_;
-import static org.armedbear.lisp.Lisp.error;
-import static org.armedbear.lisp.Lisp.javaString;
-import static org.armedbear.lisp.Lisp.memq;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,14 +43,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.jpl7.Term;
-
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 

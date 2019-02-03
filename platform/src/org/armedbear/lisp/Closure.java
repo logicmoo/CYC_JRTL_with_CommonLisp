@@ -34,8 +34,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 abstract public class Closure extends Function
 {
   // Parameter types.

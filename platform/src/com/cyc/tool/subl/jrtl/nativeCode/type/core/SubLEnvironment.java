@@ -6,12 +6,10 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 import java.util.ArrayList;
 
 import org.armedbear.lisp.Environment;
-import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 abstract public class SubLEnvironment extends FromSubLisp {

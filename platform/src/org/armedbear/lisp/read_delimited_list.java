@@ -20,7 +20,7 @@
  */
 
 package org.armedbear.lisp;
-import static org.armedbear.lisp.Lisp.*;
+
 // ### read-delimited-list char &optional input-stream recursive-p => list
 public final class read_delimited_list extends Primitive
 {

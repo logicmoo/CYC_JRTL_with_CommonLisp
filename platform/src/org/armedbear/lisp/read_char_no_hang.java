@@ -20,7 +20,6 @@
  */
 
 package org.armedbear.lisp;
-import static org.armedbear.lisp.Lisp.*;
 
 // ### read-char-no-hang &optional input-stream eof-error-p eof-value
 // recursive-p => char

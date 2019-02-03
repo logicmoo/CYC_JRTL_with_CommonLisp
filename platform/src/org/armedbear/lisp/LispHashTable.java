@@ -1,7 +1,5 @@
 package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-
 public interface LispHashTable //extends SubLObject
 {
 

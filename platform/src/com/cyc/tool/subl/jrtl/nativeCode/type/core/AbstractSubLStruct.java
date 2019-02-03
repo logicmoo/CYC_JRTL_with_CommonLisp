@@ -3,11 +3,15 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
-import java.io.IOException;
 import java.util.List;
 
-import org.armedbear.lisp.*;
-import org.jpl7.Atom;
+import org.armedbear.lisp.Fixnum;
+import org.armedbear.lisp.Layout;
+import org.armedbear.lisp.LispClass;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.SimpleVector;
+import org.armedbear.lisp.StructureClass;
+import org.armedbear.lisp.Symbol;
 import org.jpl7.Term;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;

@@ -1,17 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>platform</groupId>
   <artifactId>platform</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <name>LARKC_CL</name>
+  <description>LARKC_CL</description>
   <build>
-    <sourceDirectory>build/classes</sourceDirectory>
+    <sourceDirectory>src</sourceDirectory>
     <resources>
-      <resource>
-        <directory>build/classes</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
       <resource>
         <directory>src</directory>
         <excludes>
@@ -19,13 +17,55 @@
         </excludes>
       </resource>
       <resource>
-        <directory>src1</directory>
+        <directory>Desktop/objectweb-asm-src</directory>
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>
       </resource>
       <resource>
-        <directory>src2</directory>
+        <directory>Desktop/armedbear-j-src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>Desktop/opencyc-jsrc</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>Desktop/logicmoo-desktop</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>Desktop/appdapter-src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>Desktop/jpl7-hacked</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>Desktop/server-4q</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>main/java</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>build/classes</directory>
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>
@@ -34,12 +74,47 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
+        <version>3.6.1</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
+        <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>3.0.0-M3</version>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.maven.surefire</groupId>
+        <artifactId>surefire-junit47</artifactId>
+        <version>3.0.0-M3</version>
+      </dependency>
+    </dependencies>
+     </plugin>
     </plugins>
   </build>
+  <dependencies>
+  <dependency>
+    <groupId>org.eclipse.jetty</groupId>
+    <artifactId>jetty-server</artifactId>
+    <version>7.6.0.RC0</version>
+   </dependency>
+  <dependency>
+    <groupId>org.eclipse.jetty</groupId>
+    <artifactId>jetty-webapp</artifactId>
+    <version>7.6.0.RC0</version>
+   </dependency>
+   <dependency>
+  <groupId>org.eclipse.jetty.toolchain</groupId>
+  <artifactId>jetty-test-helper</artifactId>
+  <version>2.2</version>
+   </dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.11</version>
+  		<scope>runtime</scope>
+  	</dependency>
+  </dependencies>
 </project>

@@ -6,7 +6,6 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -14,15 +13,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.FromSubLisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputBinaryStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputTextStream;

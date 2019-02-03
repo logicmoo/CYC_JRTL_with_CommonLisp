@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.Reader;
 import java.io.StringReader;
 
-import org.armedbear.lisp.Lisp;
 import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;

@@ -35,12 +35,6 @@ package org.armedbear.lisp;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-//import org.armedbear.lisp.HashTable.HTComparator;
-
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
-
-import static org.armedbear.lisp.Lisp.*;
-
 public class HashTable
     extends LispObject
     implements org.armedbear.lisp.protocol.Hashtable, LispHashTable
