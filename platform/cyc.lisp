@@ -62,10 +62,6 @@
 
 ;; uses com.cyc.cycjava.cycl.constants_low.lookup_constant_by_guid
 
-;; CYC Server
-(let ((*PACKAGE* *PACKAGE*))
-   (cyc:init-cyc-server))
-
 #+CYC-HTML
 (sl:csetq cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
 (defparameter cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
@@ -100,14 +96,10 @@
 ;;#+USE-CYC
 (let ((*PACKAGE* (find-package :CYC))) (sl:load "e2c/larkc_prolog.lisp"))
 
+;; Starts rest of CYC
 #+USE-CYC
-(let
-  ((*PACKAGE* *PACKAGE*))
-(cyc:init-server) ;; Starts All of CYC
-)
-
-
-
+(let ((*PACKAGE* *PACKAGE*))
+   (cyc:init-cyc-server))
 
 
 
