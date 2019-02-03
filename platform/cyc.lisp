@@ -53,7 +53,6 @@
      (cyc:init-cyc) ;; Loads CYC code (without a KB)
      '(cyc::setup-kb-tables 0)
      (cyc:init-kb) ;; Loads CYC's KB (a server without TCP services)
-     (cyc:init-server) ;; Starts All of CYC
  )
 
 
@@ -98,12 +97,17 @@
 
 (cl-imports-cyc)
 (cyc-imports-cl)
-
-
-
-
 ;;#+USE-CYC
 (let ((*PACKAGE* (find-package :CYC))) (sl:load "e2c/larkc_prolog.lisp"))
+
+#+USE-CYC
+(let
+  ((*PACKAGE* *PACKAGE*))
+(cyc:init-server) ;; Starts All of CYC
+)
+
+
+
 
 
 

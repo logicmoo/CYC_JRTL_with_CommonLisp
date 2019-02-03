@@ -46,7 +46,7 @@ CLASSPATH=$CPR/slf4j-api-1.7.5.jar:$CPR/slf4j-log4j12-1.7.5.jar:$CLASSPATH
 # hides the unhacked version
 # cat /dev/null > jpl.jar
 
-CLASSPATH=$LARKC_HOME/build/classes:$LARKC_HOME/dist/abcl-contrib.jar:$CLASSPATH
+CLASSPATH=$LARKC_HOME/target/classes:$LARKC_HOME/dist/abcl-contrib.jar:$CLASSPATH
 
 
 CLASSPATH=$LARKC_HOME/jpl.jar:$CLASSPATH

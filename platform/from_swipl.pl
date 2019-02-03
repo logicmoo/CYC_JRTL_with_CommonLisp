@@ -5,7 +5,7 @@ prolog_stack:stack_guard(none).
 
 dmiles_machine:- fail, gethostname('gitlab.logicmoo.org') ; gethostname('i74930k').
 
-ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(false)]).
+ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactexitive(false)]).
 
 % :- use_module(library(yall)).
 :- maplist(([P] >> pack_install(P,[upgrade(true),git(true),interactive(false)])), [ 

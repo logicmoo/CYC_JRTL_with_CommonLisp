@@ -26619,10 +26619,12 @@
 		<F N="abcl.rdf"/>
 		<F N="abcl.sh"/>
 		<F N="abclc"/>
+		<F N="abclc-rc.lisp"/>
 		<F N="ABCLVErsion.vpj"/>
 		<F N="AWTFromToSWI.launch"/>
 		<F N="b.xml"/>
 		<F N="build-abcl.lisp"/>
+		<F N="build-cyc-java.sh"/>
 		<F N="build-cyc.xml"/>
 		<F N="build-from-lisp.bash"/>
 		<F N="build-from-lisp.sh"/>
@@ -26641,8 +26643,11 @@
 		<F N="Editor.launch"/>
 		<F N="From_Prolog.sh"/>
 		<F N="from_swipl.pl"/>
+		<F N="gdbinit"/>
 		<F N="go-cyc.bat"/>
+		<F N="hs_err_pid214924.log"/>
 		<F N="install-sh"/>
+		<F N="jpl.jar"/>
 		<F N="larkc-build.xml"/>
 		<F N="LarKC_CommonLisp_Extensions.vpw"/>
 		<F N="LaunchMUDAndRemote.launch"/>
@@ -26659,6 +26664,10 @@
 		<F N="NOTICE.txt"/>
 		<F N="org.armedbear.lisp.java.swing.REPLConsolePLATFORM.launch"/>
 		<F N="org.armedbear.lisp.Main Plain.launch"/>
+		<F N="platform.eml"/>
+		<F N="platform.iml"/>
+		<F N="platform.properties"/>
+		<F N="platform.xml"/>
 		<F N="pom.xml"/>
 		<F N="pom.xml.hide"/>
 		<F N="PrologMUD_Runtime.vpj"/>

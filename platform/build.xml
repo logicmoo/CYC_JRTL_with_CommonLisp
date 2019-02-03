@@ -31,7 +31,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
     <property file="abcl.properties"/>
 
     <property name="build.dir"
-              value="${basedir}/build"/>
+              value="${basedir}/target"/>
     <property name="build.classes.dir"
               value="${build.dir}/classes"/>
     <property name="src.dir"
