@@ -57,7 +57,7 @@ mp_test:- sys, meta_predicate(system: write(7)), meta_predicate(system: writeq(7
 
 
 
-cl_eval(L):- trace, cl_eval(L, O),po(O).
+cl_eval(L):- cl_eval(L, O),po(O).
 cyc_eval(L):- cl_cyc_eval(L, O),po(O).
 cl_read_lisp(L):- cl_read_lisp(L, O),po(O).                                
 cl_eval_string(L):- cl_eval_string(L, O),po(O).
