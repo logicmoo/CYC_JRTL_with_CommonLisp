@@ -79,7 +79,7 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 		functionSymbol.setFunction(this);
 	}
 
-	@Override
+    @Override
 	public String printObjectImpl()
     {
     	return super.printObjectImpl();
@@ -135,7 +135,6 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 		methodParameters = method.getParameterTypes();
 		returnType = method.getReturnType();
 	}
-
 	@Override
 	public LispObject arrayify(LispObject... args) {
 		return (LispObject) applyObject(args);

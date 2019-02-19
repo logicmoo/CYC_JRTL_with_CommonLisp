@@ -290,12 +290,15 @@
 	<classpathentry exported="true" kind="lib" path="ext/ordi-model-0.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="ext/ordi-trree-adapter-3.1.a6.jar"/>
 	<classpathentry exported="true" kind="lib" path="ext/owlim-big-3.1.a7.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_162">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path=".apt_generated">
 		<attributes>
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="build/classes"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

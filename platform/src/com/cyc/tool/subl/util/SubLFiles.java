@@ -156,7 +156,7 @@ public class SubLFiles {
 				Errors.warn("Redefining " + functionSymbol);
 			}
 			SubLFunction func = SubLObjectFactory.makeCompiledFunction(meth, functionSymbol, requiredArgCount,
-					optionalArgCount, allowsRest);
+					optionalArgCount, allowsRest);		
 		} catch (Exception e) {
 			Errors.cerror("Continue.", "Error while declaring function: " + functionName, e);
 		}
