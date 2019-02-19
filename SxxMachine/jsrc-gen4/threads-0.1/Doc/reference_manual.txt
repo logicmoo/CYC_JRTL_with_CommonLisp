@@ -1,0 +1,722 @@
+                  ------------------------------------
+
+                           A Reference Manual
+
+                                 of the
+
+                     Logical State Threads package
+
+                          for SICStus Prolog
+
+                  ------------------------------------
+                            Andreas Kagedal
+                  ------------------------------------
+
+                              Version 0.1
+
+----------------------------------------------------------------------
+Copyright (C) 1996  Andreas Kagedal
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided also that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+----------------------------------------------------------------------
+
+% Comments in the text, such a this one, are meta comments that
+% discusses the contents and form of the document.  They should be
+% removed in the final version.
+
+% This ASCII version of the Refrence Manual should eventually be
+% converted into TeXInfo format.
+
+% The Refrence Manual is currently very incomplete. Lots of
+% things remain to be discussed. FOr instance: A general scheme for
+% translating threaded clauses is still missing.
+
+======================================================================
+Usage.
+======================================================================
+
+To use the ``Logical State Threads'' package in your file you should
+include the following line somewhere close to the top of your file:
+
+    :- ensure_loaded( library(threads) ).
+
+% It is currently also possible to use use_module/1 instead of
+% ensure_loaded/1. 
+
+
+======================================================================
+Declarations.
+======================================================================
+
+Summary
+-------
+
+Declaring Threads:
+
+    :- thread(T, Methods).
+    :- thread(T, Methods, Init).
+    :- thread_bwd(T, Methods).
+    :- thread_bwd(T, Methods, Init).
+
+Declaring Passed Arguments:
+
+    :- thread_pass(<pass>).
+    :- thread_pass(<pass>,PStart).
+
+Declaring Methods:
+
+    :- thread_method(MethodCall, Old, New, Updater).
+
+Declaring Predicates:
+
+    :- thread_pred(Pred/Arity, Threads).
+
+
+Declaring Threads.
+------------------
+
+    :- thread(T, Methods).
+    :- thread(T, Methods, Init).
+    :- thread_bwd(T, Methods).
+    :- thread_bwd(T, Methods, Init).
+
+These declarations specify that T is a thread associating with a set
+Methods of ``methods'', and, optionally, a default initial value Init.
+
+T should be an atom and Methods is either a single method or a list of
+methods.  A method is specified with a defined method name (an atom) or
+with an ``anonymous method'' (see below, "Declaring Methods").
+
+The thread T has a *default method* M if 
+
+   - Methods is a single method M (anonymous or named) which
+     takes one argument.
+
+   - Methods is a non-empty list where M is the first method (anonymous
+     or named) and M takes one argument.
+
+Otherwise, T does not have a default method. In section "Accessing and
+Modifying the Value of a Thread" below the use of default methods is
+described.
+
+An anonymous method can only appear as a default method.
+
+The `:- thread_bwd(...)' form specify that the propagation and
+modification of the thread should be done ``backwards'',
+i.e. right-to-left instead of the normal left-to-right.
+
+% Somewhere there should be an example showing the difference between
+% `thread(...)' and `thread_bwd(...)'.
+
+Examples:
+
+    :- thread(count, [add,inc], 0).
+
+Defines a thread `count' which will be initialized with the value `0'
+and which can be updated with the methods `add' and `inc'. The default
+method is `add'.
+
+    :- thread(list_of_things, cons, []).
+
+Defines a thread `list_of_things' which will be initialized with the
+empty list and which can be updated with the method `cons', which is
+also its default method.
+
+    :- thread(another_list_of_things, cons ).
+
+Defines a thread `another_list_of_things' which does not have a default
+initial value. It can be updated with the method `cons', which is also
+its default method.
+
+    :- thread(a_third_list_of_things, method(X,New,Old,New=[X|Old]), []).
+
+Defines a thread `a_third_list_of_things' which will be initialized with
+the empty list and which can be updated with an anonymous method (which
+does exactly the same thing as the method `cons') and which is also its
+default method.
+
+
+Declaring Passed Arguments.
+---------------------------
+
+% Passed arguments has been somewhat neglected.
+
+    :- thread_pass(<pass>).
+    :- thread_pass(<pass>,PStart).
+
+
+Declaring Methods.
+------------------
+
+A method specifies how a thread can be updated.  A named method is
+declared with:
+
+    :- thread_method(MethodCall, Old, New, Updater).
+
+Where Updater is a goal that should instantiate New to a new value of
+the thread, given the old value Old of the thread and any arguments
+given in MethodCall.
+
+Examples:
+
+    :- thread_method(inc, Old, New, New is Old + 1).
+
+says that `inc' is a method that updates the value of a thread by adding
+1 to it.
+
+    :- thread_method(add(X), Old, New, New is Old + X).
+
+says that `add' is method that takes one argument X and updates the
+value of a thread by adding X to it.
+
+    :- thread_method( cons(X), Old, New, New = [X|Old] ).
+
+says that `cons' is a method that takes one argument X and updates the
+value of a thread, which probably is a list, by adding X as the new head
+of the list.
+
+% End Examples
+
+When you declare a thread you have to specify which methods could be
+used with this thread.  The methods could be given as names of a defined
+method, like `inc' or `cons', or with an ``anonymous method'' of the
+form `method(X,Old,New,Updater)'.  An anonymous method takes one
+argument X and instantiates New to a new value of the thread, given the
+old value Old of the thread and X.
+
+Example:
+
+    method(X, Old, New, New is Old + X)
+
+which is an anonymous method that does exactly the same thing as `add'
+above. 
+
+
+Declaring Threaded Predicates.
+------------------------------
+
+    :- thread_pred(Pred/Arity, Threads).
+
+Declares that the predicate Pred with arity Arity should be associated
+with the set Threads of threads.
+
+Example
+
+    :- thread_pred(p/0, [count,list_of_things]).
+
+
+======================================================================
+Clause Syntax.
+======================================================================
+
+The syntax of clauses that will be expanded by the Logical State Threads
+package is described by the following grammar:
+
+Clause ::= Head -->> Goal
+         | Head :--  Goal
+
+Goal ::= PrologGoal | (Goal,Goal) | (Goal;Goal)
+       | (Goal->Goal;Goal) | (Goal->Goal)
+       | {PrologGoal}
+       | ThreadName::MethodAppl
+       | DefMethodArgsList
+       | (Goal with Linkage)
+
+
+MethodAppl ::= PrologTerm | DefMethodArgsList              
+
+DefMethodArgsList ::= [] | [PrologTerm|DefMethodArgsList]  
+
+Linkage ::= (Linkage,Linkage) | TIE | PIE | TPIE
+
+TIE    ::= TIE => TIE      % TIE = ``Thread Initialization Expression''
+         | TIE := TIE
+         | TIE = TIE
+         | ThreadName
+         | ThreadName(F)
+         | ThreadName(I,F)
+         | glob(ThreadName)   % May only be used inside =>, := or =
+         | @(I,F)             %           ---  "  ---
+
+PIE   ::= PIE = PIE       % PIE = ``Passed arg. Initialization Expression''
+         | PassName
+         | PassName(V)
+         | glob(PassName)     % May only be used inside := or =
+         | @(V)               %           ---  "  ---
+
+ThreadName ::= PrologAtom
+PassName   ::= PrologAtom
+
+TPIE   ::= PIE => TIE
+         | TIE => PIE
+         | PIE => TIE => PIE
+
+
+Comments:
+
+There is (currently) no semantic difference between the two clause
+constructors `-->>' and `:--'. The former was used in the original
+Aquarius Prolog version of this package, and the latter in the Wild_LIFE
+version.
+
+A clause normally written without a body, a ``fact'', must be written
+with an empty body (`Head -->> true.' or `Head :-- true'.).
+
+The {PrologGoal} form provides an ``escape'' from the expansion
+mechanism.  Goals inside braces are never expanded to take ``hidden''
+thread arguments.
+
+The semantics of thread initialization, (Goal with Linkage), and thread
+method application is described below.
+
+
+======================================================================
+Initializing threads.
+======================================================================
+
+% At the moment there is almost nothing about passed args here. should
+% be added!
+
+When a predicate that uses a thread t is called from a clause where this
+thread is not "defined", the call must supply an initial value for t
+and, perhaps, provide access to the final value of t at success of the
+call.  This is accomplished using a call on the form '<goal> with
+<linkage>', where <linkage> describes how threads that will be used in
+<goal> should be initialized.  The syntax of <linkage> is given by the
+grammar in the previous section.  Here we give the semantics (in an
+informal way).
+
+The <linkage> describes how threads should be initialized using TIEs
+(Thead Initialization Expressions) and PIEs (Passed argument
+Initialization Expressions).  TIEs and PIEs can also be combined to
+describe dependencies between threads and/or passed arguments.
+
+Thread Initialization Expressions (TIEs)
+---------------------------------------
+
+A TIE is an expression describing how one or several threads should be
+initialized and what should happen with the final value of the thread or
+threads.  A thread can be initialized with its declared initial value,
+but a combined TIE makes it possible to express that the final value of
+a thread instead should be defined by the initial or final value of
+another thread.  To simplify the description of how this happens we
+associate with each TIE one initial value and one final value. For each
+way of combining sub-TIEs into a TIE described bellow, the following will
+be given:
+
+   - In case an initial value is imposed on the TIE, it is described
+     how this initial value is imposed on its sub-TIEs.
+
+   - In case an initial value is not imposed on the TIE, what the initial
+     values of the TIE will be.
+       
+   - How the final vale of the TIE is defined from its sub-TIEs and how
+     the sub-TIEs depend on each other.
+
+
+Simple TIEs
+- - - - - -
+
+    <thread-name>
+
+       Initializes the named thread.  If it occurs in a context where it
+       will be initialized it is initialized with this value, otherwise
+       it uses the declared default value as initial value (see the
+       section on declarations).  No constraints are imposed on the
+       final value of the thread.
+
+       If a default initial value is required but the thread is not
+       declared to have a default value, an error message is emitted.
+
+    <thread-name>(Final)
+
+       Initializes the named thread.  If it occurs in a context where it
+       will be initialized it is initialized with this value, otherwise
+       it uses the declared default value as initial value (see the
+       section on declarations).  The final value is unified with the
+       prolog term Final.
+
+       If a default initial value is required but the thread is not
+       declared to have a default value, an error message is emitted.
+
+    <thread-name>(Initial,Final)
+
+       Initializes the named thread.  It lets the initial and final
+       values of the thread be the Prolog terms Initial and Final
+       respectively.
+
+       If this TIE occurs in a context where an initial value is imposed, an
+       error message is emitted.
+
+    @(Initial,Final)
+
+       An ``anonymous'' TIE.  It provides a way to get hold of initial
+       and final values of other TIEs (together with '='. See Combined
+       TIEs) and does not correspond to a thread.
+
+       It lets the initial and final values of the TIE be the Prolog
+       terms Initial and Final respectively.
+
+    glob(<thread-name>)
+       
+       This TIE provides a way to get a reference to a thread defined
+       outside the current `with' goal.
+
+       The initial value of this TIE is the ``old'' value of
+       <thread-name> in the context the goal where this TIE occurs.  The
+       final value is the ``new'' value of <thread-name>.
+
+       If this TIE occurs in a context where an initial value is
+       imposed, an error message is emitted.
+
+       If glob(<thread-name>) occurs in the <linkage> of `<goal> with
+       <linkage>' and goal contains a call to a predicate that is
+       defined to take a thread <thread-name>, then <thread-name> must
+       also be initialized in <linkage>, otherwise an error message is
+       emitted.
+
+% This is still a really bad  explanation/definition of what glob()
+% does.
+%
+% Also, `glob(<thread-name>)' is not a good syntactic construction since
+% it looks just like `<thread-name>(Final)' for a thread named `glob'.
+% `^(<thread-name>)' would be somewhat better since the `^' looks more
+% like an operator and less like the name of a thread. I have checked
+% that it would work in SICStus Prolog.
+
+Example:
+
+    :- thread( t,  [], 1 ).
+    :- thread( tt, []).
+    :- thread_pred( p/0,   [t]    ).
+    :- thread_pred( pp/0,  [tt]   ).
+    :- thread_pred( ppp/0, [t,tt] ).
+
+    q :-- p with t(2,Final).
+    q :-- p with t(Final).
+    q :-- p with t.
+    q :-- p with t = @(I,F), r(I,F).
+    p :-- p, pp with tt := glob(t), p.
+    
+Transforms to
+
+    q :- p(2, Final).
+    q :- p(1, Final).
+    q :- p(1, _).
+    q :- p(1, F), r(1, F).
+    p(A, B) :- p(A, C), pp(C, D), p(D, B).
+
+The clause
+
+    p :-- p, ppp with tt := glob(t), p.  
+
+would generate an error message since ppp/0 also takes 't' as a thread,
+which occurs as `glob(t)' on the right hand side of the `with'.  In such
+case the `with' must also initialize `t'.  The follwoing clauses
+illustrates this:
+
+    p :-- p, ppp with (t, tt := glob(t)), p.  
+    p :-- p, ppp with t := tt := glob(t), p.  
+
+Transforms to
+
+    p(A, B) :- p(A, C), ppp(1, _, C, D), p(D, B).
+    p(A, B) :- p(A, C), ppp(C, D, C, D), p(D, B).
+
+Where the two first arguments of ppp/4 are the values for 't` and the
+last tw are the values for `tt'.
+
+End Example.
+
+
+Combined TIEs
+- - - - - - -
+
+    <tie1> => <tie2>
+       
+       Provides a way of linking the threads <tie1> and <tie2> by making
+       the final value of <tie1> be the initial value of <tie2>.
+
+       If this TIE occurs in a context where it will be initialized with
+       a value v, then so does <tie1>.  <tie2> occur in a context where
+       it will be initialized by the final value of <tie1>. The final
+       value of this TIE is the final value of <tie2>.
+
+    <tie1> := <tie2>
+       
+       Provides a way of imposing the initial and final values of <tie2>
+       on <tie1>.
+
+       If this TIE occurs in a context where it will be initialized with
+       a value v, then so does <tie2>.  <tie1> occur in a context where
+       it will be initialized by the initial value of <tie2>. The final
+       values of <tie1> and <tie2> will be unified and this value makes
+       up the final value of the combined TIE.
+
+    <tie1> = <tie2>
+       
+       Provides a way of unifying the initial and final values of <tie1>
+       and <tie2>.
+
+       If this TIE occurs in a context where it will be initialized with
+       a value v, then so does both <tie1> and <tie2>. Otherwise the
+       initial values of both <tie1> and <tie2> is defined as the
+       unification of the initial values of <tie1> and <tie2> as
+       calculated individually. The final values of <tie1> and <tie2>
+       will be unified and this value makes up the final value of the
+       combined TIE.
+
+
+Examples:
+
+    :- thread( t1, [], 10 ).
+    :- thread( t2, [], 20 ).
+    :- thread( t3, [], init(30,_) ).
+    :- thread( t4, [], init(_,40) ).
+    :- thread_pred( p1/0, [t1] ).
+    :- thread_pred( p2/0, [t2] ).
+    :- thread_pred( p3/0, [t3] ).
+    :- thread_pred( p4/0, [t4] ).
+
+    q :- (p1, p2) with t1 => t2(Result).
+    q :- (p1, p2) with t1 := t2(Result).
+    q :- (p3, p4) with t3 = t4.
+
+    Transforms to
+
+    q :- p1(10, A), p2(A, Result).
+    q :- p1(20, Result), p2(20, Result).
+    q :- p1(init(30,40), B), p2(init(30,40), B).
+
+End Example.
+
+
+======================================================================
+Accessing and Modifying the Value of a Thread.
+======================================================================
+
+
+In the section on declarations it is described how one or several
+*methods* are associated with a thread.  In this section it is described
+how a method can be applied to a thread to modify its value.
+
+There are three forms of a goal that are used to access and/or modify
+the value of a thread:
+
+    <thread-name>::<method-name>(arg,...)
+    <thread-name>::<method-name>
+    <thread-name>::[arg,...]
+    [arg,...]
+
+Below these are described individually.
+
+Using a named method.
+---------------------
+
+Given that
+
+  - L is the variable that holds the value of the thread <thread-name>
+    before the current goal (in a left-to-right execution) and R is the
+    variable that holds the value of the thread after the current goal.
+
+  - the named method <method-name> is declared to take n arguments X1,...Xn.
+
+  - Goal is the declared goal for the method.
+
+  - the variables Old and New are used in Goal to hold the "old" and
+    "new" value of the thread.
+
+  - <thread-name> is a forward thread.
+
+A goal of the form
+
+    <thread-name>::<method-name>(Y1,...Yn)
+
+is expanded to 
+
+     Goal'
+
+which is Goal with any occurrence of Xi is replaced with Yi, any
+occurrence of Old replaced with L and any occurrence of New with R.
+
+With all the above conditions except that <thread-name> is a backward
+thread, it is instead expanded to
+
+     Goal''
+
+which is Goal with any occurrence of Xi is replaced with Yi, any
+occurrence of Old replaced with R and any occurrence of New with L.
+
+If the method is declared to take no arguments the parenthesis are also
+omitted (standard Prolog term syntax).
+
+Examples:
+
+Difference between forward and backward threads:
+
+    :- thread_method(add_to_list(X), Old, New, New = [X|Old]).
+
+    :- thread(     flist, [add_to_list], [] ).
+    :- thread_bwd( blist, [add_to_list], [] ).
+
+    :- thread_pred( p1/0, [flist] ).
+    :- thread_pred( p2/0, [blist] ).
+
+    p1 :-- p1, flist::add_to_list(a), p1.
+    p2 :-- p2, blist::add_to_list(a), p2.
+
+Transforms to
+
+    p1(A, B) :- p1(A, C), D=[a|C], p1(D, B).
+    p2(A, B) :- p2(A, C), C=[a|D], p2(D, B).
+
+
+Another example illustrating methods without arguments and a slightly
+more complex updating goal:
+
+    :- thread_method( swap_top, Old, New, ( Old = [X,Y|Rest] 
+					    -> New = [Y,X|Rest] 
+					    ;  New = Old
+					  ) ).
+
+    :- thread( list, swap_top, [] ).
+
+    :- thread_pred(p/0, [list]).
+
+    p :-- p, list::swap_top, p.
+
+Which transforms to
+
+    p(A, B) :-
+            p(A, C),
+            ( C=[X,Y|E]
+              -> D=[Y,X|E]
+              ;  D=C
+            ),
+            p(D, B).
+
+
+Using the default method.
+-------------------------
+
+The default method (see the section on declaring methods) can be invoked
+with a different syntax, using a list instead of the normal method name
+and argument.
+
+Given that
+
+  - L is the variable that holds the value of the thread <thread-name>
+    before the current goal (in a left-to-right execution) and R is the
+    variable that holds the value of the thread after the current goal.
+
+  - the argument of the default method is X.
+
+  - Goal is the declared goal for the default method.
+
+  - the variables Old and New are used in Goal to hold the "old" and
+    "new" value of the thread.
+
+  - <thread-name> is a forward thread.
+
+A goal of the form
+
+    <thread-name>::[Y]
+
+is expanded to 
+
+     Goal'
+
+which is Goal with any occurrence of X is replaced with Y, any
+occurrence of Old replaced with L and any occurrence of New with R.
+
+With all the above conditions except that <thread-name> is a backward
+thread, it is instead expanded to
+
+     Goal''
+
+which is Goal with any occurrence of X is replaced with Y, any
+occurrence of Old replaced with R and any occurrence of New with L.
+
+It is possible to give several arguments in the list.  This is
+equivalent to call update the thread several times using each argument,
+with the leftmost first. That is,
+
+    <thread-name>::[X1, X2,...Xn]
+
+is equivalent to
+
+    <thread-name>::[X1], <thread-name>::[X2],...<thread-name>::[Xn]
+
+If the list is empty
+
+    <thread-name>::[]
+
+this goal does not do anything. 
+
+
+Example:
+
+Below the default method of of the thread `count1' above is `add'.
+
+    :- thread_method(inc, Old, New, New is Old + 1).
+    :- thread_method(add(X), Old, New, New is Old + X).
+
+    :- thread(count, [add,inc], 0).
+
+    :- thread_pred(p/0, [count]).
+
+     p :-- count::[3].
+     p :-- count::[3,4,5].
+
+translates to
+
+     p(A, B) :- B is A+3.
+     p(A, B) :- C is A+3, D is C+4, B is D+5.
+
+End of Example
+
+
+Using the `dcg' thread.
+-------------------------
+
+For the predefined thread `dcg' the the thread name can be omitted when
+the default method (the only method of `dcg') is applied. That is, a
+goal of the form:
+
+    [Y1,...]
+
+is equivalent to
+
+    dcg::[Y1,...]
+
+
+======================================================================
+Predefined Threads and Methods
+======================================================================
+
+Predefined Threads
+------------------
+
+The thread `dcg' is predefined and can be used without declaring it in
+any file using the Logical State Threads package.  It is defined as if
+by the declaration
+
+    :- thread_bwd(dcg, method(Term,Old,New,New=[Term|Old]), []).
+
+
+Predefined Methods
+------------------
+
+The following method is predefined:
+
+`value' defined as if by
+
+    :- thread_method(value(V), Thread, Thread, V=Thread)).
+

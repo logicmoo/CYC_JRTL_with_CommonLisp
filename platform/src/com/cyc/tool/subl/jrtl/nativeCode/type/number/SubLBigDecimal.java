@@ -17,19 +17,17 @@ public class SubLBigDecimal extends AbstractSubLFloat implements SubLFloat, SubL
 
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
     	double value = this.doubleValue();
         long bits = Double.doubleToLongBits(value);
         return (int) (bits ^ (bits >>> 32));
     }
 
     @Override
-    public int psxhash()
-    {
+    public int psxhash() {
     	double value = this.doubleValue();
         if ((value % 1) == 0)
-            return (((int)value) & 0x7fffffff);
+            return (((int) value) & 0x7fffffff);
         else
             return (hashCode() & 0x7fffffff);
     }
@@ -373,7 +371,7 @@ public class SubLBigDecimal extends AbstractSubLFloat implements SubLFloat, SubL
 
 	@Override
 	public SubLFixnum toFixnum() {
-		org.armedbear.lisp.Lisp.lisp_type_error(this,"FIXNUM");
+        org.armedbear.lisp.Lisp.lisp_type_error(this, "FIXNUM");
 		return null;
 	}
 

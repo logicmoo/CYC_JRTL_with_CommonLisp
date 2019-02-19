@@ -1,0 +1,45 @@
+What you have here should be enough to run the small example that
+shows the PrologFromJava interface.
+
+What you should do  - % is the Linux prompt
+what appears after a # is comment, the rest part of a session
+
+
+% javac *.java           # this will cause some warnings that you can
+                         # apparently ignore, but at some point you might
+                         # want to make them disappear
+                         # this command is needed only once of course
+
+
+% xsb         # will also work: BinProlog, SICStus and probably most others
+XSB Version 2.2 (Tsingtao) of April 20, 2000
+[i686-pc-linux-gnu; mode: optimal; engine: chat; gc: copy; scheduling: batched]
+
+| ?- [comp].
+[comp loaded]
+
+yes
+| ?- comp(animal).      
+
+yes
+| ?- halt.
+
+
+% javac pred_animal_1.java     #it would be nice to package the last 2 into one
+                               # command for the user
+
+
+% java PrologFromJava  
+please type one more animal name: tiger.    # you must type tiger. yourself
+                                            # see later (*)
+animal(goat)
+animal(elephant)
+animal(tiger)
+
+%
+
+# (*) a small bug in the reader - which didn't show in earlier Java versions - 
+requires to type an extra <return>
+
+Have a look at the file animal.
+

@@ -1,0 +1,38 @@
+Fri Oct 18 10:57:11 MET DST 1996
+
+Announcing jProlog 0.1
+
+	a compiler from Prolog to Java + a Prolog system written in Java
+
+
+Runs under java version "1.0.2".
+The toplevel of jProlog prompts for queries with ?- and shows
+variable bindings, like most Prologs.
+
+Features:
+
+	Prolog files are compiled to Java files (*)
+	syntax almost Edingburgh (*)
+	most Clocksin-Mellish built-ins - almost no I/O
+	no consult: predicates are loaded on need according to Java filosophy
+	intuitionistic assumption (assume/2)
+	backtrackable destructive assignment (setarg/3)
+	delayed execution (freeze/2)
+	a garbage collector :-)
+	...
+	No GUI, applets, interface to Netscape ...
+
+
+We invite you to check out http://people.cs.kuleuven.be/Bart.Demoen/PrologInJava/
+
+
+
+(*) lacking an efficient parser, the system isn't bootstrapped yet, i.e.
+    the compiler form Prolog to Java is written in Prolog and you need
+    a Prolog system (BinProlog - SICStus Prolog ...)
+
+
+Oh, we almost forgot: the authors are
+
+	Bart Demoen Bart.Demoen@cs.kuleuven.be
+	Paul Tarau taraup@umoncton.ca

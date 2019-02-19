@@ -1,0 +1,117 @@
+jProlog was written by Bart Demoen and Paul Tarau.
+==================================================
+Basically, we wanted to learn Java :-)
+That's visible from the code. But we believe we made some good choices
+for instance wrt representation of heap objects.
+It works in java version "1.0.2"
+
+Speed of execution was never our concern, but we were nicely surprised
+by the speed with which is was possible to add exotic features to the
+basic implementation.
+BTW, there is no interface (yet) to Netscape or JDK appletviewer,
+it is standalone without GUI.
+
+Sample session
+--------------
+
+java -cs Prolog
+jProlog 0.1 Copyright (C) Bart Demoen, Paul Tarau 1996
+?- ap([1,2],[3],X) .
+X = [1,2,3]
+
+
+
+exit with ?- halt . or ^D
+
+
+Set your
+--------
+CLASSPATH=/home/java/JDK-1.0.2/lib/classes.zip:X
+
+X stands for the concatenation of the directories where the (compiled)
+Prolog programs (a bunch of pred_*.class files) are and where this
+Prolog-in-Java system is installed.
+
+
+To use the Prolog to Java compiler
+----------------------------------
+
+You need a Prolog system (SICStus, BinProlog, BIMprolog are ok - SWI
+doesn't work apparently - for info on freely available BinProlog,
+contact Paul Tarau: taraup@umoncton.ca)
+
+To compile a Prolog file to Java:
+
+	prolog comp
+	?- comp(file) .
+
+
+Before you can start up the system
+----------------------------------
+
+Some files need to be compiled:
+
+	javac Prolog.java
+	javac builtins.java
+
+(in this order)
+
+and also the Prolog files
+
+	someprolog
+	read.pl
+
+What this implementation has
+----------------------------
+Too much to enumerate :-)
+It is close to Clocksin-Mellish Prolog, with lots of the typical builtins.
+It runs some famous benchmarks happily (and slow :-) like boyer
+(slightly adapted because this implementation doesn't deal with if-then-else).
+
+It also has
+
+	intuitionistic assumption (assume/2)
+	backtrackable destructive assignment (setarg/3)
+	delayed execution (freeze/2)
+
+It loads predicates on need, similar in spirit to what Java does itself.
+
+And it has a garbage collector of course: we inherited it from Java !
+
+
+The things that are missing in this implementation
+--------------------------------------------------
+The compiler generates very naive code:
+	no indexing
+	no specialisation of unification
+	(almost) no inlining of simple builtins
+Some missing builtins: I/O has only read/1, write/1 and nl.
+Read/1 is very slow, because in Prolog and a backtracking parser.
+No floating point numbers/strings.
+No error handling as in ISO Prolog.
+Does not deal with the if-then-else ( -> ;).
+Most notably: there is no consult/1 predicate ! See above.
+Documentation is missing completely.
+
+
+If you have
+-----------
+comments about the implementation, what you liked or disliked, questions,
+suggestions or plans to do work on this yourself, please let us know
+
+Recent additions
+----------------
+
+1. Calling Prolog from Java - latest change: Wed Feb  5 15:13:56 EST 1997
+
+Several people asked how to call Prolog from within a Java program.
+In file PrologFromJava.java (replacing Prolog.java - sorry for the
+names) you will find a way how it can be done: it is just one way,
+if you have requests, please let me know ("me" = Bart - I haven't
+had time to look at what Paul has done in this respect, but it will
+soon happen :-)
+There is more documentation in docPrologFromJava.
+
+
+Bart Demoen Bart.Demoen@cs.kuleuven.ac.be
+Paul Tarau taraup@umoncton.ca

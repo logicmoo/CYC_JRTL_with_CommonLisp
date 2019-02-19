@@ -1,0 +1,10 @@
+/eclipse-out/
+# /.apt_generated
+/bazel-*/
+*.bak
+*.pl.am
+~*
+*~
+jsrc-gen3-*/
+jsrc-gen4-*/
+target/

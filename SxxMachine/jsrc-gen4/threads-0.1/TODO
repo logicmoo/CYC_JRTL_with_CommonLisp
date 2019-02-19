@@ -1,0 +1,116 @@
+Make sure these things work:
+
+   pass => acc
+   acc => pass
+   pass => acc => pass
+   pass => pass (?)
+
+------------------------------------------------------------------------------
+
+Methods for passed args.
+
+------------------------------------------------------------------------------
+
+Provide a way for the programmer to inspect the transformation.
+
+------------------------------------------------------------------------------
+
+Initializations such as
+
+   p with t1(A,B) := t2
+   p with t2 => t1(A,B)
+
+should emitt warnings since t1 is explicitly initialized in two ways.
+If you want to get to the "internal" variables you can write
+
+   p with (t1 := t2) = @(A,B)
+   p with t2 => (t1 = @(A,B))
+
+This should also happen when one tries to initialise the anonymos TIE
+i.e., these goals should also emitt warnings:
+
+   p with @(A,B) := t2
+   p with t2 => @(A,B)
+
+Or, maybe not.  The clause from above
+
+   p with t2 => (t1 = @(A,B))
+
+would still not work if annonymous TIEs are not initializable by '=>'.
+
+
+
+------------------------------------------------------------------------------
+
+User queries should be expanded when they contain 'withs'.
+
+------------------------------------------------------------------------------
+
+The error control of the :- thread_pred(P/A, Threads) should be
+improved. 
+
+    Threads should be alowed to be a single thread.  It should then be
+    turned into a singleton list of one thread.
+
+    It the list of threads is not a list of atoms (no args or arities)
+    an error should be emitted.
+
+    if the P/A is a SICStus built-in, (check with predicate_property/2)
+    am error should be emitted.
+
+------------------------------------------------------------------------------
+
+Extend the notion of initializaion such that the default init value can
+be "parameterized".  It should be possible to say something like that
+the initial value shoule be an empty stack of max size n, where n is
+provided in the "with" goal.
+
+This could be achieved by extending the declaration for threads such
+that the default initial value is given either as:
+
+  def(Val)    which says that Val is the default value (the old way).
+
+  def([params],Goal,Val)  where params is a sequence of parameters of the
+
+                          form 'param(Val)'. and Goal is a goal that
+                          produces the value of Val given the
+                          parameters.  the parameters could also provide
+                          a default value in a optional second
+                          argument: 'param(Val,Def)'.
+
+An example:
+
+:- thread( stack, [push,pop], def([size(Sz,100)], make_stack(Sz,Stk), Stk) ).
+
+If stack is initialized like this:
+
+  p with stack([size(10)], Final)
+
+it will expand to 
+
+  make_stack(10,Stk), p(Stk,Final).
+
+and if stack is initialized like this:
+
+  p with stack(Final)
+
+it will expand to 
+
+  make_stack(100,Stk), p(Stk,Final).
+
+------------------------------------------------------------------------------
+
+The following (and similar constructs) should produce an error:
+
+   p with t1 => (t2 := t3)
+
+since the initial value  of t2 is assigned from two places. 
+
+Or not.  in the refenrence manual it is explicitly said that it is t3
+that is initialized brom t1.
+
+------------------------------------------------------------------------------
+
+Replace all occuences of 'EDCG' and 'edcg' in the source code.
+
+------------------------------------------------------------------------------

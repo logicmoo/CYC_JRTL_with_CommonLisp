@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="jsrc-gen1/builtin"/>
+	<classpathentry kind="src" path="jsrc-gen1/repl"/>
+	<classpathentry kind="src" path="jsrc/machine"/>
+	<classpathentry kind="src" path="jsrc/kernelprolog/fluents"/>
+	<classpathentry kind="src" path="jsrc/kernelprolog/io"/>
+	<classpathentry kind="src" path="jsrc/kernelprolog/terms"/>
+	<classpathentry kind="src" path="jsrc/kernelprolog/tests"/>
+	<classpathentry kind="src" path="jsrc/kernelprolog/main"/>
+	<classpathentry kind="src" path="jsrc/exceptions"/>
+	<classpathentry kind="src" path="jsrc/repl"/>
+	<classpathentry kind="src" path="jsrc/handcoded"/>
+	<classpathentry kind="src" path="jsrc/compiler"/>
+	<classpathentry kind="src" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src/test/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="fluents/|io/|terms/|tests/|main/" kind="src" path="jsrc/kernelprolog"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="jsrc-gen1/compiler"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="SxxMachine/FILE_dra.java" kind="src" path="jsrc-gen2/tabling_dra"/>
+	<classpathentry kind="src" path="jsrc-gen2/tests"/>
+	<classpathentry excluding="SxxMachine/FILE_run.java|SxxMachine/FILE_sdda.java" kind="src" path="jsrc-gen2/bench"/>
+	<classpathentry kind="lib" path="lib/bddbddb-full.jar"/>
+	<classpathentry kind="lib" path="lib/lprolog.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

@@ -1,0 +1,44 @@
+This file contains directives for installing the Logical State Thread
+package for SICStus Prolog 2.1 and 3.
+
+For SICStus 3
+-------------
+
+Move the two files threads.pl and versions.pl from the directory Source
+to a directory SICStus Prolog recognizes as a library, i.e one that is
+search when a directive like :- ensure_loaded(library(threads)) is
+isued.  That's all!
+
+If you cannot find such a directory you can easily make SICStus Prolog
+recognize any directory of your choice as a library directory.  Just put
+the following lines in you ~/.sicstusrc file.
+
+%----------------------------------------------------------
+% Adding my own library:
+
+:- asserta( user:library_directory('<path-to-my-own-library-dir>') ).
+%----------------------------------------------------------
+
+where <path-to-my-own-library-dir> could be something like
+~andka/lib/sicstus.  See the manual on user:library_directory/1 for a
+more thorough expalanaton.
+
+
+For SICStus 2.1
+---------------
+
+Install as for SICStus 3.
+
+For non-ISO Prologs such as SICStus 2.1 "multifile" declarations work in a
+awkward way. A declaration of the form
+
+      :- multifile pred/arity
+
+should only occur in the first file loaded that contains definitions of
+the predicate pred/arity.  In the Logical State Threads package the file
+Source/versions.pl contain such a declaration for the predicate
+'user:term_expansion/2'.  If you want to be able to load other files
+containing clauses for 'user:term_expansion/2' prior to this one (which
+is loaded automatically by the threads package) you should comment out
+this declaration and make sure it occurs in some a file loaded before
+this one.

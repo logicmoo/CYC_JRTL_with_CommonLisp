@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.JVMImpl;
 import org.logicmoo.system.SystemCurrent;
 import org.logicmoo.system.SystemCurrent.In;
@@ -122,6 +123,7 @@ public final class Main
 		needIOConsole = false;
 		Lisp.initLisp();
 		passedArgs = args;
+		BeanShellCntrl.start_prolog_from_lisp();
 		Runnable r = new SubLProcess("Main Process")
 		{
 			@Override

@@ -24,7 +24,7 @@ public class SubLNumberFactory {
 
 	private static int getFixNumBits() {
 		String fixNumBitsStr = System.getProperty("FIX_NUM_BITS");
-		int fixNumBits = 26;
+		int fixNumBits = FIX_NUM_BITS;
 		if (fixNumBitsStr != null)
 			try {
 				fixNumBits = Integer.parseInt(fixNumBitsStr);
@@ -38,8 +38,8 @@ public class SubLNumberFactory {
 	}
 
 	private static int getFixNumBitsToPreallocate() {
+	        int fixNumBitsToPreallocate = FIX_NUM_BITS_TO_PREALLOCATE;
 		String fixnumBitsToPreallocateStr = System.getProperty("FIX_NUM_BITS_TO_PREALLOCATE");
-		int fixNumBitsToPreallocate = 16;
 		if (fixnumBitsToPreallocateStr != null)
 			try {
 				fixNumBitsToPreallocate = Integer.parseInt(fixnumBitsToPreallocateStr);
@@ -118,8 +118,11 @@ public class SubLNumberFactory {
 	}
 
 	public static SubLInteger makeSmallInteger(int value) {
-		return getCache(value)[getCacheIndex(value)];
+		return getCache(value)[getCacheIndex(value)].toInteger();
 	}
+
+        public static int FIX_NUM_BITS_TO_PREALLOCATE = 8; // was 16
+        public static int FIX_NUM_BITS = 26;
 
 	private static BigInteger MAX_LONG_VALUE_BIGNUM;
 	private static BigInteger MIN_LONG_VALUE_BIGNUM;
@@ -129,7 +132,6 @@ public class SubLNumberFactory {
 	public static int FIXNUM_BIT_SIZE;
 	public static int MAX_FIXNUM;
 	public static int MIN_FIXNUM;
-	public static int DEFAULT_FIXNUM_BIT_SIZE_TO_PREALLOCATE = 16;
 	public static int MIN_FIXNUM_BIT_SIZE_TO_PREALLOCATE = 8;
 	public static int MAX_FIXNUM_BIT_SIZE_TO_PREALLOCATE = 31;
 	public static int FIXNUM_BIT_SIZE_TO_PRECACHE;

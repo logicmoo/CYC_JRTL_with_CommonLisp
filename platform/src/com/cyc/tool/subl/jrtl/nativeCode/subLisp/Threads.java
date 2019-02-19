@@ -72,7 +72,7 @@ public class Threads extends SubLTrampolineFile {
 			return;
 		SubLProcess thisProcess = SubLProcess.currentProcess();
 		if (thisProcess != null)
-			SubLProcess.currentProcess().processInterrupts();
+			thisProcess.processInterrupts();
 	}
 
 	public static SubLObject process_active_p(SubLObject process) {
