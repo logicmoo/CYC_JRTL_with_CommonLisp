@@ -9,9 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.armedbear.lisp.ControlTransfer;
+import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.Function;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.LispThread;
+import org.armedbear.lisp.SpecialBindingsMark;
+import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -75,15 +79,32 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 		functionSymbol.setFunction(this);
 	}
 
+    @Override
+	public String printObjectImpl()
+    {
+    	return super.printObjectImpl();
+    }
 	@Override
 	protected void extraInfo(StringBuilder sb) {
-		if(methodClass==null && method!=null) {
+		Method prev = method;
+		Class methodClassPrev = methodClass;
+		if (methodClass == null || method == null)
+		{
+			method = getMethod();
 			methodClass = method.getDeclaringClass();
 		}
-		if(methodClass!=null) {
+		if (methodClass != null)
+		{
 			sb.append(Lisp.getDotName(methodClass));
-			return;
 		}
+		if (method != null)
+		{
+			sb.append("::" + method.getName());
+		}
+		final SubLList subLArgs = getArglist();
+		sb.append(subLArgs);
+		method = prev;
+		methodClass = methodClassPrev;
 	}
 
 	private Method method;
@@ -114,7 +135,6 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 		methodParameters = method.getParameterTypes();
 		returnType = method.getReturnType();
 	}
-
 	@Override
 	public LispObject arrayify(LispObject... args) {
 		return (LispObject) applyObject(args);
@@ -213,6 +233,24 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 		}
 		this.argList = arglist;
 		return arglist;
+	}
+	
+	@Override
+	public boolean equal(SubLObject obj) {
+		if (this == obj) return true;
+		if (obj instanceof SubLCompiledFunction)
+		{
+			SubLCompiledFunction other = (SubLCompiledFunction) obj;
+			Method om = other.getMethod();
+			Method tm = this.getMethod();
+			if (!om.equals(tm)) return false;
+			if (getRequiredArgCount() != other.getRequiredArgCount()) return false;
+			if (getOptionalArgCount() != other.getOptionalArgCount()) return false;
+			if (isSubLispFunction() != other.isSubLispFunction()) return false;
+			//if (getOptionalArgCount() != other.getOptionalArgCount()) return false;
+			return true;
+		}
+		return super.equal(obj);
 	}
 
 	public Method getMethod() {

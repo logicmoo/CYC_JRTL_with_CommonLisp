@@ -21,6 +21,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.ResumeException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLCompiledFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLMacro;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
@@ -100,12 +101,27 @@ public class SubLFiles {
 				parameterTypes.add(SubLObject[].class);
 			Class[] parameterArray = parameterTypes.toArray(new Class[parameterTypes.size()]);
 			SubLSymbol functionSymbol = SubLObjectFactory.makeSymbol(functionName);
-			if (functionSymbol.fboundp()) {
-				Errors.warn("Attempt to redefine: " + functionSymbol);
-				return;
+			SubLOperator prev = null;
+			if (functionSymbol.fboundp())
+			{
+				prev = functionSymbol.getFunction();
 			}
-			SubLFunction func = SubLObjectFactory.makeCompiledFunction(className, methodName, parameterArray,
-					SubLObject.class, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
+			try
+			{
+				SubLCompiledFunction func = SubLObjectFactory.makeCompiledFunction(className, methodName, 
+						parameterArray, SubLObject.class, functionSymbol, 
+						requiredArgCount, optionalArgCount, allowsRest);
+				
+				if (prev != null && !func.equalp(prev))
+				{
+					Errors.warn("Attempt to redefine: " + functionSymbol);
+					return;
+				}
+
+			} finally
+			{
+				if(prev!=null)functionSymbol.setFunction(prev);
+			}
 		} catch (Exception e) {
 			Errors.cerror("Continue.", "Error while declaring function: " + functionName, e);
 		}
@@ -140,7 +156,7 @@ public class SubLFiles {
 				Errors.warn("Redefining " + functionSymbol);
 			}
 			SubLFunction func = SubLObjectFactory.makeCompiledFunction(meth, functionSymbol, requiredArgCount,
-					optionalArgCount, allowsRest);
+					optionalArgCount, allowsRest);		
 		} catch (Exception e) {
 			Errors.cerror("Continue.", "Error while declaring function: " + functionName, e);
 		}

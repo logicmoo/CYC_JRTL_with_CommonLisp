@@ -2604,36 +2604,22 @@ public class BeanShellCntrl
 		}
 	}
 
-	static public void staticInit()
+	static public void start_prolog_from_lisp()
 	{
-		init_swipl();
+		init_swipl_server();			
 		scanForExports(BeanShellCntrl.class);
-		if (!started_from_prolog || true)
-		{
-			init_swipl_server();
-
-		}
-
 	}
 
-	static
-	{
-		synchronized (StartupInitLock)
-		{
-			staticInit();
-		}
-	}
 
 	public static void main(String[] args) throws InterruptedException
 	{
 
 		String[] argsNew = Main.extractOptions(args);
-		init_swipl();
-		init_swipl_server();
 		start_lisp_from_prolog();
 		Runnable runnable = Main.mainRunnable(argsNew, null);
 		scanForExports(BeanShellCntrl.class);
 		runnable.run();
+		scanForExports(BeanShellCntrl.class);
 	}
 
 	static class CreationInfo

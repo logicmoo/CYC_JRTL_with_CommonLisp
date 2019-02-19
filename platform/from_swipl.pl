@@ -3,7 +3,7 @@
 :- load_files(library(prolog_stack)).
 prolog_stack:stack_guard(none).
 
-dmiles_machine:- fail, gethostname('gitlab.logicmoo.org') ; gethostname('i74930k').
+dmiles_machine:- fail, once((gethostname('gitlab.logicmoo.org') ; gethostname('i74930k'))).
 
 ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactexitive(false)]).
 
@@ -329,7 +329,7 @@ guess_claspath(CP):-
   append(LL1,[ToolsJar|_]),
   maplist(expand_file_name,['jpl.jar','lib/*.jar','dist/*-contrib.jar'],LL2),append(LL2,L22),
   exclude(hidden_jars,L22,L2),
-  maplist(absolute_file_name,['build/classes',ToolsJar|L2],AA),
+  maplist(absolute_file_name,['target/classes',ToolsJar|L2],AA),
   maplist(prolog_to_os_filename,AA,A), path_sep(SEP),
   atomic_list_concat(A,SEP,CP),!.
 
@@ -453,7 +453,7 @@ test_x:- jpl:jpl_class_to_methods('org.logicmoo.system.BeanShellCntrl',C),dmsg(C
 %:- if((app_argv('--irc'))).
 :- if(exists_source(library(eggdrop))).
 :- if(exists_source(library(pfc))).
-:- user:use_module(library(pfc)).
+%:- user:use_module(library(pfc)).
 :- endif.
 :- dmsg("Eggdrop Server").
 :- user:use_module(library(eggdrop)).
@@ -463,20 +463,28 @@ test_x:- jpl:jpl_class_to_methods('org.logicmoo.system.BeanShellCntrl',C),dmsg(C
 
 
 lmmud :-
+ setup_call_cleanup(
+ working_directory(W,W),
   % cd('/home/prologmud_server/'),
-  ensure_loaded(library('prologmud_sample_games/run_mud_server')).
+  ensure_loaded(library('prologmud_sample_games/run_mud_server')),
+  working_directory(_,W)).
   
 on_bg_repl:- thread_signal(main, call(call,lmmud)).
 
-%:- jpl.
+:- jpl.
 %program_init :-startBG.
-program_init :- fg_abcl.
+program_init :- 
+  catch(lmmud,E,dmsg(lmmud=E)),
+  threads,
+  catch(fg_abcl,E2,dmsg(fg_abcl=E2)),
+  prolog.
 
 
 
 
 %:- initialization(startBG, program).
 :- initialization(program_init, program).
+
 
 end_of_file.
 
