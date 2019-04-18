@@ -1,19 +1,18 @@
 platform/License.txt
-platform/bin/
+#platform/bin/
 platform/build/
 platform/dist/
-platform/data/
+# platform/data/
 platform/go-cyc.bat
-platform/httpd/
+#platform/httpd/
 platform/lib/ant-1.6.5.jar
 platform/lib/cyc.jar
 platform/lib/subl.jar
 platform/src-bak/
 platform/target/
-platform/units/
-platform/webapps/
-platform/transcripts/
-*/
+#platform/units/
+#platform/webapps/
+#platform/transcripts/
 researchcyc-4.0q/
 *.snap
 *.vtg
@@ -87,3 +86,20 @@ easye/
 ste-bench/
 uabcl/
 /.metadata/
+/platform-*/
+/2p-trunk/
+/External Prolog Files/
+/RemoteSystemsTempFiles/
+/Resources/
+/SxxMachine/
+/SxxMachineWorks/
+/jiprolog/
+/narchy/
+/narchyTuProlog/
+/noJRTL/
+/opencyc-4.0/
+/prologpluscg-code/
+/tuprolog.git/
+platform/e2c/sumo2loom/
+platform/e2c/cycl/
+platform/e2c/XP/*.*
