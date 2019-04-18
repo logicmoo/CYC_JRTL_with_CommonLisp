@@ -14,6 +14,7 @@
 	<classpathentry kind="src" path="Desktop/jpl7-hacked"/>
 	<classpathentry kind="src" path="Desktop/server-4q"/>
 	<classpathentry kind="src" path="main/java"/>
+	<classpathentry kind="src" path="Desktop/opencyc-server-jsrc"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-continuation-8.0.4.v20111024.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
@@ -290,6 +291,7 @@
 	<classpathentry exported="true" kind="lib" path="ext/ordi-model-0.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="ext/ordi-trree-adapter-3.1.a6.jar"/>
 	<classpathentry exported="true" kind="lib" path="ext/owlim-big-3.1.a7.jar"/>
+	<classpathentry kind="lib" path="lib/cyc-oc4.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_162">
 		<attributes>
 			<attribute name="module" value="true"/>

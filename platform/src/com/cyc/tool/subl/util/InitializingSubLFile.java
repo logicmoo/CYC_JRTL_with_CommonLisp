@@ -31,23 +31,41 @@ public abstract class InitializingSubLFile implements SubLFile {
 		System.out.flush();
 	}
 
-	protected void initializeClass(String className) {
-		SubLFiles.initialize(className);
-		++initSpot;
-		int percentile = computePercentile();
-		if (percentile != lastPercentile) {
-			if (percentile % 10 == 0) {
-				System.out.printf(" %d%% ", percentile);
-				if (percentile == 50) {
-					System.out.println();
-					System.out.print(" ");
-				}
-			} else
-				System.out.print('.');
-			System.out.flush();
-			lastPercentile = percentile;
-		}
-	}
+        protected void initializeClass(String className) {
+                SubLFiles.initialize(className);
+                ++initSpot;
+                int percentile = computePercentile();
+                if (percentile != lastPercentile) {
+                        if (percentile % 10 == 0) {
+                                System.out.printf(" %d%% ", percentile);
+                                if (percentile == 50) {
+                                        System.out.println();
+                                        System.out.print(" ");
+                                }
+                        } else
+                                System.out.print('.');
+                        System.out.flush(); 
+                        lastPercentile = percentile;
+                }
+        }
+        
+        protected void initializeClass(Class clazz) {
+            SubLFiles.initialize(clazz);
+            ++initSpot;
+            int percentile = computePercentile();
+            if (percentile != lastPercentile) {
+                    if (percentile % 10 == 0) {
+                            System.out.printf(" %d%% ", percentile);
+                            if (percentile == 50) {
+                                    System.out.println();
+                                    System.out.print(" ");
+                            }
+                    } else
+                            System.out.print('.');
+                    System.out.flush();
+                    lastPercentile = percentile;
+            }
+    }
 
 	protected void preparePercentProgress(int total) {
 		sysdclSize = total;
