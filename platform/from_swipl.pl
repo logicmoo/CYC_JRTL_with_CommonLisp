@@ -7,6 +7,8 @@ dmiles_machine:- fail, once((gethostname('gitlab.logicmoo.org') ; gethostname('i
 
 ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactexitive(false)]).
 
+:- use_module(library(apply)).
+
 % :- use_module(library(yall)).
 :- maplist(([P] >> pack_install(P,[upgrade(true),git(true),interactive(false)])), [ 
    predicate_streams,multimodal_dcg,eggdrop,gvar_syntax,dictoo,logicmoo_utils, 

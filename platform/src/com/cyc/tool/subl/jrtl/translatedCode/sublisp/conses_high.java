@@ -935,6 +935,16 @@ public class conses_high extends SubLTranslatedFile {
 		return _recons(new_car, new_cdr, tree);
 	}
 
+	    /**
+	     * @param var74
+	     * @param var10
+	     * @return
+	     */
+	    public static SubLNil symbol_in_tree_p(SubLObject var74, SubLObject var10) {
+	        // TODO Auto-generated method stub
+	        if (true) throw new AbstractMethodError("conses_high.symbol_in_tree_p");
+	        return null;
+	    }
 	@SubL(source = "sublisp/conses-high.lisp", position = 1939L)
 	public static SubLObject _tree_equal_2(SubLObject tree1, SubLObject tree2) {
 		if (tree1.isAtom() && tree2.isAtom())

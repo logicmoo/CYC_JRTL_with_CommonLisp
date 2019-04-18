@@ -226,6 +226,6 @@
 (SL::IN-PACKAGE "CYC")
 
 (csetq *USE-TRANSCRIPT-SERVER* nil)
-(csetq *MASTER-TRANSCRIPT-LOCK-HOST* "transcript-server.cyc.com")
+(csetq *MASTER-TRANSCRIPT-LOCK-HOST* "transcript-server.logicmoo.org")
 (pwhen (probe-file "kif-loader.lisp")  (SL::LOAD "kif-loader.lisp"))
 

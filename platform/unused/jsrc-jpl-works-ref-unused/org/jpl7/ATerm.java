@@ -196,7 +196,7 @@ public abstract class ATerm extends Term {
 	 *
 	 * @return whether this Term is an Atom (of some kind)
 	 */
-	public boolean isAtom() {
+	public boolean isAtomPL() {
 		return ((Object)this).getClass()==Atom.class;
 	}
 

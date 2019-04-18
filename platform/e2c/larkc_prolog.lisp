@@ -11,6 +11,11 @@
 ;;   #$prologAsserted
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;}}}EDOC
+
+(in-package "CYC")
+
+(cvs-id "$Id: larkc_prolog.lisp 0 2018-12-04 13:39:36Z dmiles $")
+
 (defparameter *UVMt* (foc "UniversalVocabularyMt"))
 
 (foc "prologAsserted")
@@ -34,9 +39,6 @@ resultIsa: Relation.
   (cyc-assert `(#$isa #$prologAsserted #$Predicate) *UVMt*) 
   (cyc-assert `(#$comment #$prologAsserted "(#$prologAsserted ?MT (#$member ?WHAT (#$TheList 1 2 3)))") *UVMt*) 
 
-(in-package "CYC")
-
-(cvs-id "$Id: larkc_prolog.lisp 0 2018-12-04 13:39:36Z dmiles $")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; #$prologCall literals

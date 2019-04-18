@@ -713,6 +713,7 @@ public class SubLMain
 		commonSymbolsOK = true;
 
 		preInitLisp();
+		SubLPackage.initPackages();
 		trueMainReader = new SubLReader();
 		setMainReader(trueMainReader);
 		if (args == null || args.length == 0)

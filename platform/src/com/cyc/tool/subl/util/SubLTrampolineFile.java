@@ -8,6 +8,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
@@ -15,7 +16,28 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class SubLTrampolineFile implements SubLFile, CommonSymbols {
+
+    /**
+     * @param string
+     */
+    public static void newF(String string) {
+        newF(string, 1);
+    }
+
+    /**
+     * @param string
+     * @param i
+     */
+    public static void newF(String string, int i) {
+        // TODO Auto-generated method stub
+        if (true)
+            throw new AbstractMethodError("UnaryFunction.newF");
+
+    }
+
 	public static boolean assertionsDisabledInClass = true;
+    public static boolean $assertionsDisabled = true;
+    // public static SubLList throwStack;
 
 	public SubLTrampolineFile() {
 		PrologSync.addSingleton(this);
@@ -64,7 +86,8 @@ public abstract class SubLTrampolineFile implements SubLFile, CommonSymbols {
 
 	public static UnaryFunction extractUnaryFunc(SubLObject func) {
 		return func == CommonSymbols.UNPROVIDED || func == SubLNil.NIL || func == CommonSymbols.IDENTITY
-				? UnaryFunction.IDENTITY_UNARY_FUNC : UnaryFunction.makeInstance(func.getFunc());
+                ? UnaryFunction.IDENTITY_UNARY_FUNC
+                : UnaryFunction.makeInstance(func.getFunc());
 	}
 
 	public static void main(String[] args) {

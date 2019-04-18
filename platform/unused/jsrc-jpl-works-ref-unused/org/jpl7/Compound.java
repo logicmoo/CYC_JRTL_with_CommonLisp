@@ -211,7 +211,7 @@ public class Compound extends Atom
 	 */
 	public boolean isJObject()
 	{
-		return hasFunctor("@", 1) && arg(1).isAtom() && JPL.isTag(arg(1).name());
+		return hasFunctor("@", 1) && arg(1).isAtomPL() && JPL.isTag(arg(1).name());
 	}
 
 	/**

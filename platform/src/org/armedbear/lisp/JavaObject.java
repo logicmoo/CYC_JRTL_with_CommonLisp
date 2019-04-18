@@ -55,8 +55,7 @@ public final class JavaObject extends SubLAlienObject {
 
     public JavaObject(Object obj) {
         this.obj = obj;
-        this.intendedClass =
-            obj != null ? Java.maybeBoxClass(obj.getClass()) : null;
+        this.intendedClass = obj != null ? Java.maybeBoxClass(obj.getClass()) : null;
     }
 
     public static final Symbol JAVA_CLASS_JCLASS = PACKAGE_JAVA.intern("JAVA-CLASS-JCLASS");
@@ -71,17 +70,16 @@ public final class JavaObject extends SubLAlienObject {
      *                            intended class.
      */
     public JavaObject(Object obj, Class<?> intendedClass) {
-        if(obj != null && intendedClass == null) {
+        if (obj != null && intendedClass == null) {
             intendedClass = obj.getClass();
         }
-        if(intendedClass != null) {
+        if (intendedClass != null) {
             intendedClass = Java.maybeBoxClass(intendedClass);
-            if(!intendedClass.isInstance(obj)) {
-                if (intendedClass.equals(java.lang.Byte.class)
-                    && obj instanceof java.lang.Number) {
+            if (!intendedClass.isInstance(obj)) {
+                if (intendedClass.equals(java.lang.Byte.class) && obj instanceof java.lang.Number) {
                     // Maps any number to two's complement 8bit byte representation
                     // ??? Is this a reasonable thing?
-                    this.obj = ((java.lang.Number)obj).byteValue();
+                    this.obj = ((java.lang.Number) obj).byteValue();
                     this.intendedClass = intendedClass;
                     return;
                 }
@@ -93,16 +91,14 @@ public final class JavaObject extends SubLAlienObject {
     }
 
     @Override
-    public LispObject typeOf()
-    {
+    public LispObject typeOf() {
         return Symbol.JAVA_OBJECT;
     }
 
     @Override
-    public LispObject classOf()
-    {
-        if(obj == null) {
-                return BuiltInClass.JAVA_OBJECT;
+    public LispObject classOf() {
+        if (obj == null) {
+            return BuiltInClass.JAVA_OBJECT;
         } else {
             return ENSURE_JAVA_CLASS.execute(createJavaObject(obj.getClass()));
         }
@@ -115,24 +111,23 @@ public final class JavaObject extends SubLAlienObject {
         if (type == BuiltInClass.JAVA_OBJECT)
             return T;
         LispObject cls = NIL;
-        if(type instanceof Symbol) {
+        if (type instanceof Symbol) {
             cls = LispClass.findClass(type, false);
         }
-        if(cls == NIL) {
+        if (cls == NIL) {
             cls = type;
         }
-        if(cls.typep(LispClass.findClass(JAVA_CLASS, false)) != NIL) {
-            if(obj != null) {
+        if (cls.typep(LispClass.findClass(JAVA_CLASS, false)) != NIL) {
+            if (obj != null) {
                 Class c = (Class) JAVA_CLASS_JCLASS.execute(cls).javaInstance();
                 return c.isAssignableFrom(obj.getClass()) ? T : NIL;
             } else {
                 return T;
             }
-        } else if(cls == BuiltInClass.SEQUENCE) {
+        } else if (cls == BuiltInClass.SEQUENCE) {
             //This information is replicated here from java.lisp; it is a very
             //specific case, not worth implementing CPL traversal in typep
-            if(java.util.List.class.isInstance(obj) ||
-               java.util.Set.class.isInstance(obj)) {
+            if (java.util.List.class.isInstance(obj) || java.util.Set.class.isInstance(obj)) {
                 return T;
             }
         }
@@ -140,13 +135,11 @@ public final class JavaObject extends SubLAlienObject {
     }
 
     @Override
-    public LispObject STRING()
-    {
-        return new SimpleString(obj != null? obj.toString(): "null");
+    public LispObject STRING() {
+        return new SimpleString(obj != null ? obj.toString() : "null");
     }
 
-    public final Object getObject()
-    {
+    public final Object getObject() {
         return obj;
     }
 
@@ -161,7 +154,7 @@ public final class JavaObject extends SubLAlienObject {
             return createJavaObject(null);
 
         if (obj instanceof LispObject)
-            return (LispObject)obj;
+            return (LispObject) obj;
 
         return createJavaObject(obj);
     }
@@ -179,7 +172,7 @@ public final class JavaObject extends SubLAlienObject {
             return new JavaObject(null, intendedClass);
 
         if (obj instanceof LispObject)
-            return (LispObject)obj;
+            return (LispObject) obj;
 
         return new JavaObject(obj, intendedClass);
     }
@@ -197,8 +190,6 @@ public final class JavaObject extends SubLAlienObject {
         return getInstance(obj, translated, obj != null ? obj.getClass() : null);
     }
 
-
-
     /** Encapsulates obj, if required.
      * If obj is a {@link LispObject}, it's returned as-is.
      * If obj is of a type which can be mapped to a lisp type,
@@ -214,52 +205,53 @@ public final class JavaObject extends SubLAlienObject {
      * @return a LispObject representing or encapsulating obj
      */
     public final static LispObject getInstance(Object obj, boolean translated, Class<?> intendedClass) {
-        if (! translated)
+        if (!translated)
             return getInstance(obj, intendedClass);
 
-        if (obj == null) return NIL;
-        
+        if (obj == null)
+            return NIL;
+
         if (obj instanceof LispObject)
-            return (LispObject)obj;
+            return (LispObject) obj;
 
         if (obj instanceof String)
-            return new SimpleString((String)obj);
+            return new SimpleString((String) obj);
 
         if (obj instanceof Number) {
             // Number types ordered according to decreasing
             // estimated chances of occurrance
 
             if (obj instanceof Integer)
-                return Fixnum.getInstance(((Integer)obj).intValue());
+                return Fixnum.getInstance(((Integer) obj).intValue());
 
             if (obj instanceof Float)
-                return new SingleFloat((Float)obj);
+                return new SingleFloat((Float) obj);
 
             if (obj instanceof Double)
-                return new DoubleFloat((Double)obj);
+                return new DoubleFloat((Double) obj);
 
             if (obj instanceof Long)
-                return LispInteger.getInstance(((Long)obj).longValue());
+                return LispInteger.getInstance(((Long) obj).longValue());
 
             if (obj instanceof BigInteger)
-                return Bignum.getInstance((BigInteger)obj);
+                return Bignum.getInstance((BigInteger) obj);
 
             if (obj instanceof Short)
-                return Fixnum.getInstance(((Short)obj).shortValue());
+                return Fixnum.getInstance(((Short) obj).shortValue());
 
             if (obj instanceof Byte)
-                return Fixnum.getInstance(((Byte)obj).byteValue());
+                return Fixnum.getInstance(((Byte) obj).byteValue());
             // We don't handle BigDecimal: it doesn't map to a Lisp type
 
             if (obj instanceof BigDecimal)
-                return SubLNumberFactory.makeDecimal((BigDecimal)obj);
+                return SubLNumberFactory.makeDecimal((BigDecimal) obj);
         }
 
         if (obj instanceof Boolean)
-            return ((Boolean)obj).booleanValue() ? T : NIL;
+            return ((Boolean) obj).booleanValue() ? T : NIL;
 
         if (obj instanceof Character)
-            return LispCharacter.getInstance((Character)obj);
+            return LispCharacter.getInstance((Character) obj);
 
         if (obj instanceof Object[]) {
             Object[] array = (Object[]) obj;
@@ -282,23 +274,23 @@ public final class JavaObject extends SubLAlienObject {
 
     @Override
     public Object javaInstanceImpl(Class<?> c) {
-        if(obj == null) {
-            if(c.isPrimitive()) {
+        if (obj == null) {
+            if (c.isPrimitive()) {
                 throw new NullPointerException("Cannot assign null to " + c);
             }
             return obj;
         } else {
             c = Java.maybeBoxClass(c);
             if (c.isAssignableFrom(intendedClass) || c.isInstance(obj)) {
-              // XXX In the case that c.isInstance(obj) should we then
-              // "fix" the intendedClass field with the (presumably)
-              // narrower type of 'obj'?
+                // XXX In the case that c.isInstance(obj) should we then
+                // "fix" the intendedClass field with the (presumably)
+                // narrower type of 'obj'?
 
-              // ME 20100323: I decided not to because a) we don't
-              // know the "proper" class to narrow to (i.e. maybe
-              // there's something "narrower" and b) I'm not sure how
-              // primitive types relate to their boxed
-              // representations.
+                // ME 20100323: I decided not to because a) we don't
+                // know the "proper" class to narrow to (i.e. maybe
+                // there's something "narrower" and b) I'm not sure how
+                // primitive types relate to their boxed
+                // representations.
                 return obj;
             } else {
                 return error(new TypeError(intendedClass.getName() + " is not assignable to " + c.getName()));
@@ -324,79 +316,70 @@ public final class JavaObject extends SubLAlienObject {
 
     {
         if (o instanceof JavaObject)
-                return ((JavaObject)o).obj;
-        return             // Not reached.
+            return ((JavaObject) o).obj;
+        return // Not reached.
         type_error(o, Symbol.JAVA_OBJECT);
     }
 
     @Override
-    public final boolean equal(LispObject other)
-    {
+    public final boolean equal(LispObject other) {
         if (this == other)
             return true;
         if (other instanceof JavaObject)
-            return (obj == ((JavaObject)other).obj);
+            return (obj == ((JavaObject) other).obj);
         return false;
     }
 
     @Override
-    public final boolean equalp(LispObject other)
-    {
+    public final boolean equalp(LispObject other) {
         return equal(other);
     }
 
     @Override
-    public int sxhash()
-    {
+    public int sxhash() {
         return obj == null ? 0 : (obj.hashCode() & 0x7ffffff);
     }
 
-    public static LispObject JAVA_OBJECT_TO_STRING_LENGTH
-        = LispInteger.getInstance(32);
+    public static LispObject JAVA_OBJECT_TO_STRING_LENGTH = LispInteger.getInstance(32);
 
-    public static final Symbol _JAVA_OBJECT_TO_STRING_LENGTH
-        = exportSpecial("*JAVA-OBJECT-TO-STRING-LENGTH*",
-                        PACKAGE_JAVA, JAVA_OBJECT_TO_STRING_LENGTH);
+    public static final Symbol _JAVA_OBJECT_TO_STRING_LENGTH = exportSpecial("*JAVA-OBJECT-TO-STRING-LENGTH*", PACKAGE_JAVA, JAVA_OBJECT_TO_STRING_LENGTH);
 
     static {
         String doc = "Length to truncate toString() PRINT-OBJECT output for an otherwise "
-                  +  "unspecialized JAVA-OBJECT.  Can be set to NIL to indicate no limit.";
-        _JAVA_OBJECT_TO_STRING_LENGTH
-            .setDocumentation(Symbol.VARIABLE, new SimpleString(doc));
+                + "unspecialized JAVA-OBJECT.  Can be set to NIL to indicate no limit.";
+        _JAVA_OBJECT_TO_STRING_LENGTH.setDocumentation(Symbol.VARIABLE, new SimpleString(doc));
     }
 
     @Override
-    public String printObjectImpl()
-    {
+    public String printObjectImpl() {
         if (obj instanceof ControlTransfer)
-            return ((ControlTransfer)obj).toString();
+            return ((ControlTransfer) obj).toString();
         String s = "ERROR_Unseen";
         if (obj != null) {
             Class<?> c = obj.getClass();
-            StringBuilder sb
-                = new StringBuilder(c.isArray() ? "jarray" : c.getName());
+            StringBuilder sb = new StringBuilder(c.isArray() ? "jarray" : c.getName());
             sb.append(' ');
-			try {
-				String ts = obj.toString();
-				int length = -1;
-				LispObject stringLength = _JAVA_OBJECT_TO_STRING_LENGTH.symbolValueNoThrow();
-				if (stringLength instanceof Fixnum) {
-					length = Fixnum.getValue(stringLength);
-				}
-				if (length < 0) {
-					sb.append(ts);
-				} else if (ts.length() > length) {
-					// use '....' to not confuse user with PPRINT conventions
-					sb.append(ts.substring(0, length)).append("....");
-				} else {
-					sb.append(ts);
-				}
-				s = sb.toString();
-			} catch (Exception e) {
-				error(new JavaException(e));
-				// never reached
-				s = sb.toString();
-			}
+            try {
+                String ts = obj.toString();
+                int length = -1;
+                LispObject stringLength = _JAVA_OBJECT_TO_STRING_LENGTH.symbolValueNoThrow();
+                if (stringLength instanceof Fixnum) {
+                    length = Fixnum.getValue(stringLength);
+                }
+                if (length < 0) {
+                    sb.append(ts);
+                } else if (ts.length() > length) {
+                    // use '....' to not confuse user with PPRINT conventions
+                    sb.append(ts.substring(0, length)).append("....");
+                } else {
+                    sb.append(ts);
+                }
+                s = sb.toString();
+            } catch (Exception e) {
+                error(new JavaException(e));
+                // never reached
+                s = sb.toString();
+            }
         } else {
             s = "null";
         }
@@ -408,42 +391,37 @@ public final class JavaObject extends SubLAlienObject {
         return new SimpleString(describeJavaObject(this));
     }
 
-
     @Override
     public LispObject getParts() {
-    	return getParts(obj, intendedClass, true , false ,null); // was default true, false
+        return getParts(obj, intendedClass, true, false, null); // was default true, false
     }
 
-
-	static public LispObject getParts(Object obj, Class intendedClass, boolean includeStatic, boolean translate, final Set excluded) {
-        if(obj != null) {
+    static public LispObject getParts(Object obj, Class intendedClass, boolean includeStatic, boolean translate,
+            final Set excluded) {
+        if (obj != null) {
             LispObject parts = NIL;
-            parts = parts.push(new Cons("Java class",
-                                        createJavaObject(obj.getClass())));
+            parts = parts.push(new Cons("Java class", createJavaObject(obj.getClass())));
             if (intendedClass != null) {
                 parts = parts.push(new Cons("intendedClass", new SimpleString(intendedClass.getCanonicalName())));
             }
             if (obj.getClass().isArray()) {
                 int length = Array.getLength(obj);
                 for (int i = 0; i < length; i++) {
-                    parts = parts
-                        .push(new Cons(new SimpleString(i),
-                                       JavaObject.getInstance(Array.get(obj, i))));
+                    parts = parts.push(new Cons(new SimpleString(i), JavaObject.getInstance(Array.get(obj, i))));
                 }
             } else {
-                parts = Symbol.NCONC.execute(parts, getInspectedFields(obj,includeStatic,translate,excluded));
+                parts = Symbol.NCONC.execute(parts, getInspectedFields(obj, includeStatic, translate, excluded));
             }
             if (obj instanceof java.lang.Class) {
-                Class o = (java.lang.Class)obj;
+                Class o = (java.lang.Class) obj;
                 try {
                     Class[] classes = o.getClasses();
                     LispObject classesList = NIL;
                     for (int i = 0; i < classes.length; i++) {
-                        classesList = classesList.push(JavaObject.getInstance(classes[i],translate));
+                        classesList = classesList.push(JavaObject.getInstance(classes[i], translate));
                     }
                     if (!classesList.equals(NIL)) {
-                        parts = parts
-                            .push(new Cons("Member classes", classesList.nreverse()));
+                        parts = parts.push(new Cons("Member classes", classesList.nreverse()));
                     }
                 } catch (SecurityException e) {
                     Debug.trace(e);
@@ -451,21 +429,19 @@ public final class JavaObject extends SubLAlienObject {
                 Class[] interfaces = o.getInterfaces();
                 LispObject interfacesList = NIL;
                 for (int i = 0; i < interfaces.length; i++) {
-                    interfacesList = interfacesList.push(JavaObject.getInstance(interfaces[i],translate));
+                    interfacesList = interfacesList.push(JavaObject.getInstance(interfaces[i], translate));
                 }
                 if (!interfacesList.equals(NIL)) {
-                    parts = parts
-                        .push(new Cons("Interfaces", interfacesList.nreverse()));
+                    parts = parts.push(new Cons("Interfaces", interfacesList.nreverse()));
                 }
                 LispObject superclassList = NIL;
                 Class superclass = o.getSuperclass();
                 while (superclass != null) {
-                    superclassList = superclassList.push(JavaObject.getInstance(superclass,translate));
+                    superclassList = superclassList.push(JavaObject.getInstance(superclass, translate));
                     superclass = superclass.getSuperclass();
                 }
                 if (!superclassList.equals(NIL)) {
-                    parts = parts
-                        .push(new Cons("Superclasses", superclassList.nreverse()));
+                    parts = parts.push(new Cons("Superclasses", superclassList.nreverse()));
                 }
             }
             return parts.nreverse();
@@ -474,63 +450,67 @@ public final class JavaObject extends SubLAlienObject {
         }
     }
 
-    static LispObject getInspectedFields(final Object obj, final boolean includeStatic, final boolean translated, final Set excluded)
-        {
-    	final Integer ZERO = Integer.valueOf(0);
-        final LispObject[] acc = new LispObject[] { NIL , NIL, NIL, NIL };
+    static LispObject getInspectedFields(final Object obj, final boolean includeStatic, final boolean translated,
+            final Set excluded) {
+        final Integer ZERO = Integer.valueOf(0);
+        final LispObject[] acc = new LispObject[] { NIL, NIL, NIL, NIL };
 
-		doClassHierarchy(obj.getClass(), new Function() {
-                @Override
-                public LispObject execute(LispObject arg)
-                    {
-                	if(acc[3]!=NIL) return NIL;
-                	//LispObject nulls = NIL;
-                    //No possibility of type error - we're mapping this function
-                    //over a list of classes
-                    Class<?> c = (Class) arg.javaInstance();
-                    if(excluded!=null && excluded.contains(c)) { acc[3]=NIL; return NIL;}
-                    //if(!includeStatic && c==Lisp.class) return NIL;
-                    for(Field f : c.getDeclaredFields()) {
-                    	Object o;
-                		if(Modifier.isStatic(f.getModifiers())) {
-	                    	if(!includeStatic) {
-	                    		continue;
-	                    	}
-	                    	o = null;
-                		} else {
-                			o = obj;
-                		}
-                        LispObject value = NIL;
-                        boolean notAccessable = !f.isAccessible();
-                        try {
-                            if(notAccessable) {
-                            	 f.setAccessible(true);
-                            }
-                            Object v = f.get(o);
-                            if(v==null) {
-                            	acc[1] = acc[1].push(new SimpleString(f.getName()));
-                            	continue;
-                            }
-                            if(ZERO.equals(v)) {
-                            	acc[2] = acc[2].push(new SimpleString(f.getName()));
-                            	continue;
-                            }
-                            value = JavaObject.getInstance(v,translated);
-                        } catch(Exception e) {}
-                        finally {
-                        	 if(notAccessable) f.setAccessible(true);
-                        }
-                        acc[0] = acc[0].push(new Cons(f.getName(), value));
-                    }
-                    return acc[0];
+        doClassHierarchy(obj.getClass(), new Function() {
+            @Override
+            public LispObject execute(LispObject arg) {
+                if (acc[3] != NIL)
+                    return NIL;
+                //LispObject nulls = NIL;
+                //No possibility of type error - we're mapping this function
+                //over a list of classes
+                Class<?> c = (Class) arg.javaInstance();
+                if (excluded != null && excluded.contains(c)) {
+                    acc[3] = NIL;
+                    return NIL;
                 }
-            } );
+                //if(!includeStatic && c==Lisp.class) return NIL;
+                for (Field f : c.getDeclaredFields()) {
+                    Object o;
+                    if (Modifier.isStatic(f.getModifiers())) {
+                        if (!includeStatic) {
+                            continue;
+                        }
+                        o = null;
+                    } else {
+                        o = obj;
+                    }
+                    LispObject value = NIL;
+                    boolean notAccessable = !f.isAccessible();
+                    try {
+                        if (notAccessable) {
+                            f.setAccessible(true);
+                        }
+                        Object v = f.get(o);
+                        if (v == null) {
+                            acc[1] = acc[1].push(new SimpleString(f.getName()));
+                            continue;
+                        }
+                        if (ZERO.equals(v)) {
+                            acc[2] = acc[2].push(new SimpleString(f.getName()));
+                            continue;
+                        }
+                        value = JavaObject.getInstance(v, translated);
+                    } catch (Exception e) {
+                    } finally {
+                        if (notAccessable)
+                            f.setAccessible(true);
+                    }
+                    acc[0] = acc[0].push(new Cons(f.getName(), value));
+                }
+                return acc[0];
+            }
+        });
 
-        if(acc[1]!=NIL) {
-        	acc[0] = acc[0].push(new Cons(":nulls",acc[1]));
+        if (acc[1] != NIL) {
+            acc[0] = acc[0].push(new Cons(":nulls", acc[1]));
         }
-        if(acc[2]!=NIL) {
-        	acc[0] = acc[0].push(new Cons(":zeros",acc[2]));
+        if (acc[2] != NIL) {
+            acc[0] = acc[0].push(new Cons(":zeros", acc[2]));
         }
         return acc[0].nreverse();
     }
@@ -539,29 +519,26 @@ public final class JavaObject extends SubLAlienObject {
      * Executes a function repeatedly over the minimal subtree of the
      * Java class hierarchy which contains every class in <classes>.
      */
-    private static void doClassHierarchy(Collection<Class<?>> classes,
-                                         LispObject callback,
-                                         Set<Class<?>> visited)
-        {
+    private static void doClassHierarchy(Collection<Class<?>> classes, LispObject callback, Set<Class<?>> visited) {
         Collection<Class<?>> newClasses = new LinkedList<Class<?>>();
-        for(Class<?> clss : classes) {
-            if(clss == null) {
+        for (Class<?> clss : classes) {
+            if (clss == null) {
                 continue;
             }
-            if(!visited.contains(clss)) {
+            if (!visited.contains(clss)) {
                 callback.execute(JavaObject.getInstance(clss, true));
                 visited.add(clss);
             }
-            if(!visited.contains(clss.getSuperclass())) {
+            if (!visited.contains(clss.getSuperclass())) {
                 newClasses.add(clss.getSuperclass());
             }
-            for(Class<?> iface : clss.getInterfaces()) {
+            for (Class<?> iface : clss.getInterfaces()) {
                 if (!visited.contains(iface)) {
                     newClasses.add(iface);
                 }
             }
         }
-        if(!newClasses.isEmpty()) {
+        if (!newClasses.isEmpty()) {
             doClassHierarchy(newClasses, callback, visited);
         }
     }
@@ -570,8 +547,7 @@ public final class JavaObject extends SubLAlienObject {
      * Executes a function recursively over <clss> and its superclasses and
      * interfaces.
      */
-    public static void doClassHierarchy(Class<?> clss, LispObject callback)
-        {
+    public static void doClassHierarchy(Class<?> clss, LispObject callback) {
         if (clss != null) {
             Set<Class<?>> visited = new HashSet<Class<?>>();
             Collection<Class<?>> classes = new ArrayList<Class<?>>(1);
@@ -580,26 +556,21 @@ public final class JavaObject extends SubLAlienObject {
         }
     }
 
-    public static LispObject mapcarClassHierarchy(Class<?> clss,
-                                                  final LispObject fn)
-    {
+    public static LispObject mapcarClassHierarchy(Class<?> clss, final LispObject fn) {
         final LispObject[] acc = new LispObject[] { NIL };
         doClassHierarchy(clss, new Function() {
-                @Override
-                public LispObject execute(LispObject arg)
-                    {
-                    acc[0] = acc[0].push(fn.execute(arg));
-                    return acc[0];
-                }
-            });
+            @Override
+            public LispObject execute(LispObject arg) {
+                acc[0] = acc[0].push(fn.execute(arg));
+                return acc[0];
+            }
+        });
         return acc[0].nreverse();
     }
 
-    public static String describeJavaObject(final JavaObject javaObject)
-        {
+    public static String describeJavaObject(final JavaObject javaObject) {
         final Object obj = javaObject.getObject();
-        final StringBuilder sb =
-            new StringBuilder(javaObject.princToString());
+        final StringBuilder sb = new StringBuilder(javaObject.princToString());
         sb.append(" is an object of type ");
         sb.append(Symbol.JAVA_OBJECT.princToString());
         sb.append(".");
@@ -621,16 +592,32 @@ public final class JavaObject extends SubLAlienObject {
                     char descriptor = className.charAt(1);
                     final String type;
                     switch (descriptor) {
-                    case 'B': type = "bytes"; break;
-                    case 'C': type = "chars"; break;
-                    case 'D': type = "doubles"; break;
-                    case 'F': type = "floats"; break;
-                    case 'I': type = "ints"; break;
-                    case 'J': type = "longs"; break;
-                    case 'S': type = "shorts"; break;
-                    case 'Z': type = "booleans"; break;
-                    default:
-                        type = "unknown type";
+                        case 'B':
+                            type = "bytes";
+                            break;
+                        case 'C':
+                            type = "chars";
+                            break;
+                        case 'D':
+                            type = "doubles";
+                            break;
+                        case 'F':
+                            type = "floats";
+                            break;
+                        case 'I':
+                            type = "ints";
+                            break;
+                        case 'J':
+                            type = "longs";
+                            break;
+                        case 'S':
+                            type = "shorts";
+                            break;
+                        case 'Z':
+                            type = "booleans";
+                            break;
+                        default:
+                            type = "unknown type";
                     }
                     sb.append(type);
                 }
@@ -655,9 +642,7 @@ public final class JavaObject extends SubLAlienObject {
     }
 
     // ### describe-java-object
-    private static final Primitive DESCRIBE_JAVA_OBJECT =
-        new Primitive("describe-java-object", PACKAGE_JAVA, true)
-    {
+    private static final Primitive DESCRIBE_JAVA_OBJECT = new Primitive("describe-java-object", PACKAGE_JAVA, true) {
         @Override
         public LispObject execute(LispObject first, LispObject second)
 
@@ -696,47 +681,46 @@ public final class JavaObject extends SubLAlienObject {
         }
     }
 
-    private static final Primitive _FIND_JAVA_CLASS = new Primitive("%find-java-class", PACKAGE_JAVA, false, "class-name-or-class") {
-            @Override
-            public LispObject execute(LispObject arg) {
-                try {
-                    if(arg instanceof AbstractString) {
-                        return findJavaClass(Class.forName((String) arg.getStringValue()));
-                    } else {
-                        return findJavaClass((Class<?>) arg.javaInstance());
-                    }
-                } catch (ClassNotFoundException e) {
-                    return error(new LispError("Cannot find Java class " + arg.getStringValue()));
+    private static final Primitive _FIND_JAVA_CLASS = new Primitive("%find-java-class", PACKAGE_JAVA, false,
+            "class-name-or-class") {
+        @Override
+        public LispObject execute(LispObject arg) {
+            try {
+                if (arg instanceof AbstractString) {
+                    return findJavaClass(Class.forName((String) arg.getStringValue()));
+                } else {
+                    return findJavaClass((Class<?>) arg.javaInstance());
                 }
+            } catch (ClassNotFoundException e) {
+                return error(new LispError("Cannot find Java class " + arg.getStringValue()));
             }
+        }
 
-        };
+    };
 
-    private static final Primitive _REGISTER_JAVA_CLASS = new Primitive("%register-java-class", PACKAGE_JAVA, false, "jclass class-metaobject") {
-            @Override
-            public LispObject execute(LispObject jclass, LispObject classMetaObject) {
-                return registerJavaClass((Class<?>) jclass.javaInstance(), classMetaObject);
-            }
+    private static final Primitive _REGISTER_JAVA_CLASS = new Primitive("%register-java-class", PACKAGE_JAVA, false,
+            "jclass class-metaobject") {
+        @Override
+        public LispObject execute(LispObject jclass, LispObject classMetaObject) {
+            return registerJavaClass((Class<?>) jclass.javaInstance(), classMetaObject);
+        }
 
-        };
+    };
 
     // ### +null+
-    public final static Symbol NULL
-        = Lisp.exportConstant("+NULL+", PACKAGE_JAVA, createJavaObject(null));
+    public final static Symbol NULL = Lisp.exportConstant("+NULL+", PACKAGE_JAVA, createJavaObject(null));
     static {
         String doc = "The JVM null object reference.";
         NULL.setDocumentation(Symbol.VARIABLE, new SimpleString(doc));
     }
     // ### +true+
-    public final static Symbol TRUE
-        = Lisp.exportConstant("+TRUE+", PACKAGE_JAVA, createJavaObject(true));
+    public final static Symbol TRUE = Lisp.exportConstant("+TRUE+", PACKAGE_JAVA, createJavaObject(true));
     static {
         String doc = "The JVM primitive value for boolean true.";
         TRUE.setDocumentation(Symbol.VARIABLE, new SimpleString(doc));
     }
     // ### +false+
-    public final static Symbol FALSE
-        = Lisp.exportConstant("+FALSE+", PACKAGE_JAVA, createJavaObject(false));
+    public final static Symbol FALSE = Lisp.exportConstant("+FALSE+", PACKAGE_JAVA, createJavaObject(false));
     static {
         String doc = "The JVM primitive value for boolean false.";
         FALSE.setDocumentation(Symbol.VARIABLE, new SimpleString(doc));

@@ -78,7 +78,7 @@ public class TestJUnit extends TestCase {
 
 	public void testEmptyParentheses() {
 		Term t = Query.oneSolution("T = a()").get("T"); // valid in both traditional and modern syntax in SWI Prolog 7.x 
-		assertTrue("T is not bound to an atom", t.isAtom());
+		assertTrue("T is not bound to an atom", t.isAtomPL());
 		assertTrue("the atom's name is not \"a\"", t.name().equals("a"));
 	}
 
@@ -151,7 +151,7 @@ public class TestJUnit extends TestCase {
 	public void testCompoundZeroArity1() {
 		Term t = new Compound("foo", new Term[] {});
 		assertTrue(t.isCompound());
-		assertFalse(t.isAtom());
+		assertFalse(t.isAtomPL());
 		assertTrue(t.name().equals("foo"));
 		assertTrue(t.arity() == 0);
 	}
@@ -166,7 +166,7 @@ public class TestJUnit extends TestCase {
 	// public void testCompoundZeroArity3() {
 	// Term t = Query.oneSolution("T = foo()").get("T");
 	// assertTrue("term is a compound", t.isCompound());
-	// assertFalse("term is an atom", t.isAtom());
+	// assertFalse("term is an atom", t.isAtomPL());
 	// }
 
 	public void testMap1() {
@@ -368,9 +368,9 @@ public class TestJUnit extends TestCase {
 	public void testListNil1() {
 		Term x = Query.oneSolution("X = []").get("X");
 		if (syntax.equals("traditional")) {
-			assertTrue("empty list is text atom []", x.isAtom() && x.atomType().equals("text") && x.name().equals("[]"));
+			assertTrue("empty list is text atom []", x.isAtomPL() && x.atomType().equals("text") && x.name().equals("[]"));
 		} else {
-			assertTrue("empty list is reserved atom []", x.isAtom() && x.atomType().equals("reserved_symbol") && x.name().equals("[]"));
+			assertTrue("empty list is reserved atom []", x.isAtomPL() && x.atomType().equals("reserved_symbol") && x.name().equals("[]"));
 		}
 	}
 
@@ -769,14 +769,14 @@ public class TestJUnit extends TestCase {
 		String goal = "T = [a,b,c]";
 		Term list = Query.oneSolution(goal).get("T");
 		Term[] array = Util.listToTermArray(list);
-		assertTrue(array[2].isAtom() && array[2].name().equals("c"));
+		assertTrue(array[2].isAtomPL() && array[2].name().equals("c"));
 	}
 
 	public void testTermToTermArray1() {
 		String goal = "T = [a,b,c]";
 		Term list = Query.oneSolution(goal).get("T");
 		Term[] array = list.toTermArray();
-		assertTrue(array[2].isAtom() && array[2].name().equals("c"));
+		assertTrue(array[2].isAtomPL() && array[2].name().equals("c"));
 	}
 
 	public void testJRef1() {

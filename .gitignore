@@ -13,6 +13,7 @@ platform/target/
 platform/units/
 platform/webapps/
 platform/transcripts/
+*/
 researchcyc-4.0q/
 *.snap
 *.vtg
@@ -85,3 +86,4 @@ cusp/
 easye/
 ste-bench/
 uabcl/
+/.metadata/

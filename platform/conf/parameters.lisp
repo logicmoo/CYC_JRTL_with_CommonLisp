@@ -19,7 +19,7 @@
 
 ;;; Possible values: T, NIL.  Type checking occurs in SBHL modules iff this
 ;;; is nil.
-(csetq *SUSPEND-SBHL-TYPE-CHECKING?* NIL)
+(csetq *SUSPEND-SBHL-TYPE-CHECKING?* T)
 
 ;;; Possible values: T, NIL.  If NIL, the System Info page (accessible to
 ;;; administrators only) will estimate, rather than actually count, the
@@ -90,7 +90,7 @@
 ;;; Possible values: T, NIL.  If NIL, require authentication before allowing
 ;;; modifications to the knowledge base.  If T, any user is allowed to
 ;;; modify the knowledge base.
-(csetq *ALLOW-GUEST-TO-EDIT?* NIL)
+(csetq *ALLOW-GUEST-TO-EDIT?* T)
 
 ;;; Possible values: The name of a constant representing a Cyclist.  This is the
 ;;; default Cyclist initially logged into the system.
@@ -182,7 +182,7 @@
 
 ;;; Possible values: A string.  Should be the URL for the homepage link on
 ;;; the welcome page of the interface.
-(csetq *CLIENT-HOME-PAGE* "http://www.cyc.com/")
+(csetq *CLIENT-HOME-PAGE* "http://logicmoo.org:3602/cgi-bin/cg?cb-start")
 
 ;;; Possible values: A string.  It should be the pathname of an image file,
 ;;; expressed as relative to the directory where your web server looks for
@@ -191,7 +191,7 @@
 
 ;;; Possible values: NIL, or a string.  Should be the URL for the thesaurus homepage
 ;;; link found on almost every thesaurus page.
-(csetq *CLIENT-THES-HOME-PAGE* "http://www.cyc.com/")
+(csetq *CLIENT-THES-HOME-PAGE* "http://logicmoo.org:3602/cgi-bin/cg?cb-start")
 
 ;;; Possible values: NIL, or a string.  It should be the pathname of an image file,
 ;;; expressed as relative to the directory where your web server looks for

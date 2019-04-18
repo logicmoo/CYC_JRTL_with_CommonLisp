@@ -42,6 +42,7 @@ public class SubLReader {
 	}
 
 	public SubLReader(boolean quitOnExit, InputStream is, OutputStream os) {
+	        
 		shouldReadloopExit = false;
 		history = new SubLCommandHistory();
 		historyCount = 1;

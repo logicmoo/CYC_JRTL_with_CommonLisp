@@ -251,7 +251,7 @@ public final class Util {
 		Term head = t;
 		while (head.isListPair()) {
 			Term x = head.arg(1);
-			if (x.isAtom()) {
+			if (x.isAtomSymbol()) {
 				a[i++] = x.name();
 			} else {
 				return null;

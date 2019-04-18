@@ -6,6 +6,7 @@
 
 (in-package :CYC)
 
+;;; Added by dmiles
 #+CYC-HTML
 (sl:csetq cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
 
@@ -24,6 +25,9 @@
 ;;; Possible Values: T or NIL
 ;;; Type checking occurs in SBHL modules iff this is NIL, which
 ;;; is slower but correcter.
+;; OpenCYC 
+(csetq *SUSPEND-SBHL-TYPE-CHECKING?* NIL)
+;; LarKC
 (csetq *SUSPEND-SBHL-TYPE-CHECKING?* T)
 
 ;;; Possible Values: T or NIL
@@ -116,6 +120,8 @@
 ;;; you are running multiple instances of Cyc.  If NIL,
 ;;; then Cyc will read and write to the master transcript
 ;;; without regard to other processes doing the same.
+;;; OpenCYC
+(csetq *USE-TRANSCRIPT-SERVER* T)
 (csetq *USE-TRANSCRIPT-SERVER* NIL)
 
 ;;; Possible Values: a string or undefined
@@ -123,7 +129,9 @@
 ;;; If so, then this parameter should be set to the name of the host
 ;;; that runs the transcript server; the port is specified with
 ;;; *MASTER-TRANSCRIPT-SERVER-PORT*.
-(csetq *MASTER-TRANSCRIPT-LOCK-HOST* "localhost")
+(csetq *MASTER-TRANSCRIPT-LOCK-HOST* "transcript-server.logicmoo.org")
+;; Opencyc
+(csetq *MASTER-TRANSCRIPT-LOCK-HOST* "transcript-server.cyc.com")
 
 ;;; Possible Values: an integer
 ;;; This parameter is only used if *USE-TRANSCRIPT-SERVER* is T.
@@ -145,11 +153,17 @@
 ;;; If NIL, require authentication before allowing modifications
 ;;; to the knowledge base.  If T, any user is allowed to modify
 ;;; the knowledge base.
+;;; OpenCYC 
+(csetq *ALLOW-GUEST-TO-EDIT?* NIL)
+;;; LarKC
 (csetq *ALLOW-GUEST-TO-EDIT?* T)
 
 ;;; Possible Values: a string
 ;;; Specifies the name of the default Cyclist constant under which
 ;;; users browse the system before they log in.
+;;; OpenCYC 
+(csetq *DEFAULT-CYCLIST-NAME* "Guest")
+;;; LarKC
 (csetq *DEFAULT-CYCLIST-NAME* "CycAdministrator")
 
 ;;; Possible Values: a valid directory path
@@ -224,7 +238,10 @@
 ;;; ability of Administrator users to switch among user levels, via a link on
 ;;; the Preferences page.  If NIL, these testing features are not
 ;;; available.
+;;; OpenCYC 
 (csetq *TM-TESTING* NIL)
+;;; LarKC
+(csetq *TM-TESTING* T)
 
 ;;; Possible Values: T or NIL
 ;;; If NIL, normal thesaurus editing is allowed.
@@ -334,7 +351,10 @@
 ;;; transcript.  If NIL, the read transcript isn't run at thesaurus
 ;;; init file load time, but may be processed later by the agenda if
 ;;; that is enabled.
+;;; OpenCYC
 (csetq *TM-LOAD-TRANSCRIPT-AT-STARTUP* NIL)
+;;; LarKC
+(csetq *TM-LOAD-TRANSCRIPT-AT-STARTUP* T)
 
 ;;; Possible Values: T or NIL
 ;;; If T, the application will load the thesaurus init

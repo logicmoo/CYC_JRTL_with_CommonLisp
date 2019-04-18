@@ -41,7 +41,7 @@ import java.util.List;
 public interface CycLTerm extends Serializable {
    
   boolean isOpen();
-  boolean isAtom();
+  boolean isAtomSymbol();
   boolean isAtomic();
   boolean isFormula();
   boolean isSentence();

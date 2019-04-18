@@ -360,7 +360,7 @@ public abstract class Term {
 	 *
 	 * @return whether this Term is an Atom (of any type)
 	 */
-	public final boolean isAtom() {
+	public final boolean isAtomSymbol() {
 		return this instanceof Atom;
 	}
 

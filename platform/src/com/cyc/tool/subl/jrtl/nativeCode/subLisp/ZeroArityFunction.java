@@ -32,6 +32,15 @@ public abstract class ZeroArityFunction extends FixedArityFunctor implements Com
 		}
 	}
 
+	/**
+         * 
+         */
+	protected ZeroArityFunction() {
+            // TODO Auto-generated constructor stub
+            if (true)
+                throw new AbstractMethodError("ZeroArityFunction.ZeroArityFunction.");
+
+        }
 	protected ZeroArityFunction(SubLFunction func) {
 		(this.func = func).setZeroArityFunction(this);
 	}

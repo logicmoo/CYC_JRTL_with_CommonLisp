@@ -18,6 +18,15 @@
          (load-kb units-directory)
          (system-code-initializations))))
 
+;; OpenCYC
+(clet ((units-directory "units/5022/"))
+  (pif (fboundp 'cyc-load-kb)
+       (cyc-load-kb units-directory)
+       (progn
+         (load-kb units-directory)
+         (system-code-initializations))))
+
+
 '(clet ((units-directory "units/0988/"))
   (pif (fboundp 'cyc-load-kb)
        (cyc-load-kb units-directory)
@@ -25,7 +34,8 @@
          (load-kb units-directory)
          (system-code-initializations))))
 
-(clet ((units-directory "units/7166/"))
+;; LarKC
+'(clet ((units-directory "units/7166/"))
   (pif (fboundp 'cyc-load-kb)
        (cyc-load-kb units-directory)
        (progn

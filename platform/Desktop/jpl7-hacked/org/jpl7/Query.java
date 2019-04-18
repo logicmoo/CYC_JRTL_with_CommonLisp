@@ -386,7 +386,7 @@ public class Query implements Iterable<Map<String, Term>>, Iterator<Map<String, 
 		String module;
 		Term goal;
 		if (goal_.hasFunctor(":", 2)) {
-			if (goal_.arg(1).isAtom()) {
+			if (goal_.arg(1).isAtomSymbol()) {
 				module = goal_.arg(1).name();
 			} else if (goal_.arg(1).isVariable()) {
 				throw new PrologException(Util.textParamsToTerm("error(instantiation_error,?)", new Term[] { goal_ }));

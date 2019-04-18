@@ -198,7 +198,7 @@ public abstract class Term {
 	 *
 	 * @return whether this Term is an Atom (of some kind)
 	 */
-	public boolean isAtom() {
+	public boolean isAtomPL() {
 		return this instanceof Atom;
 	}
 
