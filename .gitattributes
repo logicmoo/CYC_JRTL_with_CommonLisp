@@ -1,3 +1,5 @@
 *.psd filter=lfs diff=lfs merge=lfs -text
 # * filter=lfs diff=lfs merge=lfs -text
 *.cfasl filter=lfs diff=lfs merge=lfs -text
+*.fht filter=lfs diff=lfs merge=lfs -text
+*.ser filter=lfs diff=lfs merge=lfs -text
