@@ -419,7 +419,7 @@ public final class removal_modules_abduction extends SubLTranslatedFile
     
     public static SubLObject init_removal_modules_abduction_file() {
         removal_modules_abduction.$abductive_removal_modules$ = SubLFiles.deflexical("*ABDUCTIVE-REMOVAL-MODULES*", (SubLObject)removal_modules_abduction.$list0);
-        removal_modules_abduction.$abduction_term_isg$ = SubLFiles.deflexical("*ABDUCTION-TERM-ISG*", (removal_modules_abduction.NIL != Symbols.boundp((SubLObject)removal_modules_abduction.$sym3$_ABDUCTION_TERM_ISG_)) ? removal_modules_abduction.$abduction_term_isg$.getGlobalValue() : integer_sequence_generator.new_integer_sequence_generator((SubLObject)removal_modules_abduction.UNPROVIDED, (SubLObject)removal_modules_abduction.UNPROVIDED, (SubLObject)removal_modules_abduction.UNPROVIDED));
+        removal_modules_abduction.$abduction_term_isg$ = SubLFiles.deflexical("*ABDUCTION-TERM-ISG*", maybeDefault((SubLObject)removal_modules_abduction.$sym3$_ABDUCTION_TERM_ISG_, removal_modules_abduction.$abduction_term_isg$, ()->(integer_sequence_generator.new_integer_sequence_generator((SubLObject)removal_modules_abduction.UNPROVIDED, (SubLObject)removal_modules_abduction.UNPROVIDED, (SubLObject)removal_modules_abduction.UNPROVIDED))));
         removal_modules_abduction.$abduce_subcollection_denoting_termsP$ = SubLFiles.defparameter("*ABDUCE-SUBCOLLECTION-DENOTING-TERMS?*", (SubLObject)removal_modules_abduction.NIL);
         removal_modules_abduction.$default_abduction_cost$ = SubLFiles.deflexical("*DEFAULT-ABDUCTION-COST*", (SubLObject)removal_modules_abduction.ZERO_INTEGER);
         return (SubLObject)removal_modules_abduction.NIL;

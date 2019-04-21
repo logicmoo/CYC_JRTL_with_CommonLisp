@@ -233,8 +233,8 @@ public final class conflicts extends SubLTranslatedFile
     
     public static SubLObject init_conflicts_file() {
         conflicts.$inconsistent_support_sets$ = SubLFiles.defparameter("*INCONSISTENT-SUPPORT-SETS*", (SubLObject)conflicts.NIL);
-        conflicts.$current_conflicts$ = SubLFiles.deflexical("*CURRENT-CONFLICTS*", (SubLObject)((conflicts.NIL != Symbols.boundp((SubLObject)conflicts.$sym1$_CURRENT_CONFLICTS_)) ? conflicts.$current_conflicts$.getGlobalValue() : conflicts.NIL));
-        conflicts.$mt_conflicts$ = SubLFiles.deflexical("*MT-CONFLICTS*", (SubLObject)((conflicts.NIL != Symbols.boundp((SubLObject)conflicts.$sym2$_MT_CONFLICTS_)) ? conflicts.$mt_conflicts$.getGlobalValue() : conflicts.NIL));
+        conflicts.$current_conflicts$ = SubLFiles.deflexical("*CURRENT-CONFLICTS*", (SubLObject)(maybeDefault((SubLObject)conflicts.$sym1$_CURRENT_CONFLICTS_, conflicts.$current_conflicts$, conflicts.NIL)));
+        conflicts.$mt_conflicts$ = SubLFiles.deflexical("*MT-CONFLICTS*", (SubLObject)(maybeDefault((SubLObject)conflicts.$sym2$_MT_CONFLICTS_, conflicts.$mt_conflicts$, conflicts.NIL)));
         return (SubLObject)conflicts.NIL;
     }
     

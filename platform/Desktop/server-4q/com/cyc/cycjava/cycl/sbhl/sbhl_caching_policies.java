@@ -760,7 +760,7 @@ public final class sbhl_caching_policies extends SubLTranslatedFile
     }
     
     public static SubLObject init_sbhl_caching_policies_file() {
-        sbhl_caching_policies.$active_sbhl_caching_policies$ = SubLFiles.deflexical("*ACTIVE-SBHL-CACHING-POLICIES*", (sbhl_caching_policies.NIL != Symbols.boundp((SubLObject)sbhl_caching_policies.$sym0$_ACTIVE_SBHL_CACHING_POLICIES_)) ? sbhl_caching_policies.$active_sbhl_caching_policies$.getGlobalValue() : dictionary.new_dictionary((SubLObject)sbhl_caching_policies.UNPROVIDED, (SubLObject)sbhl_caching_policies.UNPROVIDED));
+        sbhl_caching_policies.$active_sbhl_caching_policies$ = SubLFiles.deflexical("*ACTIVE-SBHL-CACHING-POLICIES*", maybeDefault((SubLObject)sbhl_caching_policies.$sym0$_ACTIVE_SBHL_CACHING_POLICIES_, sbhl_caching_policies.$active_sbhl_caching_policies$, ()->(dictionary.new_dictionary((SubLObject)sbhl_caching_policies.UNPROVIDED, (SubLObject)sbhl_caching_policies.UNPROVIDED))));
         sbhl_caching_policies.$valid_sbhl_caching_instruction_verb$ = SubLFiles.deflexical("*VALID-SBHL-CACHING-INSTRUCTION-VERB*", (SubLObject)sbhl_caching_policies.$list1);
         sbhl_caching_policies.$valid_sbhl_caching_policy_types$ = SubLFiles.deflexical("*VALID-SBHL-CACHING-POLICY-TYPES*", (SubLObject)sbhl_caching_policies.$list2);
         return (SubLObject)sbhl_caching_policies.NIL;

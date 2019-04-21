@@ -1271,7 +1271,7 @@ public final class new_cycl_query_specification extends SubLTranslatedFile
     
     public static SubLObject init_new_cycl_query_specification_file() {
         new_cycl_query_specification.$dtp_new_cycl_query_specification$ = SubLFiles.defconstant("*DTP-NEW-CYCL-QUERY-SPECIFICATION*", (SubLObject)new_cycl_query_specification.$sym0$NEW_CYCL_QUERY_SPECIFICATION);
-        new_cycl_query_specification.$new_cycl_query_parameter_set$ = SubLFiles.deflexical("*NEW-CYCL-QUERY-PARAMETER-SET*", (SubLObject)((new_cycl_query_specification.NIL != Symbols.boundp((SubLObject)new_cycl_query_specification.$sym69$_NEW_CYCL_QUERY_PARAMETER_SET_)) ? new_cycl_query_specification.$new_cycl_query_parameter_set$.getGlobalValue() : new_cycl_query_specification.NIL));
+        new_cycl_query_specification.$new_cycl_query_parameter_set$ = SubLFiles.deflexical("*NEW-CYCL-QUERY-PARAMETER-SET*", (SubLObject)(maybeDefault((SubLObject)new_cycl_query_specification.$sym69$_NEW_CYCL_QUERY_PARAMETER_SET_, new_cycl_query_specification.$new_cycl_query_parameter_set$, new_cycl_query_specification.NIL)));
         new_cycl_query_specification.$new_cycl_query_encoding_extent$ = SubLFiles.deflexical("*NEW-CYCL-QUERY-ENCODING-EXTENT*", new_cycl_query_specification.$const71$CycAPIMt);
         return (SubLObject)new_cycl_query_specification.NIL;
     }

@@ -345,9 +345,9 @@ public final class system_info extends SubLTranslatedFile
     
     public static SubLObject init_system_info_file() {
         system_info.$cyc_home_directory$ = SubLFiles.deflexical("*CYC-HOME-DIRECTORY*", Filesys.construct_filename((SubLObject)system_info.NIL, (SubLObject)system_info.NIL, (SubLObject)system_info.NIL, (SubLObject)system_info.T));
-        system_info.$available_cyc_features$ = SubLFiles.deflexical("*AVAILABLE-CYC-FEATURES*", (SubLObject)((system_info.NIL != Symbols.boundp((SubLObject)system_info.$sym0$_AVAILABLE_CYC_FEATURES_)) ? system_info.$available_cyc_features$.getGlobalValue() : system_info.NIL));
-        system_info.$cycl_start_time$ = SubLFiles.deflexical("*CYCL-START-TIME*", (SubLObject)((system_info.NIL != Symbols.boundp((SubLObject)system_info.$sym38$_CYCL_START_TIME_)) ? system_info.$cycl_start_time$.getGlobalValue() : system_info.NIL));
-        system_info.$subl_initial_continuation$ = SubLFiles.deflexical("*SUBL-INITIAL-CONTINUATION*", (SubLObject)((system_info.NIL != Symbols.boundp((SubLObject)system_info.$sym40$_SUBL_INITIAL_CONTINUATION_)) ? system_info.$subl_initial_continuation$.getGlobalValue() : system_info.NIL));
+        system_info.$available_cyc_features$ = SubLFiles.deflexical("*AVAILABLE-CYC-FEATURES*", (SubLObject)(maybeDefault((SubLObject)system_info.$sym0$_AVAILABLE_CYC_FEATURES_, system_info.$available_cyc_features$, system_info.NIL)));
+        system_info.$cycl_start_time$ = SubLFiles.deflexical("*CYCL-START-TIME*", (SubLObject)(maybeDefault((SubLObject)system_info.$sym38$_CYCL_START_TIME_, system_info.$cycl_start_time$, system_info.NIL)));
+        system_info.$subl_initial_continuation$ = SubLFiles.deflexical("*SUBL-INITIAL-CONTINUATION*", (SubLObject)(maybeDefault((SubLObject)system_info.$sym40$_SUBL_INITIAL_CONTINUATION_, system_info.$subl_initial_continuation$, system_info.NIL)));
         return (SubLObject)system_info.NIL;
     }
     

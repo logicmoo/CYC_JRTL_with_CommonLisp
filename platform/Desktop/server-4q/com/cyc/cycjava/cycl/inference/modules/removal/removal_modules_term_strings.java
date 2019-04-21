@@ -104,7 +104,7 @@ public final class removal_modules_term_strings extends SubLTranslatedFile
     }
     
     public static SubLObject init_removal_modules_term_strings_file() {
-        removal_modules_term_strings.$term_strings_defining_mt$ = SubLFiles.deflexical("*TERM-STRINGS-DEFINING-MT*", (removal_modules_term_strings.NIL != Symbols.boundp((SubLObject)removal_modules_term_strings.$sym8$_TERM_STRINGS_DEFINING_MT_)) ? removal_modules_term_strings.$term_strings_defining_mt$.getGlobalValue() : removal_modules_term_strings.$const9$BaseKB);
+        removal_modules_term_strings.$term_strings_defining_mt$ = SubLFiles.deflexical("*TERM-STRINGS-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_term_strings.$sym8$_TERM_STRINGS_DEFINING_MT_, removal_modules_term_strings.$term_strings_defining_mt$, removal_modules_term_strings.$const9$BaseKB));
         removal_modules_term_strings.$term_strings_check_default_cost$ = SubLFiles.deflexical("*TERM-STRINGS-CHECK-DEFAULT-COST*", control_vars.$hl_module_check_cost$.getDynamicValue());
         removal_modules_term_strings.$term_strings_unify_default_cost$ = SubLFiles.deflexical("*TERM-STRINGS-UNIFY-DEFAULT-COST*", (SubLObject)removal_modules_term_strings.ONE_INTEGER);
         removal_modules_term_strings.$expected_number_of_terms_per_string$ = SubLFiles.deflexical("*EXPECTED-NUMBER-OF-TERMS-PER-STRING*", (SubLObject)removal_modules_term_strings.ONE_INTEGER);

@@ -204,9 +204,9 @@ public final class removal_modules_regular_expressions extends SubLTranslatedFil
     }
     
     public static SubLObject init_removal_modules_regular_expressions_file() {
-        removal_modules_regular_expressions.$regex_string_match_mt$ = SubLFiles.deflexical("*REGEX-STRING-MATCH-MT*", (removal_modules_regular_expressions.NIL != Symbols.boundp((SubLObject)removal_modules_regular_expressions.$sym2$_REGEX_STRING_MATCH_MT_)) ? removal_modules_regular_expressions.$regex_string_match_mt$.getGlobalValue() : removal_modules_regular_expressions.$const3$BaseKB);
+        removal_modules_regular_expressions.$regex_string_match_mt$ = SubLFiles.deflexical("*REGEX-STRING-MATCH-MT*", maybeDefault((SubLObject)removal_modules_regular_expressions.$sym2$_REGEX_STRING_MATCH_MT_, removal_modules_regular_expressions.$regex_string_match_mt$, removal_modules_regular_expressions.$const3$BaseKB));
         removal_modules_regular_expressions.$default_regex_string_match_cost$ = SubLFiles.defparameter("*DEFAULT-REGEX-STRING-MATCH-COST*", control_vars.$cheap_hl_module_check_cost$.getGlobalValue());
-        removal_modules_regular_expressions.$regex_string_match_case_insensitive_mt$ = SubLFiles.deflexical("*REGEX-STRING-MATCH-CASE-INSENSITIVE-MT*", (removal_modules_regular_expressions.NIL != Symbols.boundp((SubLObject)removal_modules_regular_expressions.$sym15$_REGEX_STRING_MATCH_CASE_INSENSITIVE_MT_)) ? removal_modules_regular_expressions.$regex_string_match_case_insensitive_mt$.getGlobalValue() : removal_modules_regular_expressions.$const3$BaseKB);
+        removal_modules_regular_expressions.$regex_string_match_case_insensitive_mt$ = SubLFiles.deflexical("*REGEX-STRING-MATCH-CASE-INSENSITIVE-MT*", maybeDefault((SubLObject)removal_modules_regular_expressions.$sym15$_REGEX_STRING_MATCH_CASE_INSENSITIVE_MT_, removal_modules_regular_expressions.$regex_string_match_case_insensitive_mt$, removal_modules_regular_expressions.$const3$BaseKB));
         removal_modules_regular_expressions.$default_regex_string_match_case_insensitive_cost$ = SubLFiles.defparameter("*DEFAULT-REGEX-STRING-MATCH-CASE-INSENSITIVE-COST*", control_vars.$cheap_hl_module_check_cost$.getGlobalValue());
         return (SubLObject)removal_modules_regular_expressions.NIL;
     }

@@ -5861,7 +5861,7 @@ public final class html_utilities extends SubLTranslatedFile
         html_utilities.$html_align_map$ = SubLFiles.defparameter("*HTML-ALIGN-MAP*", (SubLObject)html_utilities.$list49);
         html_utilities.$cycorp_homepage_url$ = SubLFiles.defparameter("*CYCORP-HOMEPAGE-URL*", (SubLObject)html_utilities.$str50$http___www_cyc_com);
         html_utilities.$cycorp_homepage_text$ = SubLFiles.defparameter("*CYCORP-HOMEPAGE-TEXT*", (SubLObject)html_utilities.$str51$Cycorp);
-        html_utilities.$proprietarity_message$ = SubLFiles.deflexical("*PROPRIETARITY-MESSAGE*", (SubLObject)((html_utilities.NIL != Symbols.boundp((SubLObject)html_utilities.$sym52$_PROPRIETARITY_MESSAGE_)) ? html_utilities.$proprietarity_message$.getGlobalValue() : html_utilities.$str47$));
+        html_utilities.$proprietarity_message$ = SubLFiles.deflexical("*PROPRIETARITY-MESSAGE*", (SubLObject)(maybeDefault((SubLObject)html_utilities.$sym52$_PROPRIETARITY_MESSAGE_, html_utilities.$proprietarity_message$, html_utilities.$str47$)));
         html_utilities.$html_extract_field_name$ = SubLFiles.defparameter("*HTML-EXTRACT-FIELD-NAME*", (SubLObject)html_utilities.NIL);
         html_utilities.$url_to_text_replacements$ = SubLFiles.deflexical("*URL-TO-TEXT-REPLACEMENTS*", (SubLObject)html_utilities.$list689);
         html_utilities.$html_filename_input_prefix$ = SubLFiles.deflexical("*HTML-FILENAME-INPUT-PREFIX*", (SubLObject)html_utilities.$str696$_file_input_);

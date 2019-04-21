@@ -1642,7 +1642,7 @@ public final class preserves_genls_in_arg extends SubLTranslatedFile
         preserves_genls_in_arg.$consider_current_pgiaP$ = SubLFiles.defparameter("*CONSIDER-CURRENT-PGIA?*", (SubLObject)preserves_genls_in_arg.NIL);
         preserves_genls_in_arg.$current_pgia_genls$ = SubLFiles.defparameter("*CURRENT-PGIA-GENLS*", (SubLObject)preserves_genls_in_arg.NIL);
         preserves_genls_in_arg.$current_pgia_specs$ = SubLFiles.defparameter("*CURRENT-PGIA-SPECS*", (SubLObject)preserves_genls_in_arg.NIL);
-        preserves_genls_in_arg.$pgia_mt$ = SubLFiles.deflexical("*PGIA-MT*", (preserves_genls_in_arg.NIL != Symbols.boundp((SubLObject)preserves_genls_in_arg.$sym0$_PGIA_MT_)) ? preserves_genls_in_arg.$pgia_mt$.getGlobalValue() : preserves_genls_in_arg.$const1$BaseKB);
+        preserves_genls_in_arg.$pgia_mt$ = SubLFiles.deflexical("*PGIA-MT*", maybeDefault((SubLObject)preserves_genls_in_arg.$sym0$_PGIA_MT_, preserves_genls_in_arg.$pgia_mt$, preserves_genls_in_arg.$const1$BaseKB));
         preserves_genls_in_arg.$pgia_rule$ = SubLFiles.defparameter("*PGIA-RULE*", (SubLObject)preserves_genls_in_arg.$list2);
         return (SubLObject)preserves_genls_in_arg.NIL;
     }

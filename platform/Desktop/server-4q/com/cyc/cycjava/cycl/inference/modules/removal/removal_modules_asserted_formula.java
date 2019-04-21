@@ -5208,7 +5208,7 @@ public final class removal_modules_asserted_formula extends SubLTranslatedFile
     }
     
     public static SubLObject init_removal_modules_asserted_formula_file() {
-        removal_modules_asserted_formula.$term_formulas_defining_mt$ = SubLFiles.deflexical("*TERM-FORMULAS-DEFINING-MT*", (removal_modules_asserted_formula.NIL != Symbols.boundp((SubLObject)removal_modules_asserted_formula.$sym41$_TERM_FORMULAS_DEFINING_MT_)) ? removal_modules_asserted_formula.$term_formulas_defining_mt$.getGlobalValue() : removal_modules_asserted_formula.$const42$BaseKB);
+        removal_modules_asserted_formula.$term_formulas_defining_mt$ = SubLFiles.deflexical("*TERM-FORMULAS-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_asserted_formula.$sym41$_TERM_FORMULAS_DEFINING_MT_, removal_modules_asserted_formula.$term_formulas_defining_mt$, removal_modules_asserted_formula.$const42$BaseKB));
         return (SubLObject)removal_modules_asserted_formula.NIL;
     }
     

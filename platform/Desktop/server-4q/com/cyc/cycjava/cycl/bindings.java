@@ -1160,7 +1160,7 @@ public final class bindings extends SubLTranslatedFile
         bindings.$hl_identity_binding_caching_state$ = SubLFiles.deflexical("*HL-IDENTITY-BINDING-CACHING-STATE*", (SubLObject)bindings.NIL);
         bindings.$hl_identity_bindings_caching_state$ = SubLFiles.deflexical("*HL-IDENTITY-BINDINGS-CACHING-STATE*", (SubLObject)bindings.NIL);
         bindings.$dont_care_variable_binding_value$ = SubLFiles.defconstant("*DONT-CARE-VARIABLE-BINDING-VALUE*", (SubLObject)bindings.$kw17$DONT_CARE);
-        bindings.$dummy_binding$ = SubLFiles.deflexical("*DUMMY-BINDING*", (bindings.NIL != Symbols.boundp((SubLObject)bindings.$sym29$_DUMMY_BINDING_)) ? bindings.$dummy_binding$.getGlobalValue() : make_variable_binding((SubLObject)bindings.T, (SubLObject)bindings.T));
+        bindings.$dummy_binding$ = SubLFiles.deflexical("*DUMMY-BINDING*", maybeDefault((SubLObject)bindings.$sym29$_DUMMY_BINDING_, bindings.$dummy_binding$, ()->(make_variable_binding((SubLObject)bindings.T, (SubLObject)bindings.T))));
         bindings.$unification_success_token$ = SubLFiles.deflexical("*UNIFICATION-SUCCESS-TOKEN*", (SubLObject)ConsesLow.list(bindings.$dummy_binding$.getGlobalValue()));
         return (SubLObject)bindings.NIL;
     }

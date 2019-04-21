@@ -909,7 +909,7 @@ public final class pph_vars extends SubLTranslatedFile
         pph_vars.$gen_template_store_lock$ = SubLFiles.deflexical("*GEN-TEMPLATE-STORE-LOCK*", Locks.make_lock((SubLObject)pph_vars.$str44$Gen_Template_Store_Lock));
         pph_vars.$last_pph_sentence$ = SubLFiles.defparameter("*LAST-PPH-SENTENCE*", (SubLObject)pph_vars.NIL);
         pph_vars.$pph_phrase_fns$ = SubLFiles.defparameter("*PPH-PHRASE-FNS*", dictionary.new_dictionary((SubLObject)pph_vars.UNPROVIDED, (SubLObject)pph_vars.UNPROVIDED));
-        pph_vars.$pph_data_structures_code_revision$ = SubLFiles.deflexical("*PPH-DATA-STRUCTURES-CODE-REVISION*", (SubLObject)((pph_vars.NIL != Symbols.boundp((SubLObject)pph_vars.$sym45$_PPH_DATA_STRUCTURES_CODE_REVISION_)) ? pph_vars.$pph_data_structures_code_revision$.getGlobalValue() : pph_vars.NIL));
+        pph_vars.$pph_data_structures_code_revision$ = SubLFiles.deflexical("*PPH-DATA-STRUCTURES-CODE-REVISION*", (SubLObject)(maybeDefault((SubLObject)pph_vars.$sym45$_PPH_DATA_STRUCTURES_CODE_REVISION_, pph_vars.$pph_data_structures_code_revision$, pph_vars.NIL)));
         pph_vars.$pph_cycls$ = SubLFiles.defparameter("*PPH-CYCLS*", (SubLObject)pph_vars.NIL);
         pph_vars.$pph_root_phrase$ = SubLFiles.defparameter("*PPH-ROOT-PHRASE*", misc_utilities.uninitialized());
         pph_vars.$bypass_pph_phrase_destroyerP$ = SubLFiles.defparameter("*BYPASS-PPH-PHRASE-DESTROYER?*", (SubLObject)pph_vars.T);

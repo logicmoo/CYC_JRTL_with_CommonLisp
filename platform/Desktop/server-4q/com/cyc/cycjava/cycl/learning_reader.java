@@ -5012,7 +5012,7 @@ public final class learning_reader extends SubLTranslatedFile
         learning_reader.$long_inference_cutoff$ = SubLFiles.deflexical("*LONG-INFERENCE-CUTOFF*", (SubLObject)learning_reader.$int197$600);
         learning_reader.$current_long_inference_info$ = SubLFiles.defparameter("*CURRENT-LONG-INFERENCE-INFO*", (SubLObject)learning_reader.NIL);
         learning_reader.$dtp_l2r_document_reader$ = SubLFiles.defconstant("*DTP-L2R-DOCUMENT-READER*", (SubLObject)learning_reader.$sym216$L2R_DOCUMENT_READER);
-        learning_reader.$l2r_reader_image_document_reader$ = SubLFiles.deflexical("*L2R-READER-IMAGE-DOCUMENT-READER*", (SubLObject)((learning_reader.NIL != Symbols.boundp((SubLObject)learning_reader.$sym242$_L2R_READER_IMAGE_DOCUMENT_READER_)) ? learning_reader.$l2r_reader_image_document_reader$.getGlobalValue() : learning_reader.NIL));
+        learning_reader.$l2r_reader_image_document_reader$ = SubLFiles.deflexical("*L2R-READER-IMAGE-DOCUMENT-READER*", (SubLObject)(maybeDefault((SubLObject)learning_reader.$sym242$_L2R_READER_IMAGE_DOCUMENT_READER_, learning_reader.$l2r_reader_image_document_reader$, learning_reader.NIL)));
         learning_reader.$l2r_sentence_level_peg_creation_template_caching_state$ = SubLFiles.deflexical("*L2R-SENTENCE-LEVEL-PEG-CREATION-TEMPLATE-CACHING-STATE*", (SubLObject)learning_reader.NIL);
         learning_reader.$l2r_sentence_level_peg_exemplar_caching_state$ = SubLFiles.deflexical("*L2R-SENTENCE-LEVEL-PEG-EXEMPLAR-CACHING-STATE*", (SubLObject)learning_reader.NIL);
         learning_reader.$l2r_sentence_level_peg_creation_template_sentences_caching_state$ = SubLFiles.deflexical("*L2R-SENTENCE-LEVEL-PEG-CREATION-TEMPLATE-SENTENCES-CACHING-STATE*", (SubLObject)learning_reader.NIL);

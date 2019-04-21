@@ -594,7 +594,7 @@ public final class sksi_sks_predicate_indexing extends SubLTranslatedFile
     
     public static SubLObject init_sksi_sks_predicate_indexing_file() {
         sksi_sks_predicate_indexing.$dtp_sksi_supported_predicate_cache_entry$ = SubLFiles.defconstant("*DTP-SKSI-SUPPORTED-PREDICATE-CACHE-ENTRY*", (SubLObject)sksi_sks_predicate_indexing.$sym0$SKSI_SUPPORTED_PREDICATE_CACHE_ENTRY);
-        sksi_sks_predicate_indexing.$sksi_supported_predicate_cache$ = SubLFiles.deflexical("*SKSI-SUPPORTED-PREDICATE-CACHE*", (sksi_sks_predicate_indexing.NIL != Symbols.boundp((SubLObject)sksi_sks_predicate_indexing.$sym31$_SKSI_SUPPORTED_PREDICATE_CACHE_)) ? sksi_sks_predicate_indexing.$sksi_supported_predicate_cache$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_sks_predicate_indexing.EQ), (SubLObject)sksi_sks_predicate_indexing.UNPROVIDED));
+        sksi_sks_predicate_indexing.$sksi_supported_predicate_cache$ = SubLFiles.deflexical("*SKSI-SUPPORTED-PREDICATE-CACHE*", maybeDefault((SubLObject)sksi_sks_predicate_indexing.$sym31$_SKSI_SUPPORTED_PREDICATE_CACHE_, sksi_sks_predicate_indexing.$sksi_supported_predicate_cache$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_sks_predicate_indexing.EQ), (SubLObject)sksi_sks_predicate_indexing.UNPROVIDED))));
         return (SubLObject)sksi_sks_predicate_indexing.NIL;
     }
     

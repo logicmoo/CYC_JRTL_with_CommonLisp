@@ -949,8 +949,8 @@ public final class deduction_handles extends SubLTranslatedFile
     }
     
     public static SubLObject init_deduction_handles_file() {
-        deduction_handles.$deduction_from_id$ = SubLFiles.deflexical("*DEDUCTION-FROM-ID*", (SubLObject)((deduction_handles.NIL != Symbols.boundp($sym0$_DEDUCTION_FROM_ID_)) ? deduction_handles.$deduction_from_id$.getGlobalValue() : deduction_handles.NIL));
-        deduction_handles.$new_deduction_id_threshold$ = SubLFiles.deflexical("*NEW-DEDUCTION-ID-THRESHOLD*", (SubLObject)((deduction_handles.NIL != Symbols.boundp($sym26$_NEW_DEDUCTION_ID_THRESHOLD_)) ? deduction_handles.$new_deduction_id_threshold$.getGlobalValue() : deduction_handles.NIL));
+        deduction_handles.$deduction_from_id$ = SubLFiles.deflexical("*DEDUCTION-FROM-ID*", (SubLObject)(maybeDefault($sym0$_DEDUCTION_FROM_ID_, deduction_handles.$deduction_from_id$, deduction_handles.NIL)));
+        deduction_handles.$new_deduction_id_threshold$ = SubLFiles.deflexical("*NEW-DEDUCTION-ID-THRESHOLD*", (SubLObject)(maybeDefault($sym26$_NEW_DEDUCTION_ID_THRESHOLD_, deduction_handles.$new_deduction_id_threshold$, deduction_handles.NIL)));
         deduction_handles.$dtp_deduction$ = SubLFiles.defconstant("*DTP-DEDUCTION*", $sym43$DEDUCTION);
         return NIL;
     }

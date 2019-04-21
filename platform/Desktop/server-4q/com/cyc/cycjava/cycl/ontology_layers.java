@@ -993,11 +993,11 @@ public final class ontology_layers extends SubLTranslatedFile
     
     public static SubLObject init_ontology_layers_file() {
         ontology_layers.$ontology_layers$ = SubLFiles.deflexical("*ONTOLOGY-LAYERS*", (SubLObject)ontology_layers.$list0);
-        ontology_layers.$upper_ontology_core_terms$ = SubLFiles.deflexical("*UPPER-ONTOLOGY-CORE-TERMS*", (SubLObject)((ontology_layers.NIL != Symbols.boundp((SubLObject)ontology_layers.$sym2$_UPPER_ONTOLOGY_CORE_TERMS_)) ? ontology_layers.$upper_ontology_core_terms$.getGlobalValue() : ontology_layers.NIL));
-        ontology_layers.$upper_ontology_collections$ = SubLFiles.deflexical("*UPPER-ONTOLOGY-COLLECTIONS*", (SubLObject)((ontology_layers.NIL != Symbols.boundp((SubLObject)ontology_layers.$sym3$_UPPER_ONTOLOGY_COLLECTIONS_)) ? ontology_layers.$upper_ontology_collections$.getGlobalValue() : ontology_layers.NIL));
-        ontology_layers.$middle_ontology_collections$ = SubLFiles.deflexical("*MIDDLE-ONTOLOGY-COLLECTIONS*", (SubLObject)((ontology_layers.NIL != Symbols.boundp((SubLObject)ontology_layers.$sym4$_MIDDLE_ONTOLOGY_COLLECTIONS_)) ? ontology_layers.$middle_ontology_collections$.getGlobalValue() : ontology_layers.NIL));
-        ontology_layers.$upper_ontology_relations$ = SubLFiles.deflexical("*UPPER-ONTOLOGY-RELATIONS*", (SubLObject)((ontology_layers.NIL != Symbols.boundp((SubLObject)ontology_layers.$sym5$_UPPER_ONTOLOGY_RELATIONS_)) ? ontology_layers.$upper_ontology_relations$.getGlobalValue() : ontology_layers.NIL));
-        ontology_layers.$middle_ontology_relations$ = SubLFiles.deflexical("*MIDDLE-ONTOLOGY-RELATIONS*", (SubLObject)((ontology_layers.NIL != Symbols.boundp((SubLObject)ontology_layers.$sym6$_MIDDLE_ONTOLOGY_RELATIONS_)) ? ontology_layers.$middle_ontology_relations$.getGlobalValue() : ontology_layers.NIL));
+        ontology_layers.$upper_ontology_core_terms$ = SubLFiles.deflexical("*UPPER-ONTOLOGY-CORE-TERMS*", (SubLObject)(maybeDefault((SubLObject)ontology_layers.$sym2$_UPPER_ONTOLOGY_CORE_TERMS_, ontology_layers.$upper_ontology_core_terms$, ontology_layers.NIL)));
+        ontology_layers.$upper_ontology_collections$ = SubLFiles.deflexical("*UPPER-ONTOLOGY-COLLECTIONS*", (SubLObject)(maybeDefault((SubLObject)ontology_layers.$sym3$_UPPER_ONTOLOGY_COLLECTIONS_, ontology_layers.$upper_ontology_collections$, ontology_layers.NIL)));
+        ontology_layers.$middle_ontology_collections$ = SubLFiles.deflexical("*MIDDLE-ONTOLOGY-COLLECTIONS*", (SubLObject)(maybeDefault((SubLObject)ontology_layers.$sym4$_MIDDLE_ONTOLOGY_COLLECTIONS_, ontology_layers.$middle_ontology_collections$, ontology_layers.NIL)));
+        ontology_layers.$upper_ontology_relations$ = SubLFiles.deflexical("*UPPER-ONTOLOGY-RELATIONS*", (SubLObject)(maybeDefault((SubLObject)ontology_layers.$sym5$_UPPER_ONTOLOGY_RELATIONS_, ontology_layers.$upper_ontology_relations$, ontology_layers.NIL)));
+        ontology_layers.$middle_ontology_relations$ = SubLFiles.deflexical("*MIDDLE-ONTOLOGY-RELATIONS*", (SubLObject)(maybeDefault((SubLObject)ontology_layers.$sym6$_MIDDLE_ONTOLOGY_RELATIONS_, ontology_layers.$middle_ontology_relations$, ontology_layers.NIL)));
         return (SubLObject)ontology_layers.NIL;
     }
     

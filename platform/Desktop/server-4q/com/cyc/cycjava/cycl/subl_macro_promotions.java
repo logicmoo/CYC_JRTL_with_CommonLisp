@@ -477,7 +477,7 @@ public final class subl_macro_promotions extends SubLTranslatedFile
     }
     
     public static SubLObject init_subl_macro_promotions_file() {
-        subl_macro_promotions.$catch_error_message_target$ = SubLFiles.deflexical("*CATCH-ERROR-MESSAGE-TARGET*", (subl_macro_promotions.NIL != Symbols.boundp((SubLObject)subl_macro_promotions.$sym9$_CATCH_ERROR_MESSAGE_TARGET_)) ? subl_macro_promotions.$catch_error_message_target$.getGlobalValue() : Symbols.make_symbol((SubLObject)subl_macro_promotions.$str10$ERROR));
+        subl_macro_promotions.$catch_error_message_target$ = SubLFiles.deflexical("*CATCH-ERROR-MESSAGE-TARGET*", maybeDefault((SubLObject)subl_macro_promotions.$sym9$_CATCH_ERROR_MESSAGE_TARGET_, subl_macro_promotions.$catch_error_message_target$, ()->(Symbols.make_symbol((SubLObject)subl_macro_promotions.$str10$ERROR))));
         subl_macro_promotions.$within_with_timeout$ = SubLFiles.defparameter("*WITHIN-WITH-TIMEOUT*", (SubLObject)subl_macro_promotions.NIL);
         subl_macro_promotions.$with_timeout_nesting_depth$ = SubLFiles.defparameter("*WITH-TIMEOUT-NESTING-DEPTH*", (SubLObject)subl_macro_promotions.ZERO_INTEGER);
         return (SubLObject)subl_macro_promotions.NIL;

@@ -669,7 +669,7 @@ public final class file_backed_cache_setup extends SubLTranslatedFile
     }
     
     public static SubLObject init_file_backed_cache_setup_file() {
-        file_backed_cache_setup.$registered_file_backed_caches$ = SubLFiles.deflexical("*REGISTERED-FILE-BACKED-CACHES*", (SubLObject)((file_backed_cache_setup.NIL != Symbols.boundp((SubLObject)file_backed_cache_setup.$sym0$_REGISTERED_FILE_BACKED_CACHES_)) ? file_backed_cache_setup.$registered_file_backed_caches$.getGlobalValue() : file_backed_cache_setup.NIL));
+        file_backed_cache_setup.$registered_file_backed_caches$ = SubLFiles.deflexical("*REGISTERED-FILE-BACKED-CACHES*", (SubLObject)(maybeDefault((SubLObject)file_backed_cache_setup.$sym0$_REGISTERED_FILE_BACKED_CACHES_, file_backed_cache_setup.$registered_file_backed_caches$, file_backed_cache_setup.NIL)));
         file_backed_cache_setup.$file_backed_cache_default_temp_dir$ = SubLFiles.defparameter("*FILE-BACKED-CACHE-DEFAULT-TEMP-DIR*", (SubLObject)file_backed_cache_setup.$str1$tmp_);
         file_backed_cache_setup.$fbc_registration_lock$ = SubLFiles.deflexical("*FBC-REGISTRATION-LOCK*", Locks.make_lock((SubLObject)file_backed_cache_setup.$str2$fbc_registration_lock));
         file_backed_cache_setup.$dtp_file_backed_cache_registration$ = SubLFiles.defconstant("*DTP-FILE-BACKED-CACHE-REGISTRATION*", (SubLObject)file_backed_cache_setup.$sym3$FILE_BACKED_CACHE_REGISTRATION);

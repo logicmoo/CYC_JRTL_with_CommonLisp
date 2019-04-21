@@ -1441,9 +1441,9 @@ public final class predicate_suggestor extends SubLTranslatedFile
     }
     
     public static SubLObject init_predicate_suggestor_file() {
-        predicate_suggestor.$fts_antecedent_index$ = SubLFiles.deflexical("*FTS-ANTECEDENT-INDEX*", (SubLObject)((predicate_suggestor.NIL != Symbols.boundp((SubLObject)predicate_suggestor.$sym3$_FTS_ANTECEDENT_INDEX_)) ? predicate_suggestor.$fts_antecedent_index$.getGlobalValue() : predicate_suggestor.NIL));
-        predicate_suggestor.$fts_consequent_index$ = SubLFiles.deflexical("*FTS-CONSEQUENT-INDEX*", (SubLObject)((predicate_suggestor.NIL != Symbols.boundp((SubLObject)predicate_suggestor.$sym4$_FTS_CONSEQUENT_INDEX_)) ? predicate_suggestor.$fts_consequent_index$.getGlobalValue() : predicate_suggestor.NIL));
-        predicate_suggestor.$fts_joint_antecedent_index$ = SubLFiles.deflexical("*FTS-JOINT-ANTECEDENT-INDEX*", (SubLObject)((predicate_suggestor.NIL != Symbols.boundp((SubLObject)predicate_suggestor.$sym5$_FTS_JOINT_ANTECEDENT_INDEX_)) ? predicate_suggestor.$fts_joint_antecedent_index$.getGlobalValue() : predicate_suggestor.NIL));
+        predicate_suggestor.$fts_antecedent_index$ = SubLFiles.deflexical("*FTS-ANTECEDENT-INDEX*", (SubLObject)(maybeDefault((SubLObject)predicate_suggestor.$sym3$_FTS_ANTECEDENT_INDEX_, predicate_suggestor.$fts_antecedent_index$, predicate_suggestor.NIL)));
+        predicate_suggestor.$fts_consequent_index$ = SubLFiles.deflexical("*FTS-CONSEQUENT-INDEX*", (SubLObject)(maybeDefault((SubLObject)predicate_suggestor.$sym4$_FTS_CONSEQUENT_INDEX_, predicate_suggestor.$fts_consequent_index$, predicate_suggestor.NIL)));
+        predicate_suggestor.$fts_joint_antecedent_index$ = SubLFiles.deflexical("*FTS-JOINT-ANTECEDENT-INDEX*", (SubLObject)(maybeDefault((SubLObject)predicate_suggestor.$sym5$_FTS_JOINT_ANTECEDENT_INDEX_, predicate_suggestor.$fts_joint_antecedent_index$, predicate_suggestor.NIL)));
         predicate_suggestor.$fts_expert_term_coll$ = SubLFiles.defconstant("*FTS-EXPERT-TERM-COLL*", predicate_suggestor.$const6$TermSuggestorExpertOnlyTerm);
         predicate_suggestor.$fts_expert_terms$ = SubLFiles.defparameter("*FTS-EXPERT-TERMS*", keyhash.new_keyhash((SubLObject)predicate_suggestor.$int7$5000, (SubLObject)predicate_suggestor.UNPROVIDED));
         predicate_suggestor.$fts_excluded_term_coll$ = SubLFiles.defconstant("*FTS-EXCLUDED-TERM-COLL*", predicate_suggestor.$const9$TermSuggestorNonIndexedTerm);

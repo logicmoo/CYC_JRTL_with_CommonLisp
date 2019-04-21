@@ -882,8 +882,8 @@ public final class rule_after_adding extends SubLTranslatedFile
     
     public static SubLObject init_rule_after_adding_file() {
         rule_after_adding.$rule_after_adding_predicates$ = SubLFiles.deflexical("*RULE-AFTER-ADDING-PREDICATES*", (SubLObject)rule_after_adding.NIL);
-        rule_after_adding.$rule_after_addings_hash$ = SubLFiles.deflexical("*RULE-AFTER-ADDINGS-HASH*", (SubLObject)((rule_after_adding.NIL != Symbols.boundp((SubLObject)rule_after_adding.$sym0$_RULE_AFTER_ADDINGS_HASH_)) ? rule_after_adding.$rule_after_addings_hash$.getGlobalValue() : rule_after_adding.NIL));
-        rule_after_adding.$rule_after_removings_hash$ = SubLFiles.deflexical("*RULE-AFTER-REMOVINGS-HASH*", (SubLObject)((rule_after_adding.NIL != Symbols.boundp((SubLObject)rule_after_adding.$sym1$_RULE_AFTER_REMOVINGS_HASH_)) ? rule_after_adding.$rule_after_removings_hash$.getGlobalValue() : rule_after_adding.NIL));
+        rule_after_adding.$rule_after_addings_hash$ = SubLFiles.deflexical("*RULE-AFTER-ADDINGS-HASH*", (SubLObject)(maybeDefault((SubLObject)rule_after_adding.$sym0$_RULE_AFTER_ADDINGS_HASH_, rule_after_adding.$rule_after_addings_hash$, rule_after_adding.NIL)));
+        rule_after_adding.$rule_after_removings_hash$ = SubLFiles.deflexical("*RULE-AFTER-REMOVINGS-HASH*", (SubLObject)(maybeDefault((SubLObject)rule_after_adding.$sym1$_RULE_AFTER_REMOVINGS_HASH_, rule_after_adding.$rule_after_removings_hash$, rule_after_adding.NIL)));
         return (SubLObject)rule_after_adding.NIL;
     }
     

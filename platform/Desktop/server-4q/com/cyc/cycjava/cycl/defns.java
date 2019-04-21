@@ -4474,7 +4474,7 @@ public final class defns extends SubLTranslatedFile
     }
     
     public static SubLObject init_defns_file() {
-        defns.$index_to_defns_cache_vector$ = SubLFiles.deflexical("*INDEX-TO-DEFNS-CACHE-VECTOR*", (SubLObject)((defns.NIL != Symbols.boundp((SubLObject)defns.$sym0$_INDEX_TO_DEFNS_CACHE_VECTOR_)) ? defns.$index_to_defns_cache_vector$.getGlobalValue() : defns.NIL));
+        defns.$index_to_defns_cache_vector$ = SubLFiles.deflexical("*INDEX-TO-DEFNS-CACHE-VECTOR*", (SubLObject)(maybeDefault((SubLObject)defns.$sym0$_INDEX_TO_DEFNS_CACHE_VECTOR_, defns.$index_to_defns_cache_vector$, defns.NIL)));
         defns.$has_suf_defn_cache_index$ = SubLFiles.defconstant("*HAS-SUF-DEFN-CACHE-INDEX*", (SubLObject)defns.ZERO_INTEGER);
         defns.$has_quoted_suf_defn_cache_index$ = SubLFiles.defconstant("*HAS-QUOTED-SUF-DEFN-CACHE-INDEX*", (SubLObject)defns.ONE_INTEGER);
         defns.$iff_defns_index$ = SubLFiles.defconstant("*IFF-DEFNS-INDEX*", (SubLObject)defns.TWO_INTEGER);

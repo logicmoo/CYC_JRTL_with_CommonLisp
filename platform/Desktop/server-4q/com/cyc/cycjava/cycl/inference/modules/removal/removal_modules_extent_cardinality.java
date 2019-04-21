@@ -166,7 +166,7 @@ public final class removal_modules_extent_cardinality extends SubLTranslatedFile
     
     public static SubLObject init_removal_modules_extent_cardinality_file() {
         removal_modules_extent_cardinality.$default_removal_extent_cardinality_cost$ = SubLFiles.deflexical("*DEFAULT-REMOVAL-EXTENT-CARDINALITY-COST*", control_vars.$expensive_hl_module_check_cost$.getGlobalValue());
-        removal_modules_extent_cardinality.$length_of_list_defining_mt$ = SubLFiles.deflexical("*LENGTH-OF-LIST-DEFINING-MT*", (removal_modules_extent_cardinality.NIL != Symbols.boundp((SubLObject)removal_modules_extent_cardinality.$sym23$_LENGTH_OF_LIST_DEFINING_MT_)) ? removal_modules_extent_cardinality.$length_of_list_defining_mt$.getGlobalValue() : removal_modules_extent_cardinality.$const24$BaseKB);
+        removal_modules_extent_cardinality.$length_of_list_defining_mt$ = SubLFiles.deflexical("*LENGTH-OF-LIST-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_extent_cardinality.$sym23$_LENGTH_OF_LIST_DEFINING_MT_, removal_modules_extent_cardinality.$length_of_list_defining_mt$, removal_modules_extent_cardinality.$const24$BaseKB));
         return (SubLObject)removal_modules_extent_cardinality.NIL;
     }
     

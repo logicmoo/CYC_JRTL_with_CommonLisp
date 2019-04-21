@@ -7339,14 +7339,14 @@ public final class pph_phrase extends SubLTranslatedFile
         pph_phrase.$pph_variable_bindings$ = SubLFiles.defparameter("*PPH-VARIABLE-BINDINGS*", (SubLObject)pph_phrase.NIL);
         pph_phrase.$pph_sanity_check_phrase_donenessP$ = SubLFiles.defparameter("*PPH-SANITY-CHECK-PHRASE-DONENESS?*", (SubLObject)pph_phrase.NIL);
         pph_phrase.$pph_phrase_destroyer_grace_period$ = SubLFiles.deflexical("*PPH-PHRASE-DESTROYER-GRACE-PERIOD*", (SubLObject)pph_phrase.$int137$600);
-        pph_phrase.$pph_phrase_destroyer$ = SubLFiles.deflexical("*PPH-PHRASE-DESTROYER*", (pph_phrase.NIL != Symbols.boundp((SubLObject)pph_phrase.$sym138$_PPH_PHRASE_DESTROYER_)) ? pph_phrase.$pph_phrase_destroyer$.getGlobalValue() : delayed_processor.new_delayed_processor(pph_phrase.$pph_phrase_destroyer_grace_period$.getGlobalValue(), (SubLObject)pph_phrase.$sym139$VALID_PPH_PHRASE_P, (SubLObject)pph_phrase.$sym140$DESTROY_PPH_PHRASE_LOW));
+        pph_phrase.$pph_phrase_destroyer$ = SubLFiles.deflexical("*PPH-PHRASE-DESTROYER*", maybeDefault((SubLObject)pph_phrase.$sym138$_PPH_PHRASE_DESTROYER_, pph_phrase.$pph_phrase_destroyer$, ()->(delayed_processor.new_delayed_processor(pph_phrase.$pph_phrase_destroyer_grace_period$.getGlobalValue(), (SubLObject)pph_phrase.$sym139$VALID_PPH_PHRASE_P, (SubLObject)pph_phrase.$sym140$DESTROY_PPH_PHRASE_LOW))));
         pph_phrase.$warn_about_pph_phrase_destruction_caching_state$ = SubLFiles.deflexical("*WARN-ABOUT-PPH-PHRASE-DESTRUCTION-CACHING-STATE*", (SubLObject)pph_phrase.NIL);
         pph_phrase.$warn_on_invalid_pph_inferencesP$ = SubLFiles.defparameter("*WARN-ON-INVALID-PPH-INFERENCES?*", (SubLObject)pph_phrase.NIL);
         pph_phrase.$pph_do_alternatives_max$ = SubLFiles.defparameter("*PPH-DO-ALTERNATIVES-MAX*", (SubLObject)pph_phrase.$int185$500);
         pph_phrase.$pph_root_mother_list$ = SubLFiles.defparameter("*PPH-ROOT-MOTHER-LIST*", (SubLObject)pph_phrase.NIL);
         pph_phrase.$pph_variant_list_max_count$ = SubLFiles.defparameter("*PPH-VARIANT-LIST-MAX-COUNT*", (SubLObject)pph_phrase.TEN_INTEGER);
         pph_phrase.$pph_phrase_category_depth$ = SubLFiles.defparameter("*PPH-PHRASE-CATEGORY-DEPTH*", (SubLObject)pph_phrase.ZERO_INTEGER);
-        pph_phrase.$pph_phrase_category_max_depth$ = SubLFiles.deflexical("*PPH-PHRASE-CATEGORY-MAX-DEPTH*", (SubLObject)((pph_phrase.NIL != Symbols.boundp((SubLObject)pph_phrase.$sym250$_PPH_PHRASE_CATEGORY_MAX_DEPTH_)) ? pph_phrase.$pph_phrase_category_max_depth$.getGlobalValue() : pph_phrase.$int251$99));
+        pph_phrase.$pph_phrase_category_max_depth$ = SubLFiles.deflexical("*PPH-PHRASE-CATEGORY-MAX-DEPTH*", (SubLObject)(maybeDefault((SubLObject)pph_phrase.$sym250$_PPH_PHRASE_CATEGORY_MAX_DEPTH_, pph_phrase.$pph_phrase_category_max_depth$, pph_phrase.$int251$99)));
         pph_phrase.$pph_unknown_cycl$ = SubLFiles.defconstant("*PPH-UNKNOWN-CYCL*", (SubLObject)pph_phrase.$kw266$PPH_UNKNOWN_CYCL);
         pph_phrase.$pph_empty_cycl$ = SubLFiles.defconstant("*PPH-EMPTY-CYCL*", (SubLObject)pph_phrase.$kw267$PPH_EMPTY_CYCL);
         pph_phrase.$pph_agr_preds_from_category_cached_caching_state$ = SubLFiles.deflexical("*PPH-AGR-PREDS-FROM-CATEGORY-CACHED-CACHING-STATE*", (SubLObject)pph_phrase.NIL);

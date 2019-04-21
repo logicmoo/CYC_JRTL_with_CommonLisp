@@ -2996,7 +2996,7 @@ public final class removal_modules_function_corresponding_predicate extends SubL
     }
     
     public static SubLObject init_removal_modules_function_corresponding_predicate_file() {
-        removal_modules_function_corresponding_predicate.$use_fcp_removal_moduleP$ = SubLFiles.deflexical("*USE-FCP-REMOVAL-MODULE?*", (SubLObject)((removal_modules_function_corresponding_predicate.NIL != Symbols.boundp((SubLObject)removal_modules_function_corresponding_predicate.$sym0$_USE_FCP_REMOVAL_MODULE__)) ? removal_modules_function_corresponding_predicate.$use_fcp_removal_moduleP$.getGlobalValue() : removal_modules_function_corresponding_predicate.NIL));
+        removal_modules_function_corresponding_predicate.$use_fcp_removal_moduleP$ = SubLFiles.deflexical("*USE-FCP-REMOVAL-MODULE?*", (SubLObject)(maybeDefault((SubLObject)removal_modules_function_corresponding_predicate.$sym0$_USE_FCP_REMOVAL_MODULE__, removal_modules_function_corresponding_predicate.$use_fcp_removal_moduleP$, removal_modules_function_corresponding_predicate.NIL)));
         return (SubLObject)removal_modules_function_corresponding_predicate.NIL;
     }
     

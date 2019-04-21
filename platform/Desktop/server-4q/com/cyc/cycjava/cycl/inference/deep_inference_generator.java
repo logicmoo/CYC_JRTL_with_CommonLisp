@@ -966,7 +966,7 @@ public final class deep_inference_generator extends SubLTranslatedFile
     }
     
     public static SubLObject init_deep_inference_generator_file() {
-        deep_inference_generator.$deep_inference_gaf_table$ = SubLFiles.deflexical("*DEEP-INFERENCE-GAF-TABLE*", (deep_inference_generator.NIL != Symbols.boundp((SubLObject)deep_inference_generator.$sym0$_DEEP_INFERENCE_GAF_TABLE_)) ? deep_inference_generator.$deep_inference_gaf_table$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)deep_inference_generator.$int1$212, (SubLObject)deep_inference_generator.UNPROVIDED, (SubLObject)deep_inference_generator.UNPROVIDED));
+        deep_inference_generator.$deep_inference_gaf_table$ = SubLFiles.deflexical("*DEEP-INFERENCE-GAF-TABLE*", maybeDefault((SubLObject)deep_inference_generator.$sym0$_DEEP_INFERENCE_GAF_TABLE_, deep_inference_generator.$deep_inference_gaf_table$, ()->(Hashtables.make_hash_table((SubLObject)deep_inference_generator.$int1$212, (SubLObject)deep_inference_generator.UNPROVIDED, (SubLObject)deep_inference_generator.UNPROVIDED))));
         deep_inference_generator.$deep_inference_recursion_stack$ = SubLFiles.defparameter("*DEEP-INFERENCE-RECURSION-STACK*", (SubLObject)deep_inference_generator.$kw2$UNINITIALIZED);
         deep_inference_generator.$totally_uninteresting_haystack_mts$ = SubLFiles.deflexical("*TOTALLY-UNINTERESTING-HAYSTACK-MTS*", (SubLObject)deep_inference_generator.$list6);
         deep_inference_generator.$somewhat_uninteresting_haystack_mts$ = SubLFiles.deflexical("*SOMEWHAT-UNINTERESTING-HAYSTACK-MTS*", (SubLObject)deep_inference_generator.$list7);

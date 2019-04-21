@@ -1187,7 +1187,7 @@ public final class arete extends SubLTranslatedFile
     public static SubLObject init_arete_file() {
         arete.$arete_experiment_directory$ = SubLFiles.deflexical("*ARETE-EXPERIMENT-DIRECTORY*", (SubLObject)arete.$str0$_cyc_projects_inference_arete_exp);
         arete.$arete_analysis_directory$ = SubLFiles.deflexical("*ARETE-ANALYSIS-DIRECTORY*", (SubLObject)arete.$str3$_cyc_projects_inference_arete_ana);
-        arete.$kbq_control_query_set_run$ = SubLFiles.deflexical("*KBQ-CONTROL-QUERY-SET-RUN*", (SubLObject)((arete.NIL != Symbols.boundp((SubLObject)arete.$sym8$_KBQ_CONTROL_QUERY_SET_RUN_)) ? arete.$kbq_control_query_set_run$.getGlobalValue() : arete.$kw9$UNINITIALIZED));
+        arete.$kbq_control_query_set_run$ = SubLFiles.deflexical("*KBQ-CONTROL-QUERY-SET-RUN*", (SubLObject)(maybeDefault((SubLObject)arete.$sym8$_KBQ_CONTROL_QUERY_SET_RUN_, arete.$kbq_control_query_set_run$, arete.$kw9$UNINITIALIZED)));
         arete.$arete_outlier_timeout$ = SubLFiles.deflexical("*ARETE-OUTLIER-TIMEOUT*", kbq_query_run.$kbq_default_outlier_timeout$.getGlobalValue());
         return (SubLObject)arete.NIL;
     }

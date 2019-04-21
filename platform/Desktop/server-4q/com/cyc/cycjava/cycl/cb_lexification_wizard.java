@@ -2223,9 +2223,9 @@ public final class cb_lexification_wizard extends SubLTranslatedFile
     }
     
     public static SubLObject init_cb_lexification_wizard_file() {
-        cb_lexification_wizard.$skipped_lexwiz_terms$ = SubLFiles.deflexical("*SKIPPED-LEXWIZ-TERMS*", (cb_lexification_wizard.NIL != Symbols.boundp((SubLObject)cb_lexification_wizard.$sym0$_SKIPPED_LEXWIZ_TERMS_)) ? cb_lexification_wizard.$skipped_lexwiz_terms$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)cb_lexification_wizard.EQL), (SubLObject)cb_lexification_wizard.UNPROVIDED));
-        cb_lexification_wizard.$streamlined_lexwizP$ = SubLFiles.deflexical("*STREAMLINED-LEXWIZ?*", (SubLObject)((cb_lexification_wizard.NIL != Symbols.boundp((SubLObject)cb_lexification_wizard.$sym1$_STREAMLINED_LEXWIZ__)) ? cb_lexification_wizard.$streamlined_lexwizP$.getGlobalValue() : cb_lexification_wizard.NIL));
-        cb_lexification_wizard.$known_lexified_terms$ = SubLFiles.deflexical("*KNOWN-LEXIFIED-TERMS*", (cb_lexification_wizard.NIL != Symbols.boundp((SubLObject)cb_lexification_wizard.$sym189$_KNOWN_LEXIFIED_TERMS_)) ? cb_lexification_wizard.$known_lexified_terms$.getGlobalValue() : set.new_set((SubLObject)cb_lexification_wizard.EQUAL, (SubLObject)cb_lexification_wizard.UNPROVIDED));
+        cb_lexification_wizard.$skipped_lexwiz_terms$ = SubLFiles.deflexical("*SKIPPED-LEXWIZ-TERMS*", maybeDefault((SubLObject)cb_lexification_wizard.$sym0$_SKIPPED_LEXWIZ_TERMS_, cb_lexification_wizard.$skipped_lexwiz_terms$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)cb_lexification_wizard.EQL), (SubLObject)cb_lexification_wizard.UNPROVIDED))));
+        cb_lexification_wizard.$streamlined_lexwizP$ = SubLFiles.deflexical("*STREAMLINED-LEXWIZ?*", (SubLObject)(maybeDefault((SubLObject)cb_lexification_wizard.$sym1$_STREAMLINED_LEXWIZ__, cb_lexification_wizard.$streamlined_lexwizP$, cb_lexification_wizard.NIL)));
+        cb_lexification_wizard.$known_lexified_terms$ = SubLFiles.deflexical("*KNOWN-LEXIFIED-TERMS*", maybeDefault((SubLObject)cb_lexification_wizard.$sym189$_KNOWN_LEXIFIED_TERMS_, cb_lexification_wizard.$known_lexified_terms$, ()->(set.new_set((SubLObject)cb_lexification_wizard.EQUAL, (SubLObject)cb_lexification_wizard.UNPROVIDED))));
         return (SubLObject)cb_lexification_wizard.NIL;
     }
     

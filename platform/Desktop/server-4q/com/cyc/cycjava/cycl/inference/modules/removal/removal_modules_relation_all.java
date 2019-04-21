@@ -779,7 +779,7 @@ public final class removal_modules_relation_all extends SubLTranslatedFile
     public static SubLObject init_removal_modules_relation_all_file() {
         removal_modules_relation_all.$estimated_per_collection_relation_all_fraction$ = SubLFiles.defparameter("*ESTIMATED-PER-COLLECTION-RELATION-ALL-FRACTION*", (SubLObject)removal_modules_relation_all.TEN_INTEGER);
         removal_modules_relation_all.$relation_all_rule$ = SubLFiles.deflexical("*RELATION-ALL-RULE*", (SubLObject)removal_modules_relation_all.$list1);
-        removal_modules_relation_all.$relation_all_defining_mt$ = SubLFiles.deflexical("*RELATION-ALL-DEFINING-MT*", (removal_modules_relation_all.NIL != Symbols.boundp((SubLObject)removal_modules_relation_all.$sym2$_RELATION_ALL_DEFINING_MT_)) ? removal_modules_relation_all.$relation_all_defining_mt$.getGlobalValue() : removal_modules_relation_all.$const3$BaseKB);
+        removal_modules_relation_all.$relation_all_defining_mt$ = SubLFiles.deflexical("*RELATION-ALL-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_relation_all.$sym2$_RELATION_ALL_DEFINING_MT_, removal_modules_relation_all.$relation_all_defining_mt$, removal_modules_relation_all.$const3$BaseKB));
         removal_modules_relation_all.$removal_relation_all_check_cost$ = SubLFiles.defparameter("*REMOVAL-RELATION-ALL-CHECK-COST*", (SubLObject)removal_modules_relation_all.$float6$1_5);
         return (SubLObject)removal_modules_relation_all.NIL;
     }

@@ -194,9 +194,9 @@ public final class api_remote_objects extends SubLTranslatedFile
     }
     
     public static SubLObject init_api_remote_objects_file() {
-        api_remote_objects.$remo_session_map$ = SubLFiles.deflexical("*REMO-SESSION-MAP*", (api_remote_objects.NIL != Symbols.boundp((SubLObject)api_remote_objects.$sym0$_REMO_SESSION_MAP_)) ? api_remote_objects.$remo_session_map$.getGlobalValue() : dictionary.new_dictionary((SubLObject)api_remote_objects.UNPROVIDED, (SubLObject)api_remote_objects.UNPROVIDED));
-        api_remote_objects.$remo_session_id_generator$ = SubLFiles.deflexical("*REMO-SESSION-ID-GENERATOR*", (api_remote_objects.NIL != Symbols.boundp((SubLObject)api_remote_objects.$sym1$_REMO_SESSION_ID_GENERATOR_)) ? api_remote_objects.$remo_session_id_generator$.getGlobalValue() : integer_sequence_generator.new_integer_sequence_generator((SubLObject)api_remote_objects.UNPROVIDED, (SubLObject)api_remote_objects.UNPROVIDED, (SubLObject)api_remote_objects.UNPROVIDED));
-        api_remote_objects.$remo_object_not_found$ = SubLFiles.deflexical("*REMO-OBJECT-NOT-FOUND*", (api_remote_objects.NIL != Symbols.boundp((SubLObject)api_remote_objects.$sym4$_REMO_OBJECT_NOT_FOUND_)) ? api_remote_objects.$remo_object_not_found$.getGlobalValue() : Symbols.make_symbol((SubLObject)api_remote_objects.$str5$Remote_Object_Not_Found));
+        api_remote_objects.$remo_session_map$ = SubLFiles.deflexical("*REMO-SESSION-MAP*", maybeDefault((SubLObject)api_remote_objects.$sym0$_REMO_SESSION_MAP_, api_remote_objects.$remo_session_map$, ()->(dictionary.new_dictionary((SubLObject)api_remote_objects.UNPROVIDED, (SubLObject)api_remote_objects.UNPROVIDED))));
+        api_remote_objects.$remo_session_id_generator$ = SubLFiles.deflexical("*REMO-SESSION-ID-GENERATOR*", maybeDefault((SubLObject)api_remote_objects.$sym1$_REMO_SESSION_ID_GENERATOR_, api_remote_objects.$remo_session_id_generator$, ()->(integer_sequence_generator.new_integer_sequence_generator((SubLObject)api_remote_objects.UNPROVIDED, (SubLObject)api_remote_objects.UNPROVIDED, (SubLObject)api_remote_objects.UNPROVIDED))));
+        api_remote_objects.$remo_object_not_found$ = SubLFiles.deflexical("*REMO-OBJECT-NOT-FOUND*", maybeDefault((SubLObject)api_remote_objects.$sym4$_REMO_OBJECT_NOT_FOUND_, api_remote_objects.$remo_object_not_found$, ()->(Symbols.make_symbol((SubLObject)api_remote_objects.$str5$Remote_Object_Not_Found))));
         return (SubLObject)api_remote_objects.NIL;
     }
     

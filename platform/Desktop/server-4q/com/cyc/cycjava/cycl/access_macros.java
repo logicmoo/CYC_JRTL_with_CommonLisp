@@ -1148,7 +1148,7 @@ public final class access_macros extends SubLTranslatedFile
     }
     
     public static SubLObject init_access_macros_file() {
-        access_macros.$external_symbols$ = SubLFiles.deflexical("*EXTERNAL-SYMBOLS*", (access_macros.NIL != Symbols.boundp((SubLObject)access_macros.$sym45$_EXTERNAL_SYMBOLS_)) ? access_macros.$external_symbols$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)access_macros.$int46$400, Symbols.symbol_function((SubLObject)access_macros.EQ), (SubLObject)access_macros.UNPROVIDED));
+        access_macros.$external_symbols$ = SubLFiles.deflexical("*EXTERNAL-SYMBOLS*", maybeDefault((SubLObject)access_macros.$sym45$_EXTERNAL_SYMBOLS_, access_macros.$external_symbols$, ()->(Hashtables.make_hash_table((SubLObject)access_macros.$int46$400, Symbols.symbol_function((SubLObject)access_macros.EQ), (SubLObject)access_macros.UNPROVIDED))));
         access_macros.$external_access_methods$ = SubLFiles.deflexical("*EXTERNAL-ACCESS-METHODS*", (SubLObject)access_macros.$list57);
         return (SubLObject)access_macros.NIL;
     }

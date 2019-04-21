@@ -7594,7 +7594,7 @@ public final class inference_datastructures_inference extends SubLTranslatedFile
     public static SubLObject init_inference_datastructures_inference_file() {
         inference_datastructures_inference.$inference_types$ = SubLFiles.deflexical("*INFERENCE-TYPES*", (SubLObject)inference_datastructures_inference.$list0);
         inference_datastructures_inference.$dtp_inference$ = SubLFiles.defconstant("*DTP-INFERENCE*", (SubLObject)inference_datastructures_inference.$sym1$INFERENCE);
-        inference_datastructures_inference.$pad_times_to_first_answer$ = SubLFiles.deflexical("*PAD-TIMES-TO-FIRST-ANSWER*", (SubLObject)((inference_datastructures_inference.NIL != Symbols.boundp((SubLObject)inference_datastructures_inference.$sym416$_PAD_TIMES_TO_FIRST_ANSWER_)) ? inference_datastructures_inference.$pad_times_to_first_answer$.getGlobalValue() : inference_datastructures_inference.$kw417$UNINITIALIZED));
+        inference_datastructures_inference.$pad_times_to_first_answer$ = SubLFiles.deflexical("*PAD-TIMES-TO-FIRST-ANSWER*", (SubLObject)(maybeDefault((SubLObject)inference_datastructures_inference.$sym416$_PAD_TIMES_TO_FIRST_ANSWER_, inference_datastructures_inference.$pad_times_to_first_answer$, inference_datastructures_inference.$kw417$UNINITIALIZED)));
         inference_datastructures_inference.$dtp_inference_answer$ = SubLFiles.defconstant("*DTP-INFERENCE-ANSWER*", (SubLObject)inference_datastructures_inference.$sym441$INFERENCE_ANSWER);
         inference_datastructures_inference.$dtp_inference_answer_justification$ = SubLFiles.defconstant("*DTP-INFERENCE-ANSWER-JUSTIFICATION*", (SubLObject)inference_datastructures_inference.$sym481$INFERENCE_ANSWER_JUSTIFICATION);
         return (SubLObject)inference_datastructures_inference.NIL;

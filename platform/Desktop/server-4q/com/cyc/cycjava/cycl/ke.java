@@ -2488,9 +2488,9 @@ public final class ke extends SubLTranslatedFile
         ke.$note_old_constant_name$ = SubLFiles.defparameter("*NOTE-OLD-CONSTANT-NAME*", (SubLObject)ke.T);
         ke.$ke_assert_now_assume_wff_test$ = SubLFiles.defparameter("*KE-ASSERT-NOW-ASSUME-WFF-TEST*", (SubLObject)ke.$sym58$FALSE);
         ke.$check_if_already_ke_unassertedP$ = SubLFiles.defparameter("*CHECK-IF-ALREADY-KE-UNASSERTED?*", (SubLObject)ke.NIL);
-        ke.$ke_edit_use_fi_edit$ = SubLFiles.deflexical("*KE-EDIT-USE-FI-EDIT*", (SubLObject)((ke.NIL != Symbols.boundp((SubLObject)ke.$sym68$_KE_EDIT_USE_FI_EDIT_)) ? ke.$ke_edit_use_fi_edit$.getGlobalValue() : ke.T));
+        ke.$ke_edit_use_fi_edit$ = SubLFiles.deflexical("*KE-EDIT-USE-FI-EDIT*", (SubLObject)(maybeDefault((SubLObject)ke.$sym68$_KE_EDIT_USE_FI_EDIT_, ke.$ke_edit_use_fi_edit$, ke.T)));
         ke.$ke_add_assertion_original_textP$ = SubLFiles.defparameter("*KE-ADD-ASSERTION-ORIGINAL-TEXT?*", (SubLObject)ke.NIL);
-        ke.$old_constant_names_table$ = SubLFiles.deflexical("*OLD-CONSTANT-NAMES-TABLE*", (SubLObject)((ke.NIL != Symbols.boundp((SubLObject)ke.$sym101$_OLD_CONSTANT_NAMES_TABLE_)) ? ke.$old_constant_names_table$.getGlobalValue() : ke.NIL));
+        ke.$old_constant_names_table$ = SubLFiles.deflexical("*OLD-CONSTANT-NAMES-TABLE*", (SubLObject)(maybeDefault((SubLObject)ke.$sym101$_OLD_CONSTANT_NAMES_TABLE_, ke.$old_constant_names_table$, ke.NIL)));
         ke.$ke_assertion_edit_formula_find_func$ = SubLFiles.defparameter("*KE-ASSERTION-EDIT-FORMULA-FIND-FUNC*", (SubLObject)ke.$sym104$ASSERTION_TL_IST_FORMULA);
         ke.$ke_assertion_edit_formula_display_func$ = SubLFiles.defparameter("*KE-ASSERTION-EDIT-FORMULA-DISPLAY-FUNC*", (SubLObject)ke.$sym105$ASSERTION_EL_FORMULA);
         return (SubLObject)ke.NIL;

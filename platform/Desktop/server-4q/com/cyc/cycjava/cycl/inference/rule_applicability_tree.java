@@ -929,7 +929,7 @@ public final class rule_applicability_tree extends SubLTranslatedFile
     }
     
     public static SubLObject init_rule_applicability_tree_file() {
-        rule_applicability_tree.$rule_applicability_tree_map$ = SubLFiles.deflexical("*RULE-APPLICABILITY-TREE-MAP*", (SubLObject)((rule_applicability_tree.NIL != Symbols.boundp((SubLObject)rule_applicability_tree.$sym34$_RULE_APPLICABILITY_TREE_MAP_)) ? rule_applicability_tree.$rule_applicability_tree_map$.getGlobalValue() : rule_applicability_tree.$kw35$UNINITIALIZED));
+        rule_applicability_tree.$rule_applicability_tree_map$ = SubLFiles.deflexical("*RULE-APPLICABILITY-TREE-MAP*", (SubLObject)(maybeDefault((SubLObject)rule_applicability_tree.$sym34$_RULE_APPLICABILITY_TREE_MAP_, rule_applicability_tree.$rule_applicability_tree_map$, rule_applicability_tree.$kw35$UNINITIALIZED)));
         return (SubLObject)rule_applicability_tree.NIL;
     }
     

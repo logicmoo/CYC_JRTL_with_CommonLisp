@@ -115,7 +115,7 @@ public final class removal_modules_perform_subl extends SubLTranslatedFile
     }
     
     public static SubLObject init_removal_modules_perform_subl_file() {
-        removal_modules_perform_subl.$perform_subl_defining_mt$ = SubLFiles.deflexical("*PERFORM-SUBL-DEFINING-MT*", (removal_modules_perform_subl.NIL != Symbols.boundp((SubLObject)removal_modules_perform_subl.$sym4$_PERFORM_SUBL_DEFINING_MT_)) ? removal_modules_perform_subl.$perform_subl_defining_mt$.getGlobalValue() : removal_modules_perform_subl.$const5$UniversalVocabularyMt);
+        removal_modules_perform_subl.$perform_subl_defining_mt$ = SubLFiles.deflexical("*PERFORM-SUBL-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_perform_subl.$sym4$_PERFORM_SUBL_DEFINING_MT_, removal_modules_perform_subl.$perform_subl_defining_mt$, removal_modules_perform_subl.$const5$UniversalVocabularyMt));
         removal_modules_perform_subl.$default_perform_subl_pos_cost$ = SubLFiles.defparameter("*DEFAULT-PERFORM-SUBL-POS-COST*", control_vars.$cheap_hl_module_check_cost$.getGlobalValue());
         removal_modules_perform_subl.$default_perform_subl_neg_cost$ = SubLFiles.defparameter("*DEFAULT-PERFORM-SUBL-NEG-COST*", removal_modules_perform_subl.$default_perform_subl_pos_cost$.getDynamicValue());
         return (SubLObject)removal_modules_perform_subl.NIL;

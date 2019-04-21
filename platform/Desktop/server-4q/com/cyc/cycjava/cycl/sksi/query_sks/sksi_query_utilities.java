@@ -2552,7 +2552,7 @@ public final class sksi_query_utilities extends SubLTranslatedFile
     
     public static SubLObject init_sksi_query_utilities_file() {
         sksi_query_utilities.$sksi_query_history_limit$ = SubLFiles.deflexical("*SKSI-QUERY-HISTORY-LIMIT*", (SubLObject)sksi_query_utilities.TEN_INTEGER);
-        sksi_query_utilities.$sksi_query_costs$ = SubLFiles.deflexical("*SKSI-QUERY-COSTS*", (sksi_query_utilities.NIL != Symbols.boundp((SubLObject)sksi_query_utilities.$sym0$_SKSI_QUERY_COSTS_)) ? sksi_query_utilities.$sksi_query_costs$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_query_utilities.EQUAL), (SubLObject)sksi_query_utilities.UNPROVIDED));
+        sksi_query_utilities.$sksi_query_costs$ = SubLFiles.deflexical("*SKSI-QUERY-COSTS*", maybeDefault((SubLObject)sksi_query_utilities.$sym0$_SKSI_QUERY_COSTS_, sksi_query_utilities.$sksi_query_costs$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_query_utilities.EQUAL), (SubLObject)sksi_query_utilities.UNPROVIDED))));
         sksi_query_utilities.$sksi_cost_recording_suspended_for_current_iteratorP$ = SubLFiles.defparameter("*SKSI-COST-RECORDING-SUSPENDED-FOR-CURRENT-ITERATOR?*", (SubLObject)sksi_query_utilities.NIL);
         sksi_query_utilities.$sksi_default_query_cost$ = SubLFiles.deflexical("*SKSI-DEFAULT-QUERY-COST*", (SubLObject)sksi_query_utilities.SEVENTEEN_INTEGER);
         return (SubLObject)sksi_query_utilities.NIL;

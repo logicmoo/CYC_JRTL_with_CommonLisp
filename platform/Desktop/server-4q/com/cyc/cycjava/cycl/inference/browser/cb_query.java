@@ -13967,7 +13967,7 @@ public final class cb_query extends SubLTranslatedFile
     public static SubLObject init_cb_query_file() {
         cb_query.$cb_inference_progress_frame_enabledP$ = SubLFiles.deflexical("*CB-INFERENCE-PROGRESS-FRAME-ENABLED?*", (SubLObject)cb_query.T);
         cb_query.$cb_inference_help_filename$ = SubLFiles.deflexical("*CB-INFERENCE-HELP-FILENAME*", (SubLObject)cb_query.$str26$inference_overview);
-        cb_query.$inference_parameter_table$ = SubLFiles.deflexical("*INFERENCE-PARAMETER-TABLE*", (cb_query.NIL != Symbols.boundp((SubLObject)cb_query.$sym28$_INFERENCE_PARAMETER_TABLE_)) ? cb_query.$inference_parameter_table$.getGlobalValue() : dictionary.new_dictionary((SubLObject)cb_query.EQ, (SubLObject)cb_query.UNPROVIDED));
+        cb_query.$inference_parameter_table$ = SubLFiles.deflexical("*INFERENCE-PARAMETER-TABLE*", maybeDefault((SubLObject)cb_query.$sym28$_INFERENCE_PARAMETER_TABLE_, cb_query.$inference_parameter_table$, ()->(dictionary.new_dictionary((SubLObject)cb_query.EQ, (SubLObject)cb_query.UNPROVIDED))));
         cb_query.$inference_mode_custom_value_number$ = SubLFiles.deflexical("*INFERENCE-MODE-CUSTOM-VALUE-NUMBER*", (SubLObject)cb_query.FOUR_INTEGER);
         cb_query.$cb_inferences$ = SubLFiles.defvar("*CB-INFERENCES*", (SubLObject)cb_query.NIL);
         cb_query.$cb_cyc_editor_enabledP$ = SubLFiles.defvar("*CB-CYC-EDITOR-ENABLED?*", (SubLObject)cb_query.NIL);

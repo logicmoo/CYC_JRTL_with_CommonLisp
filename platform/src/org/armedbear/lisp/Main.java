@@ -32,6 +32,8 @@
  */
 package org.armedbear.lisp;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,213 +41,211 @@ import java.util.List;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.JVMImpl;
 import org.logicmoo.system.SystemCurrent;
+import org.logicmoo.system.UpdateZip;
 import org.logicmoo.system.SystemCurrent.In;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 
-public final class Main
-{
+public final class Main {
 
+    public static final long startTimeMillis = System.currentTimeMillis();
 
-	public static final long startTimeMillis = System.currentTimeMillis();
+    public static boolean isSublispDefault = false;
 
-	public static boolean isSublispDefault = false;
+    public static InheritableThreadLocal<Boolean> isSubLisp = new InheritableThreadLocal<Boolean>() {
 
-	public static InheritableThreadLocal<Boolean> isSubLisp = new InheritableThreadLocal<Boolean>()
-	{
+        @Override
+        protected Boolean initialValue() {
+            return isSublispDefault;
+        }
 
-		@Override
-		protected Boolean initialValue()
-		{
-			return isSublispDefault;
-		}
+    };
+    public static InheritableThreadLocal<Boolean> isNoDebug = new InheritableThreadLocal<Boolean>() {
 
-	};
-	public static InheritableThreadLocal<Boolean> isNoDebug = new InheritableThreadLocal<Boolean>()
-	{
+        @Override
+        protected Boolean initialValue() {
+            return Boolean.FALSE;
+        }
 
-		@Override
-		protected Boolean initialValue()
-		{
-			return Boolean.FALSE;
-		}
+    };
 
-	};
+    public static boolean isSubLispBindingMode;
 
-	public static boolean isSubLispBindingMode;
+    public static void main(String[] args) throws InterruptedException {
+        SystemCurrent.setupIO();
+        SystemCurrent.attachConsole();
+        assert (System.in instanceof In);
+        SystemCurrent.attachConsole();
+        SystemCurrent.takeOwnerShip();
+        abclProcessArgs = true;
+        Main.noBSH = true;
+        Main.noExit = false;
+        String[] argsNew = Main.extractOptions(args);
+        Thread t = mainUnjoined(argsNew);
+        if (true) {
+            t.run();
+            return;
+        }
+        t.start();
+        t.join();
 
-	public static void main(String[] args) throws InterruptedException
-	{
-		SystemCurrent.setupIO();
-		SystemCurrent.attachConsole();
-		assert (System.in instanceof In);
-		SystemCurrent.attachConsole();
-		SystemCurrent.takeOwnerShip();
-		abclProcessArgs = true;
-		Main.noBSH = true;
-		Main.noExit = false;
-		String[] argsNew = Main.extractOptions(args);
-		Thread t = mainUnjoined(argsNew);
-		if (true)
-		{
-			t.run();
-			return;
-		}
-		t.start();
-		t.join();
+    }
 
-	}
+    public static Thread mainUnjoined(final String[] args) throws InterruptedException {
+        // Run the interpreter in a secondary thread so we can control the stack
+        // size.
+        //Lisp.checkOutput(Symbol.STANDARD_OUTPUT,Lisp.stdout);
+        Runnable r = mainRunnable(args, new Runnable() {
+            @Override
+            public void run() {
+                Interpreter interpreter = Interpreter.getInstance();
+                if (interpreter != null)
+                    interpreter.run();
+            }
+        });
 
-	public static Thread mainUnjoined(final String[] args) throws InterruptedException
-	{
-		// Run the interpreter in a secondary thread so we can control the stack
-		// size.
-		//Lisp.checkOutput(Symbol.STANDARD_OUTPUT,Lisp.stdout);
-		Runnable r = mainRunnable(args, new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				Interpreter interpreter = Interpreter.getInstance();
-				if (interpreter != null) interpreter.run();
-			}
-		});
+        Thread t = new SubLThread(null, r, Main.class.getClass().getName(), 1 << 30L).asJavaTread();
+        return t;
+    }
 
-		Thread t = new SubLThread(null, r, Main.class.getClass().getName(), 1 << 30L).asJavaTread();
-		return t;
-	}
+    public static Runnable mainRunnable(final String[] argsIn, final Runnable after) {
+        final String[] args = Main.extractOptions(argsIn);
+        globalContext.set(true);
+        needIOConsole = false;
+        Lisp.initLisp();
+        passedArgs = args;
+        BeanShellCntrl.start_prolog_from_lisp();
+        Runnable r = new SubLProcess("Main Process") {
+            @Override
+            public void safeRun() {
+                boolean wasSubLisp = Main.isSubLisp();
+                try {
+                    try {
+                        globalContext.set(true);
+                        //SubLMain.commonSymbolsOK = true;
+                        setSubLisp(false);
+                        //Main.noSubLisp =true;
+                        //File initialDir = new File("./");
+                        Interpreter.createDefaultInstance(args);
+                        /*Interpreter interpreter = Interpreter.createNewLispInstance(SystemCurrent.in, SystemCurrent.out,
+                        	 initialDir.getCanonicalPath(),
+                                Version.getLongVersionString());*/
+                        if (after != null)
+                            after.run();
+                    } catch (ProcessingTerminated e) {
+                        Lisp.exit(e.getStatus());
+                    } catch (Throwable e) {
+                        throw JVMImpl.doThrow(e);
+                    }
+                } finally {
+                    Main.setSubLisp(wasSubLisp);
+                }
+            }
+        };
+        return r;
+    }
 
-	public static Runnable mainRunnable(final String[] args, final Runnable after)
-	{
-		globalContext.set(true);
-		needIOConsole = false;
-		Lisp.initLisp();
-		passedArgs = args;
-		BeanShellCntrl.start_prolog_from_lisp();
-		Runnable r = new SubLProcess("Main Process")
-		{
-			@Override
-			public void safeRun()
-			{
-				boolean wasSubLisp = Main.isSubLisp();
-				try
-				{
-					try
-					{
-						globalContext.set(true);
-						//SubLMain.commonSymbolsOK = true;
-						setSubLisp(false);
-						//Main.noSubLisp =true;
-						//File initialDir = new File("./");
-						Interpreter.createDefaultInstance(args);
-						/*Interpreter interpreter = Interpreter.createNewLispInstance(SystemCurrent.in, SystemCurrent.out,
-							 initialDir.getCanonicalPath(),
-						        Version.getLongVersionString());*/
-						if (after != null) after.run();
-					} catch (ProcessingTerminated e)
-					{
-						Lisp.exit(e.getStatus());
-					} catch (Throwable e)
-					{
-						throw JVMImpl.doThrow(e);
-					}
-				} finally
-				{
-					Main.setSubLisp(wasSubLisp);
-				}
-			}
-		};
-		return r;
-	}
+    public static boolean isSubLisp() {
+        return isSubLisp.get();
+    }
 
-	public static boolean isSubLisp()
-	{
-		return isSubLisp.get();
-	}
+    public static void setSubLisp(boolean isSubLisp) {
+        Main.isSubLisp.set(isSubLisp);
+    }
 
-	public static void setSubLisp(boolean isSubLisp)
-	{
-		Main.isSubLisp.set(isSubLisp);
-	}
+    public static boolean isNoDebug() {
+        return isNoDebug.get();
+    }
 
-	public static boolean isNoDebug()
-	{
-		return isNoDebug.get();
-	}
+    public static void setNoDebug(boolean isNoDebug) {
+        Main.isNoDebug.set(isNoDebug);
+    }
 
-	public static void setNoDebug(boolean isNoDebug)
-	{
-		Main.isNoDebug.set(isNoDebug);
-	}
+    public static boolean noProlog = false;
+    public static boolean noPrologJNI = false;
+    public static boolean disablePrologSync = false;
 
-	public static boolean noProlog = false;
-	public static boolean noPrologJNI = false;
-	public static boolean disablePrologSync = false;
+    public static boolean trackStructs = true;
+    public static boolean noBSH = false;
+    public static boolean noBSHGUI = true;
+    public static boolean noGUI = false;
 
-	public static boolean trackStructs = true;
-	public static boolean noBSH = false;
-	public static boolean noBSHGUI = true;
-	public static boolean noGUI = false;
+    public static String subLisp = null;
+    public static int lispInstances = 0;
 
-	public static String subLisp = null;
-	public static int lispInstances = 0;
+    public static boolean needIOConsole = true;
+    public static boolean needABCL = true;
+    public static boolean needSubLMAIN = false;
+    //	public static boolean commonSymbolsOK;	
+    public static boolean noExit = true;
+    public static boolean abclProcessArgs = false;
+    public static String[] passedArgs;
 
-	public static boolean needIOConsole = true;
-	public static boolean needABCL = true;
-	//	public static boolean commonSymbolsOK;	
-	public static boolean noExit = true;
-	public static boolean abclProcessArgs = false;
-	public static String[] passedArgs;
+    public static ThreadLocal<Boolean> globalContext = new ThreadLocal<Boolean>() {
+        @Override
+        protected Boolean initialValue() {
+            return false;
+        };
+    };
 
-	public static ThreadLocal<Boolean> globalContext = new ThreadLocal<Boolean>()
-	{
-		@Override
-		protected Boolean initialValue()
-		{
-			return false;
-		};
-	};
+    public static String[] extractOptions(String[] args) {
+        List<String> argsList = new ArrayList<String>(Arrays.asList(args));
+        if (argsList.remove("--prolog")) {
+            noPrologJNI = false;
+        }
+        if (argsList.remove("--noprolog")) {
+            noPrologJNI = true;
+        }
+        if (argsList.remove("--opencyc")) {
+            try {
+                UpdateZip.updateUnits();
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                if (true)
+                    throw new AbstractMethodError("Main.extractOptions throw MalformedURLException");
 
-	public static String[] extractOptions(String[] args)
-	{
-		List<String> argsList = new ArrayList<String>(Arrays.asList(args));
-		if (argsList.remove("--prolog"))
-		{
-			noPrologJNI = false;
-		}
-		if (argsList.remove("--noprolog"))
-		{
-			noPrologJNI = true;
-		}
-		if (argsList.remove("--cyc"))
-		{
-			Main.subLisp = "cyc-init";
-			Main.noBSHGUI = false;
-			Main.needABCL = false;
-			SubLMain.noInitCyc = false;
-		}
-		if (argsList.remove("--prologsync"))
-		{
-			disablePrologSync = false;
-			noPrologJNI = false;
-		}
-		if (argsList.remove("--noprologsync"))
-		{
-			disablePrologSync = true;
-		}
-		if (argsList.remove("--headless") || argsList.remove("--nogui"))
-		{
-			noGUI = true;
-			noBSHGUI = true;
-		}
-		if (argsList.remove("--beandesk"))
-		{
-			noBSHGUI = false;
-		}
-		String[] argsNew = argsList.toArray(new String[argsList.size()]);
-		return argsNew;
-	}
+            } catch (IOException e) { 
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                if (true)
+                    throw new AbstractMethodError("Main.extractOptions throw IOException");
+
+            }
+            SubLMain.OPENCYC = true;
+            needSubLMAIN = true;
+            //Main.subLisp = "opencyc-init";
+            Main.needABCL = false;
+            SubLMain.noInitCyc = false;
+        }
+        if (argsList.remove("--cyc")) {
+            Main.subLisp = "cyc-init";
+            Main.noBSHGUI = false;
+            needSubLMAIN = true;
+            Main.needABCL = false;
+            SubLMain.noInitCyc = false;
+        }
+        if (argsList.remove("--nocyc")) {
+            needSubLMAIN = false;
+        }
+        if (argsList.remove("--prologsync")) {
+            disablePrologSync = false;
+            noPrologJNI = false;
+        }
+        if (argsList.remove("--noprologsync")) {
+            disablePrologSync = true;
+        }
+        if (argsList.remove("--headless") || argsList.remove("--nogui")) {
+            noGUI = true;
+            noBSHGUI = true;
+        }
+        if (argsList.remove("--beandesk")) {
+            noBSHGUI = false;
+        }
+        String[] argsNew = argsList.toArray(new String[argsList.size()]);
+        return argsNew;
+    }
 
 }

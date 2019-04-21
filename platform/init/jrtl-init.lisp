@@ -7,11 +7,10 @@
 (load-system-parameters)
 (system-code-initializations)
 
-'(load-kb "units/0988/")
-'(load-kb "units/7166/")
 
 
-'(clet ((units-directory "ext/cyc-tiny/"))
+#+MAIN-TINYKB
+(clet ((units-directory "ext/cyc-tiny/"))
   (pif (fboundp 'cyc-load-kb)
        (cyc-load-kb units-directory)
        (progn
@@ -19,6 +18,7 @@
          (system-code-initializations))))
 
 ;; OpenCYC
+#+MAIN-OPENCYC
 (clet ((units-directory "units/5022/"))
   (pif (fboundp 'cyc-load-kb)
        (cyc-load-kb units-directory)
@@ -26,8 +26,8 @@
          (load-kb units-directory)
          (system-code-initializations))))
 
-
-'(clet ((units-directory "units/0988/"))
+#+MAIN-IGNORE
+(clet ((units-directory "units/0988/"))
   (pif (fboundp 'cyc-load-kb)
        (cyc-load-kb units-directory)
        (progn
@@ -35,14 +35,16 @@
          (system-code-initializations))))
 
 ;; LarKC
-'(clet ((units-directory "units/7166/"))
+#-MAIN-OPENCYC
+(clet ((units-directory "units/7166/"))
   (pif (fboundp 'cyc-load-kb)
        (cyc-load-kb units-directory)
        (progn
          (load-kb units-directory)
          (system-code-initializations))))
 
-'(clet ((units-directory "units/7133/"))
+#+MAIN-IGNORE
+(clet ((units-directory "units/7133/"))
   (pif (fboundp 'cyc-load-kb)
        (cyc-load-kb units-directory)
        (progn
@@ -51,8 +53,8 @@
 
 (common-lisp:defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
 
-(cl-imports-cyc)
+(pwhen (fboundp 'cl-imports-cyc) (cl-imports-cyc))
 
-(cyc-imports-cl)
+(pwhen (fboundp 'cyc-imports-cl) (cyc-imports-cl))
 
 

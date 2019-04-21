@@ -3693,7 +3693,7 @@ public final class rdf_graph extends SubLTranslatedFile
         rdf_graph.$rdf_graph_literal_indexing_enabledP$ = SubLFiles.defparameter("*RDF-GRAPH-LITERAL-INDEXING-ENABLED?*", (SubLObject)rdf_graph.NIL);
         rdf_graph.$rdf_graph_converted_triples$ = SubLFiles.defparameter("*RDF-GRAPH-CONVERTED-TRIPLES*", (SubLObject)rdf_graph.NIL);
         rdf_graph.$target_max_loaded_rdf_triple_count$ = SubLFiles.deflexical("*TARGET-MAX-LOADED-RDF-TRIPLE-COUNT*", (SubLObject)rdf_graph.$int62$10000);
-        rdf_graph.$rdf_blank_node_isg$ = SubLFiles.deflexical("*RDF-BLANK-NODE-ISG*", (rdf_graph.NIL != Symbols.boundp((SubLObject)rdf_graph.$sym63$_RDF_BLANK_NODE_ISG_)) ? rdf_graph.$rdf_blank_node_isg$.getGlobalValue() : integer_sequence_generator.new_integer_sequence_generator((SubLObject)rdf_graph.UNPROVIDED, (SubLObject)rdf_graph.UNPROVIDED, (SubLObject)rdf_graph.UNPROVIDED));
+        rdf_graph.$rdf_blank_node_isg$ = SubLFiles.deflexical("*RDF-BLANK-NODE-ISG*", maybeDefault((SubLObject)rdf_graph.$sym63$_RDF_BLANK_NODE_ISG_, rdf_graph.$rdf_blank_node_isg$, ()->(integer_sequence_generator.new_integer_sequence_generator((SubLObject)rdf_graph.UNPROVIDED, (SubLObject)rdf_graph.UNPROVIDED, (SubLObject)rdf_graph.UNPROVIDED))));
         rdf_graph.$rdf_graph_get_blank_node_cached_caching_state$ = SubLFiles.deflexical("*RDF-GRAPH-GET-BLANK-NODE-CACHED-CACHING-STATE*", (SubLObject)rdf_graph.NIL);
         rdf_graph.$rdf_graph_get_literal_cached_caching_state$ = SubLFiles.deflexical("*RDF-GRAPH-GET-LITERAL-CACHED-CACHING-STATE*", (SubLObject)rdf_graph.NIL);
         rdf_graph.$dtp_rdf_graph$ = SubLFiles.defconstant("*DTP-RDF-GRAPH*", (SubLObject)rdf_graph.$sym71$RDF_GRAPH);

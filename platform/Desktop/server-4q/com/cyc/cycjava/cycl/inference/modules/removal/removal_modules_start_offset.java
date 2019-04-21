@@ -57,8 +57,8 @@ public final class removal_modules_start_offset extends SubLTranslatedFile
     }
     
     public static SubLObject init_removal_modules_start_offset_file() {
-        removal_modules_start_offset.$start_offset_check_cost$ = SubLFiles.deflexical("*START-OFFSET-CHECK-COST*", (SubLObject)((removal_modules_start_offset.NIL != Symbols.boundp((SubLObject)removal_modules_start_offset.$sym0$_START_OFFSET_CHECK_COST_)) ? removal_modules_start_offset.$start_offset_check_cost$.getGlobalValue() : removal_modules_start_offset.ONE_INTEGER));
-        removal_modules_start_offset.$start_offset_unify_cost$ = SubLFiles.deflexical("*START-OFFSET-UNIFY-COST*", (SubLObject)((removal_modules_start_offset.NIL != Symbols.boundp((SubLObject)removal_modules_start_offset.$sym5$_START_OFFSET_UNIFY_COST_)) ? removal_modules_start_offset.$start_offset_unify_cost$.getGlobalValue() : removal_modules_start_offset.ONE_INTEGER));
+        removal_modules_start_offset.$start_offset_check_cost$ = SubLFiles.deflexical("*START-OFFSET-CHECK-COST*", (SubLObject)(maybeDefault((SubLObject)removal_modules_start_offset.$sym0$_START_OFFSET_CHECK_COST_, removal_modules_start_offset.$start_offset_check_cost$, removal_modules_start_offset.ONE_INTEGER)));
+        removal_modules_start_offset.$start_offset_unify_cost$ = SubLFiles.deflexical("*START-OFFSET-UNIFY-COST*", (SubLObject)(maybeDefault((SubLObject)removal_modules_start_offset.$sym5$_START_OFFSET_UNIFY_COST_, removal_modules_start_offset.$start_offset_unify_cost$, removal_modules_start_offset.ONE_INTEGER)));
         return (SubLObject)removal_modules_start_offset.NIL;
     }
     

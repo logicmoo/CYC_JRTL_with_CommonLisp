@@ -6629,12 +6629,12 @@ public final class hl_supports extends SubLTranslatedFile
     
     public static SubLObject init_hl_supports_file() {
         hl_supports.$hl_predicates$ = SubLFiles.deflexical("*HL-PREDICATES*", (SubLObject)hl_supports.$list0);
-        hl_supports.$hl_support_modules$ = SubLFiles.deflexical("*HL-SUPPORT-MODULES*", (SubLObject)((hl_supports.NIL != Symbols.boundp((SubLObject)hl_supports.$sym2$_HL_SUPPORT_MODULES_)) ? hl_supports.$hl_support_modules$.getGlobalValue() : hl_supports.NIL));
+        hl_supports.$hl_support_modules$ = SubLFiles.deflexical("*HL-SUPPORT-MODULES*", (SubLObject)(maybeDefault((SubLObject)hl_supports.$sym2$_HL_SUPPORT_MODULES_, hl_supports.$hl_support_modules$, hl_supports.NIL)));
         hl_supports.$hl_support_module_plist_indicators$ = SubLFiles.defparameter("*HL-SUPPORT-MODULE-PLIST-INDICATORS*", (SubLObject)hl_supports.$list3);
         hl_supports.$hl_forward_mt_combos_max_recursion_depth$ = SubLFiles.defparameter("*HL-FORWARD-MT-COMBOS-MAX-RECURSION-DEPTH*", (SubLObject)hl_supports.FIVE_INTEGER);
         hl_supports.$debug_null_hl_forward_mt_combosP$ = SubLFiles.defparameter("*DEBUG-NULL-HL-FORWARD-MT-COMBOS?*", (SubLObject)hl_supports.NIL);
         hl_supports.$perform_opaque_support_verification$ = SubLFiles.defparameter("*PERFORM-OPAQUE-SUPPORT-VERIFICATION*", (SubLObject)hl_supports.NIL);
-        hl_supports.$bookkeeping_justification_assertion_mt$ = SubLFiles.deflexical("*BOOKKEEPING-JUSTIFICATION-ASSERTION-MT*", (hl_supports.NIL != Symbols.boundp((SubLObject)hl_supports.$sym56$_BOOKKEEPING_JUSTIFICATION_ASSERTION_MT_)) ? hl_supports.$bookkeeping_justification_assertion_mt$.getGlobalValue() : hl_supports.$const26$BaseKB);
+        hl_supports.$bookkeeping_justification_assertion_mt$ = SubLFiles.deflexical("*BOOKKEEPING-JUSTIFICATION-ASSERTION-MT*", maybeDefault((SubLObject)hl_supports.$sym56$_BOOKKEEPING_JUSTIFICATION_ASSERTION_MT_, hl_supports.$bookkeeping_justification_assertion_mt$, hl_supports.$const26$BaseKB));
         hl_supports.$cached_find_assertion_cycl_caching_state$ = SubLFiles.deflexical("*CACHED-FIND-ASSERTION-CYCL-CACHING-STATE*", (SubLObject)hl_supports.NIL);
         hl_supports.$hl_forward_mt_combos_isa_caching_state$ = SubLFiles.deflexical("*HL-FORWARD-MT-COMBOS-ISA-CACHING-STATE*", (SubLObject)hl_supports.NIL);
         hl_supports.$default_hl_verify_query_properties$ = SubLFiles.defparameter("*DEFAULT-HL-VERIFY-QUERY-PROPERTIES*", (SubLObject)hl_supports.$list218);

@@ -1491,10 +1491,10 @@ public final class constant_handles extends SubLTranslatedFile
     }
     
     public static SubLObject init_constant_handles_file() {
-        constant_handles.$constant_from_suid$ = SubLFiles.deflexical("*CONSTANT-FROM-SUID*", (SubLObject)((constant_handles.NIL != Symbols.boundp((SubLObject)constant_handles.$sym0$_CONSTANT_FROM_SUID_)) ? constant_handles.$constant_from_suid$.getGlobalValue() : constant_handles.NIL));
-        constant_handles.$new_constant_suid_threshold$ = SubLFiles.deflexical("*NEW-CONSTANT-SUID-THRESHOLD*", (SubLObject)((constant_handles.NIL != Symbols.boundp((SubLObject)constant_handles.$sym20$_NEW_CONSTANT_SUID_THRESHOLD_)) ? constant_handles.$new_constant_suid_threshold$.getGlobalValue() : constant_handles.NIL));
+        constant_handles.$constant_from_suid$ = SubLFiles.deflexical("*CONSTANT-FROM-SUID*", (SubLObject)(maybeDefault((SubLObject)constant_handles.$sym0$_CONSTANT_FROM_SUID_, constant_handles.$constant_from_suid$, constant_handles.NIL)));
+        constant_handles.$new_constant_suid_threshold$ = SubLFiles.deflexical("*NEW-CONSTANT-SUID-THRESHOLD*", (SubLObject)(maybeDefault((SubLObject)constant_handles.$sym20$_NEW_CONSTANT_SUID_THRESHOLD_, constant_handles.$new_constant_suid_threshold$, constant_handles.NIL)));
         constant_handles.$dtp_constant$ = SubLFiles.defconstant("*DTP-CONSTANT*", (SubLObject)constant_handles.$sym39$CONSTANT);
-        constant_handles.$invalid_constants$ = SubLFiles.deflexical("*INVALID-CONSTANTS*", (constant_handles.NIL != Symbols.boundp((SubLObject)constant_handles.$sym75$_INVALID_CONSTANTS_)) ? constant_handles.$invalid_constants$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)constant_handles.$int76$4000, Symbols.symbol_function((SubLObject)constant_handles.EQUAL), (SubLObject)constant_handles.UNPROVIDED));
+        constant_handles.$invalid_constants$ = SubLFiles.deflexical("*INVALID-CONSTANTS*", maybeDefault((SubLObject)constant_handles.$sym75$_INVALID_CONSTANTS_, constant_handles.$invalid_constants$, ()->(Hashtables.make_hash_table((SubLObject)constant_handles.$int76$4000, Symbols.symbol_function((SubLObject)constant_handles.EQUAL), (SubLObject)constant_handles.UNPROVIDED))));
         return (SubLObject)constant_handles.NIL;
     }
     

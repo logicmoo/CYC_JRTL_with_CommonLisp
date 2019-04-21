@@ -997,7 +997,7 @@ public final class kb_modification_event extends SubLTranslatedFile
     
     public static SubLObject init_kb_modification_event_file() {
         kb_modification_event.$kb_modifications_event_dispatcher_lock$ = SubLFiles.deflexical("*KB-MODIFICATIONS-EVENT-DISPATCHER-LOCK*", Locks.make_lock((SubLObject)kb_modification_event.$str84$KB_MODIFICATIONS_EVENT_DISPATCHER));
-        kb_modification_event.$kb_modifications_event_dispatcher_listeners$ = SubLFiles.deflexical("*KB-MODIFICATIONS-EVENT-DISPATCHER-LISTENERS*", (SubLObject)((kb_modification_event.NIL != Symbols.boundp((SubLObject)kb_modification_event.$sym85$_KB_MODIFICATIONS_EVENT_DISPATCHER_LISTENERS_)) ? kb_modification_event.$kb_modifications_event_dispatcher_listeners$.getGlobalValue() : kb_modification_event.NIL));
+        kb_modification_event.$kb_modifications_event_dispatcher_listeners$ = SubLFiles.deflexical("*KB-MODIFICATIONS-EVENT-DISPATCHER-LISTENERS*", (SubLObject)(maybeDefault((SubLObject)kb_modification_event.$sym85$_KB_MODIFICATIONS_EVENT_DISPATCHER_LISTENERS_, kb_modification_event.$kb_modifications_event_dispatcher_listeners$, kb_modification_event.NIL)));
         return (SubLObject)kb_modification_event.NIL;
     }
     

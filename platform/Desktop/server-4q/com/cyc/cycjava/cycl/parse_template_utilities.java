@@ -475,8 +475,8 @@ public final class parse_template_utilities extends SubLTranslatedFile
         parse_template_utilities.$apply_new_template_transforms$ = SubLFiles.deflexical("*APPLY-NEW-TEMPLATE-TRANSFORMS*", (SubLObject)parse_template_utilities.T);
         parse_template_utilities.$question_mark_expression$ = SubLFiles.deflexical("*QUESTION-MARK-EXPRESSION*", (SubLObject)parse_template_utilities.$list0);
         parse_template_utilities.$who_what_expression$ = SubLFiles.deflexical("*WHO-WHAT-EXPRESSION*", (SubLObject)parse_template_utilities.$list1);
-        parse_template_utilities.$be_wordforms$ = SubLFiles.deflexical("*BE-WORDFORMS*", (SubLObject)((parse_template_utilities.NIL != Symbols.boundp((SubLObject)parse_template_utilities.$sym2$_BE_WORDFORMS_)) ? parse_template_utilities.$be_wordforms$.getGlobalValue() : parse_template_utilities.$list3));
-        parse_template_utilities.$do_wordforms$ = SubLFiles.deflexical("*DO-WORDFORMS*", (SubLObject)((parse_template_utilities.NIL != Symbols.boundp((SubLObject)parse_template_utilities.$sym4$_DO_WORDFORMS_)) ? parse_template_utilities.$do_wordforms$.getGlobalValue() : parse_template_utilities.$list5));
+        parse_template_utilities.$be_wordforms$ = SubLFiles.deflexical("*BE-WORDFORMS*", (SubLObject)(maybeDefault((SubLObject)parse_template_utilities.$sym2$_BE_WORDFORMS_, parse_template_utilities.$be_wordforms$, parse_template_utilities.$list3)));
+        parse_template_utilities.$do_wordforms$ = SubLFiles.deflexical("*DO-WORDFORMS*", (SubLObject)(maybeDefault((SubLObject)parse_template_utilities.$sym4$_DO_WORDFORMS_, parse_template_utilities.$do_wordforms$, parse_template_utilities.$list5)));
         return (SubLObject)parse_template_utilities.NIL;
     }
     

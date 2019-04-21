@@ -5625,7 +5625,7 @@ public final class noun_compound_parser extends SubLTranslatedFile
     
     public static SubLObject init_noun_compound_parser_file() {
         noun_compound_parser.$dtp_noun_compound_parse$ = SubLFiles.defconstant("*DTP-NOUN-COMPOUND-PARSE*", (SubLObject)noun_compound_parser.$sym4$NOUN_COMPOUND_PARSE);
-        noun_compound_parser.$nc_parse_id_counter$ = SubLFiles.deflexical("*NC-PARSE-ID-COUNTER*", (SubLObject)((noun_compound_parser.NIL != Symbols.boundp((SubLObject)noun_compound_parser.$sym31$_NC_PARSE_ID_COUNTER_)) ? noun_compound_parser.$nc_parse_id_counter$.getGlobalValue() : noun_compound_parser.ZERO_INTEGER));
+        noun_compound_parser.$nc_parse_id_counter$ = SubLFiles.deflexical("*NC-PARSE-ID-COUNTER*", (SubLObject)(maybeDefault((SubLObject)noun_compound_parser.$sym31$_NC_PARSE_ID_COUNTER_, noun_compound_parser.$nc_parse_id_counter$, noun_compound_parser.ZERO_INTEGER)));
         noun_compound_parser.$rbp_report_parse_timeP$ = SubLFiles.defparameter("*RBP-REPORT-PARSE-TIME?*", (SubLObject)noun_compound_parser.NIL);
         noun_compound_parser.$rbp_shadow_rulesP$ = SubLFiles.defparameter("*RBP-SHADOW-RULES?*", (SubLObject)noun_compound_parser.NIL);
         noun_compound_parser.$rbp_rules_to_parses_shadow$ = SubLFiles.defparameter("*RBP-RULES-TO-PARSES-SHADOW*", (SubLObject)noun_compound_parser.NIL);
@@ -5634,7 +5634,7 @@ public final class noun_compound_parser extends SubLTranslatedFile
         noun_compound_parser.$rbp_traced_rules$ = SubLFiles.defparameter("*RBP-TRACED-RULES*", (SubLObject)noun_compound_parser.NIL);
         noun_compound_parser.$dtp_noun_compound_block$ = SubLFiles.defconstant("*DTP-NOUN-COMPOUND-BLOCK*", (SubLObject)noun_compound_parser.$sym39$NOUN_COMPOUND_BLOCK);
         noun_compound_parser.$rbp_default_confidence_multiplier_for_failing_a_filter$ = SubLFiles.defparameter("*RBP-DEFAULT-CONFIDENCE-MULTIPLIER-FOR-FAILING-A-FILTER*", (SubLObject)noun_compound_parser.$float83$0_5);
-        noun_compound_parser.$nc_block_unique_id_counter$ = SubLFiles.deflexical("*NC-BLOCK-UNIQUE-ID-COUNTER*", (SubLObject)((noun_compound_parser.NIL != Symbols.boundp((SubLObject)noun_compound_parser.$sym85$_NC_BLOCK_UNIQUE_ID_COUNTER_)) ? noun_compound_parser.$nc_block_unique_id_counter$.getGlobalValue() : noun_compound_parser.ZERO_INTEGER));
+        noun_compound_parser.$nc_block_unique_id_counter$ = SubLFiles.deflexical("*NC-BLOCK-UNIQUE-ID-COUNTER*", (SubLObject)(maybeDefault((SubLObject)noun_compound_parser.$sym85$_NC_BLOCK_UNIQUE_ID_COUNTER_, noun_compound_parser.$nc_block_unique_id_counter$, noun_compound_parser.ZERO_INTEGER)));
         noun_compound_parser.$rbp_universal_boolean_filters$ = SubLFiles.defparameter("*RBP-UNIVERSAL-BOOLEAN-FILTERS*", (SubLObject)noun_compound_parser.$list92);
         noun_compound_parser.$rbp_deverbal_boolean_filters$ = SubLFiles.defparameter("*RBP-DEVERBAL-BOOLEAN-FILTERS*", (SubLObject)noun_compound_parser.$list93);
         noun_compound_parser.$rbp_deverbal_macroscopic_filters$ = SubLFiles.defparameter("*RBP-DEVERBAL-MACROSCOPIC-FILTERS*", (SubLObject)noun_compound_parser.$list94);

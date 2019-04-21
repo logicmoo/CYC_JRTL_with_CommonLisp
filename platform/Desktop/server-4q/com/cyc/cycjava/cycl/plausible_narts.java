@@ -2015,9 +2015,9 @@ public final class plausible_narts extends SubLTranslatedFile
     }
     
     public static SubLObject init_plausible_narts_file() {
-        plausible_narts.$default_nart_plausibility$ = SubLFiles.deflexical("*DEFAULT-NART-PLAUSIBILITY*", (SubLObject)((plausible_narts.NIL != Symbols.boundp((SubLObject)plausible_narts.$sym0$_DEFAULT_NART_PLAUSIBILITY_)) ? plausible_narts.$default_nart_plausibility$.getGlobalValue() : plausible_narts.$list1));
-        plausible_narts.$too_general_cols_for_plausibility$ = SubLFiles.deflexical("*TOO-GENERAL-COLS-FOR-PLAUSIBILITY*", (SubLObject)((plausible_narts.NIL != Symbols.boundp((SubLObject)plausible_narts.$sym2$_TOO_GENERAL_COLS_FOR_PLAUSIBILITY_)) ? plausible_narts.$too_general_cols_for_plausibility$.getGlobalValue() : plausible_narts.$list3));
-        plausible_narts.$nart_functions$ = SubLFiles.deflexical("*NART-FUNCTIONS*", (SubLObject)((plausible_narts.NIL != Symbols.boundp((SubLObject)plausible_narts.$sym4$_NART_FUNCTIONS_)) ? plausible_narts.$nart_functions$.getGlobalValue() : plausible_narts.$list5));
+        plausible_narts.$default_nart_plausibility$ = SubLFiles.deflexical("*DEFAULT-NART-PLAUSIBILITY*", (SubLObject)(maybeDefault((SubLObject)plausible_narts.$sym0$_DEFAULT_NART_PLAUSIBILITY_, plausible_narts.$default_nart_plausibility$, plausible_narts.$list1)));
+        plausible_narts.$too_general_cols_for_plausibility$ = SubLFiles.deflexical("*TOO-GENERAL-COLS-FOR-PLAUSIBILITY*", (SubLObject)(maybeDefault((SubLObject)plausible_narts.$sym2$_TOO_GENERAL_COLS_FOR_PLAUSIBILITY_, plausible_narts.$too_general_cols_for_plausibility$, plausible_narts.$list3)));
+        plausible_narts.$nart_functions$ = SubLFiles.deflexical("*NART-FUNCTIONS*", (SubLObject)(maybeDefault((SubLObject)plausible_narts.$sym4$_NART_FUNCTIONS_, plausible_narts.$nart_functions$, plausible_narts.$list5)));
         plausible_narts.$default_plausibility_mt$ = SubLFiles.defparameter("*DEFAULT-PLAUSIBILITY-MT*", plausible_narts.$const6$EverythingPSC);
         plausible_narts.$not_useful_cols_for_similarity_computations$ = SubLFiles.defparameter("*NOT-USEFUL-COLS-FOR-SIMILARITY-COMPUTATIONS*", (SubLObject)plausible_narts.$list7);
         plausible_narts.$do_tva_query_type_type_caching_state$ = SubLFiles.deflexical("*DO-TVA-QUERY-TYPE-TYPE-CACHING-STATE*", (SubLObject)plausible_narts.NIL);

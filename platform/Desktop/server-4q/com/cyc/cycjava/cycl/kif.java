@@ -1683,7 +1683,7 @@ public final class kif extends SubLTranslatedFile
         kif.$kb_to_kif_file_preamble$ = SubLFiles.defparameter("*KB-TO-KIF-FILE-PREAMBLE*", (SubLObject)kif.$str44$_____KIF_assertion_specs_for_enti);
         kif.$mt_to_kif_file_preamble$ = SubLFiles.defparameter("*MT-TO-KIF-FILE-PREAMBLE*", (SubLObject)kif.$str45$_____KIF_assertion_specs_for_micr);
         kif.$dtp_kif_term$ = SubLFiles.defconstant("*DTP-KIF-TERM*", (SubLObject)kif.$sym62$KIF_TERM);
-        kif.$kif_term_table$ = SubLFiles.deflexical("*KIF-TERM-TABLE*", (SubLObject)((kif.NIL != Symbols.boundp((SubLObject)kif.$sym81$_KIF_TERM_TABLE_)) ? kif.$kif_term_table$.getGlobalValue() : kif.NIL));
+        kif.$kif_term_table$ = SubLFiles.deflexical("*KIF-TERM-TABLE*", (SubLObject)(maybeDefault((SubLObject)kif.$sym81$_KIF_TERM_TABLE_, kif.$kif_term_table$, kif.NIL)));
         kif.$cycl_to_kif_method_table$ = SubLFiles.defparameter("*CYCL-TO-KIF-METHOD-TABLE*", (SubLObject)kif.NIL);
         return (SubLObject)kif.NIL;
     }

@@ -2196,7 +2196,7 @@ public final class dictionary_utilities extends SubLTranslatedFile
     public static SubLObject init_dictionary_utilities_file() {
         dictionary_utilities.$dictionary_keys_sorter_current_sorting_information$ = SubLFiles.defparameter("*DICTIONARY-KEYS-SORTER-CURRENT-SORTING-INFORMATION*", (SubLObject)dictionary_utilities.NIL);
         dictionary_utilities.$key_missing$ = SubLFiles.deflexical("*KEY-MISSING*", Symbols.make_symbol((SubLObject)dictionary_utilities.$str59$KEY_MISSING));
-        dictionary_utilities.$sub_dictionary_not_found$ = SubLFiles.deflexical("*SUB-DICTIONARY-NOT-FOUND*", (dictionary_utilities.NIL != Symbols.boundp((SubLObject)dictionary_utilities.$sym61$_SUB_DICTIONARY_NOT_FOUND_)) ? dictionary_utilities.$sub_dictionary_not_found$.getGlobalValue() : Symbols.gensym((SubLObject)dictionary_utilities.UNPROVIDED));
+        dictionary_utilities.$sub_dictionary_not_found$ = SubLFiles.deflexical("*SUB-DICTIONARY-NOT-FOUND*", maybeDefault((SubLObject)dictionary_utilities.$sym61$_SUB_DICTIONARY_NOT_FOUND_, dictionary_utilities.$sub_dictionary_not_found$, ()->(Symbols.gensym((SubLObject)dictionary_utilities.UNPROVIDED))));
         dictionary_utilities.$dtp_synchronized_dictionary$ = SubLFiles.defconstant("*DTP-SYNCHRONIZED-DICTIONARY*", (SubLObject)dictionary_utilities.$sym62$SYNCHRONIZED_DICTIONARY);
         return (SubLObject)dictionary_utilities.NIL;
     }

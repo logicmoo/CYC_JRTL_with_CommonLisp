@@ -13,6 +13,7 @@ import org.armedbear.lisp.Symbol;
 import org.jpl7.Term;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
@@ -70,8 +71,8 @@ public abstract class AbstractSubLObject extends Lisp  implements SubLObject
 
 	@Override
 	public SubLObject add(SubLObject num) {
-		type_error_str(this, "NUMBER");
-		return null;
+		if(!SubLMain.OPENCYC)type_error_str(this, "NUMBER");
+		return num;
 	}
 
 	@Override

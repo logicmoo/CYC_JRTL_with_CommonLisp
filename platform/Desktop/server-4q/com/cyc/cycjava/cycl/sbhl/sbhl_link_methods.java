@@ -3690,10 +3690,10 @@ public final class sbhl_link_methods extends SubLTranslatedFile
         sbhl_link_methods.$make_sbhl_graph_link_genl_preds_caching_state$ = SubLFiles.deflexical("*MAKE-SBHL-GRAPH-LINK-GENL-PREDS-CACHING-STATE*", (SubLObject)sbhl_link_methods.NIL);
         sbhl_link_methods.$make_sbhl_graph_link_genl_mt_caching_state$ = SubLFiles.deflexical("*MAKE-SBHL-GRAPH-LINK-GENL-MT-CACHING-STATE*", (SubLObject)sbhl_link_methods.NIL);
         sbhl_link_methods.$make_sbhl_graph_link_other_caching_state$ = SubLFiles.deflexical("*MAKE-SBHL-GRAPH-LINK-OTHER-CACHING-STATE*", (SubLObject)sbhl_link_methods.NIL);
-        sbhl_link_methods.$isa_arg2_naut_table$ = SubLFiles.deflexical("*ISA-ARG2-NAUT-TABLE*", (SubLObject)((sbhl_link_methods.NIL != Symbols.boundp((SubLObject)sbhl_link_methods.$sym63$_ISA_ARG2_NAUT_TABLE_)) ? sbhl_link_methods.$isa_arg2_naut_table$.getGlobalValue() : sbhl_link_methods.NIL));
-        sbhl_link_methods.$quoted_isa_arg2_naut_table$ = SubLFiles.deflexical("*QUOTED-ISA-ARG2-NAUT-TABLE*", (SubLObject)((sbhl_link_methods.NIL != Symbols.boundp((SubLObject)sbhl_link_methods.$sym88$_QUOTED_ISA_ARG2_NAUT_TABLE_)) ? sbhl_link_methods.$quoted_isa_arg2_naut_table$.getGlobalValue() : sbhl_link_methods.NIL));
-        sbhl_link_methods.$non_fort_isa_table$ = SubLFiles.deflexical("*NON-FORT-ISA-TABLE*", (sbhl_link_methods.NIL != Symbols.boundp((SubLObject)sbhl_link_methods.$sym97$_NON_FORT_ISA_TABLE_)) ? sbhl_link_methods.$non_fort_isa_table$.getGlobalValue() : misc_utilities.uninitialized());
-        sbhl_link_methods.$non_fort_instance_table$ = SubLFiles.deflexical("*NON-FORT-INSTANCE-TABLE*", (sbhl_link_methods.NIL != Symbols.boundp((SubLObject)sbhl_link_methods.$sym98$_NON_FORT_INSTANCE_TABLE_)) ? sbhl_link_methods.$non_fort_instance_table$.getGlobalValue() : misc_utilities.uninitialized());
+        sbhl_link_methods.$isa_arg2_naut_table$ = SubLFiles.deflexical("*ISA-ARG2-NAUT-TABLE*", (SubLObject)(maybeDefault((SubLObject)sbhl_link_methods.$sym63$_ISA_ARG2_NAUT_TABLE_, sbhl_link_methods.$isa_arg2_naut_table$, sbhl_link_methods.NIL)));
+        sbhl_link_methods.$quoted_isa_arg2_naut_table$ = SubLFiles.deflexical("*QUOTED-ISA-ARG2-NAUT-TABLE*", (SubLObject)(maybeDefault((SubLObject)sbhl_link_methods.$sym88$_QUOTED_ISA_ARG2_NAUT_TABLE_, sbhl_link_methods.$quoted_isa_arg2_naut_table$, sbhl_link_methods.NIL)));
+        sbhl_link_methods.$non_fort_isa_table$ = SubLFiles.deflexical("*NON-FORT-ISA-TABLE*", maybeDefault((SubLObject)sbhl_link_methods.$sym97$_NON_FORT_ISA_TABLE_, sbhl_link_methods.$non_fort_isa_table$, ()->(misc_utilities.uninitialized())));
+        sbhl_link_methods.$non_fort_instance_table$ = SubLFiles.deflexical("*NON-FORT-INSTANCE-TABLE*", maybeDefault((SubLObject)sbhl_link_methods.$sym98$_NON_FORT_INSTANCE_TABLE_, sbhl_link_methods.$non_fort_instance_table$, ()->(misc_utilities.uninitialized())));
         return (SubLObject)sbhl_link_methods.NIL;
     }
     

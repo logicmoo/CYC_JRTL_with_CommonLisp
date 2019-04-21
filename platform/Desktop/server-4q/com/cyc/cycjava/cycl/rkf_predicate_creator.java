@@ -1393,7 +1393,7 @@ public final class rkf_predicate_creator extends SubLTranslatedFile
     }
     
     public static SubLObject init_rkf_predicate_creator_file() {
-        rkf_predicate_creator.$pc_lock$ = SubLFiles.deflexical("*PC-LOCK*", (rkf_predicate_creator.NIL != Symbols.boundp((SubLObject)rkf_predicate_creator.$sym0$_PC_LOCK_)) ? rkf_predicate_creator.$pc_lock$.getGlobalValue() : Locks.make_lock((SubLObject)rkf_predicate_creator.$str1$Predicate_Creator_lock));
+        rkf_predicate_creator.$pc_lock$ = SubLFiles.deflexical("*PC-LOCK*", maybeDefault((SubLObject)rkf_predicate_creator.$sym0$_PC_LOCK_, rkf_predicate_creator.$pc_lock$, ()->(Locks.make_lock((SubLObject)rkf_predicate_creator.$str1$Predicate_Creator_lock))));
         rkf_predicate_creator.$pc_session_modes$ = SubLFiles.deflexical("*PC-SESSION-MODES*", (SubLObject)rkf_predicate_creator.$list4);
         rkf_predicate_creator.$pc_session_constraint_predicates$ = SubLFiles.deflexical("*PC-SESSION-CONSTRAINT-PREDICATES*", (SubLObject)rkf_predicate_creator.$list5);
         rkf_predicate_creator.$dtp_pc_session$ = SubLFiles.defconstant("*DTP-PC-SESSION*", (SubLObject)rkf_predicate_creator.$sym7$PC_SESSION);

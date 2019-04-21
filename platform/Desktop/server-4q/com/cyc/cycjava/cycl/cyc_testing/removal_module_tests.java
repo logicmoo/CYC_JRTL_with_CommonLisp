@@ -1048,7 +1048,7 @@ public final class removal_module_tests extends SubLTranslatedFile
     
     public static SubLObject init_removal_module_tests_file() {
         removal_module_tests.$dtp_removal_module_test$ = SubLFiles.defconstant("*DTP-REMOVAL-MODULE-TEST*", (SubLObject)removal_module_tests.$sym0$REMOVAL_MODULE_TEST);
-        removal_module_tests.$removal_module_tests$ = SubLFiles.deflexical("*REMOVAL-MODULE-TESTS*", (removal_module_tests.NIL != Symbols.boundp((SubLObject)removal_module_tests.$sym51$_REMOVAL_MODULE_TESTS_)) ? removal_module_tests.$removal_module_tests$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)removal_module_tests.$int52$100, (SubLObject)removal_module_tests.UNPROVIDED, (SubLObject)removal_module_tests.UNPROVIDED));
+        removal_module_tests.$removal_module_tests$ = SubLFiles.deflexical("*REMOVAL-MODULE-TESTS*", maybeDefault((SubLObject)removal_module_tests.$sym51$_REMOVAL_MODULE_TESTS_, removal_module_tests.$removal_module_tests$, ()->(Hashtables.make_hash_table((SubLObject)removal_module_tests.$int52$100, (SubLObject)removal_module_tests.UNPROVIDED, (SubLObject)removal_module_tests.UNPROVIDED))));
         return (SubLObject)removal_module_tests.NIL;
     }
     

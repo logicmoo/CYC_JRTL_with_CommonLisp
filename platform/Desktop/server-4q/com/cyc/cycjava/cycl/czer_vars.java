@@ -490,7 +490,7 @@ public final class czer_vars extends SubLTranslatedFile
         czer_vars.$sequence_variable_split_limit$ = SubLFiles.defparameter("*SEQUENCE-VARIABLE-SPLIT-LIMIT*", (SubLObject)czer_vars.FIVE_INTEGER);
         czer_vars.$simplify_equality_literalsP$ = SubLFiles.defparameter("*SIMPLIFY-EQUALITY-LITERALS?*", (SubLObject)czer_vars.NIL);
         czer_vars.$simplify_true_sentence_awayP$ = SubLFiles.defparameter("*SIMPLIFY-TRUE-SENTENCE-AWAY?*", (SubLObject)czer_vars.NIL);
-        czer_vars.$skolem_axiom_table$ = SubLFiles.deflexical("*SKOLEM-AXIOM-TABLE*", (czer_vars.NIL != Symbols.boundp((SubLObject)czer_vars.$sym27$_SKOLEM_AXIOM_TABLE_)) ? czer_vars.$skolem_axiom_table$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)czer_vars.$int28$2048, Symbols.symbol_function((SubLObject)czer_vars.EQUAL), (SubLObject)czer_vars.UNPROVIDED));
+        czer_vars.$skolem_axiom_table$ = SubLFiles.deflexical("*SKOLEM-AXIOM-TABLE*", maybeDefault((SubLObject)czer_vars.$sym27$_SKOLEM_AXIOM_TABLE_, czer_vars.$skolem_axiom_table$, ()->(Hashtables.make_hash_table((SubLObject)czer_vars.$int28$2048, Symbols.symbol_function((SubLObject)czer_vars.EQUAL), (SubLObject)czer_vars.UNPROVIDED))));
         czer_vars.$infer_skolem_result_isa_via_arg_constraintsP$ = SubLFiles.defparameter("*INFER-SKOLEM-RESULT-ISA-VIA-ARG-CONSTRAINTS?*", (SubLObject)czer_vars.T);
         czer_vars.$interpolate_singleton_arg_isaP$ = SubLFiles.defparameter("*INTERPOLATE-SINGLETON-ARG-ISA?*", (SubLObject)czer_vars.NIL);
         czer_vars.$clothe_naked_skolemsP$ = SubLFiles.defparameter("*CLOTHE-NAKED-SKOLEMS?*", (SubLObject)czer_vars.NIL);

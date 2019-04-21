@@ -6010,7 +6010,7 @@ public final class date_utilities extends SubLTranslatedFile
         date_utilities.$hours_of_day$ = SubLFiles.deflexical("*HOURS-OF-DAY*", (SubLObject)date_utilities.$list124);
         date_utilities.$duration_denoting_functions_ordered$ = SubLFiles.defparameter("*DURATION-DENOTING-FUNCTIONS-ORDERED*", (SubLObject)date_utilities.$list156);
         date_utilities.$u_date_year_div$ = SubLFiles.defconstant("*U-DATE-YEAR-DIV*", (SubLObject)date_utilities.$int159$10000000000);
-        date_utilities.$temporal_indexicals$ = SubLFiles.deflexical("*TEMPORAL-INDEXICALS*", (SubLObject)((date_utilities.NIL != Symbols.boundp((SubLObject)date_utilities.$sym161$_TEMPORAL_INDEXICALS_)) ? date_utilities.$temporal_indexicals$.getGlobalValue() : date_utilities.$list162));
+        date_utilities.$temporal_indexicals$ = SubLFiles.deflexical("*TEMPORAL-INDEXICALS*", (SubLObject)(maybeDefault((SubLObject)date_utilities.$sym161$_TEMPORAL_INDEXICALS_, date_utilities.$temporal_indexicals$, date_utilities.$list162)));
         date_utilities.$inference_now$ = SubLFiles.defparameter("*INFERENCE-NOW*", (SubLObject)date_utilities.NIL);
         date_utilities.$start_of_1970$ = SubLFiles.defconstant("*START-OF-1970*", Time.encode_universal_time((SubLObject)date_utilities.ZERO_INTEGER, (SubLObject)date_utilities.ZERO_INTEGER, (SubLObject)date_utilities.ZERO_INTEGER, (SubLObject)date_utilities.ONE_INTEGER, (SubLObject)date_utilities.ONE_INTEGER, (SubLObject)date_utilities.$int173$1970, (SubLObject)date_utilities.UNPROVIDED));
         date_utilities.$parse_to_two_digit_years_in_datesP$ = SubLFiles.defparameter("*PARSE-TO-TWO-DIGIT-YEARS-IN-DATES?*", (SubLObject)date_utilities.T);

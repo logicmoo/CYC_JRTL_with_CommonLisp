@@ -275,7 +275,7 @@ public final class unrepresented_term_index_manager extends SubLTranslatedFile
     }
     
     public static SubLObject init_unrepresented_term_index_manager_file() {
-        unrepresented_term_index_manager.$unrepresented_term_index_manager$ = SubLFiles.deflexical("*UNREPRESENTED-TERM-INDEX-MANAGER*", (SubLObject)((unrepresented_term_index_manager.NIL != Symbols.boundp((SubLObject)unrepresented_term_index_manager.$sym0$_UNREPRESENTED_TERM_INDEX_MANAGER_)) ? unrepresented_term_index_manager.$unrepresented_term_index_manager$.getGlobalValue() : unrepresented_term_index_manager.$kw1$UNINITIALIZED));
+        unrepresented_term_index_manager.$unrepresented_term_index_manager$ = SubLFiles.deflexical("*UNREPRESENTED-TERM-INDEX-MANAGER*", (SubLObject)(maybeDefault((SubLObject)unrepresented_term_index_manager.$sym0$_UNREPRESENTED_TERM_INDEX_MANAGER_, unrepresented_term_index_manager.$unrepresented_term_index_manager$, unrepresented_term_index_manager.$kw1$UNINITIALIZED)));
         unrepresented_term_index_manager.$unrepresented_term_index_lru_size_percentage$ = SubLFiles.deflexical("*UNREPRESENTED-TERM-INDEX-LRU-SIZE-PERCENTAGE*", (SubLObject)unrepresented_term_index_manager.TEN_INTEGER);
         unrepresented_term_index_manager.$unrepresented_term_index_lru_size_max$ = SubLFiles.deflexical("*UNREPRESENTED-TERM-INDEX-LRU-SIZE-MAX*", (SubLObject)unrepresented_term_index_manager.$int2$40000);
         return (SubLObject)unrepresented_term_index_manager.NIL;

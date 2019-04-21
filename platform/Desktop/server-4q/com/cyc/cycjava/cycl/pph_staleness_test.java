@@ -192,9 +192,9 @@ public final class pph_staleness_test extends SubLTranslatedFile
     }
     
     public static SubLObject init_pph_staleness_test_file() {
-        pph_staleness_test.$gen_template_store_revisions$ = SubLFiles.deflexical("*GEN-TEMPLATE-STORE-REVISIONS*", (SubLObject)((pph_staleness_test.NIL != Symbols.boundp((SubLObject)pph_staleness_test.$sym0$_GEN_TEMPLATE_STORE_REVISIONS_)) ? pph_staleness_test.$gen_template_store_revisions$.getGlobalValue() : pph_staleness_test.NIL));
-        pph_staleness_test.$gen_template_store_staleness_acceptableP$ = SubLFiles.deflexical("*GEN-TEMPLATE-STORE-STALENESS-ACCEPTABLE?*", (SubLObject)((pph_staleness_test.NIL != Symbols.boundp((SubLObject)pph_staleness_test.$sym1$_GEN_TEMPLATE_STORE_STALENESS_ACCEPTABLE__)) ? pph_staleness_test.$gen_template_store_staleness_acceptableP$.getGlobalValue() : pph_staleness_test.NIL));
-        pph_staleness_test.$gen_template_store_known_staleP$ = SubLFiles.deflexical("*GEN-TEMPLATE-STORE-KNOWN-STALE?*", (SubLObject)((pph_staleness_test.NIL != Symbols.boundp((SubLObject)pph_staleness_test.$sym2$_GEN_TEMPLATE_STORE_KNOWN_STALE__)) ? pph_staleness_test.$gen_template_store_known_staleP$.getGlobalValue() : pph_staleness_test.NIL));
+        pph_staleness_test.$gen_template_store_revisions$ = SubLFiles.deflexical("*GEN-TEMPLATE-STORE-REVISIONS*", (SubLObject)(maybeDefault((SubLObject)pph_staleness_test.$sym0$_GEN_TEMPLATE_STORE_REVISIONS_, pph_staleness_test.$gen_template_store_revisions$, pph_staleness_test.NIL)));
+        pph_staleness_test.$gen_template_store_staleness_acceptableP$ = SubLFiles.deflexical("*GEN-TEMPLATE-STORE-STALENESS-ACCEPTABLE?*", (SubLObject)(maybeDefault((SubLObject)pph_staleness_test.$sym1$_GEN_TEMPLATE_STORE_STALENESS_ACCEPTABLE__, pph_staleness_test.$gen_template_store_staleness_acceptableP$, pph_staleness_test.NIL)));
+        pph_staleness_test.$gen_template_store_known_staleP$ = SubLFiles.deflexical("*GEN-TEMPLATE-STORE-KNOWN-STALE?*", (SubLObject)(maybeDefault((SubLObject)pph_staleness_test.$sym2$_GEN_TEMPLATE_STORE_KNOWN_STALE__, pph_staleness_test.$gen_template_store_known_staleP$, pph_staleness_test.NIL)));
         pph_staleness_test.$gen_template_store_revision_globals$ = SubLFiles.deflexical("*GEN-TEMPLATE-STORE-REVISION-GLOBALS*", (SubLObject)pph_staleness_test.$list3);
         return (SubLObject)pph_staleness_test.NIL;
     }

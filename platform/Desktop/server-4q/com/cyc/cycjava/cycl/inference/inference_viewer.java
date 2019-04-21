@@ -314,8 +314,8 @@ public final class inference_viewer extends SubLTranslatedFile
     }
     
     public static SubLObject init_inference_viewer_file() {
-        inference_viewer.$cyc_term_working_set_query_lock$ = SubLFiles.deflexical("*CYC-TERM-WORKING-SET-QUERY-LOCK*", (inference_viewer.NIL != Symbols.boundp((SubLObject)inference_viewer.$sym4$_CYC_TERM_WORKING_SET_QUERY_LOCK_)) ? inference_viewer.$cyc_term_working_set_query_lock$.getGlobalValue() : Locks.make_lock((SubLObject)inference_viewer.$str5$cyc_term_working_set_query_lock));
-        inference_viewer.$cyc_term_working_set_query_inference$ = SubLFiles.deflexical("*CYC-TERM-WORKING-SET-QUERY-INFERENCE*", (SubLObject)((inference_viewer.NIL != Symbols.boundp((SubLObject)inference_viewer.$sym6$_CYC_TERM_WORKING_SET_QUERY_INFERENCE_)) ? inference_viewer.$cyc_term_working_set_query_inference$.getGlobalValue() : inference_viewer.NIL));
+        inference_viewer.$cyc_term_working_set_query_lock$ = SubLFiles.deflexical("*CYC-TERM-WORKING-SET-QUERY-LOCK*", maybeDefault((SubLObject)inference_viewer.$sym4$_CYC_TERM_WORKING_SET_QUERY_LOCK_, inference_viewer.$cyc_term_working_set_query_lock$, ()->(Locks.make_lock((SubLObject)inference_viewer.$str5$cyc_term_working_set_query_lock))));
+        inference_viewer.$cyc_term_working_set_query_inference$ = SubLFiles.deflexical("*CYC-TERM-WORKING-SET-QUERY-INFERENCE*", (SubLObject)(maybeDefault((SubLObject)inference_viewer.$sym6$_CYC_TERM_WORKING_SET_QUERY_INFERENCE_, inference_viewer.$cyc_term_working_set_query_inference$, inference_viewer.NIL)));
         inference_viewer.$external_inference_monitor_time_increment_secs$ = SubLFiles.deflexical("*EXTERNAL-INFERENCE-MONITOR-TIME-INCREMENT-SECS*", (SubLObject)inference_viewer.$float12$0_5);
         inference_viewer.$external_inference_monitor_max_terms$ = SubLFiles.deflexical("*EXTERNAL-INFERENCE-MONITOR-MAX-TERMS*", (SubLObject)inference_viewer.$int14$25);
         return (SubLObject)inference_viewer.NIL;

@@ -184,7 +184,7 @@ public final class alexandria_allegro_macros extends SubLTranslatedFile
     
     public static SubLObject init_alexandria_allegro_macros_file() {
         alexandria_allegro_macros.$alexandria_allegro_mode_enabledP$ = SubLFiles.defparameter("*ALEXANDRIA-ALLEGRO-MODE-ENABLED?*", (SubLObject)alexandria_allegro_macros.NIL);
-        alexandria_allegro_macros.$alexandria_allegro_cache_kb_store_contentP$ = SubLFiles.deflexical("*ALEXANDRIA-ALLEGRO-CACHE-KB-STORE-CONTENT?*", (SubLObject)((alexandria_allegro_macros.NIL != Symbols.boundp((SubLObject)alexandria_allegro_macros.$sym0$_ALEXANDRIA_ALLEGRO_CACHE_KB_STORE_CONTENT__)) ? alexandria_allegro_macros.$alexandria_allegro_cache_kb_store_contentP$.getGlobalValue() : alexandria_allegro_macros.NIL));
+        alexandria_allegro_macros.$alexandria_allegro_cache_kb_store_contentP$ = SubLFiles.deflexical("*ALEXANDRIA-ALLEGRO-CACHE-KB-STORE-CONTENT?*", (SubLObject)(maybeDefault((SubLObject)alexandria_allegro_macros.$sym0$_ALEXANDRIA_ALLEGRO_CACHE_KB_STORE_CONTENT__, alexandria_allegro_macros.$alexandria_allegro_cache_kb_store_contentP$, alexandria_allegro_macros.NIL)));
         alexandria_allegro_macros.$suspend_jrtl_object_cachingP$ = SubLFiles.defparameter("*SUSPEND-JRTL-OBJECT-CACHING?*", (SubLObject)alexandria_allegro_macros.NIL);
         return (SubLObject)alexandria_allegro_macros.NIL;
     }

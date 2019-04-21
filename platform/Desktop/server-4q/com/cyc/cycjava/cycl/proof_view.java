@@ -6451,7 +6451,7 @@ public final class proof_view extends SubLTranslatedFile
         proof_view.$proof_view_entity_mention_padding$ = SubLFiles.defparameter("*PROOF-VIEW-ENTITY-MENTION-PADDING*", (SubLObject)proof_view.$int9$150);
         proof_view.$proof_view_citation_format$ = SubLFiles.defparameter("*PROOF-VIEW-CITATION-FORMAT*", (SubLObject)proof_view.$kw10$SUPERSCRIPTS);
         proof_view.$dtp_proof_view$ = SubLFiles.defconstant("*DTP-PROOF-VIEW*", (SubLObject)proof_view.$sym15$PROOF_VIEW);
-        proof_view.$proof_view_id_index$ = SubLFiles.deflexical("*PROOF-VIEW-ID-INDEX*", (proof_view.NIL != Symbols.boundp((SubLObject)proof_view.$sym46$_PROOF_VIEW_ID_INDEX_)) ? proof_view.$proof_view_id_index$.getGlobalValue() : id_index.new_id_index((SubLObject)proof_view.UNPROVIDED, (SubLObject)proof_view.UNPROVIDED));
+        proof_view.$proof_view_id_index$ = SubLFiles.deflexical("*PROOF-VIEW-ID-INDEX*", maybeDefault((SubLObject)proof_view.$sym46$_PROOF_VIEW_ID_INDEX_, proof_view.$proof_view_id_index$, ()->(id_index.new_id_index((SubLObject)proof_view.UNPROVIDED, (SubLObject)proof_view.UNPROVIDED))));
         proof_view.$proof_view_root_entry_id$ = SubLFiles.defconstant("*PROOF-VIEW-ROOT-ENTRY-ID*", (SubLObject)proof_view.ZERO_INTEGER);
         proof_view.$break_on_proof_view_filteringP$ = SubLFiles.defparameter("*BREAK-ON-PROOF-VIEW-FILTERING?*", (SubLObject)proof_view.NIL);
         proof_view.$dtp_proof_view_entry$ = SubLFiles.defconstant("*DTP-PROOF-VIEW-ENTRY*", (SubLObject)proof_view.$sym165$PROOF_VIEW_ENTRY);

@@ -6315,12 +6315,12 @@ public final class cb_utilities extends SubLTranslatedFile
     
     public static SubLObject init_cb_utilities_file() {
         cb_utilities.$cb_html_for_cyclist_in_nl_caching_state$ = SubLFiles.deflexical("*CB-HTML-FOR-CYCLIST-IN-NL-CACHING-STATE*", (SubLObject)cb_utilities.NIL);
-        cb_utilities.$cb_available_tools$ = SubLFiles.deflexical("*CB-AVAILABLE-TOOLS*", (SubLObject)((cb_utilities.NIL != Symbols.boundp((SubLObject)cb_utilities.$sym51$_CB_AVAILABLE_TOOLS_)) ? cb_utilities.$cb_available_tools$.getGlobalValue() : cb_utilities.NIL));
+        cb_utilities.$cb_available_tools$ = SubLFiles.deflexical("*CB-AVAILABLE-TOOLS*", (SubLObject)(maybeDefault((SubLObject)cb_utilities.$sym51$_CB_AVAILABLE_TOOLS_, cb_utilities.$cb_available_tools$, cb_utilities.NIL)));
         cb_utilities.$cb_c_definitional_type_pred_map$ = SubLFiles.deflexical("*CB-C-DEFINITIONAL-TYPE-PRED-MAP*", (SubLObject)cb_utilities.$list57);
         cb_utilities.$cb_max_mts_to_sort_temporally$ = SubLFiles.defparameter("*CB-MAX-MTS-TO-SORT-TEMPORALLY*", (SubLObject)cb_utilities.$int6$2000);
         cb_utilities.$cb_back_button_predefined_script$ = SubLFiles.deflexical("*CB-BACK-BUTTON-PREDEFINED-SCRIPT*", (SubLObject)cb_utilities.$str73$onClick___A_history_back____);
         cb_utilities.$cb_back_button_script$ = SubLFiles.deflexical("*CB-BACK-BUTTON-SCRIPT*", (SubLObject)cb_utilities.$str74$onClick__var_frame_name_____A___i);
-        cb_utilities.$cb_frame_table$ = SubLFiles.deflexical("*CB-FRAME-TABLE*", (SubLObject)((cb_utilities.NIL != Symbols.boundp((SubLObject)cb_utilities.$sym80$_CB_FRAME_TABLE_)) ? cb_utilities.$cb_frame_table$.getGlobalValue() : cb_utilities.NIL));
+        cb_utilities.$cb_frame_table$ = SubLFiles.deflexical("*CB-FRAME-TABLE*", (SubLObject)(maybeDefault((SubLObject)cb_utilities.$sym80$_CB_FRAME_TABLE_, cb_utilities.$cb_frame_table$, cb_utilities.NIL)));
         cb_utilities.$max_cb_link_arg_count$ = SubLFiles.deflexical("*MAX-CB-LINK-ARG-COUNT*", (SubLObject)cb_utilities.FIVE_INTEGER);
         cb_utilities.$cb_default_fort_handler$ = SubLFiles.defparameter("*CB-DEFAULT-FORT-HANDLER*", (SubLObject)cb_utilities.$str137$cb_cf);
         cb_utilities.$cb_default_fort_link_emitter$ = SubLFiles.defparameter("*CB-DEFAULT-FORT-LINK-EMITTER*", (SubLObject)cb_utilities.NIL);
@@ -6343,8 +6343,8 @@ public final class cb_utilities extends SubLTranslatedFile
         cb_utilities.$cb_string_length_wrap$ = SubLFiles.defparameter("*CB-STRING-LENGTH-WRAP*", (SubLObject)cb_utilities.$int253$60);
         cb_utilities.$cb_wrap_after_arg_1$ = SubLFiles.defparameter("*CB-WRAP-AFTER-ARG-1*", (SubLObject)cb_utilities.$list255);
         cb_utilities.$cb_form_cons_methods_active$ = SubLFiles.defparameter("*CB-FORM-CONS-METHODS-ACTIVE*", (SubLObject)cb_utilities.NIL);
-        cb_utilities.$cb_form_cons_methods$ = SubLFiles.deflexical("*CB-FORM-CONS-METHODS*", (SubLObject)((cb_utilities.NIL != Symbols.boundp((SubLObject)cb_utilities.$sym256$_CB_FORM_CONS_METHODS_)) ? cb_utilities.$cb_form_cons_methods$.getGlobalValue() : cb_utilities.NIL));
-        cb_utilities.$cb_form_cons_methods_by_keyword$ = SubLFiles.deflexical("*CB-FORM-CONS-METHODS-BY-KEYWORD*", (cb_utilities.NIL != Symbols.boundp((SubLObject)cb_utilities.$sym257$_CB_FORM_CONS_METHODS_BY_KEYWORD_)) ? cb_utilities.$cb_form_cons_methods_by_keyword$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)cb_utilities.TEN_INTEGER, (SubLObject)cb_utilities.UNPROVIDED, (SubLObject)cb_utilities.UNPROVIDED));
+        cb_utilities.$cb_form_cons_methods$ = SubLFiles.deflexical("*CB-FORM-CONS-METHODS*", (SubLObject)(maybeDefault((SubLObject)cb_utilities.$sym256$_CB_FORM_CONS_METHODS_, cb_utilities.$cb_form_cons_methods$, cb_utilities.NIL)));
+        cb_utilities.$cb_form_cons_methods_by_keyword$ = SubLFiles.deflexical("*CB-FORM-CONS-METHODS-BY-KEYWORD*", maybeDefault((SubLObject)cb_utilities.$sym257$_CB_FORM_CONS_METHODS_BY_KEYWORD_, cb_utilities.$cb_form_cons_methods_by_keyword$, ()->(Hashtables.make_hash_table((SubLObject)cb_utilities.TEN_INTEGER, (SubLObject)cb_utilities.UNPROVIDED, (SubLObject)cb_utilities.UNPROVIDED))));
         cb_utilities.$dtp_cb_form_cons_method$ = SubLFiles.defconstant("*DTP-CB-FORM-CONS-METHOD*", (SubLObject)cb_utilities.$sym258$CB_FORM_CONS_METHOD);
         cb_utilities.$always_active_cb_form_cons_methods$ = SubLFiles.defparameter("*ALWAYS-ACTIVE-CB-FORM-CONS-METHODS*", (SubLObject)cb_utilities.NIL);
         cb_utilities.$cb_form_suppress_naut_link_functions$ = SubLFiles.defvar("*CB-FORM-SUPPRESS-NAUT-LINK-FUNCTIONS*", (SubLObject)cb_utilities.NIL);
@@ -6358,7 +6358,7 @@ public final class cb_utilities extends SubLTranslatedFile
         cb_utilities.$cb_nart_id_prefix$ = SubLFiles.deflexical("*CB-NART-ID-PREFIX*", (SubLObject)cb_utilities.$str376$nart);
         cb_utilities.$cb_assertion_id_prefix$ = SubLFiles.deflexical("*CB-ASSERTION-ID-PREFIX*", (SubLObject)cb_utilities.$str377$a);
         cb_utilities.$cb_assertion_id_prefix_length$ = SubLFiles.deflexical("*CB-ASSERTION-ID-PREFIX-LENGTH*", Sequences.length(cb_utilities.$cb_assertion_id_prefix$.getGlobalValue()));
-        cb_utilities.$cb_image_independent_fort_identifiersP$ = SubLFiles.deflexical("*CB-IMAGE-INDEPENDENT-FORT-IDENTIFIERS?*", (SubLObject)((cb_utilities.NIL != Symbols.boundp((SubLObject)cb_utilities.$sym378$_CB_IMAGE_INDEPENDENT_FORT_IDENTIFIERS__)) ? cb_utilities.$cb_image_independent_fort_identifiersP$.getGlobalValue() : cb_utilities.NIL));
+        cb_utilities.$cb_image_independent_fort_identifiersP$ = SubLFiles.deflexical("*CB-IMAGE-INDEPENDENT-FORT-IDENTIFIERS?*", (SubLObject)(maybeDefault((SubLObject)cb_utilities.$sym378$_CB_IMAGE_INDEPENDENT_FORT_IDENTIFIERS__, cb_utilities.$cb_image_independent_fort_identifiersP$, cb_utilities.NIL)));
         cb_utilities.$cb_image_independent_id_marker$ = SubLFiles.deflexical("*CB-IMAGE-INDEPENDENT-ID-MARKER*", string_utilities.substring(kb_utilities.compact_hl_external_id_string((SubLObject)cb_utilities.ONE_INTEGER), (SubLObject)cb_utilities.ZERO_INTEGER, (SubLObject)cb_utilities.ONE_INTEGER));
         cb_utilities.$cb_image_independent_constant_id_prefix$ = SubLFiles.deflexical("*CB-IMAGE-INDEPENDENT-CONSTANT-ID-PREFIX*", Sequences.cconcatenate(cb_utilities.$cb_constant_id_prefix$.getGlobalValue(), cb_utilities.$cb_image_independent_id_marker$.getGlobalValue()));
         cb_utilities.$cb_image_independent_nart_id_prefix$ = SubLFiles.deflexical("*CB-IMAGE-INDEPENDENT-NART-ID-PREFIX*", Sequences.cconcatenate(cb_utilities.$cb_nart_id_prefix$.getGlobalValue(), cb_utilities.$cb_image_independent_id_marker$.getGlobalValue()));

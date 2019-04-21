@@ -2021,7 +2021,7 @@ public final class system_benchmarks extends SubLTranslatedFile
         system_benchmarks.$benchmark_cyclops_ontology_root$ = SubLFiles.defvar("*BENCHMARK-CYCLOPS-ONTOLOGY-ROOT*", system_benchmarks.$const0$Individual);
         system_benchmarks.$cyclops_throwaway_default$ = SubLFiles.deflexical("*CYCLOPS-THROWAWAY-DEFAULT*", (SubLObject)system_benchmarks.$int1$33);
         system_benchmarks.$cyclops_lockedP$ = SubLFiles.defparameter("*CYCLOPS-LOCKED?*", (SubLObject)system_benchmarks.NIL);
-        system_benchmarks.$cyclops_lock$ = SubLFiles.deflexical("*CYCLOPS-LOCK*", (system_benchmarks.NIL != Symbols.boundp((SubLObject)system_benchmarks.$sym49$_CYCLOPS_LOCK_)) ? system_benchmarks.$cyclops_lock$.getGlobalValue() : Locks.make_lock((SubLObject)system_benchmarks.$str50$CycLOPs_lock));
+        system_benchmarks.$cyclops_lock$ = SubLFiles.deflexical("*CYCLOPS-LOCK*", maybeDefault((SubLObject)system_benchmarks.$sym49$_CYCLOPS_LOCK_, system_benchmarks.$cyclops_lock$, ()->(Locks.make_lock((SubLObject)system_benchmarks.$str50$CycLOPs_lock))));
         system_benchmarks.$cyclops_rule_expensiveness_threshold$ = SubLFiles.defparameter("*CYCLOPS-RULE-EXPENSIVENESS-THRESHOLD*", (SubLObject)system_benchmarks.TWO_INTEGER);
         return (SubLObject)system_benchmarks.NIL;
     }

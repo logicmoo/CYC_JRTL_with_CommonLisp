@@ -1251,8 +1251,8 @@ public final class os_process_utilities extends SubLTranslatedFile
     public static SubLObject init_os_process_utilities_file() {
         os_process_utilities.$dtp_os_process_impl$ = SubLFiles.defconstant("*DTP-OS-PROCESS-IMPL*", (SubLObject)os_process_utilities.$sym0$OS_PROCESS_IMPL);
         os_process_utilities.$valid_os_process_status$ = SubLFiles.defconstant("*VALID-OS-PROCESS-STATUS*", (SubLObject)os_process_utilities.$list65);
-        os_process_utilities.$os_process_enumeration_lock$ = SubLFiles.deflexical("*OS-PROCESS-ENUMERATION-LOCK*", (os_process_utilities.NIL != Symbols.boundp((SubLObject)os_process_utilities.$sym66$_OS_PROCESS_ENUMERATION_LOCK_)) ? os_process_utilities.$os_process_enumeration_lock$.getGlobalValue() : Locks.make_lock((SubLObject)os_process_utilities.$str67$OS_Process_enumeration_lock));
-        os_process_utilities.$active_os_processes$ = SubLFiles.deflexical("*ACTIVE-OS-PROCESSES*", (SubLObject)((os_process_utilities.NIL != Symbols.boundp((SubLObject)os_process_utilities.$sym68$_ACTIVE_OS_PROCESSES_)) ? os_process_utilities.$active_os_processes$.getGlobalValue() : os_process_utilities.NIL));
+        os_process_utilities.$os_process_enumeration_lock$ = SubLFiles.deflexical("*OS-PROCESS-ENUMERATION-LOCK*", maybeDefault((SubLObject)os_process_utilities.$sym66$_OS_PROCESS_ENUMERATION_LOCK_, os_process_utilities.$os_process_enumeration_lock$, ()->(Locks.make_lock((SubLObject)os_process_utilities.$str67$OS_Process_enumeration_lock))));
+        os_process_utilities.$active_os_processes$ = SubLFiles.deflexical("*ACTIVE-OS-PROCESSES*", (SubLObject)(maybeDefault((SubLObject)os_process_utilities.$sym68$_ACTIVE_OS_PROCESSES_, os_process_utilities.$active_os_processes$, os_process_utilities.NIL)));
         os_process_utilities.$forked_cyc_server_process_task$ = SubLFiles.defparameter("*FORKED-CYC-SERVER-PROCESS-TASK*", (SubLObject)os_process_utilities.NIL);
         return (SubLObject)os_process_utilities.NIL;
     }

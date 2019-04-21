@@ -352,7 +352,7 @@ public final class inference_event extends SubLTranslatedFile
     
     public static SubLObject init_inference_event_file() {
         inference_event.$inference_event_dispatcher_lock$ = SubLFiles.deflexical("*INFERENCE-EVENT-DISPATCHER-LOCK*", Locks.make_lock((SubLObject)inference_event.$str18$INFERENCE_EVENT_DISPATCHER_Lock));
-        inference_event.$inference_event_dispatcher_listeners$ = SubLFiles.deflexical("*INFERENCE-EVENT-DISPATCHER-LISTENERS*", (SubLObject)((inference_event.NIL != Symbols.boundp((SubLObject)inference_event.$sym19$_INFERENCE_EVENT_DISPATCHER_LISTENERS_)) ? inference_event.$inference_event_dispatcher_listeners$.getGlobalValue() : inference_event.NIL));
+        inference_event.$inference_event_dispatcher_listeners$ = SubLFiles.deflexical("*INFERENCE-EVENT-DISPATCHER-LISTENERS*", (SubLObject)(maybeDefault((SubLObject)inference_event.$sym19$_INFERENCE_EVENT_DISPATCHER_LISTENERS_, inference_event.$inference_event_dispatcher_listeners$, inference_event.NIL)));
         return (SubLObject)inference_event.NIL;
     }
     

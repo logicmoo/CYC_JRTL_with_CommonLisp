@@ -1847,7 +1847,7 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile
     }
     
     public static SubLObject init_inference_strategic_heuristics_file() {
-        inference_strategic_heuristics.$strategic_heuristic_index$ = SubLFiles.deflexical("*STRATEGIC-HEURISTIC-INDEX*", (inference_strategic_heuristics.NIL != Symbols.boundp((SubLObject)inference_strategic_heuristics.$sym0$_STRATEGIC_HEURISTIC_INDEX_)) ? inference_strategic_heuristics.$strategic_heuristic_index$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)inference_strategic_heuristics.EQ), (SubLObject)inference_strategic_heuristics.UNPROVIDED));
+        inference_strategic_heuristics.$strategic_heuristic_index$ = SubLFiles.deflexical("*STRATEGIC-HEURISTIC-INDEX*", maybeDefault((SubLObject)inference_strategic_heuristics.$sym0$_STRATEGIC_HEURISTIC_INDEX_, inference_strategic_heuristics.$strategic_heuristic_index$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)inference_strategic_heuristics.EQ), (SubLObject)inference_strategic_heuristics.UNPROVIDED))));
         inference_strategic_heuristics.$heuristic_domains$ = SubLFiles.deflexical("*HEURISTIC-DOMAINS*", (SubLObject)inference_strategic_heuristics.$list17);
         inference_strategic_heuristics.$overriding_strategic_heuristic_scaling_factors$ = SubLFiles.defvar("*OVERRIDING-STRATEGIC-HEURISTIC-SCALING-FACTORS*", (SubLObject)inference_strategic_heuristics.NIL);
         inference_strategic_heuristics.$strategic_uselessness_based_on_proof_depth_math_memoized_caching_state$ = SubLFiles.deflexical("*STRATEGIC-USELESSNESS-BASED-ON-PROOF-DEPTH-MATH-MEMOIZED-CACHING-STATE*", (SubLObject)inference_strategic_heuristics.NIL);

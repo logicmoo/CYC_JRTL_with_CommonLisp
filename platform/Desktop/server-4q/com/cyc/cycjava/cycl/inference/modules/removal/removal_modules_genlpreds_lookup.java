@@ -2718,7 +2718,7 @@ public final class removal_modules_genlpreds_lookup extends SubLTranslatedFile
     }
     
     public static SubLObject init_removal_modules_genlpreds_lookup_file() {
-        removal_modules_genlpreds_lookup.$unknown_hl_variable$ = SubLFiles.deflexical("*UNKNOWN-HL-VARIABLE*", (removal_modules_genlpreds_lookup.NIL != Symbols.boundp((SubLObject)removal_modules_genlpreds_lookup.$sym12$_UNKNOWN_HL_VARIABLE_)) ? removal_modules_genlpreds_lookup.$unknown_hl_variable$.getGlobalValue() : variables.get_variable((SubLObject)removal_modules_genlpreds_lookup.ZERO_INTEGER));
+        removal_modules_genlpreds_lookup.$unknown_hl_variable$ = SubLFiles.deflexical("*UNKNOWN-HL-VARIABLE*", maybeDefault((SubLObject)removal_modules_genlpreds_lookup.$sym12$_UNKNOWN_HL_VARIABLE_, removal_modules_genlpreds_lookup.$unknown_hl_variable$, ()->(variables.get_variable((SubLObject)removal_modules_genlpreds_lookup.ZERO_INTEGER))));
         return (SubLObject)removal_modules_genlpreds_lookup.NIL;
     }
     

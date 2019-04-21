@@ -1234,8 +1234,8 @@ public final class kb_hl_supports_low extends SubLTranslatedFile
     
     public static SubLObject init_kb_hl_supports_low_file() {
         kb_hl_supports_low.$dtp_kb_hl_support_content$ = SubLFiles.defconstant("*DTP-KB-HL-SUPPORT-CONTENT*", (SubLObject)kb_hl_supports_low.$sym0$KB_HL_SUPPORT_CONTENT);
-        kb_hl_supports_low.$kb_hl_supports_being_created$ = SubLFiles.deflexical("*KB-HL-SUPPORTS-BEING-CREATED*", (SubLObject)((kb_hl_supports_low.NIL != Symbols.boundp((SubLObject)kb_hl_supports_low.$sym23$_KB_HL_SUPPORTS_BEING_CREATED_)) ? kb_hl_supports_low.$kb_hl_supports_being_created$.getGlobalValue() : kb_hl_supports_low.NIL));
-        kb_hl_supports_low.$kb_hl_support_index$ = SubLFiles.deflexical("*KB-HL-SUPPORT-INDEX*", (SubLObject)((kb_hl_supports_low.NIL != Symbols.boundp((SubLObject)kb_hl_supports_low.$sym24$_KB_HL_SUPPORT_INDEX_)) ? kb_hl_supports_low.$kb_hl_support_index$.getGlobalValue() : kb_hl_supports_low.NIL));
+        kb_hl_supports_low.$kb_hl_supports_being_created$ = SubLFiles.deflexical("*KB-HL-SUPPORTS-BEING-CREATED*", (SubLObject)(maybeDefault((SubLObject)kb_hl_supports_low.$sym23$_KB_HL_SUPPORTS_BEING_CREATED_, kb_hl_supports_low.$kb_hl_supports_being_created$, kb_hl_supports_low.NIL)));
+        kb_hl_supports_low.$kb_hl_support_index$ = SubLFiles.deflexical("*KB-HL-SUPPORT-INDEX*", (SubLObject)(maybeDefault((SubLObject)kb_hl_supports_low.$sym24$_KB_HL_SUPPORT_INDEX_, kb_hl_supports_low.$kb_hl_support_index$, kb_hl_supports_low.NIL)));
         kb_hl_supports_low.$kb_hl_support_index_lock$ = SubLFiles.deflexical("*KB-HL-SUPPORT-INDEX-LOCK*", Locks.make_lock((SubLObject)kb_hl_supports_low.$str25$KB_HL_support_indexing_lock));
         kb_hl_supports_low.$kb_hl_support_index_unindexed_terms$ = SubLFiles.deflexical("*KB-HL-SUPPORT-INDEX-UNINDEXED-TERMS*", (SubLObject)kb_hl_supports_low.$list26);
         return (SubLObject)kb_hl_supports_low.NIL;

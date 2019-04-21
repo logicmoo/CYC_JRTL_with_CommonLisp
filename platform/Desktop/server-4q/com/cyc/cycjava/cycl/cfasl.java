@@ -2692,10 +2692,10 @@ public final class cfasl extends SubLTranslatedFile
         cfasl.$cfasl_output_object_method_table$ = SubLFiles.deflexical("*CFASL-OUTPUT-OBJECT-METHOD-TABLE*", Vectors.make_vector((SubLObject)cfasl.$int79$256, (SubLObject)cfasl.NIL));
         cfasl.$cfasl_input_to_static_area$ = SubLFiles.defparameter("*CFASL-INPUT-TO-STATIC-AREA*", (SubLObject)cfasl.NIL);
         cfasl.$cfasl_max_opcode$ = SubLFiles.defconstant("*CFASL-MAX-OPCODE*", (SubLObject)cfasl.$int87$128);
-        cfasl.$cfasl_input_method_table$ = SubLFiles.deflexical("*CFASL-INPUT-METHOD-TABLE*", (cfasl.NIL != Symbols.boundp((SubLObject)cfasl.$sym88$_CFASL_INPUT_METHOD_TABLE_)) ? cfasl.$cfasl_input_method_table$.getGlobalValue() : Vectors.make_vector(cfasl.$cfasl_max_opcode$.getGlobalValue(), (SubLObject)cfasl.$sym85$CFASL_INPUT_ERROR));
+        cfasl.$cfasl_input_method_table$ = SubLFiles.deflexical("*CFASL-INPUT-METHOD-TABLE*", maybeDefault((SubLObject)cfasl.$sym88$_CFASL_INPUT_METHOD_TABLE_, cfasl.$cfasl_input_method_table$, ()->(Vectors.make_vector(cfasl.$cfasl_max_opcode$.getGlobalValue(), (SubLObject)cfasl.$sym85$CFASL_INPUT_ERROR))));
         cfasl.$within_cfasl_externalization$ = SubLFiles.defparameter("*WITHIN-CFASL-EXTERNALIZATION*", (SubLObject)cfasl.NIL);
         cfasl.$cfasl_channel_externalizedP$ = SubLFiles.defparameter("*CFASL-CHANNEL-EXTERNALIZED?*", (SubLObject)cfasl.T);
-        cfasl.$cfasl_extensions$ = SubLFiles.deflexical("*CFASL-EXTENSIONS*", (SubLObject)((cfasl.NIL != Symbols.boundp((SubLObject)cfasl.$sym102$_CFASL_EXTENSIONS_)) ? cfasl.$cfasl_extensions$.getGlobalValue() : cfasl.NIL));
+        cfasl.$cfasl_extensions$ = SubLFiles.deflexical("*CFASL-EXTENSIONS*", (SubLObject)(maybeDefault((SubLObject)cfasl.$sym102$_CFASL_EXTENSIONS_, cfasl.$cfasl_extensions$, cfasl.NIL)));
         cfasl.$cfasl_opcode_externalization$ = SubLFiles.defconstant("*CFASL-OPCODE-EXTERNALIZATION*", (SubLObject)cfasl.$int106$51);
         cfasl.$current_cfasl_defstruct_output_stream$ = SubLFiles.defparameter("*CURRENT-CFASL-DEFSTRUCT-OUTPUT-STREAM*", (SubLObject)cfasl.NIL);
         cfasl.$cfasl_opcode_defstruct_recipe$ = SubLFiles.defconstant("*CFASL-OPCODE-DEFSTRUCT-RECIPE*", (SubLObject)cfasl.$int108$44);
@@ -2718,7 +2718,7 @@ public final class cfasl extends SubLTranslatedFile
         cfasl.$cfasl_opcode_nil$ = SubLFiles.defconstant("*CFASL-OPCODE-NIL*", (SubLObject)cfasl.TWELVE_INTEGER);
         cfasl.$cfasl_opcode_common_symbol$ = SubLFiles.defconstant("*CFASL-OPCODE-COMMON-SYMBOL*", (SubLObject)cfasl.$int140$50);
         cfasl.$cfasl_common_symbols$ = SubLFiles.defparameter("*CFASL-COMMON-SYMBOLS*", (SubLObject)cfasl.NIL);
-        cfasl.$cfasl_list_methods$ = SubLFiles.deflexical("*CFASL-LIST-METHODS*", (SubLObject)((cfasl.NIL != Symbols.boundp((SubLObject)cfasl.$sym151$_CFASL_LIST_METHODS_)) ? cfasl.$cfasl_list_methods$.getGlobalValue() : cfasl.NIL));
+        cfasl.$cfasl_list_methods$ = SubLFiles.deflexical("*CFASL-LIST-METHODS*", (SubLObject)(maybeDefault((SubLObject)cfasl.$sym151$_CFASL_LIST_METHODS_, cfasl.$cfasl_list_methods$, cfasl.NIL)));
         cfasl.$cfasl_opcode_list$ = SubLFiles.defconstant("*CFASL-OPCODE-LIST*", (SubLObject)cfasl.THIRTEEN_INTEGER);
         cfasl.$cfasl_opcode_dotted_list$ = SubLFiles.defconstant("*CFASL-OPCODE-DOTTED-LIST*", (SubLObject)cfasl.SEVENTEEN_INTEGER);
         cfasl.$cfasl_opcode_general_vector$ = SubLFiles.defconstant("*CFASL-OPCODE-GENERAL-VECTOR*", (SubLObject)cfasl.FOURTEEN_INTEGER);
@@ -2734,10 +2734,10 @@ public final class cfasl extends SubLTranslatedFile
         cfasl.$cfasl_opcode_package$ = SubLFiles.defconstant("*CFASL-OPCODE-PACKAGE*", (SubLObject)cfasl.$int175$28);
         cfasl.$cfasl_opcode_wide_cfasl_opcode$ = SubLFiles.defconstant("*CFASL-OPCODE-WIDE-CFASL-OPCODE*", (SubLObject)cfasl.$int178$29);
         cfasl.$cfasl_min_wide_opcode$ = SubLFiles.defconstant("*CFASL-MIN-WIDE-OPCODE*", cfasl.$cfasl_max_opcode$.getGlobalValue());
-        cfasl.$cfasl_wide_opcode_input_method_table$ = SubLFiles.deflexical("*CFASL-WIDE-OPCODE-INPUT-METHOD-TABLE*", (cfasl.NIL != Symbols.boundp((SubLObject)cfasl.$sym180$_CFASL_WIDE_OPCODE_INPUT_METHOD_TABLE_)) ? cfasl.$cfasl_wide_opcode_input_method_table$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)cfasl.$int131$32, Symbols.symbol_function((SubLObject)cfasl.EQL), (SubLObject)cfasl.UNPROVIDED));
+        cfasl.$cfasl_wide_opcode_input_method_table$ = SubLFiles.deflexical("*CFASL-WIDE-OPCODE-INPUT-METHOD-TABLE*", maybeDefault((SubLObject)cfasl.$sym180$_CFASL_WIDE_OPCODE_INPUT_METHOD_TABLE_, cfasl.$cfasl_wide_opcode_input_method_table$, ()->(Hashtables.make_hash_table((SubLObject)cfasl.$int131$32, Symbols.symbol_function((SubLObject)cfasl.EQL), (SubLObject)cfasl.UNPROVIDED))));
         cfasl.$cfasl_opcode_instance$ = SubLFiles.defconstant("*CFASL-OPCODE-INSTANCE*", (SubLObject)cfasl.$int186$124);
         cfasl.$cfasl_opcode_guid_denoted_type$ = SubLFiles.defconstant("*CFASL-OPCODE-GUID-DENOTED-TYPE*", (SubLObject)cfasl.$int191$126);
-        cfasl.$cfasl_guid_denoted_type_input_method_table$ = SubLFiles.deflexical("*CFASL-GUID-DENOTED-TYPE-INPUT-METHOD-TABLE*", (cfasl.NIL != Symbols.boundp((SubLObject)cfasl.$sym193$_CFASL_GUID_DENOTED_TYPE_INPUT_METHOD_TABLE_)) ? cfasl.$cfasl_guid_denoted_type_input_method_table$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)cfasl.$int194$100, Symbols.symbol_function((SubLObject)cfasl.EQUALP), (SubLObject)cfasl.UNPROVIDED));
+        cfasl.$cfasl_guid_denoted_type_input_method_table$ = SubLFiles.deflexical("*CFASL-GUID-DENOTED-TYPE-INPUT-METHOD-TABLE*", maybeDefault((SubLObject)cfasl.$sym193$_CFASL_GUID_DENOTED_TYPE_INPUT_METHOD_TABLE_, cfasl.$cfasl_guid_denoted_type_input_method_table$, ()->(Hashtables.make_hash_table((SubLObject)cfasl.$int194$100, Symbols.symbol_function((SubLObject)cfasl.EQUALP), (SubLObject)cfasl.UNPROVIDED))));
         return (SubLObject)cfasl.NIL;
     }
     

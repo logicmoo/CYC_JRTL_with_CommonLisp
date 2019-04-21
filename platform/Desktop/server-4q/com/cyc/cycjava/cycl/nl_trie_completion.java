@@ -386,7 +386,7 @@ public final class nl_trie_completion extends SubLTranslatedFile
     }
     
     public static SubLObject init_nl_trie_completion_file() {
-        nl_trie_completion.$nl_trie_completion_index$ = SubLFiles.deflexical("*NL-TRIE-COMPLETION-INDEX*", (SubLObject)((nl_trie_completion.NIL != Symbols.boundp((SubLObject)nl_trie_completion.$sym11$_NL_TRIE_COMPLETION_INDEX_)) ? nl_trie_completion.$nl_trie_completion_index$.getGlobalValue() : nl_trie_completion.$kw12$UNPREPARED));
+        nl_trie_completion.$nl_trie_completion_index$ = SubLFiles.deflexical("*NL-TRIE-COMPLETION-INDEX*", (SubLObject)(maybeDefault((SubLObject)nl_trie_completion.$sym11$_NL_TRIE_COMPLETION_INDEX_, nl_trie_completion.$nl_trie_completion_index$, nl_trie_completion.$kw12$UNPREPARED)));
         nl_trie_completion.$nl_trie_completion_null_key_proxy$ = SubLFiles.deflexical("*NL-TRIE-COMPLETION-NULL-KEY-PROXY*", Characters.code_char((SubLObject)nl_trie_completion.SEVEN_INTEGER));
         return (SubLObject)nl_trie_completion.NIL;
     }

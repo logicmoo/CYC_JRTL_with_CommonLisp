@@ -904,7 +904,7 @@ public final class sksi_conjunctive_removal_module_generation extends SubLTransl
     }
     
     public static SubLObject init_sksi_conjunctive_removal_module_generation_file() {
-        sksi_conjunctive_removal_module_generation.$sksi_conjunctive_removal_modules$ = SubLFiles.deflexical("*SKSI-CONJUNCTIVE-REMOVAL-MODULES*", (sksi_conjunctive_removal_module_generation.NIL != Symbols.boundp((SubLObject)sksi_conjunctive_removal_module_generation.$sym0$_SKSI_CONJUNCTIVE_REMOVAL_MODULES_)) ? sksi_conjunctive_removal_module_generation.$sksi_conjunctive_removal_modules$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_conjunctive_removal_module_generation.EQ), (SubLObject)sksi_conjunctive_removal_module_generation.UNPROVIDED));
+        sksi_conjunctive_removal_module_generation.$sksi_conjunctive_removal_modules$ = SubLFiles.deflexical("*SKSI-CONJUNCTIVE-REMOVAL-MODULES*", maybeDefault((SubLObject)sksi_conjunctive_removal_module_generation.$sym0$_SKSI_CONJUNCTIVE_REMOVAL_MODULES_, sksi_conjunctive_removal_module_generation.$sksi_conjunctive_removal_modules$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_conjunctive_removal_module_generation.EQ), (SubLObject)sksi_conjunctive_removal_module_generation.UNPROVIDED))));
         sksi_conjunctive_removal_module_generation.$removal_sksi_conjunction_with_unknown_sentence_pos_lits_cost$ = SubLFiles.deflexical("*REMOVAL-SKSI-CONJUNCTION-WITH-UNKNOWN-SENTENCE-POS-LITS-COST*", (SubLObject)sksi_conjunctive_removal_module_generation.THREE_INTEGER);
         return (SubLObject)sksi_conjunctive_removal_module_generation.NIL;
     }

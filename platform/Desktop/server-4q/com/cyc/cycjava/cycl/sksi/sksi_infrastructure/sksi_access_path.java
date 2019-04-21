@@ -1227,7 +1227,7 @@ public final class sksi_access_path extends SubLTranslatedFile
     }
     
     public static SubLObject init_sksi_access_path_file() {
-        sksi_access_path.$external_source_access_path_cache$ = SubLFiles.deflexical("*EXTERNAL-SOURCE-ACCESS-PATH-CACHE*", (sksi_access_path.NIL != Symbols.boundp((SubLObject)sksi_access_path.$sym1$_EXTERNAL_SOURCE_ACCESS_PATH_CACHE_)) ? sksi_access_path.$external_source_access_path_cache$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_access_path.EQ), (SubLObject)sksi_access_path.UNPROVIDED));
+        sksi_access_path.$external_source_access_path_cache$ = SubLFiles.deflexical("*EXTERNAL-SOURCE-ACCESS-PATH-CACHE*", maybeDefault((SubLObject)sksi_access_path.$sym1$_EXTERNAL_SOURCE_ACCESS_PATH_CACHE_, sksi_access_path.$external_source_access_path_cache$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_access_path.EQ), (SubLObject)sksi_access_path.UNPROVIDED))));
         sksi_access_path.$ignore_access_path_errorsP$ = SubLFiles.defparameter("*IGNORE-ACCESS-PATH-ERRORS?*", (SubLObject)sksi_access_path.NIL);
         sksi_access_path.$red_candidate_access_path_predicates$ = SubLFiles.deflexical("*RED-CANDIDATE-ACCESS-PATH-PREDICATES*", (SubLObject)sksi_access_path.$list54);
         sksi_access_path.$sksi_red_prefix$ = SubLFiles.deflexical("*SKSI-RED-PREFIX*", (SubLObject)sksi_access_path.$str55$application_sksi);

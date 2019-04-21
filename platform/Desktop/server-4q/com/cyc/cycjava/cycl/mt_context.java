@@ -666,11 +666,11 @@ public final class mt_context extends SubLTranslatedFile
     }
     
     public static SubLObject init_mt_context_file() {
-        mt_context.$mt_vectors$ = SubLFiles.deflexical("*MT-VECTORS*", (SubLObject)((mt_context.NIL != Symbols.boundp((SubLObject)mt_context.$sym0$_MT_VECTORS_)) ? mt_context.$mt_vectors$.getGlobalValue() : mt_context.NIL));
-        mt_context.$too_general_cols$ = SubLFiles.deflexical("*TOO-GENERAL-COLS*", (SubLObject)((mt_context.NIL != Symbols.boundp((SubLObject)mt_context.$sym1$_TOO_GENERAL_COLS_)) ? mt_context.$too_general_cols$.getGlobalValue() : mt_context.NIL));
-        mt_context.$score_threshold$ = SubLFiles.deflexical("*SCORE-THRESHOLD*", (SubLObject)((mt_context.NIL != Symbols.boundp((SubLObject)mt_context.$sym2$_SCORE_THRESHOLD_)) ? mt_context.$score_threshold$.getGlobalValue() : mt_context.$float3$1_0e_5));
-        mt_context.$mt_vector_files$ = SubLFiles.deflexical("*MT-VECTOR-FILES*", (SubLObject)((mt_context.NIL != Symbols.boundp((SubLObject)mt_context.$sym60$_MT_VECTOR_FILES_)) ? mt_context.$mt_vector_files$.getGlobalValue() : mt_context.$list61));
-        mt_context.$mt_vectors_general_cols_file$ = SubLFiles.deflexical("*MT-VECTORS-GENERAL-COLS-FILE*", (SubLObject)((mt_context.NIL != Symbols.boundp((SubLObject)mt_context.$sym62$_MT_VECTORS_GENERAL_COLS_FILE_)) ? mt_context.$mt_vectors_general_cols_file$.getGlobalValue() : mt_context.$str63$_cyc_top_data_mt_vectors_too_gene));
+        mt_context.$mt_vectors$ = SubLFiles.deflexical("*MT-VECTORS*", (SubLObject)(maybeDefault((SubLObject)mt_context.$sym0$_MT_VECTORS_, mt_context.$mt_vectors$, mt_context.NIL)));
+        mt_context.$too_general_cols$ = SubLFiles.deflexical("*TOO-GENERAL-COLS*", (SubLObject)(maybeDefault((SubLObject)mt_context.$sym1$_TOO_GENERAL_COLS_, mt_context.$too_general_cols$, mt_context.NIL)));
+        mt_context.$score_threshold$ = SubLFiles.deflexical("*SCORE-THRESHOLD*", (SubLObject)(maybeDefault((SubLObject)mt_context.$sym2$_SCORE_THRESHOLD_, mt_context.$score_threshold$, mt_context.$float3$1_0e_5)));
+        mt_context.$mt_vector_files$ = SubLFiles.deflexical("*MT-VECTOR-FILES*", (SubLObject)(maybeDefault((SubLObject)mt_context.$sym60$_MT_VECTOR_FILES_, mt_context.$mt_vector_files$, mt_context.$list61)));
+        mt_context.$mt_vectors_general_cols_file$ = SubLFiles.deflexical("*MT-VECTORS-GENERAL-COLS-FILE*", (SubLObject)(maybeDefault((SubLObject)mt_context.$sym62$_MT_VECTORS_GENERAL_COLS_FILE_, mt_context.$mt_vectors_general_cols_file$, mt_context.$str63$_cyc_top_data_mt_vectors_too_gene)));
         return (SubLObject)mt_context.NIL;
     }
     

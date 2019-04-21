@@ -3667,7 +3667,7 @@ public final class lexicon_cache extends SubLTranslatedFile
         lexicon_cache.$grsos_repeated_argsP$ = SubLFiles.defparameter("*GRSOS-REPEATED-ARGS?*", (SubLObject)lexicon_cache.NIL);
         lexicon_cache.$lexicon_core_constants$ = SubLFiles.deflexical("*LEXICON-CORE-CONSTANTS*", (SubLObject)lexicon_cache.$list132);
         lexicon_cache.$allow_nl_trie_rotation_initializationP$ = SubLFiles.defparameter("*ALLOW-NL-TRIE-ROTATION-INITIALIZATION?*", (SubLObject)lexicon_cache.NIL);
-        lexicon_cache.$must_use_static_memory_for_nl_trieP$ = SubLFiles.deflexical("*MUST-USE-STATIC-MEMORY-FOR-NL-TRIE?*", (SubLObject)((lexicon_cache.NIL != Symbols.boundp((SubLObject)lexicon_cache.$sym150$_MUST_USE_STATIC_MEMORY_FOR_NL_TRIE__)) ? lexicon_cache.$must_use_static_memory_for_nl_trieP$.getGlobalValue() : lexicon_cache.NIL));
+        lexicon_cache.$must_use_static_memory_for_nl_trieP$ = SubLFiles.deflexical("*MUST-USE-STATIC-MEMORY-FOR-NL-TRIE?*", (SubLObject)(maybeDefault((SubLObject)lexicon_cache.$sym150$_MUST_USE_STATIC_MEMORY_FOR_NL_TRIE__, lexicon_cache.$must_use_static_memory_for_nl_trieP$, lexicon_cache.NIL)));
         return (SubLObject)lexicon_cache.NIL;
     }
     

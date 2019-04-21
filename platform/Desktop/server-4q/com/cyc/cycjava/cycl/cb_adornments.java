@@ -1995,7 +1995,7 @@ public final class cb_adornments extends SubLTranslatedFile
         cb_adornments.$adornment_type$ = SubLFiles.defparameter("*ADORNMENT-TYPE*", (SubLObject)cb_adornments.NIL);
         cb_adornments.$adornment_sorted_list$ = SubLFiles.deflexical("*ADORNMENT-SORTED-LIST*", (SubLObject)cb_adornments.$list1);
         cb_adornments.$dtp_adornment$ = SubLFiles.defconstant("*DTP-ADORNMENT*", (SubLObject)cb_adornments.$sym3$ADORNMENT);
-        cb_adornments.$cb_adornment_table$ = SubLFiles.deflexical("*CB-ADORNMENT-TABLE*", (SubLObject)((cb_adornments.NIL != Symbols.boundp((SubLObject)cb_adornments.$sym63$_CB_ADORNMENT_TABLE_)) ? cb_adornments.$cb_adornment_table$.getGlobalValue() : cb_adornments.NIL));
+        cb_adornments.$cb_adornment_table$ = SubLFiles.deflexical("*CB-ADORNMENT-TABLE*", (SubLObject)(maybeDefault((SubLObject)cb_adornments.$sym63$_CB_ADORNMENT_TABLE_, cb_adornments.$cb_adornment_table$, cb_adornments.NIL)));
         cb_adornments.$debug_adornments_p$ = SubLFiles.defparameter("*DEBUG-ADORNMENTS-P*", (SubLObject)cb_adornments.NIL);
         return (SubLObject)cb_adornments.NIL;
     }

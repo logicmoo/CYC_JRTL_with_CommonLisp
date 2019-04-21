@@ -330,7 +330,7 @@ public final class removal_modules_integer_between extends SubLTranslatedFile
     
     public static SubLObject init_removal_modules_integer_between_file() {
         removal_modules_integer_between.$default_integer_between_check_cost$ = SubLFiles.defparameter("*DEFAULT-INTEGER-BETWEEN-CHECK-COST*", control_vars.$hl_module_check_cost$.getDynamicValue());
-        removal_modules_integer_between.$integer_between_defining_mt$ = SubLFiles.deflexical("*INTEGER-BETWEEN-DEFINING-MT*", (removal_modules_integer_between.NIL != Symbols.boundp((SubLObject)removal_modules_integer_between.$sym5$_INTEGER_BETWEEN_DEFINING_MT_)) ? removal_modules_integer_between.$integer_between_defining_mt$.getGlobalValue() : removal_modules_integer_between.$const6$BaseKB);
+        removal_modules_integer_between.$integer_between_defining_mt$ = SubLFiles.deflexical("*INTEGER-BETWEEN-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_integer_between.$sym5$_INTEGER_BETWEEN_DEFINING_MT_, removal_modules_integer_between.$integer_between_defining_mt$, removal_modules_integer_between.$const6$BaseKB));
         removal_modules_integer_between.$default_not_integer_between_check_cost$ = SubLFiles.defparameter("*DEFAULT-NOT-INTEGER-BETWEEN-CHECK-COST*", control_vars.$hl_module_check_cost$.getDynamicValue());
         return (SubLObject)removal_modules_integer_between.NIL;
     }

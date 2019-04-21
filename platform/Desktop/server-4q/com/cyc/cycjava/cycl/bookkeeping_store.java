@@ -1480,8 +1480,8 @@ public final class bookkeeping_store extends SubLTranslatedFile
     public static SubLObject init_bookkeeping_store_file() {
         bookkeeping_store.$bookkeeping_predicates_for_hl_store$ = SubLFiles.deflexical("*BOOKKEEPING-PREDICATES-FOR-HL-STORE*", (SubLObject)bookkeeping_store.$list37);
         bookkeeping_store.$arg2_indexed_bookkeeping_predicates_for_hl_store$ = SubLFiles.deflexical("*ARG2-INDEXED-BOOKKEEPING-PREDICATES-FOR-HL-STORE*", (SubLObject)bookkeeping_store.$list38);
-        bookkeeping_store.$bookkeeping_binary_gaf_store$ = SubLFiles.deflexical("*BOOKKEEPING-BINARY-GAF-STORE*", (bookkeeping_store.NIL != Symbols.boundp((SubLObject)bookkeeping_store.$sym44$_BOOKKEEPING_BINARY_GAF_STORE_)) ? bookkeeping_store.$bookkeeping_binary_gaf_store$.getGlobalValue() : new_bookkeeping_top_level_index(bookkeeping_store.$bookkeeping_predicates_for_hl_store$.getGlobalValue()));
-        bookkeeping_store.$bookkeeping_binary_gaf_arg2_index$ = SubLFiles.deflexical("*BOOKKEEPING-BINARY-GAF-ARG2-INDEX*", (bookkeeping_store.NIL != Symbols.boundp((SubLObject)bookkeeping_store.$sym45$_BOOKKEEPING_BINARY_GAF_ARG2_INDEX_)) ? bookkeeping_store.$bookkeeping_binary_gaf_arg2_index$.getGlobalValue() : new_bookkeeping_top_level_index(bookkeeping_store.$arg2_indexed_bookkeeping_predicates_for_hl_store$.getGlobalValue()));
+        bookkeeping_store.$bookkeeping_binary_gaf_store$ = SubLFiles.deflexical("*BOOKKEEPING-BINARY-GAF-STORE*", maybeDefault((SubLObject)bookkeeping_store.$sym44$_BOOKKEEPING_BINARY_GAF_STORE_, bookkeeping_store.$bookkeeping_binary_gaf_store$, ()->(new_bookkeeping_top_level_index(bookkeeping_store.$bookkeeping_predicates_for_hl_store$.getGlobalValue()))));
+        bookkeeping_store.$bookkeeping_binary_gaf_arg2_index$ = SubLFiles.deflexical("*BOOKKEEPING-BINARY-GAF-ARG2-INDEX*", maybeDefault((SubLObject)bookkeeping_store.$sym45$_BOOKKEEPING_BINARY_GAF_ARG2_INDEX_, bookkeeping_store.$bookkeeping_binary_gaf_arg2_index$, ()->(new_bookkeeping_top_level_index(bookkeeping_store.$arg2_indexed_bookkeeping_predicates_for_hl_store$.getGlobalValue()))));
         return (SubLObject)bookkeeping_store.NIL;
     }
     

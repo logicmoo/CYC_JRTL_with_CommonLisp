@@ -54,7 +54,7 @@ public final class removal_modules_country_of_city extends SubLTranslatedFile
     }
     
     public static SubLObject init_removal_modules_country_of_city_file() {
-        removal_modules_country_of_city.$country_of_city_mt$ = SubLFiles.deflexical("*COUNTRY-OF-CITY-MT*", (removal_modules_country_of_city.NIL != Symbols.boundp((SubLObject)removal_modules_country_of_city.$sym0$_COUNTRY_OF_CITY_MT_)) ? removal_modules_country_of_city.$country_of_city_mt$.getGlobalValue() : removal_modules_country_of_city.$const1$WorldGeographyMt);
+        removal_modules_country_of_city.$country_of_city_mt$ = SubLFiles.deflexical("*COUNTRY-OF-CITY-MT*", maybeDefault((SubLObject)removal_modules_country_of_city.$sym0$_COUNTRY_OF_CITY_MT_, removal_modules_country_of_city.$country_of_city_mt$, removal_modules_country_of_city.$const1$WorldGeographyMt));
         return (SubLObject)removal_modules_country_of_city.NIL;
     }
     

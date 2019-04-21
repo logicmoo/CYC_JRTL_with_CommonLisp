@@ -7,26 +7,24 @@ import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.InitializingSubLFile;
 
-public class cycl extends InitializingSubLFile
-{
-    public static final SubLFile me;
-    
+public class rcycl extends InitializingSubLFile {
+    public static final rcycl me;
+
     @Override
-	public void declareFunctions() {
+    public void declareFunctions() {
     }
-    
+
     @Override
-	public void initializeVariables() {
+    public void initializeVariables() {
     }
-    
+
     @Override
-	public void runTopLevelForms() {
+    public void runTopLevelForms() {
         try {
             SubLFiles.initialize("eu.cyc.sparql.server.Sparql");
             SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
-        }
-        catch (Exception ex) {
-        	ex.printStackTrace();        	
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         this.preparePercentProgress(1255);
         this.initializeClass("com.cyc.cycjava.cycl.cyc_cvs_id");
@@ -1286,8 +1284,8 @@ public class cycl extends InitializingSubLFile
         this.initializeClass("com.cyc.cycjava.cycl.cb_translation_browser");
         this.finishPercentProgress();
     }
-    
+
     static {
-        me = (SubLFile)new cycl();
+        me = (rcycl) (SubLFile) new rcycl();
     }
 }

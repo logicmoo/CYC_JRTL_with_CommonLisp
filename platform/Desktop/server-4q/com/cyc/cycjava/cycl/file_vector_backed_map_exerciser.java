@@ -154,7 +154,7 @@ public final class file_vector_backed_map_exerciser extends SubLTranslatedFile
         file_vector_backed_map_exerciser.$file_vector_backed_map_exerciser_map$ = SubLFiles.deflexical("*FILE-VECTOR-BACKED-MAP-EXERCISER-MAP*", (SubLObject)file_vector_backed_map_exerciser.NIL);
         file_vector_backed_map_exerciser.$file_vector_backed_map_exerciser_file_vector$ = SubLFiles.deflexical("*FILE-VECTOR-BACKED-MAP-EXERCISER-FILE-VECTOR*", (SubLObject)file_vector_backed_map_exerciser.NIL);
         file_vector_backed_map_exerciser.$file_vector_backed_map_exerciser_loop_times$ = SubLFiles.deflexical("*FILE-VECTOR-BACKED-MAP-EXERCISER-LOOP-TIMES*", (SubLObject)file_vector_backed_map_exerciser.NIL);
-        file_vector_backed_map_exerciser.$file_vector_backed_map_exerciser_lock$ = SubLFiles.deflexical("*FILE-VECTOR-BACKED-MAP-EXERCISER-LOCK*", (SubLObject)((file_vector_backed_map_exerciser.NIL != Symbols.boundp((SubLObject)file_vector_backed_map_exerciser.$sym6$_FILE_VECTOR_BACKED_MAP_EXERCISER_LOCK_)) ? file_vector_backed_map_exerciser.$file_vector_backed_map_exerciser_lock$.getGlobalValue() : file_vector_backed_map_exerciser.NIL));
+        file_vector_backed_map_exerciser.$file_vector_backed_map_exerciser_lock$ = SubLFiles.deflexical("*FILE-VECTOR-BACKED-MAP-EXERCISER-LOCK*", (SubLObject)(maybeDefault((SubLObject)file_vector_backed_map_exerciser.$sym6$_FILE_VECTOR_BACKED_MAP_EXERCISER_LOCK_, file_vector_backed_map_exerciser.$file_vector_backed_map_exerciser_lock$, file_vector_backed_map_exerciser.NIL)));
         return (SubLObject)file_vector_backed_map_exerciser.NIL;
     }
     

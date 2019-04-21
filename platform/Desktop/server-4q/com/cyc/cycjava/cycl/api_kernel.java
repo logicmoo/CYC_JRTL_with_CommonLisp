@@ -917,7 +917,7 @@ public final class api_kernel extends SubLTranslatedFile
         api_kernel.$api_output_protocol$ = SubLFiles.defparameter("*API-OUTPUT-PROTOCOL*", api_kernel.$default_api_output_protocol$.getDynamicValue());
         api_kernel.$api_in_stream$ = SubLFiles.defparameter("*API-IN-STREAM*", (SubLObject)api_kernel.NIL);
         api_kernel.$api_out_stream$ = SubLFiles.defparameter("*API-OUT-STREAM*", (SubLObject)api_kernel.NIL);
-        api_kernel.$api_input_eof_marker$ = SubLFiles.deflexical("*API-INPUT-EOF-MARKER*", (api_kernel.NIL != Symbols.boundp((SubLObject)api_kernel.$sym18$_API_INPUT_EOF_MARKER_)) ? api_kernel.$api_input_eof_marker$.getGlobalValue() : Symbols.make_symbol((SubLObject)api_kernel.$str19$API_Input_EOF_Marker));
+        api_kernel.$api_input_eof_marker$ = SubLFiles.deflexical("*API-INPUT-EOF-MARKER*", maybeDefault((SubLObject)api_kernel.$sym18$_API_INPUT_EOF_MARKER_, api_kernel.$api_input_eof_marker$, ()->(Symbols.make_symbol((SubLObject)api_kernel.$str19$API_Input_EOF_Marker))));
         api_kernel.$record_api_messagesP$ = SubLFiles.defparameter("*RECORD-API-MESSAGES?*", (SubLObject)api_kernel.NIL);
         api_kernel.$api_message_sink$ = SubLFiles.defparameter("*API-MESSAGE-SINK*", (SubLObject)api_kernel.NIL);
         api_kernel.$api_success_code$ = SubLFiles.defparameter("*API-SUCCESS-CODE*", (SubLObject)api_kernel.$int27$200);

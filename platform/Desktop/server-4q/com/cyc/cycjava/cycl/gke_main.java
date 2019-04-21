@@ -4646,9 +4646,9 @@ public final class gke_main extends SubLTranslatedFile
         gke_main.$generate_gke_gloss_wrt_mt_cached_caching_state$ = SubLFiles.deflexical("*GENERATE-GKE-GLOSS-WRT-MT-CACHED-CACHING-STATE*", (SubLObject)gke_main.NIL);
         gke_main.$candidate_replacements_for_sentence_cached_caching_state$ = SubLFiles.deflexical("*CANDIDATE-REPLACEMENTS-FOR-SENTENCE-CACHED-CACHING-STATE*", (SubLObject)gke_main.NIL);
         gke_main.$gke_get_elements_caching_state$ = SubLFiles.deflexical("*GKE-GET-ELEMENTS-CACHING-STATE*", (SubLObject)gke_main.NIL);
-        gke_main.$omit_suggestion_stumpsP$ = SubLFiles.deflexical("*OMIT-SUGGESTION-STUMPS?*", (SubLObject)((gke_main.NIL != Symbols.boundp((SubLObject)gke_main.$sym140$_OMIT_SUGGESTION_STUMPS__)) ? gke_main.$omit_suggestion_stumpsP$.getGlobalValue() : gke_main.NIL));
+        gke_main.$omit_suggestion_stumpsP$ = SubLFiles.deflexical("*OMIT-SUGGESTION-STUMPS?*", (SubLObject)(maybeDefault((SubLObject)gke_main.$sym140$_OMIT_SUGGESTION_STUMPS__, gke_main.$omit_suggestion_stumpsP$, gke_main.NIL)));
         gke_main.$dtp_replacement_tree$ = SubLFiles.defconstant("*DTP-REPLACEMENT-TREE*", (SubLObject)gke_main.$sym141$REPLACEMENT_TREE);
-        gke_main.$use_tva_for_suggestionsP$ = SubLFiles.deflexical("*USE-TVA-FOR-SUGGESTIONS?*", (SubLObject)((gke_main.NIL != Symbols.boundp((SubLObject)gke_main.$sym188$_USE_TVA_FOR_SUGGESTIONS__)) ? gke_main.$use_tva_for_suggestionsP$.getGlobalValue() : gke_main.NIL));
+        gke_main.$use_tva_for_suggestionsP$ = SubLFiles.deflexical("*USE-TVA-FOR-SUGGESTIONS?*", (SubLObject)(maybeDefault((SubLObject)gke_main.$sym188$_USE_TVA_FOR_SUGGESTIONS__, gke_main.$use_tva_for_suggestionsP$, gke_main.NIL)));
         gke_main.$default_patience_wait_time$ = SubLFiles.defparameter("*DEFAULT-PATIENCE-WAIT-TIME*", (SubLObject)gke_main.TWO_INTEGER);
         gke_main.$gke_query_threads$ = SubLFiles.defparameter("*GKE-QUERY-THREADS*", Hashtables.make_hash_table((SubLObject)gke_main.FIVE_INTEGER, Symbols.symbol_function((SubLObject)gke_main.EQUAL), (SubLObject)gke_main.UNPROVIDED));
         gke_main.$daemon_should_run_inference_statuses$ = SubLFiles.deflexical("*DAEMON-SHOULD-RUN-INFERENCE-STATUSES*", (SubLObject)gke_main.$list220);

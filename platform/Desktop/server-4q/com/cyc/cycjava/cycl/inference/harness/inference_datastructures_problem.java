@@ -3681,7 +3681,7 @@ public final class inference_datastructures_problem extends SubLTranslatedFile
     
     public static SubLObject init_inference_datastructures_problem_file() {
         inference_datastructures_problem.$dtp_problem$ = SubLFiles.defconstant("*DTP-PROBLEM*", (SubLObject)inference_datastructures_problem.$sym0$PROBLEM);
-        inference_datastructures_problem.$empty_clauses$ = SubLFiles.deflexical("*EMPTY-CLAUSES*", (SubLObject)((inference_datastructures_problem.NIL != Symbols.boundp((SubLObject)inference_datastructures_problem.$sym66$_EMPTY_CLAUSES_)) ? inference_datastructures_problem.$empty_clauses$.getGlobalValue() : ConsesLow.list(clauses.empty_clause())));
+        inference_datastructures_problem.$empty_clauses$ = SubLFiles.deflexical("*EMPTY-CLAUSES*", (SubLObject)(maybeDefault((SubLObject)inference_datastructures_problem.$sym66$_EMPTY_CLAUSES_, inference_datastructures_problem.$empty_clauses$, ()->(ConsesLow.list(clauses.empty_clause())))));
         inference_datastructures_problem.$generalized_tactic_types$ = SubLFiles.deflexical("*GENERALIZED-TACTIC-TYPES*", (SubLObject)inference_datastructures_problem.$list99);
         inference_datastructures_problem.$transformation_depth_computation$ = SubLFiles.defvar("*TRANSFORMATION-DEPTH-COMPUTATION*", (SubLObject)inference_datastructures_problem.$kw208$COUNTERINTUITIVE);
         inference_datastructures_problem.$problem_min_transformation_depth_from_signature_enabledP$ = SubLFiles.defparameter("*PROBLEM-MIN-TRANSFORMATION-DEPTH-FROM-SIGNATURE-ENABLED?*", (SubLObject)inference_datastructures_problem.T);

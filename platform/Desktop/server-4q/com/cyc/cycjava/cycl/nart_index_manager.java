@@ -257,7 +257,7 @@ public final class nart_index_manager extends SubLTranslatedFile
     }
     
     public static SubLObject init_nart_index_manager_file() {
-        nart_index_manager.$nart_index_manager$ = SubLFiles.deflexical("*NART-INDEX-MANAGER*", (SubLObject)((nart_index_manager.NIL != Symbols.boundp((SubLObject)nart_index_manager.$sym0$_NART_INDEX_MANAGER_)) ? nart_index_manager.$nart_index_manager$.getGlobalValue() : nart_index_manager.$kw1$UNINITIALIZED));
+        nart_index_manager.$nart_index_manager$ = SubLFiles.deflexical("*NART-INDEX-MANAGER*", (SubLObject)(maybeDefault((SubLObject)nart_index_manager.$sym0$_NART_INDEX_MANAGER_, nart_index_manager.$nart_index_manager$, nart_index_manager.$kw1$UNINITIALIZED)));
         nart_index_manager.$nart_index_lru_size_percentage$ = SubLFiles.deflexical("*NART-INDEX-LRU-SIZE-PERCENTAGE*", (SubLObject)nart_index_manager.TWENTY_INTEGER);
         nart_index_manager.$nart_index_lru_size_max$ = SubLFiles.deflexical("*NART-INDEX-LRU-SIZE-MAX*", (SubLObject)nart_index_manager.$int2$30000);
         return (SubLObject)nart_index_manager.NIL;

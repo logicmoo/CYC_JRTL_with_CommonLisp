@@ -193,7 +193,7 @@ public final class cyc_bookkeeping extends SubLTranslatedFile
     }
     
     public static SubLObject init_cyc_bookkeeping_file() {
-        cyc_bookkeeping.$bookkeeping_enabledP$ = SubLFiles.deflexical("*BOOKKEEPING-ENABLED?*", (SubLObject)((cyc_bookkeeping.NIL != Symbols.boundp((SubLObject)cyc_bookkeeping.$sym0$_BOOKKEEPING_ENABLED__)) ? cyc_bookkeeping.$bookkeeping_enabledP$.getGlobalValue() : cyc_bookkeeping.T));
+        cyc_bookkeeping.$bookkeeping_enabledP$ = SubLFiles.deflexical("*BOOKKEEPING-ENABLED?*", (SubLObject)(maybeDefault((SubLObject)cyc_bookkeeping.$sym0$_BOOKKEEPING_ENABLED__, cyc_bookkeeping.$bookkeeping_enabledP$, cyc_bookkeeping.T)));
         cyc_bookkeeping.$cyc_bookkeeping_info$ = SubLFiles.defparameter("*CYC-BOOKKEEPING-INFO*", (SubLObject)cyc_bookkeeping.NIL);
         return (SubLObject)cyc_bookkeeping.NIL;
     }

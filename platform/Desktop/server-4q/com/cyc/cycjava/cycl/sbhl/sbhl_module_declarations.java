@@ -329,7 +329,7 @@ public final class sbhl_module_declarations extends SubLTranslatedFile
     }
     
     public static SubLObject init_sbhl_module_declarations_file() {
-        sbhl_module_declarations.$sbhl_modules_initializedP$ = SubLFiles.deflexical("*SBHL-MODULES-INITIALIZED?*", (SubLObject)((sbhl_module_declarations.NIL != Symbols.boundp((SubLObject)sbhl_module_declarations.$sym74$_SBHL_MODULES_INITIALIZED__)) ? sbhl_module_declarations.$sbhl_modules_initializedP$.getGlobalValue() : sbhl_module_declarations.NIL));
+        sbhl_module_declarations.$sbhl_modules_initializedP$ = SubLFiles.deflexical("*SBHL-MODULES-INITIALIZED?*", (SubLObject)(maybeDefault((SubLObject)sbhl_module_declarations.$sym74$_SBHL_MODULES_INITIALIZED__, sbhl_module_declarations.$sbhl_modules_initializedP$, sbhl_module_declarations.NIL)));
         return (SubLObject)sbhl_module_declarations.NIL;
     }
     

@@ -14391,7 +14391,7 @@ public final class pph_utilities extends SubLTranslatedFile
         pph_utilities.$always_use_instances_names$ = SubLFiles.defconstant("*ALWAYS-USE-INSTANCES-NAMES*", (SubLObject)pph_utilities.NIL);
         pph_utilities.$pph_remove_spaces_before$ = SubLFiles.defconstant("*PPH-REMOVE-SPACES-BEFORE*", (SubLObject)pph_utilities.$list4);
         pph_utilities.$pph_remove_spaces_after$ = SubLFiles.defconstant("*PPH-REMOVE-SPACES-AFTER*", (SubLObject)pph_utilities.$list5);
-        pph_utilities.$pph_nbar_nart$ = SubLFiles.deflexical("*PPH-NBAR-NART*", (SubLObject)((pph_utilities.NIL != Symbols.boundp((SubLObject)pph_utilities.$sym6$_PPH_NBAR_NART_)) ? pph_utilities.$pph_nbar_nart$.getGlobalValue() : pph_utilities.NIL));
+        pph_utilities.$pph_nbar_nart$ = SubLFiles.deflexical("*PPH-NBAR-NART*", (SubLObject)(maybeDefault((SubLObject)pph_utilities.$sym6$_PPH_NBAR_NART_, pph_utilities.$pph_nbar_nart$, pph_utilities.NIL)));
         pph_utilities.$paraphrase_core_constants$ = SubLFiles.deflexical("*PARAPHRASE-CORE-CONSTANTS*", (SubLObject)pph_utilities.$list8);
         pph_utilities.$pph_current_environment$ = SubLFiles.defparameter("*PPH-CURRENT-ENVIRONMENT*", (SubLObject)pph_utilities.NIL);
         pph_utilities.$resourced_pph_environment_stacks$ = SubLFiles.deflexical("*RESOURCED-PPH-ENVIRONMENT-STACKS*", queues.create_queue((SubLObject)pph_utilities.UNPROVIDED));
@@ -14420,7 +14420,7 @@ public final class pph_utilities extends SubLTranslatedFile
         pph_utilities.$pph_query_stack$ = SubLFiles.defparameter("*PPH-QUERY-STACK*", (SubLObject)pph_utilities.$kw394$UNINITIALIZED);
         pph_utilities.$pph_query_stack_max_size$ = SubLFiles.defparameter("*PPH-QUERY-STACK-MAX-SIZE*", (SubLObject)pph_utilities.FOUR_INTEGER);
         pph_utilities.$pph_inference_destroyer_grace_period$ = SubLFiles.deflexical("*PPH-INFERENCE-DESTROYER-GRACE-PERIOD*", (SubLObject)pph_utilities.$int395$600);
-        pph_utilities.$pph_inference_destroyer$ = SubLFiles.deflexical("*PPH-INFERENCE-DESTROYER*", (pph_utilities.NIL != Symbols.boundp((SubLObject)pph_utilities.$sym396$_PPH_INFERENCE_DESTROYER_)) ? pph_utilities.$pph_inference_destroyer$.getGlobalValue() : delayed_processor.new_delayed_processor(pph_utilities.$pph_inference_destroyer_grace_period$.getGlobalValue(), (SubLObject)pph_utilities.$sym397$DESTROYABLE_PPH_INFERENCE_, (SubLObject)pph_utilities.$sym398$PPH_DESTROY_INFERENCE));
+        pph_utilities.$pph_inference_destroyer$ = SubLFiles.deflexical("*PPH-INFERENCE-DESTROYER*", maybeDefault((SubLObject)pph_utilities.$sym396$_PPH_INFERENCE_DESTROYER_, pph_utilities.$pph_inference_destroyer$, ()->(delayed_processor.new_delayed_processor(pph_utilities.$pph_inference_destroyer_grace_period$.getGlobalValue(), (SubLObject)pph_utilities.$sym397$DESTROYABLE_PPH_INFERENCE_, (SubLObject)pph_utilities.$sym398$PPH_DESTROY_INFERENCE))));
         pph_utilities.$pph_query_cumulative_time$ = SubLFiles.defparameter("*PPH-QUERY-CUMULATIVE-TIME*", misc_utilities.uninitialized());
         pph_utilities.$verify_pph_removal_ask_booleanP$ = SubLFiles.defparameter("*VERIFY-PPH-REMOVAL-ASK-BOOLEAN?*", (SubLObject)pph_utilities.NIL);
         pph_utilities.$pph_optimized_vars$ = SubLFiles.defparameter("*PPH-OPTIMIZED-VARS*", (SubLObject)pph_utilities.NIL);

@@ -502,7 +502,7 @@ public final class corba_module_utilities extends SubLTranslatedFile
     
     public static SubLObject init_corba_module_utilities_file() {
         corba_module_utilities.$corba_connections_by_sks$ = SubLFiles.deflexical("*CORBA-CONNECTIONS-BY-SKS*", (SubLObject)corba_module_utilities.NIL);
-        corba_module_utilities.$sksi_corba_modules$ = SubLFiles.deflexical("*SKSI-CORBA-MODULES*", (corba_module_utilities.NIL != Symbols.boundp((SubLObject)corba_module_utilities.$sym23$_SKSI_CORBA_MODULES_)) ? corba_module_utilities.$sksi_corba_modules$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)corba_module_utilities.EQUAL), (SubLObject)corba_module_utilities.UNPROVIDED));
+        corba_module_utilities.$sksi_corba_modules$ = SubLFiles.deflexical("*SKSI-CORBA-MODULES*", maybeDefault((SubLObject)corba_module_utilities.$sym23$_SKSI_CORBA_MODULES_, corba_module_utilities.$sksi_corba_modules$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)corba_module_utilities.EQUAL), (SubLObject)corba_module_utilities.UNPROVIDED))));
         return (SubLObject)corba_module_utilities.NIL;
     }
     

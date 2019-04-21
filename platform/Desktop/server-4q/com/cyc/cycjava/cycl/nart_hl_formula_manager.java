@@ -228,10 +228,10 @@ public final class nart_hl_formula_manager extends SubLTranslatedFile
     }
     
     public static SubLObject init_nart_hl_formula_manager_file() {
-        nart_hl_formula_manager.$nart_hl_formula_manager$ = SubLFiles.deflexical("*NART-HL-FORMULA-MANAGER*", (SubLObject)((nart_hl_formula_manager.NIL != Symbols.boundp((SubLObject)nart_hl_formula_manager.$sym0$_NART_HL_FORMULA_MANAGER_)) ? nart_hl_formula_manager.$nart_hl_formula_manager$.getGlobalValue() : nart_hl_formula_manager.$kw1$UNINITIALIZED));
+        nart_hl_formula_manager.$nart_hl_formula_manager$ = SubLFiles.deflexical("*NART-HL-FORMULA-MANAGER*", (SubLObject)(maybeDefault((SubLObject)nart_hl_formula_manager.$sym0$_NART_HL_FORMULA_MANAGER_, nart_hl_formula_manager.$nart_hl_formula_manager$, nart_hl_formula_manager.$kw1$UNINITIALIZED)));
         nart_hl_formula_manager.$nart_hl_formula_lru_size_percentage$ = SubLFiles.deflexical("*NART-HL-FORMULA-LRU-SIZE-PERCENTAGE*", (SubLObject)nart_hl_formula_manager.FIVE_INTEGER);
         nart_hl_formula_manager.$nart_hl_formula_lru_size_max$ = SubLFiles.deflexical("*NART-HL-FORMULA-LRU-SIZE-MAX*", (SubLObject)nart_hl_formula_manager.$int2$10000);
-        nart_hl_formula_manager.$nart_hl_formula_table$ = SubLFiles.deflexical("*NART-HL-FORMULA-TABLE*", (SubLObject)((nart_hl_formula_manager.NIL != Symbols.boundp((SubLObject)nart_hl_formula_manager.$sym8$_NART_HL_FORMULA_TABLE_)) ? nart_hl_formula_manager.$nart_hl_formula_table$.getGlobalValue() : nart_hl_formula_manager.NIL));
+        nart_hl_formula_manager.$nart_hl_formula_table$ = SubLFiles.deflexical("*NART-HL-FORMULA-TABLE*", (SubLObject)(maybeDefault((SubLObject)nart_hl_formula_manager.$sym8$_NART_HL_FORMULA_TABLE_, nart_hl_formula_manager.$nart_hl_formula_table$, nart_hl_formula_manager.NIL)));
         return (SubLObject)nart_hl_formula_manager.NIL;
     }
     

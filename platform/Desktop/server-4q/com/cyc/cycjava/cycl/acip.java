@@ -1721,7 +1721,7 @@ public final class acip extends SubLTranslatedFile
         acip.$quad_3d_tolerance_accel$ = SubLFiles.deflexical("*QUAD-3D-TOLERANCE-ACCEL*", (SubLObject)acip.$float30$0_1);
         acip.$quad_3d_tolerance_veloc$ = SubLFiles.deflexical("*QUAD-3D-TOLERANCE-VELOC*", (SubLObject)acip.ONE_INTEGER);
         acip.$quad_3d_tolerance_locat$ = SubLFiles.deflexical("*QUAD-3D-TOLERANCE-LOCAT*", (SubLObject)acip.TEN_INTEGER);
-        acip.$acip_defender_observation_mt$ = SubLFiles.deflexical("*ACIP-DEFENDER-OBSERVATION-MT*", (acip.NIL != Symbols.boundp((SubLObject)acip.$sym115$_ACIP_DEFENDER_OBSERVATION_MT_)) ? acip.$acip_defender_observation_mt$.getGlobalValue() : acip.$const116$ACIPDefenderObservationMt);
+        acip.$acip_defender_observation_mt$ = SubLFiles.deflexical("*ACIP-DEFENDER-OBSERVATION-MT*", maybeDefault((SubLObject)acip.$sym115$_ACIP_DEFENDER_OBSERVATION_MT_, acip.$acip_defender_observation_mt$, acip.$const116$ACIPDefenderObservationMt));
         acip.$acip_load_defender_observations_caching_state$ = SubLFiles.deflexical("*ACIP-LOAD-DEFENDER-OBSERVATIONS-CACHING-STATE*", (SubLObject)acip.NIL);
         acip.$acip_partition$ = SubLFiles.deflexical("*ACIP-PARTITION*", (SubLObject)acip.$list130);
         acip.$acip_background_partition$ = SubLFiles.deflexical("*ACIP-BACKGROUND-PARTITION*", (SubLObject)acip.$list132);

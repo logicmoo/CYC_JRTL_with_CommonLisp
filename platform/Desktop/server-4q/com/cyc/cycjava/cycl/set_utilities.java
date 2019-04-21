@@ -1218,7 +1218,7 @@ public final class set_utilities extends SubLTranslatedFile
     }
     
     public static SubLObject init_set_utilities_file() {
-        set_utilities.$empty_set$ = SubLFiles.deflexical("*EMPTY-SET*", (set_utilities.NIL != Symbols.boundp((SubLObject)set_utilities.$sym0$_EMPTY_SET_)) ? set_utilities.$empty_set$.getGlobalValue() : set.new_set(Symbols.symbol_function((SubLObject)set_utilities.EQ), (SubLObject)set_utilities.ZERO_INTEGER));
+        set_utilities.$empty_set$ = SubLFiles.deflexical("*EMPTY-SET*", maybeDefault((SubLObject)set_utilities.$sym0$_EMPTY_SET_, set_utilities.$empty_set$, ()->(set.new_set(Symbols.symbol_function((SubLObject)set_utilities.EQ), (SubLObject)set_utilities.ZERO_INTEGER))));
         set_utilities.$dtp_sliding_window$ = SubLFiles.defconstant("*DTP-SLIDING-WINDOW*", (SubLObject)set_utilities.$sym21$SLIDING_WINDOW);
         return (SubLObject)set_utilities.NIL;
     }

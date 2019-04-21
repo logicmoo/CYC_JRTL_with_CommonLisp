@@ -1064,7 +1064,7 @@ public final class event_model extends SubLTranslatedFile
     public static SubLObject init_event_model_file() {
         event_model.$dtp_event_class$ = SubLFiles.defconstant("*DTP-EVENT-CLASS*", (SubLObject)event_model.$sym0$EVENT_CLASS);
         event_model.$dtp_event_hierarchy$ = SubLFiles.defconstant("*DTP-EVENT-HIERARCHY*", (SubLObject)event_model.$sym33$EVENT_HIERARCHY);
-        event_model.$event_hierarchy$ = SubLFiles.deflexical("*EVENT-HIERARCHY*", (SubLObject)((event_model.NIL != Symbols.boundp((SubLObject)event_model.$sym54$_EVENT_HIERARCHY_)) ? event_model.$event_hierarchy$.getGlobalValue() : event_model.NIL));
+        event_model.$event_hierarchy$ = SubLFiles.deflexical("*EVENT-HIERARCHY*", (SubLObject)(maybeDefault((SubLObject)event_model.$sym54$_EVENT_HIERARCHY_, event_model.$event_hierarchy$, event_model.NIL)));
         event_model.$dtp_event$ = SubLFiles.defconstant("*DTP-EVENT*", (SubLObject)event_model.$sym116$EVENT);
         return (SubLObject)event_model.NIL;
     }

@@ -49,9 +49,11 @@ import static org.armedbear.lisp.Lisp.program_error;
 import static org.armedbear.lisp.Lisp.type_error;
 
 import java.util.LinkedList;
+
 public final class SpecialOperators {
     // ### quote
     private static final SpecialOperator QUOTE = new sf_quote();
+
     private static final class sf_quote extends SpecialOperator {
         sf_quote() {
             super(Symbol.QUOTE, "thing");
@@ -69,6 +71,7 @@ public final class SpecialOperators {
 
     // ### if
     private static final SpecialOperator IF = new sf_if();
+
     private static final class sf_if extends SpecialOperator {
         sf_if() {
             super(Symbol.IF, "test then &optional else");
@@ -80,25 +83,26 @@ public final class SpecialOperators {
         {
             final LispThread thread = LispThread.currentThread();
             switch (args.length()) {
-            case 2: {
-                if (eval(((Cons)args).car, env, thread) != NIL)
-                    return eval(args.cadr(), env, thread);
-                thread.clearValues();
-                return NIL;
-            }
-            case 3: {
-                if (eval(((Cons)args).car, env, thread) != NIL)
-                    return eval(args.cadr(), env, thread);
-                return eval((((Cons)args).cdr).cadr(), env, thread);
-            }
-            default:
-                return error(new WrongNumberOfArgumentsException(this, 2, 3));
+                case 2: {
+                    if (eval(((Cons) args).car, env, thread) != NIL)
+                        return eval(args.cadr(), env, thread);
+                    thread.clearValues();
+                    return NIL;
+                }
+                case 3: {
+                    if (eval(((Cons) args).car, env, thread) != NIL)
+                        return eval(args.cadr(), env, thread);
+                    return eval((((Cons) args).cdr).cadr(), env, thread);
+                }
+                default:
+                    return error(new WrongNumberOfArgumentsException(this, 2, 3));
             }
         }
     };
 
     // ### let
     private static final SpecialOperator LET = new sf_let();
+
     private static final class sf_let extends SpecialOperator {
         sf_let() {
             super(Symbol.LET, "bindings &body body");
@@ -116,6 +120,7 @@ public final class SpecialOperators {
 
     // ### let*
     private static final SpecialOperator LET_STAR = new sf_let_star();
+
     private static final class sf_let_star extends SpecialOperator {
         sf_let_star() {
             super(Symbol.LET_STAR, "bindings &body body");
@@ -131,8 +136,7 @@ public final class SpecialOperators {
         }
     };
 
-    static final LispObject _let(LispObject args, Environment env,
-                                         boolean sequential)
+    static final LispObject _let(LispObject args, Environment env, boolean sequential)
 
     {
         final LispThread thread = LispThread.currentThread();
@@ -151,10 +155,8 @@ public final class SpecialOperators {
                 LispObject obj = varList.car();
                 if (obj instanceof Cons) {
                     if (obj.length() > 2)
-                        return error(new LispError("The " + (sequential ? "LET*" : "LET")
-                                                   + " binding specification " +
-                                                   obj.princToString() + " is invalid."));
-                    symbol = checkSymbol(((Cons)obj).car);
+                        return error(new LispError("The " + (sequential ? "LET*" : "LET") + " binding specification " + obj.princToString() + " is invalid."));
+                    symbol = checkSymbol(((Cons) obj).car);
                     value = eval(obj.cadr(), sequential ? ext : env, thread);
                 } else {
                     symbol = checkSymbol(obj);
@@ -165,28 +167,28 @@ public final class SpecialOperators {
                     bindArg(specials, symbol, value, ext, thread);
                 } else
                     nonSequentialVars.add(new Cons(symbol, value));
-                varList = ((Cons)varList).cdr;
+                varList = ((Cons) varList).cdr;
             }
             if (!sequential)
-for (Cons x : nonSequentialVars)
-                    bindArg(specials, (Symbol)x.car(), x.cdr(), ext, thread);
+                for (Cons x : nonSequentialVars)
+                    bindArg(specials, (Symbol) x.car(), x.cdr(), ext, thread);
 
             // Make sure free special declarations are visible in the body.
             // "The scope of free declarations specifically does not include
             // initialization forms for bindings established by the form
             // containing the declarations." (3.3.4)
             for (; specials != NIL; specials = specials.cdr())
-                ext.declareSpecial((Symbol)specials.car());
+                ext.declareSpecial((Symbol) specials.car());
 
             return progn(body, ext, thread);
-        }
-        finally {
+        } finally {
             thread.resetSpecialBindings(mark);
         }
     }
 
     // ### symbol-macrolet
     private static final SpecialOperator SYMBOL_MACROLET = new sf_symbol_macrolet();
+
     private static final class sf_symbol_macrolet extends SpecialOperator {
         sf_symbol_macrolet() {
             super(Symbol.SYMBOL_MACROLET, "macrobindings &body body");
@@ -209,21 +211,16 @@ for (Cons x : nonSequentialVars)
                     varList = varList.cdr();
                     if (obj instanceof Cons && obj.length() == 2) {
                         Symbol symbol = checkSymbol(obj.car());
-                        if (symbol.isSpecialVariable()
-                                || ext.isDeclaredSpecial(symbol)) {
-                            return program_error("Attempt to bind the special variable "
-                                                 + symbol.princToString()
-                                                 + " with SYMBOL-MACROLET.");
+                        if (symbol.isSpecialVariable() || ext.isDeclaredSpecial(symbol)) {
+                            return program_error("Attempt to bind the special variable " + symbol.princToString() + " with SYMBOL-MACROLET.");
                         }
                         ext.bind(symbol, new SymbolMacro(obj.cadr()));
                     } else {
-                        return program_error("Malformed symbol-expansion pair in SYMBOL-MACROLET: "
-                                             + obj.princToString() + ".");
+                        return program_error("Malformed symbol-expansion pair in SYMBOL-MACROLET: " + obj.princToString() + ".");
                     }
                 }
                 return progn(body, ext, thread);
-            }
-            finally {
+            } finally {
                 thread.resetSpecialBindings(mark);
             }
         }
@@ -231,10 +228,10 @@ for (Cons x : nonSequentialVars)
 
     // ### load-time-value form &optional read-only-p => object
     private static final SpecialOperator LOAD_TIME_VALUE = new sf_load_time_value();
+
     private static final class sf_load_time_value extends SpecialOperator {
         sf_load_time_value() {
-            super(Symbol.LOAD_TIME_VALUE,
-                  "form &optional read-only-p");
+            super(Symbol.LOAD_TIME_VALUE, "form &optional read-only-p");
         }
 
         @Override
@@ -242,18 +239,18 @@ for (Cons x : nonSequentialVars)
 
         {
             switch (args.length()) {
-            case 1:
-            case 2:
-                return eval(args.car(), Environment.newEnvironment(),
-                            LispThread.currentThread());
-            default:
-                return error(new WrongNumberOfArgumentsException(this, 1, 2));
+                case 1:
+                case 2:
+                    return eval(args.car(), Environment.newEnvironment(), LispThread.currentThread());
+                default:
+                    return error(new WrongNumberOfArgumentsException(this, 1, 2));
             }
         }
     };
 
     // ### locally
     private static final SpecialOperator LOCALLY = new sf_locally();
+
     private static final class sf_locally extends SpecialOperator {
         sf_locally() {
             super(Symbol.LOCALLY, "&body body");
@@ -272,6 +269,7 @@ for (Cons x : nonSequentialVars)
 
     // ### progn
     private static final SpecialOperator PROGN = new sf_progn();
+
     private static final class sf_progn extends SpecialOperator {
         sf_progn() {
             super(Symbol.PROGN, "&rest forms");
@@ -288,6 +286,7 @@ for (Cons x : nonSequentialVars)
 
     // ### flet
     private static final SpecialOperator FLET = new sf_flet();
+
     private static final class sf_flet extends SpecialOperator {
         sf_flet() {
             super(Symbol.FLET, "definitions &body body");
@@ -303,6 +302,7 @@ for (Cons x : nonSequentialVars)
 
     // ### labels
     private static final SpecialOperator LABELS = new sf_labels();
+
     private static final class sf_labels extends SpecialOperator {
         sf_labels() {
             super(Symbol.LABELS, "definitions &body body");
@@ -316,8 +316,7 @@ for (Cons x : nonSequentialVars)
         }
     };
 
-    static final LispObject _flet(LispObject args, Environment env,
-                                          boolean recursive)
+    static final LispObject _flet(LispObject args, Environment env, boolean recursive)
 
     {
         // First argument is a list of local function definitions.
@@ -332,8 +331,7 @@ for (Cons x : nonSequentialVars)
             if (name instanceof Symbol) {
                 symbol = checkSymbol(name);
                 if (symbol.getSymbolFunction() instanceof SpecialOperator) {
-                  return program_error(symbol.getName()
-                                       + " is a special operator and may not be redefined.");
+                    return program_error(symbol.getName() + " is a special operator and may not be redefined.");
                 }
             } else if (isValidSetfFunctionName(name))
                 symbol = checkSymbol(name.cadr());
@@ -354,13 +352,9 @@ for (Cons x : nonSequentialVars)
                 body = new Cons(decls.car(), body);
                 decls = decls.cdr();
             }
-            LispObject lambda_expression =
-                new Cons(Symbol.LAMBDA, new Cons(parameters, body));
-            LispObject lambda_name =
-                list(recursive ? Symbol.LABELS : Symbol.FLET, name);
-            Closure closure =
-                new LambdaClosure(lambda_name, lambda_expression,
-                            recursive ? funEnv : env);
+            LispObject lambda_expression = new Cons(Symbol.LAMBDA, new Cons(parameters, body));
+            LispObject lambda_name = list(recursive ? Symbol.LABELS : Symbol.FLET, name);
+            Closure closure = new LambdaClosure(lambda_name, lambda_expression, recursive ? funEnv : env);
             funEnv.addFunctionBinding(name, closure);
             defs = defs.cdr();
         }
@@ -369,14 +363,14 @@ for (Cons x : nonSequentialVars)
             LispObject body = args.cdr();
             body = ext.processDeclarations(body);
             return progn(body, ext, thread);
-        }
-        finally {
+        } finally {
             thread.resetSpecialBindings(mark);
         }
     }
 
     // ### the value-type form => result*
     private static final SpecialOperator THE = new sf_the();
+
     private static final class sf_the extends SpecialOperator {
         sf_the() {
             super(Symbol.THE, "type value");
@@ -403,9 +397,7 @@ for (Cons x : nonSequentialVars)
             // The policy below is in line with the level of verification
             // in the compiler at *safety* levels below 3
             LispObject type = args.car();
-            if ((type instanceof Symbol
-                    && Lisp.get(type, Symbol.DEFTYPE_DEFINITION) == NIL)
-                    || type instanceof BuiltInClass)
+            if ((type instanceof Symbol && Lisp.get(type, Symbol.DEFTYPE_DEFINITION) == NIL) || type instanceof BuiltInClass)
                 if (rv.typep(type) == NIL)
                     type_error(rv, type);
 
@@ -415,6 +407,7 @@ for (Cons x : nonSequentialVars)
 
     // ### progv
     private static final SpecialOperator PROGV = new sf_progv();
+
     private static final class sf_progv extends SpecialOperator {
         sf_progv() {
             super(Symbol.PROGV, "symbols values &body body");
@@ -435,8 +428,7 @@ for (Cons x : nonSequentialVars)
                 progvBindVars(symbols, values, thread);
                 // Implicit PROGN.
                 return progn(args.cdr().cdr(), env, thread);
-            }
-            finally {
+            } finally {
                 thread.resetSpecialBindings(mark);
             }
         }
@@ -444,6 +436,7 @@ for (Cons x : nonSequentialVars)
 
     // ### declare
     private static final SpecialOperator DECLARE = new sf_declare();
+
     private static final class sf_declare extends SpecialOperator {
         sf_declare() {
             super(Symbol.DECLARE, "&rest declaration-specifiers");
@@ -459,6 +452,7 @@ for (Cons x : nonSequentialVars)
 
     // ### function
     private static final SpecialOperator FUNCTION = new sf_function();
+
     private static final class sf_function extends SpecialOperator {
         sf_function() {
             super(Symbol.FUNCTION, "thing");
@@ -483,7 +477,7 @@ for (Cons x : nonSequentialVars)
                 return error(new UndefinedFunction(arg));
             }
             if (arg instanceof Cons) {
-                LispObject car = ((Cons)arg).car;
+                LispObject car = ((Cons) arg).car;
                 if (car == Symbol.SETF) {
                     LispObject f = env.lookupFunction(arg);
                     if (f != null)
@@ -501,9 +495,7 @@ for (Cons x : nonSequentialVars)
                 if (car == Symbol.NAMED_LAMBDA) {
                     LispObject name = arg.cadr();
                     if (name instanceof Symbol || isValidSetfFunctionName(name)) {
-                        return new LambdaClosure(name,
-                                           new Cons(Symbol.LAMBDA, arg.cddr()),
-                                           env);
+                        return new LambdaClosure(name, new Cons(Symbol.LAMBDA, arg.cddr()), env);
                     }
                     return type_error(name, FUNCTION_NAME);
                 }
@@ -516,6 +508,7 @@ for (Cons x : nonSequentialVars)
 
     // ### setq
     private static final SpecialOperator SETQ = new sf_setq();
+
     private static final class sf_setq extends SpecialOperator {
         sf_setq() {
             super(Symbol.SETQ, "&rest vars-and-values");
@@ -530,8 +523,7 @@ for (Cons x : nonSequentialVars)
             while (args != NIL) {
                 Symbol symbol = checkSymbol(args.car());
                 if (false && symbol.isConstantSymbol()) {
-                    return program_error(symbol.princToString()
-                                         + " is a constant and thus cannot be set.");
+                    return program_error(symbol.princToString() + " is a constant and thus cannot be set.");
                 }
                 args = args.cdr();
                 if (symbol.isSpecialVariable() || env.isDeclaredSpecial(symbol)) {
@@ -547,8 +539,7 @@ for (Cons x : nonSequentialVars)
                     Binding binding = env.getBinding(symbol);
                     if (binding != null) {
                         if (binding.value instanceof SymbolMacro) {
-                            LispObject expansion =
-                                ((SymbolMacro)binding.value).getExpansion();
+                            LispObject expansion = ((SymbolMacro) binding.value).getExpansion();
                             LispObject form = list(Symbol.SETF, expansion, args.car());
                             value = eval(form, env, thread);
                         } else {
@@ -557,8 +548,7 @@ for (Cons x : nonSequentialVars)
                         }
                     } else {
                         if (symbol.getSymbolMacro() != null) {
-                            LispObject expansion =
-                                symbol.getSymbolMacro().getExpansion();
+                            LispObject expansion = symbol.getSymbolMacro().getExpansion();
                             LispObject form = list(Symbol.SETF, expansion, args.car());
                             value = eval(form, env, thread);
                         } else {

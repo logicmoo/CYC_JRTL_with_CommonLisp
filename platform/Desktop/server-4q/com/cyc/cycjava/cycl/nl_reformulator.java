@@ -909,8 +909,8 @@ public final class nl_reformulator extends SubLTranslatedFile
         nl_reformulator.$nl_reformulations_simplified$ = SubLFiles.defparameter("*NL-REFORMULATIONS-SIMPLIFIED*", (SubLObject)nl_reformulator.ZERO_INTEGER);
         nl_reformulator.$nl_ref_show_reformulationsP$ = SubLFiles.deflexical("*NL-REF-SHOW-REFORMULATIONS?*", (SubLObject)nl_reformulator.NIL);
         nl_reformulator.$nl_reformulator_settings$ = SubLFiles.defvar("*NL-REFORMULATOR-SETTINGS*", (SubLObject)nl_reformulator.NIL);
-        nl_reformulator.$nl_reformulate_queue$ = SubLFiles.deflexical("*NL-REFORMULATE-QUEUE*", (SubLObject)((nl_reformulator.NIL != Symbols.boundp((SubLObject)nl_reformulator.$sym19$_NL_REFORMULATE_QUEUE_)) ? nl_reformulator.$nl_reformulate_queue$.getGlobalValue() : nl_reformulator.NIL));
-        nl_reformulator.$nl_reformulate_daemon$ = SubLFiles.deflexical("*NL-REFORMULATE-DAEMON*", (SubLObject)((nl_reformulator.NIL != Symbols.boundp((SubLObject)nl_reformulator.$sym22$_NL_REFORMULATE_DAEMON_)) ? nl_reformulator.$nl_reformulate_daemon$.getGlobalValue() : nl_reformulator.NIL));
+        nl_reformulator.$nl_reformulate_queue$ = SubLFiles.deflexical("*NL-REFORMULATE-QUEUE*", (SubLObject)(maybeDefault((SubLObject)nl_reformulator.$sym19$_NL_REFORMULATE_QUEUE_, nl_reformulator.$nl_reformulate_queue$, nl_reformulator.NIL)));
+        nl_reformulator.$nl_reformulate_daemon$ = SubLFiles.deflexical("*NL-REFORMULATE-DAEMON*", (SubLObject)(maybeDefault((SubLObject)nl_reformulator.$sym22$_NL_REFORMULATE_DAEMON_, nl_reformulator.$nl_reformulate_daemon$, nl_reformulator.NIL)));
         nl_reformulator.$within_nl_reformulate_daemon$ = SubLFiles.defparameter("*WITHIN-NL-REFORMULATE-DAEMON*", (SubLObject)nl_reformulator.NIL);
         nl_reformulator.$nl_reformulate_int_cached_caching_state$ = SubLFiles.deflexical("*NL-REFORMULATE-INT-CACHED-CACHING-STATE*", (SubLObject)nl_reformulator.NIL);
         return (SubLObject)nl_reformulator.NIL;

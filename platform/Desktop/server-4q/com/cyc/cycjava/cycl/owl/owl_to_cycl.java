@@ -9544,7 +9544,7 @@ public final class owl_to_cycl extends SubLTranslatedFile
     }
     
     public static SubLObject init_owl_to_cycl_file() {
-        owl_to_cycl.$owl_importer_v1_version_number$ = SubLFiles.deflexical("*OWL-IMPORTER-V1-VERSION-NUMBER*", (SubLObject)((owl_to_cycl.NIL != Symbols.boundp((SubLObject)owl_to_cycl.$sym0$_OWL_IMPORTER_V1_VERSION_NUMBER_)) ? owl_to_cycl.$owl_importer_v1_version_number$.getGlobalValue() : owl_to_cycl.NIL));
+        owl_to_cycl.$owl_importer_v1_version_number$ = SubLFiles.deflexical("*OWL-IMPORTER-V1-VERSION-NUMBER*", (SubLObject)(maybeDefault((SubLObject)owl_to_cycl.$sym0$_OWL_IMPORTER_V1_VERSION_NUMBER_, owl_to_cycl.$owl_importer_v1_version_number$, owl_to_cycl.NIL)));
         owl_to_cycl.$owl_importer$ = SubLFiles.defparameter("*OWL-IMPORTER*", (SubLObject)owl_to_cycl.NIL);
         owl_to_cycl.$owl_merge_mt$ = SubLFiles.deflexical("*OWL-MERGE-MT*", owl_to_cycl.$const34$OWLMappingMt);
         owl_to_cycl.$owl_term_names_preceded_by_id$ = SubLFiles.deflexical("*OWL-TERM-NAMES-PRECEDED-BY-ID*", (SubLObject)owl_to_cycl.$list49);
@@ -9570,11 +9570,11 @@ public final class owl_to_cycl extends SubLTranslatedFile
         owl_to_cycl.$owl_allow_find_via_creationP$ = SubLFiles.defparameter("*OWL-ALLOW-FIND-VIA-CREATION?*", (SubLObject)owl_to_cycl.NIL);
         owl_to_cycl.$cyc_properties_to_not_import$ = SubLFiles.deflexical("*CYC-PROPERTIES-TO-NOT-IMPORT*", (SubLObject)owl_to_cycl.$list392);
         owl_to_cycl.$owl_found_terms$ = SubLFiles.deflexical("*OWL-FOUND-TERMS*", dictionary.new_dictionary(Symbols.symbol_function((SubLObject)owl_to_cycl.EQUAL), (SubLObject)owl_to_cycl.UNPROVIDED));
-        owl_to_cycl.$owl_oe_queues$ = SubLFiles.deflexical("*OWL-OE-QUEUES*", (SubLObject)((owl_to_cycl.NIL != Symbols.boundp((SubLObject)owl_to_cycl.$sym418$_OWL_OE_QUEUES_)) ? owl_to_cycl.$owl_oe_queues$.getGlobalValue() : owl_to_cycl.NIL));
-        owl_to_cycl.$owl_oe_daemon$ = SubLFiles.deflexical("*OWL-OE-DAEMON*", (SubLObject)((owl_to_cycl.NIL != Symbols.boundp((SubLObject)owl_to_cycl.$sym419$_OWL_OE_DAEMON_)) ? owl_to_cycl.$owl_oe_daemon$.getGlobalValue() : owl_to_cycl.NIL));
+        owl_to_cycl.$owl_oe_queues$ = SubLFiles.deflexical("*OWL-OE-QUEUES*", (SubLObject)(maybeDefault((SubLObject)owl_to_cycl.$sym418$_OWL_OE_QUEUES_, owl_to_cycl.$owl_oe_queues$, owl_to_cycl.NIL)));
+        owl_to_cycl.$owl_oe_daemon$ = SubLFiles.deflexical("*OWL-OE-DAEMON*", (SubLObject)(maybeDefault((SubLObject)owl_to_cycl.$sym419$_OWL_OE_DAEMON_, owl_to_cycl.$owl_oe_daemon$, owl_to_cycl.NIL)));
         owl_to_cycl.$owl_oe_queue_marker$ = SubLFiles.deflexical("*OWL-OE-QUEUE-MARKER*", (SubLObject)Characters.CHAR_vertical);
         owl_to_cycl.$owl_oe_queue_end_marker$ = SubLFiles.deflexical("*OWL-OE-QUEUE-END-MARKER*", (SubLObject)Characters.CHAR_exclamation);
-        owl_to_cycl.$owl_node_id_index$ = SubLFiles.deflexical("*OWL-NODE-ID-INDEX*", (SubLObject)((owl_to_cycl.NIL != Symbols.boundp((SubLObject)owl_to_cycl.$sym420$_OWL_NODE_ID_INDEX_)) ? owl_to_cycl.$owl_node_id_index$.getGlobalValue() : owl_to_cycl.NIL));
+        owl_to_cycl.$owl_node_id_index$ = SubLFiles.deflexical("*OWL-NODE-ID-INDEX*", (SubLObject)(maybeDefault((SubLObject)owl_to_cycl.$sym420$_OWL_NODE_ID_INDEX_, owl_to_cycl.$owl_node_id_index$, owl_to_cycl.NIL)));
         owl_to_cycl.$note_found_term_resolution_caching_state$ = SubLFiles.deflexical("*NOTE-FOUND-TERM-RESOLUTION-CACHING-STATE*", (SubLObject)owl_to_cycl.NIL);
         owl_to_cycl.$create_anonymous_owl_termsP$ = SubLFiles.defparameter("*CREATE-ANONYMOUS-OWL-TERMS?*", (SubLObject)owl_to_cycl.NIL);
         owl_to_cycl.$owl_restriction_collection_templates$ = SubLFiles.deflexical("*OWL-RESTRICTION-COLLECTION-TEMPLATES*", (SubLObject)ConsesLow.list(reader.bq_cons(owl_utilities.owl_name((SubLObject)owl_to_cycl.$str496$allValuesFrom), (SubLObject)owl_to_cycl.$list509), reader.bq_cons(owl_utilities.owl_name((SubLObject)owl_to_cycl.$str498$someValuesFrom), (SubLObject)owl_to_cycl.$list510), reader.bq_cons(owl_utilities.owl_name((SubLObject)owl_to_cycl.$str500$hasValue), (SubLObject)owl_to_cycl.$list511), reader.bq_cons(owl_utilities.owl_name((SubLObject)owl_to_cycl.$str504$cardinality), (SubLObject)owl_to_cycl.$list512), reader.bq_cons(owl_utilities.owl_name((SubLObject)owl_to_cycl.$str507$maxCardinality), (SubLObject)owl_to_cycl.$list513), reader.bq_cons(owl_utilities.owl_name((SubLObject)owl_to_cycl.$str502$minCardinality), (SubLObject)owl_to_cycl.$list514)));
@@ -9583,7 +9583,7 @@ public final class owl_to_cycl extends SubLTranslatedFile
         owl_to_cycl.$owl_interval_datatypes$ = SubLFiles.deflexical("*OWL-INTERVAL-DATATYPES*", (SubLObject)owl_to_cycl.$list623);
         owl_to_cycl.$xml_name_caching_state$ = SubLFiles.deflexical("*XML-NAME-CACHING-STATE*", (SubLObject)owl_to_cycl.NIL);
         owl_to_cycl.$dtp_owl_importer$ = SubLFiles.defconstant("*DTP-OWL-IMPORTER*", (SubLObject)owl_to_cycl.$sym640$OWL_IMPORTER);
-        owl_to_cycl.$owl_importer_id_index$ = SubLFiles.deflexical("*OWL-IMPORTER-ID-INDEX*", (SubLObject)((owl_to_cycl.NIL != Symbols.boundp((SubLObject)owl_to_cycl.$sym673$_OWL_IMPORTER_ID_INDEX_)) ? owl_to_cycl.$owl_importer_id_index$.getGlobalValue() : owl_to_cycl.NIL));
+        owl_to_cycl.$owl_importer_id_index$ = SubLFiles.deflexical("*OWL-IMPORTER-ID-INDEX*", (SubLObject)(maybeDefault((SubLObject)owl_to_cycl.$sym673$_OWL_IMPORTER_ID_INDEX_, owl_to_cycl.$owl_importer_id_index$, owl_to_cycl.NIL)));
         owl_to_cycl.$sweet_root$ = SubLFiles.deflexical("*SWEET-ROOT*", (SubLObject)owl_to_cycl.$str675$http___sweet_jpl_nasa_gov_ontolog);
         owl_to_cycl.$sweet_ontologies$ = SubLFiles.deflexical("*SWEET-ONTOLOGIES*", (SubLObject)owl_to_cycl.$list676);
         return (SubLObject)owl_to_cycl.NIL;

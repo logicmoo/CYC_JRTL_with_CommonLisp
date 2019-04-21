@@ -3240,7 +3240,7 @@ public final class rkf_collaborator_fire extends SubLTranslatedFile
         rkf_collaborator_fire.$kqml_read_table$ = SubLFiles.deflexical("*KQML-READ-TABLE*", create_kqml_read_table());
         rkf_collaborator_fire.$kmql_package_prefixes$ = SubLFiles.defparameter("*KMQL-PACKAGE-PREFIXES*", (SubLObject)rkf_collaborator_fire.$list91);
         rkf_collaborator_fire.$dtp_fire_session$ = SubLFiles.defconstant("*DTP-FIRE-SESSION*", (SubLObject)rkf_collaborator_fire.$sym136$FIRE_SESSION);
-        rkf_collaborator_fire.$current_fire_session$ = SubLFiles.deflexical("*CURRENT-FIRE-SESSION*", (SubLObject)((rkf_collaborator_fire.NIL != Symbols.boundp((SubLObject)rkf_collaborator_fire.$sym159$_CURRENT_FIRE_SESSION_)) ? rkf_collaborator_fire.$current_fire_session$.getGlobalValue() : rkf_collaborator_fire.NIL));
+        rkf_collaborator_fire.$current_fire_session$ = SubLFiles.deflexical("*CURRENT-FIRE-SESSION*", (SubLObject)(maybeDefault((SubLObject)rkf_collaborator_fire.$sym159$_CURRENT_FIRE_SESSION_, rkf_collaborator_fire.$current_fire_session$, rkf_collaborator_fire.NIL)));
         rkf_collaborator_fire.$rkf_fire_trace_analogy$ = SubLFiles.defparameter("*RKF-FIRE-TRACE-ANALOGY*", (SubLObject)rkf_collaborator_fire.NIL);
         rkf_collaborator_fire.$fire_server_nil$ = SubLFiles.defconstant("*FIRE-SERVER-NIL*", Packages.intern((SubLObject)rkf_collaborator_fire.$str208$nil, (SubLObject)rkf_collaborator_fire.$str207$CYC));
         return (SubLObject)rkf_collaborator_fire.NIL;

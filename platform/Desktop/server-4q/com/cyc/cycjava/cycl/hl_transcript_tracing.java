@@ -1871,7 +1871,7 @@ public final class hl_transcript_tracing extends SubLTranslatedFile
         hl_transcript_tracing.$within_hl_evalP$ = SubLFiles.defparameter("*WITHIN-HL-EVAL?*", (SubLObject)hl_transcript_tracing.NIL);
         hl_transcript_tracing.$hlt_include_constant_external_idsP$ = SubLFiles.defvar("*HLT-INCLUDE-CONSTANT-EXTERNAL-IDS?*", (SubLObject)hl_transcript_tracing.T);
         hl_transcript_tracing.$hlt_trace_streams$ = SubLFiles.defvar("*HLT-TRACE-STREAMS*", (SubLObject)hl_transcript_tracing.NIL);
-        hl_transcript_tracing.$hlt_trace_lock$ = SubLFiles.deflexical("*HLT-TRACE-LOCK*", (hl_transcript_tracing.NIL != Symbols.boundp((SubLObject)hl_transcript_tracing.$sym30$_HLT_TRACE_LOCK_)) ? hl_transcript_tracing.$hlt_trace_lock$.getGlobalValue() : Locks.make_lock((SubLObject)hl_transcript_tracing.$str31$HLT_trace));
+        hl_transcript_tracing.$hlt_trace_lock$ = SubLFiles.deflexical("*HLT-TRACE-LOCK*", maybeDefault((SubLObject)hl_transcript_tracing.$sym30$_HLT_TRACE_LOCK_, hl_transcript_tracing.$hlt_trace_lock$, ()->(Locks.make_lock((SubLObject)hl_transcript_tracing.$str31$HLT_trace))));
         hl_transcript_tracing.$hlt_format_operationsP$ = SubLFiles.defvar("*HLT-FORMAT-OPERATIONS?*", (SubLObject)hl_transcript_tracing.NIL);
         hl_transcript_tracing.$hlt_constant_id_map$ = SubLFiles.defparameter("*HLT-CONSTANT-ID-MAP*", (SubLObject)hl_transcript_tracing.NIL);
         hl_transcript_tracing.$hlt_constant_list$ = SubLFiles.defparameter("*HLT-CONSTANT-LIST*", (SubLObject)hl_transcript_tracing.NIL);

@@ -400,10 +400,10 @@ public final class removal_modules_gaf_components extends SubLTranslatedFile
     
     public static SubLObject init_removal_modules_gaf_components_file() {
         removal_modules_gaf_components.$default_gaf_predicate_check_cost$ = SubLFiles.deflexical("*DEFAULT-GAF-PREDICATE-CHECK-COST*", control_vars.$cheap_hl_module_check_cost$.getGlobalValue());
-        removal_modules_gaf_components.$gaf_predicate_defining_mt$ = SubLFiles.deflexical("*GAF-PREDICATE-DEFINING-MT*", (removal_modules_gaf_components.NIL != Symbols.boundp((SubLObject)removal_modules_gaf_components.$sym2$_GAF_PREDICATE_DEFINING_MT_)) ? removal_modules_gaf_components.$gaf_predicate_defining_mt$.getGlobalValue() : removal_modules_gaf_components.$const3$BaseKB);
+        removal_modules_gaf_components.$gaf_predicate_defining_mt$ = SubLFiles.deflexical("*GAF-PREDICATE-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_gaf_components.$sym2$_GAF_PREDICATE_DEFINING_MT_, removal_modules_gaf_components.$gaf_predicate_defining_mt$, removal_modules_gaf_components.$const3$BaseKB));
         removal_modules_gaf_components.$gaf_predicate_code_rule$ = SubLFiles.deflexical("*GAF-PREDICATE-CODE-RULE*", (SubLObject)removal_modules_gaf_components.$list4);
         removal_modules_gaf_components.$default_gaf_argument_check_cost$ = SubLFiles.deflexical("*DEFAULT-GAF-ARGUMENT-CHECK-COST*", control_vars.$cheap_hl_module_check_cost$.getGlobalValue());
-        removal_modules_gaf_components.$gaf_argument_defining_mt$ = SubLFiles.deflexical("*GAF-ARGUMENT-DEFINING-MT*", (removal_modules_gaf_components.NIL != Symbols.boundp((SubLObject)removal_modules_gaf_components.$sym18$_GAF_ARGUMENT_DEFINING_MT_)) ? removal_modules_gaf_components.$gaf_argument_defining_mt$.getGlobalValue() : removal_modules_gaf_components.$const3$BaseKB);
+        removal_modules_gaf_components.$gaf_argument_defining_mt$ = SubLFiles.deflexical("*GAF-ARGUMENT-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_gaf_components.$sym18$_GAF_ARGUMENT_DEFINING_MT_, removal_modules_gaf_components.$gaf_argument_defining_mt$, removal_modules_gaf_components.$const3$BaseKB));
         removal_modules_gaf_components.$gaf_argument_code_rule$ = SubLFiles.deflexical("*GAF-ARGUMENT-CODE-RULE*", (SubLObject)removal_modules_gaf_components.$list19);
         return (SubLObject)removal_modules_gaf_components.NIL;
     }

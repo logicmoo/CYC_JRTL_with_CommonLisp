@@ -432,7 +432,7 @@ public final class sksi_sparql_removal_module_generation extends SubLTranslatedF
     }
     
     public static SubLObject init_sksi_sparql_removal_module_generation_file() {
-        sksi_sparql_removal_module_generation.$sksi_sparql_removal_modules$ = SubLFiles.deflexical("*SKSI-SPARQL-REMOVAL-MODULES*", (sksi_sparql_removal_module_generation.NIL != Symbols.boundp((SubLObject)sksi_sparql_removal_module_generation.$sym0$_SKSI_SPARQL_REMOVAL_MODULES_)) ? sksi_sparql_removal_module_generation.$sksi_sparql_removal_modules$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_sparql_removal_module_generation.EQUAL), (SubLObject)sksi_sparql_removal_module_generation.UNPROVIDED));
+        sksi_sparql_removal_module_generation.$sksi_sparql_removal_modules$ = SubLFiles.deflexical("*SKSI-SPARQL-REMOVAL-MODULES*", maybeDefault((SubLObject)sksi_sparql_removal_module_generation.$sym0$_SKSI_SPARQL_REMOVAL_MODULES_, sksi_sparql_removal_module_generation.$sksi_sparql_removal_modules$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_sparql_removal_module_generation.EQUAL), (SubLObject)sksi_sparql_removal_module_generation.UNPROVIDED))));
         return (SubLObject)sksi_sparql_removal_module_generation.NIL;
     }
     

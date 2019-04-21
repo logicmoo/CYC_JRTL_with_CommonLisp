@@ -1047,9 +1047,9 @@ public final class modules extends SubLTranslatedFile
         modules.$module_lock$ = SubLFiles.deflexical("*MODULE-LOCK*", Locks.make_lock((SubLObject)modules.$str0$Module_Lock));
         modules.$system_lock$ = SubLFiles.deflexical("*SYSTEM-LOCK*", Locks.make_lock((SubLObject)modules.$str3$System_Lock));
         modules.$dtp_module$ = SubLFiles.defconstant("*DTP-MODULE*", (SubLObject)modules.$sym5$MODULE);
-        modules.$module_index$ = SubLFiles.deflexical("*MODULE-INDEX*", (modules.NIL != Symbols.boundp((SubLObject)modules.$sym43$_MODULE_INDEX_)) ? modules.$module_index$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)modules.$int44$1024, Symbols.symbol_function((SubLObject)modules.EQUALP), (SubLObject)modules.UNPROVIDED));
+        modules.$module_index$ = SubLFiles.deflexical("*MODULE-INDEX*", maybeDefault((SubLObject)modules.$sym43$_MODULE_INDEX_, modules.$module_index$, ()->(Hashtables.make_hash_table((SubLObject)modules.$int44$1024, Symbols.symbol_function((SubLObject)modules.EQUALP), (SubLObject)modules.UNPROVIDED))));
         modules.$dtp_system$ = SubLFiles.defconstant("*DTP-SYSTEM*", (SubLObject)modules.$sym72$SYSTEM);
-        modules.$system_index$ = SubLFiles.deflexical("*SYSTEM-INDEX*", (SubLObject)((modules.NIL != Symbols.boundp((SubLObject)modules.$sym96$_SYSTEM_INDEX_)) ? modules.$system_index$.getGlobalValue() : modules.NIL));
+        modules.$system_index$ = SubLFiles.deflexical("*SYSTEM-INDEX*", (SubLObject)(maybeDefault((SubLObject)modules.$sym96$_SYSTEM_INDEX_, modules.$system_index$, modules.NIL)));
         return (SubLObject)modules.NIL;
     }
     

@@ -5,7 +5,7 @@ import com.cyc.tool.subl.util.*;
 public class cycl_opencyc extends InitializingSubLFile
 {
 
-    public static final SubLFile me = new cycl();
+    public static final SubLFile me = new cycl_opencyc();
 
 
     public void declareFunctions()

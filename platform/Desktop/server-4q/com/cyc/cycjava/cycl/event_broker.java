@@ -1645,7 +1645,7 @@ public final class event_broker extends SubLTranslatedFile
         event_broker.$dtp_event_listener$ = SubLFiles.defconstant("*DTP-EVENT-LISTENER*", (SubLObject)event_broker.$sym39$EVENT_LISTENER);
         event_broker.$dtp_event_broker$ = SubLFiles.defconstant("*DTP-EVENT-BROKER*", (SubLObject)event_broker.$sym72$EVENT_BROKER);
         event_broker.$dtp_protocol_description$ = SubLFiles.defconstant("*DTP-PROTOCOL-DESCRIPTION*", (SubLObject)event_broker.$sym108$PROTOCOL_DESCRIPTION);
-        event_broker.$event_broker$ = SubLFiles.deflexical("*EVENT-BROKER*", (SubLObject)((event_broker.NIL != Symbols.boundp((SubLObject)event_broker.$sym136$_EVENT_BROKER_)) ? event_broker.$event_broker$.getGlobalValue() : event_broker.NIL));
+        event_broker.$event_broker$ = SubLFiles.deflexical("*EVENT-BROKER*", (SubLObject)(maybeDefault((SubLObject)event_broker.$sym136$_EVENT_BROKER_, event_broker.$event_broker$, event_broker.NIL)));
         event_broker.$fast_has_event_class_any_transitive_listenersP_caching_state$ = SubLFiles.deflexical("*FAST-HAS-EVENT-CLASS-ANY-TRANSITIVE-LISTENERS?-CACHING-STATE*", (SubLObject)event_broker.NIL);
         event_broker.$deregistration_during_system_initialization$ = SubLFiles.defparameter("*DEREGISTRATION-DURING-SYSTEM-INITIALIZATION*", (SubLObject)event_broker.NIL);
         return (SubLObject)event_broker.NIL;

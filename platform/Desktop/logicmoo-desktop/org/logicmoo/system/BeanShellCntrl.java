@@ -200,8 +200,7 @@ public class BeanShellCntrl {
         //int hc = CycEval.CYC_PROGN.hotCount;
     }
 
-    static public void addConsole(bsh.This thiz, final JConsole console)
-            throws UtilEvalError, EvalError, InterruptedException {
+    static public void addConsole(bsh.This thiz, final JConsole console) throws UtilEvalError, EvalError, InterruptedException {
         Object o = thiz.getNameSpace().getVariable("interpreter", false);
         String myName = null;
         o = thiz.getNameSpace().getVariable("name", false);
@@ -541,15 +540,16 @@ public class BeanShellCntrl {
             PACKAGE_EXT.ALLOW_INHERIT_CONFLICTS = true;
             PACKAGE_CL.ALLOW_INHERIT_CONFLICTS = true;
             PACKAGE_CL_USER.ALLOW_INHERIT_CONFLICTS = true;
-            PACKAGE_CL_USER.usePackage(PACKAGE_CYC, true);
+            PACKAGE_CL_USER.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CYC, true);
             PACKAGE_CL_USER.unusePackage(PACKAGE_CL);
             PACKAGE_CL_USER.unusePackage(PACKAGE_EXT);
             PACKAGE_CL_USER.unusePackage(PACKAGE_JAVA);
-            PACKAGE_CL_USER.usePackage(PACKAGE_SUBLISP, true);
-            PACKAGE_CL_USER.usePackage(PACKAGE_EXT, true);
-            PACKAGE_CL_USER.usePackage(PACKAGE_JAVA, true);
-            PACKAGE_CL_USER.usePackage(PACKAGE_CL, true);
+            PACKAGE_CL_USER.usePackageIgnoringErrorsPreferPrevious(PACKAGE_SUBLISP, true);
+            PACKAGE_CL_USER.usePackageIgnoringErrorsPreferPrevious(PACKAGE_EXT, false);
+            PACKAGE_CL_USER.usePackageIgnoringErrorsPreferPrevious(PACKAGE_JAVA, false);
+            PACKAGE_CL_USER.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL, false);
             PACKAGE_CL_USER.addNickname("USER");
+            PACKAGE_CL_USER.addNickname("U");
             //  PACKAGE_SUBLISP.usePackage(PACKAGE_CL, true);
         }
     }
@@ -561,11 +561,11 @@ public class BeanShellCntrl {
                 return;
             inited_cyc_sees_cl = true;
             PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
-            PACKAGE_CYC.usePackage(PACKAGE_JAVA, true);
-            PACKAGE_CYC.usePackage(PACKAGE_EXT, true);
-            PACKAGE_CYC.usePackage(PACKAGE_CL, true);
-            PACKAGE_CYC.usePackage(PACKAGE_CL_USER, true);
-            PACKAGE_CYC.usePackage(PACKAGE_SUBLISP, true);
+            PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_JAVA, false);
+            PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_EXT, false);
+            PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL, false);
+            PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL_USER, false);
+            PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_SUBLISP, true);
         }
     }
 
@@ -593,8 +593,7 @@ public class BeanShellCntrl {
             public void safeRun() {
                 try {
                     org.armedbear.lisp.Interpreter interp = org.armedbear.lisp.Interpreter
-                            .createNewLispInstance(console.getInputStream(), console.getOut(), new File("./")
-                                    .getCanonicalPath(), Version.getVersion(), false);
+                            .createNewLispInstance(console.getInputStream(), console.getOut(), new File("./").getCanonicalPath(), Version.getVersion(), false);
                     console.setNameCompletion(new LispNameCompletion());
                     interp.run();
                 } catch (IOException e) {
@@ -1451,9 +1450,8 @@ public class BeanShellCntrl {
         try {
             try {
                 Main.noExit = true;
-                final Interpreter lispInstance = org.armedbear.lisp.Interpreter
-                        .createNewLispInstance(System.in, System.out, // 
-                                new File(".").getAbsolutePath(), Version.getVersion(), false);
+                final Interpreter lispInstance = org.armedbear.lisp.Interpreter.createNewLispInstance(System.in, System.out, // 
+                        new File(".").getAbsolutePath(), Version.getVersion(), false);
                 lispInstance.run();
             } catch (org.armedbear.lisp.ProcessingTerminated e) {
                 //e.printStackTrace();
@@ -2057,8 +2055,7 @@ public class BeanShellCntrl {
         final SubLObject _prev_bind_0 = constant_completion_low.$require_valid_constants$.currentBinding(thread);
         try {
             constant_completion_low.$require_valid_constants$.bind(localNil, thread);
-            constant = constant_completion_high
-                    .constant_complete_exact(name, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
+            constant = constant_completion_high.constant_complete_exact(name, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
         } finally {
             constant_completion_low.$require_valid_constants$.rebind(_prev_bind_0, thread);
         }
@@ -2289,13 +2286,22 @@ public class BeanShellCntrl {
     }
 
     public static void main(String[] args) throws InterruptedException {
-
         String[] argsNew = Main.extractOptions(args);
         start_lisp_from_prolog();
-        Runnable runnable = Main.mainRunnable(argsNew, null);
+        Runnable runnable;
+        if (Main.needSubLMAIN) {
+            runnable = null;
+        } else {
+            runnable = Main.mainRunnable(argsNew, null);
+        }
         scanForExports(BeanShellCntrl.class);
-        runnable.run();
-        scanForExports(BeanShellCntrl.class);
+        if (runnable != null) {
+            runnable.run();
+            scanForExports(BeanShellCntrl.class);
+        }
+        if (Main.needSubLMAIN) {
+            SubLMain.main(argsNew);
+        }
     }
 
     static class CreationInfo {
@@ -2753,6 +2759,15 @@ public class BeanShellCntrl {
     public static org.armedbear.lisp.Interpreter currentLisp() {
         return Interpreter.getInstance();
 
+    }
+
+    /**
+     * 
+     */
+    public static void registerSelf() {
+        BeanShellCntrl.scanForExports(BeanShellCntrl.class);
+        BeanShellCntrl.cl_imports_cyc();
+        BeanShellCntrl.cyc_imports_cl();
     }
 
 }

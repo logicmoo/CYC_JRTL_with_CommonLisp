@@ -866,10 +866,10 @@ public final class rkf_concept_harvester extends SubLTranslatedFile
     
     public static SubLObject init_rkf_concept_harvester_file() {
         rkf_concept_harvester.$rkf_ch_string_tokenize_internal_cached_caching_state$ = SubLFiles.deflexical("*RKF-CH-STRING-TOKENIZE-INTERNAL-CACHED-CACHING-STATE*", (SubLObject)rkf_concept_harvester.NIL);
-        rkf_concept_harvester.$rkf_all_concept_harvester_methods$ = SubLFiles.deflexical("*RKF-ALL-CONCEPT-HARVESTER-METHODS*", (SubLObject)((rkf_concept_harvester.NIL != Symbols.boundp((SubLObject)rkf_concept_harvester.$sym28$_RKF_ALL_CONCEPT_HARVESTER_METHODS_)) ? rkf_concept_harvester.$rkf_all_concept_harvester_methods$.getGlobalValue() : rkf_concept_harvester.NIL));
-        rkf_concept_harvester.$rkf_active_concept_harvester_methods$ = SubLFiles.deflexical("*RKF-ACTIVE-CONCEPT-HARVESTER-METHODS*", (SubLObject)((rkf_concept_harvester.NIL != Symbols.boundp((SubLObject)rkf_concept_harvester.$sym29$_RKF_ACTIVE_CONCEPT_HARVESTER_METHODS_)) ? rkf_concept_harvester.$rkf_active_concept_harvester_methods$.getGlobalValue() : rkf_concept_harvester.NIL));
+        rkf_concept_harvester.$rkf_all_concept_harvester_methods$ = SubLFiles.deflexical("*RKF-ALL-CONCEPT-HARVESTER-METHODS*", (SubLObject)(maybeDefault((SubLObject)rkf_concept_harvester.$sym28$_RKF_ALL_CONCEPT_HARVESTER_METHODS_, rkf_concept_harvester.$rkf_all_concept_harvester_methods$, rkf_concept_harvester.NIL)));
+        rkf_concept_harvester.$rkf_active_concept_harvester_methods$ = SubLFiles.deflexical("*RKF-ACTIVE-CONCEPT-HARVESTER-METHODS*", (SubLObject)(maybeDefault((SubLObject)rkf_concept_harvester.$sym29$_RKF_ACTIVE_CONCEPT_HARVESTER_METHODS_, rkf_concept_harvester.$rkf_active_concept_harvester_methods$, rkf_concept_harvester.NIL)));
         rkf_concept_harvester.$rkf_ch_template_parses_method$ = SubLFiles.defparameter("*RKF-CH-TEMPLATE-PARSES-METHOD*", (SubLObject)rkf_concept_harvester.$sym45$ITP_SEQUEL);
-        rkf_concept_harvester.$rkf_ch_template_parse_cache$ = SubLFiles.deflexical("*RKF-CH-TEMPLATE-PARSE-CACHE*", (SubLObject)((rkf_concept_harvester.NIL != Symbols.boundp((SubLObject)rkf_concept_harvester.$sym46$_RKF_CH_TEMPLATE_PARSE_CACHE_)) ? rkf_concept_harvester.$rkf_ch_template_parse_cache$.getGlobalValue() : rkf_concept_harvester.NIL));
+        rkf_concept_harvester.$rkf_ch_template_parse_cache$ = SubLFiles.deflexical("*RKF-CH-TEMPLATE-PARSE-CACHE*", (SubLObject)(maybeDefault((SubLObject)rkf_concept_harvester.$sym46$_RKF_CH_TEMPLATE_PARSE_CACHE_, rkf_concept_harvester.$rkf_ch_template_parse_cache$, rkf_concept_harvester.NIL)));
         return (SubLObject)rkf_concept_harvester.NIL;
     }
     

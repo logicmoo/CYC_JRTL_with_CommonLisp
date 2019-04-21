@@ -3049,7 +3049,7 @@ public final class task_processor extends SubLTranslatedFile
         task_processor.$tpool_background_msg_path$ = SubLFiles.deflexical("*TPOOL-BACKGROUND-MSG-PATH*", (SubLObject)task_processor.NIL);
         task_processor.$tpool_background_msg_stream$ = SubLFiles.deflexical("*TPOOL-BACKGROUND-MSG-STREAM*", (SubLObject)task_processor.NIL);
         task_processor.$queue_tpool_background_msgs_when_no_pathP$ = SubLFiles.defparameter("*QUEUE-TPOOL-BACKGROUND-MSGS-WHEN-NO-PATH?*", (SubLObject)task_processor.NIL);
-        task_processor.$tpool_background_msg_lock$ = SubLFiles.deflexical("*TPOOL-BACKGROUND-MSG-LOCK*", (task_processor.NIL != Symbols.boundp((SubLObject)task_processor.$sym156$_TPOOL_BACKGROUND_MSG_LOCK_)) ? task_processor.$tpool_background_msg_lock$.getGlobalValue() : Locks.make_lock((SubLObject)task_processor.$str157$tpool_background_msg_lock));
+        task_processor.$tpool_background_msg_lock$ = SubLFiles.deflexical("*TPOOL-BACKGROUND-MSG-LOCK*", maybeDefault((SubLObject)task_processor.$sym156$_TPOOL_BACKGROUND_MSG_LOCK_, task_processor.$tpool_background_msg_lock$, ()->(Locks.make_lock((SubLObject)task_processor.$str157$tpool_background_msg_lock))));
         task_processor.$eval_with_bindings$ = SubLFiles.defparameter("*EVAL-WITH-BINDINGS*", (SubLObject)task_processor.NIL);
         task_processor.$process_to_task_process_pool$ = SubLFiles.deflexical("*PROCESS-TO-TASK-PROCESS-POOL*", dictionary_utilities.new_synchronized_dictionary((SubLObject)task_processor.UNPROVIDED, (SubLObject)task_processor.UNPROVIDED));
         task_processor.$task_processes_being_worked_on_lock$ = SubLFiles.deflexical("*TASK-PROCESSES-BEING-WORKED-ON-LOCK*", Locks.make_lock((SubLObject)task_processor.$str184$Task_processes_being_worked_on));
@@ -3070,7 +3070,7 @@ public final class task_processor extends SubLTranslatedFile
         task_processor.$bg_task_processor_request_id$ = SubLFiles.deflexical("*BG-TASK-PROCESSOR-REQUEST-ID*", (SubLObject)task_processor.ZERO_INTEGER);
         task_processor.$console_task_process_pool$ = SubLFiles.deflexical("*CONSOLE-TASK-PROCESS-POOL*", (SubLObject)task_processor.NIL);
         task_processor.$console_task_process_pool_lock$ = SubLFiles.defconstant("*CONSOLE-TASK-PROCESS-POOL-LOCK*", Locks.make_lock((SubLObject)task_processor.$str277$task_processor_initialization_loc));
-        task_processor.$task_processor_console_id$ = SubLFiles.deflexical("*TASK-PROCESSOR-CONSOLE-ID*", (SubLObject)((task_processor.NIL != Symbols.boundp((SubLObject)task_processor.$sym310$_TASK_PROCESSOR_CONSOLE_ID_)) ? task_processor.$task_processor_console_id$.getGlobalValue() : task_processor.ZERO_INTEGER));
+        task_processor.$task_processor_console_id$ = SubLFiles.deflexical("*TASK-PROCESSOR-CONSOLE-ID*", (SubLObject)(maybeDefault((SubLObject)task_processor.$sym310$_TASK_PROCESSOR_CONSOLE_ID_, task_processor.$task_processor_console_id$, task_processor.ZERO_INTEGER)));
         return (SubLObject)task_processor.NIL;
     }
     

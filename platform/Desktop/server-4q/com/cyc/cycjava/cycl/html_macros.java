@@ -7516,13 +7516,13 @@ public final class html_macros extends SubLTranslatedFile
         html_macros.$suppress_html_source_readability_terpriP$ = SubLFiles.defparameter("*SUPPRESS-HTML-SOURCE-READABILITY-TERPRI?*", (SubLObject)html_macros.NIL);
         html_macros.$html_id_space_id_generator$ = SubLFiles.defparameter("*HTML-ID-SPACE-ID-GENERATOR*", (SubLObject)html_macros.NIL);
         html_macros.$html_form_field_uniquifier_code$ = SubLFiles.defparameter("*HTML-FORM-FIELD-UNIQUIFIER-CODE*", (SubLObject)html_macros.NIL);
-        html_macros.$html_form_field_uniquifier_isg$ = SubLFiles.deflexical("*HTML-FORM-FIELD-UNIQUIFIER-ISG*", (SubLObject)((html_macros.NIL != Symbols.boundp((SubLObject)html_macros.$sym624$_HTML_FORM_FIELD_UNIQUIFIER_ISG_)) ? html_macros.$html_form_field_uniquifier_isg$.getGlobalValue() : html_macros.NIL));
+        html_macros.$html_form_field_uniquifier_isg$ = SubLFiles.deflexical("*HTML-FORM-FIELD-UNIQUIFIER-ISG*", (SubLObject)(maybeDefault((SubLObject)html_macros.$sym624$_HTML_FORM_FIELD_UNIQUIFIER_ISG_, html_macros.$html_form_field_uniquifier_isg$, html_macros.NIL)));
         html_macros.$within_html_form$ = SubLFiles.defparameter("*WITHIN-HTML-FORM*", (SubLObject)html_macros.NIL);
         html_macros.$html_indent_table_max$ = SubLFiles.defparameter("*HTML-INDENT-TABLE-MAX*", (SubLObject)html_macros.NIL);
-        html_macros.$html_handler_property$ = SubLFiles.deflexical("*HTML-HANDLER-PROPERTY*", (SubLObject)((html_macros.NIL != Symbols.boundp((SubLObject)html_macros.$sym1022$_HTML_HANDLER_PROPERTY_)) ? html_macros.$html_handler_property$.getGlobalValue() : html_macros.$kw1023$HTML_HANDLER));
-        html_macros.$xml_handler_property$ = SubLFiles.deflexical("*XML-HANDLER-PROPERTY*", (SubLObject)((html_macros.NIL != Symbols.boundp((SubLObject)html_macros.$sym1024$_XML_HANDLER_PROPERTY_)) ? html_macros.$xml_handler_property$.getGlobalValue() : html_macros.$kw1025$XML_HANDLER));
-        html_macros.$json_handler_property$ = SubLFiles.deflexical("*JSON-HANDLER-PROPERTY*", (SubLObject)((html_macros.NIL != Symbols.boundp((SubLObject)html_macros.$sym1026$_JSON_HANDLER_PROPERTY_)) ? html_macros.$json_handler_property$.getGlobalValue() : html_macros.$kw1027$JSON_HANDLER));
-        html_macros.$handler_mime_types$ = SubLFiles.deflexical("*HANDLER-MIME-TYPES*", (html_macros.NIL != Symbols.boundp((SubLObject)html_macros.$sym1033$_HANDLER_MIME_TYPES_)) ? html_macros.$handler_mime_types$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)html_macros.$int1034$200, (SubLObject)html_macros.EQ, (SubLObject)html_macros.UNPROVIDED));
+        html_macros.$html_handler_property$ = SubLFiles.deflexical("*HTML-HANDLER-PROPERTY*", (SubLObject)(maybeDefault((SubLObject)html_macros.$sym1022$_HTML_HANDLER_PROPERTY_, html_macros.$html_handler_property$, html_macros.$kw1023$HTML_HANDLER)));
+        html_macros.$xml_handler_property$ = SubLFiles.deflexical("*XML-HANDLER-PROPERTY*", (SubLObject)(maybeDefault((SubLObject)html_macros.$sym1024$_XML_HANDLER_PROPERTY_, html_macros.$xml_handler_property$, html_macros.$kw1025$XML_HANDLER)));
+        html_macros.$json_handler_property$ = SubLFiles.deflexical("*JSON-HANDLER-PROPERTY*", (SubLObject)(maybeDefault((SubLObject)html_macros.$sym1026$_JSON_HANDLER_PROPERTY_, html_macros.$json_handler_property$, html_macros.$kw1027$JSON_HANDLER)));
+        html_macros.$handler_mime_types$ = SubLFiles.deflexical("*HANDLER-MIME-TYPES*", maybeDefault((SubLObject)html_macros.$sym1033$_HANDLER_MIME_TYPES_, html_macros.$handler_mime_types$, ()->(Hashtables.make_hash_table((SubLObject)html_macros.$int1034$200, (SubLObject)html_macros.EQ, (SubLObject)html_macros.UNPROVIDED))));
         return (SubLObject)html_macros.NIL;
     }
     

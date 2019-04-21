@@ -1129,9 +1129,9 @@ public final class arity extends SubLTranslatedFile
     
     public static SubLObject init_arity_file() {
         arity.$kb_arity_table_equality_test$ = SubLFiles.deflexical("*KB-ARITY-TABLE-EQUALITY-TEST*", Symbols.symbol_function((SubLObject)arity.EQL));
-        arity.$kb_arity_table$ = SubLFiles.deflexical("*KB-ARITY-TABLE*", (SubLObject)((arity.NIL != Symbols.boundp((SubLObject)arity.$sym0$_KB_ARITY_TABLE_)) ? arity.$kb_arity_table$.getGlobalValue() : arity.NIL));
-        arity.$kb_arity_min_table$ = SubLFiles.deflexical("*KB-ARITY-MIN-TABLE*", (SubLObject)((arity.NIL != Symbols.boundp((SubLObject)arity.$sym19$_KB_ARITY_MIN_TABLE_)) ? arity.$kb_arity_min_table$.getGlobalValue() : arity.NIL));
-        arity.$kb_arity_max_table$ = SubLFiles.deflexical("*KB-ARITY-MAX-TABLE*", (SubLObject)((arity.NIL != Symbols.boundp((SubLObject)arity.$sym24$_KB_ARITY_MAX_TABLE_)) ? arity.$kb_arity_max_table$.getGlobalValue() : arity.NIL));
+        arity.$kb_arity_table$ = SubLFiles.deflexical("*KB-ARITY-TABLE*", (SubLObject)(maybeDefault((SubLObject)arity.$sym0$_KB_ARITY_TABLE_, arity.$kb_arity_table$, arity.NIL)));
+        arity.$kb_arity_min_table$ = SubLFiles.deflexical("*KB-ARITY-MIN-TABLE*", (SubLObject)(maybeDefault((SubLObject)arity.$sym19$_KB_ARITY_MIN_TABLE_, arity.$kb_arity_min_table$, arity.NIL)));
+        arity.$kb_arity_max_table$ = SubLFiles.deflexical("*KB-ARITY-MAX-TABLE*", (SubLObject)(maybeDefault((SubLObject)arity.$sym24$_KB_ARITY_MAX_TABLE_, arity.$kb_arity_max_table$, arity.NIL)));
         return (SubLObject)arity.NIL;
     }
     

@@ -7448,10 +7448,10 @@ public final class leviathan extends SubLTranslatedFile
         leviathan.$cached_load_all_instantiated_haystacks_caching_state$ = SubLFiles.deflexical("*CACHED-LOAD-ALL-INSTANTIATED-HAYSTACKS-CACHING-STATE*", (SubLObject)leviathan.NIL);
         leviathan.$cached_load_all_crippled_haystacks_caching_state$ = SubLFiles.deflexical("*CACHED-LOAD-ALL-CRIPPLED-HAYSTACKS-CACHING-STATE*", (SubLObject)leviathan.NIL);
         leviathan.$sorted_rule_analyses$ = SubLFiles.deflexical("*SORTED-RULE-ANALYSES*", (SubLObject)leviathan.$list126);
-        leviathan.$rule_bindings_wff_table$ = SubLFiles.deflexical("*RULE-BINDINGS-WFF-TABLE*", (SubLObject)((leviathan.NIL != Symbols.boundp((SubLObject)leviathan.$sym150$_RULE_BINDINGS_WFF_TABLE_)) ? leviathan.$rule_bindings_wff_table$.getGlobalValue() : leviathan.NIL));
+        leviathan.$rule_bindings_wff_table$ = SubLFiles.deflexical("*RULE-BINDINGS-WFF-TABLE*", (SubLObject)(maybeDefault((SubLObject)leviathan.$sym150$_RULE_BINDINGS_WFF_TABLE_, leviathan.$rule_bindings_wff_table$, leviathan.NIL)));
         leviathan.$rule_bindings_to_closed_wff_pruning_enabledP$ = SubLFiles.defparameter("*RULE-BINDINGS-TO-CLOSED-WFF-PRUNING-ENABLED?*", (SubLObject)leviathan.NIL);
         leviathan.$maintain_problem_creation_timesP$ = SubLFiles.defparameter("*MAINTAIN-PROBLEM-CREATION-TIMES?*", (SubLObject)leviathan.NIL);
-        leviathan.$problem_creation_times$ = SubLFiles.deflexical("*PROBLEM-CREATION-TIMES*", (SubLObject)((leviathan.NIL != Symbols.boundp((SubLObject)leviathan.$sym159$_PROBLEM_CREATION_TIMES_)) ? leviathan.$problem_creation_times$.getGlobalValue() : leviathan.NIL));
+        leviathan.$problem_creation_times$ = SubLFiles.deflexical("*PROBLEM-CREATION-TIMES*", (SubLObject)(maybeDefault((SubLObject)leviathan.$sym159$_PROBLEM_CREATION_TIMES_, leviathan.$problem_creation_times$, leviathan.NIL)));
         leviathan.$leviathan_crtl_internal_time_units_per_second$ = SubLFiles.deflexical("*LEVIATHAN-CRTL-INTERNAL-TIME-UNITS-PER-SECOND*", (SubLObject)leviathan.$int223$1000000);
         leviathan.$doppelganger_time_threshold$ = SubLFiles.defparameter("*DOPPELGANGER-TIME-THRESHOLD*", (SubLObject)leviathan.THREE_INTEGER);
         return (SubLObject)leviathan.NIL;

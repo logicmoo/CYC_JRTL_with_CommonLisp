@@ -776,9 +776,9 @@ public final class subl_promotions extends SubLTranslatedFile
     }
     
     public static SubLObject init_subl_promotions_file() {
-        subl_promotions.$make_process_with_args_table$ = SubLFiles.deflexical("*MAKE-PROCESS-WITH-ARGS-TABLE*", (SubLObject)((subl_promotions.NIL != Symbols.boundp((SubLObject)subl_promotions.$sym0$_MAKE_PROCESS_WITH_ARGS_TABLE_)) ? subl_promotions.$make_process_with_args_table$.getGlobalValue() : subl_promotions.NIL));
+        subl_promotions.$make_process_with_args_table$ = SubLFiles.deflexical("*MAKE-PROCESS-WITH-ARGS-TABLE*", (SubLObject)(maybeDefault((SubLObject)subl_promotions.$sym0$_MAKE_PROCESS_WITH_ARGS_TABLE_, subl_promotions.$make_process_with_args_table$, subl_promotions.NIL)));
         subl_promotions.$make_process_with_args_table_lock$ = SubLFiles.deflexical("*MAKE-PROCESS-WITH-ARGS-TABLE-LOCK*", Locks.make_lock((SubLObject)subl_promotions.$str1$MAKE_PROCESS_WITH_ARGS_TABLE));
-        subl_promotions.$interrupt_process_with_args_table$ = SubLFiles.deflexical("*INTERRUPT-PROCESS-WITH-ARGS-TABLE*", (SubLObject)((subl_promotions.NIL != Symbols.boundp((SubLObject)subl_promotions.$sym8$_INTERRUPT_PROCESS_WITH_ARGS_TABLE_)) ? subl_promotions.$interrupt_process_with_args_table$.getGlobalValue() : subl_promotions.NIL));
+        subl_promotions.$interrupt_process_with_args_table$ = SubLFiles.deflexical("*INTERRUPT-PROCESS-WITH-ARGS-TABLE*", (SubLObject)(maybeDefault((SubLObject)subl_promotions.$sym8$_INTERRUPT_PROCESS_WITH_ARGS_TABLE_, subl_promotions.$interrupt_process_with_args_table$, subl_promotions.NIL)));
         subl_promotions.$interrupt_process_with_args_table_lock$ = SubLFiles.deflexical("*INTERRUPT-PROCESS-WITH-ARGS-TABLE-LOCK*", Locks.make_lock((SubLObject)subl_promotions.$str9$INTERRUPT_PROCESS_WITH_ARGS_TABLE));
         return (SubLObject)subl_promotions.NIL;
     }

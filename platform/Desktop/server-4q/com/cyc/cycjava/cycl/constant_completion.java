@@ -176,8 +176,8 @@ public final class constant_completion extends SubLTranslatedFile
     }
     
     public static SubLObject init_constant_completion_file() {
-        constant_completion.$constant_names_in_code$ = SubLFiles.deflexical("*CONSTANT-NAMES-IN-CODE*", (SubLObject)((constant_completion.NIL != Symbols.boundp((SubLObject)constant_completion.$sym0$_CONSTANT_NAMES_IN_CODE_)) ? constant_completion.$constant_names_in_code$.getGlobalValue() : constant_completion.NIL));
-        constant_completion.$bogus_constant_names_in_code$ = SubLFiles.deflexical("*BOGUS-CONSTANT-NAMES-IN-CODE*", (SubLObject)((constant_completion.NIL != Symbols.boundp((SubLObject)constant_completion.$sym1$_BOGUS_CONSTANT_NAMES_IN_CODE_)) ? constant_completion.$bogus_constant_names_in_code$.getGlobalValue() : constant_completion.NIL));
+        constant_completion.$constant_names_in_code$ = SubLFiles.deflexical("*CONSTANT-NAMES-IN-CODE*", (SubLObject)(maybeDefault((SubLObject)constant_completion.$sym0$_CONSTANT_NAMES_IN_CODE_, constant_completion.$constant_names_in_code$, constant_completion.NIL)));
+        constant_completion.$bogus_constant_names_in_code$ = SubLFiles.deflexical("*BOGUS-CONSTANT-NAMES-IN-CODE*", (SubLObject)(maybeDefault((SubLObject)constant_completion.$sym1$_BOGUS_CONSTANT_NAMES_IN_CODE_, constant_completion.$bogus_constant_names_in_code$, constant_completion.NIL)));
         return (SubLObject)constant_completion.NIL;
     }
     

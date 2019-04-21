@@ -37,7 +37,7 @@ public final class cyc_testing_initialization extends SubLTranslatedFile
     }
     
     public static SubLObject init_cyc_testing_initialization_file() {
-        cyc_testing_initialization.$cyc_tests_initializedP$ = SubLFiles.deflexical("*CYC-TESTS-INITIALIZED?*", (SubLObject)((cyc_testing_initialization.NIL != Symbols.boundp((SubLObject)cyc_testing_initialization.$sym0$_CYC_TESTS_INITIALIZED__)) ? cyc_testing_initialization.$cyc_tests_initializedP$.getGlobalValue() : cyc_testing_initialization.NIL));
+        cyc_testing_initialization.$cyc_tests_initializedP$ = SubLFiles.deflexical("*CYC-TESTS-INITIALIZED?*", (SubLObject)(maybeDefault((SubLObject)cyc_testing_initialization.$sym0$_CYC_TESTS_INITIALIZED__, cyc_testing_initialization.$cyc_tests_initializedP$, cyc_testing_initialization.NIL)));
         return (SubLObject)cyc_testing_initialization.NIL;
     }
     

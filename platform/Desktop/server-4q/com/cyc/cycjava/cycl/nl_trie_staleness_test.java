@@ -258,9 +258,9 @@ public final class nl_trie_staleness_test extends SubLTranslatedFile
     }
     
     public static SubLObject init_nl_trie_staleness_test_file() {
-        nl_trie_staleness_test.$nl_trie_revisions$ = SubLFiles.deflexical("*NL-TRIE-REVISIONS*", (SubLObject)((nl_trie_staleness_test.NIL != Symbols.boundp((SubLObject)nl_trie_staleness_test.$sym0$_NL_TRIE_REVISIONS_)) ? nl_trie_staleness_test.$nl_trie_revisions$.getGlobalValue() : nl_trie_staleness_test.NIL));
-        nl_trie_staleness_test.$nl_trie_staleness_acceptableP$ = SubLFiles.deflexical("*NL-TRIE-STALENESS-ACCEPTABLE?*", (SubLObject)((nl_trie_staleness_test.NIL != Symbols.boundp((SubLObject)nl_trie_staleness_test.$sym1$_NL_TRIE_STALENESS_ACCEPTABLE__)) ? nl_trie_staleness_test.$nl_trie_staleness_acceptableP$.getGlobalValue() : nl_trie_staleness_test.T));
-        nl_trie_staleness_test.$nl_trie_known_staleP$ = SubLFiles.deflexical("*NL-TRIE-KNOWN-STALE?*", (SubLObject)((nl_trie_staleness_test.NIL != Symbols.boundp((SubLObject)nl_trie_staleness_test.$sym2$_NL_TRIE_KNOWN_STALE__)) ? nl_trie_staleness_test.$nl_trie_known_staleP$.getGlobalValue() : nl_trie_staleness_test.NIL));
+        nl_trie_staleness_test.$nl_trie_revisions$ = SubLFiles.deflexical("*NL-TRIE-REVISIONS*", (SubLObject)(maybeDefault((SubLObject)nl_trie_staleness_test.$sym0$_NL_TRIE_REVISIONS_, nl_trie_staleness_test.$nl_trie_revisions$, nl_trie_staleness_test.NIL)));
+        nl_trie_staleness_test.$nl_trie_staleness_acceptableP$ = SubLFiles.deflexical("*NL-TRIE-STALENESS-ACCEPTABLE?*", (SubLObject)(maybeDefault((SubLObject)nl_trie_staleness_test.$sym1$_NL_TRIE_STALENESS_ACCEPTABLE__, nl_trie_staleness_test.$nl_trie_staleness_acceptableP$, nl_trie_staleness_test.T)));
+        nl_trie_staleness_test.$nl_trie_known_staleP$ = SubLFiles.deflexical("*NL-TRIE-KNOWN-STALE?*", (SubLObject)(maybeDefault((SubLObject)nl_trie_staleness_test.$sym2$_NL_TRIE_KNOWN_STALE__, nl_trie_staleness_test.$nl_trie_known_staleP$, nl_trie_staleness_test.NIL)));
         nl_trie_staleness_test.$nl_trie_revision_globals$ = SubLFiles.deflexical("*NL-TRIE-REVISION-GLOBALS*", (SubLObject)nl_trie_staleness_test.$list3);
         return (SubLObject)nl_trie_staleness_test.NIL;
     }

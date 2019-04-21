@@ -847,7 +847,7 @@ public final class rkf_term_agglomerator extends SubLTranslatedFile
     
     public static SubLObject init_rkf_term_agglomerator_file() {
         rkf_term_agglomerator.$kr_sugar_on$ = SubLFiles.defparameter("*KR-SUGAR-ON*", (SubLObject)rkf_term_agglomerator.NIL);
-        rkf_term_agglomerator.$kr_sugar$ = SubLFiles.deflexical("*KR-SUGAR*", (SubLObject)((rkf_term_agglomerator.NIL != Symbols.boundp((SubLObject)rkf_term_agglomerator.$sym0$_KR_SUGAR_)) ? rkf_term_agglomerator.$kr_sugar$.getGlobalValue() : rkf_term_agglomerator.NIL));
+        rkf_term_agglomerator.$kr_sugar$ = SubLFiles.deflexical("*KR-SUGAR*", (SubLObject)(maybeDefault((SubLObject)rkf_term_agglomerator.$sym0$_KR_SUGAR_, rkf_term_agglomerator.$kr_sugar$, rkf_term_agglomerator.NIL)));
         rkf_term_agglomerator.$k_permutations_max$ = SubLFiles.defparameter("*K-PERMUTATIONS-MAX*", (SubLObject)rkf_term_agglomerator.$int12$100000);
         rkf_term_agglomerator.$dtp_agglomeration_state$ = SubLFiles.defconstant("*DTP-AGGLOMERATION-STATE*", (SubLObject)rkf_term_agglomerator.$sym13$AGGLOMERATION_STATE);
         return (SubLObject)rkf_term_agglomerator.NIL;

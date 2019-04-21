@@ -801,7 +801,7 @@ public final class psp_parse_tree_generator extends SubLTranslatedFile
     
     public static SubLObject init_psp_parse_tree_generator_file() {
         psp_parse_tree_generator.$dtp_psp_edge_equivalence_set$ = SubLFiles.defconstant("*DTP-PSP-EDGE-EQUIVALENCE-SET*", (SubLObject)psp_parse_tree_generator.$sym5$PSP_EDGE_EQUIVALENCE_SET);
-        psp_parse_tree_generator.$psp_chart_tokenizations$ = SubLFiles.deflexical("*PSP-CHART-TOKENIZATIONS*", (psp_parse_tree_generator.NIL != Symbols.boundp((SubLObject)psp_parse_tree_generator.$sym41$_PSP_CHART_TOKENIZATIONS_)) ? psp_parse_tree_generator.$psp_chart_tokenizations$.getGlobalValue() : dictionary.new_dictionary((SubLObject)psp_parse_tree_generator.UNPROVIDED, (SubLObject)psp_parse_tree_generator.UNPROVIDED));
+        psp_parse_tree_generator.$psp_chart_tokenizations$ = SubLFiles.deflexical("*PSP-CHART-TOKENIZATIONS*", maybeDefault((SubLObject)psp_parse_tree_generator.$sym41$_PSP_CHART_TOKENIZATIONS_, psp_parse_tree_generator.$psp_chart_tokenizations$, ()->(dictionary.new_dictionary((SubLObject)psp_parse_tree_generator.UNPROVIDED, (SubLObject)psp_parse_tree_generator.UNPROVIDED))));
         return (SubLObject)psp_parse_tree_generator.NIL;
     }
     

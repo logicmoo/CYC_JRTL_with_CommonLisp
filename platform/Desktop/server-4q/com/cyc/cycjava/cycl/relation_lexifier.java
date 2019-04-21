@@ -1513,7 +1513,7 @@ public final class relation_lexifier extends SubLTranslatedFile
     }
     
     public static SubLObject init_relation_lexifier_file() {
-        relation_lexifier.$pos_template_mappings$ = SubLFiles.deflexical("*POS-TEMPLATE-MAPPINGS*", (SubLObject)((relation_lexifier.NIL != Symbols.boundp((SubLObject)relation_lexifier.$sym0$_POS_TEMPLATE_MAPPINGS_)) ? relation_lexifier.$pos_template_mappings$.getGlobalValue() : relation_lexifier.NIL));
+        relation_lexifier.$pos_template_mappings$ = SubLFiles.deflexical("*POS-TEMPLATE-MAPPINGS*", (SubLObject)(maybeDefault((SubLObject)relation_lexifier.$sym0$_POS_TEMPLATE_MAPPINGS_, relation_lexifier.$pos_template_mappings$, relation_lexifier.NIL)));
         relation_lexifier.$generalize_speech_part_pred_caching_state$ = SubLFiles.deflexical("*GENERALIZE-SPEECH-PART-PRED-CACHING-STATE*", (SubLObject)relation_lexifier.NIL);
         relation_lexifier.$qsl_keywords_used$ = SubLFiles.defparameter("*QSL-KEYWORDS-USED*", (SubLObject)relation_lexifier.NIL);
         return (SubLObject)relation_lexifier.NIL;

@@ -5847,7 +5847,7 @@ public final class java_backend extends SubLTranslatedFile
         java_backend.$java_backend_new_array_items_on_separate_linesP$ = SubLFiles.defparameter("*JAVA-BACKEND-NEW-ARRAY-ITEMS-ON-SEPARATE-LINES?*", (SubLObject)java_backend.NIL);
         java_backend.$java_backend_current_local_variable_scope$ = SubLFiles.defparameter("*JAVA-BACKEND-CURRENT-LOCAL-VARIABLE-SCOPE*", (SubLObject)java_backend.NIL);
         java_backend.$java_backend_previous_local_variable_scope$ = SubLFiles.defparameter("*JAVA-BACKEND-PREVIOUS-LOCAL-VARIABLE-SCOPE*", (SubLObject)java_backend.NIL);
-        java_backend.$java_backend_eliminate_uninteresting_variance$ = SubLFiles.deflexical("*JAVA-BACKEND-ELIMINATE-UNINTERESTING-VARIANCE*", (SubLObject)((java_backend.NIL != Symbols.boundp((SubLObject)java_backend.$sym71$_JAVA_BACKEND_ELIMINATE_UNINTERESTING_VARIANCE_)) ? java_backend.$java_backend_eliminate_uninteresting_variance$.getGlobalValue() : java_backend.NIL));
+        java_backend.$java_backend_eliminate_uninteresting_variance$ = SubLFiles.deflexical("*JAVA-BACKEND-ELIMINATE-UNINTERESTING-VARIANCE*", (SubLObject)(maybeDefault((SubLObject)java_backend.$sym71$_JAVA_BACKEND_ELIMINATE_UNINTERESTING_VARIANCE_, java_backend.$java_backend_eliminate_uninteresting_variance$, java_backend.NIL)));
         java_backend.$java_backend_current_class$ = SubLFiles.defparameter("*JAVA-BACKEND-CURRENT-CLASS*", (SubLObject)java_backend.NIL);
         java_backend.$java_backend_initializer_methods$ = SubLFiles.defparameter("*JAVA-BACKEND-INITIALIZER-METHODS*", (SubLObject)java_backend.NIL);
         java_backend.$java_backend_writers$ = SubLFiles.deflexical("*JAVA-BACKEND-WRITERS*", (SubLObject)java_backend.$list144);
@@ -5860,7 +5860,7 @@ public final class java_backend extends SubLTranslatedFile
         java_backend.$target_most_positive_int$ = SubLFiles.deflexical("*TARGET-MOST-POSITIVE-INT*", Numbers.subtract(Numbers.expt((SubLObject)java_backend.TWO_INTEGER, (SubLObject)java_backend.$int367$31), (SubLObject)java_backend.ONE_INTEGER));
         java_backend.$target_most_negative_int$ = SubLFiles.deflexical("*TARGET-MOST-NEGATIVE-INT*", Numbers.minus(Numbers.expt((SubLObject)java_backend.TWO_INTEGER, (SubLObject)java_backend.$int367$31)));
         java_backend.$java_backend_current_thread_variable$ = SubLFiles.defparameter("*JAVA-BACKEND-CURRENT-THREAD-VARIABLE*", (SubLObject)java_backend.NIL);
-        java_backend.$translate_eq_as_eql$ = SubLFiles.deflexical("*TRANSLATE-EQ-AS-EQL*", (SubLObject)((java_backend.NIL != Symbols.boundp((SubLObject)java_backend.$sym421$_TRANSLATE_EQ_AS_EQL_)) ? java_backend.$translate_eq_as_eql$.getGlobalValue() : java_backend.T));
+        java_backend.$translate_eq_as_eql$ = SubLFiles.deflexical("*TRANSLATE-EQ-AS-EQL*", (SubLObject)(maybeDefault((SubLObject)java_backend.$sym421$_TRANSLATE_EQ_AS_EQL_, java_backend.$translate_eq_as_eql$, java_backend.T)));
         java_backend.$java_backend_unary_function_class_template$ = SubLFiles.deflexical("*JAVA-BACKEND-UNARY-FUNCTION-CLASS-TEMPLATE*", (SubLObject)java_backend.$str497$___public_static_final_class__A_e);
         java_backend.$java_backend_unary_function_class_initializer_template$ = SubLFiles.deflexical("*JAVA-BACKEND-UNARY-FUNCTION-CLASS-INITIALIZER-TEMPLATE*", (SubLObject)java_backend.$str500$__new__A__);
         java_backend.$java_backend_binary_function_class_template$ = SubLFiles.deflexical("*JAVA-BACKEND-BINARY-FUNCTION-CLASS-TEMPLATE*", (SubLObject)java_backend.$str504$___public_static_final_class__A_e);

@@ -6712,7 +6712,7 @@ public final class foil_export extends SubLTranslatedFile
         foil_export.$ilp_export_instance_to_type_information$ = SubLFiles.defparameter("*ILP-EXPORT-INSTANCE-TO-TYPE-INFORMATION*", (SubLObject)foil_export.NIL);
         foil_export.$ilp_export_conversion_plug_name_caching_state$ = SubLFiles.deflexical("*ILP-EXPORT-CONVERSION-PLUG-NAME-CACHING-STATE*", (SubLObject)foil_export.NIL);
         foil_export.$ilp_export_mode_name_for_term_caching_state$ = SubLFiles.deflexical("*ILP-EXPORT-MODE-NAME-FOR-TERM-CACHING-STATE*", (SubLObject)foil_export.NIL);
-        foil_export.$variables_for_arity$ = SubLFiles.deflexical("*VARIABLES-FOR-ARITY*", (SubLObject)((foil_export.NIL != Symbols.boundp((SubLObject)foil_export.$sym165$_VARIABLES_FOR_ARITY_)) ? foil_export.$variables_for_arity$.getGlobalValue() : foil_export.$list166));
+        foil_export.$variables_for_arity$ = SubLFiles.deflexical("*VARIABLES-FOR-ARITY*", (SubLObject)(maybeDefault((SubLObject)foil_export.$sym165$_VARIABLES_FOR_ARITY_, foil_export.$variables_for_arity$, foil_export.$list166)));
         foil_export.$ilp_export_gather_predicate_extent_index_caching_state$ = SubLFiles.deflexical("*ILP-EXPORT-GATHER-PREDICATE-EXTENT-INDEX-CACHING-STATE*", (SubLObject)foil_export.NIL);
         foil_export.$ilp_export_allow_variables_in_negative_examplesP$ = SubLFiles.defvar("*ILP-EXPORT-ALLOW-VARIABLES-IN-NEGATIVE-EXAMPLES?*", (SubLObject)foil_export.T);
         foil_export.$ilp_export_negative_example_argnum_variable_caching_state$ = SubLFiles.deflexical("*ILP-EXPORT-NEGATIVE-EXAMPLE-ARGNUM-VARIABLE-CACHING-STATE*", (SubLObject)foil_export.NIL);

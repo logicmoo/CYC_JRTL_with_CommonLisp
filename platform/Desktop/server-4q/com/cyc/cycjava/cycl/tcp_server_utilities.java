@@ -671,8 +671,8 @@ public final class tcp_server_utilities extends SubLTranslatedFile
         Tcp.$remote_address$ = SubLFiles.defparameter("*REMOTE-ADDRESS*", (SubLObject)tcp_server_utilities.NIL);
         Tcp.$remote_hostname$ = SubLFiles.defparameter("*REMOTE-HOSTNAME*", (SubLObject)tcp_server_utilities.NIL);
         tcp_server_utilities.$dtp_tcp_server$ = SubLFiles.defconstant("*DTP-TCP-SERVER*", (SubLObject)tcp_server_utilities.$sym24$TCP_SERVER);
-        tcp_server_utilities.$all_tcp_servers$ = SubLFiles.deflexical("*ALL-TCP-SERVERS*", (SubLObject)((tcp_server_utilities.NIL != Symbols.boundp((SubLObject)tcp_server_utilities.$sym48$_ALL_TCP_SERVERS_)) ? tcp_server_utilities.$all_tcp_servers$.getGlobalValue() : tcp_server_utilities.NIL));
-        tcp_server_utilities.$tcp_server_type_table$ = SubLFiles.deflexical("*TCP-SERVER-TYPE-TABLE*", (SubLObject)((tcp_server_utilities.NIL != Symbols.boundp((SubLObject)tcp_server_utilities.$sym50$_TCP_SERVER_TYPE_TABLE_)) ? tcp_server_utilities.$tcp_server_type_table$.getGlobalValue() : tcp_server_utilities.NIL));
+        tcp_server_utilities.$all_tcp_servers$ = SubLFiles.deflexical("*ALL-TCP-SERVERS*", (SubLObject)(maybeDefault((SubLObject)tcp_server_utilities.$sym48$_ALL_TCP_SERVERS_, tcp_server_utilities.$all_tcp_servers$, tcp_server_utilities.NIL)));
+        tcp_server_utilities.$tcp_server_type_table$ = SubLFiles.deflexical("*TCP-SERVER-TYPE-TABLE*", (SubLObject)(maybeDefault((SubLObject)tcp_server_utilities.$sym50$_TCP_SERVER_TYPE_TABLE_, tcp_server_utilities.$tcp_server_type_table$, tcp_server_utilities.NIL)));
         return (SubLObject)tcp_server_utilities.NIL;
     }
     

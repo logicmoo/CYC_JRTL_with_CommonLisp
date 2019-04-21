@@ -737,7 +737,7 @@ public final class system_parameters extends SubLTranslatedFile
     }
     
     public static SubLObject init_system_parameters_file() {
-        system_parameters.$system_parameters$ = SubLFiles.deflexical("*SYSTEM-PARAMETERS*", (SubLObject)((system_parameters.NIL != Symbols.boundp((SubLObject)system_parameters.$sym0$_SYSTEM_PARAMETERS_)) ? system_parameters.$system_parameters$.getGlobalValue() : system_parameters.NIL));
+        system_parameters.$system_parameters$ = SubLFiles.deflexical("*SYSTEM-PARAMETERS*", (SubLObject)(maybeDefault((SubLObject)system_parameters.$sym0$_SYSTEM_PARAMETERS_, system_parameters.$system_parameters$, system_parameters.NIL)));
         system_parameters.$auto_continue_transcript_problems$ = SubLFiles.defvar("*AUTO-CONTINUE-TRANSCRIPT-PROBLEMS*", (SubLObject)system_parameters.$kw11$UNSET);
         system_parameters.$continue_agenda_on_error$ = SubLFiles.defvar("*CONTINUE-AGENDA-ON-ERROR*", (SubLObject)system_parameters.$kw11$UNSET);
         system_parameters.$suspend_sbhl_type_checkingP$ = SubLFiles.defvar("*SUSPEND-SBHL-TYPE-CHECKING?*", (SubLObject)system_parameters.$kw11$UNSET);

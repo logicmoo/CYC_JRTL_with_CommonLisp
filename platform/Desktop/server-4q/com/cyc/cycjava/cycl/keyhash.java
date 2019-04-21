@@ -704,7 +704,7 @@ public final class keyhash extends SubLTranslatedFile
     
     public static SubLObject init_keyhash_file() {
         keyhash.$dtp_keyhash$ = SubLFiles.defconstant("*DTP-KEYHASH*", (SubLObject)keyhash.$sym0$KEYHASH);
-        keyhash.$keyhash_empty_key$ = SubLFiles.deflexical("*KEYHASH-EMPTY-KEY*", (keyhash.NIL != Symbols.boundp((SubLObject)keyhash.$sym30$_KEYHASH_EMPTY_KEY_)) ? keyhash.$keyhash_empty_key$.getGlobalValue() : Symbols.make_symbol((SubLObject)keyhash.$str31$The_Empty_KEYHASH_Key));
+        keyhash.$keyhash_empty_key$ = SubLFiles.deflexical("*KEYHASH-EMPTY-KEY*", maybeDefault((SubLObject)keyhash.$sym30$_KEYHASH_EMPTY_KEY_, keyhash.$keyhash_empty_key$, ()->(Symbols.make_symbol((SubLObject)keyhash.$str31$The_Empty_KEYHASH_Key))));
         keyhash.$cfasl_opcode_keyhash$ = SubLFiles.defconstant("*CFASL-OPCODE-KEYHASH*", (SubLObject)keyhash.$int53$68);
         return (SubLObject)keyhash.NIL;
     }

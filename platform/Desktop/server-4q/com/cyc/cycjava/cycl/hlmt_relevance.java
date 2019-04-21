@@ -937,7 +937,7 @@ public final class hlmt_relevance extends SubLTranslatedFile
     }
     
     public static SubLObject init_hlmt_relevance_file() {
-        hlmt_relevance.$time_inference_mt$ = SubLFiles.deflexical("*TIME-INFERENCE-MT*", (hlmt_relevance.NIL != Symbols.boundp((SubLObject)hlmt_relevance.$sym0$_TIME_INFERENCE_MT_)) ? hlmt_relevance.$time_inference_mt$.getGlobalValue() : hlmt_relevance.$const1$UniversalVocabularyMt);
+        hlmt_relevance.$time_inference_mt$ = SubLFiles.deflexical("*TIME-INFERENCE-MT*", maybeDefault((SubLObject)hlmt_relevance.$sym0$_TIME_INFERENCE_MT_, hlmt_relevance.$time_inference_mt$, hlmt_relevance.$const1$UniversalVocabularyMt));
         hlmt_relevance.$hlmt_sliding_type$ = SubLFiles.defparameter("*HLMT-SLIDING-TYPE*", (SubLObject)hlmt_relevance.NIL);
         hlmt_relevance.$date_range_time_mt_pattern$ = SubLFiles.deflexical("*DATE-RANGE-TIME-MT-PATTERN*", (SubLObject)hlmt_relevance.$list26);
         hlmt_relevance.$temporal_intersection_call_args$ = SubLFiles.defparameter("*TEMPORAL-INTERSECTION-CALL-ARGS*", (SubLObject)hlmt_relevance.NIL);

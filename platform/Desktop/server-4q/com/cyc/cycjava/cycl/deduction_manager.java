@@ -256,7 +256,7 @@ public final class deduction_manager extends SubLTranslatedFile
     }
     
     public static SubLObject init_deduction_manager_file() {
-        deduction_manager.$deduction_content_manager$ = SubLFiles.deflexical("*DEDUCTION-CONTENT-MANAGER*", (SubLObject)((deduction_manager.NIL != Symbols.boundp((SubLObject)deduction_manager.$sym0$_DEDUCTION_CONTENT_MANAGER_)) ? deduction_manager.$deduction_content_manager$.getGlobalValue() : deduction_manager.$kw1$UNINITIALIZED));
+        deduction_manager.$deduction_content_manager$ = SubLFiles.deflexical("*DEDUCTION-CONTENT-MANAGER*", (SubLObject)(maybeDefault((SubLObject)deduction_manager.$sym0$_DEDUCTION_CONTENT_MANAGER_, deduction_manager.$deduction_content_manager$, deduction_manager.$kw1$UNINITIALIZED)));
         deduction_manager.$deduction_lru_size_percentage$ = SubLFiles.deflexical("*DEDUCTION-LRU-SIZE-PERCENTAGE*", (SubLObject)deduction_manager.EIGHT_INTEGER);
         deduction_manager.$deduction_lru_size_max$ = SubLFiles.deflexical("*DEDUCTION-LRU-SIZE-MAX*", (SubLObject)deduction_manager.$int2$400000);
         return (SubLObject)deduction_manager.NIL;

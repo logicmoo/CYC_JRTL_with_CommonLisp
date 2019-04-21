@@ -851,8 +851,8 @@ public final class kb_hl_support_handles extends SubLTranslatedFile
     }
     
     public static SubLObject init_kb_hl_support_handles_file() {
-        kb_hl_support_handles.$kb_hl_supports_from_ids$ = SubLFiles.deflexical("*KB-HL-SUPPORTS-FROM-IDS*", (SubLObject)((kb_hl_support_handles.NIL != Symbols.boundp((SubLObject)kb_hl_support_handles.$sym0$_KB_HL_SUPPORTS_FROM_IDS_)) ? kb_hl_support_handles.$kb_hl_supports_from_ids$.getGlobalValue() : kb_hl_support_handles.NIL));
-        kb_hl_support_handles.$new_kb_hl_support_id_threshold$ = SubLFiles.deflexical("*NEW-KB-HL-SUPPORT-ID-THRESHOLD*", (SubLObject)((kb_hl_support_handles.NIL != Symbols.boundp((SubLObject)kb_hl_support_handles.$sym21$_NEW_KB_HL_SUPPORT_ID_THRESHOLD_)) ? kb_hl_support_handles.$new_kb_hl_support_id_threshold$.getGlobalValue() : kb_hl_support_handles.NIL));
+        kb_hl_support_handles.$kb_hl_supports_from_ids$ = SubLFiles.deflexical("*KB-HL-SUPPORTS-FROM-IDS*", (SubLObject)(maybeDefault((SubLObject)kb_hl_support_handles.$sym0$_KB_HL_SUPPORTS_FROM_IDS_, kb_hl_support_handles.$kb_hl_supports_from_ids$, kb_hl_support_handles.NIL)));
+        kb_hl_support_handles.$new_kb_hl_support_id_threshold$ = SubLFiles.deflexical("*NEW-KB-HL-SUPPORT-ID-THRESHOLD*", (SubLObject)(maybeDefault((SubLObject)kb_hl_support_handles.$sym21$_NEW_KB_HL_SUPPORT_ID_THRESHOLD_, kb_hl_support_handles.$new_kb_hl_support_id_threshold$, kb_hl_support_handles.NIL)));
         kb_hl_support_handles.$dtp_kb_hl_support$ = SubLFiles.defconstant("*DTP-KB-HL-SUPPORT*", (SubLObject)kb_hl_support_handles.$sym30$KB_HL_SUPPORT);
         kb_hl_support_handles.$print_kb_hl_support_hl_supportP$ = SubLFiles.defparameter("*PRINT-KB-HL-SUPPORT-HL-SUPPORT?*", (SubLObject)kb_hl_support_handles.T);
         return (SubLObject)kb_hl_support_handles.NIL;

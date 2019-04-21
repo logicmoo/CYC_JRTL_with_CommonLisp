@@ -2037,8 +2037,8 @@ public final class sbhl_time_assertion_processing extends SubLTranslatedFile
     }
     
     public static SubLObject init_sbhl_time_assertion_processing_file() {
-        sbhl_time_assertion_processing.$sbhl_time_default_link_mt$ = SubLFiles.deflexical("*SBHL-TIME-DEFAULT-LINK-MT*", (sbhl_time_assertion_processing.NIL != Symbols.boundp((SubLObject)sbhl_time_assertion_processing.$sym0$_SBHL_TIME_DEFAULT_LINK_MT_)) ? sbhl_time_assertion_processing.$sbhl_time_default_link_mt$.getGlobalValue() : sbhl_time_assertion_processing.$const1$BaseKB);
-        sbhl_time_assertion_processing.$hl_start_end_fn_defining_mt$ = SubLFiles.deflexical("*HL-START-END-FN-DEFINING-MT*", (sbhl_time_assertion_processing.NIL != Symbols.boundp((SubLObject)sbhl_time_assertion_processing.$sym2$_HL_START_END_FN_DEFINING_MT_)) ? sbhl_time_assertion_processing.$hl_start_end_fn_defining_mt$.getGlobalValue() : sbhl_time_assertion_processing.$const1$BaseKB);
+        sbhl_time_assertion_processing.$sbhl_time_default_link_mt$ = SubLFiles.deflexical("*SBHL-TIME-DEFAULT-LINK-MT*", maybeDefault((SubLObject)sbhl_time_assertion_processing.$sym0$_SBHL_TIME_DEFAULT_LINK_MT_, sbhl_time_assertion_processing.$sbhl_time_default_link_mt$, sbhl_time_assertion_processing.$const1$BaseKB));
+        sbhl_time_assertion_processing.$hl_start_end_fn_defining_mt$ = SubLFiles.deflexical("*HL-START-END-FN-DEFINING-MT*", maybeDefault((SubLObject)sbhl_time_assertion_processing.$sym2$_HL_START_END_FN_DEFINING_MT_, sbhl_time_assertion_processing.$hl_start_end_fn_defining_mt$, sbhl_time_assertion_processing.$const1$BaseKB));
         return (SubLObject)sbhl_time_assertion_processing.NIL;
     }
     

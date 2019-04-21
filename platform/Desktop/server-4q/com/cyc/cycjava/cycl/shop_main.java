@@ -909,7 +909,7 @@ public final class shop_main extends SubLTranslatedFile
         shop_main.$shop_domain_definition_predicates$ = SubLFiles.deflexical("*SHOP-DOMAIN-DEFINITION-PREDICATES*", conses_high.union(shop_main.$shop_simple_action_definition_predicates$.getGlobalValue(), shop_main.$shop_complex_action_definition_predicates$.getGlobalValue(), (SubLObject)shop_main.UNPROVIDED, (SubLObject)shop_main.UNPROVIDED));
         shop_main.$shop_domain_definition_collections$ = SubLFiles.deflexical("*SHOP-DOMAIN-DEFINITION-COLLECTIONS*", (SubLObject)shop_main.$list2);
         shop_main.$planner_core_constants$ = SubLFiles.deflexical("*PLANNER-CORE-CONSTANTS*", ConsesLow.append(shop_main.$shop_domain_definition_predicates$.getGlobalValue(), shop_main.$shop_domain_definition_collections$.getGlobalValue()));
-        shop_main.$shop$ = SubLFiles.deflexical("*SHOP*", (SubLObject)((shop_main.NIL != Symbols.boundp((SubLObject)shop_main.$sym4$_SHOP_)) ? shop_main.$shop$.getGlobalValue() : shop_main.NIL));
+        shop_main.$shop$ = SubLFiles.deflexical("*SHOP*", (SubLObject)(maybeDefault((SubLObject)shop_main.$sym4$_SHOP_, shop_main.$shop$, shop_main.NIL)));
         return (SubLObject)shop_main.NIL;
     }
     

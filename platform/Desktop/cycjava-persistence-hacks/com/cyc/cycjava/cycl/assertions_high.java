@@ -1823,7 +1823,7 @@ public final class assertions_high extends SubLTranslatedFile
     }
     
     public static SubLObject init_assertions_high_file() {
-        assertions_high.$tl_assertion_lookaside_table$ = SubLFiles.deflexical("*TL-ASSERTION-LOOKASIDE-TABLE*", (SubLObject)((assertions_high.NIL != Symbols.boundp((SubLObject)assertions_high.$sym125$_TL_ASSERTION_LOOKASIDE_TABLE_)) ? assertions_high.$tl_assertion_lookaside_table$.getGlobalValue() : assertions_high.NIL));
+        assertions_high.$tl_assertion_lookaside_table$ = SubLFiles.deflexical("*TL-ASSERTION-LOOKASIDE-TABLE*", (SubLObject)(maybeDefault((SubLObject)assertions_high.$sym125$_TL_ASSERTION_LOOKASIDE_TABLE_, assertions_high.$tl_assertion_lookaside_table$, assertions_high.NIL)));
         assertions_high.$tl_assertion_capacity$ = SubLFiles.deflexical("*TL-ASSERTION-CAPACITY*", (SubLObject)assertions_high.FIVE_INTEGER);
         assertions_high.$assertion_dump_id_table$ = SubLFiles.defparameter("*ASSERTION-DUMP-ID-TABLE*", (SubLObject)assertions_high.NIL);
         return (SubLObject)assertions_high.NIL;

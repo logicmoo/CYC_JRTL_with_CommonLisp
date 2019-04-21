@@ -5768,7 +5768,7 @@ public final class sksi_smt extends SubLTranslatedFile
         sksi_smt.$sksi_smt_mode$ = SubLFiles.deflexical("*SKSI-SMT-MODE*", (SubLObject)sksi_smt.$kw189$ENABLED);
         sksi_smt.$sksi_smt_column_or_fort_name_caching_state$ = SubLFiles.deflexical("*SKSI-SMT-COLUMN-OR-FORT-NAME-CACHING-STATE*", (SubLObject)sksi_smt.NIL);
         sksi_smt.$sksi_smt_warn_about_invariantsP$ = SubLFiles.defparameter("*SKSI-SMT-WARN-ABOUT-INVARIANTS?*", (SubLObject)sksi_smt.NIL);
-        sksi_smt.$sksi_isg$ = SubLFiles.deflexical("*SKSI-ISG*", (sksi_smt.NIL != Symbols.boundp((SubLObject)sksi_smt.$sym340$_SKSI_ISG_)) ? sksi_smt.$sksi_isg$.getGlobalValue() : integer_sequence_generator.new_integer_sequence_generator((SubLObject)sksi_smt.UNPROVIDED, (SubLObject)sksi_smt.UNPROVIDED, (SubLObject)sksi_smt.UNPROVIDED));
+        sksi_smt.$sksi_isg$ = SubLFiles.deflexical("*SKSI-ISG*", maybeDefault((SubLObject)sksi_smt.$sym340$_SKSI_ISG_, sksi_smt.$sksi_isg$, ()->(integer_sequence_generator.new_integer_sequence_generator((SubLObject)sksi_smt.UNPROVIDED, (SubLObject)sksi_smt.UNPROVIDED, (SubLObject)sksi_smt.UNPROVIDED))));
         return (SubLObject)sksi_smt.NIL;
     }
     

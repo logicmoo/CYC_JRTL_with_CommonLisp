@@ -1151,9 +1151,9 @@ public final class document_search extends SubLTranslatedFile
         document_search.$search_engines$ = SubLFiles.deflexical("*SEARCH-ENGINES*", (SubLObject)document_search.$list0);
         document_search.$search_engine_specs$ = SubLFiles.deflexical("*SEARCH-ENGINE-SPECS*", (SubLObject)document_search.$list1);
         document_search.$default_search_engine$ = SubLFiles.defparameter("*DEFAULT-SEARCH-ENGINE*", (SubLObject)document_search.NIL);
-        document_search.$cluster_id_isg$ = SubLFiles.deflexical("*CLUSTER-ID-ISG*", (document_search.NIL != Symbols.boundp((SubLObject)document_search.$sym50$_CLUSTER_ID_ISG_)) ? document_search.$cluster_id_isg$.getGlobalValue() : integer_sequence_generator.new_integer_sequence_generator((SubLObject)document_search.UNPROVIDED, (SubLObject)document_search.UNPROVIDED, (SubLObject)document_search.UNPROVIDED));
-        document_search.$cluster_map$ = SubLFiles.deflexical("*CLUSTER-MAP*", (document_search.NIL != Symbols.boundp((SubLObject)document_search.$sym51$_CLUSTER_MAP_)) ? document_search.$cluster_map$.getGlobalValue() : dictionary.new_dictionary((SubLObject)document_search.UNPROVIDED, (SubLObject)document_search.UNPROVIDED));
-        document_search.$cluster_lock$ = SubLFiles.deflexical("*CLUSTER-LOCK*", (document_search.NIL != Symbols.boundp((SubLObject)document_search.$sym52$_CLUSTER_LOCK_)) ? document_search.$cluster_lock$.getGlobalValue() : Locks.make_lock((SubLObject)document_search.$str53$Ontological_Cluster_Map_Lock));
+        document_search.$cluster_id_isg$ = SubLFiles.deflexical("*CLUSTER-ID-ISG*", maybeDefault((SubLObject)document_search.$sym50$_CLUSTER_ID_ISG_, document_search.$cluster_id_isg$, ()->(integer_sequence_generator.new_integer_sequence_generator((SubLObject)document_search.UNPROVIDED, (SubLObject)document_search.UNPROVIDED, (SubLObject)document_search.UNPROVIDED))));
+        document_search.$cluster_map$ = SubLFiles.deflexical("*CLUSTER-MAP*", maybeDefault((SubLObject)document_search.$sym51$_CLUSTER_MAP_, document_search.$cluster_map$, ()->(dictionary.new_dictionary((SubLObject)document_search.UNPROVIDED, (SubLObject)document_search.UNPROVIDED))));
+        document_search.$cluster_lock$ = SubLFiles.deflexical("*CLUSTER-LOCK*", maybeDefault((SubLObject)document_search.$sym52$_CLUSTER_LOCK_, document_search.$cluster_lock$, ()->(Locks.make_lock((SubLObject)document_search.$str53$Ontological_Cluster_Map_Lock))));
         return (SubLObject)document_search.NIL;
     }
     

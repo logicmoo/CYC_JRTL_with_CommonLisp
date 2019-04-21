@@ -2134,6 +2134,8 @@ public class Lisp {
             featureList = new Cons(Keyword.JAVA_1_6, featureList);
         } else if (javaVersion.startsWith("1.7")) {
             featureList = new Cons(Keyword.JAVA_1_7, featureList);
+        } else if (javaVersion.startsWith("1.8")) {
+            featureList = new Cons(Keyword.JAVA_1_8, featureList);
         }
         // Processor architecture
         if (osArch != null) {

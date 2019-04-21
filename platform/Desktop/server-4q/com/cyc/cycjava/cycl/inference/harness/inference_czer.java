@@ -2034,7 +2034,7 @@ public final class inference_czer extends SubLTranslatedFile
         inference_czer.$inference_czer_fixed_vars_table$ = SubLFiles.defparameter("*INFERENCE-CZER-FIXED-VARS-TABLE*", misc_utilities.uninitialized());
         inference_czer.$inference_czer_next_fixed_var_id$ = SubLFiles.defparameter("*INFERENCE-CZER-NEXT-FIXED-VAR-ID*", misc_utilities.uninitialized());
         inference_czer.$inference_czer_at_least_partially_commutative_relations_alist$ = SubLFiles.defparameter("*INFERENCE-CZER-AT-LEAST-PARTIALLY-COMMUTATIVE-RELATIONS-ALIST*", misc_utilities.uninitialized());
-        inference_czer.$variable_token$ = SubLFiles.deflexical("*VARIABLE-TOKEN*", (inference_czer.NIL != Symbols.boundp((SubLObject)inference_czer.$sym18$_VARIABLE_TOKEN_)) ? inference_czer.$variable_token$.getGlobalValue() : Symbols.make_symbol((SubLObject)inference_czer.$str19$var));
+        inference_czer.$variable_token$ = SubLFiles.deflexical("*VARIABLE-TOKEN*", maybeDefault((SubLObject)inference_czer.$sym18$_VARIABLE_TOKEN_, inference_czer.$variable_token$, ()->(Symbols.make_symbol((SubLObject)inference_czer.$str19$var))));
         inference_czer.$largest_hl_var_num_so_far$ = SubLFiles.defparameter("*LARGEST-HL-VAR-NUM-SO-FAR*", (SubLObject)inference_czer.$kw25$LAMBDA);
         inference_czer.$hl_var_contiguity_alist$ = SubLFiles.defparameter("*HL-VAR-CONTIGUITY-ALIST*", (SubLObject)inference_czer.$kw25$LAMBDA);
         return (SubLObject)inference_czer.NIL;

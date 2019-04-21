@@ -2969,14 +2969,14 @@ public final class core extends SubLTranslatedFile
     public static SubLObject init_core_file() {
         core.$core_seed_collection$ = SubLFiles.deflexical("*CORE-SEED-COLLECTION*", core.$const0$CoreUnionConstant);
         core.$core_seed_mt$ = SubLFiles.deflexical("*CORE-SEED-MT*", (SubLObject)core.$list1);
-        core.$all_core_raw_constants$ = SubLFiles.deflexical("*ALL-CORE-RAW-CONSTANTS*", (SubLObject)((core.NIL != Symbols.boundp((SubLObject)core.$sym4$_ALL_CORE_RAW_CONSTANTS_)) ? core.$all_core_raw_constants$.getGlobalValue() : core.$kw5$UNINITIALIZED));
-        core.$all_core_skolems$ = SubLFiles.deflexical("*ALL-CORE-SKOLEMS*", (SubLObject)((core.NIL != Symbols.boundp((SubLObject)core.$sym6$_ALL_CORE_SKOLEMS_)) ? core.$all_core_skolems$.getGlobalValue() : core.NIL));
-        core.$all_core_constants$ = SubLFiles.deflexical("*ALL-CORE-CONSTANTS*", (SubLObject)((core.NIL != Symbols.boundp((SubLObject)core.$sym7$_ALL_CORE_CONSTANTS_)) ? core.$all_core_constants$.getGlobalValue() : core.$kw5$UNINITIALIZED));
-        core.$core_constant_table$ = SubLFiles.deflexical("*CORE-CONSTANT-TABLE*", (SubLObject)((core.NIL != Symbols.boundp((SubLObject)core.$sym8$_CORE_CONSTANT_TABLE_)) ? core.$core_constant_table$.getGlobalValue() : core.NIL));
-        core.$all_core_narts$ = SubLFiles.deflexical("*ALL-CORE-NARTS*", (SubLObject)((core.NIL != Symbols.boundp((SubLObject)core.$sym12$_ALL_CORE_NARTS_)) ? core.$all_core_narts$.getGlobalValue() : core.$kw5$UNINITIALIZED));
-        core.$all_core_forts$ = SubLFiles.deflexical("*ALL-CORE-FORTS*", (SubLObject)((core.NIL != Symbols.boundp((SubLObject)core.$sym13$_ALL_CORE_FORTS_)) ? core.$all_core_forts$.getGlobalValue() : core.$kw5$UNINITIALIZED));
-        core.$core_fort_table$ = SubLFiles.deflexical("*CORE-FORT-TABLE*", (SubLObject)((core.NIL != Symbols.boundp((SubLObject)core.$sym14$_CORE_FORT_TABLE_)) ? core.$core_fort_table$.getGlobalValue() : core.NIL));
-        core.$all_core_rules$ = SubLFiles.deflexical("*ALL-CORE-RULES*", (SubLObject)((core.NIL != Symbols.boundp((SubLObject)core.$sym20$_ALL_CORE_RULES_)) ? core.$all_core_rules$.getGlobalValue() : core.$kw5$UNINITIALIZED));
+        core.$all_core_raw_constants$ = SubLFiles.deflexical("*ALL-CORE-RAW-CONSTANTS*", (SubLObject)(maybeDefault((SubLObject)core.$sym4$_ALL_CORE_RAW_CONSTANTS_, core.$all_core_raw_constants$, core.$kw5$UNINITIALIZED)));
+        core.$all_core_skolems$ = SubLFiles.deflexical("*ALL-CORE-SKOLEMS*", (SubLObject)(maybeDefault((SubLObject)core.$sym6$_ALL_CORE_SKOLEMS_, core.$all_core_skolems$, core.NIL)));
+        core.$all_core_constants$ = SubLFiles.deflexical("*ALL-CORE-CONSTANTS*", (SubLObject)(maybeDefault((SubLObject)core.$sym7$_ALL_CORE_CONSTANTS_, core.$all_core_constants$, core.$kw5$UNINITIALIZED)));
+        core.$core_constant_table$ = SubLFiles.deflexical("*CORE-CONSTANT-TABLE*", (SubLObject)(maybeDefault((SubLObject)core.$sym8$_CORE_CONSTANT_TABLE_, core.$core_constant_table$, core.NIL)));
+        core.$all_core_narts$ = SubLFiles.deflexical("*ALL-CORE-NARTS*", (SubLObject)(maybeDefault((SubLObject)core.$sym12$_ALL_CORE_NARTS_, core.$all_core_narts$, core.$kw5$UNINITIALIZED)));
+        core.$all_core_forts$ = SubLFiles.deflexical("*ALL-CORE-FORTS*", (SubLObject)(maybeDefault((SubLObject)core.$sym13$_ALL_CORE_FORTS_, core.$all_core_forts$, core.$kw5$UNINITIALIZED)));
+        core.$core_fort_table$ = SubLFiles.deflexical("*CORE-FORT-TABLE*", (SubLObject)(maybeDefault((SubLObject)core.$sym14$_CORE_FORT_TABLE_, core.$core_fort_table$, core.NIL)));
+        core.$all_core_rules$ = SubLFiles.deflexical("*ALL-CORE-RULES*", (SubLObject)(maybeDefault((SubLObject)core.$sym20$_ALL_CORE_RULES_, core.$all_core_rules$, core.$kw5$UNINITIALIZED)));
         core.$core_defining_arg1_predicates_info$ = SubLFiles.defparameter("*CORE-DEFINING-ARG1-PREDICATES-INFO*", (SubLObject)core.$list22);
         core.$core_defining_arg2_predicates_info$ = SubLFiles.defparameter("*CORE-DEFINING-ARG2-PREDICATES-INFO*", (SubLObject)core.NIL);
         core.$core_definitional_info_caching_state$ = SubLFiles.deflexical("*CORE-DEFINITIONAL-INFO-CACHING-STATE*", (SubLObject)core.NIL);

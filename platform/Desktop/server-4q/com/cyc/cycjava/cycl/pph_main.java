@@ -11568,9 +11568,9 @@ public final class pph_main extends SubLTranslatedFile
 
     public static SubLObject init_pph_main_file() {
         pph_main.$pph_sbhl_spaces_to_resource$ = SubLFiles.defconstant("*PPH-SBHL-SPACES-TO-RESOURCE*", (SubLObject)pph_main.SIX_INTEGER);
-        pph_main.$generate_text_bad_results$ = SubLFiles.deflexical("*GENERATE-TEXT-BAD-RESULTS*", (pph_main.NIL != Symbols.boundp((SubLObject)pph_main.$sym90$_GENERATE_TEXT_BAD_RESULTS_)) ? pph_main.$generate_text_bad_results$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)pph_main.EQUAL), (SubLObject)pph_main.UNPROVIDED));
-        pph_main.$pph_initializedP$ = SubLFiles.deflexical("*PPH-INITIALIZED?*", (SubLObject)((pph_main.NIL != Symbols.boundp((SubLObject)pph_main.$sym106$_PPH_INITIALIZED__)) ? pph_main.$pph_initializedP$.getGlobalValue() : pph_main.NIL));
-        pph_main.$pph_recursion_limit$ = SubLFiles.deflexical("*PPH-RECURSION-LIMIT*", (SubLObject)((pph_main.NIL != Symbols.boundp((SubLObject)pph_main.$sym110$_PPH_RECURSION_LIMIT_)) ? pph_main.$pph_recursion_limit$.getGlobalValue() : pph_main.$int111$100));
+        pph_main.$generate_text_bad_results$ = SubLFiles.deflexical("*GENERATE-TEXT-BAD-RESULTS*", maybeDefault((SubLObject)pph_main.$sym90$_GENERATE_TEXT_BAD_RESULTS_, pph_main.$generate_text_bad_results$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)pph_main.EQUAL), (SubLObject)pph_main.UNPROVIDED))));
+        pph_main.$pph_initializedP$ = SubLFiles.deflexical("*PPH-INITIALIZED?*", (SubLObject)(maybeDefault((SubLObject)pph_main.$sym106$_PPH_INITIALIZED__, pph_main.$pph_initializedP$, pph_main.NIL)));
+        pph_main.$pph_recursion_limit$ = SubLFiles.deflexical("*PPH-RECURSION-LIMIT*", (SubLObject)(maybeDefault((SubLObject)pph_main.$sym110$_PPH_RECURSION_LIMIT_, pph_main.$pph_recursion_limit$, pph_main.$int111$100)));
         pph_main.$pph_method_stack$ = SubLFiles.defparameter("*PPH-METHOD-STACK*", (SubLObject)pph_main.NIL);
         pph_main.$pph_phrase_method_times$ = SubLFiles.defparameter("*PPH-PHRASE-METHOD-TIMES*", misc_utilities.uninitialized());
         pph_main.$currently_metered_pph_phrase_methods$ = SubLFiles.defparameter("*CURRENTLY-METERED-PPH-PHRASE-METHODS*", (SubLObject)pph_main.NIL);

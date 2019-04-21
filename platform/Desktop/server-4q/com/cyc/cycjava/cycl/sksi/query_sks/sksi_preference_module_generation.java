@@ -140,7 +140,7 @@ public final class sksi_preference_module_generation extends SubLTranslatedFile
     }
     
     public static SubLObject init_sksi_preference_module_generation_file() {
-        sksi_preference_module_generation.$sks_preference_modules_cache$ = SubLFiles.deflexical("*SKS-PREFERENCE-MODULES-CACHE*", (sksi_preference_module_generation.NIL != Symbols.boundp((SubLObject)sksi_preference_module_generation.$sym0$_SKS_PREFERENCE_MODULES_CACHE_)) ? sksi_preference_module_generation.$sks_preference_modules_cache$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_preference_module_generation.EQ), (SubLObject)sksi_preference_module_generation.UNPROVIDED));
+        sksi_preference_module_generation.$sks_preference_modules_cache$ = SubLFiles.deflexical("*SKS-PREFERENCE-MODULES-CACHE*", maybeDefault((SubLObject)sksi_preference_module_generation.$sym0$_SKS_PREFERENCE_MODULES_CACHE_, sksi_preference_module_generation.$sks_preference_modules_cache$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_preference_module_generation.EQ), (SubLObject)sksi_preference_module_generation.UNPROVIDED))));
         return (SubLObject)sksi_preference_module_generation.NIL;
     }
     

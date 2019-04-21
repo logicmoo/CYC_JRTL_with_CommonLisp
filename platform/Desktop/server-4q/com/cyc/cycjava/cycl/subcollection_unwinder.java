@@ -610,9 +610,9 @@ public final class subcollection_unwinder extends SubLTranslatedFile
     
     public static SubLObject init_subcollection_unwinder_file() {
         subcollection_unwinder.$subcol_unwind_existential_variables$ = SubLFiles.defparameter("*SUBCOL-UNWIND-EXISTENTIAL-VARIABLES*", (SubLObject)subcollection_unwinder.$kw0$UNINITIALIZED);
-        subcollection_unwinder.$isa_subcol_unwind_patterns$ = SubLFiles.deflexical("*ISA-SUBCOL-UNWIND-PATTERNS*", (SubLObject)((subcollection_unwinder.NIL != Symbols.boundp((SubLObject)subcollection_unwinder.$sym21$_ISA_SUBCOL_UNWIND_PATTERNS_)) ? subcollection_unwinder.$isa_subcol_unwind_patterns$.getGlobalValue() : subcollection_unwinder.NIL));
+        subcollection_unwinder.$isa_subcol_unwind_patterns$ = SubLFiles.deflexical("*ISA-SUBCOL-UNWIND-PATTERNS*", (SubLObject)(maybeDefault((SubLObject)subcollection_unwinder.$sym21$_ISA_SUBCOL_UNWIND_PATTERNS_, subcollection_unwinder.$isa_subcol_unwind_patterns$, subcollection_unwinder.NIL)));
         subcollection_unwinder.$isa_subcol_unwind_patterns_complex$ = SubLFiles.defparameter("*ISA-SUBCOL-UNWIND-PATTERNS-COMPLEX*", subcollection_unwinder.$list24);
-        subcollection_unwinder.$isa_subcol_unwind_template_map$ = SubLFiles.deflexical("*ISA-SUBCOL-UNWIND-TEMPLATE-MAP*", (SubLObject)((subcollection_unwinder.NIL != Symbols.boundp((SubLObject)subcollection_unwinder.$sym25$_ISA_SUBCOL_UNWIND_TEMPLATE_MAP_)) ? subcollection_unwinder.$isa_subcol_unwind_template_map$.getGlobalValue() : subcollection_unwinder.NIL));
+        subcollection_unwinder.$isa_subcol_unwind_template_map$ = SubLFiles.deflexical("*ISA-SUBCOL-UNWIND-TEMPLATE-MAP*", (SubLObject)(maybeDefault((SubLObject)subcollection_unwinder.$sym25$_ISA_SUBCOL_UNWIND_TEMPLATE_MAP_, subcollection_unwinder.$isa_subcol_unwind_template_map$, subcollection_unwinder.NIL)));
         subcollection_unwinder.$existential_unwind_patterns$ = SubLFiles.defparameter("*EXISTENTIAL-UNWIND-PATTERNS*", (SubLObject)subcollection_unwinder.$list38);
         return (SubLObject)subcollection_unwinder.NIL;
     }

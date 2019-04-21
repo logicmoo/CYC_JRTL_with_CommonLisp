@@ -2022,8 +2022,8 @@ public final class cb_viewpoint extends SubLTranslatedFile
     public static SubLObject init_cb_viewpoint_file() {
         cb_viewpoint.$viewpoint_type$ = SubLFiles.defparameter("*VIEWPOINT-TYPE*", (SubLObject)cb_viewpoint.NIL);
         cb_viewpoint.$dtp_viewpoint$ = SubLFiles.defconstant("*DTP-VIEWPOINT*", (SubLObject)cb_viewpoint.$sym1$VIEWPOINT);
-        cb_viewpoint.$cb_viewpoint_table$ = SubLFiles.deflexical("*CB-VIEWPOINT-TABLE*", (SubLObject)((cb_viewpoint.NIL != Symbols.boundp((SubLObject)cb_viewpoint.$sym55$_CB_VIEWPOINT_TABLE_)) ? cb_viewpoint.$cb_viewpoint_table$.getGlobalValue() : cb_viewpoint.NIL));
-        cb_viewpoint.$cb_viewpoint_summary_alist$ = SubLFiles.deflexical("*CB-VIEWPOINT-SUMMARY-ALIST*", (SubLObject)((cb_viewpoint.NIL != Symbols.boundp((SubLObject)cb_viewpoint.$sym56$_CB_VIEWPOINT_SUMMARY_ALIST_)) ? cb_viewpoint.$cb_viewpoint_summary_alist$.getGlobalValue() : cb_viewpoint.NIL));
+        cb_viewpoint.$cb_viewpoint_table$ = SubLFiles.deflexical("*CB-VIEWPOINT-TABLE*", (SubLObject)(maybeDefault((SubLObject)cb_viewpoint.$sym55$_CB_VIEWPOINT_TABLE_, cb_viewpoint.$cb_viewpoint_table$, cb_viewpoint.NIL)));
+        cb_viewpoint.$cb_viewpoint_summary_alist$ = SubLFiles.deflexical("*CB-VIEWPOINT-SUMMARY-ALIST*", (SubLObject)(maybeDefault((SubLObject)cb_viewpoint.$sym56$_CB_VIEWPOINT_SUMMARY_ALIST_, cb_viewpoint.$cb_viewpoint_summary_alist$, cb_viewpoint.NIL)));
         cb_viewpoint.$index_hook$ = SubLFiles.defparameter("*INDEX-HOOK*", (SubLObject)cb_viewpoint.NIL);
         cb_viewpoint.$viewpoint_cache$ = SubLFiles.deflexical("*VIEWPOINT-CACHE*", (SubLObject)cb_viewpoint.NIL);
         cb_viewpoint.$dash_nil$ = SubLFiles.deflexical("*DASH-NIL*", (SubLObject)cb_viewpoint.$str93$________);

@@ -290,7 +290,7 @@ public final class simple_sksi_hl_storage_modules extends SubLTranslatedFile
     }
     
     public static SubLObject init_simple_sksi_hl_storage_modules_file() {
-        simple_sksi_hl_storage_modules.$simple_sksi_hl_storage_predicates$ = SubLFiles.deflexical("*SIMPLE-SKSI-HL-STORAGE-PREDICATES*", (simple_sksi_hl_storage_modules.NIL != Symbols.boundp((SubLObject)simple_sksi_hl_storage_modules.$sym0$_SIMPLE_SKSI_HL_STORAGE_PREDICATES_)) ? simple_sksi_hl_storage_modules.$simple_sksi_hl_storage_predicates$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)simple_sksi_hl_storage_modules.EQ), (SubLObject)simple_sksi_hl_storage_modules.UNPROVIDED));
+        simple_sksi_hl_storage_modules.$simple_sksi_hl_storage_predicates$ = SubLFiles.deflexical("*SIMPLE-SKSI-HL-STORAGE-PREDICATES*", maybeDefault((SubLObject)simple_sksi_hl_storage_modules.$sym0$_SIMPLE_SKSI_HL_STORAGE_PREDICATES_, simple_sksi_hl_storage_modules.$simple_sksi_hl_storage_predicates$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)simple_sksi_hl_storage_modules.EQ), (SubLObject)simple_sksi_hl_storage_modules.UNPROVIDED))));
         return (SubLObject)simple_sksi_hl_storage_modules.NIL;
     }
     

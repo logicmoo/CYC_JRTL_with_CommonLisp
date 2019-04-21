@@ -1717,9 +1717,9 @@ public final class prove extends SubLTranslatedFile
         prove.$something_asserted_within_hypothesize_termsP$ = SubLFiles.defparameter("*SOMETHING-ASSERTED-WITHIN-HYPOTHESIZE-TERMS?*", (SubLObject)prove.NIL);
         prove.$fi_prove_new_cyc_query_trampoline_enabledP$ = SubLFiles.defparameter("*FI-PROVE-NEW-CYC-QUERY-TRAMPOLINE-ENABLED?*", (SubLObject)prove.NIL);
         prove.$proof_hypothesis_forward_propagation_enabled$ = SubLFiles.defparameter("*PROOF-HYPOTHESIS-FORWARD-PROPAGATION-ENABLED*", (SubLObject)prove.NIL);
-        prove.$hypothesis_mt_table$ = SubLFiles.deflexical("*HYPOTHESIS-MT-TABLE*", (prove.NIL != Symbols.boundp((SubLObject)prove.$sym56$_HYPOTHESIS_MT_TABLE_)) ? prove.$hypothesis_mt_table$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)prove.EQUAL), (SubLObject)prove.ZERO_INTEGER));
+        prove.$hypothesis_mt_table$ = SubLFiles.deflexical("*HYPOTHESIS-MT-TABLE*", maybeDefault((SubLObject)prove.$sym56$_HYPOTHESIS_MT_TABLE_, prove.$hypothesis_mt_table$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)prove.EQUAL), (SubLObject)prove.ZERO_INTEGER))));
         prove.$proof_assume_consequent_type_constraintsP$ = SubLFiles.defvar("*PROOF-ASSUME-CONSEQUENT-TYPE-CONSTRAINTS?*", (SubLObject)prove.T);
-        prove.$proof_mt_table$ = SubLFiles.deflexical("*PROOF-MT-TABLE*", (prove.NIL != Symbols.boundp((SubLObject)prove.$sym63$_PROOF_MT_TABLE_)) ? prove.$proof_mt_table$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)prove.EQUAL), (SubLObject)prove.ZERO_INTEGER));
+        prove.$proof_mt_table$ = SubLFiles.deflexical("*PROOF-MT-TABLE*", maybeDefault((SubLObject)prove.$sym63$_PROOF_MT_TABLE_, prove.$proof_mt_table$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)prove.EQUAL), (SubLObject)prove.ZERO_INTEGER))));
         prove.$proof_hypothesis_forward_absolute_time_cutoff$ = SubLFiles.defvar("*PROOF-HYPOTHESIS-FORWARD-ABSOLUTE-TIME-CUTOFF*", (SubLObject)prove.$int65$120);
         prove.$proof_hypothesis_forward_time_cutoff$ = SubLFiles.defvar("*PROOF-HYPOTHESIS-FORWARD-TIME-CUTOFF*", (SubLObject)prove.FIVE_INTEGER);
         prove.$proof_hypothesis_forward_removal_cost_cutoff$ = SubLFiles.defvar("*PROOF-HYPOTHESIS-FORWARD-REMOVAL-COST-CUTOFF*", (SubLObject)prove.TWENTY_INTEGER);

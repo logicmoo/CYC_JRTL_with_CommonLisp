@@ -2642,12 +2642,12 @@ public final class constrained_parsing extends SubLTranslatedFile
     }
     
     public static SubLObject init_constrained_parsing_file() {
-        constrained_parsing.$constrained_parsing_rankings$ = SubLFiles.deflexical("*CONSTRAINED-PARSING-RANKINGS*", (SubLObject)((constrained_parsing.NIL != Symbols.boundp((SubLObject)constrained_parsing.$sym1$_CONSTRAINED_PARSING_RANKINGS_)) ? constrained_parsing.$constrained_parsing_rankings$.getGlobalValue() : constrained_parsing.NIL));
+        constrained_parsing.$constrained_parsing_rankings$ = SubLFiles.deflexical("*CONSTRAINED-PARSING-RANKINGS*", (SubLObject)(maybeDefault((SubLObject)constrained_parsing.$sym1$_CONSTRAINED_PARSING_RANKINGS_, constrained_parsing.$constrained_parsing_rankings$, constrained_parsing.NIL)));
         constrained_parsing.$constrained_parsing_without_assertingP$ = SubLFiles.defparameter("*CONSTRAINED-PARSING-WITHOUT-ASSERTING?*", (SubLObject)constrained_parsing.NIL);
         constrained_parsing.$constrained_parsing_tracking_stringsP$ = SubLFiles.defparameter("*CONSTRAINED-PARSING-TRACKING-STRINGS?*", (SubLObject)constrained_parsing.NIL);
         constrained_parsing.$constrained_parsing_tracking_substringsP$ = SubLFiles.defparameter("*CONSTRAINED-PARSING-TRACKING-SUBSTRINGS?*", (SubLObject)constrained_parsing.NIL);
         constrained_parsing.$constrained_parsing_trace_level$ = SubLFiles.defparameter("*CONSTRAINED-PARSING-TRACE-LEVEL*", (SubLObject)constrained_parsing.ZERO_INTEGER);
-        constrained_parsing.$constrained_parsing_action_log$ = SubLFiles.deflexical("*CONSTRAINED-PARSING-ACTION-LOG*", (SubLObject)((constrained_parsing.NIL != Symbols.boundp((SubLObject)constrained_parsing.$sym11$_CONSTRAINED_PARSING_ACTION_LOG_)) ? constrained_parsing.$constrained_parsing_action_log$.getGlobalValue() : constrained_parsing.NIL));
+        constrained_parsing.$constrained_parsing_action_log$ = SubLFiles.deflexical("*CONSTRAINED-PARSING-ACTION-LOG*", (SubLObject)(maybeDefault((SubLObject)constrained_parsing.$sym11$_CONSTRAINED_PARSING_ACTION_LOG_, constrained_parsing.$constrained_parsing_action_log$, constrained_parsing.NIL)));
         constrained_parsing.$constrained_parsing_case_sensitiveP$ = SubLFiles.defparameter("*CONSTRAINED-PARSING-CASE-SENSITIVE?*", (SubLObject)constrained_parsing.NIL);
         constrained_parsing.$constrained_parsing_assert_into_mt$ = SubLFiles.defparameter("*CONSTRAINED-PARSING-ASSERT-INTO-MT*", (SubLObject)constrained_parsing.NIL);
         constrained_parsing.$constrained_parsing_consider_adjectivesP$ = SubLFiles.defparameter("*CONSTRAINED-PARSING-CONSIDER-ADJECTIVES?*", (SubLObject)constrained_parsing.NIL);

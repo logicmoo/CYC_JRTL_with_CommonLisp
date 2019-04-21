@@ -3098,7 +3098,7 @@ public final class nl_generation_fort_cache extends SubLTranslatedFile
     }
     
     public static SubLObject init_nl_generation_fort_cache_file() {
-        nl_generation_fort_cache.$english_generation_fort_cache$ = SubLFiles.deflexical("*ENGLISH-GENERATION-FORT-CACHE*", (SubLObject)((nl_generation_fort_cache.NIL != Symbols.boundp((SubLObject)nl_generation_fort_cache.$sym0$_ENGLISH_GENERATION_FORT_CACHE_)) ? nl_generation_fort_cache.$english_generation_fort_cache$.getGlobalValue() : nl_generation_fort_cache.NIL));
+        nl_generation_fort_cache.$english_generation_fort_cache$ = SubLFiles.deflexical("*ENGLISH-GENERATION-FORT-CACHE*", (SubLObject)(maybeDefault((SubLObject)nl_generation_fort_cache.$sym0$_ENGLISH_GENERATION_FORT_CACHE_, nl_generation_fort_cache.$english_generation_fort_cache$, nl_generation_fort_cache.NIL)));
         nl_generation_fort_cache.$english_generation_fht_name$ = SubLFiles.defparameter("*ENGLISH-GENERATION-FHT-NAME*", (SubLObject)nl_generation_fort_cache.NIL);
         nl_generation_fort_cache.$use_generic_singular_nl_generation_fort_cacheP$ = SubLFiles.defparameter("*USE-GENERIC-SINGULAR-NL-GENERATION-FORT-CACHE?*", (SubLObject)nl_generation_fort_cache.T);
         nl_generation_fort_cache.$english_generation_base_file_name$ = SubLFiles.deflexical("*ENGLISH-GENERATION-BASE-FILE-NAME*", red_infrastructure_macros.red_def_helper((SubLObject)(nl_generation_fort_cache.$list1.isSymbol() ? Symbols.symbol_value((SubLObject)nl_generation_fort_cache.$list1) : nl_generation_fort_cache.$list1), (SubLObject)nl_generation_fort_cache.$sym2$_ENGLISH_GENERATION_BASE_FILE_NAME_, (SubLObject)(nl_generation_fort_cache.$str3$generic_singular_nl_generation_fo.isSymbol() ? Symbols.symbol_value((SubLObject)nl_generation_fort_cache.$str3$generic_singular_nl_generation_fo) : nl_generation_fort_cache.$str3$generic_singular_nl_generation_fo), (SubLObject)nl_generation_fort_cache.$kw4$LEXICAL, (SubLObject)nl_generation_fort_cache.UNPROVIDED));
@@ -3129,7 +3129,7 @@ public final class nl_generation_fort_cache extends SubLTranslatedFile
         nl_generation_fort_cache.$nl_generation_fort_cache_retry_failed_tasksP$ = SubLFiles.defparameter("*NL-GENERATION-FORT-CACHE-RETRY-FAILED-TASKS?*", (SubLObject)nl_generation_fort_cache.NIL);
         nl_generation_fort_cache.$nanoseconds_per_second$ = SubLFiles.defconstant("*NANOSECONDS-PER-SECOND*", (SubLObject)nl_generation_fort_cache.$int134$1000000000);
         nl_generation_fort_cache.$nart_max_sister_to_gaf_ratio$ = SubLFiles.defparameter("*NART-MAX-SISTER-TO-GAF-RATIO*", number_utilities.positive_infinity());
-        nl_generation_fort_cache.$nl_generation_cache_exceptions$ = SubLFiles.deflexical("*NL-GENERATION-CACHE-EXCEPTIONS*", (nl_generation_fort_cache.NIL != Symbols.boundp((SubLObject)nl_generation_fort_cache.$sym158$_NL_GENERATION_CACHE_EXCEPTIONS_)) ? nl_generation_fort_cache.$nl_generation_cache_exceptions$.getGlobalValue() : set.new_set(Symbols.symbol_function((SubLObject)nl_generation_fort_cache.EQL), (SubLObject)nl_generation_fort_cache.UNPROVIDED));
+        nl_generation_fort_cache.$nl_generation_cache_exceptions$ = SubLFiles.deflexical("*NL-GENERATION-CACHE-EXCEPTIONS*", maybeDefault((SubLObject)nl_generation_fort_cache.$sym158$_NL_GENERATION_CACHE_EXCEPTIONS_, nl_generation_fort_cache.$nl_generation_cache_exceptions$, ()->(set.new_set(Symbols.symbol_function((SubLObject)nl_generation_fort_cache.EQL), (SubLObject)nl_generation_fort_cache.UNPROVIDED))));
         return (SubLObject)nl_generation_fort_cache.NIL;
     }
     

@@ -1095,7 +1095,7 @@ public final class evaluatable_relation_tests extends SubLTranslatedFile
     
     public static SubLObject init_evaluatable_relation_tests_file() {
         evaluatable_relation_tests.$dtp_evaluatable_relation_test$ = SubLFiles.defconstant("*DTP-EVALUATABLE-RELATION-TEST*", (SubLObject)evaluatable_relation_tests.$sym0$EVALUATABLE_RELATION_TEST);
-        evaluatable_relation_tests.$evaluatable_relation_tests$ = SubLFiles.deflexical("*EVALUATABLE-RELATION-TESTS*", (evaluatable_relation_tests.NIL != Symbols.boundp((SubLObject)evaluatable_relation_tests.$sym30$_EVALUATABLE_RELATION_TESTS_)) ? evaluatable_relation_tests.$evaluatable_relation_tests$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)evaluatable_relation_tests.$int31$100, (SubLObject)evaluatable_relation_tests.UNPROVIDED, (SubLObject)evaluatable_relation_tests.UNPROVIDED));
+        evaluatable_relation_tests.$evaluatable_relation_tests$ = SubLFiles.deflexical("*EVALUATABLE-RELATION-TESTS*", maybeDefault((SubLObject)evaluatable_relation_tests.$sym30$_EVALUATABLE_RELATION_TESTS_, evaluatable_relation_tests.$evaluatable_relation_tests$, ()->(Hashtables.make_hash_table((SubLObject)evaluatable_relation_tests.$int31$100, (SubLObject)evaluatable_relation_tests.UNPROVIDED, (SubLObject)evaluatable_relation_tests.UNPROVIDED))));
         return (SubLObject)evaluatable_relation_tests.NIL;
     }
     

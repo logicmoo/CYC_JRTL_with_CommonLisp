@@ -4068,7 +4068,7 @@ public final class cb_frames extends SubLTranslatedFile
         cb_frames.$cb_specify_show_gloss_options_text$ = SubLFiles.deflexical("*CB-SPECIFY-SHOW-GLOSS-OPTIONS-TEXT*", (SubLObject)cb_frames.$list67);
         cb_frames.$cb_specify_show_gloss_options$ = SubLFiles.deflexical("*CB-SPECIFY-SHOW-GLOSS-OPTIONS*", (SubLObject)cb_frames.$list68);
         cb_frames.$cb_search_autocomplete_enabled$ = SubLFiles.defparameter("*CB-SEARCH-AUTOCOMPLETE-ENABLED*", (SubLObject)cb_frames.T);
-        cb_frames.$compute_gloss_max_clarifying_sentences$ = SubLFiles.deflexical("*COMPUTE-GLOSS-MAX-CLARIFYING-SENTENCES*", (SubLObject)((cb_frames.NIL != Symbols.boundp((SubLObject)cb_frames.$sym137$_COMPUTE_GLOSS_MAX_CLARIFYING_SENTENCES_)) ? cb_frames.$compute_gloss_max_clarifying_sentences$.getGlobalValue() : cb_frames.THREE_INTEGER));
+        cb_frames.$compute_gloss_max_clarifying_sentences$ = SubLFiles.deflexical("*COMPUTE-GLOSS-MAX-CLARIFYING-SENTENCES*", (SubLObject)(maybeDefault((SubLObject)cb_frames.$sym137$_COMPUTE_GLOSS_MAX_CLARIFYING_SENTENCES_, cb_frames.$compute_gloss_max_clarifying_sentences$, cb_frames.THREE_INTEGER)));
         cb_frames.$use_cyc_ir_terms_for_browsingP$ = SubLFiles.defparameter("*USE-CYC-IR-TERMS-FOR-BROWSING?*", (SubLObject)cb_frames.NIL);
         cb_frames.$cb_default_index_view$ = SubLFiles.defvar("*CB-DEFAULT-INDEX-VIEW*", (SubLObject)cb_frames.$kw183$LEGACY);
         return (SubLObject)cb_frames.NIL;

@@ -399,7 +399,7 @@ public final class kb_storage_logging extends SubLTranslatedFile
         kb_storage_logging.$kb_storage_logging_sink$ = SubLFiles.deflexical("*KB-STORAGE-LOGGING-SINK*", (SubLObject)kb_storage_logging.NIL);
         kb_storage_logging.$kb_storage_log_time_stamp_interval$ = SubLFiles.deflexical("*KB-STORAGE-LOG-TIME-STAMP-INTERVAL*", (SubLObject)kb_storage_logging.ONE_INTEGER);
         kb_storage_logging.$next_kb_storage_log_time_stamp_message$ = SubLFiles.deflexical("*NEXT-KB-STORAGE-LOG-TIME-STAMP-MESSAGE*", Time.get_universal_time());
-        kb_storage_logging.$kb_storage_logging_tag_table$ = SubLFiles.deflexical("*KB-STORAGE-LOGGING-TAG-TABLE*", (SubLObject)((kb_storage_logging.NIL != Symbols.boundp((SubLObject)kb_storage_logging.$sym29$_KB_STORAGE_LOGGING_TAG_TABLE_)) ? kb_storage_logging.$kb_storage_logging_tag_table$.getGlobalValue() : kb_storage_logging.NIL));
+        kb_storage_logging.$kb_storage_logging_tag_table$ = SubLFiles.deflexical("*KB-STORAGE-LOGGING-TAG-TABLE*", (SubLObject)(maybeDefault((SubLObject)kb_storage_logging.$sym29$_KB_STORAGE_LOGGING_TAG_TABLE_, kb_storage_logging.$kb_storage_logging_tag_table$, kb_storage_logging.NIL)));
         return (SubLObject)kb_storage_logging.NIL;
     }
     

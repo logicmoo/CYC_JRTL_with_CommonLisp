@@ -955,8 +955,8 @@ public final class assertion_handles extends SubLTranslatedFile
     }
     
     public static SubLObject init_assertion_handles_file() {
-        assertion_handles.$assertion_from_id$ = SubLFiles.deflexical("*ASSERTION-FROM-ID*", (SubLObject)((assertion_handles.NIL != Symbols.boundp((SubLObject)assertion_handles.$sym0$_ASSERTION_FROM_ID_)) ? assertion_handles.$assertion_from_id$.getGlobalValue() : assertion_handles.NIL));
-        assertion_handles.$new_assertion_id_threshold$ = SubLFiles.deflexical("*NEW-ASSERTION-ID-THRESHOLD*", (SubLObject)((assertion_handles.NIL != Symbols.boundp((SubLObject)assertion_handles.$sym26$_NEW_ASSERTION_ID_THRESHOLD_)) ? assertion_handles.$new_assertion_id_threshold$.getGlobalValue() : assertion_handles.NIL));
+        assertion_handles.$assertion_from_id$ = SubLFiles.deflexical("*ASSERTION-FROM-ID*", (SubLObject)(maybeDefault((SubLObject)assertion_handles.$sym0$_ASSERTION_FROM_ID_, assertion_handles.$assertion_from_id$, assertion_handles.NIL)));
+        assertion_handles.$new_assertion_id_threshold$ = SubLFiles.deflexical("*NEW-ASSERTION-ID-THRESHOLD*", (SubLObject)(maybeDefault((SubLObject)assertion_handles.$sym26$_NEW_ASSERTION_ID_THRESHOLD_, assertion_handles.$new_assertion_id_threshold$, assertion_handles.NIL)));
         assertion_handles.$dtp_assertion$ = SubLFiles.defconstant("*DTP-ASSERTION*", (SubLObject)assertion_handles.$sym43$ASSERTION);
         assertion_handles.$print_assertions_in_cnf$ = SubLFiles.defparameter("*PRINT-ASSERTIONS-IN-CNF*", (SubLObject)assertion_handles.NIL);
         return (SubLObject)assertion_handles.NIL;

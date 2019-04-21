@@ -628,13 +628,13 @@ public final class guardian extends SubLTranslatedFile
     }
     
     public static SubLObject init_guardian_file() {
-        guardian.$guardian_process$ = SubLFiles.deflexical("*GUARDIAN-PROCESS*", (SubLObject)((guardian.NIL != Symbols.boundp((SubLObject)guardian.$sym0$_GUARDIAN_PROCESS_)) ? guardian.$guardian_process$.getGlobalValue() : guardian.NIL));
-        guardian.$guarding_requests$ = SubLFiles.deflexical("*GUARDING-REQUESTS*", (SubLObject)((guardian.NIL != Symbols.boundp((SubLObject)guardian.$sym1$_GUARDING_REQUESTS_)) ? guardian.$guarding_requests$.getGlobalValue() : guardian.NIL));
+        guardian.$guardian_process$ = SubLFiles.deflexical("*GUARDIAN-PROCESS*", (SubLObject)(maybeDefault((SubLObject)guardian.$sym0$_GUARDIAN_PROCESS_, guardian.$guardian_process$, guardian.NIL)));
+        guardian.$guarding_requests$ = SubLFiles.deflexical("*GUARDING-REQUESTS*", (SubLObject)(maybeDefault((SubLObject)guardian.$sym1$_GUARDING_REQUESTS_, guardian.$guarding_requests$, guardian.NIL)));
         guardian.$guardian_timeslice$ = SubLFiles.deflexical("*GUARDIAN-TIMESLICE*", (SubLObject)guardian.TWO_INTEGER);
-        guardian.$guardian_isg$ = SubLFiles.deflexical("*GUARDIAN-ISG*", (guardian.NIL != Symbols.boundp((SubLObject)guardian.$sym2$_GUARDIAN_ISG_)) ? guardian.$guardian_isg$.getGlobalValue() : integer_sequence_generator.new_integer_sequence_generator((SubLObject)guardian.UNPROVIDED, (SubLObject)guardian.UNPROVIDED, (SubLObject)guardian.UNPROVIDED));
+        guardian.$guardian_isg$ = SubLFiles.deflexical("*GUARDIAN-ISG*", maybeDefault((SubLObject)guardian.$sym2$_GUARDIAN_ISG_, guardian.$guardian_isg$, ()->(integer_sequence_generator.new_integer_sequence_generator((SubLObject)guardian.UNPROVIDED, (SubLObject)guardian.UNPROVIDED, (SubLObject)guardian.UNPROVIDED))));
         guardian.$dtp_guardian_request$ = SubLFiles.defconstant("*DTP-GUARDIAN-REQUEST*", (SubLObject)guardian.$sym3$GUARDIAN_REQUEST);
-        guardian.$guardian_shutdown_marker$ = SubLFiles.deflexical("*GUARDIAN-SHUTDOWN-MARKER*", (guardian.NIL != Symbols.boundp((SubLObject)guardian.$sym71$_GUARDIAN_SHUTDOWN_MARKER_)) ? guardian.$guardian_shutdown_marker$.getGlobalValue() : Symbols.make_symbol((SubLObject)guardian.$str72$Guardian_Shutdown_Marker));
-        guardian.$guardian_sleep_marker$ = SubLFiles.deflexical("*GUARDIAN-SLEEP-MARKER*", (guardian.NIL != Symbols.boundp((SubLObject)guardian.$sym81$_GUARDIAN_SLEEP_MARKER_)) ? guardian.$guardian_sleep_marker$.getGlobalValue() : Symbols.make_symbol((SubLObject)guardian.$str82$Guardian_Sleep_Marker));
+        guardian.$guardian_shutdown_marker$ = SubLFiles.deflexical("*GUARDIAN-SHUTDOWN-MARKER*", maybeDefault((SubLObject)guardian.$sym71$_GUARDIAN_SHUTDOWN_MARKER_, guardian.$guardian_shutdown_marker$, ()->(Symbols.make_symbol((SubLObject)guardian.$str72$Guardian_Shutdown_Marker))));
+        guardian.$guardian_sleep_marker$ = SubLFiles.deflexical("*GUARDIAN-SLEEP-MARKER*", maybeDefault((SubLObject)guardian.$sym81$_GUARDIAN_SLEEP_MARKER_, guardian.$guardian_sleep_marker$, ()->(Symbols.make_symbol((SubLObject)guardian.$str82$Guardian_Sleep_Marker))));
         return (SubLObject)guardian.NIL;
     }
     

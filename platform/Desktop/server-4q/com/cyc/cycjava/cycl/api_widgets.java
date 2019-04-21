@@ -11215,7 +11215,7 @@ public final class api_widgets extends SubLTranslatedFile
         api_widgets.$dtp_foo$ = SubLFiles.defconstant("*DTP-FOO*", (SubLObject)api_widgets.$sym0$FOO);
         api_widgets.$a_foo$ = SubLFiles.defparameter("*A-FOO*", make_foo((SubLObject)api_widgets.UNPROVIDED));
         api_widgets.$api_widget_session_resource_lock$ = SubLFiles.deflexical("*API-WIDGET-SESSION-RESOURCE-LOCK*", Locks.make_lock((SubLObject)api_widgets.$str24$Api_Widget_Session_Resource_Lock));
-        api_widgets.$api_widget_session_resource_map$ = SubLFiles.deflexical("*API-WIDGET-SESSION-RESOURCE-MAP*", (api_widgets.NIL != Symbols.boundp((SubLObject)api_widgets.$sym25$_API_WIDGET_SESSION_RESOURCE_MAP_)) ? api_widgets.$api_widget_session_resource_map$.getGlobalValue() : dictionary.new_dictionary((SubLObject)api_widgets.EQUAL, (SubLObject)api_widgets.UNPROVIDED));
+        api_widgets.$api_widget_session_resource_map$ = SubLFiles.deflexical("*API-WIDGET-SESSION-RESOURCE-MAP*", maybeDefault((SubLObject)api_widgets.$sym25$_API_WIDGET_SESSION_RESOURCE_MAP_, api_widgets.$api_widget_session_resource_map$, ()->(dictionary.new_dictionary((SubLObject)api_widgets.EQUAL, (SubLObject)api_widgets.UNPROVIDED))));
         api_widgets.$api_widgets_get_collection_instances_arg_cooccurrence$ = SubLFiles.deflexical("*API-WIDGETS-GET-COLLECTION-INSTANCES-ARG-COOCCURRENCE*", dictionary.new_dictionary(Symbols.symbol_function((SubLObject)api_widgets.EQUAL), (SubLObject)api_widgets.UNPROVIDED));
         api_widgets.$get_collection_instances_caching_state$ = SubLFiles.deflexical("*GET-COLLECTION-INSTANCES-CACHING-STATE*", (SubLObject)api_widgets.NIL);
         api_widgets.$ws_instance_dict$ = SubLFiles.defparameter("*WS-INSTANCE-DICT*", dictionary.new_dictionary(Symbols.symbol_function((SubLObject)api_widgets.EQUAL), (SubLObject)api_widgets.UNPROVIDED));
@@ -11233,7 +11233,7 @@ public final class api_widgets extends SubLTranslatedFile
         api_widgets.$get_reformulation_specification_from_kb_caching_state$ = SubLFiles.deflexical("*GET-REFORMULATION-SPECIFICATION-FROM-KB-CACHING-STATE*", (SubLObject)api_widgets.NIL);
         api_widgets.$fet_evaluation_mt$ = SubLFiles.defparameter("*FET-EVALUATION-MT*", api_widgets.$const150$TKBEvaluatedSentencesMt);
         api_widgets.$future_assertion_message_string$ = SubLFiles.deflexical("*FUTURE-ASSERTION-MESSAGE-STRING*", (SubLObject)api_widgets.$str177$Future_assertion_only_possibility);
-        api_widgets.$future_assertion_counter$ = SubLFiles.deflexical("*FUTURE-ASSERTION-COUNTER*", (api_widgets.NIL != Symbols.boundp((SubLObject)api_widgets.$sym178$_FUTURE_ASSERTION_COUNTER_)) ? api_widgets.$future_assertion_counter$.getGlobalValue() : integer_sequence_generator.new_integer_sequence_generator((SubLObject)api_widgets.UNPROVIDED, (SubLObject)api_widgets.UNPROVIDED, (SubLObject)api_widgets.UNPROVIDED));
+        api_widgets.$future_assertion_counter$ = SubLFiles.deflexical("*FUTURE-ASSERTION-COUNTER*", maybeDefault((SubLObject)api_widgets.$sym178$_FUTURE_ASSERTION_COUNTER_, api_widgets.$future_assertion_counter$, ()->(integer_sequence_generator.new_integer_sequence_generator((SubLObject)api_widgets.UNPROVIDED, (SubLObject)api_widgets.UNPROVIDED, (SubLObject)api_widgets.UNPROVIDED))));
         api_widgets.$microtheory_indexical_referent_current_mt$ = SubLFiles.deflexical("*MICROTHEORY-INDEXICAL-REFERENT-CURRENT-MT*", (SubLObject)api_widgets.$list182);
         api_widgets.$microtheory_mentioning_constructs$ = SubLFiles.deflexical("*MICROTHEORY-MENTIONING-CONSTRUCTS*", (SubLObject)api_widgets.$list183);
         api_widgets.$parse_sentence_context$ = SubLFiles.defparameter("*PARSE-SENTENCE-CONTEXT*", (SubLObject)api_widgets.NIL);
@@ -11256,7 +11256,7 @@ public final class api_widgets extends SubLTranslatedFile
         api_widgets.$everything_psc_dwimmed_awayP$ = SubLFiles.defparameter("*EVERYTHING-PSC-DWIMMED-AWAY?*", (SubLObject)api_widgets.NIL);
         api_widgets.$get_possible_renderers_for_followup_int_caching_state$ = SubLFiles.deflexical("*GET-POSSIBLE-RENDERERS-FOR-FOLLOWUP-INT-CACHING-STATE*", (SubLObject)api_widgets.NIL);
         api_widgets.$fet_categorized_source_pred$ = SubLFiles.deflexical("*FET-CATEGORIZED-SOURCE-PRED*", (SubLObject)api_widgets.NIL);
-        api_widgets.$fet_categorized_sources$ = SubLFiles.deflexical("*FET-CATEGORIZED-SOURCES*", (SubLObject)((api_widgets.NIL != Symbols.boundp((SubLObject)api_widgets.$sym416$_FET_CATEGORIZED_SOURCES_)) ? api_widgets.$fet_categorized_sources$.getGlobalValue() : api_widgets.$kw417$UNINITIALIZED));
+        api_widgets.$fet_categorized_sources$ = SubLFiles.deflexical("*FET-CATEGORIZED-SOURCES*", (SubLObject)(maybeDefault((SubLObject)api_widgets.$sym416$_FET_CATEGORIZED_SOURCES_, api_widgets.$fet_categorized_sources$, api_widgets.$kw417$UNINITIALIZED)));
         api_widgets.$fet_empty_source_dictionary$ = SubLFiles.deflexical("*FET-EMPTY-SOURCE-DICTIONARY*", (SubLObject)api_widgets.NIL);
         api_widgets.$collection_creation_template_caching_state$ = SubLFiles.deflexical("*COLLECTION-CREATION-TEMPLATE-CACHING-STATE*", (SubLObject)api_widgets.NIL);
         api_widgets.$term_qua_inference_answer_pattern$ = SubLFiles.deflexical("*TERM-QUA-INFERENCE-ANSWER-PATTERN*", (SubLObject)api_widgets.$list469);

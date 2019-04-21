@@ -487,9 +487,9 @@ public final class tersifier extends SubLTranslatedFile
     
     public static SubLObject init_tersifier_file() {
         tersifier.$constants_to_ignore_for_contraction_ht$ = SubLFiles.deflexical("*CONSTANTS-TO-IGNORE-FOR-CONTRACTION-HT*", (SubLObject)tersifier.$list2);
-        tersifier.$contraction_constant_ht$ = SubLFiles.deflexical("*CONTRACTION-CONSTANT-HT*", (SubLObject)((tersifier.NIL != Symbols.boundp((SubLObject)tersifier.$sym3$_CONTRACTION_CONSTANT_HT_)) ? tersifier.$contraction_constant_ht$.getGlobalValue() : tersifier.NIL));
-        tersifier.$contraction_checksum_ht$ = SubLFiles.deflexical("*CONTRACTION-CHECKSUM-HT*", (SubLObject)((tersifier.NIL != Symbols.boundp((SubLObject)tersifier.$sym4$_CONTRACTION_CHECKSUM_HT_)) ? tersifier.$contraction_checksum_ht$.getGlobalValue() : tersifier.NIL));
-        tersifier.$canon_expansion_ht$ = SubLFiles.deflexical("*CANON-EXPANSION-HT*", (SubLObject)((tersifier.NIL != Symbols.boundp((SubLObject)tersifier.$sym5$_CANON_EXPANSION_HT_)) ? tersifier.$canon_expansion_ht$.getGlobalValue() : tersifier.NIL));
+        tersifier.$contraction_constant_ht$ = SubLFiles.deflexical("*CONTRACTION-CONSTANT-HT*", (SubLObject)(maybeDefault((SubLObject)tersifier.$sym3$_CONTRACTION_CONSTANT_HT_, tersifier.$contraction_constant_ht$, tersifier.NIL)));
+        tersifier.$contraction_checksum_ht$ = SubLFiles.deflexical("*CONTRACTION-CHECKSUM-HT*", (SubLObject)(maybeDefault((SubLObject)tersifier.$sym4$_CONTRACTION_CHECKSUM_HT_, tersifier.$contraction_checksum_ht$, tersifier.NIL)));
+        tersifier.$canon_expansion_ht$ = SubLFiles.deflexical("*CANON-EXPANSION-HT*", (SubLObject)(maybeDefault((SubLObject)tersifier.$sym5$_CANON_EXPANSION_HT_, tersifier.$canon_expansion_ht$, tersifier.NIL)));
         tersifier.$current_generic_arg_num$ = SubLFiles.defparameter("*CURRENT-GENERIC-ARG-NUM*", (SubLObject)tersifier.ZERO_INTEGER);
         return (SubLObject)tersifier.NIL;
     }

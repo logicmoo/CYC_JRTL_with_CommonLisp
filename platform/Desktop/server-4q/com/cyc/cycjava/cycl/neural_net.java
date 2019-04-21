@@ -462,7 +462,7 @@ public final class neural_net extends SubLTranslatedFile
         neural_net.$dtp_neural_net$ = SubLFiles.defconstant("*DTP-NEURAL-NET*", (SubLObject)neural_net.$sym0$NEURAL_NET);
         neural_net.$dtp_nn_input_node$ = SubLFiles.defconstant("*DTP-NN-INPUT-NODE*", (SubLObject)neural_net.$sym21$NN_INPUT_NODE);
         neural_net.$rl_tactician_neural_net_weights_list$ = SubLFiles.deflexical("*RL-TACTICIAN-NEURAL-NET-WEIGHTS-LIST*", (SubLObject)neural_net.$list39);
-        neural_net.$rl_tactician_neural_net$ = SubLFiles.deflexical("*RL-TACTICIAN-NEURAL-NET*", (SubLObject)((neural_net.NIL != Symbols.boundp((SubLObject)neural_net.$sym40$_RL_TACTICIAN_NEURAL_NET_)) ? neural_net.$rl_tactician_neural_net$.getGlobalValue() : neural_net.NIL));
+        neural_net.$rl_tactician_neural_net$ = SubLFiles.deflexical("*RL-TACTICIAN-NEURAL-NET*", (SubLObject)(maybeDefault((SubLObject)neural_net.$sym40$_RL_TACTICIAN_NEURAL_NET_, neural_net.$rl_tactician_neural_net$, neural_net.NIL)));
         neural_net.$test_rl_tactician_evaluate_neural_net_tolerance$ = SubLFiles.deflexical("*TEST-RL-TACTICIAN-EVALUATE-NEURAL-NET-TOLERANCE*", (SubLObject)neural_net.$float42$0_01);
         return (SubLObject)neural_net.NIL;
     }

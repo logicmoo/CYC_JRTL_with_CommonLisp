@@ -1369,7 +1369,7 @@ public final class heap extends SubLTranslatedFile
     
     public static SubLObject init_heap_file() {
         heap.$dtp_heap_impl$ = SubLFiles.defconstant("*DTP-HEAP-IMPL*", (SubLObject)heap.$sym0$HEAP_IMPL);
-        heap.$empty_heap_element$ = SubLFiles.deflexical("*EMPTY-HEAP-ELEMENT*", (heap.NIL != Symbols.boundp((SubLObject)heap.$sym27$_EMPTY_HEAP_ELEMENT_)) ? heap.$empty_heap_element$.getGlobalValue() : Symbols.make_symbol((SubLObject)heap.$str28$Empty_Heap_Element));
+        heap.$empty_heap_element$ = SubLFiles.deflexical("*EMPTY-HEAP-ELEMENT*", maybeDefault((SubLObject)heap.$sym27$_EMPTY_HEAP_ELEMENT_, heap.$empty_heap_element$, ()->(Symbols.make_symbol((SubLObject)heap.$str28$Empty_Heap_Element))));
         heap.$heap_root_index$ = SubLFiles.deflexical("*HEAP-ROOT-INDEX*", (SubLObject)heap.ONE_INTEGER);
         heap.$dtp_heap_test_example$ = SubLFiles.defconstant("*DTP-HEAP-TEST-EXAMPLE*", (SubLObject)heap.$sym71$HEAP_TEST_EXAMPLE);
         return (SubLObject)heap.NIL;

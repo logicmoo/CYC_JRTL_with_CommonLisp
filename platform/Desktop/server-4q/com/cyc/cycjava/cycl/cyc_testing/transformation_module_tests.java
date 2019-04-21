@@ -939,7 +939,7 @@ public final class transformation_module_tests extends SubLTranslatedFile
     
     public static SubLObject init_transformation_module_tests_file() {
         transformation_module_tests.$dtp_transformation_module_test$ = SubLFiles.defconstant("*DTP-TRANSFORMATION-MODULE-TEST*", (SubLObject)transformation_module_tests.$sym0$TRANSFORMATION_MODULE_TEST);
-        transformation_module_tests.$transformation_module_tests$ = SubLFiles.deflexical("*TRANSFORMATION-MODULE-TESTS*", (transformation_module_tests.NIL != Symbols.boundp((SubLObject)transformation_module_tests.$sym51$_TRANSFORMATION_MODULE_TESTS_)) ? transformation_module_tests.$transformation_module_tests$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)transformation_module_tests.$int52$100, (SubLObject)transformation_module_tests.UNPROVIDED, (SubLObject)transformation_module_tests.UNPROVIDED));
+        transformation_module_tests.$transformation_module_tests$ = SubLFiles.deflexical("*TRANSFORMATION-MODULE-TESTS*", maybeDefault((SubLObject)transformation_module_tests.$sym51$_TRANSFORMATION_MODULE_TESTS_, transformation_module_tests.$transformation_module_tests$, ()->(Hashtables.make_hash_table((SubLObject)transformation_module_tests.$int52$100, (SubLObject)transformation_module_tests.UNPROVIDED, (SubLObject)transformation_module_tests.UNPROVIDED))));
         return (SubLObject)transformation_module_tests.NIL;
     }
     

@@ -1717,7 +1717,7 @@ public final class cb_system_health extends SubLTranslatedFile
         cb_system_health.$cb_system_health_show_details$ = SubLFiles.defparameter("*CB-SYSTEM-HEALTH-SHOW-DETAILS*", (SubLObject)cb_system_health.NIL);
         cb_system_health.$deduction_per_secs_semantic_checking_rate$ = SubLFiles.deflexical("*DEDUCTION-PER-SECS-SEMANTIC-CHECKING-RATE*", (SubLObject)cb_system_health.$int32$4850);
         cb_system_health.$deduction_per_secs_syntactic_checking_rate$ = SubLFiles.deflexical("*DEDUCTION-PER-SECS-SYNTACTIC-CHECKING-RATE*", Numbers.multiply((SubLObject)cb_system_health.TEN_INTEGER, cb_system_health.$deduction_per_secs_semantic_checking_rate$.getGlobalValue()));
-        cb_system_health.$kb_units_fragmentation_statistics$ = SubLFiles.deflexical("*KB-UNITS-FRAGMENTATION-STATISTICS*", (SubLObject)((cb_system_health.NIL != Symbols.boundp((SubLObject)cb_system_health.$sym33$_KB_UNITS_FRAGMENTATION_STATISTICS_)) ? cb_system_health.$kb_units_fragmentation_statistics$.getGlobalValue() : cb_system_health.NIL));
+        cb_system_health.$kb_units_fragmentation_statistics$ = SubLFiles.deflexical("*KB-UNITS-FRAGMENTATION-STATISTICS*", (SubLObject)(maybeDefault((SubLObject)cb_system_health.$sym33$_KB_UNITS_FRAGMENTATION_STATISTICS_, cb_system_health.$kb_units_fragmentation_statistics$, cb_system_health.NIL)));
         return (SubLObject)cb_system_health.NIL;
     }
     

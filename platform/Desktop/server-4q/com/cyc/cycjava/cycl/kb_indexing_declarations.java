@@ -215,7 +215,7 @@ public final class kb_indexing_declarations extends SubLTranslatedFile
     
     public static SubLObject init_kb_indexing_declarations_file() {
         kb_indexing_declarations.$default_intermediate_index_equal_test$ = SubLFiles.deflexical("*DEFAULT-INTERMEDIATE-INDEX-EQUAL-TEST*", Symbols.symbol_function((SubLObject)kb_indexing_declarations.EQL));
-        kb_indexing_declarations.$kb_indexing_declaration_store$ = SubLFiles.deflexical("*KB-INDEXING-DECLARATION-STORE*", (kb_indexing_declarations.NIL != Symbols.boundp((SubLObject)kb_indexing_declarations.$sym0$_KB_INDEXING_DECLARATION_STORE_)) ? kb_indexing_declarations.$kb_indexing_declaration_store$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)kb_indexing_declarations.EQL), (SubLObject)kb_indexing_declarations.UNPROVIDED));
+        kb_indexing_declarations.$kb_indexing_declaration_store$ = SubLFiles.deflexical("*KB-INDEXING-DECLARATION-STORE*", maybeDefault((SubLObject)kb_indexing_declarations.$sym0$_KB_INDEXING_DECLARATION_STORE_, kb_indexing_declarations.$kb_indexing_declaration_store$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)kb_indexing_declarations.EQL), (SubLObject)kb_indexing_declarations.UNPROVIDED))));
         return (SubLObject)kb_indexing_declarations.NIL;
     }
     

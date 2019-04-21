@@ -1101,7 +1101,7 @@ public final class morphological_word_parser extends SubLTranslatedFile
     public static SubLObject init_morphological_word_parser_file() {
         morphological_word_parser.$complex_word_string_is_speech_partP_caching_state$ = SubLFiles.deflexical("*COMPLEX-WORD-STRING-IS-SPEECH-PART?-CACHING-STATE*", (SubLObject)morphological_word_parser.NIL);
         morphological_word_parser.$parse_complex_word_string_caching_state$ = SubLFiles.deflexical("*PARSE-COMPLEX-WORD-STRING-CACHING-STATE*", (SubLObject)morphological_word_parser.NIL);
-        morphological_word_parser.$mwp_initializedP$ = SubLFiles.deflexical("*MWP-INITIALIZED?*", (SubLObject)((morphological_word_parser.NIL != Symbols.boundp((SubLObject)morphological_word_parser.$sym39$_MWP_INITIALIZED__)) ? morphological_word_parser.$mwp_initializedP$.getGlobalValue() : morphological_word_parser.NIL));
+        morphological_word_parser.$mwp_initializedP$ = SubLFiles.deflexical("*MWP-INITIALIZED?*", (SubLObject)(maybeDefault((SubLObject)morphological_word_parser.$sym39$_MWP_INITIALIZED__, morphological_word_parser.$mwp_initializedP$, morphological_word_parser.NIL)));
         return (SubLObject)morphological_word_parser.NIL;
     }
     

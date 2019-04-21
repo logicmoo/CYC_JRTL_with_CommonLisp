@@ -877,8 +877,8 @@ public final class control_vars extends SubLTranslatedFile
 
     public static SubLObject init_control_vars_file() {
         control_vars.$read_require_constant_exists$ = SubLFiles.defparameter("*READ-REQUIRE-CONSTANT-EXISTS*", (SubLObject)control_vars.T);
-        control_vars.$table_area$ = SubLFiles.deflexical("*TABLE-AREA*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym0$_TABLE_AREA_)) ? control_vars.$table_area$.getGlobalValue() : control_vars.NIL));
-        control_vars.$hl_lock$ = SubLFiles.deflexical("*HL-LOCK*", (control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym1$_HL_LOCK_)) ? control_vars.$hl_lock$.getGlobalValue() : Locks.make_lock((SubLObject)control_vars.$str2$HL_Store_Lock));
+        control_vars.$table_area$ = SubLFiles.deflexical("*TABLE-AREA*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym0$_TABLE_AREA_, control_vars.$table_area$, control_vars.NIL)));
+        control_vars.$hl_lock$ = SubLFiles.deflexical("*HL-LOCK*", maybeDefault((SubLObject)control_vars.$sym1$_HL_LOCK_, control_vars.$hl_lock$, ()->(Locks.make_lock((SubLObject)control_vars.$str2$HL_Store_Lock))));
         control_vars.$bootstrapping_kbP$ = SubLFiles.defparameter("*BOOTSTRAPPING-KB?*", (SubLObject)control_vars.NIL);
         control_vars.$keyword_package$ = SubLFiles.deflexical("*KEYWORD-PACKAGE*", Packages.find_package((SubLObject)control_vars.$str5$KEYWORD));
         control_vars.$sublisp_package$ = SubLFiles.deflexical("*SUBLISP-PACKAGE*", Packages.find_package((SubLObject)control_vars.$str6$SUBLISP));
@@ -988,21 +988,21 @@ public final class control_vars extends SubLTranslatedFile
         control_vars.$last_agenda_error_explanatory_supports$ = SubLFiles.deflexical("*LAST-AGENDA-ERROR-EXPLANATORY-SUPPORTS*", (SubLObject)control_vars.NIL);
         control_vars.$agenda_display_fi_warnings$ = SubLFiles.defparameter("*AGENDA-DISPLAY-FI-WARNINGS*", (SubLObject)control_vars.NIL);
         control_vars.$ignore_remote_errors$ = SubLFiles.defparameter("*IGNORE-REMOTE-ERRORS*", (SubLObject)control_vars.T);
-        control_vars.$auto_increment_kb$ = SubLFiles.deflexical("*AUTO-INCREMENT-KB*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym37$_AUTO_INCREMENT_KB_)) ? control_vars.$auto_increment_kb$.getGlobalValue() : control_vars.NIL));
+        control_vars.$auto_increment_kb$ = SubLFiles.deflexical("*AUTO-INCREMENT-KB*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym37$_AUTO_INCREMENT_KB_, control_vars.$auto_increment_kb$, control_vars.NIL)));
         control_vars.$load_submitted_transcriptsP$ = SubLFiles.deflexical("*LOAD-SUBMITTED-TRANSCRIPTS?*", (SubLObject)control_vars.NIL);
         control_vars.$send_submitted_transcript_loading_noticesP$ = SubLFiles.deflexical("*SEND-SUBMITTED-TRANSCRIPT-LOADING-NOTICES?*", (SubLObject)control_vars.NIL);
         control_vars.$cyc_image_id$ = SubLFiles.defvar("*CYC-IMAGE-ID*", (SubLObject)control_vars.NIL);
         control_vars.$use_tcp_port_in_image_id$ = SubLFiles.deflexical("*USE-TCP-PORT-IN-IMAGE-ID*", (SubLObject)control_vars.T);
-        control_vars.$build_kb_loaded$ = SubLFiles.deflexical("*BUILD-KB-LOADED*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym43$_BUILD_KB_LOADED_)) ? control_vars.$build_kb_loaded$.getGlobalValue() : control_vars.NIL));
-        control_vars.$kb_loaded$ = SubLFiles.deflexical("*KB-LOADED*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym45$_KB_LOADED_)) ? control_vars.$kb_loaded$.getGlobalValue() : control_vars.NIL));
-        control_vars.$kb_pedigree$ = SubLFiles.deflexical("*KB-PEDIGREE*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym49$_KB_PEDIGREE_)) ? control_vars.$kb_pedigree$.getGlobalValue() : control_vars.$kw50$UNKNOWN));
+        control_vars.$build_kb_loaded$ = SubLFiles.deflexical("*BUILD-KB-LOADED*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym43$_BUILD_KB_LOADED_, control_vars.$build_kb_loaded$, control_vars.NIL)));
+        control_vars.$kb_loaded$ = SubLFiles.deflexical("*KB-LOADED*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym45$_KB_LOADED_, control_vars.$kb_loaded$, control_vars.NIL)));
+        control_vars.$kb_pedigree$ = SubLFiles.deflexical("*KB-PEDIGREE*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym49$_KB_PEDIGREE_, control_vars.$kb_pedigree$, control_vars.$kw50$UNKNOWN)));
         control_vars.$use_transcriptP$ = SubLFiles.defparameter("*USE-TRANSCRIPT?*", (SubLObject)control_vars.T);
-        control_vars.$run_own_operationsP$ = SubLFiles.deflexical("*RUN-OWN-OPERATIONS?*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym51$_RUN_OWN_OPERATIONS__)) ? control_vars.$run_own_operationsP$.getGlobalValue() : control_vars.T));
-        control_vars.$caught_up_on_master_transcript$ = SubLFiles.deflexical("*CAUGHT-UP-ON-MASTER-TRANSCRIPT*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym52$_CAUGHT_UP_ON_MASTER_TRANSCRIPT_)) ? control_vars.$caught_up_on_master_transcript$.getGlobalValue() : control_vars.NIL));
-        control_vars.$communication_mode$ = SubLFiles.deflexical("*COMMUNICATION-MODE*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym53$_COMMUNICATION_MODE_)) ? control_vars.$communication_mode$.getGlobalValue() : control_vars.$kw50$UNKNOWN));
+        control_vars.$run_own_operationsP$ = SubLFiles.deflexical("*RUN-OWN-OPERATIONS?*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym51$_RUN_OWN_OPERATIONS__, control_vars.$run_own_operationsP$, control_vars.T)));
+        control_vars.$caught_up_on_master_transcript$ = SubLFiles.deflexical("*CAUGHT-UP-ON-MASTER-TRANSCRIPT*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym52$_CAUGHT_UP_ON_MASTER_TRANSCRIPT_, control_vars.$caught_up_on_master_transcript$, control_vars.NIL)));
+        control_vars.$communication_mode$ = SubLFiles.deflexical("*COMMUNICATION-MODE*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym53$_COMMUNICATION_MODE_, control_vars.$communication_mode$, control_vars.$kw50$UNKNOWN)));
         control_vars.$unencapsulating_within_agenda$ = SubLFiles.defparameter("*UNENCAPSULATING-WITHIN-AGENDA*", (SubLObject)control_vars.NIL);
         control_vars.$save_asked_queriesP$ = SubLFiles.defvar("*SAVE-ASKED-QUERIES?*", (SubLObject)control_vars.NIL);
-        control_vars.$init_file_loadedP$ = SubLFiles.deflexical("*INIT-FILE-LOADED?*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym54$_INIT_FILE_LOADED__)) ? control_vars.$init_file_loadedP$.getGlobalValue() : control_vars.NIL));
+        control_vars.$init_file_loadedP$ = SubLFiles.deflexical("*INIT-FILE-LOADED?*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym54$_INIT_FILE_LOADED__, control_vars.$init_file_loadedP$, control_vars.NIL)));
         control_vars.$within_assert$ = SubLFiles.defparameter("*WITHIN-ASSERT*", (SubLObject)control_vars.NIL);
         control_vars.$within_unassert$ = SubLFiles.defparameter("*WITHIN-UNASSERT*", (SubLObject)control_vars.NIL);
         control_vars.$within_ask$ = SubLFiles.defparameter("*WITHIN-ASK*", (SubLObject)control_vars.NIL);
@@ -1010,7 +1010,7 @@ public final class control_vars extends SubLTranslatedFile
         control_vars.$compute_inference_results$ = SubLFiles.defparameter("*COMPUTE-INFERENCE-RESULTS*", (SubLObject)control_vars.T);
         control_vars.$cache_inference_results$ = SubLFiles.defparameter("*CACHE-INFERENCE-RESULTS*", (SubLObject)control_vars.NIL);
         control_vars.$transformation_depth_cutoff$ = SubLFiles.defparameter("*TRANSFORMATION-DEPTH-CUTOFF*", (SubLObject)control_vars.NIL);
-        control_vars.$lexicon_initializedP$ = SubLFiles.deflexical("*LEXICON-INITIALIZED?*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym58$_LEXICON_INITIALIZED__)) ? control_vars.$lexicon_initializedP$.getGlobalValue() : control_vars.NIL));
+        control_vars.$lexicon_initializedP$ = SubLFiles.deflexical("*LEXICON-INITIALIZED?*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym58$_LEXICON_INITIALIZED__, control_vars.$lexicon_initializedP$, control_vars.NIL)));
         control_vars.$partial_semanticsP$ = SubLFiles.defparameter("*PARTIAL-SEMANTICS?*", (SubLObject)control_vars.NIL);
         control_vars.$enforce_mass_vs_countP$ = SubLFiles.defparameter("*ENFORCE-MASS-VS-COUNT?*", (SubLObject)control_vars.T);
         control_vars.$partial_syntaxP$ = SubLFiles.defparameter("*PARTIAL-SYNTAX?*", (SubLObject)control_vars.NIL);
@@ -1036,10 +1036,10 @@ public final class control_vars extends SubLTranslatedFile
         control_vars.$dbm_init_file_loadedP$ = SubLFiles.defparameter("*DBM-INIT-FILE-LOADED?*", (SubLObject)control_vars.NIL);
         control_vars.$dbm_cache_loading_startedP$ = SubLFiles.defparameter("*DBM-CACHE-LOADING-STARTED?*", (SubLObject)control_vars.NIL);
         control_vars.$dbm_cache_loading_finishedP$ = SubLFiles.defparameter("*DBM-CACHE-LOADING-FINISHED?*", (SubLObject)control_vars.NIL);
-        control_vars.$wordnet_initializedP$ = SubLFiles.deflexical("*WORDNET-INITIALIZED?*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym78$_WORDNET_INITIALIZED__)) ? control_vars.$wordnet_initializedP$.getGlobalValue() : control_vars.NIL));
-        control_vars.$use_wn_linksP$ = SubLFiles.deflexical("*USE-WN-LINKS?*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym79$_USE_WN_LINKS__)) ? control_vars.$use_wn_linksP$.getGlobalValue() : control_vars.NIL));
-        control_vars.$acip_subkernel_extraction$ = SubLFiles.deflexical("*ACIP-SUBKERNEL-EXTRACTION*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym80$_ACIP_SUBKERNEL_EXTRACTION_)) ? control_vars.$acip_subkernel_extraction$.getGlobalValue() : control_vars.NIL));
-        control_vars.$acip_subkernel_output_stream$ = SubLFiles.deflexical("*ACIP-SUBKERNEL-OUTPUT-STREAM*", (SubLObject)((control_vars.NIL != Symbols.boundp((SubLObject)control_vars.$sym81$_ACIP_SUBKERNEL_OUTPUT_STREAM_)) ? control_vars.$acip_subkernel_output_stream$.getGlobalValue() : control_vars.NIL));
+        control_vars.$wordnet_initializedP$ = SubLFiles.deflexical("*WORDNET-INITIALIZED?*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym78$_WORDNET_INITIALIZED__, control_vars.$wordnet_initializedP$, control_vars.NIL)));
+        control_vars.$use_wn_linksP$ = SubLFiles.deflexical("*USE-WN-LINKS?*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym79$_USE_WN_LINKS__, control_vars.$use_wn_linksP$, control_vars.NIL)));
+        control_vars.$acip_subkernel_extraction$ = SubLFiles.deflexical("*ACIP-SUBKERNEL-EXTRACTION*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym80$_ACIP_SUBKERNEL_EXTRACTION_, control_vars.$acip_subkernel_extraction$, control_vars.NIL)));
+        control_vars.$acip_subkernel_output_stream$ = SubLFiles.deflexical("*ACIP-SUBKERNEL-OUTPUT-STREAM*", (SubLObject)(maybeDefault((SubLObject)control_vars.$sym81$_ACIP_SUBKERNEL_OUTPUT_STREAM_, control_vars.$acip_subkernel_output_stream$, control_vars.NIL)));
         control_vars.$janus_tag$ = SubLFiles.defparameter("*JANUS-TAG*", (SubLObject)control_vars.NIL);
         control_vars.$janus_new_constants$ = SubLFiles.defparameter("*JANUS-NEW-CONSTANTS*", (SubLObject)control_vars.NIL);
         control_vars.$janus_test_case_loggingP$ = SubLFiles.defparameter("*JANUS-TEST-CASE-LOGGING?*", (SubLObject)control_vars.NIL);

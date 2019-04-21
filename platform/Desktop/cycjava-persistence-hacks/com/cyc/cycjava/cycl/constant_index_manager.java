@@ -291,7 +291,7 @@ public final class constant_index_manager extends SubLTranslatedFile
     }
     
     public static SubLObject init_constant_index_manager_file() {
-        constant_index_manager.$constant_index_manager$ = SubLFiles.deflexical("*CONSTANT-INDEX-MANAGER*", (SubLObject)((constant_index_manager.NIL != Symbols.boundp((SubLObject)constant_index_manager.$sym0$_CONSTANT_INDEX_MANAGER_)) ? constant_index_manager.$constant_index_manager$.getGlobalValue() : constant_index_manager.$kw1$UNINITIALIZED));
+        constant_index_manager.$constant_index_manager$ = SubLFiles.deflexical("*CONSTANT-INDEX-MANAGER*", (SubLObject)(maybeDefault((SubLObject)constant_index_manager.$sym0$_CONSTANT_INDEX_MANAGER_, constant_index_manager.$constant_index_manager$, constant_index_manager.$kw1$UNINITIALIZED)));
         constant_index_manager.$constant_index_lru_size_percentage$ = SubLFiles.deflexical("*CONSTANT-INDEX-LRU-SIZE-PERCENTAGE*", (SubLObject)constant_index_manager.SIXTEEN_INTEGER);
         constant_index_manager.$constant_index_lru_size_max$ = SubLFiles.deflexical("*CONSTANT-INDEX-LRU-SIZE-MAX*", (SubLObject)constant_index_manager.$int2$20000);
         return (SubLObject)constant_index_manager.NIL;

@@ -159,7 +159,7 @@ public final class ctest_macros extends SubLTranslatedFile
     }
 
     public static SubLObject init_ctest_macros_file() {
-        ctest_macros.$kct_metric_evaluator_methods$ = SubLFiles.deflexical("*KCT-METRIC-EVALUATOR-METHODS*", (SubLObject)((ctest_macros.NIL != Symbols.boundp((SubLObject)ctest_macros.$sym16$_KCT_METRIC_EVALUATOR_METHODS_)) ? ctest_macros.$kct_metric_evaluator_methods$.getGlobalValue() : ctest_macros.NIL));
+        ctest_macros.$kct_metric_evaluator_methods$ = SubLFiles.deflexical("*KCT-METRIC-EVALUATOR-METHODS*", (SubLObject)(maybeDefault((SubLObject)ctest_macros.$sym16$_KCT_METRIC_EVALUATOR_METHODS_, ctest_macros.$kct_metric_evaluator_methods$, ctest_macros.NIL)));
         return (SubLObject)ctest_macros.NIL;
     }
 

@@ -1196,9 +1196,9 @@ public final class sbhl_module_vars extends SubLTranslatedFile
     public static SubLObject init_sbhl_module_vars_file() {
         sbhl_module_vars.$dtp_sbhl_module$ = SubLFiles.defconstant("*DTP-SBHL-MODULE*", (SubLObject)sbhl_module_vars.$sym0$SBHL_MODULE);
         sbhl_module_vars.$sbhl_module_key_test$ = SubLFiles.deflexical("*SBHL-MODULE-KEY-TEST*", Symbols.symbol_function((SubLObject)sbhl_module_vars.EQL));
-        sbhl_module_vars.$sbhl_modules$ = SubLFiles.deflexical("*SBHL-MODULES*", (SubLObject)((sbhl_module_vars.NIL != Symbols.boundp((SubLObject)sbhl_module_vars.$sym62$_SBHL_MODULES_)) ? sbhl_module_vars.$sbhl_modules$.getGlobalValue() : sbhl_module_vars.NIL));
+        sbhl_module_vars.$sbhl_modules$ = SubLFiles.deflexical("*SBHL-MODULES*", (SubLObject)(maybeDefault((SubLObject)sbhl_module_vars.$sym62$_SBHL_MODULES_, sbhl_module_vars.$sbhl_modules$, sbhl_module_vars.NIL)));
         sbhl_module_vars.$sbhl_module_types$ = SubLFiles.deflexical("*SBHL-MODULE-TYPES*", (SubLObject)sbhl_module_vars.$list75);
-        sbhl_module_vars.$sbhl_module_properties$ = SubLFiles.deflexical("*SBHL-MODULE-PROPERTIES*", (sbhl_module_vars.NIL != Symbols.boundp((SubLObject)sbhl_module_vars.$sym91$_SBHL_MODULE_PROPERTIES_)) ? sbhl_module_vars.$sbhl_module_properties$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sbhl_module_vars.EQ), (SubLObject)sbhl_module_vars.UNPROVIDED));
+        sbhl_module_vars.$sbhl_module_properties$ = SubLFiles.deflexical("*SBHL-MODULE-PROPERTIES*", maybeDefault((SubLObject)sbhl_module_vars.$sym91$_SBHL_MODULE_PROPERTIES_, sbhl_module_vars.$sbhl_module_properties$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sbhl_module_vars.EQ), (SubLObject)sbhl_module_vars.UNPROVIDED))));
         sbhl_module_vars.$sbhl_module_required_properties$ = SubLFiles.deflexical("*SBHL-MODULE-REQUIRED-PROPERTIES*", (SubLObject)sbhl_module_vars.$list119);
         sbhl_module_vars.$sbhl_module$ = SubLFiles.defparameter("*SBHL-MODULE*", (SubLObject)sbhl_module_vars.NIL);
         sbhl_module_vars.$sbhl_module_vars$ = SubLFiles.defvar("*SBHL-MODULE-VARS*", (SubLObject)sbhl_module_vars.NIL);

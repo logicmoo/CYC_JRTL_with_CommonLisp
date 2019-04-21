@@ -316,7 +316,7 @@ public final class encapsulation extends SubLTranslatedFile
         encapsulation.$encapsulate_method_table$ = SubLFiles.deflexical("*ENCAPSULATE-METHOD-TABLE*", Vectors.make_vector((SubLObject)encapsulation.$int0$256, (SubLObject)encapsulation.NIL));
         encapsulation.$unencapsulate_believe_names$ = SubLFiles.defparameter("*UNENCAPSULATE-BELIEVE-NAMES*", (SubLObject)encapsulation.NIL);
         encapsulation.$unencapsulate_constant_via_name_optimizationP$ = SubLFiles.defparameter("*UNENCAPSULATE-CONSTANT-VIA-NAME-OPTIMIZATION?*", (SubLObject)encapsulation.NIL);
-        encapsulation.$unencapsulate_find_constant_lookaside_table$ = SubLFiles.deflexical("*UNENCAPSULATE-FIND-CONSTANT-LOOKASIDE-TABLE*", (SubLObject)((encapsulation.NIL != Symbols.boundp((SubLObject)encapsulation.$sym12$_UNENCAPSULATE_FIND_CONSTANT_LOOKASIDE_TABLE_)) ? encapsulation.$unencapsulate_find_constant_lookaside_table$.getGlobalValue() : encapsulation.NIL));
+        encapsulation.$unencapsulate_find_constant_lookaside_table$ = SubLFiles.deflexical("*UNENCAPSULATE-FIND-CONSTANT-LOOKASIDE-TABLE*", (SubLObject)(maybeDefault((SubLObject)encapsulation.$sym12$_UNENCAPSULATE_FIND_CONSTANT_LOOKASIDE_TABLE_, encapsulation.$unencapsulate_find_constant_lookaside_table$, encapsulation.NIL)));
         encapsulation.$unencapsulate_find_constant_capacity$ = SubLFiles.deflexical("*UNENCAPSULATE-FIND-CONSTANT-CAPACITY*", (SubLObject)encapsulation.TWENTY_INTEGER);
         return (SubLObject)encapsulation.NIL;
     }

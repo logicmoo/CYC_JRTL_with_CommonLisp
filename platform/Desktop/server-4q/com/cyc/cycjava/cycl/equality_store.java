@@ -392,7 +392,7 @@ public final class equality_store extends SubLTranslatedFile
     }
     
     public static SubLObject init_equality_store_file() {
-        equality_store.$some_equality_assertions_somewhere_set$ = SubLFiles.deflexical("*SOME-EQUALITY-ASSERTIONS-SOMEWHERE-SET*", (SubLObject)((equality_store.NIL != Symbols.boundp((SubLObject)equality_store.$sym2$_SOME_EQUALITY_ASSERTIONS_SOMEWHERE_SET_)) ? equality_store.$some_equality_assertions_somewhere_set$.getGlobalValue() : equality_store.NIL));
+        equality_store.$some_equality_assertions_somewhere_set$ = SubLFiles.deflexical("*SOME-EQUALITY-ASSERTIONS-SOMEWHERE-SET*", (SubLObject)(maybeDefault((SubLObject)equality_store.$sym2$_SOME_EQUALITY_ASSERTIONS_SOMEWHERE_SET_, equality_store.$some_equality_assertions_somewhere_set$, equality_store.NIL)));
         return (SubLObject)equality_store.NIL;
     }
     

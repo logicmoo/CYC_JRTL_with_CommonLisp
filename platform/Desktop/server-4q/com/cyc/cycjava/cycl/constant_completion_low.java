@@ -193,7 +193,7 @@ public final class constant_completion_low extends SubLTranslatedFile
     }
     
     public static SubLObject init_constant_completion_low_file() {
-        constant_completion_low.$constant_completion_table$ = SubLFiles.deflexical("*CONSTANT-COMPLETION-TABLE*", (constant_completion_low.NIL != Symbols.boundp((SubLObject)constant_completion_low.$sym0$_CONSTANT_COMPLETION_TABLE_)) ? constant_completion_low.$constant_completion_table$.getGlobalValue() : tries.create_trie((SubLObject)constant_completion_low.T, (SubLObject)constant_completion_low.$str1$Constant_Completion_Table, (SubLObject)constant_completion_low.UNPROVIDED, (SubLObject)constant_completion_low.UNPROVIDED));
+        constant_completion_low.$constant_completion_table$ = SubLFiles.deflexical("*CONSTANT-COMPLETION-TABLE*", maybeDefault((SubLObject)constant_completion_low.$sym0$_CONSTANT_COMPLETION_TABLE_, constant_completion_low.$constant_completion_table$, ()->(tries.create_trie((SubLObject)constant_completion_low.T, (SubLObject)constant_completion_low.$str1$Constant_Completion_Table, (SubLObject)constant_completion_low.UNPROVIDED, (SubLObject)constant_completion_low.UNPROVIDED))));
         constant_completion_low.$require_valid_constants$ = SubLFiles.defparameter("*REQUIRE-VALID-CONSTANTS*", (SubLObject)constant_completion_low.T);
         return (SubLObject)constant_completion_low.NIL;
     }

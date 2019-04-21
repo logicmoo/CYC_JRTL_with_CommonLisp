@@ -3159,7 +3159,7 @@ public final class inference_proof_spec extends SubLTranslatedFile
     }
     
     public static SubLObject init_inference_proof_spec_file() {
-        inference_proof_spec.$kbq_proof_spec_table$ = SubLFiles.deflexical("*KBQ-PROOF-SPEC-TABLE*", (inference_proof_spec.NIL != Symbols.boundp((SubLObject)inference_proof_spec.$sym94$_KBQ_PROOF_SPEC_TABLE_)) ? inference_proof_spec.$kbq_proof_spec_table$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)inference_proof_spec.EQL), (SubLObject)inference_proof_spec.UNPROVIDED));
+        inference_proof_spec.$kbq_proof_spec_table$ = SubLFiles.deflexical("*KBQ-PROOF-SPEC-TABLE*", maybeDefault((SubLObject)inference_proof_spec.$sym94$_KBQ_PROOF_SPEC_TABLE_, inference_proof_spec.$kbq_proof_spec_table$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)inference_proof_spec.EQL), (SubLObject)inference_proof_spec.UNPROVIDED))));
         inference_proof_spec.$use_kbq_proof_spec_tableP$ = SubLFiles.defparameter("*USE-KBQ-PROOF-SPEC-TABLE?*", (SubLObject)inference_proof_spec.NIL);
         inference_proof_spec.$proof_spec_experiment_metrics$ = SubLFiles.deflexical("*PROOF-SPEC-EXPERIMENT-METRICS*", (SubLObject)inference_proof_spec.$list119);
         return (SubLObject)inference_proof_spec.NIL;

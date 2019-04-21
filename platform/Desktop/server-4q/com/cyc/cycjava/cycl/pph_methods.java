@@ -6220,7 +6220,7 @@ public final class pph_methods extends SubLTranslatedFile
         pph_methods.$generate_skolem_name_caching_state$ = SubLFiles.deflexical("*GENERATE-SKOLEM-NAME-CACHING-STATE*", (SubLObject)pph_methods.NIL);
         pph_methods.$pph_facet_threshold$ = SubLFiles.defparameter("*PPH-FACET-THRESHOLD*", (SubLObject)pph_methods.NIL);
         pph_methods.$pph_assume_distinct_vars_require_different_bindingsP$ = SubLFiles.defparameter("*PPH-ASSUME-DISTINCT-VARS-REQUIRE-DIFFERENT-BINDINGS?*", (SubLObject)pph_methods.NIL);
-        pph_methods.$select_string_method_count$ = SubLFiles.deflexical("*SELECT-STRING-METHOD-COUNT*", (pph_methods.NIL != Symbols.boundp((SubLObject)pph_methods.$sym148$_SELECT_STRING_METHOD_COUNT_)) ? pph_methods.$select_string_method_count$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)pph_methods.$int149$256, (SubLObject)pph_methods.UNPROVIDED, (SubLObject)pph_methods.UNPROVIDED));
+        pph_methods.$select_string_method_count$ = SubLFiles.deflexical("*SELECT-STRING-METHOD-COUNT*", maybeDefault((SubLObject)pph_methods.$sym148$_SELECT_STRING_METHOD_COUNT_, pph_methods.$select_string_method_count$, ()->(Hashtables.make_hash_table((SubLObject)pph_methods.$int149$256, (SubLObject)pph_methods.UNPROVIDED, (SubLObject)pph_methods.UNPROVIDED))));
         pph_methods.$select_string_methods$ = SubLFiles.defparameter("*SELECT-STRING-METHODS*", (SubLObject)pph_methods.$list150);
         pph_methods.$pph_name_string_preds_caching_state$ = SubLFiles.deflexical("*PPH-NAME-STRING-PREDS-CACHING-STATE*", (SubLObject)pph_methods.NIL);
         pph_methods.$pph_term_string_preds_caching_state$ = SubLFiles.deflexical("*PPH-TERM-STRING-PREDS-CACHING-STATE*", (SubLObject)pph_methods.NIL);
@@ -6229,7 +6229,7 @@ public final class pph_methods extends SubLTranslatedFile
         pph_methods.$dispreferred_pph_name_string_preds$ = SubLFiles.deflexical("*DISPREFERRED-PPH-NAME-STRING-PREDS*", (SubLObject)pph_methods.$list229);
         pph_methods.$english_integer_paraphrases$ = SubLFiles.deflexical("*ENGLISH-INTEGER-PARAPHRASES*", (SubLObject)pph_methods.$list272);
         pph_methods.$english_tens_paraphrases$ = SubLFiles.deflexical("*ENGLISH-TENS-PARAPHRASES*", (SubLObject)pph_methods.$list273);
-        pph_methods.$pph_default_mt_time_index$ = SubLFiles.deflexical("*PPH-DEFAULT-MT-TIME-INDEX*", (SubLObject)((pph_methods.NIL != Symbols.boundp((SubLObject)pph_methods.$sym292$_PPH_DEFAULT_MT_TIME_INDEX_)) ? pph_methods.$pph_default_mt_time_index$.getGlobalValue() : pph_methods.NIL));
+        pph_methods.$pph_default_mt_time_index$ = SubLFiles.deflexical("*PPH-DEFAULT-MT-TIME-INDEX*", (SubLObject)(maybeDefault((SubLObject)pph_methods.$sym292$_PPH_DEFAULT_MT_TIME_INDEX_, pph_methods.$pph_default_mt_time_index$, pph_methods.NIL)));
         pph_methods.$ignore_misleading_time_parametersP$ = SubLFiles.defparameter("*IGNORE-MISLEADING-TIME-PARAMETERS?*", (SubLObject)pph_methods.NIL);
         pph_methods.$bad_collections_for_genitive_paraphrase$ = SubLFiles.deflexical("*BAD-COLLECTIONS-FOR-GENITIVE-PARAPHRASE*", (SubLObject)pph_methods.$list362);
         pph_methods.$pph_possessive_preds_caching_state$ = SubLFiles.deflexical("*PPH-POSSESSIVE-PREDS-CACHING-STATE*", (SubLObject)pph_methods.NIL);

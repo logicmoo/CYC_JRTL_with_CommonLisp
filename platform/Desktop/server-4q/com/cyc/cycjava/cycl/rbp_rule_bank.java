@@ -1419,9 +1419,9 @@ public final class rbp_rule_bank extends SubLTranslatedFile
     }
     
     public static SubLObject init_rbp_rule_bank_file() {
-        rbp_rule_bank.$rbp_rule_bank$ = SubLFiles.deflexical("*RBP-RULE-BANK*", (rbp_rule_bank.NIL != Symbols.boundp((SubLObject)rbp_rule_bank.$sym0$_RBP_RULE_BANK_)) ? rbp_rule_bank.$rbp_rule_bank$.getGlobalValue() : rbp_new_rule_bank());
-        rbp_rule_bank.$rbp_rule_index$ = SubLFiles.deflexical("*RBP-RULE-INDEX*", (rbp_rule_bank.NIL != Symbols.boundp((SubLObject)rbp_rule_bank.$sym1$_RBP_RULE_INDEX_)) ? rbp_rule_bank.$rbp_rule_index$.getGlobalValue() : dictionary.new_dictionary((SubLObject)rbp_rule_bank.UNPROVIDED, (SubLObject)rbp_rule_bank.UNPROVIDED));
-        rbp_rule_bank.$rbp_rb_initializedP$ = SubLFiles.deflexical("*RBP-RB-INITIALIZED?*", (SubLObject)((rbp_rule_bank.NIL != Symbols.boundp((SubLObject)rbp_rule_bank.$sym2$_RBP_RB_INITIALIZED__)) ? rbp_rule_bank.$rbp_rb_initializedP$.getGlobalValue() : rbp_rule_bank.NIL));
+        rbp_rule_bank.$rbp_rule_bank$ = SubLFiles.deflexical("*RBP-RULE-BANK*", maybeDefault((SubLObject)rbp_rule_bank.$sym0$_RBP_RULE_BANK_, rbp_rule_bank.$rbp_rule_bank$, ()->(rbp_new_rule_bank())));
+        rbp_rule_bank.$rbp_rule_index$ = SubLFiles.deflexical("*RBP-RULE-INDEX*", maybeDefault((SubLObject)rbp_rule_bank.$sym1$_RBP_RULE_INDEX_, rbp_rule_bank.$rbp_rule_index$, ()->(dictionary.new_dictionary((SubLObject)rbp_rule_bank.UNPROVIDED, (SubLObject)rbp_rule_bank.UNPROVIDED))));
+        rbp_rule_bank.$rbp_rb_initializedP$ = SubLFiles.deflexical("*RBP-RB-INITIALIZED?*", (SubLObject)(maybeDefault((SubLObject)rbp_rule_bank.$sym2$_RBP_RB_INITIALIZED__, rbp_rule_bank.$rbp_rb_initializedP$, rbp_rule_bank.NIL)));
         rbp_rule_bank.$rbp_rule_bank_lock$ = SubLFiles.deflexical("*RBP-RULE-BANK-LOCK*", Locks.make_lock((SubLObject)rbp_rule_bank.$str3$RBP_Rule_Bank_Lock));
         rbp_rule_bank.$rbp_syntactic_constraint_types$ = SubLFiles.defconstant("*RBP-SYNTACTIC-CONSTRAINT-TYPES*", (SubLObject)rbp_rule_bank.$list6);
         rbp_rule_bank.$rbp_semantic_constraint_types$ = SubLFiles.defconstant("*RBP-SEMANTIC-CONSTRAINT-TYPES*", (SubLObject)rbp_rule_bank.$list7);

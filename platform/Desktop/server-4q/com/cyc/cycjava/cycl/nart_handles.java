@@ -857,8 +857,8 @@ public final class nart_handles extends SubLTranslatedFile
     }
     
     public static SubLObject init_nart_handles_file() {
-        nart_handles.$nart_from_id$ = SubLFiles.deflexical("*NART-FROM-ID*", (SubLObject)((nart_handles.NIL != Symbols.boundp((SubLObject)nart_handles.$sym0$_NART_FROM_ID_)) ? nart_handles.$nart_from_id$.getGlobalValue() : nart_handles.NIL));
-        nart_handles.$new_nart_id_threshold$ = SubLFiles.deflexical("*NEW-NART-ID-THRESHOLD*", (SubLObject)((nart_handles.NIL != Symbols.boundp((SubLObject)nart_handles.$sym18$_NEW_NART_ID_THRESHOLD_)) ? nart_handles.$new_nart_id_threshold$.getGlobalValue() : nart_handles.NIL));
+        nart_handles.$nart_from_id$ = SubLFiles.deflexical("*NART-FROM-ID*", (SubLObject)(maybeDefault((SubLObject)nart_handles.$sym0$_NART_FROM_ID_, nart_handles.$nart_from_id$, nart_handles.NIL)));
+        nart_handles.$new_nart_id_threshold$ = SubLFiles.deflexical("*NEW-NART-ID-THRESHOLD*", (SubLObject)(maybeDefault((SubLObject)nart_handles.$sym18$_NEW_NART_ID_THRESHOLD_, nart_handles.$new_nart_id_threshold$, nart_handles.NIL)));
         nart_handles.$dtp_nart$ = SubLFiles.defconstant("*DTP-NART*", (SubLObject)nart_handles.$sym35$NART);
         return (SubLObject)nart_handles.NIL;
     }

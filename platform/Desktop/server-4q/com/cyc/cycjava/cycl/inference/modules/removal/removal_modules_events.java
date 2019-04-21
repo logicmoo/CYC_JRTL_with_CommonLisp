@@ -142,7 +142,7 @@ public final class removal_modules_events extends SubLTranslatedFile
     }
     
     public static SubLObject init_removal_modules_events_file() {
-        removal_modules_events.$event_defining_mt$ = SubLFiles.deflexical("*EVENT-DEFINING-MT*", (removal_modules_events.NIL != Symbols.boundp((SubLObject)removal_modules_events.$sym4$_EVENT_DEFINING_MT_)) ? removal_modules_events.$event_defining_mt$.getGlobalValue() : removal_modules_events.$const5$UniversalVocabularyMt);
+        removal_modules_events.$event_defining_mt$ = SubLFiles.deflexical("*EVENT-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_events.$sym4$_EVENT_DEFINING_MT_, removal_modules_events.$event_defining_mt$, removal_modules_events.$const5$UniversalVocabularyMt));
         return (SubLObject)removal_modules_events.NIL;
     }
     

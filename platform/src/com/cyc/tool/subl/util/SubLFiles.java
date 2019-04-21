@@ -84,10 +84,11 @@ public class SubLFiles {
 
         public abstract SubLSymbol toSymbol();
     }
-    //// Public Area
 
-    public static void declareFunction(String className, String methodName, String functionName, int requiredArgCount,
-            int optionalArgCount, boolean allowsRest) {
+    //// Public Area
+    public static List<String> skippedClasses = new ArrayList<String>();
+
+    public static void declareFunction(String className, String methodName, String functionName, int requiredArgCount, int optionalArgCount, boolean allowsRest) {
         try {
             List<Class> parameterTypes = new ArrayList<Class>();
             for (int i = 0; i < requiredArgCount + optionalArgCount; i++)
@@ -124,8 +125,7 @@ public class SubLFiles {
      * that we can access this.getClass() without having to pass it as an
      * argument
      */
-    public static void declareFunction(SubLFile file, String methodName, String functionName, int requiredArgCount,
-            int optionalArgCount, boolean allowsRest) {
+    public static void declareFunction(SubLFile file, String methodName, String functionName, int requiredArgCount, int optionalArgCount, boolean allowsRest) {
         try {
             List<Class> parameterTypes = new ArrayList<Class>();
             for (int i = 0; i < requiredArgCount + optionalArgCount; i++)
@@ -146,21 +146,17 @@ public class SubLFiles {
                 }
                 Errors.warn("Redefining " + functionSymbol);
             }
-            SubLFunction func = SubLObjectFactory
-                    .makeCompiledFunction(meth, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
+            SubLFunction func = SubLObjectFactory.makeCompiledFunction(meth, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
         } catch (Exception e) {
             Errors.cerror("Continue.", "Error while declaring function: " + functionName, e);
         }
     }
 
-    private static SubLSymbol declareSymbol(Object variableName, SubLObject initialValue, VariableAccessMode accessMode,
-            boolean isReinitialized) {
-        return declareSymbol(variableName, initialValue, accessMode, isReinitialized, (SubLPackage) Packages.$package$
-                .getDynamicValue());
+    private static SubLSymbol declareSymbol(Object variableName, SubLObject initialValue, VariableAccessMode accessMode, boolean isReinitialized) {
+        return declareSymbol(variableName, initialValue, accessMode, isReinitialized, (SubLPackage) Packages.$package$.getDynamicValue());
     }
 
-    private static SubLSymbol declareSymbol(Object variableName, SubLObject initialValue, VariableAccessMode accessMode,
-            boolean isReinitialized, SubLPackage thePackage) {
+    private static SubLSymbol declareSymbol(Object variableName, SubLObject initialValue, VariableAccessMode accessMode, boolean isReinitialized, SubLPackage thePackage) {
         try {
 
             SubLSymbol symbol = asSymbol(variableName, thePackage.toPackage());
@@ -200,8 +196,7 @@ public class SubLFiles {
         try {
             Class[] parameterArray = { SubLObject.class, SubLObject.class };
             SubLSymbol functionSymbol = SubLObjectFactory.makeSymbol(functionName);
-            SubLCompiledFunction macroExpander = SubLObjectFactory
-                    .makeCompiledFunction(className, methodName, parameterArray, SubLObject.class, functionSymbol, 2, 0, false);
+            SubLCompiledFunction macroExpander = SubLObjectFactory.makeCompiledFunction(className, methodName, parameterArray, SubLObject.class, functionSymbol, 2, 0, false);
             SubLMacro macro = SubLObjectFactory.makeMacro(macroExpander);
             functionSymbol.setFunction(macro);
         } catch (Exception e) {
@@ -214,13 +209,17 @@ public class SubLFiles {
             Class[] parameterArray = { SubLObject.class, SubLObject.class };
             Method meth = file.getClass().getMethod(methodName, parameterArray);
             SubLSymbol functionSymbol = SubLObjectFactory.makeSymbol(functionName);
-            SubLCompiledFunction macroExpander = SubLObjectFactory
-                    .makeCompiledFunction(meth, functionSymbol, 2, 0, false);
+            SubLCompiledFunction macroExpander = SubLObjectFactory.makeCompiledFunction(meth, functionSymbol, 2, 0, false);
             SubLMacro macro = SubLObjectFactory.makeMacro(macroExpander);
             functionSymbol.setFunction(macro);
         } catch (Exception e) {
             Errors.cerror("Continue.", "Error while declaring macro: " + functionName, e);
         }
+    }
+
+    public static SubLSymbol defconstant(String variableName, SubLObject initialValue) {
+        /* SubL defconstant : constant lexical global */
+        return declareSymbol(variableName, initialValue, VariableAccessMode.CONSTANT, true);
     }
 
     public static SubLSymbol defconstant(Object variableName, SubLObject initialValue) {
@@ -235,13 +234,20 @@ public class SubLFiles {
     }
 
     // @todo get rid of references to file -APB
-    public static SubLSymbol defconstant(SubLFile file, Object variableName, SubLObject initialValue,
-            SubLPackage thePackage) {
+    public static SubLSymbol defconstant(SubLFile file, Object variableName, SubLObject initialValue, SubLPackage thePackage) {
         /* SubL defconstant : constant lexical global */
         return declareSymbol(variableName, initialValue, VariableAccessMode.CONSTANT, true, thePackage);
     }
 
     public static SubLSymbol defglobal(Object variableName, SubLObject initialValue) {
+        /*
+         * SubL defglobal : mutable lexical global, not re-initialized on
+         * re-evaluation
+         */
+        return declareSymbol(variableName, initialValue, VariableAccessMode.LEXICAL, false);
+    }
+
+    public static SubLSymbol defglobal(String variableName, SubLObject initialValue) {
         /*
          * SubL defglobal : mutable lexical global, not re-initialized on
          * re-evaluation
@@ -258,8 +264,7 @@ public class SubLFiles {
         return declareSymbol(variableName, initialValue, VariableAccessMode.LEXICAL, false);
     }
 
-    public static SubLSymbol defglobal(SubLFile file, Object variableName, SubLObject initialValue,
-            SubLPackage thePackage) {
+    public static SubLSymbol defglobal(SubLFile file, Object variableName, SubLObject initialValue, SubLPackage thePackage) {
         /*
          * SubL defglobal : mutable lexical global, not re-initialized on
          * re-evaluation
@@ -269,7 +274,15 @@ public class SubLFiles {
 
     public static SubLSymbol deflexical(Object variableName, SubLObject initialValue) {
         /* SubL deflexical : mutable lexical global */
-        return declareSymbol(variableName, initialValue, VariableAccessMode.LEXICAL, true);
+        return declareSymbol(variableName, initialValue, VariableAccessMode.LEXICAL, false);
+    }
+
+    public static SubLSymbol deflexical(String variableName, SubLObject initialValue) {
+        /*
+         * SubL defglobal : mutable lexical global, not re-initialized on
+         * re-evaluation
+         */
+        return declareSymbol(variableName, initialValue, VariableAccessMode.LEXICAL, false);
     }
 
     // @todo get rid of references to file -APB
@@ -278,10 +291,14 @@ public class SubLFiles {
         return declareSymbol(variableName, initialValue, VariableAccessMode.LEXICAL, true);
     }
 
-    public static SubLSymbol deflexical(SubLFile file, Object variableName, SubLObject initialValue,
-            SubLPackage thePackage) {
+    public static SubLSymbol deflexical(SubLFile file, Object variableName, SubLObject initialValue, SubLPackage thePackage) {
         /* SubL deflexical : mutable lexical global */
         return declareSymbol(variableName, initialValue, VariableAccessMode.LEXICAL, true, thePackage);
+    }
+
+    public static SubLSymbol defparameter(String variableName, SubLObject initialValue) {
+        /* SubL defparameter : mutable dynamic global */
+        return declareSymbol(variableName, initialValue, VariableAccessMode.DYNAMIC, true);
     }
 
     public static SubLSymbol defparameter(Object variableName, SubLObject initialValue) {
@@ -295,10 +312,17 @@ public class SubLFiles {
         return declareSymbol(variableName, initialValue, VariableAccessMode.DYNAMIC, true);
     }
 
-    public static SubLSymbol defparameter(SubLFile file, Object variableName, SubLObject initialValue,
-            SubLPackage thePackage) {
+    public static SubLSymbol defparameter(SubLFile file, Object variableName, SubLObject initialValue, SubLPackage thePackage) {
         /* SubL defparameter : mutable dynamic global */
         return declareSymbol(variableName, initialValue, VariableAccessMode.DYNAMIC, true, thePackage);
+    }
+
+    public static SubLSymbol defvar(String variableName, SubLObject initialValue) {
+        /*
+         * SubL defvar : mutable dynamic global, not re-initialized on
+         * re-evaluation
+         */
+        return declareSymbol(variableName, initialValue, VariableAccessMode.DYNAMIC, false);
     }
 
     public static SubLSymbol defvar(Object variableName, SubLObject initialValue) {
@@ -318,8 +342,7 @@ public class SubLFiles {
         return declareSymbol(variableName, initialValue, VariableAccessMode.DYNAMIC, false);
     }
 
-    public static SubLSymbol defvar(SubLFile file, Object variableName, SubLObject initialValue,
-            SubLPackage thePackage) {
+    public static SubLSymbol defvar(SubLFile file, Object variableName, SubLObject initialValue, SubLPackage thePackage) {
         /*
          * SubL defvar : mutable dynamic global, not re-initialized on
          * re-evaluation
@@ -331,6 +354,9 @@ public class SubLFiles {
     }
 
     public static void initialize(String className) {
+        if (skippedClasses.contains(className)) {
+
+        }
         org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
         try {
             if (p != Lisp.PACKAGE_SUBLISP && p != Lisp.PACKAGE_CYC)

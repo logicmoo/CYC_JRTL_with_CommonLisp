@@ -874,7 +874,7 @@ public final class removal_modules_natfunction extends SubLTranslatedFile
         removal_modules_natfunction.$default_nat_argument_check_cost$ = SubLFiles.deflexical("*DEFAULT-NAT-ARGUMENT-CHECK-COST*", control_vars.$hl_module_check_cost$.getDynamicValue());
         removal_modules_natfunction.$nat_argument_code_rule$ = SubLFiles.defparameter("*NAT-ARGUMENT-CODE-RULE*", (SubLObject)removal_modules_natfunction.$list20);
         removal_modules_natfunction.$nat_arguments_equal_code_rule$ = SubLFiles.defparameter("*NAT-ARGUMENTS-EQUAL-CODE-RULE*", (SubLObject)removal_modules_natfunction.$list32);
-        removal_modules_natfunction.$nart_id_defining_mt$ = SubLFiles.deflexical("*NART-ID-DEFINING-MT*", (removal_modules_natfunction.NIL != Symbols.boundp((SubLObject)removal_modules_natfunction.$sym45$_NART_ID_DEFINING_MT_)) ? removal_modules_natfunction.$nart_id_defining_mt$.getGlobalValue() : removal_modules_natfunction.$const46$BaseKB);
+        removal_modules_natfunction.$nart_id_defining_mt$ = SubLFiles.deflexical("*NART-ID-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_natfunction.$sym45$_NART_ID_DEFINING_MT_, removal_modules_natfunction.$nart_id_defining_mt$, removal_modules_natfunction.$const46$BaseKB));
         removal_modules_natfunction.$nart_id_check_default_cost$ = SubLFiles.deflexical("*NART-ID-CHECK-DEFAULT-COST*", control_vars.$cheap_hl_module_check_cost$.getGlobalValue());
         removal_modules_natfunction.$nart_id_unify_default_cost$ = SubLFiles.deflexical("*NART-ID-UNIFY-DEFAULT-COST*", (SubLObject)removal_modules_natfunction.ONE_INTEGER);
         return (SubLObject)removal_modules_natfunction.NIL;

@@ -901,7 +901,7 @@ public final class removal_module_cost_tests extends SubLTranslatedFile
     
     public static SubLObject init_removal_module_cost_tests_file() {
         removal_module_cost_tests.$dtp_removal_module_cost_test$ = SubLFiles.defconstant("*DTP-REMOVAL-MODULE-COST-TEST*", (SubLObject)removal_module_cost_tests.$sym0$REMOVAL_MODULE_COST_TEST);
-        removal_module_cost_tests.$removal_module_cost_tests$ = SubLFiles.deflexical("*REMOVAL-MODULE-COST-TESTS*", (removal_module_cost_tests.NIL != Symbols.boundp((SubLObject)removal_module_cost_tests.$sym48$_REMOVAL_MODULE_COST_TESTS_)) ? removal_module_cost_tests.$removal_module_cost_tests$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)removal_module_cost_tests.$int49$100, (SubLObject)removal_module_cost_tests.UNPROVIDED, (SubLObject)removal_module_cost_tests.UNPROVIDED));
+        removal_module_cost_tests.$removal_module_cost_tests$ = SubLFiles.deflexical("*REMOVAL-MODULE-COST-TESTS*", maybeDefault((SubLObject)removal_module_cost_tests.$sym48$_REMOVAL_MODULE_COST_TESTS_, removal_module_cost_tests.$removal_module_cost_tests$, ()->(Hashtables.make_hash_table((SubLObject)removal_module_cost_tests.$int49$100, (SubLObject)removal_module_cost_tests.UNPROVIDED, (SubLObject)removal_module_cost_tests.UNPROVIDED))));
         return (SubLObject)removal_module_cost_tests.NIL;
     }
     

@@ -5180,7 +5180,7 @@ public final class psp_chart extends SubLTranslatedFile
     public static SubLObject init_psp_chart_file() {
         psp_chart.$psp_parse_wh_wordsP$ = SubLFiles.deflexical("*PSP-PARSE-WH-WORDS?*", (SubLObject)psp_chart.NIL);
         psp_chart.$dtp_phrase_structure_parser_chart$ = SubLFiles.defconstant("*DTP-PHRASE-STRUCTURE-PARSER-CHART*", (SubLObject)psp_chart.$sym0$PHRASE_STRUCTURE_PARSER_CHART);
-        psp_chart.$psp_chart_id_counter$ = SubLFiles.deflexical("*PSP-CHART-ID-COUNTER*", (SubLObject)((psp_chart.NIL != Symbols.boundp((SubLObject)psp_chart.$sym54$_PSP_CHART_ID_COUNTER_)) ? psp_chart.$psp_chart_id_counter$.getGlobalValue() : psp_chart.ZERO_INTEGER));
+        psp_chart.$psp_chart_id_counter$ = SubLFiles.deflexical("*PSP-CHART-ID-COUNTER*", (SubLObject)(maybeDefault((SubLObject)psp_chart.$sym54$_PSP_CHART_ID_COUNTER_, psp_chart.$psp_chart_id_counter$, psp_chart.ZERO_INTEGER)));
         psp_chart.$psp_chart_index_edgesP$ = SubLFiles.deflexical("*PSP-CHART-INDEX-EDGES?*", (SubLObject)psp_chart.NIL);
         psp_chart.$dtp_phrase_structure_parser_phrasal_edge$ = SubLFiles.defconstant("*DTP-PHRASE-STRUCTURE-PARSER-PHRASAL-EDGE*", (SubLObject)psp_chart.$sym61$PHRASE_STRUCTURE_PARSER_PHRASAL_EDGE);
         psp_chart.$dtp_phrase_structure_parser_lexical_edge$ = SubLFiles.defconstant("*DTP-PHRASE-STRUCTURE-PARSER-LEXICAL-EDGE*", (SubLObject)psp_chart.$sym109$PHRASE_STRUCTURE_PARSER_LEXICAL_EDGE);

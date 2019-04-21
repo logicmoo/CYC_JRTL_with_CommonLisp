@@ -1333,8 +1333,8 @@ public final class clause_strucs extends SubLTranslatedFile
         clause_strucs.$dtp_clause_struc$ = SubLFiles.defconstant("*DTP-CLAUSE-STRUC*", (SubLObject)clause_strucs.$sym0$CLAUSE_STRUC);
         clause_strucs.$clause_struc_free_list$ = SubLFiles.deflexical("*CLAUSE-STRUC-FREE-LIST*", (SubLObject)clause_strucs.NIL);
         clause_strucs.$clause_struc_free_lock$ = SubLFiles.deflexical("*CLAUSE-STRUC-FREE-LOCK*", Locks.make_lock((SubLObject)clause_strucs.$str31$CLAUSE_STRUC_resource_lock));
-        clause_strucs.$clause_struc_from_id$ = SubLFiles.deflexical("*CLAUSE-STRUC-FROM-ID*", (SubLObject)((clause_strucs.NIL != Symbols.boundp((SubLObject)clause_strucs.$sym46$_CLAUSE_STRUC_FROM_ID_)) ? clause_strucs.$clause_struc_from_id$.getGlobalValue() : clause_strucs.NIL));
-        clause_strucs.$new_clause_struc_id_threshold$ = SubLFiles.deflexical("*NEW-CLAUSE-STRUC-ID-THRESHOLD*", (SubLObject)((clause_strucs.NIL != Symbols.boundp((SubLObject)clause_strucs.$sym55$_NEW_CLAUSE_STRUC_ID_THRESHOLD_)) ? clause_strucs.$new_clause_struc_id_threshold$.getGlobalValue() : clause_strucs.NIL));
+        clause_strucs.$clause_struc_from_id$ = SubLFiles.deflexical("*CLAUSE-STRUC-FROM-ID*", (SubLObject)(maybeDefault((SubLObject)clause_strucs.$sym46$_CLAUSE_STRUC_FROM_ID_, clause_strucs.$clause_struc_from_id$, clause_strucs.NIL)));
+        clause_strucs.$new_clause_struc_id_threshold$ = SubLFiles.deflexical("*NEW-CLAUSE-STRUC-ID-THRESHOLD*", (SubLObject)(maybeDefault((SubLObject)clause_strucs.$sym55$_NEW_CLAUSE_STRUC_ID_THRESHOLD_, clause_strucs.$new_clause_struc_id_threshold$, clause_strucs.NIL)));
         clause_strucs.$clause_struc_dump_id_table$ = SubLFiles.defparameter("*CLAUSE-STRUC-DUMP-ID-TABLE*", (SubLObject)clause_strucs.NIL);
         return (SubLObject)clause_strucs.NIL;
     }

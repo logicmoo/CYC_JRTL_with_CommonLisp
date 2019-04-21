@@ -2463,7 +2463,7 @@ public final class fact_sheet_logs extends SubLTranslatedFile
     public static SubLObject init_fact_sheet_logs_file() {
         fact_sheet_logs.$fact_sheet_log_file$ = SubLFiles.defparameter("*FACT-SHEET-LOG-FILE*", (SubLObject)fact_sheet_logs.NIL);
         fact_sheet_logs.$fact_sheet_log_stream$ = SubLFiles.defparameter("*FACT-SHEET-LOG-STREAM*", (SubLObject)fact_sheet_logs.T);
-        fact_sheet_logs.$closed_fact_sheet_log_files$ = SubLFiles.deflexical("*CLOSED-FACT-SHEET-LOG-FILES*", (SubLObject)((fact_sheet_logs.NIL != Symbols.boundp((SubLObject)fact_sheet_logs.$sym43$_CLOSED_FACT_SHEET_LOG_FILES_)) ? fact_sheet_logs.$closed_fact_sheet_log_files$.getGlobalValue() : fact_sheet_logs.NIL));
+        fact_sheet_logs.$closed_fact_sheet_log_files$ = SubLFiles.deflexical("*CLOSED-FACT-SHEET-LOG-FILES*", (SubLObject)(maybeDefault((SubLObject)fact_sheet_logs.$sym43$_CLOSED_FACT_SHEET_LOG_FILES_, fact_sheet_logs.$closed_fact_sheet_log_files$, fact_sheet_logs.NIL)));
         fact_sheet_logs.$next_fact_sheet_hourly_report_time$ = SubLFiles.defparameter("*NEXT-FACT-SHEET-HOURLY-REPORT-TIME*", (SubLObject)fact_sheet_logs.NIL);
         fact_sheet_logs.$hourly_fact_sheet_stats$ = SubLFiles.defparameter("*HOURLY-FACT-SHEET-STATS*", (SubLObject)fact_sheet_logs.NIL);
         fact_sheet_logs.$fact_sheet_log_file_properties$ = SubLFiles.deflexical("*FACT-SHEET-LOG-FILE-PROPERTIES*", (SubLObject)fact_sheet_logs.$list95);

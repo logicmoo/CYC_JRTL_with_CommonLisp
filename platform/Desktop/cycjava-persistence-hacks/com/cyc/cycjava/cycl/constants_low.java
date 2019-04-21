@@ -384,9 +384,9 @@ public final class constants_low extends SubLTranslatedFile
     }
     
     public static SubLObject init_constants_low_file() {
-        constants_low.$constant_guid_table$ = SubLFiles.deflexical("*CONSTANT-GUID-TABLE*", (SubLObject)((constants_low.NIL != Symbols.boundp((SubLObject)constants_low.$sym0$_CONSTANT_GUID_TABLE_)) ? constants_low.$constant_guid_table$.getGlobalValue() : constants_low.$kw1$UNINITIALIZED));
-        constants_low.$constant_merged_guid_table$ = SubLFiles.deflexical("*CONSTANT-MERGED-GUID-TABLE*", (SubLObject)((constants_low.NIL != Symbols.boundp((SubLObject)constants_low.$sym2$_CONSTANT_MERGED_GUID_TABLE_)) ? constants_low.$constant_merged_guid_table$.getGlobalValue() : constants_low.$kw1$UNINITIALIZED));
-        constants_low.$constant_from_guid$ = SubLFiles.deflexical("*CONSTANT-FROM-GUID*", (SubLObject)((constants_low.NIL != Symbols.boundp((SubLObject)constants_low.$sym3$_CONSTANT_FROM_GUID_)) ? constants_low.$constant_from_guid$.getGlobalValue() : constants_low.NIL));
+        constants_low.$constant_guid_table$ = SubLFiles.deflexical("*CONSTANT-GUID-TABLE*", (SubLObject)(maybeDefault((SubLObject)constants_low.$sym0$_CONSTANT_GUID_TABLE_, constants_low.$constant_guid_table$, constants_low.$kw1$UNINITIALIZED)));
+        constants_low.$constant_merged_guid_table$ = SubLFiles.deflexical("*CONSTANT-MERGED-GUID-TABLE*", (SubLObject)(maybeDefault((SubLObject)constants_low.$sym2$_CONSTANT_MERGED_GUID_TABLE_, constants_low.$constant_merged_guid_table$, constants_low.$kw1$UNINITIALIZED)));
+        constants_low.$constant_from_guid$ = SubLFiles.deflexical("*CONSTANT-FROM-GUID*", (SubLObject)(maybeDefault((SubLObject)constants_low.$sym3$_CONSTANT_FROM_GUID_, constants_low.$constant_from_guid$, constants_low.NIL)));
         return (SubLObject)constants_low.NIL;
     }
     

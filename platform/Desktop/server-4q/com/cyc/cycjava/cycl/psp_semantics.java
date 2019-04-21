@@ -3981,7 +3981,7 @@ public final class psp_semantics extends SubLTranslatedFile
         psp_semantics.$psp_context$ = SubLFiles.defparameter("*PSP-CONTEXT*", (SubLObject)psp_semantics.NIL);
         psp_semantics.$dtp_phrase_structure_parser_weighted_cycl$ = SubLFiles.defconstant("*DTP-PHRASE-STRUCTURE-PARSER-WEIGHTED-CYCL*", (SubLObject)psp_semantics.$sym0$PHRASE_STRUCTURE_PARSER_WEIGHTED_CYCL);
         psp_semantics.$psp_category_from_frame_caching_state$ = SubLFiles.deflexical("*PSP-CATEGORY-FROM-FRAME-CACHING-STATE*", (SubLObject)psp_semantics.NIL);
-        psp_semantics.$psp_special_semantic_methods$ = SubLFiles.deflexical("*PSP-SPECIAL-SEMANTIC-METHODS*", (psp_semantics.NIL != Symbols.boundp((SubLObject)psp_semantics.$sym61$_PSP_SPECIAL_SEMANTIC_METHODS_)) ? psp_semantics.$psp_special_semantic_methods$.getGlobalValue() : dictionary.new_dictionary((SubLObject)psp_semantics.UNPROVIDED, (SubLObject)psp_semantics.UNPROVIDED));
+        psp_semantics.$psp_special_semantic_methods$ = SubLFiles.deflexical("*PSP-SPECIAL-SEMANTIC-METHODS*", maybeDefault((SubLObject)psp_semantics.$sym61$_PSP_SPECIAL_SEMANTIC_METHODS_, psp_semantics.$psp_special_semantic_methods$, ()->(dictionary.new_dictionary((SubLObject)psp_semantics.UNPROVIDED, (SubLObject)psp_semantics.UNPROVIDED))));
         psp_semantics.$psp_head_key_for_category_caching_state$ = SubLFiles.deflexical("*PSP-HEAD-KEY-FOR-CATEGORY-CACHING-STATE*", (SubLObject)psp_semantics.NIL);
         psp_semantics.$psp_reformulator_modules_to_skip$ = SubLFiles.deflexical("*PSP-REFORMULATOR-MODULES-TO-SKIP*", (SubLObject)psp_semantics.$list139);
         psp_semantics.$psp_genl_posP_caching_state$ = SubLFiles.deflexical("*PSP-GENL-POS?-CACHING-STATE*", (SubLObject)psp_semantics.NIL);

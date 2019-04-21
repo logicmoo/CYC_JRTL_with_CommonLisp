@@ -226,7 +226,7 @@ public final class cb_events extends SubLTranslatedFile
     
     public static SubLObject init_cb_events_file() {
         cb_events.$cb_event_dispatcher_lock$ = SubLFiles.deflexical("*CB-EVENT-DISPATCHER-LOCK*", Locks.make_lock((SubLObject)cb_events.$str8$CB_EVENT_DISPATCHER_Lock));
-        cb_events.$cb_event_dispatcher_listeners$ = SubLFiles.deflexical("*CB-EVENT-DISPATCHER-LISTENERS*", (SubLObject)((cb_events.NIL != Symbols.boundp((SubLObject)cb_events.$sym9$_CB_EVENT_DISPATCHER_LISTENERS_)) ? cb_events.$cb_event_dispatcher_listeners$.getGlobalValue() : cb_events.NIL));
+        cb_events.$cb_event_dispatcher_listeners$ = SubLFiles.deflexical("*CB-EVENT-DISPATCHER-LISTENERS*", (SubLObject)(maybeDefault((SubLObject)cb_events.$sym9$_CB_EVENT_DISPATCHER_LISTENERS_, cb_events.$cb_event_dispatcher_listeners$, cb_events.NIL)));
         return (SubLObject)cb_events.NIL;
     }
     

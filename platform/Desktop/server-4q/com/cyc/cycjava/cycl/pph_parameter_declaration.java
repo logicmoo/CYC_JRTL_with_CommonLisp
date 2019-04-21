@@ -340,7 +340,7 @@ public final class pph_parameter_declaration extends SubLTranslatedFile
     }
     
     public static SubLObject init_pph_parameter_declaration_file() {
-        pph_parameter_declaration.$pph_parameter_declarations$ = SubLFiles.deflexical("*PPH-PARAMETER-DECLARATIONS*", (pph_parameter_declaration.NIL != Symbols.boundp((SubLObject)pph_parameter_declaration.$sym0$_PPH_PARAMETER_DECLARATIONS_)) ? pph_parameter_declaration.$pph_parameter_declarations$.getGlobalValue() : dictionary.new_dictionary((SubLObject)pph_parameter_declaration.UNPROVIDED, (SubLObject)pph_parameter_declaration.UNPROVIDED));
+        pph_parameter_declaration.$pph_parameter_declarations$ = SubLFiles.deflexical("*PPH-PARAMETER-DECLARATIONS*", maybeDefault((SubLObject)pph_parameter_declaration.$sym0$_PPH_PARAMETER_DECLARATIONS_, pph_parameter_declaration.$pph_parameter_declarations$, ()->(dictionary.new_dictionary((SubLObject)pph_parameter_declaration.UNPROVIDED, (SubLObject)pph_parameter_declaration.UNPROVIDED))));
         pph_parameter_declaration.$pph_parameter_declaration_keywords$ = SubLFiles.deflexical("*PPH-PARAMETER-DECLARATION-KEYWORDS*", (SubLObject)pph_parameter_declaration.$list45);
         pph_parameter_declaration.$pph_parameter_types$ = SubLFiles.deflexical("*PPH-PARAMETER-TYPES*", (SubLObject)pph_parameter_declaration.$list46);
         return (SubLObject)pph_parameter_declaration.NIL;

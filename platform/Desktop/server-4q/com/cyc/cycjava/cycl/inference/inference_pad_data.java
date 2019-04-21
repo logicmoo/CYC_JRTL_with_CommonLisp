@@ -30,8 +30,8 @@ public final class inference_pad_data extends SubLTranslatedFile
     }
     
     public static SubLObject init_inference_pad_data_file() {
-        inference_pad_data.$non_tkb_final_bogomips$ = SubLFiles.deflexical("*NON-TKB-FINAL-BOGOMIPS*", (SubLObject)((inference_pad_data.NIL != Symbols.boundp((SubLObject)inference_pad_data.$sym0$_NON_TKB_FINAL_BOGOMIPS_)) ? inference_pad_data.$non_tkb_final_bogomips$.getGlobalValue() : inference_pad_data.$float1$4154_98));
-        inference_pad_data.$non_tkb_final_times_to_first_answer$ = SubLFiles.deflexical("*NON-TKB-FINAL-TIMES-TO-FIRST-ANSWER*", (inference_pad_data.NIL != Symbols.boundp((SubLObject)inference_pad_data.$sym2$_NON_TKB_FINAL_TIMES_TO_FIRST_ANSWER_)) ? inference_pad_data.$non_tkb_final_times_to_first_answer$.getGlobalValue() : inference_pad_data.$list3);
+        inference_pad_data.$non_tkb_final_bogomips$ = SubLFiles.deflexical("*NON-TKB-FINAL-BOGOMIPS*", (SubLObject)(maybeDefault((SubLObject)inference_pad_data.$sym0$_NON_TKB_FINAL_BOGOMIPS_, inference_pad_data.$non_tkb_final_bogomips$, inference_pad_data.$float1$4154_98)));
+        inference_pad_data.$non_tkb_final_times_to_first_answer$ = SubLFiles.deflexical("*NON-TKB-FINAL-TIMES-TO-FIRST-ANSWER*", maybeDefault((SubLObject)inference_pad_data.$sym2$_NON_TKB_FINAL_TIMES_TO_FIRST_ANSWER_, inference_pad_data.$non_tkb_final_times_to_first_answer$, inference_pad_data.$list3));
         return (SubLObject)inference_pad_data.NIL;
     }
     

@@ -287,7 +287,7 @@ public final class system_parameter_types extends SubLTranslatedFile
     }
     
     public static SubLObject init_system_parameter_types_file() {
-        system_parameter_types.$system_parameter_type_definitions$ = SubLFiles.deflexical("*SYSTEM-PARAMETER-TYPE-DEFINITIONS*", (SubLObject)((system_parameter_types.NIL != Symbols.boundp((SubLObject)system_parameter_types.$sym0$_SYSTEM_PARAMETER_TYPE_DEFINITIONS_)) ? system_parameter_types.$system_parameter_type_definitions$.getGlobalValue() : system_parameter_types.NIL));
+        system_parameter_types.$system_parameter_type_definitions$ = SubLFiles.deflexical("*SYSTEM-PARAMETER-TYPE-DEFINITIONS*", (SubLObject)(maybeDefault((SubLObject)system_parameter_types.$sym0$_SYSTEM_PARAMETER_TYPE_DEFINITIONS_, system_parameter_types.$system_parameter_type_definitions$, system_parameter_types.NIL)));
         return (SubLObject)system_parameter_types.NIL;
     }
     

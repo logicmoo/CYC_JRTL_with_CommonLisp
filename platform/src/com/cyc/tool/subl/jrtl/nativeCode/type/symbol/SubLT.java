@@ -30,7 +30,7 @@ public class SubLT extends Symbol implements SubLObject, SubLBoolean, SubLSymbol
 	private SubLT() {
 		super(T_SYMBOL_NAME, Lisp.PACKAGE_CL);
 		Symbol.T = this;
-		Lisp.PACKAGE_CL.addSymbol(this);
+		Lisp.PACKAGE_CL.addSymbol_ImplUseOnly(this);
 		Lisp.PACKAGE_CL.export(this);		
 		initializeConstant(this);
 	}

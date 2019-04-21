@@ -492,7 +492,7 @@ public final class gke_template_specification extends SubLTranslatedFile
     }
     
     public static SubLObject init_gke_template_specification_file() {
-        gke_template_specification.$gke_template_current_template$ = SubLFiles.deflexical("*GKE-TEMPLATE-CURRENT-TEMPLATE*", (SubLObject)((gke_template_specification.NIL != Symbols.boundp((SubLObject)gke_template_specification.$sym0$_GKE_TEMPLATE_CURRENT_TEMPLATE_)) ? gke_template_specification.$gke_template_current_template$.getGlobalValue() : gke_template_specification.NIL));
+        gke_template_specification.$gke_template_current_template$ = SubLFiles.deflexical("*GKE-TEMPLATE-CURRENT-TEMPLATE*", (SubLObject)(maybeDefault((SubLObject)gke_template_specification.$sym0$_GKE_TEMPLATE_CURRENT_TEMPLATE_, gke_template_specification.$gke_template_current_template$, gke_template_specification.NIL)));
         gke_template_specification.$dtp_gke_template_specification$ = SubLFiles.defconstant("*DTP-GKE-TEMPLATE-SPECIFICATION*", (SubLObject)gke_template_specification.$sym1$GKE_TEMPLATE_SPECIFICATION);
         return (SubLObject)gke_template_specification.NIL;
     }

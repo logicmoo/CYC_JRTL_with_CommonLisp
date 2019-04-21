@@ -177,7 +177,7 @@ public final class word_frequencies extends SubLTranslatedFile
     
     public static SubLObject init_word_frequencies_file() {
         word_frequencies.$frequency_hash_initial_size$ = SubLFiles.deflexical("*FREQUENCY-HASH-INITIAL-SIZE*", (SubLObject)word_frequencies.$int0$64000);
-        word_frequencies.$word_frequency_hash$ = SubLFiles.deflexical("*WORD-FREQUENCY-HASH*", (word_frequencies.NIL != Symbols.boundp((SubLObject)word_frequencies.$sym1$_WORD_FREQUENCY_HASH_)) ? word_frequencies.$word_frequency_hash$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)word_frequencies.$int0$64000, Symbols.symbol_function((SubLObject)word_frequencies.EQUALP), (SubLObject)word_frequencies.UNPROVIDED));
+        word_frequencies.$word_frequency_hash$ = SubLFiles.deflexical("*WORD-FREQUENCY-HASH*", maybeDefault((SubLObject)word_frequencies.$sym1$_WORD_FREQUENCY_HASH_, word_frequencies.$word_frequency_hash$, ()->(Hashtables.make_hash_table((SubLObject)word_frequencies.$int0$64000, Symbols.symbol_function((SubLObject)word_frequencies.EQUALP), (SubLObject)word_frequencies.UNPROVIDED))));
         word_frequencies.$frequency_hash_save_name$ = SubLFiles.defparameter("*FREQUENCY-HASH-SAVE-NAME*", Filesys.construct_filename((SubLObject)word_frequencies.$list2, (SubLObject)word_frequencies.$str3$word_frequencies, (SubLObject)word_frequencies.$str4$hash, (SubLObject)word_frequencies.T));
         return (SubLObject)word_frequencies.NIL;
     }

@@ -259,10 +259,10 @@ public final class kb_hl_support_manager extends SubLTranslatedFile
     }
     
     public static SubLObject init_kb_hl_support_manager_file() {
-        kb_hl_support_manager.$kb_hl_support_content_manager$ = SubLFiles.deflexical("*KB-HL-SUPPORT-CONTENT-MANAGER*", (SubLObject)((kb_hl_support_manager.NIL != Symbols.boundp((SubLObject)kb_hl_support_manager.$sym0$_KB_HL_SUPPORT_CONTENT_MANAGER_)) ? kb_hl_support_manager.$kb_hl_support_content_manager$.getGlobalValue() : kb_hl_support_manager.$kw1$UNINITIALIZED));
+        kb_hl_support_manager.$kb_hl_support_content_manager$ = SubLFiles.deflexical("*KB-HL-SUPPORT-CONTENT-MANAGER*", (SubLObject)(maybeDefault((SubLObject)kb_hl_support_manager.$sym0$_KB_HL_SUPPORT_CONTENT_MANAGER_, kb_hl_support_manager.$kb_hl_support_content_manager$, kb_hl_support_manager.$kw1$UNINITIALIZED)));
         kb_hl_support_manager.$kb_hl_support_lru_size_percentage$ = SubLFiles.deflexical("*KB-HL-SUPPORT-LRU-SIZE-PERCENTAGE*", (SubLObject)kb_hl_support_manager.FIVE_INTEGER);
         kb_hl_support_manager.$kb_hl_support_lru_size_max$ = SubLFiles.deflexical("*KB-HL-SUPPORT-LRU-SIZE-MAX*", (SubLObject)kb_hl_support_manager.$int2$10000);
-        kb_hl_support_manager.$kb_hl_support_contents_from_ids$ = SubLFiles.deflexical("*KB-HL-SUPPORT-CONTENTS-FROM-IDS*", (SubLObject)((kb_hl_support_manager.NIL != Symbols.boundp((SubLObject)kb_hl_support_manager.$sym8$_KB_HL_SUPPORT_CONTENTS_FROM_IDS_)) ? kb_hl_support_manager.$kb_hl_support_contents_from_ids$.getGlobalValue() : kb_hl_support_manager.NIL));
+        kb_hl_support_manager.$kb_hl_support_contents_from_ids$ = SubLFiles.deflexical("*KB-HL-SUPPORT-CONTENTS-FROM-IDS*", (SubLObject)(maybeDefault((SubLObject)kb_hl_support_manager.$sym8$_KB_HL_SUPPORT_CONTENTS_FROM_IDS_, kb_hl_support_manager.$kb_hl_support_contents_from_ids$, kb_hl_support_manager.NIL)));
         return (SubLObject)kb_hl_support_manager.NIL;
     }
     

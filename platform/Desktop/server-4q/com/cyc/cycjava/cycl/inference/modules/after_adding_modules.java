@@ -2858,7 +2858,7 @@ public final class after_adding_modules extends SubLTranslatedFile
         after_adding_modules.$inside_clear_isa_dependent_cachesP$ = SubLFiles.defparameter("*INSIDE-CLEAR-ISA-DEPENDENT-CACHES?*", (SubLObject)after_adding_modules.NIL);
         after_adding_modules.$inside_clear_quoted_isa_dependent_cachesP$ = SubLFiles.defparameter("*INSIDE-CLEAR-QUOTED-ISA-DEPENDENT-CACHES?*", (SubLObject)after_adding_modules.NIL);
         after_adding_modules.$true_rule_template$ = SubLFiles.defparameter("*TRUE-RULE-TEMPLATE*", (SubLObject)after_adding_modules.$list54);
-        after_adding_modules.$true_rule_defining_mt$ = SubLFiles.deflexical("*TRUE-RULE-DEFINING-MT*", (after_adding_modules.NIL != Symbols.boundp((SubLObject)after_adding_modules.$sym55$_TRUE_RULE_DEFINING_MT_)) ? after_adding_modules.$true_rule_defining_mt$.getGlobalValue() : after_adding_modules.$const56$CoreCycLMt);
+        after_adding_modules.$true_rule_defining_mt$ = SubLFiles.deflexical("*TRUE-RULE-DEFINING-MT*", maybeDefault((SubLObject)after_adding_modules.$sym55$_TRUE_RULE_DEFINING_MT_, after_adding_modules.$true_rule_defining_mt$, after_adding_modules.$const56$CoreCycLMt));
         after_adding_modules.$cyc_except_mt_repropagate_mt_contents_cutoff$ = SubLFiles.defparameter("*CYC-EXCEPT-MT-REPROPAGATE-MT-CONTENTS-CUTOFF*", (SubLObject)after_adding_modules.$int113$256);
         after_adding_modules.$debug_do_create_from_descriptionP$ = SubLFiles.defparameter("*DEBUG-DO-CREATE-FROM-DESCRIPTION?*", (SubLObject)after_adding_modules.NIL);
         after_adding_modules.$instantiate_from_subcollection_expression_constant_prefix$ = SubLFiles.defparameter("*INSTANTIATE-FROM-SUBCOLLECTION-EXPRESSION-CONSTANT-PREFIX*", (SubLObject)after_adding_modules.$str159$INST);

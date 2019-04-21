@@ -313,9 +313,9 @@ public final class mt_relevance_cache extends SubLTranslatedFile
     
     public static SubLObject init_mt_relevance_cache_file() {
         mt_relevance_cache.$mt_relevance_cache_unknown$ = SubLFiles.deflexical("*MT-RELEVANCE-CACHE-UNKNOWN*", (SubLObject)mt_relevance_cache.$kw0$UNKNOWN);
-        mt_relevance_cache.$monad_mt_fort_cache$ = SubLFiles.deflexical("*MONAD-MT-FORT-CACHE*", (mt_relevance_cache.NIL != Symbols.boundp((SubLObject)mt_relevance_cache.$sym4$_MONAD_MT_FORT_CACHE_)) ? mt_relevance_cache.$monad_mt_fort_cache$.getGlobalValue() : cache.new_cache((SubLObject)mt_relevance_cache.$int5$256, Symbols.symbol_function((SubLObject)mt_relevance_cache.EQL)));
-        mt_relevance_cache.$monad_mt_naut_cache$ = SubLFiles.deflexical("*MONAD-MT-NAUT-CACHE*", (mt_relevance_cache.NIL != Symbols.boundp((SubLObject)mt_relevance_cache.$sym6$_MONAD_MT_NAUT_CACHE_)) ? mt_relevance_cache.$monad_mt_naut_cache$.getGlobalValue() : cache.new_cache((SubLObject)mt_relevance_cache.$int5$256, Symbols.symbol_function((SubLObject)mt_relevance_cache.EQUAL)));
-        mt_relevance_cache.$time_mt_cache$ = SubLFiles.deflexical("*TIME-MT-CACHE*", (mt_relevance_cache.NIL != Symbols.boundp((SubLObject)mt_relevance_cache.$sym7$_TIME_MT_CACHE_)) ? mt_relevance_cache.$time_mt_cache$.getGlobalValue() : cache.new_cache((SubLObject)mt_relevance_cache.$int8$1024, Symbols.symbol_function((SubLObject)mt_relevance_cache.EQUAL)));
+        mt_relevance_cache.$monad_mt_fort_cache$ = SubLFiles.deflexical("*MONAD-MT-FORT-CACHE*", maybeDefault((SubLObject)mt_relevance_cache.$sym4$_MONAD_MT_FORT_CACHE_, mt_relevance_cache.$monad_mt_fort_cache$, ()->(cache.new_cache((SubLObject)mt_relevance_cache.$int5$256, Symbols.symbol_function((SubLObject)mt_relevance_cache.EQL)))));
+        mt_relevance_cache.$monad_mt_naut_cache$ = SubLFiles.deflexical("*MONAD-MT-NAUT-CACHE*", maybeDefault((SubLObject)mt_relevance_cache.$sym6$_MONAD_MT_NAUT_CACHE_, mt_relevance_cache.$monad_mt_naut_cache$, ()->(cache.new_cache((SubLObject)mt_relevance_cache.$int5$256, Symbols.symbol_function((SubLObject)mt_relevance_cache.EQUAL)))));
+        mt_relevance_cache.$time_mt_cache$ = SubLFiles.deflexical("*TIME-MT-CACHE*", maybeDefault((SubLObject)mt_relevance_cache.$sym7$_TIME_MT_CACHE_, mt_relevance_cache.$time_mt_cache$, ()->(cache.new_cache((SubLObject)mt_relevance_cache.$int8$1024, Symbols.symbol_function((SubLObject)mt_relevance_cache.EQUAL)))));
         return (SubLObject)mt_relevance_cache.NIL;
     }
     

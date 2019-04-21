@@ -421,7 +421,7 @@ public final class removal_modules_equation_permutations extends SubLTranslatedF
     
     public static SubLObject init_removal_modules_equation_permutations_file() {
         removal_modules_equation_permutations.$equation_permutable_operators$ = SubLFiles.deflexical("*EQUATION-PERMUTABLE-OPERATORS*", (SubLObject)removal_modules_equation_permutations.$list11);
-        removal_modules_equation_permutations.$equation_permutations_defining_mt$ = SubLFiles.deflexical("*EQUATION-PERMUTATIONS-DEFINING-MT*", (removal_modules_equation_permutations.NIL != Symbols.boundp((SubLObject)removal_modules_equation_permutations.$sym18$_EQUATION_PERMUTATIONS_DEFINING_MT_)) ? removal_modules_equation_permutations.$equation_permutations_defining_mt$.getGlobalValue() : removal_modules_equation_permutations.$const19$UniversalVocabularyMt);
+        removal_modules_equation_permutations.$equation_permutations_defining_mt$ = SubLFiles.deflexical("*EQUATION-PERMUTATIONS-DEFINING-MT*", maybeDefault((SubLObject)removal_modules_equation_permutations.$sym18$_EQUATION_PERMUTATIONS_DEFINING_MT_, removal_modules_equation_permutations.$equation_permutations_defining_mt$, removal_modules_equation_permutations.$const19$UniversalVocabularyMt));
         return (SubLObject)removal_modules_equation_permutations.NIL;
     }
     

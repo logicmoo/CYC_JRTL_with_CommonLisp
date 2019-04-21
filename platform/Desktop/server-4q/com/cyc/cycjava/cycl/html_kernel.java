@@ -2059,14 +2059,14 @@ public final class html_kernel extends SubLTranslatedFile
         html_kernel.$html_message_record$ = SubLFiles.defparameter("*HTML-MESSAGE-RECORD*", (SubLObject)html_kernel.NIL);
         html_kernel.$http_remote_user$ = SubLFiles.defparameter("*HTTP-REMOTE-USER*", (SubLObject)html_kernel.NIL);
         html_kernel.$http_remote_host$ = SubLFiles.defparameter("*HTTP-REMOTE-HOST*", (SubLObject)html_kernel.NIL);
-        html_kernel.$default_html_handler$ = SubLFiles.deflexical("*DEFAULT-HTML-HANDLER*", (SubLObject)((html_kernel.NIL != Symbols.boundp((SubLObject)html_kernel.$sym13$_DEFAULT_HTML_HANDLER_)) ? html_kernel.$default_html_handler$.getGlobalValue() : html_kernel.NIL));
+        html_kernel.$default_html_handler$ = SubLFiles.deflexical("*DEFAULT-HTML-HANDLER*", (SubLObject)(maybeDefault((SubLObject)html_kernel.$sym13$_DEFAULT_HTML_HANDLER_, html_kernel.$default_html_handler$, html_kernel.NIL)));
         html_kernel.$http_restricted_functions$ = SubLFiles.defparameter("*HTTP-RESTRICTED-FUNCTIONS*", (SubLObject)html_kernel.NIL);
         html_kernel.$html_arg_separator_chars$ = SubLFiles.defparameter("*HTML-ARG-SEPARATOR-CHARS*", (SubLObject)html_kernel.$str29$__);
         html_kernel.$html_arg_syntax_char$ = SubLFiles.defparameter("*HTML-ARG-SYNTAX-CHAR*", Sequences.cconcatenate((SubLObject)html_kernel.$str31$_, html_kernel.$html_arg_separator_chars$.getDynamicValue()));
         html_kernel.$html_javascript_compatibility_script$ = SubLFiles.defparameter("*HTML-JAVASCRIPT-COMPATIBILITY-SCRIPT*", (SubLObject)html_kernel.$str49$_var_path___location_href__var_ne);
         html_kernel.$main_menu_list$ = SubLFiles.defparameter("*MAIN-MENU-LIST*", (SubLObject)html_kernel.$list53);
         html_kernel.$html_machine_state_lock$ = SubLFiles.defparameter("*HTML-MACHINE-STATE-LOCK*", (SubLObject)html_kernel.NIL);
-        html_kernel.$html_machine_state_hash$ = SubLFiles.deflexical("*HTML-MACHINE-STATE-HASH*", (html_kernel.NIL != Symbols.boundp((SubLObject)html_kernel.$sym69$_HTML_MACHINE_STATE_HASH_)) ? html_kernel.$html_machine_state_hash$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)html_kernel.TEN_INTEGER, Symbols.symbol_function((SubLObject)html_kernel.EQUALP), (SubLObject)html_kernel.UNPROVIDED));
+        html_kernel.$html_machine_state_hash$ = SubLFiles.deflexical("*HTML-MACHINE-STATE-HASH*", maybeDefault((SubLObject)html_kernel.$sym69$_HTML_MACHINE_STATE_HASH_, html_kernel.$html_machine_state_hash$, ()->(Hashtables.make_hash_table((SubLObject)html_kernel.TEN_INTEGER, Symbols.symbol_function((SubLObject)html_kernel.EQUALP), (SubLObject)html_kernel.UNPROVIDED))));
         html_kernel.$html_machine_state_update_lock$ = SubLFiles.deflexical("*HTML-MACHINE-STATE-UPDATE-LOCK*", Locks.make_lock((SubLObject)html_kernel.$str70$HTML_Machine_State));
         html_kernel.$machine_is_myself_timeout$ = SubLFiles.deflexical("*MACHINE-IS-MYSELF-TIMEOUT*", (SubLObject)html_kernel.$float85$0_1);
         html_kernel.$machine_is_myself_via_cyc_api_caching_state$ = SubLFiles.deflexical("*MACHINE-IS-MYSELF-VIA-CYC-API-CACHING-STATE*", (SubLObject)html_kernel.NIL);

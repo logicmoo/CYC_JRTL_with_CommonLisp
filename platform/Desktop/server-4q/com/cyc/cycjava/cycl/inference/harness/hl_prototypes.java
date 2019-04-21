@@ -631,9 +631,9 @@ public final class hl_prototypes extends SubLTranslatedFile
     public static SubLObject init_hl_prototypes_file() {
         hl_prototypes.$hl_prototypes_enabledP$ = SubLFiles.defparameter("*HL-PROTOTYPES-ENABLED?*", (SubLObject)hl_prototypes.T);
         hl_prototypes.$gather_hl_prototype_statisticsP$ = SubLFiles.defparameter("*GATHER-HL-PROTOTYPE-STATISTICS?*", (SubLObject)hl_prototypes.T);
-        hl_prototypes.$hl_prototype_hits$ = SubLFiles.deflexical("*HL-PROTOTYPE-HITS*", (SubLObject)((hl_prototypes.NIL != Symbols.boundp((SubLObject)hl_prototypes.$sym0$_HL_PROTOTYPE_HITS_)) ? hl_prototypes.$hl_prototype_hits$.getGlobalValue() : hl_prototypes.ZERO_INTEGER));
-        hl_prototypes.$hl_prototype_hit_table$ = SubLFiles.deflexical("*HL-PROTOTYPE-HIT-TABLE*", (hl_prototypes.NIL != Symbols.boundp((SubLObject)hl_prototypes.$sym1$_HL_PROTOTYPE_HIT_TABLE_)) ? hl_prototypes.$hl_prototype_hit_table$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)hl_prototypes.EQ), (SubLObject)hl_prototypes.UNPROVIDED));
-        hl_prototypes.$hl_prototype_misses$ = SubLFiles.deflexical("*HL-PROTOTYPE-MISSES*", (SubLObject)((hl_prototypes.NIL != Symbols.boundp((SubLObject)hl_prototypes.$sym2$_HL_PROTOTYPE_MISSES_)) ? hl_prototypes.$hl_prototype_misses$.getGlobalValue() : hl_prototypes.ZERO_INTEGER));
+        hl_prototypes.$hl_prototype_hits$ = SubLFiles.deflexical("*HL-PROTOTYPE-HITS*", (SubLObject)(maybeDefault((SubLObject)hl_prototypes.$sym0$_HL_PROTOTYPE_HITS_, hl_prototypes.$hl_prototype_hits$, hl_prototypes.ZERO_INTEGER)));
+        hl_prototypes.$hl_prototype_hit_table$ = SubLFiles.deflexical("*HL-PROTOTYPE-HIT-TABLE*", maybeDefault((SubLObject)hl_prototypes.$sym1$_HL_PROTOTYPE_HIT_TABLE_, hl_prototypes.$hl_prototype_hit_table$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)hl_prototypes.EQ), (SubLObject)hl_prototypes.UNPROVIDED))));
+        hl_prototypes.$hl_prototype_misses$ = SubLFiles.deflexical("*HL-PROTOTYPE-MISSES*", (SubLObject)(maybeDefault((SubLObject)hl_prototypes.$sym2$_HL_PROTOTYPE_MISSES_, hl_prototypes.$hl_prototype_misses$, hl_prototypes.ZERO_INTEGER)));
         hl_prototypes.$the_hl_prototype_ke_irrelevant_rule_caching_state$ = SubLFiles.deflexical("*THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE-CACHING-STATE*", (SubLObject)hl_prototypes.NIL);
         return (SubLObject)hl_prototypes.NIL;
     }

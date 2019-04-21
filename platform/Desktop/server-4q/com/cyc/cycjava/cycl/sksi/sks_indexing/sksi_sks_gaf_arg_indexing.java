@@ -832,7 +832,7 @@ public final class sksi_sks_gaf_arg_indexing extends SubLTranslatedFile
     
     public static SubLObject init_sksi_sks_gaf_arg_indexing_file() {
         sksi_sks_gaf_arg_indexing.$dtp_sksi_supported_gaf_argument_cache_entry$ = SubLFiles.defconstant("*DTP-SKSI-SUPPORTED-GAF-ARGUMENT-CACHE-ENTRY*", (SubLObject)sksi_sks_gaf_arg_indexing.$sym0$SKSI_SUPPORTED_GAF_ARGUMENT_CACHE_ENTRY);
-        sksi_sks_gaf_arg_indexing.$sksi_supported_gaf_argument_cache$ = SubLFiles.deflexical("*SKSI-SUPPORTED-GAF-ARGUMENT-CACHE*", (sksi_sks_gaf_arg_indexing.NIL != Symbols.boundp((SubLObject)sksi_sks_gaf_arg_indexing.$sym35$_SKSI_SUPPORTED_GAF_ARGUMENT_CACHE_)) ? sksi_sks_gaf_arg_indexing.$sksi_supported_gaf_argument_cache$.getGlobalValue() : dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_sks_gaf_arg_indexing.EQ), (SubLObject)sksi_sks_gaf_arg_indexing.UNPROVIDED));
+        sksi_sks_gaf_arg_indexing.$sksi_supported_gaf_argument_cache$ = SubLFiles.deflexical("*SKSI-SUPPORTED-GAF-ARGUMENT-CACHE*", maybeDefault((SubLObject)sksi_sks_gaf_arg_indexing.$sym35$_SKSI_SUPPORTED_GAF_ARGUMENT_CACHE_, sksi_sks_gaf_arg_indexing.$sksi_supported_gaf_argument_cache$, ()->(dictionary.new_dictionary(Symbols.symbol_function((SubLObject)sksi_sks_gaf_arg_indexing.EQ), (SubLObject)sksi_sks_gaf_arg_indexing.UNPROVIDED))));
         sksi_sks_gaf_arg_indexing.$sksi_default_count_for_term_argnum_pred$ = SubLFiles.deflexical("*SKSI-DEFAULT-COUNT-FOR-TERM-ARGNUM-PRED*", (SubLObject)sksi_sks_gaf_arg_indexing.SEVENTEEN_INTEGER);
         return (SubLObject)sksi_sks_gaf_arg_indexing.NIL;
     }

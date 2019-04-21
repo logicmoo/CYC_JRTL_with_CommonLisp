@@ -9901,7 +9901,7 @@ public final class inference_worker extends SubLTranslatedFile
         inference_worker.$bubble_up_proofs_through_closed_split_linksP$ = SubLFiles.defparameter("*BUBBLE-UP-PROOFS-THROUGH-CLOSED-SPLIT-LINKS?*", (SubLObject)inference_worker.T);
         inference_worker.$reconsidering_set_asidesP$ = SubLFiles.defparameter("*RECONSIDERING-SET-ASIDES?*", (SubLObject)inference_worker.NIL);
         inference_worker.$always_consider_deepP$ = SubLFiles.defparameter("*ALWAYS-CONSIDER-DEEP?*", (SubLObject)inference_worker.NIL);
-        inference_worker.$problem_store_prune_reports$ = SubLFiles.deflexical("*PROBLEM-STORE-PRUNE-REPORTS*", (SubLObject)((inference_worker.NIL != Symbols.boundp((SubLObject)inference_worker.$sym195$_PROBLEM_STORE_PRUNE_REPORTS_)) ? inference_worker.$problem_store_prune_reports$.getGlobalValue() : inference_worker.NIL));
+        inference_worker.$problem_store_prune_reports$ = SubLFiles.deflexical("*PROBLEM-STORE-PRUNE-REPORTS*", (SubLObject)(maybeDefault((SubLObject)inference_worker.$sym195$_PROBLEM_STORE_PRUNE_REPORTS_, inference_worker.$problem_store_prune_reports$, inference_worker.NIL)));
         inference_worker.$possibly_propagate_problem_indestructible_stack$ = SubLFiles.defparameter("*POSSIBLY-PROPAGATE-PROBLEM-INDESTRUCTIBLE-STACK*", (SubLObject)inference_worker.$kw199$UNINITIALIZED);
         inference_worker.$processed_proofs_retain_one_proofP$ = SubLFiles.defparameter("*PROCESSED-PROOFS-RETAIN-ONE-PROOF?*", (SubLObject)inference_worker.T);
         return (SubLObject)inference_worker.NIL;

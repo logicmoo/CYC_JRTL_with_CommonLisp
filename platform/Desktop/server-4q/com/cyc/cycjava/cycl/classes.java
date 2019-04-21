@@ -2565,13 +2565,13 @@ public final class classes extends SubLTranslatedFile
         classes.$classes_class_slot_access_violation$ = SubLFiles.defconstant("*CLASSES-CLASS-SLOT-ACCESS-VIOLATION*", (SubLObject)classes.$str0$Cannot_access__A_slot__S_from_cla);
         classes.$classes_initial_hashtable_size$ = SubLFiles.defconstant("*CLASSES-INITIAL-HASHTABLE-SIZE*", (SubLObject)classes.$int1$800);
         classes.$classes_class_table_update_lock$ = SubLFiles.defparameter("*CLASSES-CLASS-TABLE-UPDATE-LOCK*", Locks.make_lock((SubLObject)classes.$str2$Class_Table_Update_Lock));
-        classes.$classes_class_table$ = SubLFiles.deflexical("*CLASSES-CLASS-TABLE*", (classes.NIL != Symbols.boundp((SubLObject)classes.$sym3$_CLASSES_CLASS_TABLE_)) ? classes.$classes_class_table$.getGlobalValue() : Hashtables.make_hash_table(classes.$classes_initial_hashtable_size$.getGlobalValue(), (SubLObject)classes.UNPROVIDED, (SubLObject)classes.UNPROVIDED));
+        classes.$classes_class_table$ = SubLFiles.deflexical("*CLASSES-CLASS-TABLE*", maybeDefault((SubLObject)classes.$sym3$_CLASSES_CLASS_TABLE_, classes.$classes_class_table$, ()->(Hashtables.make_hash_table(classes.$classes_initial_hashtable_size$.getGlobalValue(), (SubLObject)classes.UNPROVIDED, (SubLObject)classes.UNPROVIDED))));
         classes.$classes_valid_class_properties$ = SubLFiles.defparameter("*CLASSES-VALID-CLASS-PROPERTIES*", (SubLObject)classes.$list4);
         classes.$classes_valid_slot_properties$ = SubLFiles.defparameter("*CLASSES-VALID-SLOT-PROPERTIES*", (SubLObject)classes.$list5);
         classes.$classes_valid_method_interface_types$ = SubLFiles.defparameter("*CLASSES-VALID-METHOD-INTERFACE-TYPES*", (SubLObject)classes.$list6);
         classes.$classes_valid_method_properties$ = SubLFiles.defparameter("*CLASSES-VALID-METHOD-PROPERTIES*", (SubLObject)classes.$list7);
-        classes.$classes_always_generate_before_listeners$ = SubLFiles.deflexical("*CLASSES-ALWAYS-GENERATE-BEFORE-LISTENERS*", (SubLObject)((classes.NIL != Symbols.boundp((SubLObject)classes.$sym8$_CLASSES_ALWAYS_GENERATE_BEFORE_LISTENERS_)) ? classes.$classes_always_generate_before_listeners$.getGlobalValue() : classes.NIL));
-        classes.$classes_always_generate_after_listeners$ = SubLFiles.deflexical("*CLASSES-ALWAYS-GENERATE-AFTER-LISTENERS*", (SubLObject)((classes.NIL != Symbols.boundp((SubLObject)classes.$sym9$_CLASSES_ALWAYS_GENERATE_AFTER_LISTENERS_)) ? classes.$classes_always_generate_after_listeners$.getGlobalValue() : classes.NIL));
+        classes.$classes_always_generate_before_listeners$ = SubLFiles.deflexical("*CLASSES-ALWAYS-GENERATE-BEFORE-LISTENERS*", (SubLObject)(maybeDefault((SubLObject)classes.$sym8$_CLASSES_ALWAYS_GENERATE_BEFORE_LISTENERS_, classes.$classes_always_generate_before_listeners$, classes.NIL)));
+        classes.$classes_always_generate_after_listeners$ = SubLFiles.deflexical("*CLASSES-ALWAYS-GENERATE-AFTER-LISTENERS*", (SubLObject)(maybeDefault((SubLObject)classes.$sym9$_CLASSES_ALWAYS_GENERATE_AFTER_LISTENERS_, classes.$classes_always_generate_after_listeners$, classes.NIL)));
         classes.$classes_new_class_current$ = SubLFiles.defparameter("*CLASSES-NEW-CLASS-CURRENT*", (SubLObject)classes.NIL);
         classes.$curclass$ = SubLFiles.defparameter("*CURCLASS*", (SubLObject)classes.NIL);
         return (SubLObject)classes.NIL;

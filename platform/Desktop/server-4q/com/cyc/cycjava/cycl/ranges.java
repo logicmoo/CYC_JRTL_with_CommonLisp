@@ -1388,7 +1388,7 @@ public final class ranges extends SubLTranslatedFile
         ranges.$valid_range_bound_types$ = SubLFiles.defconstant("*VALID-RANGE-BOUND-TYPES*", (SubLObject)ranges.$list0);
         ranges.$ranges_initial_hashtable_size$ = SubLFiles.defconstant("*RANGES-INITIAL-HASHTABLE-SIZE*", (SubLObject)ranges.$int8$100);
         ranges.$ranges_table_update_lock$ = SubLFiles.defparameter("*RANGES-TABLE-UPDATE-LOCK*", Locks.make_lock((SubLObject)ranges.$str9$Ranges_Table_Lock));
-        ranges.$ranges_table$ = SubLFiles.deflexical("*RANGES-TABLE*", (ranges.NIL != Symbols.boundp((SubLObject)ranges.$sym10$_RANGES_TABLE_)) ? ranges.$ranges_table$.getGlobalValue() : Hashtables.make_hash_table(ranges.$ranges_initial_hashtable_size$.getGlobalValue(), (SubLObject)ranges.UNPROVIDED, (SubLObject)ranges.UNPROVIDED));
+        ranges.$ranges_table$ = SubLFiles.deflexical("*RANGES-TABLE*", maybeDefault((SubLObject)ranges.$sym10$_RANGES_TABLE_, ranges.$ranges_table$, ()->(Hashtables.make_hash_table(ranges.$ranges_initial_hashtable_size$.getGlobalValue(), (SubLObject)ranges.UNPROVIDED, (SubLObject)ranges.UNPROVIDED))));
         ranges.$dtp_range$ = SubLFiles.defconstant("*DTP-RANGE*", (SubLObject)ranges.$sym11$RANGE);
         return (SubLObject)ranges.NIL;
     }

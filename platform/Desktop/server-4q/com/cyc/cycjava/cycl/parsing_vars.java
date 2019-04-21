@@ -364,7 +364,7 @@ public final class parsing_vars extends SubLTranslatedFile
         parsing_vars.$psp_environmental_globals_new$ = SubLFiles.deflexical("*PSP-ENVIRONMENTAL-GLOBALS-NEW*", ConsesLow.append((SubLObject)parsing_vars.$list11, lexicon_vars.lexicon_filters()));
         parsing_vars.$psp_max_edges_per_span$ = SubLFiles.defparameter("*PSP-MAX-EDGES-PER-SPAN*", (SubLObject)parsing_vars.$int14$2120);
         parsing_vars.$psp_max_edges_per_chart$ = SubLFiles.defparameter("*PSP-MAX-EDGES-PER-CHART*", (SubLObject)parsing_vars.$int15$100000);
-        parsing_vars.$psp_cached_interface_helper_clearing_functions$ = SubLFiles.deflexical("*PSP-CACHED-INTERFACE-HELPER-CLEARING-FUNCTIONS*", (SubLObject)((parsing_vars.NIL != Symbols.boundp((SubLObject)parsing_vars.$sym16$_PSP_CACHED_INTERFACE_HELPER_CLEARING_FUNCTIONS_)) ? parsing_vars.$psp_cached_interface_helper_clearing_functions$.getGlobalValue() : parsing_vars.NIL));
+        parsing_vars.$psp_cached_interface_helper_clearing_functions$ = SubLFiles.deflexical("*PSP-CACHED-INTERFACE-HELPER-CLEARING-FUNCTIONS*", (SubLObject)(maybeDefault((SubLObject)parsing_vars.$sym16$_PSP_CACHED_INTERFACE_HELPER_CLEARING_FUNCTIONS_, parsing_vars.$psp_cached_interface_helper_clearing_functions$, parsing_vars.NIL)));
         parsing_vars.$variable_uniquification_store$ = SubLFiles.defparameter("*VARIABLE-UNIQUIFICATION-STORE*", dictionary.new_dictionary((SubLObject)parsing_vars.EQUALP, (SubLObject)parsing_vars.UNPROVIDED));
         parsing_vars.$linkage_creation_rules$ = SubLFiles.defparameter("*LINKAGE-CREATION-RULES*", (SubLObject)parsing_vars.$kw18$DEFAULT);
         parsing_vars.$parse_tree_mt$ = SubLFiles.defparameter("*PARSE-TREE-MT*", (SubLObject)parsing_vars.NIL);

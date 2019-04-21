@@ -2044,7 +2044,7 @@ public final class np_parser extends SubLTranslatedFile
         np_parser.$code_constraint_poses$ = SubLFiles.deflexical("*CODE-CONSTRAINT-POSES*", (SubLObject)np_parser.$list40);
         np_parser.$npp_specify_semtransP$ = SubLFiles.defparameter("*NPP-SPECIFY-SEMTRANS?*", (SubLObject)np_parser.NIL);
         np_parser.$wf_col_template_comboP_caching_state$ = SubLFiles.deflexical("*WF-COL-TEMPLATE-COMBO?-CACHING-STATE*", (SubLObject)np_parser.NIL);
-        np_parser.$prep_semtrans_hash$ = SubLFiles.deflexical("*PREP-SEMTRANS-HASH*", (np_parser.NIL != Symbols.boundp((SubLObject)np_parser.$sym89$_PREP_SEMTRANS_HASH_)) ? np_parser.$prep_semtrans_hash$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)np_parser.$int90$48, Symbols.symbol_function((SubLObject)np_parser.EQUALP), (SubLObject)np_parser.UNPROVIDED));
+        np_parser.$prep_semtrans_hash$ = SubLFiles.deflexical("*PREP-SEMTRANS-HASH*", maybeDefault((SubLObject)np_parser.$sym89$_PREP_SEMTRANS_HASH_, np_parser.$prep_semtrans_hash$, ()->(Hashtables.make_hash_table((SubLObject)np_parser.$int90$48, Symbols.symbol_function((SubLObject)np_parser.EQUALP), (SubLObject)np_parser.UNPROVIDED))));
         return (SubLObject)np_parser.NIL;
     }
     

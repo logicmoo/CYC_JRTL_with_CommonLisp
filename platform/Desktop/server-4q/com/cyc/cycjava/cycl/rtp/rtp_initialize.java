@@ -114,7 +114,7 @@ public final class rtp_initialize extends SubLTranslatedFile
     
     public static SubLObject init_rtp_initialize_file() {
         rtp_initialize.$rtp_core_constants$ = SubLFiles.deflexical("*RTP-CORE-CONSTANTS*", (SubLObject)rtp_initialize.$list0);
-        rtp_initialize.$rtp_initialized$ = SubLFiles.deflexical("*RTP-INITIALIZED*", (SubLObject)((rtp_initialize.NIL != Symbols.boundp((SubLObject)rtp_initialize.$sym2$_RTP_INITIALIZED_)) ? rtp_initialize.$rtp_initialized$.getGlobalValue() : rtp_initialize.NIL));
+        rtp_initialize.$rtp_initialized$ = SubLFiles.deflexical("*RTP-INITIALIZED*", (SubLObject)(maybeDefault((SubLObject)rtp_initialize.$sym2$_RTP_INITIALIZED_, rtp_initialize.$rtp_initialized$, rtp_initialize.NIL)));
         rtp_initialize.$rtp_default_template_types$ = SubLFiles.defparameter("*RTP-DEFAULT-TEMPLATE-TYPES*", (SubLObject)rtp_initialize.$list3);
         return (SubLObject)rtp_initialize.NIL;
     }

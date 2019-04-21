@@ -375,7 +375,7 @@ public final class rkf_event_dispatcher extends SubLTranslatedFile
     
     public static SubLObject init_rkf_event_dispatcher_file() {
         rkf_event_dispatcher.$rkf_event_dispatcher_lock$ = SubLFiles.deflexical("*RKF-EVENT-DISPATCHER-LOCK*", Locks.make_lock((SubLObject)rkf_event_dispatcher.$str22$RKF_EVENT_DISPATCHER_Lock));
-        rkf_event_dispatcher.$rkf_event_dispatcher_listeners$ = SubLFiles.deflexical("*RKF-EVENT-DISPATCHER-LISTENERS*", (SubLObject)((rkf_event_dispatcher.NIL != Symbols.boundp((SubLObject)rkf_event_dispatcher.$sym23$_RKF_EVENT_DISPATCHER_LISTENERS_)) ? rkf_event_dispatcher.$rkf_event_dispatcher_listeners$.getGlobalValue() : rkf_event_dispatcher.NIL));
+        rkf_event_dispatcher.$rkf_event_dispatcher_listeners$ = SubLFiles.deflexical("*RKF-EVENT-DISPATCHER-LISTENERS*", (SubLObject)(maybeDefault((SubLObject)rkf_event_dispatcher.$sym23$_RKF_EVENT_DISPATCHER_LISTENERS_, rkf_event_dispatcher.$rkf_event_dispatcher_listeners$, rkf_event_dispatcher.NIL)));
         return (SubLObject)rkf_event_dispatcher.NIL;
     }
     

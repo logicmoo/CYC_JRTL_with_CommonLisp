@@ -43,7 +43,7 @@ public final class Nil extends SubLNil
     {
     	super();
      //   super("NIL", pkg);
-        pkg.addSymbol(this);
+        pkg.addSymbol_ImplUseOnly(this);
         initializeConstant(this);
     }
 

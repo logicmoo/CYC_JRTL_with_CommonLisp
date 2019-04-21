@@ -1798,7 +1798,7 @@ public final class pph_types extends SubLTranslatedFile
     public static SubLObject init_pph_types_file() {
         pph_types.$pph_type_tree$ = SubLFiles.deflexical("*PPH-TYPE-TREE*", (SubLObject)pph_types.$list0);
         pph_types.$paraphrase_tests$ = SubLFiles.deflexical("*PARAPHRASE-TESTS*", (SubLObject)pph_types.$list1);
-        pph_types.$pph_type_method_hash$ = SubLFiles.deflexical("*PPH-TYPE-METHOD-HASH*", (pph_types.NIL != Symbols.boundp((SubLObject)pph_types.$sym2$_PPH_TYPE_METHOD_HASH_)) ? pph_types.$pph_type_method_hash$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)pph_types.$int3$256, Symbols.symbol_function((SubLObject)pph_types.EQ), (SubLObject)pph_types.UNPROVIDED));
+        pph_types.$pph_type_method_hash$ = SubLFiles.deflexical("*PPH-TYPE-METHOD-HASH*", maybeDefault((SubLObject)pph_types.$sym2$_PPH_TYPE_METHOD_HASH_, pph_types.$pph_type_method_hash$, ()->(Hashtables.make_hash_table((SubLObject)pph_types.$int3$256, Symbols.symbol_function((SubLObject)pph_types.EQ), (SubLObject)pph_types.UNPROVIDED))));
         pph_types.$pph_valid_method_qualities$ = SubLFiles.deflexical("*PPH-VALID-METHOD-QUALITIES*", (SubLObject)pph_types.$list4);
         pph_types.$pph_date_denoting_functions$ = SubLFiles.deflexical("*PPH-DATE-DENOTING-FUNCTIONS*", (SubLObject)pph_types.$list38);
         pph_types.$pph_subcol_fns$ = SubLFiles.defparameter("*PPH-SUBCOL-FNS*", set.new_set(Symbols.symbol_function((SubLObject)pph_types.EQUAL), (SubLObject)pph_types.UNPROVIDED));

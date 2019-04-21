@@ -1083,8 +1083,8 @@ public final class generic_testing extends SubLTranslatedFile
     }
     
     public static SubLObject init_generic_testing_file() {
-        generic_testing.$test_case_table_index$ = SubLFiles.deflexical("*TEST-CASE-TABLE-INDEX*", (generic_testing.NIL != Symbols.boundp((SubLObject)generic_testing.$sym0$_TEST_CASE_TABLE_INDEX_)) ? generic_testing.$test_case_table_index$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)generic_testing.$int1$212, Symbols.symbol_function((SubLObject)generic_testing.EQL), (SubLObject)generic_testing.UNPROVIDED));
-        generic_testing.$ordered_test_cases$ = SubLFiles.deflexical("*ORDERED-TEST-CASES*", (SubLObject)((generic_testing.NIL != Symbols.boundp((SubLObject)generic_testing.$sym2$_ORDERED_TEST_CASES_)) ? generic_testing.$ordered_test_cases$.getGlobalValue() : generic_testing.NIL));
+        generic_testing.$test_case_table_index$ = SubLFiles.deflexical("*TEST-CASE-TABLE-INDEX*", maybeDefault((SubLObject)generic_testing.$sym0$_TEST_CASE_TABLE_INDEX_, generic_testing.$test_case_table_index$, ()->(Hashtables.make_hash_table((SubLObject)generic_testing.$int1$212, Symbols.symbol_function((SubLObject)generic_testing.EQL), (SubLObject)generic_testing.UNPROVIDED))));
+        generic_testing.$ordered_test_cases$ = SubLFiles.deflexical("*ORDERED-TEST-CASES*", (SubLObject)(maybeDefault((SubLObject)generic_testing.$sym2$_ORDERED_TEST_CASES_, generic_testing.$ordered_test_cases$, generic_testing.NIL)));
         generic_testing.$test_case_tables_by_class$ = SubLFiles.deflexical("*TEST-CASE-TABLES-BY-CLASS*", Hashtables.make_hash_table((SubLObject)generic_testing.$int3$64, (SubLObject)generic_testing.EQL, (SubLObject)generic_testing.UNPROVIDED));
         generic_testing.$generic_test_results$ = SubLFiles.deflexical("*GENERIC-TEST-RESULTS*", (SubLObject)generic_testing.$list4);
         generic_testing.$generic_test_verbosity_levels$ = SubLFiles.deflexical("*GENERIC-TEST-VERBOSITY-LEVELS*", (SubLObject)generic_testing.$list5);

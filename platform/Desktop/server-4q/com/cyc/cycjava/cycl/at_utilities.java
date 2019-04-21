@@ -4985,9 +4985,9 @@ public final class at_utilities extends SubLTranslatedFile
     }
     
     public static SubLObject init_at_utilities_file() {
-        at_utilities.$generic_arg_store$ = SubLFiles.deflexical("*GENERIC-ARG-STORE*", (SubLObject)((at_utilities.NIL != Symbols.boundp((SubLObject)at_utilities.$sym5$_GENERIC_ARG_STORE_)) ? at_utilities.$generic_arg_store$.getGlobalValue() : at_utilities.NIL));
-        at_utilities.$some_inter_arg_isa_assertion_somewhere_cache$ = SubLFiles.deflexical("*SOME-INTER-ARG-ISA-ASSERTION-SOMEWHERE-CACHE*", (SubLObject)((at_utilities.NIL != Symbols.boundp((SubLObject)at_utilities.$sym76$_SOME_INTER_ARG_ISA_ASSERTION_SOMEWHERE_CACHE_)) ? at_utilities.$some_inter_arg_isa_assertion_somewhere_cache$.getGlobalValue() : at_utilities.NIL));
-        at_utilities.$some_inter_arg_format_assertion_somewhere_cache$ = SubLFiles.deflexical("*SOME-INTER-ARG-FORMAT-ASSERTION-SOMEWHERE-CACHE*", (SubLObject)((at_utilities.NIL != Symbols.boundp((SubLObject)at_utilities.$sym97$_SOME_INTER_ARG_FORMAT_ASSERTION_SOMEWHERE_CACHE_)) ? at_utilities.$some_inter_arg_format_assertion_somewhere_cache$.getGlobalValue() : at_utilities.NIL));
+        at_utilities.$generic_arg_store$ = SubLFiles.deflexical("*GENERIC-ARG-STORE*", (SubLObject)(maybeDefault((SubLObject)at_utilities.$sym5$_GENERIC_ARG_STORE_, at_utilities.$generic_arg_store$, at_utilities.NIL)));
+        at_utilities.$some_inter_arg_isa_assertion_somewhere_cache$ = SubLFiles.deflexical("*SOME-INTER-ARG-ISA-ASSERTION-SOMEWHERE-CACHE*", (SubLObject)(maybeDefault((SubLObject)at_utilities.$sym76$_SOME_INTER_ARG_ISA_ASSERTION_SOMEWHERE_CACHE_, at_utilities.$some_inter_arg_isa_assertion_somewhere_cache$, at_utilities.NIL)));
+        at_utilities.$some_inter_arg_format_assertion_somewhere_cache$ = SubLFiles.deflexical("*SOME-INTER-ARG-FORMAT-ASSERTION-SOMEWHERE-CACHE*", (SubLObject)(maybeDefault((SubLObject)at_utilities.$sym97$_SOME_INTER_ARG_FORMAT_ASSERTION_SOMEWHERE_CACHE_, at_utilities.$some_inter_arg_format_assertion_somewhere_cache$, at_utilities.NIL)));
         at_utilities.$mts_cutoff_for_mts_accommodating_formula_wrt_types$ = SubLFiles.defparameter("*MTS-CUTOFF-FOR-MTS-ACCOMMODATING-FORMULA-WRT-TYPES*", (SubLObject)at_utilities.$int139$40);
         at_utilities.$max_floor_mts_of_nat_exceptions$ = SubLFiles.defparameter("*MAX-FLOOR-MTS-OF-NAT-EXCEPTIONS*", (SubLObject)at_utilities.NIL);
         at_utilities.$cached_max_floor_mts_of_nat_caching_state$ = SubLFiles.deflexical("*CACHED-MAX-FLOOR-MTS-OF-NAT-CACHING-STATE*", (SubLObject)at_utilities.NIL);

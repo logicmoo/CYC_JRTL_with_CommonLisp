@@ -641,9 +641,9 @@ public final class event_utilities extends SubLTranslatedFile
     }
     
     public static SubLObject init_event_utilities_file() {
-        event_utilities.$generic_event_dispatcher_lock$ = SubLFiles.deflexical("*GENERIC-EVENT-DISPATCHER-LOCK*", (event_utilities.NIL != Symbols.boundp((SubLObject)event_utilities.$sym8$_GENERIC_EVENT_DISPATCHER_LOCK_)) ? event_utilities.$generic_event_dispatcher_lock$.getGlobalValue() : Locks.make_lock((SubLObject)event_utilities.$str9$Generic_Event_Dispatcher_Process_));
-        event_utilities.$generic_event_dispatcher_applications$ = SubLFiles.deflexical("*GENERIC-EVENT-DISPATCHER-APPLICATIONS*", (event_utilities.NIL != Symbols.boundp((SubLObject)event_utilities.$sym10$_GENERIC_EVENT_DISPATCHER_APPLICATIONS_)) ? event_utilities.$generic_event_dispatcher_applications$.getGlobalValue() : bag.new_bag((SubLObject)event_utilities.UNPROVIDED, (SubLObject)event_utilities.UNPROVIDED));
-        event_utilities.$generic_event_dispatcher_process$ = SubLFiles.deflexical("*GENERIC-EVENT-DISPATCHER-PROCESS*", (SubLObject)((event_utilities.NIL != Symbols.boundp((SubLObject)event_utilities.$sym11$_GENERIC_EVENT_DISPATCHER_PROCESS_)) ? event_utilities.$generic_event_dispatcher_process$.getGlobalValue() : event_utilities.NIL));
+        event_utilities.$generic_event_dispatcher_lock$ = SubLFiles.deflexical("*GENERIC-EVENT-DISPATCHER-LOCK*", maybeDefault((SubLObject)event_utilities.$sym8$_GENERIC_EVENT_DISPATCHER_LOCK_, event_utilities.$generic_event_dispatcher_lock$, ()->(Locks.make_lock((SubLObject)event_utilities.$str9$Generic_Event_Dispatcher_Process_))));
+        event_utilities.$generic_event_dispatcher_applications$ = SubLFiles.deflexical("*GENERIC-EVENT-DISPATCHER-APPLICATIONS*", maybeDefault((SubLObject)event_utilities.$sym10$_GENERIC_EVENT_DISPATCHER_APPLICATIONS_, event_utilities.$generic_event_dispatcher_applications$, ()->(bag.new_bag((SubLObject)event_utilities.UNPROVIDED, (SubLObject)event_utilities.UNPROVIDED))));
+        event_utilities.$generic_event_dispatcher_process$ = SubLFiles.deflexical("*GENERIC-EVENT-DISPATCHER-PROCESS*", (SubLObject)(maybeDefault((SubLObject)event_utilities.$sym11$_GENERIC_EVENT_DISPATCHER_PROCESS_, event_utilities.$generic_event_dispatcher_process$, event_utilities.NIL)));
         return (SubLObject)event_utilities.NIL;
     }
     

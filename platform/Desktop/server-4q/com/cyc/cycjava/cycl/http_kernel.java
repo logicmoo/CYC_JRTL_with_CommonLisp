@@ -1026,8 +1026,8 @@ public final class http_kernel extends SubLTranslatedFile
         http_kernel.$http_cg_url$ = SubLFiles.deflexical("*HTTP-CG-URL*", (SubLObject)http_kernel.$str1$_cg_);
         http_kernel.$http_cgi_bin_ws_directory$ = SubLFiles.deflexical("*HTTP-CGI-BIN-WS-DIRECTORY*", (SubLObject)http_kernel.$str2$_cgi_bin_ws_);
         http_kernel.$http_cyc_ws_directory$ = SubLFiles.deflexical("*HTTP-CYC-WS-DIRECTORY*", (SubLObject)http_kernel.$str3$_cyc_ws);
-        http_kernel.$http_cyc_ws_machine$ = SubLFiles.deflexical("*HTTP-CYC-WS-MACHINE*", (SubLObject)((http_kernel.NIL != Symbols.boundp((SubLObject)http_kernel.$sym4$_HTTP_CYC_WS_MACHINE_)) ? http_kernel.$http_cyc_ws_machine$.getGlobalValue() : http_kernel.NIL));
-        http_kernel.$http_cyc_ws_port$ = SubLFiles.deflexical("*HTTP-CYC-WS-PORT*", (SubLObject)((http_kernel.NIL != Symbols.boundp((SubLObject)http_kernel.$sym5$_HTTP_CYC_WS_PORT_)) ? http_kernel.$http_cyc_ws_port$.getGlobalValue() : http_kernel.NIL));
+        http_kernel.$http_cyc_ws_machine$ = SubLFiles.deflexical("*HTTP-CYC-WS-MACHINE*", (SubLObject)(maybeDefault((SubLObject)http_kernel.$sym4$_HTTP_CYC_WS_MACHINE_, http_kernel.$http_cyc_ws_machine$, http_kernel.NIL)));
+        http_kernel.$http_cyc_ws_port$ = SubLFiles.deflexical("*HTTP-CYC-WS-PORT*", (SubLObject)(maybeDefault((SubLObject)http_kernel.$sym5$_HTTP_CYC_WS_PORT_, http_kernel.$http_cyc_ws_port$, http_kernel.NIL)));
         http_kernel.$http_request_logging_stream$ = SubLFiles.deflexical("*HTTP-REQUEST-LOGGING-STREAM*", (SubLObject)http_kernel.NIL);
         http_kernel.$get_http_logging_sequence_generator$ = SubLFiles.defparameter("*GET-HTTP-LOGGING-SEQUENCE-GENERATOR*", (SubLObject)http_kernel.$kw30$UNINITIALIZED);
         http_kernel.$http_return_mime_type_prefix$ = SubLFiles.defconstant("*HTTP-RETURN-MIME-TYPE-PREFIX*", (SubLObject)http_kernel.$str33$return_mime_type_);

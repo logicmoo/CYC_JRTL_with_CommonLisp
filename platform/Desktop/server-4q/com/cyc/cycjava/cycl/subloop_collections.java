@@ -5933,7 +5933,7 @@ public final class subloop_collections extends SubLTranslatedFile
     public static SubLObject init_subloop_collections_file() {
         subloop_collections.$valid_sequential_directions$ = SubLFiles.defconstant("*VALID-SEQUENTIAL-DIRECTIONS*", (SubLObject)subloop_collections.$list0);
         subloop_collections.$dtp_double_link_cell$ = SubLFiles.defconstant("*DTP-DOUBLE-LINK-CELL*", (SubLObject)subloop_collections.$sym249$DOUBLE_LINK_CELL);
-        subloop_collections.$test_list_elements$ = SubLFiles.deflexical("*TEST-LIST-ELEMENTS*", (SubLObject)((subloop_collections.NIL != Symbols.boundp((SubLObject)subloop_collections.$sym684$_TEST_LIST_ELEMENTS_)) ? subloop_collections.$test_list_elements$.getGlobalValue() : subloop_collections.NIL));
+        subloop_collections.$test_list_elements$ = SubLFiles.deflexical("*TEST-LIST-ELEMENTS*", (SubLObject)(maybeDefault((SubLObject)subloop_collections.$sym684$_TEST_LIST_ELEMENTS_, subloop_collections.$test_list_elements$, subloop_collections.NIL)));
         return (SubLObject)subloop_collections.NIL;
     }
     

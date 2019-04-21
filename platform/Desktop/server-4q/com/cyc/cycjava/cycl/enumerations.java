@@ -1045,10 +1045,10 @@ public final class enumerations extends SubLTranslatedFile
     public static SubLObject init_enumerations_file() {
         enumerations.$enumerations_initial_hashtable_size$ = SubLFiles.defconstant("*ENUMERATIONS-INITIAL-HASHTABLE-SIZE*", (SubLObject)enumerations.$int0$100);
         enumerations.$enumerations_table_update_lock$ = SubLFiles.defparameter("*ENUMERATIONS-TABLE-UPDATE-LOCK*", Locks.make_lock((SubLObject)enumerations.$str1$Enumerations_Table_Lock));
-        enumerations.$enumerations_table$ = SubLFiles.deflexical("*ENUMERATIONS-TABLE*", (enumerations.NIL != Symbols.boundp((SubLObject)enumerations.$sym2$_ENUMERATIONS_TABLE_)) ? enumerations.$enumerations_table$.getGlobalValue() : Hashtables.make_hash_table(enumerations.$enumerations_initial_hashtable_size$.getGlobalValue(), (SubLObject)enumerations.UNPROVIDED, (SubLObject)enumerations.UNPROVIDED));
+        enumerations.$enumerations_table$ = SubLFiles.deflexical("*ENUMERATIONS-TABLE*", maybeDefault((SubLObject)enumerations.$sym2$_ENUMERATIONS_TABLE_, enumerations.$enumerations_table$, ()->(Hashtables.make_hash_table(enumerations.$enumerations_initial_hashtable_size$.getGlobalValue(), (SubLObject)enumerations.UNPROVIDED, (SubLObject)enumerations.UNPROVIDED))));
         enumerations.$enum_values_initial_hashtable_size$ = SubLFiles.defconstant("*ENUM-VALUES-INITIAL-HASHTABLE-SIZE*", (SubLObject)enumerations.$int3$200);
         enumerations.$enum_values_table_update_lock$ = SubLFiles.defparameter("*ENUM-VALUES-TABLE-UPDATE-LOCK*", Locks.make_lock((SubLObject)enumerations.$str4$Enum_Values_Table_Lock));
-        enumerations.$enum_values_table$ = SubLFiles.deflexical("*ENUM-VALUES-TABLE*", (enumerations.NIL != Symbols.boundp((SubLObject)enumerations.$sym5$_ENUM_VALUES_TABLE_)) ? enumerations.$enum_values_table$.getGlobalValue() : Hashtables.make_hash_table(enumerations.$enum_values_initial_hashtable_size$.getGlobalValue(), (SubLObject)enumerations.UNPROVIDED, (SubLObject)enumerations.UNPROVIDED));
+        enumerations.$enum_values_table$ = SubLFiles.deflexical("*ENUM-VALUES-TABLE*", maybeDefault((SubLObject)enumerations.$sym5$_ENUM_VALUES_TABLE_, enumerations.$enum_values_table$, ()->(Hashtables.make_hash_table(enumerations.$enum_values_initial_hashtable_size$.getGlobalValue(), (SubLObject)enumerations.UNPROVIDED, (SubLObject)enumerations.UNPROVIDED))));
         enumerations.$dtp_enumeration$ = SubLFiles.defconstant("*DTP-ENUMERATION*", (SubLObject)enumerations.$sym6$ENUMERATION);
         return (SubLObject)enumerations.NIL;
     }

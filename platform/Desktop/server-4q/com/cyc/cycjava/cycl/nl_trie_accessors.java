@@ -4240,11 +4240,11 @@ public final class nl_trie_accessors extends SubLTranslatedFile
         nl_trie_accessors.$word_external_punctuation_chars$ = SubLFiles.deflexical("*WORD-EXTERNAL-PUNCTUATION-CHARS*", (SubLObject)nl_trie_accessors.$list55);
         nl_trie_accessors.$denotation_mapping_break_chars$ = SubLFiles.deflexical("*DENOTATION-MAPPING-BREAK-CHARS*", Sequences.cconcatenate(nl_trie_accessors.$word_external_punctuation_chars$.getGlobalValue(), string_utilities.whitespace_chars()));
         nl_trie_accessors.$nl_trie_check_semantic_mtP$ = SubLFiles.defparameter("*NL-TRIE-CHECK-SEMANTIC-MT?*", (SubLObject)nl_trie_accessors.NIL);
-        nl_trie_accessors.$nl_trie_rotation_index$ = SubLFiles.deflexical("*NL-TRIE-ROTATION-INDEX*", (SubLObject)((nl_trie_accessors.NIL != Symbols.boundp((SubLObject)nl_trie_accessors.$sym120$_NL_TRIE_ROTATION_INDEX_)) ? nl_trie_accessors.$nl_trie_rotation_index$.getGlobalValue() : nl_trie_accessors.NIL));
+        nl_trie_accessors.$nl_trie_rotation_index$ = SubLFiles.deflexical("*NL-TRIE-ROTATION-INDEX*", (SubLObject)(maybeDefault((SubLObject)nl_trie_accessors.$sym120$_NL_TRIE_ROTATION_INDEX_, nl_trie_accessors.$nl_trie_rotation_index$, nl_trie_accessors.NIL)));
         nl_trie_accessors.$nl_trie_rotate_characters$ = SubLFiles.deflexical("*NL-TRIE-ROTATE-CHARACTERS*", (SubLObject)nl_trie_accessors.$list121);
         nl_trie_accessors.$nl_trie_rotate_point_char$ = SubLFiles.defconstant("*NL-TRIE-ROTATE-POINT-CHAR*", (SubLObject)Characters.CHAR_vertical);
         nl_trie_accessors.$nl_trie_rotate_point_string$ = SubLFiles.defconstant("*NL-TRIE-ROTATE-POINT-STRING*", Strings.string(nl_trie_accessors.$nl_trie_rotate_point_char$.getGlobalValue()));
-        nl_trie_accessors.$nl_trie_stoplist_trie$ = SubLFiles.deflexical("*NL-TRIE-STOPLIST-TRIE*", (SubLObject)((nl_trie_accessors.NIL != Symbols.boundp((SubLObject)nl_trie_accessors.$sym122$_NL_TRIE_STOPLIST_TRIE_)) ? nl_trie_accessors.$nl_trie_stoplist_trie$.getGlobalValue() : nl_trie_accessors.NIL));
+        nl_trie_accessors.$nl_trie_stoplist_trie$ = SubLFiles.deflexical("*NL-TRIE-STOPLIST-TRIE*", (SubLObject)(maybeDefault((SubLObject)nl_trie_accessors.$sym122$_NL_TRIE_STOPLIST_TRIE_, nl_trie_accessors.$nl_trie_stoplist_trie$, nl_trie_accessors.NIL)));
         nl_trie_accessors.$dtp_nl_trie_index_item$ = SubLFiles.defconstant("*DTP-NL-TRIE-INDEX-ITEM*", (SubLObject)nl_trie_accessors.$sym124$NL_TRIE_INDEX_ITEM);
         nl_trie_accessors.$default_number_of_concurrent_test_threads$ = SubLFiles.deflexical("*DEFAULT-NUMBER-OF-CONCURRENT-TEST-THREADS*", (SubLObject)nl_trie_accessors.TWENTY_INTEGER);
         nl_trie_accessors.$default_string_test_count$ = SubLFiles.deflexical("*DEFAULT-STRING-TEST-COUNT*", (SubLObject)nl_trie_accessors.$int166$500);

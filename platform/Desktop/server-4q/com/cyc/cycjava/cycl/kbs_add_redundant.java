@@ -1840,7 +1840,7 @@ public final class kbs_add_redundant extends SubLTranslatedFile
         kbs_add_redundant.$arg2_defining_predicates_info$ = SubLFiles.defparameter("*ARG2-DEFINING-PREDICATES-INFO*", (SubLObject)kbs_add_redundant.$list19);
         kbs_add_redundant.$cached_kbs_additional_redundant_definitional_info_caching_state$ = SubLFiles.deflexical("*CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO-CACHING-STATE*", (SubLObject)kbs_add_redundant.NIL);
         kbs_add_redundant.$kbs_cycle_size_threshold$ = SubLFiles.defparameter("*KBS-CYCLE-SIZE-THRESHOLD*", (SubLObject)kbs_add_redundant.TWENTY_INTEGER);
-        kbs_add_redundant.$kbs_broader_term_gafs$ = SubLFiles.deflexical("*KBS-BROADER-TERM-GAFS*", (SubLObject)((kbs_add_redundant.NIL != Symbols.boundp((SubLObject)kbs_add_redundant.$sym42$_KBS_BROADER_TERM_GAFS_)) ? kbs_add_redundant.$kbs_broader_term_gafs$.getGlobalValue() : kbs_add_redundant.NIL));
+        kbs_add_redundant.$kbs_broader_term_gafs$ = SubLFiles.deflexical("*KBS-BROADER-TERM-GAFS*", (SubLObject)(maybeDefault((SubLObject)kbs_add_redundant.$sym42$_KBS_BROADER_TERM_GAFS_, kbs_add_redundant.$kbs_broader_term_gafs$, kbs_add_redundant.NIL)));
         kbs_add_redundant.$get_broader_mt_support_stack$ = SubLFiles.defparameter("*GET-BROADER-MT-SUPPORT-STACK*", (SubLObject)kbs_add_redundant.NIL);
         kbs_add_redundant.$broader_term_preds_caching_state$ = SubLFiles.deflexical("*BROADER-TERM-PREDS-CACHING-STATE*", (SubLObject)kbs_add_redundant.NIL);
         kbs_add_redundant.$kbs_additional_redundant_asserted_arguments$ = SubLFiles.defparameter("*KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS*", (SubLObject)kbs_add_redundant.NIL);

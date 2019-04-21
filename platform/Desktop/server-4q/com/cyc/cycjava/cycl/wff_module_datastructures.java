@@ -393,7 +393,7 @@ public final class wff_module_datastructures extends SubLTranslatedFile
     
     public static SubLObject init_wff_module_datastructures_file() {
         wff_module_datastructures.$dtp_wff_module$ = SubLFiles.defconstant("*DTP-WFF-MODULE*", (SubLObject)wff_module_datastructures.$sym0$WFF_MODULE);
-        wff_module_datastructures.$wff_module_store$ = SubLFiles.deflexical("*WFF-MODULE-STORE*", (wff_module_datastructures.NIL != Symbols.boundp((SubLObject)wff_module_datastructures.$sym24$_WFF_MODULE_STORE_)) ? wff_module_datastructures.$wff_module_store$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)wff_module_datastructures.$int25$212, Symbols.symbol_function((SubLObject)wff_module_datastructures.EQUAL), (SubLObject)wff_module_datastructures.UNPROVIDED));
+        wff_module_datastructures.$wff_module_store$ = SubLFiles.deflexical("*WFF-MODULE-STORE*", maybeDefault((SubLObject)wff_module_datastructures.$sym24$_WFF_MODULE_STORE_, wff_module_datastructures.$wff_module_store$, ()->(Hashtables.make_hash_table((SubLObject)wff_module_datastructures.$int25$212, Symbols.symbol_function((SubLObject)wff_module_datastructures.EQUAL), (SubLObject)wff_module_datastructures.UNPROVIDED))));
         wff_module_datastructures.$wff_module_properties$ = SubLFiles.deflexical("*WFF-MODULE-PROPERTIES*", (SubLObject)wff_module_datastructures.$list37);
         return (SubLObject)wff_module_datastructures.NIL;
     }

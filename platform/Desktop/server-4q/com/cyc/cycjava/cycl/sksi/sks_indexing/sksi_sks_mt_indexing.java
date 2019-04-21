@@ -470,7 +470,7 @@ public final class sksi_sks_mt_indexing extends SubLTranslatedFile
     
     public static SubLObject init_sksi_sks_mt_indexing_file() {
         sksi_sks_mt_indexing.$dtp_sksi_supported_mt_cache_entry$ = SubLFiles.defconstant("*DTP-SKSI-SUPPORTED-MT-CACHE-ENTRY*", (SubLObject)sksi_sks_mt_indexing.$sym0$SKSI_SUPPORTED_MT_CACHE_ENTRY);
-        sksi_sks_mt_indexing.$sksi_supported_mt_cache$ = SubLFiles.deflexical("*SKSI-SUPPORTED-MT-CACHE*", (sksi_sks_mt_indexing.NIL != Symbols.boundp((SubLObject)sksi_sks_mt_indexing.$sym28$_SKSI_SUPPORTED_MT_CACHE_)) ? sksi_sks_mt_indexing.$sksi_supported_mt_cache$.getGlobalValue() : dictionary.new_dictionary((SubLObject)sksi_sks_mt_indexing.EQUAL, (SubLObject)sksi_sks_mt_indexing.UNPROVIDED));
+        sksi_sks_mt_indexing.$sksi_supported_mt_cache$ = SubLFiles.deflexical("*SKSI-SUPPORTED-MT-CACHE*", maybeDefault((SubLObject)sksi_sks_mt_indexing.$sym28$_SKSI_SUPPORTED_MT_CACHE_, sksi_sks_mt_indexing.$sksi_supported_mt_cache$, ()->(dictionary.new_dictionary((SubLObject)sksi_sks_mt_indexing.EQUAL, (SubLObject)sksi_sks_mt_indexing.UNPROVIDED))));
         return (SubLObject)sksi_sks_mt_indexing.NIL;
     }
     

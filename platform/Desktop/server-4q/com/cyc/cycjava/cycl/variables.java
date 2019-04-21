@@ -652,12 +652,12 @@ public final class variables extends SubLTranslatedFile
         variables.$default_el_variable_prefix$ = SubLFiles.defconstant("*DEFAULT-EL-VARIABLE-PREFIX*", (SubLObject)variables.$str0$_VAR);
         variables.$dtp_variable$ = SubLFiles.defconstant("*DTP-VARIABLE*", (SubLObject)variables.$sym1$VARIABLE);
         variables.$variable_max$ = SubLFiles.deflexical("*VARIABLE-MAX*", (SubLObject)variables.$int25$200);
-        variables.$variable_array$ = SubLFiles.deflexical("*VARIABLE-ARRAY*", (SubLObject)((variables.NIL != Symbols.boundp((SubLObject)variables.$sym26$_VARIABLE_ARRAY_)) ? variables.$variable_array$.getGlobalValue() : variables.NIL));
-        variables.$var0$ = SubLFiles.deflexical("*VAR0*", (SubLObject)((variables.NIL != Symbols.boundp((SubLObject)variables.$sym27$_VAR0_)) ? variables.$var0$.getGlobalValue() : variables.NIL));
-        variables.$var1$ = SubLFiles.deflexical("*VAR1*", (SubLObject)((variables.NIL != Symbols.boundp((SubLObject)variables.$sym28$_VAR1_)) ? variables.$var1$.getGlobalValue() : variables.NIL));
-        variables.$var2$ = SubLFiles.deflexical("*VAR2*", (SubLObject)((variables.NIL != Symbols.boundp((SubLObject)variables.$sym29$_VAR2_)) ? variables.$var2$.getGlobalValue() : variables.NIL));
-        variables.$var3$ = SubLFiles.deflexical("*VAR3*", (SubLObject)((variables.NIL != Symbols.boundp((SubLObject)variables.$sym30$_VAR3_)) ? variables.$var3$.getGlobalValue() : variables.NIL));
-        variables.$var4$ = SubLFiles.deflexical("*VAR4*", (SubLObject)((variables.NIL != Symbols.boundp((SubLObject)variables.$sym31$_VAR4_)) ? variables.$var4$.getGlobalValue() : variables.NIL));
+        variables.$variable_array$ = SubLFiles.deflexical("*VARIABLE-ARRAY*", (SubLObject)(maybeDefault((SubLObject)variables.$sym26$_VARIABLE_ARRAY_, variables.$variable_array$, variables.NIL)));
+        variables.$var0$ = SubLFiles.deflexical("*VAR0*", (SubLObject)(maybeDefault((SubLObject)variables.$sym27$_VAR0_, variables.$var0$, variables.NIL)));
+        variables.$var1$ = SubLFiles.deflexical("*VAR1*", (SubLObject)(maybeDefault((SubLObject)variables.$sym28$_VAR1_, variables.$var1$, variables.NIL)));
+        variables.$var2$ = SubLFiles.deflexical("*VAR2*", (SubLObject)(maybeDefault((SubLObject)variables.$sym29$_VAR2_, variables.$var2$, variables.NIL)));
+        variables.$var3$ = SubLFiles.deflexical("*VAR3*", (SubLObject)(maybeDefault((SubLObject)variables.$sym30$_VAR3_, variables.$var3$, variables.NIL)));
+        variables.$var4$ = SubLFiles.deflexical("*VAR4*", (SubLObject)(maybeDefault((SubLObject)variables.$sym31$_VAR4_, variables.$var4$, variables.NIL)));
         variables.$default_el_var_for_hl_var_cached_caching_state$ = SubLFiles.deflexical("*DEFAULT-EL-VAR-FOR-HL-VAR-CACHED-CACHING-STATE*", (SubLObject)variables.NIL);
         variables.$hl_var_for_default_el_var_caching_state$ = SubLFiles.deflexical("*HL-VAR-FOR-DEFAULT-EL-VAR-CACHING-STATE*", (SubLObject)variables.NIL);
         return (SubLObject)variables.NIL;

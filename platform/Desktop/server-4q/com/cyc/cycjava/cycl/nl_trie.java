@@ -9580,8 +9580,8 @@ public final class nl_trie extends SubLTranslatedFile
     public static SubLObject init_nl_trie_file() {
         nl_trie.$nl_trie_default_test$ = SubLFiles.deflexical("*NL-TRIE-DEFAULT-TEST*", Symbols.symbol_function((SubLObject)nl_trie.EQUALP));
         nl_trie.$default_nl_trie_cache_strategy_size$ = SubLFiles.deflexical("*DEFAULT-NL-TRIE-CACHE-STRATEGY-SIZE*", (SubLObject)nl_trie.$int3$6000);
-        nl_trie.$nl_trie_cache_strategy$ = SubLFiles.deflexical("*NL-TRIE-CACHE-STRATEGY*", (nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym4$_NL_TRIE_CACHE_STRATEGY_)) ? nl_trie.$nl_trie_cache_strategy$.getGlobalValue() : cache_utilities.new_metered_preallocated_cache(nl_trie.$default_nl_trie_cache_strategy_size$.getGlobalValue(), nl_trie.$nl_trie_default_test$.getGlobalValue()));
-        nl_trie.$nl_trie_lock$ = SubLFiles.deflexical("*NL-TRIE-LOCK*", (nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym8$_NL_TRIE_LOCK_)) ? nl_trie.$nl_trie_lock$.getGlobalValue() : Locks.make_lock((SubLObject)nl_trie.$str9$NL_Trie_Lock));
+        nl_trie.$nl_trie_cache_strategy$ = SubLFiles.deflexical("*NL-TRIE-CACHE-STRATEGY*", maybeDefault((SubLObject)nl_trie.$sym4$_NL_TRIE_CACHE_STRATEGY_, nl_trie.$nl_trie_cache_strategy$, ()->(cache_utilities.new_metered_preallocated_cache(nl_trie.$default_nl_trie_cache_strategy_size$.getGlobalValue(), nl_trie.$nl_trie_default_test$.getGlobalValue()))));
+        nl_trie.$nl_trie_lock$ = SubLFiles.deflexical("*NL-TRIE-LOCK*", maybeDefault((SubLObject)nl_trie.$sym8$_NL_TRIE_LOCK_, nl_trie.$nl_trie_lock$, ()->(Locks.make_lock((SubLObject)nl_trie.$str9$NL_Trie_Lock))));
         nl_trie.$english_definite_determiner$ = SubLFiles.defconstant("*ENGLISH-DEFINITE-DETERMINER*", (SubLObject)nl_trie.$str22$the);
         nl_trie.$nl_trie_word_denot_invalidity_tests$ = SubLFiles.deflexical("*NL-TRIE-WORD-DENOT-INVALIDITY-TESTS*", (SubLObject)nl_trie.$list99);
         nl_trie.$dtp_nl_trie_word_struc$ = SubLFiles.defconstant("*DTP-NL-TRIE-WORD-STRUC*", (SubLObject)nl_trie.$sym106$NL_TRIE_WORD_STRUC);
@@ -9592,15 +9592,15 @@ public final class nl_trie extends SubLTranslatedFile
         nl_trie.$call_to_nl_trie_word_semantic_supports_licensedP$ = SubLFiles.defparameter("*CALL-TO-NL-TRIE-WORD-SEMANTIC-SUPPORTS-LICENSED?*", (SubLObject)nl_trie.NIL);
         nl_trie.$nl_trie_closed_class_pos_preds_caching_state$ = SubLFiles.deflexical("*NL-TRIE-CLOSED-CLASS-POS-PREDS-CACHING-STATE*", (SubLObject)nl_trie.NIL);
         nl_trie.$nl_trie_preferred_semantic_predicates$ = SubLFiles.deflexical("*NL-TRIE-PREFERRED-SEMANTIC-PREDICATES*", (SubLObject)nl_trie.$list192);
-        nl_trie.$nl_trie_lexical_mt$ = SubLFiles.deflexical("*NL-TRIE-LEXICAL-MT*", (nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym231$_NL_TRIE_LEXICAL_MT_)) ? nl_trie.$nl_trie_lexical_mt$.getGlobalValue() : nl_trie.$const232$AllLexicalMicrotheoryPSC);
-        nl_trie.$nl_trie_syntactic_predicates$ = SubLFiles.deflexical("*NL-TRIE-SYNTACTIC-PREDICATES*", (SubLObject)((nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym233$_NL_TRIE_SYNTACTIC_PREDICATES_)) ? nl_trie.$nl_trie_syntactic_predicates$.getGlobalValue() : nl_trie.$kw234$UNINITIALIZED));
-        nl_trie.$nl_trie_denotation_predicates$ = SubLFiles.deflexical("*NL-TRIE-DENOTATION-PREDICATES*", (SubLObject)((nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym235$_NL_TRIE_DENOTATION_PREDICATES_)) ? nl_trie.$nl_trie_denotation_predicates$.getGlobalValue() : nl_trie.$kw234$UNINITIALIZED));
-        nl_trie.$nl_trie_semtrans_predicates$ = SubLFiles.deflexical("*NL-TRIE-SEMTRANS-PREDICATES*", (SubLObject)((nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym236$_NL_TRIE_SEMTRANS_PREDICATES_)) ? nl_trie.$nl_trie_semtrans_predicates$.getGlobalValue() : nl_trie.$kw234$UNINITIALIZED));
-        nl_trie.$nl_trie_abbreviation_predicates$ = SubLFiles.deflexical("*NL-TRIE-ABBREVIATION-PREDICATES*", (SubLObject)((nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym237$_NL_TRIE_ABBREVIATION_PREDICATES_)) ? nl_trie.$nl_trie_abbreviation_predicates$.getGlobalValue() : nl_trie.$kw234$UNINITIALIZED));
-        nl_trie.$nl_trie_arg_in_reln_predicates$ = SubLFiles.deflexical("*NL-TRIE-ARG-IN-RELN-PREDICATES*", (SubLObject)((nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym238$_NL_TRIE_ARG_IN_RELN_PREDICATES_)) ? nl_trie.$nl_trie_arg_in_reln_predicates$.getGlobalValue() : nl_trie.$kw234$UNINITIALIZED));
-        nl_trie.$nl_trie_pragmatic_predicates$ = SubLFiles.deflexical("*NL-TRIE-PRAGMATIC-PREDICATES*", (SubLObject)((nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym239$_NL_TRIE_PRAGMATIC_PREDICATES_)) ? nl_trie.$nl_trie_pragmatic_predicates$.getGlobalValue() : nl_trie.$kw234$UNINITIALIZED));
+        nl_trie.$nl_trie_lexical_mt$ = SubLFiles.deflexical("*NL-TRIE-LEXICAL-MT*", maybeDefault((SubLObject)nl_trie.$sym231$_NL_TRIE_LEXICAL_MT_, nl_trie.$nl_trie_lexical_mt$, nl_trie.$const232$AllLexicalMicrotheoryPSC));
+        nl_trie.$nl_trie_syntactic_predicates$ = SubLFiles.deflexical("*NL-TRIE-SYNTACTIC-PREDICATES*", (SubLObject)(maybeDefault((SubLObject)nl_trie.$sym233$_NL_TRIE_SYNTACTIC_PREDICATES_, nl_trie.$nl_trie_syntactic_predicates$, nl_trie.$kw234$UNINITIALIZED)));
+        nl_trie.$nl_trie_denotation_predicates$ = SubLFiles.deflexical("*NL-TRIE-DENOTATION-PREDICATES*", (SubLObject)(maybeDefault((SubLObject)nl_trie.$sym235$_NL_TRIE_DENOTATION_PREDICATES_, nl_trie.$nl_trie_denotation_predicates$, nl_trie.$kw234$UNINITIALIZED)));
+        nl_trie.$nl_trie_semtrans_predicates$ = SubLFiles.deflexical("*NL-TRIE-SEMTRANS-PREDICATES*", (SubLObject)(maybeDefault((SubLObject)nl_trie.$sym236$_NL_TRIE_SEMTRANS_PREDICATES_, nl_trie.$nl_trie_semtrans_predicates$, nl_trie.$kw234$UNINITIALIZED)));
+        nl_trie.$nl_trie_abbreviation_predicates$ = SubLFiles.deflexical("*NL-TRIE-ABBREVIATION-PREDICATES*", (SubLObject)(maybeDefault((SubLObject)nl_trie.$sym237$_NL_TRIE_ABBREVIATION_PREDICATES_, nl_trie.$nl_trie_abbreviation_predicates$, nl_trie.$kw234$UNINITIALIZED)));
+        nl_trie.$nl_trie_arg_in_reln_predicates$ = SubLFiles.deflexical("*NL-TRIE-ARG-IN-RELN-PREDICATES*", (SubLObject)(maybeDefault((SubLObject)nl_trie.$sym238$_NL_TRIE_ARG_IN_RELN_PREDICATES_, nl_trie.$nl_trie_arg_in_reln_predicates$, nl_trie.$kw234$UNINITIALIZED)));
+        nl_trie.$nl_trie_pragmatic_predicates$ = SubLFiles.deflexical("*NL-TRIE-PRAGMATIC-PREDICATES*", (SubLObject)(maybeDefault((SubLObject)nl_trie.$sym239$_NL_TRIE_PRAGMATIC_PREDICATES_, nl_trie.$nl_trie_pragmatic_predicates$, nl_trie.$kw234$UNINITIALIZED)));
         nl_trie.$nl_tries_being_initialized$ = SubLFiles.defparameter("*NL-TRIES-BEING-INITIALIZED*", (SubLObject)nl_trie.NIL);
-        nl_trie.$nl_trie$ = SubLFiles.deflexical("*NL-TRIE*", (nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym245$_NL_TRIE_)) ? nl_trie.$nl_trie$.getGlobalValue() : new_nl_trie((SubLObject)nl_trie.UNPROVIDED));
+        nl_trie.$nl_trie$ = SubLFiles.deflexical("*NL-TRIE*", maybeDefault((SubLObject)nl_trie.$sym245$_NL_TRIE_, nl_trie.$nl_trie$, ()->(new_nl_trie((SubLObject)nl_trie.UNPROVIDED))));
         nl_trie.$nl_trie_entry_filter_stack$ = SubLFiles.defparameter("*NL-TRIE-ENTRY-FILTER-STACK*", (SubLObject)nl_trie.NIL);
         nl_trie.$nl_trie_multi_word_abbreviation_preds_caching_state$ = SubLFiles.deflexical("*NL-TRIE-MULTI-WORD-ABBREVIATION-PREDS-CACHING-STATE*", (SubLObject)nl_trie.NIL);
         nl_trie.$catch_nl_trie_errorsP$ = SubLFiles.defparameter("*CATCH-NL-TRIE-ERRORS?*", (SubLObject)nl_trie.T);
@@ -9616,7 +9616,7 @@ public final class nl_trie extends SubLTranslatedFile
         nl_trie.$nl_trie_warning_level$ = SubLFiles.defparameter("*NL-TRIE-WARNING-LEVEL*", (SubLObject)nl_trie.ONE_INTEGER);
         nl_trie.$nl_trie_break_on_errorP$ = SubLFiles.defparameter("*NL-TRIE-BREAK-ON-ERROR?*", (SubLObject)nl_trie.NIL);
         nl_trie.$nl_trie_include_derived_formsP$ = SubLFiles.defparameter("*NL-TRIE-INCLUDE-DERIVED-FORMS?*", (SubLObject)nl_trie.T);
-        nl_trie.$nl_trie_name_string_preds_set$ = SubLFiles.deflexical("*NL-TRIE-NAME-STRING-PREDS-SET*", (nl_trie.NIL != Symbols.boundp((SubLObject)nl_trie.$sym398$_NL_TRIE_NAME_STRING_PREDS_SET_)) ? nl_trie.$nl_trie_name_string_preds_set$.getGlobalValue() : lexicon_vars.new_lex_pred_set());
+        nl_trie.$nl_trie_name_string_preds_set$ = SubLFiles.deflexical("*NL-TRIE-NAME-STRING-PREDS-SET*", maybeDefault((SubLObject)nl_trie.$sym398$_NL_TRIE_NAME_STRING_PREDS_SET_, nl_trie.$nl_trie_name_string_preds_set$, ()->(lexicon_vars.new_lex_pred_set())));
         return (SubLObject)nl_trie.NIL;
     }
     

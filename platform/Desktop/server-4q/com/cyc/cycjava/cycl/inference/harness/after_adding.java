@@ -951,8 +951,8 @@ public final class after_adding extends SubLTranslatedFile
     public static SubLObject init_after_adding_file() {
         after_adding.$debug_after_addingsP$ = SubLFiles.defparameter("*DEBUG-AFTER-ADDINGS?*", (SubLObject)after_adding.NIL);
         after_adding.$gaf_after_adding_predicates$ = SubLFiles.deflexical("*GAF-AFTER-ADDING-PREDICATES*", (SubLObject)after_adding.$list0);
-        after_adding.$gaf_after_addings_hash$ = SubLFiles.deflexical("*GAF-AFTER-ADDINGS-HASH*", (SubLObject)((after_adding.NIL != Symbols.boundp((SubLObject)after_adding.$sym1$_GAF_AFTER_ADDINGS_HASH_)) ? after_adding.$gaf_after_addings_hash$.getGlobalValue() : after_adding.NIL));
-        after_adding.$gaf_after_removings_hash$ = SubLFiles.deflexical("*GAF-AFTER-REMOVINGS-HASH*", (SubLObject)((after_adding.NIL != Symbols.boundp((SubLObject)after_adding.$sym2$_GAF_AFTER_REMOVINGS_HASH_)) ? after_adding.$gaf_after_removings_hash$.getGlobalValue() : after_adding.NIL));
+        after_adding.$gaf_after_addings_hash$ = SubLFiles.deflexical("*GAF-AFTER-ADDINGS-HASH*", (SubLObject)(maybeDefault((SubLObject)after_adding.$sym1$_GAF_AFTER_ADDINGS_HASH_, after_adding.$gaf_after_addings_hash$, after_adding.NIL)));
+        after_adding.$gaf_after_removings_hash$ = SubLFiles.deflexical("*GAF-AFTER-REMOVINGS-HASH*", (SubLObject)(maybeDefault((SubLObject)after_adding.$sym2$_GAF_AFTER_REMOVINGS_HASH_, after_adding.$gaf_after_removings_hash$, after_adding.NIL)));
         after_adding.$after_addings_disabledP$ = SubLFiles.defparameter("*AFTER-ADDINGS-DISABLED?*", (SubLObject)after_adding.NIL);
         return (SubLObject)after_adding.NIL;
     }

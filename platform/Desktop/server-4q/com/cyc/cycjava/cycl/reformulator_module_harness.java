@@ -605,7 +605,7 @@ public final class reformulator_module_harness extends SubLTranslatedFile
     
     public static SubLObject init_reformulator_module_harness_file() {
         reformulator_module_harness.$dtp_rl_module$ = SubLFiles.defconstant("*DTP-RL-MODULE*", (SubLObject)reformulator_module_harness.$sym0$RL_MODULE);
-        reformulator_module_harness.$rl_module_store$ = SubLFiles.deflexical("*RL-MODULE-STORE*", (SubLObject)((reformulator_module_harness.NIL != Symbols.boundp((SubLObject)reformulator_module_harness.$sym62$_RL_MODULE_STORE_)) ? reformulator_module_harness.$rl_module_store$.getGlobalValue() : reformulator_module_harness.NIL));
+        reformulator_module_harness.$rl_module_store$ = SubLFiles.deflexical("*RL-MODULE-STORE*", (SubLObject)(maybeDefault((SubLObject)reformulator_module_harness.$sym62$_RL_MODULE_STORE_, reformulator_module_harness.$rl_module_store$, reformulator_module_harness.NIL)));
         return (SubLObject)reformulator_module_harness.NIL;
     }
     

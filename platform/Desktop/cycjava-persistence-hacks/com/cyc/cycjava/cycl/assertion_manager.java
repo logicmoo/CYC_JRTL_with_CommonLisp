@@ -282,7 +282,7 @@ public final class assertion_manager extends SubLTranslatedFile
     }
     
     public static SubLObject init_assertion_manager_file() {
-        assertion_manager.$assertion_content_manager$ = SubLFiles.deflexical("*ASSERTION-CONTENT-MANAGER*", (SubLObject)((assertion_manager.NIL != Symbols.boundp((SubLObject)assertion_manager.$sym0$_ASSERTION_CONTENT_MANAGER_)) ? assertion_manager.$assertion_content_manager$.getGlobalValue() : assertion_manager.$kw1$UNINITIALIZED));
+        assertion_manager.$assertion_content_manager$ = SubLFiles.deflexical("*ASSERTION-CONTENT-MANAGER*", (SubLObject)(maybeDefault((SubLObject)assertion_manager.$sym0$_ASSERTION_CONTENT_MANAGER_, assertion_manager.$assertion_content_manager$, assertion_manager.$kw1$UNINITIALIZED)));
         assertion_manager.$assertion_lru_size_percentage$ = SubLFiles.deflexical("*ASSERTION-LRU-SIZE-PERCENTAGE*", (SubLObject)assertion_manager.SIXTEEN_INTEGER);
         assertion_manager.$assertion_lru_size_max$ = SubLFiles.deflexical("*ASSERTION-LRU-SIZE-MAX*", (SubLObject)assertion_manager.$int2$600000);
         return (SubLObject)assertion_manager.NIL;

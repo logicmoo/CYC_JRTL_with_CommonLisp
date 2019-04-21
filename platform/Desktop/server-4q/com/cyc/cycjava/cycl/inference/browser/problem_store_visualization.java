@@ -2057,7 +2057,7 @@ public final class problem_store_visualization extends SubLTranslatedFile
     
     public static SubLObject init_problem_store_visualization_file() {
         problem_store_visualization.$dtp_problem_layout$ = SubLFiles.defconstant("*DTP-PROBLEM-LAYOUT*", (SubLObject)problem_store_visualization.$sym0$PROBLEM_LAYOUT);
-        problem_store_visualization.$octant_locations$ = SubLFiles.deflexical("*OCTANT-LOCATIONS*", (SubLObject)((problem_store_visualization.NIL != Symbols.boundp((SubLObject)problem_store_visualization.$sym47$_OCTANT_LOCATIONS_)) ? problem_store_visualization.$octant_locations$.getGlobalValue() : problem_store_visualization.NIL));
+        problem_store_visualization.$octant_locations$ = SubLFiles.deflexical("*OCTANT-LOCATIONS*", (SubLObject)(maybeDefault((SubLObject)problem_store_visualization.$sym47$_OCTANT_LOCATIONS_, problem_store_visualization.$octant_locations$, problem_store_visualization.NIL)));
         problem_store_visualization.$html_problem_layout_visualization_script_template$ = SubLFiles.defparameter("*HTML-PROBLEM-LAYOUT-VISUALIZATION-SCRIPT-TEMPLATE*", (SubLObject)problem_store_visualization.$str78$_script_type__text_javascript____);
         problem_store_visualization.$html_problem_layout_visualization_table_style_caching_state$ = SubLFiles.deflexical("*HTML-PROBLEM-LAYOUT-VISUALIZATION-TABLE-STYLE-CACHING-STATE*", (SubLObject)problem_store_visualization.NIL);
         problem_store_visualization.$cb_problem_store_default_zoom_levels$ = SubLFiles.defparameter("*CB-PROBLEM-STORE-DEFAULT-ZOOM-LEVELS*", (SubLObject)problem_store_visualization.$list130);
@@ -2070,7 +2070,7 @@ public final class problem_store_visualization extends SubLTranslatedFile
         problem_store_visualization.$inference_monitor_max_cell_size$ = SubLFiles.deflexical("*INFERENCE-MONITOR-MAX-CELL-SIZE*", (SubLObject)problem_store_visualization.FIFTEEN_INTEGER);
         problem_store_visualization.$compute_grid_size_for_inference_monitor_caching_state$ = SubLFiles.deflexical("*COMPUTE-GRID-SIZE-FOR-INFERENCE-MONITOR-CACHING-STATE*", (SubLObject)problem_store_visualization.NIL);
         problem_store_visualization.$html_problem_layout_visualization_for_monitor_table_style_caching_state$ = SubLFiles.deflexical("*HTML-PROBLEM-LAYOUT-VISUALIZATION-FOR-MONITOR-TABLE-STYLE-CACHING-STATE*", (SubLObject)problem_store_visualization.NIL);
-        problem_store_visualization.$cb_problem_store_layout_table$ = SubLFiles.deflexical("*CB-PROBLEM-STORE-LAYOUT-TABLE*", (problem_store_visualization.NIL != Symbols.boundp((SubLObject)problem_store_visualization.$sym188$_CB_PROBLEM_STORE_LAYOUT_TABLE_)) ? problem_store_visualization.$cb_problem_store_layout_table$.getGlobalValue() : cache.new_cache((SubLObject)problem_store_visualization.TEN_INTEGER, Symbols.symbol_function((SubLObject)problem_store_visualization.EQ)));
+        problem_store_visualization.$cb_problem_store_layout_table$ = SubLFiles.deflexical("*CB-PROBLEM-STORE-LAYOUT-TABLE*", maybeDefault((SubLObject)problem_store_visualization.$sym188$_CB_PROBLEM_STORE_LAYOUT_TABLE_, problem_store_visualization.$cb_problem_store_layout_table$, ()->(cache.new_cache((SubLObject)problem_store_visualization.TEN_INTEGER, Symbols.symbol_function((SubLObject)problem_store_visualization.EQ)))));
         return (SubLObject)problem_store_visualization.NIL;
     }
     

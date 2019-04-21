@@ -956,10 +956,10 @@ public final class at_cache extends SubLTranslatedFile
     }
     
     public static SubLObject init_at_cache_file() {
-        at_cache.$arg_type_cache$ = SubLFiles.deflexical("*ARG-TYPE-CACHE*", (at_cache.NIL != Symbols.boundp((SubLObject)at_cache.$sym0$_ARG_TYPE_CACHE_)) ? at_cache.$arg_type_cache$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)at_cache.$int1$1024, (SubLObject)at_cache.UNPROVIDED, (SubLObject)at_cache.UNPROVIDED));
+        at_cache.$arg_type_cache$ = SubLFiles.deflexical("*ARG-TYPE-CACHE*", maybeDefault((SubLObject)at_cache.$sym0$_ARG_TYPE_CACHE_, at_cache.$arg_type_cache$, ()->(Hashtables.make_hash_table((SubLObject)at_cache.$int1$1024, (SubLObject)at_cache.UNPROVIDED, (SubLObject)at_cache.UNPROVIDED))));
         at_cache.$arg_type_cache_preds$ = SubLFiles.deflexical("*ARG-TYPE-CACHE-PREDS*", (SubLObject)at_cache.$list2);
         at_cache.$arg_type_cache_preds_reversed$ = SubLFiles.deflexical("*ARG-TYPE-CACHE-PREDS-REVERSED*", Sequences.reverse(at_cache.$arg_type_cache_preds$.getGlobalValue()));
-        at_cache.$arg_type_cache_initializedP$ = SubLFiles.deflexical("*ARG-TYPE-CACHE-INITIALIZED?*", (SubLObject)((at_cache.NIL != Symbols.boundp((SubLObject)at_cache.$sym3$_ARG_TYPE_CACHE_INITIALIZED__)) ? at_cache.$arg_type_cache_initializedP$.getGlobalValue() : at_cache.NIL));
+        at_cache.$arg_type_cache_initializedP$ = SubLFiles.deflexical("*ARG-TYPE-CACHE-INITIALIZED?*", (SubLObject)(maybeDefault((SubLObject)at_cache.$sym3$_ARG_TYPE_CACHE_INITIALIZED__, at_cache.$arg_type_cache_initializedP$, at_cache.NIL)));
         return (SubLObject)at_cache.NIL;
     }
     

@@ -1969,8 +1969,8 @@ public final class rkf_rule_constructor extends SubLTranslatedFile
     
     public static SubLObject init_rkf_rule_constructor_file() {
         rkf_rule_constructor.$rc_lock$ = SubLFiles.deflexical("*RC-LOCK*", Locks.make_lock((SubLObject)rkf_rule_constructor.$str0$Rule_Constructor_Lock));
-        rkf_rule_constructor.$rc_isg$ = SubLFiles.deflexical("*RC-ISG*", (rkf_rule_constructor.NIL != Symbols.boundp((SubLObject)rkf_rule_constructor.$sym3$_RC_ISG_)) ? rkf_rule_constructor.$rc_isg$.getGlobalValue() : integer_sequence_generator.new_integer_sequence_generator((SubLObject)rkf_rule_constructor.UNPROVIDED, (SubLObject)rkf_rule_constructor.UNPROVIDED, (SubLObject)rkf_rule_constructor.UNPROVIDED));
-        rkf_rule_constructor.$rc_index$ = SubLFiles.deflexical("*RC-INDEX*", (rkf_rule_constructor.NIL != Symbols.boundp((SubLObject)rkf_rule_constructor.$sym4$_RC_INDEX_)) ? rkf_rule_constructor.$rc_index$.getGlobalValue() : dictionary.new_dictionary((SubLObject)rkf_rule_constructor.UNPROVIDED, (SubLObject)rkf_rule_constructor.UNPROVIDED));
+        rkf_rule_constructor.$rc_isg$ = SubLFiles.deflexical("*RC-ISG*", maybeDefault((SubLObject)rkf_rule_constructor.$sym3$_RC_ISG_, rkf_rule_constructor.$rc_isg$, ()->(integer_sequence_generator.new_integer_sequence_generator((SubLObject)rkf_rule_constructor.UNPROVIDED, (SubLObject)rkf_rule_constructor.UNPROVIDED, (SubLObject)rkf_rule_constructor.UNPROVIDED))));
+        rkf_rule_constructor.$rc_index$ = SubLFiles.deflexical("*RC-INDEX*", maybeDefault((SubLObject)rkf_rule_constructor.$sym4$_RC_INDEX_, rkf_rule_constructor.$rc_index$, ()->(dictionary.new_dictionary((SubLObject)rkf_rule_constructor.UNPROVIDED, (SubLObject)rkf_rule_constructor.UNPROVIDED))));
         rkf_rule_constructor.$dtp_rc_lhs$ = SubLFiles.defconstant("*DTP-RC-LHS*", (SubLObject)rkf_rule_constructor.$sym5$RC_LHS);
         rkf_rule_constructor.$dtp_rc_rhs$ = SubLFiles.defconstant("*DTP-RC-RHS*", (SubLObject)rkf_rule_constructor.$sym38$RC_RHS);
         rkf_rule_constructor.$dtp_rc_state$ = SubLFiles.defconstant("*DTP-RC-STATE*", (SubLObject)rkf_rule_constructor.$sym61$RC_STATE);

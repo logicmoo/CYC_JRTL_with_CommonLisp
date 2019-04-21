@@ -2726,8 +2726,8 @@ public final class process_utilities extends SubLTranslatedFile
     }
     
     public static SubLObject init_process_utilities_file() {
-        process_utilities.$active_processes_at_startup$ = SubLFiles.deflexical("*ACTIVE-PROCESSES-AT-STARTUP*", (SubLObject)((process_utilities.NIL != Symbols.boundp((SubLObject)process_utilities.$sym10$_ACTIVE_PROCESSES_AT_STARTUP_)) ? process_utilities.$active_processes_at_startup$.getGlobalValue() : process_utilities.NIL));
-        process_utilities.$process_form_map$ = SubLFiles.deflexical("*PROCESS-FORM-MAP*", (process_utilities.NIL != Symbols.boundp((SubLObject)process_utilities.$sym11$_PROCESS_FORM_MAP_)) ? process_utilities.$process_form_map$.getGlobalValue() : Hashtables.make_hash_table((SubLObject)process_utilities.TEN_INTEGER, Symbols.symbol_function((SubLObject)process_utilities.EQ), (SubLObject)process_utilities.UNPROVIDED));
+        process_utilities.$active_processes_at_startup$ = SubLFiles.deflexical("*ACTIVE-PROCESSES-AT-STARTUP*", (SubLObject)(maybeDefault((SubLObject)process_utilities.$sym10$_ACTIVE_PROCESSES_AT_STARTUP_, process_utilities.$active_processes_at_startup$, process_utilities.NIL)));
+        process_utilities.$process_form_map$ = SubLFiles.deflexical("*PROCESS-FORM-MAP*", maybeDefault((SubLObject)process_utilities.$sym11$_PROCESS_FORM_MAP_, process_utilities.$process_form_map$, ()->(Hashtables.make_hash_table((SubLObject)process_utilities.TEN_INTEGER, Symbols.symbol_function((SubLObject)process_utilities.EQ), (SubLObject)process_utilities.UNPROVIDED))));
         process_utilities.$process_form_lock$ = SubLFiles.deflexical("*PROCESS-FORM-LOCK*", Locks.make_lock((SubLObject)process_utilities.$str12$Process_Form));
         process_utilities.$dtp_task$ = SubLFiles.defconstant("*DTP-TASK*", (SubLObject)process_utilities.$sym13$TASK);
         process_utilities.$dtp_thinking_task$ = SubLFiles.defconstant("*DTP-THINKING-TASK*", (SubLObject)process_utilities.$sym39$THINKING_TASK);
@@ -2739,7 +2739,7 @@ public final class process_utilities extends SubLTranslatedFile
         process_utilities.$ordered_ipcq_empty$ = SubLFiles.defconstant("*ORDERED-IPCQ-EMPTY*", Symbols.make_symbol((SubLObject)process_utilities.$str181$empty_ordered_IPC_queue_entry));
         process_utilities.$ordered_ipc_current_queue_size_estimation_threshold$ = SubLFiles.defparameter("*ORDERED-IPC-CURRENT-QUEUE-SIZE-ESTIMATION-THRESHOLD*", (SubLObject)process_utilities.$int185$212);
         process_utilities.$dtp_process_wrapper$ = SubLFiles.defconstant("*DTP-PROCESS-WRAPPER*", (SubLObject)process_utilities.$sym196$PROCESS_WRAPPER);
-        process_utilities.$process_wrapper_isg$ = SubLFiles.deflexical("*PROCESS-WRAPPER-ISG*", (process_utilities.NIL != Symbols.boundp((SubLObject)process_utilities.$sym219$_PROCESS_WRAPPER_ISG_)) ? process_utilities.$process_wrapper_isg$.getGlobalValue() : integer_sequence_generator.new_integer_sequence_generator((SubLObject)process_utilities.UNPROVIDED, (SubLObject)process_utilities.UNPROVIDED, (SubLObject)process_utilities.UNPROVIDED));
+        process_utilities.$process_wrapper_isg$ = SubLFiles.deflexical("*PROCESS-WRAPPER-ISG*", maybeDefault((SubLObject)process_utilities.$sym219$_PROCESS_WRAPPER_ISG_, process_utilities.$process_wrapper_isg$, ()->(integer_sequence_generator.new_integer_sequence_generator((SubLObject)process_utilities.UNPROVIDED, (SubLObject)process_utilities.UNPROVIDED, (SubLObject)process_utilities.UNPROVIDED))));
         return (SubLObject)process_utilities.NIL;
     }
     

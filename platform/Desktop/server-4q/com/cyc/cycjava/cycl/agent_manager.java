@@ -189,7 +189,7 @@ public final class agent_manager extends SubLTranslatedFile
         agent_manager.$agent_mgr_port$ = SubLFiles.deflexical("*AGENT-MGR-PORT*", (SubLObject)agent_manager.$int1$4444);
         agent_manager.$agent_mgr_socket$ = SubLFiles.deflexical("*AGENT-MGR-SOCKET*", (SubLObject)agent_manager.NIL);
         agent_manager.$api_service_agent_name$ = SubLFiles.deflexical("*API-SERVICE-AGENT-NAME*", (SubLObject)agent_manager.NIL);
-        agent_manager.$agent_received_message_handler$ = SubLFiles.deflexical("*AGENT-RECEIVED-MESSAGE-HANDLER*", (SubLObject)((agent_manager.NIL != Symbols.boundp((SubLObject)agent_manager.$sym2$_AGENT_RECEIVED_MESSAGE_HANDLER_)) ? agent_manager.$agent_received_message_handler$.getGlobalValue() : agent_manager.NIL));
+        agent_manager.$agent_received_message_handler$ = SubLFiles.deflexical("*AGENT-RECEIVED-MESSAGE-HANDLER*", (SubLObject)(maybeDefault((SubLObject)agent_manager.$sym2$_AGENT_RECEIVED_MESSAGE_HANDLER_, agent_manager.$agent_received_message_handler$, agent_manager.NIL)));
         return (SubLObject)agent_manager.NIL;
     }
     

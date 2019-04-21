@@ -671,7 +671,7 @@ public final class disambiguation extends SubLTranslatedFile
     public static SubLObject init_disambiguation_file() {
         disambiguation.$disambiguation_term_counts$ = SubLFiles.deflexical("*DISAMBIGUATION-TERM-COUNTS*", (SubLObject)disambiguation.NIL);
         disambiguation.$disambiguation_term_counts_load_attempted$ = SubLFiles.deflexical("*DISAMBIGUATION-TERM-COUNTS-LOAD-ATTEMPTED*", (SubLObject)disambiguation.NIL);
-        disambiguation.$disambiguation_term_counts_lock$ = SubLFiles.deflexical("*DISAMBIGUATION-TERM-COUNTS-LOCK*", (disambiguation.NIL != Symbols.boundp((SubLObject)disambiguation.$sym0$_DISAMBIGUATION_TERM_COUNTS_LOCK_)) ? disambiguation.$disambiguation_term_counts_lock$.getGlobalValue() : Locks.make_lock((SubLObject)disambiguation.$str1$Disambiguation_Term_Counts_Lock));
+        disambiguation.$disambiguation_term_counts_lock$ = SubLFiles.deflexical("*DISAMBIGUATION-TERM-COUNTS-LOCK*", maybeDefault((SubLObject)disambiguation.$sym0$_DISAMBIGUATION_TERM_COUNTS_LOCK_, disambiguation.$disambiguation_term_counts_lock$, ()->(Locks.make_lock((SubLObject)disambiguation.$str1$Disambiguation_Term_Counts_Lock))));
         disambiguation.$disambiguation_term_counts_file$ = SubLFiles.defparameter("*DISAMBIGUATION-TERM-COUNTS-FILE*", (SubLObject)disambiguation.$str2$data_sense_disambiguation_disambi);
         return (SubLObject)disambiguation.NIL;
     }

@@ -624,10 +624,10 @@ public final class mwp_affix_matcher extends SubLTranslatedFile
     }
     
     public static SubLObject init_mwp_affix_matcher_file() {
-        mwp_affix_matcher.$mwp_suffix_matcher_deriv$ = SubLFiles.deflexical("*MWP-SUFFIX-MATCHER-DERIV*", (mwp_affix_matcher.NIL != Symbols.boundp((SubLObject)mwp_affix_matcher.$sym0$_MWP_SUFFIX_MATCHER_DERIV_)) ? mwp_affix_matcher.$mwp_suffix_matcher_deriv$.getGlobalValue() : new_mwp_suffix_matcher());
-        mwp_affix_matcher.$mwp_suffix_matcher_infl$ = SubLFiles.deflexical("*MWP-SUFFIX-MATCHER-INFL*", (mwp_affix_matcher.NIL != Symbols.boundp((SubLObject)mwp_affix_matcher.$sym1$_MWP_SUFFIX_MATCHER_INFL_)) ? mwp_affix_matcher.$mwp_suffix_matcher_infl$.getGlobalValue() : new_mwp_suffix_matcher());
-        mwp_affix_matcher.$mwp_prefix_matcher_deriv$ = SubLFiles.deflexical("*MWP-PREFIX-MATCHER-DERIV*", (mwp_affix_matcher.NIL != Symbols.boundp((SubLObject)mwp_affix_matcher.$sym2$_MWP_PREFIX_MATCHER_DERIV_)) ? mwp_affix_matcher.$mwp_prefix_matcher_deriv$.getGlobalValue() : new_mwp_prefix_matcher());
-        mwp_affix_matcher.$mwp_prefix_matcher_infl$ = SubLFiles.deflexical("*MWP-PREFIX-MATCHER-INFL*", (mwp_affix_matcher.NIL != Symbols.boundp((SubLObject)mwp_affix_matcher.$sym3$_MWP_PREFIX_MATCHER_INFL_)) ? mwp_affix_matcher.$mwp_prefix_matcher_infl$.getGlobalValue() : new_mwp_prefix_matcher());
+        mwp_affix_matcher.$mwp_suffix_matcher_deriv$ = SubLFiles.deflexical("*MWP-SUFFIX-MATCHER-DERIV*", maybeDefault((SubLObject)mwp_affix_matcher.$sym0$_MWP_SUFFIX_MATCHER_DERIV_, mwp_affix_matcher.$mwp_suffix_matcher_deriv$, ()->(new_mwp_suffix_matcher())));
+        mwp_affix_matcher.$mwp_suffix_matcher_infl$ = SubLFiles.deflexical("*MWP-SUFFIX-MATCHER-INFL*", maybeDefault((SubLObject)mwp_affix_matcher.$sym1$_MWP_SUFFIX_MATCHER_INFL_, mwp_affix_matcher.$mwp_suffix_matcher_infl$, ()->(new_mwp_suffix_matcher())));
+        mwp_affix_matcher.$mwp_prefix_matcher_deriv$ = SubLFiles.deflexical("*MWP-PREFIX-MATCHER-DERIV*", maybeDefault((SubLObject)mwp_affix_matcher.$sym2$_MWP_PREFIX_MATCHER_DERIV_, mwp_affix_matcher.$mwp_prefix_matcher_deriv$, ()->(new_mwp_prefix_matcher())));
+        mwp_affix_matcher.$mwp_prefix_matcher_infl$ = SubLFiles.deflexical("*MWP-PREFIX-MATCHER-INFL*", maybeDefault((SubLObject)mwp_affix_matcher.$sym3$_MWP_PREFIX_MATCHER_INFL_, mwp_affix_matcher.$mwp_prefix_matcher_infl$, ()->(new_mwp_prefix_matcher())));
         mwp_affix_matcher.$use_suffix_variantsP$ = SubLFiles.defparameter("*USE-SUFFIX-VARIANTS?*", (SubLObject)mwp_affix_matcher.NIL);
         return (SubLObject)mwp_affix_matcher.NIL;
     }
