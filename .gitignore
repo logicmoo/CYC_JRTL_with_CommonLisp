@@ -114,5 +114,5 @@ uabcl/
 /platform/transcripts/5022/gitlab*.ts
 /platform/webapps/*/
 /platform/StartMUD.sh
-
+/platform/units/*/
 

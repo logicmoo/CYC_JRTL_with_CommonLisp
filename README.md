@@ -27,13 +27,51 @@ Understanding Source Directories:
   ./platform/src/com/cyc/tool/  CYC JRTL initially from LarKC with CommonLisp
 ~~~~
 
+# Prerequisites
+
+I started from a bare Ubuntu 19.04 (Disco Dingo) 64-bit PC (AMD64) server install image onto a VMWare 11 Machine
+~~~~
+ http://cdimage.ubuntu.com/releases/19.04/release/ubuntu-19.04-server-amd64.iso
+~~~~
+
+
+
+Here is my install log
+~~~~
+
+root@ubuntu:~# apt-get install software-properties-common network-tools openssh-server git curl 
+root@ubuntu:~# apt-get install swi-prolog  # installs 7.6.4
+root@ubuntu:~# apt-get install ca-certificates-java java-common libnspr4 libnss3 libpcsclite1
+root@ubuntu:~# wget http://security.ubuntu.com/ubuntu/pool/main/o/openjdk-8/openjdk-8-jre-headless_8u191-b12-2ubuntu0.16.04.1_amd64.deb
+root@ubuntu:~# wget http://security.ubuntu.com/ubuntu/pool/main/o/openjdk-8/openjdk-8-jdk-headless_8u191-b12-2ubuntu0.16.04.1_amd64.deb
+root@ubuntu:~# dpkg -i openjdk-8-jre-headless_8u191-b12-2ubuntu0.16.04.1_amd64.deb
+root@ubuntu:~# dpkg -i openjdk-8-jdk-headless_8u191-b12-2ubuntu0.16.04.1_amd64.deb
+root@ubuntu:~# apt-get install ant 
+
+root@ubuntu:~# file /etc/alternatives/java /etc/alternatives/javac
+/etc/alternatives/java:  symbolic link to /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+/etc/alternatives/javac: symbolic link to /usr/lib/jvm/java-8-openjdk-amd64/bin/javac
+root@ubuntu:~#  update-alternatives --config java
+There are 2 choices for the alternative java (providing /usr/bin/java).
+
+  Selection    Path                                            Priority   Status
+------------------------------------------------------------
+* 0            /usr/lib/jvm/java-11-openjdk-amd64/bin/java      1111      auto mode
+  1            /usr/lib/jvm/java-11-openjdk-amd64/bin/java      1111      manual mode
+  2            /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java   1081      manual mode
+
+Press <enter> to keep the current choice[*], or type selection number: 2
+update-alternatives: using /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java to provide /usr/bin/java (java) in manual mode
+root@ubuntu:~# file /etc/alternatives/java /etc/alternatives/javac
+/etc/alternatives/java:  symbolic link to /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+/etc/alternatives/javac: symbolic link to /usr/lib/jvm/java-8-openjdk-amd64/bin/javac
+root@ubuntu:~# java -version
+openjdk version "1.8.0_191"
+OpenJDK Runtime Environment (build 1.8.0_191-8u191-b12-2ubuntu0.16.04.1-b12)
+OpenJDK 64-Bit Server VM (build 25.191-b12, mixed mode)
+~~~~
+
 # Building
-
-If you already have a ResearchCyc license, see ResearchCyc Releases 
-  ( http://www.cyc.com/documentation/enterprise-cyc-administrator-handbook/installation/ )
-  for information about downloading the latest release of Cyc.
-If not, apply for a License at http://www.cyc.com/researchcyc/
-
 
 Clone the git repo
 ~~~~
@@ -48,35 +86,6 @@ Resolving deltas: 100% (65844/65844), done.
 Checking out files: 100% (7790/7790), done.
 ~~~~
 
-Go into cloned location and unzip your RCYC-4Q
-~~~~
-root@gitlab:/opt# cd CYC_JRTL_with_CommonLisp/
-root@gitlab:/opt/CYC_JRTL_with_CommonLisp# tar xfvz /mnt/gggg/researchcyc-4.0q.tgz
-researchcyc-4.0q/
-researchcyc-4.0q/server/
-researchcyc-4.0q/server/cyc/
-researchcyc-4.0q/server/cyc/run/
-researchcyc-4.0q/server/cyc/run/plugins/
-researchcyc-4.0q/server/cyc/run/units/
-...<SNIP>...
-researchcyc-4.0q/doc/CycAdministratorHandbook.pdf
-researchcyc-4.0q/README.txt
-~~~~
-
-Delete part of the cloned repo 
-~~~~
-root@gitlab:/opt/CYC_JRTL_with_CommonLisp# rm -rf platform/
-~~~~
-
-Move the server "run" directory there
-~~~~
-root@gitlab:/opt/CYC_JRTL_with_CommonLisp# mv researchcyc-4.0q/server/cyc/run/  platform
-~~~~
-
-Git checkout to overwrite some 4Q files
-~~~~
-root@gitlab:/opt/CYC_JRTL_with_CommonLisp# git checkout platform/ -f
-~~~~
 
 Build the platform
 ~~~~

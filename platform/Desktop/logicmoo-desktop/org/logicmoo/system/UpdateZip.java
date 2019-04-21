@@ -53,7 +53,7 @@ public class UpdateZip {
             throw new IOException("Not exists dir " + fileDir);
         }
         File testfile = new File(fileDir, "units/5022/unrepresented-terms.cfasl");
-        if (!testfile.exists() || true) {
+        if (!testfile.exists()) {
             System.err.println("Not exists " + testfile);
             URL url;
             url = new URL("http://www.logicmoo.org/downloads/units5022.zip");
