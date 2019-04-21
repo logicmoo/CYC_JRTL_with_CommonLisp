@@ -234,7 +234,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 		<src path="Desktop/jpl7-hacked"/>
 		<src path="Desktop/logicmoo-desktop"/>
 		<src path="Desktop/objectweb-asm-src"/>
-		<src path="Desktop/opencyc-jsrc"/>
+		<src path="Desktop/opencyc-server-jsrc"/>
 		<src path="Desktop/server-4q"/>
 		<src path="main/java/"/>
         <compilerarg value="-XDignore.symbol.file"/>

@@ -56,6 +56,9 @@ export CLASSPATH
 
 fi
 
+
+export LD_LIBRARY_PATH=`find $JAVA_HOME -type f -name 'libjvm*' | sed -r 's|/[^/]+$||' |sort |uniq`:$LD_LIBRARY_PATH
+
 echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 echo JAVA_HOME=$JAVA_HOME
 echo LD_PRELOAD=$LD_PRELOAD
