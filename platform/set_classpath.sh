@@ -17,6 +17,7 @@ fi
 
 if [ -z "$LD_PRELOAD" ]; then
 export LD_PRELOAD=$SWI_HOME/lib/x86_64-linux/libswipl.so.7.7.25
+export LD_PRELOAD=/usr/lib/libswipl.so
 fi
 
 

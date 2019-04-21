@@ -81,7 +81,7 @@ public abstract class SubLTrampolineFile implements SubLFile, CommonSymbols {
     }
 
     public static boolean assertionsDisabledInClass = true;
-    public static boolean $assertionsDisabled = true;
+    // public static boolean $assertionsDisabled = true;
     // public static SubLList throwStack;
 
     public SubLTrampolineFile() {
