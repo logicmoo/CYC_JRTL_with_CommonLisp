@@ -1220,7 +1220,7 @@ public class BeanShellCntrl {
                     Eval.eval("(sl:load \"init/services-init.lisp\")");
                     SubLFiles.initialize("eu.larkc.core.orchestrator.LarkcInit");
                     SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
-                    LarkcInit.initializeLarkc();
+                    if(!SubLMain.OPENCYC) LarkcInit.initializeLarkc();
                     LarKCHttpServer.start_sparql_server();
                     inited_cyc_server = true;
                     PrologSync.setPrologReady(true);

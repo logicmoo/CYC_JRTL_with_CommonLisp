@@ -61,12 +61,12 @@ ant
 
 echo ""
 echo ""
-echo "Success!?"
+echo "Success!? THINK SO!"
 
 chmod 555 *.sh
 chmod 555 ./abclc
 chmod 555 ./data/scg-repo-v2  -R
-chmod 777 transcripts/7166/
+chmod 777 transcripts/5022/
 
 
 
