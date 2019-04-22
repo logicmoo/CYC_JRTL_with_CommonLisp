@@ -20,7 +20,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 exec /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java \
-  -cp  /root/CYC_JRTL_with_CommonLisp/platform/dist/abcl.jar:/root/CYC_JRTL_with_CommonLisp/platform/c:/pf/Java/jdk1.8.0_162/lib/tools.jar:"$CLASSPATH" \
+  -cp  /mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform/dist/abcl.jar:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform/c:/pf/Java/jdk1.8.0_162/lib/tools.jar:"$CLASSPATH" \
   -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC \
   org.armedbear.lisp.Main \
   "$@"
