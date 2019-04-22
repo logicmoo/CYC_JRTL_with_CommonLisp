@@ -48,6 +48,8 @@ public interface SubLFunction extends SubLOperator {
 	ZeroArityFunction getZeroArityFunction();
 
 	boolean isInterpreted();
+	
+	boolean isSubLispBased();
 
 	void setBinaryFunction(BinaryFunction p0);
 

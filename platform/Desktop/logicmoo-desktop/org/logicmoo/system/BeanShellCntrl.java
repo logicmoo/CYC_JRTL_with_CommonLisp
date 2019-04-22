@@ -104,6 +104,8 @@ import com.cyc.cycjava.cycl.constant_completion_high;
 import com.cyc.cycjava.cycl.constant_completion_low;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.constant_reader;
+import com.cyc.cycjava.cycl.module0000;
+import com.cyc.cycjava.cycl.module0166;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
@@ -171,9 +173,9 @@ public class BeanShellCntrl {
 
     static public boolean calledStartAppdatper = false;
     static public boolean calledStartDmiles = false;
+    static public boolean called_init_swipl = false;
 
     static public boolean started_from_prolog = true;
-    static boolean init_swipled_server = false;
 
     static public Object dbrowser;
     static Container desktop;
@@ -186,6 +188,7 @@ public class BeanShellCntrl {
     static public boolean inited_cl_sees_cyc;
     static public boolean inited_cyc_server;
     static public boolean inited_cyc_complete;
+    static public boolean inited_swipl_server;
 
     // final static public BeanBowlGUI gui = BeanBowlGUI.getDefaultFrame();
 
@@ -1220,7 +1223,8 @@ public class BeanShellCntrl {
                     Eval.eval("(sl:load \"init/services-init.lisp\")");
                     SubLFiles.initialize("eu.larkc.core.orchestrator.LarkcInit");
                     SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
-                    if(!SubLMain.OPENCYC) LarkcInit.initializeLarkc();
+                    if (!SubLMain.OPENCYC)
+                        LarkcInit.initializeLarkc();
                     LarKCHttpServer.start_sparql_server();
                     inited_cyc_server = true;
                     PrologSync.setPrologReady(true);
@@ -1740,33 +1744,32 @@ public class BeanShellCntrl {
 
     }
 
-    static boolean calledSwiplInt = false;
-
     @LispMethod
     static void init_swipl() {
         synchronized (StartupLock) {
             if (noPrologJNI)
                 return;
-            if (calledSwiplInt)
+            if (called_init_swipl)
                 return;
-            calledSwiplInt = true;
-        }
-        synchronized (StartupInitLock) {
-            try {
-                started_from_prolog = !JPL.init();
-                //Thread.sleep(10000);
-                Object r = JPL.getDefaultInitArgs();
-                if (isIKVM()) {
-                    oneSolution("assert(swicli:is_ikvm)");
-                }
-                PrologSync.setPrologReady(true);
-            } catch (UnsatisfiedLinkError e) {
-                noPrologJNI = true;
-                noProlog = true;
-                disablePrologSync = true;
-                System.err.println("" + e);
-            }
+            called_init_swipl = true;
 
+            synchronized (StartupInitLock) {
+                try {
+                    started_from_prolog = !JPL.init();
+                    //Thread.sleep(10000);
+                    Object r = JPL.getDefaultInitArgs();
+                    if (isIKVM()) {
+                        oneSolution("assert(swicli:is_ikvm)");
+                    }
+                    PrologSync.setPrologReady(true);
+                } catch (UnsatisfiedLinkError e) {
+                    noPrologJNI = true;
+                    noProlog = true;
+                    disablePrologSync = true;
+                    System.err.println("" + e);
+                }
+
+            }
         }
     }
 
@@ -1775,29 +1778,30 @@ public class BeanShellCntrl {
         synchronized (StartupLock) {
             if (noPrologJNI)
                 return;
-            if (init_swipled_server)
+            if (inited_swipl_server)
                 return;
-        }
-        synchronized (StartupInitLock) {
-            try {
-                init_swipl();
-                init_swipled_server = oneSolution("ensure_loaded(from_swipl)");
 
-                init_swipled_server = oneSolution("(current_thread(prolog_server,X),X=running)");
-                if (init_swipled_server)
-                    return;
-                oneSolution("use_module(library('prolog_server'))");
-                init_swipled_server = true;
-            } catch (Throwable t) {
-                init_swipled_server = false;
-                MsgBox.error(t);
+            synchronized (StartupInitLock) {
+                try {
+                    init_swipl();
+                    inited_swipl_server = oneSolution("ensure_loaded(from_swipl)");
+
+                    inited_swipl_server = oneSolution("(current_thread(prolog_server,X),X=running)");
+                    if (inited_swipl_server)
+                        return;
+                    oneSolution("use_module(library('prolog_server'))");
+                    inited_swipl_server = true;
+                } catch (Throwable t) {
+                    inited_swipl_server = false;
+                    MsgBox.error(t);
+                }
             }
-        }
-        synchronized (StartupInitLock) {
-            try {
-                oneSolution("prolog_server(4023, [allow(_)])");
-            } catch (Throwable t) {
-                System.err.println("" + t);
+            synchronized (StartupInitLock) {
+                try {
+                    oneSolution("prolog_server(4023, [allow(_)])");
+                } catch (Throwable t) {
+                    System.err.println("" + t);
+                }
             }
         }
     }
@@ -2049,8 +2053,14 @@ public class BeanShellCntrl {
 
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLNil localNil = SubLNil.NIL;
+
         SubLObject constant = localNil;
         if (!inited_cyc_complete)
+            return constant;
+        if (SubLMain.OPENCYC) {
+            return module0166.f10737(name);
+        }
+        if (constant_completion_low.$require_valid_constants$ == null)
             return constant;
         final SubLObject _prev_bind_0 = constant_completion_low.$require_valid_constants$.currentBinding(thread);
         try {
@@ -2539,7 +2549,7 @@ public class BeanShellCntrl {
 
         // Special operator
         public LispObject executeOP(LispObject form, Environment env) {
-            if (isSubLispFunction()) {
+            if (isSubLispBased()) {
                 SubLObject toEval = super.apply((SubLCons) form, env);
                 return (LispObject) toEval;//(LispObject) toEval.eval(env);
             }
@@ -2721,7 +2731,7 @@ public class BeanShellCntrl {
 
         @Override
         public SubLObject evalViaApply(SubLCons form, SubLEnvironment env) {
-            if (isSubLispFunction()) {
+            if (isSubLispBased()) {
                 return super.evalViaApply(form, env);
             }
             return Lisp.eval((Cons) form, (Environment) env);
@@ -2768,6 +2778,7 @@ public class BeanShellCntrl {
         BeanShellCntrl.scanForExports(BeanShellCntrl.class);
         BeanShellCntrl.cl_imports_cyc();
         BeanShellCntrl.cyc_imports_cl();
+        start_prolog_from_lisp();
     }
 
 }

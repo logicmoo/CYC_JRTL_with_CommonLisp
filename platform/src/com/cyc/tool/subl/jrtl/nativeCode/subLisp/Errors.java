@@ -61,9 +61,7 @@ public class Errors extends SubLTrampolineFile {
         if (e instanceof SubLException && errorString == null)
             se = (SubLException) e;
         else
-            se = e == null ? SubLObjectFactory.makeException(errorString)
-                    : SubLObjectFactory
-                            .makeException(errorString + "\nBecause of nested exception: " + e.toString(), e);
+            se = e == null ? SubLObjectFactory.makeException(errorString) : SubLObjectFactory.makeException(errorString + "\nBecause of nested exception: " + e.toString(), e);
         return se;
     }
 
@@ -78,13 +76,10 @@ public class Errors extends SubLTrampolineFile {
         synchronized (Errors.handleErrorInternalLock) {
             if (e instanceof Error)
                 throw (Error) e;
-            if (!SubLMain.isInitialized()
-                    || CommonSymbols.APPEND_STACK_TRACES_TO_ERROR_MESSAGES.getDynamicValue() != SubLNil.NIL)
+            if (!SubLMain.isInitialized() || CommonSymbols.APPEND_STACK_TRACES_TO_ERROR_MESSAGES.getDynamicValue() != SubLNil.NIL)
                 showErrorMessage(SubLException.getStringForException(e));
             else {
-                String message = e.getMessage() == null
-                        ? "RuntimeException of type " + e.getClass().getName() + " without much detail."
-                        : e.getMessage();
+                String message = e.getMessage() == null ? "RuntimeException of type " + e.getClass().getName() + " without much detail." : e.getMessage();
                 showErrorMessage(message);
             }
         }
@@ -103,8 +98,7 @@ public class Errors extends SubLTrampolineFile {
         if (errorMessage != null)
             errorMessage = errorMessage.trim();
         if (errorMessage == null || "".equals(errorMessage))
-            errorMessage = SubLException
-                    .getStringForException(e == null ? new Exception("possiblyCallErrorHandler") : e);
+            errorMessage = SubLException.getStringForException(e == null ? new Exception("possiblyCallErrorHandler") : e);
         else if (SubLNil.NIL != CommonSymbols.APPEND_STACK_TRACES_TO_ERROR_MESSAGES.getDynamicValue())
             errorMessage = errorMessage + "\n" + SubLException.getStringForException(e == null ? new Exception() : e);
         SubLString errorStr = SubLObjectFactory.makeString(errorMessage);
@@ -180,8 +174,7 @@ public class Errors extends SubLTrampolineFile {
         }
     }
 
-    public static SubLObject cerror(SubLObject continue_string, SubLObject formatString, SubLObject arg1,
-            SubLObject arg2) {
+    public static SubLObject cerror(SubLObject continue_string, SubLObject formatString, SubLObject arg1, SubLObject arg2) {
         SubLObject[] args = null;
         Resourcer resourcer = Resourcer.getInstance();
         try {
@@ -194,8 +187,7 @@ public class Errors extends SubLTrampolineFile {
         }
     }
 
-    public static SubLObject cerror(SubLObject continue_string, SubLObject formatString, SubLObject arg1,
-            SubLObject arg2, SubLObject arg3) {
+    public static SubLObject cerror(SubLObject continue_string, SubLObject formatString, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
         SubLObject[] args = null;
         Resourcer resourcer = Resourcer.getInstance();
         try {
@@ -224,8 +216,7 @@ public class Errors extends SubLTrampolineFile {
                 error(errorString);
             SubLReader reader = getReaderForCurrentThread();
             String continueString = PrintLow.format(SubLNil.NIL, continue_string, arguments).getStringValue();
-            RestartMethod restartMethod = reader.askRestartChoiceQuestion("Continuable error: "
-                    + errorString, continueString, Errors.ERROR_RESTARTS, true, SubLObjectFactory.makeException());
+            RestartMethod restartMethod = reader.askRestartChoiceQuestion("Continuable error: " + errorString, continueString, Errors.ERROR_RESTARTS, true, SubLObjectFactory.makeException());
             if (restartMethod.process(reader, errorString, null))
                 return cerror(continue_string, formatString, arguments);
             return SubLNil.NIL;
@@ -309,8 +300,7 @@ public class Errors extends SubLTrampolineFile {
             }
             restartMethod = SubLReader.CONTINUE_RESTART_METHOD;
         } else {
-            restartMethod = reader
-                    .askRestartChoiceQuestion("Error: " + se.getMessage(), null, Errors.ERROR_RESTARTS, true, se);
+            restartMethod = reader.askRestartChoiceQuestion("Error: " + se.getMessage(), null, Errors.ERROR_RESTARTS, true, se);
         }
         if (restartMethod.process(reader, se.getMessage(), se))
             return error(errorString, e);
@@ -384,11 +374,9 @@ public class Errors extends SubLTrampolineFile {
     }
 
     public static SubLObject error(SubLObject formatString, SubLObject[] arguments) {
-        if (SubLMain.OPENCYC)
-            return SubLNil.NIL;
         String errorString = PrintLow.format(SubLNil.NIL, formatString, arguments).getStringValue();
         error(errorString, null);
-        throw SubLObjectFactory.makeException("Unexpected situation.");
+        throw SubLObjectFactory.makeException("Unexpected situation: " + errorString);
     }
 
     public static SubLObject forceWarn(String formatString) {
@@ -430,9 +418,7 @@ public class Errors extends SubLTrampolineFile {
             if (e instanceof Unhandleable)
                 throw (Unhandleable) e;
             if (!(e instanceof SubLException))
-                e = SubLObjectFactory.makeException(description == null || "".equals(description)
-                        ? e instanceof SubLException ? e.getMessage() : e.toString()
-                        : description, e);
+                e = SubLObjectFactory.makeException(description == null || "".equals(description) ? e instanceof SubLException ? e.getMessage() : e.toString() : description, e);
             SubLException se = (SubLException) e;
             se.setDescription(description);
             SubLErrorHistory.me.add(se);
@@ -441,8 +427,7 @@ public class Errors extends SubLTrampolineFile {
                 return;
             }
             SubLReader reader = getReaderForCurrentThread();
-            RestartMethod restartMethod = reader
-                    .askRestartChoiceQuestion("Error: " + description, null, Errors.ERROR_RESTARTS, true, se);
+            RestartMethod restartMethod = reader.askRestartChoiceQuestion("Error: " + description, null, Errors.ERROR_RESTARTS, true, se);
             if (restartMethod.process(reader, description, se))
                 handleError(description, e);
         }
@@ -501,24 +486,20 @@ public class Errors extends SubLTrampolineFile {
                 return SubLNil.NIL;
             if (SubLNil.NIL != Errors.$ignore_breaksP$.getDynamicValue())
                 return SubLNil.NIL;
-            String breakString = format_string != CommonSymbols.UNPROVIDED
-                    ? PrintLow.format(SubLNil.NIL, format_string, arguments).getStringValue()
-                    : "";
+            String breakString = format_string != CommonSymbols.UNPROVIDED ? PrintLow.format(SubLNil.NIL, format_string, arguments).getStringValue() : "";
             SubLReader reader = SubLMain.getMainReader();
             SubLOutputTextStream stream1 = StreamsLow.$error_output$.getDynamicValue().toOutputTextStream();
             SubLOutputTextStream stream2 = StreamsLow.originalErrorStream;
             if (reader == null || !reader.isInReaderThread() || !stream1.equals(stream2)) {
                 String breakHeaderString = "\nBreakpoint reached from background thread or from REPL with *error-output* rebound: ";
-                SubLOutputTextStream stream3 = StreamsLow.$error_output$.getDynamicValue().getStream(true)
-                        .toOutputTextStream();
+                SubLOutputTextStream stream3 = StreamsLow.$error_output$.getDynamicValue().getStream(true).toOutputTextStream();
                 stream3.writeString(breakHeaderString);
                 stream3.writeString(breakString);
                 stream3.writeString("\n");
                 return SubLNil.NIL;
             }
-            RestartMethod restartMethod = reader.askRestartChoiceQuestion("Breakpoint reached: "
-                    + breakString, "Continue from break: ", Errors.ERROR_RESTARTS, true, SubLObjectFactory
-                            .makeException());
+            RestartMethod restartMethod = reader
+                    .askRestartChoiceQuestion("Breakpoint reached: " + breakString, "Continue from break: ", Errors.ERROR_RESTARTS, true, SubLObjectFactory.makeException());
             if (restartMethod.process(reader, breakString, null))
                 sublisp_break(format_string, arguments);
             else
@@ -685,10 +666,8 @@ public class Errors extends SubLTrampolineFile {
         Errors.$ignore_mustsP$ = SubLFiles.defvar(Errors.me, "*IGNORE-MUSTS?*", SubLNil.NIL);
         Errors.$ignore_warnsP$ = SubLFiles.defvar(Errors.me, "*IGNORE-WARNS?*", SubLNil.NIL);
         Errors.$restarts$ = SubLFiles.defvar(Errors.me, "*RESTARTS*", SubLNil.NIL);
-        Errors.$append_stack_traces_to_error_messagesP$ = SubLFiles
-                .defvar(Errors.me, CommonSymbols.APPEND_STACK_TRACES_TO_ERROR_MESSAGES.getName(), CommonSymbols.T);
-        Errors.$force_error_message_outputP$ = SubLFiles
-                .defvar(Errors.me, CommonSymbols.FORCE_ERROR_MESSAGE_OUTPUT.getName(), SubLNil.NIL);
+        Errors.$append_stack_traces_to_error_messagesP$ = SubLFiles.defvar(Errors.me, CommonSymbols.APPEND_STACK_TRACES_TO_ERROR_MESSAGES.getName(), CommonSymbols.T);
+        Errors.$force_error_message_outputP$ = SubLFiles.defvar(Errors.me, CommonSymbols.FORCE_ERROR_MESSAGE_OUTPUT.getName(), SubLNil.NIL);
     }
 
     @Override

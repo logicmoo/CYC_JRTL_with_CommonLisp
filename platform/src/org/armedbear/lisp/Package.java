@@ -497,6 +497,8 @@ public class Package extends SubLPackage implements java.io.Serializable {
         }
     }
 
+    boolean oldStyleOverload = true;
+
     /**
      * @param s
      * @param package1
@@ -512,6 +514,11 @@ public class Package extends SubLPackage implements java.io.Serializable {
         if (!reusesChildSymbols) {
             if (false)
                 System.err.println(";; Skipping " + symbol + " for " + name);
+            symbol = new Symbol(symbolName, this);
+            return symbol;
+        }
+        if (oldStyleOverload) {
+            System.err.println(";; Not reusing " + symbol + " for " + name);
             symbol = new Symbol(symbolName, this);
             return symbol;
         }
@@ -800,7 +807,8 @@ public class Package extends SubLPackage implements java.io.Serializable {
                 Cons found = packageCyc.findSymbolOrigin(symbolName);
                 if (found != null && found.cdr().isKeyword()) {
                     if (symbol != found.car()) {
-                        packageError("Non-inheritable: " + found + " in " + name);
+                        if (!oldStyleOverload)
+                            packageError("Non-inheritable: " + found + " in " + name);
                     }
                 }
             }
@@ -820,6 +828,9 @@ public class Package extends SubLPackage implements java.io.Serializable {
     }
 
     private void usePackageIgnoringErrorsPreferPrevious0(Package pkg, boolean ignoreErrors, boolean preferPrevious) {
+        if (oldStyleOverload) {
+            preferPrevious = false;
+        }
         if (pkg == this)
             return;
         if (useList == null)

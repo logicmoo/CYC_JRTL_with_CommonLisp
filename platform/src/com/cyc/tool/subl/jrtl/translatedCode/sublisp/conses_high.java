@@ -65,7 +65,7 @@ public class conses_high extends SubLTranslatedFile {
         while (SubLNil.NIL != rest) {
             if (SubLNil.NIL != entry) {
                 final SubLObject first2 = entry.first();
-                if (SubLNil.NIL != Functions.funcall(test, item, first2))
+                if (NIL != Functions.funcall(test, item, first2))
                     return entry;
             }
             rest = rest.rest();

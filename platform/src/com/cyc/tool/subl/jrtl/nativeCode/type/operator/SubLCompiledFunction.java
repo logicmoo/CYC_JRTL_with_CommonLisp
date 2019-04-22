@@ -51,7 +51,7 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 	}
 
 	@Override
-	public boolean isSubLispFunction() {
+	public boolean isSubLispBased() {
 		return true;
 	}
 
@@ -246,7 +246,7 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 			if (!om.equals(tm)) return false;
 			if (getRequiredArgCount() != other.getRequiredArgCount()) return false;
 			if (getOptionalArgCount() != other.getOptionalArgCount()) return false;
-			if (isSubLispFunction() != other.isSubLispFunction()) return false;
+			if (isSubLispBased() != other.isSubLispBased()) return false;
 			//if (getOptionalArgCount() != other.getOptionalArgCount()) return false;
 			return true;
 		}

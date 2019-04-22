@@ -311,7 +311,7 @@ jdwp_opts('').
 jvm_opts(
     [%'-XX:PermSize=512m','-XX:MaxPermSize=4g','-Xmx26g',
      % '-server',
-     '-d64','-Xms5000m','-Xmx8000m',
+     '-Xms5000m','-Xmx8000m',
      '-XX:ReservedCodeCacheSize=96m',
      '-XX:+DoEscapeAnalysis','-XX:+UseCompressedOops',
      '-XX:+UseConcMarkSweepGC', % '-XshowSettings:vm',

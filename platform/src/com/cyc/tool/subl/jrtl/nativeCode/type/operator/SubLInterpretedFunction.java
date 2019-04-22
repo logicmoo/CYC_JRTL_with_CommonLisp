@@ -27,7 +27,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SubLInterpretedFunction extends Function implements SubLFunction {
 	@Override
-	public boolean isSubLispFunction() {
+	public boolean isSubLispBased() {
 		return true;
 	}
 

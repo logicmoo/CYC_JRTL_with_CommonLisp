@@ -132,6 +132,7 @@ public final class Main {
                         /*Interpreter interpreter = Interpreter.createNewLispInstance(SystemCurrent.in, SystemCurrent.out,
                         	 initialDir.getCanonicalPath(),
                                 Version.getLongVersionString());*/
+                        BeanShellCntrl.registerSelf();
                         if (after != null)
                             after.run();
                     } catch (ProcessingTerminated e) {

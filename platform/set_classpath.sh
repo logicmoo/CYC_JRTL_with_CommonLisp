@@ -16,8 +16,7 @@ if [ -z "$JAVA_HOME" ]; then
 fi
 
 if [ -z "$LD_PRELOAD" ]; then
-#export LD_PRELOAD=$SWI_HOME/lib/x86_64-linux/libswipl.so.7.7.25
-export LD_PRELOAD=`find $SWI_HOME -name libswipl.so`
+export LD_PRELOAD=`find $SWI_HOME /usr/lib -name libswipl.so`
 fi
 
 

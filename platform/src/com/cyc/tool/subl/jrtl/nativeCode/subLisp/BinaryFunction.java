@@ -13,6 +13,33 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class BinaryFunction extends FixedArityFunctor {
 
+    /**
+     * @author Administrator
+     *
+     */
+    public static final class BinaryFunctionInstance extends BinaryFunction {
+        /**
+         * @param func
+         */
+        public BinaryFunctionInstance(SubLFunction func) {
+            super(func);
+        }
+
+        @Override
+        public SubLObject processItem(SubLObject obj1, SubLObject obj2) {
+            SubLObject[] args = null;
+            Resourcer resourcer = Resourcer.getInstance();
+            try {
+                args = resourcer.acquireSubLObjectArray(2);
+                args[0] = obj1;
+                args[1] = obj2;
+                return func.funcall(args);
+            } finally {
+                resourcer.releaseSubLObjectArray(args);
+            }
+        }
+    }
+
     private static class AssembleFixnumsToIntegerBinaryFunction extends BinaryFunction {
         public AssembleFixnumsToIntegerBinaryFunction() {
             super(CommonSymbols.ASSEMBLE_FIXNUMS_TO_INTEGER.getFunc());
@@ -1169,21 +1196,7 @@ public abstract class BinaryFunction extends FixedArityFunctor {
     public static BinaryFunction makeInstance(SubLFunction function) {
         BinaryFunction result = function.getBinaryFunction();
         if (result == null)
-            result = new BinaryFunction(function) {
-                @Override
-                public SubLObject processItem(SubLObject obj1, SubLObject obj2) {
-                    SubLObject[] args = null;
-                    Resourcer resourcer = Resourcer.getInstance();
-                    try {
-                        args = resourcer.acquireSubLObjectArray(2);
-                        args[0] = obj1;
-                        args[1] = obj2;
-                        return func.funcall(args);
-                    } finally {
-                        resourcer.releaseSubLObjectArray(args);
-                    }
-                }
-            };
+            result = new BinaryFunctionInstance(function);
         return result;
     }
 

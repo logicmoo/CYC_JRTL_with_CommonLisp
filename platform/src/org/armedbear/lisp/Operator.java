@@ -44,201 +44,194 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLSpecialOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class Operator extends AbstractSubLFunction implements SubLOperator
-{
-	protected Operator(SubLSymbol functionSymbol) {
-		super(functionSymbol);
-		this.lambdaName = (LispObject) functionSymbol;
-		if (functionSymbol != null)
-			functionSymbol.setFunction((SubLOperator) this);
-	}
+public abstract class Operator extends AbstractSubLFunction implements SubLOperator {
+    protected Operator(SubLSymbol functionSymbol) {
+        super(functionSymbol);
+        this.lambdaName = (LispObject) functionSymbol;
+        if (functionSymbol != null)
+            functionSymbol.setFunction((SubLOperator) this);
+    }
 
-	public boolean isSubLispFunction() {
-		return false;
-	}
-
-
-	@Override
-	final public Operator toLispObject() {
-		return  this;
-	}
-
-	//abstract public SubLOperator toSubLObject();
-	//public abstract SubLSymbol getFunctionSymbol();
-    @Override
-	public LispObject execute(LispObject[] args)
-    {
-        if (args.length<9) return dispatch(args);
-        	return funcallCL(args);
-	}
-
-//    abstract public LispObject execute(LispObject[] args);
-    @Override
-	abstract public LispObject arrayify(LispObject... args);
-
-	//protected LispObject lambdaName;
-
-	private LispObject lambdaList;
-
-    public final LispObject getLambdaName()
-    {
-		return lambdaName;
-	}
-
-    public final void setLambdaName(LispObject obj)
-    {
-		lambdaName = obj;
-	}
-
-    public final LispObject getLambdaList()
-    {
-		if (lambdaList == null) {
-			DocString ds = getClass().getAnnotation(DocString.class);
-            if(ds != null)
-            {
-				lambdaList = new SimpleString(ds.args());
-			}
-		}
-		return lambdaList;
-	}
-
-    public final void setLambdaList(LispObject obj)
-    {
-		lambdaList = obj;
-	}
+    public boolean isSubLispBased() {
+        return false;
+    }
 
     @Override
-	public LispObject getParts()
-    {
+    final public Operator toLispObject() {
+        return this;
+    }
+
+    //abstract public SubLOperator toSubLObject();
+    //public abstract SubLSymbol getFunctionSymbol();
+    @Override
+    public LispObject execute(LispObject[] args) {
+        if (args.length < 9)
+            return dispatch(args);
+        return funcallCL(args);
+    }
+
+    //    abstract public LispObject execute(LispObject[] args);
+    @Override
+    abstract public LispObject arrayify(LispObject... args);
+
+    //protected LispObject lambdaName;
+
+    private LispObject lambdaList;
+
+    public final LispObject getLambdaName() {
+        return lambdaName;
+    }
+
+    public final void setLambdaName(LispObject obj) {
+        lambdaName = obj;
+    }
+
+    public final LispObject getLambdaList() {
+        if (lambdaList == null) {
+            DocString ds = getClass().getAnnotation(DocString.class);
+            if (ds != null) {
+                lambdaList = new SimpleString(ds.args());
+            }
+        }
+        return lambdaList;
+    }
+
+    public final void setLambdaList(LispObject obj) {
+        lambdaList = obj;
+    }
+
+    @Override
+    public LispObject getParts() {
         LispObject result = NIL;
         result = result.push(new Cons("lambda-name", lambdaName));
         result = result.push(new Cons("lambda-list", lambdaList));
         return result.nreverse();
     }
 
-	@Override
-	public SubLList getArglist() {
-		if (argList == null) {
-			LispObject ll = getLambdaList();
+    @Override
+    public SubLList getArglist() {
+        if (argList == null) {
+            LispObject ll = getLambdaList();
 
-			if (ll instanceof SubLString) {
-				argList = Lisp.readObjectFromString("(" + ll.getStringValue() + ")").toList();
-			}
-		}
-		return argList;
-	}
+            if (ll instanceof SubLString) {
+                argList = Lisp.readObjectFromString("(" + ll.getStringValue() + ")").toList();
+            }
+        }
+        return argList;
+    }
 
-	protected SubLList argList;
-
-	@Override
-	public boolean isAtom() {
-		return true;
-	}
-
-	@Override
-	final public String toString() {
-		return super.toString();
-	}
+    protected SubLList argList;
 
     @Override
-	public String printObjectImpl()
-    {
-		final LispThread thread = LispThread.currentThread();
-		final SpecialBindingsMark mark = thread.markSpecialBindings();
-		thread.bindSpecial(Symbol.PRINT_LENGTH, Fixnum.THIRTY_TWO);
-		StringBuilder sb = new StringBuilder(Lisp.getDotName(getClass()) + " ");
-		try {
-			LispObject name = getLambdaName();
-			boolean closeBrace = false;
-			if (name != null && name != NIL)
-			{
-				sb.append(name.princToString());
-				sb.append(' ');
-			}
-			LispObject lambdaList = getLambdaList();
-			if (lambdaList != null) {
-
-				if (name == null || name == NIL) {
-					// No name.
-					sb.append("(LAMBDA ");
-					closeBrace = true;
-				}
-
-				if (lambdaList == NIL) {
-					sb.append("()");
-				} else {
-
-					sb.append(lambdaList.printObject());
-				}
-			}
-
-			if (closeBrace)
-				sb.append(")");
-
-			extraInfo(sb);
-
-		} finally {
-			thread.resetSpecialBindings(mark);
-		}
-		return unreadableString(sb.toString());
+    public boolean isAtom() {
+        return true;
     }
 
     @Override
-	protected void extraInfo(StringBuilder sb) {    }
+    final public String toString() {
+        return super.toString();
+    }
 
-	@Override
-	public boolean isMacroOperator() {
-		return false;
-	}
-//	protected AbstractSubLOperator() {
-//		this(null);
-//	}
+    @Override
+    public String printObjectImpl() {
+        final LispThread thread = LispThread.currentThread();
+        final SpecialBindingsMark mark = thread.markSpecialBindings();
+        thread.bindSpecial(Symbol.PRINT_LENGTH, Fixnum.THIRTY_TWO);
+        StringBuilder sb = new StringBuilder(Lisp.getDotName(getClass()) + " ");
+        try {
+            LispObject name = getLambdaName();
+            boolean closeBrace = false;
+            if (name != null && name != NIL) {
+                sb.append(name.princToString());
+                sb.append(' ');
+            }
+            LispObject lambdaList = getLambdaList();
+            if (lambdaList != null) {
+
+                if (name == null || name == NIL) {
+                    // No name.
+                    sb.append("(LAMBDA ");
+                    closeBrace = true;
+                }
+
+                if (lambdaList == NIL) {
+                    sb.append("()");
+                } else {
+
+                    sb.append(lambdaList.printObject());
+                }
+            }
+
+            if (closeBrace)
+                sb.append(")");
+
+            extraInfo(sb);
+
+        } finally {
+            thread.resetSpecialBindings(mark);
+        }
+        return unreadableString(sb.toString());
+    }
+
+    @Override
+    protected void extraInfo(StringBuilder sb) {
+    }
+
+    @Override
+    public boolean isMacroOperator() {
+        return false;
+    }
+    //	protected AbstractSubLOperator() {
+    //		this(null);
+    //	}
 
     //abstract public SubLOperator toSubLObject();
     abstract public LispObject funcallCL(LispObject... args);
 
+    @Override
+    public SubLSymbol getType() {
+        return Types.$dtp_function$;
+    }
 
-	@Override
-	public SubLSymbol getType() {
-		return Types.$dtp_function$;
-	}
+    @Override
+    public SubLFixnum getTypeCode() {
+        return CommonSymbols.FIVE_INTEGER;
+    }
 
-	@Override
-	public SubLFixnum getTypeCode() {
-		return CommonSymbols.FIVE_INTEGER;
-	}
+    //protected SubLSymbol lambdaName;
+    //public static String SPECIAL_OPERATOR_NAME = "SPECIAL-OPERATOR";
 
-	//protected SubLSymbol lambdaName;
-	//public static String SPECIAL_OPERATOR_NAME = "SPECIAL-OPERATOR";
+    @Override
+    public boolean canFastHash() {
+        return true;
+    }
 
+    @Override
+    public SubLSymbol getFunctionSymbol() {
+        if (this.lambdaName != null)
+            return (SubLSymbol) this.lambdaName;
+        LispObject lambdaName = getLambdaName();
+        if (lambdaName == null)
+            return null;
+        return lambdaName.toSymbol();
+    }
 
-	@Override
-	public boolean canFastHash() {
-		return true;
-	}
+    @Override
+    public boolean isSpecial() {
+        return (this instanceof SubLSpecialOperator);
+    }
 
-	@Override
-	public SubLSymbol getFunctionSymbol() {
-        if(this.lambdaName!=null) return (SubLSymbol) this.lambdaName;
-		LispObject lambdaName = getLambdaName();
-		if(lambdaName==null) return null;
-		return lambdaName.toSymbol();
-	}
+    @Override
+    public SubLSpecialOperator toSpecialOperator() {
+        if (this instanceof SubLSpecialOperator)
+            return (SubLSpecialOperator) this;
+        org.armedbear.lisp.Lisp.lisp_type_error(this, "SPECIAL-OPERATOR");
+        return null;
+    }
 
-	@Override
-	public boolean isSpecial() {
-		return (this instanceof SubLSpecialOperator);
-	}
-	@Override
-	public SubLSpecialOperator toSpecialOperator() {
-		if(this instanceof SubLSpecialOperator) return (SubLSpecialOperator) this;
-		org.armedbear.lisp.Lisp.lisp_type_error(this,"SPECIAL-OPERATOR");
-		return null;
-	}
-
-	@Override
-	public String toTypeName() {
-		return SPECIAL_OPERATOR_NAME;
-	}
+    @Override
+    public String toTypeName() {
+        return SPECIAL_OPERATOR_NAME;
+    }
 
 }

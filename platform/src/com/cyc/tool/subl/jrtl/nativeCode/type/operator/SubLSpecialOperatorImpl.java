@@ -30,7 +30,7 @@ public class SubLSpecialOperatorImpl extends SpecialOperator implements SubLOper
 //	}
 
 
-	public boolean isSubLispFunction() {
+	public boolean isSubLispBased() {
 		return true;
 	}
 	
