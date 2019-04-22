@@ -16,13 +16,13 @@ if [ -z "$JAVA_HOME" ]; then
 fi
 
 if [ -z "$LD_PRELOAD" ]; then
-export LD_PRELOAD=$SWI_HOME/lib/x86_64-linux/libswipl.so.7.7.25
+#export LD_PRELOAD=$SWI_HOME/lib/x86_64-linux/libswipl.so.7.7.25
 export LD_PRELOAD=/usr/lib/libswipl.so
 fi
 
 
 if [ -z "$LD_LIBRARY_PATH" ]; then
-  export LD_LIBRARY_PATH=$JAVA_HOME/lib:$SWI_HOME/lib/x86_64-linux:/usr/lib/guile/2.2/extensions:.
+  export LD_LIBRARY_PATH=$JAVA_HOME/lib:$SWI_HOME/lib/amd64:$SWI_HOME/lib/x86_64-linux:/usr/lib/guile/2.2/extensions:.
 fi
 
 if [ -z "$CLASSPATH" ]; then

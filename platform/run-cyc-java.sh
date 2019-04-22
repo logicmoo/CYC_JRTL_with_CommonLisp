@@ -12,4 +12,4 @@ export CLASSPATH_ABCL=$PRJ/powerloom-4.0.9.beta/native/java/lib/castor-core.jar:
 . set_classpath
 
 #./abclc --eval "(init-cyc-server)" $@  --eval "(cyc-repl)"
-./abclc --load cyc
+./abclc --opencyc --load cyc

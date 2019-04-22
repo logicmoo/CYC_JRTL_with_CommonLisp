@@ -43,7 +43,7 @@ echo ";"
 
 
 export RUN_COMMAND="-server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC \
- -Djava.library.path=$SWI_HOME/lib/x86_64-linux:. \
+ -Djava.library.path=$LD_LIBRARY_PATH:. \
  -XshowSettings:vm \
  org.armedbear.lisp.Main \
  $@"
