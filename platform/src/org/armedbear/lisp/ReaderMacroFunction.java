@@ -30,46 +30,53 @@
  * obligated to do so.  If you do not wish to do so, delete this
  * exception statement from your version.
  */
-
 package org.armedbear.lisp;
 
 public abstract class ReaderMacroFunction extends Function
 {
-    public ReaderMacroFunction(String name)
-    {
-        super(name);
-    }
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.armedbear.lisp.Operator#isSubLispBased()
+   */
+  @Override
+  public boolean isSubLispBased()
+  {
+    return false;
+  }
 
-    public ReaderMacroFunction(String name, String arglist)
-    {
-        super(name, arglist);
-    }
+  public ReaderMacroFunction( String name )
+  {
+    super( name );
+  }
 
-    public ReaderMacroFunction(String name, Package pkg)
-    {
-        super(name, pkg);
-    }
+  public ReaderMacroFunction( String name, String arglist )
+  {
+    super( name, arglist );
+  }
 
-    public ReaderMacroFunction(String name, Package pkg, boolean exported)
-    {
-        super(name, pkg, exported);
-    }
+  public ReaderMacroFunction( String name, Package pkg )
+  {
+    super( name, pkg );
+  }
 
-    public ReaderMacroFunction(String name, Package pkg, boolean exported,
-                      String arglist)
-    {
-        super(name, pkg, exported, arglist);
-    }
+  public ReaderMacroFunction( String name, Package pkg, boolean exported )
+  {
+    super( name, pkg, exported );
+  }
 
-    @Override
-    public LispObject execute(LispObject first, LispObject second)
+  public ReaderMacroFunction( String name, Package pkg, boolean exported, String arglist )
+  {
+    super( name, pkg, exported, arglist );
+  }
 
-    {
-        Stream stream = inSynonymOf(first);
-        char c = LispCharacter.getValue(second);
-        return execute(stream, c);
-    }
+  @Override
+  public LispObject execute(LispObject first, LispObject second)
+  {
+    Stream stream = inSynonymOf( first );
+    char c = LispCharacter.getValue( second );
+    return execute( stream, c );
+  }
 
-    public abstract LispObject execute(Stream stream, char c)
-       ;
+  public abstract LispObject execute(Stream stream, char c);
 }

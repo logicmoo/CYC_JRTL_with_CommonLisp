@@ -34,6 +34,7 @@
 package org.armedbear.lisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
@@ -52,6 +53,7 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
             functionSymbol.setFunction((SubLOperator) this);
     }
 
+    @Override
     public boolean isSubLispBased() {
         return false;
     }

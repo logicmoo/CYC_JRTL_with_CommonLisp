@@ -30,189 +30,178 @@
  * obligated to do so.  If you do not wish to do so, delete this
  * exception statement from your version.
  */
-
 package org.armedbear.lisp;
 
 abstract public class Primitive extends Function
 {
-    public Primitive(LispObject name)
-    {
-        super(name);
-    }
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.armedbear.lisp.Operator#isSubLispBased()
+   */
+  @Override
+  public boolean isSubLispBased()
+  {
+    return false;
+  }
 
-    public Primitive(String name)
-    {
-        super(name);
-    }
+  public Primitive( LispObject name )
+  {
+    super( name );
+  }
 
-    public Primitive(Symbol symbol)
-    {
-        super(symbol);
-    }
+  public Primitive( String name )
+  {
+    super( name );
+  }
 
-    public Primitive(Symbol symbol, String arglist)
-    {
-        super(symbol, arglist);
-    }
+  public Primitive( Symbol symbol )
+  {
+    super( symbol );
+  }
 
-    public Primitive(Symbol symbol, String arglist, String docstring)
-    {
-        super(symbol, arglist, docstring);
-    }
+  public Primitive( Symbol symbol, String arglist )
+  {
+    super( symbol, arglist );
+  }
 
-    public Primitive(String name, String arglist)
-    {
-        super(name, arglist);
-    }
+  public Primitive( Symbol symbol, String arglist, String docstring )
+  {
+    super( symbol, arglist, docstring );
+  }
 
-    public Primitive(LispObject name, LispObject lambdaList)
-    {
-        super(name, lambdaList);
-    }
+  public Primitive( String name, String arglist )
+  {
+    super( name, arglist );
+  }
 
-    public Primitive(String name, Package pkg)
-    {
-        super(name, pkg);
-    }
+  public Primitive( LispObject name, LispObject lambdaList )
+  {
+    super( name, lambdaList );
+  }
 
-    public Primitive(String name, Package pkg, boolean exported)
-    {
-        super(name, pkg, exported);
-    }
+  public Primitive( String name, Package pkg )
+  {
+    super( name, pkg );
+  }
 
-    public Primitive(String name, Package pkg, boolean exported,
-                     String arglist)
-    {
-        super(name, pkg, exported, arglist);
-    }
+  public Primitive( String name, Package pkg, boolean exported )
+  {
+    super( name, pkg, exported );
+  }
 
-    public Primitive(String name, Package pkg, boolean exported,
-                     String arglist, String docstring)
-    {
-        super(name, pkg, exported, arglist, docstring);
-    }
+  public Primitive( String name, Package pkg, boolean exported, String arglist )
+  {
+    super( name, pkg, exported, arglist );
+  }
 
-    @Override
-    public LispObject typeOf()
-    {
-        return Symbol.COMPILED_FUNCTION;
-    }
+  public Primitive( String name, Package pkg, boolean exported, String arglist, String docstring )
+  {
+    super( name, pkg, exported, arglist, docstring );
+  }
 
-    @Override
-    public LispObject execute()
-    {
-        LispObject[] args = new LispObject[0];
-        return execute(args);
-    }
+  @Override
+  public LispObject typeOf()
+  {
+    return Symbol.COMPILED_FUNCTION;
+  }
 
-    @Override
-    public LispObject execute(LispObject arg)
-    {
-        LispObject[] args = new LispObject[1];
-        args[0] = arg;
-        return execute(args);
-    }
+  @Override
+  public LispObject execute()
+  {
+    LispObject[] args = new LispObject[ 0 ];
+    return execute( args );
+  }
 
-    @Override
-    public LispObject execute(LispObject first, LispObject second)
+  @Override
+  public LispObject execute(LispObject arg)
+  {
+    LispObject[] args = new LispObject[ 1 ];
+    args[ 0 ] = arg;
+    return execute( args );
+  }
 
-    {
-        LispObject[] args = new LispObject[2];
-        args[0] = first;
-        args[1] = second;
-        return execute(args);
-    }
+  @Override
+  public LispObject execute(LispObject first, LispObject second)
+  {
+    LispObject[] args = new LispObject[ 2 ];
+    args[ 0 ] = first;
+    args[ 1 ] = second;
+    return execute( args );
+  }
 
-    @Override
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third)
+  @Override
+  public LispObject execute(LispObject first, LispObject second, LispObject third)
+  {
+    LispObject[] args = new LispObject[ 3 ];
+    args[ 0 ] = first;
+    args[ 1 ] = second;
+    args[ 2 ] = third;
+    return execute( args );
+  }
 
-    {
-        LispObject[] args = new LispObject[3];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        return execute(args);
-    }
+  @Override
+  public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth)
+  {
+    LispObject[] args = new LispObject[ 4 ];
+    args[ 0 ] = first;
+    args[ 1 ] = second;
+    args[ 2 ] = third;
+    args[ 3 ] = fourth;
+    return execute( args );
+  }
 
-    @Override
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth)
+  @Override
+  public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth)
+  {
+    LispObject[] args = new LispObject[ 5 ];
+    args[ 0 ] = first;
+    args[ 1 ] = second;
+    args[ 2 ] = third;
+    args[ 3 ] = fourth;
+    args[ 4 ] = fifth;
+    return execute( args );
+  }
 
-    {
-        LispObject[] args = new LispObject[4];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        return execute(args);
-    }
+  @Override
+  public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth)
+  {
+    LispObject[] args = new LispObject[ 6 ];
+    args[ 0 ] = first;
+    args[ 1 ] = second;
+    args[ 2 ] = third;
+    args[ 3 ] = fourth;
+    args[ 4 ] = fifth;
+    args[ 5 ] = sixth;
+    return execute( args );
+  }
 
-    @Override
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth,
-                              LispObject fifth)
+  @Override
+  public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh)
+  {
+    LispObject[] args = new LispObject[ 7 ];
+    args[ 0 ] = first;
+    args[ 1 ] = second;
+    args[ 2 ] = third;
+    args[ 3 ] = fourth;
+    args[ 4 ] = fifth;
+    args[ 5 ] = sixth;
+    args[ 6 ] = seventh;
+    return execute( args );
+  }
 
-    {
-        LispObject[] args = new LispObject[5];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        return execute(args);
-    }
-
-    @Override
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth,
-                              LispObject fifth, LispObject sixth)
-
-    {
-        LispObject[] args = new LispObject[6];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        return execute(args);
-    }
-
-    @Override
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth,
-                              LispObject fifth, LispObject sixth,
-                              LispObject seventh)
-
-    {
-        LispObject[] args = new LispObject[7];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        args[6] = seventh;
-        return execute(args);
-    }
-
-    @Override
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth,
-                              LispObject fifth, LispObject sixth,
-                              LispObject seventh, LispObject eighth)
-
-    {
-        LispObject[] args = new LispObject[8];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        args[6] = seventh;
-        args[7] = eighth;
-        return execute(args);
-    }
+  @Override
+  public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh, LispObject eighth)
+  {
+    LispObject[] args = new LispObject[ 8 ];
+    args[ 0 ] = first;
+    args[ 1 ] = second;
+    args[ 2 ] = third;
+    args[ 3 ] = fourth;
+    args[ 4 ] = fifth;
+    args[ 5 ] = sixth;
+    args[ 6 ] = seventh;
+    args[ 7 ] = eighth;
+    return execute( args );
+  }
 }

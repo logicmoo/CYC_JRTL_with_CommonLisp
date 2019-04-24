@@ -16,7 +16,7 @@
     </listAttribute>
     <booleanAttribute key="org.eclipse.jdt.launching.ALLOW_TERMINATE" value="true"/>
     <mapAttribute key="org.eclipse.jdt.launching.CONNECT_MAP">
-        <mapEntry key="connectionLimit" value="2"/>
+        <mapEntry key="connectionLimit" value="4"/>
         <mapEntry key="port" value="5005"/>
     </mapAttribute>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>

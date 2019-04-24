@@ -14,5 +14,6 @@ public interface SubLOperator extends SubLObject {
 
 	boolean isSpecial();
 
+
 	SubLSpecialOperator toSpecialOperator();
 }

@@ -32,6 +32,9 @@ public abstract class AbstractSubLFunction extends AbstractSubLOperator implemen
 
     @Override
     abstract public boolean isFunction();
+    
+    @Override
+    abstract public boolean isSubLispBased();
 
     protected AbstractSubLFunction(SubLSymbol functionSymbol, int requiredArgCount, int optionalArgCount, boolean allowsRest) {
         super(functionSymbol);

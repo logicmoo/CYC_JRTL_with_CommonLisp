@@ -12,6 +12,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLCompiledFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
@@ -173,11 +174,13 @@ public class Functions extends SubLTrampolineFile {
     }
 
     public static SubLObject funcall(SubLObject function) {
-        return ZeroArityFunction.makeInstance(function.getFunc()).processItem();
+        final SubLFunction func = function.getFunc();
+        return ZeroArityFunction.makeInstance(func).processItem();
     }
 
     public static SubLObject funcall(SubLObject function, SubLObject arg1) {
-        return UnaryFunction.makeInstance(function.getFunc()).processItem(arg1);
+        final SubLFunction func = function.getFunc();
+        return UnaryFunction.makeInstance(func).processItem(arg1);
     }
 
     public static SubLObject funcall(SubLObject function, SubLObject arg1, SubLObject arg2) {

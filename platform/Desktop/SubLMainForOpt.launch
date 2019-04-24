@@ -302,13 +302,11 @@
         <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#13;&#10;&lt;runtimeClasspathEntry internalArchive=&quot;/platform-deps/cp/javax.xml.soap-api-1.3.6.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;&#13;&#10;"/>
         <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#13;&#10;&lt;runtimeClasspathEntry containerPath=&quot;org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER&quot; path=&quot;3&quot; type=&quot;4&quot;/&gt;&#13;&#10;"/>
     </listAttribute>
-    <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
     <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_80"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-f &quot;(progn (load \&quot;init/jrtl-release-init.lisp\&quot;)  (load \&quot;init/port-init.lisp\&quot;))&quot;"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
-    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
     <booleanAttribute key="org.eclipse.jdt.launching.STOP_IN_MAIN" value="true"/>
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC"/>
     <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:platform}"/>
