@@ -44,7 +44,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class constant_handles_oc extends SubLTranslatedFile
+public final class constant_handles_oc
+    extends
+      SubLTranslatedFile
 {
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.constant_handles_oc";
@@ -508,8 +510,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
     final SubLObject var14;
     var4 = ( var14 = var5 );
     final SubLObject var15 = $ic24$;
-    return ConsesLow.list( $ic25$, ConsesLow.list( reader.bq_cons( var15, $ic26$ ) ), ConsesLow.listS( $ic27$, ConsesLow.list(
-        var6, $ic8$, var15, $ic9$, var11, $ic6$, var13 ), ConsesLow.append( var14, NIL ) ) );
+    return ConsesLow.list( $ic25$, ConsesLow.list( reader.bq_cons( var15, $ic26$ ) ), ConsesLow.listS( $ic27$, ConsesLow.list( var6, $ic8$, var15, $ic9$, var11, $ic6$, var13 ), ConsesLow.append( var14, NIL ) ) );
   }
 
   public static SubLObject f8446(final SubLObject var1, final SubLObject var2)
@@ -554,8 +555,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
     final SubLObject var14;
     var4 = ( var14 = var5 );
     final SubLObject var15 = $ic28$;
-    return ConsesLow.list( $ic25$, ConsesLow.list( reader.bq_cons( var15, $ic29$ ) ), ConsesLow.listS( $ic30$, ConsesLow.list(
-        var6, $ic8$, var15, $ic9$, var11, $ic6$, var13 ), ConsesLow.append( var14, NIL ) ) );
+    return ConsesLow.list( $ic25$, ConsesLow.list( reader.bq_cons( var15, $ic29$ ) ), ConsesLow.listS( $ic30$, ConsesLow.list( var6, $ic8$, var15, $ic9$, var11, $ic6$, var13 ), ConsesLow.append( var14, NIL ) ) );
   }
 
   public static SubLObject f8447(final SubLObject var74, final SubLObject var75)
@@ -692,7 +692,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
 
   public static SubLObject f8461(final SubLObject var49)
   {
-    return SubLObjectFactory.makeBoolean( NIL != f8449( var49 ) && NIL != f8462( var49 ) );
+    return makeBoolean( NIL != f8449( var49 ) && NIL != f8462( var49 ) );
   }
 
   public static SubLObject f8463(final SubLObject var49, SubLObject var90)
@@ -711,7 +711,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
     {
       final SubLObject var50 = constants_high_oc.f10743( var49 );
       final SubLObject var51 = module0165.f10719( var49 );
-      return SubLObjectFactory.makeBoolean( ( var50.isString() || $ic63$ == var50 ) && NIL != module0212.f13775( var51 ) );
+      return makeBoolean( ( var50.isString() || $ic63$ == var50 ) && NIL != module0212.f13775( var51 ) );
     }
     return NIL;
   }
@@ -727,7 +727,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
 
   public static SubLObject f8466(final SubLObject var49)
   {
-    return SubLObjectFactory.makeBoolean( NIL != f8449( var49 ) && NIL == f8461( var49 ) );
+    return makeBoolean( NIL != f8449( var49 ) && NIL == f8461( var49 ) );
   }
 
   public static SubLObject f8467(final SubLObject var49, SubLObject var90)
@@ -736,12 +736,12 @@ public final class constant_handles_oc extends SubLTranslatedFile
     {
       var90 = NIL;
     }
-    return SubLObjectFactory.makeBoolean( NIL != f8449( var49 ) && NIL == f8463( var49, UNPROVIDED ) );
+    return makeBoolean( NIL != f8449( var49 ) && NIL == f8463( var49, UNPROVIDED ) );
   }
 
   public static SubLObject f8468(final SubLObject var49)
   {
-    return SubLObjectFactory.makeBoolean( NIL != f8449( var49 ) && NIL == f8464( var49 ) );
+    return makeBoolean( NIL != f8449( var49 ) && NIL == f8464( var49 ) );
   }
 
   public static SubLObject f8469()
@@ -882,7 +882,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
     try
     {
       SubLObject var45;
-      for( SubLObject var43 = NIL; NIL == var43; var43 = SubLObjectFactory.makeBoolean( NIL == var45 ) )
+      for( SubLObject var43 = NIL; NIL == var43; var43 = makeBoolean( NIL == var45 ) )
       {
         var17.resetMultipleValues();
         final SubLObject var44 = module0052.f3693( var41 );
@@ -1317,7 +1317,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
     SubLObject var18 = NIL;
     final SubLObject var19 = module0126.f8404( T, UNPROVIDED );
     SubLObject var22;
-    for( SubLObject var20 = NIL; NIL == var20; var20 = SubLObjectFactory.makeBoolean( NIL == var22 ) )
+    for( SubLObject var20 = NIL; NIL == var20; var20 = makeBoolean( NIL == var22 ) )
     {
       var17.resetMultipleValues();
       final SubLObject var21 = module0052.f3693( var19 );
@@ -1348,81 +1348,81 @@ public final class constant_handles_oc extends SubLTranslatedFile
 
   public static SubLObject f8491()
   {
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8423", "S#10533", 0, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.constant_handles_oc", "f8424", "DO-CONSTANTS" );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8425", "S#10534", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8426", "S#10535", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8427", "S#10536", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8428", "S#10537", 0, 1, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8430", "S#10538", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8431", "S#10539", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8432", "S#10540", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8433", "CONSTANT-COUNT", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8434", "S#10541", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8435", "S#10542", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8436", "S#10543", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8437", "S#10544", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8438", "S#10545", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8439", "S#10546", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8429", "S#10547", 0, 1, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8441", "S#10548", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8443", "S#10549", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8444", "S#10550", 0, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.constant_handles_oc", "f8445", "S#10551" );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.constant_handles_oc", "f8446", "S#10552" );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8447", "S#10518", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8423", "S#10533", 0, 0, false );
+    SubLFiles.declareMacro(me, "f8424", "DO-CONSTANTS" );
+    SubLFiles.declareFunction(me, "f8425", "S#10534", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8426", "S#10535", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8427", "S#10536", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8428", "S#10537", 0, 1, false );
+    SubLFiles.declareFunction(me, "f8430", "S#10538", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8431", "S#10539", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8432", "S#10540", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8433", "CONSTANT-COUNT", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8434", "S#10541", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8435", "S#10542", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8436", "S#10543", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8437", "S#10544", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8438", "S#10545", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8439", "S#10546", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8429", "S#10547", 0, 1, false );
+    SubLFiles.declareFunction(me, "f8441", "S#10548", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8443", "S#10549", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8444", "S#10550", 0, 0, false );
+    SubLFiles.declareMacro(me, "f8445", "S#10551" );
+    SubLFiles.declareMacro(me, "f8446", "S#10552" );
+    SubLFiles.declareFunction(me, "f8447", "S#10518", 2, 0, false );
     new $f8447$BinaryFunction();
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8449", "CONSTANT-P", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8449", "CONSTANT-P", 1, 0, false );
     new $f8449$UnaryFunction();
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8450", "S#10553", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8451", "S#10554", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8452", "S#10555", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8453", "S#10556", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8454", "S#10557", 0, 1, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8455", "S#10558", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8456", "S#10559", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8448", "S#10560", 3, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8457", "S#10520", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8450", "S#10553", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8451", "S#10554", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8452", "S#10555", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8453", "S#10556", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8454", "S#10557", 0, 1, false );
+    SubLFiles.declareFunction(me, "f8455", "S#10558", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8456", "S#10559", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8448", "S#10560", 3, 0, false );
+    SubLFiles.declareFunction(me, "f8457", "S#10520", 1, 0, false );
     new $f8457$UnaryFunction();
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8458", "S#10561", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8459", "S#10562", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8460", "S#10563", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8461", "S#10469", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8463", "VALID-CONSTANT?", 1, 1, false );
+    SubLFiles.declareFunction(me, "f8458", "S#10561", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8459", "S#10562", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8460", "S#10563", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8461", "S#10469", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8463", "VALID-CONSTANT?", 1, 1, false );
     new $f8463$UnaryFunction();
     new $f8463$BinaryFunction();
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8464", "S#10564", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8465", "VALID-CONSTANT", 1, 1, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8466", "S#10485", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8467", "S#2609", 1, 1, false );
+    SubLFiles.declareFunction(me, "f8464", "S#10564", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8465", "VALID-CONSTANT", 1, 1, false );
+    SubLFiles.declareFunction(me, "f8466", "S#10485", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8467", "S#2609", 1, 1, false );
     new $f8467$UnaryFunction();
     new $f8467$BinaryFunction();
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8468", "S#10565", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8469", "S#10506", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8470", "S#10566", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8471", "S#10567", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8472", "S#10568", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8473", "S#10569", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8474", "S#10570", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8475", "S#10571", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8476", "S#10572", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8477", "S#10573", 1, 1, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8478", "S#10574", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8479", "S#10575", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8480", "S#10576", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8481", "S#10577", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8482", "S#10578", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8483", "S#10579", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8440", "CONSTANT-SUID", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8485", "S#10580", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8442", "S#10581", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8462", "S#10582", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8486", "S#10583", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8487", "S#10584", 2, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8488", "S#10585", 0, 1, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8484", "S#10586", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8489", "S#10587", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_handles_oc", "f8490", "S#10588", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8468", "S#10565", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8469", "S#10506", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8470", "S#10566", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8471", "S#10567", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8472", "S#10568", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8473", "S#10569", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8474", "S#10570", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8475", "S#10571", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8476", "S#10572", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8477", "S#10573", 1, 1, false );
+    SubLFiles.declareFunction(me, "f8478", "S#10574", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8479", "S#10575", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8480", "S#10576", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8481", "S#10577", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8482", "S#10578", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8483", "S#10579", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8440", "CONSTANT-SUID", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8485", "S#10580", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8442", "S#10581", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8462", "S#10582", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8486", "S#10583", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8487", "S#10584", 2, 0, false );
+    SubLFiles.declareFunction(me, "f8488", "S#10585", 0, 1, false );
+    SubLFiles.declareFunction(me, "f8484", "S#10586", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8489", "S#10587", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8490", "S#10588", 0, 0, false );
     return NIL;
   }
 
@@ -1430,8 +1430,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
   {
     $constant_from_suid$ = SubLFiles.deflexical( "S#10589", ( NIL != Symbols.boundp( $ic0$ ) ) ? $constant_from_suid$.getGlobalValue() : NIL );
     $g1501$ = SubLFiles.defconstant( "S#10590", $ic31$ );
-    $g1502$ = SubLFiles.deflexical( "S#10591", ( NIL != Symbols.boundp( $ic67$ ) ) ? $g1502$.getGlobalValue()
-        : Hashtables.make_hash_table( $ic68$, Symbols.symbol_function( EQUAL ), UNPROVIDED ) );
+    $g1502$ = SubLFiles.deflexical( "S#10591", ( NIL != Symbols.boundp( $ic67$ ) ) ? $g1502$.getGlobalValue() : Hashtables.make_hash_table( $ic68$, Symbols.symbol_function( EQUAL ), UNPROVIDED ) );
     return NIL;
   }
 
@@ -1479,90 +1478,89 @@ public final class constant_handles_oc extends SubLTranslatedFile
     $constant_from_suid$ = null;
     $g1501$ = null;
     $g1502$ = null;
-    $ic0$ = SubLObjectFactory.makeSymbol( "S#10589", "CYC" );
-    $ic1$ = SubLObjectFactory.makeSymbol( "SECOND" );
-    $ic2$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "VAR", "CYC" ), SubLObjectFactory.makeSymbol( "&OPTIONAL" ), ConsesLow.list(
-        SubLObjectFactory.makeSymbol( "S#130", "CYC" ), SubLObjectFactory.makeString( "mapping Cyc constants" ) ), SubLObjectFactory.makeSymbol( "&KEY" ),
-        SubLObjectFactory.makeSymbol( "S#127", "CYC" ) ), SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol( "S#5", "CYC" ) );
-    $ic3$ = SubLObjectFactory.makeString( "mapping Cyc constants" );
-    $ic4$ = ConsesLow.list( SubLObjectFactory.makeKeyword( "DONE" ) );
-    $ic5$ = SubLObjectFactory.makeKeyword( "ALLOW-OTHER-KEYS" );
-    $ic6$ = SubLObjectFactory.makeKeyword( "DONE" );
-    $ic7$ = SubLObjectFactory.makeSymbol( "DO-KB-SUID-TABLE" );
-    $ic8$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10534", "CYC" ) );
-    $ic9$ = SubLObjectFactory.makeKeyword( "PROGRESS-MESSAGE" );
-    $ic10$ = SubLObjectFactory.makeSymbol( "DO-CONSTANTS" );
-    $ic11$ = SubLObjectFactory.makeString(
+    $ic0$ = makeSymbol( "S#10589", "CYC" );
+    $ic1$ = makeSymbol( "SECOND" );
+    $ic2$ = ConsesLow.list( ConsesLow.list( makeSymbol( "VAR", "CYC" ), makeSymbol( "&OPTIONAL" ), ConsesLow.list( makeSymbol( "S#130", "CYC" ), makeString( "mapping Cyc constants" ) ), makeSymbol( "&KEY" ), makeSymbol(
+        "S#127", "CYC" ) ), makeSymbol( "&BODY" ), makeSymbol( "S#5", "CYC" ) );
+    $ic3$ = makeString( "mapping Cyc constants" );
+    $ic4$ = ConsesLow.list( makeKeyword( "DONE" ) );
+    $ic5$ = makeKeyword( "ALLOW-OTHER-KEYS" );
+    $ic6$ = makeKeyword( "DONE" );
+    $ic7$ = makeSymbol( "DO-KB-SUID-TABLE" );
+    $ic8$ = ConsesLow.list( makeSymbol( "S#10534", "CYC" ) );
+    $ic9$ = makeKeyword( "PROGRESS-MESSAGE" );
+    $ic10$ = makeSymbol( "DO-CONSTANTS" );
+    $ic11$ = makeString(
         "Iterate over all HL constant datastructures, executing BODY within the scope of VAR.\n   VAR is bound to each constant in turn.\n   PROGRESS-MESSAGE is a progress message string.\n   Iteration halts early as soon as DONE becomes non-nil." );
-    $ic12$ = SubLObjectFactory.makeSymbol( "S#10534", "CYC" );
-    $ic13$ = SubLObjectFactory.makeSymbol( "STRINGP" );
-    $ic14$ = SubLObjectFactory.makeKeyword( "SKIP" );
-    $ic15$ = SubLObjectFactory.makeSymbol( "S#10539", "CYC" );
-    $ic16$ = SubLObjectFactory.makeSymbol( "S#10592", "CYC" );
-    $ic17$ = SubLObjectFactory.makeSymbol( "CONSTANT-COUNT" );
-    $ic18$ = SubLObjectFactory.makeString( "Return the total number of constants." );
-    $ic19$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "INTEGERP" ) );
-    $ic20$ = SubLObjectFactory.makeKeyword( "OLD" );
-    $ic21$ = SubLObjectFactory.makeString( "Determining maximum constant SUID" );
-    $ic22$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT", "CYC" ), SubLObjectFactory.makeSymbol( "&KEY" ), SubLObjectFactory.makeSymbol(
-        "S#130", "CYC" ), SubLObjectFactory.makeSymbol( "S#127", "CYC" ) ), SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol( "S#5", "CYC" ) );
-    $ic23$ = ConsesLow.list( SubLObjectFactory.makeKeyword( "PROGRESS-MESSAGE" ), SubLObjectFactory.makeKeyword( "DONE" ) );
-    $ic24$ = SubLObjectFactory.makeUninternedSymbol( "US#4D08B3F" );
-    $ic25$ = SubLObjectFactory.makeSymbol( "CLET" );
-    $ic26$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10517", "CYC" ) ) );
-    $ic27$ = SubLObjectFactory.makeSymbol( "S#10463", "CYC" );
-    $ic28$ = SubLObjectFactory.makeUninternedSymbol( "US#352B2C1" );
-    $ic29$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "+" ), ONE_INTEGER, ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10517",
-        "CYC" ) ) ) );
-    $ic30$ = SubLObjectFactory.makeSymbol( "S#10464", "CYC" );
-    $ic31$ = SubLObjectFactory.makeSymbol( "CONSTANT", "CYC" );
-    $ic32$ = SubLObjectFactory.makeSymbol( "CONSTANT-P" );
-    $ic33$ = SubLObjectFactory.makeInteger( 140 );
-    $ic34$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10593", "CYC" ), SubLObjectFactory.makeSymbol( "S#29", "CYC" ) );
-    $ic35$ = ConsesLow.list( SubLObjectFactory.makeKeyword( "SUID" ), SubLObjectFactory.makeKeyword( "NAME" ) );
-    $ic36$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10553", "CYC" ), SubLObjectFactory.makeSymbol( "S#10554", "CYC" ) );
-    $ic37$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10555", "CYC" ), SubLObjectFactory.makeSymbol( "S#10556", "CYC" ) );
-    $ic38$ = SubLObjectFactory.makeSymbol( "S#10560", "CYC" );
-    $ic39$ = SubLObjectFactory.makeSymbol( "S#10518", "CYC" );
-    $ic40$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "OPTIMIZE-FUNCALL" ), SubLObjectFactory.makeSymbol( "CONSTANT-P" ) );
-    $ic41$ = SubLObjectFactory.makeSymbol( "S#10553", "CYC" );
-    $ic42$ = SubLObjectFactory.makeSymbol( "S#10555", "CYC" );
-    $ic43$ = SubLObjectFactory.makeSymbol( "S#10554", "CYC" );
-    $ic44$ = SubLObjectFactory.makeSymbol( "S#10556", "CYC" );
-    $ic45$ = SubLObjectFactory.makeKeyword( "SUID" );
-    $ic46$ = SubLObjectFactory.makeKeyword( "NAME" );
-    $ic47$ = SubLObjectFactory.makeString( "Invalid slot ~S for construction function" );
-    $ic48$ = SubLObjectFactory.makeKeyword( "BEGIN" );
-    $ic49$ = SubLObjectFactory.makeSymbol( "S#10557", "CYC" );
-    $ic50$ = SubLObjectFactory.makeKeyword( "SLOT" );
-    $ic51$ = SubLObjectFactory.makeKeyword( "END" );
-    $ic52$ = SubLObjectFactory.makeSymbol( "S#10559", "CYC" );
-    $ic53$ = SubLObjectFactory.makeString( "#$~a" );
-    $ic54$ = SubLObjectFactory.makeString( "<The CFASL invalid constant>" );
-    $ic55$ = SubLObjectFactory.makeString( "<Constant ~a>" );
-    $ic56$ = SubLObjectFactory.makeSymbol( "S#10520", "CYC" );
-    $ic57$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "OBJECT", "CYC" ) );
-    $ic58$ = SubLObjectFactory.makeString( "Return T iff the argument is a CycL constant" );
-    $ic59$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "BOOLEANP" ) );
-    $ic60$ = SubLObjectFactory.makeSymbol( "VALID-CONSTANT?" );
-    $ic61$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT", "CYC" ), SubLObjectFactory.makeSymbol( "&OPTIONAL" ), SubLObjectFactory.makeSymbol( "S#10594", "CYC" ) );
-    $ic62$ = SubLObjectFactory.makeString( "Return T if CONSTANT is a valid, fully-formed constant." );
-    $ic63$ = SubLObjectFactory.makeKeyword( "UNNAMED" );
-    $ic64$ = SubLObjectFactory.makeSymbol( "VALID-CONSTANT" );
-    $ic65$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "VALID-CONSTANT?" ) );
-    $ic66$ = SubLObjectFactory.makeString( "Deprecated in favor of valid-constant?\n   Return T if CONSTANT is a valid constant." );
-    $ic67$ = SubLObjectFactory.makeSymbol( "S#10591", "CYC" );
-    $ic68$ = SubLObjectFactory.makeInteger( 4000 );
-    $ic69$ = SubLObjectFactory.makeString( "clearing local constant information" );
-    $ic70$ = SubLObjectFactory.makeInteger( 50000 );
-    $ic71$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10595", "CYC" ), SubLObjectFactory.makeSymbol( "S#29", "CYC" ), SubLObjectFactory.makeSymbol( "S#10596", "CYC" ) );
-    $ic72$ = SubLObjectFactory.makeSymbol( "S#10492", "CYC" );
-    $ic73$ = SubLObjectFactory.makeString( "Freeing constants" );
-    $ic74$ = SubLObjectFactory.makeSymbol( "INTEGERP" );
-    $ic75$ = SubLObjectFactory.makeString( "Rebuilding constant completion table" );
+    $ic12$ = makeSymbol( "S#10534", "CYC" );
+    $ic13$ = makeSymbol( "STRINGP" );
+    $ic14$ = makeKeyword( "SKIP" );
+    $ic15$ = makeSymbol( "S#10539", "CYC" );
+    $ic16$ = makeSymbol( "S#10592", "CYC" );
+    $ic17$ = makeSymbol( "CONSTANT-COUNT" );
+    $ic18$ = makeString( "Return the total number of constants." );
+    $ic19$ = ConsesLow.list( makeSymbol( "INTEGERP" ) );
+    $ic20$ = makeKeyword( "OLD" );
+    $ic21$ = makeString( "Determining maximum constant SUID" );
+    $ic22$ = ConsesLow.list( ConsesLow.list( makeSymbol( "CONSTANT", "CYC" ), makeSymbol( "&KEY" ), makeSymbol( "S#130", "CYC" ), makeSymbol( "S#127", "CYC" ) ), makeSymbol( "&BODY" ), makeSymbol( "S#5", "CYC" ) );
+    $ic23$ = ConsesLow.list( makeKeyword( "PROGRESS-MESSAGE" ), makeKeyword( "DONE" ) );
+    $ic24$ = makeUninternedSymbol( "US#4D08B3F" );
+    $ic25$ = makeSymbol( "CLET" );
+    $ic26$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#10517", "CYC" ) ) );
+    $ic27$ = makeSymbol( "S#10463", "CYC" );
+    $ic28$ = makeUninternedSymbol( "US#352B2C1" );
+    $ic29$ = ConsesLow.list( ConsesLow.list( makeSymbol( "+" ), ONE_INTEGER, ConsesLow.list( makeSymbol( "S#10517", "CYC" ) ) ) );
+    $ic30$ = makeSymbol( "S#10464", "CYC" );
+    $ic31$ = makeSymbol( "CONSTANT", "CYC" );
+    $ic32$ = makeSymbol( "CONSTANT-P" );
+    $ic33$ = makeInteger( 140 );
+    $ic34$ = ConsesLow.list( makeSymbol( "S#10593", "CYC" ), makeSymbol( "S#29", "CYC" ) );
+    $ic35$ = ConsesLow.list( makeKeyword( "SUID" ), makeKeyword( "NAME" ) );
+    $ic36$ = ConsesLow.list( makeSymbol( "S#10553", "CYC" ), makeSymbol( "S#10554", "CYC" ) );
+    $ic37$ = ConsesLow.list( makeSymbol( "S#10555", "CYC" ), makeSymbol( "S#10556", "CYC" ) );
+    $ic38$ = makeSymbol( "S#10560", "CYC" );
+    $ic39$ = makeSymbol( "S#10518", "CYC" );
+    $ic40$ = ConsesLow.list( makeSymbol( "OPTIMIZE-FUNCALL" ), makeSymbol( "CONSTANT-P" ) );
+    $ic41$ = makeSymbol( "S#10553", "CYC" );
+    $ic42$ = makeSymbol( "S#10555", "CYC" );
+    $ic43$ = makeSymbol( "S#10554", "CYC" );
+    $ic44$ = makeSymbol( "S#10556", "CYC" );
+    $ic45$ = makeKeyword( "SUID" );
+    $ic46$ = makeKeyword( "NAME" );
+    $ic47$ = makeString( "Invalid slot ~S for construction function" );
+    $ic48$ = makeKeyword( "BEGIN" );
+    $ic49$ = makeSymbol( "S#10557", "CYC" );
+    $ic50$ = makeKeyword( "SLOT" );
+    $ic51$ = makeKeyword( "END" );
+    $ic52$ = makeSymbol( "S#10559", "CYC" );
+    $ic53$ = makeString( "#$~a" );
+    $ic54$ = makeString( "<The CFASL invalid constant>" );
+    $ic55$ = makeString( "<Constant ~a>" );
+    $ic56$ = makeSymbol( "S#10520", "CYC" );
+    $ic57$ = ConsesLow.list( makeSymbol( "OBJECT", "CYC" ) );
+    $ic58$ = makeString( "Return T iff the argument is a CycL constant" );
+    $ic59$ = ConsesLow.list( makeSymbol( "BOOLEANP" ) );
+    $ic60$ = makeSymbol( "VALID-CONSTANT?" );
+    $ic61$ = ConsesLow.list( makeSymbol( "CONSTANT", "CYC" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "S#10594", "CYC" ) );
+    $ic62$ = makeString( "Return T if CONSTANT is a valid, fully-formed constant." );
+    $ic63$ = makeKeyword( "UNNAMED" );
+    $ic64$ = makeSymbol( "VALID-CONSTANT" );
+    $ic65$ = ConsesLow.list( makeSymbol( "VALID-CONSTANT?" ) );
+    $ic66$ = makeString( "Deprecated in favor of valid-constant?\n   Return T if CONSTANT is a valid constant." );
+    $ic67$ = makeSymbol( "S#10591", "CYC" );
+    $ic68$ = makeInteger( 4000 );
+    $ic69$ = makeString( "clearing local constant information" );
+    $ic70$ = makeInteger( 50000 );
+    $ic71$ = ConsesLow.list( makeSymbol( "S#10595", "CYC" ), makeSymbol( "S#29", "CYC" ), makeSymbol( "S#10596", "CYC" ) );
+    $ic72$ = makeSymbol( "S#10492", "CYC" );
+    $ic73$ = makeString( "Freeing constants" );
+    $ic74$ = makeSymbol( "INTEGERP" );
+    $ic75$ = makeString( "Rebuilding constant completion table" );
   }
 
-  public static final class $constant_native extends SubLStructNative
+  public static final class $constant_native
+      extends
+        SubLStructNative
   {
     public SubLObject $suid;
     public SubLObject $name;
@@ -1610,7 +1608,9 @@ public final class constant_handles_oc extends SubLTranslatedFile
     }
   }
 
-  public static final class $f8447$BinaryFunction extends BinaryFunction
+  public static final class $f8447$BinaryFunction
+      extends
+        BinaryFunction
   {
     public $f8447$BinaryFunction()
     {
@@ -1624,7 +1624,9 @@ public final class constant_handles_oc extends SubLTranslatedFile
     }
   }
 
-  public static final class $f8449$UnaryFunction extends UnaryFunction
+  public static final class $f8449$UnaryFunction
+      extends
+        UnaryFunction
   {
     public $f8449$UnaryFunction()
     {
@@ -1638,7 +1640,9 @@ public final class constant_handles_oc extends SubLTranslatedFile
     }
   }
 
-  public static final class $f8457$UnaryFunction extends UnaryFunction
+  public static final class $f8457$UnaryFunction
+      extends
+        UnaryFunction
   {
     public $f8457$UnaryFunction()
     {
@@ -1652,7 +1656,9 @@ public final class constant_handles_oc extends SubLTranslatedFile
     }
   }
 
-  public static final class $f8463$UnaryFunction extends UnaryFunction
+  public static final class $f8463$UnaryFunction
+      extends
+        UnaryFunction
   {
     public $f8463$UnaryFunction()
     {
@@ -1666,7 +1672,9 @@ public final class constant_handles_oc extends SubLTranslatedFile
     }
   }
 
-  public static final class $f8463$BinaryFunction extends BinaryFunction
+  public static final class $f8463$BinaryFunction
+      extends
+        BinaryFunction
   {
     public $f8463$BinaryFunction()
     {
@@ -1680,7 +1688,9 @@ public final class constant_handles_oc extends SubLTranslatedFile
     }
   }
 
-  public static final class $f8467$UnaryFunction extends UnaryFunction
+  public static final class $f8467$UnaryFunction
+      extends
+        UnaryFunction
   {
     public $f8467$UnaryFunction()
     {
@@ -1694,7 +1704,9 @@ public final class constant_handles_oc extends SubLTranslatedFile
     }
   }
 
-  public static final class $f8467$BinaryFunction extends BinaryFunction
+  public static final class $f8467$BinaryFunction
+      extends
+        BinaryFunction
   {
     public $f8467$BinaryFunction()
     {

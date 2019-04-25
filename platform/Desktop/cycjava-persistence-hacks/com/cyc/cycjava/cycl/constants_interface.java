@@ -16,7 +16,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class constants_interface extends SubLTranslatedFile
+public final class constants_interface
+    extends
+      SubLTranslatedFile
 {
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.constants_interface";
@@ -63,9 +65,7 @@ public final class constants_interface extends SubLTranslatedFile
   private static final SubLList $list39;
   private static final SubLList $list40;
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 857L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 857L)
   public static SubLObject kb_create_constant(final SubLObject name, final SubLObject external_id)
   {
     enforceType( name, $sym0$CONSTANT_NAME_SPEC_P );
@@ -95,9 +95,7 @@ public final class constants_interface extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 1556L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 1556L)
   public static SubLObject kb_create_constant_remote(final SubLObject name, final SubLObject external_id)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -120,18 +118,14 @@ public final class constants_interface extends SubLTranslatedFile
     return constant;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 1955L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 1955L)
   public static SubLObject kb_create_constant_local(final SubLObject name, final SubLObject external_id)
   {
     final SubLObject internal_id = constants_low.kb_create_constant_kb_store( name, external_id );
     return constants_high.find_constant_by_internal_id( internal_id );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 2373L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 2373L)
   public static SubLObject kb_remove_constant(final SubLObject constant)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -173,9 +167,7 @@ public final class constants_interface extends SubLTranslatedFile
     return result;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 2907L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 2907L)
   public static SubLObject kb_lookup_constant_by_name(final SubLObject name)
   {
     enforceType( name, $sym16$STRINGP );
@@ -186,9 +178,7 @@ public final class constants_interface extends SubLTranslatedFile
     return constant_completion_low.constant_shell_from_name( name );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 3443L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 3443L)
   public static SubLObject kb_constant_name(final SubLObject constant)
   {
     enforceType( constant, $sym9$CONSTANT_P );
@@ -199,9 +189,7 @@ public final class constants_interface extends SubLTranslatedFile
     return constants_low.constant_name_internal( constant );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 3713L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 3713L)
   public static SubLObject kb_lookup_constant_by_guid(final SubLObject guid)
   {
     enforceType( guid, $sym25$GUID_P );
@@ -212,9 +200,7 @@ public final class constants_interface extends SubLTranslatedFile
     return constants_low.lookup_constant_by_guid( guid );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 4142L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 4142L)
   public static SubLObject kb_constant_guid(final SubLObject constant)
   {
     enforceType( constant, $sym9$CONSTANT_P );
@@ -225,9 +211,7 @@ public final class constants_interface extends SubLTranslatedFile
     return constants_low.constant_guid_internal( constant );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 4540L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 4540L)
   public static SubLObject kb_constant_merged_guid(final SubLObject constant)
   {
     enforceType( constant, $sym9$CONSTANT_P );
@@ -238,9 +222,7 @@ public final class constants_interface extends SubLTranslatedFile
     return constants_low.constant_merged_guid_internal( constant );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 4966L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 4966L)
   public static SubLObject kb_rename_constant(final SubLObject constant, final SubLObject new_name)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -286,9 +268,7 @@ public final class constants_interface extends SubLTranslatedFile
     return result;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-interface.lisp",
-    position = 5914L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-interface.lisp", position = 5914L)
   public static SubLObject kb_new_constant_info_iterator(SubLObject buffer_size)
   {
     if( buffer_size == UNPROVIDED )
@@ -300,17 +280,17 @@ public final class constants_interface extends SubLTranslatedFile
 
   public static SubLObject declare_constants_interface_file()
   {
-    SubLFiles.declareFunction( myName, "kb_create_constant", "KB-CREATE-CONSTANT", 2, 0, false );
-    SubLFiles.declareFunction( myName, "kb_create_constant_remote", "KB-CREATE-CONSTANT-REMOTE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "kb_create_constant_local", "KB-CREATE-CONSTANT-LOCAL", 2, 0, false );
-    SubLFiles.declareFunction( myName, "kb_remove_constant", "KB-REMOVE-CONSTANT", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_lookup_constant_by_name", "KB-LOOKUP-CONSTANT-BY-NAME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_constant_name", "KB-CONSTANT-NAME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_lookup_constant_by_guid", "KB-LOOKUP-CONSTANT-BY-GUID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_constant_guid", "KB-CONSTANT-GUID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_constant_merged_guid", "KB-CONSTANT-MERGED-GUID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_rename_constant", "KB-RENAME-CONSTANT", 2, 0, false );
-    SubLFiles.declareFunction( myName, "kb_new_constant_info_iterator", "KB-NEW-CONSTANT-INFO-ITERATOR", 0, 1, false );
+    SubLFiles.declareFunction(me, "kb_create_constant", "KB-CREATE-CONSTANT", 2, 0, false );
+    SubLFiles.declareFunction(me, "kb_create_constant_remote", "KB-CREATE-CONSTANT-REMOTE", 2, 0, false );
+    SubLFiles.declareFunction(me, "kb_create_constant_local", "KB-CREATE-CONSTANT-LOCAL", 2, 0, false );
+    SubLFiles.declareFunction(me, "kb_remove_constant", "KB-REMOVE-CONSTANT", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_lookup_constant_by_name", "KB-LOOKUP-CONSTANT-BY-NAME", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_constant_name", "KB-CONSTANT-NAME", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_lookup_constant_by_guid", "KB-LOOKUP-CONSTANT-BY-GUID", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_constant_guid", "KB-CONSTANT-GUID", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_constant_merged_guid", "KB-CONSTANT-MERGED-GUID", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_rename_constant", "KB-RENAME-CONSTANT", 2, 0, false );
+    SubLFiles.declareFunction(me, "kb_new_constant_info_iterator", "KB-NEW-CONSTANT-INFO-ITERATOR", 0, 1, false );
     return NIL;
   }
 
@@ -352,48 +332,46 @@ public final class constants_interface extends SubLTranslatedFile
   static
   {
     me = new constants_interface();
-    $sym0$CONSTANT_NAME_SPEC_P = SubLObjectFactory.makeSymbol( "CONSTANT-NAME-SPEC-P" );
-    $sym1$CONSTANT_EXTERNAL_ID_P = SubLObjectFactory.makeSymbol( "CONSTANT-EXTERNAL-ID-P" );
-    $sym2$KB_CREATE_CONSTANT = SubLObjectFactory.makeSymbol( "KB-CREATE-CONSTANT" );
-    $sym3$_EXIT = SubLObjectFactory.makeSymbol( "%EXIT" );
-    $list4 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NAME" ), SubLObjectFactory.makeSymbol( "EXTERNAL-ID" ) );
-    $str5$Return_a_new_constant_named_NAME_ = SubLObjectFactory.makeString( "Return a new constant named NAME with EXTERNAL-ID.\n   If NAME is :unnamed, returns a constant with no name." );
-    $list6 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "NAME" ), SubLObjectFactory.makeSymbol( "CONSTANT-NAME-SPEC-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "EXTERNAL-ID" ),
-        SubLObjectFactory.makeSymbol( "CONSTANT-EXTERNAL-ID-P" ) ) );
-    $list7 = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT-P" ) );
-    $sym8$KB_CREATE_CONSTANT_KB_STORE = SubLObjectFactory.makeSymbol( "KB-CREATE-CONSTANT-KB-STORE" );
-    $sym9$CONSTANT_P = SubLObjectFactory.makeSymbol( "CONSTANT-P" );
-    $sym10$KB_REMOVE_CONSTANT = SubLObjectFactory.makeSymbol( "KB-REMOVE-CONSTANT" );
-    $sym11$QUOTE = SubLObjectFactory.makeSymbol( "QUOTE" );
-    $list12 = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT" ) );
-    $str13$Remove_CONSTANT_from_the_KB_ = SubLObjectFactory.makeString( "Remove CONSTANT from the KB." );
-    $list14 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT" ), SubLObjectFactory.makeSymbol( "CONSTANT-P" ) ) );
-    $list15 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NULL" ) );
-    $sym16$STRINGP = SubLObjectFactory.makeSymbol( "STRINGP" );
-    $sym17$KB_LOOKUP_CONSTANT_BY_NAME = SubLObjectFactory.makeSymbol( "KB-LOOKUP-CONSTANT-BY-NAME" );
-    $list18 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NAME" ) );
-    $str19$Return_the_constant_named_NAME__i = SubLObjectFactory.makeString( "Return the constant named NAME, if it exists.\n   Return NIL otherwise." );
-    $list20 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "NAME" ), SubLObjectFactory.makeSymbol( "STRINGP" ) ) );
-    $list21 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "NIL-OR" ), SubLObjectFactory.makeSymbol( "CONSTANT-P" ) ) );
-    $sym22$KB_CONSTANT_NAME = SubLObjectFactory.makeSymbol( "KB-CONSTANT-NAME" );
-    $str23$Return_the_name_for_CONSTANT_ = SubLObjectFactory.makeString( "Return the name for CONSTANT." );
-    $list24 = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT-NAME-SPEC-P" ) );
-    $sym25$GUID_P = SubLObjectFactory.makeSymbol( "GUID-P" );
-    $sym26$KB_LOOKUP_CONSTANT_BY_GUID = SubLObjectFactory.makeSymbol( "KB-LOOKUP-CONSTANT-BY-GUID" );
-    $list27 = ConsesLow.list( SubLObjectFactory.makeSymbol( "GUID" ) );
-    $str28$Return_the_constant_with_GUID__if = SubLObjectFactory.makeString( "Return the constant with GUID, if it exists.\n   Return NIL otherwise." );
-    $list29 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "GUID" ), SubLObjectFactory.makeSymbol( "GUID-P" ) ) );
-    $sym30$KB_CONSTANT_GUID = SubLObjectFactory.makeSymbol( "KB-CONSTANT-GUID" );
-    $str31$Return_the_external_ID_for_CONSTA = SubLObjectFactory.makeString( "Return the external ID for CONSTANT." );
-    $list32 = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT-EXTERNAL-ID-P" ) );
-    $sym33$KB_CONSTANT_MERGED_GUID = SubLObjectFactory.makeSymbol( "KB-CONSTANT-MERGED-GUID" );
-    $str34$Return_the_external_merged_ID_for = SubLObjectFactory.makeString( "Return the external merged ID for CONSTANT." );
-    $sym35$VALID_CONSTANT_NAME_P = SubLObjectFactory.makeSymbol( "VALID-CONSTANT-NAME-P" );
-    $sym36$KB_RENAME_CONSTANT = SubLObjectFactory.makeSymbol( "KB-RENAME-CONSTANT" );
-    $list37 = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT" ), SubLObjectFactory.makeSymbol( "NEW-NAME" ) );
-    $str38$Rename_CONSTANT_to_have_NEW_NAME_ = SubLObjectFactory.makeString( "Rename CONSTANT to have NEW-NAME as its name.  The constant is returned." );
-    $list39 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT" ), SubLObjectFactory.makeSymbol( "CONSTANT-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "NEW-NAME" ), SubLObjectFactory
-        .makeSymbol( "VALID-CONSTANT-NAME-P" ) ) );
-    $list40 = ConsesLow.list( SubLObjectFactory.makeSymbol( "KB-NEW-CONSTANT-INFO-ITERATOR-INTERNAL" ) );
+    $sym0$CONSTANT_NAME_SPEC_P = makeSymbol( "CONSTANT-NAME-SPEC-P" );
+    $sym1$CONSTANT_EXTERNAL_ID_P = makeSymbol( "CONSTANT-EXTERNAL-ID-P" );
+    $sym2$KB_CREATE_CONSTANT = makeSymbol( "KB-CREATE-CONSTANT" );
+    $sym3$_EXIT = makeSymbol( "%EXIT" );
+    $list4 = ConsesLow.list( makeSymbol( "NAME" ), makeSymbol( "EXTERNAL-ID" ) );
+    $str5$Return_a_new_constant_named_NAME_ = makeString( "Return a new constant named NAME with EXTERNAL-ID.\n   If NAME is :unnamed, returns a constant with no name." );
+    $list6 = ConsesLow.list( ConsesLow.list( makeSymbol( "NAME" ), makeSymbol( "CONSTANT-NAME-SPEC-P" ) ), ConsesLow.list( makeSymbol( "EXTERNAL-ID" ), makeSymbol( "CONSTANT-EXTERNAL-ID-P" ) ) );
+    $list7 = ConsesLow.list( makeSymbol( "CONSTANT-P" ) );
+    $sym8$KB_CREATE_CONSTANT_KB_STORE = makeSymbol( "KB-CREATE-CONSTANT-KB-STORE" );
+    $sym9$CONSTANT_P = makeSymbol( "CONSTANT-P" );
+    $sym10$KB_REMOVE_CONSTANT = makeSymbol( "KB-REMOVE-CONSTANT" );
+    $sym11$QUOTE = makeSymbol( "QUOTE" );
+    $list12 = ConsesLow.list( makeSymbol( "CONSTANT" ) );
+    $str13$Remove_CONSTANT_from_the_KB_ = makeString( "Remove CONSTANT from the KB." );
+    $list14 = ConsesLow.list( ConsesLow.list( makeSymbol( "CONSTANT" ), makeSymbol( "CONSTANT-P" ) ) );
+    $list15 = ConsesLow.list( makeSymbol( "NULL" ) );
+    $sym16$STRINGP = makeSymbol( "STRINGP" );
+    $sym17$KB_LOOKUP_CONSTANT_BY_NAME = makeSymbol( "KB-LOOKUP-CONSTANT-BY-NAME" );
+    $list18 = ConsesLow.list( makeSymbol( "NAME" ) );
+    $str19$Return_the_constant_named_NAME__i = makeString( "Return the constant named NAME, if it exists.\n   Return NIL otherwise." );
+    $list20 = ConsesLow.list( ConsesLow.list( makeSymbol( "NAME" ), makeSymbol( "STRINGP" ) ) );
+    $list21 = ConsesLow.list( ConsesLow.list( makeSymbol( "NIL-OR" ), makeSymbol( "CONSTANT-P" ) ) );
+    $sym22$KB_CONSTANT_NAME = makeSymbol( "KB-CONSTANT-NAME" );
+    $str23$Return_the_name_for_CONSTANT_ = makeString( "Return the name for CONSTANT." );
+    $list24 = ConsesLow.list( makeSymbol( "CONSTANT-NAME-SPEC-P" ) );
+    $sym25$GUID_P = makeSymbol( "GUID-P" );
+    $sym26$KB_LOOKUP_CONSTANT_BY_GUID = makeSymbol( "KB-LOOKUP-CONSTANT-BY-GUID" );
+    $list27 = ConsesLow.list( makeSymbol( "GUID" ) );
+    $str28$Return_the_constant_with_GUID__if = makeString( "Return the constant with GUID, if it exists.\n   Return NIL otherwise." );
+    $list29 = ConsesLow.list( ConsesLow.list( makeSymbol( "GUID" ), makeSymbol( "GUID-P" ) ) );
+    $sym30$KB_CONSTANT_GUID = makeSymbol( "KB-CONSTANT-GUID" );
+    $str31$Return_the_external_ID_for_CONSTA = makeString( "Return the external ID for CONSTANT." );
+    $list32 = ConsesLow.list( makeSymbol( "CONSTANT-EXTERNAL-ID-P" ) );
+    $sym33$KB_CONSTANT_MERGED_GUID = makeSymbol( "KB-CONSTANT-MERGED-GUID" );
+    $str34$Return_the_external_merged_ID_for = makeString( "Return the external merged ID for CONSTANT." );
+    $sym35$VALID_CONSTANT_NAME_P = makeSymbol( "VALID-CONSTANT-NAME-P" );
+    $sym36$KB_RENAME_CONSTANT = makeSymbol( "KB-RENAME-CONSTANT" );
+    $list37 = ConsesLow.list( makeSymbol( "CONSTANT" ), makeSymbol( "NEW-NAME" ) );
+    $str38$Rename_CONSTANT_to_have_NEW_NAME_ = makeString( "Rename CONSTANT to have NEW-NAME as its name.  The constant is returned." );
+    $list39 = ConsesLow.list( ConsesLow.list( makeSymbol( "CONSTANT" ), makeSymbol( "CONSTANT-P" ) ), ConsesLow.list( makeSymbol( "NEW-NAME" ), SubLObjectFactory.makeSymbol( "VALID-CONSTANT-NAME-P" ) ) );
+    $list40 = ConsesLow.list( makeSymbol( "KB-NEW-CONSTANT-INFO-ITERATOR-INTERNAL" ) );
   }
 }

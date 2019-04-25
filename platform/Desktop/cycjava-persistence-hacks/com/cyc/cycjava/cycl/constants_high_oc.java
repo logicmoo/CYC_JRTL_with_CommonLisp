@@ -32,7 +32,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class constants_high_oc extends SubLTranslatedFile
+public final class constants_high_oc
+    extends
+      SubLTranslatedFile
 {
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.constants_high_oc";
@@ -386,7 +388,7 @@ public final class constants_high_oc extends SubLTranslatedFile
 
   public static SubLObject f10755(final SubLObject var26)
   {
-    return SubLObjectFactory.makeBoolean( NIL != constant_handles_oc.f8449( var26 ) && NIL == f10738( var26 ) );
+    return makeBoolean( NIL != constant_handles_oc.f8449( var26 ) && NIL == f10738( var26 ) );
   }
 
   public static SubLObject f10756()
@@ -588,7 +590,7 @@ public final class constants_high_oc extends SubLTranslatedFile
 
   public static SubLObject f10770(final SubLObject var4)
   {
-    return SubLObjectFactory.makeBoolean( NIL != constant_handles_oc.f8449( var4 ) && $ic69$ == f10743( var4 ) );
+    return makeBoolean( NIL != constant_handles_oc.f8449( var4 ) && $ic69$ == f10743( var4 ) );
   }
 
   public static SubLObject f10771(final SubLObject var4)
@@ -662,8 +664,7 @@ public final class constants_high_oc extends SubLTranslatedFile
       return var60;
     }
     SubLObject var60;
-    for( var60 = module0032.f1726( var58, Symbols.symbol_function( EQL ) ); module0032.f1728( var60 ).numL( var58 ); var60 = module0032.f1736( f10773( var54 ), var60, Symbols.symbol_function(
-        EQL ) ) )
+    for( var60 = module0032.f1726( var58, Symbols.symbol_function( EQL ) ); module0032.f1728( var60 ).numL( var58 ); var60 = module0032.f1736( f10773( var54 ), var60, Symbols.symbol_function( EQL ) ) )
     {
     }
     return module0032.f1753( var60 );
@@ -762,8 +763,7 @@ public final class constants_high_oc extends SubLTranslatedFile
         while ( var75.numL( var76 ))
         {
           final SubLObject var78 = Hashtables.gethash_without_values( var75, var74, var77 );
-          if( ( NIL == module0065.f4773( $ic83$ ) || NIL == module0065.f4749( var78 ) ) && NIL != module0035.sublisp_boolean( module0045.f3139( var65, f10743( var78 ), var63, NIL,
-              UNPROVIDED, UNPROVIDED ) ) )
+          if( ( NIL == module0065.f4773( $ic83$ ) || NIL == module0065.f4749( var78 ) ) && NIL != module0035.sublisp_boolean( module0045.f3139( var65, f10743( var78 ), var63, NIL, UNPROVIDED, UNPROVIDED ) ) )
           {
             var66 = ConsesLow.cons( var78, var66 );
           }
@@ -776,8 +776,7 @@ public final class constants_high_oc extends SubLTranslatedFile
 
   public static SubLObject f10777(final SubLObject var26)
   {
-    return SubLObjectFactory.makeBoolean( NIL != module0035.f2014( var26 ) && NIL != module0035.f1995( var26, TWO_INTEGER, UNPROVIDED ) && NIL != module0035.f2370(
-        $ic80$, var26, UNPROVIDED ) );
+    return makeBoolean( NIL != module0035.f2014( var26 ) && NIL != module0035.f1995( var26, TWO_INTEGER, UNPROVIDED ) && NIL != module0035.f2370( $ic80$, var26, UNPROVIDED ) );
   }
 
   public static SubLObject f10778()
@@ -799,7 +798,7 @@ public final class constants_high_oc extends SubLTranslatedFile
     var87 = var87.rest();
     if( NIL == var87 )
     {
-      return SubLObjectFactory.makeBoolean( var85.numE( constant_handles_oc.f8433() ) && var86.numE( constant_handles_oc.f8435() ) );
+      return makeBoolean( var85.numE( constant_handles_oc.f8433() ) && var86.numE( constant_handles_oc.f8435() ) );
     }
     cdestructuring_bind.cdestructuring_bind_error( var84, $ic84$ );
     return NIL;
@@ -832,56 +831,56 @@ public final class constants_high_oc extends SubLTranslatedFile
 
   public static SubLObject f10783()
   {
-    SubLFiles.declareFunction( myName, "f10733", "CREATE-CONSTANT", 1, 1, false );
-    SubLFiles.declareFunction( myName, "f10736", "FIND-OR-CREATE-CONSTANT", 1, 1, false );
-    SubLFiles.declareFunction( myName, "f10739", "GENTEMP-CONSTANT", 1, 1, false );
-    SubLFiles.declareFunction( myName, "f10740", "S#13560", 1, 5, false );
-    SubLFiles.declareFunction( myName, "f10741", "REMOVE-CONSTANT", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10742", "S#13561", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10737", "FIND-CONSTANT", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10743", "CONSTANT-NAME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10744", "CONSTANT-GUID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10745", "S#13531", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10746", "FIND-CONSTANT-BY-GUID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10747", "S#13562", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10748", "RENAME-CONSTANT", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f10749", "CONSTANT-INTERNAL-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10750", "S#13563", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10752", "FIND-CONSTANT-BY-INTERNAL-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10753", "S#13564", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10754", "S#13565", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f10738", "S#13566", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10755", "S#10507", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10756", "S#13567", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f10757", "CONSTANT-EXTERNAL-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10758", "S#13568", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10751", "FIND-CONSTANT-BY-EXTERNAL-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10734", "S#13484", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10759", "S#13569", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f10760", "S#13570", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f10761", "CONSTANT-INFO-FROM-GUID-STRINGS", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10762", "CONSTANT-INFO-FROM-NAME-STRINGS", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10735", "S#13571", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f10764", "S#13572", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f10763", "S#13573", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f10765", "S#13530", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10767", "S#13574", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10768", "S#13575", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10769", "S#13576", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10766", "S#13529", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10770", "S#13577", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10771", "CONSTANT-NAMESPACE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10772", "CONSTANT-NAME-WITHIN-NAMESPACE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10773", "RANDOM-CONSTANT", 0, 1, false );
-    SubLFiles.declareFunction( myName, "f10774", "S#13578", 0, 3, false );
-    SubLFiles.declareFunction( myName, "f10775", "S#13579", 1, 2, false );
-    SubLFiles.declareFunction( myName, "f10776", "S#13580", 1, 1, false );
-    SubLFiles.declareFunction( myName, "f10777", "S#13581", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10778", "S#13582", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f10779", "S#13583", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10780", "S#13584", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f10781", "S#13585", 1, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.constants_high_oc", "f10782", "S#10592" );
+    SubLFiles.declareFunction(me, "f10733", "CREATE-CONSTANT", 1, 1, false );
+    SubLFiles.declareFunction(me, "f10736", "FIND-OR-CREATE-CONSTANT", 1, 1, false );
+    SubLFiles.declareFunction(me, "f10739", "GENTEMP-CONSTANT", 1, 1, false );
+    SubLFiles.declareFunction(me, "f10740", "S#13560", 1, 5, false );
+    SubLFiles.declareFunction(me, "f10741", "REMOVE-CONSTANT", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10742", "S#13561", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10737", "FIND-CONSTANT", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10743", "CONSTANT-NAME", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10744", "CONSTANT-GUID", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10745", "S#13531", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10746", "FIND-CONSTANT-BY-GUID", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10747", "S#13562", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10748", "RENAME-CONSTANT", 2, 0, false );
+    SubLFiles.declareFunction(me, "f10749", "CONSTANT-INTERNAL-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10750", "S#13563", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10752", "FIND-CONSTANT-BY-INTERNAL-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10753", "S#13564", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10754", "S#13565", 2, 0, false );
+    SubLFiles.declareFunction(me, "f10738", "S#13566", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10755", "S#10507", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10756", "S#13567", 0, 0, false );
+    SubLFiles.declareFunction(me, "f10757", "CONSTANT-EXTERNAL-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10758", "S#13568", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10751", "FIND-CONSTANT-BY-EXTERNAL-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10734", "S#13484", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10759", "S#13569", 2, 0, false );
+    SubLFiles.declareFunction(me, "f10760", "S#13570", 2, 0, false );
+    SubLFiles.declareFunction(me, "f10761", "CONSTANT-INFO-FROM-GUID-STRINGS", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10762", "CONSTANT-INFO-FROM-NAME-STRINGS", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10735", "S#13571", 0, 0, false );
+    SubLFiles.declareFunction(me, "f10764", "S#13572", 0, 0, false );
+    SubLFiles.declareFunction(me, "f10763", "S#13573", 0, 0, false );
+    SubLFiles.declareFunction(me, "f10765", "S#13530", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10767", "S#13574", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10768", "S#13575", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10769", "S#13576", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10766", "S#13529", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10770", "S#13577", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10771", "CONSTANT-NAMESPACE", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10772", "CONSTANT-NAME-WITHIN-NAMESPACE", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10773", "RANDOM-CONSTANT", 0, 1, false );
+    SubLFiles.declareFunction(me, "f10774", "S#13578", 0, 3, false );
+    SubLFiles.declareFunction(me, "f10775", "S#13579", 1, 2, false );
+    SubLFiles.declareFunction(me, "f10776", "S#13580", 1, 1, false );
+    SubLFiles.declareFunction(me, "f10777", "S#13581", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10778", "S#13582", 0, 0, false );
+    SubLFiles.declareFunction(me, "f10779", "S#13583", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10780", "S#13584", 1, 0, false );
+    SubLFiles.declareFunction(me, "f10781", "S#13585", 1, 0, false );
+    SubLFiles.declareMacro(me, "f10782", "S#10592" );
     return NIL;
   }
 
@@ -935,100 +934,95 @@ public final class constants_high_oc extends SubLTranslatedFile
     me = new constants_high_oc();
     $g2179$ = null;
     $g2180$ = null;
-    $ic0$ = SubLObjectFactory.makeSymbol( "S#10492", "CYC" );
-    $ic1$ = SubLObjectFactory.makeSymbol( "S#13484", "CYC" );
-    $ic2$ = SubLObjectFactory.makeSymbol( "CREATE-CONSTANT" );
-    $ic3$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#29", "CYC" ), SubLObjectFactory.makeSymbol( "&OPTIONAL" ), SubLObjectFactory.makeSymbol( "S#10596", "CYC" ) );
-    $ic4$ = SubLObjectFactory.makeString( "Return a new constant named NAME with EXTERNAL-ID as the external ID." );
-    $ic5$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#29", "CYC" ), SubLObjectFactory.makeSymbol( "S#10492", "CYC" ) ), ConsesLow.list(
-        SubLObjectFactory.makeSymbol( "S#10596", "CYC" ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "S#13484",
-            "CYC" ) ) ) );
-    $ic6$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT-P" ) );
-    $ic7$ = SubLObjectFactory.makeSymbol( "STRINGP" );
-    $ic8$ = SubLObjectFactory.makeSymbol( "FIND-OR-CREATE-CONSTANT" );
-    $ic9$ = SubLObjectFactory.makeString( "Return the constant with NAME if it exists, otherwise create it with EXTERNAL-ID.\n  Also, if it exists but has a null id, install EXTERNAL-ID on the constant." );
-    $ic10$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#29", "CYC" ), SubLObjectFactory.makeSymbol( "STRINGP" ) ) );
-    $ic11$ = SubLObjectFactory.makeString( "TMP" );
-    $ic12$ = SubLObjectFactory.makeString( "~A-~A" );
-    $ic13$ = SubLObjectFactory.makeSymbol( "GENTEMP-CONSTANT" );
-    $ic14$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13588", "CYC" ), SubLObjectFactory.makeSymbol( "&OPTIONAL" ), ConsesLow.list( SubLObjectFactory
-        .makeSymbol( "S#10299", "CYC" ), SubLObjectFactory.makeString( "TMP" ) ) );
-    $ic15$ = SubLObjectFactory.makeString( "Create and return a temporary constant whose name is based on START-NAME" );
-    $ic16$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13588", "CYC" ), SubLObjectFactory.makeSymbol( "STRINGP" ) ) );
-    $ic17$ = SubLObjectFactory.makeString( "" );
-    $ic18$ = SubLObjectFactory.makeKeyword( "UPCASE" );
-    $ic19$ = SubLObjectFactory.makeKeyword( "DOWNCASE" );
-    $ic20$ = SubLObjectFactory.makeString( "T" );
-    $ic21$ = SubLObjectFactory.makeString( "T-" );
-    $ic22$ = SubLObjectFactory.makeSymbol( "CONSTANT-P" );
-    $ic23$ = SubLObjectFactory.makeSymbol( "REMOVE-CONSTANT" );
-    $ic24$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT", "CYC" ) );
-    $ic25$ = SubLObjectFactory.makeString( "Remove CONSTANT from the KB." );
-    $ic26$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT", "CYC" ), SubLObjectFactory.makeSymbol( "CONSTANT-P" ) ) );
-    $ic27$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "NULL" ) );
-    $ic28$ = SubLObjectFactory.makeSymbol( "FIND-CONSTANT" );
-    $ic29$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#29", "CYC" ) );
-    $ic30$ = SubLObjectFactory.makeString( "Return the constant with NAME, or NIL if not present." );
-    $ic31$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "CONSTANT-P" ) ) );
-    $ic32$ = SubLObjectFactory.makeSymbol( "CONSTANT-NAME" );
-    $ic33$ = SubLObjectFactory.makeString( "Return the name of CONSTANT or :unnamed." );
-    $ic34$ = SubLObjectFactory.makeSymbol( "GUID-P" );
-    $ic35$ = SubLObjectFactory.makeSymbol( "GUID-STRING-P" );
-    $ic36$ = SubLObjectFactory.makeSymbol( "RENAME-CONSTANT" );
-    $ic37$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT", "CYC" ), SubLObjectFactory.makeSymbol( "S#13498", "CYC" ) );
-    $ic38$ = SubLObjectFactory.makeString( "Rename CONSTANT to have NEW-NAME as its name.  The constant is returned." );
-    $ic39$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT", "CYC" ), SubLObjectFactory.makeSymbol( "CONSTANT-P" ) ), ConsesLow.list(
-        SubLObjectFactory.makeSymbol( "S#13498", "CYC" ), SubLObjectFactory.makeSymbol( "STRINGP" ) ) );
-    $ic40$ = SubLObjectFactory.makeSymbol( "CONSTANT-INTERNAL-ID" );
-    $ic41$ = SubLObjectFactory.makeString( "Return the internal id of CONSTANT." );
-    $ic42$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "S#13564", "CYC" ) ) );
-    $ic43$ = SubLObjectFactory.makeSymbol( "S#13564", "CYC" );
-    $ic44$ = SubLObjectFactory.makeSymbol( "FIND-CONSTANT-BY-INTERNAL-ID" );
-    $ic45$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#1519", "CYC" ) );
-    $ic46$ = SubLObjectFactory.makeString( "Return the constant with internal ID, or NIL if not present." );
-    $ic47$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#1519", "CYC" ), SubLObjectFactory.makeSymbol( "S#13564", "CYC" ) ) );
-    $ic48$ = SubLObjectFactory.makeSymbol( "CONSTANT-EXTERNAL-ID" );
-    $ic49$ = SubLObjectFactory.makeString( "Return the external id of CONSTANT." );
-    $ic50$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "S#13484", "CYC" ) ) );
-    $ic51$ = SubLObjectFactory.makeSymbol( "FIND-CONSTANT-BY-EXTERNAL-ID" );
-    $ic52$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10596", "CYC" ) );
-    $ic53$ = SubLObjectFactory.makeString( "Return the constant with EXTERNAL-ID, or NIL if not present." );
-    $ic54$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10596", "CYC" ), SubLObjectFactory.makeSymbol( "S#13484", "CYC" ) ) );
-    $ic55$ = SubLObjectFactory.makeSymbol( "LISTP" );
-    $ic56$ = SubLObjectFactory.makeSymbol( "CONSTANT-INFO-FROM-GUID-STRINGS" );
-    $ic57$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13589", "CYC" ) );
-    $ic58$ = SubLObjectFactory.makeString( "Returns a list of constant info-items corresponding to the GUID-LIST.  Each\ninfo item is a list of guid-string and name." );
-    $ic59$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13589", "CYC" ), SubLObjectFactory.makeSymbol( "LISTP" ) ) );
-    $ic60$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "LISTP" ) );
-    $ic61$ = SubLObjectFactory.makeSymbol( "CONSTANT-INFO-FROM-NAME-STRINGS" );
-    $ic62$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13590", "CYC" ) );
-    $ic63$ = SubLObjectFactory.makeString( "Returns a list of constant info-items corresponding to the NAME-LIST.  Each\ninfo item is a list of guid-string and name." );
-    $ic64$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13590", "CYC" ), SubLObjectFactory.makeSymbol( "LISTP" ) ) );
-    $ic65$ = ConsesLow.list( SEVEN_INTEGER, TWENTY_INTEGER, SubLObjectFactory.makeInteger( 1969 ) );
-    $ic66$ = SubLObjectFactory.makeSymbol( "S#13529", "CYC" );
-    $ic67$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13591", "CYC" ), SubLObjectFactory.makeSymbol( "S#13592", "CYC" ), SubLObjectFactory.makeSymbol( "S#13593", "CYC" ) );
-    $ic68$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13594", "CYC" ), SubLObjectFactory.makeSymbol( "S#13595", "CYC" ), SubLObjectFactory.makeSymbol( "S#13596", "CYC" ) );
-    $ic69$ = SubLObjectFactory.makeKeyword( "UNNAMED" );
-    $ic70$ = SubLObjectFactory.makeString( "cyc" );
-    $ic71$ = SubLObjectFactory.makeSymbol( "CONSTANT-NAMESPACE" );
-    $ic72$ = SubLObjectFactory.makeString( "Return the namespace to which the constant belongs." );
-    $ic73$ = SubLObjectFactory.makeSymbol( "CONSTANT-NAME-WITHIN-NAMESPACE" );
-    $ic74$ = SubLObjectFactory.makeString( "Return the constant name within its namespace." );
-    $ic75$ = SubLObjectFactory.makeSymbol( "TRUE" );
-    $ic76$ = SubLObjectFactory.makeSymbol( "RANDOM-CONSTANT" );
-    $ic77$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "&OPTIONAL" ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#122", "CYC" ), ConsesLow.list(
-        SubLObjectFactory.makeSymbol( "FUNCTION" ), SubLObjectFactory.makeSymbol( "TRUE" ) ) ) );
-    $ic78$ = SubLObjectFactory.makeString( "Return a randomly chosen constant that satisfies TEST" );
-    $ic79$ = SubLObjectFactory.makeInteger( 500 );
-    $ic80$ = SubLObjectFactory.makeSymbol( "NON-NEGATIVE-INTEGER-P" );
-    $ic81$ = SubLObjectFactory.makeSymbol( "S#2322", "CYC" );
-    $ic82$ = SubLObjectFactory.makeString( "Error ~A (~A) compiling regular expression ~S at offset ~A." );
-    $ic83$ = SubLObjectFactory.makeKeyword( "SKIP" );
-    $ic84$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13597", "CYC" ), SubLObjectFactory.makeSymbol( "S#13598", "CYC" ) );
-    $ic85$ = SubLObjectFactory.makeSymbol( "CLET" );
-    $ic86$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13587", "CYC" ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10539", "CYC" ) ) ),
-        ConsesLow.list( SubLObjectFactory.makeSymbol( "S#9675", "CYC" ), ConsesLow.list( SubLObjectFactory.makeSymbol( "QUOTE" ), SubLObjectFactory
-            .makeSymbol( "S#13584", "CYC" ) ) ) );
+    $ic0$ = makeSymbol( "S#10492", "CYC" );
+    $ic1$ = makeSymbol( "S#13484", "CYC" );
+    $ic2$ = makeSymbol( "CREATE-CONSTANT" );
+    $ic3$ = ConsesLow.list( makeSymbol( "S#29", "CYC" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "S#10596", "CYC" ) );
+    $ic4$ = makeString( "Return a new constant named NAME with EXTERNAL-ID as the external ID." );
+    $ic5$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#29", "CYC" ), makeSymbol( "S#10492", "CYC" ) ), ConsesLow.list( makeSymbol( "S#10596", "CYC" ), ConsesLow.list( makeSymbol( "S#664", "CYC" ), makeSymbol(
+        "S#13484", "CYC" ) ) ) );
+    $ic6$ = ConsesLow.list( makeSymbol( "CONSTANT-P" ) );
+    $ic7$ = makeSymbol( "STRINGP" );
+    $ic8$ = makeSymbol( "FIND-OR-CREATE-CONSTANT" );
+    $ic9$ = makeString( "Return the constant with NAME if it exists, otherwise create it with EXTERNAL-ID.\n  Also, if it exists but has a null id, install EXTERNAL-ID on the constant." );
+    $ic10$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#29", "CYC" ), makeSymbol( "STRINGP" ) ) );
+    $ic11$ = makeString( "TMP" );
+    $ic12$ = makeString( "~A-~A" );
+    $ic13$ = makeSymbol( "GENTEMP-CONSTANT" );
+    $ic14$ = ConsesLow.list( makeSymbol( "S#13588", "CYC" ), makeSymbol( "&OPTIONAL" ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#10299", "CYC" ), makeString( "TMP" ) ) );
+    $ic15$ = makeString( "Create and return a temporary constant whose name is based on START-NAME" );
+    $ic16$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#13588", "CYC" ), makeSymbol( "STRINGP" ) ) );
+    $ic17$ = makeString( "" );
+    $ic18$ = makeKeyword( "UPCASE" );
+    $ic19$ = makeKeyword( "DOWNCASE" );
+    $ic20$ = makeString( "T" );
+    $ic21$ = makeString( "T-" );
+    $ic22$ = makeSymbol( "CONSTANT-P" );
+    $ic23$ = makeSymbol( "REMOVE-CONSTANT" );
+    $ic24$ = ConsesLow.list( makeSymbol( "CONSTANT", "CYC" ) );
+    $ic25$ = makeString( "Remove CONSTANT from the KB." );
+    $ic26$ = ConsesLow.list( ConsesLow.list( makeSymbol( "CONSTANT", "CYC" ), makeSymbol( "CONSTANT-P" ) ) );
+    $ic27$ = ConsesLow.list( makeSymbol( "NULL" ) );
+    $ic28$ = makeSymbol( "FIND-CONSTANT" );
+    $ic29$ = ConsesLow.list( makeSymbol( "S#29", "CYC" ) );
+    $ic30$ = makeString( "Return the constant with NAME, or NIL if not present." );
+    $ic31$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#664", "CYC" ), makeSymbol( "CONSTANT-P" ) ) );
+    $ic32$ = makeSymbol( "CONSTANT-NAME" );
+    $ic33$ = makeString( "Return the name of CONSTANT or :unnamed." );
+    $ic34$ = makeSymbol( "GUID-P" );
+    $ic35$ = makeSymbol( "GUID-STRING-P" );
+    $ic36$ = makeSymbol( "RENAME-CONSTANT" );
+    $ic37$ = ConsesLow.list( makeSymbol( "CONSTANT", "CYC" ), makeSymbol( "S#13498", "CYC" ) );
+    $ic38$ = makeString( "Rename CONSTANT to have NEW-NAME as its name.  The constant is returned." );
+    $ic39$ = ConsesLow.list( ConsesLow.list( makeSymbol( "CONSTANT", "CYC" ), makeSymbol( "CONSTANT-P" ) ), ConsesLow.list( makeSymbol( "S#13498", "CYC" ), makeSymbol( "STRINGP" ) ) );
+    $ic40$ = makeSymbol( "CONSTANT-INTERNAL-ID" );
+    $ic41$ = makeString( "Return the internal id of CONSTANT." );
+    $ic42$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#664", "CYC" ), makeSymbol( "S#13564", "CYC" ) ) );
+    $ic43$ = makeSymbol( "S#13564", "CYC" );
+    $ic44$ = makeSymbol( "FIND-CONSTANT-BY-INTERNAL-ID" );
+    $ic45$ = ConsesLow.list( makeSymbol( "S#1519", "CYC" ) );
+    $ic46$ = makeString( "Return the constant with internal ID, or NIL if not present." );
+    $ic47$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#1519", "CYC" ), makeSymbol( "S#13564", "CYC" ) ) );
+    $ic48$ = makeSymbol( "CONSTANT-EXTERNAL-ID" );
+    $ic49$ = makeString( "Return the external id of CONSTANT." );
+    $ic50$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#664", "CYC" ), makeSymbol( "S#13484", "CYC" ) ) );
+    $ic51$ = makeSymbol( "FIND-CONSTANT-BY-EXTERNAL-ID" );
+    $ic52$ = ConsesLow.list( makeSymbol( "S#10596", "CYC" ) );
+    $ic53$ = makeString( "Return the constant with EXTERNAL-ID, or NIL if not present." );
+    $ic54$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#10596", "CYC" ), makeSymbol( "S#13484", "CYC" ) ) );
+    $ic55$ = makeSymbol( "LISTP" );
+    $ic56$ = makeSymbol( "CONSTANT-INFO-FROM-GUID-STRINGS" );
+    $ic57$ = ConsesLow.list( makeSymbol( "S#13589", "CYC" ) );
+    $ic58$ = makeString( "Returns a list of constant info-items corresponding to the GUID-LIST.  Each\ninfo item is a list of guid-string and name." );
+    $ic59$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#13589", "CYC" ), makeSymbol( "LISTP" ) ) );
+    $ic60$ = ConsesLow.list( makeSymbol( "LISTP" ) );
+    $ic61$ = makeSymbol( "CONSTANT-INFO-FROM-NAME-STRINGS" );
+    $ic62$ = ConsesLow.list( makeSymbol( "S#13590", "CYC" ) );
+    $ic63$ = makeString( "Returns a list of constant info-items corresponding to the NAME-LIST.  Each\ninfo item is a list of guid-string and name." );
+    $ic64$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#13590", "CYC" ), makeSymbol( "LISTP" ) ) );
+    $ic65$ = ConsesLow.list( SEVEN_INTEGER, TWENTY_INTEGER, makeInteger( 1969 ) );
+    $ic66$ = makeSymbol( "S#13529", "CYC" );
+    $ic67$ = ConsesLow.list( makeSymbol( "S#13591", "CYC" ), makeSymbol( "S#13592", "CYC" ), makeSymbol( "S#13593", "CYC" ) );
+    $ic68$ = ConsesLow.list( makeSymbol( "S#13594", "CYC" ), makeSymbol( "S#13595", "CYC" ), makeSymbol( "S#13596", "CYC" ) );
+    $ic69$ = makeKeyword( "UNNAMED" );
+    $ic70$ = makeString( "cyc" );
+    $ic71$ = makeSymbol( "CONSTANT-NAMESPACE" );
+    $ic72$ = makeString( "Return the namespace to which the constant belongs." );
+    $ic73$ = makeSymbol( "CONSTANT-NAME-WITHIN-NAMESPACE" );
+    $ic74$ = makeString( "Return the constant name within its namespace." );
+    $ic75$ = makeSymbol( "TRUE" );
+    $ic76$ = makeSymbol( "RANDOM-CONSTANT" );
+    $ic77$ = ConsesLow.list( makeSymbol( "&OPTIONAL" ), ConsesLow.list( makeSymbol( "S#122", "CYC" ), ConsesLow.list( makeSymbol( "FUNCTION" ), makeSymbol( "TRUE" ) ) ) );
+    $ic78$ = makeString( "Return a randomly chosen constant that satisfies TEST" );
+    $ic79$ = makeInteger( 500 );
+    $ic80$ = makeSymbol( "NON-NEGATIVE-INTEGER-P" );
+    $ic81$ = makeSymbol( "S#2322", "CYC" );
+    $ic82$ = makeString( "Error ~A (~A) compiling regular expression ~S at offset ~A." );
+    $ic83$ = makeKeyword( "SKIP" );
+    $ic84$ = ConsesLow.list( makeSymbol( "S#13597", "CYC" ), makeSymbol( "S#13598", "CYC" ) );
+    $ic85$ = makeSymbol( "CLET" );
+    $ic86$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#13587", "CYC" ), ConsesLow.list( makeSymbol( "S#10539", "CYC" ) ) ), ConsesLow.list( makeSymbol( "S#9675", "CYC" ), ConsesLow.list( makeSymbol( "QUOTE" ),
+        SubLObjectFactory.makeSymbol( "S#13584", "CYC" ) ) ) );
   }
 }
 /*

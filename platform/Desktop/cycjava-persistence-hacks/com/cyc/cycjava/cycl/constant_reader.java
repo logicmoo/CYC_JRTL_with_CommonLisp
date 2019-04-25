@@ -23,18 +23,16 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class constant_reader extends SubLTranslatedFile
+public final class constant_reader
+    extends
+      SubLTranslatedFile
 {
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.constant_reader";
   public static final String myFingerPrint = "6a2258c4d1229cb28a5b3caa6a93d18a0228da4c9ade1491c17c39f661698cef";
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constant-reader.lisp",
-    position = 1014L)
+  @SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 1014L)
   private static SubLSymbol $constant_reader_macro_char$;
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constant-reader.lisp",
-    position = 1428L)
+  @SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 1428L)
   private static SubLSymbol $constant_reader_prefix$;
   private static final SubLString $str0$_;
   private static final SubLString $str1$The__S_reader_macro_does_not_take;
@@ -43,25 +41,19 @@ public final class constant_reader extends SubLTranslatedFile
   private static final SubLSymbol $sym4$CATCH_ERROR_MESSAGE_HANDLER;
   private static final SubLSymbol $sym5$SHARPSIGN_DOLLAR_RMF;
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constant-reader.lisp",
-    position = 1223L)
+  @SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 1223L)
   public static SubLObject constant_reader_macro_char()
   {
     return $constant_reader_macro_char$.getGlobalValue();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constant-reader.lisp",
-    position = 1590L)
+  @SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 1590L)
   public static SubLObject constant_reader_prefix()
   {
     return $constant_reader_prefix$.getGlobalValue();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constant-reader.lisp",
-    position = 1736L)
+  @SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 1736L)
   public static SubLObject sharpsign_dollar_rmf(final SubLObject stream, final SubLObject ch, final SubLObject arg)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -73,8 +65,7 @@ public final class constant_reader extends SubLTranslatedFile
     SubLObject buffer = Strings.make_string( length, UNPROVIDED );
     SubLObject i = ZERO_INTEGER;
     SubLObject next;
-    for( next = streams_high.read_char( stream, NIL, NIL, UNPROVIDED ); NIL != next && NIL != constant_completion_high
-        .valid_constant_name_char_p( next ); next = streams_high.read_char( stream, NIL, NIL, UNPROVIDED ) )
+    for( next = streams_high.read_char( stream, NIL, NIL, UNPROVIDED ); NIL != next && NIL != constant_completion_high.valid_constant_name_char_p( next ); next = streams_high.read_char( stream, NIL, NIL, UNPROVIDED ) )
     {
       if( i.numGE( length ) )
       {
@@ -146,9 +137,7 @@ public final class constant_reader extends SubLTranslatedFile
     return Values.values( constant, T );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constant-reader.lisp",
-    position = 3066L)
+  @SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 3066L)
   public static SubLObject find_constant_by_name(final SubLObject name)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -182,9 +171,7 @@ public final class constant_reader extends SubLTranslatedFile
     return constant;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constant-reader.lisp",
-    position = 3475L)
+  @SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 3475L)
   public static SubLObject stream_forbids_constant_creation(final SubLObject stream)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -197,19 +184,18 @@ public final class constant_reader extends SubLTranslatedFile
 
   public static SubLObject declare_constant_reader_file()
   {
-    SubLFiles.declareFunction( myName, "constant_reader_macro_char", "CONSTANT-READER-MACRO-CHAR", 0, 0, false );
-    SubLFiles.declareFunction( myName, "constant_reader_prefix", "CONSTANT-READER-PREFIX", 0, 0, false );
-    SubLFiles.declareFunction( myName, "sharpsign_dollar_rmf", "SHARPSIGN-DOLLAR-RMF", 3, 0, false );
-    SubLFiles.declareFunction( myName, "find_constant_by_name", "FIND-CONSTANT-BY-NAME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "stream_forbids_constant_creation", "STREAM-FORBIDS-CONSTANT-CREATION", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_reader_macro_char", "CONSTANT-READER-MACRO-CHAR", 0, 0, false );
+    SubLFiles.declareFunction(me, "constant_reader_prefix", "CONSTANT-READER-PREFIX", 0, 0, false );
+    SubLFiles.declareFunction(me, "sharpsign_dollar_rmf", "SHARPSIGN-DOLLAR-RMF", 3, 0, false );
+    SubLFiles.declareFunction(me, "find_constant_by_name", "FIND-CONSTANT-BY-NAME", 1, 0, false );
+    SubLFiles.declareFunction(me, "stream_forbids_constant_creation", "STREAM-FORBIDS-CONSTANT-CREATION", 1, 0, false );
     return NIL;
   }
 
   public static SubLObject init_constant_reader_file()
   {
     $constant_reader_macro_char$ = SubLFiles.defconstant( "*CONSTANT-READER-MACRO-CHAR*", Characters.CHAR_dollar );
-    $constant_reader_prefix$ = SubLFiles.defconstant( "*CONSTANT-READER-PREFIX*", Sequences.cconcatenate( $str0$_, Strings.string( $constant_reader_macro_char$
-        .getGlobalValue() ) ) );
+    $constant_reader_prefix$ = SubLFiles.defconstant( "*CONSTANT-READER-PREFIX*", Sequences.cconcatenate( $str0$_, Strings.string( $constant_reader_macro_char$.getGlobalValue() ) ) );
     return NIL;
   }
 
@@ -241,11 +227,11 @@ public final class constant_reader extends SubLTranslatedFile
     me = new constant_reader();
     $constant_reader_macro_char$ = null;
     $constant_reader_prefix$ = null;
-    $str0$_ = SubLObjectFactory.makeString( "#" );
-    $str1$The__S_reader_macro_does_not_take = SubLObjectFactory.makeString( "The ~S reader macro does not take an argument." );
-    $int2$64 = SubLObjectFactory.makeInteger( 64 );
-    $str3$_S_is_not_the_name_of_a_constant_ = SubLObjectFactory.makeString( "~S is not the name of a constant." );
-    $sym4$CATCH_ERROR_MESSAGE_HANDLER = SubLObjectFactory.makeSymbol( "CATCH-ERROR-MESSAGE-HANDLER" );
-    $sym5$SHARPSIGN_DOLLAR_RMF = SubLObjectFactory.makeSymbol( "SHARPSIGN-DOLLAR-RMF" );
+    $str0$_ = makeString( "#" );
+    $str1$The__S_reader_macro_does_not_take = makeString( "The ~S reader macro does not take an argument." );
+    $int2$64 = makeInteger( 64 );
+    $str3$_S_is_not_the_name_of_a_constant_ = makeString( "~S is not the name of a constant." );
+    $sym4$CATCH_ERROR_MESSAGE_HANDLER = makeSymbol( "CATCH-ERROR-MESSAGE-HANDLER" );
+    $sym5$SHARPSIGN_DOLLAR_RMF = makeSymbol( "SHARPSIGN-DOLLAR-RMF" );
   }
 }

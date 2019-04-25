@@ -37,26 +37,20 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class constants_high extends SubLTranslatedFile
+public final class constants_high
+    extends
+      SubLTranslatedFile
 {
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.constants_high";
   public static final String myFingerPrint = "841191859c8a0b679f830e1d25d1965e82a7c59af185c8b00ff928c275ae2ddd";
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 9380L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 9380L)
   public static SubLSymbol $constant_external_id_equivalence_map$;
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 13439L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 13439L)
   private static SubLSymbol $constant_legacy_guid_date$;
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 19292L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 19292L)
   public static SubLSymbol $constant_dump_id_table$;
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 20144L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 20144L)
   public static SubLSymbol $constant_name_obfuscation_fn$;
   private static final SubLList $list0;
   private static final SubLList $list1;
@@ -167,9 +161,7 @@ public final class constants_high extends SubLTranslatedFile
   private static final SubLSymbol $sym106$FIND_CONSTANT_BY_SUID;
   private static final boolean $find_renamed$ = false;
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 1074L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 1074L)
   public static SubLObject do_recent_constants(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -213,14 +205,11 @@ public final class constants_high extends SubLTranslatedFile
     final SubLObject done = ( NIL != done_tail ) ? conses_high.cadr( done_tail ) : NIL;
     final SubLObject body;
     current = ( body = temp );
-    return ConsesLow.list( $sym7$PIF, ConsesLow.list( $sym8$POSITIVE_INTEGER_P, num ), ConsesLow.listS( $sym9$PROGRESS_CSOME,
-        ConsesLow.list( var, ConsesLow.list( $sym10$CONSTANTS_AROUND, $list11, num, num ), progress_message, done ), ConsesLow.append( body, NIL ) ),
-        ConsesLow.listS( $sym12$DO_CONSTANTS, ConsesLow.list( var, progress_message, $kw6$DONE, done ), ConsesLow.append( body, NIL ) ) );
+    return ConsesLow.list( $sym7$PIF, ConsesLow.list( $sym8$POSITIVE_INTEGER_P, num ), ConsesLow.listS( $sym9$PROGRESS_CSOME, ConsesLow.list( var, ConsesLow.list( $sym10$CONSTANTS_AROUND, $list11, num, num ),
+        progress_message, done ), ConsesLow.append( body, NIL ) ), ConsesLow.listS( $sym12$DO_CONSTANTS, ConsesLow.list( var, progress_message, $kw6$DONE, done ), ConsesLow.append( body, NIL ) ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 1727L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 1727L)
   public static SubLObject create_constant(final SubLObject name, SubLObject external_id)
   {
     if( external_id == UNPROVIDED )
@@ -241,9 +230,7 @@ public final class constants_high extends SubLTranslatedFile
     return result;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 2278L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 2278L)
   public static SubLObject find_or_create_constant(final SubLObject name, SubLObject external_id)
   {
     if( external_id == UNPROVIDED )
@@ -259,9 +246,7 @@ public final class constants_high extends SubLTranslatedFile
     return create_constant( name, external_id );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 2724L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 2724L)
   public static SubLObject gentemp_constant(final SubLObject start_name, SubLObject prefix)
   {
     if( prefix == UNPROVIDED )
@@ -274,9 +259,7 @@ public final class constants_high extends SubLTranslatedFile
     return constant;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 3084L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 3084L)
   public static SubLObject suggest_constant_name(final SubLObject string, SubLObject prefix, SubLObject suffix, SubLObject initial_case, SubLObject uniquifyP, SubLObject sequentialP)
   {
     if( prefix == UNPROVIDED )
@@ -363,9 +346,7 @@ public final class constants_high extends SubLTranslatedFile
     return name;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 4275L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 4275L)
   public static SubLObject remove_constant(final SubLObject constant)
   {
     enforceType( constant, $sym35$CONSTANT_P );
@@ -377,9 +358,7 @@ public final class constants_high extends SubLTranslatedFile
     return constants_interface.kb_remove_constant( constant );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 4621L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 4621L)
   public static SubLObject remove_everything_about_constant(final SubLObject constant)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -409,9 +388,7 @@ public final class constants_high extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 5869L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 5869L)
   public static SubLObject find_constant(final SubLObject name)
   {
     enforceType( name, $sym20$STRINGP );
@@ -422,54 +399,42 @@ public final class constants_high extends SubLTranslatedFile
     return constant;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 6116L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 6116L)
   public static SubLObject constant_name(final SubLObject constant)
   {
     enforceType( constant, $sym35$CONSTANT_P );
     return constants_interface.kb_constant_name( constant );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 6284L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 6284L)
   public static SubLObject constant_guid(final SubLObject constant)
   {
     assert NIL != constant_handles.constant_p( constant ) : constant;
     return ( NIL != constant_handles.constant_handle_validP( constant ) ) ? constants_interface.kb_constant_guid( constant ) : NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 6477L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 6477L)
   public static SubLObject constant_merged_guid(final SubLObject constant)
   {
     assert NIL != constant_handles.constant_p( constant ) : constant;
     return ( NIL != constant_handles.constant_handle_validP( constant ) ) ? constants_interface.kb_constant_merged_guid( constant ) : NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 6691L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 6691L)
   public static SubLObject find_constant_by_guid(final SubLObject guid)
   {
     assert NIL != Guids.guid_p( guid ) : guid;
     return constants_interface.kb_lookup_constant_by_guid( guid );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 6866L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 6866L)
   public static SubLObject find_constant_by_guid_string(final SubLObject guid_string)
   {
     assert NIL != Guids.guid_string_p( guid_string ) : guid_string;
     return find_constant_by_guid( Guids.string_to_guid( guid_string ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 7138L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 7138L)
   public static SubLObject rename_constant(final SubLObject constant, final SubLObject new_name)
   {
     enforceType( constant, $sym35$CONSTANT_P );
@@ -477,44 +442,34 @@ public final class constants_high extends SubLTranslatedFile
     return constants_interface.kb_rename_constant( constant, new_name );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 7462L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 7462L)
   public static SubLObject constant_internal_id(final SubLObject constant)
   {
     enforceType( constant, $sym35$CONSTANT_P );
     return constant_handles.constant_suid( constant );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 7844L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 7844L)
   public static SubLObject constant_internal_id_from_external_id(final SubLObject external_id)
   {
     final SubLObject constant = find_constant_by_external_id( external_id );
     return ( NIL != constant ) ? constant_internal_id( constant ) : NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 8037L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 8037L)
   public static SubLObject find_constant_by_internal_id(final SubLObject id)
   {
     enforceType( id, $sym56$CONSTANT_INTERNAL_ID_P );
     return constant_handles.find_constant_by_suid( id );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 8274L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 8274L)
   public static SubLObject constant_internal_id_p(final SubLObject v_object)
   {
     return Types.integerp( v_object );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 8407L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 8407L)
   public static SubLObject constant_internal_id_L(final SubLObject constant1, final SubLObject constant2)
   {
     final SubLObject suid_1 = constant_handles.constant_suid( constant1 );
@@ -530,33 +485,25 @@ public final class constants_high extends SubLTranslatedFile
     return Types.sublisp_null( suid_1 );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 8873L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 8873L)
   public static SubLObject installed_constant_p(final SubLObject v_object)
   {
     return constant_handles.valid_constant_handleP( v_object );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 9027L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 9027L)
   public static SubLObject uninstalled_constant_p(final SubLObject v_object)
   {
-    return SubLObjectFactory.makeBoolean( NIL != constant_handles.constant_p( v_object ) && NIL == installed_constant_p( v_object ) );
+    return makeBoolean( NIL != constant_handles.constant_p( v_object ) && NIL == installed_constant_p( v_object ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 9230L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 9230L)
   public static SubLObject new_constant_internal_id_threshold()
   {
     return constant_handles.new_constant_suid_threshold();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 9674L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 9674L)
   public static SubLObject with_constant_external_id_equivalence_map(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -566,13 +513,10 @@ public final class constants_high extends SubLTranslatedFile
     id_map = current.first();
     final SubLObject body;
     current = ( body = current.rest() );
-    return ConsesLow.listS( $sym62$CLET, ConsesLow.list( ConsesLow.list( $sym63$_CONSTANT_EXTERNAL_ID_EQUIVALENCE_MAP_, id_map ) ), ConsesLow.append( body,
-        NIL ) );
+    return ConsesLow.listS( $sym62$CLET, ConsesLow.list( ConsesLow.list( $sym63$_CONSTANT_EXTERNAL_ID_EQUIVALENCE_MAP_, id_map ) ), ConsesLow.append( body, NIL ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 9835L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 9835L)
   public static SubLObject prefered_constant_external_id_wrt_equivalence(SubLObject external_id)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -583,27 +527,21 @@ public final class constants_high extends SubLTranslatedFile
     return external_id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 10102L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 10102L)
   public static SubLObject constant_external_id(final SubLObject constant)
   {
     enforceType( constant, $sym35$CONSTANT_P );
     return constant_guid( constant );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 10317L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 10317L)
   public static SubLObject constant_name_from_internal_id(final SubLObject internal_id)
   {
     final SubLObject constant = find_constant_by_internal_id( internal_id );
     return ( NIL != constant_handles.constant_p( constant ) ) ? constant_name( constant ) : NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 10509L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 10509L)
   public static SubLObject find_constant_by_external_id(SubLObject external_id)
   {
     enforceType( external_id, $sym14$CONSTANT_EXTERNAL_ID_P );
@@ -611,17 +549,13 @@ public final class constants_high extends SubLTranslatedFile
     return find_constant_by_guid( external_id );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 10855L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 10855L)
   public static SubLObject constant_external_id_p(final SubLObject v_object)
   {
     return Guids.guid_p( v_object );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 10986L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 10986L)
   public static SubLObject constant_has_external_id(final SubLObject constant, final SubLObject external_id)
   {
     assert NIL != constant_handles.constant_p( constant ) : constant;
@@ -630,9 +564,7 @@ public final class constants_high extends SubLTranslatedFile
     return Guids.guidE( guid, external_id );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 11276L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 11276L)
   public static SubLObject constant_external_id_L(final SubLObject constant1, final SubLObject constant2)
   {
     final SubLObject guid_1 = constant_guid( constant1 );
@@ -648,9 +580,7 @@ public final class constants_high extends SubLTranslatedFile
     return Types.sublisp_null( guid_1 );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 11746L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 11746L)
   public static SubLObject constant_info_from_guid_strings(final SubLObject guid_string_list)
   {
     enforceType( guid_string_list, $sym71$LISTP );
@@ -676,9 +606,7 @@ public final class constants_high extends SubLTranslatedFile
     return Sequences.nreverse( constant_info_list );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 12365L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 12365L)
   public static SubLObject constant_info_from_name_strings(final SubLObject name_string_list)
   {
     enforceType( name_string_list, $sym71$LISTP );
@@ -704,33 +632,25 @@ public final class constants_high extends SubLTranslatedFile
     return Sequences.nreverse( constant_info_list );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 12965L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 12965L)
   public static SubLObject make_constant_external_id()
   {
     return make_constant_guid();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 13132L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 13132L)
   public static SubLObject make_skolem_id()
   {
     return make_constant_external_id();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 13380L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 13380L)
   public static SubLObject make_constant_guid()
   {
     return Guids.new_guid();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 13637L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 13637L)
   public static SubLObject make_constant_legacy_guid(final SubLObject legacy_id)
   {
     assert NIL != constant_legacy_id_p( legacy_id ) : legacy_id;
@@ -756,9 +676,7 @@ public final class constants_high extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 13933L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 13933L)
   public static SubLObject constant_guid_to_legacy_id(final SubLObject guid)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -800,41 +718,31 @@ public final class constants_high extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 14440L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 14440L)
   public static SubLObject constant_legacy_id(final SubLObject constant)
   {
     return constant_guid_to_legacy_id( constant_guid( constant ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 14821L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 14821L)
   public static SubLObject find_constant_by_legacy_id(final SubLObject legacy_id)
   {
     return find_constant_by_guid( make_constant_legacy_guid( legacy_id ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 15011L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 15011L)
   public static SubLObject constant_legacy_id_p(final SubLObject v_object)
   {
     return Types.integerp( v_object );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 15087L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 15087L)
   public static SubLObject unnamed_constant_p(final SubLObject constant)
   {
-    return SubLObjectFactory.makeBoolean( NIL != constant_handles.constant_p( constant ) && $kw85$UNNAMED == constant_name( constant ) );
+    return makeBoolean( NIL != constant_handles.constant_p( constant ) && $kw85$UNNAMED == constant_name( constant ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 15331L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 15331L)
   public static SubLObject constant_namespace(final SubLObject constant)
   {
     enforceType( constant, $sym35$CONSTANT_P );
@@ -846,9 +754,7 @@ public final class constants_high extends SubLTranslatedFile
     return $str86$cyc;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 15806L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 15806L)
   public static SubLObject constant_name_within_namespace(final SubLObject constant)
   {
     enforceType( constant, $sym35$CONSTANT_P );
@@ -860,9 +766,7 @@ public final class constants_high extends SubLTranslatedFile
     return constant_name( constant );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 16254L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 16254L)
   public static SubLObject random_constant(SubLObject test)
   {
     if( test == UNPROVIDED )
@@ -872,9 +776,7 @@ public final class constants_high extends SubLTranslatedFile
     return constants_low.random_constant_internal( test );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 16929L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 16929L)
   public static SubLObject sample_constants(SubLObject n, SubLObject allow_repeatsP, SubLObject test)
   {
     if( n == UNPROVIDED )
@@ -901,16 +803,14 @@ public final class constants_high extends SubLTranslatedFile
       return result;
     }
     SubLObject result;
-    for( result = set_contents.new_set_contents( n, Symbols.symbol_function( EQL ) ); set_contents.set_contents_size( result ).numL( n ); result = set_contents.set_contents_add( random_constant( test ),
-        result, Symbols.symbol_function( EQL ) ) )
+    for( result = set_contents.new_set_contents( n, Symbols.symbol_function( EQL ) ); set_contents.set_contents_size( result ).numL( n ); result = set_contents.set_contents_add( random_constant( test ), result, Symbols
+        .symbol_function( EQL ) ) )
     {
     }
     return set_contents.set_contents_element_list( result );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 17518L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 17518L)
   public static SubLObject constant_grep(final SubLObject regular_expression, SubLObject comp_options, SubLObject match_options)
   {
     if( comp_options == UNPROVIDED )
@@ -960,9 +860,7 @@ public final class constants_high extends SubLTranslatedFile
     return matches;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 17518L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 17518L)
   public static SubLObject constant_grep_pattern(final SubLObject pattern, SubLObject match_options)
   {
     if( match_options == UNPROVIDED )
@@ -982,8 +880,7 @@ public final class constants_high extends SubLTranslatedFile
         SubLObject v_iteration;
         SubLObject id;
         SubLObject constant;
-        for( length = Sequences.length( vector_var ), v_iteration = NIL, v_iteration = ZERO_INTEGER; v_iteration.numL( length ); v_iteration = Numbers.add( v_iteration,
-            ONE_INTEGER ) )
+        for( length = Sequences.length( vector_var ), v_iteration = NIL, v_iteration = ZERO_INTEGER; v_iteration.numL( length ); v_iteration = Numbers.add( v_iteration, ONE_INTEGER ) )
         {
           id = ( ( NIL != backwardP_var ) ? Numbers.subtract( length, v_iteration, ONE_INTEGER ) : v_iteration );
           constant = Vectors.aref( vector_var, id );
@@ -993,8 +890,7 @@ public final class constants_high extends SubLTranslatedFile
             {
               constant = $kw99$SKIP;
             }
-            if( NIL != list_utilities.sublisp_boolean( regular_expression_utilities.find_all_matches_within_string( pattern, constant_name( constant ), match_options, NIL, UNPROVIDED,
-                UNPROVIDED ) ) )
+            if( NIL != list_utilities.sublisp_boolean( regular_expression_utilities.find_all_matches_within_string( pattern, constant_name( constant ), match_options, NIL, UNPROVIDED, UNPROVIDED ) ) )
             {
               matches = ConsesLow.cons( constant, matches );
             }
@@ -1023,18 +919,14 @@ public final class constants_high extends SubLTranslatedFile
     return Sequences.nreverse( matches );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 18435L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 18435L)
   public static SubLObject constant_checkpoint_p(final SubLObject v_object)
   {
-    return SubLObjectFactory.makeBoolean( NIL != list_utilities.proper_list_p( v_object ) && NIL != list_utilities.lengthE( v_object, TWO_INTEGER, UNPROVIDED )
-        && NIL != list_utilities.every_in_list( $sym96$NON_NEGATIVE_INTEGER_P, v_object, UNPROVIDED ) );
+    return makeBoolean( NIL != list_utilities.proper_list_p( v_object ) && NIL != list_utilities.lengthE( v_object, TWO_INTEGER, UNPROVIDED ) && NIL != list_utilities.every_in_list( $sym96$NON_NEGATIVE_INTEGER_P,
+        v_object, UNPROVIDED ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 18723L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 18723L)
   public static SubLObject new_constant_checkpoint()
   {
     final SubLObject constant_count = constant_handles.constant_count();
@@ -1042,9 +934,7 @@ public final class constants_high extends SubLTranslatedFile
     return ConsesLow.list( constant_count, next_constant_id );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 18973L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 18973L)
   public static SubLObject constant_checkpoint_currentP(final SubLObject constant_checkpoint)
   {
     SubLObject checkpoint_count = NIL;
@@ -1057,15 +947,13 @@ public final class constants_high extends SubLTranslatedFile
     current = current.rest();
     if( NIL == current )
     {
-      return SubLObjectFactory.makeBoolean( checkpoint_count.numE( constant_handles.constant_count() ) && checkpoint_next_id.numE( constant_handles.next_constant_suid() ) );
+      return makeBoolean( checkpoint_count.numE( constant_handles.constant_count() ) && checkpoint_next_id.numE( constant_handles.next_constant_suid() ) );
     }
     cdestructuring_bind.cdestructuring_bind_error( constant_checkpoint, $list100 );
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 19510L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 19510L)
   public static SubLObject constant_dump_id(final SubLObject constant)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1078,17 +966,13 @@ public final class constants_high extends SubLTranslatedFile
     return id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 19783L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 19783L)
   public static SubLObject find_constant_by_dump_id(final SubLObject dump_id)
   {
     return find_constant_by_internal_id( dump_id );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 19937L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 19937L)
   public static SubLObject with_constant_dump_id_table(final SubLObject macroform, final SubLObject environment)
   {
     final SubLObject datum = macroform.rest();
@@ -1097,9 +981,7 @@ public final class constants_high extends SubLTranslatedFile
     return ConsesLow.listS( $sym62$CLET, $list101, ConsesLow.append( body, NIL ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 20498L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 20498L)
   public static SubLObject constant_dump_name(final SubLObject constant)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1110,9 +992,7 @@ public final class constants_high extends SubLTranslatedFile
     return constant_name( constant );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 20703L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 20703L)
   public static SubLObject with_constant_name_obfuscation(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -1122,13 +1002,10 @@ public final class constants_high extends SubLTranslatedFile
     obfuscate_fn = current.first();
     final SubLObject body;
     current = ( body = current.rest() );
-    return ConsesLow.listS( $sym62$CLET, ConsesLow.list( ConsesLow.list( $sym104$_CONSTANT_NAME_OBFUSCATION_FN_, obfuscate_fn ) ), ConsesLow.append( body,
-        NIL ) );
+    return ConsesLow.listS( $sym62$CLET, ConsesLow.list( ConsesLow.list( $sym104$_CONSTANT_NAME_OBFUSCATION_FN_, obfuscate_fn ) ), ConsesLow.append( body, NIL ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 20987L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 20987L)
   public static SubLObject constants_around_constant(final SubLObject constant, SubLObject total, SubLObject before, SubLObject after)
   {
     if( total == UNPROVIDED )
@@ -1147,9 +1024,7 @@ public final class constants_high extends SubLTranslatedFile
     return constants_around( constant_handles.constant_suid( constant ), total, before, after );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constants-high.lisp",
-    position = 21474L)
+  @SubLTranslatedFile.SubL(source = "cycl/constants-high.lisp", position = 21474L)
   public static SubLObject constants_around(final SubLObject constant_id, SubLObject total, SubLObject before, SubLObject after)
   {
     if( total == UNPROVIDED )
@@ -1170,63 +1045,63 @@ public final class constants_high extends SubLTranslatedFile
 
   public static SubLObject declare_constants_high_file()
   {
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.constants_high", "do_recent_constants", "DO-RECENT-CONSTANTS" );
-    SubLFiles.declareFunction( myName, "create_constant", "CREATE-CONSTANT", 1, 1, false );
-    SubLFiles.declareFunction( myName, "find_or_create_constant", "FIND-OR-CREATE-CONSTANT", 1, 1, false );
-    SubLFiles.declareFunction( myName, "gentemp_constant", "GENTEMP-CONSTANT", 1, 1, false );
-    SubLFiles.declareFunction( myName, "suggest_constant_name", "SUGGEST-CONSTANT-NAME", 1, 5, false );
-    SubLFiles.declareFunction( myName, "remove_constant", "REMOVE-CONSTANT", 1, 0, false );
-    SubLFiles.declareFunction( myName, "remove_everything_about_constant", "REMOVE-EVERYTHING-ABOUT-CONSTANT", 1, 0, false );
-    SubLFiles.declareFunction( myName, "find_constant", "FIND-CONSTANT", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_name", "CONSTANT-NAME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_guid", "CONSTANT-GUID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_merged_guid", "CONSTANT-MERGED-GUID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "find_constant_by_guid", "FIND-CONSTANT-BY-GUID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "find_constant_by_guid_string", "FIND-CONSTANT-BY-GUID-STRING", 1, 0, false );
-    SubLFiles.declareFunction( myName, "rename_constant", "RENAME-CONSTANT", 2, 0, false );
-    SubLFiles.declareFunction( myName, "constant_internal_id", "CONSTANT-INTERNAL-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_internal_id_from_external_id", "CONSTANT-INTERNAL-ID-FROM-EXTERNAL-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "find_constant_by_internal_id", "FIND-CONSTANT-BY-INTERNAL-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_internal_id_p", "CONSTANT-INTERNAL-ID-P", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_internal_id_L", "CONSTANT-INTERNAL-ID-<", 2, 0, false );
-    SubLFiles.declareFunction( myName, "installed_constant_p", "INSTALLED-CONSTANT-P", 1, 0, false );
-    SubLFiles.declareFunction( myName, "uninstalled_constant_p", "UNINSTALLED-CONSTANT-P", 1, 0, false );
-    SubLFiles.declareFunction( myName, "new_constant_internal_id_threshold", "NEW-CONSTANT-INTERNAL-ID-THRESHOLD", 0, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.constants_high", "with_constant_external_id_equivalence_map", "WITH-CONSTANT-EXTERNAL-ID-EQUIVALENCE-MAP" );
-    SubLFiles.declareFunction( myName, "prefered_constant_external_id_wrt_equivalence", "PREFERED-CONSTANT-EXTERNAL-ID-WRT-EQUIVALENCE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_external_id", "CONSTANT-EXTERNAL-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_name_from_internal_id", "CONSTANT-NAME-FROM-INTERNAL-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "find_constant_by_external_id", "FIND-CONSTANT-BY-EXTERNAL-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_external_id_p", "CONSTANT-EXTERNAL-ID-P", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_has_external_id", "CONSTANT-HAS-EXTERNAL-ID", 2, 0, false );
-    SubLFiles.declareFunction( myName, "constant_external_id_L", "CONSTANT-EXTERNAL-ID-<", 2, 0, false );
-    SubLFiles.declareFunction( myName, "constant_info_from_guid_strings", "CONSTANT-INFO-FROM-GUID-STRINGS", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_info_from_name_strings", "CONSTANT-INFO-FROM-NAME-STRINGS", 1, 0, false );
-    SubLFiles.declareFunction( myName, "make_constant_external_id", "MAKE-CONSTANT-EXTERNAL-ID", 0, 0, false );
-    SubLFiles.declareFunction( myName, "make_skolem_id", "MAKE-SKOLEM-ID", 0, 0, false );
-    SubLFiles.declareFunction( myName, "make_constant_guid", "MAKE-CONSTANT-GUID", 0, 0, false );
-    SubLFiles.declareFunction( myName, "make_constant_legacy_guid", "MAKE-CONSTANT-LEGACY-GUID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_guid_to_legacy_id", "CONSTANT-GUID-TO-LEGACY-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_legacy_id", "CONSTANT-LEGACY-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "find_constant_by_legacy_id", "FIND-CONSTANT-BY-LEGACY-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_legacy_id_p", "CONSTANT-LEGACY-ID-P", 1, 0, false );
-    SubLFiles.declareFunction( myName, "unnamed_constant_p", "UNNAMED-CONSTANT-P", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_namespace", "CONSTANT-NAMESPACE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_name_within_namespace", "CONSTANT-NAME-WITHIN-NAMESPACE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "random_constant", "RANDOM-CONSTANT", 0, 1, false );
-    SubLFiles.declareFunction( myName, "sample_constants", "SAMPLE-CONSTANTS", 0, 3, false );
-    SubLFiles.declareFunction( myName, "constant_grep", "CONSTANT-GREP", 1, 2, false );
-    SubLFiles.declareFunction( myName, "constant_grep_pattern", "CONSTANT-GREP-PATTERN", 1, 1, false );
-    SubLFiles.declareFunction( myName, "constant_checkpoint_p", "CONSTANT-CHECKPOINT-P", 1, 0, false );
-    SubLFiles.declareFunction( myName, "new_constant_checkpoint", "NEW-CONSTANT-CHECKPOINT", 0, 0, false );
-    SubLFiles.declareFunction( myName, "constant_checkpoint_currentP", "CONSTANT-CHECKPOINT-CURRENT?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "constant_dump_id", "CONSTANT-DUMP-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "find_constant_by_dump_id", "FIND-CONSTANT-BY-DUMP-ID", 1, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.constants_high", "with_constant_dump_id_table", "WITH-CONSTANT-DUMP-ID-TABLE" );
-    SubLFiles.declareFunction( myName, "constant_dump_name", "CONSTANT-DUMP-NAME", 1, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.constants_high", "with_constant_name_obfuscation", "WITH-CONSTANT-NAME-OBFUSCATION" );
-    SubLFiles.declareFunction( myName, "constants_around_constant", "CONSTANTS-AROUND-CONSTANT", 1, 3, false );
-    SubLFiles.declareFunction( myName, "constants_around", "CONSTANTS-AROUND", 1, 3, false );
+    SubLFiles.declareMacro(me, "do_recent_constants", "DO-RECENT-CONSTANTS" );
+    SubLFiles.declareFunction(me, "create_constant", "CREATE-CONSTANT", 1, 1, false );
+    SubLFiles.declareFunction(me, "find_or_create_constant", "FIND-OR-CREATE-CONSTANT", 1, 1, false );
+    SubLFiles.declareFunction(me, "gentemp_constant", "GENTEMP-CONSTANT", 1, 1, false );
+    SubLFiles.declareFunction(me, "suggest_constant_name", "SUGGEST-CONSTANT-NAME", 1, 5, false );
+    SubLFiles.declareFunction(me, "remove_constant", "REMOVE-CONSTANT", 1, 0, false );
+    SubLFiles.declareFunction(me, "remove_everything_about_constant", "REMOVE-EVERYTHING-ABOUT-CONSTANT", 1, 0, false );
+    SubLFiles.declareFunction(me, "find_constant", "FIND-CONSTANT", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_name", "CONSTANT-NAME", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_guid", "CONSTANT-GUID", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_merged_guid", "CONSTANT-MERGED-GUID", 1, 0, false );
+    SubLFiles.declareFunction(me, "find_constant_by_guid", "FIND-CONSTANT-BY-GUID", 1, 0, false );
+    SubLFiles.declareFunction(me, "find_constant_by_guid_string", "FIND-CONSTANT-BY-GUID-STRING", 1, 0, false );
+    SubLFiles.declareFunction(me, "rename_constant", "RENAME-CONSTANT", 2, 0, false );
+    SubLFiles.declareFunction(me, "constant_internal_id", "CONSTANT-INTERNAL-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_internal_id_from_external_id", "CONSTANT-INTERNAL-ID-FROM-EXTERNAL-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "find_constant_by_internal_id", "FIND-CONSTANT-BY-INTERNAL-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_internal_id_p", "CONSTANT-INTERNAL-ID-P", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_internal_id_L", "CONSTANT-INTERNAL-ID-<", 2, 0, false );
+    SubLFiles.declareFunction(me, "installed_constant_p", "INSTALLED-CONSTANT-P", 1, 0, false );
+    SubLFiles.declareFunction(me, "uninstalled_constant_p", "UNINSTALLED-CONSTANT-P", 1, 0, false );
+    SubLFiles.declareFunction(me, "new_constant_internal_id_threshold", "NEW-CONSTANT-INTERNAL-ID-THRESHOLD", 0, 0, false );
+    SubLFiles.declareMacro(me, "with_constant_external_id_equivalence_map", "WITH-CONSTANT-EXTERNAL-ID-EQUIVALENCE-MAP" );
+    SubLFiles.declareFunction(me, "prefered_constant_external_id_wrt_equivalence", "PREFERED-CONSTANT-EXTERNAL-ID-WRT-EQUIVALENCE", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_external_id", "CONSTANT-EXTERNAL-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_name_from_internal_id", "CONSTANT-NAME-FROM-INTERNAL-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "find_constant_by_external_id", "FIND-CONSTANT-BY-EXTERNAL-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_external_id_p", "CONSTANT-EXTERNAL-ID-P", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_has_external_id", "CONSTANT-HAS-EXTERNAL-ID", 2, 0, false );
+    SubLFiles.declareFunction(me, "constant_external_id_L", "CONSTANT-EXTERNAL-ID-<", 2, 0, false );
+    SubLFiles.declareFunction(me, "constant_info_from_guid_strings", "CONSTANT-INFO-FROM-GUID-STRINGS", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_info_from_name_strings", "CONSTANT-INFO-FROM-NAME-STRINGS", 1, 0, false );
+    SubLFiles.declareFunction(me, "make_constant_external_id", "MAKE-CONSTANT-EXTERNAL-ID", 0, 0, false );
+    SubLFiles.declareFunction(me, "make_skolem_id", "MAKE-SKOLEM-ID", 0, 0, false );
+    SubLFiles.declareFunction(me, "make_constant_guid", "MAKE-CONSTANT-GUID", 0, 0, false );
+    SubLFiles.declareFunction(me, "make_constant_legacy_guid", "MAKE-CONSTANT-LEGACY-GUID", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_guid_to_legacy_id", "CONSTANT-GUID-TO-LEGACY-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_legacy_id", "CONSTANT-LEGACY-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "find_constant_by_legacy_id", "FIND-CONSTANT-BY-LEGACY-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_legacy_id_p", "CONSTANT-LEGACY-ID-P", 1, 0, false );
+    SubLFiles.declareFunction(me, "unnamed_constant_p", "UNNAMED-CONSTANT-P", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_namespace", "CONSTANT-NAMESPACE", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_name_within_namespace", "CONSTANT-NAME-WITHIN-NAMESPACE", 1, 0, false );
+    SubLFiles.declareFunction(me, "random_constant", "RANDOM-CONSTANT", 0, 1, false );
+    SubLFiles.declareFunction(me, "sample_constants", "SAMPLE-CONSTANTS", 0, 3, false );
+    SubLFiles.declareFunction(me, "constant_grep", "CONSTANT-GREP", 1, 2, false );
+    SubLFiles.declareFunction(me, "constant_grep_pattern", "CONSTANT-GREP-PATTERN", 1, 1, false );
+    SubLFiles.declareFunction(me, "constant_checkpoint_p", "CONSTANT-CHECKPOINT-P", 1, 0, false );
+    SubLFiles.declareFunction(me, "new_constant_checkpoint", "NEW-CONSTANT-CHECKPOINT", 0, 0, false );
+    SubLFiles.declareFunction(me, "constant_checkpoint_currentP", "CONSTANT-CHECKPOINT-CURRENT?", 1, 0, false );
+    SubLFiles.declareFunction(me, "constant_dump_id", "CONSTANT-DUMP-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "find_constant_by_dump_id", "FIND-CONSTANT-BY-DUMP-ID", 1, 0, false );
+    SubLFiles.declareMacro(me, "with_constant_dump_id_table", "WITH-CONSTANT-DUMP-ID-TABLE" );
+    SubLFiles.declareFunction(me, "constant_dump_name", "CONSTANT-DUMP-NAME", 1, 0, false );
+    SubLFiles.declareMacro(me, "with_constant_name_obfuscation", "WITH-CONSTANT-NAME-OBFUSCATION" );
+    SubLFiles.declareFunction(me, "constants_around_constant", "CONSTANTS-AROUND-CONSTANT", 1, 3, false );
+    SubLFiles.declareFunction(me, "constants_around", "CONSTANTS-AROUND", 1, 3, false );
     return NIL;
   }
 
@@ -1252,10 +1127,8 @@ public final class constants_high extends SubLTranslatedFile
     utilities_macros.register_cyc_api_function( $sym57$FIND_CONSTANT_BY_INTERNAL_ID, $list58, $str59$Return_the_constant_with_internal, $list60, $list44 );
     utilities_macros.register_cyc_api_function( $sym64$CONSTANT_EXTERNAL_ID, $list37, $str65$Return_the_external_id_of_CONSTAN, $list39, $list66 );
     utilities_macros.register_cyc_api_function( $sym67$FIND_CONSTANT_BY_EXTERNAL_ID, $list68, $str69$Return_the_constant_with_EXTERNAL, $list70, $list44 );
-    utilities_macros.register_cyc_api_function( $sym72$CONSTANT_INFO_FROM_GUID_STRINGS, $list73, $str74$Returns_a_list_of_constant_info_i, $list75,
-        $list76 );
-    utilities_macros.register_cyc_api_function( $sym77$CONSTANT_INFO_FROM_NAME_STRINGS, $list78, $str79$Returns_a_list_of_constant_info_i, $list80,
-        $list76 );
+    utilities_macros.register_cyc_api_function( $sym72$CONSTANT_INFO_FROM_GUID_STRINGS, $list73, $str74$Returns_a_list_of_constant_info_i, $list75, $list76 );
+    utilities_macros.register_cyc_api_function( $sym77$CONSTANT_INFO_FROM_NAME_STRINGS, $list78, $str79$Returns_a_list_of_constant_info_i, $list80, $list76 );
     utilities_macros.register_cyc_api_function( $sym87$CONSTANT_NAMESPACE, $list37, $str88$Return_the_namespace_to_which_the, $list39, NIL );
     utilities_macros.register_cyc_api_function( $sym89$CONSTANT_NAME_WITHIN_NAMESPACE, $list37, $str90$Return_the_constant_name_within_i, $list39, NIL );
     utilities_macros.register_cyc_api_function( $sym92$RANDOM_CONSTANT, $list93, $str94$Return_a_randomly_chosen_constant, NIL, $list19 );
@@ -1287,122 +1160,116 @@ public final class constants_high extends SubLTranslatedFile
     $constant_legacy_guid_date$ = null;
     $constant_dump_id_table$ = null;
     $constant_name_obfuscation_fn$ = null;
-    $list0 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "VAR" ), SubLObjectFactory.makeSymbol( "&KEY" ), SubLObjectFactory.makeSymbol( "NUM" ),
-        ConsesLow.list( SubLObjectFactory.makeSymbol( "PROGRESS-MESSAGE" ), SubLObjectFactory.makeString( "mapping constants for sweep" ) ), SubLObjectFactory
-            .makeSymbol( "DONE" ) ), SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol( "BODY" ) );
-    $list1 = ConsesLow.list( SubLObjectFactory.makeKeyword( "NUM" ), SubLObjectFactory.makeKeyword( "PROGRESS-MESSAGE" ), SubLObjectFactory.makeKeyword( "DONE" ) );
-    $kw2$ALLOW_OTHER_KEYS = SubLObjectFactory.makeKeyword( "ALLOW-OTHER-KEYS" );
-    $kw3$NUM = SubLObjectFactory.makeKeyword( "NUM" );
-    $kw4$PROGRESS_MESSAGE = SubLObjectFactory.makeKeyword( "PROGRESS-MESSAGE" );
-    $str5$mapping_constants_for_sweep = SubLObjectFactory.makeString( "mapping constants for sweep" );
-    $kw6$DONE = SubLObjectFactory.makeKeyword( "DONE" );
-    $sym7$PIF = SubLObjectFactory.makeSymbol( "PIF" );
-    $sym8$POSITIVE_INTEGER_P = SubLObjectFactory.makeSymbol( "POSITIVE-INTEGER-P" );
-    $sym9$PROGRESS_CSOME = SubLObjectFactory.makeSymbol( "PROGRESS-CSOME" );
-    $sym10$CONSTANTS_AROUND = SubLObjectFactory.makeSymbol( "CONSTANTS-AROUND" );
-    $list11 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NEXT-CONSTANT-SUID" ) );
-    $sym12$DO_CONSTANTS = SubLObjectFactory.makeSymbol( "DO-CONSTANTS" );
-    $sym13$CONSTANT_NAME_SPEC_P = SubLObjectFactory.makeSymbol( "CONSTANT-NAME-SPEC-P" );
-    $sym14$CONSTANT_EXTERNAL_ID_P = SubLObjectFactory.makeSymbol( "CONSTANT-EXTERNAL-ID-P" );
-    $sym15$CREATE_CONSTANT = SubLObjectFactory.makeSymbol( "CREATE-CONSTANT" );
-    $list16 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NAME" ), SubLObjectFactory.makeSymbol( "&OPTIONAL" ), SubLObjectFactory.makeSymbol( "EXTERNAL-ID" ) );
-    $str17$Return_a_new_constant_named_NAME_ = SubLObjectFactory.makeString( "Return a new constant named NAME with EXTERNAL-ID as the external ID." );
-    $list18 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "NAME" ), SubLObjectFactory.makeSymbol( "CONSTANT-NAME-SPEC-P" ) ), ConsesLow.list(
-        SubLObjectFactory.makeSymbol( "EXTERNAL-ID" ), ConsesLow.list( SubLObjectFactory.makeSymbol( "NIL-OR" ), SubLObjectFactory.makeSymbol(
-            "CONSTANT-EXTERNAL-ID-P" ) ) ) );
-    $list19 = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT-P" ) );
-    $sym20$STRINGP = SubLObjectFactory.makeSymbol( "STRINGP" );
-    $sym21$FIND_OR_CREATE_CONSTANT = SubLObjectFactory.makeSymbol( "FIND-OR-CREATE-CONSTANT" );
-    $str22$Return_the_constant_with_NAME_if_ = SubLObjectFactory.makeString(
+    $list0 = ConsesLow.list( ConsesLow.list( makeSymbol( "VAR" ), makeSymbol( "&KEY" ), makeSymbol( "NUM" ), ConsesLow.list( makeSymbol( "PROGRESS-MESSAGE" ), makeString( "mapping constants for sweep" ) ),
+        SubLObjectFactory.makeSymbol( "DONE" ) ), makeSymbol( "&BODY" ), makeSymbol( "BODY" ) );
+    $list1 = ConsesLow.list( makeKeyword( "NUM" ), makeKeyword( "PROGRESS-MESSAGE" ), makeKeyword( "DONE" ) );
+    $kw2$ALLOW_OTHER_KEYS = makeKeyword( "ALLOW-OTHER-KEYS" );
+    $kw3$NUM = makeKeyword( "NUM" );
+    $kw4$PROGRESS_MESSAGE = makeKeyword( "PROGRESS-MESSAGE" );
+    $str5$mapping_constants_for_sweep = makeString( "mapping constants for sweep" );
+    $kw6$DONE = makeKeyword( "DONE" );
+    $sym7$PIF = makeSymbol( "PIF" );
+    $sym8$POSITIVE_INTEGER_P = makeSymbol( "POSITIVE-INTEGER-P" );
+    $sym9$PROGRESS_CSOME = makeSymbol( "PROGRESS-CSOME" );
+    $sym10$CONSTANTS_AROUND = makeSymbol( "CONSTANTS-AROUND" );
+    $list11 = ConsesLow.list( makeSymbol( "NEXT-CONSTANT-SUID" ) );
+    $sym12$DO_CONSTANTS = makeSymbol( "DO-CONSTANTS" );
+    $sym13$CONSTANT_NAME_SPEC_P = makeSymbol( "CONSTANT-NAME-SPEC-P" );
+    $sym14$CONSTANT_EXTERNAL_ID_P = makeSymbol( "CONSTANT-EXTERNAL-ID-P" );
+    $sym15$CREATE_CONSTANT = makeSymbol( "CREATE-CONSTANT" );
+    $list16 = ConsesLow.list( makeSymbol( "NAME" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "EXTERNAL-ID" ) );
+    $str17$Return_a_new_constant_named_NAME_ = makeString( "Return a new constant named NAME with EXTERNAL-ID as the external ID." );
+    $list18 = ConsesLow.list( ConsesLow.list( makeSymbol( "NAME" ), makeSymbol( "CONSTANT-NAME-SPEC-P" ) ), ConsesLow.list( makeSymbol( "EXTERNAL-ID" ), ConsesLow.list( makeSymbol( "NIL-OR" ), makeSymbol(
+        "CONSTANT-EXTERNAL-ID-P" ) ) ) );
+    $list19 = ConsesLow.list( makeSymbol( "CONSTANT-P" ) );
+    $sym20$STRINGP = makeSymbol( "STRINGP" );
+    $sym21$FIND_OR_CREATE_CONSTANT = makeSymbol( "FIND-OR-CREATE-CONSTANT" );
+    $str22$Return_the_constant_with_NAME_if_ = makeString(
         "Return the constant with NAME if it exists, otherwise create it with EXTERNAL-ID.\n  Also, if it exists but has a null id, install EXTERNAL-ID on the constant." );
-    $list23 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "NAME" ), SubLObjectFactory.makeSymbol( "STRINGP" ) ) );
-    $str24$TMP = SubLObjectFactory.makeString( "TMP" );
-    $str25$_A__A = SubLObjectFactory.makeString( "~A-~A" );
-    $sym26$GENTEMP_CONSTANT = SubLObjectFactory.makeSymbol( "GENTEMP-CONSTANT" );
-    $list27 = ConsesLow.list( SubLObjectFactory.makeSymbol( "START-NAME" ), SubLObjectFactory.makeSymbol( "&OPTIONAL" ), ConsesLow.list( SubLObjectFactory.makeSymbol(
-        "PREFIX" ), SubLObjectFactory.makeString( "TMP" ) ) );
-    $str28$Create_and_return_a_temporary_con = SubLObjectFactory.makeString( "Create and return a temporary constant whose name is based on START-NAME" );
-    $list29 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "START-NAME" ), SubLObjectFactory.makeSymbol( "STRINGP" ) ) );
-    $str30$ = SubLObjectFactory.makeString( "" );
-    $kw31$UPCASE = SubLObjectFactory.makeKeyword( "UPCASE" );
-    $kw32$DOWNCASE = SubLObjectFactory.makeKeyword( "DOWNCASE" );
-    $str33$T = SubLObjectFactory.makeString( "T" );
-    $str34$T_ = SubLObjectFactory.makeString( "T-" );
-    $sym35$CONSTANT_P = SubLObjectFactory.makeSymbol( "CONSTANT-P" );
-    $sym36$REMOVE_CONSTANT = SubLObjectFactory.makeSymbol( "REMOVE-CONSTANT" );
-    $list37 = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT" ) );
-    $str38$Remove_CONSTANT_from_the_KB_ = SubLObjectFactory.makeString( "Remove CONSTANT from the KB." );
-    $list39 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT" ), SubLObjectFactory.makeSymbol( "CONSTANT-P" ) ) );
-    $list40 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NULL" ) );
-    $sym41$FIND_CONSTANT = SubLObjectFactory.makeSymbol( "FIND-CONSTANT" );
-    $list42 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NAME" ) );
-    $str43$Return_the_constant_with_NAME__or = SubLObjectFactory.makeString( "Return the constant with NAME, or NIL if not present." );
-    $list44 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "NIL-OR" ), SubLObjectFactory.makeSymbol( "CONSTANT-P" ) ) );
-    $sym45$CONSTANT_NAME = SubLObjectFactory.makeSymbol( "CONSTANT-NAME" );
-    $str46$Return_the_name_of_CONSTANT_or__u = SubLObjectFactory.makeString( "Return the name of CONSTANT or :unnamed." );
-    $sym47$GUID_P = SubLObjectFactory.makeSymbol( "GUID-P" );
-    $sym48$GUID_STRING_P = SubLObjectFactory.makeSymbol( "GUID-STRING-P" );
-    $sym49$RENAME_CONSTANT = SubLObjectFactory.makeSymbol( "RENAME-CONSTANT" );
-    $list50 = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT" ), SubLObjectFactory.makeSymbol( "NEW-NAME" ) );
-    $str51$Rename_CONSTANT_to_have_NEW_NAME_ = SubLObjectFactory.makeString( "Rename CONSTANT to have NEW-NAME as its name.  The constant is returned." );
-    $list52 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSTANT" ), SubLObjectFactory.makeSymbol( "CONSTANT-P" ) ), ConsesLow.list(
-        SubLObjectFactory.makeSymbol( "NEW-NAME" ), SubLObjectFactory.makeSymbol( "STRINGP" ) ) );
-    $sym53$CONSTANT_INTERNAL_ID = SubLObjectFactory.makeSymbol( "CONSTANT-INTERNAL-ID" );
-    $str54$Return_the_internal_id_of_CONSTAN = SubLObjectFactory.makeString( "Return the internal id of CONSTANT." );
-    $list55 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "NIL-OR" ), SubLObjectFactory.makeSymbol( "CONSTANT-INTERNAL-ID-P" ) ) );
-    $sym56$CONSTANT_INTERNAL_ID_P = SubLObjectFactory.makeSymbol( "CONSTANT-INTERNAL-ID-P" );
-    $sym57$FIND_CONSTANT_BY_INTERNAL_ID = SubLObjectFactory.makeSymbol( "FIND-CONSTANT-BY-INTERNAL-ID" );
-    $list58 = ConsesLow.list( SubLObjectFactory.makeSymbol( "ID" ) );
-    $str59$Return_the_constant_with_internal = SubLObjectFactory.makeString( "Return the constant with internal ID, or NIL if not present." );
-    $list60 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ID" ), SubLObjectFactory.makeSymbol( "CONSTANT-INTERNAL-ID-P" ) ) );
-    $list61 = ConsesLow.list( SubLObjectFactory.makeSymbol( "ID-MAP" ), SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol( "BODY" ) );
-    $sym62$CLET = SubLObjectFactory.makeSymbol( "CLET" );
-    $sym63$_CONSTANT_EXTERNAL_ID_EQUIVALENCE_MAP_ = SubLObjectFactory.makeSymbol( "*CONSTANT-EXTERNAL-ID-EQUIVALENCE-MAP*" );
-    $sym64$CONSTANT_EXTERNAL_ID = SubLObjectFactory.makeSymbol( "CONSTANT-EXTERNAL-ID" );
-    $str65$Return_the_external_id_of_CONSTAN = SubLObjectFactory.makeString( "Return the external id of CONSTANT." );
-    $list66 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "NIL-OR" ), SubLObjectFactory.makeSymbol( "CONSTANT-EXTERNAL-ID-P" ) ) );
-    $sym67$FIND_CONSTANT_BY_EXTERNAL_ID = SubLObjectFactory.makeSymbol( "FIND-CONSTANT-BY-EXTERNAL-ID" );
-    $list68 = ConsesLow.list( SubLObjectFactory.makeSymbol( "EXTERNAL-ID" ) );
-    $str69$Return_the_constant_with_EXTERNAL = SubLObjectFactory.makeString( "Return the constant with EXTERNAL-ID, or NIL if not present." );
-    $list70 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "EXTERNAL-ID" ), SubLObjectFactory.makeSymbol( "CONSTANT-EXTERNAL-ID-P" ) ) );
-    $sym71$LISTP = SubLObjectFactory.makeSymbol( "LISTP" );
-    $sym72$CONSTANT_INFO_FROM_GUID_STRINGS = SubLObjectFactory.makeSymbol( "CONSTANT-INFO-FROM-GUID-STRINGS" );
-    $list73 = ConsesLow.list( SubLObjectFactory.makeSymbol( "GUID-STRING-LIST" ) );
-    $str74$Returns_a_list_of_constant_info_i = SubLObjectFactory.makeString( "Returns a list of constant info-items corresponding to the GUID-LIST.  Each\ninfo item is a list of guid-string and name." );
-    $list75 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "GUID-STRING-LIST" ), SubLObjectFactory.makeSymbol( "LISTP" ) ) );
-    $list76 = ConsesLow.list( SubLObjectFactory.makeSymbol( "LISTP" ) );
-    $sym77$CONSTANT_INFO_FROM_NAME_STRINGS = SubLObjectFactory.makeSymbol( "CONSTANT-INFO-FROM-NAME-STRINGS" );
-    $list78 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NAME-STRING-LIST" ) );
-    $str79$Returns_a_list_of_constant_info_i = SubLObjectFactory.makeString( "Returns a list of constant info-items corresponding to the NAME-LIST.  Each\ninfo item is a list of guid-string and name." );
-    $list80 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "NAME-STRING-LIST" ), SubLObjectFactory.makeSymbol( "LISTP" ) ) );
-    $list81 = ConsesLow.list( SEVEN_INTEGER, TWENTY_INTEGER, SubLObjectFactory.makeInteger( 1969 ) );
-    $sym82$CONSTANT_LEGACY_ID_P = SubLObjectFactory.makeSymbol( "CONSTANT-LEGACY-ID-P" );
-    $list83 = ConsesLow.list( SubLObjectFactory.makeSymbol( "MONTH" ), SubLObjectFactory.makeSymbol( "DAY" ), SubLObjectFactory.makeSymbol( "YEAR" ) );
-    $list84 = ConsesLow.list( SubLObjectFactory.makeSymbol( "LEGACY-MONTH" ), SubLObjectFactory.makeSymbol( "LEGACY-DAY" ), SubLObjectFactory.makeSymbol( "LEGACY-YEAR" ) );
-    $kw85$UNNAMED = SubLObjectFactory.makeKeyword( "UNNAMED" );
-    $str86$cyc = SubLObjectFactory.makeString( "cyc" );
-    $sym87$CONSTANT_NAMESPACE = SubLObjectFactory.makeSymbol( "CONSTANT-NAMESPACE" );
-    $str88$Return_the_namespace_to_which_the = SubLObjectFactory.makeString( "Return the namespace to which the constant belongs." );
-    $sym89$CONSTANT_NAME_WITHIN_NAMESPACE = SubLObjectFactory.makeSymbol( "CONSTANT-NAME-WITHIN-NAMESPACE" );
-    $str90$Return_the_constant_name_within_i = SubLObjectFactory.makeString( "Return the constant name within its namespace." );
-    $sym91$TRUE = SubLObjectFactory.makeSymbol( "TRUE" );
-    $sym92$RANDOM_CONSTANT = SubLObjectFactory.makeSymbol( "RANDOM-CONSTANT" );
-    $list93 = ConsesLow.list( SubLObjectFactory.makeSymbol( "&OPTIONAL" ), ConsesLow.list( SubLObjectFactory.makeSymbol( "TEST" ), ConsesLow.list(
-        SubLObjectFactory.makeSymbol( "FUNCTION" ), SubLObjectFactory.makeSymbol( "TRUE" ) ) ) );
-    $str94$Return_a_randomly_chosen_constant = SubLObjectFactory.makeString( "Return a randomly chosen constant that satisfies TEST" );
-    $int95$500 = SubLObjectFactory.makeInteger( 500 );
-    $sym96$NON_NEGATIVE_INTEGER_P = SubLObjectFactory.makeSymbol( "NON-NEGATIVE-INTEGER-P" );
-    $sym97$REGULAR_EXPRESSION_P = SubLObjectFactory.makeSymbol( "REGULAR-EXPRESSION-P" );
-    $str98$Error__A___A__compiling_regular_e = SubLObjectFactory.makeString( "Error ~A (~A) compiling regular expression ~S at offset ~A." );
-    $kw99$SKIP = SubLObjectFactory.makeKeyword( "SKIP" );
-    $list100 = ConsesLow.list( SubLObjectFactory.makeSymbol( "CHECKPOINT-COUNT" ), SubLObjectFactory.makeSymbol( "CHECKPOINT-NEXT-ID" ) );
-    $list101 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "*CONSTANT-DUMP-ID-TABLE*" ), ConsesLow.list( SubLObjectFactory.makeSymbol(
-        "CREATE-CONSTANT-DUMP-ID-TABLE" ) ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "*CFASL-CONSTANT-HANDLE-FUNC*" ), ConsesLow.list( SubLObjectFactory
-            .makeSymbol( "QUOTE" ), SubLObjectFactory.makeSymbol( "CONSTANT-DUMP-ID" ) ) ) );
-    $sym102$WITH_CONSTANT_NAME_OBFUSCATION = SubLObjectFactory.makeSymbol( "WITH-CONSTANT-NAME-OBFUSCATION" );
-    $list103 = ConsesLow.list( SubLObjectFactory.makeSymbol( "OBFUSCATE-FN" ), SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol( "BODY" ) );
-    $sym104$_CONSTANT_NAME_OBFUSCATION_FN_ = SubLObjectFactory.makeSymbol( "*CONSTANT-NAME-OBFUSCATION-FN*" );
-    $int105$100 = SubLObjectFactory.makeInteger( 100 );
-    $sym106$FIND_CONSTANT_BY_SUID = SubLObjectFactory.makeSymbol( "FIND-CONSTANT-BY-SUID" );
+    $list23 = ConsesLow.list( ConsesLow.list( makeSymbol( "NAME" ), makeSymbol( "STRINGP" ) ) );
+    $str24$TMP = makeString( "TMP" );
+    $str25$_A__A = makeString( "~A-~A" );
+    $sym26$GENTEMP_CONSTANT = makeSymbol( "GENTEMP-CONSTANT" );
+    $list27 = ConsesLow.list( makeSymbol( "START-NAME" ), makeSymbol( "&OPTIONAL" ), ConsesLow.list( makeSymbol( "PREFIX" ), makeString( "TMP" ) ) );
+    $str28$Create_and_return_a_temporary_con = makeString( "Create and return a temporary constant whose name is based on START-NAME" );
+    $list29 = ConsesLow.list( ConsesLow.list( makeSymbol( "START-NAME" ), makeSymbol( "STRINGP" ) ) );
+    $str30$ = makeString( "" );
+    $kw31$UPCASE = makeKeyword( "UPCASE" );
+    $kw32$DOWNCASE = makeKeyword( "DOWNCASE" );
+    $str33$T = makeString( "T" );
+    $str34$T_ = makeString( "T-" );
+    $sym35$CONSTANT_P = makeSymbol( "CONSTANT-P" );
+    $sym36$REMOVE_CONSTANT = makeSymbol( "REMOVE-CONSTANT" );
+    $list37 = ConsesLow.list( makeSymbol( "CONSTANT" ) );
+    $str38$Remove_CONSTANT_from_the_KB_ = makeString( "Remove CONSTANT from the KB." );
+    $list39 = ConsesLow.list( ConsesLow.list( makeSymbol( "CONSTANT" ), makeSymbol( "CONSTANT-P" ) ) );
+    $list40 = ConsesLow.list( makeSymbol( "NULL" ) );
+    $sym41$FIND_CONSTANT = makeSymbol( "FIND-CONSTANT" );
+    $list42 = ConsesLow.list( makeSymbol( "NAME" ) );
+    $str43$Return_the_constant_with_NAME__or = makeString( "Return the constant with NAME, or NIL if not present." );
+    $list44 = ConsesLow.list( ConsesLow.list( makeSymbol( "NIL-OR" ), makeSymbol( "CONSTANT-P" ) ) );
+    $sym45$CONSTANT_NAME = makeSymbol( "CONSTANT-NAME" );
+    $str46$Return_the_name_of_CONSTANT_or__u = makeString( "Return the name of CONSTANT or :unnamed." );
+    $sym47$GUID_P = makeSymbol( "GUID-P" );
+    $sym48$GUID_STRING_P = makeSymbol( "GUID-STRING-P" );
+    $sym49$RENAME_CONSTANT = makeSymbol( "RENAME-CONSTANT" );
+    $list50 = ConsesLow.list( makeSymbol( "CONSTANT" ), makeSymbol( "NEW-NAME" ) );
+    $str51$Rename_CONSTANT_to_have_NEW_NAME_ = makeString( "Rename CONSTANT to have NEW-NAME as its name.  The constant is returned." );
+    $list52 = ConsesLow.list( ConsesLow.list( makeSymbol( "CONSTANT" ), makeSymbol( "CONSTANT-P" ) ), ConsesLow.list( makeSymbol( "NEW-NAME" ), makeSymbol( "STRINGP" ) ) );
+    $sym53$CONSTANT_INTERNAL_ID = makeSymbol( "CONSTANT-INTERNAL-ID" );
+    $str54$Return_the_internal_id_of_CONSTAN = makeString( "Return the internal id of CONSTANT." );
+    $list55 = ConsesLow.list( ConsesLow.list( makeSymbol( "NIL-OR" ), makeSymbol( "CONSTANT-INTERNAL-ID-P" ) ) );
+    $sym56$CONSTANT_INTERNAL_ID_P = makeSymbol( "CONSTANT-INTERNAL-ID-P" );
+    $sym57$FIND_CONSTANT_BY_INTERNAL_ID = makeSymbol( "FIND-CONSTANT-BY-INTERNAL-ID" );
+    $list58 = ConsesLow.list( makeSymbol( "ID" ) );
+    $str59$Return_the_constant_with_internal = makeString( "Return the constant with internal ID, or NIL if not present." );
+    $list60 = ConsesLow.list( ConsesLow.list( makeSymbol( "ID" ), makeSymbol( "CONSTANT-INTERNAL-ID-P" ) ) );
+    $list61 = ConsesLow.list( makeSymbol( "ID-MAP" ), makeSymbol( "&BODY" ), makeSymbol( "BODY" ) );
+    $sym62$CLET = makeSymbol( "CLET" );
+    $sym63$_CONSTANT_EXTERNAL_ID_EQUIVALENCE_MAP_ = makeSymbol( "*CONSTANT-EXTERNAL-ID-EQUIVALENCE-MAP*" );
+    $sym64$CONSTANT_EXTERNAL_ID = makeSymbol( "CONSTANT-EXTERNAL-ID" );
+    $str65$Return_the_external_id_of_CONSTAN = makeString( "Return the external id of CONSTANT." );
+    $list66 = ConsesLow.list( ConsesLow.list( makeSymbol( "NIL-OR" ), makeSymbol( "CONSTANT-EXTERNAL-ID-P" ) ) );
+    $sym67$FIND_CONSTANT_BY_EXTERNAL_ID = makeSymbol( "FIND-CONSTANT-BY-EXTERNAL-ID" );
+    $list68 = ConsesLow.list( makeSymbol( "EXTERNAL-ID" ) );
+    $str69$Return_the_constant_with_EXTERNAL = makeString( "Return the constant with EXTERNAL-ID, or NIL if not present." );
+    $list70 = ConsesLow.list( ConsesLow.list( makeSymbol( "EXTERNAL-ID" ), makeSymbol( "CONSTANT-EXTERNAL-ID-P" ) ) );
+    $sym71$LISTP = makeSymbol( "LISTP" );
+    $sym72$CONSTANT_INFO_FROM_GUID_STRINGS = makeSymbol( "CONSTANT-INFO-FROM-GUID-STRINGS" );
+    $list73 = ConsesLow.list( makeSymbol( "GUID-STRING-LIST" ) );
+    $str74$Returns_a_list_of_constant_info_i = makeString( "Returns a list of constant info-items corresponding to the GUID-LIST.  Each\ninfo item is a list of guid-string and name." );
+    $list75 = ConsesLow.list( ConsesLow.list( makeSymbol( "GUID-STRING-LIST" ), makeSymbol( "LISTP" ) ) );
+    $list76 = ConsesLow.list( makeSymbol( "LISTP" ) );
+    $sym77$CONSTANT_INFO_FROM_NAME_STRINGS = makeSymbol( "CONSTANT-INFO-FROM-NAME-STRINGS" );
+    $list78 = ConsesLow.list( makeSymbol( "NAME-STRING-LIST" ) );
+    $str79$Returns_a_list_of_constant_info_i = makeString( "Returns a list of constant info-items corresponding to the NAME-LIST.  Each\ninfo item is a list of guid-string and name." );
+    $list80 = ConsesLow.list( ConsesLow.list( makeSymbol( "NAME-STRING-LIST" ), makeSymbol( "LISTP" ) ) );
+    $list81 = ConsesLow.list( SEVEN_INTEGER, TWENTY_INTEGER, makeInteger( 1969 ) );
+    $sym82$CONSTANT_LEGACY_ID_P = makeSymbol( "CONSTANT-LEGACY-ID-P" );
+    $list83 = ConsesLow.list( makeSymbol( "MONTH" ), makeSymbol( "DAY" ), makeSymbol( "YEAR" ) );
+    $list84 = ConsesLow.list( makeSymbol( "LEGACY-MONTH" ), makeSymbol( "LEGACY-DAY" ), makeSymbol( "LEGACY-YEAR" ) );
+    $kw85$UNNAMED = makeKeyword( "UNNAMED" );
+    $str86$cyc = makeString( "cyc" );
+    $sym87$CONSTANT_NAMESPACE = makeSymbol( "CONSTANT-NAMESPACE" );
+    $str88$Return_the_namespace_to_which_the = makeString( "Return the namespace to which the constant belongs." );
+    $sym89$CONSTANT_NAME_WITHIN_NAMESPACE = makeSymbol( "CONSTANT-NAME-WITHIN-NAMESPACE" );
+    $str90$Return_the_constant_name_within_i = makeString( "Return the constant name within its namespace." );
+    $sym91$TRUE = makeSymbol( "TRUE" );
+    $sym92$RANDOM_CONSTANT = makeSymbol( "RANDOM-CONSTANT" );
+    $list93 = ConsesLow.list( makeSymbol( "&OPTIONAL" ), ConsesLow.list( makeSymbol( "TEST" ), ConsesLow.list( makeSymbol( "FUNCTION" ), makeSymbol( "TRUE" ) ) ) );
+    $str94$Return_a_randomly_chosen_constant = makeString( "Return a randomly chosen constant that satisfies TEST" );
+    $int95$500 = makeInteger( 500 );
+    $sym96$NON_NEGATIVE_INTEGER_P = makeSymbol( "NON-NEGATIVE-INTEGER-P" );
+    $sym97$REGULAR_EXPRESSION_P = makeSymbol( "REGULAR-EXPRESSION-P" );
+    $str98$Error__A___A__compiling_regular_e = makeString( "Error ~A (~A) compiling regular expression ~S at offset ~A." );
+    $kw99$SKIP = makeKeyword( "SKIP" );
+    $list100 = ConsesLow.list( makeSymbol( "CHECKPOINT-COUNT" ), makeSymbol( "CHECKPOINT-NEXT-ID" ) );
+    $list101 = ConsesLow.list( ConsesLow.list( makeSymbol( "*CONSTANT-DUMP-ID-TABLE*" ), ConsesLow.list( makeSymbol( "CREATE-CONSTANT-DUMP-ID-TABLE" ) ) ), ConsesLow.list( makeSymbol( "*CFASL-CONSTANT-HANDLE-FUNC*" ),
+        ConsesLow.list( SubLObjectFactory.makeSymbol( "QUOTE" ), makeSymbol( "CONSTANT-DUMP-ID" ) ) ) );
+    $sym102$WITH_CONSTANT_NAME_OBFUSCATION = makeSymbol( "WITH-CONSTANT-NAME-OBFUSCATION" );
+    $list103 = ConsesLow.list( makeSymbol( "OBFUSCATE-FN" ), makeSymbol( "&BODY" ), makeSymbol( "BODY" ) );
+    $sym104$_CONSTANT_NAME_OBFUSCATION_FN_ = makeSymbol( "*CONSTANT-NAME-OBFUSCATION-FN*" );
+    $int105$100 = makeInteger( 100 );
+    $sym106$FIND_CONSTANT_BY_SUID = makeSymbol( "FIND-CONSTANT-BY-SUID" );
   }
 }

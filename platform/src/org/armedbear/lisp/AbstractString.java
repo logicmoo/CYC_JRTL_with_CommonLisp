@@ -30,101 +30,112 @@
  * obligated to do so.  If you do not wish to do so, delete this
  * exception statement from your version.
  */
-
 package org.armedbear.lisp;
 
-public abstract class AbstractString extends com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString
+public abstract class AbstractString
+    extends
+      com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString
 {
-    @Override
-    public LispObject typep(LispObject type)
+  /**
+   *
+   */
+  protected AbstractString()
+  {}
+
+  @Override
+  public LispObject typep(LispObject type)
+  {
+    if( type instanceof Symbol )
     {
-        if (type instanceof Symbol) {
-            if (type == Symbol.STRING)
-                return T;
-            if (type == Symbol.BASE_STRING)
-                return T;
-        }
-        if (type == BuiltInClass.STRING)
-            return T;
-        if (type == BuiltInClass.BASE_STRING)
-            return T;
-        return super.typep(type);
+      if( type == Symbol.STRING )
+        return T;
+      if( type == Symbol.BASE_STRING )
+        return T;
     }
+    if( type == BuiltInClass.STRING )
+      return T;
+    if( type == BuiltInClass.BASE_STRING )
+      return T;
+    return super.typep( type );
+  }
 
-    @Override
-    public final boolean stringp()
+  @Override
+  public final boolean stringp()
+  {
+    return true;
+  }
+
+  @Override
+  public LispObject getElementType()
+  {
+    return Symbol.CHARACTER;
+  }
+
+  @Override
+  public final boolean isSimpleVector()
+  {
+    return false;
+  }
+
+  @Override
+  public final LispObject STRING()
+  {
+    return this;
+  }
+
+  public abstract void fill(char c);
+
+  @Override
+  public abstract char charAt(int index);
+
+  public abstract void setCharAt(int index, char c);
+
+  public final String printObject(int beginIndex, int endIndex)
+  {
+    if( beginIndex < 0 )
+      beginIndex = 0;
+    final int limit;
+    limit = length();
+    if( endIndex > limit )
+      endIndex = limit;
+    final LispThread thread = LispThread.currentThread();
+    if( Symbol.PRINT_ESCAPE.symbolValue( thread ) != NIL || Symbol.PRINT_READABLY.symbolValue( thread ) != NIL )
     {
-        return true;
+      StringBuilder sb = new StringBuilder( "\"" );
+      for( int i = beginIndex; i < endIndex; i++ )
+      {
+        char c = charAt( i );
+        if( c == '\"' || c == '\\' )
+          sb.append( '\\' );
+        sb.append( c );
+      }
+      sb.append( '"' );
+      return sb.toString();
     }
+    else
+      return getStringValue().substring( beginIndex, endIndex );
+  }
 
-    @Override
-    public LispObject getElementType()
+  @Override
+  public String printObjectImpl()
+  {
+    return printObject( 0, length() );
+  }
+
+  @Override
+  public String toString()
+  {
+    int length = length();
+    StringBuilder sb = new StringBuilder( length );
+    for( int i = 0; i < length; ++i )
     {
-        return Symbol.CHARACTER;
+      sb.append( charAt( i ) );
     }
-
-    @Override
-    public final boolean isSimpleVector()
+    String string = sb.toString();
+    if( Lisp.insideToString == 0 )
     {
-        return false;
+      Debug.assertViolation( "calling toString in a STR " + string + ".. use getStringValue() instead" );
     }
-
-    @Override
-    public final LispObject STRING()
-    {
-        return this;
-    }
-
-    public abstract void fill(char c);
-
-    public abstract char charAt(int index);
-
-    public abstract void setCharAt(int index, char c);
-
-    public final String printObject(int beginIndex, int endIndex)
-
-    {
-        if (beginIndex < 0)
-            beginIndex = 0;
-        final int limit;
-        limit = length();
-        if (endIndex > limit)
-            endIndex = limit;
-        final LispThread thread = LispThread.currentThread();
-        if (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL ||
-            Symbol.PRINT_READABLY.symbolValue(thread) != NIL)
-        {
-            StringBuilder sb = new StringBuilder("\"");
-            for (int i = beginIndex; i < endIndex; i++) {
-                char c = charAt(i);
-                if (c == '\"' || c == '\\')
-                    sb.append('\\');
-                sb.append(c);
-            }
-            sb.append('"');
-            return sb.toString();
-        } else
-            return getStringValue().substring(beginIndex, endIndex);
-    }
-
-    @Override
-    public String printObjectImpl()
-    {
-        return printObject(0, length());
-    }
-
-    @Override
-	public String toString() {
-    	int length = length();
-	    StringBuilder sb = new StringBuilder(length);
-	    for(int i = 0; i < length; ++i) {
-			sb.append(charAt(i));
-	    }
-	    String string = sb.toString();
-		if (Lisp.insideToString == 0) {
-			Debug.assertViolation("calling toString in a STR " + string + ".. use getStringValue() instead");
-		}
-		return string;
-    }
-
+    return string;
+  }
 }

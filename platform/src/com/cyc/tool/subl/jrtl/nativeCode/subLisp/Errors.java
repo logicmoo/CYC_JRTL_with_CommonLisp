@@ -30,7 +30,9 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-public class Errors extends SubLTrampolineFile
+public class Errors
+    extends
+      SubLTrampolineFile
 {
   final static public PrintStream trout = SystemCurrent.out;
 

@@ -6,7 +6,9 @@ import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.InitializingSubLFile;
 
-public class rcycl extends InitializingSubLFile
+public class rcycl
+    extends
+      InitializingSubLFile
 {
   public static final rcycl me;
 
@@ -1290,6 +1292,6 @@ public class rcycl extends InitializingSubLFile
   }
   static
   {
-    me = (rcycl) new rcycl();
+    me = new rcycl();
   }
 }

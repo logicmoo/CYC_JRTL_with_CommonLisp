@@ -15,7 +15,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class assertions_interface_oc extends SubLTranslatedFile
+public final class assertions_interface_oc
+    extends
+      SubLTranslatedFile
 {
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.assertions_interface_oc";
@@ -576,22 +578,22 @@ public final class assertions_interface_oc extends SubLTranslatedFile
 
   public static SubLObject f11081(final SubLObject var38)
   {
-    return SubLObjectFactory.makeBoolean( NIL == var38 || var38 == $ic85$ || NIL != module0173.f10955( var38 ) );
+    return makeBoolean( NIL == var38 || var38 == $ic85$ || NIL != module0173.f10955( var38 ) );
   }
 
   public static SubLObject f11082(final SubLObject var39)
   {
-    return SubLObjectFactory.makeBoolean( NIL == var39 || var39 == $ic85$ || NIL != module0051.f3603( var39 ) );
+    return makeBoolean( NIL == var39 || var39 == $ic85$ || NIL != module0051.f3603( var39 ) );
   }
 
   public static SubLObject f11083(final SubLObject var40)
   {
-    return SubLObjectFactory.makeBoolean( NIL == var40 || var40 == $ic85$ || NIL != module0173.f10955( var40 ) );
+    return makeBoolean( NIL == var40 || var40 == $ic85$ || NIL != module0173.f10955( var40 ) );
   }
 
   public static SubLObject f11084(final SubLObject var41)
   {
-    return SubLObjectFactory.makeBoolean( NIL == var41 || var41 == $ic85$ || NIL != module0051.f3631( var41 ) );
+    return makeBoolean( NIL == var41 || var41 == $ic85$ || NIL != module0051.f3631( var41 ) );
   }
 
   public static SubLObject f11085(final SubLObject var10, final SubLObject var38, final SubLObject var39, final SubLObject var40, final SubLObject var41)
@@ -888,50 +890,50 @@ public final class assertions_interface_oc extends SubLTranslatedFile
 
   public static SubLObject f11101()
   {
-    SubLFiles.declareFunction( myName, "f11057", "KB-CREATE-ASSERTION", 7, 0, false );
-    SubLFiles.declareFunction( myName, "f11058", "S#13900", 7, 0, false );
-    SubLFiles.declareFunction( myName, "f11059", "S#13901", 7, 0, false );
-    SubLFiles.declareFunction( myName, "f11060", "KB-REMOVE-ASSERTION", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11061", "KB-ASSERTION-CNF", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11062", "KB-POSSIBLY-ASSERTION-CNF", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11063", "KB-ASSERTION-MT", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11064", "KB-LOOKUP-ASSERTION", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11065", "KB-GAF-ASSERTION?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11066", "KB-RULE-ASSERTION?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11067", "KB-ASSERTION-GAF-HL-FORMULA", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11068", "KB-ASSERTION-CONS", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11069", "KB-ASSERTION-DIRECTION", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11070", "KB-ASSERTION-TRUTH", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11071", "KB-ASSERTION-STRENGTH", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11072", "KB-ASSERTION-VARIABLE-NAMES", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11073", "KB-ASSERTION-ASSERTED-BY", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11074", "KB-ASSERTION-ASSERTED-WHEN", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11075", "KB-ASSERTION-ASSERTED-WHY", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11076", "KB-ASSERTION-ASSERTED-SECOND", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11077", "KB-SET-ASSERTION-DIRECTION", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11078", "KB-SET-ASSERTION-TRUTH", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11079", "KB-SET-ASSERTION-STRENGTH", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11080", "KB-SET-ASSERTION-VARIABLE-NAMES", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11081", "S#13902", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11082", "S#13903", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11083", "S#13904", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11084", "S#13905", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11085", "KB-TIMESTAMP-ASSERTED-ASSERTION", 5, 0, false );
-    SubLFiles.declareFunction( myName, "f11086", "S#13906", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11087", "S#13907", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11088", "S#13908", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11089", "S#13909", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11090", "KB-ASSERTION-ARGUMENTS", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11091", "KB-LOOKUP-ASSERTED-ARGUMENT", 3, 0, false );
-    SubLFiles.declareFunction( myName, "f11092", "S#13910", 3, 0, false );
-    SubLFiles.declareFunction( myName, "f11093", "S#13911", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11095", "S#13912", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11094", "S#13913", 4, 0, false );
-    SubLFiles.declareFunction( myName, "f11098", "S#13914", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11097", "KB-CREATE-ASSERTED-ARGUMENT", 3, 0, false );
-    SubLFiles.declareFunction( myName, "f11096", "KB-REMOVE-ASSERTED-ARGUMENT", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11099", "KB-ASSERTION-DEPENDENTS", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11100", "S#13915", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11057", "KB-CREATE-ASSERTION", 7, 0, false );
+    SubLFiles.declareFunction(me, "f11058", "S#13900", 7, 0, false );
+    SubLFiles.declareFunction(me, "f11059", "S#13901", 7, 0, false );
+    SubLFiles.declareFunction(me, "f11060", "KB-REMOVE-ASSERTION", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11061", "KB-ASSERTION-CNF", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11062", "KB-POSSIBLY-ASSERTION-CNF", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11063", "KB-ASSERTION-MT", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11064", "KB-LOOKUP-ASSERTION", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11065", "KB-GAF-ASSERTION?", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11066", "KB-RULE-ASSERTION?", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11067", "KB-ASSERTION-GAF-HL-FORMULA", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11068", "KB-ASSERTION-CONS", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11069", "KB-ASSERTION-DIRECTION", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11070", "KB-ASSERTION-TRUTH", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11071", "KB-ASSERTION-STRENGTH", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11072", "KB-ASSERTION-VARIABLE-NAMES", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11073", "KB-ASSERTION-ASSERTED-BY", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11074", "KB-ASSERTION-ASSERTED-WHEN", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11075", "KB-ASSERTION-ASSERTED-WHY", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11076", "KB-ASSERTION-ASSERTED-SECOND", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11077", "KB-SET-ASSERTION-DIRECTION", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11078", "KB-SET-ASSERTION-TRUTH", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11079", "KB-SET-ASSERTION-STRENGTH", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11080", "KB-SET-ASSERTION-VARIABLE-NAMES", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11081", "S#13902", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11082", "S#13903", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11083", "S#13904", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11084", "S#13905", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11085", "KB-TIMESTAMP-ASSERTED-ASSERTION", 5, 0, false );
+    SubLFiles.declareFunction(me, "f11086", "S#13906", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11087", "S#13907", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11088", "S#13908", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11089", "S#13909", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11090", "KB-ASSERTION-ARGUMENTS", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11091", "KB-LOOKUP-ASSERTED-ARGUMENT", 3, 0, false );
+    SubLFiles.declareFunction(me, "f11092", "S#13910", 3, 0, false );
+    SubLFiles.declareFunction(me, "f11093", "S#13911", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11095", "S#13912", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11094", "S#13913", 4, 0, false );
+    SubLFiles.declareFunction(me, "f11098", "S#13914", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11097", "KB-CREATE-ASSERTED-ARGUMENT", 3, 0, false );
+    SubLFiles.declareFunction(me, "f11096", "KB-REMOVE-ASSERTED-ARGUMENT", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11099", "KB-ASSERTION-DEPENDENTS", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11100", "S#13915", 1, 0, false );
     return NIL;
   }
 
@@ -993,132 +995,123 @@ public final class assertions_interface_oc extends SubLTranslatedFile
   static
   {
     me = new assertions_interface_oc();
-    $ic0$ = SubLObjectFactory.makeSymbol( "CNF-P" );
-    $ic1$ = SubLObjectFactory.makeSymbol( "S#12263", "CYC" );
-    $ic2$ = SubLObjectFactory.makeSymbol( "LISTP" );
-    $ic3$ = SubLObjectFactory.makeSymbol( "DIRECTION-P" );
-    $ic4$ = SubLObjectFactory.makeSymbol( "TRUTH-P" );
-    $ic5$ = SubLObjectFactory.makeSymbol( "EL-STRENGTH-P" );
-    $ic6$ = SubLObjectFactory.makeSymbol( "ASSERTED-ARGUMENT-P" );
-    $ic7$ = SubLObjectFactory.makeSymbol( "KB-CREATE-ASSERTION" );
-    $ic8$ = SubLObjectFactory.makeSymbol( "S#5859", "CYC" );
-    $ic9$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13916", "CYC" ), SubLObjectFactory.makeSymbol( "S#11445", "CYC" ), SubLObjectFactory.makeSymbol( "S#13917", "CYC" ), SubLObjectFactory.makeSymbol( "S#5432",
-        "CYC" ), SubLObjectFactory.makeSymbol( "S#12576", "CYC" ), SubLObjectFactory.makeSymbol( "S#13918", "CYC" ), SubLObjectFactory.makeSymbol( "S#13919", "CYC" ) );
-    $ic10$ = SubLObjectFactory.makeString( "Create a new assertion with CNF in MT." );
-    $ic11$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13916", "CYC" ), SubLObjectFactory.makeSymbol( "CNF-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#11445", "CYC" ),
-        SubLObjectFactory.makeSymbol( "S#12263", "CYC" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13917", "CYC" ), SubLObjectFactory.makeSymbol( "LISTP" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol(
-            "S#5432", "CYC" ), SubLObjectFactory.makeSymbol( "DIRECTION-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#12576", "CYC" ), SubLObjectFactory.makeSymbol( "TRUTH-P" ) ), ConsesLow.list(
-                SubLObjectFactory.makeSymbol( "S#13918", "CYC" ), SubLObjectFactory.makeSymbol( "EL-STRENGTH-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13919", "CYC" ), ConsesLow.list( SubLObjectFactory
-                    .makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTED-ARGUMENT-P" ) ) ) );
-    $ic12$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION-P" ) );
-    $ic13$ = SubLObjectFactory.makeSymbol( "S#13858", "CYC" );
-    $ic14$ = SubLObjectFactory.makeSymbol( "ASSERTION-P" );
-    $ic15$ = SubLObjectFactory.makeSymbol( "KB-REMOVE-ASSERTION" );
-    $ic16$ = SubLObjectFactory.makeSymbol( "QUOTE" );
-    $ic17$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ) );
-    $ic18$ = SubLObjectFactory.makeString( "Remove ASSERTION from the KB." );
-    $ic19$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTION-P" ) ) );
-    $ic20$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "NULL" ) );
-    $ic21$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-CNF" );
-    $ic22$ = SubLObjectFactory.makeString( "Return the CNF for ASSERTION." );
-    $ic23$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "CNF-P" ) );
-    $ic24$ = SubLObjectFactory.makeSymbol( "KB-POSSIBLY-ASSERTION-CNF" );
-    $ic25$ = SubLObjectFactory.makeString( "Return the CNF for ASSERTION or NIL." );
-    $ic26$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "CNF-P" ) ) );
-    $ic27$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-MT" );
-    $ic28$ = SubLObjectFactory.makeString( "Return the MT for ASSERTION." );
-    $ic29$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#12263", "CYC" ) );
-    $ic30$ = SubLObjectFactory.makeSymbol( "S#12265", "CYC" );
-    $ic31$ = SubLObjectFactory.makeSymbol( "KB-LOOKUP-ASSERTION" );
-    $ic32$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13916", "CYC" ), SubLObjectFactory.makeSymbol( "S#11445", "CYC" ) );
-    $ic33$ = SubLObjectFactory.makeString( "Return the assertion with CNF and MT, if it exists.\n   Return NIL otherwise." );
-    $ic34$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13916", "CYC" ), SubLObjectFactory.makeSymbol( "CNF-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#11445", "CYC" ),
-        SubLObjectFactory.makeSymbol( "S#12265", "CYC" ) ) );
-    $ic35$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTION-P" ) ) );
-    $ic36$ = SubLObjectFactory.makeSymbol( "KB-GAF-ASSERTION?" );
-    $ic37$ = SubLObjectFactory.makeString( "Return T iff ASSERTION is a ground atomic formula (gaf)." );
-    $ic38$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "BOOLEANP" ) );
-    $ic39$ = SubLObjectFactory.makeSymbol( "KB-RULE-ASSERTION?" );
-    $ic40$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-GAF-HL-FORMULA" );
-    $ic41$ = SubLObjectFactory.makeString( "Returns the HL clause of ASSERTION if it's a gaf, otherwise returns nil.\n   Ignores the truth - i.e. returns <blah> instead of (#$not <blah>) for negated gafs." );
-    $ic42$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13920", "CYC" ) );
-    $ic43$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-CONS" );
-    $ic44$ = SubLObjectFactory.makeString( "Returns a CNF or GAF HL formula." );
-    $ic45$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "CONSP" ) );
-    $ic46$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-DIRECTION" );
-    $ic47$ = SubLObjectFactory.makeString( "Return the direction of ASSERTION (either :backward, :forward or :code)." );
-    $ic48$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "DIRECTION-P" ) );
-    $ic49$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-TRUTH" );
-    $ic50$ = SubLObjectFactory.makeString( "Return the current truth of ASSERTION -- either :true :false or :unknown." );
-    $ic51$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "TRUTH-P" ) );
-    $ic52$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-STRENGTH" );
-    $ic53$ = SubLObjectFactory.makeString( "Return the current argumentation strength of ASSERTION -- either :monotonic, :default, or :unknown." );
-    $ic54$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "EL-STRENGTH-P" ) );
-    $ic55$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-VARIABLE-NAMES" );
-    $ic56$ = SubLObjectFactory.makeString( "Return the variable names for ASSERTION." );
-    $ic57$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "LISTP" ) );
-    $ic58$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-ASSERTED-BY" );
-    $ic59$ = SubLObjectFactory.makeString( "Return the asserted-by bookkeeping info for ASSERTION." );
-    $ic60$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "FORT-P" ) ) );
-    $ic61$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-ASSERTED-WHEN" );
-    $ic62$ = SubLObjectFactory.makeString( "Return the asserted-when bookkeeping info for ASSERTION." );
-    $ic63$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "S#4999", "CYC" ) ) );
-    $ic64$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-ASSERTED-WHY" );
-    $ic65$ = SubLObjectFactory.makeString( "Return the asserted-why bookkeeping info for ASSERTION." );
-    $ic66$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-ASSERTED-SECOND" );
-    $ic67$ = SubLObjectFactory.makeString( "Return the asserted-second bookkeeping info for ASSERTION." );
-    $ic68$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "S#5028", "CYC" ) ) );
-    $ic69$ = SubLObjectFactory.makeSymbol( "KB-SET-ASSERTION-DIRECTION" );
-    $ic70$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "S#13921", "CYC" ) );
-    $ic71$ = SubLObjectFactory.makeString( "Change direction of ASSERTION to NEW-DIRECTION." );
-    $ic72$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13921", "CYC" ),
-        SubLObjectFactory.makeSymbol( "DIRECTION-P" ) ) );
-    $ic73$ = SubLObjectFactory.makeSymbol( "KB-SET-ASSERTION-TRUTH" );
-    $ic74$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "S#13922", "CYC" ) );
-    $ic75$ = SubLObjectFactory.makeString( "Change the truth of ASSERTION to NEW-TRUTH." );
-    $ic76$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13922", "CYC" ),
-        SubLObjectFactory.makeSymbol( "TRUTH-P" ) ) );
-    $ic77$ = SubLObjectFactory.makeSymbol( "KB-SET-ASSERTION-STRENGTH" );
-    $ic78$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "S#13923", "CYC" ) );
-    $ic79$ = SubLObjectFactory.makeString( "Change the strength of ASSERTION to NEW-STRENGTH." );
-    $ic80$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13923", "CYC" ),
-        SubLObjectFactory.makeSymbol( "EL-STRENGTH-P" ) ) );
-    $ic81$ = SubLObjectFactory.makeSymbol( "KB-SET-ASSERTION-VARIABLE-NAMES" );
-    $ic82$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "S#13924", "CYC" ) );
-    $ic83$ = SubLObjectFactory.makeString( "Change the variable names for ASSERTION to NEW-VARIABLE-NAMES." );
-    $ic84$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13924", "CYC" ),
-        SubLObjectFactory.makeSymbol( "LISTP" ) ) );
-    $ic85$ = SubLObjectFactory.makeKeyword( "UNCHANGED" );
-    $ic86$ = SubLObjectFactory.makeSymbol( "S#13902", "CYC" );
-    $ic87$ = SubLObjectFactory.makeSymbol( "S#13903", "CYC" );
-    $ic88$ = SubLObjectFactory.makeSymbol( "S#13904", "CYC" );
-    $ic89$ = SubLObjectFactory.makeSymbol( "S#13905", "CYC" );
-    $ic90$ = SubLObjectFactory.makeSymbol( "KB-TIMESTAMP-ASSERTED-ASSERTION" );
-    $ic91$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "S#13925", "CYC" ), SubLObjectFactory.makeSymbol( "WHEN" ), SubLObjectFactory.makeSymbol( "S#13926", "CYC" ),
-        SubLObjectFactory.makeSymbol( "SECOND" ) );
-    $ic92$ = SubLObjectFactory.makeString( "Set meta data on ASSERTION." );
-    $ic93$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13925", "CYC" ),
-        SubLObjectFactory.makeSymbol( "S#13902", "CYC" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "WHEN" ), SubLObjectFactory.makeSymbol( "S#13903", "CYC" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol(
-            "S#13926", "CYC" ), SubLObjectFactory.makeSymbol( "S#13904", "CYC" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "SECOND" ), SubLObjectFactory.makeSymbol( "S#13905", "CYC" ) ) );
-    $ic94$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-ARGUMENTS" );
-    $ic95$ = SubLObjectFactory.makeString( "Return the arguments for ASSERTION." );
-    $ic96$ = SubLObjectFactory.makeSymbol( "KB-LOOKUP-ASSERTED-ARGUMENT" );
-    $ic97$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "S#12576", "CYC" ), SubLObjectFactory.makeSymbol( "S#13918", "CYC" ) );
-    $ic98$ = SubLObjectFactory.makeString( "Return the asserted argument with ASSERTION, TRUTH, and STRENGTH, if it exists.\n   Return NIL otherwise." );
-    $ic99$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#12576", "CYC" ),
-        SubLObjectFactory.makeSymbol( "TRUTH-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13918", "CYC" ), SubLObjectFactory.makeSymbol( "EL-STRENGTH-P" ) ) );
-    $ic100$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTED-ARGUMENT-P" ) ) );
-    $ic101$ = SubLObjectFactory.makeSymbol( "KB-CREATE-ASSERTED-ARGUMENT" );
-    $ic102$ = SubLObjectFactory.makeString( "Create an asserted argument for ASSERTION from TRUTH and STRENGTH,\nand hook up all the indexing between them." );
-    $ic103$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTED-ARGUMENT-P" ) );
-    $ic104$ = SubLObjectFactory.makeSymbol( "KB-REMOVE-ASSERTED-ARGUMENT" );
-    $ic105$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "S#13919", "CYC" ) );
-    $ic106$ = SubLObjectFactory.makeString( "Remove ASSERTED-ARGUMENT for ASSERTION." );
-    $ic107$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ASSERTION", "CYC" ), SubLObjectFactory.makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13919", "CYC" ),
-        SubLObjectFactory.makeSymbol( "ASSERTED-ARGUMENT-P" ) ) );
-    $ic108$ = SubLObjectFactory.makeSymbol( "KB-ASSERTION-DEPENDENTS" );
-    $ic109$ = SubLObjectFactory.makeString( "Return the dependents of ASSERTION." );
-    $ic110$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#2986", "CYC" ) );
+    $ic0$ = makeSymbol( "CNF-P" );
+    $ic1$ = makeSymbol( "S#12263", "CYC" );
+    $ic2$ = makeSymbol( "LISTP" );
+    $ic3$ = makeSymbol( "DIRECTION-P" );
+    $ic4$ = makeSymbol( "TRUTH-P" );
+    $ic5$ = makeSymbol( "EL-STRENGTH-P" );
+    $ic6$ = makeSymbol( "ASSERTED-ARGUMENT-P" );
+    $ic7$ = makeSymbol( "KB-CREATE-ASSERTION" );
+    $ic8$ = makeSymbol( "S#5859", "CYC" );
+    $ic9$ = ConsesLow.list( makeSymbol( "S#13916", "CYC" ), makeSymbol( "S#11445", "CYC" ), makeSymbol( "S#13917", "CYC" ), makeSymbol( "S#5432", "CYC" ), makeSymbol( "S#12576", "CYC" ), makeSymbol( "S#13918", "CYC" ),
+        makeSymbol( "S#13919", "CYC" ) );
+    $ic10$ = makeString( "Create a new assertion with CNF in MT." );
+    $ic11$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#13916", "CYC" ), makeSymbol( "CNF-P" ) ), ConsesLow.list( makeSymbol( "S#11445", "CYC" ), makeSymbol( "S#12263", "CYC" ) ), ConsesLow.list( makeSymbol(
+        "S#13917", "CYC" ), makeSymbol( "LISTP" ) ), ConsesLow.list( makeSymbol( "S#5432", "CYC" ), makeSymbol( "DIRECTION-P" ) ), ConsesLow.list( makeSymbol( "S#12576", "CYC" ), makeSymbol( "TRUTH-P" ) ), ConsesLow
+            .list( makeSymbol( "S#13918", "CYC" ), makeSymbol( "EL-STRENGTH-P" ) ), ConsesLow.list( makeSymbol( "S#13919", "CYC" ), ConsesLow.list( SubLObjectFactory.makeSymbol( "S#664", "CYC" ), makeSymbol(
+                "ASSERTED-ARGUMENT-P" ) ) ) );
+    $ic12$ = ConsesLow.list( makeSymbol( "ASSERTION-P" ) );
+    $ic13$ = makeSymbol( "S#13858", "CYC" );
+    $ic14$ = makeSymbol( "ASSERTION-P" );
+    $ic15$ = makeSymbol( "KB-REMOVE-ASSERTION" );
+    $ic16$ = makeSymbol( "QUOTE" );
+    $ic17$ = ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ) );
+    $ic18$ = makeString( "Remove ASSERTION from the KB." );
+    $ic19$ = ConsesLow.list( ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "ASSERTION-P" ) ) );
+    $ic20$ = ConsesLow.list( makeSymbol( "NULL" ) );
+    $ic21$ = makeSymbol( "KB-ASSERTION-CNF" );
+    $ic22$ = makeString( "Return the CNF for ASSERTION." );
+    $ic23$ = ConsesLow.list( makeSymbol( "CNF-P" ) );
+    $ic24$ = makeSymbol( "KB-POSSIBLY-ASSERTION-CNF" );
+    $ic25$ = makeString( "Return the CNF for ASSERTION or NIL." );
+    $ic26$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#664", "CYC" ), makeSymbol( "CNF-P" ) ) );
+    $ic27$ = makeSymbol( "KB-ASSERTION-MT" );
+    $ic28$ = makeString( "Return the MT for ASSERTION." );
+    $ic29$ = ConsesLow.list( makeSymbol( "S#12263", "CYC" ) );
+    $ic30$ = makeSymbol( "S#12265", "CYC" );
+    $ic31$ = makeSymbol( "KB-LOOKUP-ASSERTION" );
+    $ic32$ = ConsesLow.list( makeSymbol( "S#13916", "CYC" ), makeSymbol( "S#11445", "CYC" ) );
+    $ic33$ = makeString( "Return the assertion with CNF and MT, if it exists.\n   Return NIL otherwise." );
+    $ic34$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#13916", "CYC" ), makeSymbol( "CNF-P" ) ), ConsesLow.list( makeSymbol( "S#11445", "CYC" ), makeSymbol( "S#12265", "CYC" ) ) );
+    $ic35$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#664", "CYC" ), makeSymbol( "ASSERTION-P" ) ) );
+    $ic36$ = makeSymbol( "KB-GAF-ASSERTION?" );
+    $ic37$ = makeString( "Return T iff ASSERTION is a ground atomic formula (gaf)." );
+    $ic38$ = ConsesLow.list( makeSymbol( "BOOLEANP" ) );
+    $ic39$ = makeSymbol( "KB-RULE-ASSERTION?" );
+    $ic40$ = makeSymbol( "KB-ASSERTION-GAF-HL-FORMULA" );
+    $ic41$ = makeString( "Returns the HL clause of ASSERTION if it's a gaf, otherwise returns nil.\n   Ignores the truth - i.e. returns <blah> instead of (#$not <blah>) for negated gafs." );
+    $ic42$ = ConsesLow.list( makeSymbol( "S#13920", "CYC" ) );
+    $ic43$ = makeSymbol( "KB-ASSERTION-CONS" );
+    $ic44$ = makeString( "Returns a CNF or GAF HL formula." );
+    $ic45$ = ConsesLow.list( makeSymbol( "CONSP" ) );
+    $ic46$ = makeSymbol( "KB-ASSERTION-DIRECTION" );
+    $ic47$ = makeString( "Return the direction of ASSERTION (either :backward, :forward or :code)." );
+    $ic48$ = ConsesLow.list( makeSymbol( "DIRECTION-P" ) );
+    $ic49$ = makeSymbol( "KB-ASSERTION-TRUTH" );
+    $ic50$ = makeString( "Return the current truth of ASSERTION -- either :true :false or :unknown." );
+    $ic51$ = ConsesLow.list( makeSymbol( "TRUTH-P" ) );
+    $ic52$ = makeSymbol( "KB-ASSERTION-STRENGTH" );
+    $ic53$ = makeString( "Return the current argumentation strength of ASSERTION -- either :monotonic, :default, or :unknown." );
+    $ic54$ = ConsesLow.list( makeSymbol( "EL-STRENGTH-P" ) );
+    $ic55$ = makeSymbol( "KB-ASSERTION-VARIABLE-NAMES" );
+    $ic56$ = makeString( "Return the variable names for ASSERTION." );
+    $ic57$ = ConsesLow.list( makeSymbol( "LISTP" ) );
+    $ic58$ = makeSymbol( "KB-ASSERTION-ASSERTED-BY" );
+    $ic59$ = makeString( "Return the asserted-by bookkeeping info for ASSERTION." );
+    $ic60$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#664", "CYC" ), makeSymbol( "FORT-P" ) ) );
+    $ic61$ = makeSymbol( "KB-ASSERTION-ASSERTED-WHEN" );
+    $ic62$ = makeString( "Return the asserted-when bookkeeping info for ASSERTION." );
+    $ic63$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#664", "CYC" ), makeSymbol( "S#4999", "CYC" ) ) );
+    $ic64$ = makeSymbol( "KB-ASSERTION-ASSERTED-WHY" );
+    $ic65$ = makeString( "Return the asserted-why bookkeeping info for ASSERTION." );
+    $ic66$ = makeSymbol( "KB-ASSERTION-ASSERTED-SECOND" );
+    $ic67$ = makeString( "Return the asserted-second bookkeeping info for ASSERTION." );
+    $ic68$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#664", "CYC" ), makeSymbol( "S#5028", "CYC" ) ) );
+    $ic69$ = makeSymbol( "KB-SET-ASSERTION-DIRECTION" );
+    $ic70$ = ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "S#13921", "CYC" ) );
+    $ic71$ = makeString( "Change direction of ASSERTION to NEW-DIRECTION." );
+    $ic72$ = ConsesLow.list( ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( makeSymbol( "S#13921", "CYC" ), makeSymbol( "DIRECTION-P" ) ) );
+    $ic73$ = makeSymbol( "KB-SET-ASSERTION-TRUTH" );
+    $ic74$ = ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "S#13922", "CYC" ) );
+    $ic75$ = makeString( "Change the truth of ASSERTION to NEW-TRUTH." );
+    $ic76$ = ConsesLow.list( ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( makeSymbol( "S#13922", "CYC" ), makeSymbol( "TRUTH-P" ) ) );
+    $ic77$ = makeSymbol( "KB-SET-ASSERTION-STRENGTH" );
+    $ic78$ = ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "S#13923", "CYC" ) );
+    $ic79$ = makeString( "Change the strength of ASSERTION to NEW-STRENGTH." );
+    $ic80$ = ConsesLow.list( ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( makeSymbol( "S#13923", "CYC" ), makeSymbol( "EL-STRENGTH-P" ) ) );
+    $ic81$ = makeSymbol( "KB-SET-ASSERTION-VARIABLE-NAMES" );
+    $ic82$ = ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "S#13924", "CYC" ) );
+    $ic83$ = makeString( "Change the variable names for ASSERTION to NEW-VARIABLE-NAMES." );
+    $ic84$ = ConsesLow.list( ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( makeSymbol( "S#13924", "CYC" ), makeSymbol( "LISTP" ) ) );
+    $ic85$ = makeKeyword( "UNCHANGED" );
+    $ic86$ = makeSymbol( "S#13902", "CYC" );
+    $ic87$ = makeSymbol( "S#13903", "CYC" );
+    $ic88$ = makeSymbol( "S#13904", "CYC" );
+    $ic89$ = makeSymbol( "S#13905", "CYC" );
+    $ic90$ = makeSymbol( "KB-TIMESTAMP-ASSERTED-ASSERTION" );
+    $ic91$ = ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "S#13925", "CYC" ), makeSymbol( "WHEN" ), makeSymbol( "S#13926", "CYC" ), makeSymbol( "SECOND" ) );
+    $ic92$ = makeString( "Set meta data on ASSERTION." );
+    $ic93$ = ConsesLow.list( ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( makeSymbol( "S#13925", "CYC" ), makeSymbol( "S#13902", "CYC" ) ), ConsesLow.list( makeSymbol(
+        "WHEN" ), makeSymbol( "S#13903", "CYC" ) ), ConsesLow.list( makeSymbol( "S#13926", "CYC" ), makeSymbol( "S#13904", "CYC" ) ), ConsesLow.list( makeSymbol( "SECOND" ), makeSymbol( "S#13905", "CYC" ) ) );
+    $ic94$ = makeSymbol( "KB-ASSERTION-ARGUMENTS" );
+    $ic95$ = makeString( "Return the arguments for ASSERTION." );
+    $ic96$ = makeSymbol( "KB-LOOKUP-ASSERTED-ARGUMENT" );
+    $ic97$ = ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "S#12576", "CYC" ), makeSymbol( "S#13918", "CYC" ) );
+    $ic98$ = makeString( "Return the asserted argument with ASSERTION, TRUTH, and STRENGTH, if it exists.\n   Return NIL otherwise." );
+    $ic99$ = ConsesLow.list( ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( makeSymbol( "S#12576", "CYC" ), makeSymbol( "TRUTH-P" ) ), ConsesLow.list( makeSymbol(
+        "S#13918", "CYC" ), makeSymbol( "EL-STRENGTH-P" ) ) );
+    $ic100$ = ConsesLow.list( ConsesLow.list( makeSymbol( "S#664", "CYC" ), makeSymbol( "ASSERTED-ARGUMENT-P" ) ) );
+    $ic101$ = makeSymbol( "KB-CREATE-ASSERTED-ARGUMENT" );
+    $ic102$ = makeString( "Create an asserted argument for ASSERTION from TRUTH and STRENGTH,\nand hook up all the indexing between them." );
+    $ic103$ = ConsesLow.list( makeSymbol( "ASSERTED-ARGUMENT-P" ) );
+    $ic104$ = makeSymbol( "KB-REMOVE-ASSERTED-ARGUMENT" );
+    $ic105$ = ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "S#13919", "CYC" ) );
+    $ic106$ = makeString( "Remove ASSERTED-ARGUMENT for ASSERTION." );
+    $ic107$ = ConsesLow.list( ConsesLow.list( makeSymbol( "ASSERTION", "CYC" ), makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( makeSymbol( "S#13919", "CYC" ), makeSymbol( "ASSERTED-ARGUMENT-P" ) ) );
+    $ic108$ = makeSymbol( "KB-ASSERTION-DEPENDENTS" );
+    $ic109$ = makeString( "Return the dependents of ASSERTION." );
+    $ic110$ = ConsesLow.list( makeSymbol( "S#2986", "CYC" ) );
   }
 }
 /*

@@ -16,7 +16,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class assertion_manager_oc extends SubLTranslatedFile
+public final class assertion_manager_oc
+    extends
+      SubLTranslatedFile
 {
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.assertion_manager_oc";
@@ -35,8 +37,7 @@ public final class assertion_manager_oc extends SubLTranslatedFile
 
   public static SubLObject setup_assertion_content_table(final SubLObject var1, final SubLObject var2)
   {
-    $assertion_content_manager$.setGlobalValue( kb_object_manager_oc.new_kb_object_manager( $ic3$, var1, $assertion_lru_size_percentage$.getGlobalValue(), $assertion_lru_size_max$.getGlobalValue(),
-        $ic4$, var2 ) );
+    $assertion_content_manager$.setGlobalValue( kb_object_manager_oc.new_kb_object_manager( $ic3$, var1, $assertion_lru_size_percentage$.getGlobalValue(), $assertion_lru_size_max$.getGlobalValue(), $ic4$, var2 ) );
     return T;
   }
 
@@ -190,43 +191,42 @@ public final class assertion_manager_oc extends SubLTranslatedFile
 
   public static SubLObject declare_assertion_manager_file()
   {
-    SubLFiles.declareFunction( myName, "setup_assertion_content_table", "SETUP-ASSERTION-CONTENT-TABLE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11105", "S#13805", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11106", "S#13813", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11107", "S#13929", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11108", "S#13930", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11109", "S#13931", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11110", "S#13932", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11111", "S#9555", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11112", "S#13933", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11113", "S#13934", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11114", "S#13812", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11115", "S#13806", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11116", "S#13935", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11117", "S#13936", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11118", "S#13937", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11119", "S#13938", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11120", "S#13939", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11121", "S#13940", 0, 0, false );
+    SubLFiles.declareFunction(me, "setup_assertion_content_table", "SETUP-ASSERTION-CONTENT-TABLE", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11105", "S#13805", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11106", "S#13813", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11107", "S#13929", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11108", "S#13930", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11109", "S#13931", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11110", "S#13932", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11111", "S#9555", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11112", "S#13933", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11113", "S#13934", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11114", "S#13812", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11115", "S#13806", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11116", "S#13935", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11117", "S#13936", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11118", "S#13937", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11119", "S#13938", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11120", "S#13939", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11121", "S#13940", 0, 0, false );
     /// 6666
-    SubLFiles.declareMacro( myName, "f11122", "S#13941" );
-    SubLFiles.declareFunction( myName, "f11123", "S#13942", 2, 0, false );
-    SubLFiles.declareFunction( myName, "f11124", "S#13943", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11125", "S#13944", 1, 0, false );
-    SubLFiles.declareFunction( myName, "f11126", "S#13945", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11127", "S#13946", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11128", "S#13947", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11129", "S#13948", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11130", "S#13949", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11131", "S#9544", 0, 0, false );
-    SubLFiles.declareFunction( myName, "f11132", "S#13950", 1, 1, false );
+    SubLFiles.declareMacro(me, "f11122", "S#13941" );
+    SubLFiles.declareFunction(me, "f11123", "S#13942", 2, 0, false );
+    SubLFiles.declareFunction(me, "f11124", "S#13943", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11125", "S#13944", 1, 0, false );
+    SubLFiles.declareFunction(me, "f11126", "S#13945", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11127", "S#13946", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11128", "S#13947", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11129", "S#13948", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11130", "S#13949", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11131", "S#9544", 0, 0, false );
+    SubLFiles.declareFunction(me, "f11132", "S#13950", 1, 1, false );
     return NIL;
   }
 
   public static SubLObject f11134()
   {
-    $assertion_content_manager$ = SubLFiles.deflexical( "*ASSERTION-CONTENT-MANAGER*", ( NIL != Symbols.boundp( $sym0$_ASSERTION_CONTENT_MANAGER_ ) ) ? $assertion_content_manager$
-        .getGlobalValue() : $ic1$ );
+    $assertion_content_manager$ = SubLFiles.deflexical( "*ASSERTION-CONTENT-MANAGER*", ( NIL != Symbols.boundp( $sym0$_ASSERTION_CONTENT_MANAGER_ ) ) ? $assertion_content_manager$.getGlobalValue() : $ic1$ );
     $assertion_lru_size_percentage$ = SubLFiles.deflexical( "*ASSERTION-LRU-SIZE-PERCENTAGE*", SIXTEEN_INTEGER );
     $assertion_lru_size_max$ = SubLFiles.deflexical( "S#13953", $ic2$ );
     return NIL;
@@ -261,14 +261,14 @@ public final class assertion_manager_oc extends SubLTranslatedFile
     $assertion_content_manager$ = null;
     $assertion_lru_size_percentage$ = null;
     $assertion_lru_size_max$ = null;
-    $sym0$_ASSERTION_CONTENT_MANAGER_ = SubLObjectFactory.makeSymbol( "*ASSERTION-CONTENT-MANAGER*", "CYC" );
-    $ic1$ = SubLObjectFactory.makeKeyword( "UNINITIALIZED" );
-    $ic2$ = SubLObjectFactory.makeInteger( 600000 );
-    $ic3$ = SubLObjectFactory.makeString( "assertion" );
-    $ic4$ = SubLObjectFactory.makeSymbol( "S#13954", "CYC" );
-    $ic5$ = SubLObjectFactory.makeSymbol( "S#13240", "CYC" );
+    $sym0$_ASSERTION_CONTENT_MANAGER_ = makeSymbol( "*ASSERTION-CONTENT-MANAGER*", "CYC" );
+    $ic1$ = makeKeyword( "UNINITIALIZED" );
+    $ic2$ = makeInteger( 600000 );
+    $ic3$ = makeString( "assertion" );
+    $ic4$ = makeSymbol( "S#13954", "CYC" );
+    $ic5$ = makeSymbol( "S#13240", "CYC" );
     $ic6$ = ConsesLow.list( $sym0$_ASSERTION_CONTENT_MANAGER_ );
-    $ic7$ = SubLObjectFactory.makeString( "assertion-index" );
+    $ic7$ = makeString( "assertion-index" );
   }
 }
 /*

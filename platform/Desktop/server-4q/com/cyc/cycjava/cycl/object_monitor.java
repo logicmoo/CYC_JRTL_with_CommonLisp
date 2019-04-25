@@ -24,671 +24,829 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class object_monitor extends SubLTranslatedFile
+public final class object_monitor
+    extends
+      SubLTranslatedFile
 {
-    public static final SubLFile me;
-    public static final String myName = "com.cyc.cycjava.cycl.object_monitor";
-    public static final String myFingerPrint = "be2f481145cdff76f4ce8ebb7c19afc6194b6e10bbe957f5eb3ebf06eac1f412";
-    private static final SubLSymbol $sym0$OBJECT_MONITOR;
-    private static final SubLSymbol $sym1$OBJECT;
-    private static final SubLList $list2;
-    private static final SubLSymbol $sym3$TAB_STRING;
-    private static final SubLSymbol $sym4$NESTING_DEPTH;
-    private static final SubLSymbol $sym5$SUBJECTS;
-    private static final SubLInteger $int6$4097;
-    private static final SubLSymbol $sym7$INSTANCE_COUNT;
-    private static final SubLSymbol $sym8$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_CLASS;
-    private static final SubLSymbol $sym9$ISOLATED_P;
-    private static final SubLSymbol $sym10$MONITORING_P;
-    private static final SubLSymbol $sym11$INSTANCE_NUMBER;
-    private static final SubLSymbol $sym12$STREAM;
-    private static final SubLSymbol $sym13$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_INSTANCE;
-    private static final SubLSymbol $sym14$INITIALIZE;
-    private static final SubLList $list15;
-    private static final SubLSymbol $sym16$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
-    private static final SubLString $str17$____;
-    private static final SubLSymbol $sym18$OBJECT_MONITOR_INITIALIZE_METHOD;
-    private static final SubLSymbol $sym19$TAB_TO_DEPTH;
-    private static final SubLList $list20;
-    private static final SubLSymbol $sym21$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
-    private static final SubLSymbol $sym22$OBJECT_MONITOR_TAB_TO_DEPTH_METHOD;
-    private static final SubLSymbol $sym23$MONITOR_SET_SLOT;
-    private static final SubLList $list24;
-    private static final SubLList $list25;
-    private static final SubLSymbol $sym26$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
-    private static final SubLString $str27$__;
-    private static final SubLString $str28$_SET_SLOT__S__S__S_;
-    private static final SubLSymbol $kw29$UNKNOWN_SLOT;
-    private static final SubLSymbol $sym30$OBJECT_MONITOR_MONITOR_SET_SLOT_METHOD;
-    private static final SubLSymbol $sym31$MONITOR_BEFORE_METHOD;
-    private static final SubLList $list32;
-    private static final SubLList $list33;
-    private static final SubLList $list34;
-    private static final SubLString $str35$Entered____S__S___S;
-    private static final SubLString $str36$Entered___S__S;
-    private static final SubLString $str37$Arg___S____S;
-    private static final SubLSymbol $sym38$OBJECT_MONITOR_MONITOR_BEFORE_METHOD_METHOD;
-    private static final SubLSymbol $sym39$MONITOR_AFTER_METHOD;
-    private static final SubLList $list40;
-    private static final SubLList $list41;
-    private static final SubLString $str42$Returning____S__S___S_____S;
-    private static final SubLString $str43$Returning___S__S_____S;
-    private static final SubLSymbol $sym44$OBJECT_MONITOR_MONITOR_AFTER_METHOD_METHOD;
-    private static final SubLSymbol $sym45$MONITOR;
-    private static final SubLList $list46;
-    private static final SubLList $list47;
-    private static final SubLSymbol $sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
-    private static final SubLSymbol $sym49$OBJECT_MONITOR_MONITOR_METHOD;
-    private static final SubLSymbol $sym50$UNMONITOR;
-    private static final SubLList $list51;
-    private static final SubLSymbol $sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
-    private static final SubLSymbol $sym53$OBJECT_MONITOR_UNMONITOR_METHOD;
-    private static final SubLSymbol $sym54$MONITOR_INSTANCE;
-    private static final SubLList $list55;
-    private static final SubLSymbol $sym56$OBJECT_MONITOR_MONITOR_INSTANCE_METHOD;
-    private static final SubLSymbol $sym57$START_MONITORING;
-    private static final SubLList $list58;
-    private static final SubLSymbol $sym59$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
-    private static final SubLSymbol $sym60$OBJECT_MONITOR_START_MONITORING_METHOD;
-    private static final SubLSymbol $sym61$STOP_MONITORING;
-    private static final SubLList $list62;
-    private static final SubLSymbol $sym63$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
-    private static final SubLSymbol $sym64$OBJECT_MONITOR_STOP_MONITORING_METHOD;
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject get_object_monitor_tab_string(final SubLObject v_object_monitor) {
-        return classes.subloop_get_access_protected_instance_slot(v_object_monitor, (SubLObject)object_monitor.FOUR_INTEGER, (SubLObject)object_monitor.$sym3$TAB_STRING);
+  public static final SubLFile me;
+  public static final String myName = "com.cyc.cycjava.cycl.object_monitor";
+  public static final String myFingerPrint = "be2f481145cdff76f4ce8ebb7c19afc6194b6e10bbe957f5eb3ebf06eac1f412";
+  private static final SubLSymbol $sym0$OBJECT_MONITOR;
+  private static final SubLSymbol $sym1$OBJECT;
+  private static final SubLList $list2;
+  private static final SubLSymbol $sym3$TAB_STRING;
+  private static final SubLSymbol $sym4$NESTING_DEPTH;
+  private static final SubLSymbol $sym5$SUBJECTS;
+  private static final SubLInteger $int6$4097;
+  private static final SubLSymbol $sym7$INSTANCE_COUNT;
+  private static final SubLSymbol $sym8$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_CLASS;
+  private static final SubLSymbol $sym9$ISOLATED_P;
+  private static final SubLSymbol $sym10$MONITORING_P;
+  private static final SubLSymbol $sym11$INSTANCE_NUMBER;
+  private static final SubLSymbol $sym12$STREAM;
+  private static final SubLSymbol $sym13$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_INSTANCE;
+  private static final SubLSymbol $sym14$INITIALIZE;
+  private static final SubLList $list15;
+  private static final SubLSymbol $sym16$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
+  private static final SubLString $str17$____;
+  private static final SubLSymbol $sym18$OBJECT_MONITOR_INITIALIZE_METHOD;
+  private static final SubLSymbol $sym19$TAB_TO_DEPTH;
+  private static final SubLList $list20;
+  private static final SubLSymbol $sym21$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
+  private static final SubLSymbol $sym22$OBJECT_MONITOR_TAB_TO_DEPTH_METHOD;
+  private static final SubLSymbol $sym23$MONITOR_SET_SLOT;
+  private static final SubLList $list24;
+  private static final SubLList $list25;
+  private static final SubLSymbol $sym26$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
+  private static final SubLString $str27$__;
+  private static final SubLString $str28$_SET_SLOT__S__S__S_;
+  private static final SubLSymbol $kw29$UNKNOWN_SLOT;
+  private static final SubLSymbol $sym30$OBJECT_MONITOR_MONITOR_SET_SLOT_METHOD;
+  private static final SubLSymbol $sym31$MONITOR_BEFORE_METHOD;
+  private static final SubLList $list32;
+  private static final SubLList $list33;
+  private static final SubLList $list34;
+  private static final SubLString $str35$Entered____S__S___S;
+  private static final SubLString $str36$Entered___S__S;
+  private static final SubLString $str37$Arg___S____S;
+  private static final SubLSymbol $sym38$OBJECT_MONITOR_MONITOR_BEFORE_METHOD_METHOD;
+  private static final SubLSymbol $sym39$MONITOR_AFTER_METHOD;
+  private static final SubLList $list40;
+  private static final SubLList $list41;
+  private static final SubLString $str42$Returning____S__S___S_____S;
+  private static final SubLString $str43$Returning___S__S_____S;
+  private static final SubLSymbol $sym44$OBJECT_MONITOR_MONITOR_AFTER_METHOD_METHOD;
+  private static final SubLSymbol $sym45$MONITOR;
+  private static final SubLList $list46;
+  private static final SubLList $list47;
+  private static final SubLSymbol $sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
+  private static final SubLSymbol $sym49$OBJECT_MONITOR_MONITOR_METHOD;
+  private static final SubLSymbol $sym50$UNMONITOR;
+  private static final SubLList $list51;
+  private static final SubLSymbol $sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
+  private static final SubLSymbol $sym53$OBJECT_MONITOR_UNMONITOR_METHOD;
+  private static final SubLSymbol $sym54$MONITOR_INSTANCE;
+  private static final SubLList $list55;
+  private static final SubLSymbol $sym56$OBJECT_MONITOR_MONITOR_INSTANCE_METHOD;
+  private static final SubLSymbol $sym57$START_MONITORING;
+  private static final SubLList $list58;
+  private static final SubLSymbol $sym59$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
+  private static final SubLSymbol $sym60$OBJECT_MONITOR_START_MONITORING_METHOD;
+  private static final SubLSymbol $sym61$STOP_MONITORING;
+  private static final SubLList $list62;
+  private static final SubLSymbol $sym63$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD;
+  private static final SubLSymbol $sym64$OBJECT_MONITOR_STOP_MONITORING_METHOD;
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject get_object_monitor_tab_string(final SubLObject v_object_monitor)
+  {
+    return classes.subloop_get_access_protected_instance_slot( v_object_monitor, FOUR_INTEGER, $sym3$TAB_STRING );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject set_object_monitor_tab_string(final SubLObject v_object_monitor, final SubLObject value)
+  {
+    return classes.subloop_set_access_protected_instance_slot( v_object_monitor, value, FOUR_INTEGER, $sym3$TAB_STRING );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject get_object_monitor_nesting_depth(final SubLObject v_object_monitor)
+  {
+    return classes.subloop_get_access_protected_instance_slot( v_object_monitor, THREE_INTEGER, $sym4$NESTING_DEPTH );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject set_object_monitor_nesting_depth(final SubLObject v_object_monitor, final SubLObject value)
+  {
+    return classes.subloop_set_access_protected_instance_slot( v_object_monitor, value, THREE_INTEGER, $sym4$NESTING_DEPTH );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject get_object_monitor_stream(final SubLObject v_object_monitor)
+  {
+    return classes.subloop_get_instance_slot( v_object_monitor, TWO_INTEGER );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject set_object_monitor_stream(final SubLObject v_object_monitor, final SubLObject value)
+  {
+    return classes.subloop_set_instance_slot( v_object_monitor, value, TWO_INTEGER );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject get_object_monitor_subjects(final SubLObject v_object_monitor)
+  {
+    return classes.subloop_get_access_protected_instance_slot( v_object_monitor, ONE_INTEGER, $sym5$SUBJECTS );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject set_object_monitor_subjects(final SubLObject v_object_monitor, final SubLObject value)
+  {
+    return classes.subloop_set_access_protected_instance_slot( v_object_monitor, value, ONE_INTEGER, $sym5$SUBJECTS );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject get_object_monitor_monitoring_p(final SubLObject v_object_monitor)
+  {
+    return classes.ldb_test( $int6$4097, subloop_structures.instance_boolean_slots( v_object_monitor ) );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject set_object_monitor_monitoring_p(final SubLObject v_object_monitor, final SubLObject value)
+  {
+    subloop_structures._csetf_instance_boolean_slots( v_object_monitor, bytes.dpb( ( NIL != value ) ? ONE_INTEGER : ZERO_INTEGER, $int6$4097, subloop_structures.instance_boolean_slots( v_object_monitor ) ) );
+    return value;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject subloop_reserved_initialize_object_monitor_class(final SubLObject new_instance)
+  {
+    classes.subloop_initialize_slot( new_instance, $sym1$OBJECT, $sym7$INSTANCE_COUNT, ZERO_INTEGER );
+    return NIL;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject subloop_reserved_initialize_object_monitor_instance(final SubLObject new_instance)
+  {
+    classes.subloop_initialize_slot( new_instance, $sym1$OBJECT, $sym9$ISOLATED_P, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym0$OBJECT_MONITOR, $sym10$MONITORING_P, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym1$OBJECT, $sym11$INSTANCE_NUMBER, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym0$OBJECT_MONITOR, $sym5$SUBJECTS, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym0$OBJECT_MONITOR, $sym12$STREAM, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym0$OBJECT_MONITOR, $sym4$NESTING_DEPTH, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym0$OBJECT_MONITOR, $sym3$TAB_STRING, NIL );
+    return NIL;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
+  public static SubLObject object_monitor_p(final SubLObject v_object_monitor)
+  {
+    return classes.subloop_instanceof_class( v_object_monitor, $sym0$OBJECT_MONITOR );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 3675L)
+  public static SubLObject object_monitor_initialize_method(final SubLObject self)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_object_monitor_method = NIL;
+    SubLObject tab_string = get_object_monitor_tab_string( self );
+    SubLObject nesting_depth = get_object_monitor_nesting_depth( self );
+    SubLObject stream = get_object_monitor_stream( self );
+    SubLObject subjects = get_object_monitor_subjects( self );
+    SubLObject monitoring_p = get_object_monitor_monitoring_p( self );
+    try
+    {
+      thread.throwStack.push( $sym16$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
+      try
+      {
+        object.object_initialize_method( self );
+        monitoring_p = NIL;
+        subjects = NIL;
+        stream = T;
+        nesting_depth = ZERO_INTEGER;
+        tab_string = $str17$____;
+        Dynamic.sublisp_throw( $sym16$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, self );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_object_monitor_tab_string( self, tab_string );
+          set_object_monitor_nesting_depth( self, nesting_depth );
+          set_object_monitor_stream( self, stream );
+          set_object_monitor_subjects( self, subjects );
+          set_object_monitor_monitoring_p( self, monitoring_p );
+          Values.restoreValuesFromVector( _values );
+        }
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
+        }
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject set_object_monitor_tab_string(final SubLObject v_object_monitor, final SubLObject value) {
-        return classes.subloop_set_access_protected_instance_slot(v_object_monitor, value, (SubLObject)object_monitor.FOUR_INTEGER, (SubLObject)object_monitor.$sym3$TAB_STRING);
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_object_monitor_method = Errors.handleThrowable( ccatch_env_var, $sym16$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject get_object_monitor_nesting_depth(final SubLObject v_object_monitor) {
-        return classes.subloop_get_access_protected_instance_slot(v_object_monitor, (SubLObject)object_monitor.THREE_INTEGER, (SubLObject)object_monitor.$sym4$NESTING_DEPTH);
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject set_object_monitor_nesting_depth(final SubLObject v_object_monitor, final SubLObject value) {
-        return classes.subloop_set_access_protected_instance_slot(v_object_monitor, value, (SubLObject)object_monitor.THREE_INTEGER, (SubLObject)object_monitor.$sym4$NESTING_DEPTH);
+    return catch_var_for_object_monitor_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 4116L)
+  public static SubLObject object_monitor_tab_to_depth_method(final SubLObject self)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_object_monitor_method = NIL;
+    final SubLObject tab_string = get_object_monitor_tab_string( self );
+    final SubLObject nesting_depth = get_object_monitor_nesting_depth( self );
+    final SubLObject stream = get_object_monitor_stream( self );
+    try
+    {
+      thread.throwStack.push( $sym21$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
+      try
+      {
+        SubLObject i;
+        for( i = NIL, i = ZERO_INTEGER; i.numL( nesting_depth ); i = Numbers.add( i, ONE_INTEGER ) )
+        {
+          PrintLow.format( stream, tab_string );
+        }
+        Dynamic.sublisp_throw( $sym21$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, NIL );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_object_monitor_tab_string( self, tab_string );
+          set_object_monitor_nesting_depth( self, nesting_depth );
+          set_object_monitor_stream( self, stream );
+          Values.restoreValuesFromVector( _values );
+        }
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
+        }
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject get_object_monitor_stream(final SubLObject v_object_monitor) {
-        return classes.subloop_get_instance_slot(v_object_monitor, (SubLObject)object_monitor.TWO_INTEGER);
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_object_monitor_method = Errors.handleThrowable( ccatch_env_var, $sym21$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject set_object_monitor_stream(final SubLObject v_object_monitor, final SubLObject value) {
-        return classes.subloop_set_instance_slot(v_object_monitor, value, (SubLObject)object_monitor.TWO_INTEGER);
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject get_object_monitor_subjects(final SubLObject v_object_monitor) {
-        return classes.subloop_get_access_protected_instance_slot(v_object_monitor, (SubLObject)object_monitor.ONE_INTEGER, (SubLObject)object_monitor.$sym5$SUBJECTS);
+    return catch_var_for_object_monitor_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 4246L)
+  public static SubLObject object_monitor_monitor_set_slot_method(final SubLObject self, final SubLObject target, final SubLObject new_value)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_object_monitor_method = NIL;
+    final SubLObject stream = get_object_monitor_stream( self );
+    try
+    {
+      thread.throwStack.push( $sym26$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
+      try
+      {
+        PrintLow.format( stream, $str27$__ );
+        object_monitor_tab_to_depth_method( self );
+        PrintLow.format( stream, $str28$_SET_SLOT__S__S__S_, new SubLObject[] { target, ( NIL != slot_listeners.$active_slot_listener$.getDynamicValue( thread ) && NIL != subloop_structures.slot_listener_p(
+            slot_listeners.$active_slot_listener$.getDynamicValue( thread ) ) ) ? subloop_structures.sl_slot_name( slot_listeners.$active_slot_listener$.getDynamicValue( thread ) ) : $kw29$UNKNOWN_SLOT, new_value
+        } );
+        Dynamic.sublisp_throw( $sym26$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, NIL );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_object_monitor_stream( self, stream );
+          Values.restoreValuesFromVector( _values );
+        }
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
+        }
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject set_object_monitor_subjects(final SubLObject v_object_monitor, final SubLObject value) {
-        return classes.subloop_set_access_protected_instance_slot(v_object_monitor, value, (SubLObject)object_monitor.ONE_INTEGER, (SubLObject)object_monitor.$sym5$SUBJECTS);
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_object_monitor_method = Errors.handleThrowable( ccatch_env_var, $sym26$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject get_object_monitor_monitoring_p(final SubLObject v_object_monitor) {
-        return classes.ldb_test((SubLObject)object_monitor.$int6$4097, subloop_structures.instance_boolean_slots(v_object_monitor));
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject set_object_monitor_monitoring_p(final SubLObject v_object_monitor, final SubLObject value) {
-        subloop_structures._csetf_instance_boolean_slots(v_object_monitor, bytes.dpb((SubLObject)((object_monitor.NIL != value) ? object_monitor.ONE_INTEGER : object_monitor.ZERO_INTEGER), (SubLObject)object_monitor.$int6$4097, subloop_structures.instance_boolean_slots(v_object_monitor)));
-        return value;
+    return catch_var_for_object_monitor_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 4743L)
+  public static SubLObject object_monitor_monitor_before_method_method(final SubLObject self, final SubLObject instance_or_class, final SubLObject owning_method_name, SubLObject args)
+  {
+    SubLObject nesting_depth = get_object_monitor_nesting_depth( self );
+    final SubLObject stream = get_object_monitor_stream( self );
+    PrintLow.format( stream, $str27$__ );
+    object_monitor_tab_to_depth_method( self );
+    SubLObject filtered_lambda_list = method_listeners.method_listeners_filtered_lambda_list( instance_or_class, owning_method_name );
+    SubLObject current_var = NIL;
+    SubLObject current_arg = NIL;
+    if( NIL != subloop_structures.instance_p( instance_or_class ) )
+    {
+      final SubLObject class_of_instance = subloop_structures.instance_class( instance_or_class );
+      PrintLow.format( stream, $str35$Entered____S__S___S, new SubLObject[] { owning_method_name, subloop_structures.class_name( class_of_instance ), ConsesLow.cons( instance_or_class, args )
+      } );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject subloop_reserved_initialize_object_monitor_class(final SubLObject new_instance) {
-        classes.subloop_initialize_slot(new_instance, (SubLObject)object_monitor.$sym1$OBJECT, (SubLObject)object_monitor.$sym7$INSTANCE_COUNT, (SubLObject)object_monitor.ZERO_INTEGER);
-        return (SubLObject)object_monitor.NIL;
+    else if( NIL != subloop_structures.class_p( instance_or_class ) )
+    {
+      PrintLow.format( stream, $str35$Entered____S__S___S, new SubLObject[] { owning_method_name, subloop_structures.class_name( instance_or_class ), args
+      } );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject subloop_reserved_initialize_object_monitor_instance(final SubLObject new_instance) {
-        classes.subloop_initialize_slot(new_instance, (SubLObject)object_monitor.$sym1$OBJECT, (SubLObject)object_monitor.$sym9$ISOLATED_P, (SubLObject)object_monitor.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym10$MONITORING_P, (SubLObject)object_monitor.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)object_monitor.$sym1$OBJECT, (SubLObject)object_monitor.$sym11$INSTANCE_NUMBER, (SubLObject)object_monitor.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym5$SUBJECTS, (SubLObject)object_monitor.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym12$STREAM, (SubLObject)object_monitor.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym4$NESTING_DEPTH, (SubLObject)object_monitor.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym3$TAB_STRING, (SubLObject)object_monitor.NIL);
-        return (SubLObject)object_monitor.NIL;
+    else
+    {
+      PrintLow.format( stream, $str36$Entered___S__S, owning_method_name, ConsesLow.cons( owning_method_name, args ) );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 1581L)
-    public static SubLObject object_monitor_p(final SubLObject v_object_monitor) {
-        return classes.subloop_instanceof_class(v_object_monitor, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR);
+    while ( NIL != filtered_lambda_list && NIL != args)
+    {
+      PrintLow.format( stream, $str27$__ );
+      object_monitor_tab_to_depth_method( self );
+      current_var = filtered_lambda_list.first();
+      current_arg = args.first();
+      PrintLow.format( stream, $str37$Arg___S____S, current_var, current_arg );
+      filtered_lambda_list = filtered_lambda_list.rest();
+      args = args.rest();
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 3675L)
-    public static SubLObject object_monitor_initialize_method(final SubLObject self) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_object_monitor_method = (SubLObject)object_monitor.NIL;
-        SubLObject tab_string = get_object_monitor_tab_string(self);
-        SubLObject nesting_depth = get_object_monitor_nesting_depth(self);
-        SubLObject stream = get_object_monitor_stream(self);
-        SubLObject subjects = get_object_monitor_subjects(self);
-        SubLObject monitoring_p = get_object_monitor_monitoring_p(self);
-        try {
-            thread.throwStack.push(object_monitor.$sym16$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-            try {
-                object.object_initialize_method(self);
-                monitoring_p = (SubLObject)object_monitor.NIL;
-                subjects = (SubLObject)object_monitor.NIL;
-                stream = (SubLObject)object_monitor.T;
-                nesting_depth = (SubLObject)object_monitor.ZERO_INTEGER;
-                tab_string = (SubLObject)object_monitor.$str17$____;
-                Dynamic.sublisp_throw((SubLObject)object_monitor.$sym16$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, self);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)object_monitor.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_object_monitor_tab_string(self, tab_string);
-                    set_object_monitor_nesting_depth(self, nesting_depth);
-                    set_object_monitor_stream(self, stream);
-                    set_object_monitor_subjects(self, subjects);
-                    set_object_monitor_monitoring_p(self, monitoring_p);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
-        }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_object_monitor_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)object_monitor.$sym16$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_object_monitor_method;
+    nesting_depth = Numbers.add( nesting_depth, ONE_INTEGER );
+    set_object_monitor_nesting_depth( self, nesting_depth );
+    return NIL;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 5904L)
+  public static SubLObject object_monitor_monitor_after_method_method(final SubLObject self, final SubLObject instance_or_class, final SubLObject owning_method_name, final SubLObject args, final SubLObject result)
+  {
+    SubLObject nesting_depth = get_object_monitor_nesting_depth( self );
+    final SubLObject stream = get_object_monitor_stream( self );
+    nesting_depth = Numbers.subtract( nesting_depth, ONE_INTEGER );
+    set_object_monitor_nesting_depth( self, nesting_depth );
+    PrintLow.format( stream, $str27$__ );
+    object_monitor_tab_to_depth_method( self );
+    if( NIL != subloop_structures.instance_p( instance_or_class ) )
+    {
+      final SubLObject class_of_instance = subloop_structures.instance_class( instance_or_class );
+      PrintLow.format( stream, $str42$Returning____S__S___S_____S, new SubLObject[] { owning_method_name, subloop_structures.class_name( class_of_instance ), ConsesLow.cons( instance_or_class, args ), result
+      } );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 4116L)
-    public static SubLObject object_monitor_tab_to_depth_method(final SubLObject self) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_object_monitor_method = (SubLObject)object_monitor.NIL;
-        final SubLObject tab_string = get_object_monitor_tab_string(self);
-        final SubLObject nesting_depth = get_object_monitor_nesting_depth(self);
-        final SubLObject stream = get_object_monitor_stream(self);
-        try {
-            thread.throwStack.push(object_monitor.$sym21$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-            try {
-                SubLObject i;
-                for (i = (SubLObject)object_monitor.NIL, i = (SubLObject)object_monitor.ZERO_INTEGER; i.numL(nesting_depth); i = Numbers.add(i, (SubLObject)object_monitor.ONE_INTEGER)) {
-                    PrintLow.format(stream, tab_string);
-                }
-                Dynamic.sublisp_throw((SubLObject)object_monitor.$sym21$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, (SubLObject)object_monitor.NIL);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)object_monitor.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_object_monitor_tab_string(self, tab_string);
-                    set_object_monitor_nesting_depth(self, nesting_depth);
-                    set_object_monitor_stream(self, stream);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
-        }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_object_monitor_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)object_monitor.$sym21$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_object_monitor_method;
+    else if( NIL != subloop_structures.class_p( instance_or_class ) )
+    {
+      PrintLow.format( stream, $str42$Returning____S__S___S_____S, new SubLObject[] { owning_method_name, subloop_structures.class_name( instance_or_class ), args, result
+      } );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 4246L)
-    public static SubLObject object_monitor_monitor_set_slot_method(final SubLObject self, final SubLObject target, final SubLObject new_value) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_object_monitor_method = (SubLObject)object_monitor.NIL;
-        final SubLObject stream = get_object_monitor_stream(self);
-        try {
-            thread.throwStack.push(object_monitor.$sym26$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-            try {
-                PrintLow.format(stream, (SubLObject)object_monitor.$str27$__);
-                object_monitor_tab_to_depth_method(self);
-                PrintLow.format(stream, (SubLObject)object_monitor.$str28$_SET_SLOT__S__S__S_, new SubLObject[] { target, (object_monitor.NIL != slot_listeners.$active_slot_listener$.getDynamicValue(thread) && object_monitor.NIL != subloop_structures.slot_listener_p(slot_listeners.$active_slot_listener$.getDynamicValue(thread))) ? subloop_structures.sl_slot_name(slot_listeners.$active_slot_listener$.getDynamicValue(thread)) : object_monitor.$kw29$UNKNOWN_SLOT, new_value });
-                Dynamic.sublisp_throw((SubLObject)object_monitor.$sym26$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, (SubLObject)object_monitor.NIL);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)object_monitor.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_object_monitor_stream(self, stream);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
-        }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_object_monitor_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)object_monitor.$sym26$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_object_monitor_method;
+    else
+    {
+      PrintLow.format( stream, $str43$Returning___S__S_____S, new SubLObject[] { owning_method_name, ConsesLow.cons( owning_method_name, args ), result
+      } );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 4743L)
-    public static SubLObject object_monitor_monitor_before_method_method(final SubLObject self, final SubLObject instance_or_class, final SubLObject owning_method_name, SubLObject args) {
-        SubLObject nesting_depth = get_object_monitor_nesting_depth(self);
-        final SubLObject stream = get_object_monitor_stream(self);
-        PrintLow.format(stream, (SubLObject)object_monitor.$str27$__);
-        object_monitor_tab_to_depth_method(self);
-        SubLObject filtered_lambda_list = method_listeners.method_listeners_filtered_lambda_list(instance_or_class, owning_method_name);
-        SubLObject current_var = (SubLObject)object_monitor.NIL;
-        SubLObject current_arg = (SubLObject)object_monitor.NIL;
-        if (object_monitor.NIL != subloop_structures.instance_p(instance_or_class)) {
-            final SubLObject class_of_instance = subloop_structures.instance_class(instance_or_class);
-            PrintLow.format(stream, (SubLObject)object_monitor.$str35$Entered____S__S___S, new SubLObject[] { owning_method_name, subloop_structures.class_name(class_of_instance), ConsesLow.cons(instance_or_class, args) });
+    return NIL;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 6635L)
+  public static SubLObject object_monitor_monitor_method(final SubLObject self, final SubLObject target)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_object_monitor_method = NIL;
+    SubLObject subjects = get_object_monitor_subjects( self );
+    final SubLObject monitoring_p = get_object_monitor_monitoring_p( self );
+    try
+    {
+      thread.throwStack.push( $sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
+      try
+      {
+        if( NIL != subloop_structures.instance_p( target ) )
+        {
+          if( NIL == conses_high.member( target, subjects, Symbols.symbol_function( EQL ), Symbols.symbol_function( IDENTITY ) ) )
+          {
+            subjects = ConsesLow.cons( target, subjects );
+          }
+          if( NIL != monitoring_p )
+          {
+            object_monitor_monitor_instance_method( self, target );
+          }
+          Dynamic.sublisp_throw( $sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, T );
         }
-        else if (object_monitor.NIL != subloop_structures.class_p(instance_or_class)) {
-            PrintLow.format(stream, (SubLObject)object_monitor.$str35$Entered____S__S___S, new SubLObject[] { owning_method_name, subloop_structures.class_name(instance_or_class), args });
+        Dynamic.sublisp_throw( $sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, NIL );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_object_monitor_subjects( self, subjects );
+          set_object_monitor_monitoring_p( self, monitoring_p );
+          Values.restoreValuesFromVector( _values );
         }
-        else {
-            PrintLow.format(stream, (SubLObject)object_monitor.$str36$Entered___S__S, owning_method_name, (SubLObject)ConsesLow.cons(owning_method_name, args));
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
         }
-        while (object_monitor.NIL != filtered_lambda_list && object_monitor.NIL != args) {
-            PrintLow.format(stream, (SubLObject)object_monitor.$str27$__);
-            object_monitor_tab_to_depth_method(self);
-            current_var = filtered_lambda_list.first();
-            current_arg = args.first();
-            PrintLow.format(stream, (SubLObject)object_monitor.$str37$Arg___S____S, current_var, current_arg);
-            filtered_lambda_list = filtered_lambda_list.rest();
-            args = args.rest();
-        }
-        nesting_depth = Numbers.add(nesting_depth, (SubLObject)object_monitor.ONE_INTEGER);
-        set_object_monitor_nesting_depth(self, nesting_depth);
-        return (SubLObject)object_monitor.NIL;
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 5904L)
-    public static SubLObject object_monitor_monitor_after_method_method(final SubLObject self, final SubLObject instance_or_class, final SubLObject owning_method_name, final SubLObject args, final SubLObject result) {
-        SubLObject nesting_depth = get_object_monitor_nesting_depth(self);
-        final SubLObject stream = get_object_monitor_stream(self);
-        nesting_depth = Numbers.subtract(nesting_depth, (SubLObject)object_monitor.ONE_INTEGER);
-        set_object_monitor_nesting_depth(self, nesting_depth);
-        PrintLow.format(stream, (SubLObject)object_monitor.$str27$__);
-        object_monitor_tab_to_depth_method(self);
-        if (object_monitor.NIL != subloop_structures.instance_p(instance_or_class)) {
-            final SubLObject class_of_instance = subloop_structures.instance_class(instance_or_class);
-            PrintLow.format(stream, (SubLObject)object_monitor.$str42$Returning____S__S___S_____S, new SubLObject[] { owning_method_name, subloop_structures.class_name(class_of_instance), ConsesLow.cons(instance_or_class, args), result });
-        }
-        else if (object_monitor.NIL != subloop_structures.class_p(instance_or_class)) {
-            PrintLow.format(stream, (SubLObject)object_monitor.$str42$Returning____S__S___S_____S, new SubLObject[] { owning_method_name, subloop_structures.class_name(instance_or_class), args, result });
-        }
-        else {
-            PrintLow.format(stream, (SubLObject)object_monitor.$str43$Returning___S__S_____S, new SubLObject[] { owning_method_name, ConsesLow.cons(owning_method_name, args), result });
-        }
-        return (SubLObject)object_monitor.NIL;
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_object_monitor_method = Errors.handleThrowable( ccatch_env_var, $sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 6635L)
-    public static SubLObject object_monitor_monitor_method(final SubLObject self, final SubLObject target) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_object_monitor_method = (SubLObject)object_monitor.NIL;
-        SubLObject subjects = get_object_monitor_subjects(self);
-        final SubLObject monitoring_p = get_object_monitor_monitoring_p(self);
-        try {
-            thread.throwStack.push(object_monitor.$sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-            try {
-                if (object_monitor.NIL != subloop_structures.instance_p(target)) {
-                    if (object_monitor.NIL == conses_high.member(target, subjects, Symbols.symbol_function((SubLObject)object_monitor.EQL), Symbols.symbol_function((SubLObject)object_monitor.IDENTITY))) {
-                        subjects = (SubLObject)ConsesLow.cons(target, subjects);
-                    }
-                    if (object_monitor.NIL != monitoring_p) {
-                        object_monitor_monitor_instance_method(self, target);
-                    }
-                    Dynamic.sublisp_throw((SubLObject)object_monitor.$sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, (SubLObject)object_monitor.T);
-                }
-                Dynamic.sublisp_throw((SubLObject)object_monitor.$sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, (SubLObject)object_monitor.NIL);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)object_monitor.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_object_monitor_subjects(self, subjects);
-                    set_object_monitor_monitoring_p(self, monitoring_p);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
-        }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_object_monitor_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)object_monitor.$sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_object_monitor_method;
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 6903L)
-    public static SubLObject object_monitor_unmonitor_method(final SubLObject self, final SubLObject target) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_object_monitor_method = (SubLObject)object_monitor.NIL;
-        SubLObject subjects = get_object_monitor_subjects(self);
-        final SubLObject monitoring_p = get_object_monitor_monitoring_p(self);
-        try {
-            thread.throwStack.push(object_monitor.$sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-            try {
-                if (object_monitor.NIL != conses_high.member(target, subjects, Symbols.symbol_function((SubLObject)object_monitor.EQ), (SubLObject)object_monitor.UNPROVIDED)) {
-                    subjects = Sequences.delete(target, subjects, (SubLObject)object_monitor.UNPROVIDED, (SubLObject)object_monitor.UNPROVIDED, (SubLObject)object_monitor.UNPROVIDED, (SubLObject)object_monitor.UNPROVIDED, (SubLObject)object_monitor.UNPROVIDED);
-                    if (object_monitor.NIL != monitoring_p) {
-                        object.object_remove_all_set_slot_listeners_method(self, target, (SubLObject)object_monitor.UNPROVIDED);
-                    }
-                    Dynamic.sublisp_throw((SubLObject)object_monitor.$sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, (SubLObject)object_monitor.T);
-                }
-                Dynamic.sublisp_throw((SubLObject)object_monitor.$sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, (SubLObject)object_monitor.NIL);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)object_monitor.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_object_monitor_subjects(self, subjects);
-                    set_object_monitor_monitoring_p(self, monitoring_p);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
+    return catch_var_for_object_monitor_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 6903L)
+  public static SubLObject object_monitor_unmonitor_method(final SubLObject self, final SubLObject target)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_object_monitor_method = NIL;
+    SubLObject subjects = get_object_monitor_subjects( self );
+    final SubLObject monitoring_p = get_object_monitor_monitoring_p( self );
+    try
+    {
+      thread.throwStack.push( $sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
+      try
+      {
+        if( NIL != conses_high.member( target, subjects, Symbols.symbol_function( EQ ), UNPROVIDED ) )
+        {
+          subjects = Sequences.delete( target, subjects, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+          if( NIL != monitoring_p )
+          {
+            object.object_remove_all_set_slot_listeners_method( self, target, UNPROVIDED );
+          }
+          Dynamic.sublisp_throw( $sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, T );
         }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_object_monitor_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)object_monitor.$sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
+        Dynamic.sublisp_throw( $sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, NIL );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_object_monitor_subjects( self, subjects );
+          set_object_monitor_monitoring_p( self, monitoring_p );
+          Values.restoreValuesFromVector( _values );
         }
-        finally {
-            thread.throwStack.pop();
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
         }
-        return catch_var_for_object_monitor_method;
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 7352L)
-    public static SubLObject object_monitor_monitor_instance_method(final SubLObject self, final SubLObject target) {
-        SubLObject v_slots = (SubLObject)object_monitor.NIL;
-        SubLObject method_names = (SubLObject)object_monitor.NIL;
-        SubLObject cdolist_list_var;
-        v_slots = (cdolist_list_var = instances.instances_all_any_instance_slots(target));
-        SubLObject slot = (SubLObject)object_monitor.NIL;
-        slot = cdolist_list_var.first();
-        while (object_monitor.NIL != cdolist_list_var) {
-            object.object_add_set_slot_listener_method(self, target, slot, (SubLObject)object_monitor.$sym23$MONITOR_SET_SLOT);
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_object_monitor_method = Errors.handleThrowable( ccatch_env_var, $sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
+    }
+    finally
+    {
+      thread.throwStack.pop();
+    }
+    return catch_var_for_object_monitor_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 7352L)
+  public static SubLObject object_monitor_monitor_instance_method(final SubLObject self, final SubLObject target)
+  {
+    SubLObject v_slots = NIL;
+    SubLObject method_names = NIL;
+    SubLObject cdolist_list_var;
+    v_slots = ( cdolist_list_var = instances.instances_all_any_instance_slots( target ) );
+    SubLObject slot = NIL;
+    slot = cdolist_list_var.first();
+    while ( NIL != cdolist_list_var)
+    {
+      object.object_add_set_slot_listener_method( self, target, slot, $sym23$MONITOR_SET_SLOT );
+      cdolist_list_var = cdolist_list_var.rest();
+      slot = cdolist_list_var.first();
+    }
+    method_names = ( cdolist_list_var = methods.methods_get_all_method_names( target ) );
+    SubLObject method_name = NIL;
+    method_name = cdolist_list_var.first();
+    while ( NIL != cdolist_list_var)
+    {
+      object.object_add_class_wide_before_method_listener_method( self, target, method_name, $sym31$MONITOR_BEFORE_METHOD );
+      object.object_add_class_wide_after_method_listener_method( self, target, method_name, $sym39$MONITOR_AFTER_METHOD );
+      cdolist_list_var = cdolist_list_var.rest();
+      method_name = cdolist_list_var.first();
+    }
+    return NIL;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 7900L)
+  public static SubLObject object_monitor_start_monitoring_method(final SubLObject self)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_object_monitor_method = NIL;
+    final SubLObject subjects = get_object_monitor_subjects( self );
+    SubLObject monitoring_p = get_object_monitor_monitoring_p( self );
+    try
+    {
+      thread.throwStack.push( $sym59$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
+      try
+      {
+        SubLObject cdolist_list_var = subjects;
+        SubLObject target = NIL;
+        target = cdolist_list_var.first();
+        while ( NIL != cdolist_list_var)
+        {
+          object_monitor_monitor_instance_method( self, target );
+          cdolist_list_var = cdolist_list_var.rest();
+          target = cdolist_list_var.first();
+        }
+        monitoring_p = T;
+        Dynamic.sublisp_throw( $sym59$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, T );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_object_monitor_subjects( self, subjects );
+          set_object_monitor_monitoring_p( self, monitoring_p );
+          Values.restoreValuesFromVector( _values );
+        }
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
+        }
+      }
+    }
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_object_monitor_method = Errors.handleThrowable( ccatch_env_var, $sym59$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
+    }
+    finally
+    {
+      thread.throwStack.pop();
+    }
+    return catch_var_for_object_monitor_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 8265L)
+  public static SubLObject object_monitor_stop_monitoring_method(final SubLObject self)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_object_monitor_method = NIL;
+    final SubLObject subjects = get_object_monitor_subjects( self );
+    SubLObject monitoring_p = get_object_monitor_monitoring_p( self );
+    try
+    {
+      thread.throwStack.push( $sym63$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
+      try
+      {
+        if( NIL != monitoring_p )
+        {
+          SubLObject cdolist_list_var = subjects;
+          SubLObject target = NIL;
+          target = cdolist_list_var.first();
+          while ( NIL != cdolist_list_var)
+          {
+            object.object_remove_all_set_slot_listeners_method( self, target, UNPROVIDED );
+            object.object_remove_all_class_wide_method_listeners_method( self, target, UNPROVIDED );
             cdolist_list_var = cdolist_list_var.rest();
-            slot = cdolist_list_var.first();
+            target = cdolist_list_var.first();
+          }
+          monitoring_p = NIL;
         }
-        method_names = (cdolist_list_var = methods.methods_get_all_method_names(target));
-        SubLObject method_name = (SubLObject)object_monitor.NIL;
-        method_name = cdolist_list_var.first();
-        while (object_monitor.NIL != cdolist_list_var) {
-            object.object_add_class_wide_before_method_listener_method(self, target, method_name, (SubLObject)object_monitor.$sym31$MONITOR_BEFORE_METHOD);
-            object.object_add_class_wide_after_method_listener_method(self, target, method_name, (SubLObject)object_monitor.$sym39$MONITOR_AFTER_METHOD);
-            cdolist_list_var = cdolist_list_var.rest();
-            method_name = cdolist_list_var.first();
+        Dynamic.sublisp_throw( $sym63$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, T );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_object_monitor_subjects( self, subjects );
+          set_object_monitor_monitoring_p( self, monitoring_p );
+          Values.restoreValuesFromVector( _values );
         }
-        return (SubLObject)object_monitor.NIL;
-    }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 7900L)
-    public static SubLObject object_monitor_start_monitoring_method(final SubLObject self) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_object_monitor_method = (SubLObject)object_monitor.NIL;
-        final SubLObject subjects = get_object_monitor_subjects(self);
-        SubLObject monitoring_p = get_object_monitor_monitoring_p(self);
-        try {
-            thread.throwStack.push(object_monitor.$sym59$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-            try {
-                SubLObject cdolist_list_var = subjects;
-                SubLObject target = (SubLObject)object_monitor.NIL;
-                target = cdolist_list_var.first();
-                while (object_monitor.NIL != cdolist_list_var) {
-                    object_monitor_monitor_instance_method(self, target);
-                    cdolist_list_var = cdolist_list_var.rest();
-                    target = cdolist_list_var.first();
-                }
-                monitoring_p = (SubLObject)object_monitor.T;
-                Dynamic.sublisp_throw((SubLObject)object_monitor.$sym59$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, (SubLObject)object_monitor.T);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)object_monitor.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_object_monitor_subjects(self, subjects);
-                    set_object_monitor_monitoring_p(self, monitoring_p);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
         }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_object_monitor_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)object_monitor.$sym59$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_object_monitor_method;
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/object-monitor.lisp", position = 8265L)
-    public static SubLObject object_monitor_stop_monitoring_method(final SubLObject self) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_object_monitor_method = (SubLObject)object_monitor.NIL;
-        final SubLObject subjects = get_object_monitor_subjects(self);
-        SubLObject monitoring_p = get_object_monitor_monitoring_p(self);
-        try {
-            thread.throwStack.push(object_monitor.$sym63$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-            try {
-                if (object_monitor.NIL != monitoring_p) {
-                    SubLObject cdolist_list_var = subjects;
-                    SubLObject target = (SubLObject)object_monitor.NIL;
-                    target = cdolist_list_var.first();
-                    while (object_monitor.NIL != cdolist_list_var) {
-                        object.object_remove_all_set_slot_listeners_method(self, target, (SubLObject)object_monitor.UNPROVIDED);
-                        object.object_remove_all_class_wide_method_listeners_method(self, target, (SubLObject)object_monitor.UNPROVIDED);
-                        cdolist_list_var = cdolist_list_var.rest();
-                        target = cdolist_list_var.first();
-                    }
-                    monitoring_p = (SubLObject)object_monitor.NIL;
-                }
-                Dynamic.sublisp_throw((SubLObject)object_monitor.$sym63$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD, (SubLObject)object_monitor.T);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)object_monitor.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_object_monitor_subjects(self, subjects);
-                    set_object_monitor_monitoring_p(self, monitoring_p);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
-        }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_object_monitor_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)object_monitor.$sym63$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_object_monitor_method;
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_object_monitor_method = Errors.handleThrowable( ccatch_env_var, $sym63$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD );
     }
-    
-    public static SubLObject declare_object_monitor_file() {
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "get_object_monitor_tab_string", "GET-OBJECT-MONITOR-TAB-STRING", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "set_object_monitor_tab_string", "SET-OBJECT-MONITOR-TAB-STRING", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "get_object_monitor_nesting_depth", "GET-OBJECT-MONITOR-NESTING-DEPTH", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "set_object_monitor_nesting_depth", "SET-OBJECT-MONITOR-NESTING-DEPTH", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "get_object_monitor_stream", "GET-OBJECT-MONITOR-STREAM", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "set_object_monitor_stream", "SET-OBJECT-MONITOR-STREAM", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "get_object_monitor_subjects", "GET-OBJECT-MONITOR-SUBJECTS", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "set_object_monitor_subjects", "SET-OBJECT-MONITOR-SUBJECTS", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "get_object_monitor_monitoring_p", "GET-OBJECT-MONITOR-MONITORING-P", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "set_object_monitor_monitoring_p", "SET-OBJECT-MONITOR-MONITORING-P", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "subloop_reserved_initialize_object_monitor_class", "SUBLOOP-RESERVED-INITIALIZE-OBJECT-MONITOR-CLASS", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "subloop_reserved_initialize_object_monitor_instance", "SUBLOOP-RESERVED-INITIALIZE-OBJECT-MONITOR-INSTANCE", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_p", "OBJECT-MONITOR-P", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_initialize_method", "OBJECT-MONITOR-INITIALIZE-METHOD", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_tab_to_depth_method", "OBJECT-MONITOR-TAB-TO-DEPTH-METHOD", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_monitor_set_slot_method", "OBJECT-MONITOR-MONITOR-SET-SLOT-METHOD", 3, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_monitor_before_method_method", "OBJECT-MONITOR-MONITOR-BEFORE-METHOD-METHOD", 4, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_monitor_after_method_method", "OBJECT-MONITOR-MONITOR-AFTER-METHOD-METHOD", 5, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_monitor_method", "OBJECT-MONITOR-MONITOR-METHOD", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_unmonitor_method", "OBJECT-MONITOR-UNMONITOR-METHOD", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_monitor_instance_method", "OBJECT-MONITOR-MONITOR-INSTANCE-METHOD", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_start_monitoring_method", "OBJECT-MONITOR-START-MONITORING-METHOD", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.object_monitor", "object_monitor_stop_monitoring_method", "OBJECT-MONITOR-STOP-MONITORING-METHOD", 1, 0, false);
-        return (SubLObject)object_monitor.NIL;
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    public static SubLObject init_object_monitor_file() {
-        return (SubLObject)object_monitor.NIL;
-    }
-    
-    public static SubLObject setup_object_monitor_file() {
-        classes.subloop_new_class((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym1$OBJECT, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.$list2);
-        classes.class_set_implements_slot_listeners((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.NIL);
-        classes.subloop_note_class_initialization_function((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym8$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_CLASS);
-        classes.subloop_note_instance_initialization_function((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym13$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_INSTANCE);
-        subloop_reserved_initialize_object_monitor_class((SubLObject)object_monitor.$sym0$OBJECT_MONITOR);
-        methods.methods_incorporate_instance_method((SubLObject)object_monitor.$sym14$INITIALIZE, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.$list15);
-        methods.subloop_register_instance_method((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym14$INITIALIZE, (SubLObject)object_monitor.$sym18$OBJECT_MONITOR_INITIALIZE_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)object_monitor.$sym19$TAB_TO_DEPTH, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.$list20);
-        methods.subloop_register_instance_method((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym19$TAB_TO_DEPTH, (SubLObject)object_monitor.$sym22$OBJECT_MONITOR_TAB_TO_DEPTH_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)object_monitor.$sym23$MONITOR_SET_SLOT, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.$list24, (SubLObject)object_monitor.$list25);
-        methods.subloop_register_instance_method((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym23$MONITOR_SET_SLOT, (SubLObject)object_monitor.$sym30$OBJECT_MONITOR_MONITOR_SET_SLOT_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)object_monitor.$sym31$MONITOR_BEFORE_METHOD, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$list32, (SubLObject)object_monitor.$list33, (SubLObject)object_monitor.$list34);
-        methods.subloop_register_instance_method((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym31$MONITOR_BEFORE_METHOD, (SubLObject)object_monitor.$sym38$OBJECT_MONITOR_MONITOR_BEFORE_METHOD_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)object_monitor.$sym39$MONITOR_AFTER_METHOD, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$list32, (SubLObject)object_monitor.$list40, (SubLObject)object_monitor.$list41);
-        methods.subloop_register_instance_method((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym39$MONITOR_AFTER_METHOD, (SubLObject)object_monitor.$sym44$OBJECT_MONITOR_MONITOR_AFTER_METHOD_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)object_monitor.$sym45$MONITOR, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.$list46, (SubLObject)object_monitor.$list47);
-        methods.subloop_register_instance_method((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym45$MONITOR, (SubLObject)object_monitor.$sym49$OBJECT_MONITOR_MONITOR_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)object_monitor.$sym50$UNMONITOR, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.$list46, (SubLObject)object_monitor.$list51);
-        methods.subloop_register_instance_method((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym50$UNMONITOR, (SubLObject)object_monitor.$sym53$OBJECT_MONITOR_UNMONITOR_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)object_monitor.$sym54$MONITOR_INSTANCE, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.$list46, (SubLObject)object_monitor.$list55);
-        methods.subloop_register_instance_method((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym54$MONITOR_INSTANCE, (SubLObject)object_monitor.$sym56$OBJECT_MONITOR_MONITOR_INSTANCE_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)object_monitor.$sym57$START_MONITORING, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.$list58);
-        methods.subloop_register_instance_method((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym57$START_MONITORING, (SubLObject)object_monitor.$sym60$OBJECT_MONITOR_START_MONITORING_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)object_monitor.$sym61$STOP_MONITORING, (SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.NIL, (SubLObject)object_monitor.$list62);
-        methods.subloop_register_instance_method((SubLObject)object_monitor.$sym0$OBJECT_MONITOR, (SubLObject)object_monitor.$sym61$STOP_MONITORING, (SubLObject)object_monitor.$sym64$OBJECT_MONITOR_STOP_MONITORING_METHOD);
-        return (SubLObject)object_monitor.NIL;
-    }
-    
-    @Override
-	public void declareFunctions() {
-        declare_object_monitor_file();
-    }
-    
-    @Override
-	public void initializeVariables() {
-        init_object_monitor_file();
-    }
-    
-    @Override
-	public void runTopLevelForms() {
-        setup_object_monitor_file();
-    }
-    
-    static {
-        me = (SubLFile)new object_monitor();
-        $sym0$OBJECT_MONITOR = SubLObjectFactory.makeSymbol("OBJECT-MONITOR");
-        $sym1$OBJECT = SubLObjectFactory.makeSymbol("OBJECT");
-        $list2 = ConsesLow.list(new SubLObject[] { ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("MONITORING-P"), (SubLObject)SubLObjectFactory.makeKeyword("INSTANCE"), (SubLObject)SubLObjectFactory.makeKeyword("BOOLEAN"), (SubLObject)SubLObjectFactory.makeKeyword("PUBLIC")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("SUBJECTS"), (SubLObject)SubLObjectFactory.makeKeyword("INSTANCE"), (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeKeyword("INSTANCE"), (SubLObject)SubLObjectFactory.makeKeyword("PUBLIC")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NESTING-DEPTH"), (SubLObject)SubLObjectFactory.makeKeyword("INSTANCE"), (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TAB-STRING"), (SubLObject)SubLObjectFactory.makeKeyword("INSTANCE"), (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("INITIALIZE"), (SubLObject)object_monitor.NIL, (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("TAB-TO-DEPTH"), (SubLObject)object_monitor.NIL, (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("MONITOR-SET-SLOT"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)SubLObjectFactory.makeSymbol("NEW-VALUE"))), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("MONITOR-BEFORE-METHOD"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"))), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("MONITOR-AFTER-METHOD"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"), (SubLObject)SubLObjectFactory.makeSymbol("RESULT"))), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("MONITOR"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TARGET"))), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("UNMONITOR"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TARGET"))), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("MONITOR-INSTANCE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TARGET")), (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("START-MONITORING"), (SubLObject)object_monitor.NIL), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("STOP-MONITORING"), (SubLObject)object_monitor.NIL) });
-        $sym3$TAB_STRING = SubLObjectFactory.makeSymbol("TAB-STRING");
-        $sym4$NESTING_DEPTH = SubLObjectFactory.makeSymbol("NESTING-DEPTH");
-        $sym5$SUBJECTS = SubLObjectFactory.makeSymbol("SUBJECTS");
-        $int6$4097 = SubLObjectFactory.makeInteger(4097);
-        $sym7$INSTANCE_COUNT = SubLObjectFactory.makeSymbol("INSTANCE-COUNT");
-        $sym8$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_CLASS = SubLObjectFactory.makeSymbol("SUBLOOP-RESERVED-INITIALIZE-OBJECT-MONITOR-CLASS");
-        $sym9$ISOLATED_P = SubLObjectFactory.makeSymbol("ISOLATED-P");
-        $sym10$MONITORING_P = SubLObjectFactory.makeSymbol("MONITORING-P");
-        $sym11$INSTANCE_NUMBER = SubLObjectFactory.makeSymbol("INSTANCE-NUMBER");
-        $sym12$STREAM = SubLObjectFactory.makeSymbol("STREAM");
-        $sym13$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_INSTANCE = SubLObjectFactory.makeSymbol("SUBLOOP-RESERVED-INITIALIZE-OBJECT-MONITOR-INSTANCE");
-        $sym14$INITIALIZE = SubLObjectFactory.makeSymbol("INITIALIZE");
-        $list15 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INITIALIZE"), (SubLObject)SubLObjectFactory.makeSymbol("SUPER")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("MONITORING-P"), (SubLObject)object_monitor.NIL), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("SUBJECTS"), (SubLObject)object_monitor.NIL), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)object_monitor.T), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("NESTING-DEPTH"), (SubLObject)object_monitor.ZERO_INTEGER), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("TAB-STRING"), (SubLObject)SubLObjectFactory.makeString("   |")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)SubLObjectFactory.makeSymbol("SELF")));
-        $sym16$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD");
-        $str17$____ = SubLObjectFactory.makeString("   |");
-        $sym18$OBJECT_MONITOR_INITIALIZE_METHOD = SubLObjectFactory.makeSymbol("OBJECT-MONITOR-INITIALIZE-METHOD");
-        $sym19$TAB_TO_DEPTH = SubLObjectFactory.makeSymbol("TAB-TO-DEPTH");
-        $list20 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CDOTIMES"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("I"), (SubLObject)SubLObjectFactory.makeSymbol("NESTING-DEPTH")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeSymbol("TAB-STRING"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.NIL));
-        $sym21$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD");
-        $sym22$OBJECT_MONITOR_TAB_TO_DEPTH_METHOD = SubLObjectFactory.makeSymbol("OBJECT-MONITOR-TAB-TO-DEPTH-METHOD");
-        $sym23$MONITOR_SET_SLOT = SubLObjectFactory.makeSymbol("MONITOR-SET-SLOT");
-        $list24 = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)SubLObjectFactory.makeSymbol("NEW-VALUE"));
-        $list25 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("~%")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TAB-TO-DEPTH"), (SubLObject)SubLObjectFactory.makeSymbol("SELF")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("(SET-SLOT ~S ~S ~S)"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FIF"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CAND"), (SubLObject)SubLObjectFactory.makeSymbol("*ACTIVE-SLOT-LISTENER*"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("SLOT-LISTENER-P"), (SubLObject)SubLObjectFactory.makeSymbol("*ACTIVE-SLOT-LISTENER*"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("SL-SLOT-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("*ACTIVE-SLOT-LISTENER*")), (SubLObject)SubLObjectFactory.makeKeyword("UNKNOWN-SLOT")), (SubLObject)SubLObjectFactory.makeSymbol("NEW-VALUE")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.NIL));
-        $sym26$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD");
-        $str27$__ = SubLObjectFactory.makeString("~%");
-        $str28$_SET_SLOT__S__S__S_ = SubLObjectFactory.makeString("(SET-SLOT ~S ~S ~S)");
-        $kw29$UNKNOWN_SLOT = SubLObjectFactory.makeKeyword("UNKNOWN-SLOT");
-        $sym30$OBJECT_MONITOR_MONITOR_SET_SLOT_METHOD = SubLObjectFactory.makeSymbol("OBJECT-MONITOR-MONITOR-SET-SLOT-METHOD");
-        $sym31$MONITOR_BEFORE_METHOD = SubLObjectFactory.makeSymbol("MONITOR-BEFORE-METHOD");
-        $list32 = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("AUTO-UPDATE"));
-        $list33 = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"));
-        $list34 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("~%")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TAB-TO-DEPTH"), (SubLObject)SubLObjectFactory.makeSymbol("SELF")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLET"), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FILTERED-LAMBDA-LIST"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("METHOD-LISTENERS-FILTERED-LAMBDA-LIST"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CURRENT-VAR"), (SubLObject)object_monitor.NIL), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CURRENT-ARG"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PCOND"), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-P"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLET"), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLASS-OF-INSTANCE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-CLASS"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS")))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("Entered: (~S ~S) ~S"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLASS-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("CLASS-OF-INSTANCE")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONS"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"))))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLASS-P"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("Entered: (~S ~S) ~S"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLASS-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS")), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"))), (SubLObject)ConsesLow.list((SubLObject)object_monitor.T, (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("Entered: ~S ~S"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONS"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"))))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("WHILE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CAND"), (SubLObject)SubLObjectFactory.makeSymbol("FILTERED-LAMBDA-LIST"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("~%")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TAB-TO-DEPTH"), (SubLObject)SubLObjectFactory.makeSymbol("SELF")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("CURRENT-VAR"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CAR"), (SubLObject)SubLObjectFactory.makeSymbol("FILTERED-LAMBDA-LIST")), (SubLObject)SubLObjectFactory.makeSymbol("CURRENT-ARG"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CAR"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("Arg: ~S = ~S"), (SubLObject)SubLObjectFactory.makeSymbol("CURRENT-VAR"), (SubLObject)SubLObjectFactory.makeSymbol("CURRENT-ARG")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("FILTERED-LAMBDA-LIST"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CDR"), (SubLObject)SubLObjectFactory.makeSymbol("FILTERED-LAMBDA-LIST")), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CDR"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"))))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CINC"), (SubLObject)SubLObjectFactory.makeSymbol("NESTING-DEPTH")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.NIL));
-        $str35$Entered____S__S___S = SubLObjectFactory.makeString("Entered: (~S ~S) ~S");
-        $str36$Entered___S__S = SubLObjectFactory.makeString("Entered: ~S ~S");
-        $str37$Arg___S____S = SubLObjectFactory.makeString("Arg: ~S = ~S");
-        $sym38$OBJECT_MONITOR_MONITOR_BEFORE_METHOD_METHOD = SubLObjectFactory.makeSymbol("OBJECT-MONITOR-MONITOR-BEFORE-METHOD-METHOD");
-        $sym39$MONITOR_AFTER_METHOD = SubLObjectFactory.makeSymbol("MONITOR-AFTER-METHOD");
-        $list40 = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"), (SubLObject)SubLObjectFactory.makeSymbol("RESULT"));
-        $list41 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CDEC"), (SubLObject)SubLObjectFactory.makeSymbol("NESTING-DEPTH")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("~%")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TAB-TO-DEPTH"), (SubLObject)SubLObjectFactory.makeSymbol("SELF")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PCOND"), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-P"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLET"), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLASS-OF-INSTANCE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-CLASS"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS")))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("Returning: (~S ~S) ~S -> ~S"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLASS-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("CLASS-OF-INSTANCE")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONS"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS")), (SubLObject)SubLObjectFactory.makeSymbol("RESULT")))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLASS-P"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("Returning: (~S ~S) ~S -> ~S"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLASS-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-OR-CLASS")), (SubLObject)SubLObjectFactory.makeSymbol("ARGS"), (SubLObject)SubLObjectFactory.makeSymbol("RESULT"))), (SubLObject)ConsesLow.list((SubLObject)object_monitor.T, (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORMAT"), (SubLObject)SubLObjectFactory.makeSymbol("STREAM"), (SubLObject)SubLObjectFactory.makeString("Returning: ~S ~S -> ~S"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONS"), (SubLObject)SubLObjectFactory.makeSymbol("OWNING-METHOD-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("ARGS")), (SubLObject)SubLObjectFactory.makeSymbol("RESULT")))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.NIL));
-        $str42$Returning____S__S___S_____S = SubLObjectFactory.makeString("Returning: (~S ~S) ~S -> ~S");
-        $str43$Returning___S__S_____S = SubLObjectFactory.makeString("Returning: ~S ~S -> ~S");
-        $sym44$OBJECT_MONITOR_MONITOR_AFTER_METHOD_METHOD = SubLObjectFactory.makeSymbol("OBJECT-MONITOR-MONITOR-AFTER-METHOD-METHOD");
-        $sym45$MONITOR = SubLObjectFactory.makeSymbol("MONITOR");
-        $list46 = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TARGET"));
-        $list47 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-P"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CPUSHNEW"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)SubLObjectFactory.makeSymbol("SUBJECTS")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)SubLObjectFactory.makeSymbol("MONITORING-P"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("MONITOR-INSTANCE"), (SubLObject)SubLObjectFactory.makeSymbol("SELF"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.T)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.NIL));
-        $sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD");
-        $sym49$OBJECT_MONITOR_MONITOR_METHOD = SubLObjectFactory.makeSymbol("OBJECT-MONITOR-MONITOR-METHOD");
-        $sym50$UNMONITOR = SubLObjectFactory.makeSymbol("UNMONITOR");
-        $list51 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("MEMBER"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)SubLObjectFactory.makeSymbol("SUBJECTS"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)object_monitor.EQ)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("SUBJECTS"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DELETE"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)SubLObjectFactory.makeSymbol("SUBJECTS"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)SubLObjectFactory.makeSymbol("MONITORING-P"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("REMOVE-ALL-SET-SLOT-LISTENERS"), (SubLObject)SubLObjectFactory.makeSymbol("SELF"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.T)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.NIL));
-        $sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD");
-        $sym53$OBJECT_MONITOR_UNMONITOR_METHOD = SubLObjectFactory.makeSymbol("OBJECT-MONITOR-UNMONITOR-METHOD");
-        $sym54$MONITOR_INSTANCE = SubLObjectFactory.makeSymbol("MONITOR-INSTANCE");
-        $list55 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLET"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("SLOTS"), (SubLObject)SubLObjectFactory.makeSymbol("METHOD-NAMES")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("SLOTS"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCES-ALL-ANY-INSTANCE-SLOTS"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CDOLIST"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("SLOT"), (SubLObject)SubLObjectFactory.makeSymbol("SLOTS")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ADD-SET-SLOT-LISTENER"), (SubLObject)SubLObjectFactory.makeSymbol("SELF"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)SubLObjectFactory.makeSymbol("SLOT"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("MONITOR-SET-SLOT")))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("METHOD-NAMES"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("METHODS-GET-ALL-METHOD-NAMES"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CDOLIST"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("METHOD-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("METHOD-NAMES")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ADD-CLASS-WIDE-BEFORE-METHOD-LISTENER"), (SubLObject)SubLObjectFactory.makeSymbol("SELF"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)SubLObjectFactory.makeSymbol("METHOD-NAME"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("MONITOR-BEFORE-METHOD"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ADD-CLASS-WIDE-AFTER-METHOD-LISTENER"), (SubLObject)SubLObjectFactory.makeSymbol("SELF"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)SubLObjectFactory.makeSymbol("METHOD-NAME"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("MONITOR-AFTER-METHOD"))))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.NIL));
-        $sym56$OBJECT_MONITOR_MONITOR_INSTANCE_METHOD = SubLObjectFactory.makeSymbol("OBJECT-MONITOR-MONITOR-INSTANCE-METHOD");
-        $sym57$START_MONITORING = SubLObjectFactory.makeSymbol("START-MONITORING");
-        $list58 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CDOLIST"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)SubLObjectFactory.makeSymbol("SUBJECTS")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("MONITOR-INSTANCE"), (SubLObject)SubLObjectFactory.makeSymbol("SELF"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("MONITORING-P"), (SubLObject)object_monitor.T), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.T));
-        $sym59$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD");
-        $sym60$OBJECT_MONITOR_START_MONITORING_METHOD = SubLObjectFactory.makeSymbol("OBJECT-MONITOR-START-MONITORING-METHOD");
-        $sym61$STOP_MONITORING = SubLObjectFactory.makeSymbol("STOP-MONITORING");
-        $list62 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)SubLObjectFactory.makeSymbol("MONITORING-P"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CDOLIST"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TARGET"), (SubLObject)SubLObjectFactory.makeSymbol("SUBJECTS")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("REMOVE-ALL-SET-SLOT-LISTENERS"), (SubLObject)SubLObjectFactory.makeSymbol("SELF"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("REMOVE-ALL-CLASS-WIDE-METHOD-LISTENERS"), (SubLObject)SubLObjectFactory.makeSymbol("SELF"), (SubLObject)SubLObjectFactory.makeSymbol("TARGET"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("MONITORING-P"), (SubLObject)object_monitor.NIL)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)object_monitor.T));
-        $sym63$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD");
-        $sym64$OBJECT_MONITOR_STOP_MONITORING_METHOD = SubLObjectFactory.makeSymbol("OBJECT-MONITOR-STOP-MONITORING-METHOD");
-    }
+    return catch_var_for_object_monitor_method;
+  }
+
+  public static SubLObject declare_object_monitor_file()
+  {
+    SubLFiles.declareFunction( me, "get_object_monitor_tab_string", "GET-OBJECT-MONITOR-TAB-STRING", 1, 0, false );
+    SubLFiles.declareFunction( me, "set_object_monitor_tab_string", "SET-OBJECT-MONITOR-TAB-STRING", 2, 0, false );
+    SubLFiles.declareFunction( me, "get_object_monitor_nesting_depth", "GET-OBJECT-MONITOR-NESTING-DEPTH", 1, 0, false );
+    SubLFiles.declareFunction( me, "set_object_monitor_nesting_depth", "SET-OBJECT-MONITOR-NESTING-DEPTH", 2, 0, false );
+    SubLFiles.declareFunction( me, "get_object_monitor_stream", "GET-OBJECT-MONITOR-STREAM", 1, 0, false );
+    SubLFiles.declareFunction( me, "set_object_monitor_stream", "SET-OBJECT-MONITOR-STREAM", 2, 0, false );
+    SubLFiles.declareFunction( me, "get_object_monitor_subjects", "GET-OBJECT-MONITOR-SUBJECTS", 1, 0, false );
+    SubLFiles.declareFunction( me, "set_object_monitor_subjects", "SET-OBJECT-MONITOR-SUBJECTS", 2, 0, false );
+    SubLFiles.declareFunction( me, "get_object_monitor_monitoring_p", "GET-OBJECT-MONITOR-MONITORING-P", 1, 0, false );
+    SubLFiles.declareFunction( me, "set_object_monitor_monitoring_p", "SET-OBJECT-MONITOR-MONITORING-P", 2, 0, false );
+    SubLFiles.declareFunction( me, "subloop_reserved_initialize_object_monitor_class", "SUBLOOP-RESERVED-INITIALIZE-OBJECT-MONITOR-CLASS", 1, 0, false );
+    SubLFiles.declareFunction( me, "subloop_reserved_initialize_object_monitor_instance", "SUBLOOP-RESERVED-INITIALIZE-OBJECT-MONITOR-INSTANCE", 1, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_p", "OBJECT-MONITOR-P", 1, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_initialize_method", "OBJECT-MONITOR-INITIALIZE-METHOD", 1, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_tab_to_depth_method", "OBJECT-MONITOR-TAB-TO-DEPTH-METHOD", 1, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_monitor_set_slot_method", "OBJECT-MONITOR-MONITOR-SET-SLOT-METHOD", 3, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_monitor_before_method_method", "OBJECT-MONITOR-MONITOR-BEFORE-METHOD-METHOD", 4, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_monitor_after_method_method", "OBJECT-MONITOR-MONITOR-AFTER-METHOD-METHOD", 5, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_monitor_method", "OBJECT-MONITOR-MONITOR-METHOD", 2, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_unmonitor_method", "OBJECT-MONITOR-UNMONITOR-METHOD", 2, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_monitor_instance_method", "OBJECT-MONITOR-MONITOR-INSTANCE-METHOD", 2, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_start_monitoring_method", "OBJECT-MONITOR-START-MONITORING-METHOD", 1, 0, false );
+    SubLFiles.declareFunction( me, "object_monitor_stop_monitoring_method", "OBJECT-MONITOR-STOP-MONITORING-METHOD", 1, 0, false );
+    return NIL;
+  }
+
+  public static SubLObject init_object_monitor_file()
+  {
+    return NIL;
+  }
+
+  public static SubLObject setup_object_monitor_file()
+  {
+    classes.subloop_new_class( $sym0$OBJECT_MONITOR, $sym1$OBJECT, NIL, NIL, $list2 );
+    classes.class_set_implements_slot_listeners( $sym0$OBJECT_MONITOR, NIL );
+    classes.subloop_note_class_initialization_function( $sym0$OBJECT_MONITOR, $sym8$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_CLASS );
+    classes.subloop_note_instance_initialization_function( $sym0$OBJECT_MONITOR, $sym13$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_INSTANCE );
+    subloop_reserved_initialize_object_monitor_class( $sym0$OBJECT_MONITOR );
+    methods.methods_incorporate_instance_method( $sym14$INITIALIZE, $sym0$OBJECT_MONITOR, NIL, NIL, $list15 );
+    methods.subloop_register_instance_method( $sym0$OBJECT_MONITOR, $sym14$INITIALIZE, $sym18$OBJECT_MONITOR_INITIALIZE_METHOD );
+    methods.methods_incorporate_instance_method( $sym19$TAB_TO_DEPTH, $sym0$OBJECT_MONITOR, NIL, NIL, $list20 );
+    methods.subloop_register_instance_method( $sym0$OBJECT_MONITOR, $sym19$TAB_TO_DEPTH, $sym22$OBJECT_MONITOR_TAB_TO_DEPTH_METHOD );
+    methods.methods_incorporate_instance_method( $sym23$MONITOR_SET_SLOT, $sym0$OBJECT_MONITOR, NIL, $list24, $list25 );
+    methods.subloop_register_instance_method( $sym0$OBJECT_MONITOR, $sym23$MONITOR_SET_SLOT, $sym30$OBJECT_MONITOR_MONITOR_SET_SLOT_METHOD );
+    methods.methods_incorporate_instance_method( $sym31$MONITOR_BEFORE_METHOD, $sym0$OBJECT_MONITOR, $list32, $list33, $list34 );
+    methods.subloop_register_instance_method( $sym0$OBJECT_MONITOR, $sym31$MONITOR_BEFORE_METHOD, $sym38$OBJECT_MONITOR_MONITOR_BEFORE_METHOD_METHOD );
+    methods.methods_incorporate_instance_method( $sym39$MONITOR_AFTER_METHOD, $sym0$OBJECT_MONITOR, $list32, $list40, $list41 );
+    methods.subloop_register_instance_method( $sym0$OBJECT_MONITOR, $sym39$MONITOR_AFTER_METHOD, $sym44$OBJECT_MONITOR_MONITOR_AFTER_METHOD_METHOD );
+    methods.methods_incorporate_instance_method( $sym45$MONITOR, $sym0$OBJECT_MONITOR, NIL, $list46, $list47 );
+    methods.subloop_register_instance_method( $sym0$OBJECT_MONITOR, $sym45$MONITOR, $sym49$OBJECT_MONITOR_MONITOR_METHOD );
+    methods.methods_incorporate_instance_method( $sym50$UNMONITOR, $sym0$OBJECT_MONITOR, NIL, $list46, $list51 );
+    methods.subloop_register_instance_method( $sym0$OBJECT_MONITOR, $sym50$UNMONITOR, $sym53$OBJECT_MONITOR_UNMONITOR_METHOD );
+    methods.methods_incorporate_instance_method( $sym54$MONITOR_INSTANCE, $sym0$OBJECT_MONITOR, NIL, $list46, $list55 );
+    methods.subloop_register_instance_method( $sym0$OBJECT_MONITOR, $sym54$MONITOR_INSTANCE, $sym56$OBJECT_MONITOR_MONITOR_INSTANCE_METHOD );
+    methods.methods_incorporate_instance_method( $sym57$START_MONITORING, $sym0$OBJECT_MONITOR, NIL, NIL, $list58 );
+    methods.subloop_register_instance_method( $sym0$OBJECT_MONITOR, $sym57$START_MONITORING, $sym60$OBJECT_MONITOR_START_MONITORING_METHOD );
+    methods.methods_incorporate_instance_method( $sym61$STOP_MONITORING, $sym0$OBJECT_MONITOR, NIL, NIL, $list62 );
+    methods.subloop_register_instance_method( $sym0$OBJECT_MONITOR, $sym61$STOP_MONITORING, $sym64$OBJECT_MONITOR_STOP_MONITORING_METHOD );
+    return NIL;
+  }
+
+  @Override
+  public void declareFunctions()
+  {
+    declare_object_monitor_file();
+  }
+
+  @Override
+  public void initializeVariables()
+  {
+    init_object_monitor_file();
+  }
+
+  @Override
+  public void runTopLevelForms()
+  {
+    setup_object_monitor_file();
+  }
+  static
+  {
+    me = new object_monitor();
+    $sym0$OBJECT_MONITOR = makeSymbol( "OBJECT-MONITOR" );
+    $sym1$OBJECT = makeSymbol( "OBJECT" );
+    $list2 = ConsesLow.list( new SubLObject[] { ConsesLow.list( makeSymbol( "MONITORING-P" ), makeKeyword( "INSTANCE" ), makeKeyword( "BOOLEAN" ), makeKeyword( "PUBLIC" ) ), ConsesLow.list( makeSymbol( "SUBJECTS" ),
+        makeKeyword( "INSTANCE" ), makeKeyword( "PROTECTED" ) ), ConsesLow.list( makeSymbol( "STREAM" ), makeKeyword( "INSTANCE" ), makeKeyword( "PUBLIC" ) ), ConsesLow.list( makeSymbol( "NESTING-DEPTH" ), makeKeyword(
+            "INSTANCE" ), makeKeyword( "PROTECTED" ) ), ConsesLow.list( makeSymbol( "TAB-STRING" ), makeKeyword( "INSTANCE" ), makeKeyword( "PROTECTED" ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ),
+                makeSymbol( "INITIALIZE" ), NIL, makeKeyword( "PROTECTED" ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "TAB-TO-DEPTH" ), NIL, makeKeyword( "PROTECTED" ) ), ConsesLow.list(
+                    makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "MONITOR-SET-SLOT" ), ConsesLow.list( makeSymbol( "TARGET" ), makeSymbol( "NEW-VALUE" ) ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ),
+                        makeSymbol( "MONITOR-BEFORE-METHOD" ), ConsesLow.list( makeSymbol( "OWNING-METHOD-NAME" ), makeSymbol( "INSTANCE-OR-CLASS" ), makeSymbol( "ARGS" ) ) ), ConsesLow.list( makeSymbol(
+                            "DEF-INSTANCE-METHOD" ), makeSymbol( "MONITOR-AFTER-METHOD" ), ConsesLow.list( makeSymbol( "OWNING-METHOD-NAME" ), makeSymbol( "INSTANCE-OR-CLASS" ), makeSymbol( "ARGS" ), makeSymbol(
+                                "RESULT" ) ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "MONITOR" ), ConsesLow.list( makeSymbol( "TARGET" ) ) ), ConsesLow.list( makeSymbol(
+                                    "DEF-INSTANCE-METHOD" ), makeSymbol( "UNMONITOR" ), ConsesLow.list( makeSymbol( "TARGET" ) ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "MONITOR-INSTANCE" ),
+                                        ConsesLow.list( makeSymbol( "TARGET" ) ), makeKeyword( "PROTECTED" ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "START-MONITORING" ), NIL ), ConsesLow
+                                            .list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "STOP-MONITORING" ), NIL )
+    } );
+    $sym3$TAB_STRING = makeSymbol( "TAB-STRING" );
+    $sym4$NESTING_DEPTH = makeSymbol( "NESTING-DEPTH" );
+    $sym5$SUBJECTS = makeSymbol( "SUBJECTS" );
+    $int6$4097 = makeInteger( 4097 );
+    $sym7$INSTANCE_COUNT = makeSymbol( "INSTANCE-COUNT" );
+    $sym8$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_CLASS = makeSymbol( "SUBLOOP-RESERVED-INITIALIZE-OBJECT-MONITOR-CLASS" );
+    $sym9$ISOLATED_P = makeSymbol( "ISOLATED-P" );
+    $sym10$MONITORING_P = makeSymbol( "MONITORING-P" );
+    $sym11$INSTANCE_NUMBER = makeSymbol( "INSTANCE-NUMBER" );
+    $sym12$STREAM = makeSymbol( "STREAM" );
+    $sym13$SUBLOOP_RESERVED_INITIALIZE_OBJECT_MONITOR_INSTANCE = makeSymbol( "SUBLOOP-RESERVED-INITIALIZE-OBJECT-MONITOR-INSTANCE" );
+    $sym14$INITIALIZE = makeSymbol( "INITIALIZE" );
+    $list15 = ConsesLow.list( ConsesLow.list( makeSymbol( "INITIALIZE" ), makeSymbol( "SUPER" ) ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "MONITORING-P" ), NIL ), ConsesLow.list( makeSymbol( "CSETQ" ),
+        makeSymbol( "SUBJECTS" ), NIL ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "STREAM" ), T ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "NESTING-DEPTH" ), ZERO_INTEGER ), ConsesLow.list(
+            makeSymbol( "CSETQ" ), makeSymbol( "TAB-STRING" ), makeString( "   |" ) ), ConsesLow.list( makeSymbol( "RET" ), makeSymbol( "SELF" ) ) );
+    $sym16$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD" );
+    $str17$____ = makeString( "   |" );
+    $sym18$OBJECT_MONITOR_INITIALIZE_METHOD = makeSymbol( "OBJECT-MONITOR-INITIALIZE-METHOD" );
+    $sym19$TAB_TO_DEPTH = makeSymbol( "TAB-TO-DEPTH" );
+    $list20 = ConsesLow.list( ConsesLow.list( makeSymbol( "CDOTIMES" ), ConsesLow.list( makeSymbol( "I" ), makeSymbol( "NESTING-DEPTH" ) ), ConsesLow.list( makeSymbol( "FORMAT" ), makeSymbol( "STREAM" ), makeSymbol(
+        "TAB-STRING" ) ) ), ConsesLow.list( makeSymbol( "RET" ), NIL ) );
+    $sym21$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD" );
+    $sym22$OBJECT_MONITOR_TAB_TO_DEPTH_METHOD = makeSymbol( "OBJECT-MONITOR-TAB-TO-DEPTH-METHOD" );
+    $sym23$MONITOR_SET_SLOT = makeSymbol( "MONITOR-SET-SLOT" );
+    $list24 = ConsesLow.list( makeSymbol( "TARGET" ), makeSymbol( "NEW-VALUE" ) );
+    $list25 = ConsesLow.list( ConsesLow.list( makeSymbol( "FORMAT" ), makeSymbol( "STREAM" ), makeString( "~%" ) ), ConsesLow.list( makeSymbol( "TAB-TO-DEPTH" ), makeSymbol( "SELF" ) ), ConsesLow.list( makeSymbol(
+        "FORMAT" ), makeSymbol( "STREAM" ), makeString( "(SET-SLOT ~S ~S ~S)" ), makeSymbol( "TARGET" ), ConsesLow.list( makeSymbol( "FIF" ), ConsesLow.list( makeSymbol( "CAND" ), makeSymbol( "*ACTIVE-SLOT-LISTENER*" ),
+            ConsesLow.list( makeSymbol( "SLOT-LISTENER-P" ), makeSymbol( "*ACTIVE-SLOT-LISTENER*" ) ) ), ConsesLow.list( makeSymbol( "SL-SLOT-NAME" ), makeSymbol( "*ACTIVE-SLOT-LISTENER*" ) ), makeKeyword(
+                "UNKNOWN-SLOT" ) ), makeSymbol( "NEW-VALUE" ) ), ConsesLow.list( makeSymbol( "RET" ), NIL ) );
+    $sym26$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD" );
+    $str27$__ = makeString( "~%" );
+    $str28$_SET_SLOT__S__S__S_ = makeString( "(SET-SLOT ~S ~S ~S)" );
+    $kw29$UNKNOWN_SLOT = makeKeyword( "UNKNOWN-SLOT" );
+    $sym30$OBJECT_MONITOR_MONITOR_SET_SLOT_METHOD = makeSymbol( "OBJECT-MONITOR-MONITOR-SET-SLOT-METHOD" );
+    $sym31$MONITOR_BEFORE_METHOD = makeSymbol( "MONITOR-BEFORE-METHOD" );
+    $list32 = ConsesLow.list( makeKeyword( "AUTO-UPDATE" ) );
+    $list33 = ConsesLow.list( makeSymbol( "INSTANCE-OR-CLASS" ), makeSymbol( "OWNING-METHOD-NAME" ), makeSymbol( "ARGS" ) );
+    $list34 = ConsesLow.list( ConsesLow.list( makeSymbol( "FORMAT" ), makeSymbol( "STREAM" ), makeString( "~%" ) ), ConsesLow.list( makeSymbol( "TAB-TO-DEPTH" ), makeSymbol( "SELF" ) ), ConsesLow.list( makeSymbol(
+        "CLET" ), ConsesLow.list( ConsesLow.list( makeSymbol( "FILTERED-LAMBDA-LIST" ), ConsesLow.list( makeSymbol( "METHOD-LISTENERS-FILTERED-LAMBDA-LIST" ), makeSymbol( "INSTANCE-OR-CLASS" ), makeSymbol(
+            "OWNING-METHOD-NAME" ) ) ), ConsesLow.list( makeSymbol( "CURRENT-VAR" ), NIL ), ConsesLow.list( makeSymbol( "CURRENT-ARG" ) ) ), ConsesLow.list( makeSymbol( "PCOND" ), ConsesLow.list( ConsesLow.list(
+                makeSymbol( "INSTANCE-P" ), makeSymbol( "INSTANCE-OR-CLASS" ) ), ConsesLow.list( makeSymbol( "CLET" ), ConsesLow.list( ConsesLow.list( makeSymbol( "CLASS-OF-INSTANCE" ), ConsesLow.list( makeSymbol(
+                    "INSTANCE-CLASS" ), makeSymbol( "INSTANCE-OR-CLASS" ) ) ) ), ConsesLow.list( makeSymbol( "FORMAT" ), makeSymbol( "STREAM" ), makeString( "Entered: (~S ~S) ~S" ), makeSymbol( "OWNING-METHOD-NAME" ),
+                        ConsesLow.list( makeSymbol( "CLASS-NAME" ), makeSymbol( "CLASS-OF-INSTANCE" ) ), ConsesLow.list( makeSymbol( "CONS" ), makeSymbol( "INSTANCE-OR-CLASS" ), makeSymbol( "ARGS" ) ) ) ) ), ConsesLow
+                            .list( ConsesLow.list( makeSymbol( "CLASS-P" ), makeSymbol( "INSTANCE-OR-CLASS" ) ), ConsesLow.list( makeSymbol( "FORMAT" ), makeSymbol( "STREAM" ), makeString( "Entered: (~S ~S) ~S" ),
+                                makeSymbol( "OWNING-METHOD-NAME" ), ConsesLow.list( makeSymbol( "CLASS-NAME" ), makeSymbol( "INSTANCE-OR-CLASS" ) ), makeSymbol( "ARGS" ) ) ), ConsesLow.list( T, ConsesLow.list(
+                                    makeSymbol( "FORMAT" ), makeSymbol( "STREAM" ), makeString( "Entered: ~S ~S" ), makeSymbol( "OWNING-METHOD-NAME" ), ConsesLow.list( makeSymbol( "CONS" ), makeSymbol(
+                                        "OWNING-METHOD-NAME" ), makeSymbol( "ARGS" ) ) ) ) ), ConsesLow.list( makeSymbol( "WHILE" ), ConsesLow.list( makeSymbol( "CAND" ), makeSymbol( "FILTERED-LAMBDA-LIST" ), makeSymbol(
+                                            "ARGS" ) ), ConsesLow.list( makeSymbol( "FORMAT" ), makeSymbol( "STREAM" ), makeString( "~%" ) ), ConsesLow.list( makeSymbol( "TAB-TO-DEPTH" ), makeSymbol( "SELF" ) ),
+                                            ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "CURRENT-VAR" ), ConsesLow.list( makeSymbol( "CAR" ), makeSymbol( "FILTERED-LAMBDA-LIST" ) ), makeSymbol( "CURRENT-ARG" ),
+                                                ConsesLow.list( makeSymbol( "CAR" ), makeSymbol( "ARGS" ) ) ), ConsesLow.list( makeSymbol( "FORMAT" ), makeSymbol( "STREAM" ), makeString( "Arg: ~S = ~S" ), makeSymbol(
+                                                    "CURRENT-VAR" ), makeSymbol( "CURRENT-ARG" ) ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "FILTERED-LAMBDA-LIST" ), ConsesLow.list( makeSymbol( "CDR" ),
+                                                        makeSymbol( "FILTERED-LAMBDA-LIST" ) ), makeSymbol( "ARGS" ), ConsesLow.list( makeSymbol( "CDR" ), makeSymbol( "ARGS" ) ) ) ) ), ConsesLow.list( makeSymbol(
+                                                            "CINC" ), makeSymbol( "NESTING-DEPTH" ) ), ConsesLow.list( makeSymbol( "RET" ), NIL ) );
+    $str35$Entered____S__S___S = makeString( "Entered: (~S ~S) ~S" );
+    $str36$Entered___S__S = makeString( "Entered: ~S ~S" );
+    $str37$Arg___S____S = makeString( "Arg: ~S = ~S" );
+    $sym38$OBJECT_MONITOR_MONITOR_BEFORE_METHOD_METHOD = makeSymbol( "OBJECT-MONITOR-MONITOR-BEFORE-METHOD-METHOD" );
+    $sym39$MONITOR_AFTER_METHOD = makeSymbol( "MONITOR-AFTER-METHOD" );
+    $list40 = ConsesLow.list( makeSymbol( "INSTANCE-OR-CLASS" ), makeSymbol( "OWNING-METHOD-NAME" ), makeSymbol( "ARGS" ), makeSymbol( "RESULT" ) );
+    $list41 = ConsesLow.list( ConsesLow.list( makeSymbol( "CDEC" ), makeSymbol( "NESTING-DEPTH" ) ), ConsesLow.list( makeSymbol( "FORMAT" ), makeSymbol( "STREAM" ), makeString( "~%" ) ), ConsesLow.list( makeSymbol(
+        "TAB-TO-DEPTH" ), makeSymbol( "SELF" ) ), ConsesLow.list( makeSymbol( "PCOND" ), ConsesLow.list( ConsesLow.list( makeSymbol( "INSTANCE-P" ), makeSymbol( "INSTANCE-OR-CLASS" ) ), ConsesLow.list( makeSymbol(
+            "CLET" ), ConsesLow.list( ConsesLow.list( makeSymbol( "CLASS-OF-INSTANCE" ), ConsesLow.list( makeSymbol( "INSTANCE-CLASS" ), makeSymbol( "INSTANCE-OR-CLASS" ) ) ) ), ConsesLow.list( makeSymbol( "FORMAT" ),
+                makeSymbol( "STREAM" ), makeString( "Returning: (~S ~S) ~S -> ~S" ), makeSymbol( "OWNING-METHOD-NAME" ), ConsesLow.list( makeSymbol( "CLASS-NAME" ), makeSymbol( "CLASS-OF-INSTANCE" ) ), ConsesLow.list(
+                    makeSymbol( "CONS" ), makeSymbol( "INSTANCE-OR-CLASS" ), makeSymbol( "ARGS" ) ), makeSymbol( "RESULT" ) ) ) ), ConsesLow.list( ConsesLow.list( makeSymbol( "CLASS-P" ), makeSymbol(
+                        "INSTANCE-OR-CLASS" ) ), ConsesLow.list( makeSymbol( "FORMAT" ), makeSymbol( "STREAM" ), makeString( "Returning: (~S ~S) ~S -> ~S" ), makeSymbol( "OWNING-METHOD-NAME" ), ConsesLow.list(
+                            makeSymbol( "CLASS-NAME" ), makeSymbol( "INSTANCE-OR-CLASS" ) ), makeSymbol( "ARGS" ), makeSymbol( "RESULT" ) ) ), ConsesLow.list( T, ConsesLow.list( makeSymbol( "FORMAT" ), makeSymbol(
+                                "STREAM" ), makeString( "Returning: ~S ~S -> ~S" ), makeSymbol( "OWNING-METHOD-NAME" ), ConsesLow.list( makeSymbol( "CONS" ), makeSymbol( "OWNING-METHOD-NAME" ), makeSymbol( "ARGS" ) ),
+                                makeSymbol( "RESULT" ) ) ) ), ConsesLow.list( makeSymbol( "RET" ), NIL ) );
+    $str42$Returning____S__S___S_____S = makeString( "Returning: (~S ~S) ~S -> ~S" );
+    $str43$Returning___S__S_____S = makeString( "Returning: ~S ~S -> ~S" );
+    $sym44$OBJECT_MONITOR_MONITOR_AFTER_METHOD_METHOD = makeSymbol( "OBJECT-MONITOR-MONITOR-AFTER-METHOD-METHOD" );
+    $sym45$MONITOR = makeSymbol( "MONITOR" );
+    $list46 = ConsesLow.list( makeSymbol( "TARGET" ) );
+    $list47 = ConsesLow.list( ConsesLow.list( makeSymbol( "PWHEN" ), ConsesLow.list( makeSymbol( "INSTANCE-P" ), makeSymbol( "TARGET" ) ), ConsesLow.list( makeSymbol( "CPUSHNEW" ), makeSymbol( "TARGET" ), makeSymbol(
+        "SUBJECTS" ) ), ConsesLow.list( makeSymbol( "PWHEN" ), makeSymbol( "MONITORING-P" ), ConsesLow.list( makeSymbol( "MONITOR-INSTANCE" ), makeSymbol( "SELF" ), makeSymbol( "TARGET" ) ) ), ConsesLow.list( makeSymbol(
+            "RET" ), T ) ), ConsesLow.list( makeSymbol( "RET" ), NIL ) );
+    $sym48$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD" );
+    $sym49$OBJECT_MONITOR_MONITOR_METHOD = makeSymbol( "OBJECT-MONITOR-MONITOR-METHOD" );
+    $sym50$UNMONITOR = makeSymbol( "UNMONITOR" );
+    $list51 = ConsesLow.list( ConsesLow.list( makeSymbol( "PWHEN" ), ConsesLow.list( makeSymbol( "MEMBER" ), makeSymbol( "TARGET" ), makeSymbol( "SUBJECTS" ), ConsesLow.list( makeSymbol( "FUNCTION" ), EQ ) ), ConsesLow
+        .list( makeSymbol( "CSETQ" ), makeSymbol( "SUBJECTS" ), ConsesLow.list( makeSymbol( "DELETE" ), makeSymbol( "TARGET" ), makeSymbol( "SUBJECTS" ) ) ), ConsesLow.list( makeSymbol( "PWHEN" ), makeSymbol(
+            "MONITORING-P" ), ConsesLow.list( makeSymbol( "REMOVE-ALL-SET-SLOT-LISTENERS" ), makeSymbol( "SELF" ), makeSymbol( "TARGET" ) ) ), ConsesLow.list( makeSymbol( "RET" ), T ) ), ConsesLow.list( makeSymbol(
+                "RET" ), NIL ) );
+    $sym52$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD" );
+    $sym53$OBJECT_MONITOR_UNMONITOR_METHOD = makeSymbol( "OBJECT-MONITOR-UNMONITOR-METHOD" );
+    $sym54$MONITOR_INSTANCE = makeSymbol( "MONITOR-INSTANCE" );
+    $list55 = ConsesLow.list( ConsesLow.list( makeSymbol( "CLET" ), ConsesLow.list( makeSymbol( "SLOTS" ), makeSymbol( "METHOD-NAMES" ) ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "SLOTS" ), ConsesLow.list(
+        makeSymbol( "INSTANCES-ALL-ANY-INSTANCE-SLOTS" ), makeSymbol( "TARGET" ) ) ), ConsesLow.list( makeSymbol( "CDOLIST" ), ConsesLow.list( makeSymbol( "SLOT" ), makeSymbol( "SLOTS" ) ), ConsesLow.list( makeSymbol(
+            "ADD-SET-SLOT-LISTENER" ), makeSymbol( "SELF" ), makeSymbol( "TARGET" ), makeSymbol( "SLOT" ), ConsesLow.list( makeSymbol( "QUOTE" ), makeSymbol( "MONITOR-SET-SLOT" ) ) ) ), ConsesLow.list( makeSymbol(
+                "CSETQ" ), makeSymbol( "METHOD-NAMES" ), ConsesLow.list( makeSymbol( "METHODS-GET-ALL-METHOD-NAMES" ), makeSymbol( "TARGET" ) ) ), ConsesLow.list( makeSymbol( "CDOLIST" ), ConsesLow.list( makeSymbol(
+                    "METHOD-NAME" ), makeSymbol( "METHOD-NAMES" ) ), ConsesLow.list( makeSymbol( "ADD-CLASS-WIDE-BEFORE-METHOD-LISTENER" ), makeSymbol( "SELF" ), makeSymbol( "TARGET" ), makeSymbol( "METHOD-NAME" ),
+                        ConsesLow.list( makeSymbol( "QUOTE" ), makeSymbol( "MONITOR-BEFORE-METHOD" ) ) ), ConsesLow.list( makeSymbol( "ADD-CLASS-WIDE-AFTER-METHOD-LISTENER" ), makeSymbol( "SELF" ), makeSymbol(
+                            "TARGET" ), makeSymbol( "METHOD-NAME" ), ConsesLow.list( makeSymbol( "QUOTE" ), makeSymbol( "MONITOR-AFTER-METHOD" ) ) ) ) ), ConsesLow.list( makeSymbol( "RET" ), NIL ) );
+    $sym56$OBJECT_MONITOR_MONITOR_INSTANCE_METHOD = makeSymbol( "OBJECT-MONITOR-MONITOR-INSTANCE-METHOD" );
+    $sym57$START_MONITORING = makeSymbol( "START-MONITORING" );
+    $list58 = ConsesLow.list( ConsesLow.list( makeSymbol( "CDOLIST" ), ConsesLow.list( makeSymbol( "TARGET" ), makeSymbol( "SUBJECTS" ) ), ConsesLow.list( makeSymbol( "MONITOR-INSTANCE" ), makeSymbol( "SELF" ),
+        makeSymbol( "TARGET" ) ) ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "MONITORING-P" ), T ), ConsesLow.list( makeSymbol( "RET" ), T ) );
+    $sym59$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD" );
+    $sym60$OBJECT_MONITOR_START_MONITORING_METHOD = makeSymbol( "OBJECT-MONITOR-START-MONITORING-METHOD" );
+    $sym61$STOP_MONITORING = makeSymbol( "STOP-MONITORING" );
+    $list62 = ConsesLow.list( ConsesLow.list( makeSymbol( "PWHEN" ), makeSymbol( "MONITORING-P" ), ConsesLow.list( makeSymbol( "CDOLIST" ), ConsesLow.list( makeSymbol( "TARGET" ), makeSymbol( "SUBJECTS" ) ), ConsesLow
+        .list( makeSymbol( "REMOVE-ALL-SET-SLOT-LISTENERS" ), makeSymbol( "SELF" ), makeSymbol( "TARGET" ) ), ConsesLow.list( makeSymbol( "REMOVE-ALL-CLASS-WIDE-METHOD-LISTENERS" ), makeSymbol( "SELF" ), makeSymbol(
+            "TARGET" ) ) ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "MONITORING-P" ), NIL ) ), ConsesLow.list( makeSymbol( "RET" ), T ) );
+    $sym63$OUTER_CATCH_FOR_OBJECT_MONITOR_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-OBJECT-MONITOR-METHOD" );
+    $sym64$OBJECT_MONITOR_STOP_MONITORING_METHOD = makeSymbol( "OBJECT-MONITOR-STOP-MONITORING-METHOD" );
+  }
 }
-
 /*
-
-	Total time: 324 ms
-	
-*/
+ * 
+ * Total time: 324 ms
+ * 
+ */

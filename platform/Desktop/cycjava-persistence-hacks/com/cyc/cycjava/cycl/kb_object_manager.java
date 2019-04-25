@@ -50,22 +50,18 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class kb_object_manager extends SubLTranslatedFile
+public final class kb_object_manager
+    extends
+      SubLTranslatedFile
 {
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.kb_object_manager";
   public static final String myFingerPrint = "db8fd13f1e1dbb9c1fad723d80cf25bc6e83a1625c2b2b823a7fca4c1a2660de";
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLSymbol $dtp_kb_object_manager$;
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 5759L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 5759L)
   private static SubLSymbol $min_kb_object_lru_size$;
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 5886L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 5886L)
   private static SubLSymbol $kbom_id_equality_test$;
   private static final SubLList $list0;
   private static final SubLSymbol $sym1$WITH_LOCK_HELD;
@@ -176,9 +172,7 @@ public final class kb_object_manager extends SubLTranslatedFile
   private static final SubLSymbol $sym106$KB_OBJECT_MANAGER_CHANGE_STREAM_BUFFER_SIZES;
   private static final SubLList $list107;
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 1696L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 1696L)
   public static SubLObject with_kb_object_manager_lock_held(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -194,285 +188,222 @@ public final class kb_object_manager extends SubLTranslatedFile
     {
       final SubLObject body;
       current = ( body = temp );
-      return ConsesLow.listS( $sym1$WITH_LOCK_HELD, ConsesLow.list( ConsesLow.list( $sym2$KB_OBJECT_MANAGER_CONTENT_LOCK, kbom ) ), ConsesLow.append( body,
-          NIL ) );
+      return ConsesLow.listS( $sym1$WITH_LOCK_HELD, ConsesLow.list( ConsesLow.list( $sym2$KB_OBJECT_MANAGER_CONTENT_LOCK, kbom ) ), ConsesLow.append( body, NIL ) );
     }
     cdestructuring_bind.cdestructuring_bind_error( datum, $list0 );
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kb_object_manager_print_function_trampoline(final SubLObject v_object, final SubLObject stream)
   {
     compatibility.default_struct_print_function( v_object, stream, ZERO_INTEGER );
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kb_object_manager_p(final SubLObject v_object)
   {
     return ( v_object.getClass() == $kb_object_manager_native.class ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_name(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField2();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_content_lock(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField3();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_lru_size_percentage(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField4();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_content_table(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField5();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_usage_table(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField6();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_lru_information(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField7();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_file_vector(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField8();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_id_threshold(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField9();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_load_func(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField10();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_meter_swap_timeP(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField11();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_swap_time(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField12();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_lru_size_max(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField13();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_sub_file_vector(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField14();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject kbom_dummy3(final SubLObject v_object)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.getField15();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_name(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField2( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_content_lock(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField3( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_lru_size_percentage(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField4( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_content_table(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField5( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_usage_table(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField6( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_lru_information(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField7( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_file_vector(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField8( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_id_threshold(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField9( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_load_func(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField10( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_meter_swap_timeP(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField11( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_swap_time(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField12( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_lru_size_max(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField13( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_sub_file_vector(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField14( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject _csetf_kbom_dummy3(final SubLObject v_object, final SubLObject value)
   {
     assert NIL != kb_object_manager_p( v_object ) : v_object;
     return v_object.setField15( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject make_kb_object_manager(SubLObject arglist)
   {
     if( arglist == UNPROVIDED )
@@ -553,9 +484,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return v_new;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject visit_defstruct_kb_object_manager(final SubLObject obj, final SubLObject visitor_fn)
   {
     Functions.funcall( visitor_fn, obj, $kw55$BEGIN, $sym56$MAKE_KB_OBJECT_MANAGER, FOURTEEN_INTEGER );
@@ -577,17 +506,13 @@ public final class kb_object_manager extends SubLTranslatedFile
     return obj;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2333L)
   public static SubLObject visit_defstruct_object_kb_object_manager_method(final SubLObject obj, final SubLObject visitor_fn)
   {
     return visit_defstruct_kb_object_manager( obj, visitor_fn );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 2776L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 2776L)
   public static SubLObject new_kb_object_manager(final SubLObject name, final SubLObject size, final SubLObject lru_size_percentage, final SubLObject lru_size_max, final SubLObject load_func,
       final SubLObject exact_sizeP)
   {
@@ -612,9 +537,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return kbom;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 4003L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 4003L)
   public static SubLObject kb_object_manager_change_stream_buffer_sizes(final SubLObject kbom, final SubLObject data_stream_buffer_size, final SubLObject index_stream_buffer_size)
   {
     assert NIL != subl_promotions.positive_integer_p( data_stream_buffer_size ) : data_stream_buffer_size;
@@ -641,9 +564,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 4515L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 4515L)
   public static SubLObject kb_object_manager_enable_memory_mapping(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
@@ -668,9 +589,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 4802L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 4802L)
   public static SubLObject kb_object_manager_memory_mappedP(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
@@ -681,7 +600,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     {
       release = Locks.seize_lock( lock );
       final SubLObject fvector = kb_object_manager_file_vector( kbom );
-      result = SubLObjectFactory.makeBoolean( NIL != fvector && NIL != file_vector.file_vector_memory_mappedP( fvector ) );
+      result = makeBoolean( NIL != fvector && NIL != file_vector.file_vector_memory_mappedP( fvector ) );
     }
     finally
     {
@@ -693,9 +612,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return result;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 5116L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 5116L)
   public static SubLObject setup_kb_object_content_table(final SubLObject kbom, final SubLObject size, final SubLObject exactP)
   {
     SubLObject did_setupP = NIL;
@@ -722,9 +639,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return did_setupP;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 5937L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 5937L)
   public static SubLObject setup_kb_object_content_support(final SubLObject kbom, SubLObject initialize_usage_countsP, SubLObject size)
   {
     if( initialize_usage_countsP == UNPROVIDED )
@@ -763,9 +678,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return did_setupP;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 6770L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 6770L)
   public static SubLObject compute_kbom_lru_size(final SubLObject kbom, final SubLObject given_size)
   {
     SubLObject size = Numbers.multiply( Numbers.integerDivide( given_size, $int67$100 ), kb_object_manager_lru_size_percentage( kbom ) );
@@ -781,9 +694,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return size;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 7150L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 7150L)
   public static SubLObject initialize_kb_object_hl_store_cache(final SubLObject kbom, final SubLObject content_filename, final SubLObject index_filename, SubLObject sub_content_filename, SubLObject sub_index_filename)
   {
     if( sub_content_filename == UNPROVIDED )
@@ -858,9 +769,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return result;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 9781L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 9781L)
   public static SubLObject resize_kbom_lru_cache_from_percentage_and_max(final SubLObject kbom, final SubLObject percentage, final SubLObject max)
   {
     _csetf_kbom_lru_size_percentage( kbom, percentage );
@@ -870,9 +779,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return resize_kbom_lru_cache( kbom, new_size );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 10237L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 10237L)
   public static SubLObject resize_kbom_lru_cache(final SubLObject kbom, final SubLObject new_size)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -911,9 +818,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return kbom;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 11108L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 11108L)
   public static SubLObject new_legacy_kb_object_manager(final SubLObject name, final SubLObject lru_size_percentage, final SubLObject lru_size_max, final SubLObject content_table, final SubLObject lru_information,
       final SubLObject usage_table, final SubLObject load_func)
   {
@@ -933,9 +838,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return kbom;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 12035L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 12035L)
   public static SubLObject optimize_kb_object_content_table(final SubLObject kbom, final SubLObject sparse_id_threshold)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -969,9 +872,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return new_size;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 12532L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 12532L)
   public static SubLObject clear_kb_object_content_table(final SubLObject kbom)
   {
     SubLObject result = NIL;
@@ -1003,126 +904,98 @@ public final class kb_object_manager extends SubLTranslatedFile
     return result;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 13077L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 13077L)
   public static SubLObject kb_object_manager_name(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_name( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 13202L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 13202L)
   public static SubLObject kb_object_manager_content_lock(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_content_lock( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 13333L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 13333L)
   public static SubLObject kb_object_manager_lru_size_percentage(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_lru_size_percentage( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 13476L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 13476L)
   public static SubLObject kb_object_manager_lru_size_max(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_lru_size_max( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 13605L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 13605L)
   public static SubLObject kb_object_manager_content_table(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_content_table( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 13736L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 13736L)
   public static SubLObject kb_object_manager_usage_table(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_usage_table( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 13863L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 13863L)
   public static SubLObject kb_object_manager_lru_information(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_lru_information( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 13998L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 13998L)
   public static SubLObject kb_object_manager_file_vector(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_file_vector( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 14127L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 14127L)
   public static SubLObject kb_object_manager_id_threshold(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_id_threshold( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 14256L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 14256L)
   public static SubLObject kb_object_manager_load_func(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_load_func( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 14379L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 14379L)
   public static SubLObject kb_object_manager_meter_swap_timeP(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_meter_swap_timeP( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 14516L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 14516L)
   public static SubLObject kb_object_manager_swap_time(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_swap_time( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 14641L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 14641L)
   public static SubLObject kb_object_manager_sub_file_vector(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
     return kbom_sub_file_vector( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 14778L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 14778L)
   public static SubLObject set_kb_object_manager_sub_file_vector(final SubLObject kbom, final SubLObject fvector)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
@@ -1130,17 +1003,13 @@ public final class kb_object_manager extends SubLTranslatedFile
     return kbom;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 14962L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 14962L)
   public static SubLObject kb_object_usage_counts_enabledP(final SubLObject kbom)
   {
     return id_index.id_index_p( kb_object_manager_usage_table( kbom ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 15093L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 15093L)
   public static SubLObject cached_kb_object_count(final SubLObject kbom)
   {
     final SubLObject content_table = kb_object_manager_content_table( kbom );
@@ -1151,34 +1020,26 @@ public final class kb_object_manager extends SubLTranslatedFile
     return id_index.id_index_count( content_table );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 15305L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 15305L)
   public static SubLObject swappable_kb_object_count(final SubLObject kbom)
   {
     return cache.cache_size( kbom_lru_information( kbom ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 15494L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 15494L)
   public static SubLObject kb_object_id_cachedP(final SubLObject kbom, final SubLObject id)
   {
     return misc_utilities.initialized_p( id_index.id_index_lookup( kb_object_manager_content_table( kbom ), id, misc_utilities.uninitialized() ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 15645L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 15645L)
   public static SubLObject kb_object_id_cachableP(final SubLObject kbom, final SubLObject id)
   {
-    return SubLObjectFactory.makeBoolean( NIL != misc_utilities.initialized_p( id_index.id_index_lookup( kb_object_manager_content_table( kbom ), id, misc_utilities.uninitialized() ) )
-        || NIL != is_lru_cachable_kb_object_content_idP( kbom, id ) );
+    return makeBoolean( NIL != misc_utilities.initialized_p( id_index.id_index_lookup( kb_object_manager_content_table( kbom ), id, misc_utilities.uninitialized() ) ) || NIL != is_lru_cachable_kb_object_content_idP(
+        kbom, id ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 15857L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 15857L)
   public static SubLObject lookup_kb_object_content(final SubLObject kbom, final SubLObject id)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1227,9 +1088,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return content;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 16619L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 16619L)
   public static SubLObject kb_object_manager_unbuiltP(final SubLObject kbom)
   {
     assert NIL != kb_object_manager_p( kbom ) : kbom;
@@ -1260,9 +1119,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return T;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 17139L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 17139L)
   public static SubLObject maintain_kb_object_usage_counts(final SubLObject kbom)
   {
     if( NIL == kb_object_usage_counts_enabledP( kbom ) )
@@ -1285,9 +1142,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return T;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 17417L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 17417L)
   public static SubLObject dont_maintain_kb_object_usage_counts(final SubLObject kbom)
   {
     if( NIL != kb_object_usage_counts_enabledP( kbom ) )
@@ -1310,9 +1165,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 17682L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 17682L)
   public static SubLObject register_kb_object_content(final SubLObject kbom, final SubLObject id, final SubLObject kb_object_content)
   {
     final SubLObject lock = kb_object_manager_content_lock( kbom );
@@ -1332,9 +1185,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return kb_object_content;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 17971L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 17971L)
   public static SubLObject deregister_kb_object_content(final SubLObject kbom, final SubLObject id)
   {
     SubLObject deregistration = NIL;
@@ -1356,9 +1207,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return deregistration;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 18311L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 18311L)
   public static SubLObject new_kb_object_content_file_vector(final SubLObject cfasl_file, final SubLObject index_file, SubLObject mark_file)
   {
     if( mark_file == UNPROVIDED )
@@ -1372,25 +1221,19 @@ public final class kb_object_manager extends SubLTranslatedFile
     return file_vector.new_wide_input_file_vector( cfasl_file, index_file, mark_file, UNPROVIDED, UNPROVIDED, UNPROVIDED );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 18689L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 18689L)
   public static SubLObject kb_object_content_file_vector_cfasl_stream(final SubLObject v_file_vector)
   {
     return file_vector.get_file_vector_data_stream( v_file_vector );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 18814L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 18814L)
   public static SubLObject kb_object_content_file_vector_p(final SubLObject v_object)
   {
     return file_vector.file_vector_p( v_object );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 18904L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 18904L)
   public static SubLObject kb_object_content_file_vector_lookup(final SubLObject kbom, final SubLObject id)
   {
     final SubLObject cfasl_stream = file_vector.position_file_vector( kb_object_manager_file_vector( kbom ), id );
@@ -1414,26 +1257,20 @@ public final class kb_object_manager extends SubLTranslatedFile
     return id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 20016L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 20016L)
   public static SubLObject wide_kb_object_managerP(final SubLObject kbom)
   {
     return file_vector.wide_file_vectorP( kb_object_manager_file_vector( kbom ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 20132L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 20132L)
   public static SubLObject wide_kb_object_sub_managerP(final SubLObject kbom)
   {
     final SubLObject sub_fvector = kb_object_manager_sub_file_vector( kbom );
-    return SubLObjectFactory.makeBoolean( NIL != file_vector.file_vector_p( sub_fvector ) && NIL != file_vector.wide_file_vectorP( sub_fvector ) );
+    return makeBoolean( NIL != file_vector.file_vector_p( sub_fvector ) && NIL != file_vector.wide_file_vectorP( sub_fvector ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 20345L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 20345L)
   public static SubLObject serialize_kbom_lru_information(final SubLObject kbom, final SubLObject directory)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1483,9 +1320,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return filename;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 20940L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 20940L)
   public static SubLObject precache_kbom_by_lru_information(final SubLObject kbom, final SubLObject directory)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1554,26 +1389,20 @@ public final class kb_object_manager extends SubLTranslatedFile
     return filename;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 21855L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 21855L)
   public static SubLObject kbom_lru_info_filename(final SubLObject kbom, final SubLObject directory)
   {
     return Sequences.cconcatenate( directory, new SubLObject[] { kbom_name( kbom ), $str80$_lru_info_for_, operation_communication.kb_loaded_string(), $str81$_cfasl
     } );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 22009L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 22009L)
   public static SubLObject is_lru_cachable_kb_object_content_idP(final SubLObject kbom, final SubLObject id)
   {
     return Numbers.numL( id, kb_object_manager_id_threshold( kbom ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 22129L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 22129L)
   public static SubLObject update_kb_object_usage(final SubLObject kbom, final SubLObject id)
   {
     if( NIL != kb_object_usage_counts_enabledP( kbom ) )
@@ -1588,9 +1417,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 22532L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 22532L)
   public static SubLObject drop_kb_object_usage(final SubLObject kbom, final SubLObject id)
   {
     final SubLObject lru_information = kb_object_manager_lru_information( kbom );
@@ -1601,9 +1428,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 22968L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 22968L)
   public static SubLObject mark_kb_object_content_as_muted(final SubLObject kbom, final SubLObject id)
   {
     final SubLObject lock = kb_object_manager_content_lock( kbom );
@@ -1628,44 +1453,34 @@ public final class kb_object_manager extends SubLTranslatedFile
     return id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 23413L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 23413L)
   public static SubLObject meter_kb_object_content_swap_time(final SubLObject kbom)
   {
     _csetf_kbom_meter_swap_timeP( kbom, T );
     return T;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 23578L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 23578L)
   public static SubLObject dont_meter_kb_object_content_swap_time(final SubLObject kbom)
   {
     _csetf_kbom_meter_swap_timeP( kbom, NIL );
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 23753L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 23753L)
   public static SubLObject clear_kb_object_content_swap_time(final SubLObject kbom)
   {
     _csetf_kbom_swap_time( kbom, ZERO_INTEGER );
     return ZERO_INTEGER;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 23858L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 23858L)
   public static SubLObject get_file_backed_kb_object_id_threshold(final SubLObject kbom)
   {
     return kb_object_manager_id_threshold( kbom );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 24075L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 24075L)
   public static SubLObject swap_in_kb_object_content(final SubLObject kbom, final SubLObject id)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1704,9 +1519,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 24759L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 24759L)
   public static SubLObject swap_in_kb_object_content_metered(final SubLObject kbom, final SubLObject id)
   {
     SubLObject time = NIL;
@@ -1717,9 +1530,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 24954L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 24954L)
   public static SubLObject swap_in_kb_object_content_internal(final SubLObject kbom, final SubLObject id)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1747,9 +1558,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 25551L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 25551L)
   public static SubLObject swap_out_pristine_kb_object_content(final SubLObject kbom, final SubLObject loser)
   {
     id_index.id_index_remove( kb_object_manager_content_table( kbom ), loser );
@@ -1757,9 +1566,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return loser;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 25771L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 25771L)
   public static SubLObject safely_swap_out_all_pristine_kb_objects(final SubLObject kbom)
   {
     SubLObject paged_out = NIL;
@@ -1780,9 +1587,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return paged_out;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 25994L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 25994L)
   public static SubLObject swap_out_all_pristine_kb_objects_int(final SubLObject kbom)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1869,9 +1674,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return Sequences.length( pristine_ids );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 26522L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 26522L)
   public static SubLObject increment_kb_object_usage_count(final SubLObject kbom, final SubLObject id)
   {
     if( NIL != kb_object_usage_counts_enabledP( kbom ) )
@@ -1885,17 +1688,13 @@ public final class kb_object_manager extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 26935L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 26935L)
   public static SubLObject new_muted_kb_object_iterator(final SubLObject kbom)
   {
     return iteration.new_filter_iterator( id_index.new_id_index_dense_objects_iterator( kb_object_manager_content_table( kbom ) ), $sym86$IS_MUTED_KB_OBJECT_, ConsesLow.list( kbom ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 27296L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 27296L)
   public static SubLObject is_muted_kb_objectP(final SubLObject tuple, final SubLObject kbom)
   {
     SubLObject id = NIL;
@@ -1908,15 +1707,13 @@ public final class kb_object_manager extends SubLTranslatedFile
     current = current.rest();
     if( NIL == current )
     {
-      return SubLObjectFactory.makeBoolean( NIL != is_lru_cachable_kb_object_content_idP( kbom, id ) && NIL == cache.cache_contains_key_p( kb_object_manager_lru_information( kbom ), id ) );
+      return makeBoolean( NIL != is_lru_cachable_kb_object_content_idP( kbom, id ) && NIL == cache.cache_contains_key_p( kb_object_manager_lru_information( kbom ), id ) );
     }
     cdestructuring_bind.cdestructuring_bind_error( tuple, $list87 );
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 27684L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 27684L)
   public static SubLObject verify_kb_object_content_table_int(final SubLObject kbom, final SubLObject type_pred, SubLObject repairP)
   {
     if( repairP == UNPROVIDED )
@@ -1957,8 +1754,7 @@ public final class kb_object_manager extends SubLTranslatedFile
             SubLObject v_iteration;
             SubLObject id;
             SubLObject content;
-            for( length = Sequences.length( vector_var ), v_iteration = NIL, v_iteration = ZERO_INTEGER; v_iteration.numL( length ); v_iteration = Numbers.add( v_iteration,
-                ONE_INTEGER ) )
+            for( length = Sequences.length( vector_var ), v_iteration = NIL, v_iteration = ZERO_INTEGER; v_iteration.numL( length ); v_iteration = Numbers.add( v_iteration, ONE_INTEGER ) )
             {
               id = ( ( NIL != backwardP_var ) ? Numbers.subtract( length, v_iteration, ONE_INTEGER ) : v_iteration );
               content = Vectors.aref( vector_var, id );
@@ -2050,9 +1846,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return Values.values( Numbers.numE( invalid_count, ZERO_INTEGER ), invalid_count );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 28736L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 28736L)
   public static SubLObject with_kbom_fully_loaded(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -2071,21 +1865,17 @@ public final class kb_object_manager extends SubLTranslatedFile
       final SubLObject manager = $sym93$MANAGER;
       final SubLObject maintaining_countsP = $sym94$MAINTAINING_COUNTS_;
       final SubLObject memory_mappedP = $sym95$MEMORY_MAPPED_;
-      return ConsesLow.list( $sym96$CLET, ConsesLow.list( ConsesLow.list( manager, kbom ), ConsesLow.list( maintaining_countsP, ConsesLow
-          .list( $sym97$KB_OBJECT_USAGE_COUNTS_ENABLED_, manager ) ), ConsesLow.list( memory_mappedP, ConsesLow.list( $sym98$KB_OBJECT_MANAGER_MEMORY_MAPPED_,
-              manager ) ) ), ConsesLow.list( $sym99$CUNWIND_PROTECT, ConsesLow.listS( $sym100$PROGN, ConsesLow.list(
-                  $sym101$DONT_MAINTAIN_KB_OBJECT_USAGE_COUNTS, manager ), ConsesLow.list( $sym102$KB_OBJECT_MANAGER_ENABLE_MEMORY_MAPPING, manager ), ConsesLow.append( body,
-                      NIL ) ), ConsesLow.list( $sym100$PROGN, ConsesLow.list( $sym103$PWHEN, maintaining_countsP, ConsesLow.list(
-                          $sym104$MAINTAIN_KB_OBJECT_USAGE_COUNTS, manager ) ), ConsesLow.list( $sym103$PWHEN, ConsesLow.list( $sym105$CNOT,
-                              memory_mappedP ), ConsesLow.listS( $sym106$KB_OBJECT_MANAGER_CHANGE_STREAM_BUFFER_SIZES, manager, $list107 ) ) ) ) );
+      return ConsesLow.list( $sym96$CLET, ConsesLow.list( ConsesLow.list( manager, kbom ), ConsesLow.list( maintaining_countsP, ConsesLow.list( $sym97$KB_OBJECT_USAGE_COUNTS_ENABLED_, manager ) ), ConsesLow.list(
+          memory_mappedP, ConsesLow.list( $sym98$KB_OBJECT_MANAGER_MEMORY_MAPPED_, manager ) ) ), ConsesLow.list( $sym99$CUNWIND_PROTECT, ConsesLow.listS( $sym100$PROGN, ConsesLow.list(
+              $sym101$DONT_MAINTAIN_KB_OBJECT_USAGE_COUNTS, manager ), ConsesLow.list( $sym102$KB_OBJECT_MANAGER_ENABLE_MEMORY_MAPPING, manager ), ConsesLow.append( body, NIL ) ), ConsesLow.list( $sym100$PROGN, ConsesLow
+                  .list( $sym103$PWHEN, maintaining_countsP, ConsesLow.list( $sym104$MAINTAIN_KB_OBJECT_USAGE_COUNTS, manager ) ), ConsesLow.list( $sym103$PWHEN, ConsesLow.list( $sym105$CNOT, memory_mappedP ), ConsesLow
+                      .listS( $sym106$KB_OBJECT_MANAGER_CHANGE_STREAM_BUFFER_SIZES, manager, $list107 ) ) ) ) );
     }
     cdestructuring_bind.cdestructuring_bind_error( datum, $list0 );
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 29601L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 29601L)
   public static SubLObject segment_kb_object_manager_data(final SubLObject kbom, SubLObject stream, SubLObject include_idP)
   {
     if( stream == UNPROVIDED )
@@ -2101,9 +1891,7 @@ public final class kb_object_manager extends SubLTranslatedFile
     return kbom;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/kb-object-manager.lisp",
-    position = 30143L)
+  @SubLTranslatedFile.SubL(source = "cycl/kb-object-manager.lisp", position = 30143L)
   public static SubLObject inspect_kb_object_manager_data(final SubLObject kbom, final SubLObject id)
   {
     final SubLObject fvector = kbom_file_vector( kbom );
@@ -2112,109 +1900,109 @@ public final class kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject declare_kb_object_manager_file()
   {
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_object_manager", "with_kb_object_manager_lock_held", "WITH-KB-OBJECT-MANAGER-LOCK-HELD" );
-    SubLFiles.declareFunction( myName, "kb_object_manager_print_function_trampoline", "KB-OBJECT-MANAGER-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_p", "KB-OBJECT-MANAGER-P", 1, 0, false );
+    SubLFiles.declareMacro(me, "with_kb_object_manager_lock_held", "WITH-KB-OBJECT-MANAGER-LOCK-HELD" );
+    SubLFiles.declareFunction(me, "kb_object_manager_print_function_trampoline", "KB-OBJECT-MANAGER-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_p", "KB-OBJECT-MANAGER-P", 1, 0, false );
     new $kb_object_manager_p$UnaryFunction();
-    SubLFiles.declareFunction( myName, "kbom_name", "KBOM-NAME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_content_lock", "KBOM-CONTENT-LOCK", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_lru_size_percentage", "KBOM-LRU-SIZE-PERCENTAGE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_content_table", "KBOM-CONTENT-TABLE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_usage_table", "KBOM-USAGE-TABLE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_lru_information", "KBOM-LRU-INFORMATION", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_file_vector", "KBOM-FILE-VECTOR", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_id_threshold", "KBOM-ID-THRESHOLD", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_load_func", "KBOM-LOAD-FUNC", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_meter_swap_timeP", "KBOM-METER-SWAP-TIME?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_swap_time", "KBOM-SWAP-TIME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_lru_size_max", "KBOM-LRU-SIZE-MAX", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_sub_file_vector", "KBOM-SUB-FILE-VECTOR", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_dummy3", "KBOM-DUMMY3", 1, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_name", "_CSETF-KBOM-NAME", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_content_lock", "_CSETF-KBOM-CONTENT-LOCK", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_lru_size_percentage", "_CSETF-KBOM-LRU-SIZE-PERCENTAGE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_content_table", "_CSETF-KBOM-CONTENT-TABLE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_usage_table", "_CSETF-KBOM-USAGE-TABLE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_lru_information", "_CSETF-KBOM-LRU-INFORMATION", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_file_vector", "_CSETF-KBOM-FILE-VECTOR", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_id_threshold", "_CSETF-KBOM-ID-THRESHOLD", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_load_func", "_CSETF-KBOM-LOAD-FUNC", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_meter_swap_timeP", "_CSETF-KBOM-METER-SWAP-TIME?", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_swap_time", "_CSETF-KBOM-SWAP-TIME", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_lru_size_max", "_CSETF-KBOM-LRU-SIZE-MAX", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_sub_file_vector", "_CSETF-KBOM-SUB-FILE-VECTOR", 2, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_kbom_dummy3", "_CSETF-KBOM-DUMMY3", 2, 0, false );
-    SubLFiles.declareFunction( myName, "make_kb_object_manager", "MAKE-KB-OBJECT-MANAGER", 0, 1, false );
-    SubLFiles.declareFunction( myName, "visit_defstruct_kb_object_manager", "VISIT-DEFSTRUCT-KB-OBJECT-MANAGER", 2, 0, false );
-    SubLFiles.declareFunction( myName, "visit_defstruct_object_kb_object_manager_method", "VISIT-DEFSTRUCT-OBJECT-KB-OBJECT-MANAGER-METHOD", 2, 0, false );
-    SubLFiles.declareFunction( myName, "new_kb_object_manager", "NEW-KB-OBJECT-MANAGER", 6, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_change_stream_buffer_sizes", "KB-OBJECT-MANAGER-CHANGE-STREAM-BUFFER-SIZES", 3, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_enable_memory_mapping", "KB-OBJECT-MANAGER-ENABLE-MEMORY-MAPPING", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_memory_mappedP", "KB-OBJECT-MANAGER-MEMORY-MAPPED?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "setup_kb_object_content_table", "SETUP-KB-OBJECT-CONTENT-TABLE", 3, 0, false );
-    SubLFiles.declareFunction( myName, "setup_kb_object_content_support", "SETUP-KB-OBJECT-CONTENT-SUPPORT", 1, 2, false );
-    SubLFiles.declareFunction( myName, "compute_kbom_lru_size", "COMPUTE-KBOM-LRU-SIZE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "initialize_kb_object_hl_store_cache", "INITIALIZE-KB-OBJECT-HL-STORE-CACHE", 3, 2, false );
-    SubLFiles.declareFunction( myName, "resize_kbom_lru_cache_from_percentage_and_max", "RESIZE-KBOM-LRU-CACHE-FROM-PERCENTAGE-AND-MAX", 3, 0, false );
-    SubLFiles.declareFunction( myName, "resize_kbom_lru_cache", "RESIZE-KBOM-LRU-CACHE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "new_legacy_kb_object_manager", "NEW-LEGACY-KB-OBJECT-MANAGER", 7, 0, false );
-    SubLFiles.declareFunction( myName, "optimize_kb_object_content_table", "OPTIMIZE-KB-OBJECT-CONTENT-TABLE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "clear_kb_object_content_table", "CLEAR-KB-OBJECT-CONTENT-TABLE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_name", "KB-OBJECT-MANAGER-NAME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_content_lock", "KB-OBJECT-MANAGER-CONTENT-LOCK", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_lru_size_percentage", "KB-OBJECT-MANAGER-LRU-SIZE-PERCENTAGE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_lru_size_max", "KB-OBJECT-MANAGER-LRU-SIZE-MAX", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_content_table", "KB-OBJECT-MANAGER-CONTENT-TABLE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_usage_table", "KB-OBJECT-MANAGER-USAGE-TABLE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_lru_information", "KB-OBJECT-MANAGER-LRU-INFORMATION", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_file_vector", "KB-OBJECT-MANAGER-FILE-VECTOR", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_id_threshold", "KB-OBJECT-MANAGER-ID-THRESHOLD", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_load_func", "KB-OBJECT-MANAGER-LOAD-FUNC", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_meter_swap_timeP", "KB-OBJECT-MANAGER-METER-SWAP-TIME?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_swap_time", "KB-OBJECT-MANAGER-SWAP-TIME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_sub_file_vector", "KB-OBJECT-MANAGER-SUB-FILE-VECTOR", 1, 0, false );
-    SubLFiles.declareFunction( myName, "set_kb_object_manager_sub_file_vector", "SET-KB-OBJECT-MANAGER-SUB-FILE-VECTOR", 2, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_usage_counts_enabledP", "KB-OBJECT-USAGE-COUNTS-ENABLED?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "cached_kb_object_count", "CACHED-KB-OBJECT-COUNT", 1, 0, false );
-    SubLFiles.declareFunction( myName, "swappable_kb_object_count", "SWAPPABLE-KB-OBJECT-COUNT", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_id_cachedP", "KB-OBJECT-ID-CACHED?", 2, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_id_cachableP", "KB-OBJECT-ID-CACHABLE?", 2, 0, false );
-    SubLFiles.declareFunction( myName, "lookup_kb_object_content", "LOOKUP-KB-OBJECT-CONTENT", 2, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_manager_unbuiltP", "KB-OBJECT-MANAGER-UNBUILT?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "maintain_kb_object_usage_counts", "MAINTAIN-KB-OBJECT-USAGE-COUNTS", 1, 0, false );
-    SubLFiles.declareFunction( myName, "dont_maintain_kb_object_usage_counts", "DONT-MAINTAIN-KB-OBJECT-USAGE-COUNTS", 1, 0, false );
-    SubLFiles.declareFunction( myName, "register_kb_object_content", "REGISTER-KB-OBJECT-CONTENT", 3, 0, false );
-    SubLFiles.declareFunction( myName, "deregister_kb_object_content", "DEREGISTER-KB-OBJECT-CONTENT", 2, 0, false );
-    SubLFiles.declareFunction( myName, "new_kb_object_content_file_vector", "NEW-KB-OBJECT-CONTENT-FILE-VECTOR", 2, 1, false );
-    SubLFiles.declareFunction( myName, "kb_object_content_file_vector_cfasl_stream", "KB-OBJECT-CONTENT-FILE-VECTOR-CFASL-STREAM", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_content_file_vector_p", "KB-OBJECT-CONTENT-FILE-VECTOR-P", 1, 0, false );
-    SubLFiles.declareFunction( myName, "kb_object_content_file_vector_lookup", "KB-OBJECT-CONTENT-FILE-VECTOR-LOOKUP", 2, 0, false );
-    SubLFiles.declareFunction( myName, "wide_kb_object_managerP", "WIDE-KB-OBJECT-MANAGER?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "wide_kb_object_sub_managerP", "WIDE-KB-OBJECT-SUB-MANAGER?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "serialize_kbom_lru_information", "SERIALIZE-KBOM-LRU-INFORMATION", 2, 0, false );
-    SubLFiles.declareFunction( myName, "precache_kbom_by_lru_information", "PRECACHE-KBOM-BY-LRU-INFORMATION", 2, 0, false );
-    SubLFiles.declareFunction( myName, "kbom_lru_info_filename", "KBOM-LRU-INFO-FILENAME", 2, 0, false );
-    SubLFiles.declareFunction( myName, "is_lru_cachable_kb_object_content_idP", "IS-LRU-CACHABLE-KB-OBJECT-CONTENT-ID?", 2, 0, false );
-    SubLFiles.declareFunction( myName, "update_kb_object_usage", "UPDATE-KB-OBJECT-USAGE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "drop_kb_object_usage", "DROP-KB-OBJECT-USAGE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "mark_kb_object_content_as_muted", "MARK-KB-OBJECT-CONTENT-AS-MUTED", 2, 0, false );
-    SubLFiles.declareFunction( myName, "meter_kb_object_content_swap_time", "METER-KB-OBJECT-CONTENT-SWAP-TIME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "dont_meter_kb_object_content_swap_time", "DONT-METER-KB-OBJECT-CONTENT-SWAP-TIME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "clear_kb_object_content_swap_time", "CLEAR-KB-OBJECT-CONTENT-SWAP-TIME", 1, 0, false );
-    SubLFiles.declareFunction( myName, "get_file_backed_kb_object_id_threshold", "GET-FILE-BACKED-KB-OBJECT-ID-THRESHOLD", 1, 0, false );
-    SubLFiles.declareFunction( myName, "swap_in_kb_object_content", "SWAP-IN-KB-OBJECT-CONTENT", 2, 0, false );
-    SubLFiles.declareFunction( myName, "swap_in_kb_object_content_metered", "SWAP-IN-KB-OBJECT-CONTENT-METERED", 2, 0, false );
-    SubLFiles.declareFunction( myName, "swap_in_kb_object_content_internal", "SWAP-IN-KB-OBJECT-CONTENT-INTERNAL", 2, 0, false );
-    SubLFiles.declareFunction( myName, "swap_out_pristine_kb_object_content", "SWAP-OUT-PRISTINE-KB-OBJECT-CONTENT", 2, 0, false );
-    SubLFiles.declareFunction( myName, "safely_swap_out_all_pristine_kb_objects", "SAFELY-SWAP-OUT-ALL-PRISTINE-KB-OBJECTS", 1, 0, false );
-    SubLFiles.declareFunction( myName, "swap_out_all_pristine_kb_objects_int", "SWAP-OUT-ALL-PRISTINE-KB-OBJECTS-INT", 1, 0, false );
-    SubLFiles.declareFunction( myName, "increment_kb_object_usage_count", "INCREMENT-KB-OBJECT-USAGE-COUNT", 2, 0, false );
-    SubLFiles.declareFunction( myName, "new_muted_kb_object_iterator", "NEW-MUTED-KB-OBJECT-ITERATOR", 1, 0, false );
-    SubLFiles.declareFunction( myName, "is_muted_kb_objectP", "IS-MUTED-KB-OBJECT?", 2, 0, false );
-    SubLFiles.declareFunction( myName, "verify_kb_object_content_table_int", "VERIFY-KB-OBJECT-CONTENT-TABLE-INT", 2, 1, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_object_manager", "with_kbom_fully_loaded", "WITH-KBOM-FULLY-LOADED" );
-    SubLFiles.declareFunction( myName, "segment_kb_object_manager_data", "SEGMENT-KB-OBJECT-MANAGER-DATA", 1, 2, false );
-    SubLFiles.declareFunction( myName, "inspect_kb_object_manager_data", "INSPECT-KB-OBJECT-MANAGER-DATA", 2, 0, false );
+    SubLFiles.declareFunction(me, "kbom_name", "KBOM-NAME", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_content_lock", "KBOM-CONTENT-LOCK", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_lru_size_percentage", "KBOM-LRU-SIZE-PERCENTAGE", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_content_table", "KBOM-CONTENT-TABLE", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_usage_table", "KBOM-USAGE-TABLE", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_lru_information", "KBOM-LRU-INFORMATION", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_file_vector", "KBOM-FILE-VECTOR", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_id_threshold", "KBOM-ID-THRESHOLD", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_load_func", "KBOM-LOAD-FUNC", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_meter_swap_timeP", "KBOM-METER-SWAP-TIME?", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_swap_time", "KBOM-SWAP-TIME", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_lru_size_max", "KBOM-LRU-SIZE-MAX", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_sub_file_vector", "KBOM-SUB-FILE-VECTOR", 1, 0, false );
+    SubLFiles.declareFunction(me, "kbom_dummy3", "KBOM-DUMMY3", 1, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_name", "_CSETF-KBOM-NAME", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_content_lock", "_CSETF-KBOM-CONTENT-LOCK", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_lru_size_percentage", "_CSETF-KBOM-LRU-SIZE-PERCENTAGE", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_content_table", "_CSETF-KBOM-CONTENT-TABLE", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_usage_table", "_CSETF-KBOM-USAGE-TABLE", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_lru_information", "_CSETF-KBOM-LRU-INFORMATION", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_file_vector", "_CSETF-KBOM-FILE-VECTOR", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_id_threshold", "_CSETF-KBOM-ID-THRESHOLD", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_load_func", "_CSETF-KBOM-LOAD-FUNC", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_meter_swap_timeP", "_CSETF-KBOM-METER-SWAP-TIME?", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_swap_time", "_CSETF-KBOM-SWAP-TIME", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_lru_size_max", "_CSETF-KBOM-LRU-SIZE-MAX", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_sub_file_vector", "_CSETF-KBOM-SUB-FILE-VECTOR", 2, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_kbom_dummy3", "_CSETF-KBOM-DUMMY3", 2, 0, false );
+    SubLFiles.declareFunction(me, "make_kb_object_manager", "MAKE-KB-OBJECT-MANAGER", 0, 1, false );
+    SubLFiles.declareFunction(me, "visit_defstruct_kb_object_manager", "VISIT-DEFSTRUCT-KB-OBJECT-MANAGER", 2, 0, false );
+    SubLFiles.declareFunction(me, "visit_defstruct_object_kb_object_manager_method", "VISIT-DEFSTRUCT-OBJECT-KB-OBJECT-MANAGER-METHOD", 2, 0, false );
+    SubLFiles.declareFunction(me, "new_kb_object_manager", "NEW-KB-OBJECT-MANAGER", 6, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_change_stream_buffer_sizes", "KB-OBJECT-MANAGER-CHANGE-STREAM-BUFFER-SIZES", 3, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_enable_memory_mapping", "KB-OBJECT-MANAGER-ENABLE-MEMORY-MAPPING", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_memory_mappedP", "KB-OBJECT-MANAGER-MEMORY-MAPPED?", 1, 0, false );
+    SubLFiles.declareFunction(me, "setup_kb_object_content_table", "SETUP-KB-OBJECT-CONTENT-TABLE", 3, 0, false );
+    SubLFiles.declareFunction(me, "setup_kb_object_content_support", "SETUP-KB-OBJECT-CONTENT-SUPPORT", 1, 2, false );
+    SubLFiles.declareFunction(me, "compute_kbom_lru_size", "COMPUTE-KBOM-LRU-SIZE", 2, 0, false );
+    SubLFiles.declareFunction(me, "initialize_kb_object_hl_store_cache", "INITIALIZE-KB-OBJECT-HL-STORE-CACHE", 3, 2, false );
+    SubLFiles.declareFunction(me, "resize_kbom_lru_cache_from_percentage_and_max", "RESIZE-KBOM-LRU-CACHE-FROM-PERCENTAGE-AND-MAX", 3, 0, false );
+    SubLFiles.declareFunction(me, "resize_kbom_lru_cache", "RESIZE-KBOM-LRU-CACHE", 2, 0, false );
+    SubLFiles.declareFunction(me, "new_legacy_kb_object_manager", "NEW-LEGACY-KB-OBJECT-MANAGER", 7, 0, false );
+    SubLFiles.declareFunction(me, "optimize_kb_object_content_table", "OPTIMIZE-KB-OBJECT-CONTENT-TABLE", 2, 0, false );
+    SubLFiles.declareFunction(me, "clear_kb_object_content_table", "CLEAR-KB-OBJECT-CONTENT-TABLE", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_name", "KB-OBJECT-MANAGER-NAME", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_content_lock", "KB-OBJECT-MANAGER-CONTENT-LOCK", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_lru_size_percentage", "KB-OBJECT-MANAGER-LRU-SIZE-PERCENTAGE", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_lru_size_max", "KB-OBJECT-MANAGER-LRU-SIZE-MAX", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_content_table", "KB-OBJECT-MANAGER-CONTENT-TABLE", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_usage_table", "KB-OBJECT-MANAGER-USAGE-TABLE", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_lru_information", "KB-OBJECT-MANAGER-LRU-INFORMATION", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_file_vector", "KB-OBJECT-MANAGER-FILE-VECTOR", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_id_threshold", "KB-OBJECT-MANAGER-ID-THRESHOLD", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_load_func", "KB-OBJECT-MANAGER-LOAD-FUNC", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_meter_swap_timeP", "KB-OBJECT-MANAGER-METER-SWAP-TIME?", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_swap_time", "KB-OBJECT-MANAGER-SWAP-TIME", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_sub_file_vector", "KB-OBJECT-MANAGER-SUB-FILE-VECTOR", 1, 0, false );
+    SubLFiles.declareFunction(me, "set_kb_object_manager_sub_file_vector", "SET-KB-OBJECT-MANAGER-SUB-FILE-VECTOR", 2, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_usage_counts_enabledP", "KB-OBJECT-USAGE-COUNTS-ENABLED?", 1, 0, false );
+    SubLFiles.declareFunction(me, "cached_kb_object_count", "CACHED-KB-OBJECT-COUNT", 1, 0, false );
+    SubLFiles.declareFunction(me, "swappable_kb_object_count", "SWAPPABLE-KB-OBJECT-COUNT", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_id_cachedP", "KB-OBJECT-ID-CACHED?", 2, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_id_cachableP", "KB-OBJECT-ID-CACHABLE?", 2, 0, false );
+    SubLFiles.declareFunction(me, "lookup_kb_object_content", "LOOKUP-KB-OBJECT-CONTENT", 2, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_manager_unbuiltP", "KB-OBJECT-MANAGER-UNBUILT?", 1, 0, false );
+    SubLFiles.declareFunction(me, "maintain_kb_object_usage_counts", "MAINTAIN-KB-OBJECT-USAGE-COUNTS", 1, 0, false );
+    SubLFiles.declareFunction(me, "dont_maintain_kb_object_usage_counts", "DONT-MAINTAIN-KB-OBJECT-USAGE-COUNTS", 1, 0, false );
+    SubLFiles.declareFunction(me, "register_kb_object_content", "REGISTER-KB-OBJECT-CONTENT", 3, 0, false );
+    SubLFiles.declareFunction(me, "deregister_kb_object_content", "DEREGISTER-KB-OBJECT-CONTENT", 2, 0, false );
+    SubLFiles.declareFunction(me, "new_kb_object_content_file_vector", "NEW-KB-OBJECT-CONTENT-FILE-VECTOR", 2, 1, false );
+    SubLFiles.declareFunction(me, "kb_object_content_file_vector_cfasl_stream", "KB-OBJECT-CONTENT-FILE-VECTOR-CFASL-STREAM", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_content_file_vector_p", "KB-OBJECT-CONTENT-FILE-VECTOR-P", 1, 0, false );
+    SubLFiles.declareFunction(me, "kb_object_content_file_vector_lookup", "KB-OBJECT-CONTENT-FILE-VECTOR-LOOKUP", 2, 0, false );
+    SubLFiles.declareFunction(me, "wide_kb_object_managerP", "WIDE-KB-OBJECT-MANAGER?", 1, 0, false );
+    SubLFiles.declareFunction(me, "wide_kb_object_sub_managerP", "WIDE-KB-OBJECT-SUB-MANAGER?", 1, 0, false );
+    SubLFiles.declareFunction(me, "serialize_kbom_lru_information", "SERIALIZE-KBOM-LRU-INFORMATION", 2, 0, false );
+    SubLFiles.declareFunction(me, "precache_kbom_by_lru_information", "PRECACHE-KBOM-BY-LRU-INFORMATION", 2, 0, false );
+    SubLFiles.declareFunction(me, "kbom_lru_info_filename", "KBOM-LRU-INFO-FILENAME", 2, 0, false );
+    SubLFiles.declareFunction(me, "is_lru_cachable_kb_object_content_idP", "IS-LRU-CACHABLE-KB-OBJECT-CONTENT-ID?", 2, 0, false );
+    SubLFiles.declareFunction(me, "update_kb_object_usage", "UPDATE-KB-OBJECT-USAGE", 2, 0, false );
+    SubLFiles.declareFunction(me, "drop_kb_object_usage", "DROP-KB-OBJECT-USAGE", 2, 0, false );
+    SubLFiles.declareFunction(me, "mark_kb_object_content_as_muted", "MARK-KB-OBJECT-CONTENT-AS-MUTED", 2, 0, false );
+    SubLFiles.declareFunction(me, "meter_kb_object_content_swap_time", "METER-KB-OBJECT-CONTENT-SWAP-TIME", 1, 0, false );
+    SubLFiles.declareFunction(me, "dont_meter_kb_object_content_swap_time", "DONT-METER-KB-OBJECT-CONTENT-SWAP-TIME", 1, 0, false );
+    SubLFiles.declareFunction(me, "clear_kb_object_content_swap_time", "CLEAR-KB-OBJECT-CONTENT-SWAP-TIME", 1, 0, false );
+    SubLFiles.declareFunction(me, "get_file_backed_kb_object_id_threshold", "GET-FILE-BACKED-KB-OBJECT-ID-THRESHOLD", 1, 0, false );
+    SubLFiles.declareFunction(me, "swap_in_kb_object_content", "SWAP-IN-KB-OBJECT-CONTENT", 2, 0, false );
+    SubLFiles.declareFunction(me, "swap_in_kb_object_content_metered", "SWAP-IN-KB-OBJECT-CONTENT-METERED", 2, 0, false );
+    SubLFiles.declareFunction(me, "swap_in_kb_object_content_internal", "SWAP-IN-KB-OBJECT-CONTENT-INTERNAL", 2, 0, false );
+    SubLFiles.declareFunction(me, "swap_out_pristine_kb_object_content", "SWAP-OUT-PRISTINE-KB-OBJECT-CONTENT", 2, 0, false );
+    SubLFiles.declareFunction(me, "safely_swap_out_all_pristine_kb_objects", "SAFELY-SWAP-OUT-ALL-PRISTINE-KB-OBJECTS", 1, 0, false );
+    SubLFiles.declareFunction(me, "swap_out_all_pristine_kb_objects_int", "SWAP-OUT-ALL-PRISTINE-KB-OBJECTS-INT", 1, 0, false );
+    SubLFiles.declareFunction(me, "increment_kb_object_usage_count", "INCREMENT-KB-OBJECT-USAGE-COUNT", 2, 0, false );
+    SubLFiles.declareFunction(me, "new_muted_kb_object_iterator", "NEW-MUTED-KB-OBJECT-ITERATOR", 1, 0, false );
+    SubLFiles.declareFunction(me, "is_muted_kb_objectP", "IS-MUTED-KB-OBJECT?", 2, 0, false );
+    SubLFiles.declareFunction(me, "verify_kb_object_content_table_int", "VERIFY-KB-OBJECT-CONTENT-TABLE-INT", 2, 1, false );
+    SubLFiles.declareMacro(me, "with_kbom_fully_loaded", "WITH-KBOM-FULLY-LOADED" );
+    SubLFiles.declareFunction(me, "segment_kb_object_manager_data", "SEGMENT-KB-OBJECT-MANAGER-DATA", 1, 2, false );
+    SubLFiles.declareFunction(me, "inspect_kb_object_manager_data", "INSPECT-KB-OBJECT-MANAGER-DATA", 2, 0, false );
     return NIL;
   }
 
@@ -2228,8 +2016,7 @@ public final class kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject setup_kb_object_manager_file()
   {
-    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), $dtp_kb_object_manager$.getGlobalValue(), Symbols.symbol_function(
-        $sym10$KB_OBJECT_MANAGER_PRINT_FUNCTION_TRAMPOLINE ) );
+    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), $dtp_kb_object_manager$.getGlobalValue(), Symbols.symbol_function( $sym10$KB_OBJECT_MANAGER_PRINT_FUNCTION_TRAMPOLINE ) );
     SubLSpecialOperatorDeclarations.proclaim( $list11 );
     Structures.def_csetf( $sym12$KBOM_NAME, $sym13$_CSETF_KBOM_NAME );
     Structures.def_csetf( $sym14$KBOM_CONTENT_LOCK, $sym15$_CSETF_KBOM_CONTENT_LOCK );
@@ -2278,137 +2065,132 @@ public final class kb_object_manager extends SubLTranslatedFile
     $dtp_kb_object_manager$ = null;
     $min_kb_object_lru_size$ = null;
     $kbom_id_equality_test$ = null;
-    $list0 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "KBOM" ) ), SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol(
-        "BODY" ) );
-    $sym1$WITH_LOCK_HELD = SubLObjectFactory.makeSymbol( "WITH-LOCK-HELD" );
-    $sym2$KB_OBJECT_MANAGER_CONTENT_LOCK = SubLObjectFactory.makeSymbol( "KB-OBJECT-MANAGER-CONTENT-LOCK" );
-    $sym3$KB_OBJECT_MANAGER = SubLObjectFactory.makeSymbol( "KB-OBJECT-MANAGER" );
-    $sym4$KB_OBJECT_MANAGER_P = SubLObjectFactory.makeSymbol( "KB-OBJECT-MANAGER-P" );
-    $list5 = ConsesLow.list( new SubLObject[] { SubLObjectFactory.makeSymbol( "NAME" ), SubLObjectFactory.makeSymbol( "CONTENT-LOCK" ), SubLObjectFactory.makeSymbol( "LRU-SIZE-PERCENTAGE" ), SubLObjectFactory.makeSymbol(
-        "CONTENT-TABLE" ), SubLObjectFactory.makeSymbol( "USAGE-TABLE" ), SubLObjectFactory.makeSymbol( "LRU-INFORMATION" ), SubLObjectFactory.makeSymbol( "FILE-VECTOR" ), SubLObjectFactory.makeSymbol( "ID-THRESHOLD" ),
-      SubLObjectFactory.makeSymbol( "LOAD-FUNC" ), SubLObjectFactory.makeSymbol( "METER-SWAP-TIME?" ), SubLObjectFactory.makeSymbol( "SWAP-TIME" ), SubLObjectFactory.makeSymbol( "LRU-SIZE-MAX" ), SubLObjectFactory
-          .makeSymbol( "SUB-FILE-VECTOR" ), SubLObjectFactory.makeSymbol( "DUMMY3" )
+    $list0 = ConsesLow.list( ConsesLow.list( makeSymbol( "KBOM" ) ), makeSymbol( "&BODY" ), makeSymbol( "BODY" ) );
+    $sym1$WITH_LOCK_HELD = makeSymbol( "WITH-LOCK-HELD" );
+    $sym2$KB_OBJECT_MANAGER_CONTENT_LOCK = makeSymbol( "KB-OBJECT-MANAGER-CONTENT-LOCK" );
+    $sym3$KB_OBJECT_MANAGER = makeSymbol( "KB-OBJECT-MANAGER" );
+    $sym4$KB_OBJECT_MANAGER_P = makeSymbol( "KB-OBJECT-MANAGER-P" );
+    $list5 = ConsesLow.list( new SubLObject[] { makeSymbol( "NAME" ), makeSymbol( "CONTENT-LOCK" ), makeSymbol( "LRU-SIZE-PERCENTAGE" ), makeSymbol( "CONTENT-TABLE" ), makeSymbol( "USAGE-TABLE" ), makeSymbol(
+        "LRU-INFORMATION" ), makeSymbol( "FILE-VECTOR" ), makeSymbol( "ID-THRESHOLD" ), makeSymbol( "LOAD-FUNC" ), makeSymbol( "METER-SWAP-TIME?" ), makeSymbol( "SWAP-TIME" ), makeSymbol( "LRU-SIZE-MAX" ),
+      SubLObjectFactory.makeSymbol( "SUB-FILE-VECTOR" ), makeSymbol( "DUMMY3" )
     } );
-    $list6 = ConsesLow.list( new SubLObject[] { SubLObjectFactory.makeKeyword( "NAME" ), SubLObjectFactory.makeKeyword( "CONTENT-LOCK" ), SubLObjectFactory.makeKeyword( "LRU-SIZE-PERCENTAGE" ), SubLObjectFactory
-        .makeKeyword( "CONTENT-TABLE" ), SubLObjectFactory.makeKeyword( "USAGE-TABLE" ), SubLObjectFactory.makeKeyword( "LRU-INFORMATION" ), SubLObjectFactory.makeKeyword( "FILE-VECTOR" ), SubLObjectFactory.makeKeyword(
-            "ID-THRESHOLD" ), SubLObjectFactory.makeKeyword( "LOAD-FUNC" ), SubLObjectFactory.makeKeyword( "METER-SWAP-TIME?" ), SubLObjectFactory.makeKeyword( "SWAP-TIME" ), SubLObjectFactory.makeKeyword(
-                "LRU-SIZE-MAX" ), SubLObjectFactory.makeKeyword( "SUB-FILE-VECTOR" ), SubLObjectFactory.makeKeyword( "DUMMY3" )
+    $list6 = ConsesLow.list( new SubLObject[] { makeKeyword( "NAME" ), makeKeyword( "CONTENT-LOCK" ), makeKeyword( "LRU-SIZE-PERCENTAGE" ), SubLObjectFactory.makeKeyword( "CONTENT-TABLE" ), makeKeyword( "USAGE-TABLE" ),
+      makeKeyword( "LRU-INFORMATION" ), makeKeyword( "FILE-VECTOR" ), makeKeyword( "ID-THRESHOLD" ), makeKeyword( "LOAD-FUNC" ), makeKeyword( "METER-SWAP-TIME?" ), makeKeyword( "SWAP-TIME" ), makeKeyword(
+          "LRU-SIZE-MAX" ), makeKeyword( "SUB-FILE-VECTOR" ), makeKeyword( "DUMMY3" )
     } );
-    $list7 = ConsesLow.list( new SubLObject[] { SubLObjectFactory.makeSymbol( "KBOM-NAME" ), SubLObjectFactory.makeSymbol( "KBOM-CONTENT-LOCK" ), SubLObjectFactory.makeSymbol( "KBOM-LRU-SIZE-PERCENTAGE" ),
-      SubLObjectFactory.makeSymbol( "KBOM-CONTENT-TABLE" ), SubLObjectFactory.makeSymbol( "KBOM-USAGE-TABLE" ), SubLObjectFactory.makeSymbol( "KBOM-LRU-INFORMATION" ), SubLObjectFactory.makeSymbol( "KBOM-FILE-VECTOR" ),
-      SubLObjectFactory.makeSymbol( "KBOM-ID-THRESHOLD" ), SubLObjectFactory.makeSymbol( "KBOM-LOAD-FUNC" ), SubLObjectFactory.makeSymbol( "KBOM-METER-SWAP-TIME?" ), SubLObjectFactory.makeSymbol( "KBOM-SWAP-TIME" ),
-      SubLObjectFactory.makeSymbol( "KBOM-LRU-SIZE-MAX" ), SubLObjectFactory.makeSymbol( "KBOM-SUB-FILE-VECTOR" ), SubLObjectFactory.makeSymbol( "KBOM-DUMMY3" )
+    $list7 = ConsesLow.list( new SubLObject[] { makeSymbol( "KBOM-NAME" ), makeSymbol( "KBOM-CONTENT-LOCK" ), makeSymbol( "KBOM-LRU-SIZE-PERCENTAGE" ), makeSymbol( "KBOM-CONTENT-TABLE" ), makeSymbol(
+        "KBOM-USAGE-TABLE" ), makeSymbol( "KBOM-LRU-INFORMATION" ), makeSymbol( "KBOM-FILE-VECTOR" ), makeSymbol( "KBOM-ID-THRESHOLD" ), makeSymbol( "KBOM-LOAD-FUNC" ), makeSymbol( "KBOM-METER-SWAP-TIME?" ), makeSymbol(
+            "KBOM-SWAP-TIME" ), makeSymbol( "KBOM-LRU-SIZE-MAX" ), makeSymbol( "KBOM-SUB-FILE-VECTOR" ), makeSymbol( "KBOM-DUMMY3" )
     } );
-    $list8 = ConsesLow.list( new SubLObject[] { SubLObjectFactory.makeSymbol( "_CSETF-KBOM-NAME" ), SubLObjectFactory.makeSymbol( "_CSETF-KBOM-CONTENT-LOCK" ), SubLObjectFactory.makeSymbol(
-        "_CSETF-KBOM-LRU-SIZE-PERCENTAGE" ), SubLObjectFactory.makeSymbol( "_CSETF-KBOM-CONTENT-TABLE" ), SubLObjectFactory.makeSymbol( "_CSETF-KBOM-USAGE-TABLE" ), SubLObjectFactory.makeSymbol(
-            "_CSETF-KBOM-LRU-INFORMATION" ), SubLObjectFactory.makeSymbol( "_CSETF-KBOM-FILE-VECTOR" ), SubLObjectFactory.makeSymbol( "_CSETF-KBOM-ID-THRESHOLD" ), SubLObjectFactory.makeSymbol( "_CSETF-KBOM-LOAD-FUNC" ),
-      SubLObjectFactory.makeSymbol( "_CSETF-KBOM-METER-SWAP-TIME?" ), SubLObjectFactory.makeSymbol( "_CSETF-KBOM-SWAP-TIME" ), SubLObjectFactory.makeSymbol( "_CSETF-KBOM-LRU-SIZE-MAX" ), SubLObjectFactory.makeSymbol(
-          "_CSETF-KBOM-SUB-FILE-VECTOR" ), SubLObjectFactory.makeSymbol( "_CSETF-KBOM-DUMMY3" )
+    $list8 = ConsesLow.list( new SubLObject[] { makeSymbol( "_CSETF-KBOM-NAME" ), makeSymbol( "_CSETF-KBOM-CONTENT-LOCK" ), makeSymbol( "_CSETF-KBOM-LRU-SIZE-PERCENTAGE" ), makeSymbol( "_CSETF-KBOM-CONTENT-TABLE" ),
+      makeSymbol( "_CSETF-KBOM-USAGE-TABLE" ), makeSymbol( "_CSETF-KBOM-LRU-INFORMATION" ), makeSymbol( "_CSETF-KBOM-FILE-VECTOR" ), makeSymbol( "_CSETF-KBOM-ID-THRESHOLD" ), makeSymbol( "_CSETF-KBOM-LOAD-FUNC" ),
+      makeSymbol( "_CSETF-KBOM-METER-SWAP-TIME?" ), makeSymbol( "_CSETF-KBOM-SWAP-TIME" ), makeSymbol( "_CSETF-KBOM-LRU-SIZE-MAX" ), makeSymbol( "_CSETF-KBOM-SUB-FILE-VECTOR" ), makeSymbol( "_CSETF-KBOM-DUMMY3" )
     } );
-    $sym9$DEFAULT_STRUCT_PRINT_FUNCTION = SubLObjectFactory.makeSymbol( "DEFAULT-STRUCT-PRINT-FUNCTION" );
-    $sym10$KB_OBJECT_MANAGER_PRINT_FUNCTION_TRAMPOLINE = SubLObjectFactory.makeSymbol( "KB-OBJECT-MANAGER-PRINT-FUNCTION-TRAMPOLINE" );
-    $list11 = ConsesLow.list( SubLObjectFactory.makeSymbol( "OPTIMIZE-FUNCALL" ), SubLObjectFactory.makeSymbol( "KB-OBJECT-MANAGER-P" ) );
-    $sym12$KBOM_NAME = SubLObjectFactory.makeSymbol( "KBOM-NAME" );
-    $sym13$_CSETF_KBOM_NAME = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-NAME" );
-    $sym14$KBOM_CONTENT_LOCK = SubLObjectFactory.makeSymbol( "KBOM-CONTENT-LOCK" );
-    $sym15$_CSETF_KBOM_CONTENT_LOCK = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-CONTENT-LOCK" );
-    $sym16$KBOM_LRU_SIZE_PERCENTAGE = SubLObjectFactory.makeSymbol( "KBOM-LRU-SIZE-PERCENTAGE" );
-    $sym17$_CSETF_KBOM_LRU_SIZE_PERCENTAGE = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-LRU-SIZE-PERCENTAGE" );
-    $sym18$KBOM_CONTENT_TABLE = SubLObjectFactory.makeSymbol( "KBOM-CONTENT-TABLE" );
-    $sym19$_CSETF_KBOM_CONTENT_TABLE = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-CONTENT-TABLE" );
-    $sym20$KBOM_USAGE_TABLE = SubLObjectFactory.makeSymbol( "KBOM-USAGE-TABLE" );
-    $sym21$_CSETF_KBOM_USAGE_TABLE = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-USAGE-TABLE" );
-    $sym22$KBOM_LRU_INFORMATION = SubLObjectFactory.makeSymbol( "KBOM-LRU-INFORMATION" );
-    $sym23$_CSETF_KBOM_LRU_INFORMATION = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-LRU-INFORMATION" );
-    $sym24$KBOM_FILE_VECTOR = SubLObjectFactory.makeSymbol( "KBOM-FILE-VECTOR" );
-    $sym25$_CSETF_KBOM_FILE_VECTOR = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-FILE-VECTOR" );
-    $sym26$KBOM_ID_THRESHOLD = SubLObjectFactory.makeSymbol( "KBOM-ID-THRESHOLD" );
-    $sym27$_CSETF_KBOM_ID_THRESHOLD = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-ID-THRESHOLD" );
-    $sym28$KBOM_LOAD_FUNC = SubLObjectFactory.makeSymbol( "KBOM-LOAD-FUNC" );
-    $sym29$_CSETF_KBOM_LOAD_FUNC = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-LOAD-FUNC" );
-    $sym30$KBOM_METER_SWAP_TIME_ = SubLObjectFactory.makeSymbol( "KBOM-METER-SWAP-TIME?" );
-    $sym31$_CSETF_KBOM_METER_SWAP_TIME_ = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-METER-SWAP-TIME?" );
-    $sym32$KBOM_SWAP_TIME = SubLObjectFactory.makeSymbol( "KBOM-SWAP-TIME" );
-    $sym33$_CSETF_KBOM_SWAP_TIME = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-SWAP-TIME" );
-    $sym34$KBOM_LRU_SIZE_MAX = SubLObjectFactory.makeSymbol( "KBOM-LRU-SIZE-MAX" );
-    $sym35$_CSETF_KBOM_LRU_SIZE_MAX = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-LRU-SIZE-MAX" );
-    $sym36$KBOM_SUB_FILE_VECTOR = SubLObjectFactory.makeSymbol( "KBOM-SUB-FILE-VECTOR" );
-    $sym37$_CSETF_KBOM_SUB_FILE_VECTOR = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-SUB-FILE-VECTOR" );
-    $sym38$KBOM_DUMMY3 = SubLObjectFactory.makeSymbol( "KBOM-DUMMY3" );
-    $sym39$_CSETF_KBOM_DUMMY3 = SubLObjectFactory.makeSymbol( "_CSETF-KBOM-DUMMY3" );
-    $kw40$NAME = SubLObjectFactory.makeKeyword( "NAME" );
-    $kw41$CONTENT_LOCK = SubLObjectFactory.makeKeyword( "CONTENT-LOCK" );
-    $kw42$LRU_SIZE_PERCENTAGE = SubLObjectFactory.makeKeyword( "LRU-SIZE-PERCENTAGE" );
-    $kw43$CONTENT_TABLE = SubLObjectFactory.makeKeyword( "CONTENT-TABLE" );
-    $kw44$USAGE_TABLE = SubLObjectFactory.makeKeyword( "USAGE-TABLE" );
-    $kw45$LRU_INFORMATION = SubLObjectFactory.makeKeyword( "LRU-INFORMATION" );
-    $kw46$FILE_VECTOR = SubLObjectFactory.makeKeyword( "FILE-VECTOR" );
-    $kw47$ID_THRESHOLD = SubLObjectFactory.makeKeyword( "ID-THRESHOLD" );
-    $kw48$LOAD_FUNC = SubLObjectFactory.makeKeyword( "LOAD-FUNC" );
-    $kw49$METER_SWAP_TIME_ = SubLObjectFactory.makeKeyword( "METER-SWAP-TIME?" );
-    $kw50$SWAP_TIME = SubLObjectFactory.makeKeyword( "SWAP-TIME" );
-    $kw51$LRU_SIZE_MAX = SubLObjectFactory.makeKeyword( "LRU-SIZE-MAX" );
-    $kw52$SUB_FILE_VECTOR = SubLObjectFactory.makeKeyword( "SUB-FILE-VECTOR" );
-    $kw53$DUMMY3 = SubLObjectFactory.makeKeyword( "DUMMY3" );
-    $str54$Invalid_slot__S_for_construction_ = SubLObjectFactory.makeString( "Invalid slot ~S for construction function" );
-    $kw55$BEGIN = SubLObjectFactory.makeKeyword( "BEGIN" );
-    $sym56$MAKE_KB_OBJECT_MANAGER = SubLObjectFactory.makeSymbol( "MAKE-KB-OBJECT-MANAGER" );
-    $kw57$SLOT = SubLObjectFactory.makeKeyword( "SLOT" );
-    $kw58$END = SubLObjectFactory.makeKeyword( "END" );
-    $sym59$VISIT_DEFSTRUCT_OBJECT_KB_OBJECT_MANAGER_METHOD = SubLObjectFactory.makeSymbol( "VISIT-DEFSTRUCT-OBJECT-KB-OBJECT-MANAGER-METHOD" );
-    $sym60$STRINGP = SubLObjectFactory.makeSymbol( "STRINGP" );
-    $sym61$NON_NEGATIVE_INTEGER_P = SubLObjectFactory.makeSymbol( "NON-NEGATIVE-INTEGER-P" );
-    $sym62$POSITIVE_INTEGER_P = SubLObjectFactory.makeSymbol( "POSITIVE-INTEGER-P" );
-    $sym63$FBOUNDP = SubLObjectFactory.makeSymbol( "FBOUNDP" );
-    $str64$_content_manager_lock = SubLObjectFactory.makeString( " content manager lock" );
-    $kw65$UNINITIALIZED = SubLObjectFactory.makeKeyword( "UNINITIALIZED" );
-    $int66$212 = SubLObjectFactory.makeInteger( 212 );
-    $int67$100 = SubLObjectFactory.makeInteger( 100 );
-    $str68$Got__s__expected_an_extensionless = SubLObjectFactory.makeString( "Got ~s, expected an extensionless file basename" );
-    $kw69$OLDEST = SubLObjectFactory.makeKeyword( "OLDEST" );
-    $sym70$NEW_LEGACY_KB_OBJECT_MANAGER = SubLObjectFactory.makeSymbol( "NEW-LEGACY-KB-OBJECT-MANAGER" );
-    $float71$0_05 = SubLObjectFactory.makeDouble( 0.05 );
-    $str72$Failed_to_swap_in_KB_object__A_ba = SubLObjectFactory.makeString(
-        "Failed to swap in KB object ~A back from the CFASL stream ~A; got ~A instead.~%After index lookup, index was at filepos ~A.~%Corrupted KB units?" );
-    $str73$We_expected_KB_object_ID__A_from_ = SubLObjectFactory.makeString(
+    $sym9$DEFAULT_STRUCT_PRINT_FUNCTION = makeSymbol( "DEFAULT-STRUCT-PRINT-FUNCTION" );
+    $sym10$KB_OBJECT_MANAGER_PRINT_FUNCTION_TRAMPOLINE = makeSymbol( "KB-OBJECT-MANAGER-PRINT-FUNCTION-TRAMPOLINE" );
+    $list11 = ConsesLow.list( makeSymbol( "OPTIMIZE-FUNCALL" ), makeSymbol( "KB-OBJECT-MANAGER-P" ) );
+    $sym12$KBOM_NAME = makeSymbol( "KBOM-NAME" );
+    $sym13$_CSETF_KBOM_NAME = makeSymbol( "_CSETF-KBOM-NAME" );
+    $sym14$KBOM_CONTENT_LOCK = makeSymbol( "KBOM-CONTENT-LOCK" );
+    $sym15$_CSETF_KBOM_CONTENT_LOCK = makeSymbol( "_CSETF-KBOM-CONTENT-LOCK" );
+    $sym16$KBOM_LRU_SIZE_PERCENTAGE = makeSymbol( "KBOM-LRU-SIZE-PERCENTAGE" );
+    $sym17$_CSETF_KBOM_LRU_SIZE_PERCENTAGE = makeSymbol( "_CSETF-KBOM-LRU-SIZE-PERCENTAGE" );
+    $sym18$KBOM_CONTENT_TABLE = makeSymbol( "KBOM-CONTENT-TABLE" );
+    $sym19$_CSETF_KBOM_CONTENT_TABLE = makeSymbol( "_CSETF-KBOM-CONTENT-TABLE" );
+    $sym20$KBOM_USAGE_TABLE = makeSymbol( "KBOM-USAGE-TABLE" );
+    $sym21$_CSETF_KBOM_USAGE_TABLE = makeSymbol( "_CSETF-KBOM-USAGE-TABLE" );
+    $sym22$KBOM_LRU_INFORMATION = makeSymbol( "KBOM-LRU-INFORMATION" );
+    $sym23$_CSETF_KBOM_LRU_INFORMATION = makeSymbol( "_CSETF-KBOM-LRU-INFORMATION" );
+    $sym24$KBOM_FILE_VECTOR = makeSymbol( "KBOM-FILE-VECTOR" );
+    $sym25$_CSETF_KBOM_FILE_VECTOR = makeSymbol( "_CSETF-KBOM-FILE-VECTOR" );
+    $sym26$KBOM_ID_THRESHOLD = makeSymbol( "KBOM-ID-THRESHOLD" );
+    $sym27$_CSETF_KBOM_ID_THRESHOLD = makeSymbol( "_CSETF-KBOM-ID-THRESHOLD" );
+    $sym28$KBOM_LOAD_FUNC = makeSymbol( "KBOM-LOAD-FUNC" );
+    $sym29$_CSETF_KBOM_LOAD_FUNC = makeSymbol( "_CSETF-KBOM-LOAD-FUNC" );
+    $sym30$KBOM_METER_SWAP_TIME_ = makeSymbol( "KBOM-METER-SWAP-TIME?" );
+    $sym31$_CSETF_KBOM_METER_SWAP_TIME_ = makeSymbol( "_CSETF-KBOM-METER-SWAP-TIME?" );
+    $sym32$KBOM_SWAP_TIME = makeSymbol( "KBOM-SWAP-TIME" );
+    $sym33$_CSETF_KBOM_SWAP_TIME = makeSymbol( "_CSETF-KBOM-SWAP-TIME" );
+    $sym34$KBOM_LRU_SIZE_MAX = makeSymbol( "KBOM-LRU-SIZE-MAX" );
+    $sym35$_CSETF_KBOM_LRU_SIZE_MAX = makeSymbol( "_CSETF-KBOM-LRU-SIZE-MAX" );
+    $sym36$KBOM_SUB_FILE_VECTOR = makeSymbol( "KBOM-SUB-FILE-VECTOR" );
+    $sym37$_CSETF_KBOM_SUB_FILE_VECTOR = makeSymbol( "_CSETF-KBOM-SUB-FILE-VECTOR" );
+    $sym38$KBOM_DUMMY3 = makeSymbol( "KBOM-DUMMY3" );
+    $sym39$_CSETF_KBOM_DUMMY3 = makeSymbol( "_CSETF-KBOM-DUMMY3" );
+    $kw40$NAME = makeKeyword( "NAME" );
+    $kw41$CONTENT_LOCK = makeKeyword( "CONTENT-LOCK" );
+    $kw42$LRU_SIZE_PERCENTAGE = makeKeyword( "LRU-SIZE-PERCENTAGE" );
+    $kw43$CONTENT_TABLE = makeKeyword( "CONTENT-TABLE" );
+    $kw44$USAGE_TABLE = makeKeyword( "USAGE-TABLE" );
+    $kw45$LRU_INFORMATION = makeKeyword( "LRU-INFORMATION" );
+    $kw46$FILE_VECTOR = makeKeyword( "FILE-VECTOR" );
+    $kw47$ID_THRESHOLD = makeKeyword( "ID-THRESHOLD" );
+    $kw48$LOAD_FUNC = makeKeyword( "LOAD-FUNC" );
+    $kw49$METER_SWAP_TIME_ = makeKeyword( "METER-SWAP-TIME?" );
+    $kw50$SWAP_TIME = makeKeyword( "SWAP-TIME" );
+    $kw51$LRU_SIZE_MAX = makeKeyword( "LRU-SIZE-MAX" );
+    $kw52$SUB_FILE_VECTOR = makeKeyword( "SUB-FILE-VECTOR" );
+    $kw53$DUMMY3 = makeKeyword( "DUMMY3" );
+    $str54$Invalid_slot__S_for_construction_ = makeString( "Invalid slot ~S for construction function" );
+    $kw55$BEGIN = makeKeyword( "BEGIN" );
+    $sym56$MAKE_KB_OBJECT_MANAGER = makeSymbol( "MAKE-KB-OBJECT-MANAGER" );
+    $kw57$SLOT = makeKeyword( "SLOT" );
+    $kw58$END = makeKeyword( "END" );
+    $sym59$VISIT_DEFSTRUCT_OBJECT_KB_OBJECT_MANAGER_METHOD = makeSymbol( "VISIT-DEFSTRUCT-OBJECT-KB-OBJECT-MANAGER-METHOD" );
+    $sym60$STRINGP = makeSymbol( "STRINGP" );
+    $sym61$NON_NEGATIVE_INTEGER_P = makeSymbol( "NON-NEGATIVE-INTEGER-P" );
+    $sym62$POSITIVE_INTEGER_P = makeSymbol( "POSITIVE-INTEGER-P" );
+    $sym63$FBOUNDP = makeSymbol( "FBOUNDP" );
+    $str64$_content_manager_lock = makeString( " content manager lock" );
+    $kw65$UNINITIALIZED = makeKeyword( "UNINITIALIZED" );
+    $int66$212 = makeInteger( 212 );
+    $int67$100 = makeInteger( 100 );
+    $str68$Got__s__expected_an_extensionless = makeString( "Got ~s, expected an extensionless file basename" );
+    $kw69$OLDEST = makeKeyword( "OLDEST" );
+    $sym70$NEW_LEGACY_KB_OBJECT_MANAGER = makeSymbol( "NEW-LEGACY-KB-OBJECT-MANAGER" );
+    $float71$0_05 = makeDouble( 0.05 );
+    $str72$Failed_to_swap_in_KB_object__A_ba = makeString( "Failed to swap in KB object ~A back from the CFASL stream ~A; got ~A instead.~%After index lookup, index was at filepos ~A.~%Corrupted KB units?" );
+    $str73$We_expected_KB_object_ID__A_from_ = makeString(
         "We expected KB object ID ~A from CFASL stream ~A but got object ~A of type ~A instead.~%Thus, the index and the data files for the file vector are misaligned.~%After index lookup, index was at filepos ~A.~%Corrupted KB units?" );
-    $sym74$SERIALIZE_KBOM_LRU_INFORMATION = SubLObjectFactory.makeSymbol( "SERIALIZE-KBOM-LRU-INFORMATION" );
-    $kw75$OUTPUT = SubLObjectFactory.makeKeyword( "OUTPUT" );
-    $str76$Unable_to_open__S = SubLObjectFactory.makeString( "Unable to open ~S" );
-    $sym77$PRECACHE_KBOM_BY_LRU_INFORMATION = SubLObjectFactory.makeSymbol( "PRECACHE-KBOM-BY-LRU-INFORMATION" );
-    $kw78$INPUT = SubLObjectFactory.makeKeyword( "INPUT" );
-    $sym79$_ = SubLObjectFactory.makeSymbol( "<" );
-    $str80$_lru_info_for_ = SubLObjectFactory.makeString( "-lru-info-for-" );
-    $str81$_cfasl = SubLObjectFactory.makeString( ".cfasl" );
-    $kw82$NEWEST = SubLObjectFactory.makeKeyword( "NEWEST" );
-    $str83$Swapping_out_ = SubLObjectFactory.makeString( "Swapping out " );
-    $str84$_objects = SubLObjectFactory.makeString( " objects" );
-    $str85$cdolist = SubLObjectFactory.makeString( "cdolist" );
-    $sym86$IS_MUTED_KB_OBJECT_ = SubLObjectFactory.makeSymbol( "IS-MUTED-KB-OBJECT?" );
-    $list87 = ConsesLow.list( SubLObjectFactory.makeSymbol( "ID" ), SubLObjectFactory.makeSymbol( "PAYLOAD" ) );
-    $str88$Verifying_integrity_of_ = SubLObjectFactory.makeString( "Verifying integrity of " );
-    $str89$_content_table = SubLObjectFactory.makeString( " content table" );
-    $kw90$SKIP = SubLObjectFactory.makeKeyword( "SKIP" );
-    $str91$Entry__a_is_invalid___a__repairin = SubLObjectFactory.makeString( "Entry ~a is invalid: ~a, repairing" );
-    $str92$Entry__a_is_invalid___a = SubLObjectFactory.makeString( "Entry ~a is invalid: ~a" );
-    $sym93$MANAGER = SubLObjectFactory.makeUninternedSymbol( "MANAGER" );
-    $sym94$MAINTAINING_COUNTS_ = SubLObjectFactory.makeUninternedSymbol( "MAINTAINING-COUNTS?" );
-    $sym95$MEMORY_MAPPED_ = SubLObjectFactory.makeUninternedSymbol( "MEMORY-MAPPED?" );
-    $sym96$CLET = SubLObjectFactory.makeSymbol( "CLET" );
-    $sym97$KB_OBJECT_USAGE_COUNTS_ENABLED_ = SubLObjectFactory.makeSymbol( "KB-OBJECT-USAGE-COUNTS-ENABLED?" );
-    $sym98$KB_OBJECT_MANAGER_MEMORY_MAPPED_ = SubLObjectFactory.makeSymbol( "KB-OBJECT-MANAGER-MEMORY-MAPPED?" );
-    $sym99$CUNWIND_PROTECT = SubLObjectFactory.makeSymbol( "CUNWIND-PROTECT" );
-    $sym100$PROGN = SubLObjectFactory.makeSymbol( "PROGN" );
-    $sym101$DONT_MAINTAIN_KB_OBJECT_USAGE_COUNTS = SubLObjectFactory.makeSymbol( "DONT-MAINTAIN-KB-OBJECT-USAGE-COUNTS" );
-    $sym102$KB_OBJECT_MANAGER_ENABLE_MEMORY_MAPPING = SubLObjectFactory.makeSymbol( "KB-OBJECT-MANAGER-ENABLE-MEMORY-MAPPING" );
-    $sym103$PWHEN = SubLObjectFactory.makeSymbol( "PWHEN" );
-    $sym104$MAINTAIN_KB_OBJECT_USAGE_COUNTS = SubLObjectFactory.makeSymbol( "MAINTAIN-KB-OBJECT-USAGE-COUNTS" );
-    $sym105$CNOT = SubLObjectFactory.makeSymbol( "CNOT" );
-    $sym106$KB_OBJECT_MANAGER_CHANGE_STREAM_BUFFER_SIZES = SubLObjectFactory.makeSymbol( "KB-OBJECT-MANAGER-CHANGE-STREAM-BUFFER-SIZES" );
-    $list107 = ConsesLow.list( SubLObjectFactory.makeInteger( 2048 ), SubLObjectFactory.makeInteger( 256 ) );
+    $sym74$SERIALIZE_KBOM_LRU_INFORMATION = makeSymbol( "SERIALIZE-KBOM-LRU-INFORMATION" );
+    $kw75$OUTPUT = makeKeyword( "OUTPUT" );
+    $str76$Unable_to_open__S = makeString( "Unable to open ~S" );
+    $sym77$PRECACHE_KBOM_BY_LRU_INFORMATION = makeSymbol( "PRECACHE-KBOM-BY-LRU-INFORMATION" );
+    $kw78$INPUT = makeKeyword( "INPUT" );
+    $sym79$_ = makeSymbol( "<" );
+    $str80$_lru_info_for_ = makeString( "-lru-info-for-" );
+    $str81$_cfasl = makeString( ".cfasl" );
+    $kw82$NEWEST = makeKeyword( "NEWEST" );
+    $str83$Swapping_out_ = makeString( "Swapping out " );
+    $str84$_objects = makeString( " objects" );
+    $str85$cdolist = makeString( "cdolist" );
+    $sym86$IS_MUTED_KB_OBJECT_ = makeSymbol( "IS-MUTED-KB-OBJECT?" );
+    $list87 = ConsesLow.list( makeSymbol( "ID" ), makeSymbol( "PAYLOAD" ) );
+    $str88$Verifying_integrity_of_ = makeString( "Verifying integrity of " );
+    $str89$_content_table = makeString( " content table" );
+    $kw90$SKIP = makeKeyword( "SKIP" );
+    $str91$Entry__a_is_invalid___a__repairin = makeString( "Entry ~a is invalid: ~a, repairing" );
+    $str92$Entry__a_is_invalid___a = makeString( "Entry ~a is invalid: ~a" );
+    $sym93$MANAGER = makeUninternedSymbol( "MANAGER" );
+    $sym94$MAINTAINING_COUNTS_ = makeUninternedSymbol( "MAINTAINING-COUNTS?" );
+    $sym95$MEMORY_MAPPED_ = makeUninternedSymbol( "MEMORY-MAPPED?" );
+    $sym96$CLET = makeSymbol( "CLET" );
+    $sym97$KB_OBJECT_USAGE_COUNTS_ENABLED_ = makeSymbol( "KB-OBJECT-USAGE-COUNTS-ENABLED?" );
+    $sym98$KB_OBJECT_MANAGER_MEMORY_MAPPED_ = makeSymbol( "KB-OBJECT-MANAGER-MEMORY-MAPPED?" );
+    $sym99$CUNWIND_PROTECT = makeSymbol( "CUNWIND-PROTECT" );
+    $sym100$PROGN = makeSymbol( "PROGN" );
+    $sym101$DONT_MAINTAIN_KB_OBJECT_USAGE_COUNTS = makeSymbol( "DONT-MAINTAIN-KB-OBJECT-USAGE-COUNTS" );
+    $sym102$KB_OBJECT_MANAGER_ENABLE_MEMORY_MAPPING = makeSymbol( "KB-OBJECT-MANAGER-ENABLE-MEMORY-MAPPING" );
+    $sym103$PWHEN = makeSymbol( "PWHEN" );
+    $sym104$MAINTAIN_KB_OBJECT_USAGE_COUNTS = makeSymbol( "MAINTAIN-KB-OBJECT-USAGE-COUNTS" );
+    $sym105$CNOT = makeSymbol( "CNOT" );
+    $sym106$KB_OBJECT_MANAGER_CHANGE_STREAM_BUFFER_SIZES = makeSymbol( "KB-OBJECT-MANAGER-CHANGE-STREAM-BUFFER-SIZES" );
+    $list107 = ConsesLow.list( makeInteger( 2048 ), makeInteger( 256 ) );
   }
 
-  public static final class $kb_object_manager_native extends SubLStructNative
+  public static final class $kb_object_manager_native
+      extends
+        SubLStructNative
   {
     public SubLObject $name;
     public SubLObject $content_lock;
@@ -2619,13 +2401,15 @@ public final class kb_object_manager extends SubLTranslatedFile
     }
     static
     {
-      structDecl = Structures.makeStructDeclNative( $kb_object_manager_native.class, $sym3$KB_OBJECT_MANAGER, $sym4$KB_OBJECT_MANAGER_P, $list5, $list6, new String[] { "$name", "$content_lock",
-        "$lru_size_percentage", "$content_table", "$usage_table", "$lru_information", "$file_vector", "$id_threshold", "$load_func", "$meter_swap_timeP", "$swap_time", "$lru_size_max", "$sub_file_vector", "$dummy3"
+      structDecl = Structures.makeStructDeclNative( $kb_object_manager_native.class, $sym3$KB_OBJECT_MANAGER, $sym4$KB_OBJECT_MANAGER_P, $list5, $list6, new String[] { "$name", "$content_lock", "$lru_size_percentage",
+        "$content_table", "$usage_table", "$lru_information", "$file_vector", "$id_threshold", "$load_func", "$meter_swap_timeP", "$swap_time", "$lru_size_max", "$sub_file_vector", "$dummy3"
       }, $list7, $list8, $sym9$DEFAULT_STRUCT_PRINT_FUNCTION );
     }
   }
 
-  public static final class $kb_object_manager_p$UnaryFunction extends UnaryFunction
+  public static final class $kb_object_manager_p$UnaryFunction
+      extends
+        UnaryFunction
   {
     public $kb_object_manager_p$UnaryFunction()
     {

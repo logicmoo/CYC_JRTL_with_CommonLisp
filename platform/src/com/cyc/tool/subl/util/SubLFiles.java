@@ -169,7 +169,8 @@ public class SubLFiles
         }
         Errors.warn( "Redefining " + functionSymbol );
       }
-      SubLFunction func = SubLObjectFactory.makeCompiledFunction( meth, functionSymbol, requiredArgCount, optionalArgCount, allowsRest );
+      // SubLFunction func =
+      SubLObjectFactory.makeCompiledFunction( meth, functionSymbol, requiredArgCount, optionalArgCount, allowsRest );
     }
     catch( Exception e )
     {
@@ -503,7 +504,7 @@ public class SubLFiles
   }
 
   /**
-   * 
+   *
    */
   private static void initializeFns()
   {

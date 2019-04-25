@@ -25,671 +25,812 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class context extends SubLTranslatedFile
+public final class context
+    extends
+      SubLTranslatedFile
 {
-    public static final SubLFile me;
-    public static final String myName = "com.cyc.cycjava.cycl.context";
-    public static final String myFingerPrint = "71ef8a70d50e9aa5da7f97d1ddfaed2a08d51faf507018293ecbf721256a31f8";
-    private static final SubLSymbol $sym0$CONTEXT;
-    private static final SubLSymbol $sym1$OBJECT;
-    private static final SubLList $list2;
-    private static final SubLSymbol $sym3$PARSE_TREE_CONTEXT;
-    private static final SubLSymbol $sym4$INSTANCE_COUNT;
-    private static final SubLSymbol $sym5$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_CLASS;
-    private static final SubLSymbol $sym6$ISOLATED_P;
-    private static final SubLSymbol $sym7$INSTANCE_NUMBER;
-    private static final SubLSymbol $sym8$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_INSTANCE;
-    private static final SubLSymbol $sym9$INITIALIZE;
-    private static final SubLList $list10;
-    private static final SubLList $list11;
-    private static final SubLSymbol $sym12$OUTER_CATCH_FOR_CONTEXT_METHOD;
-    private static final SubLSymbol $sym13$CONTEXT_INITIALIZE_METHOD;
-    private static final SubLSymbol $sym14$GET_PARSE_TREE_CONTEXT;
-    private static final SubLList $list15;
-    private static final SubLList $list16;
-    private static final SubLSymbol $sym17$OUTER_CATCH_FOR_CONTEXT_METHOD;
-    private static final SubLSymbol $sym18$CONTEXT_GET_PARSE_TREE_CONTEXT_METHOD;
-    private static final SubLList $list19;
-    private static final SubLSymbol $sym20$INSTANCES;
-    private static final SubLSymbol $sym21$PARSE_TREES;
-    private static final SubLSymbol $sym22$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_CLASS;
-    private static final SubLSymbol $sym23$INSTANCE_COUNTER;
-    private static final SubLSymbol $sym24$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_INSTANCE;
-    private static final SubLList $list25;
-    private static final SubLSymbol $sym26$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
-    private static final SubLInteger $int27$32;
-    private static final SubLSymbol $sym28$PARSE_TREE_CONTEXT_INITIALIZE_METHOD;
-    private static final SubLSymbol $sym29$ADD_TREE;
-    private static final SubLList $list30;
-    private static final SubLList $list31;
-    private static final SubLSymbol $sym32$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
-    private static final SubLSymbol $sym33$PARSE_TREE_P;
-    private static final SubLSymbol $sym34$PARSE_TREE_CONTEXT_ADD_TREE_METHOD;
-    private static final SubLSymbol $sym35$GET_TREE;
-    private static final SubLList $list36;
-    private static final SubLList $list37;
-    private static final SubLSymbol $sym38$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
-    private static final SubLSymbol $sym39$INTEGERP;
-    private static final SubLSymbol $sym40$PARSE_TREE_CONTEXT_GET_TREE_METHOD;
-    private static final SubLSymbol $sym41$GET_PRECEDING_TREES;
-    private static final SubLList $list42;
-    private static final SubLList $list43;
-    private static final SubLSymbol $sym44$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
-    private static final SubLSymbol $sym45$PARSE_TREE_CONTEXT_GET_PRECEDING_TREES_METHOD;
-    private static final SubLSymbol $sym46$GET_FOLLOWING_TREES;
-    private static final SubLList $list47;
-    private static final SubLSymbol $sym48$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
-    private static final SubLSymbol $sym49$PARSE_TREE_CONTEXT_GET_FOLLOWING_TREES_METHOD;
-    private static final SubLSymbol $sym50$GET_INSTANCE;
-    private static final SubLList $list51;
-    private static final SubLList $list52;
-    private static final SubLSymbol $sym53$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
-    private static final SubLSymbol $sym54$CYCLIFIABLE_P;
-    private static final SubLSymbol $sym55$GET_REFS;
-    private static final SubLSymbol $sym56$CREATE_INSTANCE;
-    private static final SubLSymbol $sym57$PARSE_TREE_CONTEXT_GET_INSTANCE_METHOD;
-    private static final SubLList $list58;
-    private static final SubLSymbol $sym59$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
-    private static final SubLObject $const60$InstanceFn;
-    private static final SubLSymbol $sym61$PARSE_TREE_CONTEXT_CREATE_INSTANCE_METHOD;
-    private static final SubLSymbol $sym62$NEW_VARIABLE;
-    private static final SubLList $list63;
-    private static final SubLList $list64;
-    private static final SubLString $str65$X;
-    private static final SubLSymbol $sym66$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
-    private static final SubLSymbol $sym67$PARSE_TREE_CONTEXT_NEW_VARIABLE_METHOD;
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1234L)
-    public static SubLObject get_context_parse_tree_context(final SubLObject v_context) {
-        return classes.subloop_get_access_protected_instance_slot(v_context, (SubLObject)context.ONE_INTEGER, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT);
-    }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1234L)
-    public static SubLObject set_context_parse_tree_context(final SubLObject v_context, final SubLObject value) {
-        return classes.subloop_set_access_protected_instance_slot(v_context, value, (SubLObject)context.ONE_INTEGER, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT);
-    }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1234L)
-    public static SubLObject subloop_reserved_initialize_context_class(final SubLObject new_instance) {
-        classes.subloop_initialize_slot(new_instance, (SubLObject)context.$sym1$OBJECT, (SubLObject)context.$sym4$INSTANCE_COUNT, (SubLObject)context.ZERO_INTEGER);
-        return (SubLObject)context.NIL;
-    }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1234L)
-    public static SubLObject subloop_reserved_initialize_context_instance(final SubLObject new_instance) {
-        classes.subloop_initialize_slot(new_instance, (SubLObject)context.$sym1$OBJECT, (SubLObject)context.$sym6$ISOLATED_P, (SubLObject)context.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)context.$sym1$OBJECT, (SubLObject)context.$sym7$INSTANCE_NUMBER, (SubLObject)context.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)context.$sym0$CONTEXT, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.NIL);
-        return (SubLObject)context.NIL;
-    }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1234L)
-    public static SubLObject context_p(final SubLObject v_context) {
-        return classes.subloop_instanceof_class(v_context, (SubLObject)context.$sym0$CONTEXT);
-    }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1475L)
-    public static SubLObject context_initialize_method(final SubLObject self) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_context_method = (SubLObject)context.NIL;
-        SubLObject parse_tree_context = get_context_parse_tree_context(self);
-        try {
-            thread.throwStack.push(context.$sym12$OUTER_CATCH_FOR_CONTEXT_METHOD);
-            try {
-                object.object_initialize_method(self);
-                parse_tree_context = object.new_class_instance((SubLObject)context.$sym3$PARSE_TREE_CONTEXT);
-                Dynamic.sublisp_throw((SubLObject)context.$sym12$OUTER_CATCH_FOR_CONTEXT_METHOD, self);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)context.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_context_parse_tree_context(self, parse_tree_context);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
+  public static final SubLFile me;
+  public static final String myName = "com.cyc.cycjava.cycl.context";
+  public static final String myFingerPrint = "71ef8a70d50e9aa5da7f97d1ddfaed2a08d51faf507018293ecbf721256a31f8";
+  private static final SubLSymbol $sym0$CONTEXT;
+  private static final SubLSymbol $sym1$OBJECT;
+  private static final SubLList $list2;
+  private static final SubLSymbol $sym3$PARSE_TREE_CONTEXT;
+  private static final SubLSymbol $sym4$INSTANCE_COUNT;
+  private static final SubLSymbol $sym5$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_CLASS;
+  private static final SubLSymbol $sym6$ISOLATED_P;
+  private static final SubLSymbol $sym7$INSTANCE_NUMBER;
+  private static final SubLSymbol $sym8$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_INSTANCE;
+  private static final SubLSymbol $sym9$INITIALIZE;
+  private static final SubLList $list10;
+  private static final SubLList $list11;
+  private static final SubLSymbol $sym12$OUTER_CATCH_FOR_CONTEXT_METHOD;
+  private static final SubLSymbol $sym13$CONTEXT_INITIALIZE_METHOD;
+  private static final SubLSymbol $sym14$GET_PARSE_TREE_CONTEXT;
+  private static final SubLList $list15;
+  private static final SubLList $list16;
+  private static final SubLSymbol $sym17$OUTER_CATCH_FOR_CONTEXT_METHOD;
+  private static final SubLSymbol $sym18$CONTEXT_GET_PARSE_TREE_CONTEXT_METHOD;
+  private static final SubLList $list19;
+  private static final SubLSymbol $sym20$INSTANCES;
+  private static final SubLSymbol $sym21$PARSE_TREES;
+  private static final SubLSymbol $sym22$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_CLASS;
+  private static final SubLSymbol $sym23$INSTANCE_COUNTER;
+  private static final SubLSymbol $sym24$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_INSTANCE;
+  private static final SubLList $list25;
+  private static final SubLSymbol $sym26$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
+  private static final SubLInteger $int27$32;
+  private static final SubLSymbol $sym28$PARSE_TREE_CONTEXT_INITIALIZE_METHOD;
+  private static final SubLSymbol $sym29$ADD_TREE;
+  private static final SubLList $list30;
+  private static final SubLList $list31;
+  private static final SubLSymbol $sym32$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
+  private static final SubLSymbol $sym33$PARSE_TREE_P;
+  private static final SubLSymbol $sym34$PARSE_TREE_CONTEXT_ADD_TREE_METHOD;
+  private static final SubLSymbol $sym35$GET_TREE;
+  private static final SubLList $list36;
+  private static final SubLList $list37;
+  private static final SubLSymbol $sym38$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
+  private static final SubLSymbol $sym39$INTEGERP;
+  private static final SubLSymbol $sym40$PARSE_TREE_CONTEXT_GET_TREE_METHOD;
+  private static final SubLSymbol $sym41$GET_PRECEDING_TREES;
+  private static final SubLList $list42;
+  private static final SubLList $list43;
+  private static final SubLSymbol $sym44$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
+  private static final SubLSymbol $sym45$PARSE_TREE_CONTEXT_GET_PRECEDING_TREES_METHOD;
+  private static final SubLSymbol $sym46$GET_FOLLOWING_TREES;
+  private static final SubLList $list47;
+  private static final SubLSymbol $sym48$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
+  private static final SubLSymbol $sym49$PARSE_TREE_CONTEXT_GET_FOLLOWING_TREES_METHOD;
+  private static final SubLSymbol $sym50$GET_INSTANCE;
+  private static final SubLList $list51;
+  private static final SubLList $list52;
+  private static final SubLSymbol $sym53$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
+  private static final SubLSymbol $sym54$CYCLIFIABLE_P;
+  private static final SubLSymbol $sym55$GET_REFS;
+  private static final SubLSymbol $sym56$CREATE_INSTANCE;
+  private static final SubLSymbol $sym57$PARSE_TREE_CONTEXT_GET_INSTANCE_METHOD;
+  private static final SubLList $list58;
+  private static final SubLSymbol $sym59$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
+  private static final SubLObject $const60$InstanceFn;
+  private static final SubLSymbol $sym61$PARSE_TREE_CONTEXT_CREATE_INSTANCE_METHOD;
+  private static final SubLSymbol $sym62$NEW_VARIABLE;
+  private static final SubLList $list63;
+  private static final SubLList $list64;
+  private static final SubLString $str65$X;
+  private static final SubLSymbol $sym66$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD;
+  private static final SubLSymbol $sym67$PARSE_TREE_CONTEXT_NEW_VARIABLE_METHOD;
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1234L)
+  public static SubLObject get_context_parse_tree_context(final SubLObject v_context)
+  {
+    return classes.subloop_get_access_protected_instance_slot( v_context, ONE_INTEGER, $sym3$PARSE_TREE_CONTEXT );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1234L)
+  public static SubLObject set_context_parse_tree_context(final SubLObject v_context, final SubLObject value)
+  {
+    return classes.subloop_set_access_protected_instance_slot( v_context, value, ONE_INTEGER, $sym3$PARSE_TREE_CONTEXT );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1234L)
+  public static SubLObject subloop_reserved_initialize_context_class(final SubLObject new_instance)
+  {
+    classes.subloop_initialize_slot( new_instance, $sym1$OBJECT, $sym4$INSTANCE_COUNT, ZERO_INTEGER );
+    return NIL;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1234L)
+  public static SubLObject subloop_reserved_initialize_context_instance(final SubLObject new_instance)
+  {
+    classes.subloop_initialize_slot( new_instance, $sym1$OBJECT, $sym6$ISOLATED_P, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym1$OBJECT, $sym7$INSTANCE_NUMBER, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym0$CONTEXT, $sym3$PARSE_TREE_CONTEXT, NIL );
+    return NIL;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1234L)
+  public static SubLObject context_p(final SubLObject v_context)
+  {
+    return classes.subloop_instanceof_class( v_context, $sym0$CONTEXT );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1475L)
+  public static SubLObject context_initialize_method(final SubLObject self)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_context_method = NIL;
+    SubLObject parse_tree_context = get_context_parse_tree_context( self );
+    try
+    {
+      thread.throwStack.push( $sym12$OUTER_CATCH_FOR_CONTEXT_METHOD );
+      try
+      {
+        object.object_initialize_method( self );
+        parse_tree_context = object.new_class_instance( $sym3$PARSE_TREE_CONTEXT );
+        Dynamic.sublisp_throw( $sym12$OUTER_CATCH_FOR_CONTEXT_METHOD, self );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_context_parse_tree_context( self, parse_tree_context );
+          Values.restoreValuesFromVector( _values );
         }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_context_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)context.$sym12$OUTER_CATCH_FOR_CONTEXT_METHOD);
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
         }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_context_method;
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1680L)
-    public static SubLObject context_get_parse_tree_context_method(final SubLObject self) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_context_method = (SubLObject)context.NIL;
-        final SubLObject parse_tree_context = get_context_parse_tree_context(self);
-        try {
-            thread.throwStack.push(context.$sym17$OUTER_CATCH_FOR_CONTEXT_METHOD);
-            try {
-                Dynamic.sublisp_throw((SubLObject)context.$sym17$OUTER_CATCH_FOR_CONTEXT_METHOD, parse_tree_context);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)context.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_context_parse_tree_context(self, parse_tree_context);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
-        }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_context_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)context.$sym17$OUTER_CATCH_FOR_CONTEXT_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_context_method;
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_context_method = Errors.handleThrowable( ccatch_env_var, $sym12$OUTER_CATCH_FOR_CONTEXT_METHOD );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1832L)
-    public static SubLObject get_parse_tree_context_instance_counter(final SubLObject parse_tree_context) {
-        return classes.subloop_get_instance_slot(parse_tree_context, (SubLObject)context.THREE_INTEGER);
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1832L)
-    public static SubLObject set_parse_tree_context_instance_counter(final SubLObject parse_tree_context, final SubLObject value) {
-        return classes.subloop_set_instance_slot(parse_tree_context, value, (SubLObject)context.THREE_INTEGER);
+    return catch_var_for_context_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1680L)
+  public static SubLObject context_get_parse_tree_context_method(final SubLObject self)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_context_method = NIL;
+    final SubLObject parse_tree_context = get_context_parse_tree_context( self );
+    try
+    {
+      thread.throwStack.push( $sym17$OUTER_CATCH_FOR_CONTEXT_METHOD );
+      try
+      {
+        Dynamic.sublisp_throw( $sym17$OUTER_CATCH_FOR_CONTEXT_METHOD, parse_tree_context );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_context_parse_tree_context( self, parse_tree_context );
+          Values.restoreValuesFromVector( _values );
+        }
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
+        }
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1832L)
-    public static SubLObject get_parse_tree_context_instances(final SubLObject parse_tree_context) {
-        return classes.subloop_get_access_protected_instance_slot(parse_tree_context, (SubLObject)context.TWO_INTEGER, (SubLObject)context.$sym20$INSTANCES);
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_context_method = Errors.handleThrowable( ccatch_env_var, $sym17$OUTER_CATCH_FOR_CONTEXT_METHOD );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1832L)
-    public static SubLObject set_parse_tree_context_instances(final SubLObject parse_tree_context, final SubLObject value) {
-        return classes.subloop_set_access_protected_instance_slot(parse_tree_context, value, (SubLObject)context.TWO_INTEGER, (SubLObject)context.$sym20$INSTANCES);
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1832L)
-    public static SubLObject get_parse_tree_context_parse_trees(final SubLObject parse_tree_context) {
-        return classes.subloop_get_access_protected_instance_slot(parse_tree_context, (SubLObject)context.ONE_INTEGER, (SubLObject)context.$sym21$PARSE_TREES);
+    return catch_var_for_context_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1832L)
+  public static SubLObject get_parse_tree_context_instance_counter(final SubLObject parse_tree_context)
+  {
+    return classes.subloop_get_instance_slot( parse_tree_context, THREE_INTEGER );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1832L)
+  public static SubLObject set_parse_tree_context_instance_counter(final SubLObject parse_tree_context, final SubLObject value)
+  {
+    return classes.subloop_set_instance_slot( parse_tree_context, value, THREE_INTEGER );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1832L)
+  public static SubLObject get_parse_tree_context_instances(final SubLObject parse_tree_context)
+  {
+    return classes.subloop_get_access_protected_instance_slot( parse_tree_context, TWO_INTEGER, $sym20$INSTANCES );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1832L)
+  public static SubLObject set_parse_tree_context_instances(final SubLObject parse_tree_context, final SubLObject value)
+  {
+    return classes.subloop_set_access_protected_instance_slot( parse_tree_context, value, TWO_INTEGER, $sym20$INSTANCES );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1832L)
+  public static SubLObject get_parse_tree_context_parse_trees(final SubLObject parse_tree_context)
+  {
+    return classes.subloop_get_access_protected_instance_slot( parse_tree_context, ONE_INTEGER, $sym21$PARSE_TREES );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1832L)
+  public static SubLObject set_parse_tree_context_parse_trees(final SubLObject parse_tree_context, final SubLObject value)
+  {
+    return classes.subloop_set_access_protected_instance_slot( parse_tree_context, value, ONE_INTEGER, $sym21$PARSE_TREES );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1832L)
+  public static SubLObject subloop_reserved_initialize_parse_tree_context_class(final SubLObject new_instance)
+  {
+    classes.subloop_initialize_slot( new_instance, $sym1$OBJECT, $sym4$INSTANCE_COUNT, ZERO_INTEGER );
+    return NIL;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1832L)
+  public static SubLObject subloop_reserved_initialize_parse_tree_context_instance(final SubLObject new_instance)
+  {
+    classes.subloop_initialize_slot( new_instance, $sym1$OBJECT, $sym6$ISOLATED_P, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym1$OBJECT, $sym7$INSTANCE_NUMBER, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym3$PARSE_TREE_CONTEXT, $sym21$PARSE_TREES, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym3$PARSE_TREE_CONTEXT, $sym20$INSTANCES, NIL );
+    classes.subloop_initialize_slot( new_instance, $sym3$PARSE_TREE_CONTEXT, $sym23$INSTANCE_COUNTER, ZERO_INTEGER );
+    return NIL;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1832L)
+  public static SubLObject parse_tree_context_p(final SubLObject parse_tree_context)
+  {
+    return classes.subloop_instanceof_class( parse_tree_context, $sym3$PARSE_TREE_CONTEXT );
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 2537L)
+  public static SubLObject parse_tree_context_initialize_method(final SubLObject self)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_parse_tree_context_method = NIL;
+    SubLObject v_instances = get_parse_tree_context_instances( self );
+    try
+    {
+      thread.throwStack.push( $sym26$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
+      try
+      {
+        object.object_initialize_method( self );
+        v_instances = Hashtables.make_hash_table( $int27$32, EQL, UNPROVIDED );
+        Dynamic.sublisp_throw( $sym26$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, self );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_parse_tree_context_instances( self, v_instances );
+          Values.restoreValuesFromVector( _values );
+        }
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
+        }
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1832L)
-    public static SubLObject set_parse_tree_context_parse_trees(final SubLObject parse_tree_context, final SubLObject value) {
-        return classes.subloop_set_access_protected_instance_slot(parse_tree_context, value, (SubLObject)context.ONE_INTEGER, (SubLObject)context.$sym21$PARSE_TREES);
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_parse_tree_context_method = Errors.handleThrowable( ccatch_env_var, $sym26$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1832L)
-    public static SubLObject subloop_reserved_initialize_parse_tree_context_class(final SubLObject new_instance) {
-        classes.subloop_initialize_slot(new_instance, (SubLObject)context.$sym1$OBJECT, (SubLObject)context.$sym4$INSTANCE_COUNT, (SubLObject)context.ZERO_INTEGER);
-        return (SubLObject)context.NIL;
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1832L)
-    public static SubLObject subloop_reserved_initialize_parse_tree_context_instance(final SubLObject new_instance) {
-        classes.subloop_initialize_slot(new_instance, (SubLObject)context.$sym1$OBJECT, (SubLObject)context.$sym6$ISOLATED_P, (SubLObject)context.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)context.$sym1$OBJECT, (SubLObject)context.$sym7$INSTANCE_NUMBER, (SubLObject)context.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym21$PARSE_TREES, (SubLObject)context.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym20$INSTANCES, (SubLObject)context.NIL);
-        classes.subloop_initialize_slot(new_instance, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym23$INSTANCE_COUNTER, (SubLObject)context.ZERO_INTEGER);
-        return (SubLObject)context.NIL;
+    return catch_var_for_parse_tree_context_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 2686L)
+  public static SubLObject parse_tree_context_add_tree_method(final SubLObject self, final SubLObject v_parse_tree)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_parse_tree_context_method = NIL;
+    SubLObject parse_trees = get_parse_tree_context_parse_trees( self );
+    try
+    {
+      thread.throwStack.push( $sym32$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
+      try
+      {
+        assert NIL != parse_tree.parse_tree_p( v_parse_tree ) : v_parse_tree;
+        if( NIL == conses_high.member( v_parse_tree, parse_trees, EQ, Symbols.symbol_function( IDENTITY ) ) )
+        {
+          parse_trees = ConsesLow.cons( v_parse_tree, parse_trees );
+        }
+        Dynamic.sublisp_throw( $sym32$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, parse_trees );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_parse_tree_context_parse_trees( self, parse_trees );
+          Values.restoreValuesFromVector( _values );
+        }
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
+        }
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 1832L)
-    public static SubLObject parse_tree_context_p(final SubLObject parse_tree_context) {
-        return classes.subloop_instanceof_class(parse_tree_context, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT);
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_parse_tree_context_method = Errors.handleThrowable( ccatch_env_var, $sym32$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 2537L)
-    public static SubLObject parse_tree_context_initialize_method(final SubLObject self) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_parse_tree_context_method = (SubLObject)context.NIL;
-        SubLObject v_instances = get_parse_tree_context_instances(self);
-        try {
-            thread.throwStack.push(context.$sym26$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-            try {
-                object.object_initialize_method(self);
-                v_instances = Hashtables.make_hash_table((SubLObject)context.$int27$32, (SubLObject)context.EQL, (SubLObject)context.UNPROVIDED);
-                Dynamic.sublisp_throw((SubLObject)context.$sym26$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, self);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)context.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_parse_tree_context_instances(self, v_instances);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
-        }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_parse_tree_context_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)context.$sym26$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_parse_tree_context_method;
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 2686L)
-    public static SubLObject parse_tree_context_add_tree_method(final SubLObject self, final SubLObject v_parse_tree) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_parse_tree_context_method = (SubLObject)context.NIL;
-        SubLObject parse_trees = get_parse_tree_context_parse_trees(self);
-        try {
-            thread.throwStack.push(context.$sym32$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-            try {
-                assert context.NIL != parse_tree.parse_tree_p(v_parse_tree) : v_parse_tree;
-                if (context.NIL == conses_high.member(v_parse_tree, parse_trees, (SubLObject)context.EQ, Symbols.symbol_function((SubLObject)context.IDENTITY))) {
-                    parse_trees = (SubLObject)ConsesLow.cons(v_parse_tree, parse_trees);
-                }
-                Dynamic.sublisp_throw((SubLObject)context.$sym32$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, parse_trees);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)context.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_parse_tree_context_parse_trees(self, parse_trees);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
+    return catch_var_for_parse_tree_context_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 3018L)
+  public static SubLObject parse_tree_context_get_tree_method(final SubLObject self, final SubLObject tree, final SubLObject i)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_parse_tree_context_method = NIL;
+    final SubLObject parse_trees = get_parse_tree_context_parse_trees( self );
+    try
+    {
+      thread.throwStack.push( $sym38$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
+      try
+      {
+        assert NIL != parse_tree.parse_tree_p( tree ) : tree;
+        assert NIL != Types.integerp( i ) : i;
+        SubLObject position = Sequences.position( tree, parse_trees, EQ, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+        SubLObject offset = NIL;
+        if( NIL == position )
+        {
+          position = MINUS_ONE_INTEGER;
         }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_parse_tree_context_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)context.$sym32$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
+        offset = Numbers.subtract( position, i );
+        Dynamic.sublisp_throw( $sym38$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, ( NIL != subl_promotions.non_negative_integer_p( offset ) ) ? ConsesLow.nth( offset, parse_trees ) : NIL );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_parse_tree_context_parse_trees( self, parse_trees );
+          Values.restoreValuesFromVector( _values );
         }
-        finally {
-            thread.throwStack.pop();
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
         }
-        return catch_var_for_parse_tree_context_method;
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 3018L)
-    public static SubLObject parse_tree_context_get_tree_method(final SubLObject self, final SubLObject tree, final SubLObject i) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_parse_tree_context_method = (SubLObject)context.NIL;
-        final SubLObject parse_trees = get_parse_tree_context_parse_trees(self);
-        try {
-            thread.throwStack.push(context.$sym38$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-            try {
-                assert context.NIL != parse_tree.parse_tree_p(tree) : tree;
-                assert context.NIL != Types.integerp(i) : i;
-                SubLObject position = Sequences.position(tree, parse_trees, (SubLObject)context.EQ, (SubLObject)context.UNPROVIDED, (SubLObject)context.UNPROVIDED, (SubLObject)context.UNPROVIDED);
-                SubLObject offset = (SubLObject)context.NIL;
-                if (context.NIL == position) {
-                    position = (SubLObject)context.MINUS_ONE_INTEGER;
-                }
-                offset = Numbers.subtract(position, i);
-                Dynamic.sublisp_throw((SubLObject)context.$sym38$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, (SubLObject)((context.NIL != subl_promotions.non_negative_integer_p(offset)) ? ConsesLow.nth(offset, parse_trees) : context.NIL));
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)context.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_parse_tree_context_parse_trees(self, parse_trees);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
-        }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_parse_tree_context_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)context.$sym38$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_parse_tree_context_method;
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_parse_tree_context_method = Errors.handleThrowable( ccatch_env_var, $sym38$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 3477L)
-    public static SubLObject parse_tree_context_get_preceding_trees_method(final SubLObject self, final SubLObject tree) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_parse_tree_context_method = (SubLObject)context.NIL;
-        final SubLObject parse_trees = get_parse_tree_context_parse_trees(self);
-        try {
-            thread.throwStack.push(context.$sym44$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-            try {
-                assert context.NIL != parse_tree.parse_tree_p(tree) : tree;
-                SubLObject position = Sequences.position(tree, parse_trees, (SubLObject)context.EQ, (SubLObject)context.UNPROVIDED, (SubLObject)context.UNPROVIDED, (SubLObject)context.UNPROVIDED);
-                if (context.NIL == position) {
-                    position = (SubLObject)context.MINUS_ONE_INTEGER;
-                }
-                Dynamic.sublisp_throw((SubLObject)context.$sym44$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, Sequences.subseq(parse_trees, number_utilities.f_1X(position), (SubLObject)context.UNPROVIDED));
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)context.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_parse_tree_context_parse_trees(self, parse_trees);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
-        }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_parse_tree_context_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)context.$sym44$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_parse_tree_context_method;
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 3818L)
-    public static SubLObject parse_tree_context_get_following_trees_method(final SubLObject self, final SubLObject tree) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_parse_tree_context_method = (SubLObject)context.NIL;
-        final SubLObject parse_trees = get_parse_tree_context_parse_trees(self);
-        try {
-            thread.throwStack.push(context.$sym48$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-            try {
-                assert context.NIL != parse_tree.parse_tree_p(tree) : tree;
-                final SubLObject position = Sequences.position(tree, parse_trees, (SubLObject)context.EQ, (SubLObject)context.UNPROVIDED, (SubLObject)context.UNPROVIDED, (SubLObject)context.UNPROVIDED);
-                Dynamic.sublisp_throw((SubLObject)context.$sym48$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, (SubLObject)((context.NIL != position) ? Sequences.nreverse(Sequences.subseq(parse_trees, (SubLObject)context.ZERO_INTEGER, position)) : context.NIL));
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)context.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_parse_tree_context_parse_trees(self, parse_trees);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
+    return catch_var_for_parse_tree_context_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 3477L)
+  public static SubLObject parse_tree_context_get_preceding_trees_method(final SubLObject self, final SubLObject tree)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_parse_tree_context_method = NIL;
+    final SubLObject parse_trees = get_parse_tree_context_parse_trees( self );
+    try
+    {
+      thread.throwStack.push( $sym44$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
+      try
+      {
+        assert NIL != parse_tree.parse_tree_p( tree ) : tree;
+        SubLObject position = Sequences.position( tree, parse_trees, EQ, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+        if( NIL == position )
+        {
+          position = MINUS_ONE_INTEGER;
         }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_parse_tree_context_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)context.$sym48$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
+        Dynamic.sublisp_throw( $sym44$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, Sequences.subseq( parse_trees, number_utilities.f_1X( position ), UNPROVIDED ) );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_parse_tree_context_parse_trees( self, parse_trees );
+          Values.restoreValuesFromVector( _values );
         }
-        finally {
-            thread.throwStack.pop();
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
         }
-        return catch_var_for_parse_tree_context_method;
+      }
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 4141L)
-    public static SubLObject parse_tree_context_get_instance_method(final SubLObject self, final SubLObject np) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_parse_tree_context_method = (SubLObject)context.NIL;
-        final SubLObject v_instances = get_parse_tree_context_instances(self);
-        try {
-            thread.throwStack.push(context.$sym53$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-            try {
-                assert context.NIL != cyclifier_interface.cyclifiable_p(np) : np;
-                SubLObject instance = Hashtables.gethash(methods.funcall_instance_method_with_0_args(np, (SubLObject)context.$sym55$GET_REFS), v_instances, (SubLObject)context.UNPROVIDED);
-                if (context.NIL == instance) {
-                    instance = methods.funcall_instance_method_with_1_args(self, (SubLObject)context.$sym56$CREATE_INSTANCE, np);
-                }
-                Dynamic.sublisp_throw((SubLObject)context.$sym53$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, instance);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)context.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_parse_tree_context_instances(self, v_instances);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
-        }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_parse_tree_context_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)context.$sym53$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-        }
-        finally {
-            thread.throwStack.pop();
-        }
-        return catch_var_for_parse_tree_context_method;
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_parse_tree_context_method = Errors.handleThrowable( ccatch_env_var, $sym44$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
     }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 4447L)
-    public static SubLObject parse_tree_context_create_instance_method(final SubLObject self, final SubLObject np) {
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_parse_tree_context_method = (SubLObject)context.NIL;
-        final SubLObject v_instances = get_parse_tree_context_instances(self);
-        try {
-            thread.throwStack.push(context.$sym59$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-            try {
-                final SubLObject ref = methods.funcall_instance_method_with_0_args(np, (SubLObject)context.$sym55$GET_REFS).first();
-                final SubLObject instance = (SubLObject)ConsesLow.list(context.$const60$InstanceFn, cycl_variables.el_var_name(ref));
-                Hashtables.sethash(ref, v_instances, instance);
-                Dynamic.sublisp_throw((SubLObject)context.$sym59$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, instance);
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)context.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_parse_tree_context_instances(self, v_instances);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
+    finally
+    {
+      thread.throwStack.pop();
+    }
+    return catch_var_for_parse_tree_context_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 3818L)
+  public static SubLObject parse_tree_context_get_following_trees_method(final SubLObject self, final SubLObject tree)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_parse_tree_context_method = NIL;
+    final SubLObject parse_trees = get_parse_tree_context_parse_trees( self );
+    try
+    {
+      thread.throwStack.push( $sym48$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
+      try
+      {
+        assert NIL != parse_tree.parse_tree_p( tree ) : tree;
+        final SubLObject position = Sequences.position( tree, parse_trees, EQ, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+        Dynamic.sublisp_throw( $sym48$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, ( NIL != position ) ? Sequences.nreverse( Sequences.subseq( parse_trees, ZERO_INTEGER, position ) ) : NIL );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_parse_tree_context_parse_trees( self, parse_trees );
+          Values.restoreValuesFromVector( _values );
         }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_parse_tree_context_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)context.$sym59$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
         }
-        finally {
-            thread.throwStack.pop();
+      }
+    }
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_parse_tree_context_method = Errors.handleThrowable( ccatch_env_var, $sym48$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
+    }
+    finally
+    {
+      thread.throwStack.pop();
+    }
+    return catch_var_for_parse_tree_context_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 4141L)
+  public static SubLObject parse_tree_context_get_instance_method(final SubLObject self, final SubLObject np)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_parse_tree_context_method = NIL;
+    final SubLObject v_instances = get_parse_tree_context_instances( self );
+    try
+    {
+      thread.throwStack.push( $sym53$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
+      try
+      {
+        assert NIL != cyclifier_interface.cyclifiable_p( np ) : np;
+        SubLObject instance = Hashtables.gethash( methods.funcall_instance_method_with_0_args( np, $sym55$GET_REFS ), v_instances, UNPROVIDED );
+        if( NIL == instance )
+        {
+          instance = methods.funcall_instance_method_with_1_args( self, $sym56$CREATE_INSTANCE, np );
         }
-        return catch_var_for_parse_tree_context_method;
-    }
-    
-    @SubLTranslatedFile.SubL(source = "cycl/context.lisp", position = 4715L)
-    public static SubLObject parse_tree_context_new_variable_method(final SubLObject self, SubLObject string) {
-        if (string == context.UNPROVIDED) {
-            string = (SubLObject)context.$str65$X;
+        Dynamic.sublisp_throw( $sym53$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, instance );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_parse_tree_context_instances( self, v_instances );
+          Values.restoreValuesFromVector( _values );
         }
-        final SubLThread thread = SubLProcess.currentSubLThread();
-        SubLObject catch_var_for_parse_tree_context_method = (SubLObject)context.NIL;
-        SubLObject instance_counter = get_parse_tree_context_instance_counter(self);
-        try {
-            thread.throwStack.push(context.$sym66$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
-            try {
-                instance_counter = Numbers.add(instance_counter, (SubLObject)context.ONE_INTEGER);
-                Dynamic.sublisp_throw((SubLObject)context.$sym66$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, cycl_variables.make_el_var(el_utilities.string_to_el_var_name(Sequences.cconcatenate(string, PrintLow.write_to_string(instance_counter, context.EMPTY_SUBL_OBJECT_ARRAY)))));
-            }
-            finally {
-                final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding(thread);
-                try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)context.T, thread);
-                    final SubLObject _values = Values.getValuesAsVector();
-                    set_parse_tree_context_instance_counter(self, instance_counter);
-                    Values.restoreValuesFromVector(_values);
-                }
-                finally {
-                    Threads.$is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                }
-            }
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
         }
-        catch (Throwable ccatch_env_var) {
-            catch_var_for_parse_tree_context_method = Errors.handleThrowable(ccatch_env_var, (SubLObject)context.$sym66$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD);
+      }
+    }
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_parse_tree_context_method = Errors.handleThrowable( ccatch_env_var, $sym53$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
+    }
+    finally
+    {
+      thread.throwStack.pop();
+    }
+    return catch_var_for_parse_tree_context_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 4447L)
+  public static SubLObject parse_tree_context_create_instance_method(final SubLObject self, final SubLObject np)
+  {
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_parse_tree_context_method = NIL;
+    final SubLObject v_instances = get_parse_tree_context_instances( self );
+    try
+    {
+      thread.throwStack.push( $sym59$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
+      try
+      {
+        final SubLObject ref = methods.funcall_instance_method_with_0_args( np, $sym55$GET_REFS ).first();
+        final SubLObject instance = ConsesLow.list( $const60$InstanceFn, cycl_variables.el_var_name( ref ) );
+        Hashtables.sethash( ref, v_instances, instance );
+        Dynamic.sublisp_throw( $sym59$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, instance );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_parse_tree_context_instances( self, v_instances );
+          Values.restoreValuesFromVector( _values );
         }
-        finally {
-            thread.throwStack.pop();
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
         }
-        return catch_var_for_parse_tree_context_method;
+      }
     }
-    
-    public static SubLObject declare_context_file() {
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "get_context_parse_tree_context", "GET-CONTEXT-PARSE-TREE-CONTEXT", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "set_context_parse_tree_context", "SET-CONTEXT-PARSE-TREE-CONTEXT", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "subloop_reserved_initialize_context_class", "SUBLOOP-RESERVED-INITIALIZE-CONTEXT-CLASS", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "subloop_reserved_initialize_context_instance", "SUBLOOP-RESERVED-INITIALIZE-CONTEXT-INSTANCE", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "context_p", "CONTEXT-P", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "context_initialize_method", "CONTEXT-INITIALIZE-METHOD", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "context_get_parse_tree_context_method", "CONTEXT-GET-PARSE-TREE-CONTEXT-METHOD", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "get_parse_tree_context_instance_counter", "GET-PARSE-TREE-CONTEXT-INSTANCE-COUNTER", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "set_parse_tree_context_instance_counter", "SET-PARSE-TREE-CONTEXT-INSTANCE-COUNTER", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "get_parse_tree_context_instances", "GET-PARSE-TREE-CONTEXT-INSTANCES", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "set_parse_tree_context_instances", "SET-PARSE-TREE-CONTEXT-INSTANCES", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "get_parse_tree_context_parse_trees", "GET-PARSE-TREE-CONTEXT-PARSE-TREES", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "set_parse_tree_context_parse_trees", "SET-PARSE-TREE-CONTEXT-PARSE-TREES", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "subloop_reserved_initialize_parse_tree_context_class", "SUBLOOP-RESERVED-INITIALIZE-PARSE-TREE-CONTEXT-CLASS", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "subloop_reserved_initialize_parse_tree_context_instance", "SUBLOOP-RESERVED-INITIALIZE-PARSE-TREE-CONTEXT-INSTANCE", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "parse_tree_context_p", "PARSE-TREE-CONTEXT-P", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "parse_tree_context_initialize_method", "PARSE-TREE-CONTEXT-INITIALIZE-METHOD", 1, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "parse_tree_context_add_tree_method", "PARSE-TREE-CONTEXT-ADD-TREE-METHOD", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "parse_tree_context_get_tree_method", "PARSE-TREE-CONTEXT-GET-TREE-METHOD", 3, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "parse_tree_context_get_preceding_trees_method", "PARSE-TREE-CONTEXT-GET-PRECEDING-TREES-METHOD", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "parse_tree_context_get_following_trees_method", "PARSE-TREE-CONTEXT-GET-FOLLOWING-TREES-METHOD", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "parse_tree_context_get_instance_method", "PARSE-TREE-CONTEXT-GET-INSTANCE-METHOD", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "parse_tree_context_create_instance_method", "PARSE-TREE-CONTEXT-CREATE-INSTANCE-METHOD", 2, 0, false);
-        SubLFiles.declareFunction("com.cyc.cycjava.cycl.context", "parse_tree_context_new_variable_method", "PARSE-TREE-CONTEXT-NEW-VARIABLE-METHOD", 1, 1, false);
-        return (SubLObject)context.NIL;
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_parse_tree_context_method = Errors.handleThrowable( ccatch_env_var, $sym59$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
     }
-    
-    public static SubLObject init_context_file() {
-        return (SubLObject)context.NIL;
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    public static SubLObject setup_context_file() {
-        classes.subloop_new_class((SubLObject)context.$sym0$CONTEXT, (SubLObject)context.$sym1$OBJECT, (SubLObject)context.NIL, (SubLObject)context.NIL, (SubLObject)context.$list2);
-        classes.class_set_implements_slot_listeners((SubLObject)context.$sym0$CONTEXT, (SubLObject)context.NIL);
-        classes.subloop_note_class_initialization_function((SubLObject)context.$sym0$CONTEXT, (SubLObject)context.$sym5$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_CLASS);
-        classes.subloop_note_instance_initialization_function((SubLObject)context.$sym0$CONTEXT, (SubLObject)context.$sym8$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_INSTANCE);
-        subloop_reserved_initialize_context_class((SubLObject)context.$sym0$CONTEXT);
-        methods.methods_incorporate_instance_method((SubLObject)context.$sym9$INITIALIZE, (SubLObject)context.$sym0$CONTEXT, (SubLObject)context.$list10, (SubLObject)context.NIL, (SubLObject)context.$list11);
-        methods.subloop_register_instance_method((SubLObject)context.$sym0$CONTEXT, (SubLObject)context.$sym9$INITIALIZE, (SubLObject)context.$sym13$CONTEXT_INITIALIZE_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)context.$sym14$GET_PARSE_TREE_CONTEXT, (SubLObject)context.$sym0$CONTEXT, (SubLObject)context.$list15, (SubLObject)context.NIL, (SubLObject)context.$list16);
-        methods.subloop_register_instance_method((SubLObject)context.$sym0$CONTEXT, (SubLObject)context.$sym14$GET_PARSE_TREE_CONTEXT, (SubLObject)context.$sym18$CONTEXT_GET_PARSE_TREE_CONTEXT_METHOD);
-        classes.subloop_new_class((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym1$OBJECT, (SubLObject)context.NIL, (SubLObject)context.NIL, (SubLObject)context.$list19);
-        classes.class_set_implements_slot_listeners((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.NIL);
-        classes.subloop_note_class_initialization_function((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym22$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_CLASS);
-        classes.subloop_note_instance_initialization_function((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym24$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_INSTANCE);
-        subloop_reserved_initialize_parse_tree_context_class((SubLObject)context.$sym3$PARSE_TREE_CONTEXT);
-        methods.methods_incorporate_instance_method((SubLObject)context.$sym9$INITIALIZE, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$list10, (SubLObject)context.NIL, (SubLObject)context.$list25);
-        methods.subloop_register_instance_method((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym9$INITIALIZE, (SubLObject)context.$sym28$PARSE_TREE_CONTEXT_INITIALIZE_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)context.$sym29$ADD_TREE, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$list15, (SubLObject)context.$list30, (SubLObject)context.$list31);
-        methods.subloop_register_instance_method((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym29$ADD_TREE, (SubLObject)context.$sym34$PARSE_TREE_CONTEXT_ADD_TREE_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)context.$sym35$GET_TREE, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$list15, (SubLObject)context.$list36, (SubLObject)context.$list37);
-        methods.subloop_register_instance_method((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym35$GET_TREE, (SubLObject)context.$sym40$PARSE_TREE_CONTEXT_GET_TREE_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)context.$sym41$GET_PRECEDING_TREES, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$list15, (SubLObject)context.$list42, (SubLObject)context.$list43);
-        methods.subloop_register_instance_method((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym41$GET_PRECEDING_TREES, (SubLObject)context.$sym45$PARSE_TREE_CONTEXT_GET_PRECEDING_TREES_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)context.$sym46$GET_FOLLOWING_TREES, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$list15, (SubLObject)context.$list42, (SubLObject)context.$list47);
-        methods.subloop_register_instance_method((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym46$GET_FOLLOWING_TREES, (SubLObject)context.$sym49$PARSE_TREE_CONTEXT_GET_FOLLOWING_TREES_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)context.$sym50$GET_INSTANCE, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$list15, (SubLObject)context.$list51, (SubLObject)context.$list52);
-        methods.subloop_register_instance_method((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym50$GET_INSTANCE, (SubLObject)context.$sym57$PARSE_TREE_CONTEXT_GET_INSTANCE_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)context.$sym56$CREATE_INSTANCE, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$list10, (SubLObject)context.$list51, (SubLObject)context.$list58);
-        methods.subloop_register_instance_method((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym56$CREATE_INSTANCE, (SubLObject)context.$sym61$PARSE_TREE_CONTEXT_CREATE_INSTANCE_METHOD);
-        methods.methods_incorporate_instance_method((SubLObject)context.$sym62$NEW_VARIABLE, (SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$list10, (SubLObject)context.$list63, (SubLObject)context.$list64);
-        methods.subloop_register_instance_method((SubLObject)context.$sym3$PARSE_TREE_CONTEXT, (SubLObject)context.$sym62$NEW_VARIABLE, (SubLObject)context.$sym67$PARSE_TREE_CONTEXT_NEW_VARIABLE_METHOD);
-        return (SubLObject)context.NIL;
+    return catch_var_for_parse_tree_context_method;
+  }
+
+  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 4715L)
+  public static SubLObject parse_tree_context_new_variable_method(final SubLObject self, SubLObject string)
+  {
+    if( string == UNPROVIDED )
+    {
+      string = $str65$X;
     }
-    
-    @Override
-	public void declareFunctions() {
-        declare_context_file();
+    final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLObject catch_var_for_parse_tree_context_method = NIL;
+    SubLObject instance_counter = get_parse_tree_context_instance_counter( self );
+    try
+    {
+      thread.throwStack.push( $sym66$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
+      try
+      {
+        instance_counter = Numbers.add( instance_counter, ONE_INTEGER );
+        Dynamic.sublisp_throw( $sym66$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD, cycl_variables.make_el_var( el_utilities.string_to_el_var_name( Sequences.cconcatenate( string, PrintLow.write_to_string( instance_counter,
+            EMPTY_SUBL_OBJECT_ARRAY ) ) ) ) );
+      }
+      finally
+      {
+        final SubLObject _prev_bind_0 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
+        try
+        {
+          Threads.$is_thread_performing_cleanupP$.bind( T, thread );
+          final SubLObject _values = Values.getValuesAsVector();
+          set_parse_tree_context_instance_counter( self, instance_counter );
+          Values.restoreValuesFromVector( _values );
+        }
+        finally
+        {
+          Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0, thread );
+        }
+      }
     }
-    
-    @Override
-	public void initializeVariables() {
-        init_context_file();
+    catch( final Throwable ccatch_env_var )
+    {
+      catch_var_for_parse_tree_context_method = Errors.handleThrowable( ccatch_env_var, $sym66$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD );
     }
-    
-    @Override
-	public void runTopLevelForms() {
-        setup_context_file();
+    finally
+    {
+      thread.throwStack.pop();
     }
-    
-    static {
-        me = (SubLFile)new context();
-        $sym0$CONTEXT = SubLObjectFactory.makeSymbol("CONTEXT");
-        $sym1$OBJECT = SubLObjectFactory.makeSymbol("OBJECT");
-        $list2 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT"), (SubLObject)SubLObjectFactory.makeKeyword("INSTANCE"), (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("GET-PARSE-TREE-CONTEXT"), (SubLObject)context.NIL, (SubLObject)SubLObjectFactory.makeKeyword("PUBLIC")));
-        $sym3$PARSE_TREE_CONTEXT = SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT");
-        $sym4$INSTANCE_COUNT = SubLObjectFactory.makeSymbol("INSTANCE-COUNT");
-        $sym5$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_CLASS = SubLObjectFactory.makeSymbol("SUBLOOP-RESERVED-INITIALIZE-CONTEXT-CLASS");
-        $sym6$ISOLATED_P = SubLObjectFactory.makeSymbol("ISOLATED-P");
-        $sym7$INSTANCE_NUMBER = SubLObjectFactory.makeSymbol("INSTANCE-NUMBER");
-        $sym8$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_INSTANCE = SubLObjectFactory.makeSymbol("SUBLOOP-RESERVED-INITIALIZE-CONTEXT-INSTANCE");
-        $sym9$INITIALIZE = SubLObjectFactory.makeSymbol("INITIALIZE");
-        $list10 = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("PROTECTED"));
-        $list11 = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("@return context-p; a new empty context"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INITIALIZE"), (SubLObject)SubLObjectFactory.makeSymbol("SUPER")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NEW-CLASS-INSTANCE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT")))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)SubLObjectFactory.makeSymbol("SELF")));
-        $sym12$OUTER_CATCH_FOR_CONTEXT_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-CONTEXT-METHOD");
-        $sym13$CONTEXT_INITIALIZE_METHOD = SubLObjectFactory.makeSymbol("CONTEXT-INITIALIZE-METHOD");
-        $sym14$GET_PARSE_TREE_CONTEXT = SubLObjectFactory.makeSymbol("GET-PARSE-TREE-CONTEXT");
-        $list15 = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("PUBLIC"));
-        $list16 = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("@return listp; the parse-tree-context of this context"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT")));
-        $sym17$OUTER_CATCH_FOR_CONTEXT_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-CONTEXT-METHOD");
-        $sym18$CONTEXT_GET_PARSE_TREE_CONTEXT_METHOD = SubLObjectFactory.makeSymbol("CONTEXT-GET-PARSE-TREE-CONTEXT-METHOD");
-        $list19 = ConsesLow.list(new SubLObject[] { ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREES"), (SubLObject)SubLObjectFactory.makeKeyword("INSTANCE"), (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCES"), (SubLObject)SubLObjectFactory.makeKeyword("INSTANCE"), (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-COUNTER"), (SubLObject)SubLObjectFactory.makeKeyword("INSTANCE"), (SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)context.ZERO_INTEGER), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("INITIALIZE"), (SubLObject)context.NIL, (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("ADD-TREE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE")), (SubLObject)SubLObjectFactory.makeKeyword("PUBLIC")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("GET-TREE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TREE"), (SubLObject)SubLObjectFactory.makeSymbol("I")), (SubLObject)SubLObjectFactory.makeKeyword("PUBLIC")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("GET-PRECEDING-TREES"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TREE")), (SubLObject)SubLObjectFactory.makeKeyword("PUBLIC")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("GET-FOLLOWING-TREES"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TREE")), (SubLObject)SubLObjectFactory.makeKeyword("PUBLIC")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("GET-INSTANCE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NP")), (SubLObject)SubLObjectFactory.makeKeyword("PUBLIC")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("NEW-VARIABLE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STRING")), (SubLObject)SubLObjectFactory.makeKeyword("PUBLIC")), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("DEF-INSTANCE-METHOD"), (SubLObject)SubLObjectFactory.makeSymbol("CREATE-INSTANCE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NP")), (SubLObject)SubLObjectFactory.makeKeyword("PROTECTED")) });
-        $sym20$INSTANCES = SubLObjectFactory.makeSymbol("INSTANCES");
-        $sym21$PARSE_TREES = SubLObjectFactory.makeSymbol("PARSE-TREES");
-        $sym22$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_CLASS = SubLObjectFactory.makeSymbol("SUBLOOP-RESERVED-INITIALIZE-PARSE-TREE-CONTEXT-CLASS");
-        $sym23$INSTANCE_COUNTER = SubLObjectFactory.makeSymbol("INSTANCE-COUNTER");
-        $sym24$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_INSTANCE = SubLObjectFactory.makeSymbol("SUBLOOP-RESERVED-INITIALIZE-PARSE-TREE-CONTEXT-INSTANCE");
-        $list25 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INITIALIZE"), (SubLObject)SubLObjectFactory.makeSymbol("SUPER")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETF"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCES"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("MAKE-HASH-TABLE"), (SubLObject)SubLObjectFactory.makeInteger(32), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)context.EQL))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)SubLObjectFactory.makeSymbol("SELF")));
-        $sym26$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD");
-        $int27$32 = SubLObjectFactory.makeInteger(32);
-        $sym28$PARSE_TREE_CONTEXT_INITIALIZE_METHOD = SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT-INITIALIZE-METHOD");
-        $sym29$ADD_TREE = SubLObjectFactory.makeSymbol("ADD-TREE");
-        $list30 = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE"));
-        $list31 = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("@param PARSE-TREE parse-tree-; the parse tree to be added to this context\n   @return listp; a list of all trees of this context, from most to least recent"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CHECK-TYPE"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CPUSHNEW"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREES"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)context.EQ)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREES")));
-        $sym32$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD");
-        $sym33$PARSE_TREE_P = SubLObjectFactory.makeSymbol("PARSE-TREE-P");
-        $sym34$PARSE_TREE_CONTEXT_ADD_TREE_METHOD = SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT-ADD-TREE-METHOD");
-        $sym35$GET_TREE = SubLObjectFactory.makeSymbol("GET-TREE");
-        $list36 = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TREE"), (SubLObject)SubLObjectFactory.makeSymbol("I"));
-        $list37 = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("@return parse-tree-p; the Ith parse tree preceding (if I is negative) or succeeding\n   (if I is positive) TREE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CHECK-TYPE"), (SubLObject)SubLObjectFactory.makeSymbol("TREE"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CHECK-TYPE"), (SubLObject)SubLObjectFactory.makeSymbol("I"), (SubLObject)SubLObjectFactory.makeSymbol("INTEGERP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLET"), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)SubLObjectFactory.makeSymbol("TREE"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREES"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)context.EQ))), (SubLObject)SubLObjectFactory.makeSymbol("OFFSET")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PUNLESS"), (SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)context.MINUS_ONE_INTEGER)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("OFFSET"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("-"), (SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)SubLObjectFactory.makeSymbol("I"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FWHEN"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NON-NEGATIVE-INTEGER-P"), (SubLObject)SubLObjectFactory.makeSymbol("OFFSET")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NTH"), (SubLObject)SubLObjectFactory.makeSymbol("OFFSET"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREES"))))));
-        $sym38$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD");
-        $sym39$INTEGERP = SubLObjectFactory.makeSymbol("INTEGERP");
-        $sym40$PARSE_TREE_CONTEXT_GET_TREE_METHOD = SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT-GET-TREE-METHOD");
-        $sym41$GET_PRECEDING_TREES = SubLObjectFactory.makeSymbol("GET-PRECEDING-TREES");
-        $list42 = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TREE"));
-        $list43 = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("@return listp; all trees in this context preceding TREE, from most to least recent"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CHECK-TYPE"), (SubLObject)SubLObjectFactory.makeSymbol("TREE"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLET"), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)SubLObjectFactory.makeSymbol("TREE"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREES"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)context.EQ)))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PUNLESS"), (SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)context.MINUS_ONE_INTEGER)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("SUBSEQ"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREES"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("1+"), (SubLObject)SubLObjectFactory.makeSymbol("POSITION"))))));
-        $sym44$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD");
-        $sym45$PARSE_TREE_CONTEXT_GET_PRECEDING_TREES_METHOD = SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT-GET-PRECEDING-TREES-METHOD");
-        $sym46$GET_FOLLOWING_TREES = SubLObjectFactory.makeSymbol("GET-FOLLOWING-TREES");
-        $list47 = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("@return listp; all trees in this context following TREE, from least to most recent"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CHECK-TYPE"), (SubLObject)SubLObjectFactory.makeSymbol("TREE"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREE-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLET"), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)SubLObjectFactory.makeSymbol("TREE"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREES"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)context.EQ)))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FWHEN"), (SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NREVERSE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("SUBSEQ"), (SubLObject)SubLObjectFactory.makeSymbol("PARSE-TREES"), (SubLObject)context.ZERO_INTEGER, (SubLObject)SubLObjectFactory.makeSymbol("POSITION")))))));
-        $sym48$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD");
-        $sym49$PARSE_TREE_CONTEXT_GET_FOLLOWING_TREES_METHOD = SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT-GET-FOLLOWING-TREES-METHOD");
-        $sym50$GET_INSTANCE = SubLObjectFactory.makeSymbol("GET-INSTANCE");
-        $list51 = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NP"));
-        $list52 = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("@return listp; the instance denoted by NP"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CHECK-TYPE"), (SubLObject)SubLObjectFactory.makeSymbol("NP"), (SubLObject)SubLObjectFactory.makeSymbol("CYCLIFIABLE-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLET"), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("GETHASH"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FIM"), (SubLObject)SubLObjectFactory.makeSymbol("NP"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("GET-REFS"))), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCES")))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PUNLESS"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FIM"), (SubLObject)SubLObjectFactory.makeSymbol("SELF"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("CREATE-INSTANCE")), (SubLObject)SubLObjectFactory.makeSymbol("NP")))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE"))));
-        $sym53$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD");
-        $sym54$CYCLIFIABLE_P = SubLObjectFactory.makeSymbol("CYCLIFIABLE-P");
-        $sym55$GET_REFS = SubLObjectFactory.makeSymbol("GET-REFS");
-        $sym56$CREATE_INSTANCE = SubLObjectFactory.makeSymbol("CREATE-INSTANCE");
-        $sym57$PARSE_TREE_CONTEXT_GET_INSTANCE_METHOD = SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT-GET-INSTANCE-METHOD");
-        $list58 = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("@return listp; a newly created instance"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CLET"), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("REF"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FIRST"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FIM"), (SubLObject)SubLObjectFactory.makeSymbol("NP"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("GET-REFS"))))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INSTANCE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BQ-LIST"), constant_handles.reader_make_constant_shell((SubLObject)SubLObjectFactory.makeString("InstanceFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("EL-VAR-NAME"), (SubLObject)SubLObjectFactory.makeSymbol("REF"))))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("SETHASH"), (SubLObject)SubLObjectFactory.makeSymbol("REF"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCES"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE"))));
-        $sym59$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD");
-        $const60$InstanceFn = constant_handles.reader_make_constant_shell((SubLObject)SubLObjectFactory.makeString("InstanceFn"));
-        $sym61$PARSE_TREE_CONTEXT_CREATE_INSTANCE_METHOD = SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT-CREATE-INSTANCE-METHOD");
-        $sym62$NEW_VARIABLE = SubLObjectFactory.makeSymbol("NEW-VARIABLE");
-        $list63 = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STRING"), (SubLObject)SubLObjectFactory.makeString("X")));
-        $list64 = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("@return el-variable-p; a new variable unique for this context, containing STRING"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CINC"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-COUNTER")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("MAKE-EL-VAR"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STRING-TO-EL-VAR-NAME"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CCONCATENATE"), (SubLObject)SubLObjectFactory.makeSymbol("STRING"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("WRITE-TO-STRING"), (SubLObject)SubLObjectFactory.makeSymbol("INSTANCE-COUNTER")))))));
-        $str65$X = SubLObjectFactory.makeString("X");
-        $sym66$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = SubLObjectFactory.makeUninternedSymbol("OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD");
-        $sym67$PARSE_TREE_CONTEXT_NEW_VARIABLE_METHOD = SubLObjectFactory.makeSymbol("PARSE-TREE-CONTEXT-NEW-VARIABLE-METHOD");
-    }
+    return catch_var_for_parse_tree_context_method;
+  }
+
+  public static SubLObject declare_context_file()
+  {
+    SubLFiles.declareFunction( me, "get_context_parse_tree_context", "GET-CONTEXT-PARSE-TREE-CONTEXT", 1, 0, false );
+    SubLFiles.declareFunction( me, "set_context_parse_tree_context", "SET-CONTEXT-PARSE-TREE-CONTEXT", 2, 0, false );
+    SubLFiles.declareFunction( me, "subloop_reserved_initialize_context_class", "SUBLOOP-RESERVED-INITIALIZE-CONTEXT-CLASS", 1, 0, false );
+    SubLFiles.declareFunction( me, "subloop_reserved_initialize_context_instance", "SUBLOOP-RESERVED-INITIALIZE-CONTEXT-INSTANCE", 1, 0, false );
+    SubLFiles.declareFunction( me, "context_p", "CONTEXT-P", 1, 0, false );
+    SubLFiles.declareFunction( me, "context_initialize_method", "CONTEXT-INITIALIZE-METHOD", 1, 0, false );
+    SubLFiles.declareFunction( me, "context_get_parse_tree_context_method", "CONTEXT-GET-PARSE-TREE-CONTEXT-METHOD", 1, 0, false );
+    SubLFiles.declareFunction( me, "get_parse_tree_context_instance_counter", "GET-PARSE-TREE-CONTEXT-INSTANCE-COUNTER", 1, 0, false );
+    SubLFiles.declareFunction( me, "set_parse_tree_context_instance_counter", "SET-PARSE-TREE-CONTEXT-INSTANCE-COUNTER", 2, 0, false );
+    SubLFiles.declareFunction( me, "get_parse_tree_context_instances", "GET-PARSE-TREE-CONTEXT-INSTANCES", 1, 0, false );
+    SubLFiles.declareFunction( me, "set_parse_tree_context_instances", "SET-PARSE-TREE-CONTEXT-INSTANCES", 2, 0, false );
+    SubLFiles.declareFunction( me, "get_parse_tree_context_parse_trees", "GET-PARSE-TREE-CONTEXT-PARSE-TREES", 1, 0, false );
+    SubLFiles.declareFunction( me, "set_parse_tree_context_parse_trees", "SET-PARSE-TREE-CONTEXT-PARSE-TREES", 2, 0, false );
+    SubLFiles.declareFunction( me, "subloop_reserved_initialize_parse_tree_context_class", "SUBLOOP-RESERVED-INITIALIZE-PARSE-TREE-CONTEXT-CLASS", 1, 0, false );
+    SubLFiles.declareFunction( me, "subloop_reserved_initialize_parse_tree_context_instance", "SUBLOOP-RESERVED-INITIALIZE-PARSE-TREE-CONTEXT-INSTANCE", 1, 0, false );
+    SubLFiles.declareFunction( me, "parse_tree_context_p", "PARSE-TREE-CONTEXT-P", 1, 0, false );
+    SubLFiles.declareFunction( me, "parse_tree_context_initialize_method", "PARSE-TREE-CONTEXT-INITIALIZE-METHOD", 1, 0, false );
+    SubLFiles.declareFunction( me, "parse_tree_context_add_tree_method", "PARSE-TREE-CONTEXT-ADD-TREE-METHOD", 2, 0, false );
+    SubLFiles.declareFunction( me, "parse_tree_context_get_tree_method", "PARSE-TREE-CONTEXT-GET-TREE-METHOD", 3, 0, false );
+    SubLFiles.declareFunction( me, "parse_tree_context_get_preceding_trees_method", "PARSE-TREE-CONTEXT-GET-PRECEDING-TREES-METHOD", 2, 0, false );
+    SubLFiles.declareFunction( me, "parse_tree_context_get_following_trees_method", "PARSE-TREE-CONTEXT-GET-FOLLOWING-TREES-METHOD", 2, 0, false );
+    SubLFiles.declareFunction( me, "parse_tree_context_get_instance_method", "PARSE-TREE-CONTEXT-GET-INSTANCE-METHOD", 2, 0, false );
+    SubLFiles.declareFunction( me, "parse_tree_context_create_instance_method", "PARSE-TREE-CONTEXT-CREATE-INSTANCE-METHOD", 2, 0, false );
+    SubLFiles.declareFunction( me, "parse_tree_context_new_variable_method", "PARSE-TREE-CONTEXT-NEW-VARIABLE-METHOD", 1, 1, false );
+    return NIL;
+  }
+
+  public static SubLObject init_context_file()
+  {
+    return NIL;
+  }
+
+  public static SubLObject setup_context_file()
+  {
+    classes.subloop_new_class( $sym0$CONTEXT, $sym1$OBJECT, NIL, NIL, $list2 );
+    classes.class_set_implements_slot_listeners( $sym0$CONTEXT, NIL );
+    classes.subloop_note_class_initialization_function( $sym0$CONTEXT, $sym5$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_CLASS );
+    classes.subloop_note_instance_initialization_function( $sym0$CONTEXT, $sym8$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_INSTANCE );
+    subloop_reserved_initialize_context_class( $sym0$CONTEXT );
+    methods.methods_incorporate_instance_method( $sym9$INITIALIZE, $sym0$CONTEXT, $list10, NIL, $list11 );
+    methods.subloop_register_instance_method( $sym0$CONTEXT, $sym9$INITIALIZE, $sym13$CONTEXT_INITIALIZE_METHOD );
+    methods.methods_incorporate_instance_method( $sym14$GET_PARSE_TREE_CONTEXT, $sym0$CONTEXT, $list15, NIL, $list16 );
+    methods.subloop_register_instance_method( $sym0$CONTEXT, $sym14$GET_PARSE_TREE_CONTEXT, $sym18$CONTEXT_GET_PARSE_TREE_CONTEXT_METHOD );
+    classes.subloop_new_class( $sym3$PARSE_TREE_CONTEXT, $sym1$OBJECT, NIL, NIL, $list19 );
+    classes.class_set_implements_slot_listeners( $sym3$PARSE_TREE_CONTEXT, NIL );
+    classes.subloop_note_class_initialization_function( $sym3$PARSE_TREE_CONTEXT, $sym22$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_CLASS );
+    classes.subloop_note_instance_initialization_function( $sym3$PARSE_TREE_CONTEXT, $sym24$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_INSTANCE );
+    subloop_reserved_initialize_parse_tree_context_class( $sym3$PARSE_TREE_CONTEXT );
+    methods.methods_incorporate_instance_method( $sym9$INITIALIZE, $sym3$PARSE_TREE_CONTEXT, $list10, NIL, $list25 );
+    methods.subloop_register_instance_method( $sym3$PARSE_TREE_CONTEXT, $sym9$INITIALIZE, $sym28$PARSE_TREE_CONTEXT_INITIALIZE_METHOD );
+    methods.methods_incorporate_instance_method( $sym29$ADD_TREE, $sym3$PARSE_TREE_CONTEXT, $list15, $list30, $list31 );
+    methods.subloop_register_instance_method( $sym3$PARSE_TREE_CONTEXT, $sym29$ADD_TREE, $sym34$PARSE_TREE_CONTEXT_ADD_TREE_METHOD );
+    methods.methods_incorporate_instance_method( $sym35$GET_TREE, $sym3$PARSE_TREE_CONTEXT, $list15, $list36, $list37 );
+    methods.subloop_register_instance_method( $sym3$PARSE_TREE_CONTEXT, $sym35$GET_TREE, $sym40$PARSE_TREE_CONTEXT_GET_TREE_METHOD );
+    methods.methods_incorporate_instance_method( $sym41$GET_PRECEDING_TREES, $sym3$PARSE_TREE_CONTEXT, $list15, $list42, $list43 );
+    methods.subloop_register_instance_method( $sym3$PARSE_TREE_CONTEXT, $sym41$GET_PRECEDING_TREES, $sym45$PARSE_TREE_CONTEXT_GET_PRECEDING_TREES_METHOD );
+    methods.methods_incorporate_instance_method( $sym46$GET_FOLLOWING_TREES, $sym3$PARSE_TREE_CONTEXT, $list15, $list42, $list47 );
+    methods.subloop_register_instance_method( $sym3$PARSE_TREE_CONTEXT, $sym46$GET_FOLLOWING_TREES, $sym49$PARSE_TREE_CONTEXT_GET_FOLLOWING_TREES_METHOD );
+    methods.methods_incorporate_instance_method( $sym50$GET_INSTANCE, $sym3$PARSE_TREE_CONTEXT, $list15, $list51, $list52 );
+    methods.subloop_register_instance_method( $sym3$PARSE_TREE_CONTEXT, $sym50$GET_INSTANCE, $sym57$PARSE_TREE_CONTEXT_GET_INSTANCE_METHOD );
+    methods.methods_incorporate_instance_method( $sym56$CREATE_INSTANCE, $sym3$PARSE_TREE_CONTEXT, $list10, $list51, $list58 );
+    methods.subloop_register_instance_method( $sym3$PARSE_TREE_CONTEXT, $sym56$CREATE_INSTANCE, $sym61$PARSE_TREE_CONTEXT_CREATE_INSTANCE_METHOD );
+    methods.methods_incorporate_instance_method( $sym62$NEW_VARIABLE, $sym3$PARSE_TREE_CONTEXT, $list10, $list63, $list64 );
+    methods.subloop_register_instance_method( $sym3$PARSE_TREE_CONTEXT, $sym62$NEW_VARIABLE, $sym67$PARSE_TREE_CONTEXT_NEW_VARIABLE_METHOD );
+    return NIL;
+  }
+
+  @Override
+  public void declareFunctions()
+  {
+    declare_context_file();
+  }
+
+  @Override
+  public void initializeVariables()
+  {
+    init_context_file();
+  }
+
+  @Override
+  public void runTopLevelForms()
+  {
+    setup_context_file();
+  }
+  static
+  {
+    me = new context();
+    $sym0$CONTEXT = makeSymbol( "CONTEXT" );
+    $sym1$OBJECT = makeSymbol( "OBJECT" );
+    $list2 = ConsesLow.list( ConsesLow.list( makeSymbol( "PARSE-TREE-CONTEXT" ), makeKeyword( "INSTANCE" ), makeKeyword( "PROTECTED" ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol(
+        "GET-PARSE-TREE-CONTEXT" ), NIL, makeKeyword( "PUBLIC" ) ) );
+    $sym3$PARSE_TREE_CONTEXT = makeSymbol( "PARSE-TREE-CONTEXT" );
+    $sym4$INSTANCE_COUNT = makeSymbol( "INSTANCE-COUNT" );
+    $sym5$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_CLASS = makeSymbol( "SUBLOOP-RESERVED-INITIALIZE-CONTEXT-CLASS" );
+    $sym6$ISOLATED_P = makeSymbol( "ISOLATED-P" );
+    $sym7$INSTANCE_NUMBER = makeSymbol( "INSTANCE-NUMBER" );
+    $sym8$SUBLOOP_RESERVED_INITIALIZE_CONTEXT_INSTANCE = makeSymbol( "SUBLOOP-RESERVED-INITIALIZE-CONTEXT-INSTANCE" );
+    $sym9$INITIALIZE = makeSymbol( "INITIALIZE" );
+    $list10 = ConsesLow.list( makeKeyword( "PROTECTED" ) );
+    $list11 = ConsesLow.list( makeString( "@return context-p; a new empty context" ), ConsesLow.list( makeSymbol( "INITIALIZE" ), makeSymbol( "SUPER" ) ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol(
+        "PARSE-TREE-CONTEXT" ), ConsesLow.list( makeSymbol( "NEW-CLASS-INSTANCE" ), ConsesLow.list( makeSymbol( "QUOTE" ), makeSymbol( "PARSE-TREE-CONTEXT" ) ) ) ), ConsesLow.list( makeSymbol( "RET" ), makeSymbol(
+            "SELF" ) ) );
+    $sym12$OUTER_CATCH_FOR_CONTEXT_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-CONTEXT-METHOD" );
+    $sym13$CONTEXT_INITIALIZE_METHOD = makeSymbol( "CONTEXT-INITIALIZE-METHOD" );
+    $sym14$GET_PARSE_TREE_CONTEXT = makeSymbol( "GET-PARSE-TREE-CONTEXT" );
+    $list15 = ConsesLow.list( makeKeyword( "PUBLIC" ) );
+    $list16 = ConsesLow.list( makeString( "@return listp; the parse-tree-context of this context" ), ConsesLow.list( makeSymbol( "RET" ), makeSymbol( "PARSE-TREE-CONTEXT" ) ) );
+    $sym17$OUTER_CATCH_FOR_CONTEXT_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-CONTEXT-METHOD" );
+    $sym18$CONTEXT_GET_PARSE_TREE_CONTEXT_METHOD = makeSymbol( "CONTEXT-GET-PARSE-TREE-CONTEXT-METHOD" );
+    $list19 = ConsesLow.list( new SubLObject[] { ConsesLow.list( makeSymbol( "PARSE-TREES" ), makeKeyword( "INSTANCE" ), makeKeyword( "PROTECTED" ) ), ConsesLow.list( makeSymbol( "INSTANCES" ), makeKeyword( "INSTANCE" ),
+        makeKeyword( "PROTECTED" ) ), ConsesLow.list( makeSymbol( "INSTANCE-COUNTER" ), makeKeyword( "INSTANCE" ), makeKeyword( "VALUE" ), ZERO_INTEGER ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol(
+            "INITIALIZE" ), NIL, makeKeyword( "PROTECTED" ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "ADD-TREE" ), ConsesLow.list( makeSymbol( "PARSE-TREE" ) ), makeKeyword( "PUBLIC" ) ),
+      ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "GET-TREE" ), ConsesLow.list( makeSymbol( "TREE" ), makeSymbol( "I" ) ), makeKeyword( "PUBLIC" ) ), ConsesLow.list( makeSymbol(
+          "DEF-INSTANCE-METHOD" ), makeSymbol( "GET-PRECEDING-TREES" ), ConsesLow.list( makeSymbol( "TREE" ) ), makeKeyword( "PUBLIC" ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol(
+              "GET-FOLLOWING-TREES" ), ConsesLow.list( makeSymbol( "TREE" ) ), makeKeyword( "PUBLIC" ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "GET-INSTANCE" ), ConsesLow.list( makeSymbol(
+                  "NP" ) ), makeKeyword( "PUBLIC" ) ), ConsesLow.list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "NEW-VARIABLE" ), ConsesLow.list( makeSymbol( "STRING" ) ), makeKeyword( "PUBLIC" ) ), ConsesLow
+                      .list( makeSymbol( "DEF-INSTANCE-METHOD" ), makeSymbol( "CREATE-INSTANCE" ), ConsesLow.list( makeSymbol( "NP" ) ), makeKeyword( "PROTECTED" ) )
+    } );
+    $sym20$INSTANCES = makeSymbol( "INSTANCES" );
+    $sym21$PARSE_TREES = makeSymbol( "PARSE-TREES" );
+    $sym22$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_CLASS = makeSymbol( "SUBLOOP-RESERVED-INITIALIZE-PARSE-TREE-CONTEXT-CLASS" );
+    $sym23$INSTANCE_COUNTER = makeSymbol( "INSTANCE-COUNTER" );
+    $sym24$SUBLOOP_RESERVED_INITIALIZE_PARSE_TREE_CONTEXT_INSTANCE = makeSymbol( "SUBLOOP-RESERVED-INITIALIZE-PARSE-TREE-CONTEXT-INSTANCE" );
+    $list25 = ConsesLow.list( ConsesLow.list( makeSymbol( "INITIALIZE" ), makeSymbol( "SUPER" ) ), ConsesLow.list( makeSymbol( "CSETF" ), makeSymbol( "INSTANCES" ), ConsesLow.list( makeSymbol( "MAKE-HASH-TABLE" ),
+        makeInteger( 32 ), ConsesLow.list( makeSymbol( "QUOTE" ), EQL ) ) ), ConsesLow.list( makeSymbol( "RET" ), makeSymbol( "SELF" ) ) );
+    $sym26$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD" );
+    $int27$32 = makeInteger( 32 );
+    $sym28$PARSE_TREE_CONTEXT_INITIALIZE_METHOD = makeSymbol( "PARSE-TREE-CONTEXT-INITIALIZE-METHOD" );
+    $sym29$ADD_TREE = makeSymbol( "ADD-TREE" );
+    $list30 = ConsesLow.list( makeSymbol( "PARSE-TREE" ) );
+    $list31 = ConsesLow.list( makeString( "@param PARSE-TREE parse-tree-; the parse tree to be added to this context\n   @return listp; a list of all trees of this context, from most to least recent" ), ConsesLow.list(
+        makeSymbol( "CHECK-TYPE" ), makeSymbol( "PARSE-TREE" ), makeSymbol( "PARSE-TREE-P" ) ), ConsesLow.list( makeSymbol( "CPUSHNEW" ), makeSymbol( "PARSE-TREE" ), makeSymbol( "PARSE-TREES" ), ConsesLow.list(
+            makeSymbol( "QUOTE" ), EQ ) ), ConsesLow.list( makeSymbol( "RET" ), makeSymbol( "PARSE-TREES" ) ) );
+    $sym32$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD" );
+    $sym33$PARSE_TREE_P = makeSymbol( "PARSE-TREE-P" );
+    $sym34$PARSE_TREE_CONTEXT_ADD_TREE_METHOD = makeSymbol( "PARSE-TREE-CONTEXT-ADD-TREE-METHOD" );
+    $sym35$GET_TREE = makeSymbol( "GET-TREE" );
+    $list36 = ConsesLow.list( makeSymbol( "TREE" ), makeSymbol( "I" ) );
+    $list37 = ConsesLow.list( makeString( "@return parse-tree-p; the Ith parse tree preceding (if I is negative) or succeeding\n   (if I is positive) TREE" ), ConsesLow.list( makeSymbol( "CHECK-TYPE" ), makeSymbol(
+        "TREE" ), makeSymbol( "PARSE-TREE-P" ) ), ConsesLow.list( makeSymbol( "CHECK-TYPE" ), makeSymbol( "I" ), makeSymbol( "INTEGERP" ) ), ConsesLow.list( makeSymbol( "CLET" ), ConsesLow.list( ConsesLow.list(
+            makeSymbol( "POSITION" ), ConsesLow.list( makeSymbol( "POSITION" ), makeSymbol( "TREE" ), makeSymbol( "PARSE-TREES" ), ConsesLow.list( makeSymbol( "QUOTE" ), EQ ) ) ), makeSymbol( "OFFSET" ) ), ConsesLow
+                .list( makeSymbol( "PUNLESS" ), makeSymbol( "POSITION" ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "POSITION" ), MINUS_ONE_INTEGER ) ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol(
+                    "OFFSET" ), ConsesLow.list( makeSymbol( "-" ), makeSymbol( "POSITION" ), makeSymbol( "I" ) ) ), ConsesLow.list( makeSymbol( "RET" ), ConsesLow.list( makeSymbol( "FWHEN" ), ConsesLow.list( makeSymbol(
+                        "NON-NEGATIVE-INTEGER-P" ), makeSymbol( "OFFSET" ) ), ConsesLow.list( makeSymbol( "NTH" ), makeSymbol( "OFFSET" ), makeSymbol( "PARSE-TREES" ) ) ) ) ) );
+    $sym38$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD" );
+    $sym39$INTEGERP = makeSymbol( "INTEGERP" );
+    $sym40$PARSE_TREE_CONTEXT_GET_TREE_METHOD = makeSymbol( "PARSE-TREE-CONTEXT-GET-TREE-METHOD" );
+    $sym41$GET_PRECEDING_TREES = makeSymbol( "GET-PRECEDING-TREES" );
+    $list42 = ConsesLow.list( makeSymbol( "TREE" ) );
+    $list43 = ConsesLow.list( makeString( "@return listp; all trees in this context preceding TREE, from most to least recent" ), ConsesLow.list( makeSymbol( "CHECK-TYPE" ), makeSymbol( "TREE" ), makeSymbol(
+        "PARSE-TREE-P" ) ), ConsesLow.list( makeSymbol( "CLET" ), ConsesLow.list( ConsesLow.list( makeSymbol( "POSITION" ), ConsesLow.list( makeSymbol( "POSITION" ), makeSymbol( "TREE" ), makeSymbol( "PARSE-TREES" ),
+            ConsesLow.list( makeSymbol( "QUOTE" ), EQ ) ) ) ), ConsesLow.list( makeSymbol( "PUNLESS" ), makeSymbol( "POSITION" ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "POSITION" ), MINUS_ONE_INTEGER ) ),
+            ConsesLow.list( makeSymbol( "RET" ), ConsesLow.list( makeSymbol( "SUBSEQ" ), makeSymbol( "PARSE-TREES" ), ConsesLow.list( makeSymbol( "1+" ), makeSymbol( "POSITION" ) ) ) ) ) );
+    $sym44$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD" );
+    $sym45$PARSE_TREE_CONTEXT_GET_PRECEDING_TREES_METHOD = makeSymbol( "PARSE-TREE-CONTEXT-GET-PRECEDING-TREES-METHOD" );
+    $sym46$GET_FOLLOWING_TREES = makeSymbol( "GET-FOLLOWING-TREES" );
+    $list47 = ConsesLow.list( makeString( "@return listp; all trees in this context following TREE, from least to most recent" ), ConsesLow.list( makeSymbol( "CHECK-TYPE" ), makeSymbol( "TREE" ), makeSymbol(
+        "PARSE-TREE-P" ) ), ConsesLow.list( makeSymbol( "CLET" ), ConsesLow.list( ConsesLow.list( makeSymbol( "POSITION" ), ConsesLow.list( makeSymbol( "POSITION" ), makeSymbol( "TREE" ), makeSymbol( "PARSE-TREES" ),
+            ConsesLow.list( makeSymbol( "QUOTE" ), EQ ) ) ) ), ConsesLow.list( makeSymbol( "RET" ), ConsesLow.list( makeSymbol( "FWHEN" ), makeSymbol( "POSITION" ), ConsesLow.list( makeSymbol( "NREVERSE" ), ConsesLow
+                .list( makeSymbol( "SUBSEQ" ), makeSymbol( "PARSE-TREES" ), ZERO_INTEGER, makeSymbol( "POSITION" ) ) ) ) ) ) );
+    $sym48$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD" );
+    $sym49$PARSE_TREE_CONTEXT_GET_FOLLOWING_TREES_METHOD = makeSymbol( "PARSE-TREE-CONTEXT-GET-FOLLOWING-TREES-METHOD" );
+    $sym50$GET_INSTANCE = makeSymbol( "GET-INSTANCE" );
+    $list51 = ConsesLow.list( makeSymbol( "NP" ) );
+    $list52 = ConsesLow.list( makeString( "@return listp; the instance denoted by NP" ), ConsesLow.list( makeSymbol( "CHECK-TYPE" ), makeSymbol( "NP" ), makeSymbol( "CYCLIFIABLE-P" ) ), ConsesLow.list( makeSymbol(
+        "CLET" ), ConsesLow.list( ConsesLow.list( makeSymbol( "INSTANCE" ), ConsesLow.list( makeSymbol( "GETHASH" ), ConsesLow.list( makeSymbol( "FIM" ), makeSymbol( "NP" ), ConsesLow.list( makeSymbol( "QUOTE" ),
+            makeSymbol( "GET-REFS" ) ) ), makeSymbol( "INSTANCES" ) ) ) ), ConsesLow.list( makeSymbol( "PUNLESS" ), makeSymbol( "INSTANCE" ), ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "INSTANCE" ), ConsesLow
+                .list( makeSymbol( "FIM" ), makeSymbol( "SELF" ), ConsesLow.list( makeSymbol( "QUOTE" ), makeSymbol( "CREATE-INSTANCE" ) ), makeSymbol( "NP" ) ) ) ), ConsesLow.list( makeSymbol( "RET" ), makeSymbol(
+                    "INSTANCE" ) ) ) );
+    $sym53$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD" );
+    $sym54$CYCLIFIABLE_P = makeSymbol( "CYCLIFIABLE-P" );
+    $sym55$GET_REFS = makeSymbol( "GET-REFS" );
+    $sym56$CREATE_INSTANCE = makeSymbol( "CREATE-INSTANCE" );
+    $sym57$PARSE_TREE_CONTEXT_GET_INSTANCE_METHOD = makeSymbol( "PARSE-TREE-CONTEXT-GET-INSTANCE-METHOD" );
+    $list58 = ConsesLow.list( makeString( "@return listp; a newly created instance" ), ConsesLow.list( makeSymbol( "CLET" ), ConsesLow.list( ConsesLow.list( makeSymbol( "REF" ), ConsesLow.list( makeSymbol( "FIRST" ),
+        ConsesLow.list( makeSymbol( "FIM" ), makeSymbol( "NP" ), ConsesLow.list( makeSymbol( "QUOTE" ), makeSymbol( "GET-REFS" ) ) ) ) ), ConsesLow.list( makeSymbol( "INSTANCE" ), ConsesLow.list( makeSymbol( "BQ-LIST" ),
+            constant_handles.reader_make_constant_shell( makeString( "InstanceFn" ) ), ConsesLow.list( makeSymbol( "EL-VAR-NAME" ), makeSymbol( "REF" ) ) ) ) ), ConsesLow.list( makeSymbol( "SETHASH" ), makeSymbol(
+                "REF" ), makeSymbol( "INSTANCES" ), makeSymbol( "INSTANCE" ) ), ConsesLow.list( makeSymbol( "RET" ), makeSymbol( "INSTANCE" ) ) ) );
+    $sym59$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD" );
+    $const60$InstanceFn = constant_handles.reader_make_constant_shell( makeString( "InstanceFn" ) );
+    $sym61$PARSE_TREE_CONTEXT_CREATE_INSTANCE_METHOD = makeSymbol( "PARSE-TREE-CONTEXT-CREATE-INSTANCE-METHOD" );
+    $sym62$NEW_VARIABLE = makeSymbol( "NEW-VARIABLE" );
+    $list63 = ConsesLow.list( makeSymbol( "&OPTIONAL" ), ConsesLow.list( makeSymbol( "STRING" ), makeString( "X" ) ) );
+    $list64 = ConsesLow.list( makeString( "@return el-variable-p; a new variable unique for this context, containing STRING" ), ConsesLow.list( makeSymbol( "CINC" ), makeSymbol( "INSTANCE-COUNTER" ) ), ConsesLow.list(
+        makeSymbol( "RET" ), ConsesLow.list( makeSymbol( "MAKE-EL-VAR" ), ConsesLow.list( makeSymbol( "STRING-TO-EL-VAR-NAME" ), ConsesLow.list( makeSymbol( "CCONCATENATE" ), makeSymbol( "STRING" ), ConsesLow.list(
+            makeSymbol( "WRITE-TO-STRING" ), makeSymbol( "INSTANCE-COUNTER" ) ) ) ) ) ) );
+    $str65$X = makeString( "X" );
+    $sym66$OUTER_CATCH_FOR_PARSE_TREE_CONTEXT_METHOD = makeUninternedSymbol( "OUTER-CATCH-FOR-PARSE-TREE-CONTEXT-METHOD" );
+    $sym67$PARSE_TREE_CONTEXT_NEW_VARIABLE_METHOD = makeSymbol( "PARSE-TREE-CONTEXT-NEW-VARIABLE-METHOD" );
+  }
 }
-
 /*
-
-	Total time: 384 ms
-	
-*/
+ * 
+ * Total time: 384 ms
+ * 
+ */

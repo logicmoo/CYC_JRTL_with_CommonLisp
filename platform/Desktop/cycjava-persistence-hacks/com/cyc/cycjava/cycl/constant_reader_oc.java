@@ -21,7 +21,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class constant_reader_oc extends SubLTranslatedFile
+public final class constant_reader_oc
+    extends
+      SubLTranslatedFile
 {
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.constant_reader_oc";
@@ -50,28 +52,28 @@ public final class constant_reader_oc extends SubLTranslatedFile
     final SubLThread var4 = SubLProcess.currentSubLThread();
     if( NIL != var3 )
     {
-      reader.simple_reader_error( (SubLObject) $ic1$, (SubLObject) ConsesLow.list( var2 ) );
+      reader.simple_reader_error( $ic1$, ConsesLow.list( var2 ) );
     }
-    SubLObject var5 = (SubLObject) $ic2$;
-    SubLObject var6 = Strings.make_string( var5, (SubLObject) UNPROVIDED );
-    SubLObject var7 = (SubLObject) ZERO_INTEGER;
+    SubLObject var5 = $ic2$;
+    SubLObject var6 = Strings.make_string( var5, UNPROVIDED );
+    SubLObject var7 = ZERO_INTEGER;
     SubLObject var8;
-    for( var8 = streams_high.read_char( var1, (SubLObject) NIL, (SubLObject) NIL, (SubLObject) UNPROVIDED ); NIL != var8 && NIL != module0126.f8387( var8 ); var8 = streams_high.read_char( var1, (SubLObject) NIL,
-        (SubLObject) NIL, (SubLObject) UNPROVIDED ) )
+    for( var8 = streams_high.read_char( var1, NIL, NIL, UNPROVIDED ); NIL != var8 && NIL != module0126.f8387( var8 ); var8 = streams_high.read_char( var1, NIL,
+        NIL, UNPROVIDED ) )
     {
       if( var7.numGE( var5 ) )
       {
-        var5 = Numbers.multiply( var5, (SubLObject) TWO_INTEGER );
-        final SubLObject var9 = Strings.make_string( var5, (SubLObject) UNPROVIDED );
+        var5 = Numbers.multiply( var5, TWO_INTEGER );
+        final SubLObject var9 = Strings.make_string( var5, UNPROVIDED );
         SubLObject var10;
-        for( var10 = (SubLObject) NIL, var10 = (SubLObject) ZERO_INTEGER; var10.numL( var7 ); var10 = Numbers.add( var10, (SubLObject) ONE_INTEGER ) )
+        for( var10 = NIL, var10 = ZERO_INTEGER; var10.numL( var7 ); var10 = Numbers.add( var10, ONE_INTEGER ) )
         {
           Strings.set_char( var9, var10, Strings.sublisp_char( var6, var10 ) );
         }
         var6 = var9;
       }
       Strings.set_char( var6, var7, var8 );
-      var7 = Numbers.add( var7, (SubLObject) ONE_INTEGER );
+      var7 = Numbers.add( var7, ONE_INTEGER );
     }
     if( NIL != var8 )
     {
@@ -79,34 +81,34 @@ public final class constant_reader_oc extends SubLTranslatedFile
     }
     if( NIL != reader.$read_suppress$.getDynamicValue( var4 ) )
     {
-      return Values.values( (SubLObject) NIL, (SubLObject) T );
+      return Values.values( NIL, T );
     }
-    final SubLObject var11 = var7.numE( var5 ) ? var6 : Sequences.subseq( var6, (SubLObject) ZERO_INTEGER, var7 );
+    final SubLObject var11 = var7.numE( var5 ) ? var6 : Sequences.subseq( var6, ZERO_INTEGER, var7 );
     SubLObject var12 = f8497( var11 );
     if( NIL != var12 )
     {
-      return Values.values( var12, (SubLObject) T );
+      return Values.values( var12, T );
     }
     if( NIL != f8498( var1 ) )
     {
-      reader.simple_reader_error( (SubLObject) $ic3$, (SubLObject) ConsesLow.list( var11 ) );
-      return (SubLObject) NIL;
+      reader.simple_reader_error( $ic3$, ConsesLow.list( var11 ) );
+      return NIL;
     }
-    SubLObject var13 = (SubLObject) NIL;
+    SubLObject var13 = NIL;
     try
     {
       var4.throwStack.push( module0003.$g3$.getGlobalValue() );
       final SubLObject var14 = Errors.$error_handler$.currentBinding( var4 );
       try
       {
-        Errors.$error_handler$.bind( (SubLObject) $ic4$, var4 );
+        Errors.$error_handler$.bind( $ic4$, var4 );
         try
         {
           var12 = constant_handles_oc.f8479( var11 );
         }
-        catch( Throwable var15 )
+        catch( final Throwable var15 )
         {
-          Errors.handleThrowable( var15, (SubLObject) NIL );
+          Errors.handleThrowable( var15, NIL );
         }
       }
       finally
@@ -114,7 +116,7 @@ public final class constant_reader_oc extends SubLTranslatedFile
         Errors.$error_handler$.rebind( var14, var4 );
       }
     }
-    catch( Throwable var16 )
+    catch( final Throwable var16 )
     {
       var13 = Errors.handleThrowable( var16, module0003.$g3$.getGlobalValue() );
     }
@@ -124,20 +126,20 @@ public final class constant_reader_oc extends SubLTranslatedFile
     }
     if( NIL != var13 )
     {
-      reader.simple_reader_error( var13, (SubLObject) NIL );
+      reader.simple_reader_error( var13, NIL );
     }
-    return Values.values( var12, (SubLObject) T );
+    return Values.values( var12, T );
   }
 
   public static SubLObject f8497(final SubLObject var11)
   {
     final SubLThread var12 = SubLProcess.currentSubLThread();
-    SubLObject var13 = (SubLObject) NIL;
+    SubLObject var13 = NIL;
     final SubLObject var14 = module0124.$g1495$.currentBinding( var12 );
     try
     {
-      module0124.$g1495$.bind( (SubLObject) NIL, var12 );
-      var13 = module0126.f8394( var11, (SubLObject) UNPROVIDED, (SubLObject) UNPROVIDED );
+      module0124.$g1495$.bind( NIL, var12 );
+      var13 = module0126.f8394( var11, UNPROVIDED, UNPROVIDED );
     }
     finally
     {
@@ -155,32 +157,32 @@ public final class constant_reader_oc extends SubLTranslatedFile
     final SubLThread var2 = SubLProcess.currentSubLThread();
     if( NIL == module0018.$g571$.getDynamicValue( var2 ) )
     {
-      return (SubLObject) NIL;
+      return NIL;
     }
-    return (SubLObject) T;
+    return T;
   }
 
   public static SubLObject f8499()
   {
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_reader_oc", "f8494", "S#3959", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_reader_oc", "f8495", "S#3934", 0, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_reader_oc", "f8496", "S#10597", 3, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_reader_oc", "f8497", "FIND-CONSTANT-BY-NAME", 1, 0, false );
-    SubLFiles.declareFunction( "com.cyc.cycjava.cycl.constant_reader_oc", "f8498", "S#10598", 1, 0, false );
-    return (SubLObject) NIL;
+    SubLFiles.declareFunction(me, "f8494", "S#3959", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8495", "S#3934", 0, 0, false );
+    SubLFiles.declareFunction(me, "f8496", "S#10597", 3, 0, false );
+    SubLFiles.declareFunction(me, "f8497", "FIND-CONSTANT-BY-NAME", 1, 0, false );
+    SubLFiles.declareFunction(me, "f8498", "S#10598", 1, 0, false );
+    return NIL;
   }
 
   public static SubLObject f8500()
   {
-    $g1503$ = SubLFiles.defconstant( "S#10599", (SubLObject) Characters.CHAR_dollar );
-    $g1504$ = SubLFiles.defconstant( "S#10600", Sequences.cconcatenate( (SubLObject) $ic0$, Strings.string( $g1503$.getGlobalValue() ) ) );
-    return (SubLObject) NIL;
+    $g1503$ = SubLFiles.defconstant( "S#10599", Characters.CHAR_dollar );
+    $g1504$ = SubLFiles.defconstant( "S#10600", Sequences.cconcatenate( $ic0$, Strings.string( $g1503$.getGlobalValue() ) ) );
+    return NIL;
   }
 
   public static SubLObject f8501()
   {
-    reader.set_dispatch_macro_character( (SubLObject) Characters.CHAR_hash, f8494(), (SubLObject) $ic5$, (SubLObject) UNPROVIDED );
-    return (SubLObject) NIL;
+    reader.set_dispatch_macro_character( Characters.CHAR_hash, f8494(), $ic5$, UNPROVIDED );
+    return NIL;
   }
 
   @Override
@@ -202,15 +204,15 @@ public final class constant_reader_oc extends SubLTranslatedFile
   }
   static
   {
-    me = (SubLFile) new constant_reader_oc();
+    me = new constant_reader_oc();
     $g1503$ = null;
     $g1504$ = null;
-    $ic0$ = SubLObjectFactory.makeString( "#" );
-    $ic1$ = SubLObjectFactory.makeString( "The ~S reader macro does not take an argument." );
-    $ic2$ = SubLObjectFactory.makeInteger( 64 );
-    $ic3$ = SubLObjectFactory.makeString( "~S is not the name of a constant." );
-    $ic4$ = SubLObjectFactory.makeSymbol( "S#38", "CYC" );
-    $ic5$ = SubLObjectFactory.makeSymbol( "S#10597", "CYC" );
+    $ic0$ = makeString( "#" );
+    $ic1$ = makeString( "The ~S reader macro does not take an argument." );
+    $ic2$ = makeInteger( 64 );
+    $ic3$ = makeString( "~S is not the name of a constant." );
+    $ic4$ = makeSymbol( "S#38", "CYC" );
+    $ic5$ = makeSymbol( "S#10597", "CYC" );
   }
 }
 /*

@@ -30,30 +30,29 @@
  * obligated to do so.  If you do not wish to do so, delete this
  * exception statement from your version.
  */
-
 package org.armedbear.lisp;
 
-public final class ComplexString extends AbstractString
+public final class ComplexString
+    extends
+      AbstractString
 {
   private int capacity;
   private int fillPointer = -1; // -1 indicates no fill pointer.
   private boolean isDisplaced;
-
   // For non-displaced arrays.
-  private char[] chars;
-
+  // private char[] chars; // dmiles maybe add back later
   // For displaced arrays.
   private AbstractArray array;
   private int displacement;
 
-  public ComplexString(int capacity)
+  public ComplexString( int capacity )
   {
     this.capacity = capacity;
-    chars = new char[capacity];
+    chars = new char[ capacity ];
     isDisplaced = false;
   }
 
-  public ComplexString(int capacity, AbstractArray array, int displacement)
+  public ComplexString( int capacity, AbstractArray array, int displacement )
   {
     this.capacity = capacity;
     this.array = array;
@@ -62,226 +61,225 @@ public final class ComplexString extends AbstractString
   }
 
   @Override
-public LispObject typeOf()
+  public LispObject typeOf()
   {
-    return list(Symbol.STRING, number(capacity()));
+    return list( Symbol.STRING, number( capacity() ) );
   }
 
   @Override
-public LispObject classOf()
+  public LispObject classOf()
   {
     return BuiltInClass.STRING;
   }
 
   @Override
-public boolean hasFillPointer()
+  public boolean hasFillPointer()
   {
     return fillPointer >= 0;
   }
 
   @Override
-public int getFillPointer()
+  public int getFillPointer()
   {
     return fillPointer;
   }
 
   @Override
-public void setFillPointer(int n)
+  public void setFillPointer(int n)
   {
     fillPointer = n;
   }
 
   @Override
-public void setFillPointer(LispObject obj)
+  public void setFillPointer(LispObject obj)
   {
-    if (obj == T)
+    if( obj == T )
       fillPointer = capacity();
     else
+    {
+      int n = Fixnum.getValue( obj );
+      if( n > capacity() )
       {
-        int n = Fixnum.getValue(obj);
-        if (n > capacity())
-          {
-            StringBuffer sb = new StringBuffer("The new fill pointer (");
-            sb.append(n);
-            sb.append(") exceeds the capacity of the vector (");
-            sb.append(capacity());
-            sb.append(").");
-            error(new LispError(sb.toString()));
-          }
-        else if (n < 0)
-          {
-            StringBuffer sb = new StringBuffer("The new fill pointer (");
-            sb.append(n);
-            sb.append(") is negative.");
-            error(new LispError(sb.toString()));
-          }
-        else
-          fillPointer = n;
+        StringBuffer sb = new StringBuffer( "The new fill pointer (" );
+        sb.append( n );
+        sb.append( ") exceeds the capacity of the vector (" );
+        sb.append( capacity() );
+        sb.append( ")." );
+        error( new LispError( sb.toString() ) );
       }
+      else if( n < 0 )
+      {
+        StringBuffer sb = new StringBuffer( "The new fill pointer (" );
+        sb.append( n );
+        sb.append( ") is negative." );
+        error( new LispError( sb.toString() ) );
+      }
+      else
+        fillPointer = n;
+    }
   }
 
   @Override
-public boolean isDisplaced()
+  public boolean isDisplaced()
   {
     return isDisplaced;
   }
 
   @Override
-public LispObject arrayDisplacement()
+  public LispObject arrayDisplacement()
   {
     LispObject value1, value2;
-    if (array != null)
-      {
-        value1 = array;
-        value2 = Fixnum.getInstance(displacement);
-      }
+    if( array != null )
+    {
+      value1 = array;
+      value2 = Fixnum.getInstance( displacement );
+    }
     else
-      {
-        value1 = NIL;
-        value2 = Fixnum.ZERO;
-      }
-    return LispThread.currentThread().setValues(value1, value2);
+    {
+      value1 = NIL;
+      value2 = Fixnum.ZERO;
+    }
+    return LispThread.currentThread().setValues( value1, value2 );
   }
 
   @Override
-public char[] charsOld()
+  public char[] charsOld()
   {
-    if (chars != null)
+    if( chars != null )
       return chars;
-    Debug.assertTrue(array != null);
-    char[] copy = new char[capacity];
-    if (array instanceof AbstractString)
-      System.arraycopy(array.charsOld(), displacement, copy, 0, capacity);
-    else if (array.getElementType() == Symbol.CHARACTER)
+    Debug.assertTrue( array != null );
+    char[] copy = new char[ capacity ];
+    if( array instanceof AbstractString )
+      System.arraycopy( array.charsOld(), displacement, copy, 0, capacity );
+    else if( array.getElementType() == Symbol.CHARACTER )
+    {
+      for( int i = 0; i < capacity; i++ )
       {
-        for (int i = 0; i < capacity; i++)
-          {
-            LispObject obj = array.AREF(displacement + i);
-            copy[i] = LispCharacter.getValue(obj);
-          }
+        LispObject obj = array.AREF( displacement + i );
+        copy[ i ] = LispCharacter.getValue( obj );
       }
+    }
     else
-      type_error(array, Symbol.STRING);
+      type_error( array, Symbol.STRING );
     return copy;
   }
 
   @Override
-public char[] getStringChars()
+  public char[] getStringChars()
   {
-    if (fillPointer < 0)
+    if( fillPointer < 0 )
       return charsOld();
-    char[] ret = new char[fillPointer];
-    System.arraycopy(charsOld(), 0, ret, 0, fillPointer);
+    char[] ret = new char[ fillPointer ];
+    System.arraycopy( charsOld(), 0, ret, 0, fillPointer );
     return ret;
   }
 
   @Override
-public boolean equal(LispObject obj)
+  public boolean equal(LispObject obj)
   {
-    if (this == obj)
+    if( this == obj )
       return true;
-    if (obj instanceof AbstractString)
-      {
-        AbstractString string = (AbstractString) obj;
-        if (string.length() != length())
+    if( obj instanceof AbstractString )
+    {
+      AbstractString string = (AbstractString) obj;
+      if( string.length() != length() )
+        return false;
+      for( int i = length(); i-- > 0; )
+        if( string.charAt( i ) != charAt( i ) )
           return false;
-        for (int i = length(); i-- > 0;)
-          if (string.charAt(i) != charAt(i))
+      return true;
+    }
+    if( obj instanceof NilVector )
+      return obj.equal( this );
+    return false;
+  }
+
+  @Override
+  public boolean equalp(LispObject obj)
+  {
+    if( this == obj )
+      return true;
+    if( obj instanceof AbstractString )
+    {
+      AbstractString string = (AbstractString) obj;
+      if( string.length() != length() )
+        return false;
+      for( int i = length(); i-- > 0; )
+      {
+        if( string.charAt( i ) != charAt( i ) )
+        {
+          if( LispCharacter.toLowerCase( string.charAt( i ) ) != LispCharacter.toLowerCase( charAt( i ) ) )
             return false;
-        return true;
+        }
       }
-    if (obj instanceof NilVector)
-      return obj.equal(this);
-    return false;
-  }
-
-  @Override
-public boolean equalp(LispObject obj)
-  {
-    if (this == obj)
       return true;
-    if (obj instanceof AbstractString)
-      {
-        AbstractString string = (AbstractString) obj;
-        if (string.length() != length())
-          return false;
-        for (int i = length(); i-- > 0;)
-          {
-            if (string.charAt(i) != charAt(i))
-              {
-                if (LispCharacter.toLowerCase(string.charAt(i)) != LispCharacter.toLowerCase(charAt(i)))
-                  return false;
-              }
-          }
-        return true;
-      }
-    if (obj instanceof AbstractBitVector)
+    }
+    if( obj instanceof AbstractBitVector )
       return false;
-    if (obj instanceof AbstractArray)
-      return obj.equalp(this);
+    if( obj instanceof AbstractArray )
+      return obj.equalp( this );
     return false;
   }
 
   @Override
-public LispObject subseq(int start, int end)
+  public LispObject subseq(int start, int end)
   {
-    AbstractString s = new SimpleString(end - start);
+    AbstractString s = new SimpleString( end - start );
     int i = start, j = 0;
-    while (i < end)
-      s.setCharAt(j++, charAt(i++));
+    while ( i < end)
+      s.setCharAt( j++, charAt( i++ ) );
     return s;
   }
 
   @Override
-public void fill(LispObject obj)
+  public void fill(LispObject obj)
   {
-    fill(LispCharacter.getValue(obj));
+    fill( LispCharacter.getValue( obj ) );
   }
 
   @Override
-public void fill(char c)
+  public void fill(char c)
   {
-    for (int i = length(); i-- > 0;)
-      setCharAt(i, c);
+    for( int i = length(); i-- > 0; )
+      setCharAt( i, c );
   }
 
   @Override
-public void shrink(int n)
+  public void shrink(int n)
   {
-    if (chars != null)
+    if( chars != null )
+    {
+      if( n < capacity )
       {
-        if (n < capacity)
-          {
-            char[] newArray = new char[n];
-            System.arraycopy(chars, 0, newArray, 0, n);
-            chars = newArray;
-            capacity = n;
-            fillPointer = -1;
-            return;
-          }
-        if (n == capacity)
-          return;
+        char[] newArray = new char[ n ];
+        System.arraycopy( chars, 0, newArray, 0, n );
+        chars = newArray;
+        capacity = n;
+        fillPointer = -1;
+        return;
       }
-    Debug.assertTrue(chars == null);
+      if( n == capacity )
+        return;
+    }
+    Debug.assertTrue( chars == null );
     // Displaced array. Copy existing characters.
-    chars = new char[n];
-    if (array instanceof AbstractString)
+    chars = new char[ n ];
+    if( array instanceof AbstractString )
+    {
+      AbstractString string = (AbstractString) array;
+      for( int i = 0; i < n; i++ )
       {
-        AbstractString string = (AbstractString) array;
-        for (int i = 0; i < n; i++)
-          {
-            chars[i] = string.charAt(displacement + i);
-          }
+        chars[ i ] = string.charAt( displacement + i );
       }
+    }
     else
+    {
+      for( int i = 0; i < n; i++ )
       {
-        for (int i = 0; i < n; i++)
-          {
-            LispCharacter character =
-              (LispCharacter) array.AREF(displacement + i);
-            chars[i] = character.value;
-          }
+        LispCharacter character = (LispCharacter) array.AREF( displacement + i );
+        chars[ i ] = character.value;
       }
+    }
     capacity = n;
     array = null;
     displacement = 0;
@@ -290,333 +288,322 @@ public void shrink(int n)
   }
 
   @Override
-public LispObject reverse()
+  public LispObject reverse()
   {
     int length = length();
-    AbstractString result = new SimpleString(length);
+    AbstractString result = new SimpleString( length );
     int i, j;
-    for (i = 0, j = length - 1; i < length; i++, j--)
-      result.setCharAt(i, charAt(j));
+    for( i = 0, j = length - 1; i < length; i++, j-- )
+      result.setCharAt( i, charAt( j ) );
     return result;
   }
 
   @Override
-public LispObject nreverse()
+  public LispObject nreverse()
   {
     int i = 0;
     int j = length() - 1;
-    while (i < j)
-      {
-        char temp = charAt(i);
-        setCharAt(i, charAt(j));
-        setCharAt(j, temp);
-        ++i;
-        --j;
-      }
+    while ( i < j)
+    {
+      char temp = charAt( i );
+      setCharAt( i, charAt( j ) );
+      setCharAt( j, temp );
+      ++i;
+      --j;
+    }
     return this;
   }
 
   @Override
-public String getStringValue()
+  public String getStringValue()
   {
-    if (fillPointer >= 0)
-      return new String(charsOld(), 0, fillPointer);
+    if( fillPointer >= 0 )
+      return new String( charsOld(), 0, fillPointer );
     else
-      return new String(charsOld());
+      return new String( charsOld() );
   }
 
   @Override
-public Object javaInstance()
+  public Object javaInstance()
   {
-    return new String(getStringValue());
+    return new String( getStringValue() );
   }
 
   @Override
-public Object javaInstanceImpl(Class c)
+  public Object javaInstanceImpl(Class c)
   {
     return javaInstance();
   }
 
   @Override
-public final int capacity()
+  public final int capacity()
   {
     return capacity;
   }
 
   @Override
-public final int length()
+  public final int length()
   {
     return fillPointer >= 0 ? fillPointer : capacity;
   }
 
   @Override
-public char charAt(int index)
+  public char charAt(int index)
   {
-    if (chars != null)
+    if( chars != null )
+    {
+      try
       {
-        try
-          {
-            return chars[index];
-          }
-        catch (ArrayIndexOutOfBoundsException e)
-          {
-            badIndex(index, capacity);
-            return 0; // Not reached.
-          }
+        return chars[ index ];
       }
+      catch( ArrayIndexOutOfBoundsException e )
+      {
+        badIndex( index, capacity );
+        return 0; // Not reached.
+      }
+    }
     else
-      return LispCharacter.getValue(array.AREF(index + displacement));
+      return LispCharacter.getValue( array.AREF( index + displacement ) );
   }
 
   @Override
-public void setCharAt(int index, char c)
+  public void setCharAt(int index, char c)
   {
-    if (chars != null)
+    if( chars != null )
+    {
+      try
       {
-        try
-          {
-            chars[index] = c;
-          }
-        catch (ArrayIndexOutOfBoundsException e)
-          {
-            badIndex(index, capacity);
-          }
+        chars[ index ] = c;
       }
+      catch( ArrayIndexOutOfBoundsException e )
+      {
+        badIndex( index, capacity );
+      }
+    }
     else
-      array.aset(index + displacement, LispCharacter.getInstance(c));
+      array.aset( index + displacement, LispCharacter.getInstance( c ) );
   }
 
   @Override
-public LispObject elt(int index)
+  public LispObject elt(int index)
   {
     final int limit = length();
-    if (index < 0 || index >= limit)
-      badIndex(index, limit);
-    return LispCharacter.getInstance(charAt(index));
+    if( index < 0 || index >= limit )
+      badIndex( index, limit );
+    return LispCharacter.getInstance( charAt( index ) );
   }
 
   // Ignores fill pointer.
   @Override
-public LispObject CHAR(int index)
+  public LispObject CHAR(int index)
   {
-    return LispCharacter.getInstance(charAt(index));
+    return LispCharacter.getInstance( charAt( index ) );
   }
 
   // Ignores fill pointer.
   @Override
-public LispObject AREF(int index)
+  public LispObject AREF(int index)
   {
-    return LispCharacter.getInstance(charAt(index));
+    return LispCharacter.getInstance( charAt( index ) );
   }
 
   @Override
-public void aset(int index, LispObject newValue)
+  public void aset(int index, LispObject newValue)
   {
-      setCharAt(index, LispCharacter.getValue(newValue));
+    setCharAt( index, LispCharacter.getValue( newValue ) );
   }
 
   @Override
-public void vectorPushExtend(LispObject element)
-
+  public void vectorPushExtend(LispObject element)
   {
-    if (fillPointer < 0)
+    if( fillPointer < 0 )
       noFillPointer();
-    if (fillPointer >= capacity)
-      {
-        // Need to extend vector.
-        ensureCapacity(capacity * 2 + 1);
-      }
-    if (chars != null)
-      {
-        chars[fillPointer] = LispCharacter.getValue(element);
-      }
+    if( fillPointer >= capacity )
+    {
+      // Need to extend vector.
+      ensureCapacity( capacity * 2 + 1 );
+    }
+    if( chars != null )
+    {
+      chars[ fillPointer ] = LispCharacter.getValue( element );
+    }
     else
-      array.aset(fillPointer + displacement, element);
+      array.aset( fillPointer + displacement, element );
     ++fillPointer;
   }
 
   @Override
-public LispObject VECTOR_PUSH_EXTEND(LispObject element)
-
+  public LispObject VECTOR_PUSH_EXTEND(LispObject element)
   {
-    vectorPushExtend(element);
-    return Fixnum.getInstance(fillPointer - 1);
+    vectorPushExtend( element );
+    return Fixnum.getInstance( fillPointer - 1 );
   }
 
   @Override
-public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
-
+  public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
   {
-    int ext = Fixnum.getValue(extension);
-    if (fillPointer < 0)
+    int ext = Fixnum.getValue( extension );
+    if( fillPointer < 0 )
       noFillPointer();
-    if (fillPointer >= capacity)
-      {
-        // Need to extend vector.
-        ext = Math.max(ext, capacity + 1);
-        ensureCapacity(capacity + ext);
-      }
-    if (chars != null)
-      {
-        chars[fillPointer] = LispCharacter.getValue(element);
-      }
+    if( fillPointer >= capacity )
+    {
+      // Need to extend vector.
+      ext = Math.max( ext, capacity + 1 );
+      ensureCapacity( capacity + ext );
+    }
+    if( chars != null )
+    {
+      chars[ fillPointer ] = LispCharacter.getValue( element );
+    }
     else
-      array.aset(fillPointer + displacement, element);
-    return Fixnum.getInstance(fillPointer++);
+      array.aset( fillPointer + displacement, element );
+    return Fixnum.getInstance( fillPointer++ );
   }
 
   public final void ensureCapacity(int minCapacity)
   {
-    if (chars != null)
+    if( chars != null )
+    {
+      if( capacity < minCapacity )
       {
-        if (capacity < minCapacity)
-          {
-            char[] newArray = new char[minCapacity];
-            System.arraycopy(chars, 0, newArray, 0, capacity);
-            chars = newArray;
-            capacity = minCapacity;
-          }
+        char[] newArray = new char[ minCapacity ];
+        System.arraycopy( chars, 0, newArray, 0, capacity );
+        chars = newArray;
+        capacity = minCapacity;
       }
+    }
     else
+    {
+      Debug.assertTrue( array != null );
+      if( capacity < minCapacity || array.getTotalSize() - displacement < minCapacity )
       {
-        Debug.assertTrue(array != null);
-        if (capacity < minCapacity ||
-            array.getTotalSize() - displacement < minCapacity)
+        // Copy array.
+        chars = new char[ minCapacity ];
+        final int limit = Math.min( capacity, array.getTotalSize() - displacement );
+        if( array instanceof AbstractString )
+        {
+          AbstractString string = (AbstractString) array;
+          for( int i = 0; i < limit; i++ )
           {
-            // Copy array.
-            chars = new char[minCapacity];
-            final int limit =
-              Math.min(capacity, array.getTotalSize() - displacement);
-            if (array instanceof AbstractString)
-              {
-                AbstractString string = (AbstractString) array;
-                for (int i = 0; i < limit; i++)
-                  {
-                    chars[i] = string.charAt(displacement + i);
-                  }
-              }
-            else
-              {
-                for (int i = 0; i < limit; i++)
-                  {
-                    LispCharacter character =
-                      (LispCharacter) array.AREF(displacement + i);
-                    chars[i] = character.value;
-                  }
-              }
-            capacity = minCapacity;
-            array = null;
-            displacement = 0;
-            isDisplaced = false;
+            chars[ i ] = string.charAt( displacement + i );
           }
+        }
+        else
+        {
+          for( int i = 0; i < limit; i++ )
+          {
+            LispCharacter character = (LispCharacter) array.AREF( displacement + i );
+            chars[ i ] = character.value;
+          }
+        }
+        capacity = minCapacity;
+        array = null;
+        displacement = 0;
+        isDisplaced = false;
       }
+    }
   }
 
   @Override
-public int sxhash()
+  public int sxhash()
   {
     int hashCode = randomStringHashBase;
     final int limit = length();
-    for (int i = 0; i < limit; i++)
-      {
-        hashCode += charAt(i);
-        hashCode += (hashCode << 10);
-        hashCode ^= (hashCode >> 6);
-      }
-    hashCode += (hashCode << 3);
-    hashCode ^= (hashCode >> 11);
-    hashCode += (hashCode << 15);
-    return (hashCode & 0x7fffffff);
+    for( int i = 0; i < limit; i++ )
+    {
+      hashCode += charAt( i );
+      hashCode += ( hashCode << 10 );
+      hashCode ^= ( hashCode >> 6 );
+    }
+    hashCode += ( hashCode << 3 );
+    hashCode ^= ( hashCode >> 11 );
+    hashCode += ( hashCode << 15 );
+    return ( hashCode & 0x7fffffff );
   }
 
   // For EQUALP hash tables.
   @Override
-public int psxhash()
+  public int psxhash()
   {
     int hashCode = randomStringHashBase;
     final int limit = length();
-    for (int i = 0; i < limit; i++)
-      {
-        hashCode += Character.toUpperCase(charAt(i));
-        hashCode += (hashCode << 10);
-        hashCode ^= (hashCode >> 6);
-      }
-    hashCode += (hashCode << 3);
-    hashCode ^= (hashCode >> 11);
-    hashCode += (hashCode << 15);
-    return (hashCode & 0x7fffffff);
+    for( int i = 0; i < limit; i++ )
+    {
+      hashCode += Character.toUpperCase( charAt( i ) );
+      hashCode += ( hashCode << 10 );
+      hashCode ^= ( hashCode >> 6 );
+    }
+    hashCode += ( hashCode << 3 );
+    hashCode ^= ( hashCode >> 11 );
+    hashCode += ( hashCode << 15 );
+    return ( hashCode & 0x7fffffff );
   }
 
   @Override
-public AbstractVector adjustArray(int newCapacity,
-                                     LispObject initialElement,
-                                     LispObject initialContents)
-
+  public AbstractVector adjustArray(int newCapacity, LispObject initialElement, LispObject initialContents)
   {
-    if (initialContents != null)
+    if( initialContents != null )
+    {
+      // "If INITIAL-CONTENTS is supplied, it is treated as for MAKE-
+      // ARRAY. In this case none of the original contents of array
+      // appears in the resulting array."
+      char[] newChars = new char[ newCapacity ];
+      if( initialContents.listp() )
       {
-        // "If INITIAL-CONTENTS is supplied, it is treated as for MAKE-
-        // ARRAY. In this case none of the original contents of array
-        // appears in the resulting array."
-        char[] newChars = new char[newCapacity];
-        if (initialContents.listp())
-          {
-            LispObject list = initialContents;
-            for (int i = 0; i < newCapacity; i++)
-              {
-                newChars[i] = LispCharacter.getValue(list.car());
-                list = list.cdr();
-              }
-          }
-        else if (initialContents.vectorp())
-          {
-            for (int i = 0; i < newCapacity; i++)
-              newChars[i] = LispCharacter.getValue(initialContents.elt(i));
-          }
-        else
-          type_error(initialContents, Symbol.SEQUENCE);
-        chars = newChars;
+        LispObject list = initialContents;
+        for( int i = 0; i < newCapacity; i++ )
+        {
+          newChars[ i ] = LispCharacter.getValue( list.car() );
+          list = list.cdr();
+        }
       }
+      else if( initialContents.vectorp() )
+      {
+        for( int i = 0; i < newCapacity; i++ )
+          newChars[ i ] = LispCharacter.getValue( initialContents.elt( i ) );
+      }
+      else
+        type_error( initialContents, Symbol.SEQUENCE );
+      chars = newChars;
+    }
     else
+    {
+      if( chars == null )
       {
-        if (chars == null)
+        // Displaced array. Copy existing characters.
+        chars = new char[ newCapacity ];
+        final int limit = Math.min( capacity, newCapacity );
+        if( array instanceof AbstractString )
+        {
+          AbstractString string = (AbstractString) array;
+          for( int i = 0; i < limit; i++ )
           {
-            // Displaced array. Copy existing characters.
-            chars = new char[newCapacity];
-            final int limit = Math.min(capacity, newCapacity);
-            if (array instanceof AbstractString)
-              {
-                AbstractString string = (AbstractString) array;
-                for (int i = 0; i < limit; i++)
-                  {
-                    chars[i] = string.charAt(displacement + i);
-                  }
-              }
-            else
-              {
-                for (int i = 0; i < limit; i++)
-                  {
-                    LispCharacter character =
-                      (LispCharacter) array.AREF(displacement + i);
-                    chars[i] = character.value;
-                  }
-              }
+            chars[ i ] = string.charAt( displacement + i );
           }
-        else if (capacity != newCapacity)
+        }
+        else
+        {
+          for( int i = 0; i < limit; i++ )
           {
-            char[] newElements = new char[newCapacity];
-            System.arraycopy(chars, 0, newElements, 0,
-                             Math.min(capacity, newCapacity));
-            chars = newElements;
+            LispCharacter character = (LispCharacter) array.AREF( displacement + i );
+            chars[ i ] = character.value;
           }
-        if (initialElement != null && capacity < newCapacity)
-          {
-            // Initialize new elements.
-            final char c = LispCharacter.getValue(initialElement);
-            for (int i = capacity; i < newCapacity; i++)
-              chars[i] = c;
-          }
+        }
       }
+      else if( capacity != newCapacity )
+      {
+        char[] newElements = new char[ newCapacity ];
+        System.arraycopy( chars, 0, newElements, 0, Math.min( capacity, newCapacity ) );
+        chars = newElements;
+      }
+      if( initialElement != null && capacity < newCapacity )
+      {
+        // Initialize new elements.
+        final char c = LispCharacter.getValue( initialElement );
+        for( int i = capacity; i < newCapacity; i++ )
+          chars[ i ] = c;
+      }
+    }
     capacity = newCapacity;
     array = null;
     displacement = 0;
@@ -625,10 +612,7 @@ public AbstractVector adjustArray(int newCapacity,
   }
 
   @Override
-public AbstractVector adjustArray(int newCapacity,
-                                     AbstractArray displacedTo,
-                                     int displacement)
-
+  public AbstractVector adjustArray(int newCapacity, AbstractArray displacedTo, int displacement)
   {
     capacity = newCapacity;
     array = displacedTo;

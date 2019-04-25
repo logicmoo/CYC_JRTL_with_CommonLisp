@@ -46,22 +46,18 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class deduction_handles extends SubLTranslatedFile
+public final class deduction_handles
+    extends
+      SubLTranslatedFile
 {
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.deduction_handles";
   public static final String myFingerPrint = "e3494013c220626c570895576bf8e411fc6fd905caf261c043eb0351a2040670";
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 1234L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 1234L)
   private static SubLSymbol $deduction_from_id$;
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 5892L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 5892L)
   private static SubLSymbol $new_deduction_id_threshold$;
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 10881L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 10881L)
   public static SubLSymbol $dtp_deduction$;
   private static final SubLSymbol $sym0$_DEDUCTION_FROM_ID_;
   private static final SubLSymbol $sym1$DEDUCTIONS_TABLE_TUPLE_TO_DEDUCTION;
@@ -145,17 +141,13 @@ public final class deduction_handles extends SubLTranslatedFile
   private static final SubLList $list79;
   private static final SubLList $list80;
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 1569L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 1569L)
   public static SubLObject new_deductions_iterator()
   {
-    return iteration.new_indirect_iterator( id_index.new_id_index_iterator( deduction_handles.$deduction_from_id$.getGlobalValue() ), $sym1$DEDUCTIONS_TABLE_TUPLE_TO_DEDUCTION, UNPROVIDED );
+    return iteration.new_indirect_iterator( id_index.new_id_index_iterator( $deduction_from_id$.getGlobalValue() ), $sym1$DEDUCTIONS_TABLE_TUPLE_TO_DEDUCTION, UNPROVIDED );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 1932L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 1932L)
   public static SubLObject do_deductions(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -167,77 +159,67 @@ public final class deduction_handles extends SubLTranslatedFile
     cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list2 );
     var = current.first();
     current = current.rest();
-    final SubLObject progress_message = current.isCons() ? current.first() : deduction_handles.$str3$mapping_Cyc_deductions;
+    final SubLObject progress_message = current.isCons() ? current.first() : $str3$mapping_Cyc_deductions;
     cdestructuring_bind.destructuring_bind_must_listp( current, datum, $list2 );
     current = current.rest();
     SubLObject allow_other_keys_p = NIL;
     SubLObject rest = current;
     SubLObject bad = NIL;
     SubLObject current_$1 = NIL;
-    while ( deduction_handles.NIL != rest)
+    while ( NIL != rest)
     {
       cdestructuring_bind.destructuring_bind_must_consp( rest, datum, $list2 );
       current_$1 = rest.first();
       rest = rest.rest();
       cdestructuring_bind.destructuring_bind_must_consp( rest, datum, $list2 );
-      if( deduction_handles.NIL == conses_high.member( current_$1, $list4, UNPROVIDED, UNPROVIDED ) )
+      if( NIL == conses_high.member( current_$1, $list4, UNPROVIDED, UNPROVIDED ) )
       {
         bad = T;
       }
-      if( current_$1 == deduction_handles.$kw5$ALLOW_OTHER_KEYS )
+      if( current_$1 == $kw5$ALLOW_OTHER_KEYS )
       {
         allow_other_keys_p = rest.first();
       }
       rest = rest.rest();
     }
-    if( deduction_handles.NIL != bad && deduction_handles.NIL == allow_other_keys_p )
+    if( NIL != bad && NIL == allow_other_keys_p )
     {
       cdestructuring_bind.cdestructuring_bind_error( datum, $list2 );
     }
     final SubLObject done_tail = cdestructuring_bind.property_list_member( $kw6$DONE, current );
-    final SubLObject done = ( deduction_handles.NIL != done_tail ) ? conses_high.cadr( done_tail ) : deduction_handles.NIL;
+    final SubLObject done = ( NIL != done_tail ) ? conses_high.cadr( done_tail ) : NIL;
     final SubLObject body;
     current = ( body = temp );
     final SubLObject d_id = $sym7$D_ID;
     final SubLObject d_handle = $sym8$D_HANDLE;
-    return ConsesLow.list( $sym9$DO_ID_INDEX, ConsesLow.list( new SubLObject[] { d_id, d_handle, deduction_handles.$list10, deduction_handles.$kw11$PROGRESS_MESSAGE, progress_message,
-      deduction_handles.$kw12$ORDERED, deduction_handles.T, deduction_handles.$kw6$DONE, done
-    } ), ConsesLow.listS( $sym13$CLET, ConsesLow.list( ConsesLow.list( var, ConsesLow.list( $sym14$RESOLVE_DEDUCTION_ID_VALUE_PAIR, d_id, d_handle ) ) ), ConsesLow
-        .append( body, NIL ) ) );
+    return ConsesLow.list( $sym9$DO_ID_INDEX, ConsesLow.list( new SubLObject[] { d_id, d_handle, $list10, $kw11$PROGRESS_MESSAGE, progress_message, $kw12$ORDERED, T, $kw6$DONE, done
+    } ), ConsesLow.listS( $sym13$CLET, ConsesLow.list( ConsesLow.list( var, ConsesLow.list( $sym14$RESOLVE_DEDUCTION_ID_VALUE_PAIR, d_id, d_handle ) ) ), ConsesLow.append( body, NIL ) ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 2772L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 2772L)
   public static SubLObject resolve_deduction_id_value_pair(final SubLObject id, SubLObject deduction)
   {
-    if( deduction_handles.$kw17$PAGED_OUT == deduction )
+    if( $kw17$PAGED_OUT == deduction )
     {
       deduction = find_deduction_by_id( id );
     }
     return deduction;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 2969L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 2969L)
   public static SubLObject do_deductions_table()
   {
-    return deduction_handles.$deduction_from_id$.getGlobalValue();
+    return $deduction_from_id$.getGlobalValue();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 3071L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 3071L)
   public static SubLObject new_new_deductions_iterator()
   {
     return iteration.new_indirect_iterator( iteration.new_filter_iterator( id_index.new_id_index_ordered_iterator( do_deductions_table() ), $sym19$NEW_DEDUCTIONS_TABLE_ENTRY_, ConsesLow.list(
         new_deduction_id_threshold() ) ), $sym1$DEDUCTIONS_TABLE_TUPLE_TO_DEDUCTION, UNPROVIDED );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 3375L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 3375L)
   public static SubLObject new_deductions_table_entryP(final SubLObject tuple, final SubLObject id_threshold)
   {
     SubLObject id = NIL;
@@ -248,7 +230,7 @@ public final class deduction_handles extends SubLTranslatedFile
     cdestructuring_bind.destructuring_bind_must_consp( current, tuple, $list20 );
     payload = current.first();
     current = current.rest();
-    if( deduction_handles.NIL == current )
+    if( NIL == current )
     {
       return Numbers.numGE( id, id_threshold );
     }
@@ -256,9 +238,7 @@ public final class deduction_handles extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 3545L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 3545L)
   public static SubLObject deductions_table_tuple_to_deduction(final SubLObject tuple)
   {
     SubLObject id = NIL;
@@ -269,7 +249,7 @@ public final class deduction_handles extends SubLTranslatedFile
     cdestructuring_bind.destructuring_bind_must_consp( current, tuple, $list20 );
     payload = current.first();
     current = current.rest();
-    if( deduction_handles.NIL == current )
+    if( NIL == current )
     {
       return find_deduction_by_id( id );
     }
@@ -277,31 +257,27 @@ public final class deduction_handles extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 3715L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 3715L)
   public static SubLObject setup_deduction_table(final SubLObject size, final SubLObject exactP)
   {
-    if( deduction_handles.NIL != deduction_handles.$deduction_from_id$.getGlobalValue() )
+    if( NIL != $deduction_from_id$.getGlobalValue() )
     {
       return NIL;
     }
-    deduction_handles.$deduction_from_id$.setGlobalValue( id_index.new_id_index( size, ZERO_INTEGER ) );
+    $deduction_from_id$.setGlobalValue( id_index.new_id_index( size, ZERO_INTEGER ) );
     return T;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 3933L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 3933L)
   public static SubLObject finalize_deductions(SubLObject max_deduction_id)
   {
-    if( max_deduction_id == deduction_handles.UNPROVIDED )
+    if( max_deduction_id == UNPROVIDED )
     {
       max_deduction_id = NIL;
     }
     set_next_deduction_id( max_deduction_id );
     set_new_deduction_id_threshold( next_deduction_id() );
-    if( deduction_handles.NIL == max_deduction_id )
+    if( NIL == max_deduction_id )
     {
       optimize_deduction_table();
       deduction_manager.optimize_deduction_content_table( new_deduction_id_threshold() );
@@ -309,9 +285,7 @@ public final class deduction_handles extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 4353L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 4353L)
   public static SubLObject optimize_deduction_table()
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -319,7 +293,7 @@ public final class deduction_handles extends SubLTranslatedFile
     try
     {
       Storage.$current_area$.bind( Storage.get_static_area(), thread );
-      id_index.optimize_id_index( deduction_handles.$deduction_from_id$.getGlobalValue(), UNPROVIDED );
+      id_index.optimize_id_index( $deduction_from_id$.getGlobalValue(), UNPROVIDED );
     }
     finally
     {
@@ -328,129 +302,100 @@ public final class deduction_handles extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 4476L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 4476L)
   public static SubLObject clear_deduction_table()
   {
-    return id_index.clear_id_index( deduction_handles.$deduction_from_id$.getGlobalValue() );
+    return id_index.clear_id_index( $deduction_from_id$.getGlobalValue() );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 4564L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 4564L)
   public static SubLObject create_deduction_dump_id_table()
   {
-    return id_index.new_indirect_compact_id_index( deduction_handles.$deduction_from_id$.getGlobalValue() );
+    return id_index.new_indirect_compact_id_index( $deduction_from_id$.getGlobalValue() );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 4721L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 4721L)
   public static SubLObject new_dense_deduction_id_index()
   {
-    return id_index.clone_id_index( deduction_handles.$deduction_from_id$.getGlobalValue() );
+    return id_index.clone_id_index( $deduction_from_id$.getGlobalValue() );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 4922L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 4922L)
   public static SubLObject deduction_count()
   {
-    if( deduction_handles.NIL == deduction_handles.$deduction_from_id$.getGlobalValue() )
+    if( NIL == $deduction_from_id$.getGlobalValue() )
     {
       return ZERO_INTEGER;
     }
-    return id_index.id_index_count( deduction_handles.$deduction_from_id$.getGlobalValue() );
+    return id_index.id_index_count( $deduction_from_id$.getGlobalValue() );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 5292L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 5292L)
   public static SubLObject lookup_deduction(final SubLObject id)
   {
-    final SubLObject deduction = id_index.id_index_lookup( deduction_handles.$deduction_from_id$.getGlobalValue(), id, UNPROVIDED );
-    if( deduction_handles.NIL == deduction )
+    final SubLObject deduction = id_index.id_index_lookup( $deduction_from_id$.getGlobalValue(), id, UNPROVIDED );
+    if( NIL == deduction )
     {
       return NIL;
     }
-    if( deduction_handles.$kw17$PAGED_OUT == deduction )
+    if( $kw17$PAGED_OUT == deduction )
     {
       return make_deduction_shell( id );
     }
     return deduction;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 5804L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 5804L)
   public static SubLObject next_deduction_id()
   {
-    return id_index.id_index_next_id( deduction_handles.$deduction_from_id$.getGlobalValue() );
+    return id_index.id_index_next_id( $deduction_from_id$.getGlobalValue() );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 6030L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 6030L)
   public static SubLObject new_deduction_id_threshold()
   {
-    return ( deduction_handles.NIL != deduction_handles.$new_deduction_id_threshold$.getGlobalValue() ) ? deduction_handles.$new_deduction_id_threshold$.getGlobalValue()
-        : deduction_manager.get_file_backed_deduction_id_threshold();
+    return ( NIL != $new_deduction_id_threshold$.getGlobalValue() ) ? $new_deduction_id_threshold$.getGlobalValue() : deduction_manager.get_file_backed_deduction_id_threshold();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 6224L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 6224L)
   public static SubLObject set_new_deduction_id_threshold(final SubLObject id)
   {
-    deduction_handles.$new_deduction_id_threshold$.setGlobalValue( id );
+    $new_deduction_id_threshold$.setGlobalValue( id );
     return id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 6331L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 6331L)
   public static SubLObject old_deduction_count()
   {
     return Values.nth_value_step_2( Values.nth_value_step_1( ZERO_INTEGER ), id_index.id_index_old_and_new_object_counts( do_deductions_table(), new_deduction_id_threshold() ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 6530L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 6530L)
   public static SubLObject new_deduction_count()
   {
     return Values.nth_value_step_2( Values.nth_value_step_1( ONE_INTEGER ), id_index.id_index_old_and_new_object_counts( do_deductions_table(), new_deduction_id_threshold() ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 6729L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 6729L)
   public static SubLObject missing_old_deduction_ids()
   {
     final SubLObject id_limit = new_deduction_id_threshold();
-    return id_index.id_index_missing_ids( deduction_handles.$deduction_from_id$.getGlobalValue(), $kw27$DENSE, id_limit );
+    return id_index.id_index_missing_ids( $deduction_from_id$.getGlobalValue(), $kw27$DENSE, id_limit );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 6980L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 6980L)
   public static SubLObject missing_deduction_id_set()
   {
-    return set_utilities.construct_set_from_list( id_index.id_index_missing_ids( deduction_handles.$deduction_from_id$.getGlobalValue(), $kw28$ALL, UNPROVIDED ), EQL, UNPROVIDED );
+    return set_utilities.construct_set_from_list( id_index.id_index_missing_ids( $deduction_from_id$.getGlobalValue(), $kw28$ALL, UNPROVIDED ), EQL, UNPROVIDED );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 7173L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 7173L)
   public static SubLObject deleted_deduction_id_iterator()
   {
     return iteration.new_list_iterator( id_index.id_index_missing_ids( do_deductions_table(), $kw28$ALL, UNPROVIDED ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 7352L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 7352L)
   public static SubLObject do_deleted_deduction_ids(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -466,55 +411,50 @@ public final class deduction_handles extends SubLTranslatedFile
     SubLObject rest = current;
     SubLObject bad = NIL;
     SubLObject current_$2 = NIL;
-    while ( deduction_handles.NIL != rest)
+    while ( NIL != rest)
     {
       cdestructuring_bind.destructuring_bind_must_consp( rest, datum, $list29 );
       current_$2 = rest.first();
       rest = rest.rest();
       cdestructuring_bind.destructuring_bind_must_consp( rest, datum, $list29 );
-      if( deduction_handles.NIL == conses_high.member( current_$2, $list4, UNPROVIDED, UNPROVIDED ) )
+      if( NIL == conses_high.member( current_$2, $list4, UNPROVIDED, UNPROVIDED ) )
       {
         bad = T;
       }
-      if( current_$2 == deduction_handles.$kw5$ALLOW_OTHER_KEYS )
+      if( current_$2 == $kw5$ALLOW_OTHER_KEYS )
       {
         allow_other_keys_p = rest.first();
       }
       rest = rest.rest();
     }
-    if( deduction_handles.NIL != bad && deduction_handles.NIL == allow_other_keys_p )
+    if( NIL != bad && NIL == allow_other_keys_p )
     {
       cdestructuring_bind.cdestructuring_bind_error( datum, $list29 );
     }
     final SubLObject done_tail = cdestructuring_bind.property_list_member( $kw6$DONE, current );
-    final SubLObject done = ( deduction_handles.NIL != done_tail ) ? conses_high.cadr( done_tail ) : deduction_handles.NIL;
+    final SubLObject done = ( NIL != done_tail ) ? conses_high.cadr( done_tail ) : NIL;
     final SubLObject body;
     current = ( body = temp );
     final SubLObject iterator = $sym30$ITERATOR;
-    return ConsesLow.list( $sym13$CLET, ConsesLow.list( reader.bq_cons( iterator, $list31 ) ), ConsesLow.listS( $sym32$DO_ITERATOR, ConsesLow.list( id, iterator,
-        $kw6$DONE, done ), ConsesLow.append( body, NIL ) ) );
+    return ConsesLow.list( $sym13$CLET, ConsesLow.list( reader.bq_cons( iterator, $list31 ) ), ConsesLow.listS( $sym32$DO_ITERATOR, ConsesLow.list( id, iterator, $kw6$DONE, done ), ConsesLow.append( body, NIL ) ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 7593L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 7593L)
   public static SubLObject has_new_deductionsP()
   {
     return Numbers.numG( next_deduction_id(), new_deduction_id_threshold() );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 7694L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 7694L)
   public static SubLObject set_next_deduction_id(SubLObject max_deduction_id)
   {
-    if( max_deduction_id == deduction_handles.UNPROVIDED )
+    if( max_deduction_id == UNPROVIDED )
     {
       max_deduction_id = NIL;
     }
     final SubLThread thread = SubLProcess.currentSubLThread();
     SubLObject max = MINUS_ONE_INTEGER;
-    if( deduction_handles.NIL != max_deduction_id )
+    if( NIL != max_deduction_id )
     {
       max = max_deduction_id;
     }
@@ -524,7 +464,7 @@ public final class deduction_handles extends SubLTranslatedFile
       final SubLObject mess = $str33$Determining_maximum_deduction_ID;
       final SubLObject total = id_index.id_index_count( idx );
       SubLObject sofar = ZERO_INTEGER;
-      assert deduction_handles.NIL != Types.stringp( mess ) : mess;
+      assert NIL != Types.stringp( mess ) : mess;
       final SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding( thread );
       final SubLObject _prev_bind_2 = utilities_macros.$last_percent_progress_prediction$.currentBinding( thread );
       final SubLObject _prev_bind_3 = utilities_macros.$within_noting_percent_progress$.currentBinding( thread );
@@ -539,10 +479,10 @@ public final class deduction_handles extends SubLTranslatedFile
         {
           utilities_macros.noting_percent_progress_preamble( mess );
           final SubLObject idx_$3 = idx;
-          if( deduction_handles.NIL == id_index.id_index_objects_empty_p( idx_$3, $kw35$SKIP ) )
+          if( NIL == id_index.id_index_objects_empty_p( idx_$3, $kw35$SKIP ) )
           {
             final SubLObject idx_$4 = idx_$3;
-            if( deduction_handles.NIL == id_index.id_index_dense_objects_empty_p( idx_$4, $kw35$SKIP ) )
+            if( NIL == id_index.id_index_dense_objects_empty_p( idx_$4, $kw35$SKIP ) )
             {
               final SubLObject vector_var = id_index.id_index_dense_objects( idx_$4 );
               final SubLObject backwardP_var = NIL;
@@ -553,11 +493,11 @@ public final class deduction_handles extends SubLTranslatedFile
               SubLObject deduction;
               for( length = Sequences.length( vector_var ), v_iteration = NIL, v_iteration = ZERO_INTEGER; v_iteration.numL( length ); v_iteration = Numbers.add( v_iteration, ONE_INTEGER ) )
               {
-                d_id = ( ( deduction_handles.NIL != backwardP_var ) ? Numbers.subtract( length, v_iteration, ONE_INTEGER ) : v_iteration );
+                d_id = ( ( NIL != backwardP_var ) ? Numbers.subtract( length, v_iteration, ONE_INTEGER ) : v_iteration );
                 d_handle = Vectors.aref( vector_var, d_id );
-                if( deduction_handles.NIL == id_index.id_index_tombstone_p( d_handle ) || deduction_handles.NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) )
+                if( NIL == id_index.id_index_tombstone_p( d_handle ) || NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) )
                 {
-                  if( deduction_handles.NIL != id_index.id_index_tombstone_p( d_handle ) )
+                  if( NIL != id_index.id_index_tombstone_p( d_handle ) )
                   {
                     d_handle = $kw35$SKIP;
                   }
@@ -569,16 +509,16 @@ public final class deduction_handles extends SubLTranslatedFile
               }
             }
             final SubLObject idx_$5 = idx_$3;
-            if( deduction_handles.NIL == id_index.id_index_sparse_objects_empty_p( idx_$5 ) || deduction_handles.NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) )
+            if( NIL == id_index.id_index_sparse_objects_empty_p( idx_$5 ) || NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) )
             {
               final SubLObject sparse = id_index.id_index_sparse_objects( idx_$5 );
               SubLObject d_id2 = id_index.id_index_sparse_id_threshold( idx_$5 );
               final SubLObject end_id = id_index.id_index_next_id( idx_$5 );
-              final SubLObject v_default = ( deduction_handles.NIL != id_index.id_index_skip_tombstones_p( $kw35$SKIP ) ) ? deduction_handles.NIL : deduction_handles.$kw35$SKIP;
+              final SubLObject v_default = ( NIL != id_index.id_index_skip_tombstones_p( $kw35$SKIP ) ) ? NIL : $kw35$SKIP;
               while ( d_id2.numL( end_id ))
               {
                 final SubLObject d_handle2 = Hashtables.gethash_without_values( d_id2, sparse, v_default );
-                if( deduction_handles.NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) || deduction_handles.NIL == id_index.id_index_tombstone_p( d_handle2 ) )
+                if( NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) || NIL == id_index.id_index_tombstone_p( d_handle2 ) )
                 {
                   final SubLObject deduction2 = resolve_deduction_id_value_pair( d_id2, d_handle2 );
                   max = Numbers.max( max, deduction_id( deduction2 ) );
@@ -615,39 +555,31 @@ public final class deduction_handles extends SubLTranslatedFile
       }
     }
     final SubLObject next_id = Numbers.add( max, ONE_INTEGER );
-    id_index.set_id_index_next_id( deduction_handles.$deduction_from_id$.getGlobalValue(), next_id );
+    id_index.set_id_index_next_id( $deduction_from_id$.getGlobalValue(), next_id );
     return next_id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 8082L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 8082L)
   public static SubLObject register_deduction_id(final SubLObject deduction, final SubLObject id)
   {
     reset_deduction_id( deduction, id );
-    id_index.id_index_enter( deduction_handles.$deduction_from_id$.getGlobalValue(), id, deduction );
+    id_index.id_index_enter( $deduction_from_id$.getGlobalValue(), id, deduction );
     return deduction;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 8298L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 8298L)
   public static SubLObject deregister_deduction_id(final SubLObject id)
   {
-    return id_index.id_index_remove( deduction_handles.$deduction_from_id$.getGlobalValue(), id );
+    return id_index.id_index_remove( $deduction_from_id$.getGlobalValue(), id );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 8446L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 8446L)
   public static SubLObject make_deduction_id()
   {
-    return id_index.id_index_reserve( deduction_handles.$deduction_from_id$.getGlobalValue() );
+    return id_index.id_index_reserve( $deduction_from_id$.getGlobalValue() );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 8579L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 8579L)
   public static SubLObject do_old_deductions(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -663,40 +595,38 @@ public final class deduction_handles extends SubLTranslatedFile
     SubLObject rest = current;
     SubLObject bad = NIL;
     SubLObject current_$7 = NIL;
-    while ( deduction_handles.NIL != rest)
+    while ( NIL != rest)
     {
       cdestructuring_bind.destructuring_bind_must_consp( rest, datum, $list36 );
       current_$7 = rest.first();
       rest = rest.rest();
       cdestructuring_bind.destructuring_bind_must_consp( rest, datum, $list36 );
-      if( deduction_handles.NIL == conses_high.member( current_$7, $list37, UNPROVIDED, UNPROVIDED ) )
+      if( NIL == conses_high.member( current_$7, $list37, UNPROVIDED, UNPROVIDED ) )
       {
         bad = T;
       }
-      if( current_$7 == deduction_handles.$kw5$ALLOW_OTHER_KEYS )
+      if( current_$7 == $kw5$ALLOW_OTHER_KEYS )
       {
         allow_other_keys_p = rest.first();
       }
       rest = rest.rest();
     }
-    if( deduction_handles.NIL != bad && deduction_handles.NIL == allow_other_keys_p )
+    if( NIL != bad && NIL == allow_other_keys_p )
     {
       cdestructuring_bind.cdestructuring_bind_error( datum, $list36 );
     }
     final SubLObject progress_message_tail = cdestructuring_bind.property_list_member( $kw11$PROGRESS_MESSAGE, current );
-    final SubLObject progress_message = ( deduction_handles.NIL != progress_message_tail ) ? conses_high.cadr( progress_message_tail ) : deduction_handles.NIL;
+    final SubLObject progress_message = ( NIL != progress_message_tail ) ? conses_high.cadr( progress_message_tail ) : NIL;
     final SubLObject done_tail = cdestructuring_bind.property_list_member( $kw6$DONE, current );
-    final SubLObject done = ( deduction_handles.NIL != done_tail ) ? conses_high.cadr( done_tail ) : deduction_handles.NIL;
+    final SubLObject done = ( NIL != done_tail ) ? conses_high.cadr( done_tail ) : NIL;
     final SubLObject body;
     current = ( body = temp );
     final SubLObject threshold = $sym38$THRESHOLD;
-    return ConsesLow.list( $sym13$CLET, ConsesLow.list( reader.bq_cons( threshold, $list39 ) ), ConsesLow.listS( $sym40$DO_KB_SUID_TABLE_UPTO_EXCLUDING_ID, ConsesLow
-        .list( deduction, $list10, threshold, $kw11$PROGRESS_MESSAGE, progress_message, $kw6$DONE, done ), ConsesLow.append( body, NIL ) ) );
+    return ConsesLow.list( $sym13$CLET, ConsesLow.list( reader.bq_cons( threshold, $list39 ) ), ConsesLow.listS( $sym40$DO_KB_SUID_TABLE_UPTO_EXCLUDING_ID, ConsesLow.list( deduction, $list10, threshold,
+        $kw11$PROGRESS_MESSAGE, progress_message, $kw6$DONE, done ), ConsesLow.append( body, NIL ) ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 9472L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 9472L)
   public static SubLObject do_new_deductions(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -712,90 +642,78 @@ public final class deduction_handles extends SubLTranslatedFile
     SubLObject rest = current;
     SubLObject bad = NIL;
     SubLObject current_$8 = NIL;
-    while ( deduction_handles.NIL != rest)
+    while ( NIL != rest)
     {
       cdestructuring_bind.destructuring_bind_must_consp( rest, datum, $list36 );
       current_$8 = rest.first();
       rest = rest.rest();
       cdestructuring_bind.destructuring_bind_must_consp( rest, datum, $list36 );
-      if( deduction_handles.NIL == conses_high.member( current_$8, $list37, UNPROVIDED, UNPROVIDED ) )
+      if( NIL == conses_high.member( current_$8, $list37, UNPROVIDED, UNPROVIDED ) )
       {
         bad = T;
       }
-      if( current_$8 == deduction_handles.$kw5$ALLOW_OTHER_KEYS )
+      if( current_$8 == $kw5$ALLOW_OTHER_KEYS )
       {
         allow_other_keys_p = rest.first();
       }
       rest = rest.rest();
     }
-    if( deduction_handles.NIL != bad && deduction_handles.NIL == allow_other_keys_p )
+    if( NIL != bad && NIL == allow_other_keys_p )
     {
       cdestructuring_bind.cdestructuring_bind_error( datum, $list36 );
     }
     final SubLObject progress_message_tail = cdestructuring_bind.property_list_member( $kw11$PROGRESS_MESSAGE, current );
-    final SubLObject progress_message = ( deduction_handles.NIL != progress_message_tail ) ? conses_high.cadr( progress_message_tail ) : deduction_handles.NIL;
+    final SubLObject progress_message = ( NIL != progress_message_tail ) ? conses_high.cadr( progress_message_tail ) : NIL;
     final SubLObject done_tail = cdestructuring_bind.property_list_member( $kw6$DONE, current );
-    final SubLObject done = ( deduction_handles.NIL != done_tail ) ? conses_high.cadr( done_tail ) : deduction_handles.NIL;
+    final SubLObject done = ( NIL != done_tail ) ? conses_high.cadr( done_tail ) : NIL;
     final SubLObject body;
     current = ( body = temp );
     final SubLObject start = $sym41$START;
-    return ConsesLow.list( $sym13$CLET, ConsesLow.list( reader.bq_cons( start, $list39 ) ), ConsesLow.listS( $sym42$DO_KB_SUID_TABLE_STARTING_AT_ID, ConsesLow.list(
-        deduction, $list10, start, $kw11$PROGRESS_MESSAGE, progress_message, $kw6$DONE, done ), ConsesLow.append( body, NIL ) ) );
+    return ConsesLow.list( $sym13$CLET, ConsesLow.list( reader.bq_cons( start, $list39 ) ), ConsesLow.listS( $sym42$DO_KB_SUID_TABLE_STARTING_AT_ID, ConsesLow.list( deduction, $list10, start, $kw11$PROGRESS_MESSAGE,
+        progress_message, $kw6$DONE, done ), ConsesLow.append( body, NIL ) ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 10260L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 10260L)
   public static SubLObject get_file_backed_deduction_internal_id_threshold()
   {
-    if( deduction_handles.NIL != Filesys.directory_p( misc_utilities.generic_caches_directory() ) )
+    if( NIL != Filesys.directory_p( misc_utilities.generic_caches_directory() ) )
     {
       return dumper.get_exclusive_deduction_internal_id_limit_for_kb( misc_utilities.generic_caches_directory() );
     }
     return ZERO_INTEGER;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 10881L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 10881L)
   public static SubLObject deduction_print_function_trampoline(final SubLObject v_object, final SubLObject stream)
   {
     print_deduction( v_object, stream, ZERO_INTEGER );
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 10881L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 10881L)
   public static SubLObject deduction_p(final SubLObject v_object)
   {
-    return ( v_object.getClass() == $deduction_native.class ) ? deduction_handles.T : deduction_handles.NIL;
+    return ( v_object.getClass() == $deduction_native.class ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 10881L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 10881L)
   public static SubLObject d_id(final SubLObject v_object)
   {
-    assert deduction_handles.NIL != deduction_p( v_object ) : v_object;
+    assert NIL != deduction_p( v_object ) : v_object;
     return v_object.getField2();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 10881L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 10881L)
   public static SubLObject _csetf_d_id(final SubLObject v_object, final SubLObject value)
   {
-    assert deduction_handles.NIL != deduction_p( v_object ) : v_object;
+    assert NIL != deduction_p( v_object ) : v_object;
     return v_object.setField2( value );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 10881L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 10881L)
   public static SubLObject make_deduction(SubLObject arglist)
   {
-    if( arglist == deduction_handles.UNPROVIDED )
+    if( arglist == UNPROVIDED )
     {
       arglist = NIL;
     }
@@ -804,7 +722,7 @@ public final class deduction_handles extends SubLTranslatedFile
     SubLObject current_arg;
     SubLObject current_value;
     SubLObject pcase_var;
-    for( next = NIL, next = arglist; deduction_handles.NIL != next; next = conses_high.cddr( next ) )
+    for( next = NIL, next = arglist; NIL != next; next = conses_high.cddr( next ) )
     {
       current_arg = next.first();
       current_value = conses_high.cadr( next );
@@ -821,9 +739,7 @@ public final class deduction_handles extends SubLTranslatedFile
     return v_new;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 10881L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 10881L)
   public static SubLObject visit_defstruct_deduction(final SubLObject obj, final SubLObject visitor_fn)
   {
     Functions.funcall( visitor_fn, obj, $kw57$BEGIN, $sym58$MAKE_DEDUCTION, ONE_INTEGER );
@@ -832,23 +748,19 @@ public final class deduction_handles extends SubLTranslatedFile
     return obj;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 10881L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 10881L)
   public static SubLObject visit_defstruct_object_deduction_method(final SubLObject obj, final SubLObject visitor_fn)
   {
     return visit_defstruct_deduction( obj, visitor_fn );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 11071L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 11071L)
   public static SubLObject print_deduction(final SubLObject v_object, final SubLObject stream, final SubLObject depth)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
-    if( deduction_handles.NIL != valid_deduction( v_object, UNPROVIDED ) )
+    if( NIL != valid_deduction( v_object, UNPROVIDED ) )
     {
-      if( deduction_handles.NIL != print_high.$print_readably$.getDynamicValue( thread ) )
+      if( NIL != print_high.$print_readably$.getDynamicValue( thread ) )
       {
         print_high.print_not_readable( v_object, stream );
       }
@@ -870,9 +782,7 @@ public final class deduction_handles extends SubLTranslatedFile
     return v_object;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 11467L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 11467L)
   public static SubLObject sxhash_deduction_method(final SubLObject v_object)
   {
     final SubLObject id = d_id( v_object );
@@ -883,9 +793,7 @@ public final class deduction_handles extends SubLTranslatedFile
     return $int63$786;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 11595L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 11595L)
   public static SubLObject get_deduction()
   {
     SubLObject deduction = NIL;
@@ -893,124 +801,106 @@ public final class deduction_handles extends SubLTranslatedFile
     return deduction;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 11823L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 11823L)
   public static SubLObject free_deduction(final SubLObject deduction)
   {
     _csetf_d_id( deduction, NIL );
     return deduction;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 12116L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 12116L)
   public static SubLObject valid_deduction_handleP(final SubLObject v_object)
   {
-    return SubLObjectFactory.makeBoolean( deduction_handles.NIL != deduction_p( v_object ) && deduction_handles.NIL != deduction_handle_validP( v_object ) );
+    return makeBoolean( NIL != deduction_p( v_object ) && NIL != deduction_handle_validP( v_object ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 12353L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 12353L)
   public static SubLObject valid_deduction(final SubLObject deduction, SubLObject robustP)
   {
-    if( robustP == deduction_handles.UNPROVIDED )
+    if( robustP == UNPROVIDED )
     {
       robustP = NIL;
     }
     return valid_deductionP( deduction, robustP );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 12498L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 12498L)
   public static SubLObject valid_deductionP(final SubLObject deduction, SubLObject robustP)
   {
-    if( robustP == deduction_handles.UNPROVIDED )
+    if( robustP == UNPROVIDED )
     {
       robustP = NIL;
     }
-    if( deduction_handles.NIL == valid_deduction_handleP( deduction ) )
+    if( NIL == valid_deduction_handleP( deduction ) )
     {
       return NIL;
     }
-    if( deduction_handles.NIL == robustP )
+    if( NIL == robustP )
     {
       return T;
     }
     final SubLObject supports = deductions_high.deduction_supports( deduction );
-    return SubLObjectFactory.makeBoolean( deduction_handles.NIL != arguments.valid_supportP( deductions_high.deduction_supported_object( deduction ), UNPROVIDED ) && supports.isCons()
-        && deduction_handles.NIL != list_utilities.every_in_list( $sym70$VALID_SUPPORT_, supports, UNPROVIDED ) );
+    return makeBoolean( NIL != arguments.valid_supportP( deductions_high.deduction_supported_object( deduction ), UNPROVIDED ) && supports.isCons() && NIL != list_utilities.every_in_list( $sym70$VALID_SUPPORT_, supports,
+        UNPROVIDED ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 12934L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 12934L)
   public static SubLObject mark_available_deductions(final SubLObject max_id, SubLObject deleted_set)
   {
-    if( deleted_set == deduction_handles.UNPROVIDED )
+    if( deleted_set == UNPROVIDED )
     {
       deleted_set = NIL;
     }
-    id_index.fill_id_index_dense_space( deduction_handles.$deduction_from_id$.getGlobalValue(), $kw17$PAGED_OUT, max_id );
-    if( deduction_handles.NIL != set.set_p( deleted_set ) )
+    id_index.fill_id_index_dense_space( $deduction_from_id$.getGlobalValue(), $kw17$PAGED_OUT, max_id );
+    if( NIL != set.set_p( deleted_set ) )
     {
       final SubLObject set_contents_var = set.do_set_internal( deleted_set );
       SubLObject basis_object;
       SubLObject state;
       SubLObject deleted_id;
-      for( basis_object = set_contents.do_set_contents_basis_object( set_contents_var ), state = NIL, state = set_contents.do_set_contents_initial_state( basis_object,
-          set_contents_var ); deduction_handles.NIL == set_contents.do_set_contents_doneP( basis_object, state ); state = set_contents.do_set_contents_update_state( state ) )
+      for( basis_object = set_contents.do_set_contents_basis_object( set_contents_var ), state = NIL, state = set_contents.do_set_contents_initial_state( basis_object, set_contents_var ); NIL == set_contents
+          .do_set_contents_doneP( basis_object, state ); state = set_contents.do_set_contents_update_state( state ) )
       {
         deleted_id = set_contents.do_set_contents_next( basis_object, state );
-        if( deduction_handles.NIL != set_contents.do_set_contents_element_validP( state, deleted_id ) )
+        if( NIL != set_contents.do_set_contents_element_validP( state, deleted_id ) )
         {
-          id_index.id_index_remove( deduction_handles.$deduction_from_id$.getGlobalValue(), deleted_id );
+          id_index.id_index_remove( $deduction_from_id$.getGlobalValue(), deleted_id );
         }
       }
     }
     return max_id;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 13284L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 13284L)
   public static SubLObject mark_deduction_available(final SubLObject id)
   {
-    return id_index.id_index_enter( deduction_handles.$deduction_from_id$.getGlobalValue(), id, $kw17$PAGED_OUT );
+    return id_index.id_index_enter( $deduction_from_id$.getGlobalValue(), id, $kw17$PAGED_OUT );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 13393L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 13393L)
   public static SubLObject make_deduction_shell(SubLObject id)
   {
-    if( id == deduction_handles.UNPROVIDED )
+    if( id == UNPROVIDED )
     {
       id = NIL;
     }
-    if( deduction_handles.NIL == id )
+    if( NIL == id )
     {
       id = make_deduction_id();
     }
-    assert deduction_handles.NIL != Types.integerp( id ) : id;
+    assert NIL != Types.integerp( id ) : id;
     final SubLObject deduction = get_deduction();
     register_deduction_id( deduction, id );
     return deduction;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 13706L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 13706L)
   public static SubLObject create_sample_invalid_deduction()
   {
     return get_deduction();
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 13843L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 13843L)
   public static SubLObject free_all_deductions()
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1018,7 +908,7 @@ public final class deduction_handles extends SubLTranslatedFile
     final SubLObject mess = $str72$Freeing_deductions;
     final SubLObject total = id_index.id_index_count( idx );
     SubLObject sofar = ZERO_INTEGER;
-    assert deduction_handles.NIL != Types.stringp( mess ) : mess;
+    assert NIL != Types.stringp( mess ) : mess;
     final SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding( thread );
     final SubLObject _prev_bind_2 = utilities_macros.$last_percent_progress_prediction$.currentBinding( thread );
     final SubLObject _prev_bind_3 = utilities_macros.$within_noting_percent_progress$.currentBinding( thread );
@@ -1033,10 +923,10 @@ public final class deduction_handles extends SubLTranslatedFile
       {
         utilities_macros.noting_percent_progress_preamble( mess );
         final SubLObject idx_$9 = idx;
-        if( deduction_handles.NIL == id_index.id_index_objects_empty_p( idx_$9, $kw35$SKIP ) )
+        if( NIL == id_index.id_index_objects_empty_p( idx_$9, $kw35$SKIP ) )
         {
           final SubLObject idx_$10 = idx_$9;
-          if( deduction_handles.NIL == id_index.id_index_dense_objects_empty_p( idx_$10, $kw35$SKIP ) )
+          if( NIL == id_index.id_index_dense_objects_empty_p( idx_$10, $kw35$SKIP ) )
           {
             final SubLObject vector_var = id_index.id_index_dense_objects( idx_$10 );
             final SubLObject backwardP_var = NIL;
@@ -1047,11 +937,11 @@ public final class deduction_handles extends SubLTranslatedFile
             SubLObject deduction;
             for( length = Sequences.length( vector_var ), v_iteration = NIL, v_iteration = ZERO_INTEGER; v_iteration.numL( length ); v_iteration = Numbers.add( v_iteration, ONE_INTEGER ) )
             {
-              d_id = ( ( deduction_handles.NIL != backwardP_var ) ? Numbers.subtract( length, v_iteration, ONE_INTEGER ) : v_iteration );
+              d_id = ( ( NIL != backwardP_var ) ? Numbers.subtract( length, v_iteration, ONE_INTEGER ) : v_iteration );
               d_handle = Vectors.aref( vector_var, d_id );
-              if( deduction_handles.NIL == id_index.id_index_tombstone_p( d_handle ) || deduction_handles.NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) )
+              if( NIL == id_index.id_index_tombstone_p( d_handle ) || NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) )
               {
-                if( deduction_handles.NIL != id_index.id_index_tombstone_p( d_handle ) )
+                if( NIL != id_index.id_index_tombstone_p( d_handle ) )
                 {
                   d_handle = $kw35$SKIP;
                 }
@@ -1063,16 +953,16 @@ public final class deduction_handles extends SubLTranslatedFile
             }
           }
           final SubLObject idx_$11 = idx_$9;
-          if( deduction_handles.NIL == id_index.id_index_sparse_objects_empty_p( idx_$11 ) || deduction_handles.NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) )
+          if( NIL == id_index.id_index_sparse_objects_empty_p( idx_$11 ) || NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) )
           {
             final SubLObject sparse = id_index.id_index_sparse_objects( idx_$11 );
             SubLObject d_id2 = id_index.id_index_sparse_id_threshold( idx_$11 );
             final SubLObject end_id = id_index.id_index_next_id( idx_$11 );
-            final SubLObject v_default = ( deduction_handles.NIL != id_index.id_index_skip_tombstones_p( $kw35$SKIP ) ) ? deduction_handles.NIL : deduction_handles.$kw35$SKIP;
+            final SubLObject v_default = ( NIL != id_index.id_index_skip_tombstones_p( $kw35$SKIP ) ) ? NIL : $kw35$SKIP;
             while ( d_id2.numL( end_id ))
             {
               final SubLObject d_handle2 = Hashtables.gethash_without_values( d_id2, sparse, v_default );
-              if( deduction_handles.NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) || deduction_handles.NIL == id_index.id_index_tombstone_p( d_handle2 ) )
+              if( NIL == id_index.id_index_skip_tombstones_p( $kw35$SKIP ) || NIL == id_index.id_index_tombstone_p( d_handle2 ) )
               {
                 final SubLObject deduction2 = resolve_deduction_id_value_pair( d_id2, d_handle2 );
                 free_deduction( deduction2 );
@@ -1112,109 +1002,100 @@ public final class deduction_handles extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 14139L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 14139L)
   public static SubLObject deduction_id(final SubLObject deduction)
   {
-    enforceType( deduction, deduction_handles.$sym44$DEDUCTION_P );
+    enforceType( deduction, $sym44$DEDUCTION_P );
     return d_id( deduction );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 14325L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 14325L)
   public static SubLObject reset_deduction_id(final SubLObject deduction, final SubLObject new_id)
   {
     _csetf_d_id( deduction, new_id );
     return deduction;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 14651L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 14651L)
   public static SubLObject deduction_handle_validP(final SubLObject deduction)
   {
     return Types.integerp( d_id( deduction ) );
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/deduction-handles.lisp",
-    position = 14993L)
+  @SubLTranslatedFile.SubL(source = "cycl/deduction-handles.lisp", position = 14993L)
   public static SubLObject find_deduction_by_id(final SubLObject id)
   {
-    enforceType( id, deduction_handles.$sym71$INTEGERP );
+    enforceType( id, $sym71$INTEGERP );
     return lookup_deduction( id );
   }
 
   public static SubLObject declare_deduction_handles_file()
   {
-    SubLFiles.declareFunction( myName, "new_deductions_iterator", "NEW-DEDUCTIONS-ITERATOR", 0, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.deduction_handles", "do_deductions", "DO-DEDUCTIONS" );
-    SubLFiles.declareFunction( myName, "resolve_deduction_id_value_pair", "RESOLVE-DEDUCTION-ID-VALUE-PAIR", 2, 0, false );
-    SubLFiles.declareFunction( myName, "do_deductions_table", "DO-DEDUCTIONS-TABLE", 0, 0, false );
-    SubLFiles.declareFunction( myName, "new_new_deductions_iterator", "NEW-NEW-DEDUCTIONS-ITERATOR", 0, 0, false );
-    SubLFiles.declareFunction( myName, "new_deductions_table_entryP", "NEW-DEDUCTIONS-TABLE-ENTRY?", 2, 0, false );
-    SubLFiles.declareFunction( myName, "deductions_table_tuple_to_deduction", "DEDUCTIONS-TABLE-TUPLE-TO-DEDUCTION", 1, 0, false );
-    SubLFiles.declareFunction( myName, "setup_deduction_table", "SETUP-DEDUCTION-TABLE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "finalize_deductions", "FINALIZE-DEDUCTIONS", 0, 1, false );
-    SubLFiles.declareFunction( myName, "optimize_deduction_table", "OPTIMIZE-DEDUCTION-TABLE", 0, 0, false );
-    SubLFiles.declareFunction( myName, "clear_deduction_table", "CLEAR-DEDUCTION-TABLE", 0, 0, false );
-    SubLFiles.declareFunction( myName, "create_deduction_dump_id_table", "CREATE-DEDUCTION-DUMP-ID-TABLE", 0, 0, false );
-    SubLFiles.declareFunction( myName, "new_dense_deduction_id_index", "NEW-DENSE-DEDUCTION-ID-INDEX", 0, 0, false );
-    SubLFiles.declareFunction( myName, "deduction_count", "DEDUCTION-COUNT", 0, 0, false );
-    SubLFiles.declareFunction( myName, "lookup_deduction", "LOOKUP-DEDUCTION", 1, 0, false );
-    SubLFiles.declareFunction( myName, "next_deduction_id", "NEXT-DEDUCTION-ID", 0, 0, false );
-    SubLFiles.declareFunction( myName, "new_deduction_id_threshold", "NEW-DEDUCTION-ID-THRESHOLD", 0, 0, false );
-    SubLFiles.declareFunction( myName, "set_new_deduction_id_threshold", "SET-NEW-DEDUCTION-ID-THRESHOLD", 1, 0, false );
-    SubLFiles.declareFunction( myName, "old_deduction_count", "OLD-DEDUCTION-COUNT", 0, 0, false );
-    SubLFiles.declareFunction( myName, "new_deduction_count", "NEW-DEDUCTION-COUNT", 0, 0, false );
-    SubLFiles.declareFunction( myName, "missing_old_deduction_ids", "MISSING-OLD-DEDUCTION-IDS", 0, 0, false );
-    SubLFiles.declareFunction( myName, "missing_deduction_id_set", "MISSING-DEDUCTION-ID-SET", 0, 0, false );
-    SubLFiles.declareFunction( myName, "deleted_deduction_id_iterator", "DELETED-DEDUCTION-ID-ITERATOR", 0, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.deduction_handles", "do_deleted_deduction_ids", "DO-DELETED-DEDUCTION-IDS" );
-    SubLFiles.declareFunction( myName, "has_new_deductionsP", "HAS-NEW-DEDUCTIONS?", 0, 0, false );
-    SubLFiles.declareFunction( myName, "set_next_deduction_id", "SET-NEXT-DEDUCTION-ID", 0, 1, false );
-    SubLFiles.declareFunction( myName, "register_deduction_id", "REGISTER-DEDUCTION-ID", 2, 0, false );
-    SubLFiles.declareFunction( myName, "deregister_deduction_id", "DEREGISTER-DEDUCTION-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "make_deduction_id", "MAKE-DEDUCTION-ID", 0, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.deduction_handles", "do_old_deductions", "DO-OLD-DEDUCTIONS" );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.deduction_handles", "do_new_deductions", "DO-NEW-DEDUCTIONS" );
-    SubLFiles.declareFunction( myName, "get_file_backed_deduction_internal_id_threshold", "GET-FILE-BACKED-DEDUCTION-INTERNAL-ID-THRESHOLD", 0, 0, false );
-    SubLFiles.declareFunction( myName, "deduction_print_function_trampoline", "DEDUCTION-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false );
-    SubLFiles.declareFunction( myName, "deduction_p", "DEDUCTION-P", 1, 0, false );
+    SubLFiles.declareFunction(me, "new_deductions_iterator", "NEW-DEDUCTIONS-ITERATOR", 0, 0, false );
+    SubLFiles.declareMacro(me, "do_deductions", "DO-DEDUCTIONS" );
+    SubLFiles.declareFunction(me, "resolve_deduction_id_value_pair", "RESOLVE-DEDUCTION-ID-VALUE-PAIR", 2, 0, false );
+    SubLFiles.declareFunction(me, "do_deductions_table", "DO-DEDUCTIONS-TABLE", 0, 0, false );
+    SubLFiles.declareFunction(me, "new_new_deductions_iterator", "NEW-NEW-DEDUCTIONS-ITERATOR", 0, 0, false );
+    SubLFiles.declareFunction(me, "new_deductions_table_entryP", "NEW-DEDUCTIONS-TABLE-ENTRY?", 2, 0, false );
+    SubLFiles.declareFunction(me, "deductions_table_tuple_to_deduction", "DEDUCTIONS-TABLE-TUPLE-TO-DEDUCTION", 1, 0, false );
+    SubLFiles.declareFunction(me, "setup_deduction_table", "SETUP-DEDUCTION-TABLE", 2, 0, false );
+    SubLFiles.declareFunction(me, "finalize_deductions", "FINALIZE-DEDUCTIONS", 0, 1, false );
+    SubLFiles.declareFunction(me, "optimize_deduction_table", "OPTIMIZE-DEDUCTION-TABLE", 0, 0, false );
+    SubLFiles.declareFunction(me, "clear_deduction_table", "CLEAR-DEDUCTION-TABLE", 0, 0, false );
+    SubLFiles.declareFunction(me, "create_deduction_dump_id_table", "CREATE-DEDUCTION-DUMP-ID-TABLE", 0, 0, false );
+    SubLFiles.declareFunction(me, "new_dense_deduction_id_index", "NEW-DENSE-DEDUCTION-ID-INDEX", 0, 0, false );
+    SubLFiles.declareFunction(me, "deduction_count", "DEDUCTION-COUNT", 0, 0, false );
+    SubLFiles.declareFunction(me, "lookup_deduction", "LOOKUP-DEDUCTION", 1, 0, false );
+    SubLFiles.declareFunction(me, "next_deduction_id", "NEXT-DEDUCTION-ID", 0, 0, false );
+    SubLFiles.declareFunction(me, "new_deduction_id_threshold", "NEW-DEDUCTION-ID-THRESHOLD", 0, 0, false );
+    SubLFiles.declareFunction(me, "set_new_deduction_id_threshold", "SET-NEW-DEDUCTION-ID-THRESHOLD", 1, 0, false );
+    SubLFiles.declareFunction(me, "old_deduction_count", "OLD-DEDUCTION-COUNT", 0, 0, false );
+    SubLFiles.declareFunction(me, "new_deduction_count", "NEW-DEDUCTION-COUNT", 0, 0, false );
+    SubLFiles.declareFunction(me, "missing_old_deduction_ids", "MISSING-OLD-DEDUCTION-IDS", 0, 0, false );
+    SubLFiles.declareFunction(me, "missing_deduction_id_set", "MISSING-DEDUCTION-ID-SET", 0, 0, false );
+    SubLFiles.declareFunction(me, "deleted_deduction_id_iterator", "DELETED-DEDUCTION-ID-ITERATOR", 0, 0, false );
+    SubLFiles.declareMacro(me, "do_deleted_deduction_ids", "DO-DELETED-DEDUCTION-IDS" );
+    SubLFiles.declareFunction(me, "has_new_deductionsP", "HAS-NEW-DEDUCTIONS?", 0, 0, false );
+    SubLFiles.declareFunction(me, "set_next_deduction_id", "SET-NEXT-DEDUCTION-ID", 0, 1, false );
+    SubLFiles.declareFunction(me, "register_deduction_id", "REGISTER-DEDUCTION-ID", 2, 0, false );
+    SubLFiles.declareFunction(me, "deregister_deduction_id", "DEREGISTER-DEDUCTION-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "make_deduction_id", "MAKE-DEDUCTION-ID", 0, 0, false );
+    SubLFiles.declareMacro(me, "do_old_deductions", "DO-OLD-DEDUCTIONS" );
+    SubLFiles.declareMacro(me, "do_new_deductions", "DO-NEW-DEDUCTIONS" );
+    SubLFiles.declareFunction(me, "get_file_backed_deduction_internal_id_threshold", "GET-FILE-BACKED-DEDUCTION-INTERNAL-ID-THRESHOLD", 0, 0, false );
+    SubLFiles.declareFunction(me, "deduction_print_function_trampoline", "DEDUCTION-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false );
+    SubLFiles.declareFunction(me, "deduction_p", "DEDUCTION-P", 1, 0, false );
     new $deduction_p$UnaryFunction();
-    SubLFiles.declareFunction( myName, "d_id", "D-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "_csetf_d_id", "_CSETF-D-ID", 2, 0, false );
-    SubLFiles.declareFunction( myName, "make_deduction", "MAKE-DEDUCTION", 0, 1, false );
-    SubLFiles.declareFunction( myName, "visit_defstruct_deduction", "VISIT-DEFSTRUCT-DEDUCTION", 2, 0, false );
-    SubLFiles.declareFunction( myName, "visit_defstruct_object_deduction_method", "VISIT-DEFSTRUCT-OBJECT-DEDUCTION-METHOD", 2, 0, false );
-    SubLFiles.declareFunction( myName, "print_deduction", "PRINT-DEDUCTION", 3, 0, false );
-    SubLFiles.declareFunction( myName, "sxhash_deduction_method", "SXHASH-DEDUCTION-METHOD", 1, 0, false );
+    SubLFiles.declareFunction(me, "d_id", "D-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "_csetf_d_id", "_CSETF-D-ID", 2, 0, false );
+    SubLFiles.declareFunction(me, "make_deduction", "MAKE-DEDUCTION", 0, 1, false );
+    SubLFiles.declareFunction(me, "visit_defstruct_deduction", "VISIT-DEFSTRUCT-DEDUCTION", 2, 0, false );
+    SubLFiles.declareFunction(me, "visit_defstruct_object_deduction_method", "VISIT-DEFSTRUCT-OBJECT-DEDUCTION-METHOD", 2, 0, false );
+    SubLFiles.declareFunction(me, "print_deduction", "PRINT-DEDUCTION", 3, 0, false );
+    SubLFiles.declareFunction(me, "sxhash_deduction_method", "SXHASH-DEDUCTION-METHOD", 1, 0, false );
     new $sxhash_deduction_method$UnaryFunction();
-    SubLFiles.declareFunction( myName, "get_deduction", "GET-DEDUCTION", 0, 0, false );
-    SubLFiles.declareFunction( myName, "free_deduction", "FREE-DEDUCTION", 1, 0, false );
-    SubLFiles.declareFunction( myName, "valid_deduction_handleP", "VALID-DEDUCTION-HANDLE?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "valid_deduction", "VALID-DEDUCTION", 1, 1, false );
-    SubLFiles.declareFunction( myName, "valid_deductionP", "VALID-DEDUCTION?", 1, 1, false );
-    SubLFiles.declareFunction( myName, "mark_available_deductions", "MARK-AVAILABLE-DEDUCTIONS", 1, 1, false );
-    SubLFiles.declareFunction( myName, "mark_deduction_available", "MARK-DEDUCTION-AVAILABLE", 1, 0, false );
-    SubLFiles.declareFunction( myName, "make_deduction_shell", "MAKE-DEDUCTION-SHELL", 0, 1, false );
-    SubLFiles.declareFunction( myName, "create_sample_invalid_deduction", "CREATE-SAMPLE-INVALID-DEDUCTION", 0, 0, false );
-    SubLFiles.declareFunction( myName, "free_all_deductions", "FREE-ALL-DEDUCTIONS", 0, 0, false );
-    SubLFiles.declareFunction( myName, "deduction_id", "DEDUCTION-ID", 1, 0, false );
-    SubLFiles.declareFunction( myName, "reset_deduction_id", "RESET-DEDUCTION-ID", 2, 0, false );
-    SubLFiles.declareFunction( myName, "deduction_handle_validP", "DEDUCTION-HANDLE-VALID?", 1, 0, false );
-    SubLFiles.declareFunction( myName, "find_deduction_by_id", "FIND-DEDUCTION-BY-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "get_deduction", "GET-DEDUCTION", 0, 0, false );
+    SubLFiles.declareFunction(me, "free_deduction", "FREE-DEDUCTION", 1, 0, false );
+    SubLFiles.declareFunction(me, "valid_deduction_handleP", "VALID-DEDUCTION-HANDLE?", 1, 0, false );
+    SubLFiles.declareFunction(me, "valid_deduction", "VALID-DEDUCTION", 1, 1, false );
+    SubLFiles.declareFunction(me, "valid_deductionP", "VALID-DEDUCTION?", 1, 1, false );
+    SubLFiles.declareFunction(me, "mark_available_deductions", "MARK-AVAILABLE-DEDUCTIONS", 1, 1, false );
+    SubLFiles.declareFunction(me, "mark_deduction_available", "MARK-DEDUCTION-AVAILABLE", 1, 0, false );
+    SubLFiles.declareFunction(me, "make_deduction_shell", "MAKE-DEDUCTION-SHELL", 0, 1, false );
+    SubLFiles.declareFunction(me, "create_sample_invalid_deduction", "CREATE-SAMPLE-INVALID-DEDUCTION", 0, 0, false );
+    SubLFiles.declareFunction(me, "free_all_deductions", "FREE-ALL-DEDUCTIONS", 0, 0, false );
+    SubLFiles.declareFunction(me, "deduction_id", "DEDUCTION-ID", 1, 0, false );
+    SubLFiles.declareFunction(me, "reset_deduction_id", "RESET-DEDUCTION-ID", 2, 0, false );
+    SubLFiles.declareFunction(me, "deduction_handle_validP", "DEDUCTION-HANDLE-VALID?", 1, 0, false );
+    SubLFiles.declareFunction(me, "find_deduction_by_id", "FIND-DEDUCTION-BY-ID", 1, 0, false );
     return NIL;
   }
 
   public static SubLObject init_deduction_handles_file()
   {
-    deduction_handles.$deduction_from_id$ = SubLFiles.deflexical( "*DEDUCTION-FROM-ID*", ( maybeDefault( $sym0$_DEDUCTION_FROM_ID_, deduction_handles.$deduction_from_id$, deduction_handles.NIL ) ) );
-    deduction_handles.$new_deduction_id_threshold$ = SubLFiles.deflexical( "*NEW-DEDUCTION-ID-THRESHOLD*", ( maybeDefault( $sym26$_NEW_DEDUCTION_ID_THRESHOLD_, deduction_handles.$new_deduction_id_threshold$,
-        deduction_handles.NIL ) ) );
-    deduction_handles.$dtp_deduction$ = SubLFiles.defconstant( "*DTP-DEDUCTION*", $sym43$DEDUCTION );
+    $deduction_from_id$ = SubLFiles.deflexical( "*DEDUCTION-FROM-ID*", ( maybeDefault( $sym0$_DEDUCTION_FROM_ID_, $deduction_from_id$, NIL ) ) );
+    $new_deduction_id_threshold$ = SubLFiles.deflexical( "*NEW-DEDUCTION-ID-THRESHOLD*", ( maybeDefault( $sym26$_NEW_DEDUCTION_ID_THRESHOLD_, $new_deduction_id_threshold$, NIL ) ) );
+    $dtp_deduction$ = SubLFiles.defconstant( "*DTP-DEDUCTION*", $sym43$DEDUCTION );
     return NIL;
   }
 
@@ -1229,13 +1110,12 @@ public final class deduction_handles extends SubLTranslatedFile
     access_macros.register_macro_helper( $sym21$CREATE_DEDUCTION_DUMP_ID_TABLE, $sym22$WITH_DEDUCTION_DUMP_ID_TABLE );
     utilities_macros.register_cyc_api_function( $sym23$DEDUCTION_COUNT, NIL, $str24$Return_the_total_number_of_deduct, NIL, $list25 );
     subl_macro_promotions.declare_defglobal( $sym26$_NEW_DEDUCTION_ID_THRESHOLD_ );
-    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), deduction_handles.$dtp_deduction$.getGlobalValue(), Symbols.symbol_function( $sym51$DEDUCTION_PRINT_FUNCTION_TRAMPOLINE ) );
+    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), $dtp_deduction$.getGlobalValue(), Symbols.symbol_function( $sym51$DEDUCTION_PRINT_FUNCTION_TRAMPOLINE ) );
     SubLSpecialOperatorDeclarations.proclaim( $list52 );
     Structures.def_csetf( $sym53$D_ID, $sym54$_CSETF_D_ID );
     Equality.identity( $sym43$DEDUCTION );
-    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), deduction_handles.$dtp_deduction$.getGlobalValue(), Symbols.symbol_function(
-        $sym61$VISIT_DEFSTRUCT_OBJECT_DEDUCTION_METHOD ) );
-    Structures.register_method( Sxhash.$sxhash_method_table$.getGlobalValue(), deduction_handles.$dtp_deduction$.getGlobalValue(), Symbols.symbol_function( $sym64$SXHASH_DEDUCTION_METHOD ) );
+    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $dtp_deduction$.getGlobalValue(), Symbols.symbol_function( $sym61$VISIT_DEFSTRUCT_OBJECT_DEDUCTION_METHOD ) );
+    Structures.register_method( Sxhash.$sxhash_method_table$.getGlobalValue(), $dtp_deduction$.getGlobalValue(), Symbols.symbol_function( $sym64$SXHASH_DEDUCTION_METHOD ) );
     utilities_macros.register_cyc_api_function( $sym44$DEDUCTION_P, $list65, $str66$Return_T_iff_OBJECT_is_a_CycL_ded, NIL, $list67 );
     access_macros.define_obsolete_register( $sym68$VALID_DEDUCTION, $list69 );
     utilities_macros.register_cyc_api_function( $sym73$DEDUCTION_ID, $list74, $str75$Return_the_id_of_DEDUCTION_, $list76, $list25 );
@@ -1263,98 +1143,97 @@ public final class deduction_handles extends SubLTranslatedFile
   static
   {
     me = new deduction_handles();
-    deduction_handles.$deduction_from_id$ = null;
-    deduction_handles.$new_deduction_id_threshold$ = null;
-    deduction_handles.$dtp_deduction$ = null;
-    $sym0$_DEDUCTION_FROM_ID_ = SubLObjectFactory.makeSymbol( "*DEDUCTION-FROM-ID*" );
-    $sym1$DEDUCTIONS_TABLE_TUPLE_TO_DEDUCTION = SubLObjectFactory.makeSymbol( "DEDUCTIONS-TABLE-TUPLE-TO-DEDUCTION" );
-    $list2 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "VAR" ), SubLObjectFactory.makeSymbol( "&OPTIONAL" ), ConsesLow.list(
-        SubLObjectFactory.makeSymbol( "PROGRESS-MESSAGE" ), SubLObjectFactory.makeString( "mapping Cyc deductions" ) ), SubLObjectFactory.makeSymbol( "&KEY" ),
-        SubLObjectFactory.makeSymbol( "DONE" ) ), SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol( "BODY" ) );
-    $str3$mapping_Cyc_deductions = SubLObjectFactory.makeString( "mapping Cyc deductions" );
-    $list4 = ConsesLow.list( SubLObjectFactory.makeKeyword( "DONE" ) );
-    $kw5$ALLOW_OTHER_KEYS = SubLObjectFactory.makeKeyword( "ALLOW-OTHER-KEYS" );
-    $kw6$DONE = SubLObjectFactory.makeKeyword( "DONE" );
-    $sym7$D_ID = SubLObjectFactory.makeUninternedSymbol( "D-ID" );
-    $sym8$D_HANDLE = SubLObjectFactory.makeUninternedSymbol( "D-HANDLE" );
-    $sym9$DO_ID_INDEX = SubLObjectFactory.makeSymbol( "DO-ID-INDEX" );
-    $list10 = ConsesLow.list( SubLObjectFactory.makeSymbol( "DO-DEDUCTIONS-TABLE" ) );
-    $kw11$PROGRESS_MESSAGE = SubLObjectFactory.makeKeyword( "PROGRESS-MESSAGE" );
-    $kw12$ORDERED = SubLObjectFactory.makeKeyword( "ORDERED" );
-    $sym13$CLET = SubLObjectFactory.makeSymbol( "CLET" );
-    $sym14$RESOLVE_DEDUCTION_ID_VALUE_PAIR = SubLObjectFactory.makeSymbol( "RESOLVE-DEDUCTION-ID-VALUE-PAIR" );
-    $sym15$DO_DEDUCTIONS = SubLObjectFactory.makeSymbol( "DO-DEDUCTIONS" );
-    $str16$Iterate_over_all_HL_deduction_dat = SubLObjectFactory.makeString(
+    $deduction_from_id$ = null;
+    $new_deduction_id_threshold$ = null;
+    $dtp_deduction$ = null;
+    $sym0$_DEDUCTION_FROM_ID_ = makeSymbol( "*DEDUCTION-FROM-ID*" );
+    $sym1$DEDUCTIONS_TABLE_TUPLE_TO_DEDUCTION = makeSymbol( "DEDUCTIONS-TABLE-TUPLE-TO-DEDUCTION" );
+    $list2 = ConsesLow.list( ConsesLow.list( makeSymbol( "VAR" ), makeSymbol( "&OPTIONAL" ), ConsesLow.list( makeSymbol( "PROGRESS-MESSAGE" ), makeString( "mapping Cyc deductions" ) ), makeSymbol( "&KEY" ), makeSymbol(
+        "DONE" ) ), makeSymbol( "&BODY" ), makeSymbol( "BODY" ) );
+    $str3$mapping_Cyc_deductions = makeString( "mapping Cyc deductions" );
+    $list4 = ConsesLow.list( makeKeyword( "DONE" ) );
+    $kw5$ALLOW_OTHER_KEYS = makeKeyword( "ALLOW-OTHER-KEYS" );
+    $kw6$DONE = makeKeyword( "DONE" );
+    $sym7$D_ID = makeUninternedSymbol( "D-ID" );
+    $sym8$D_HANDLE = makeUninternedSymbol( "D-HANDLE" );
+    $sym9$DO_ID_INDEX = makeSymbol( "DO-ID-INDEX" );
+    $list10 = ConsesLow.list( makeSymbol( "DO-DEDUCTIONS-TABLE" ) );
+    $kw11$PROGRESS_MESSAGE = makeKeyword( "PROGRESS-MESSAGE" );
+    $kw12$ORDERED = makeKeyword( "ORDERED" );
+    $sym13$CLET = makeSymbol( "CLET" );
+    $sym14$RESOLVE_DEDUCTION_ID_VALUE_PAIR = makeSymbol( "RESOLVE-DEDUCTION-ID-VALUE-PAIR" );
+    $sym15$DO_DEDUCTIONS = makeSymbol( "DO-DEDUCTIONS" );
+    $str16$Iterate_over_all_HL_deduction_dat = makeString(
         "Iterate over all HL deduction datastructures, executing BODY within the scope of VAR.\n   VAR is a deduction.\n   PROGRESS-MESSAGE is a progress message string.\n   Iteration halts early as soon as DONE becomes non-nil." );
-    $kw17$PAGED_OUT = SubLObjectFactory.makeKeyword( "PAGED-OUT" );
-    $sym18$DO_DEDUCTIONS_TABLE = SubLObjectFactory.makeSymbol( "DO-DEDUCTIONS-TABLE" );
-    $sym19$NEW_DEDUCTIONS_TABLE_ENTRY_ = SubLObjectFactory.makeSymbol( "NEW-DEDUCTIONS-TABLE-ENTRY?" );
-    $list20 = ConsesLow.list( SubLObjectFactory.makeSymbol( "ID" ), SubLObjectFactory.makeSymbol( "PAYLOAD" ) );
-    $sym21$CREATE_DEDUCTION_DUMP_ID_TABLE = SubLObjectFactory.makeSymbol( "CREATE-DEDUCTION-DUMP-ID-TABLE" );
-    $sym22$WITH_DEDUCTION_DUMP_ID_TABLE = SubLObjectFactory.makeSymbol( "WITH-DEDUCTION-DUMP-ID-TABLE" );
-    $sym23$DEDUCTION_COUNT = SubLObjectFactory.makeSymbol( "DEDUCTION-COUNT" );
-    $str24$Return_the_total_number_of_deduct = SubLObjectFactory.makeString( "Return the total number of deductions." );
-    $list25 = ConsesLow.list( SubLObjectFactory.makeSymbol( "INTEGERP" ) );
-    $sym26$_NEW_DEDUCTION_ID_THRESHOLD_ = SubLObjectFactory.makeSymbol( "*NEW-DEDUCTION-ID-THRESHOLD*" );
-    $kw27$DENSE = SubLObjectFactory.makeKeyword( "DENSE" );
-    $kw28$ALL = SubLObjectFactory.makeKeyword( "ALL" );
-    $list29 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ID" ), SubLObjectFactory.makeSymbol( "&KEY" ), SubLObjectFactory.makeSymbol( "DONE" ) ),
-        SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol( "BODY" ) );
-    $sym30$ITERATOR = SubLObjectFactory.makeUninternedSymbol( "ITERATOR" );
-    $list31 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "DELETED-DEDUCTION-ID-ITERATOR" ) ) );
-    $sym32$DO_ITERATOR = SubLObjectFactory.makeSymbol( "DO-ITERATOR" );
-    $str33$Determining_maximum_deduction_ID = SubLObjectFactory.makeString( "Determining maximum deduction ID" );
-    $sym34$STRINGP = SubLObjectFactory.makeSymbol( "STRINGP" );
-    $kw35$SKIP = SubLObjectFactory.makeKeyword( "SKIP" );
-    $list36 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "DEDUCTION" ), SubLObjectFactory.makeSymbol( "&KEY" ), SubLObjectFactory.makeSymbol(
-        "PROGRESS-MESSAGE" ), SubLObjectFactory.makeSymbol( "DONE" ) ), SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol( "BODY" ) );
-    $list37 = ConsesLow.list( SubLObjectFactory.makeKeyword( "PROGRESS-MESSAGE" ), SubLObjectFactory.makeKeyword( "DONE" ) );
-    $sym38$THRESHOLD = SubLObjectFactory.makeUninternedSymbol( "THRESHOLD" );
-    $list39 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "GET-FILE-BACKED-DEDUCTION-INTERNAL-ID-THRESHOLD" ) ) );
-    $sym40$DO_KB_SUID_TABLE_UPTO_EXCLUDING_ID = SubLObjectFactory.makeSymbol( "DO-KB-SUID-TABLE-UPTO-EXCLUDING-ID" );
-    $sym41$START = SubLObjectFactory.makeUninternedSymbol( "START" );
-    $sym42$DO_KB_SUID_TABLE_STARTING_AT_ID = SubLObjectFactory.makeSymbol( "DO-KB-SUID-TABLE-STARTING-AT-ID" );
-    $sym43$DEDUCTION = SubLObjectFactory.makeSymbol( "DEDUCTION" );
-    $sym44$DEDUCTION_P = SubLObjectFactory.makeSymbol( "DEDUCTION-P" );
-    $int45$144 = SubLObjectFactory.makeInteger( 144 );
-    $list46 = ConsesLow.list( SubLObjectFactory.makeSymbol( "ID" ) );
-    $list47 = ConsesLow.list( SubLObjectFactory.makeKeyword( "ID" ) );
-    $list48 = ConsesLow.list( SubLObjectFactory.makeSymbol( "D-ID" ) );
-    $list49 = ConsesLow.list( SubLObjectFactory.makeSymbol( "_CSETF-D-ID" ) );
-    $sym50$PRINT_DEDUCTION = SubLObjectFactory.makeSymbol( "PRINT-DEDUCTION" );
-    $sym51$DEDUCTION_PRINT_FUNCTION_TRAMPOLINE = SubLObjectFactory.makeSymbol( "DEDUCTION-PRINT-FUNCTION-TRAMPOLINE" );
-    $list52 = ConsesLow.list( SubLObjectFactory.makeSymbol( "OPTIMIZE-FUNCALL" ), SubLObjectFactory.makeSymbol( "DEDUCTION-P" ) );
-    $sym53$D_ID = SubLObjectFactory.makeSymbol( "D-ID" );
-    $sym54$_CSETF_D_ID = SubLObjectFactory.makeSymbol( "_CSETF-D-ID" );
-    $kw55$ID = SubLObjectFactory.makeKeyword( "ID" );
-    $str56$Invalid_slot__S_for_construction_ = SubLObjectFactory.makeString( "Invalid slot ~S for construction function" );
-    $kw57$BEGIN = SubLObjectFactory.makeKeyword( "BEGIN" );
-    $sym58$MAKE_DEDUCTION = SubLObjectFactory.makeSymbol( "MAKE-DEDUCTION" );
-    $kw59$SLOT = SubLObjectFactory.makeKeyword( "SLOT" );
-    $kw60$END = SubLObjectFactory.makeKeyword( "END" );
-    $sym61$VISIT_DEFSTRUCT_OBJECT_DEDUCTION_METHOD = SubLObjectFactory.makeSymbol( "VISIT-DEFSTRUCT-OBJECT-DEDUCTION-METHOD" );
-    $str62$_The_CFASL_invalid_deduction_ = SubLObjectFactory.makeString( "<The CFASL invalid deduction>" );
-    $int63$786 = SubLObjectFactory.makeInteger( 786 );
-    $sym64$SXHASH_DEDUCTION_METHOD = SubLObjectFactory.makeSymbol( "SXHASH-DEDUCTION-METHOD" );
-    $list65 = ConsesLow.list( SubLObjectFactory.makeSymbol( "OBJECT" ) );
-    $str66$Return_T_iff_OBJECT_is_a_CycL_ded = SubLObjectFactory.makeString( "Return T iff OBJECT is a CycL deduction." );
-    $list67 = ConsesLow.list( SubLObjectFactory.makeSymbol( "BOOLEANP" ) );
-    $sym68$VALID_DEDUCTION = SubLObjectFactory.makeSymbol( "VALID-DEDUCTION" );
-    $list69 = ConsesLow.list( SubLObjectFactory.makeSymbol( "VALID-DEDUCTION?" ) );
-    $sym70$VALID_SUPPORT_ = SubLObjectFactory.makeSymbol( "VALID-SUPPORT?" );
-    $sym71$INTEGERP = SubLObjectFactory.makeSymbol( "INTEGERP" );
-    $str72$Freeing_deductions = SubLObjectFactory.makeString( "Freeing deductions" );
-    $sym73$DEDUCTION_ID = SubLObjectFactory.makeSymbol( "DEDUCTION-ID" );
-    $list74 = ConsesLow.list( SubLObjectFactory.makeSymbol( "DEDUCTION" ) );
-    $str75$Return_the_id_of_DEDUCTION_ = SubLObjectFactory.makeString( "Return the id of DEDUCTION." );
-    $list76 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "DEDUCTION" ), SubLObjectFactory.makeSymbol( "DEDUCTION-P" ) ) );
-    $sym77$FIND_DEDUCTION_BY_ID = SubLObjectFactory.makeSymbol( "FIND-DEDUCTION-BY-ID" );
-    $str78$Return_the_deduction_with_ID__or_ = SubLObjectFactory.makeString( "Return the deduction with ID, or NIL if not present." );
-    $list79 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "ID" ), SubLObjectFactory.makeSymbol( "INTEGERP" ) ) );
-    $list80 = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "NIL-OR" ), SubLObjectFactory.makeSymbol( "DEDUCTION-P" ) ) );
+    $kw17$PAGED_OUT = makeKeyword( "PAGED-OUT" );
+    $sym18$DO_DEDUCTIONS_TABLE = makeSymbol( "DO-DEDUCTIONS-TABLE" );
+    $sym19$NEW_DEDUCTIONS_TABLE_ENTRY_ = makeSymbol( "NEW-DEDUCTIONS-TABLE-ENTRY?" );
+    $list20 = ConsesLow.list( makeSymbol( "ID" ), makeSymbol( "PAYLOAD" ) );
+    $sym21$CREATE_DEDUCTION_DUMP_ID_TABLE = makeSymbol( "CREATE-DEDUCTION-DUMP-ID-TABLE" );
+    $sym22$WITH_DEDUCTION_DUMP_ID_TABLE = makeSymbol( "WITH-DEDUCTION-DUMP-ID-TABLE" );
+    $sym23$DEDUCTION_COUNT = makeSymbol( "DEDUCTION-COUNT" );
+    $str24$Return_the_total_number_of_deduct = makeString( "Return the total number of deductions." );
+    $list25 = ConsesLow.list( makeSymbol( "INTEGERP" ) );
+    $sym26$_NEW_DEDUCTION_ID_THRESHOLD_ = makeSymbol( "*NEW-DEDUCTION-ID-THRESHOLD*" );
+    $kw27$DENSE = makeKeyword( "DENSE" );
+    $kw28$ALL = makeKeyword( "ALL" );
+    $list29 = ConsesLow.list( ConsesLow.list( makeSymbol( "ID" ), makeSymbol( "&KEY" ), makeSymbol( "DONE" ) ), makeSymbol( "&BODY" ), makeSymbol( "BODY" ) );
+    $sym30$ITERATOR = makeUninternedSymbol( "ITERATOR" );
+    $list31 = ConsesLow.list( ConsesLow.list( makeSymbol( "DELETED-DEDUCTION-ID-ITERATOR" ) ) );
+    $sym32$DO_ITERATOR = makeSymbol( "DO-ITERATOR" );
+    $str33$Determining_maximum_deduction_ID = makeString( "Determining maximum deduction ID" );
+    $sym34$STRINGP = makeSymbol( "STRINGP" );
+    $kw35$SKIP = makeKeyword( "SKIP" );
+    $list36 = ConsesLow.list( ConsesLow.list( makeSymbol( "DEDUCTION" ), makeSymbol( "&KEY" ), makeSymbol( "PROGRESS-MESSAGE" ), makeSymbol( "DONE" ) ), makeSymbol( "&BODY" ), makeSymbol( "BODY" ) );
+    $list37 = ConsesLow.list( makeKeyword( "PROGRESS-MESSAGE" ), makeKeyword( "DONE" ) );
+    $sym38$THRESHOLD = makeUninternedSymbol( "THRESHOLD" );
+    $list39 = ConsesLow.list( ConsesLow.list( makeSymbol( "GET-FILE-BACKED-DEDUCTION-INTERNAL-ID-THRESHOLD" ) ) );
+    $sym40$DO_KB_SUID_TABLE_UPTO_EXCLUDING_ID = makeSymbol( "DO-KB-SUID-TABLE-UPTO-EXCLUDING-ID" );
+    $sym41$START = makeUninternedSymbol( "START" );
+    $sym42$DO_KB_SUID_TABLE_STARTING_AT_ID = makeSymbol( "DO-KB-SUID-TABLE-STARTING-AT-ID" );
+    $sym43$DEDUCTION = makeSymbol( "DEDUCTION" );
+    $sym44$DEDUCTION_P = makeSymbol( "DEDUCTION-P" );
+    $int45$144 = makeInteger( 144 );
+    $list46 = ConsesLow.list( makeSymbol( "ID" ) );
+    $list47 = ConsesLow.list( makeKeyword( "ID" ) );
+    $list48 = ConsesLow.list( makeSymbol( "D-ID" ) );
+    $list49 = ConsesLow.list( makeSymbol( "_CSETF-D-ID" ) );
+    $sym50$PRINT_DEDUCTION = makeSymbol( "PRINT-DEDUCTION" );
+    $sym51$DEDUCTION_PRINT_FUNCTION_TRAMPOLINE = makeSymbol( "DEDUCTION-PRINT-FUNCTION-TRAMPOLINE" );
+    $list52 = ConsesLow.list( makeSymbol( "OPTIMIZE-FUNCALL" ), makeSymbol( "DEDUCTION-P" ) );
+    $sym53$D_ID = makeSymbol( "D-ID" );
+    $sym54$_CSETF_D_ID = makeSymbol( "_CSETF-D-ID" );
+    $kw55$ID = makeKeyword( "ID" );
+    $str56$Invalid_slot__S_for_construction_ = makeString( "Invalid slot ~S for construction function" );
+    $kw57$BEGIN = makeKeyword( "BEGIN" );
+    $sym58$MAKE_DEDUCTION = makeSymbol( "MAKE-DEDUCTION" );
+    $kw59$SLOT = makeKeyword( "SLOT" );
+    $kw60$END = makeKeyword( "END" );
+    $sym61$VISIT_DEFSTRUCT_OBJECT_DEDUCTION_METHOD = makeSymbol( "VISIT-DEFSTRUCT-OBJECT-DEDUCTION-METHOD" );
+    $str62$_The_CFASL_invalid_deduction_ = makeString( "<The CFASL invalid deduction>" );
+    $int63$786 = makeInteger( 786 );
+    $sym64$SXHASH_DEDUCTION_METHOD = makeSymbol( "SXHASH-DEDUCTION-METHOD" );
+    $list65 = ConsesLow.list( makeSymbol( "OBJECT" ) );
+    $str66$Return_T_iff_OBJECT_is_a_CycL_ded = makeString( "Return T iff OBJECT is a CycL deduction." );
+    $list67 = ConsesLow.list( makeSymbol( "BOOLEANP" ) );
+    $sym68$VALID_DEDUCTION = makeSymbol( "VALID-DEDUCTION" );
+    $list69 = ConsesLow.list( makeSymbol( "VALID-DEDUCTION?" ) );
+    $sym70$VALID_SUPPORT_ = makeSymbol( "VALID-SUPPORT?" );
+    $sym71$INTEGERP = makeSymbol( "INTEGERP" );
+    $str72$Freeing_deductions = makeString( "Freeing deductions" );
+    $sym73$DEDUCTION_ID = makeSymbol( "DEDUCTION-ID" );
+    $list74 = ConsesLow.list( makeSymbol( "DEDUCTION" ) );
+    $str75$Return_the_id_of_DEDUCTION_ = makeString( "Return the id of DEDUCTION." );
+    $list76 = ConsesLow.list( ConsesLow.list( makeSymbol( "DEDUCTION" ), makeSymbol( "DEDUCTION-P" ) ) );
+    $sym77$FIND_DEDUCTION_BY_ID = makeSymbol( "FIND-DEDUCTION-BY-ID" );
+    $str78$Return_the_deduction_with_ID__or_ = makeString( "Return the deduction with ID, or NIL if not present." );
+    $list79 = ConsesLow.list( ConsesLow.list( makeSymbol( "ID" ), makeSymbol( "INTEGERP" ) ) );
+    $list80 = ConsesLow.list( ConsesLow.list( makeSymbol( "NIL-OR" ), makeSymbol( "DEDUCTION-P" ) ) );
   }
 
-  public static final class $deduction_native extends SubLStructNative
+  public static final class $deduction_native
+      extends
+        SubLStructNative
   {
     public SubLObject $id;
     private static final SubLStructDeclNative structDecl;
@@ -1383,14 +1262,14 @@ public final class deduction_handles extends SubLTranslatedFile
     }
     static
     {
-      structDecl = Structures.makeStructDeclNative( $deduction_native.class, deduction_handles.$sym43$DEDUCTION, deduction_handles.$sym44$DEDUCTION_P, deduction_handles.$list46, deduction_handles.$list47,
-          new String[]
-          { "$id"
-          }, deduction_handles.$list48, deduction_handles.$list49, deduction_handles.$sym50$PRINT_DEDUCTION );
+      structDecl = Structures.makeStructDeclNative( $deduction_native.class, $sym43$DEDUCTION, $sym44$DEDUCTION_P, $list46, $list47, new String[] { "$id"
+      }, $list48, $list49, $sym50$PRINT_DEDUCTION );
     }
   }
 
-  public static final class $deduction_p$UnaryFunction extends UnaryFunction
+  public static final class $deduction_p$UnaryFunction
+      extends
+        UnaryFunction
   {
     public $deduction_p$UnaryFunction()
     {
@@ -1400,11 +1279,13 @@ public final class deduction_handles extends SubLTranslatedFile
     @Override
     public SubLObject processItem(final SubLObject arg1)
     {
-      return deduction_handles.deduction_p( arg1 );
+      return deduction_p( arg1 );
     }
   }
 
-  public static final class $sxhash_deduction_method$UnaryFunction extends UnaryFunction
+  public static final class $sxhash_deduction_method$UnaryFunction
+      extends
+        UnaryFunction
   {
     public $sxhash_deduction_method$UnaryFunction()
     {
@@ -1414,7 +1295,7 @@ public final class deduction_handles extends SubLTranslatedFile
     @Override
     public SubLObject processItem(final SubLObject arg1)
     {
-      return deduction_handles.sxhash_deduction_method( arg1 );
+      return sxhash_deduction_method( arg1 );
     }
   }
 }
