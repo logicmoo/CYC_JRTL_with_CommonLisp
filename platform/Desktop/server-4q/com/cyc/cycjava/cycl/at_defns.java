@@ -29,6 +29,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import java.util.Map;
 import java.util.Iterator;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;

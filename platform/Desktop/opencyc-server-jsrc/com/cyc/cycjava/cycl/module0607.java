@@ -3,6 +3,7 @@ package com.cyc.cycjava.cycl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -26,37 +27,37 @@ public final class module0607 extends SubLTranslatedFile
     private static final SubLFloat $ic5$;
     
     public static SubLObject f37109(final SubLObject var1) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
+        assert NIL != module0606.f37086(var1) : var1;
         final SubLObject var2 = module0606.f37089(var1);
         final SubLObject var3 = module0606.f37090(var1);
         return module0606.f37087(Numbers.abs(var2), var3);
     }
     
     public static SubLObject f37110(final SubLObject var1) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
+        assert NIL != module0606.f37086(var1) : var1;
         final SubLObject var2 = module0606.f37089(var1);
         final SubLObject var3 = module0606.f37090(var1);
-        return module0606.f37087(Numbers.multiply((SubLObject)module0607.MINUS_ONE_INTEGER, var2), var3);
+        return module0606.f37087(Numbers.multiply((SubLObject)MINUS_ONE_INTEGER, var2), var3);
     }
     
     public static SubLObject f37111(final SubLObject var1) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
+        assert NIL != module0606.f37086(var1) : var1;
         final SubLObject var2 = module0606.f37089(var1);
         final SubLObject var3 = module0606.f37090(var1);
         final SubLObject var4 = module0048.f3301(var2);
-        final SubLObject var5 = Numbers.subtract(var4, var3, (SubLObject)module0607.ONE_INTEGER);
-        if (var3.numL((SubLObject)module0607.ZERO_INTEGER)) {
-            return (SubLObject)module0607.ZERO_INTEGER;
+        final SubLObject var5 = Numbers.subtract(var4, var3, (SubLObject)ONE_INTEGER);
+        if (var3.numL((SubLObject)ZERO_INTEGER)) {
+            return (SubLObject)ZERO_INTEGER;
         }
-        if (var5.numL((SubLObject)module0607.ZERO_INTEGER)) {
-            return Numbers.multiply(var2, Numbers.expt((SubLObject)module0607.TEN_INTEGER, Numbers.minus(var5)));
+        if (var5.numL((SubLObject)ZERO_INTEGER)) {
+            return Numbers.multiply(var2, Numbers.expt((SubLObject)TEN_INTEGER, Numbers.minus(var5)));
         }
-        return Numbers.integerDivide(var2, Numbers.expt((SubLObject)module0607.TEN_INTEGER, var5));
+        return Numbers.integerDivide(var2, Numbers.expt((SubLObject)TEN_INTEGER, var5));
     }
     
     public static SubLObject f37112(final SubLObject var1, final SubLObject var6) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
-        assert module0607.NIL != module0004.f105(var6) : var6;
+        assert NIL != module0606.f37086(var1) : var1;
+        assert NIL != module0004.f105(var6) : var6;
         final SubLObject var7 = module0606.f37089(var1);
         final SubLObject var8 = module0048.f3301(var7);
         SubLObject var9 = module0606.f37090(var1);
@@ -66,15 +67,15 @@ public final class module0607 extends SubLTranslatedFile
         if (var11.numG(var8)) {
             var9 = Numbers.add(var9, Numbers.subtract(var11, var8));
         }
-        if (var12.numG((SubLObject)module0607.ZERO_INTEGER)) {
-            var10 = Numbers.integerDivide(var10, Numbers.expt((SubLObject)module0607.TEN_INTEGER, var12));
+        if (var12.numG((SubLObject)ZERO_INTEGER)) {
+            var10 = Numbers.integerDivide(var10, Numbers.expt((SubLObject)TEN_INTEGER, var12));
         }
         return module0606.f37087(var10, var9);
     }
     
     public static SubLObject f37113(final SubLObject var10, final SubLObject var11) {
-        assert module0607.NIL != module0606.f37086(var10) : var10;
-        assert module0607.NIL != module0606.f37086(var11) : var11;
+        assert NIL != module0606.f37086(var10) : var10;
+        assert NIL != module0606.f37086(var11) : var11;
         final SubLObject var12 = module0606.f37090(var10);
         final SubLObject var13 = module0606.f37090(var11);
         if (var12.numE(var13)) {
@@ -82,68 +83,68 @@ public final class module0607 extends SubLTranslatedFile
             final SubLObject var15 = module0606.f37089(var11);
             return Numbers.numE(var14, var15);
         }
-        return (SubLObject)module0607.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f37114(final SubLObject var10, final SubLObject var11, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        assert module0607.NIL != module0606.f37086(var10) : var10;
-        assert module0607.NIL != module0606.f37086(var11) : var11;
-        if (module0607.NIL != var6) {
-            assert module0607.NIL != module0004.f105(var6) : var6;
+        assert NIL != module0606.f37086(var10) : var10;
+        assert NIL != module0606.f37086(var11) : var11;
+        if (NIL != var6) {
+            assert NIL != module0004.f105(var6) : var6;
         }
         else {
-            var6 = Numbers.max((SubLObject)module0607.ONE_INTEGER, Numbers.min(module0606.f37100(var10), module0606.f37100(var11)));
+            var6 = Numbers.max((SubLObject)ONE_INTEGER, Numbers.min(module0606.f37100(var10), module0606.f37100(var11)));
         }
         final SubLObject var12 = module0048.f3302(var10, var6);
         final SubLObject var13 = module0048.f3302(var11, var6);
         final SubLObject var14 = module0606.f37090(var12);
         final SubLObject var15 = module0606.f37090(var13);
         if (!var14.numE(var15)) {
-            return (SubLObject)module0607.NIL;
+            return (SubLObject)NIL;
         }
         final SubLObject var16 = module0606.f37089(var12);
         final SubLObject var17 = module0606.f37089(var13);
-        if ((module0607.ZERO_INTEGER.numE(var16) || var6.numGE(module0048.f3301(var16))) && (module0607.ZERO_INTEGER.numE(var17) || var6.numGE(module0048.f3301(var17)))) {
+        if ((ZERO_INTEGER.numE(var16) || var6.numGE(module0048.f3301(var16))) && (ZERO_INTEGER.numE(var17) || var6.numGE(module0048.f3301(var17)))) {
             return Numbers.numE(var16, var17);
         }
-        return (SubLObject)module0607.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f37115(final SubLObject var1, final SubLObject var18, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        assert module0607.NIL != module0606.f37086(var1) : var1;
-        assert module0607.NIL != Types.integerp(var18) : var18;
-        if (module0607.NIL != module0606.f37092(var1)) {
+        assert NIL != module0606.f37086(var1) : var1;
+        assert NIL != Types.integerp(var18) : var18;
+        if (NIL != module0606.f37092(var1)) {
             return Numbers.zerop(var18);
         }
-        final SubLObject var19 = (module0607.NIL != var6) ? var6 : module0606.f37100(var1);
+        final SubLObject var19 = (NIL != var6) ? var6 : module0606.f37100(var1);
         final SubLObject var20 = module0606.f37088(var18, var19);
         return f37114(var1, var20, var19);
     }
     
     public static SubLObject f37116(final SubLObject var18, final SubLObject var1, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
         return f37115(var1, var18, var6);
     }
     
     public static SubLObject f37117(final SubLObject var10, final SubLObject var11, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        assert module0607.NIL != module0606.f37086(var10) : var10;
-        assert module0607.NIL != module0606.f37086(var11) : var11;
-        if (module0607.NIL != var6) {
-            assert module0607.NIL != module0004.f105(var6) : var6;
+        assert NIL != module0606.f37086(var10) : var10;
+        assert NIL != module0606.f37086(var11) : var11;
+        if (NIL != var6) {
+            assert NIL != module0004.f105(var6) : var6;
         }
         else {
-            var6 = Numbers.max((SubLObject)module0607.ONE_INTEGER, Numbers.min(module0606.f37100(var10), module0606.f37100(var11)));
+            var6 = Numbers.max((SubLObject)ONE_INTEGER, Numbers.min(module0606.f37100(var10), module0606.f37100(var11)));
         }
         final SubLObject var12 = module0048.f3302(var10, var6);
         final SubLObject var13 = module0048.f3302(var11, var6);
@@ -151,13 +152,13 @@ public final class module0607 extends SubLTranslatedFile
         final SubLObject var15 = module0606.f37090(var12);
         final SubLObject var16 = module0606.f37089(var13);
         final SubLObject var17 = module0606.f37090(var13);
-        if ((!module0607.ZERO_INTEGER.numE(var14) && !var6.numLE(module0048.f3301(var14))) || (!module0607.ZERO_INTEGER.numE(var16) && !var6.numLE(module0048.f3301(var16)))) {
-            return (SubLObject)module0607.NIL;
+        if ((!ZERO_INTEGER.numE(var14) && !var6.numLE(module0048.f3301(var14))) || (!ZERO_INTEGER.numE(var16) && !var6.numLE(module0048.f3301(var16)))) {
+            return (SubLObject)NIL;
         }
-        if (module0607.ZERO_INTEGER.numE(var14)) {
+        if (ZERO_INTEGER.numE(var14)) {
             return Numbers.minusp(var16);
         }
-        if (module0607.ZERO_INTEGER.numE(var16)) {
+        if (ZERO_INTEGER.numE(var16)) {
             return Numbers.plusp(var14);
         }
         if (var15.numG(var17)) {
@@ -169,107 +170,107 @@ public final class module0607 extends SubLTranslatedFile
         if (var15.numE(var17)) {
             return Numbers.numG(var14, var16);
         }
-        return (SubLObject)module0607.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f37118(final SubLObject var1, final SubLObject var18, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        assert module0607.NIL != module0606.f37086(var1) : var1;
-        assert module0607.NIL != Types.integerp(var18) : var18;
-        if (module0607.NIL != module0606.f37092(var1)) {
+        assert NIL != module0606.f37086(var1) : var1;
+        assert NIL != Types.integerp(var18) : var18;
+        if (NIL != module0606.f37092(var1)) {
             return module0004.f108(var18);
         }
-        final SubLObject var19 = (module0607.NIL != var6) ? var6 : module0606.f37100(var1);
+        final SubLObject var19 = (NIL != var6) ? var6 : module0606.f37100(var1);
         final SubLObject var20 = module0606.f37088(var18, var19);
         return f37117(var1, var20, var19);
     }
     
     public static SubLObject f37119(final SubLObject var18, final SubLObject var1, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        assert module0607.NIL != Types.integerp(var18) : var18;
-        assert module0607.NIL != module0606.f37086(var1) : var1;
-        if (module0607.NIL != module0606.f37092(var1)) {
+        assert NIL != Types.integerp(var18) : var18;
+        assert NIL != module0606.f37086(var1) : var1;
+        if (NIL != module0606.f37092(var1)) {
             return module0004.f105(var18);
         }
-        final SubLObject var19 = (module0607.NIL != var6) ? var6 : module0606.f37100(var1);
+        final SubLObject var19 = (NIL != var6) ? var6 : module0606.f37100(var1);
         final SubLObject var20 = module0606.f37088(var18, var19);
         return f37117(var20, var1, var19);
     }
     
     public static SubLObject f37120(final SubLObject var10, final SubLObject var11, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0607.NIL != f37114(var10, var11, var6) || module0607.NIL != f37117(var10, var11, var6));
+        return (SubLObject)makeBoolean(NIL != f37114(var10, var11, var6) || NIL != f37117(var10, var11, var6));
     }
     
     public static SubLObject f37121(final SubLObject var1, final SubLObject var18, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0607.NIL != f37115(var1, var18, var6) || module0607.NIL != f37118(var1, var18, var6));
+        return (SubLObject)makeBoolean(NIL != f37115(var1, var18, var6) || NIL != f37118(var1, var18, var6));
     }
     
     public static SubLObject f37122(final SubLObject var18, final SubLObject var1, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0607.NIL != f37116(var18, var1, var6) || module0607.NIL != f37119(var18, var1, var6));
+        return (SubLObject)makeBoolean(NIL != f37116(var18, var1, var6) || NIL != f37119(var18, var1, var6));
     }
     
     public static SubLObject f37123(final SubLObject var10, final SubLObject var11, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
         return f37117(var11, var10, var6);
     }
     
     public static SubLObject f37124(final SubLObject var1, final SubLObject var18, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
         return f37119(var18, var1, var6);
     }
     
     public static SubLObject f37125(final SubLObject var18, final SubLObject var1, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
         return f37118(var1, var18, var6);
     }
     
     public static SubLObject f37126(final SubLObject var10, final SubLObject var11, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
         return f37120(var10, var11, var6);
     }
     
     public static SubLObject f37127(final SubLObject var1, final SubLObject var18, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
         return f37122(var18, var1, var6);
     }
     
     public static SubLObject f37128(final SubLObject var18, final SubLObject var1, SubLObject var6) {
-        if (var6 == module0607.UNPROVIDED) {
-            var6 = (SubLObject)module0607.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
         return f37121(var1, var18, var6);
     }
     
     public static SubLObject f37129(final SubLObject var10, final SubLObject var11) {
-        assert module0607.NIL != module0606.f37086(var10) : var10;
-        assert module0607.NIL != module0606.f37086(var11) : var11;
+        assert NIL != module0606.f37086(var10) : var10;
+        assert NIL != module0606.f37086(var11) : var11;
         final SubLObject var12 = module0606.f37089(var10);
         final SubLObject var13 = module0606.f37089(var11);
         if (var12.isZero() || var13.isZero()) {
-            return module0606.f37087((SubLObject)module0607.ZERO_INTEGER, (SubLObject)module0607.ZERO_INTEGER);
+            return module0606.f37087((SubLObject)ZERO_INTEGER, (SubLObject)ZERO_INTEGER);
         }
         final SubLObject var14 = module0606.f37090(var10);
         final SubLObject var15 = module0048.f3301(var12);
@@ -277,16 +278,16 @@ public final class module0607 extends SubLTranslatedFile
         final SubLObject var17 = module0048.f3301(var13);
         final SubLObject var18 = Numbers.multiply(var12, var13);
         final SubLObject var19 = module0048.f3301(var18);
-        final SubLObject var20 = Numbers.subtract(var19, new SubLObject[] { Numbers.subtract(var15, var14, (SubLObject)module0607.ONE_INTEGER), Numbers.subtract(var17, var16, (SubLObject)module0607.ONE_INTEGER), module0607.ONE_INTEGER });
+        final SubLObject var20 = Numbers.subtract(var19, new SubLObject[] { Numbers.subtract(var15, var14, (SubLObject)ONE_INTEGER), Numbers.subtract(var17, var16, (SubLObject)ONE_INTEGER), ONE_INTEGER });
         final SubLObject var21 = Numbers.min(var15, var17);
         return module0048.f3302(module0606.f37087(var18, var20), var21);
     }
     
     public static SubLObject f37130(final SubLObject var1, final SubLObject var18) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
-        assert module0607.NIL != Types.integerp(var18) : var18;
-        if (module0607.NIL != module0606.f37092(var1) || var18.isZero()) {
-            return module0606.f37087((SubLObject)module0607.ZERO_INTEGER, (SubLObject)module0607.ZERO_INTEGER);
+        assert NIL != module0606.f37086(var1) : var1;
+        assert NIL != Types.integerp(var18) : var18;
+        if (NIL != module0606.f37092(var1) || var18.isZero()) {
+            return module0606.f37087((SubLObject)ZERO_INTEGER, (SubLObject)ZERO_INTEGER);
         }
         final SubLObject var19 = module0606.f37100(var1);
         final SubLObject var20 = module0606.f37088(var18, var19);
@@ -298,13 +299,13 @@ public final class module0607 extends SubLTranslatedFile
     }
     
     public static SubLObject f37132(final SubLObject var1) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
-        if (module0607.NIL != module0606.f37092(var1)) {
+        assert NIL != module0606.f37086(var1) : var1;
+        if (NIL != module0606.f37092(var1)) {
             module0229.f15259();
         }
         final SubLObject var2 = module0606.f37100(var1);
         final SubLObject var3 = module0606.f37105(var1);
-        return module0606.f37104(Numbers.divide((SubLObject)module0607.ONE_INTEGER, var3), var2);
+        return module0606.f37104(Numbers.divide((SubLObject)ONE_INTEGER, var3), var2);
     }
     
     public static SubLObject f37133(final SubLObject var10, final SubLObject var11) {
@@ -312,13 +313,13 @@ public final class module0607 extends SubLTranslatedFile
     }
     
     public static SubLObject f37134(final SubLObject var1, final SubLObject var18) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
-        assert module0607.NIL != Types.integerp(var18) : var18;
+        assert NIL != module0606.f37086(var1) : var1;
+        assert NIL != Types.integerp(var18) : var18;
         if (var18.isZero()) {
             module0229.f15259();
         }
-        if (module0607.NIL != module0606.f37092(var1)) {
-            return module0606.f37087((SubLObject)module0607.ZERO_INTEGER, (SubLObject)module0607.ZERO_INTEGER);
+        if (NIL != module0606.f37092(var1)) {
+            return module0606.f37087((SubLObject)ZERO_INTEGER, (SubLObject)ZERO_INTEGER);
         }
         final SubLObject var19 = module0606.f37100(var1);
         final SubLObject var20 = module0606.f37088(var18, var19);
@@ -326,13 +327,13 @@ public final class module0607 extends SubLTranslatedFile
     }
     
     public static SubLObject f37135(final SubLObject var18, final SubLObject var1) {
-        assert module0607.NIL != Types.integerp(var18) : var18;
-        assert module0607.NIL != module0606.f37086(var1) : var1;
-        if (module0607.NIL != module0606.f37092(var1)) {
+        assert NIL != Types.integerp(var18) : var18;
+        assert NIL != module0606.f37086(var1) : var1;
+        if (NIL != module0606.f37092(var1)) {
             module0229.f15259();
         }
         if (var18.isZero()) {
-            return module0606.f37087((SubLObject)module0607.ZERO_INTEGER, (SubLObject)module0607.ZERO_INTEGER);
+            return module0606.f37087((SubLObject)ZERO_INTEGER, (SubLObject)ZERO_INTEGER);
         }
         final SubLObject var19 = module0606.f37100(var1);
         final SubLObject var20 = module0606.f37088(var18, var19);
@@ -340,17 +341,17 @@ public final class module0607 extends SubLTranslatedFile
     }
     
     public static SubLObject f37136(final SubLObject var10, final SubLObject var11) {
-        assert module0607.NIL != module0606.f37086(var10) : var10;
-        assert module0607.NIL != module0606.f37086(var11) : var11;
-        if (module0607.NIL != module0606.f37092(var10)) {
+        assert NIL != module0606.f37086(var10) : var10;
+        assert NIL != module0606.f37086(var11) : var11;
+        if (NIL != module0606.f37092(var10)) {
             return module0606.f37091(var11);
         }
-        if (module0607.NIL != module0606.f37092(var11)) {
+        if (NIL != module0606.f37092(var11)) {
             return module0606.f37091(var10);
         }
         final SubLObject var12 = module0606.f37090(var10);
         final SubLObject var13 = module0606.f37090(var11);
-        SubLObject var14 = (SubLObject)module0607.NIL;
+        SubLObject var14 = (SubLObject)NIL;
         if (var12.numE(var13)) {
             var14 = f37137(var10, var11, var12);
         }
@@ -360,8 +361,8 @@ public final class module0607 extends SubLTranslatedFile
         else if (var12.numL(var13)) {
             var14 = f37138(var11, var13, var10, var12);
         }
-        if (module0607.NIL != module0606.f37092(var14)) {
-            return module0606.f37087((SubLObject)module0607.ZERO_INTEGER, (SubLObject)module0607.ZERO_INTEGER);
+        if (NIL != module0606.f37092(var14)) {
+            return module0606.f37087((SubLObject)ZERO_INTEGER, (SubLObject)ZERO_INTEGER);
         }
         return var14;
     }
@@ -384,7 +385,7 @@ public final class module0607 extends SubLTranslatedFile
     public static SubLObject f37138(final SubLObject var35, final SubLObject var36, final SubLObject var37, final SubLObject var38) {
         final SubLObject var39 = Numbers.subtract(var36, var38);
         final SubLObject var40 = module0606.f37089(var35);
-        final SubLObject var41 = Numbers.multiply((SubLObject)module0607.TEN_INTEGER, var40);
+        final SubLObject var41 = Numbers.multiply((SubLObject)TEN_INTEGER, var40);
         final SubLObject var42 = module0606.f37087(var41, var36);
         final SubLObject var43 = module0606.f37100(var42);
         final SubLObject var44 = module0606.f37100(var37);
@@ -397,13 +398,13 @@ public final class module0607 extends SubLTranslatedFile
         final SubLObject var48 = module0606.f37089(var46);
         final SubLObject var49 = module0606.f37089(var47);
         final SubLObject var50 = Numbers.add(var48, var49);
-        final SubLObject var51 = Numbers.min(Numbers.subtract(var43, (SubLObject)module0607.ONE_INTEGER), Numbers.add(var44, var39));
+        final SubLObject var51 = Numbers.min(Numbers.subtract(var43, (SubLObject)ONE_INTEGER), Numbers.add(var44, var39));
         final SubLObject var52 = module0048.f3301(var50);
         final SubLObject var53 = Numbers.subtract(var52, var45);
         final SubLObject var54 = Numbers.add(var36, var53);
         final SubLObject var55 = Numbers.add(var51, var53);
-        final SubLObject var56 = var55.numG((SubLObject)module0607.ZERO_INTEGER) ? module0606.f37087(var50, var54) : module0606.f37087(module0048.f3302(Numbers.integerDivide(var50, (SubLObject)module0607.TEN_INTEGER), (SubLObject)module0607.ONE_INTEGER), Numbers.add(var54, (SubLObject)module0607.ONE_INTEGER));
-        final SubLObject var57 = (SubLObject)(var55.numG((SubLObject)module0607.ZERO_INTEGER) ? var55 : module0607.ONE_INTEGER);
+        final SubLObject var56 = var55.numG((SubLObject)ZERO_INTEGER) ? module0606.f37087(var50, var54) : module0606.f37087(module0048.f3302(Numbers.integerDivide(var50, (SubLObject)TEN_INTEGER), (SubLObject)ONE_INTEGER), Numbers.add(var54, (SubLObject)ONE_INTEGER));
+        final SubLObject var57 = (SubLObject)(var55.numG((SubLObject)ZERO_INTEGER) ? var55 : ONE_INTEGER);
         return module0048.f3302(var56, var57);
     }
     
@@ -415,12 +416,12 @@ public final class module0607 extends SubLTranslatedFile
     }
     
     public static SubLObject f37140(final SubLObject var1, SubLObject var53) {
-        if (var53 == module0607.UNPROVIDED) {
-            var53 = module0607.$g4701$.getGlobalValue();
+        if (var53 == UNPROVIDED) {
+            var53 = $g4701$.getGlobalValue();
         }
-        assert module0607.NIL != module0608.f37152(var53) : var53;
-        assert module0607.NIL != module0606.f37086(var1) : var1;
-        if (var53.numE((SubLObject)module0607.TEN_INTEGER)) {
+        assert NIL != module0608.f37152(var53) : var53;
+        assert NIL != module0606.f37086(var1) : var1;
+        if (var53.numE((SubLObject)TEN_INTEGER)) {
             return f37141(var1);
         }
         final SubLObject var54 = module0606.f37100(var1);
@@ -430,12 +431,12 @@ public final class module0607 extends SubLTranslatedFile
     }
     
     public static SubLObject f37141(final SubLObject var1) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
+        assert NIL != module0606.f37086(var1) : var1;
         final SubLObject var2 = module0606.f37089(var1);
         final SubLObject var3 = module0606.f37090(var1);
         final SubLObject var4 = module0048.f3301(var3);
         final SubLObject var5 = module0606.f37100(var1);
-        final SubLObject var6 = Numbers.log(Numbers.divide(var2, Numbers.expt((SubLObject)module0607.TEN_INTEGER, Numbers.subtract(var5, (SubLObject)module0607.ONE_INTEGER))), (SubLObject)module0607.TEN_INTEGER);
+        final SubLObject var6 = Numbers.log(Numbers.divide(var2, Numbers.expt((SubLObject)TEN_INTEGER, Numbers.subtract(var5, (SubLObject)ONE_INTEGER))), (SubLObject)TEN_INTEGER);
         final SubLObject var7 = Numbers.add(var3, var6);
         final SubLObject var8 = Numbers.add(var5, var4);
         return module0606.f37104(var7, var8);
@@ -446,34 +447,34 @@ public final class module0607 extends SubLTranslatedFile
     }
     
     public static SubLObject f37144(final SubLObject var1) {
-        return f37143((SubLObject)module0607.TEN_INTEGER, var1);
+        return f37143((SubLObject)TEN_INTEGER, var1);
     }
     
     public static SubLObject f37145(final SubLObject var1) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
+        assert NIL != module0606.f37086(var1) : var1;
         final SubLObject var2 = module0606.f37100(var1);
         final SubLObject var3 = module0606.f37105(var1);
-        final SubLObject var4 = Numbers.expt(var3, (SubLObject)module0607.$ic5$);
+        final SubLObject var4 = Numbers.expt(var3, (SubLObject)$ic5$);
         return module0606.f37104(var4, var2);
     }
     
     public static SubLObject f37146(final SubLObject var1) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
+        assert NIL != module0606.f37086(var1) : var1;
         final SubLObject var2 = module0606.f37100(var1);
         final SubLObject var3 = module0606.f37090(var1);
         final SubLObject var4 = module0606.f37105(var1);
-        final SubLObject var5 = Numbers.expt((SubLObject)module0607.TEN_INTEGER, var4);
-        final SubLObject var6 = Numbers.max(Numbers.subtract(var2, var3, (SubLObject)module0607.ONE_INTEGER), (SubLObject)module0607.ONE_INTEGER);
+        final SubLObject var5 = Numbers.expt((SubLObject)TEN_INTEGER, var4);
+        final SubLObject var6 = Numbers.max(Numbers.subtract(var2, var3, (SubLObject)ONE_INTEGER), (SubLObject)ONE_INTEGER);
         return module0606.f37104(var5, var6);
     }
     
     public static SubLObject f37143(final SubLObject var53, final SubLObject var1) {
-        assert module0607.NIL != module0608.f37152(var53) : var53;
-        assert module0607.NIL != module0606.f37086(var1) : var1;
-        if (var53.numE((SubLObject)module0607.TEN_INTEGER)) {
+        assert NIL != module0608.f37152(var53) : var53;
+        assert NIL != module0606.f37086(var1) : var1;
+        if (var53.numE((SubLObject)TEN_INTEGER)) {
             return f37146(var1);
         }
-        final SubLObject var54 = (module0607.NIL != module0606.f37086(var53)) ? module0606.f37105(var53) : var53;
+        final SubLObject var54 = (NIL != module0606.f37086(var53)) ? module0606.f37105(var53) : var53;
         final SubLObject var55 = module0606.f37100(var1);
         final SubLObject var56 = module0606.f37105(var1);
         final SubLObject var57 = Numbers.expt(var54, var56);
@@ -481,7 +482,7 @@ public final class module0607 extends SubLTranslatedFile
     }
     
     public static SubLObject f37147(final SubLObject var1) {
-        assert module0607.NIL != module0606.f37086(var1) : var1;
+        assert NIL != module0606.f37086(var1) : var1;
         final SubLObject var2 = module0606.f37100(var1);
         final SubLObject var3 = module0606.f37105(var1);
         final SubLObject var4 = Numbers.exp(var3);
@@ -528,16 +529,16 @@ public final class module0607 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0607", "f37146", "S#40954", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0607", "f37143", "S#40955", 2, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0607", "f37147", "S#40956", 1, 0, false);
-        return (SubLObject)module0607.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f37149() {
-        module0607.$g4701$ = SubLFiles.defconstant("S#40957", (SubLObject)module0607.$ic3$);
-        return (SubLObject)module0607.NIL;
+        $g4701$ = SubLFiles.defconstant("S#40957", (SubLObject)$ic3$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f37150() {
-        return (SubLObject)module0607.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -554,20 +555,20 @@ public final class module0607 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0607();
-        module0607.$g4701$ = null;
-        $ic0$ = SubLObjectFactory.makeSymbol("S#4666", "CYC");
-        $ic1$ = SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P");
-        $ic2$ = SubLObjectFactory.makeSymbol("INTEGERP");
-        $ic3$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScientificNumberFn")), (SubLObject)SubLObjectFactory.makeInteger("2718281828459045"), (SubLObject)module0607.ZERO_INTEGER);
-        $ic4$ = SubLObjectFactory.makeSymbol("S#4668", "CYC");
-        $ic5$ = (SubLFloat)SubLObjectFactory.makeDouble(0.5);
+        $g4701$ = null;
+        $ic0$ = makeSymbol("S#4666", "CYC");
+        $ic1$ = makeSymbol("POSITIVE-INTEGER-P");
+        $ic2$ = makeSymbol("INTEGERP");
+        $ic3$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("ScientificNumberFn")), (SubLObject)makeInteger("2718281828459045"), (SubLObject)ZERO_INTEGER);
+        $ic4$ = makeSymbol("S#4668", "CYC");
+        $ic5$ = (SubLFloat)makeDouble(0.5);
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0607.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 115 ms
 	
 	Decompiled with Procyon 0.5.32.

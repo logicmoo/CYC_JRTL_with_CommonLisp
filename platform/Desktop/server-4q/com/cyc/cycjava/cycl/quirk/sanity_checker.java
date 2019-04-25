@@ -8,6 +8,7 @@ import com.cyc.cycjava.cycl.pph_main;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.genls;
 import com.cyc.cycjava.cycl.kb_mapping_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;

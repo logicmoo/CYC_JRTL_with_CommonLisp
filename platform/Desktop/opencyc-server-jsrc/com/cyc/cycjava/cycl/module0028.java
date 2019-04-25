@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -17,29 +18,29 @@ public final class module0028 extends SubLTranslatedFile
     private static final SubLSymbol $ic0$;
     
     public static SubLObject f1466() {
-        return module0028.$g838$.getGlobalValue();
+        return $g838$.getGlobalValue();
     }
     
     public static SubLObject f1467() {
         module0029.f1494();
-        module0028.$g838$.setGlobalValue((SubLObject)module0028.T);
-        return (SubLObject)module0028.NIL;
+        $g838$.setGlobalValue((SubLObject)T);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f1468() {
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0028", "f1466", "S#2615", 0, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0028", "f1467", "S#2616", 0, 0, false);
-        return (SubLObject)module0028.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f1469() {
-        module0028.$g838$ = SubLFiles.deflexical("S#2617", (SubLObject)((module0028.NIL != Symbols.boundp((SubLObject)module0028.$ic0$)) ? module0028.$g838$.getGlobalValue() : module0028.NIL));
-        return (SubLObject)module0028.NIL;
+        $g838$ = SubLFiles.deflexical("S#2617", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic0$)) ? $g838$.getGlobalValue() : NIL));
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f1470() {
-        module0003.f57((SubLObject)module0028.$ic0$);
-        return (SubLObject)module0028.NIL;
+        module0003.f57((SubLObject)$ic0$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -56,15 +57,15 @@ public final class module0028 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0028();
-        module0028.$g838$ = null;
-        $ic0$ = SubLObjectFactory.makeSymbol("S#2617", "CYC");
+        $g838$ = null;
+        $ic0$ = makeSymbol("S#2617", "CYC");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0028.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 19 ms
 	
 	Decompiled with Procyon 0.5.32.

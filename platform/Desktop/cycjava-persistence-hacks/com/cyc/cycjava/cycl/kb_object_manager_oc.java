@@ -26,6 +26,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Storage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
@@ -45,10 +46,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class oc_kb_object_manager extends SubLTranslatedFile
+public final class kb_object_manager_oc extends SubLTranslatedFile
 {
   public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.oc_kb_object_manager";
+  public static final String myName = "com.cyc.cycjava.cycl.kb_object_manager_oc";
   public static final String myFingerPrint = "4ca2bdc371772237f3ae14ef6f3afd91d05f25f55c3878ba78cfc98404e4efdb";
   public static SubLSymbol $g2152$;
   private static SubLSymbol $g2153$;
@@ -154,278 +155,278 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
   {
     SubLObject var4;
     final SubLObject var3 = var4 = var1.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_object_manager.$ic0$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_object_manager_oc.$ic0$ );
     final SubLObject var5 = var4.rest();
     var4 = var4.first();
-    SubLObject var6 = oc_kb_object_manager.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_object_manager.$ic0$ );
+    SubLObject var6 = kb_object_manager_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_object_manager_oc.$ic0$ );
     var6 = var4.first();
     var4 = var4.rest();
-    if( oc_kb_object_manager.NIL == var4 )
+    if( kb_object_manager_oc.NIL == var4 )
     {
       final SubLObject var7;
       var4 = ( var7 = var5 );
-      return ConsesLow.listS( oc_kb_object_manager.$ic1$, ConsesLow.list( ConsesLow.list( oc_kb_object_manager.$ic2$, var6 ) ), ConsesLow.append( var7,
-          oc_kb_object_manager.NIL ) );
+      return ConsesLow.listS( kb_object_manager_oc.$ic1$, ConsesLow.list( ConsesLow.list( kb_object_manager_oc.$ic2$, var6 ) ), ConsesLow.append( var7,
+          kb_object_manager_oc.NIL ) );
     }
-    cdestructuring_bind.cdestructuring_bind_error( var3, oc_kb_object_manager.$ic0$ );
-    return oc_kb_object_manager.NIL;
+    cdestructuring_bind.cdestructuring_bind_error( var3, kb_object_manager_oc.$ic0$ );
+    return kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10379(final SubLObject var8, final SubLObject var9)
   {
-    compatibility.default_struct_print_function( var8, var9, oc_kb_object_manager.ZERO_INTEGER );
-    return oc_kb_object_manager.NIL;
+    compatibility.default_struct_print_function( var8, var9, kb_object_manager_oc.ZERO_INTEGER );
+    return kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10380(final SubLObject var8)
   {
-    return ( var8.getClass() == $sX13152_native.class ) ? oc_kb_object_manager.T : oc_kb_object_manager.NIL;
+    return ( var8.getClass() == $sX13152_native.class ) ? kb_object_manager_oc.T : kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10381(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField2();
   }
 
   public static SubLObject f10382(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField3();
   }
 
   public static SubLObject f10383(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField4();
   }
 
   public static SubLObject f10384(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField5();
   }
 
   public static SubLObject f10385(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField6();
   }
 
   public static SubLObject f10386(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField7();
   }
 
   public static SubLObject f10387(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField8();
   }
 
   public static SubLObject f10388(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField9();
   }
 
   public static SubLObject f10389(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField10();
   }
 
   public static SubLObject f10390(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField11();
   }
 
   public static SubLObject f10391(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField12();
   }
 
   public static SubLObject f10392(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField13();
   }
 
   public static SubLObject f10393(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField14();
   }
 
   public static SubLObject f10394(final SubLObject var8)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.getField15();
   }
 
   public static SubLObject f10395(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField2( var11 );
   }
 
   public static SubLObject f10396(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField3( var11 );
   }
 
   public static SubLObject f10397(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField4( var11 );
   }
 
   public static SubLObject f10398(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField5( var11 );
   }
 
   public static SubLObject f10399(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField6( var11 );
   }
 
   public static SubLObject f10400(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField7( var11 );
   }
 
   public static SubLObject f10401(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField8( var11 );
   }
 
   public static SubLObject f10402(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField9( var11 );
   }
 
   public static SubLObject f10403(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField10( var11 );
   }
 
   public static SubLObject f10404(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField11( var11 );
   }
 
   public static SubLObject f10405(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField12( var11 );
   }
 
   public static SubLObject f10406(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField13( var11 );
   }
 
   public static SubLObject f10407(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField14( var11 );
   }
 
   public static SubLObject f10408(final SubLObject var8, final SubLObject var11)
   {
-    assert oc_kb_object_manager.NIL != f10380( var8 ) : var8;
+    assert kb_object_manager_oc.NIL != f10380( var8 ) : var8;
     return var8.setField15( var11 );
   }
 
   public static SubLObject f10409(SubLObject var12)
   {
-    if( var12 == oc_kb_object_manager.UNPROVIDED )
+    if( var12 == kb_object_manager_oc.UNPROVIDED )
     {
-      var12 = oc_kb_object_manager.NIL;
+      var12 = kb_object_manager_oc.NIL;
     }
     final SubLObject var13 = new $sX13152_native();
     SubLObject var14;
     SubLObject var15;
     SubLObject var16;
     SubLObject var17;
-    for( var14 = oc_kb_object_manager.NIL, var14 = var12; oc_kb_object_manager.NIL != var14; var14 = conses_high.cddr( var14 ) )
+    for( var14 = kb_object_manager_oc.NIL, var14 = var12; kb_object_manager_oc.NIL != var14; var14 = conses_high.cddr( var14 ) )
     {
       var15 = var14.first();
       var16 = conses_high.cadr( var14 );
       var17 = var15;
-      if( var17.eql( oc_kb_object_manager.$ic40$ ) )
+      if( var17.eql( kb_object_manager_oc.$ic40$ ) )
       {
         f10395( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic41$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic41$ ) )
       {
         f10396( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic42$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic42$ ) )
       {
         f10397( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic43$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic43$ ) )
       {
         f10398( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic44$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic44$ ) )
       {
         f10399( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic45$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic45$ ) )
       {
         f10400( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic46$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic46$ ) )
       {
         f10401( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic47$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic47$ ) )
       {
         f10402( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic48$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic48$ ) )
       {
         f10403( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic49$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic49$ ) )
       {
         f10404( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic50$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic50$ ) )
       {
         f10405( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic51$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic51$ ) )
       {
         f10406( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic52$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic52$ ) )
       {
         f10407( var13, var16 );
       }
-      else if( var17.eql( oc_kb_object_manager.$ic53$ ) )
+      else if( var17.eql( kb_object_manager_oc.$ic53$ ) )
       {
         f10408( var13, var16 );
       }
       else
       {
-        Errors.error( oc_kb_object_manager.$ic54$, var15 );
+        Errors.error( kb_object_manager_oc.$ic54$, var15 );
       }
     }
     return var13;
@@ -433,22 +434,22 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10410(final SubLObject var18, final SubLObject var19)
   {
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic55$, oc_kb_object_manager.$ic56$, oc_kb_object_manager.FOURTEEN_INTEGER );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic40$, f10381( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic41$, f10382( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic42$, f10383( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic43$, f10384( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic44$, f10385( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic45$, f10386( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic46$, f10387( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic47$, f10388( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic48$, f10389( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic49$, f10390( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic50$, f10391( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic51$, f10392( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic52$, f10393( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic57$, oc_kb_object_manager.$ic53$, f10394( var18 ) );
-    Functions.funcall( var19, var18, oc_kb_object_manager.$ic58$, oc_kb_object_manager.$ic56$, oc_kb_object_manager.FOURTEEN_INTEGER );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic55$, kb_object_manager_oc.$ic56$, kb_object_manager_oc.FOURTEEN_INTEGER );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic40$, f10381( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic41$, f10382( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic42$, f10383( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic43$, f10384( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic44$, f10385( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic45$, f10386( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic46$, f10387( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic47$, f10388( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic48$, f10389( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic49$, f10390( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic50$, f10391( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic51$, f10392( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic52$, f10393( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic57$, kb_object_manager_oc.$ic53$, f10394( var18 ) );
+    Functions.funcall( var19, var18, kb_object_manager_oc.$ic58$, kb_object_manager_oc.$ic56$, kb_object_manager_oc.FOURTEEN_INTEGER );
     return var18;
   }
 
@@ -459,91 +460,91 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject new_kb_object_manager(final SubLObject var20, final SubLObject var21, final SubLObject var22, final SubLObject var23, final SubLObject var24, final SubLObject var25)
   {
-    assert oc_kb_object_manager.NIL != Types.stringp( var20 ) : var20;
-    assert oc_kb_object_manager.NIL != module0004.f106( var21 ) : var21;
-    assert oc_kb_object_manager.NIL != module0004.f105( var22 ) : var22;
-    assert oc_kb_object_manager.NIL != module0004.f105( var23 ) : var23;
-    assert oc_kb_object_manager.NIL != Symbols.fboundp( var24 ) : var24;
-    final SubLObject var26 = f10409( oc_kb_object_manager.UNPROVIDED );
+    assert kb_object_manager_oc.NIL != Types.stringp( var20 ) : var20;
+    assert kb_object_manager_oc.NIL != module0004.f106( var21 ) : var21;
+    assert kb_object_manager_oc.NIL != module0004.f105( var22 ) : var22;
+    assert kb_object_manager_oc.NIL != module0004.f105( var23 ) : var23;
+    assert kb_object_manager_oc.NIL != Symbols.fboundp( var24 ) : var24;
+    final SubLObject var26 = f10409( kb_object_manager_oc.UNPROVIDED );
     f10395( var26, var20 );
-    f10396( var26, Locks.make_lock( Sequences.cconcatenate( var20, oc_kb_object_manager.$ic64$ ) ) );
+    f10396( var26, Locks.make_lock( Sequences.cconcatenate( var20, kb_object_manager_oc.$ic64$ ) ) );
     f10397( var26, var22 );
     f10406( var26, var23 );
     f10413( var26, var21, var25 );
-    f10399( var26, oc_kb_object_manager.$ic65$ );
-    f10401( var26, oc_kb_object_manager.NIL );
-    f10402( var26, oc_kb_object_manager.ZERO_INTEGER );
+    f10399( var26, kb_object_manager_oc.$ic65$ );
+    f10401( var26, kb_object_manager_oc.NIL );
+    f10402( var26, kb_object_manager_oc.ZERO_INTEGER );
     f10403( var26, var24 );
-    f10404( var26, oc_kb_object_manager.NIL );
-    f10405( var26, oc_kb_object_manager.NIL );
+    f10404( var26, kb_object_manager_oc.NIL );
+    f10405( var26, kb_object_manager_oc.NIL );
     return var26;
   }
 
   public static SubLObject f10414(final SubLObject var6, final SubLObject var26, final SubLObject var27)
   {
-    assert oc_kb_object_manager.NIL != module0004.f105( var26 ) : var26;
-    assert oc_kb_object_manager.NIL != module0004.f105( var27 ) : var27;
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != module0004.f105( var26 ) : var26;
+    assert kb_object_manager_oc.NIL != module0004.f105( var27 ) : var27;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     final SubLObject var28 = f10415( var6 );
-    SubLObject var29 = oc_kb_object_manager.NIL;
+    SubLObject var29 = kb_object_manager_oc.NIL;
     try
     {
       var29 = Locks.seize_lock( var28 );
       final SubLObject var30 = f10416( var6 );
-      if( oc_kb_object_manager.NIL != var30 )
+      if( kb_object_manager_oc.NIL != var30 )
       {
         module0095.f6850( var30, var26, var27 );
       }
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var29 )
+      if( kb_object_manager_oc.NIL != var29 )
       {
         Locks.release_lock( var28 );
       }
     }
-    return oc_kb_object_manager.NIL;
+    return kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10417(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     final SubLObject var7 = f10415( var6 );
-    SubLObject var8 = oc_kb_object_manager.NIL;
+    SubLObject var8 = kb_object_manager_oc.NIL;
     try
     {
       var8 = Locks.seize_lock( var7 );
       final SubLObject var9 = f10416( var6 );
-      if( oc_kb_object_manager.NIL != var9 )
+      if( kb_object_manager_oc.NIL != var9 )
       {
         module0095.f6847( var9 );
       }
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var8 )
+      if( kb_object_manager_oc.NIL != var8 )
       {
         Locks.release_lock( var7 );
       }
     }
-    return oc_kb_object_manager.NIL;
+    return kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10418(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
-    SubLObject var7 = oc_kb_object_manager.NIL;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
+    SubLObject var7 = kb_object_manager_oc.NIL;
     final SubLObject var8 = f10415( var6 );
-    SubLObject var9 = oc_kb_object_manager.NIL;
+    SubLObject var9 = kb_object_manager_oc.NIL;
     try
     {
       var9 = Locks.seize_lock( var8 );
       final SubLObject var10 = f10416( var6 );
-      var7 = SubLObjectFactory.makeBoolean( oc_kb_object_manager.NIL != var10 && oc_kb_object_manager.NIL != module0095.f6851( var10 ) );
+      var7 = SubLObjectFactory.makeBoolean( kb_object_manager_oc.NIL != var10 && kb_object_manager_oc.NIL != module0095.f6851( var10 ) );
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var9 )
+      if( kb_object_manager_oc.NIL != var9 )
       {
         Locks.release_lock( var8 );
       }
@@ -553,23 +554,23 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10413(final SubLObject var6, final SubLObject var21, final SubLObject var36)
   {
-    SubLObject var37 = oc_kb_object_manager.NIL;
+    SubLObject var37 = kb_object_manager_oc.NIL;
     final SubLObject var38 = f10415( var6 );
-    SubLObject var39 = oc_kb_object_manager.NIL;
+    SubLObject var39 = kb_object_manager_oc.NIL;
     try
     {
       var39 = Locks.seize_lock( var38 );
       final SubLObject var40 = f10419( var6 );
-      if( oc_kb_object_manager.NIL == module0065.f4719( var40 ) )
+      if( kb_object_manager_oc.NIL == module0065.f4719( var40 ) )
       {
-        f10398( var6, module0065.f4745( var21, oc_kb_object_manager.ZERO_INTEGER ) );
-        var37 = oc_kb_object_manager.T;
+        f10398( var6, module0065.f4745( var21, kb_object_manager_oc.ZERO_INTEGER ) );
+        var37 = kb_object_manager_oc.T;
       }
-      var37 = f10420( var6, oc_kb_object_manager.NIL, var21 );
+      var37 = f10420( var6, kb_object_manager_oc.NIL, var21 );
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var39 )
+      if( kb_object_manager_oc.NIL != var39 )
       {
         Locks.release_lock( var38 );
       }
@@ -579,33 +580,33 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10420(final SubLObject var6, SubLObject var41, SubLObject var21)
   {
-    if( var41 == oc_kb_object_manager.UNPROVIDED )
+    if( var41 == kb_object_manager_oc.UNPROVIDED )
     {
-      var41 = oc_kb_object_manager.NIL;
+      var41 = kb_object_manager_oc.NIL;
     }
-    if( var21 == oc_kb_object_manager.UNPROVIDED )
+    if( var21 == kb_object_manager_oc.UNPROVIDED )
     {
-      var21 = oc_kb_object_manager.NIL;
+      var21 = kb_object_manager_oc.NIL;
     }
     final SubLThread var42 = SubLProcess.currentSubLThread();
     if( !var21.isFixnum() )
     {
       var21 = module0065.f4739( f10419( var6 ) );
     }
-    SubLObject var43 = oc_kb_object_manager.NIL;
-    if( oc_kb_object_manager.NIL != var41 && oc_kb_object_manager.NIL == module0065.f4719( f10421( var6 ) ) )
+    SubLObject var43 = kb_object_manager_oc.NIL;
+    if( kb_object_manager_oc.NIL != var41 && kb_object_manager_oc.NIL == module0065.f4719( f10421( var6 ) ) )
     {
-      f10399( var6, module0065.f4745( var21, oc_kb_object_manager.ZERO_INTEGER ) );
-      var43 = oc_kb_object_manager.T;
+      f10399( var6, module0065.f4745( var21, kb_object_manager_oc.ZERO_INTEGER ) );
+      var43 = kb_object_manager_oc.T;
     }
-    if( oc_kb_object_manager.NIL == module0089.f6045( f10422( var6 ) ) )
+    if( kb_object_manager_oc.NIL == module0089.f6045( f10422( var6 ) ) )
     {
       final SubLObject var44 = f10423( var6, var21 );
       final SubLObject var45 = Storage.$current_area$.currentBinding( var42 );
       try
       {
         Storage.$current_area$.bind( Storage.get_static_area(), var42 );
-        f10400( var6, module0089.f6073( var44, Symbols.symbol_function( oc_kb_object_manager.EQ ) ) );
+        f10400( var6, module0089.f6073( var44, Symbols.symbol_function( kb_object_manager_oc.EQ ) ) );
       }
       finally
       {
@@ -617,15 +618,15 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10423(final SubLObject var6, final SubLObject var45)
   {
-    SubLObject var46 = Numbers.multiply( Numbers.integerDivide( var45, oc_kb_object_manager.$ic67$ ), f10424( var6 ) );
+    SubLObject var46 = Numbers.multiply( Numbers.integerDivide( var45, kb_object_manager_oc.$ic67$ ), f10424( var6 ) );
     final SubLObject var47 = f10425( var6 );
-    if( oc_kb_object_manager.NIL != var47 && var46.numG( var47 ) )
+    if( kb_object_manager_oc.NIL != var47 && var46.numG( var47 ) )
     {
       var46 = var47;
     }
-    if( var46.numL( oc_kb_object_manager.$g2153$.getGlobalValue() ) )
+    if( var46.numL( kb_object_manager_oc.$g2153$.getGlobalValue() ) )
     {
-      var46 = oc_kb_object_manager.$g2153$.getGlobalValue();
+      var46 = kb_object_manager_oc.$g2153$.getGlobalValue();
     }
     return var46;
   }
@@ -633,28 +634,28 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
   public static SubLObject f10426(final SubLObject var6, final SubLObject var47, final SubLObject var48)
   {
     final SubLThread var49 = SubLProcess.currentSubLThread();
-    if( oc_kb_object_manager.NIL == Errors.$ignore_mustsP$.getDynamicValue( var49 ) && oc_kb_object_manager.NIL != module0038.f2673( var47, oc_kb_object_manager.$ic68$,
-        oc_kb_object_manager.UNPROVIDED ) )
+    if( kb_object_manager_oc.NIL == Errors.$ignore_mustsP$.getDynamicValue( var49 ) && kb_object_manager_oc.NIL != module0038.f2673( var47, kb_object_manager_oc.$ic68$,
+        kb_object_manager_oc.UNPROVIDED ) )
     {
-      Errors.error( oc_kb_object_manager.$ic69$, var47 );
+      Errors.error( kb_object_manager_oc.$ic69$, var47 );
     }
-    if( oc_kb_object_manager.NIL == Errors.$ignore_mustsP$.getDynamicValue( var49 ) && oc_kb_object_manager.NIL != module0038.f2673( var48, oc_kb_object_manager.$ic68$,
-        oc_kb_object_manager.UNPROVIDED ) )
+    if( kb_object_manager_oc.NIL == Errors.$ignore_mustsP$.getDynamicValue( var49 ) && kb_object_manager_oc.NIL != module0038.f2673( var48, kb_object_manager_oc.$ic68$,
+        kb_object_manager_oc.UNPROVIDED ) )
     {
-      Errors.error( oc_kb_object_manager.$ic69$, var48 );
+      Errors.error( kb_object_manager_oc.$ic69$, var48 );
     }
-    final SubLObject var50 = module0107.f7597( var47, oc_kb_object_manager.$ic68$ );
-    final SubLObject var51 = module0107.f7597( var48, oc_kb_object_manager.$ic68$ );
-    SubLObject var52 = oc_kb_object_manager.NIL;
+    final SubLObject var50 = module0107.f7597( var47, kb_object_manager_oc.$ic68$ );
+    final SubLObject var51 = module0107.f7597( var48, kb_object_manager_oc.$ic68$ );
+    SubLObject var52 = kb_object_manager_oc.NIL;
     final SubLObject var53 = f10415( var6 );
-    SubLObject var54 = oc_kb_object_manager.NIL;
+    SubLObject var54 = kb_object_manager_oc.NIL;
     try
     {
       var54 = Locks.seize_lock( var53 );
-      if( oc_kb_object_manager.NIL != Filesys.probe_file( var50 ) && oc_kb_object_manager.NIL != Filesys.probe_file( var51 ) )
+      if( kb_object_manager_oc.NIL != Filesys.probe_file( var50 ) && kb_object_manager_oc.NIL != Filesys.probe_file( var51 ) )
       {
         final SubLObject var55 = f10387( var6 );
-        if( oc_kb_object_manager.NIL != module0095.f6844( var55 ) )
+        if( kb_object_manager_oc.NIL != module0095.f6844( var55 ) )
         {
           module0095.f6849( var55 );
         }
@@ -666,7 +667,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var54 )
+      if( kb_object_manager_oc.NIL != var54 )
       {
         Locks.release_lock( var53 );
       }
@@ -676,29 +677,29 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10429(final SubLObject var20, final SubLObject var22, final SubLObject var23, final SubLObject var40, final SubLObject var55, final SubLObject var56, final SubLObject var24)
   {
-    final SubLObject var57 = f10409( oc_kb_object_manager.UNPROVIDED );
+    final SubLObject var57 = f10409( kb_object_manager_oc.UNPROVIDED );
     f10395( var57, var20 );
-    f10396( var57, Locks.make_lock( Sequences.cconcatenate( var20, oc_kb_object_manager.$ic64$ ) ) );
+    f10396( var57, Locks.make_lock( Sequences.cconcatenate( var20, kb_object_manager_oc.$ic64$ ) ) );
     f10397( var57, var22 );
     f10406( var57, var23 );
     f10398( var57, var40 );
     f10400( var57, var55 );
     f10399( var57, var56 );
-    f10401( var57, oc_kb_object_manager.$ic65$ );
-    f10402( var57, oc_kb_object_manager.ZERO_INTEGER );
+    f10401( var57, kb_object_manager_oc.$ic65$ );
+    f10402( var57, kb_object_manager_oc.ZERO_INTEGER );
     f10403( var57, var24 );
-    f10404( var57, oc_kb_object_manager.NIL );
-    f10405( var57, oc_kb_object_manager.NIL );
+    f10404( var57, kb_object_manager_oc.NIL );
+    f10405( var57, kb_object_manager_oc.NIL );
     return var57;
   }
 
   public static SubLObject f10430(final SubLObject var6, final SubLObject var57)
   {
     final SubLThread var58 = SubLProcess.currentSubLThread();
-    assert oc_kb_object_manager.NIL != module0004.f106( var57 ) : var57;
-    final SubLObject var59 = Numbers.ceiling( Numbers.add( var57, Numbers.multiply( var57, oc_kb_object_manager.$ic71$ ) ), oc_kb_object_manager.UNPROVIDED );
+    assert kb_object_manager_oc.NIL != module0004.f106( var57 ) : var57;
+    final SubLObject var59 = Numbers.ceiling( Numbers.add( var57, Numbers.multiply( var57, kb_object_manager_oc.$ic71$ ) ), kb_object_manager_oc.UNPROVIDED );
     final SubLObject var60 = f10415( var6 );
-    SubLObject var61 = oc_kb_object_manager.NIL;
+    SubLObject var61 = kb_object_manager_oc.NIL;
     try
     {
       var61 = Locks.seize_lock( var60 );
@@ -717,7 +718,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var61 )
+      if( kb_object_manager_oc.NIL != var61 )
       {
         Locks.release_lock( var60 );
       }
@@ -727,19 +728,19 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10431(final SubLObject var6)
   {
-    SubLObject var7 = oc_kb_object_manager.NIL;
+    SubLObject var7 = kb_object_manager_oc.NIL;
     final SubLObject var8 = f10415( var6 );
-    SubLObject var9 = oc_kb_object_manager.NIL;
+    SubLObject var9 = kb_object_manager_oc.NIL;
     try
     {
       var9 = Locks.seize_lock( var8 );
       final SubLObject var10 = f10421( var6 );
-      if( oc_kb_object_manager.NIL != module0065.f4719( var10 ) )
+      if( kb_object_manager_oc.NIL != module0065.f4719( var10 ) )
       {
         module0065.f4762( var10 );
       }
       final SubLObject var11 = f10422( var6 );
-      if( oc_kb_object_manager.NIL != module0089.f6045( var11 ) )
+      if( kb_object_manager_oc.NIL != module0089.f6045( var11 ) )
       {
         module0089.f6092( var11 );
       }
@@ -748,7 +749,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var9 )
+      if( kb_object_manager_oc.NIL != var9 )
       {
         Locks.release_lock( var8 );
       }
@@ -758,73 +759,73 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10432(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10381( var6 );
   }
 
   public static SubLObject f10415(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10382( var6 );
   }
 
   public static SubLObject f10424(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10383( var6 );
   }
 
   public static SubLObject f10425(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10392( var6 );
   }
 
   public static SubLObject f10419(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10384( var6 );
   }
 
   public static SubLObject f10421(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10385( var6 );
   }
 
   public static SubLObject f10422(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10386( var6 );
   }
 
   public static SubLObject f10416(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10387( var6 );
   }
 
   public static SubLObject f10433(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10388( var6 );
   }
 
   public static SubLObject f10434(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10389( var6 );
   }
 
   public static SubLObject f10435(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10390( var6 );
   }
 
   public static SubLObject f10436(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
     return f10391( var6 );
   }
 
@@ -836,9 +837,9 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
   public static SubLObject f10438(final SubLObject var6)
   {
     final SubLObject var7 = f10419( var6 );
-    if( oc_kb_object_manager.NIL == module0065.f4719( var7 ) )
+    if( kb_object_manager_oc.NIL == module0065.f4719( var7 ) )
     {
-      return oc_kb_object_manager.ZERO_INTEGER;
+      return kb_object_manager_oc.ZERO_INTEGER;
     }
     return module0065.f4733( var7 );
   }
@@ -850,29 +851,29 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10440(final SubLObject var6, final SubLObject var63)
   {
-    return SubLObjectFactory.makeBoolean( oc_kb_object_manager.NIL != module0107.f7629( module0065.f4750( f10419( var6 ), var63, module0107.f7627() ) ) || oc_kb_object_manager.NIL != f10441( var6, var63 ) );
+    return SubLObjectFactory.makeBoolean( kb_object_manager_oc.NIL != module0107.f7629( module0065.f4750( f10419( var6 ), var63, module0107.f7627() ) ) || kb_object_manager_oc.NIL != f10441( var6, var63 ) );
   }
 
   public static SubLObject f10442(final SubLObject var6, final SubLObject var63)
   {
-    SubLObject var64 = oc_kb_object_manager.NIL;
+    SubLObject var64 = kb_object_manager_oc.NIL;
     final SubLObject var65 = f10415( var6 );
-    SubLObject var66 = oc_kb_object_manager.NIL;
+    SubLObject var66 = kb_object_manager_oc.NIL;
     try
     {
       var66 = Locks.seize_lock( var65 );
       final SubLObject var67 = f10419( var6 );
       var64 = module0065.f4750( var67, var63, module0107.f7627() );
-      if( oc_kb_object_manager.NIL != module0107.f7628( var64 ) )
+      if( kb_object_manager_oc.NIL != module0107.f7628( var64 ) )
       {
-        if( oc_kb_object_manager.NIL != f10441( var6, var63 ) )
+        if( kb_object_manager_oc.NIL != f10441( var6, var63 ) )
         {
           f10443( var6, var63 );
-          var64 = module0065.f4750( var67, var63, oc_kb_object_manager.UNPROVIDED );
+          var64 = module0065.f4750( var67, var63, kb_object_manager_oc.UNPROVIDED );
         }
         else
         {
-          var64 = oc_kb_object_manager.NIL;
+          var64 = kb_object_manager_oc.NIL;
         }
       }
       else
@@ -882,7 +883,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var66 )
+      if( kb_object_manager_oc.NIL != var66 )
       {
         Locks.release_lock( var65 );
       }
@@ -892,10 +893,10 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10445(final SubLObject var6)
   {
-    assert oc_kb_object_manager.NIL != f10380( var6 ) : var6;
-    SubLObject var7 = oc_kb_object_manager.NIL;
+    assert kb_object_manager_oc.NIL != f10380( var6 ) : var6;
+    SubLObject var7 = kb_object_manager_oc.NIL;
     final SubLObject var8 = f10415( var6 );
-    SubLObject var9 = oc_kb_object_manager.NIL;
+    SubLObject var9 = kb_object_manager_oc.NIL;
     try
     {
       var9 = Locks.seize_lock( var8 );
@@ -903,71 +904,71 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var9 )
+      if( kb_object_manager_oc.NIL != var9 )
       {
         Locks.release_lock( var8 );
       }
     }
-    if( oc_kb_object_manager.NIL != var7 )
+    if( kb_object_manager_oc.NIL != var7 )
     {
-      return oc_kb_object_manager.NIL;
+      return kb_object_manager_oc.NIL;
     }
     final SubLObject var10 = f10419( var6 );
-    if( oc_kb_object_manager.NIL != module0065.f4719( var10 ) && module0065.f4733( var10 ).isPositive() )
+    if( kb_object_manager_oc.NIL != module0065.f4719( var10 ) && module0065.f4733( var10 ).isPositive() )
     {
-      return oc_kb_object_manager.NIL;
+      return kb_object_manager_oc.NIL;
     }
-    return oc_kb_object_manager.T;
+    return kb_object_manager_oc.T;
   }
 
   public static SubLObject f10446(final SubLObject var6)
   {
-    if( oc_kb_object_manager.NIL == f10437( var6 ) )
+    if( kb_object_manager_oc.NIL == f10437( var6 ) )
     {
       final SubLObject var7 = f10415( var6 );
-      SubLObject var8 = oc_kb_object_manager.NIL;
+      SubLObject var8 = kb_object_manager_oc.NIL;
       try
       {
         var8 = Locks.seize_lock( var7 );
-        f10420( var6, oc_kb_object_manager.T, oc_kb_object_manager.UNPROVIDED );
+        f10420( var6, kb_object_manager_oc.T, kb_object_manager_oc.UNPROVIDED );
       }
       finally
       {
-        if( oc_kb_object_manager.NIL != var8 )
+        if( kb_object_manager_oc.NIL != var8 )
         {
           Locks.release_lock( var7 );
         }
       }
     }
-    return oc_kb_object_manager.T;
+    return kb_object_manager_oc.T;
   }
 
   public static SubLObject f10447(final SubLObject var6)
   {
-    if( oc_kb_object_manager.NIL != f10437( var6 ) )
+    if( kb_object_manager_oc.NIL != f10437( var6 ) )
     {
       final SubLObject var7 = f10415( var6 );
-      SubLObject var8 = oc_kb_object_manager.NIL;
+      SubLObject var8 = kb_object_manager_oc.NIL;
       try
       {
         var8 = Locks.seize_lock( var7 );
-        f10399( var6, oc_kb_object_manager.NIL );
+        f10399( var6, kb_object_manager_oc.NIL );
       }
       finally
       {
-        if( oc_kb_object_manager.NIL != var8 )
+        if( kb_object_manager_oc.NIL != var8 )
         {
           Locks.release_lock( var7 );
         }
       }
     }
-    return oc_kb_object_manager.NIL;
+    return kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10448(final SubLObject var6, final SubLObject var63, final SubLObject var75)
   {
     final SubLObject var76 = f10415( var6 );
-    SubLObject var77 = oc_kb_object_manager.NIL;
+    SubLObject var77 = kb_object_manager_oc.NIL;
     try
     {
       var77 = Locks.seize_lock( var76 );
@@ -975,7 +976,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var77 )
+      if( kb_object_manager_oc.NIL != var77 )
       {
         Locks.release_lock( var76 );
       }
@@ -985,9 +986,9 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10449(final SubLObject var6, final SubLObject var63)
   {
-    SubLObject var64 = oc_kb_object_manager.NIL;
+    SubLObject var64 = kb_object_manager_oc.NIL;
     final SubLObject var65 = f10415( var6 );
-    SubLObject var66 = oc_kb_object_manager.NIL;
+    SubLObject var66 = kb_object_manager_oc.NIL;
     try
     {
       var66 = Locks.seize_lock( var65 );
@@ -996,7 +997,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var66 )
+      if( kb_object_manager_oc.NIL != var66 )
       {
         Locks.release_lock( var65 );
       }
@@ -1006,8 +1007,8 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10427(final SubLObject var81, final SubLObject var82)
   {
-    return module0095.f6845( var81, var82, oc_kb_object_manager.UNPROVIDED, oc_kb_object_manager.UNPROVIDED, oc_kb_object_manager.UNPROVIDED,
-        oc_kb_object_manager.UNPROVIDED );
+    return module0095.f6845( var81, var82, kb_object_manager_oc.UNPROVIDED, kb_object_manager_oc.UNPROVIDED, kb_object_manager_oc.UNPROVIDED,
+        kb_object_manager_oc.UNPROVIDED );
   }
 
   public static SubLObject f10451(final SubLObject var54)
@@ -1023,10 +1024,10 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
   public static SubLObject f10452(final SubLObject var6, final SubLObject var63)
   {
     final SubLObject var64 = module0095.f6858( f10416( var6 ), var63 );
-    final SubLObject var65 = module0021.f1060( var64, oc_kb_object_manager.UNPROVIDED, oc_kb_object_manager.UNPROVIDED );
+    final SubLObject var65 = module0021.f1060( var64, kb_object_manager_oc.UNPROVIDED, kb_object_manager_oc.UNPROVIDED );
     if( !var65.isFixnum() || !var65.numE( var63 ) )
     {
-      Errors.error( oc_kb_object_manager.$ic72$, var63, var64, var65 );
+      Errors.error( kb_object_manager_oc.$ic72$, var63, var64, var65 );
     }
     final SubLObject var66 = f10434( var6 );
     Functions.funcall( var66, var63, var64 );
@@ -1040,14 +1041,14 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10444(final SubLObject var6, final SubLObject var63)
   {
-    if( oc_kb_object_manager.NIL != f10437( var6 ) )
+    if( kb_object_manager_oc.NIL != f10437( var6 ) )
     {
       f10453( var6, var63 );
     }
     final SubLObject var64 = f10422( var6 );
-    if( oc_kb_object_manager.NIL != module0089.f6045( var64 ) && oc_kb_object_manager.NIL != f10441( var6, var63 ) )
+    if( kb_object_manager_oc.NIL != module0089.f6045( var64 ) && kb_object_manager_oc.NIL != f10441( var6, var63 ) )
     {
-      module0089.f6079( var64, var63, oc_kb_object_manager.UNPROVIDED );
+      module0089.f6079( var64, var63, kb_object_manager_oc.UNPROVIDED );
     }
     return var63;
   }
@@ -1055,7 +1056,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
   public static SubLObject f10450(final SubLObject var6, final SubLObject var63)
   {
     final SubLObject var64 = f10422( var6 );
-    if( oc_kb_object_manager.NIL != module0089.f6045( var64 ) && oc_kb_object_manager.NIL != f10441( var6, var63 ) )
+    if( kb_object_manager_oc.NIL != module0089.f6045( var64 ) && kb_object_manager_oc.NIL != f10441( var6, var63 ) )
     {
       module0089.f6087( var64, var63 );
     }
@@ -1065,19 +1066,19 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
   public static SubLObject f10454(final SubLObject var6, final SubLObject var63)
   {
     final SubLObject var64 = f10415( var6 );
-    SubLObject var65 = oc_kb_object_manager.NIL;
+    SubLObject var65 = kb_object_manager_oc.NIL;
     try
     {
       var65 = Locks.seize_lock( var64 );
       final SubLObject var66 = f10422( var6 );
-      if( oc_kb_object_manager.NIL != module0089.f6045( var66 ) && oc_kb_object_manager.NIL != f10441( var6, var63 ) )
+      if( kb_object_manager_oc.NIL != module0089.f6045( var66 ) && kb_object_manager_oc.NIL != f10441( var6, var63 ) )
       {
         module0089.f6087( var66, var63 );
       }
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var65 )
+      if( kb_object_manager_oc.NIL != var65 )
       {
         Locks.release_lock( var64 );
       }
@@ -1087,20 +1088,20 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10455(final SubLObject var6)
   {
-    f10404( var6, oc_kb_object_manager.T );
-    return oc_kb_object_manager.T;
+    f10404( var6, kb_object_manager_oc.T );
+    return kb_object_manager_oc.T;
   }
 
   public static SubLObject f10456(final SubLObject var6)
   {
-    f10404( var6, oc_kb_object_manager.NIL );
-    return oc_kb_object_manager.NIL;
+    f10404( var6, kb_object_manager_oc.NIL );
+    return kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10457(final SubLObject var6)
   {
-    f10405( var6, oc_kb_object_manager.ZERO_INTEGER );
-    return oc_kb_object_manager.ZERO_INTEGER;
+    f10405( var6, kb_object_manager_oc.ZERO_INTEGER );
+    return kb_object_manager_oc.ZERO_INTEGER;
   }
 
   public static SubLObject f10458(final SubLObject var6)
@@ -1119,13 +1120,13 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     final SubLObject var70 = module0111.$g1404$.currentBinding( var64 );
     try
     {
-      module0111.$g1394$.bind( oc_kb_object_manager.NIL, var64 );
-      module0111.$g1396$.bind( oc_kb_object_manager.NIL, var64 );
-      module0111.$g1398$.bind( oc_kb_object_manager.NIL, var64 );
-      module0111.$g1400$.bind( oc_kb_object_manager.NIL, var64 );
-      module0111.$g1402$.bind( oc_kb_object_manager.NIL, var64 );
-      module0111.$g1404$.bind( oc_kb_object_manager.NIL, var64 );
-      if( oc_kb_object_manager.NIL != f10435( var6 ) )
+      module0111.$g1394$.bind( kb_object_manager_oc.NIL, var64 );
+      module0111.$g1396$.bind( kb_object_manager_oc.NIL, var64 );
+      module0111.$g1398$.bind( kb_object_manager_oc.NIL, var64 );
+      module0111.$g1400$.bind( kb_object_manager_oc.NIL, var64 );
+      module0111.$g1402$.bind( kb_object_manager_oc.NIL, var64 );
+      module0111.$g1404$.bind( kb_object_manager_oc.NIL, var64 );
+      if( kb_object_manager_oc.NIL != f10435( var6 ) )
       {
         f10459( var6, var63 );
       }
@@ -1148,7 +1149,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10459(final SubLObject var6, final SubLObject var63)
   {
-    SubLObject var64 = oc_kb_object_manager.NIL;
+    SubLObject var64 = kb_object_manager_oc.NIL;
     final SubLObject var65 = Time.get_internal_real_time();
     f10460( var6, var63 );
     var64 = Numbers.divide( Numbers.subtract( Time.get_internal_real_time(), var65 ), time_high.$internal_time_units_per_second$.getGlobalValue() );
@@ -1162,7 +1163,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     final SubLObject var65 = module0021.$g777$.currentBinding( var64 );
     try
     {
-      module0021.$g777$.bind( oc_kb_object_manager.NIL, var64 );
+      module0021.$g777$.bind( kb_object_manager_oc.NIL, var64 );
       module0021.f1151( module0107.f7590() );
       f10452( var6, var63 );
     }
@@ -1191,9 +1192,9 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10462(final SubLObject var6)
   {
-    SubLObject var7 = oc_kb_object_manager.NIL;
+    SubLObject var7 = kb_object_manager_oc.NIL;
     final SubLObject var8 = f10415( var6 );
-    SubLObject var9 = oc_kb_object_manager.NIL;
+    SubLObject var9 = kb_object_manager_oc.NIL;
     try
     {
       var9 = Locks.seize_lock( var8 );
@@ -1201,7 +1202,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     }
     finally
     {
-      if( oc_kb_object_manager.NIL != var9 )
+      if( kb_object_manager_oc.NIL != var9 )
       {
         Locks.release_lock( var8 );
       }
@@ -1212,14 +1213,14 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
   public static SubLObject f10463(final SubLObject var6)
   {
     final SubLThread var7 = SubLProcess.currentSubLThread();
-    SubLObject var8 = oc_kb_object_manager.NIL;
+    SubLObject var8 = kb_object_manager_oc.NIL;
     final SubLObject var10;
     final SubLObject var9 = var10 = f10422( var6 );
-    final SubLObject var11 = oc_kb_object_manager.$ic73$;
+    final SubLObject var11 = kb_object_manager_oc.$ic73$;
     SubLObject var12 = module0089.f6097( var10, var11 );
-    SubLObject var13 = oc_kb_object_manager.NIL;
-    SubLObject var14 = oc_kb_object_manager.NIL;
-    while ( oc_kb_object_manager.NIL == module0089.f6098( var10, var12 ))
+    SubLObject var13 = kb_object_manager_oc.NIL;
+    SubLObject var14 = kb_object_manager_oc.NIL;
+    while ( kb_object_manager_oc.NIL == module0089.f6098( var10, var12 ))
     {
       var13 = module0089.f6099( var12 );
       var14 = module0089.f6100( var12 );
@@ -1227,30 +1228,30 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
       var8 = ConsesLow.cons( var13, var8 );
     }
     final SubLObject var15;
-    var8 = ( var15 = Sort.sort( var8, Symbols.symbol_function( oc_kb_object_manager.$ic74$ ), oc_kb_object_manager.UNPROVIDED ) );
-    module0012.$g82$.setDynamicValue( Sequences.cconcatenate( oc_kb_object_manager.$ic75$, new SubLObject[] { f10432( var6 ), oc_kb_object_manager.$ic76$
+    var8 = ( var15 = Sort.sort( var8, Symbols.symbol_function( kb_object_manager_oc.$ic74$ ), kb_object_manager_oc.UNPROVIDED ) );
+    module0012.$g82$.setDynamicValue( Sequences.cconcatenate( kb_object_manager_oc.$ic75$, new SubLObject[] { f10432( var6 ), kb_object_manager_oc.$ic76$
     } ), var7 );
     module0012.$g73$.setDynamicValue( Time.get_universal_time(), var7 );
     module0012.$g83$.setDynamicValue( Sequences.length( var15 ), var7 );
-    module0012.$g84$.setDynamicValue( oc_kb_object_manager.ZERO_INTEGER, var7 );
+    module0012.$g84$.setDynamicValue( kb_object_manager_oc.ZERO_INTEGER, var7 );
     final SubLObject var16 = module0012.$g75$.currentBinding( var7 );
     final SubLObject var17 = module0012.$g76$.currentBinding( var7 );
     final SubLObject var18 = module0012.$g77$.currentBinding( var7 );
     final SubLObject var19 = module0012.$g78$.currentBinding( var7 );
     try
     {
-      module0012.$g75$.bind( oc_kb_object_manager.ZERO_INTEGER, var7 );
-      module0012.$g76$.bind( oc_kb_object_manager.NIL, var7 );
-      module0012.$g77$.bind( oc_kb_object_manager.T, var7 );
+      module0012.$g75$.bind( kb_object_manager_oc.ZERO_INTEGER, var7 );
+      module0012.$g76$.bind( kb_object_manager_oc.NIL, var7 );
+      module0012.$g77$.bind( kb_object_manager_oc.T, var7 );
       module0012.$g78$.bind( Time.get_universal_time(), var7 );
       module0012.f478( module0012.$g82$.getDynamicValue( var7 ) );
       SubLObject var20 = var15;
-      SubLObject var21 = oc_kb_object_manager.NIL;
+      SubLObject var21 = kb_object_manager_oc.NIL;
       var21 = var20.first();
-      while ( oc_kb_object_manager.NIL != var20)
+      while ( kb_object_manager_oc.NIL != var20)
       {
         module0012.note_percent_progress( module0012.$g84$.getDynamicValue( var7 ), module0012.$g83$.getDynamicValue( var7 ) );
-        module0012.$g84$.setDynamicValue( Numbers.add( module0012.$g84$.getDynamicValue( var7 ), oc_kb_object_manager.ONE_INTEGER ), var7 );
+        module0012.$g84$.setDynamicValue( Numbers.add( module0012.$g84$.getDynamicValue( var7 ), kb_object_manager_oc.ONE_INTEGER ), var7 );
         module0089.f6087( var9, var21 );
         f10461( var6, var21 );
         var20 = var20.rest();
@@ -1270,90 +1271,90 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10453(final SubLObject var6, final SubLObject var63)
   {
-    if( oc_kb_object_manager.NIL != f10437( var6 ) )
+    if( kb_object_manager_oc.NIL != f10437( var6 ) )
     {
       final SubLObject var64 = f10421( var6 );
-      final SubLObject var65 = module0065.f4750( var64, var63, oc_kb_object_manager.UNPROVIDED );
-      final SubLObject var66 = ( oc_kb_object_manager.NIL != var65 ) ? module0048.f_1X( var65 ) : oc_kb_object_manager.ONE_INTEGER;
+      final SubLObject var65 = module0065.f4750( var64, var63, kb_object_manager_oc.UNPROVIDED );
+      final SubLObject var66 = ( kb_object_manager_oc.NIL != var65 ) ? module0048.f_1X( var65 ) : kb_object_manager_oc.ONE_INTEGER;
       module0065.f4753( var64, var63, var66 );
       return var63;
     }
-    return oc_kb_object_manager.NIL;
+    return kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10464(final SubLObject var6, final SubLObject var110, SubLObject var111)
   {
-    if( var111 == oc_kb_object_manager.UNPROVIDED )
+    if( var111 == kb_object_manager_oc.UNPROVIDED )
     {
-      var111 = oc_kb_object_manager.NIL;
+      var111 = kb_object_manager_oc.NIL;
     }
     final SubLThread var112 = SubLProcess.currentSubLThread();
-    SubLObject var113 = oc_kb_object_manager.ZERO_INTEGER;
-    final SubLObject var114 = Sequences.cconcatenate( oc_kb_object_manager.$ic77$, new SubLObject[] { f10432( var6 ), oc_kb_object_manager.$ic78$
+    SubLObject var113 = kb_object_manager_oc.ZERO_INTEGER;
+    final SubLObject var114 = Sequences.cconcatenate( kb_object_manager_oc.$ic77$, new SubLObject[] { f10432( var6 ), kb_object_manager_oc.$ic78$
     } );
     final SubLObject var115 = f10419( var6 );
     final SubLObject var116 = var114;
     final SubLObject var117 = module0065.f4733( var115 );
-    SubLObject var118 = oc_kb_object_manager.ZERO_INTEGER;
-    assert oc_kb_object_manager.NIL != Types.stringp( var116 ) : var116;
+    SubLObject var118 = kb_object_manager_oc.ZERO_INTEGER;
+    assert kb_object_manager_oc.NIL != Types.stringp( var116 ) : var116;
     final SubLObject var119 = module0012.$g75$.currentBinding( var112 );
     final SubLObject var120 = module0012.$g76$.currentBinding( var112 );
     final SubLObject var121 = module0012.$g77$.currentBinding( var112 );
     final SubLObject var122 = module0012.$g78$.currentBinding( var112 );
     try
     {
-      module0012.$g75$.bind( oc_kb_object_manager.ZERO_INTEGER, var112 );
-      module0012.$g76$.bind( oc_kb_object_manager.NIL, var112 );
-      module0012.$g77$.bind( oc_kb_object_manager.T, var112 );
+      module0012.$g75$.bind( kb_object_manager_oc.ZERO_INTEGER, var112 );
+      module0012.$g76$.bind( kb_object_manager_oc.NIL, var112 );
+      module0012.$g77$.bind( kb_object_manager_oc.T, var112 );
       module0012.$g78$.bind( Time.get_universal_time(), var112 );
       module0012.f478( var116 );
       final SubLObject var118_119 = var115;
-      if( oc_kb_object_manager.NIL == module0065.f4772( var118_119, oc_kb_object_manager.$ic79$ ) )
+      if( kb_object_manager_oc.NIL == module0065.f4772( var118_119, kb_object_manager_oc.$ic79$ ) )
       {
         final SubLObject var120_121 = var118_119;
-        if( oc_kb_object_manager.NIL == module0065.f4775( var120_121, oc_kb_object_manager.$ic79$ ) )
+        if( kb_object_manager_oc.NIL == module0065.f4775( var120_121, kb_object_manager_oc.$ic79$ ) )
         {
           final SubLObject var123 = module0065.f4740( var120_121 );
-          final SubLObject var124 = oc_kb_object_manager.NIL;
+          final SubLObject var124 = kb_object_manager_oc.NIL;
           SubLObject var125;
           SubLObject var126;
           SubLObject var127;
           SubLObject var128;
-          for( var125 = Sequences.length( var123 ), var126 = oc_kb_object_manager.NIL, var126 = oc_kb_object_manager.ZERO_INTEGER; var126.numL( var125 ); var126 = Numbers.add( var126,
-              oc_kb_object_manager.ONE_INTEGER ) )
+          for( var125 = Sequences.length( var123 ), var126 = kb_object_manager_oc.NIL, var126 = kb_object_manager_oc.ZERO_INTEGER; var126.numL( var125 ); var126 = Numbers.add( var126,
+              kb_object_manager_oc.ONE_INTEGER ) )
           {
-            var127 = ( ( oc_kb_object_manager.NIL != var124 ) ? Numbers.subtract( var125, var126, oc_kb_object_manager.ONE_INTEGER ) : var126 );
+            var127 = ( ( kb_object_manager_oc.NIL != var124 ) ? Numbers.subtract( var125, var126, kb_object_manager_oc.ONE_INTEGER ) : var126 );
             var128 = Vectors.aref( var123, var127 );
-            if( oc_kb_object_manager.NIL == module0065.f4749( var128 ) || oc_kb_object_manager.NIL == module0065.f4773( oc_kb_object_manager.$ic79$ ) )
+            if( kb_object_manager_oc.NIL == module0065.f4749( var128 ) || kb_object_manager_oc.NIL == module0065.f4773( kb_object_manager_oc.$ic79$ ) )
             {
-              if( oc_kb_object_manager.NIL != module0065.f4749( var128 ) )
+              if( kb_object_manager_oc.NIL != module0065.f4749( var128 ) )
               {
-                var128 = oc_kb_object_manager.$ic79$;
+                var128 = kb_object_manager_oc.$ic79$;
               }
               module0012.note_percent_progress( var118, var117 );
-              var118 = Numbers.add( var118, oc_kb_object_manager.ONE_INTEGER );
-              if( oc_kb_object_manager.NIL != var128 && oc_kb_object_manager.NIL == Functions.funcall( var110, var128 ) )
+              var118 = Numbers.add( var118, kb_object_manager_oc.ONE_INTEGER );
+              if( kb_object_manager_oc.NIL != var128 && kb_object_manager_oc.NIL == Functions.funcall( var110, var128 ) )
               {
-                var113 = Numbers.add( var113, oc_kb_object_manager.ONE_INTEGER );
-                if( oc_kb_object_manager.NIL != var111 )
+                var113 = Numbers.add( var113, kb_object_manager_oc.ONE_INTEGER );
+                if( kb_object_manager_oc.NIL != var111 )
                 {
-                  Errors.warn( oc_kb_object_manager.$ic80$, var127, var128 );
+                  Errors.warn( kb_object_manager_oc.$ic80$, var127, var128 );
                   f10461( var6, var127 );
                 }
                 else
                 {
-                  Errors.warn( oc_kb_object_manager.$ic81$, var127, var128 );
+                  Errors.warn( kb_object_manager_oc.$ic81$, var127, var128 );
                 }
               }
             }
           }
         }
         final SubLObject var126_127 = var118_119;
-        if( oc_kb_object_manager.NIL == module0065.f4777( var126_127 ) )
+        if( kb_object_manager_oc.NIL == module0065.f4777( var126_127 ) )
         {
           final SubLObject var129 = module0065.f4738( var126_127 );
-          SubLObject var130 = oc_kb_object_manager.NIL;
-          SubLObject var131 = oc_kb_object_manager.NIL;
+          SubLObject var130 = kb_object_manager_oc.NIL;
+          SubLObject var131 = kb_object_manager_oc.NIL;
           final Iterator var132 = Hashtables.getEntrySetIterator( var129 );
           try
           {
@@ -1363,18 +1364,18 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
               var130 = Hashtables.getEntryKey( var133 );
               var131 = Hashtables.getEntryValue( var133 );
               module0012.note_percent_progress( var118, var117 );
-              var118 = Numbers.add( var118, oc_kb_object_manager.ONE_INTEGER );
-              if( oc_kb_object_manager.NIL != var131 && oc_kb_object_manager.NIL == Functions.funcall( var110, var131 ) )
+              var118 = Numbers.add( var118, kb_object_manager_oc.ONE_INTEGER );
+              if( kb_object_manager_oc.NIL != var131 && kb_object_manager_oc.NIL == Functions.funcall( var110, var131 ) )
               {
-                var113 = Numbers.add( var113, oc_kb_object_manager.ONE_INTEGER );
-                if( oc_kb_object_manager.NIL != var111 )
+                var113 = Numbers.add( var113, kb_object_manager_oc.ONE_INTEGER );
+                if( kb_object_manager_oc.NIL != var111 )
                 {
-                  Errors.warn( oc_kb_object_manager.$ic80$, var130, var131 );
+                  Errors.warn( kb_object_manager_oc.$ic80$, var130, var131 );
                   f10461( var6, var130 );
                 }
                 else
                 {
-                  Errors.warn( oc_kb_object_manager.$ic81$, var130, var131 );
+                  Errors.warn( kb_object_manager_oc.$ic81$, var130, var131 );
                 }
               }
             }
@@ -1394,48 +1395,48 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
       module0012.$g76$.rebind( var120, var112 );
       module0012.$g75$.rebind( var119, var112 );
     }
-    return Values.values( Numbers.numE( var113, oc_kb_object_manager.ZERO_INTEGER ), var113 );
+    return Values.values( Numbers.numE( var113, kb_object_manager_oc.ZERO_INTEGER ), var113 );
   }
 
   public static SubLObject f10465(final SubLObject var1, final SubLObject var2)
   {
     SubLObject var4;
     final SubLObject var3 = var4 = var1.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_object_manager.$ic0$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_object_manager_oc.$ic0$ );
     final SubLObject var5 = var4.rest();
     var4 = var4.first();
-    SubLObject var6 = oc_kb_object_manager.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_object_manager.$ic0$ );
+    SubLObject var6 = kb_object_manager_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_object_manager_oc.$ic0$ );
     var6 = var4.first();
     var4 = var4.rest();
-    if( oc_kb_object_manager.NIL == var4 )
+    if( kb_object_manager_oc.NIL == var4 )
     {
       final SubLObject var7;
       var4 = ( var7 = var5 );
-      final SubLObject var8 = oc_kb_object_manager.$ic82$;
-      final SubLObject var9 = oc_kb_object_manager.$ic83$;
-      final SubLObject var10 = oc_kb_object_manager.$ic84$;
-      return ConsesLow.list( oc_kb_object_manager.$ic85$, ConsesLow.list( ConsesLow.list( var8, var6 ), ConsesLow.list( var9, ConsesLow.list(
-          oc_kb_object_manager.$ic86$, var8 ) ), ConsesLow.list( var10, ConsesLow.list( oc_kb_object_manager.$ic87$, var8 ) ) ), ConsesLow.list(
-              oc_kb_object_manager.$ic88$, ConsesLow.listS( oc_kb_object_manager.$ic89$, ConsesLow.list( oc_kb_object_manager.$ic90$, var8 ),
-                  ConsesLow.list( oc_kb_object_manager.$ic91$, var8 ), ConsesLow.append( var7, oc_kb_object_manager.NIL ) ), ConsesLow.list(
-                      oc_kb_object_manager.$ic89$, ConsesLow.list( oc_kb_object_manager.$ic92$, var9, ConsesLow.list( oc_kb_object_manager.$ic93$,
-                          var8 ) ), ConsesLow.list( oc_kb_object_manager.$ic92$, ConsesLow.list( oc_kb_object_manager.$ic94$, var10 ), ConsesLow.listS(
-                              oc_kb_object_manager.$ic95$, var8, oc_kb_object_manager.$ic96$ ) ) ) ) );
+      final SubLObject var8 = kb_object_manager_oc.$ic82$;
+      final SubLObject var9 = kb_object_manager_oc.$ic83$;
+      final SubLObject var10 = kb_object_manager_oc.$ic84$;
+      return ConsesLow.list( kb_object_manager_oc.$ic85$, ConsesLow.list( ConsesLow.list( var8, var6 ), ConsesLow.list( var9, ConsesLow.list(
+          kb_object_manager_oc.$ic86$, var8 ) ), ConsesLow.list( var10, ConsesLow.list( kb_object_manager_oc.$ic87$, var8 ) ) ), ConsesLow.list(
+              kb_object_manager_oc.$ic88$, ConsesLow.listS( kb_object_manager_oc.$ic89$, ConsesLow.list( kb_object_manager_oc.$ic90$, var8 ),
+                  ConsesLow.list( kb_object_manager_oc.$ic91$, var8 ), ConsesLow.append( var7, kb_object_manager_oc.NIL ) ), ConsesLow.list(
+                      kb_object_manager_oc.$ic89$, ConsesLow.list( kb_object_manager_oc.$ic92$, var9, ConsesLow.list( kb_object_manager_oc.$ic93$,
+                          var8 ) ), ConsesLow.list( kb_object_manager_oc.$ic92$, ConsesLow.list( kb_object_manager_oc.$ic94$, var10 ), ConsesLow.listS(
+                              kb_object_manager_oc.$ic95$, var8, kb_object_manager_oc.$ic96$ ) ) ) ) );
     }
-    cdestructuring_bind.cdestructuring_bind_error( var3, oc_kb_object_manager.$ic0$ );
-    return oc_kb_object_manager.NIL;
+    cdestructuring_bind.cdestructuring_bind_error( var3, kb_object_manager_oc.$ic0$ );
+    return kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10466(final SubLObject var6, SubLObject var9, SubLObject var137)
   {
-    if( var9 == oc_kb_object_manager.UNPROVIDED )
+    if( var9 == kb_object_manager_oc.UNPROVIDED )
     {
       var9 = StreamsLow.$standard_output$.getDynamicValue();
     }
-    if( var137 == oc_kb_object_manager.UNPROVIDED )
+    if( var137 == kb_object_manager_oc.UNPROVIDED )
     {
-      var137 = oc_kb_object_manager.NIL;
+      var137 = kb_object_manager_oc.NIL;
     }
     final SubLObject var138 = f10387( var6 );
     module0096.f7005( var138, var9, var137 );
@@ -1450,7 +1451,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
 
   public static SubLObject f10468()
   {
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.oc_kb_object_manager", "f10378", "S#13154" );
+    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_object_manager_oc", "f10378", "S#13154" );
     SubLFiles.declareFunction( myName, "f10379", "S#13155", 2, 0, false );
     SubLFiles.declareFunction( myName, "f10380", "S#13153", 1, 0, false );
     new $f10380$UnaryFunction();
@@ -1538,41 +1539,41 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     SubLFiles.declareFunction( myName, "f10463", "S#13237", 1, 0, false );
     SubLFiles.declareFunction( myName, "f10453", "S#13238", 2, 0, false );
     SubLFiles.declareFunction( myName, "f10464", "S#13239", 2, 1, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.oc_kb_object_manager", "f10465", "S#13240" );
+    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_object_manager_oc", "f10465", "S#13240" );
     SubLFiles.declareFunction( myName, "f10466", "S#13241", 1, 2, false );
     SubLFiles.declareFunction( myName, "f10467", "S#13242", 2, 0, false );
-    return oc_kb_object_manager.NIL;
+    return kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10469()
   {
-    oc_kb_object_manager.$g2152$ = SubLFiles.defconstant( "S#13243", oc_kb_object_manager.$ic3$ );
-    oc_kb_object_manager.$g2153$ = SubLFiles.deflexical( "S#13244", oc_kb_object_manager.$ic66$ );
-    return oc_kb_object_manager.NIL;
+    kb_object_manager_oc.$g2152$ = SubLFiles.defconstant( "S#13243", kb_object_manager_oc.$ic3$ );
+    kb_object_manager_oc.$g2153$ = SubLFiles.deflexical( "S#13244", kb_object_manager_oc.$ic66$ );
+    return kb_object_manager_oc.NIL;
   }
 
   public static SubLObject f10470()
   {
-    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), oc_kb_object_manager.$g2152$.getGlobalValue(), Symbols.symbol_function( oc_kb_object_manager.$ic10$ ) );
-    SubLSpecialOperatorDeclarations.proclaim( oc_kb_object_manager.$ic11$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic12$, oc_kb_object_manager.$ic13$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic14$, oc_kb_object_manager.$ic15$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic16$, oc_kb_object_manager.$ic17$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic18$, oc_kb_object_manager.$ic19$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic20$, oc_kb_object_manager.$ic21$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic22$, oc_kb_object_manager.$ic23$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic24$, oc_kb_object_manager.$ic25$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic26$, oc_kb_object_manager.$ic27$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic28$, oc_kb_object_manager.$ic29$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic30$, oc_kb_object_manager.$ic31$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic32$, oc_kb_object_manager.$ic33$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic34$, oc_kb_object_manager.$ic35$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic36$, oc_kb_object_manager.$ic37$ );
-    Structures.def_csetf( oc_kb_object_manager.$ic38$, oc_kb_object_manager.$ic39$ );
-    Equality.identity( oc_kb_object_manager.$ic3$ );
-    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), oc_kb_object_manager.$g2152$.getGlobalValue(), Symbols.symbol_function( oc_kb_object_manager.$ic59$ ) );
-    module0002.f35( oc_kb_object_manager.$ic70$, oc_kb_object_manager.NIL );
-    return oc_kb_object_manager.NIL;
+    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), kb_object_manager_oc.$g2152$.getGlobalValue(), Symbols.symbol_function( kb_object_manager_oc.$ic10$ ) );
+    SubLSpecialOperatorDeclarations.proclaim( kb_object_manager_oc.$ic11$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic12$, kb_object_manager_oc.$ic13$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic14$, kb_object_manager_oc.$ic15$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic16$, kb_object_manager_oc.$ic17$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic18$, kb_object_manager_oc.$ic19$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic20$, kb_object_manager_oc.$ic21$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic22$, kb_object_manager_oc.$ic23$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic24$, kb_object_manager_oc.$ic25$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic26$, kb_object_manager_oc.$ic27$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic28$, kb_object_manager_oc.$ic29$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic30$, kb_object_manager_oc.$ic31$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic32$, kb_object_manager_oc.$ic33$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic34$, kb_object_manager_oc.$ic35$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic36$, kb_object_manager_oc.$ic37$ );
+    Structures.def_csetf( kb_object_manager_oc.$ic38$, kb_object_manager_oc.$ic39$ );
+    Equality.identity( kb_object_manager_oc.$ic3$ );
+    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), kb_object_manager_oc.$g2152$.getGlobalValue(), Symbols.symbol_function( kb_object_manager_oc.$ic59$ ) );
+    module0002.f35( kb_object_manager_oc.$ic70$, kb_object_manager_oc.NIL );
+    return kb_object_manager_oc.NIL;
   }
 
   @Override
@@ -1594,9 +1595,9 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
   }
   static
   {
-    me = new oc_kb_object_manager();
-    oc_kb_object_manager.$g2152$ = null;
-    oc_kb_object_manager.$g2153$ = null;
+    me = new kb_object_manager_oc();
+    kb_object_manager_oc.$g2152$ = null;
+    kb_object_manager_oc.$g2153$ = null;
     $ic0$ = ConsesLow.list( ConsesLow.list( SubLObjectFactory.makeSymbol( "S#13245", "CYC" ) ), SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol(
         "S#5", "CYC" ) );
     $ic1$ = SubLObjectFactory.makeSymbol( "WITH-LOCK-HELD" );
@@ -1924,10 +1925,10 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     }
     static
     {
-      structDecl = Structures.makeStructDeclNative( $sX13152_native.class, oc_kb_object_manager.$ic3$, oc_kb_object_manager.$ic4$, oc_kb_object_manager.$ic5$, oc_kb_object_manager.$ic6$, new String[] { "$name",
+      structDecl = Structures.makeStructDeclNative( $sX13152_native.class, kb_object_manager_oc.$ic3$, kb_object_manager_oc.$ic4$, kb_object_manager_oc.$ic5$, kb_object_manager_oc.$ic6$, new String[] { "$name",
         "$content_lock", "$lru_size_percentage", "$content_table", "$usage_table", "$lru_information", "$file_vector", "$id_threshold", "$load_func", "$meter_swap_timeP", "$swap_time", "$lru_size_max", "$dummy2",
         "$dummy3"
-      }, oc_kb_object_manager.$ic7$, oc_kb_object_manager.$ic8$, oc_kb_object_manager.$ic9$ );
+      }, kb_object_manager_oc.$ic7$, kb_object_manager_oc.$ic8$, kb_object_manager_oc.$ic9$ );
     }
   }
 
@@ -1941,7 +1942,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
     @Override
     public SubLObject processItem(final SubLObject var10)
     {
-      return oc_kb_object_manager.f10380( var10 );
+      return kb_object_manager_oc.f10380( var10 );
     }
   }
 }
@@ -1950,7 +1951,7 @@ public final class oc_kb_object_manager extends SubLTranslatedFile
  *
  * Decompiled from:
  * G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/
- * cycjava/cycl/oc_kb_object_manager.class Total time: 345 ms
+ * cycjava/cycl/kb_object_manager_oc.class Total time: 345 ms
  *
  * Decompiled with Procyon 0.5.32.
  */

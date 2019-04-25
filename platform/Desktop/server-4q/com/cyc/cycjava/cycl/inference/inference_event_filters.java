@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl.inference;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.cycjava.cycl.access_macros;
 import com.cyc.cycjava.cycl.subl_macro_promotions;

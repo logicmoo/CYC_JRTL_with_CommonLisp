@@ -3,6 +3,7 @@ package com.cyc.cycjava.cycl;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
@@ -18,37 +19,37 @@ public final class module0404 extends SubLTranslatedFile
     private static final SubLSymbol $ic2$;
     
     public static SubLObject f28321(final SubLObject var1, final SubLObject var2) {
-        assert module0404.NIL != module0363.f24478(var2) : var2;
+        assert NIL != module0363.f24478(var2) : var2;
         final SubLObject var3 = module0367.f25083(var2, var1);
-        if (module0404.NIL == var3) {
+        if (NIL == var3) {
             f28322(var1, var2);
-            return (SubLObject)module0404.T;
+            return (SubLObject)T;
         }
-        return (SubLObject)module0404.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f28322(final SubLObject var1, final SubLObject var2) {
         module0403.f28315(var1, var2);
-        if (module0404.NIL != module0363.f24586(var2, var1)) {
+        if (NIL != module0363.f24586(var2, var1)) {
             f28323(var1, var2);
         }
-        return (SubLObject)module0404.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f28323(final SubLObject var1, final SubLObject var2) {
-        if (module0404.NIL != f28324(var1, var2)) {
-            return (SubLObject)module0404.NIL;
+        if (NIL != f28324(var1, var2)) {
+            return (SubLObject)NIL;
         }
         module0373.f26191(var2, var1);
-        if (module0404.NIL != f28325(var1, var2)) {
-            return (SubLObject)module0404.NIL;
+        if (NIL != f28325(var1, var2)) {
+            return (SubLObject)NIL;
         }
-        final SubLObject var3 = (SubLObject)SubLObjectFactory.makeBoolean(module0404.NIL != module0367.f25083(var2, var1) && module0404.NIL == f28325(var1, var2));
-        if (module0404.NIL != var3) {
+        final SubLObject var3 = (SubLObject)makeBoolean(NIL != module0367.f25083(var2, var1) && NIL == f28325(var1, var2));
+        if (NIL != var3) {
             f28326(var1, var2);
-            return (SubLObject)module0404.T;
+            return (SubLObject)T;
         }
-        return (SubLObject)module0404.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f28324(final SubLObject var1, final SubLObject var2) {
@@ -60,14 +61,14 @@ public final class module0404 extends SubLTranslatedFile
     }
     
     public static SubLObject f28326(final SubLObject var1, final SubLObject var2) {
-        assert module0404.NIL != module0406.f28343(var1) : var1;
-        assert module0404.NIL != module0363.f24478(var2) : var2;
+        assert NIL != module0406.f28343(var1) : var1;
+        assert NIL != module0363.f24478(var2) : var2;
         return Numbers.plusp(f28327(var1, var2));
     }
     
     public static SubLObject f28327(final SubLObject var1, final SubLObject var2) {
         module0406.f28348(var1, var2);
-        return (SubLObject)module0404.TWO_INTEGER;
+        return (SubLObject)TWO_INTEGER;
     }
     
     public static SubLObject f28328(final SubLObject var1, final SubLObject var2) {
@@ -83,16 +84,16 @@ public final class module0404 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0404", "f28326", "S#31444", 2, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0404", "f28327", "S#31445", 2, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0404", "f28328", "S#31446", 2, 0, false);
-        return (SubLObject)module0404.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f28330() {
-        return (SubLObject)module0404.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f28331() {
-        module0012.f419((SubLObject)module0404.$ic2$);
-        return (SubLObject)module0404.NIL;
+        module0012.f419((SubLObject)$ic2$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -109,16 +110,16 @@ public final class module0404 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0404();
-        $ic0$ = SubLObjectFactory.makeSymbol("S#26082", "CYC");
-        $ic1$ = SubLObjectFactory.makeSymbol("S#29328", "CYC");
-        $ic2$ = SubLObjectFactory.makeSymbol("S#31446", "CYC");
+        $ic0$ = makeSymbol("S#26082", "CYC");
+        $ic1$ = makeSymbol("S#29328", "CYC");
+        $ic2$ = makeSymbol("S#31446", "CYC");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0404.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 63 ms
 	
 	Decompiled with Procyon 0.5.32.

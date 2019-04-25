@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl.cyc_testing.kb_content_test;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks;
 import com.cyc.tool.subl.util.SubLFiles;
 import java.util.ArrayList;

@@ -7,6 +7,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -75,84 +76,84 @@ public final class module0080 extends SubLTranslatedFile
     private static final SubLSymbol $ic39$;
     
     public static SubLObject f5506(final SubLObject var1) {
-        assert module0080.NIL != module0079.f5404(var1) : var1;
+        assert NIL != module0079.f5404(var1) : var1;
         return f5507(var1);
     }
     
     public static SubLObject f5508(final SubLObject var2, final SubLObject var3) {
-        f5509(var2, var3, (SubLObject)module0080.ZERO_INTEGER);
-        return (SubLObject)module0080.NIL;
+        f5509(var2, var3, (SubLObject)ZERO_INTEGER);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f5510(final SubLObject var2) {
-        return (SubLObject)((var2.getClass() == $sX7130_native.class) ? module0080.T : module0080.NIL);
+        return (SubLObject)((var2.getClass() == $sX7130_native.class) ? T : NIL);
     }
     
     public static SubLObject f5511(final SubLObject var2) {
-        assert module0080.NIL != f5510(var2) : var2;
+        assert NIL != f5510(var2) : var2;
         return var2.getField2();
     }
     
     public static SubLObject f5512(final SubLObject var2) {
-        assert module0080.NIL != f5510(var2) : var2;
+        assert NIL != f5510(var2) : var2;
         return var2.getField3();
     }
     
     public static SubLObject f5513(final SubLObject var2) {
-        assert module0080.NIL != f5510(var2) : var2;
+        assert NIL != f5510(var2) : var2;
         return var2.getField4();
     }
     
     public static SubLObject f5514(final SubLObject var2, final SubLObject var5) {
-        assert module0080.NIL != f5510(var2) : var2;
+        assert NIL != f5510(var2) : var2;
         return var2.setField2(var5);
     }
     
     public static SubLObject f5515(final SubLObject var2, final SubLObject var5) {
-        assert module0080.NIL != f5510(var2) : var2;
+        assert NIL != f5510(var2) : var2;
         return var2.setField3(var5);
     }
     
     public static SubLObject f5516(final SubLObject var2, final SubLObject var5) {
-        assert module0080.NIL != f5510(var2) : var2;
+        assert NIL != f5510(var2) : var2;
         return var2.setField4(var5);
     }
     
     public static SubLObject f5517(SubLObject var6) {
-        if (var6 == module0080.UNPROVIDED) {
-            var6 = (SubLObject)module0080.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
         final SubLObject var7 = (SubLObject)new $sX7130_native();
         SubLObject var8;
         SubLObject var9;
         SubLObject var10;
         SubLObject var11;
-        for (var8 = (SubLObject)module0080.NIL, var8 = var6; module0080.NIL != var8; var8 = conses_high.cddr(var8)) {
+        for (var8 = (SubLObject)NIL, var8 = var6; NIL != var8; var8 = conses_high.cddr(var8)) {
             var9 = var8.first();
             var10 = conses_high.cadr(var8);
             var11 = var9;
-            if (var11.eql((SubLObject)module0080.$ic16$)) {
+            if (var11.eql((SubLObject)$ic16$)) {
                 f5514(var7, var10);
             }
-            else if (var11.eql((SubLObject)module0080.$ic17$)) {
+            else if (var11.eql((SubLObject)$ic17$)) {
                 f5515(var7, var10);
             }
-            else if (var11.eql((SubLObject)module0080.$ic18$)) {
+            else if (var11.eql((SubLObject)$ic18$)) {
                 f5516(var7, var10);
             }
             else {
-                Errors.error((SubLObject)module0080.$ic19$, var9);
+                Errors.error((SubLObject)$ic19$, var9);
             }
         }
         return var7;
     }
     
     public static SubLObject f5518(final SubLObject var12, final SubLObject var13) {
-        Functions.funcall(var13, var12, (SubLObject)module0080.$ic20$, (SubLObject)module0080.$ic21$, (SubLObject)module0080.THREE_INTEGER);
-        Functions.funcall(var13, var12, (SubLObject)module0080.$ic22$, (SubLObject)module0080.$ic16$, f5511(var12));
-        Functions.funcall(var13, var12, (SubLObject)module0080.$ic22$, (SubLObject)module0080.$ic17$, f5512(var12));
-        Functions.funcall(var13, var12, (SubLObject)module0080.$ic22$, (SubLObject)module0080.$ic18$, f5513(var12));
-        Functions.funcall(var13, var12, (SubLObject)module0080.$ic23$, (SubLObject)module0080.$ic21$, (SubLObject)module0080.THREE_INTEGER);
+        Functions.funcall(var13, var12, (SubLObject)$ic20$, (SubLObject)$ic21$, (SubLObject)THREE_INTEGER);
+        Functions.funcall(var13, var12, (SubLObject)$ic22$, (SubLObject)$ic16$, f5511(var12));
+        Functions.funcall(var13, var12, (SubLObject)$ic22$, (SubLObject)$ic17$, f5512(var12));
+        Functions.funcall(var13, var12, (SubLObject)$ic22$, (SubLObject)$ic18$, f5513(var12));
+        Functions.funcall(var13, var12, (SubLObject)$ic23$, (SubLObject)$ic21$, (SubLObject)THREE_INTEGER);
         return var12;
     }
     
@@ -161,12 +162,12 @@ public final class module0080 extends SubLTranslatedFile
     }
     
     public static SubLObject f5509(final SubLObject var14, final SubLObject var3, final SubLObject var15) {
-        PrintLow.format(var3, (SubLObject)module0080.$ic25$, f5520(var14));
+        PrintLow.format(var3, (SubLObject)$ic25$, f5520(var14));
         return var14;
     }
     
     public static SubLObject f5521(final SubLObject var14) {
-        return (SubLObject)module0080.T;
+        return (SubLObject)T;
     }
     
     public static SubLObject f5522(final SubLObject var14) {
@@ -216,7 +217,7 @@ public final class module0080 extends SubLTranslatedFile
     }
     
     public static SubLObject f5535(final SubLObject var14) {
-        return module0079.f5430(f5520(var14), (SubLObject)module0080.UNPROVIDED);
+        return module0079.f5430(f5520(var14), (SubLObject)UNPROVIDED);
     }
     
     public static SubLObject f5536(final SubLObject var14) {
@@ -240,35 +241,35 @@ public final class module0080 extends SubLTranslatedFile
     }
     
     public static SubLObject f5507(final SubLObject var1) {
-        final SubLObject var2 = f5517((SubLObject)module0080.UNPROVIDED);
+        final SubLObject var2 = f5517((SubLObject)UNPROVIDED);
         f5514(var2, var1);
-        f5515(var2, (SubLObject)module0080.ZERO_INTEGER);
-        f5516(var2, (SubLObject)module0080.ZERO_INTEGER);
+        f5515(var2, (SubLObject)ZERO_INTEGER);
+        f5516(var2, (SubLObject)ZERO_INTEGER);
         return var2;
     }
     
     public static SubLObject f5520(final SubLObject var1) {
-        assert module0080.NIL != f5510(var1) : var1;
+        assert NIL != f5510(var1) : var1;
         return f5511(var1);
     }
     
     public static SubLObject f5541(final SubLObject var1) {
-        assert module0080.NIL != f5510(var1) : var1;
+        assert NIL != f5510(var1) : var1;
         return f5512(var1);
     }
     
     public static SubLObject f5526(final SubLObject var1) {
-        f5515(var1, Numbers.add(f5512(var1), (SubLObject)module0080.ONE_INTEGER));
+        f5515(var1, Numbers.add(f5512(var1), (SubLObject)ONE_INTEGER));
         return f5512(var1);
     }
     
     public static SubLObject f5542(final SubLObject var1) {
-        assert module0080.NIL != f5510(var1) : var1;
+        assert NIL != f5510(var1) : var1;
         return f5513(var1);
     }
     
     public static SubLObject f5533(final SubLObject var1) {
-        f5516(var1, Numbers.add(f5513(var1), (SubLObject)module0080.ONE_INTEGER));
+        f5516(var1, Numbers.add(f5513(var1), (SubLObject)ONE_INTEGER));
         return f5513(var1);
     }
     
@@ -321,38 +322,38 @@ public final class module0080 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0080", "f5533", "S#7167", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0080", "f5543", "S#7168", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0080", "f5544", "S#7169", 1, 0, false);
-        return (SubLObject)module0080.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f5546() {
-        module0080.$g1162$ = SubLFiles.defconstant("S#7170", (SubLObject)module0080.$ic1$);
-        return (SubLObject)module0080.NIL;
+        $g1162$ = SubLFiles.defconstant("S#7170", (SubLObject)$ic1$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f5547() {
-        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic8$));
-        SubLSpecialOperatorDeclarations.proclaim((SubLObject)module0080.$ic9$);
-        Structures.def_csetf((SubLObject)module0080.$ic10$, (SubLObject)module0080.$ic11$);
-        Structures.def_csetf((SubLObject)module0080.$ic12$, (SubLObject)module0080.$ic13$);
-        Structures.def_csetf((SubLObject)module0080.$ic14$, (SubLObject)module0080.$ic15$);
-        Equality.identity((SubLObject)module0080.$ic1$);
-        Structures.register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic24$));
-        module0012.f419((SubLObject)module0080.$ic7$);
-        Structures.register_method(module0079.$g1148$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic26$));
-        Structures.register_method(module0079.$g1149$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic27$));
-        Structures.register_method(module0079.$g1150$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic28$));
-        Structures.register_method(module0079.$g1151$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic29$));
-        Structures.register_method(module0079.$g1152$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic30$));
-        Structures.register_method(module0079.$g1153$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic31$));
-        Structures.register_method(module0079.$g1154$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic32$));
-        Structures.register_method(module0079.$g1156$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic33$));
-        Structures.register_method(module0079.$g1157$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic34$));
-        Structures.register_method(module0079.$g1158$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic35$));
-        Structures.register_method(module0079.$g1159$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic36$));
-        Structures.register_method(module0079.$g1160$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic37$));
-        Structures.register_method(module0079.$g1161$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic38$));
-        Structures.register_method(Sxhash.$sxhash_method_table$.getGlobalValue(), module0080.$g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0080.$ic39$));
-        return (SubLObject)module0080.NIL;
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic8$));
+        SubLSpecialOperatorDeclarations.proclaim((SubLObject)$ic9$);
+        Structures.def_csetf((SubLObject)$ic10$, (SubLObject)$ic11$);
+        Structures.def_csetf((SubLObject)$ic12$, (SubLObject)$ic13$);
+        Structures.def_csetf((SubLObject)$ic14$, (SubLObject)$ic15$);
+        Equality.identity((SubLObject)$ic1$);
+        Structures.register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic24$));
+        module0012.f419((SubLObject)$ic7$);
+        Structures.register_method(module0079.$g1148$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic26$));
+        Structures.register_method(module0079.$g1149$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic27$));
+        Structures.register_method(module0079.$g1150$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic28$));
+        Structures.register_method(module0079.$g1151$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic29$));
+        Structures.register_method(module0079.$g1152$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic30$));
+        Structures.register_method(module0079.$g1153$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic31$));
+        Structures.register_method(module0079.$g1154$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic32$));
+        Structures.register_method(module0079.$g1156$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic33$));
+        Structures.register_method(module0079.$g1157$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic34$));
+        Structures.register_method(module0079.$g1158$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic35$));
+        Structures.register_method(module0079.$g1159$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic36$));
+        Structures.register_method(module0079.$g1160$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic37$));
+        Structures.register_method(module0079.$g1161$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic38$));
+        Structures.register_method(Sxhash.$sxhash_method_table$.getGlobalValue(), $g1162$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic39$));
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -369,47 +370,47 @@ public final class module0080 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0080();
-        module0080.$g1162$ = null;
-        $ic0$ = SubLObjectFactory.makeSymbol("S#3046", "CYC");
-        $ic1$ = SubLObjectFactory.makeSymbol("S#7130", "CYC");
-        $ic2$ = SubLObjectFactory.makeSymbol("S#7131", "CYC");
-        $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("MAP"), (SubLObject)SubLObjectFactory.makeSymbol("S#7171", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#7172", "CYC"));
-        $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MAP"), (SubLObject)SubLObjectFactory.makeKeyword("PUT-COUNT"), (SubLObject)SubLObjectFactory.makeKeyword("REMOVE-COUNT"));
-        $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#7134", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#7135", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#7136", "CYC"));
-        $ic6$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#7137", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#7138", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#7139", "CYC"));
-        $ic7$ = SubLObjectFactory.makeSymbol("S#7143", "CYC");
-        $ic8$ = SubLObjectFactory.makeSymbol("S#7133", "CYC");
-        $ic9$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OPTIMIZE-FUNCALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#7131", "CYC"));
-        $ic10$ = SubLObjectFactory.makeSymbol("S#7134", "CYC");
-        $ic11$ = SubLObjectFactory.makeSymbol("S#7137", "CYC");
-        $ic12$ = SubLObjectFactory.makeSymbol("S#7135", "CYC");
-        $ic13$ = SubLObjectFactory.makeSymbol("S#7138", "CYC");
-        $ic14$ = SubLObjectFactory.makeSymbol("S#7136", "CYC");
-        $ic15$ = SubLObjectFactory.makeSymbol("S#7139", "CYC");
-        $ic16$ = SubLObjectFactory.makeKeyword("MAP");
-        $ic17$ = SubLObjectFactory.makeKeyword("PUT-COUNT");
-        $ic18$ = SubLObjectFactory.makeKeyword("REMOVE-COUNT");
-        $ic19$ = SubLObjectFactory.makeString("Invalid slot ~S for construction function");
-        $ic20$ = SubLObjectFactory.makeKeyword("BEGIN");
-        $ic21$ = SubLObjectFactory.makeSymbol("S#7140", "CYC");
-        $ic22$ = SubLObjectFactory.makeKeyword("SLOT");
-        $ic23$ = SubLObjectFactory.makeKeyword("END");
-        $ic24$ = SubLObjectFactory.makeSymbol("S#7142", "CYC");
-        $ic25$ = SubLObjectFactory.makeString("<MODIFICATION-COUNTING-MAP ~A>");
-        $ic26$ = SubLObjectFactory.makeSymbol("S#7144", "CYC");
-        $ic27$ = SubLObjectFactory.makeSymbol("S#7145", "CYC");
-        $ic28$ = SubLObjectFactory.makeSymbol("S#7146", "CYC");
-        $ic29$ = SubLObjectFactory.makeSymbol("S#7147", "CYC");
-        $ic30$ = SubLObjectFactory.makeSymbol("S#7149", "CYC");
-        $ic31$ = SubLObjectFactory.makeSymbol("S#7151", "CYC");
-        $ic32$ = SubLObjectFactory.makeSymbol("S#7153", "CYC");
-        $ic33$ = SubLObjectFactory.makeSymbol("S#7155", "CYC");
-        $ic34$ = SubLObjectFactory.makeSymbol("S#7156", "CYC");
-        $ic35$ = SubLObjectFactory.makeSymbol("S#7157", "CYC");
-        $ic36$ = SubLObjectFactory.makeSymbol("S#7158", "CYC");
-        $ic37$ = SubLObjectFactory.makeSymbol("S#7160", "CYC");
-        $ic38$ = SubLObjectFactory.makeSymbol("S#7161", "CYC");
-        $ic39$ = SubLObjectFactory.makeSymbol("S#7168", "CYC");
+        $g1162$ = null;
+        $ic0$ = makeSymbol("S#3046", "CYC");
+        $ic1$ = makeSymbol("S#7130", "CYC");
+        $ic2$ = makeSymbol("S#7131", "CYC");
+        $ic3$ = ConsesLow.list((SubLObject)makeSymbol("MAP"), (SubLObject)makeSymbol("S#7171", "CYC"), (SubLObject)makeSymbol("S#7172", "CYC"));
+        $ic4$ = ConsesLow.list((SubLObject)makeKeyword("MAP"), (SubLObject)makeKeyword("PUT-COUNT"), (SubLObject)makeKeyword("REMOVE-COUNT"));
+        $ic5$ = ConsesLow.list((SubLObject)makeSymbol("S#7134", "CYC"), (SubLObject)makeSymbol("S#7135", "CYC"), (SubLObject)makeSymbol("S#7136", "CYC"));
+        $ic6$ = ConsesLow.list((SubLObject)makeSymbol("S#7137", "CYC"), (SubLObject)makeSymbol("S#7138", "CYC"), (SubLObject)makeSymbol("S#7139", "CYC"));
+        $ic7$ = makeSymbol("S#7143", "CYC");
+        $ic8$ = makeSymbol("S#7133", "CYC");
+        $ic9$ = ConsesLow.list((SubLObject)makeSymbol("OPTIMIZE-FUNCALL"), (SubLObject)makeSymbol("S#7131", "CYC"));
+        $ic10$ = makeSymbol("S#7134", "CYC");
+        $ic11$ = makeSymbol("S#7137", "CYC");
+        $ic12$ = makeSymbol("S#7135", "CYC");
+        $ic13$ = makeSymbol("S#7138", "CYC");
+        $ic14$ = makeSymbol("S#7136", "CYC");
+        $ic15$ = makeSymbol("S#7139", "CYC");
+        $ic16$ = makeKeyword("MAP");
+        $ic17$ = makeKeyword("PUT-COUNT");
+        $ic18$ = makeKeyword("REMOVE-COUNT");
+        $ic19$ = makeString("Invalid slot ~S for construction function");
+        $ic20$ = makeKeyword("BEGIN");
+        $ic21$ = makeSymbol("S#7140", "CYC");
+        $ic22$ = makeKeyword("SLOT");
+        $ic23$ = makeKeyword("END");
+        $ic24$ = makeSymbol("S#7142", "CYC");
+        $ic25$ = makeString("<MODIFICATION-COUNTING-MAP ~A>");
+        $ic26$ = makeSymbol("S#7144", "CYC");
+        $ic27$ = makeSymbol("S#7145", "CYC");
+        $ic28$ = makeSymbol("S#7146", "CYC");
+        $ic29$ = makeSymbol("S#7147", "CYC");
+        $ic30$ = makeSymbol("S#7149", "CYC");
+        $ic31$ = makeSymbol("S#7151", "CYC");
+        $ic32$ = makeSymbol("S#7153", "CYC");
+        $ic33$ = makeSymbol("S#7155", "CYC");
+        $ic34$ = makeSymbol("S#7156", "CYC");
+        $ic35$ = makeSymbol("S#7157", "CYC");
+        $ic36$ = makeSymbol("S#7158", "CYC");
+        $ic37$ = makeSymbol("S#7160", "CYC");
+        $ic38$ = makeSymbol("S#7161", "CYC");
+        $ic39$ = makeSymbol("S#7168", "CYC");
     }
     
     public static final class $sX7130_native extends SubLStructNative
@@ -454,7 +455,7 @@ public final class module0080 extends SubLTranslatedFile
         }
         
         static {
-            structDecl = Structures.makeStructDeclNative((Class)$sX7130_native.class, module0080.$ic1$, module0080.$ic2$, module0080.$ic3$, module0080.$ic4$, new String[] { "$map", "$put_count", "$remove_count" }, module0080.$ic5$, module0080.$ic6$, module0080.$ic7$);
+            structDecl = Structures.makeStructDeclNative((Class)$sX7130_native.class, $ic1$, $ic2$, $ic3$, $ic4$, new String[] { "$map", "$put_count", "$remove_count" }, $ic5$, $ic6$, $ic7$);
         }
     }
     
@@ -465,7 +466,7 @@ public final class module0080 extends SubLTranslatedFile
         }
         
         public SubLObject processItem(final SubLObject var4) {
-            return module0080.f5510(var4);
+            return f5510(var4);
         }
     }
 }
@@ -473,7 +474,7 @@ public final class module0080 extends SubLTranslatedFile
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0080.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 99 ms
 	
 	Decompiled with Procyon 0.5.32.

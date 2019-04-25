@@ -24,6 +24,7 @@ import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.cycjava.cycl.system_info;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Guids;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
 import com.cyc.cycjava.cycl.number_utilities;
 import java.util.Map;

@@ -47,6 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
 import com.cyc.cycjava.cycl.isa;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;

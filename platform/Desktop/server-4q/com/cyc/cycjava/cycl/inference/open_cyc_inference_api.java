@@ -13,6 +13,7 @@ import com.cyc.cycjava.cycl.cycl_grammar;
 import com.cyc.cycjava.cycl.narts_high;
 import com.cyc.cycjava.cycl.parameter_specification_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.harness.hl_prototypes;
 import com.cyc.cycjava.cycl.kb_mapping_utilities;
 import com.cyc.cycjava.cycl.nart_handles;

@@ -11,6 +11,7 @@ import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.cycjava.cycl.relation_evaluation;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.collection_defns;
 import com.cyc.cycjava.cycl.extended_numbers;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;

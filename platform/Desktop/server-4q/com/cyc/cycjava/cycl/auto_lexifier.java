@@ -7,6 +7,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors;
 import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_assertion_mt;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;

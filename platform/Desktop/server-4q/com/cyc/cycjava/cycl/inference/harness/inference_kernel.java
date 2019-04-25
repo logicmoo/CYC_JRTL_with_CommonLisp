@@ -20,6 +20,7 @@ import com.cyc.cycjava.cycl.czer_vars;
 import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.hlmt;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;

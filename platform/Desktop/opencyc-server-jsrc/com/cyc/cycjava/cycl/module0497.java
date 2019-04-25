@@ -2,6 +2,7 @@ package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
@@ -38,28 +39,28 @@ public final class module0497 extends SubLTranslatedFile
     
     public static SubLObject f32177(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        SubLObject var3 = (SubLObject)module0497.NIL;
-        SubLObject var4 = (SubLObject)module0497.NIL;
-        SubLObject var5 = (SubLObject)module0497.NIL;
-        SubLObject var6 = (SubLObject)module0497.NIL;
+        SubLObject var3 = (SubLObject)NIL;
+        SubLObject var4 = (SubLObject)NIL;
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
         try {
-            var2.throwStack.push(module0497.$ic0$);
+            var2.throwStack.push($ic0$);
             final SubLObject var7 = Errors.$error_handler$.currentBinding(var2);
             try {
-                Errors.$error_handler$.bind(Symbols.symbol_function((SubLObject)module0497.$ic1$), var2);
+                Errors.$error_handler$.bind(Symbols.symbol_function((SubLObject)$ic1$), var2);
                 try {
                     final SubLObject var8 = module0205.f13136(var1);
-                    if (var8.eql(module0497.$ic2$)) {
-                        var4 = module0205.f13204(var1, (SubLObject)module0497.UNPROVIDED);
+                    if (var8.eql($ic2$)) {
+                        var4 = module0205.f13204(var1, (SubLObject)UNPROVIDED);
                     }
-                    else if (var8.eql(module0497.$ic3$)) {
-                        var4 = module0205.f13203(var1, (SubLObject)module0497.UNPROVIDED);
+                    else if (var8.eql($ic3$)) {
+                        var4 = module0205.f13203(var1, (SubLObject)UNPROVIDED);
                     }
                     var3 = module0112.f7688(var4);
-                    var5 = (SubLObject)module0497.T;
+                    var5 = (SubLObject)T;
                 }
                 catch (Throwable var9) {
-                    Errors.handleThrowable(var9, (SubLObject)module0497.NIL);
+                    Errors.handleThrowable(var9, (SubLObject)NIL);
                 }
             }
             finally {
@@ -67,7 +68,7 @@ public final class module0497 extends SubLTranslatedFile
             }
         }
         catch (Throwable var10) {
-            var6 = Errors.handleThrowable(var10, (SubLObject)module0497.$ic0$);
+            var6 = Errors.handleThrowable(var10, (SubLObject)$ic0$);
         }
         finally {
             var2.throwStack.pop();
@@ -85,35 +86,35 @@ public final class module0497 extends SubLTranslatedFile
     }
     
     public static SubLObject f32179(final SubLObject var1) {
-        if (module0497.NIL == module0373.f26113() || module0497.NIL != module0361.f24169(module0373.f26113())) {
+        if (NIL == module0373.f26113() || NIL != module0361.f24169(module0373.f26113())) {
             return f32177(var1);
         }
-        return Values.values((SubLObject)module0497.NIL, (SubLObject)module0497.NIL);
+        return Values.values((SubLObject)NIL, (SubLObject)NIL);
     }
     
     public static SubLObject f32180() {
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0497", "f32177", "S#35574", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0497", "f32178", "S#35575", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0497", "f32179", "S#35576", 1, 0, false);
-        return (SubLObject)module0497.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f32181() {
-        module0497.$g3774$ = SubLFiles.deflexical("S#35577", (module0497.NIL != Symbols.boundp((SubLObject)module0497.$ic4$)) ? module0497.$g3774$.getGlobalValue() : module0497.$ic5$);
-        module0497.$g3775$ = SubLFiles.defparameter("S#35578", module0018.$g659$.getGlobalValue());
-        module0497.$g3776$ = SubLFiles.defparameter("S#35579", module0497.$g3775$.getDynamicValue());
-        return (SubLObject)module0497.NIL;
+        $g3774$ = SubLFiles.deflexical("S#35577", (NIL != Symbols.boundp((SubLObject)$ic4$)) ? $g3774$.getGlobalValue() : $ic5$);
+        $g3775$ = SubLFiles.defparameter("S#35578", module0018.$g659$.getGlobalValue());
+        $g3776$ = SubLFiles.defparameter("S#35579", $g3775$.getDynamicValue());
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f32182() {
-        module0003.f57((SubLObject)module0497.$ic4$);
-        module0132.f8593((SubLObject)module0497.$ic4$, module0497.$ic6$);
-        module0340.f22938(module0497.$ic6$);
-        module0358.f23773((SubLObject)module0497.$ic7$, module0497.$ic6$);
-        module0358.f23773((SubLObject)module0497.$ic8$, module0497.$ic6$);
-        module0340.f22941((SubLObject)module0497.$ic9$, (SubLObject)module0497.$ic10$);
-        module0340.f22941((SubLObject)module0497.$ic11$, (SubLObject)module0497.$ic12$);
-        return (SubLObject)module0497.NIL;
+        module0003.f57((SubLObject)$ic4$);
+        module0132.f8593((SubLObject)$ic4$, $ic6$);
+        module0340.f22938($ic6$);
+        module0358.f23773((SubLObject)$ic7$, $ic6$);
+        module0358.f23773((SubLObject)$ic8$, $ic6$);
+        module0340.f22941((SubLObject)$ic9$, (SubLObject)$ic10$);
+        module0340.f22941((SubLObject)$ic11$, (SubLObject)$ic12$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -130,29 +131,29 @@ public final class module0497 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0497();
-        module0497.$g3774$ = null;
-        module0497.$g3775$ = null;
-        module0497.$g3776$ = null;
-        $ic0$ = SubLObjectFactory.makeKeyword("IGNORE-ERRORS-TARGET");
-        $ic1$ = SubLObjectFactory.makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
-        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ExpandSubLFn"));
-        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLQuoteFn"));
-        $ic4$ = SubLObjectFactory.makeSymbol("S#35577", "CYC");
-        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
-        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("performSubL"));
-        $ic7$ = SubLObjectFactory.makeKeyword("POS");
-        $ic8$ = SubLObjectFactory.makeKeyword("NEG");
-        $ic9$ = SubLObjectFactory.makeKeyword("REMOVAL-PERFORM-SUBL-POS");
-        $ic10$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("POS"), SubLObjectFactory.makeKeyword("PREDICATE"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("performSubL")), SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("performSubL")), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND")), SubLObjectFactory.makeKeyword("COST-EXPRESSION"), SubLObjectFactory.makeSymbol("S#35578", "CYC"), SubLObjectFactory.makeKeyword("COMPLETENESS"), SubLObjectFactory.makeKeyword("COMPLETE"), SubLObjectFactory.makeKeyword("CHECK"), module0497.T, SubLObjectFactory.makeKeyword("INPUT-EXTRACT-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEMPLATE"), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("performSubL")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#34788", "CYC"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)SubLObjectFactory.makeSymbol("S#34788", "CYC"))), SubLObjectFactory.makeKeyword("OUTPUT-CHECK-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#35575", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("INPUT")), SubLObjectFactory.makeKeyword("SUPPORT-MODULE"), SubLObjectFactory.makeKeyword("CODE"), SubLObjectFactory.makeKeyword("SUPPORT-MT"), SubLObjectFactory.makeSymbol("S#35577", "CYC"), SubLObjectFactory.makeKeyword("SUPPORT-STRENGTH"), SubLObjectFactory.makeKeyword("MONOTONIC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("(#$performSubL <fully-bound>)\n     by evaluating the argument as a SubL expression and succeeding if the evaluation completed."), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$performSubL (#$ExpandSubLFn () (print :DONE)))  \n    or\n    (#$performSubL (#$SubLQuoteFn (print :DONE)))") });
-        $ic11$ = SubLObjectFactory.makeKeyword("REMOVAL-PERFORM-SUBL-NEG");
-        $ic12$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("NEG"), SubLObjectFactory.makeKeyword("PREDICATE"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("performSubL")), SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("performSubL")), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND")), SubLObjectFactory.makeKeyword("COST-EXPRESSION"), SubLObjectFactory.makeSymbol("S#35579", "CYC"), SubLObjectFactory.makeKeyword("COMPLETENESS"), SubLObjectFactory.makeKeyword("COMPLETE"), SubLObjectFactory.makeKeyword("CHECK"), module0497.T, SubLObjectFactory.makeKeyword("INPUT-EXTRACT-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEMPLATE"), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("performSubL")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#34788", "CYC"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)SubLObjectFactory.makeSymbol("S#34788", "CYC"))), SubLObjectFactory.makeKeyword("OUTPUT-CHECK-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#33876", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#35575", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("INPUT"))), SubLObjectFactory.makeKeyword("SUPPORT-MODULE"), SubLObjectFactory.makeKeyword("CODE"), SubLObjectFactory.makeKeyword("SUPPORT-MT"), SubLObjectFactory.makeSymbol("S#35577", "CYC"), SubLObjectFactory.makeKeyword("SUPPORT-STRENGTH"), SubLObjectFactory.makeKeyword("MONOTONIC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("(#$not (#$performSubL <fully-bound>))\n by evaluating the argument as a SubL expression and succeeding if the evaluation failed to complete."), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$not (#$performSubL (#$ExpandSubLFn () (/ 1 0)))) or\n    (#$not (#$performSubL (#$SubLQuoteFn (/ 1 0))))") });
+        $g3774$ = null;
+        $g3775$ = null;
+        $g3776$ = null;
+        $ic0$ = makeKeyword("IGNORE-ERRORS-TARGET");
+        $ic1$ = makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
+        $ic2$ = constant_handles_oc.f8479((SubLObject)makeString("ExpandSubLFn"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)makeString("SubLQuoteFn"));
+        $ic4$ = makeSymbol("S#35577", "CYC");
+        $ic5$ = constant_handles_oc.f8479((SubLObject)makeString("UniversalVocabularyMt"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)makeString("performSubL"));
+        $ic7$ = makeKeyword("POS");
+        $ic8$ = makeKeyword("NEG");
+        $ic9$ = makeKeyword("REMOVAL-PERFORM-SUBL-POS");
+        $ic10$ = ConsesLow.list(new SubLObject[] { makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), constant_handles_oc.f8479((SubLObject)makeString("performSubL")), makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("performSubL")), (SubLObject)makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("S#35578", "CYC"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("CHECK"), T, makeKeyword("INPUT-EXTRACT-PATTERN"), ConsesLow.list((SubLObject)makeKeyword("TEMPLATE"), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("performSubL")), (SubLObject)ConsesLow.list((SubLObject)makeKeyword("BIND"), (SubLObject)makeSymbol("S#34788", "CYC"))), (SubLObject)ConsesLow.list((SubLObject)makeKeyword("VALUE"), (SubLObject)makeSymbol("S#34788", "CYC"))), makeKeyword("OUTPUT-CHECK-PATTERN"), ConsesLow.list((SubLObject)makeKeyword("CALL"), (SubLObject)makeSymbol("S#35575", "CYC"), (SubLObject)makeKeyword("INPUT")), makeKeyword("SUPPORT-MODULE"), makeKeyword("CODE"), makeKeyword("SUPPORT-MT"), makeSymbol("S#35577", "CYC"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$performSubL <fully-bound>)\n     by evaluating the argument as a SubL expression and succeeding if the evaluation completed."), makeKeyword("EXAMPLE"), makeString("(#$performSubL (#$ExpandSubLFn () (print :DONE)))  \n    or\n    (#$performSubL (#$SubLQuoteFn (print :DONE)))") });
+        $ic11$ = makeKeyword("REMOVAL-PERFORM-SUBL-NEG");
+        $ic12$ = ConsesLow.list(new SubLObject[] { makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), constant_handles_oc.f8479((SubLObject)makeString("performSubL")), makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("performSubL")), (SubLObject)makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("S#35579", "CYC"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("CHECK"), T, makeKeyword("INPUT-EXTRACT-PATTERN"), ConsesLow.list((SubLObject)makeKeyword("TEMPLATE"), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("performSubL")), (SubLObject)ConsesLow.list((SubLObject)makeKeyword("BIND"), (SubLObject)makeSymbol("S#34788", "CYC"))), (SubLObject)ConsesLow.list((SubLObject)makeKeyword("VALUE"), (SubLObject)makeSymbol("S#34788", "CYC"))), makeKeyword("OUTPUT-CHECK-PATTERN"), ConsesLow.list((SubLObject)makeKeyword("CALL"), (SubLObject)makeSymbol("S#33876", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeKeyword("CALL"), (SubLObject)makeSymbol("S#35575", "CYC"), (SubLObject)makeKeyword("INPUT"))), makeKeyword("SUPPORT-MODULE"), makeKeyword("CODE"), makeKeyword("SUPPORT-MT"), makeSymbol("S#35577", "CYC"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$performSubL <fully-bound>))\n by evaluating the argument as a SubL expression and succeeding if the evaluation failed to complete."), makeKeyword("EXAMPLE"), makeString("(#$not (#$performSubL (#$ExpandSubLFn () (/ 1 0)))) or\n    (#$not (#$performSubL (#$SubLQuoteFn (/ 1 0))))") });
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0497.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 89 ms
 	
 	Decompiled with Procyon 0.5.32.

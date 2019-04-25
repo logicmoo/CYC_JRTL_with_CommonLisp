@@ -16,6 +16,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
 import com.cyc.cycjava.cycl.sbhl.sbhl_links;
 import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
 import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;

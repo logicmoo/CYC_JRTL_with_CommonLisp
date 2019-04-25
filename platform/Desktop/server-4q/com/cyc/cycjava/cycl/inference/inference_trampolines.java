@@ -71,6 +71,7 @@ import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.cycjava.cycl.fort_types_interface;
 import com.cyc.cycjava.cycl.forts;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.cycl_grammar;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;

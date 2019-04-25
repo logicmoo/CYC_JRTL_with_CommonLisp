@@ -14,6 +14,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
 import com.cyc.cycjava.cycl.mt_relevance_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;

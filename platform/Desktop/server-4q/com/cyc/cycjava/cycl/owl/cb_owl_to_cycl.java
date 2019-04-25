@@ -21,6 +21,7 @@ import com.cyc.cycjava.cycl.file_utilities;
 import com.cyc.cycjava.cycl.web_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.cycjava.cycl.inference.browser.cb_query;
 import com.cyc.cycjava.cycl.string_utilities;

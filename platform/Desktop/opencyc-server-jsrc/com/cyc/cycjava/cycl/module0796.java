@@ -2,6 +2,7 @@ package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -27,37 +28,37 @@ public final class module0796 extends SubLTranslatedFile
     private static final SubLSymbol $ic9$;
     
     public static SubLObject f50932(final SubLObject var1, SubLObject var2) {
-        if (var2 == module0796.UNPROVIDED) {
-            var2 = module0796.$ic0$;
+        if (var2 == UNPROVIDED) {
+            var2 = $ic0$;
         }
-        assert module0796.NIL != module0206.f13425(var1) : var1;
-        assert module0796.NIL != module0161.f10481(var2) : var2;
-        return module0274.f18199(var1, var2, (SubLObject)module0796.$ic3$);
+        assert NIL != module0206.f13425(var1) : var1;
+        assert NIL != module0161.f10481(var2) : var2;
+        return module0274.f18199(var1, var2, (SubLObject)$ic3$);
     }
     
     public static SubLObject f50933(final SubLObject var1, SubLObject var2) {
-        if (var2 == module0796.UNPROVIDED) {
-            var2 = module0796.$ic0$;
+        if (var2 == UNPROVIDED) {
+            var2 = $ic0$;
         }
-        assert module0796.NIL != module0206.f13425(var1) : var1;
-        assert module0796.NIL != module0161.f10481(var2) : var2;
-        return module0274.f18195(var1, var2, (SubLObject)module0796.$ic3$);
+        assert NIL != module0206.f13425(var1) : var1;
+        assert NIL != module0161.f10481(var2) : var2;
+        return module0274.f18195(var1, var2, (SubLObject)$ic3$);
     }
     
     public static SubLObject f50934() {
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0796", "f50932", "OPENCYC-EXPLANATION-OF-WHY-NOT-WFF-ASSERT", 1, 1, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0796", "f50933", "OPENCYC-EXPLANATION-OF-WHY-NOT-WFF", 1, 1, false);
-        return (SubLObject)module0796.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f50935() {
-        return (SubLObject)module0796.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f50936() {
-        module0012.f368((SubLObject)module0796.$ic4$, (SubLObject)module0796.$ic5$, (SubLObject)module0796.$ic6$, (SubLObject)module0796.$ic7$, (SubLObject)module0796.$ic8$);
-        module0012.f368((SubLObject)module0796.$ic9$, (SubLObject)module0796.$ic5$, (SubLObject)module0796.$ic6$, (SubLObject)module0796.$ic7$, (SubLObject)module0796.$ic8$);
-        return (SubLObject)module0796.NIL;
+        module0012.f368((SubLObject)$ic4$, (SubLObject)$ic5$, (SubLObject)$ic6$, (SubLObject)$ic7$, (SubLObject)$ic8$);
+        module0012.f368((SubLObject)$ic9$, (SubLObject)$ic5$, (SubLObject)$ic6$, (SubLObject)$ic7$, (SubLObject)$ic8$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -74,23 +75,23 @@ public final class module0796 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0796();
-        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CurrentWorldDataCollectorMt-NonHomocentric"));
-        $ic1$ = SubLObjectFactory.makeSymbol("CYCL-SENTENCE-P");
-        $ic2$ = SubLObjectFactory.makeSymbol("S#12263", "CYC");
-        $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("IO-MODE"), (SubLObject)SubLObjectFactory.makeKeyword("NL"));
-        $ic4$ = SubLObjectFactory.makeSymbol("OPENCYC-EXPLANATION-OF-WHY-NOT-WFF-ASSERT");
-        $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#14349", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CurrentWorldDataCollectorMt-NonHomocentric"))));
-        $ic6$ = SubLObjectFactory.makeString("Returns an English explanation of why SENTENCE is not assertible in MT.  An assertible sentence results in a NIL return value.");
-        $ic7$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#14349", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CYCL-SENTENCE-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12263", "CYC")));
-        $ic8$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#51575", "CYC"));
-        $ic9$ = SubLObjectFactory.makeSymbol("OPENCYC-EXPLANATION-OF-WHY-NOT-WFF");
+        $ic0$ = constant_handles_oc.f8479((SubLObject)makeString("CurrentWorldDataCollectorMt-NonHomocentric"));
+        $ic1$ = makeSymbol("CYCL-SENTENCE-P");
+        $ic2$ = makeSymbol("S#12263", "CYC");
+        $ic3$ = ConsesLow.list((SubLObject)makeKeyword("IO-MODE"), (SubLObject)makeKeyword("NL"));
+        $ic4$ = makeSymbol("OPENCYC-EXPLANATION-OF-WHY-NOT-WFF-ASSERT");
+        $ic5$ = ConsesLow.list((SubLObject)makeSymbol("S#14349", "CYC"), (SubLObject)makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#11445", "CYC"), constant_handles_oc.f8479((SubLObject)makeString("CurrentWorldDataCollectorMt-NonHomocentric"))));
+        $ic6$ = makeString("Returns an English explanation of why SENTENCE is not assertible in MT.  An assertible sentence results in a NIL return value.");
+        $ic7$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#14349", "CYC"), (SubLObject)makeSymbol("CYCL-SENTENCE-P")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#11445", "CYC"), (SubLObject)makeSymbol("S#12263", "CYC")));
+        $ic8$ = ConsesLow.list((SubLObject)makeSymbol("S#51575", "CYC"));
+        $ic9$ = makeSymbol("OPENCYC-EXPLANATION-OF-WHY-NOT-WFF");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0796.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 52 ms
 	
 	Decompiled with Procyon 0.5.32.

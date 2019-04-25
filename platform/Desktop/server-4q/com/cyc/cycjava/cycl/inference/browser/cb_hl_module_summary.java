@@ -2,6 +2,7 @@ package com.cyc.cycjava.cycl.inference.browser;
 
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
 import com.cyc.cycjava.cycl.cyc_navigator_internals;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;

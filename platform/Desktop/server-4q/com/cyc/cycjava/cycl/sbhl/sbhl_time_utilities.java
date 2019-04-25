@@ -31,6 +31,7 @@ import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_infrastructure_utiliti
 import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.cycjava.cycl.numeric_date_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;

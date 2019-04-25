@@ -11,6 +11,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
 import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.subl_promotions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.cycjava.cycl.wordnet;

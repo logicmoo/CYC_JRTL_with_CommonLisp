@@ -3,6 +3,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -15,10 +16,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class oc_assertion_manager extends SubLTranslatedFile
+public final class assertion_manager_oc extends SubLTranslatedFile
 {
   public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.oc_assertion_manager";
+  public static final String myName = "com.cyc.cycjava.cycl.assertion_manager_oc";
   public static final String myFingerPrint = "75917106446cb7689a133dfa000c0c26844ce6a98f70d1878720c66345531ac2";
   public static SubLSymbol $assertion_content_manager$;
   private static SubLSymbol $assertion_lru_size_percentage$;
@@ -34,39 +35,39 @@ public final class oc_assertion_manager extends SubLTranslatedFile
 
   public static SubLObject setup_assertion_content_table(final SubLObject var1, final SubLObject var2)
   {
-    $assertion_content_manager$.setGlobalValue( oc_kb_object_manager.new_kb_object_manager( $ic3$, var1, $assertion_lru_size_percentage$.getGlobalValue(), $assertion_lru_size_max$.getGlobalValue(),
+    $assertion_content_manager$.setGlobalValue( kb_object_manager_oc.new_kb_object_manager( $ic3$, var1, $assertion_lru_size_percentage$.getGlobalValue(), $assertion_lru_size_max$.getGlobalValue(),
         $ic4$, var2 ) );
     return T;
   }
 
   public static SubLObject f11105(final SubLObject var3)
   {
-    return oc_kb_object_manager.f10430( $assertion_content_manager$.getGlobalValue(), var3 );
+    return kb_object_manager_oc.f10430( $assertion_content_manager$.getGlobalValue(), var3 );
   }
 
   public static SubLObject f11106()
   {
-    return oc_kb_object_manager.f10431( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10431( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11107()
   {
-    return oc_kb_object_manager.f10446( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10446( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11108()
   {
-    return oc_kb_object_manager.f10447( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10447( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11109()
   {
-    return oc_kb_object_manager.f10437( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10437( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11110()
   {
-    return oc_kb_object_manager.f10438( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10438( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11111()
@@ -76,53 +77,53 @@ public final class oc_assertion_manager extends SubLTranslatedFile
 
   public static SubLObject f11112(final SubLObject var4)
   {
-    return oc_kb_object_manager.f10439( $assertion_content_manager$.getGlobalValue(), assertion_handles_oc.f11025( var4 ) );
+    return kb_object_manager_oc.f10439( $assertion_content_manager$.getGlobalValue(), assertion_handles_oc.f11025( var4 ) );
   }
 
   public static SubLObject f11113(final SubLObject var4)
   {
-    return oc_kb_object_manager.f10440( $assertion_content_manager$.getGlobalValue(), assertion_handles_oc.f11025( var4 ) );
+    return kb_object_manager_oc.f10440( $assertion_content_manager$.getGlobalValue(), assertion_handles_oc.f11025( var4 ) );
   }
 
   public static SubLObject f11114(final SubLObject var5)
   {
     module0425.f30054( assertion_handles_oc.f11053( var5 ) );
-    return oc_kb_object_manager.f10442( $assertion_content_manager$.getGlobalValue(), var5 );
+    return kb_object_manager_oc.f10442( $assertion_content_manager$.getGlobalValue(), var5 );
   }
 
   public static SubLObject f11115()
   {
-    return oc_kb_object_manager.f10458( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10458( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11116()
   {
-    return oc_kb_object_manager.f10447( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10447( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11117()
   {
-    return oc_kb_object_manager.f10446( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10446( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11118()
   {
-    return oc_kb_object_manager.f10437( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10437( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11119(final SubLObject var6, final SubLObject var7)
   {
-    return oc_kb_object_manager.f10414( $assertion_content_manager$.getGlobalValue(), var6, var7 );
+    return kb_object_manager_oc.f10414( $assertion_content_manager$.getGlobalValue(), var6, var7 );
   }
 
   public static SubLObject f11120()
   {
-    return oc_kb_object_manager.f10417( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10417( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11121()
   {
-    return oc_kb_object_manager.f10418( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10418( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11122(final SubLObject var8, final SubLObject var9)
@@ -135,47 +136,47 @@ public final class oc_assertion_manager extends SubLTranslatedFile
 
   public static SubLObject f11123(final SubLObject var5, final SubLObject var13)
   {
-    return oc_kb_object_manager.f10448( $assertion_content_manager$.getGlobalValue(), var5, var13 );
+    return kb_object_manager_oc.f10448( $assertion_content_manager$.getGlobalValue(), var5, var13 );
   }
 
   public static SubLObject f11124(final SubLObject var5)
   {
-    return oc_kb_object_manager.f10449( $assertion_content_manager$.getGlobalValue(), var5 );
+    return kb_object_manager_oc.f10449( $assertion_content_manager$.getGlobalValue(), var5 );
   }
 
   public static SubLObject f11125(final SubLObject var5)
   {
-    return oc_kb_object_manager.f10454( $assertion_content_manager$.getGlobalValue(), var5 );
+    return kb_object_manager_oc.f10454( $assertion_content_manager$.getGlobalValue(), var5 );
   }
 
   public static SubLObject f11126()
   {
-    return oc_kb_object_manager.f10455( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10455( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11127()
   {
-    return oc_kb_object_manager.f10456( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10456( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11128()
   {
-    return oc_kb_object_manager.f10457( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10457( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11129()
   {
-    return oc_kb_object_manager.f10436( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10436( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11130()
   {
-    return oc_kb_object_manager.f10462( $assertion_content_manager$.getGlobalValue() );
+    return kb_object_manager_oc.f10462( $assertion_content_manager$.getGlobalValue() );
   }
 
   public static SubLObject f11131()
   {
-    return oc_kb_object_manager.f10426( $assertion_content_manager$.getGlobalValue(), $ic3$, $ic7$ );
+    return kb_object_manager_oc.f10426( $assertion_content_manager$.getGlobalValue(), $ic3$, $ic7$ );
   }
 
   public static SubLObject f11132(final SubLObject var14, SubLObject var15)
@@ -184,7 +185,7 @@ public final class oc_assertion_manager extends SubLTranslatedFile
     {
       var15 = NIL;
     }
-    return oc_kb_object_manager.f10464( $assertion_content_manager$.getGlobalValue(), var14, var15 );
+    return kb_object_manager_oc.f10464( $assertion_content_manager$.getGlobalValue(), var14, var15 );
   }
 
   public static SubLObject declare_assertion_manager_file()
@@ -256,7 +257,7 @@ public final class oc_assertion_manager extends SubLTranslatedFile
   }
   static
   {
-    me = new oc_assertion_manager();
+    me = new assertion_manager_oc();
     $assertion_content_manager$ = null;
     $assertion_lru_size_percentage$ = null;
     $assertion_lru_size_max$ = null;

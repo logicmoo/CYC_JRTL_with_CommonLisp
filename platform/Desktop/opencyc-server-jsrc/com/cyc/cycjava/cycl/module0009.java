@@ -22,61 +22,61 @@ public final class module0009 extends SubLTranslatedFile
     public static final String myFingerPrint = "59cab115f767837572ec61661372c6689c429d437517747474fc1542d09c4670";
     
     public static SubLObject f317(final SubLObject var1) {
-        final SubLObject var2 = Sequences.position((SubLObject)Characters.CHAR_space, var1, (SubLObject)module0009.UNPROVIDED, (SubLObject)module0009.UNPROVIDED, (SubLObject)module0009.UNPROVIDED, (SubLObject)module0009.UNPROVIDED);
-        if (module0009.NIL != var2) {
-            final SubLObject var3 = Sequences.position((SubLObject)Characters.CHAR_space, var1, Symbols.symbol_function((SubLObject)module0009.EQL), Symbols.symbol_function((SubLObject)module0009.IDENTITY), Numbers.add(var2, (SubLObject)module0009.ONE_INTEGER), (SubLObject)module0009.UNPROVIDED);
-            if (module0009.NIL != var3) {
-                return Sequences.subseq(var1, Numbers.add(var2, (SubLObject)module0009.ONE_INTEGER), var3);
+        final SubLObject var2 = Sequences.position((SubLObject)Characters.CHAR_space, var1, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        if (NIL != var2) {
+            final SubLObject var3 = Sequences.position((SubLObject)Characters.CHAR_space, var1, Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY), Numbers.add(var2, (SubLObject)ONE_INTEGER), (SubLObject)UNPROVIDED);
+            if (NIL != var3) {
+                return Sequences.subseq(var1, Numbers.add(var2, (SubLObject)ONE_INTEGER), var3);
             }
         }
-        return (SubLObject)module0009.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f318(final SubLObject var4, SubLObject var5) {
-        if (var5 == module0009.UNPROVIDED) {
-            var5 = (SubLObject)module0009.TEN_INTEGER;
+        if (var5 == UNPROVIDED) {
+            var5 = (SubLObject)TEN_INTEGER;
         }
         if (var4.isString()) {
-            SubLObject var6 = (SubLObject)module0009.ZERO_INTEGER;
-            SubLObject var7 = Sequences.position((SubLObject)Characters.CHAR_period, var4, Symbols.symbol_function((SubLObject)module0009.EQL), Symbols.symbol_function((SubLObject)module0009.IDENTITY), var6, (SubLObject)module0009.UNPROVIDED);
-            SubLObject var8 = (SubLObject)module0009.NIL;
+            SubLObject var6 = (SubLObject)ZERO_INTEGER;
+            SubLObject var7 = Sequences.position((SubLObject)Characters.CHAR_period, var4, Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY), var6, (SubLObject)UNPROVIDED);
+            SubLObject var8 = (SubLObject)NIL;
             while (var6.isInteger()) {
-                final SubLObject var9 = reader.read_from_string_ignoring_errors(var4, (SubLObject)module0009.NIL, (SubLObject)module0009.NIL, var6, var7);
-                if (module0009.NIL != var9) {
+                final SubLObject var9 = reader.read_from_string_ignoring_errors(var4, (SubLObject)NIL, (SubLObject)NIL, var6, var7);
+                if (NIL != var9) {
                     var8 = (SubLObject)ConsesLow.cons(var9, var8);
                 }
                 if (var7.isInteger()) {
-                    var6 = Numbers.add(var7, (SubLObject)module0009.ONE_INTEGER);
-                    var7 = Sequences.position((SubLObject)Characters.CHAR_period, var4, Symbols.symbol_function((SubLObject)module0009.EQL), Symbols.symbol_function((SubLObject)module0009.IDENTITY), var6, (SubLObject)module0009.UNPROVIDED);
+                    var6 = Numbers.add(var7, (SubLObject)ONE_INTEGER);
+                    var7 = Sequences.position((SubLObject)Characters.CHAR_period, var4, Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY), var6, (SubLObject)UNPROVIDED);
                 }
                 else {
-                    var6 = (SubLObject)module0009.NIL;
+                    var6 = (SubLObject)NIL;
                 }
             }
             var8 = Sequences.nreverse(var8);
-            if (module0009.ONE_INTEGER.numE(Sequences.length(var8))) {
+            if (ONE_INTEGER.numE(Sequences.length(var8))) {
                 var8 = (SubLObject)ConsesLow.cons(var5, var8);
             }
             return var8;
         }
-        return (SubLObject)module0009.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f319(final SubLObject var10) {
-        SubLObject var11 = (SubLObject)module0009.NIL;
-        SubLObject var12 = (SubLObject)module0009.NIL;
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var12 = (SubLObject)NIL;
         try {
             var12 = streams_high.make_private_string_output_stream();
-            SubLObject var13 = (SubLObject)module0009.T;
+            SubLObject var13 = (SubLObject)T;
             SubLObject var14 = var10;
-            SubLObject var15 = (SubLObject)module0009.NIL;
+            SubLObject var15 = (SubLObject)NIL;
             var15 = var14.first();
-            while (module0009.NIL != var14) {
-                if (module0009.NIL == var13) {
+            while (NIL != var14) {
+                if (NIL == var13) {
                     print_high.princ((SubLObject)Characters.CHAR_period, var12);
                 }
                 print_high.princ(var15, var12);
-                var13 = (SubLObject)module0009.NIL;
+                var13 = (SubLObject)NIL;
                 var14 = var14.rest();
                 var15 = var14.first();
             }
@@ -85,8 +85,8 @@ public final class module0009 extends SubLTranslatedFile
         finally {
             final SubLObject var16 = Dynamic.currentBinding(Threads.$is_thread_performing_cleanupP$);
             try {
-                Dynamic.bind(Threads.$is_thread_performing_cleanupP$, (SubLObject)module0009.T);
-                streams_high.close(var12, (SubLObject)module0009.UNPROVIDED);
+                Dynamic.bind(Threads.$is_thread_performing_cleanupP$, (SubLObject)T);
+                streams_high.close(var12, (SubLObject)UNPROVIDED);
             }
             finally {
                 Dynamic.rebind(Threads.$is_thread_performing_cleanupP$, var16);
@@ -99,15 +99,15 @@ public final class module0009 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0009", "f317", "S#311", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0009", "f318", "S#312", 1, 1, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0009", "f319", "S#313", 1, 0, false);
-        return (SubLObject)module0009.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f321() {
-        return (SubLObject)module0009.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f322() {
-        return (SubLObject)module0009.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -130,7 +130,7 @@ public final class module0009 extends SubLTranslatedFile
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0009.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 30 ms
 	
 	Decompiled with Procyon 0.5.32.

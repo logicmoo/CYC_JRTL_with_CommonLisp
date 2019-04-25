@@ -31,6 +31,7 @@ import com.cyc.cycjava.cycl.clauses;
 import com.cyc.cycjava.cycl.simplifier;
 import com.cyc.cycjava.cycl.czer_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.cycl_grammar;
 import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.cycjava.cycl.el_utilities;

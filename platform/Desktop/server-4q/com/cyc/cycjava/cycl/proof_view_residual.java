@@ -11,6 +11,7 @@ import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker_join_ordered;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker_removal;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;

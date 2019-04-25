@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
@@ -34,35 +35,35 @@ public final class module0111 extends SubLTranslatedFile
     private static final SubLSymbol $ic2$;
     
     public static SubLObject f7685() {
-        return (SubLObject)module0111.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f7686() {
-        module0111.$g1393$ = SubLFiles.defparameter("S#9675", (SubLObject)module0111.NIL);
-        module0111.$g1394$ = SubLFiles.defparameter("S#9676", (SubLObject)module0111.NIL);
-        module0111.$g1395$ = SubLFiles.defparameter("S#9677", (SubLObject)module0111.NIL);
-        module0111.$g1396$ = SubLFiles.defparameter("S#9678", (SubLObject)module0111.NIL);
-        module0111.$g1397$ = SubLFiles.defparameter("S#9679", (SubLObject)module0111.NIL);
-        module0111.$g1398$ = SubLFiles.defparameter("S#9680", (SubLObject)module0111.NIL);
-        module0111.$g1399$ = SubLFiles.defparameter("S#9681", (SubLObject)module0111.NIL);
-        module0111.$g1400$ = SubLFiles.defparameter("S#9682", (SubLObject)module0111.NIL);
-        module0111.$g1401$ = SubLFiles.defparameter("S#9683", (SubLObject)module0111.NIL);
-        module0111.$g1402$ = SubLFiles.defparameter("S#9684", (SubLObject)module0111.NIL);
-        module0111.$g1403$ = SubLFiles.defparameter("S#9685", (SubLObject)module0111.NIL);
-        module0111.$g1404$ = SubLFiles.defparameter("S#9686", (SubLObject)module0111.NIL);
-        module0111.$g1405$ = SubLFiles.defvar("*THE-CYCLIST*", (SubLObject)module0111.NIL);
-        module0111.$g1406$ = SubLFiles.defparameter("S#9687", (SubLObject)module0111.T);
-        module0111.$g1407$ = SubLFiles.defparameter("S#9688", (SubLObject)module0111.NIL);
-        module0111.$g1408$ = SubLFiles.defparameter("*KE-PURPOSE*", module0111.$g1407$.getDynamicValue());
-        module0111.$g1409$ = SubLFiles.defparameter("S#9689", (SubLObject)module0111.T);
-        return (SubLObject)module0111.NIL;
+        $g1393$ = SubLFiles.defparameter("S#9675", (SubLObject)NIL);
+        $g1394$ = SubLFiles.defparameter("S#9676", (SubLObject)NIL);
+        $g1395$ = SubLFiles.defparameter("S#9677", (SubLObject)NIL);
+        $g1396$ = SubLFiles.defparameter("S#9678", (SubLObject)NIL);
+        $g1397$ = SubLFiles.defparameter("S#9679", (SubLObject)NIL);
+        $g1398$ = SubLFiles.defparameter("S#9680", (SubLObject)NIL);
+        $g1399$ = SubLFiles.defparameter("S#9681", (SubLObject)NIL);
+        $g1400$ = SubLFiles.defparameter("S#9682", (SubLObject)NIL);
+        $g1401$ = SubLFiles.defparameter("S#9683", (SubLObject)NIL);
+        $g1402$ = SubLFiles.defparameter("S#9684", (SubLObject)NIL);
+        $g1403$ = SubLFiles.defparameter("S#9685", (SubLObject)NIL);
+        $g1404$ = SubLFiles.defparameter("S#9686", (SubLObject)NIL);
+        $g1405$ = SubLFiles.defvar("*THE-CYCLIST*", (SubLObject)NIL);
+        $g1406$ = SubLFiles.defparameter("S#9687", (SubLObject)T);
+        $g1407$ = SubLFiles.defparameter("S#9688", (SubLObject)NIL);
+        $g1408$ = SubLFiles.defparameter("*KE-PURPOSE*", $g1407$.getDynamicValue());
+        $g1409$ = SubLFiles.defparameter("S#9689", (SubLObject)T);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f7687() {
-        module0012.f441((SubLObject)module0111.$ic0$);
-        module0012.f441((SubLObject)module0111.$ic1$);
-        module0012.f441((SubLObject)module0111.$ic2$);
-        return (SubLObject)module0111.NIL;
+        module0012.f441((SubLObject)$ic0$);
+        module0012.f441((SubLObject)$ic1$);
+        module0012.f441((SubLObject)$ic2$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -79,33 +80,33 @@ public final class module0111 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0111();
-        module0111.$g1393$ = null;
-        module0111.$g1394$ = null;
-        module0111.$g1395$ = null;
-        module0111.$g1396$ = null;
-        module0111.$g1397$ = null;
-        module0111.$g1398$ = null;
-        module0111.$g1399$ = null;
-        module0111.$g1400$ = null;
-        module0111.$g1401$ = null;
-        module0111.$g1402$ = null;
-        module0111.$g1403$ = null;
-        module0111.$g1404$ = null;
-        module0111.$g1405$ = null;
-        module0111.$g1406$ = null;
-        module0111.$g1407$ = null;
-        module0111.$g1408$ = null;
-        module0111.$g1409$ = null;
-        $ic0$ = SubLObjectFactory.makeSymbol("*THE-CYCLIST*");
-        $ic1$ = SubLObjectFactory.makeSymbol("S#9687", "CYC");
-        $ic2$ = SubLObjectFactory.makeSymbol("*KE-PURPOSE*");
+        $g1393$ = null;
+        $g1394$ = null;
+        $g1395$ = null;
+        $g1396$ = null;
+        $g1397$ = null;
+        $g1398$ = null;
+        $g1399$ = null;
+        $g1400$ = null;
+        $g1401$ = null;
+        $g1402$ = null;
+        $g1403$ = null;
+        $g1404$ = null;
+        $g1405$ = null;
+        $g1406$ = null;
+        $g1407$ = null;
+        $g1408$ = null;
+        $g1409$ = null;
+        $ic0$ = makeSymbol("*THE-CYCLIST*");
+        $ic1$ = makeSymbol("S#9687", "CYC");
+        $ic2$ = makeSymbol("*KE-PURPOSE*");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0111.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 30 ms
 	
 	Decompiled with Procyon 0.5.32.

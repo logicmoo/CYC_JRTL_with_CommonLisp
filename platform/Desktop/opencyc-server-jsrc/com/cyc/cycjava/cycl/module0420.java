@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
@@ -31,7 +32,7 @@ public final class module0420 extends SubLTranslatedFile
     private static final SubLSymbol $ic9$;
     
     public static SubLObject f29370(final SubLObject var1) {
-        return module0256.f16596(var1, module0420.$ic0$, (SubLObject)module0420.UNPROVIDED, (SubLObject)module0420.UNPROVIDED);
+        return module0256.f16596(var1, $ic0$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
     }
     
     public static SubLObject f29371(final SubLObject var2, final SubLObject var3) {
@@ -43,18 +44,18 @@ public final class module0420 extends SubLTranslatedFile
     }
     
     public static SubLObject f29373(final SubLObject var2, SubLObject var5) {
-        if (var5 == module0420.UNPROVIDED) {
-            var5 = (SubLObject)module0420.NIL;
+        if (var5 == UNPROVIDED) {
+            var5 = (SubLObject)NIL;
         }
-        final SubLObject var6 = Sequences.delete((SubLObject)Characters.CHAR_hyphen, Strings.string_capitalize(Symbols.symbol_name(var2), (SubLObject)module0420.UNPROVIDED, (SubLObject)module0420.UNPROVIDED), (SubLObject)module0420.UNPROVIDED, (SubLObject)module0420.UNPROVIDED, (SubLObject)module0420.UNPROVIDED, (SubLObject)module0420.UNPROVIDED, (SubLObject)module0420.UNPROVIDED);
-        if (module0420.NIL != var5) {
-            Strings.nstring_downcase(var6, (SubLObject)module0420.ZERO_INTEGER, (SubLObject)module0420.ONE_INTEGER);
+        final SubLObject var6 = Sequences.delete((SubLObject)Characters.CHAR_hyphen, Strings.string_capitalize(Symbols.symbol_name(var2), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        if (NIL != var5) {
+            Strings.nstring_downcase(var6, (SubLObject)ZERO_INTEGER, (SubLObject)ONE_INTEGER);
         }
         return var6;
     }
     
     public static SubLObject f29374(final SubLObject var4) {
-        final SubLObject var5 = module0035.f2369(Symbols.symbol_function((SubLObject)module0420.$ic1$), f29375(var4), (SubLObject)module0420.UNPROVIDED);
+        final SubLObject var5 = module0035.f2369(Symbols.symbol_function((SubLObject)$ic1$), f29375(var4), (SubLObject)UNPROVIDED);
         return f29373(f29372(var4), var5);
     }
     
@@ -65,11 +66,11 @@ public final class module0420 extends SubLTranslatedFile
     public static SubLObject f29376(final SubLObject var4) {
         final SubLObject var5 = f29372(var4);
         if (var5.isCons()) {
-            SubLObject var6 = (SubLObject)module0420.NIL;
+            SubLObject var6 = (SubLObject)NIL;
             SubLObject var7 = Sequences.reverse(var5);
-            SubLObject var8 = (SubLObject)module0420.NIL;
+            SubLObject var8 = (SubLObject)NIL;
             var8 = var7.first();
-            while (module0420.NIL != var7) {
+            while (NIL != var7) {
                 var6 = (SubLObject)ConsesLow.cons(f29377(var8), var6);
                 var7 = var7.rest();
                 var8 = var7.first();
@@ -80,30 +81,30 @@ public final class module0420 extends SubLTranslatedFile
     }
     
     public static SubLObject f29377(final SubLObject var2) {
-        return (SubLObject)ConsesLow.list((SubLObject)module0420.$ic2$, var2, (SubLObject)ConsesLow.list((SubLObject)module0420.$ic3$, f29373(var2, (SubLObject)module0420.UNPROVIDED), (SubLObject)ConsesLow.list((SubLObject)module0420.$ic4$, var2)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic2$, var2, (SubLObject)ConsesLow.list((SubLObject)$ic3$, f29373(var2, (SubLObject)UNPROVIDED), (SubLObject)ConsesLow.list((SubLObject)$ic4$, var2)));
     }
     
     public static SubLObject f29378(final SubLObject var4) {
         final SubLObject var5 = f29372(var4);
         final SubLObject var6 = Sequences.reverse(f29375(var4));
         if (var5.isCons()) {
-            SubLObject var7 = (SubLObject)module0420.NIL;
+            SubLObject var7 = (SubLObject)NIL;
             SubLObject var8 = Sequences.reverse(var5);
-            SubLObject var9 = (SubLObject)module0420.NIL;
+            SubLObject var9 = (SubLObject)NIL;
             var9 = var8.first();
-            while (module0420.NIL != var8) {
+            while (NIL != var8) {
                 var7 = (SubLObject)ConsesLow.cons(f29378(f29371(var9, var6)), var7);
                 var8 = var8.rest();
                 var9 = var8.first();
             }
-            return Functions.apply(Symbols.symbol_function((SubLObject)module0420.$ic5$), var7);
+            return Functions.apply(Symbols.symbol_function((SubLObject)$ic5$), var7);
         }
-        SubLObject var7 = (SubLObject)module0420.NIL;
+        SubLObject var7 = (SubLObject)NIL;
         SubLObject var8 = Sequences.reverse(var6);
-        SubLObject var10 = (SubLObject)module0420.NIL;
+        SubLObject var10 = (SubLObject)NIL;
         var10 = var8.first();
-        while (module0420.NIL != var8) {
-            var7 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list((SubLObject)module0420.$ic6$, module0420.$ic7$, var5, var10), var7);
+        while (NIL != var8) {
+            var7 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list((SubLObject)$ic6$, $ic7$, var5, var10), var7);
             var8 = var8.rest();
             var10 = var8.first();
         }
@@ -111,7 +112,7 @@ public final class module0420 extends SubLTranslatedFile
     }
     
     public static SubLObject f29379(final SubLObject var11) {
-        return (SubLObject)ConsesLow.list((SubLObject)module0420.$ic8$, reader.bq_cons((SubLObject)module0420.$ic9$, ConsesLow.append(var11, (SubLObject)module0420.NIL)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic8$, reader.bq_cons((SubLObject)$ic9$, ConsesLow.append(var11, (SubLObject)NIL)));
     }
     
     public static SubLObject f29380() {
@@ -125,15 +126,15 @@ public final class module0420 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0420", "f29377", "S#32530", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0420", "f29378", "S#32531", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0420", "f29379", "S#32532", 1, 0, false);
-        return (SubLObject)module0420.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f29381() {
-        return (SubLObject)module0420.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f29382() {
-        return (SubLObject)module0420.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -150,23 +151,23 @@ public final class module0420 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0420();
-        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Predicate"));
-        $ic1$ = SubLObjectFactory.makeSymbol("S#32523", "CYC");
-        $ic2$ = SubLObjectFactory.makeSymbol("CSETQ");
-        $ic3$ = SubLObjectFactory.makeSymbol("PRINT-CREATE");
-        $ic4$ = SubLObjectFactory.makeSymbol("QUOTE");
-        $ic5$ = SubLObjectFactory.makeSymbol("APPEND");
-        $ic6$ = SubLObjectFactory.makeSymbol("LIST");
-        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic8$ = SubLObjectFactory.makeSymbol("DECLARE");
-        $ic9$ = SubLObjectFactory.makeSymbol("SPECIAL");
+        $ic0$ = constant_handles_oc.f8479((SubLObject)makeString("Predicate"));
+        $ic1$ = makeSymbol("S#32523", "CYC");
+        $ic2$ = makeSymbol("CSETQ");
+        $ic3$ = makeSymbol("PRINT-CREATE");
+        $ic4$ = makeSymbol("QUOTE");
+        $ic5$ = makeSymbol("APPEND");
+        $ic6$ = makeSymbol("LIST");
+        $ic7$ = constant_handles_oc.f8479((SubLObject)makeString("isa"));
+        $ic8$ = makeSymbol("DECLARE");
+        $ic9$ = makeSymbol("SPECIAL");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0420.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 58 ms
 	
 	Decompiled with Procyon 0.5.32.

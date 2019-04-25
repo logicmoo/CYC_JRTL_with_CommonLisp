@@ -14,6 +14,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
@@ -193,7 +194,7 @@ public final class assertion_handles_oc extends SubLTranslatedFile
     if( assertion_handles_oc.NIL == var18 )
     {
       f11014();
-      oc_assertion_manager.f11105( f11015() );
+      assertion_manager_oc.f11105( f11015() );
     }
     return assertion_handles_oc.NIL;
   }
@@ -265,7 +266,7 @@ public final class assertion_handles_oc extends SubLTranslatedFile
 
   public static SubLObject f11024()
   {
-    final SubLObject var22 = oc_assertion_manager.f11115();
+    final SubLObject var22 = assertion_manager_oc.f11115();
     return module0065.f4799( f11010(), assertion_handles_oc.$ic17$, var22 );
   }
 
@@ -478,7 +479,7 @@ public final class assertion_handles_oc extends SubLTranslatedFile
   {
     if( assertion_handles_oc.NIL != Filesys.directory_p( module0107.f7598() ) )
     {
-      return oc_dumper.f38047( module0107.f7598() );
+      return dumper_oc.f38047( module0107.f7598() );
     }
     return assertion_handles_oc.ZERO_INTEGER;
   }
@@ -628,7 +629,7 @@ public final class assertion_handles_oc extends SubLTranslatedFile
 
   public static SubLObject f11047(final SubLObject var40)
   {
-    return SubLObjectFactory.makeBoolean( assertion_handles_oc.NIL != f11045( var40 ) && assertion_handles_oc.NIL != module0035.sublisp_boolean( oc_assertion_manager.f11114( f11025( var40 ) ) ) );
+    return SubLObjectFactory.makeBoolean( assertion_handles_oc.NIL != f11045( var40 ) && assertion_handles_oc.NIL != module0035.sublisp_boolean( assertion_manager_oc.f11114( f11025( var40 ) ) ) );
   }
 
   public static SubLObject f11048(final SubLObject var81)
@@ -740,7 +741,7 @@ public final class assertion_handles_oc extends SubLTranslatedFile
       module0012.$g75$.rebind( var24, var19 );
     }
     f11016();
-    oc_assertion_manager.f11106();
+    assertion_manager_oc.f11106();
     return assertion_handles_oc.NIL;
   }
 

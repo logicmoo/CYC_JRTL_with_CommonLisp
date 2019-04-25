@@ -4,6 +4,7 @@ package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.tool.subl.util.SubLFiles;
@@ -16,7 +17,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors;
@@ -29,7 +30,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
@@ -3139,7 +3140,7 @@ public final class assertions_low extends SubLTranslatedFile
     $sym0$ASSERTION_CONTENT = SubLObjectFactory.makeSymbol( "ASSERTION-CONTENT" );
     $sym1$ASSERTION_CONTENT_P = SubLObjectFactory.makeSymbol( "ASSERTION-CONTENT-P" );
     $int2$148 = SubLObjectFactory.makeInteger( 148 );
-    assertion_content_holder.structDecl.toString();
+    /// assertion_content_holder.structDecl.toString();
     $sym7$DEFAULT_STRUCT_PRINT_FUNCTION = SubLObjectFactory.makeSymbol( "DEFAULT-STRUCT-PRINT-FUNCTION" );
     $sym8$ASSERTION_CONTENT_PRINT_FUNCTION_TRAMPOLINE = SubLObjectFactory.makeSymbol( "ASSERTION-CONTENT-PRINT-FUNCTION-TRAMPOLINE" );
     $list9 = ConsesLow.list( SubLObjectFactory.makeSymbol( "OPTIMIZE-FUNCALL" ), SubLObjectFactory.makeSymbol( "ASSERTION-CONTENT-P" ) );
@@ -3212,5 +3213,118 @@ public final class assertions_low extends SubLTranslatedFile
     $sym74$TRUE = SubLObjectFactory.makeSymbol( "TRUE" );
     $sym75$RULE_ASSERTION_ = SubLObjectFactory.makeSymbol( "RULE-ASSERTION?" );
     $sym76$GAF_ASSERTION_ = SubLObjectFactory.makeSymbol( "GAF-ASSERTION?" );
+  }
+
+  static public final class $assertion_content_native extends SubLStructNative implements SubLStruct
+  {
+    static final public SubLStructDecl structDecl;
+    static
+    {
+      if( false )
+        structDecl = SubLStructDecl.makeStructDeclInterpreted( //
+            new String[]
+            { "$formula_data", "$mt", "$flags", "$arguments", "$plist"
+            }, //
+            assertions_low.$sym0$ASSERTION_CONTENT, "AS-CONTENT", "_CSETF-" );
+      else
+        structDecl = SubLStructDeclNative.makeStructDeclNative( $assertion_content_native.class, assertions_low.$sym0$ASSERTION_CONTENT, "AS-CONTENT", "_CSETF-" );
+      // structDecl.setTrackStructInstance(true, -1);
+    }
+    public SubLObject $formula_data;
+    public SubLObject $mt;
+    public SubLObject $flags;
+    public SubLObject $arguments;
+    public SubLObject $plist;
+
+    public $assertion_content_native()
+    {
+      this.$formula_data = NIL;
+      this.$mt = NIL;
+      this.$flags = NIL;
+      this.$arguments = NIL;
+      this.$plist = NIL;
+      this.layout = structDecl;
+    }
+
+    @Override
+    public SubLStructDecl getStructDecl()
+    {
+      return structDecl;
+    }
+
+    @Override
+    public SubLObject getField2()
+    {
+      return this.$formula_data;
+    }
+
+    @Override
+    public SubLObject getField3()
+    {
+      return this.$mt;
+    }
+
+    @Override
+    public SubLObject getField4()
+    {
+      return this.$flags;
+    }
+
+    @Override
+    public SubLObject getField5()
+    {
+      return this.$arguments;
+    }
+
+    @Override
+    public SubLObject getField6()
+    {
+      return this.$plist;
+    }
+
+    @Override
+    public SubLObject setField2(final SubLObject value)
+    {
+      return this.$formula_data = value;
+    }
+
+    @Override
+    public SubLObject setField3(final SubLObject value)
+    {
+      return this.$mt = value;
+    }
+
+    @Override
+    public SubLObject setField4(final SubLObject value)
+    {
+      return this.$flags = value;
+    }
+
+    @Override
+    public SubLObject setField5(final SubLObject value)
+    {
+      return this.$arguments = value;
+    }
+
+    @Override
+    public SubLObject setField6(final SubLObject value)
+    {
+      return this.$plist = value;
+    }
+
+    @Override
+    public String toString()
+    {
+      try
+      {
+        return print_high.princ_to_string( this ).getStringValue();
+      }
+      catch( final Exception e )
+      {
+        return super.princToString();
+        // "#<" + toTypeName() + " " + getName() + " @ " +
+        // System.identityHashCode(this) + ">";
+      }
+    }
   }
 }

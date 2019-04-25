@@ -2,6 +2,7 @@ package com.cyc.cycjava.cycl.sksi.store_sks;
 
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.subl_macro_promotions;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.cycjava.cycl.list_utilities;

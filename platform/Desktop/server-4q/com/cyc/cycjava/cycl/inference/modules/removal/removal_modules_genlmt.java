@@ -11,6 +11,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.cycjava.cycl.iteration;
 import com.cyc.cycjava.cycl.cardinality_estimates;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.genl_mts;
 import com.cyc.cycjava.cycl.hlmt;
 import com.cyc.cycjava.cycl.backward;

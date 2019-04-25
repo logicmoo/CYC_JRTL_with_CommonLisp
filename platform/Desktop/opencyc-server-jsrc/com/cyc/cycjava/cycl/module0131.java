@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -77,263 +78,263 @@ public final class module0131 extends SubLTranslatedFile
     private static final SubLSymbol $ic24$;
     
     public static SubLObject f8535() {
-        SubLObject var1 = module0131.$g1513$.getGlobalValue();
-        SubLObject var2 = (SubLObject)module0131.NIL;
+        SubLObject var1 = $g1513$.getGlobalValue();
+        SubLObject var2 = (SubLObject)NIL;
         var2 = var1.first();
-        while (module0131.NIL != var1) {
-            PrintLow.format((SubLObject)module0131.T, (SubLObject)module0131.$ic2$, Symbols.symbol_name(var2), Symbols.symbol_value(var2));
+        while (NIL != var1) {
+            PrintLow.format((SubLObject)T, (SubLObject)$ic2$, Symbols.symbol_name(var2), Symbols.symbol_value(var2));
             var1 = var1.rest();
             var2 = var1.first();
         }
-        return (SubLObject)module0131.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8536() {
-        return module0131.$g1514$.getGlobalValue();
+        return $g1514$.getGlobalValue();
     }
     
     public static SubLObject f8537() {
-        module0131.$g1514$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1514$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8538() {
-        module0131.$g1514$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1514$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8539() {
-        return module0131.$g1515$.getGlobalValue();
+        return $g1515$.getGlobalValue();
     }
     
     public static SubLObject f8540() {
-        module0131.$g1515$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1515$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8541() {
-        module0131.$g1515$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1515$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8542() {
-        return module0131.$g1516$.getGlobalValue();
+        return $g1516$.getGlobalValue();
     }
     
     public static SubLObject f8543() {
-        module0131.$g1516$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1516$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8544() {
-        module0131.$g1516$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1516$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8545() {
-        return module0131.$g1517$.getGlobalValue();
+        return $g1517$.getGlobalValue();
     }
     
     public static SubLObject f8546() {
-        module0131.$g1517$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1517$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8547() {
-        module0131.$g1517$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1517$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8548() {
-        return module0131.$g1518$.getGlobalValue();
+        return $g1518$.getGlobalValue();
     }
     
     public static SubLObject f8549() {
-        module0131.$g1518$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1518$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8550() {
-        module0131.$g1518$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1518$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8551() {
-        return module0131.$g1519$.getGlobalValue();
+        return $g1519$.getGlobalValue();
     }
     
     public static SubLObject f8552() {
-        module0131.$g1519$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1519$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8553() {
-        module0131.$g1519$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1519$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8554() {
-        return module0131.$g1520$.getGlobalValue();
+        return $g1520$.getGlobalValue();
     }
     
     public static SubLObject f8555() {
-        module0131.$g1520$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1520$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8556() {
-        module0131.$g1520$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1520$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8557() {
-        return module0131.$g1521$.getGlobalValue();
+        return $g1521$.getGlobalValue();
     }
     
     public static SubLObject f8558() {
-        module0131.$g1521$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1521$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8559() {
-        module0131.$g1521$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1521$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8560() {
-        return module0131.$g1522$.getGlobalValue();
+        return $g1522$.getGlobalValue();
     }
     
     public static SubLObject f8561() {
-        module0131.$g1522$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1522$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8562() {
-        module0131.$g1522$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1522$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8563() {
-        return module0131.$g1523$.getGlobalValue();
+        return $g1523$.getGlobalValue();
     }
     
     public static SubLObject f8564() {
-        module0131.$g1523$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1523$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8565() {
-        module0131.$g1523$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1523$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8566() {
-        return module0131.$g1524$.getGlobalValue();
+        return $g1524$.getGlobalValue();
     }
     
     public static SubLObject f8567() {
-        module0131.$g1524$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1524$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8568() {
-        module0131.$g1524$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1524$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8569() {
-        return module0131.$g1525$.getGlobalValue();
+        return $g1525$.getGlobalValue();
     }
     
     public static SubLObject f8570() {
-        module0131.$g1525$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1525$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8571() {
-        module0131.$g1525$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1525$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8572() {
-        return module0131.$g1526$.getGlobalValue();
+        return $g1526$.getGlobalValue();
     }
     
     public static SubLObject f8573() {
-        module0131.$g1526$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1526$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8574() {
-        module0131.$g1526$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1526$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8575() {
-        return module0131.$g1527$.getGlobalValue();
+        return $g1527$.getGlobalValue();
     }
     
     public static SubLObject f8576() {
-        module0131.$g1527$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1527$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8577() {
-        module0131.$g1527$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1527$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8578() {
-        return module0131.$g1528$.getGlobalValue();
+        return $g1528$.getGlobalValue();
     }
     
     public static SubLObject f8579() {
-        module0131.$g1528$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1528$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8580() {
-        module0131.$g1528$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1528$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8581() {
-        return module0131.$g1529$.getGlobalValue();
+        return $g1529$.getGlobalValue();
     }
     
     public static SubLObject f8582() {
-        module0131.$g1529$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1529$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8583() {
-        module0131.$g1529$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1529$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8584() {
-        return module0131.$g1530$.getGlobalValue();
+        return $g1530$.getGlobalValue();
     }
     
     public static SubLObject f8585() {
-        module0131.$g1530$.setGlobalValue((SubLObject)module0131.T);
-        return (SubLObject)module0131.T;
+        $g1530$.setGlobalValue((SubLObject)T);
+        return (SubLObject)T;
     }
     
     public static SubLObject f8586() {
-        module0131.$g1530$.setGlobalValue((SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1530$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8587() {
         final SubLThread var3 = SubLProcess.currentSubLThread();
-        return module0131.$g1534$.getDynamicValue(var3);
+        return $g1534$.getDynamicValue(var3);
     }
     
     public static SubLObject f8588(final SubLObject var4) {
         final SubLThread var5 = SubLProcess.currentSubLThread();
-        module0131.$g1541$.setDynamicValue((SubLObject)ConsesLow.cons(var4, module0131.$g1541$.getDynamicValue(var5)), var5);
+        $g1541$.setDynamicValue((SubLObject)ConsesLow.cons(var4, $g1541$.getDynamicValue(var5)), var5);
         return var4;
     }
     
@@ -392,138 +393,138 @@ public final class module0131 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0131", "f8586", "S#10684", 0, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0131", "f8587", "S#363", 0, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0131", "f8588", "S#10685", 1, 0, false);
-        return (SubLObject)module0131.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8590() {
-        module0131.$g1512$ = SubLFiles.deflexical("S#10686", (module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic0$)) ? module0131.$g1512$.getGlobalValue() : module0131.$ic1$);
-        module0131.$g1513$ = SubLFiles.deflexical("S#745", (SubLObject)module0131.NIL);
-        module0131.$g1514$ = SubLFiles.deflexical("S#10687", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic3$)) ? module0131.$g1514$.getGlobalValue() : module0131.NIL));
-        module0131.$g1515$ = SubLFiles.deflexical("S#10688", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic4$)) ? module0131.$g1515$.getGlobalValue() : module0131.NIL));
-        module0131.$g1516$ = SubLFiles.deflexical("S#10689", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic5$)) ? module0131.$g1516$.getGlobalValue() : module0131.NIL));
-        module0131.$g1517$ = SubLFiles.deflexical("S#10690", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic6$)) ? module0131.$g1517$.getGlobalValue() : module0131.NIL));
-        module0131.$g1518$ = SubLFiles.deflexical("S#10691", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic7$)) ? module0131.$g1518$.getGlobalValue() : module0131.NIL));
-        module0131.$g1519$ = SubLFiles.deflexical("S#10692", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic8$)) ? module0131.$g1519$.getGlobalValue() : module0131.NIL));
-        module0131.$g1520$ = SubLFiles.deflexical("S#10693", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic9$)) ? module0131.$g1520$.getGlobalValue() : module0131.NIL));
-        module0131.$g1521$ = SubLFiles.deflexical("S#10694", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic10$)) ? module0131.$g1521$.getGlobalValue() : module0131.NIL));
-        module0131.$g1522$ = SubLFiles.deflexical("S#10695", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic11$)) ? module0131.$g1522$.getGlobalValue() : module0131.NIL));
-        module0131.$g1523$ = SubLFiles.deflexical("S#10696", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic12$)) ? module0131.$g1523$.getGlobalValue() : module0131.NIL));
-        module0131.$g1524$ = SubLFiles.deflexical("S#10697", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic13$)) ? module0131.$g1524$.getGlobalValue() : module0131.NIL));
-        module0131.$g1525$ = SubLFiles.deflexical("S#10698", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic14$)) ? module0131.$g1525$.getGlobalValue() : module0131.NIL));
-        module0131.$g1526$ = SubLFiles.deflexical("S#10699", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic15$)) ? module0131.$g1526$.getGlobalValue() : module0131.NIL));
-        module0131.$g1527$ = SubLFiles.deflexical("S#10700", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic16$)) ? module0131.$g1527$.getGlobalValue() : module0131.NIL));
-        module0131.$g1528$ = SubLFiles.deflexical("S#10701", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic17$)) ? module0131.$g1528$.getGlobalValue() : module0131.NIL));
-        module0131.$g1529$ = SubLFiles.deflexical("S#10702", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic18$)) ? module0131.$g1529$.getGlobalValue() : module0131.NIL));
-        module0131.$g1530$ = SubLFiles.deflexical("S#10703", (SubLObject)((module0131.NIL != Symbols.boundp((SubLObject)module0131.$ic19$)) ? module0131.$g1530$.getGlobalValue() : module0131.NIL));
-        module0131.$g1531$ = SubLFiles.defparameter("S#10704", (SubLObject)module0131.T);
-        module0131.$g1532$ = SubLFiles.defparameter("*FORWARD-PROPAGATE-FROM-NEGATIONS*", (SubLObject)module0131.T);
-        module0131.$g1533$ = SubLFiles.defparameter("S#10705", (SubLObject)module0131.NIL);
-        module0131.$g1534$ = SubLFiles.defparameter("S#10706", (SubLObject)module0131.NIL);
-        module0131.$g60$ = SubLFiles.defparameter("S#693", (SubLObject)module0131.NIL);
-        module0131.$g1535$ = SubLFiles.defparameter("S#10707", (SubLObject)module0131.NIL);
-        module0131.$g1536$ = SubLFiles.defparameter("S#10708", (SubLObject)module0131.NIL);
-        module0131.$g1537$ = SubLFiles.defparameter("S#10709", (SubLObject)module0131.$ic20$);
-        module0131.$g1538$ = SubLFiles.defparameter("S#691", (SubLObject)module0131.$ic21$);
-        module0131.$g1539$ = SubLFiles.defparameter("S#10710", (SubLObject)module0131.T);
-        module0131.$g1540$ = SubLFiles.defparameter("S#10711", (SubLObject)module0131.NIL);
-        module0131.$g1541$ = SubLFiles.defparameter("S#10712", (SubLObject)module0131.NIL);
-        return (SubLObject)module0131.NIL;
+        $g1512$ = SubLFiles.deflexical("S#10686", (NIL != Symbols.boundp((SubLObject)$ic0$)) ? $g1512$.getGlobalValue() : $ic1$);
+        $g1513$ = SubLFiles.deflexical("S#745", (SubLObject)NIL);
+        $g1514$ = SubLFiles.deflexical("S#10687", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic3$)) ? $g1514$.getGlobalValue() : NIL));
+        $g1515$ = SubLFiles.deflexical("S#10688", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic4$)) ? $g1515$.getGlobalValue() : NIL));
+        $g1516$ = SubLFiles.deflexical("S#10689", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic5$)) ? $g1516$.getGlobalValue() : NIL));
+        $g1517$ = SubLFiles.deflexical("S#10690", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic6$)) ? $g1517$.getGlobalValue() : NIL));
+        $g1518$ = SubLFiles.deflexical("S#10691", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic7$)) ? $g1518$.getGlobalValue() : NIL));
+        $g1519$ = SubLFiles.deflexical("S#10692", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic8$)) ? $g1519$.getGlobalValue() : NIL));
+        $g1520$ = SubLFiles.deflexical("S#10693", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic9$)) ? $g1520$.getGlobalValue() : NIL));
+        $g1521$ = SubLFiles.deflexical("S#10694", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic10$)) ? $g1521$.getGlobalValue() : NIL));
+        $g1522$ = SubLFiles.deflexical("S#10695", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic11$)) ? $g1522$.getGlobalValue() : NIL));
+        $g1523$ = SubLFiles.deflexical("S#10696", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic12$)) ? $g1523$.getGlobalValue() : NIL));
+        $g1524$ = SubLFiles.deflexical("S#10697", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic13$)) ? $g1524$.getGlobalValue() : NIL));
+        $g1525$ = SubLFiles.deflexical("S#10698", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic14$)) ? $g1525$.getGlobalValue() : NIL));
+        $g1526$ = SubLFiles.deflexical("S#10699", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic15$)) ? $g1526$.getGlobalValue() : NIL));
+        $g1527$ = SubLFiles.deflexical("S#10700", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic16$)) ? $g1527$.getGlobalValue() : NIL));
+        $g1528$ = SubLFiles.deflexical("S#10701", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic17$)) ? $g1528$.getGlobalValue() : NIL));
+        $g1529$ = SubLFiles.deflexical("S#10702", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic18$)) ? $g1529$.getGlobalValue() : NIL));
+        $g1530$ = SubLFiles.deflexical("S#10703", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic19$)) ? $g1530$.getGlobalValue() : NIL));
+        $g1531$ = SubLFiles.defparameter("S#10704", (SubLObject)T);
+        $g1532$ = SubLFiles.defparameter("*FORWARD-PROPAGATE-FROM-NEGATIONS*", (SubLObject)T);
+        $g1533$ = SubLFiles.defparameter("S#10705", (SubLObject)NIL);
+        $g1534$ = SubLFiles.defparameter("S#10706", (SubLObject)NIL);
+        $g60$ = SubLFiles.defparameter("S#693", (SubLObject)NIL);
+        $g1535$ = SubLFiles.defparameter("S#10707", (SubLObject)NIL);
+        $g1536$ = SubLFiles.defparameter("S#10708", (SubLObject)NIL);
+        $g1537$ = SubLFiles.defparameter("S#10709", (SubLObject)$ic20$);
+        $g1538$ = SubLFiles.defparameter("S#691", (SubLObject)$ic21$);
+        $g1539$ = SubLFiles.defparameter("S#10710", (SubLObject)T);
+        $g1540$ = SubLFiles.defparameter("S#10711", (SubLObject)NIL);
+        $g1541$ = SubLFiles.defparameter("S#10712", (SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8591() {
-        module0003.f57((SubLObject)module0131.$ic0$);
-        module0003.f57((SubLObject)module0131.$ic3$);
-        SubLObject var5 = (SubLObject)module0131.$ic3$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic0$);
+        module0003.f57((SubLObject)$ic3$);
+        SubLObject var5 = (SubLObject)$ic3$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic4$);
-        var5 = (SubLObject)module0131.$ic4$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic4$);
+        var5 = (SubLObject)$ic4$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic5$);
-        var5 = (SubLObject)module0131.$ic5$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic5$);
+        var5 = (SubLObject)$ic5$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic6$);
-        var5 = (SubLObject)module0131.$ic6$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic6$);
+        var5 = (SubLObject)$ic6$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic7$);
-        var5 = (SubLObject)module0131.$ic7$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic7$);
+        var5 = (SubLObject)$ic7$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic8$);
-        var5 = (SubLObject)module0131.$ic8$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic8$);
+        var5 = (SubLObject)$ic8$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic9$);
-        var5 = (SubLObject)module0131.$ic9$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic9$);
+        var5 = (SubLObject)$ic9$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic10$);
-        var5 = (SubLObject)module0131.$ic10$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic10$);
+        var5 = (SubLObject)$ic10$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic11$);
-        var5 = (SubLObject)module0131.$ic11$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic11$);
+        var5 = (SubLObject)$ic11$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic12$);
-        var5 = (SubLObject)module0131.$ic12$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic12$);
+        var5 = (SubLObject)$ic12$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic13$);
-        var5 = (SubLObject)module0131.$ic13$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic13$);
+        var5 = (SubLObject)$ic13$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic14$);
-        var5 = (SubLObject)module0131.$ic14$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic14$);
+        var5 = (SubLObject)$ic14$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic15$);
-        var5 = (SubLObject)module0131.$ic15$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic15$);
+        var5 = (SubLObject)$ic15$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic16$);
-        var5 = (SubLObject)module0131.$ic16$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic16$);
+        var5 = (SubLObject)$ic16$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic17$);
-        var5 = (SubLObject)module0131.$ic17$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic17$);
+        var5 = (SubLObject)$ic17$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic18$);
-        var5 = (SubLObject)module0131.$ic18$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic18$);
+        var5 = (SubLObject)$ic18$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0003.f57((SubLObject)module0131.$ic19$);
-        var5 = (SubLObject)module0131.$ic19$;
-        if (module0131.NIL == conses_high.member(var5, module0131.$g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
-            module0131.$g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0131.$g1513$.getGlobalValue()));
+        module0003.f57((SubLObject)$ic19$);
+        var5 = (SubLObject)$ic19$;
+        if (NIL == conses_high.member(var5, $g1513$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
+            $g1513$.setGlobalValue((SubLObject)ConsesLow.cons(var5, $g1513$.getGlobalValue()));
         }
-        module0012.f441((SubLObject)module0131.$ic22$);
-        var5 = (SubLObject)module0131.$ic22$;
-        if (module0131.NIL == conses_high.member(var5, module0012.$g52$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0131.EQL), Symbols.symbol_function((SubLObject)module0131.IDENTITY))) {
+        module0012.f441((SubLObject)$ic22$);
+        var5 = (SubLObject)$ic22$;
+        if (NIL == conses_high.member(var5, module0012.$g52$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY))) {
             module0012.$g52$.setGlobalValue((SubLObject)ConsesLow.cons(var5, module0012.$g52$.getGlobalValue()));
         }
-        module0002.f50((SubLObject)module0131.$ic23$, (SubLObject)module0131.$ic24$);
-        return (SubLObject)module0131.NIL;
+        module0002.f50((SubLObject)$ic23$, (SubLObject)$ic24$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -540,69 +541,69 @@ public final class module0131 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0131();
-        module0131.$g1512$ = null;
-        module0131.$g1513$ = null;
-        module0131.$g1514$ = null;
-        module0131.$g1515$ = null;
-        module0131.$g1516$ = null;
-        module0131.$g1517$ = null;
-        module0131.$g1518$ = null;
-        module0131.$g1519$ = null;
-        module0131.$g1520$ = null;
-        module0131.$g1521$ = null;
-        module0131.$g1522$ = null;
-        module0131.$g1523$ = null;
-        module0131.$g1524$ = null;
-        module0131.$g1525$ = null;
-        module0131.$g1526$ = null;
-        module0131.$g1527$ = null;
-        module0131.$g1528$ = null;
-        module0131.$g1529$ = null;
-        module0131.$g1530$ = null;
-        module0131.$g1531$ = null;
-        module0131.$g1532$ = null;
-        module0131.$g1533$ = null;
-        module0131.$g1534$ = null;
-        module0131.$g60$ = null;
-        module0131.$g1535$ = null;
-        module0131.$g1536$ = null;
-        module0131.$g1537$ = null;
-        module0131.$g1538$ = null;
-        module0131.$g1539$ = null;
-        module0131.$g1540$ = null;
-        module0131.$g1541$ = null;
-        $ic0$ = SubLObjectFactory.makeSymbol("S#10686", "CYC");
-        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("backchainForbiddenWhenUnboundInArg"));
-        $ic2$ = SubLObjectFactory.makeString("~a ~a~%");
-        $ic3$ = SubLObjectFactory.makeSymbol("S#10687", "CYC");
-        $ic4$ = SubLObjectFactory.makeSymbol("S#10688", "CYC");
-        $ic5$ = SubLObjectFactory.makeSymbol("S#10689", "CYC");
-        $ic6$ = SubLObjectFactory.makeSymbol("S#10690", "CYC");
-        $ic7$ = SubLObjectFactory.makeSymbol("S#10691", "CYC");
-        $ic8$ = SubLObjectFactory.makeSymbol("S#10692", "CYC");
-        $ic9$ = SubLObjectFactory.makeSymbol("S#10693", "CYC");
-        $ic10$ = SubLObjectFactory.makeSymbol("S#10694", "CYC");
-        $ic11$ = SubLObjectFactory.makeSymbol("S#10695", "CYC");
-        $ic12$ = SubLObjectFactory.makeSymbol("S#10696", "CYC");
-        $ic13$ = SubLObjectFactory.makeSymbol("S#10697", "CYC");
-        $ic14$ = SubLObjectFactory.makeSymbol("S#10698", "CYC");
-        $ic15$ = SubLObjectFactory.makeSymbol("S#10699", "CYC");
-        $ic16$ = SubLObjectFactory.makeSymbol("S#10700", "CYC");
-        $ic17$ = SubLObjectFactory.makeSymbol("S#10701", "CYC");
-        $ic18$ = SubLObjectFactory.makeSymbol("S#10702", "CYC");
-        $ic19$ = SubLObjectFactory.makeSymbol("S#10703", "CYC");
-        $ic20$ = SubLObjectFactory.makeKeyword("ALL");
-        $ic21$ = SubLObjectFactory.makeKeyword("UNINITIALIZED");
-        $ic22$ = SubLObjectFactory.makeSymbol("S#691", "CYC");
-        $ic23$ = SubLObjectFactory.makeSymbol("S#10685", "CYC");
-        $ic24$ = SubLObjectFactory.makeSymbol("S#10713", "CYC");
+        $g1512$ = null;
+        $g1513$ = null;
+        $g1514$ = null;
+        $g1515$ = null;
+        $g1516$ = null;
+        $g1517$ = null;
+        $g1518$ = null;
+        $g1519$ = null;
+        $g1520$ = null;
+        $g1521$ = null;
+        $g1522$ = null;
+        $g1523$ = null;
+        $g1524$ = null;
+        $g1525$ = null;
+        $g1526$ = null;
+        $g1527$ = null;
+        $g1528$ = null;
+        $g1529$ = null;
+        $g1530$ = null;
+        $g1531$ = null;
+        $g1532$ = null;
+        $g1533$ = null;
+        $g1534$ = null;
+        $g60$ = null;
+        $g1535$ = null;
+        $g1536$ = null;
+        $g1537$ = null;
+        $g1538$ = null;
+        $g1539$ = null;
+        $g1540$ = null;
+        $g1541$ = null;
+        $ic0$ = makeSymbol("S#10686", "CYC");
+        $ic1$ = constant_handles_oc.f8479((SubLObject)makeString("backchainForbiddenWhenUnboundInArg"));
+        $ic2$ = makeString("~a ~a~%");
+        $ic3$ = makeSymbol("S#10687", "CYC");
+        $ic4$ = makeSymbol("S#10688", "CYC");
+        $ic5$ = makeSymbol("S#10689", "CYC");
+        $ic6$ = makeSymbol("S#10690", "CYC");
+        $ic7$ = makeSymbol("S#10691", "CYC");
+        $ic8$ = makeSymbol("S#10692", "CYC");
+        $ic9$ = makeSymbol("S#10693", "CYC");
+        $ic10$ = makeSymbol("S#10694", "CYC");
+        $ic11$ = makeSymbol("S#10695", "CYC");
+        $ic12$ = makeSymbol("S#10696", "CYC");
+        $ic13$ = makeSymbol("S#10697", "CYC");
+        $ic14$ = makeSymbol("S#10698", "CYC");
+        $ic15$ = makeSymbol("S#10699", "CYC");
+        $ic16$ = makeSymbol("S#10700", "CYC");
+        $ic17$ = makeSymbol("S#10701", "CYC");
+        $ic18$ = makeSymbol("S#10702", "CYC");
+        $ic19$ = makeSymbol("S#10703", "CYC");
+        $ic20$ = makeKeyword("ALL");
+        $ic21$ = makeKeyword("UNINITIALIZED");
+        $ic22$ = makeSymbol("S#691", "CYC");
+        $ic23$ = makeSymbol("S#10685", "CYC");
+        $ic24$ = makeSymbol("S#10713", "CYC");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0131.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 103 ms
 	
 	Decompiled with Procyon 0.5.32.

@@ -49,6 +49,7 @@ import com.cyc.cycjava.cycl.inference.inference_trampolines;
 import com.cyc.cycjava.cycl.forts;
 import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.cycjava.cycl.cycl_variables;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;

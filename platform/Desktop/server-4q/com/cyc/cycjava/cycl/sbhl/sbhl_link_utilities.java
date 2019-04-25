@@ -10,6 +10,7 @@ import com.cyc.cycjava.cycl.misc_utilities;
 import com.cyc.cycjava.cycl.cfasl;
 import com.cyc.cycjava.cycl.file_vector_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.set;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;

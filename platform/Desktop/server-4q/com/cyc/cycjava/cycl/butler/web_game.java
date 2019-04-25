@@ -45,6 +45,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.cycjava.cycl.inference.kb_query;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.iteration;
 import com.cyc.cycjava.cycl.inference.inference_iterators;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;

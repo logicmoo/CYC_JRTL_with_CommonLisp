@@ -47,6 +47,7 @@ import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.cycjava.cycl.iteration;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.unification;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_meaning_sentence_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

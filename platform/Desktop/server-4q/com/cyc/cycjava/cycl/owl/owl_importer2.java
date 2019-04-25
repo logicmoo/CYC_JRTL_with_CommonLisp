@@ -64,6 +64,7 @@ import com.cyc.cycjava.cycl.web_utilities;
 import com.cyc.cycjava.cycl.rdf.rdf_uri;
 import com.cyc.cycjava.cycl.rdf.rdf_graph;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;

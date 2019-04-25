@@ -143,7 +143,7 @@ public class cycl extends InitializingSubLFile
         this.initializeClass("com.cyc.cycjava.cycl.module0119");
         this.initializeClass("com.cyc.cycjava.cycl.module0120");
         this.initializeClass("com.cyc.cycjava.cycl.module0121");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_hl_interface_infrastructure");
+        this.initializeClass("com.cyc.cycjava.cycl.hl_interface_infrastructure_oc");
         this.initializeClass("com.cyc.cycjava.cycl.module0123");
         this.initializeClass("com.cyc.cycjava.cycl.module0124");
         this.initializeClass("com.cyc.cycjava.cycl.module0125");
@@ -181,7 +181,7 @@ public class cycl extends InitializingSubLFile
         this.initializeClass("com.cyc.cycjava.cycl.module0157");
         this.initializeClass("com.cyc.cycjava.cycl.module0158");
         this.initializeClass("com.cyc.cycjava.cycl.module0159");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_kb_object_manager");
+        this.initializeClass("com.cyc.cycjava.cycl.kb_object_manager_oc");
         this.initializeClass("com.cyc.cycjava.cycl.module0161");
         this.initializeClass("com.cyc.cycjava.cycl.module0162");
         this.initializeClass("com.cyc.cycjava.cycl.module0163");
@@ -196,16 +196,16 @@ public class cycl extends InitializingSubLFile
         this.initializeClass("com.cyc.cycjava.cycl.module0172");
         this.initializeClass("com.cyc.cycjava.cycl.module0173");
         this.initializeClass("com.cyc.cycjava.cycl.assertion_handles_oc");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_assertions_interface");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_assertion_manager");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_assertions_low");
+        this.initializeClass("com.cyc.cycjava.cycl.assertions_interface_oc");
+        this.initializeClass("com.cyc.cycjava.cycl.assertion_manager_oc");
+        this.initializeClass("com.cyc.cycjava.cycl.assertions_low_oc");
         this.initializeClass("com.cyc.cycjava.cycl.module0178");
         this.initializeClass("com.cyc.cycjava.cycl.module0179");
         this.initializeClass("com.cyc.cycjava.cycl.module0180");
         this.initializeClass("com.cyc.cycjava.cycl.module0181");
         this.initializeClass("com.cyc.cycjava.cycl.module0182");
         this.initializeClass("com.cyc.cycjava.cycl.module0183");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_deduction_handles");
+        this.initializeClass("com.cyc.cycjava.cycl.deduction_handles_oc");
         this.initializeClass("com.cyc.cycjava.cycl.module0185");
         this.initializeClass("com.cyc.cycjava.cycl.module0186");
         this.initializeClass("com.cyc.cycjava.cycl.module0187");
@@ -390,7 +390,7 @@ public class cycl extends InitializingSubLFile
         this.initializeClass("com.cyc.cycjava.cycl.module0366");
         this.initializeClass("com.cyc.cycjava.cycl.module0367");
         this.initializeClass("com.cyc.cycjava.cycl.module0368");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_inference_datastructures_inference");
+        this.initializeClass("com.cyc.cycjava.cycl.inference_datastructures_inference_oc");
         this.initializeClass("com.cyc.cycjava.cycl.module0370");
         this.initializeClass("com.cyc.cycjava.cycl.module0371");
         this.initializeClass("com.cyc.cycjava.cycl.module0372");
@@ -617,7 +617,7 @@ public class cycl extends InitializingSubLFile
         this.initializeClass("com.cyc.cycjava.cycl.module0593");
         this.initializeClass("com.cyc.cycjava.cycl.module0594");
         this.initializeClass("com.cyc.cycjava.cycl.module0595");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_kb_compare");
+        this.initializeClass("com.cyc.cycjava.cycl.kb_compare_oc");
         this.initializeClass("com.cyc.cycjava.cycl.module0597");
         this.initializeClass("com.cyc.cycjava.cycl.module0598");
         this.initializeClass("com.cyc.cycjava.cycl.module0599");
@@ -639,7 +639,7 @@ public class cycl extends InitializingSubLFile
         this.initializeClass("com.cyc.cycjava.cycl.module0615");
         this.initializeClass("com.cyc.cycjava.cycl.module0616");
         this.initializeClass("com.cyc.cycjava.cycl.module0617");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_dumper");
+        this.initializeClass("com.cyc.cycjava.cycl.dumper_oc");
         this.initializeClass("com.cyc.cycjava.cycl.module0619");
         this.initializeClass("com.cyc.cycjava.cycl.module0620");
         this.initializeClass("com.cyc.cycjava.cycl.module0621");
@@ -706,7 +706,7 @@ public class cycl extends InitializingSubLFile
         this.initializeClass("com.cyc.cycjava.cycl.module0682");
         this.initializeClass("com.cyc.cycjava.cycl.module0683");
         this.initializeClass("com.cyc.cycjava.cycl.module0684");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_cb_query_browser");
+        this.initializeClass("com.cyc.cycjava.cycl.cb_query_browser_oc");
         this.initializeClass("com.cyc.cycjava.cycl.module0686");
         this.initializeClass("com.cyc.cycjava.cycl.module0687");
         this.initializeClass("com.cyc.cycjava.cycl.module0688");
@@ -760,7 +760,7 @@ public class cycl extends InitializingSubLFile
         this.initializeClass("com.cyc.cycjava.cycl.module0736");
         this.initializeClass("com.cyc.cycjava.cycl.module0737");
         this.initializeClass("com.cyc.cycjava.cycl.module0738");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_nl_trie_completion");
+        this.initializeClass("com.cyc.cycjava.cycl.nl_trie_completion_oc");
         this.initializeClass("com.cyc.cycjava.cycl.module0740");
         this.initializeClass("com.cyc.cycjava.cycl.module0741");
         this.initializeClass("com.cyc.cycjava.cycl.module0742");
@@ -819,7 +819,7 @@ public class cycl extends InitializingSubLFile
         this.initializeClass("com.cyc.cycjava.cycl.module0795");
         this.initializeClass("com.cyc.cycjava.cycl.module0796");
         this.initializeClass("com.cyc.cycjava.cycl.module0797");
-        this.initializeClass("com.cyc.cycjava.cycl.oc_cycml_generator");
+        this.initializeClass("com.cyc.cycjava.cycl.cycml_generator_oc");
         this.initializeClass("com.cyc.cycjava.cycl.module0799");
         this.initializeClass("com.cyc.cycjava.cycl.module0800");
         this.initializeClass("com.cyc.cycjava.cycl.module0801");

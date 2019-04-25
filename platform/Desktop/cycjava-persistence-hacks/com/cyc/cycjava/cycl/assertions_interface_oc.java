@@ -2,6 +2,7 @@ package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
@@ -14,10 +15,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class oc_assertions_interface extends SubLTranslatedFile
+public final class assertions_interface_oc extends SubLTranslatedFile
 {
   public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.oc_assertions_interface";
+  public static final String myName = "com.cyc.cycjava.cycl.assertions_interface_oc";
   public static final String myFingerPrint = "d7c60603a43dfb4305af5dbd9aea4e748e60c3b1197915fdbf75ea35a74fcf30";
   private static final SubLSymbol $ic0$;
   private static final SubLSymbol $ic1$;
@@ -143,17 +144,17 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     {
       throw new AssertionError( var7 );
     }
-    oc_hl_interface_infrastructure.f8308();
-    oc_hl_interface_infrastructure.f8341( $ic7$, var1, var2, var3, var4, var5, var6, var7 );
-    if( NIL != oc_hl_interface_infrastructure.f8289() )
+    hl_interface_infrastructure_oc.f8308();
+    hl_interface_infrastructure_oc.f8341( $ic7$, var1, var2, var3, var4, var5, var6, var7 );
+    if( NIL != hl_interface_infrastructure_oc.f8289() )
     {
       final SubLObject var8 = module0018.$g573$.getGlobalValue();
       SubLObject var9 = NIL;
       try
       {
         var9 = Locks.seize_lock( var8 );
-        final SubLObject var10 = ( NIL != oc_hl_interface_infrastructure.f8288() ) ? f11058( var1, var2, var3, var4, var5, var6, var7 ) : f11059( var1, var2, var3, var4, var5, var6, var7 );
-        oc_hl_interface_infrastructure.f8309();
+        final SubLObject var10 = ( NIL != hl_interface_infrastructure_oc.f8288() ) ? f11058( var1, var2, var3, var4, var5, var6, var7 ) : f11059( var1, var2, var3, var4, var5, var6, var7 );
+        hl_interface_infrastructure_oc.f8309();
         return var10;
       }
       finally
@@ -170,29 +171,29 @@ public final class oc_assertions_interface extends SubLTranslatedFile
   public static SubLObject f11058(final SubLObject var1, final SubLObject var2, final SubLObject var3, final SubLObject var4, final SubLObject var5, final SubLObject var6, final SubLObject var7)
   {
     final SubLThread var8 = SubLProcess.currentSubLThread();
-    final SubLObject var9 = oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic13$, module0035.f2241( var1 ), module0035.f2241( var2 ), module0035.f2241( var3 ), module0035.f2241( var4 ), module0035.f2241( var5 ),
+    final SubLObject var9 = hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic13$, module0035.f2241( var1 ), module0035.f2241( var2 ), module0035.f2241( var3 ), module0035.f2241( var4 ), module0035.f2241( var5 ),
         module0035.f2241( var6 ), module0035.f2241( var7 ) ) );
     SubLObject var10 = NIL;
-    final SubLObject var11 = oc_hl_interface_infrastructure.$g1483$.currentBinding( var8 );
+    final SubLObject var11 = hl_interface_infrastructure_oc.$g1483$.currentBinding( var8 );
     try
     {
-      oc_hl_interface_infrastructure.$g1483$.bind( T, var8 );
-      var10 = oc_assertions_low.f11260( var9 );
-      if( NIL != oc_hl_interface_infrastructure.f8287() )
+      hl_interface_infrastructure_oc.$g1483$.bind( T, var8 );
+      var10 = assertions_low_oc.f11260( var9 );
+      if( NIL != hl_interface_infrastructure_oc.f8287() )
       {
-        oc_assertions_low.f11256( var10, var9, var1, var2, var3, var4, var5, var6, var7 );
+        assertions_low_oc.f11256( var10, var9, var1, var2, var3, var4, var5, var6, var7 );
       }
     }
     finally
     {
-      oc_hl_interface_infrastructure.$g1483$.rebind( var11, var8 );
+      hl_interface_infrastructure_oc.$g1483$.rebind( var11, var8 );
     }
     return var10;
   }
 
   public static SubLObject f11059(final SubLObject var1, final SubLObject var2, final SubLObject var3, final SubLObject var4, final SubLObject var5, final SubLObject var6, final SubLObject var7)
   {
-    final SubLObject var8 = oc_assertions_low.f11255( var1, var2, var3, var4, var5, var6, var7 );
+    final SubLObject var8 = assertions_low_oc.f11255( var1, var2, var3, var4, var5, var6, var7 );
     return assertion_handles_oc.f11053( var8 );
   }
 
@@ -201,24 +202,24 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     final SubLThread var11 = SubLProcess.currentSubLThread();
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
     SubLObject var12 = NIL;
-    oc_hl_interface_infrastructure.f8308();
-    oc_hl_interface_infrastructure.f8341( $ic15$, var10, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    if( NIL != oc_hl_interface_infrastructure.f8288() )
+    hl_interface_infrastructure_oc.f8308();
+    hl_interface_infrastructure_oc.f8341( $ic15$, var10, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+    if( NIL != hl_interface_infrastructure_oc.f8288() )
     {
-      var12 = oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic15$, ConsesLow.list( $ic16$, var10 ) ) );
+      var12 = hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic15$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    if( NIL != oc_hl_interface_infrastructure.f8287() )
+    if( NIL != hl_interface_infrastructure_oc.f8287() )
     {
-      final SubLObject var13 = oc_hl_interface_infrastructure.$g1483$.currentBinding( var11 );
+      final SubLObject var13 = hl_interface_infrastructure_oc.$g1483$.currentBinding( var11 );
       try
       {
-        oc_hl_interface_infrastructure.$g1483$.bind( T, var11 );
+        hl_interface_infrastructure_oc.$g1483$.bind( T, var11 );
         final SubLObject var14 = module0018.$g573$.getGlobalValue();
         SubLObject var15 = NIL;
         try
         {
           var15 = Locks.seize_lock( var14 );
-          return oc_assertions_low.f11264( var10 );
+          return assertions_low_oc.f11264( var10 );
         }
         finally
         {
@@ -230,7 +231,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
       }
       finally
       {
-        oc_hl_interface_infrastructure.$g1483$.rebind( var13, var11 );
+        hl_interface_infrastructure_oc.$g1483$.rebind( var13, var11 );
       }
     }
     return var12;
@@ -239,40 +240,40 @@ public final class oc_assertions_interface extends SubLTranslatedFile
   public static SubLObject f11061(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic21$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic21$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11175( var10 );
+    return assertions_low_oc.f11175( var10 );
   }
 
   public static SubLObject f11062(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic24$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic24$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11177( var10 );
+    return assertions_low_oc.f11177( var10 );
   }
 
   public static SubLObject f11063(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic27$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic27$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11179( var10 );
+    return assertions_low_oc.f11179( var10 );
   }
 
   public static SubLObject f11064(final SubLObject var1, final SubLObject var2)
   {
     assert NIL != module0232.f15320( var1 ) : var1;
     assert NIL != module0161.f10480( var2 ) : var2;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic31$, ConsesLow.list( $ic16$, var1 ), ConsesLow.list( $ic16$, var2 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic31$, ConsesLow.list( $ic16$, var1 ), ConsesLow.list( $ic16$, var2 ) ) );
     }
     return module0217.f14416( var1, var2 );
   }
@@ -280,121 +281,121 @@ public final class oc_assertions_interface extends SubLTranslatedFile
   public static SubLObject f11065(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic36$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic36$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11181( var10 );
+    return assertions_low_oc.f11181( var10 );
   }
 
   public static SubLObject f11066(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic39$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic39$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11225( var10 );
+    return assertions_low_oc.f11225( var10 );
   }
 
   public static SubLObject f11067(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic40$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic40$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11180( var10 );
+    return assertions_low_oc.f11180( var10 );
   }
 
   public static SubLObject f11068(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic43$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic43$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11183( var10 );
+    return assertions_low_oc.f11183( var10 );
   }
 
   public static SubLObject f11069(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic46$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic46$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11184( var10 );
+    return assertions_low_oc.f11184( var10 );
   }
 
   public static SubLObject f11070(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic49$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic49$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11186( var10 );
+    return assertions_low_oc.f11186( var10 );
   }
 
   public static SubLObject f11071(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic52$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic52$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11188( var10 );
+    return assertions_low_oc.f11188( var10 );
   }
 
   public static SubLObject f11072(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic55$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic55$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11190( var10 );
+    return assertions_low_oc.f11190( var10 );
   }
 
   public static SubLObject f11073(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic58$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic58$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11192( var10 );
+    return assertions_low_oc.f11192( var10 );
   }
 
   public static SubLObject f11074(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic61$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic61$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11195( var10 );
+    return assertions_low_oc.f11195( var10 );
   }
 
   public static SubLObject f11075(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic64$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic64$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11197( var10 );
+    return assertions_low_oc.f11197( var10 );
   }
 
   public static SubLObject f11076(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic66$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic66$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11199( var10 );
+    return assertions_low_oc.f11199( var10 );
   }
 
   public static SubLObject f11077(final SubLObject var10, final SubLObject var17)
@@ -403,25 +404,25 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
     assert NIL != module0130.f8503( var17 ) : var17;
     SubLObject var19 = NIL;
-    oc_hl_interface_infrastructure.f8308();
-    oc_hl_interface_infrastructure.f8341( $ic69$, var10, var17, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    if( NIL != oc_hl_interface_infrastructure.f8288() )
+    hl_interface_infrastructure_oc.f8308();
+    hl_interface_infrastructure_oc.f8341( $ic69$, var10, var17, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+    if( NIL != hl_interface_infrastructure_oc.f8288() )
     {
-      var19 = oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic69$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var17 ) ) );
+      var19 = hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic69$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var17 ) ) );
     }
-    if( NIL != oc_hl_interface_infrastructure.f8287() )
+    if( NIL != hl_interface_infrastructure_oc.f8287() )
     {
-      final SubLObject var20 = oc_hl_interface_infrastructure.$g1483$.currentBinding( var18 );
+      final SubLObject var20 = hl_interface_infrastructure_oc.$g1483$.currentBinding( var18 );
       try
       {
-        oc_hl_interface_infrastructure.$g1483$.bind( T, var18 );
+        hl_interface_infrastructure_oc.$g1483$.bind( T, var18 );
         final SubLObject var21 = module0018.$g573$.getGlobalValue();
         SubLObject var22 = NIL;
         try
         {
           var22 = Locks.seize_lock( var21 );
           final SubLObject var23 = module0178.f11291( var10 );
-          final SubLObject var21_22 = oc_assertions_low.f11232( var10, var17 );
+          final SubLObject var21_22 = assertions_low_oc.f11232( var10, var17 );
           module0197.f12273( var10, var23, var17 );
           return var21_22;
         }
@@ -435,7 +436,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
       }
       finally
       {
-        oc_hl_interface_infrastructure.$g1483$.rebind( var20, var18 );
+        hl_interface_infrastructure_oc.$g1483$.rebind( var20, var18 );
       }
     }
     return var19;
@@ -447,25 +448,25 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
     assert NIL != module0130.f8511( var23 ) : var23;
     SubLObject var25 = NIL;
-    oc_hl_interface_infrastructure.f8308();
-    oc_hl_interface_infrastructure.f8341( $ic73$, var10, var23, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    if( NIL != oc_hl_interface_infrastructure.f8288() )
+    hl_interface_infrastructure_oc.f8308();
+    hl_interface_infrastructure_oc.f8341( $ic73$, var10, var23, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+    if( NIL != hl_interface_infrastructure_oc.f8288() )
     {
-      var25 = oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic73$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var23 ) ) );
+      var25 = hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic73$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var23 ) ) );
     }
-    if( NIL != oc_hl_interface_infrastructure.f8287() )
+    if( NIL != hl_interface_infrastructure_oc.f8287() )
     {
-      final SubLObject var26 = oc_hl_interface_infrastructure.$g1483$.currentBinding( var24 );
+      final SubLObject var26 = hl_interface_infrastructure_oc.$g1483$.currentBinding( var24 );
       try
       {
-        oc_hl_interface_infrastructure.$g1483$.bind( T, var24 );
+        hl_interface_infrastructure_oc.$g1483$.bind( T, var24 );
         final SubLObject var27 = module0018.$g573$.getGlobalValue();
         SubLObject var28 = NIL;
         try
         {
           var28 = Locks.seize_lock( var27 );
           final SubLObject var29 = module0178.f11292( var10 );
-          final SubLObject var21_27 = oc_assertions_low.f11235( var10, var23 );
+          final SubLObject var21_27 = assertions_low_oc.f11235( var10, var23 );
           module0197.f12277( var10, var29, var23 );
           return var21_27;
         }
@@ -479,7 +480,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
       }
       finally
       {
-        oc_hl_interface_infrastructure.$g1483$.rebind( var26, var24 );
+        hl_interface_infrastructure_oc.$g1483$.rebind( var26, var24 );
       }
     }
     return var25;
@@ -491,25 +492,25 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
     assert NIL != module0130.f8507( var28 ) : var28;
     SubLObject var30 = NIL;
-    oc_hl_interface_infrastructure.f8308();
-    oc_hl_interface_infrastructure.f8341( $ic77$, var10, var28, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    if( NIL != oc_hl_interface_infrastructure.f8288() )
+    hl_interface_infrastructure_oc.f8308();
+    hl_interface_infrastructure_oc.f8341( $ic77$, var10, var28, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+    if( NIL != hl_interface_infrastructure_oc.f8288() )
     {
-      var30 = oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic77$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var28 ) ) );
+      var30 = hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic77$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var28 ) ) );
     }
-    if( NIL != oc_hl_interface_infrastructure.f8287() )
+    if( NIL != hl_interface_infrastructure_oc.f8287() )
     {
-      final SubLObject var31 = oc_hl_interface_infrastructure.$g1483$.currentBinding( var29 );
+      final SubLObject var31 = hl_interface_infrastructure_oc.$g1483$.currentBinding( var29 );
       try
       {
-        oc_hl_interface_infrastructure.$g1483$.bind( T, var29 );
+        hl_interface_infrastructure_oc.$g1483$.bind( T, var29 );
         final SubLObject var32 = module0018.$g573$.getGlobalValue();
         SubLObject var33 = NIL;
         try
         {
           var33 = Locks.seize_lock( var32 );
           final SubLObject var34 = module0178.f11293( var10 );
-          final SubLObject var21_32 = oc_assertions_low.f11236( var10, var28 );
+          final SubLObject var21_32 = assertions_low_oc.f11236( var10, var28 );
           module0197.f12281( var10, var34, var28 );
           return var21_32;
         }
@@ -523,7 +524,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
       }
       finally
       {
-        oc_hl_interface_infrastructure.$g1483$.rebind( var31, var29 );
+        hl_interface_infrastructure_oc.$g1483$.rebind( var31, var29 );
       }
     }
     return var30;
@@ -535,25 +536,25 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
     assert NIL != Types.listp( var33 ) : var33;
     SubLObject var35 = NIL;
-    oc_hl_interface_infrastructure.f8308();
-    oc_hl_interface_infrastructure.f8341( $ic81$, var10, var33, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    if( NIL != oc_hl_interface_infrastructure.f8288() )
+    hl_interface_infrastructure_oc.f8308();
+    hl_interface_infrastructure_oc.f8341( $ic81$, var10, var33, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+    if( NIL != hl_interface_infrastructure_oc.f8288() )
     {
-      var35 = oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic81$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var33 ) ) );
+      var35 = hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic81$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var33 ) ) );
     }
-    if( NIL != oc_hl_interface_infrastructure.f8287() )
+    if( NIL != hl_interface_infrastructure_oc.f8287() )
     {
-      final SubLObject var36 = oc_hl_interface_infrastructure.$g1483$.currentBinding( var34 );
+      final SubLObject var36 = hl_interface_infrastructure_oc.$g1483$.currentBinding( var34 );
       try
       {
-        oc_hl_interface_infrastructure.$g1483$.bind( T, var34 );
+        hl_interface_infrastructure_oc.$g1483$.bind( T, var34 );
         final SubLObject var37 = module0018.$g573$.getGlobalValue();
         SubLObject var38 = NIL;
         try
         {
           var38 = Locks.seize_lock( var37 );
           final SubLObject var39 = module0178.f11294( var10 );
-          final SubLObject var21_37 = oc_assertions_low.f11239( var10, var33 );
+          final SubLObject var21_37 = assertions_low_oc.f11239( var10, var33 );
           module0197.f12285( var10, var39, var33 );
           return var21_37;
         }
@@ -567,7 +568,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
       }
       finally
       {
-        oc_hl_interface_infrastructure.$g1483$.rebind( var36, var34 );
+        hl_interface_infrastructure_oc.$g1483$.rebind( var36, var34 );
       }
     }
     return var35;
@@ -602,19 +603,19 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     assert NIL != f11083( var40 ) : var40;
     assert NIL != f11084( var41 ) : var41;
     SubLObject var43 = NIL;
-    oc_hl_interface_infrastructure.f8308();
-    oc_hl_interface_infrastructure.f8341( $ic90$, var10, var38, var39, var40, var41, UNPROVIDED, UNPROVIDED );
-    if( NIL != oc_hl_interface_infrastructure.f8288() )
+    hl_interface_infrastructure_oc.f8308();
+    hl_interface_infrastructure_oc.f8341( $ic90$, var10, var38, var39, var40, var41, UNPROVIDED, UNPROVIDED );
+    if( NIL != hl_interface_infrastructure_oc.f8288() )
     {
-      var43 = oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic90$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var38 ), ConsesLow.list( $ic16$, var39 ), ConsesLow.list( $ic16$, var40 ), ConsesLow
+      var43 = hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic90$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var38 ), ConsesLow.list( $ic16$, var39 ), ConsesLow.list( $ic16$, var40 ), ConsesLow
           .list( $ic16$, var41 ) ) );
     }
-    if( NIL != oc_hl_interface_infrastructure.f8287() )
+    if( NIL != hl_interface_infrastructure_oc.f8287() )
     {
-      final SubLObject var44 = oc_hl_interface_infrastructure.$g1483$.currentBinding( var42 );
+      final SubLObject var44 = hl_interface_infrastructure_oc.$g1483$.currentBinding( var42 );
       try
       {
-        oc_hl_interface_infrastructure.$g1483$.bind( T, var42 );
+        hl_interface_infrastructure_oc.$g1483$.bind( T, var42 );
         final SubLObject var45 = module0018.$g573$.getGlobalValue();
         SubLObject var46 = NIL;
         try
@@ -651,7 +652,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
       }
       finally
       {
-        oc_hl_interface_infrastructure.$g1483$.rebind( var44, var42 );
+        hl_interface_infrastructure_oc.$g1483$.rebind( var44, var42 );
       }
     }
     return var43;
@@ -660,7 +661,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
   public static SubLObject f11086(final SubLObject var10, final SubLObject var44)
   {
     final SubLObject var45 = module0178.f11295( var10 );
-    final SubLObject var46 = oc_assertions_low.f11250( var10, var44 );
+    final SubLObject var46 = assertions_low_oc.f11250( var10, var44 );
     module0197.f12289( var10, var45, var44 );
     return var46;
   }
@@ -668,7 +669,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
   public static SubLObject f11087(final SubLObject var10, final SubLObject var46)
   {
     final SubLObject var47 = module0178.f11296( var10 );
-    final SubLObject var48 = oc_assertions_low.f11251( var10, var46 );
+    final SubLObject var48 = assertions_low_oc.f11251( var10, var46 );
     module0197.f12293( var10, var47, var46 );
     return var48;
   }
@@ -676,7 +677,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
   public static SubLObject f11088(final SubLObject var10, final SubLObject var48)
   {
     final SubLObject var49 = module0178.f11297( var10 );
-    final SubLObject var50 = oc_assertions_low.f11252( var10, var48 );
+    final SubLObject var50 = assertions_low_oc.f11252( var10, var48 );
     module0197.f12297( var10, var49, var48 );
     return var50;
   }
@@ -684,7 +685,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
   public static SubLObject f11089(final SubLObject var10, final SubLObject var50)
   {
     final SubLObject var51 = module0178.f11298( var10 );
-    final SubLObject var52 = oc_assertions_low.f11253( var10, var50 );
+    final SubLObject var52 = assertions_low_oc.f11253( var10, var50 );
     module0197.f12301( var10, var51, var50 );
     return var52;
   }
@@ -692,11 +693,11 @@ public final class oc_assertions_interface extends SubLTranslatedFile
   public static SubLObject f11090(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic94$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic94$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11201( var10 );
+    return assertions_low_oc.f11201( var10 );
   }
 
   public static SubLObject f11091(final SubLObject var10, final SubLObject var5, final SubLObject var6)
@@ -704,9 +705,9 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
     assert NIL != module0130.f8511( var5 ) : var5;
     assert NIL != module0130.f8507( var6 ) : var6;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic96$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var5 ), ConsesLow.list( $ic16$, var6 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic96$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var5 ), ConsesLow.list( $ic16$, var6 ) ) );
     }
     return f11092( var10, var5, var6 );
   }
@@ -777,18 +778,18 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     assert NIL != module0130.f8511( var5 ) : var5;
     assert NIL != module0130.f8507( var6 ) : var6;
     SubLObject var12 = NIL;
-    oc_hl_interface_infrastructure.f8308();
-    oc_hl_interface_infrastructure.f8341( $ic101$, var10, var5, var6, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    if( NIL != oc_hl_interface_infrastructure.f8288() )
+    hl_interface_infrastructure_oc.f8308();
+    hl_interface_infrastructure_oc.f8341( $ic101$, var10, var5, var6, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+    if( NIL != hl_interface_infrastructure_oc.f8288() )
     {
-      var12 = oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic101$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var5 ), ConsesLow.list( $ic16$, var6 ) ) );
+      var12 = hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic101$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var5 ), ConsesLow.list( $ic16$, var6 ) ) );
     }
-    if( NIL != oc_hl_interface_infrastructure.f8287() )
+    if( NIL != hl_interface_infrastructure_oc.f8287() )
     {
-      final SubLObject var13 = oc_hl_interface_infrastructure.$g1483$.currentBinding( var11 );
+      final SubLObject var13 = hl_interface_infrastructure_oc.$g1483$.currentBinding( var11 );
       try
       {
-        oc_hl_interface_infrastructure.$g1483$.bind( T, var11 );
+        hl_interface_infrastructure_oc.$g1483$.bind( T, var11 );
         final SubLObject var14 = module0018.$g573$.getGlobalValue();
         SubLObject var15 = NIL;
         try
@@ -796,7 +797,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
           var15 = Locks.seize_lock( var14 );
           final SubLObject var16 = module0130.f8529( var5, var6 );
           final SubLObject var17 = module0191.f11941( var10, var16 );
-          oc_assertions_low.f11259( var10, var17 );
+          assertions_low_oc.f11259( var10, var17 );
           module0197.f12305( var10, var5, var6 );
           return var17;
         }
@@ -810,7 +811,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
       }
       finally
       {
-        oc_hl_interface_infrastructure.$g1483$.rebind( var13, var11 );
+        hl_interface_infrastructure_oc.$g1483$.rebind( var13, var11 );
       }
     }
     return var12;
@@ -822,29 +823,29 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
     assert NIL != module0191.f11932( var7 ) : var7;
     SubLObject var12 = NIL;
-    oc_hl_interface_infrastructure.f8308();
-    oc_hl_interface_infrastructure.f8341( $ic104$, var10, var7, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    if( NIL != oc_hl_interface_infrastructure.f8288() )
+    hl_interface_infrastructure_oc.f8308();
+    hl_interface_infrastructure_oc.f8341( $ic104$, var10, var7, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+    if( NIL != hl_interface_infrastructure_oc.f8288() )
     {
-      var12 = oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic104$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var7 ) ) );
+      var12 = hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic104$, ConsesLow.list( $ic16$, var10 ), ConsesLow.list( $ic16$, var7 ) ) );
     }
-    if( NIL != oc_hl_interface_infrastructure.f8287() )
+    if( NIL != hl_interface_infrastructure_oc.f8287() )
     {
-      final SubLObject var13 = oc_hl_interface_infrastructure.$g1483$.currentBinding( var11 );
+      final SubLObject var13 = hl_interface_infrastructure_oc.$g1483$.currentBinding( var11 );
       try
       {
-        oc_hl_interface_infrastructure.$g1483$.bind( T, var11 );
+        hl_interface_infrastructure_oc.$g1483$.bind( T, var11 );
         final SubLObject var14 = module0018.$g573$.getGlobalValue();
         SubLObject var15 = NIL;
         try
         {
           var15 = Locks.seize_lock( var14 );
           module0197.f12309( var10, var7 );
-          oc_assertions_low.f11250( var10, NIL );
-          oc_assertions_low.f11251( var10, NIL );
-          oc_assertions_low.f11252( var10, NIL );
-          oc_assertions_low.f11253( var10, NIL );
-          oc_assertions_low.f11268( var10, var7 );
+          assertions_low_oc.f11250( var10, NIL );
+          assertions_low_oc.f11251( var10, NIL );
+          assertions_low_oc.f11252( var10, NIL );
+          assertions_low_oc.f11253( var10, NIL );
+          assertions_low_oc.f11268( var10, var7 );
           module0191.f11944( var7 );
           return var10;
         }
@@ -858,7 +859,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
       }
       finally
       {
-        oc_hl_interface_infrastructure.$g1483$.rebind( var13, var11 );
+        hl_interface_infrastructure_oc.$g1483$.rebind( var13, var11 );
       }
     }
     return var12;
@@ -867,11 +868,11 @@ public final class oc_assertions_interface extends SubLTranslatedFile
   public static SubLObject f11099(final SubLObject var10)
   {
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
-    if( NIL != oc_hl_interface_infrastructure.f8291() )
+    if( NIL != hl_interface_infrastructure_oc.f8291() )
     {
-      return oc_hl_interface_infrastructure.f8304( ConsesLow.list( $ic108$, ConsesLow.list( $ic16$, var10 ) ) );
+      return hl_interface_infrastructure_oc.f8304( ConsesLow.list( $ic108$, ConsesLow.list( $ic16$, var10 ) ) );
     }
-    return oc_assertions_low.f11202( var10 );
+    return assertions_low_oc.f11202( var10 );
   }
 
   public static SubLObject f11100(final SubLObject var10)
@@ -879,7 +880,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
     final SubLThread var11 = SubLProcess.currentSubLThread();
     assert NIL != assertion_handles_oc.f11035( var10 ) : var10;
     var11.resetMultipleValues();
-    final SubLObject var12 = oc_assertions_low.f11272( var10 );
+    final SubLObject var12 = assertions_low_oc.f11272( var10 );
     final SubLObject var13 = var11.secondMultipleValue();
     var11.resetMultipleValues();
     return module0030.f1625( var12 );
@@ -991,7 +992,7 @@ public final class oc_assertions_interface extends SubLTranslatedFile
   }
   static
   {
-    me = new oc_assertions_interface();
+    me = new assertions_interface_oc();
     $ic0$ = SubLObjectFactory.makeSymbol( "CNF-P" );
     $ic1$ = SubLObjectFactory.makeSymbol( "S#12263", "CYC" );
     $ic2$ = SubLObjectFactory.makeSymbol( "LISTP" );

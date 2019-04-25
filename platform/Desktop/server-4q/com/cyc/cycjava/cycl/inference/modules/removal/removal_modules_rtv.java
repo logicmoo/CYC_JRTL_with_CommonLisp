@@ -29,6 +29,7 @@ import com.cyc.cycjava.cycl.mt_relevance_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.cycjava.cycl.variables;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.genls;
 import com.cyc.cycjava.cycl.isa;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;

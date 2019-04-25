@@ -3,6 +3,7 @@ package com.cyc.cycjava.cycl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
@@ -20,22 +21,22 @@ public final class module0392 extends SubLTranslatedFile
     private static final SubLList $ic2$;
     
     public static SubLObject f27957(final SubLObject var1) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0392.NIL != module0367.f24997(var1) && module0392.NIL != module0035.f2169(module0367.f25035(var1), (SubLObject)module0392.$ic1$));
+        return (SubLObject)makeBoolean(NIL != module0367.f24997(var1) && NIL != module0035.f2169(module0367.f25035(var1), (SubLObject)$ic1$));
     }
     
     public static SubLObject f27958() {
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0392", "f27957", "S#29937", 1, 0, false);
-        return (SubLObject)module0392.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f27959() {
-        module0392.$g3281$ = SubLFiles.defvar("S#31089", (SubLObject)module0392.$ic0$);
-        return (SubLObject)module0392.NIL;
+        $g3281$ = SubLFiles.defvar("S#31089", (SubLObject)$ic0$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f27960() {
-        module0387.f27534((SubLObject)module0392.$ic0$, (SubLObject)module0392.$ic2$);
-        return (SubLObject)module0392.NIL;
+        module0387.f27534((SubLObject)$ic0$, (SubLObject)$ic2$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -52,17 +53,17 @@ public final class module0392 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0392();
-        module0392.$g3281$ = null;
-        $ic0$ = SubLObjectFactory.makeKeyword("ABDUCTIVE");
-        $ic1$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ABDUCTIVE"));
-        $ic2$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("NAME"), SubLObjectFactory.makeString("Abductive Tactician"), SubLObjectFactory.makeKeyword("COMMENT"), SubLObjectFactory.makeString("A balancing tactician type subclassed to handle abduction."), SubLObjectFactory.makeKeyword("CONSTRUCTOR"), SubLObjectFactory.makeSymbol("S#30825", "CYC"), SubLObjectFactory.makeKeyword("DONE?"), SubLObjectFactory.makeSymbol("S#30837", "CYC"), SubLObjectFactory.makeKeyword("DO-ONE-STEP"), SubLObjectFactory.makeSymbol("S#30838", "CYC"), SubLObjectFactory.makeKeyword("INITIAL-RELEVANT-STRATEGIES"), SubLObjectFactory.makeSymbol("S#30852", "CYC"), SubLObjectFactory.makeKeyword("INITIALIZE-PROPERTIES"), SubLObjectFactory.makeSymbol("S#30850", "CYC"), SubLObjectFactory.makeKeyword("UPDATE-PROPERTIES"), SubLObjectFactory.makeSymbol("S#30851", "CYC"), SubLObjectFactory.makeKeyword("INFERENCE-DYNAMIC-PROPERTIES-UPDATED"), SubLObjectFactory.makeSymbol("S#30849", "CYC"), SubLObjectFactory.makeKeyword("CONTINUATION-POSSIBLE?"), SubLObjectFactory.makeSymbol("S#30843", "CYC"), SubLObjectFactory.makeKeyword("THROW-AWAY-UNINTERESTING-SET-ASIDES"), SubLObjectFactory.makeSymbol("S#30848", "CYC"), SubLObjectFactory.makeKeyword("EARLY-REMOVAL-PRODUCTIVITY-LIMIT"), SubLObjectFactory.makeSymbol("S#30861", "CYC"), SubLObjectFactory.makeKeyword("POSSIBLY-ACTIVATE-PROBLEM"), SubLObjectFactory.makeSymbol("S#30853", "CYC"), SubLObjectFactory.makeKeyword("THROW-AWAY-PROBLEM"), SubLObjectFactory.makeSymbol("S#30844", "CYC"), SubLObjectFactory.makeKeyword("SET-ASIDE-PROBLEM"), SubLObjectFactory.makeSymbol("S#30845", "CYC"), SubLObjectFactory.makeKeyword("THROW-AWAY-TACTIC"), SubLObjectFactory.makeSymbol("S#30846", "CYC"), SubLObjectFactory.makeKeyword("SET-ASIDE-TACTIC"), SubLObjectFactory.makeSymbol("S#30847", "CYC"), SubLObjectFactory.makeKeyword("NEW-ARGUMENT-LINK"), SubLObjectFactory.makeSymbol("S#30860", "CYC"), SubLObjectFactory.makeKeyword("NEW-TACTIC"), SubLObjectFactory.makeSymbol("IGNORE"), SubLObjectFactory.makeKeyword("SPLIT-TACTICS-POSSIBLE"), SubLObjectFactory.makeSymbol("IGNORE"), SubLObjectFactory.makeKeyword("PROBLEM-COULD-BE-PENDING"), SubLObjectFactory.makeSymbol("IGNORE"), SubLObjectFactory.makeKeyword("LINK-HEAD-MOTIVATED?"), SubLObjectFactory.makeSymbol("FALSE"), SubLObjectFactory.makeKeyword("PROBLEM-NOTHING-TO-DO?"), SubLObjectFactory.makeSymbol("FALSE"), SubLObjectFactory.makeKeyword("SUBSTRATEGY-STRATEGEM-MOTIVATED"), SubLObjectFactory.makeSymbol("S#30862", "CYC"), SubLObjectFactory.makeKeyword("SUBSTRATEGY-TOTALLY-THROW-AWAY-TACTIC"), SubLObjectFactory.makeSymbol("S#30877", "CYC"), SubLObjectFactory.makeKeyword("SUBSTRATEGY-ALLOW-SPLIT-TACTIC-SET-ASIDE-WRT-REMOVAL"), SubLObjectFactory.makeSymbol("S#30876", "CYC"), SubLObjectFactory.makeKeyword("SUBSTRATEGY-PROBLEM-STATUS-CHANGE"), SubLObjectFactory.makeSymbol("S#30878", "CYC") });
+        $g3281$ = null;
+        $ic0$ = makeKeyword("ABDUCTIVE");
+        $ic1$ = ConsesLow.list((SubLObject)makeKeyword("ABDUCTIVE"));
+        $ic2$ = ConsesLow.list(new SubLObject[] { makeKeyword("NAME"), makeString("Abductive Tactician"), makeKeyword("COMMENT"), makeString("A balancing tactician type subclassed to handle abduction."), makeKeyword("CONSTRUCTOR"), makeSymbol("S#30825", "CYC"), makeKeyword("DONE?"), makeSymbol("S#30837", "CYC"), makeKeyword("DO-ONE-STEP"), makeSymbol("S#30838", "CYC"), makeKeyword("INITIAL-RELEVANT-STRATEGIES"), makeSymbol("S#30852", "CYC"), makeKeyword("INITIALIZE-PROPERTIES"), makeSymbol("S#30850", "CYC"), makeKeyword("UPDATE-PROPERTIES"), makeSymbol("S#30851", "CYC"), makeKeyword("INFERENCE-DYNAMIC-PROPERTIES-UPDATED"), makeSymbol("S#30849", "CYC"), makeKeyword("CONTINUATION-POSSIBLE?"), makeSymbol("S#30843", "CYC"), makeKeyword("THROW-AWAY-UNINTERESTING-SET-ASIDES"), makeSymbol("S#30848", "CYC"), makeKeyword("EARLY-REMOVAL-PRODUCTIVITY-LIMIT"), makeSymbol("S#30861", "CYC"), makeKeyword("POSSIBLY-ACTIVATE-PROBLEM"), makeSymbol("S#30853", "CYC"), makeKeyword("THROW-AWAY-PROBLEM"), makeSymbol("S#30844", "CYC"), makeKeyword("SET-ASIDE-PROBLEM"), makeSymbol("S#30845", "CYC"), makeKeyword("THROW-AWAY-TACTIC"), makeSymbol("S#30846", "CYC"), makeKeyword("SET-ASIDE-TACTIC"), makeSymbol("S#30847", "CYC"), makeKeyword("NEW-ARGUMENT-LINK"), makeSymbol("S#30860", "CYC"), makeKeyword("NEW-TACTIC"), makeSymbol("IGNORE"), makeKeyword("SPLIT-TACTICS-POSSIBLE"), makeSymbol("IGNORE"), makeKeyword("PROBLEM-COULD-BE-PENDING"), makeSymbol("IGNORE"), makeKeyword("LINK-HEAD-MOTIVATED?"), makeSymbol("FALSE"), makeKeyword("PROBLEM-NOTHING-TO-DO?"), makeSymbol("FALSE"), makeKeyword("SUBSTRATEGY-STRATEGEM-MOTIVATED"), makeSymbol("S#30862", "CYC"), makeKeyword("SUBSTRATEGY-TOTALLY-THROW-AWAY-TACTIC"), makeSymbol("S#30877", "CYC"), makeKeyword("SUBSTRATEGY-ALLOW-SPLIT-TACTIC-SET-ASIDE-WRT-REMOVAL"), makeSymbol("S#30876", "CYC"), makeKeyword("SUBSTRATEGY-PROBLEM-STATUS-CHANGE"), makeSymbol("S#30878", "CYC") });
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0392.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 48 ms
 	
 	Decompiled with Procyon 0.5.32.

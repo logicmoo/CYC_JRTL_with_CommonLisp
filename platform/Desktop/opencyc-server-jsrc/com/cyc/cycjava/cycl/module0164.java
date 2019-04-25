@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -34,32 +35,32 @@ public final class module0164 extends SubLTranslatedFile
     private static final SubLString $ic9$;
     
     public static SubLObject f10667(final SubLObject var1, final SubLObject var2) {
-        module0164.$g2172$.setGlobalValue(oc_kb_object_manager.new_kb_object_manager((SubLObject)module0164.$ic3$, var1, module0164.$g2173$.getGlobalValue(), module0164.$g2174$.getGlobalValue(), (SubLObject)module0164.$ic4$, var2));
-        return (SubLObject)module0164.T;
+        $g2172$.setGlobalValue(kb_object_manager_oc.new_kb_object_manager((SubLObject)$ic3$, var1, $g2173$.getGlobalValue(), $g2174$.getGlobalValue(), (SubLObject)$ic4$, var2));
+        return (SubLObject)T;
     }
     
     public static SubLObject f10668(final SubLObject var3) {
-        return oc_kb_object_manager.f10430(module0164.$g2172$.getGlobalValue(), var3);
+        return kb_object_manager_oc.f10430($g2172$.getGlobalValue(), var3);
     }
     
     public static SubLObject f10669() {
-        return oc_kb_object_manager.f10431(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10431($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10670() {
-        return oc_kb_object_manager.f10446(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10446($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10671() {
-        return oc_kb_object_manager.f10447(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10447($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10672() {
-        return oc_kb_object_manager.f10437(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10437($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10673() {
-        return oc_kb_object_manager.f10438(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10438($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10674() {
@@ -67,58 +68,58 @@ public final class module0164 extends SubLTranslatedFile
     }
     
     public static SubLObject f10675(final SubLObject var4) {
-        return oc_kb_object_manager.f10442(module0164.$g2172$.getGlobalValue(), var4);
+        return kb_object_manager_oc.f10442($g2172$.getGlobalValue(), var4);
     }
     
     public static SubLObject f10676(final SubLObject var4) {
-        return oc_kb_object_manager.f10439(module0164.$g2172$.getGlobalValue(), var4);
+        return kb_object_manager_oc.f10439($g2172$.getGlobalValue(), var4);
     }
     
     public static SubLObject f10677() {
-        return oc_kb_object_manager.f10458(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10458($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10678() {
-        return oc_kb_object_manager.f10447(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10447($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10679() {
-        return oc_kb_object_manager.f10446(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10446($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10680() {
-        return oc_kb_object_manager.f10437(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10437($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10681(final SubLObject var5, final SubLObject var6) {
-        return oc_kb_object_manager.f10414(module0164.$g2172$.getGlobalValue(), var5, var6);
+        return kb_object_manager_oc.f10414($g2172$.getGlobalValue(), var5, var6);
     }
     
     public static SubLObject f10682() {
-        return oc_kb_object_manager.f10417(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10417($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10683() {
-        return oc_kb_object_manager.f10418(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10418($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10684(final SubLObject var7, final SubLObject var8) {
         final SubLObject var9 = var7.rest();
         final SubLObject var11;
         final SubLObject var10 = var11 = var9;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0164.$ic5$, (SubLObject)module0164.$ic6$, ConsesLow.append(var11, (SubLObject)module0164.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic5$, (SubLObject)$ic6$, ConsesLow.append(var11, (SubLObject)NIL));
     }
     
     public static SubLObject f10685(final SubLObject var4, final SubLObject var12) {
-        return oc_kb_object_manager.f10448(module0164.$g2172$.getGlobalValue(), var4, var12);
+        return kb_object_manager_oc.f10448($g2172$.getGlobalValue(), var4, var12);
     }
     
     public static SubLObject f10686(final SubLObject var4) {
-        return oc_kb_object_manager.f10449(module0164.$g2172$.getGlobalValue(), var4);
+        return kb_object_manager_oc.f10449($g2172$.getGlobalValue(), var4);
     }
     
     public static SubLObject f10687(final SubLObject var4) {
-        return oc_kb_object_manager.f10454(module0164.$g2172$.getGlobalValue(), var4);
+        return kb_object_manager_oc.f10454($g2172$.getGlobalValue(), var4);
     }
     
     public static SubLObject f10688(final SubLObject var4) {
@@ -127,31 +128,31 @@ public final class module0164 extends SubLTranslatedFile
     }
     
     public static SubLObject f10689() {
-        return oc_kb_object_manager.f10455(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10455($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10690() {
-        return oc_kb_object_manager.f10456(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10456($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10691() {
-        return oc_kb_object_manager.f10457(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10457($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10692() {
-        return oc_kb_object_manager.f10436(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10436($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10693() {
-        return oc_kb_object_manager.f10462(module0164.$g2172$.getGlobalValue());
+        return kb_object_manager_oc.f10462($g2172$.getGlobalValue());
     }
     
     public static SubLObject f10694() {
-        final SubLObject var13 = oc_kb_object_manager.f10426(module0164.$g2172$.getGlobalValue(), (SubLObject)module0164.$ic8$, (SubLObject)module0164.$ic9$);
-        SubLObject var14 = module0164.$g2175$.getGlobalValue();
-        SubLObject var15 = (SubLObject)module0164.NIL;
+        final SubLObject var13 = kb_object_manager_oc.f10426($g2172$.getGlobalValue(), (SubLObject)$ic8$, (SubLObject)$ic9$);
+        SubLObject var14 = $g2175$.getGlobalValue();
+        SubLObject var15 = (SubLObject)NIL;
         var15 = var14.first();
-        while (module0164.NIL != var14) {
+        while (NIL != var14) {
             f10688(constant_handles_oc.f8440(var15));
             var14 = var14.rest();
             var15 = var14.first();
@@ -188,20 +189,20 @@ public final class module0164 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0164", "f10692", "S#13522", 0, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0164", "f10693", "S#13523", 0, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0164", "f10694", "S#9545", 0, 0, false);
-        return (SubLObject)module0164.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f10696() {
-        module0164.$g2172$ = SubLFiles.deflexical("S#13524", (SubLObject)((module0164.NIL != Symbols.boundp((SubLObject)module0164.$ic0$)) ? module0164.$g2172$.getGlobalValue() : module0164.$ic1$));
-        module0164.$g2173$ = SubLFiles.deflexical("S#13525", (SubLObject)module0164.SIXTEEN_INTEGER);
-        module0164.$g2174$ = SubLFiles.deflexical("S#13526", (SubLObject)module0164.$ic2$);
-        module0164.$g2175$ = SubLFiles.deflexical("S#13527", (SubLObject)module0164.$ic7$);
-        return (SubLObject)module0164.NIL;
+        $g2172$ = SubLFiles.deflexical("S#13524", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic0$)) ? $g2172$.getGlobalValue() : $ic1$));
+        $g2173$ = SubLFiles.deflexical("S#13525", (SubLObject)SIXTEEN_INTEGER);
+        $g2174$ = SubLFiles.deflexical("S#13526", (SubLObject)$ic2$);
+        $g2175$ = SubLFiles.deflexical("S#13527", (SubLObject)$ic7$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f10697() {
-        module0003.f57((SubLObject)module0164.$ic0$);
-        return (SubLObject)module0164.NIL;
+        module0003.f57((SubLObject)$ic0$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -218,27 +219,27 @@ public final class module0164 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0164();
-        module0164.$g2172$ = null;
-        module0164.$g2173$ = null;
-        module0164.$g2174$ = null;
-        module0164.$g2175$ = null;
-        $ic0$ = SubLObjectFactory.makeSymbol("S#13524", "CYC");
-        $ic1$ = SubLObjectFactory.makeKeyword("UNINITIALIZED");
-        $ic2$ = SubLObjectFactory.makeInteger(20000);
-        $ic3$ = SubLObjectFactory.makeString("constant-index");
-        $ic4$ = SubLObjectFactory.makeSymbol("S#13528", "CYC");
-        $ic5$ = SubLObjectFactory.makeSymbol("S#13240", "CYC");
-        $ic6$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13524", "CYC"));
-        $ic7$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")));
-        $ic8$ = SubLObjectFactory.makeString("indices");
-        $ic9$ = SubLObjectFactory.makeString("indices-index");
+        $g2172$ = null;
+        $g2173$ = null;
+        $g2174$ = null;
+        $g2175$ = null;
+        $ic0$ = makeSymbol("S#13524", "CYC");
+        $ic1$ = makeKeyword("UNINITIALIZED");
+        $ic2$ = makeInteger(20000);
+        $ic3$ = makeString("constant-index");
+        $ic4$ = makeSymbol("S#13528", "CYC");
+        $ic5$ = makeSymbol("S#13240", "CYC");
+        $ic6$ = ConsesLow.list((SubLObject)makeSymbol("S#13524", "CYC"));
+        $ic7$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("isa")), constant_handles_oc.f8479((SubLObject)makeString("genls")));
+        $ic8$ = makeString("indices");
+        $ic9$ = makeString("indices-index");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0164.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 77 ms
 	
 	Decompiled with Procyon 0.5.32.

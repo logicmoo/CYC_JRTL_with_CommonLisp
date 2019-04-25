@@ -4,6 +4,7 @@ import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
 import com.cyc.cycjava.cycl.sbhl.sbhl_search_what_mts;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
 import com.cyc.cycjava.cycl.sbhl.sbhl_search_implied_relations;

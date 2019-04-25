@@ -27,6 +27,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_sks_mt_indexing;
 import com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_sks_predicate_indexing;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;

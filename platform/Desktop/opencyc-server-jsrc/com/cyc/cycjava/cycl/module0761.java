@@ -3,6 +3,7 @@ package com.cyc.cycjava.cycl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -27,38 +28,38 @@ public final class module0761 extends SubLTranslatedFile
     private static final SubLSymbol $ic4$;
     
     public static SubLObject f48129() {
-        return conses_high.copy_list(module0761.$g6100$.getGlobalValue());
+        return conses_high.copy_list($g6100$.getGlobalValue());
     }
     
     public static SubLObject f48130(final SubLObject var1) {
-        return module0004.f104(var1, module0761.$g6100$.getGlobalValue(), (SubLObject)module0761.UNPROVIDED, (SubLObject)module0761.UNPROVIDED);
+        return module0004.f104(var1, $g6100$.getGlobalValue(), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
     }
     
     public static SubLObject f48131(final SubLObject var2, final SubLObject var3, final SubLObject var4, SubLObject var5, SubLObject var6, SubLObject var7, SubLObject var8, SubLObject var9) {
-        if (var5 == module0761.UNPROVIDED) {
-            var5 = (SubLObject)module0761.$ic1$;
+        if (var5 == UNPROVIDED) {
+            var5 = (SubLObject)$ic1$;
         }
-        if (var6 == module0761.UNPROVIDED) {
+        if (var6 == UNPROVIDED) {
             var6 = module0751.f47040();
         }
-        if (var7 == module0761.UNPROVIDED) {
+        if (var7 == UNPROVIDED) {
             var7 = module0579.$g4260$.getDynamicValue();
         }
-        if (var8 == module0761.UNPROVIDED) {
+        if (var8 == UNPROVIDED) {
             var8 = module0579.$g4262$.getDynamicValue();
         }
-        if (var9 == module0761.UNPROVIDED) {
-            var9 = (SubLObject)module0761.$ic2$;
+        if (var9 == UNPROVIDED) {
+            var9 = (SubLObject)$ic2$;
         }
         final SubLThread var10 = SubLProcess.currentSubLThread();
-        SubLObject var11 = (SubLObject)module0761.NIL;
+        SubLObject var11 = (SubLObject)NIL;
         final SubLObject var12 = module0579.$g4284$.currentBinding(var10);
         final SubLObject var13 = module0579.$g4283$.currentBinding(var10);
         try {
             module0579.$g4284$.bind(var3, var10);
             module0579.$g4283$.bind(var4, var10);
-            final SubLObject var14 = (SubLObject)((module0761.NIL != var6) ? ConsesLow.list(var6) : module0761.$ic3$);
-            var11 = module0770.f49067(var2, var5, var14, var7, var8, var9, (SubLObject)module0761.UNPROVIDED);
+            final SubLObject var14 = (SubLObject)((NIL != var6) ? ConsesLow.list(var6) : $ic3$);
+            var11 = module0770.f49067(var2, var5, var14, var7, var8, var9, (SubLObject)UNPROVIDED);
         }
         finally {
             module0579.$g4283$.rebind(var13, var10);
@@ -88,22 +89,22 @@ public final class module0761 extends SubLTranslatedFile
     }
     
     public static SubLObject f48136(final SubLObject var2) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0761.NIL != f48132(var2) || module0761.NIL != f48133(var2));
+        return (SubLObject)makeBoolean(NIL != f48132(var2) || NIL != f48133(var2));
     }
     
     public static SubLObject f48137(SubLObject var9) {
-        if (var9 == module0761.UNPROVIDED) {
-            var9 = (SubLObject)module0761.$ic4$;
+        if (var9 == UNPROVIDED) {
+            var9 = (SubLObject)$ic4$;
         }
         final SubLObject var10 = f48134();
         final SubLObject var11 = f48135();
-        if (module0761.NIL != var10 && module0761.NIL != var11) {
-            return (SubLObject)module0761.T;
+        if (NIL != var10 && NIL != var11) {
+            return (SubLObject)T;
         }
-        if (module0761.$ic4$ == var9 && (module0761.NIL != var10 || module0761.NIL != var11)) {
-            return (SubLObject)module0761.T;
+        if ($ic4$ == var9 && (NIL != var10 || NIL != var11)) {
+            return (SubLObject)T;
         }
-        return (SubLObject)module0761.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f48138() {
@@ -117,16 +118,16 @@ public final class module0761 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0761", "f48136", "S#52616", 1, 0, false);
         new $f48136$UnaryFunction();
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0761", "f48137", "S#52621", 0, 1, false);
-        return (SubLObject)module0761.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f48139() {
-        module0761.$g6100$ = SubLFiles.defconstant("S#52622", (SubLObject)module0761.$ic0$);
-        return (SubLObject)module0761.NIL;
+        $g6100$ = SubLFiles.defconstant("S#52622", (SubLObject)$ic0$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f48140() {
-        return (SubLObject)module0761.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -143,12 +144,12 @@ public final class module0761 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0761();
-        module0761.$g6100$ = null;
-        $ic0$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("NONE"), (SubLObject)SubLObjectFactory.makeKeyword("DECLARATIVE"), (SubLObject)SubLObjectFactory.makeKeyword("INTERROGATIVE"), (SubLObject)SubLObjectFactory.makeKeyword("QUESTION"), (SubLObject)SubLObjectFactory.makeKeyword("IMPERATIVE"), (SubLObject)SubLObjectFactory.makeKeyword("DEFAULT"));
-        $ic1$ = SubLObjectFactory.makeKeyword("DECLARATIVE");
-        $ic2$ = SubLObjectFactory.makeKeyword("TEXT");
-        $ic3$ = SubLObjectFactory.makeKeyword("ANY");
-        $ic4$ = SubLObjectFactory.makeKeyword("EITHER");
+        $g6100$ = null;
+        $ic0$ = ConsesLow.list((SubLObject)makeKeyword("NONE"), (SubLObject)makeKeyword("DECLARATIVE"), (SubLObject)makeKeyword("INTERROGATIVE"), (SubLObject)makeKeyword("QUESTION"), (SubLObject)makeKeyword("IMPERATIVE"), (SubLObject)makeKeyword("DEFAULT"));
+        $ic1$ = makeKeyword("DECLARATIVE");
+        $ic2$ = makeKeyword("TEXT");
+        $ic3$ = makeKeyword("ANY");
+        $ic4$ = makeKeyword("EITHER");
     }
     
     public static final class $f48136$UnaryFunction extends UnaryFunction
@@ -158,7 +159,7 @@ public final class module0761 extends SubLTranslatedFile
         }
         
         public SubLObject processItem(final SubLObject var15) {
-            return module0761.f48136(var15);
+            return f48136(var15);
         }
     }
 }
@@ -166,7 +167,7 @@ public final class module0761 extends SubLTranslatedFile
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0761.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 67 ms
 	
 	Decompiled with Procyon 0.5.32.

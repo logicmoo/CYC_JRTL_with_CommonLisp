@@ -10,6 +10,7 @@ import com.cyc.cycjava.cycl.inference.harness.balancing_tactician;
 import com.cyc.cycjava.cycl.number_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_czer;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
 import com.cyc.cycjava.cycl.set_utilities;

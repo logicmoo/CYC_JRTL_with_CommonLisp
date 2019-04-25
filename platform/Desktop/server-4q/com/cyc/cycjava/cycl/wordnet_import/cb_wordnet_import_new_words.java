@@ -15,6 +15,7 @@ import com.cyc.cycjava.cycl.cyc_file_dependencies;
 import com.cyc.cycjava.cycl.integer_sequence_generator;
 import com.cyc.cycjava.cycl.html_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
 import com.cyc.cycjava.cycl.kb_accessors;
 import com.cyc.cycjava.cycl.czer_main;

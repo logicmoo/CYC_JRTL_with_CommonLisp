@@ -38,6 +38,7 @@ import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.isa;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.forts;

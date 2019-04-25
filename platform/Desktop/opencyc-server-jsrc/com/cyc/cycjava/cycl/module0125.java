@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
@@ -50,196 +51,196 @@ public final class module0125 extends SubLTranslatedFile
     
     
     public static SubLObject f8375(final SubLObject var1, SubLObject var2, SubLObject var3) {
-        if (var2 == module0125.UNPROVIDED) {
-            var2 = (SubLObject)module0125.ZERO_INTEGER;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)ZERO_INTEGER;
         }
-        if (var3 == module0125.UNPROVIDED) {
-            var3 = (SubLObject)module0125.NIL;
+        if (var3 == UNPROVIDED) {
+            var3 = (SubLObject)NIL;
         }
-        assert module0125.NIL != Types.stringp(var1) : var1;
-        assert module0125.NIL != Types.fixnump(var2) : var2;
-        if (module0125.NIL != var3 && !module0125.areAssertionsDisabledFor(me) && module0125.NIL == Types.fixnump(var3)) {
+        assert NIL != Types.stringp(var1) : var1;
+        assert NIL != Types.fixnump(var2) : var2;
+        if (NIL != var3 && !areAssertionsDisabledFor(me) && NIL == Types.fixnump(var3)) {
             throw new AssertionError(var3);
         }
-        if (module0125.NIL != oc_hl_interface_infrastructure.f8291()) {
-            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0125.$ic2$, (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var1), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var3)));
+        if (NIL != hl_interface_infrastructure_oc.f8291()) {
+            return hl_interface_infrastructure_oc.f8304((SubLObject)ConsesLow.list((SubLObject)$ic2$, (SubLObject)ConsesLow.list((SubLObject)$ic3$, var1), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var3)));
         }
         final SubLObject var4 = module0124.f8360(var1, var2, var3);
-        if (module0125.NIL != var4) {
+        if (NIL != var4) {
             return var4;
         }
-        return (SubLObject)module0125.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8376(final SubLObject var5, SubLObject var6, SubLObject var7, SubLObject var2, SubLObject var3) {
-        if (var6 == module0125.UNPROVIDED) {
-            var6 = (SubLObject)module0125.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        if (var7 == module0125.UNPROVIDED) {
-            var7 = (SubLObject)module0125.NIL;
+        if (var7 == UNPROVIDED) {
+            var7 = (SubLObject)NIL;
         }
-        if (var2 == module0125.UNPROVIDED) {
-            var2 = (SubLObject)module0125.ZERO_INTEGER;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)ZERO_INTEGER;
         }
-        if (var3 == module0125.UNPROVIDED) {
-            var3 = (SubLObject)module0125.NIL;
+        if (var3 == UNPROVIDED) {
+            var3 = (SubLObject)NIL;
         }
-        assert module0125.NIL != Types.stringp(var5) : var5;
-        assert module0125.NIL != Types.booleanp(var6) : var6;
-        assert module0125.NIL != Types.booleanp(var7) : var7;
-        assert module0125.NIL != Types.fixnump(var2) : var2;
-        if (module0125.NIL != var3 && !module0125.areAssertionsDisabledFor(me) && module0125.NIL == Types.fixnump(var3)) {
+        assert NIL != Types.stringp(var5) : var5;
+        assert NIL != Types.booleanp(var6) : var6;
+        assert NIL != Types.booleanp(var7) : var7;
+        assert NIL != Types.fixnump(var2) : var2;
+        if (NIL != var3 && !areAssertionsDisabledFor(me) && NIL == Types.fixnump(var3)) {
             throw new AssertionError(var3);
         }
-        if (module0125.NIL != oc_hl_interface_infrastructure.f8291()) {
-            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0125.$ic9$, (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var5), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var6), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var7), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var3)));
+        if (NIL != hl_interface_infrastructure_oc.f8291()) {
+            return hl_interface_infrastructure_oc.f8304((SubLObject)ConsesLow.list((SubLObject)$ic9$, (SubLObject)ConsesLow.list((SubLObject)$ic3$, var5), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var6), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var7), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var3)));
         }
         final SubLObject var8 = module0124.f8361(var5, var6, var7, var2, var3);
-        if (module0125.NIL != var8) {
+        if (NIL != var8) {
             return var8;
         }
-        return (SubLObject)module0125.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8377(final SubLObject var8, SubLObject var6, SubLObject var2, SubLObject var3) {
-        if (var6 == module0125.UNPROVIDED) {
-            var6 = (SubLObject)module0125.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        if (var2 == module0125.UNPROVIDED) {
-            var2 = (SubLObject)module0125.ZERO_INTEGER;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)ZERO_INTEGER;
         }
-        if (var3 == module0125.UNPROVIDED) {
-            var3 = (SubLObject)module0125.NIL;
+        if (var3 == UNPROVIDED) {
+            var3 = (SubLObject)NIL;
         }
-        assert module0125.NIL != Types.stringp(var8) : var8;
-        assert module0125.NIL != Types.booleanp(var6) : var6;
-        assert module0125.NIL != Types.fixnump(var2) : var2;
-        if (module0125.NIL != var3 && !module0125.areAssertionsDisabledFor(me) && module0125.NIL == Types.fixnump(var3)) {
+        assert NIL != Types.stringp(var8) : var8;
+        assert NIL != Types.booleanp(var6) : var6;
+        assert NIL != Types.fixnump(var2) : var2;
+        if (NIL != var3 && !areAssertionsDisabledFor(me) && NIL == Types.fixnump(var3)) {
             throw new AssertionError(var3);
         }
-        if (module0125.NIL != oc_hl_interface_infrastructure.f8291()) {
-            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0125.$ic14$, (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var8), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var6), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var3)));
+        if (NIL != hl_interface_infrastructure_oc.f8291()) {
+            return hl_interface_infrastructure_oc.f8304((SubLObject)ConsesLow.list((SubLObject)$ic14$, (SubLObject)ConsesLow.list((SubLObject)$ic3$, var8), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var6), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var3)));
         }
         final SubLObject var9 = module0124.f8362(var8, var6, var2, var3);
-        if (module0125.NIL != var9) {
+        if (NIL != var9) {
             return var9;
         }
-        return (SubLObject)module0125.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8378(final SubLObject var9, SubLObject var6, SubLObject var2, SubLObject var3) {
-        if (var6 == module0125.UNPROVIDED) {
-            var6 = (SubLObject)module0125.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        if (var2 == module0125.UNPROVIDED) {
-            var2 = (SubLObject)module0125.ZERO_INTEGER;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)ZERO_INTEGER;
         }
-        if (var3 == module0125.UNPROVIDED) {
-            var3 = (SubLObject)module0125.NIL;
+        if (var3 == UNPROVIDED) {
+            var3 = (SubLObject)NIL;
         }
-        assert module0125.NIL != Types.stringp(var9) : var9;
-        assert module0125.NIL != Types.booleanp(var6) : var6;
-        assert module0125.NIL != Types.fixnump(var2) : var2;
-        if (module0125.NIL != var3 && !module0125.areAssertionsDisabledFor(me) && module0125.NIL == Types.fixnump(var3)) {
+        assert NIL != Types.stringp(var9) : var9;
+        assert NIL != Types.booleanp(var6) : var6;
+        assert NIL != Types.fixnump(var2) : var2;
+        if (NIL != var3 && !areAssertionsDisabledFor(me) && NIL == Types.fixnump(var3)) {
             throw new AssertionError(var3);
         }
-        if (module0125.NIL != oc_hl_interface_infrastructure.f8291()) {
-            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0125.$ic18$, (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var9), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var6), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var3)));
+        if (NIL != hl_interface_infrastructure_oc.f8291()) {
+            return hl_interface_infrastructure_oc.f8304((SubLObject)ConsesLow.list((SubLObject)$ic18$, (SubLObject)ConsesLow.list((SubLObject)$ic3$, var9), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var6), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var3)));
         }
         final SubLObject var10 = module0124.f8363(var9, var6, var2, var3);
-        if (module0125.NIL != var10) {
+        if (NIL != var10) {
             return var10;
         }
-        return (SubLObject)module0125.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8379(final SubLObject var10, final SubLObject var1, SubLObject var6, SubLObject var2, SubLObject var3, SubLObject var11) {
-        if (var6 == module0125.UNPROVIDED) {
-            var6 = (SubLObject)module0125.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        if (var2 == module0125.UNPROVIDED) {
-            var2 = (SubLObject)module0125.ZERO_INTEGER;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)ZERO_INTEGER;
         }
-        if (var3 == module0125.UNPROVIDED) {
-            var3 = (SubLObject)module0125.NIL;
+        if (var3 == UNPROVIDED) {
+            var3 = (SubLObject)NIL;
         }
-        if (var11 == module0125.UNPROVIDED) {
-            var11 = (SubLObject)module0125.NIL;
+        if (var11 == UNPROVIDED) {
+            var11 = (SubLObject)NIL;
         }
-        assert module0125.NIL != module0004.f106(var10) : var10;
-        assert module0125.NIL != Types.stringp(var1) : var1;
-        assert module0125.NIL != Types.booleanp(var6) : var6;
-        assert module0125.NIL != Types.fixnump(var2) : var2;
-        if (module0125.NIL != var3 && !module0125.areAssertionsDisabledFor(me) && module0125.NIL == Types.fixnump(var3)) {
+        assert NIL != module0004.f106(var10) : var10;
+        assert NIL != Types.stringp(var1) : var1;
+        assert NIL != Types.booleanp(var6) : var6;
+        assert NIL != Types.fixnump(var2) : var2;
+        if (NIL != var3 && !areAssertionsDisabledFor(me) && NIL == Types.fixnump(var3)) {
             throw new AssertionError(var3);
         }
-        if (module0125.NIL != oc_hl_interface_infrastructure.f8291()) {
-            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0125.$ic23$, (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var10), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var1), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var6), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var3), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var11)));
+        if (NIL != hl_interface_infrastructure_oc.f8291()) {
+            return hl_interface_infrastructure_oc.f8304((SubLObject)ConsesLow.list((SubLObject)$ic23$, (SubLObject)ConsesLow.list((SubLObject)$ic3$, var10), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var1), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var6), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var3), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var11)));
         }
         final SubLObject var12 = module0124.f8364(var10, var1, var6, var2, var3, var11);
-        if (module0125.NIL != var12) {
+        if (NIL != var12) {
             return var12;
         }
-        return (SubLObject)module0125.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8380(final SubLObject var10, final SubLObject var1, SubLObject var6, SubLObject var2, SubLObject var3, SubLObject var11) {
-        if (var6 == module0125.UNPROVIDED) {
-            var6 = (SubLObject)module0125.NIL;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)NIL;
         }
-        if (var2 == module0125.UNPROVIDED) {
-            var2 = (SubLObject)module0125.ZERO_INTEGER;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)ZERO_INTEGER;
         }
-        if (var3 == module0125.UNPROVIDED) {
-            var3 = (SubLObject)module0125.NIL;
+        if (var3 == UNPROVIDED) {
+            var3 = (SubLObject)NIL;
         }
-        if (var11 == module0125.UNPROVIDED) {
-            var11 = (SubLObject)module0125.NIL;
+        if (var11 == UNPROVIDED) {
+            var11 = (SubLObject)NIL;
         }
-        assert module0125.NIL != module0004.f106(var10) : var10;
-        assert module0125.NIL != Types.stringp(var1) : var1;
-        assert module0125.NIL != Types.booleanp(var6) : var6;
-        assert module0125.NIL != Types.fixnump(var2) : var2;
-        if (module0125.NIL != var3 && !module0125.areAssertionsDisabledFor(me) && module0125.NIL == Types.fixnump(var3)) {
+        assert NIL != module0004.f106(var10) : var10;
+        assert NIL != Types.stringp(var1) : var1;
+        assert NIL != Types.booleanp(var6) : var6;
+        assert NIL != Types.fixnump(var2) : var2;
+        if (NIL != var3 && !areAssertionsDisabledFor(me) && NIL == Types.fixnump(var3)) {
             throw new AssertionError(var3);
         }
-        if (module0125.NIL != oc_hl_interface_infrastructure.f8291()) {
-            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0125.$ic27$, (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var10), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var1), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var6), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var3), (SubLObject)ConsesLow.list((SubLObject)module0125.$ic3$, var11)));
+        if (NIL != hl_interface_infrastructure_oc.f8291()) {
+            return hl_interface_infrastructure_oc.f8304((SubLObject)ConsesLow.list((SubLObject)$ic27$, (SubLObject)ConsesLow.list((SubLObject)$ic3$, var10), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var1), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var6), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var2), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var3), (SubLObject)ConsesLow.list((SubLObject)$ic3$, var11)));
         }
         final SubLObject var12 = module0124.f8366(var10, var1, var6, var2, var3, var11);
-        if (module0125.NIL != var12) {
+        if (NIL != var12) {
             return var12;
         }
-        return (SubLObject)module0125.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8381(SubLObject var12, SubLObject var13) {
-        if (var12 == module0125.UNPROVIDED) {
-            var12 = (SubLObject)module0125.T;
+        if (var12 == UNPROVIDED) {
+            var12 = (SubLObject)T;
         }
-        if (var13 == module0125.UNPROVIDED) {
-            var13 = (SubLObject)module0125.ONE_INTEGER;
+        if (var13 == UNPROVIDED) {
+            var13 = (SubLObject)ONE_INTEGER;
         }
-        return oc_hl_interface_infrastructure.f8328((SubLObject)ConsesLow.list((SubLObject)module0125.$ic29$, module0035.f2241(var12)), var13);
+        return hl_interface_infrastructure_oc.f8328((SubLObject)ConsesLow.list((SubLObject)$ic29$, module0035.f2241(var12)), var13);
     }
     
     public static SubLObject f8382(final SubLObject var1, SubLObject var6, SubLObject var2, SubLObject var3, SubLObject var12, SubLObject var13) {
-        if (var6 == module0125.UNPROVIDED) {
-            var6 = (SubLObject)module0125.T;
+        if (var6 == UNPROVIDED) {
+            var6 = (SubLObject)T;
         }
-        if (var2 == module0125.UNPROVIDED) {
-            var2 = (SubLObject)module0125.ZERO_INTEGER;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)ZERO_INTEGER;
         }
-        if (var3 == module0125.UNPROVIDED) {
-            var3 = (SubLObject)module0125.NIL;
+        if (var3 == UNPROVIDED) {
+            var3 = (SubLObject)NIL;
         }
-        if (var12 == module0125.UNPROVIDED) {
-            var12 = (SubLObject)module0125.T;
+        if (var12 == UNPROVIDED) {
+            var12 = (SubLObject)T;
         }
-        if (var13 == module0125.UNPROVIDED) {
-            var13 = (SubLObject)module0125.ONE_INTEGER;
+        if (var13 == UNPROVIDED) {
+            var13 = (SubLObject)ONE_INTEGER;
         }
-        return oc_hl_interface_infrastructure.f8328((SubLObject)ConsesLow.list((SubLObject)module0125.$ic30$, module0035.f2241(var1), module0035.f2241(var6), module0035.f2241(var2), module0035.f2241(var3), module0035.f2241(var12)), var13);
+        return hl_interface_infrastructure_oc.f8328((SubLObject)ConsesLow.list((SubLObject)$ic30$, module0035.f2241(var1), module0035.f2241(var6), module0035.f2241(var2), module0035.f2241(var3), module0035.f2241(var12)), var13);
     }
     
     public static SubLObject f8383() {
@@ -251,21 +252,21 @@ public final class module0125 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0125", "f8380", "KB-N-CONSTANTS-AFTER", 2, 4, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0125", "f8381", "S#10486", 0, 2, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0125", "f8382", "S#10487", 1, 5, false);
-        return (SubLObject)module0125.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8384() {
-        return (SubLObject)module0125.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8385() {
-        module0012.f368((SubLObject)module0125.$ic2$, (SubLObject)module0125.$ic4$, (SubLObject)module0125.$ic5$, (SubLObject)module0125.$ic6$, (SubLObject)module0125.$ic7$);
-        module0012.f368((SubLObject)module0125.$ic9$, (SubLObject)module0125.$ic10$, (SubLObject)module0125.$ic11$, (SubLObject)module0125.$ic12$, (SubLObject)module0125.$ic13$);
-        module0012.f368((SubLObject)module0125.$ic14$, (SubLObject)module0125.$ic15$, (SubLObject)module0125.$ic16$, (SubLObject)module0125.$ic17$, (SubLObject)module0125.$ic13$);
-        module0012.f368((SubLObject)module0125.$ic18$, (SubLObject)module0125.$ic19$, (SubLObject)module0125.$ic20$, (SubLObject)module0125.$ic21$, (SubLObject)module0125.$ic13$);
-        module0012.f368((SubLObject)module0125.$ic23$, (SubLObject)module0125.$ic24$, (SubLObject)module0125.$ic25$, (SubLObject)module0125.$ic26$, (SubLObject)module0125.$ic13$);
-        module0012.f368((SubLObject)module0125.$ic27$, (SubLObject)module0125.$ic24$, (SubLObject)module0125.$ic28$, (SubLObject)module0125.$ic26$, (SubLObject)module0125.$ic13$);
-        return (SubLObject)module0125.NIL;
+        module0012.f368((SubLObject)$ic2$, (SubLObject)$ic4$, (SubLObject)$ic5$, (SubLObject)$ic6$, (SubLObject)$ic7$);
+        module0012.f368((SubLObject)$ic9$, (SubLObject)$ic10$, (SubLObject)$ic11$, (SubLObject)$ic12$, (SubLObject)$ic13$);
+        module0012.f368((SubLObject)$ic14$, (SubLObject)$ic15$, (SubLObject)$ic16$, (SubLObject)$ic17$, (SubLObject)$ic13$);
+        module0012.f368((SubLObject)$ic18$, (SubLObject)$ic19$, (SubLObject)$ic20$, (SubLObject)$ic21$, (SubLObject)$ic13$);
+        module0012.f368((SubLObject)$ic23$, (SubLObject)$ic24$, (SubLObject)$ic25$, (SubLObject)$ic26$, (SubLObject)$ic13$);
+        module0012.f368((SubLObject)$ic27$, (SubLObject)$ic24$, (SubLObject)$ic28$, (SubLObject)$ic26$, (SubLObject)$ic13$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -282,44 +283,44 @@ public final class module0125 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0125();
-        $ic0$ = SubLObjectFactory.makeSymbol("STRINGP");
-        $ic1$ = SubLObjectFactory.makeSymbol("FIXNUMP");
-        $ic2$ = SubLObjectFactory.makeSymbol("KB-CONSTANT-COMPLETE-EXACT");
-        $ic3$ = SubLObjectFactory.makeSymbol("QUOTE");
-        $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STRING"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)module0125.ZERO_INTEGER), (SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"));
-        $ic5$ = SubLObjectFactory.makeString("Return a valid constant whose name exactly matches STRING.\n   Optionally the START and END character positions can be\n   specified, such that the STRING matches characters between the START and \n   END range.  If no constant exists, return NIL.");
-        $ic6$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STRING"), (SubLObject)SubLObjectFactory.makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FIXNUMP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#664", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FIXNUMP"))));
-        $ic7$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#664", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")));
-        $ic8$ = SubLObjectFactory.makeSymbol("BOOLEANP");
-        $ic9$ = SubLObjectFactory.makeSymbol("KB-CONSTANT-COMPLETE");
-        $ic10$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10299", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#10488", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10489", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)module0125.ZERO_INTEGER), (SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"));
-        $ic11$ = SubLObjectFactory.makeString("Return all valid constants with PREFIX as a prefix of their name\n   When CASE-SENSITIVE? is non-nil, the comparison is done in a case-sensitive fashion.\n   When EXACT-LENGTH? is non-nil, the prefix must be the entire string\n   Optionally the START and END character positions can be\n   specified, such that the PREFIX matches characters between the START and \n   END range.  If no constant exists, return NIL.");
-        $ic12$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10299", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10488", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10489", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FIXNUMP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#664", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FIXNUMP"))));
-        $ic13$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")));
-        $ic14$ = SubLObjectFactory.makeSymbol("KB-CONSTANT-APROPOS");
-        $ic15$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#368", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#10488", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)module0125.ZERO_INTEGER), (SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"));
-        $ic16$ = SubLObjectFactory.makeString("Return all valid constants with SUBSTRING somewhere in their name\n   When CASE-SENSITIVE? is non-nil, the comparison is done in a case-sensitive fashion.\n   Optionally the START and END character positions can be\n   specified, such that the SUBSTRING matches characters between the START and \n   END range.  If no constant exists, return NIL.");
-        $ic17$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#368", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10488", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FIXNUMP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#664", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FIXNUMP"))));
-        $ic18$ = SubLObjectFactory.makeSymbol("KB-CONSTANT-POSTFIX");
-        $ic19$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10300", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#10488", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)module0125.ZERO_INTEGER), (SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"));
-        $ic20$ = SubLObjectFactory.makeString("Return all valid constants with POSTFIX as a postfix of their name\n   When CASE-SENSITIVE? is non-nil, the comparison is done in a case-sensitive fashion.\n   Optionally the START and END character positions can be\n   specified, such that the SUBSTRING matches characters between the START and \n   END range.  If no constant exists, return NIL.");
-        $ic21$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10300", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10488", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FIXNUMP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#664", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FIXNUMP"))));
-        $ic22$ = SubLObjectFactory.makeSymbol("NON-NEGATIVE-INTEGER-P");
-        $ic23$ = SubLObjectFactory.makeSymbol("KB-N-CONSTANTS-BEFORE");
-        $ic24$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#770", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("STRING"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#10488", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)module0125.ZERO_INTEGER), (SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10490", "CYC"));
-        $ic25$ = SubLObjectFactory.makeString("Return the N constants with names before STRING.  When CASE-SENSITIVE? is non-nil,\n   the comparison is done in a case-sensitive fashion.  Optionally the START and END\n   character positions can be specified, such that STRING matches characters between\n   the START and END range.  If STRICT? is non-nil, then only constants strictly\n   before the string are returned.");
-        $ic26$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#770", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("NON-NEGATIVE-INTEGER-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STRING"), (SubLObject)SubLObjectFactory.makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10488", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FIXNUMP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#664", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FIXNUMP"))));
-        $ic27$ = SubLObjectFactory.makeSymbol("KB-N-CONSTANTS-AFTER");
-        $ic28$ = SubLObjectFactory.makeString("Return the N constants with names after STRING.  When CASE-SENSITIVE? is non-nil,\n   the comparison is done in a case-sensitive fashion.  Optionally the START and END\n   character positions can be specified, such that STRING matches characters between\n   the START and END range.  If STRICT? is non-nil, then only constants strictly after\n   the string are returned.");
-        $ic29$ = SubLObjectFactory.makeSymbol("S#10481", "CYC");
-        $ic30$ = SubLObjectFactory.makeSymbol("S#10482", "CYC");
+        $ic0$ = makeSymbol("STRINGP");
+        $ic1$ = makeSymbol("FIXNUMP");
+        $ic2$ = makeSymbol("KB-CONSTANT-COMPLETE-EXACT");
+        $ic3$ = makeSymbol("QUOTE");
+        $ic4$ = ConsesLow.list((SubLObject)makeSymbol("STRING"), (SubLObject)makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)ZERO_INTEGER), (SubLObject)makeSymbol("S#125", "CYC"));
+        $ic5$ = makeString("Return a valid constant whose name exactly matches STRING.\n   Optionally the START and END character positions can be\n   specified, such that the STRING matches characters between the START and \n   END range.  If no constant exists, return NIL.");
+        $ic6$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("STRING"), (SubLObject)makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)makeSymbol("FIXNUMP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#664", "CYC"), (SubLObject)makeSymbol("FIXNUMP"))));
+        $ic7$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#664", "CYC"), (SubLObject)makeSymbol("CONSTANT-P")));
+        $ic8$ = makeSymbol("BOOLEANP");
+        $ic9$ = makeSymbol("KB-CONSTANT-COMPLETE");
+        $ic10$ = ConsesLow.list((SubLObject)makeSymbol("S#10299", "CYC"), (SubLObject)makeSymbol("&OPTIONAL"), (SubLObject)makeSymbol("S#10488", "CYC"), (SubLObject)makeSymbol("S#10489", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)ZERO_INTEGER), (SubLObject)makeSymbol("S#125", "CYC"));
+        $ic11$ = makeString("Return all valid constants with PREFIX as a prefix of their name\n   When CASE-SENSITIVE? is non-nil, the comparison is done in a case-sensitive fashion.\n   When EXACT-LENGTH? is non-nil, the prefix must be the entire string\n   Optionally the START and END character positions can be\n   specified, such that the PREFIX matches characters between the START and \n   END range.  If no constant exists, return NIL.");
+        $ic12$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#10299", "CYC"), (SubLObject)makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#10488", "CYC"), (SubLObject)makeSymbol("BOOLEANP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#10489", "CYC"), (SubLObject)makeSymbol("BOOLEANP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)makeSymbol("FIXNUMP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#664", "CYC"), (SubLObject)makeSymbol("FIXNUMP"))));
+        $ic13$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("LIST"), (SubLObject)makeSymbol("CONSTANT-P")));
+        $ic14$ = makeSymbol("KB-CONSTANT-APROPOS");
+        $ic15$ = ConsesLow.list((SubLObject)makeSymbol("S#368", "CYC"), (SubLObject)makeSymbol("&OPTIONAL"), (SubLObject)makeSymbol("S#10488", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)ZERO_INTEGER), (SubLObject)makeSymbol("S#125", "CYC"));
+        $ic16$ = makeString("Return all valid constants with SUBSTRING somewhere in their name\n   When CASE-SENSITIVE? is non-nil, the comparison is done in a case-sensitive fashion.\n   Optionally the START and END character positions can be\n   specified, such that the SUBSTRING matches characters between the START and \n   END range.  If no constant exists, return NIL.");
+        $ic17$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#368", "CYC"), (SubLObject)makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#10488", "CYC"), (SubLObject)makeSymbol("BOOLEANP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)makeSymbol("FIXNUMP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#664", "CYC"), (SubLObject)makeSymbol("FIXNUMP"))));
+        $ic18$ = makeSymbol("KB-CONSTANT-POSTFIX");
+        $ic19$ = ConsesLow.list((SubLObject)makeSymbol("S#10300", "CYC"), (SubLObject)makeSymbol("&OPTIONAL"), (SubLObject)makeSymbol("S#10488", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)ZERO_INTEGER), (SubLObject)makeSymbol("S#125", "CYC"));
+        $ic20$ = makeString("Return all valid constants with POSTFIX as a postfix of their name\n   When CASE-SENSITIVE? is non-nil, the comparison is done in a case-sensitive fashion.\n   Optionally the START and END character positions can be\n   specified, such that the SUBSTRING matches characters between the START and \n   END range.  If no constant exists, return NIL.");
+        $ic21$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#10300", "CYC"), (SubLObject)makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#10488", "CYC"), (SubLObject)makeSymbol("BOOLEANP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)makeSymbol("FIXNUMP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#664", "CYC"), (SubLObject)makeSymbol("FIXNUMP"))));
+        $ic22$ = makeSymbol("NON-NEGATIVE-INTEGER-P");
+        $ic23$ = makeSymbol("KB-N-CONSTANTS-BEFORE");
+        $ic24$ = ConsesLow.list((SubLObject)makeSymbol("S#770", "CYC"), (SubLObject)makeSymbol("STRING"), (SubLObject)makeSymbol("&OPTIONAL"), (SubLObject)makeSymbol("S#10488", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)ZERO_INTEGER), (SubLObject)makeSymbol("S#125", "CYC"), (SubLObject)makeSymbol("S#10490", "CYC"));
+        $ic25$ = makeString("Return the N constants with names before STRING.  When CASE-SENSITIVE? is non-nil,\n   the comparison is done in a case-sensitive fashion.  Optionally the START and END\n   character positions can be specified, such that STRING matches characters between\n   the START and END range.  If STRICT? is non-nil, then only constants strictly\n   before the string are returned.");
+        $ic26$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#770", "CYC"), (SubLObject)makeSymbol("NON-NEGATIVE-INTEGER-P")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("STRING"), (SubLObject)makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#10488", "CYC"), (SubLObject)makeSymbol("BOOLEANP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)makeSymbol("FIXNUMP")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#664", "CYC"), (SubLObject)makeSymbol("FIXNUMP"))));
+        $ic27$ = makeSymbol("KB-N-CONSTANTS-AFTER");
+        $ic28$ = makeString("Return the N constants with names after STRING.  When CASE-SENSITIVE? is non-nil,\n   the comparison is done in a case-sensitive fashion.  Optionally the START and END\n   character positions can be specified, such that STRING matches characters between\n   the START and END range.  If STRICT? is non-nil, then only constants strictly after\n   the string are returned.");
+        $ic29$ = makeSymbol("S#10481", "CYC");
+        $ic30$ = makeSymbol("S#10482", "CYC");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0125.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 109 ms
 	 synthetic 
 	Decompiled with Procyon 0.5.32.

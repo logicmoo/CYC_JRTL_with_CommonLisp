@@ -2,6 +2,7 @@ package com.cyc.cycjava.cycl.inference.modules;
 
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.util.SubLFiles;

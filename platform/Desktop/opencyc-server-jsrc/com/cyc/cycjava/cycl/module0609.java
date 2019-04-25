@@ -4,6 +4,7 @@ import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
@@ -28,14 +29,14 @@ public final class module0609 extends SubLTranslatedFile
     private static final SubLSymbol $ic10$;
     
     public static SubLObject f37178(final SubLObject var1) {
-        if (module0609.NIL == var1) {
+        if (NIL == var1) {
             module0229.f15259();
-            return (SubLObject)module0609.NIL;
+            return (SubLObject)NIL;
         }
-        if (module0609.NIL != module0035.f1997(var1)) {
+        if (NIL != module0035.f1997(var1)) {
             return var1.first();
         }
-        return f37179((SubLObject)module0609.$ic0$, (SubLObject)module0609.NIL, var1);
+        return f37179((SubLObject)$ic0$, (SubLObject)NIL, var1);
     }
     
     public static SubLObject f37180(final SubLObject var2, final SubLObject var3) {
@@ -57,20 +58,20 @@ public final class module0609 extends SubLTranslatedFile
     }
     
     public static SubLObject f37184(final SubLObject var1) {
-        return f37179((SubLObject)module0609.$ic4$, (SubLObject)module0609.ONE_INTEGER, var1);
+        return f37179((SubLObject)$ic4$, (SubLObject)ONE_INTEGER, var1);
     }
     
     public static SubLObject f37185(final SubLObject var2, final SubLObject var3) {
-        if (module0609.ZERO_INTEGER.eql(var2)) {
-            return (SubLObject)module0609.ZERO_INTEGER;
+        if (ZERO_INTEGER.eql(var2)) {
+            return (SubLObject)ZERO_INTEGER;
         }
-        if (module0609.ZERO_INTEGER.eql(var3)) {
-            return (SubLObject)module0609.ZERO_INTEGER;
+        if (ZERO_INTEGER.eql(var3)) {
+            return (SubLObject)ZERO_INTEGER;
         }
-        if (module0609.ONE_INTEGER.eql(var2)) {
+        if (ONE_INTEGER.eql(var2)) {
             return var3;
         }
-        if (module0609.ONE_INTEGER.eql(var3)) {
+        if (ONE_INTEGER.eql(var3)) {
             return var2;
         }
         if (var2.isNumber() && var3.isNumber()) {
@@ -106,28 +107,28 @@ public final class module0609 extends SubLTranslatedFile
     }
     
     public static SubLObject f37191(final SubLObject var2, final SubLObject var3) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0609.NIL != f37190(var2, var3) && module0609.NIL != f37189(var2, var3));
+        return (SubLObject)makeBoolean(NIL != f37190(var2, var3) && NIL != f37189(var2, var3));
     }
     
     public static SubLObject f37179(final SubLObject var5, final SubLObject var6, final SubLObject var1) {
         final SubLObject var7 = Sequences.length(var1);
-        if (var7.numE((SubLObject)module0609.ZERO_INTEGER)) {
-            if (module0609.NIL != var6) {
+        if (var7.numE((SubLObject)ZERO_INTEGER)) {
+            if (NIL != var6) {
                 return var6;
             }
             module0229.f15259();
-            return (SubLObject)module0609.NIL;
+            return (SubLObject)NIL;
         }
         else {
-            if (!var7.numE((SubLObject)module0609.ONE_INTEGER)) {
+            if (!var7.numE((SubLObject)ONE_INTEGER)) {
                 SubLObject var8 = var1.first();
-                SubLObject var9 = (SubLObject)module0609.NIL;
-                SubLObject var10 = (SubLObject)module0609.NIL;
-                SubLObject var11 = (SubLObject)module0609.NIL;
+                SubLObject var9 = (SubLObject)NIL;
+                SubLObject var10 = (SubLObject)NIL;
+                SubLObject var11 = (SubLObject)NIL;
                 var9 = var1.rest();
                 var10 = var8;
                 var11 = var9.first();
-                while (module0609.NIL != var9) {
+                while (NIL != var9) {
                     var8 = Functions.funcall(var5, var10, var11);
                     var9 = var9.rest();
                     var10 = var8;
@@ -135,7 +136,7 @@ public final class module0609 extends SubLTranslatedFile
                 }
                 return var8;
             }
-            if (module0609.NIL != var6) {
+            if (NIL != var6) {
                 return Functions.funcall(var5, var6, var1.first());
             }
             return var1.first();
@@ -148,9 +149,9 @@ public final class module0609 extends SubLTranslatedFile
     
     public static SubLObject f37188(final SubLObject var13) {
         if (var13.isDouble()) {
-            final SubLObject var14 = module0048.f3302(var13, (SubLObject)module0609.FIFTEEN_INTEGER);
+            final SubLObject var14 = module0048.f3302(var13, (SubLObject)FIFTEEN_INTEGER);
             if (!var13.numE(var14)) {
-                final SubLObject var15 = module0048.f3302(var13, (SubLObject)module0609.TEN_INTEGER);
+                final SubLObject var15 = module0048.f3302(var13, (SubLObject)TEN_INTEGER);
                 if (var15.numE(var14)) {
                     return var14;
                 }
@@ -174,24 +175,24 @@ public final class module0609 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0609", "f37179", "S#40987", 3, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0609", "f37181", "S#40988", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0609", "f37188", "S#40989", 1, 0, false);
-        return (SubLObject)module0609.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f37193() {
-        return (SubLObject)module0609.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f37194() {
-        module0012.f416((SubLObject)module0609.$ic1$);
-        module0012.f416((SubLObject)module0609.$ic2$);
-        module0012.f416((SubLObject)module0609.$ic3$);
-        module0012.f416((SubLObject)module0609.$ic5$);
-        module0012.f416((SubLObject)module0609.$ic6$);
-        module0012.f416((SubLObject)module0609.$ic7$);
-        module0012.f416((SubLObject)module0609.$ic8$);
-        module0012.f416((SubLObject)module0609.$ic9$);
-        module0012.f416((SubLObject)module0609.$ic10$);
-        return (SubLObject)module0609.NIL;
+        module0012.f416((SubLObject)$ic1$);
+        module0012.f416((SubLObject)$ic2$);
+        module0012.f416((SubLObject)$ic3$);
+        module0012.f416((SubLObject)$ic5$);
+        module0012.f416((SubLObject)$ic6$);
+        module0012.f416((SubLObject)$ic7$);
+        module0012.f416((SubLObject)$ic8$);
+        module0012.f416((SubLObject)$ic9$);
+        module0012.f416((SubLObject)$ic10$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -208,24 +209,24 @@ public final class module0609 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0609();
-        $ic0$ = SubLObjectFactory.makeSymbol("S#40985", "CYC");
-        $ic1$ = SubLObjectFactory.makeSymbol("CYC-PLUS");
-        $ic2$ = SubLObjectFactory.makeSymbol("CYC-DIFFERENCE");
-        $ic3$ = SubLObjectFactory.makeSymbol("CYC-MINUS");
-        $ic4$ = SubLObjectFactory.makeSymbol("S#40986", "CYC");
-        $ic5$ = SubLObjectFactory.makeSymbol("CYC-TIMES");
-        $ic6$ = SubLObjectFactory.makeSymbol("CYC-GREATER-THAN");
-        $ic7$ = SubLObjectFactory.makeSymbol("CYC-LESS-THAN");
-        $ic8$ = SubLObjectFactory.makeSymbol("CYC-GREATER-THAN-OR-EQUAL-TO");
-        $ic9$ = SubLObjectFactory.makeSymbol("CYC-LESS-THAN-OR-EQUAL-TO");
-        $ic10$ = SubLObjectFactory.makeSymbol("CYC-NUMERICALLY-EQUAL");
+        $ic0$ = makeSymbol("S#40985", "CYC");
+        $ic1$ = makeSymbol("CYC-PLUS");
+        $ic2$ = makeSymbol("CYC-DIFFERENCE");
+        $ic3$ = makeSymbol("CYC-MINUS");
+        $ic4$ = makeSymbol("S#40986", "CYC");
+        $ic5$ = makeSymbol("CYC-TIMES");
+        $ic6$ = makeSymbol("CYC-GREATER-THAN");
+        $ic7$ = makeSymbol("CYC-LESS-THAN");
+        $ic8$ = makeSymbol("CYC-GREATER-THAN-OR-EQUAL-TO");
+        $ic9$ = makeSymbol("CYC-LESS-THAN-OR-EQUAL-TO");
+        $ic10$ = makeSymbol("CYC-NUMERICALLY-EQUAL");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0609.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 66 ms
 	
 	Decompiled with Procyon 0.5.32.

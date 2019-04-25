@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Iterator;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -770,7 +771,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
 
   public static SubLObject f8474()
   {
-    return ( NIL != oc_hl_interface_infrastructure.f8291() ) ? f8475() : f8476();
+    return ( NIL != hl_interface_infrastructure_oc.f8291() ) ? f8475() : f8476();
   }
 
   public static SubLObject f8475()
@@ -871,7 +872,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
       module0012.$g76$.rebind( var23, var17 );
       module0012.$g75$.rebind( var22, var17 );
     }
-    if( NIL != oc_hl_interface_infrastructure.f8287() )
+    if( NIL != hl_interface_infrastructure_oc.f8287() )
     {
       module0165.f10706();
       module0124.f8368();
@@ -909,7 +910,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
             if( var48.isInteger() )
             {
               module0165.f10711( var51, var48 );
-              if( NIL != oc_hl_interface_infrastructure.f8287() )
+              if( NIL != hl_interface_infrastructure_oc.f8287() )
               {
                 module0165.f10709( var51, var50 );
                 module0124.f8369( var51, var49 );
@@ -939,7 +940,7 @@ public final class constant_handles_oc extends SubLTranslatedFile
       try
       {
         Threads.$is_thread_performing_cleanupP$.bind( T, var17 );
-        oc_hl_interface_infrastructure.f8331( var41 );
+        hl_interface_infrastructure_oc.f8331( var41 );
       }
       finally
       {

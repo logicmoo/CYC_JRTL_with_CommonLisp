@@ -12,6 +12,7 @@ import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.cycjava.cycl.formula_pattern_match;
 import com.cyc.cycjava.cycl.cycl_grammar;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.string_utilities;

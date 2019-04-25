@@ -65,6 +65,7 @@ import com.cyc.cycjava.cycl.numeric_date_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.methods;
 import com.cyc.cycjava.cycl.classes;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;

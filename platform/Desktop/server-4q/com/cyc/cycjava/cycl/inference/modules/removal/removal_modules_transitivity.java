@@ -34,6 +34,7 @@ import com.cyc.cycjava.cycl.sbhl.sbhl_links;
 import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
 import com.cyc.cycjava.cycl.function_terms;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
 import com.cyc.cycjava.cycl.kb_indexing;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;

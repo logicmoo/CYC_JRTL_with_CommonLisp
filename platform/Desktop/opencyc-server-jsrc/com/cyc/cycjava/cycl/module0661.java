@@ -17,6 +17,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
@@ -292,15 +293,15 @@ public final class module0661 extends SubLTranslatedFile
     
     public static SubLObject f40212(final SubLObject var1, final SubLObject var2, final SubLObject var3) {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        if (module0661.NIL != print_high.$print_level$.getDynamicValue(var4) && var3.numG(print_high.$print_level$.getDynamicValue(var4))) {
-            print_high.princ((SubLObject)module0661.$ic0$, var2);
+        if (NIL != print_high.$print_level$.getDynamicValue(var4) && var3.numG(print_high.$print_level$.getDynamicValue(var4))) {
+            print_high.princ((SubLObject)$ic0$, var2);
         }
-        else if (module0661.NIL != print_high.$print_readably$.getDynamicValue(var4)) {
+        else if (NIL != print_high.$print_readably$.getDynamicValue(var4)) {
             print_high.print_not_readable(var1, var2);
         }
         else {
-            streams_high.write_string((SubLObject)module0661.$ic1$, var2, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-            PrintLow.write((SubLObject)Types.type_of(var1), new SubLObject[] { module0661.$ic2$, var2 });
+            streams_high.write_string((SubLObject)$ic1$, var2, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+            PrintLow.write((SubLObject)Types.type_of(var1), new SubLObject[] { $ic2$, var2 });
             streams_high.write_char((SubLObject)Characters.CHAR_space, var2);
             print_high.princ(f40213(var1), var2);
             streams_high.write_char((SubLObject)Characters.CHAR_greater, var2);
@@ -309,219 +310,219 @@ public final class module0661 extends SubLTranslatedFile
     }
     
     public static SubLObject f40214(final SubLObject var9, final SubLObject var2) {
-        f40212(var9, var2, (SubLObject)module0661.ZERO_INTEGER);
-        return (SubLObject)module0661.NIL;
+        f40212(var9, var2, (SubLObject)ZERO_INTEGER);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40215(final SubLObject var9) {
-        return (SubLObject)((var9.getClass() == $sX44265_native.class) ? module0661.T : module0661.NIL);
+        return (SubLObject)((var9.getClass() == $sX44265_native.class) ? T : NIL);
     }
     
     public static SubLObject f40213(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField2();
     }
     
     public static SubLObject f40216(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField3();
     }
     
     public static SubLObject f40217(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField4();
     }
     
     public static SubLObject f40218(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField5();
     }
     
     public static SubLObject f40219(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField6();
     }
     
     public static SubLObject f40220(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField7();
     }
     
     public static SubLObject f40221(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField8();
     }
     
     public static SubLObject f40222(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField9();
     }
     
     public static SubLObject f40223(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField10();
     }
     
     public static SubLObject f40224(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField11();
     }
     
     public static SubLObject f40225(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField12();
     }
     
     public static SubLObject f40226(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField13();
     }
     
     public static SubLObject f40227(final SubLObject var9) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.getField14();
     }
     
     public static SubLObject f40228(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField2(var11);
     }
     
     public static SubLObject f40229(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField3(var11);
     }
     
     public static SubLObject f40230(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField4(var11);
     }
     
     public static SubLObject f40231(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField5(var11);
     }
     
     public static SubLObject f40232(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField6(var11);
     }
     
     public static SubLObject f40233(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField7(var11);
     }
     
     public static SubLObject f40234(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField8(var11);
     }
     
     public static SubLObject f40235(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField9(var11);
     }
     
     public static SubLObject f40236(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField10(var11);
     }
     
     public static SubLObject f40237(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField11(var11);
     }
     
     public static SubLObject f40238(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField12(var11);
     }
     
     public static SubLObject f40239(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField13(var11);
     }
     
     public static SubLObject f40240(final SubLObject var9, final SubLObject var11) {
-        assert module0661.NIL != f40215(var9) : var9;
+        assert NIL != f40215(var9) : var9;
         return var9.setField14(var11);
     }
     
     public static SubLObject f40241(SubLObject var12) {
-        if (var12 == module0661.UNPROVIDED) {
-            var12 = (SubLObject)module0661.NIL;
+        if (var12 == UNPROVIDED) {
+            var12 = (SubLObject)NIL;
         }
         final SubLObject var13 = (SubLObject)new $sX44265_native();
         SubLObject var14;
         SubLObject var15;
         SubLObject var16;
         SubLObject var17;
-        for (var14 = (SubLObject)module0661.NIL, var14 = var12; module0661.NIL != var14; var14 = conses_high.cddr(var14)) {
+        for (var14 = (SubLObject)NIL, var14 = var12; NIL != var14; var14 = conses_high.cddr(var14)) {
             var15 = var14.first();
             var16 = conses_high.cadr(var14);
             var17 = var15;
-            if (var17.eql((SubLObject)module0661.$ic39$)) {
+            if (var17.eql((SubLObject)$ic39$)) {
                 f40228(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic40$)) {
+            else if (var17.eql((SubLObject)$ic40$)) {
                 f40229(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic41$)) {
+            else if (var17.eql((SubLObject)$ic41$)) {
                 f40230(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic42$)) {
+            else if (var17.eql((SubLObject)$ic42$)) {
                 f40231(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic43$)) {
+            else if (var17.eql((SubLObject)$ic43$)) {
                 f40232(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic44$)) {
+            else if (var17.eql((SubLObject)$ic44$)) {
                 f40233(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic45$)) {
+            else if (var17.eql((SubLObject)$ic45$)) {
                 f40234(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic46$)) {
+            else if (var17.eql((SubLObject)$ic46$)) {
                 f40235(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic47$)) {
+            else if (var17.eql((SubLObject)$ic47$)) {
                 f40236(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic48$)) {
+            else if (var17.eql((SubLObject)$ic48$)) {
                 f40237(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic49$)) {
+            else if (var17.eql((SubLObject)$ic49$)) {
                 f40238(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic50$)) {
+            else if (var17.eql((SubLObject)$ic50$)) {
                 f40239(var13, var16);
             }
-            else if (var17.eql((SubLObject)module0661.$ic51$)) {
+            else if (var17.eql((SubLObject)$ic51$)) {
                 f40240(var13, var16);
             }
             else {
-                Errors.error((SubLObject)module0661.$ic52$, var15);
+                Errors.error((SubLObject)$ic52$, var15);
             }
         }
         return var13;
     }
     
     public static SubLObject f40242(final SubLObject var18, final SubLObject var19) {
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic53$, (SubLObject)module0661.$ic54$, (SubLObject)module0661.THIRTEEN_INTEGER);
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic39$, f40213(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic40$, f40216(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic41$, f40217(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic42$, f40218(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic43$, f40219(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic44$, f40220(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic45$, f40221(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic46$, f40222(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic47$, f40223(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic48$, f40224(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic49$, f40225(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic50$, f40226(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic55$, (SubLObject)module0661.$ic51$, f40227(var18));
-        Functions.funcall(var19, var18, (SubLObject)module0661.$ic56$, (SubLObject)module0661.$ic54$, (SubLObject)module0661.THIRTEEN_INTEGER);
+        Functions.funcall(var19, var18, (SubLObject)$ic53$, (SubLObject)$ic54$, (SubLObject)THIRTEEN_INTEGER);
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic39$, f40213(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic40$, f40216(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic41$, f40217(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic42$, f40218(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic43$, f40219(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic44$, f40220(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic45$, f40221(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic46$, f40222(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic47$, f40223(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic48$, f40224(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic49$, f40225(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic50$, f40226(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic55$, (SubLObject)$ic51$, f40227(var18));
+        Functions.funcall(var19, var18, (SubLObject)$ic56$, (SubLObject)$ic54$, (SubLObject)THIRTEEN_INTEGER);
         return var18;
     }
     
@@ -530,415 +531,415 @@ public final class module0661 extends SubLTranslatedFile
     }
     
     public static SubLObject f40244(final SubLObject var20) {
-        return Sequences.find(var20, module0661.$g5211$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0661.EQUAL), Symbols.symbol_function((SubLObject)module0661.$ic13$), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+        return Sequences.find(var20, $g5211$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQUAL), Symbols.symbol_function((SubLObject)$ic13$), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
     }
     
     public static SubLObject f40245(final SubLObject var21) {
         final SubLObject var22 = f40244(var21);
-        if (module0661.NIL != var22) {
+        if (NIL != var22) {
             return f40222(var22);
         }
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40246(final SubLObject var22, SubLObject var23) {
-        if (var23 == module0661.UNPROVIDED) {
-            var23 = module0661.$g5209$.getDynamicValue();
+        if (var23 == UNPROVIDED) {
+            var23 = $g5209$.getDynamicValue();
         }
-        if (module0661.NIL != var23) {
-            if (module0661.NIL != f40245(var22) && f40221(var22).eql(var23)) {
+        if (NIL != var23) {
+            if (NIL != f40245(var22) && f40221(var22).eql(var23)) {
                 return (SubLObject)ConsesLow.list(var22);
             }
         }
-        else if (module0661.NIL != f40222(var22)) {
+        else if (NIL != f40222(var22)) {
             return (SubLObject)ConsesLow.list(var22);
         }
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40247() {
-        module0661.$g5214$.setGlobalValue((SubLObject)module0661.NIL);
-        return (SubLObject)module0661.NIL;
+        $g5214$.setGlobalValue((SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40248(SubLObject var23) {
-        if (var23 == module0661.UNPROVIDED) {
-            var23 = (SubLObject)module0661.NIL;
+        if (var23 == UNPROVIDED) {
+            var23 = (SubLObject)NIL;
         }
         final SubLThread var24 = SubLProcess.currentSubLThread();
-        final SubLObject var25 = conses_high.assoc(var23, module0661.$g5214$.getGlobalValue(), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED).rest();
-        if (module0661.NIL != var25) {
+        final SubLObject var25 = conses_high.assoc(var23, $g5214$.getGlobalValue(), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED).rest();
+        if (NIL != var25) {
             return var25;
         }
-        SubLObject var26 = (SubLObject)module0661.NIL;
-        final SubLObject var27 = module0661.$g5209$.currentBinding(var24);
+        SubLObject var26 = (SubLObject)NIL;
+        final SubLObject var27 = $g5209$.currentBinding(var24);
         try {
-            module0661.$g5209$.bind(var23, var24);
-            var26 = Mapping.mapcan(Symbols.symbol_function((SubLObject)module0661.$ic60$), module0661.$g5211$.getGlobalValue(), module0661.EMPTY_SUBL_OBJECT_ARRAY);
+            $g5209$.bind(var23, var24);
+            var26 = Mapping.mapcan(Symbols.symbol_function((SubLObject)$ic60$), $g5211$.getGlobalValue(), EMPTY_SUBL_OBJECT_ARRAY);
         }
         finally {
-            module0661.$g5209$.rebind(var27, var24);
+            $g5209$.rebind(var27, var24);
         }
-        if (module0661.NIL != var26) {
-            module0661.$g5214$.setGlobalValue(conses_high.acons(var23, var26, module0661.$g5214$.getGlobalValue()));
+        if (NIL != var26) {
+            $g5214$.setGlobalValue(conses_high.acons(var23, var26, $g5214$.getGlobalValue()));
         }
         return var26;
     }
     
     public static SubLObject f40249(final SubLObject var27, SubLObject var28) {
-        if (var28 == module0661.UNPROVIDED) {
-            var28 = (SubLObject)module0661.T;
+        if (var28 == UNPROVIDED) {
+            var28 = (SubLObject)T;
         }
         f40247();
         final SubLObject var29 = f40244(var27);
-        if (module0661.NIL != var29) {
+        if (NIL != var29) {
             f40235(var29, var28);
             return var28;
         }
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40250(final SubLObject var29) {
         final SubLThread var30 = SubLProcess.currentSubLThread();
-        return (SubLObject)SubLObjectFactory.makeBoolean((module0661.NIL != module0655.$g5140$.getDynamicValue(var30) && module0661.NIL != module0659.f40064(var29)) || (module0661.NIL != module0655.$g5141$.getDynamicValue(var30) && module0661.NIL != module0659.f40063(var29)));
+        return (SubLObject)makeBoolean((NIL != module0655.$g5140$.getDynamicValue(var30) && NIL != module0659.f40064(var29)) || (NIL != module0655.$g5141$.getDynamicValue(var30) && NIL != module0659.f40063(var29)));
     }
     
     public static SubLObject f40251(final SubLObject var30, final SubLObject var31) {
         SubLObject var33;
         final SubLObject var32 = var33 = var30.rest();
-        SubLObject var34 = (SubLObject)module0661.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)module0661.$ic61$);
+        SubLObject var34 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)$ic61$);
         var34 = var33.first();
         final SubLObject var35;
         var33 = (var35 = var33.rest());
-        final SubLObject var36 = Packages.intern(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic62$, Strings.string_upcase(Strings.string(var34), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED)), (SubLObject)module0661.UNPROVIDED);
-        final SubLObject var37 = Packages.intern(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic63$, var36), (SubLObject)module0661.UNPROVIDED);
-        final SubLObject var38 = Packages.intern(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic64$, var37), (SubLObject)module0661.UNPROVIDED);
-        final SubLObject var39 = Packages.intern(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic65$, var34), (SubLObject)module0661.UNPROVIDED);
-        final SubLObject var40 = module0653.f39726((SubLObject)module0661.$ic45$, var35, (SubLObject)module0661.UNPROVIDED);
-        return (SubLObject)ConsesLow.list((SubLObject)module0661.$ic66$, (SubLObject)ConsesLow.listS((SubLObject)module0661.$ic67$, var36, (SubLObject)module0661.$ic68$), (SubLObject)((module0661.NIL != module0653.f39726((SubLObject)module0661.$ic51$, var35, (SubLObject)module0661.UNPROVIDED)) ? ((var40 == module0661.$ic69$) ? ConsesLow.list((SubLObject)module0661.$ic66$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic70$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var34), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var35), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var37), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var38), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var39)), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic72$, var39, (SubLObject)module0661.$ic73$, (SubLObject)module0661.$ic74$, (SubLObject)module0661.$ic75$, (SubLObject)ConsesLow.listS((SubLObject)module0661.$ic76$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0661.$ic4$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic77$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var34)))), (SubLObject)module0661.$ic78$))) : ConsesLow.listS((SubLObject)module0661.$ic70$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var34), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var35), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var37), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var38), (SubLObject)module0661.$ic79$)) : ConsesLow.listS((SubLObject)module0661.$ic70$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var34), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var35), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var37), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic71$, var38), (SubLObject)module0661.$ic79$)));
+        final SubLObject var36 = Packages.intern(PrintLow.format((SubLObject)NIL, (SubLObject)$ic62$, Strings.string_upcase(Strings.string(var34), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)), (SubLObject)UNPROVIDED);
+        final SubLObject var37 = Packages.intern(PrintLow.format((SubLObject)NIL, (SubLObject)$ic63$, var36), (SubLObject)UNPROVIDED);
+        final SubLObject var38 = Packages.intern(PrintLow.format((SubLObject)NIL, (SubLObject)$ic64$, var37), (SubLObject)UNPROVIDED);
+        final SubLObject var39 = Packages.intern(PrintLow.format((SubLObject)NIL, (SubLObject)$ic65$, var34), (SubLObject)UNPROVIDED);
+        final SubLObject var40 = module0653.f39726((SubLObject)$ic45$, var35, (SubLObject)UNPROVIDED);
+        return (SubLObject)ConsesLow.list((SubLObject)$ic66$, (SubLObject)ConsesLow.listS((SubLObject)$ic67$, var36, (SubLObject)$ic68$), (SubLObject)((NIL != module0653.f39726((SubLObject)$ic51$, var35, (SubLObject)UNPROVIDED)) ? ((var40 == $ic69$) ? ConsesLow.list((SubLObject)$ic66$, (SubLObject)ConsesLow.list((SubLObject)$ic70$, (SubLObject)ConsesLow.list((SubLObject)$ic71$, var34), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var35), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var37), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var38), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var39)), (SubLObject)ConsesLow.list((SubLObject)$ic72$, var39, (SubLObject)$ic73$, (SubLObject)$ic74$, (SubLObject)$ic75$, (SubLObject)ConsesLow.listS((SubLObject)$ic76$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic4$, (SubLObject)ConsesLow.list((SubLObject)$ic77$, (SubLObject)ConsesLow.list((SubLObject)$ic71$, var34)))), (SubLObject)$ic78$))) : ConsesLow.listS((SubLObject)$ic70$, (SubLObject)ConsesLow.list((SubLObject)$ic71$, var34), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var35), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var37), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var38), (SubLObject)$ic79$)) : ConsesLow.listS((SubLObject)$ic70$, (SubLObject)ConsesLow.list((SubLObject)$ic71$, var34), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var35), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var37), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var38), (SubLObject)$ic79$)));
     }
     
     public static SubLObject f40252(final SubLObject var20, final SubLObject var34, final SubLObject var36, final SubLObject var37, final SubLObject var38) {
         f40247();
-        final SubLObject var39 = module0661.$g5211$.getGlobalValue();
+        final SubLObject var39 = $g5211$.getGlobalValue();
         final SubLObject var40 = f40241(var34);
         f40228(var40, var20);
-        if (module0661.NIL == f40216(var40)) {
+        if (NIL == f40216(var40)) {
             f40229(var40, var20);
         }
         f40232(var40, var36);
         f40233(var40, var37);
         Functions.funcall(var37, f40226(var40));
-        module0661.$g5211$.setGlobalValue((SubLObject)ConsesLow.cons(var40, Sequences.delete(var20, var39, Symbols.symbol_function((SubLObject)module0661.EQUAL), Symbols.symbol_function((SubLObject)module0661.$ic13$), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED)));
-        module0661.$g5212$.setGlobalValue(conses_high.acons(f40216(var40), (SubLObject)ConsesLow.cons(var40, Sequences.delete(var20, conses_high.assoc(f40216(var40), module0661.$g5212$.getGlobalValue(), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED).rest(), Symbols.symbol_function((SubLObject)module0661.EQUAL), Symbols.symbol_function((SubLObject)module0661.$ic13$), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED)), Sequences.delete(f40216(var40), module0661.$g5212$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0661.EQUAL), Symbols.symbol_function((SubLObject)module0661.$ic80$), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED)));
-        if (module0661.NIL != var38) {
+        $g5211$.setGlobalValue((SubLObject)ConsesLow.cons(var40, Sequences.delete(var20, var39, Symbols.symbol_function((SubLObject)EQUAL), Symbols.symbol_function((SubLObject)$ic13$), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)));
+        $g5212$.setGlobalValue(conses_high.acons(f40216(var40), (SubLObject)ConsesLow.cons(var40, Sequences.delete(var20, conses_high.assoc(f40216(var40), $g5212$.getGlobalValue(), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED).rest(), Symbols.symbol_function((SubLObject)EQUAL), Symbols.symbol_function((SubLObject)$ic13$), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)), Sequences.delete(f40216(var40), $g5212$.getGlobalValue(), Symbols.symbol_function((SubLObject)EQUAL), Symbols.symbol_function((SubLObject)$ic80$), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)));
+        if (NIL != var38) {
             f40236(var40, var38);
         }
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40253(final SubLObject var22, SubLObject var41) {
-        if (var41 == module0661.UNPROVIDED) {
-            var41 = (SubLObject)module0661.NIL;
+        if (var41 == UNPROVIDED) {
+            var41 = (SubLObject)NIL;
         }
         final SubLThread var42 = SubLProcess.currentSubLThread();
-        if (module0661.NIL != var41) {
-            final SubLObject var43 = PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic81$, f40213(var22));
-            module0642.f39068(var43, var43, f40246(var22, (SubLObject)module0661.UNPROVIDED), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-            module0642.f39032((SubLObject)module0661.UNPROVIDED);
+        if (NIL != var41) {
+            final SubLObject var43 = PrintLow.format((SubLObject)NIL, (SubLObject)$ic81$, f40213(var22));
+            module0642.f39068(var43, var43, f40246(var22, (SubLObject)UNPROVIDED), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+            module0642.f39032((SubLObject)UNPROVIDED);
         }
         else {
-            module0642.f39026((SubLObject)module0661.UNPROVIDED);
-            module0642.f39032((SubLObject)module0661.TWO_INTEGER);
+            module0642.f39026((SubLObject)UNPROVIDED);
+            module0642.f39032((SubLObject)TWO_INTEGER);
         }
-        if (module0661.NIL != f40218(var22)) {
+        if (NIL != f40218(var22)) {
             module0642.f39019(f40218(var22));
         }
-        module0656.f39804(f40217(var22), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39019((SubLObject)module0661.$ic82$);
+        module0656.f39804(f40217(var22), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        module0642.f39019((SubLObject)$ic82$);
         final SubLObject var45;
         final SubLObject var44 = var45 = f40221(var22);
-        if (var45.eql((SubLObject)module0661.$ic69$)) {
+        if (var45.eql((SubLObject)$ic69$)) {
             SubLObject var46 = Functions.funcall(f40219(var22));
-            SubLObject var47 = (SubLObject)module0661.NIL;
+            SubLObject var47 = (SubLObject)NIL;
             var47 = var46.first();
-            while (module0661.NIL != var46) {
-                module0642.f39027((SubLObject)module0661.$ic83$, (SubLObject)module0661.UNPROVIDED);
-                module0656.f39804(var47, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                if (module0661.NIL != var41) {
-                    module0642.f39026((SubLObject)module0661.UNPROVIDED);
+            while (NIL != var46) {
+                module0642.f39027((SubLObject)$ic83$, (SubLObject)UNPROVIDED);
+                module0656.f39804(var47, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                if (NIL != var41) {
+                    module0642.f39026((SubLObject)UNPROVIDED);
                 }
                 else {
-                    module0642.f39032((SubLObject)module0661.UNPROVIDED);
+                    module0642.f39032((SubLObject)UNPROVIDED);
                 }
                 var46 = var46.rest();
                 var47 = var46.first();
             }
         }
-        else if (var45.eql((SubLObject)module0661.$ic84$)) {
-            module0642.f39027((SubLObject)module0661.$ic83$, (SubLObject)module0661.UNPROVIDED);
-            PrintLow.format(module0015.$g131$.getDynamicValue(var42), (SubLObject)module0661.$ic85$, Functions.funcall(f40219(var22)));
+        else if (var45.eql((SubLObject)$ic84$)) {
+            module0642.f39027((SubLObject)$ic83$, (SubLObject)UNPROVIDED);
+            PrintLow.format(module0015.$g131$.getDynamicValue(var42), (SubLObject)$ic85$, Functions.funcall(f40219(var22)));
         }
-        if (module0661.NIL != var41) {
-            module0642.f39032((SubLObject)module0661.TWO_INTEGER);
-            module0656.f39837((SubLObject)module0661.$ic86$, var22, (SubLObject)module0661.$ic87$, module0656.f39931(module0661.$g5213$.getDynamicValue(var42)), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+        if (NIL != var41) {
+            module0642.f39032((SubLObject)TWO_INTEGER);
+            module0656.f39837((SubLObject)$ic86$, var22, (SubLObject)$ic87$, module0656.f39931($g5213$.getDynamicValue(var42)), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         }
-        if (module0661.NIL != var41) {
-            module0642.f39026((SubLObject)module0661.UNPROVIDED);
+        if (NIL != var41) {
+            module0642.f39026((SubLObject)UNPROVIDED);
         }
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40254() {
-        if (module0661.NIL != f40248((SubLObject)module0661.UNPROVIDED)) {
-            module0642.f39019((SubLObject)module0661.$ic82$);
-            Mapping.mapc(Symbols.symbol_function((SubLObject)module0661.$ic88$), f40248((SubLObject)module0661.UNPROVIDED), module0661.EMPTY_SUBL_OBJECT_ARRAY);
+        if (NIL != f40248((SubLObject)UNPROVIDED)) {
+            module0642.f39019((SubLObject)$ic82$);
+            Mapping.mapc(Symbols.symbol_function((SubLObject)$ic88$), f40248((SubLObject)UNPROVIDED), EMPTY_SUBL_OBJECT_ARRAY);
         }
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40255(final SubLObject var45, final SubLObject var23, final SubLObject var46, final SubLObject var47) {
-        module0642.f39026((SubLObject)module0661.UNPROVIDED);
-        module0642.f39032((SubLObject)module0661.THREE_INTEGER);
-        module0666.f40467(var45, (SubLObject)module0661.$ic89$, var23, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39032((SubLObject)module0661.UNPROVIDED);
+        module0642.f39026((SubLObject)UNPROVIDED);
+        module0642.f39032((SubLObject)THREE_INTEGER);
+        module0666.f40467(var45, (SubLObject)$ic89$, var23, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        module0642.f39032((SubLObject)UNPROVIDED);
         module0642.f39075(var45, var46, var47);
-        module0642.f39032((SubLObject)module0661.UNPROVIDED);
-        module0644.f39184(var45, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39026((SubLObject)module0661.UNPROVIDED);
-        return (SubLObject)module0661.NIL;
+        module0642.f39032((SubLObject)UNPROVIDED);
+        module0644.f39184(var45, (SubLObject)UNPROVIDED);
+        module0642.f39026((SubLObject)UNPROVIDED);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40256(final SubLObject var48, SubLObject var49, SubLObject var50, SubLObject var51) {
-        if (var49 == module0661.UNPROVIDED) {
-            var49 = (SubLObject)module0661.$ic90$;
+        if (var49 == UNPROVIDED) {
+            var49 = (SubLObject)$ic90$;
         }
-        if (var50 == module0661.UNPROVIDED) {
-            var50 = (SubLObject)module0661.$ic90$;
+        if (var50 == UNPROVIDED) {
+            var50 = (SubLObject)$ic90$;
         }
-        if (var51 == module0661.UNPROVIDED) {
-            var51 = (SubLObject)module0661.$ic90$;
+        if (var51 == UNPROVIDED) {
+            var51 = (SubLObject)$ic90$;
         }
-        f40255(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic91$, var48), module0661.$ic92$, var49, (SubLObject)module0661.$ic93$);
-        f40255(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic94$, var48), module0661.$ic92$, var50, (SubLObject)module0661.$ic93$);
-        f40255(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic95$, var48), module0661.$ic92$, var51, (SubLObject)module0661.$ic93$);
-        return (SubLObject)module0661.NIL;
+        f40255(PrintLow.format((SubLObject)NIL, (SubLObject)$ic91$, var48), $ic92$, var49, (SubLObject)$ic93$);
+        f40255(PrintLow.format((SubLObject)NIL, (SubLObject)$ic94$, var48), $ic92$, var50, (SubLObject)$ic93$);
+        f40255(PrintLow.format((SubLObject)NIL, (SubLObject)$ic95$, var48), $ic92$, var51, (SubLObject)$ic93$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40257(final SubLObject var52, final SubLObject var53, final SubLObject var54) {
         SubLObject var55 = module0038.f2735(module0642.f39104(var52, var53));
-        if (module0661.$ic90$.equalp(var55) || module0661.$g5215$.getGlobalValue().equalp(var55)) {
-            var55 = (SubLObject)module0661.NIL;
+        if ($ic90$.equalp(var55) || $g5215$.getGlobalValue().equalp(var55)) {
+            var55 = (SubLObject)NIL;
         }
         else {
-            var55 = module0656.f39943(var55, (SubLObject)module0661.UNPROVIDED);
-            if (module0661.NIL == module0173.f10955(var55)) {
-                module0656.f39789((SubLObject)module0661.$ic97$, var54, var55, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                return (SubLObject)module0661.NIL;
+            var55 = module0656.f39943(var55, (SubLObject)UNPROVIDED);
+            if (NIL == module0173.f10955(var55)) {
+                module0656.f39789((SubLObject)$ic97$, var54, var55, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                return (SubLObject)NIL;
             }
         }
         return var55;
     }
     
     public static SubLObject f40258(final SubLObject var48, final SubLObject var53) {
-        return Sequences.delete((SubLObject)module0661.NIL, (SubLObject)ConsesLow.list(f40257(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic91$, var48), var53, (SubLObject)module0661.$ic98$), f40257(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic94$, var48), var53, (SubLObject)module0661.$ic98$), f40257(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic95$, var48), var53, (SubLObject)module0661.$ic98$)), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+        return Sequences.delete((SubLObject)NIL, (SubLObject)ConsesLow.list(f40257(PrintLow.format((SubLObject)NIL, (SubLObject)$ic91$, var48), var53, (SubLObject)$ic98$), f40257(PrintLow.format((SubLObject)NIL, (SubLObject)$ic94$, var48), var53, (SubLObject)$ic98$), f40257(PrintLow.format((SubLObject)NIL, (SubLObject)$ic95$, var48), var53, (SubLObject)$ic98$)), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
     }
     
     public static SubLObject f40259(final SubLObject var48, SubLObject var49, SubLObject var50, SubLObject var51) {
-        if (var49 == module0661.UNPROVIDED) {
-            var49 = module0661.$g5215$.getGlobalValue();
+        if (var49 == UNPROVIDED) {
+            var49 = $g5215$.getGlobalValue();
         }
-        if (var50 == module0661.UNPROVIDED) {
-            var50 = module0661.$g5215$.getGlobalValue();
+        if (var50 == UNPROVIDED) {
+            var50 = $g5215$.getGlobalValue();
         }
-        if (var51 == module0661.UNPROVIDED) {
-            var51 = module0661.$g5215$.getGlobalValue();
+        if (var51 == UNPROVIDED) {
+            var51 = $g5215$.getGlobalValue();
         }
-        final SubLObject var52 = (SubLObject)ConsesLow.cons(module0661.$g5215$.getGlobalValue(), module0220.f14565(module0661.$ic99$, module0661.$ic100$, (SubLObject)module0661.TWO_INTEGER, (SubLObject)module0661.ONE_INTEGER, (SubLObject)module0661.UNPROVIDED));
-        module0642.f39106(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic101$, var48), var49, var52, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39106(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic102$, var48), var50, var52, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39106(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic103$, var48), var51, var52, (SubLObject)module0661.UNPROVIDED);
-        return (SubLObject)module0661.NIL;
+        final SubLObject var52 = (SubLObject)ConsesLow.cons($g5215$.getGlobalValue(), module0220.f14565($ic99$, $ic100$, (SubLObject)TWO_INTEGER, (SubLObject)ONE_INTEGER, (SubLObject)UNPROVIDED));
+        module0642.f39106(PrintLow.format((SubLObject)NIL, (SubLObject)$ic101$, var48), var49, var52, (SubLObject)UNPROVIDED);
+        module0642.f39106(PrintLow.format((SubLObject)NIL, (SubLObject)$ic102$, var48), var50, var52, (SubLObject)UNPROVIDED);
+        module0642.f39106(PrintLow.format((SubLObject)NIL, (SubLObject)$ic103$, var48), var51, var52, (SubLObject)UNPROVIDED);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40260(final SubLObject var48, final SubLObject var53) {
-        return Sequences.delete((SubLObject)module0661.NIL, (SubLObject)ConsesLow.list(f40257(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic101$, var48), var53, (SubLObject)module0661.$ic104$), f40257(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic102$, var48), var53, (SubLObject)module0661.$ic104$), f40257(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic103$, var48), var53, (SubLObject)module0661.$ic104$)), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+        return Sequences.delete((SubLObject)NIL, (SubLObject)ConsesLow.list(f40257(PrintLow.format((SubLObject)NIL, (SubLObject)$ic101$, var48), var53, (SubLObject)$ic104$), f40257(PrintLow.format((SubLObject)NIL, (SubLObject)$ic102$, var48), var53, (SubLObject)$ic104$), f40257(PrintLow.format((SubLObject)NIL, (SubLObject)$ic103$, var48), var53, (SubLObject)$ic104$)), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
     }
     
     public static SubLObject f40261(final SubLObject var57) {
-        return f40253(var57, (SubLObject)module0661.T);
+        return f40253(var57, (SubLObject)T);
     }
     
     public static SubLObject f40262(SubLObject var53) {
-        if (var53 == module0661.UNPROVIDED) {
-            var53 = (SubLObject)module0661.NIL;
+        if (var53 == UNPROVIDED) {
+            var53 = (SubLObject)NIL;
         }
         final SubLThread var54 = SubLProcess.currentSubLThread();
         SubLObject var56;
         final SubLObject var55 = var56 = var53;
-        SubLObject var57 = (SubLObject)module0661.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var56, var55, (SubLObject)module0661.$ic107$);
+        SubLObject var57 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var56, var55, (SubLObject)$ic107$);
         var57 = var56.first();
         var56 = var56.rest();
-        if (module0661.NIL == var56) {
+        if (NIL == var56) {
             final SubLObject var58 = module0656.f39969(var57);
-            if (module0661.NIL == module0656.f39930(var58)) {
-                module0656.f39789((SubLObject)module0661.$ic108$, var58, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                return (SubLObject)module0661.NIL;
+            if (NIL == module0656.f39930(var58)) {
+                module0656.f39789((SubLObject)$ic108$, var58, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                return (SubLObject)NIL;
             }
-            final SubLObject var59 = (SubLObject)module0661.$ic109$;
+            final SubLObject var59 = (SubLObject)$ic109$;
             final SubLObject var60 = module0015.$g538$.currentBinding(var54);
             try {
-                module0015.$g538$.bind((module0661.NIL != module0057.f4158(module0015.$g538$.getDynamicValue(var54))) ? module0015.$g538$.getDynamicValue(var54) : module0057.f4173((SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED), var54);
-                module0642.f39020((SubLObject)module0661.$ic110$);
-                module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                module0015.$g538$.bind((NIL != module0057.f4158(module0015.$g538$.getDynamicValue(var54))) ? module0015.$g538$.getDynamicValue(var54) : module0057.f4173((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED), var54);
+                module0642.f39020((SubLObject)$ic110$);
+                module0642.f39029((SubLObject)UNPROVIDED);
                 module0642.f39020(module0015.$g155$.getGlobalValue());
                 module0642.f39020(module0015.$g153$.getGlobalValue());
                 module0015.f718();
                 module0655.f39766();
                 module0642.f39064(module0655.$g5143$.getDynamicValue(var54), module0655.$g5142$.getDynamicValue(var54));
-                final SubLObject var61 = module0014.f672((SubLObject)module0661.$ic111$);
-                module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                final SubLObject var61 = module0014.f672((SubLObject)$ic111$);
+                module0642.f39029((SubLObject)UNPROVIDED);
                 module0642.f39020(module0015.$g175$.getGlobalValue());
                 module0642.f39020(module0015.$g176$.getGlobalValue());
-                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                module0642.f39020((SubLObject)module0661.$ic112$);
-                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                if (module0661.NIL != var61) {
+                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                module0642.f39020((SubLObject)$ic112$);
+                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                if (NIL != var61) {
                     module0642.f39020(module0015.$g178$.getGlobalValue());
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                     module0642.f39020(var61);
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                 }
                 module0642.f39020(module0015.$g177$.getGlobalValue());
-                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                module0642.f39020((SubLObject)module0661.$ic113$);
-                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                module0642.f39020((SubLObject)$ic113$);
+                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                 module0016.f941();
-                if (module0661.NIL != var59) {
-                    module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                if (NIL != var59) {
+                    module0642.f39029((SubLObject)UNPROVIDED);
                     module0642.f39020(module0015.$g173$.getGlobalValue());
                     module0642.f39019(var59);
                     module0642.f39020(module0015.$g174$.getGlobalValue());
                 }
                 module0642.f39020(module0015.$g154$.getGlobalValue());
-                module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                module0642.f39029((SubLObject)UNPROVIDED);
                 final SubLObject var26_64 = module0015.$g535$.currentBinding(var54);
                 try {
-                    module0015.$g535$.bind((SubLObject)module0661.T, var54);
+                    module0015.$g535$.bind((SubLObject)T, var54);
                     module0642.f39020(module0015.$g133$.getGlobalValue());
-                    if (module0661.NIL != module0015.$g132$.getDynamicValue(var54)) {
+                    if (NIL != module0015.$g132$.getDynamicValue(var54)) {
                         module0642.f39020(module0015.$g135$.getGlobalValue());
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                         module0642.f39020(module0642.f39042(module0015.$g132$.getDynamicValue(var54)));
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                     }
                     module0642.f39020(module0015.$g137$.getGlobalValue());
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                    module0642.f39020((SubLObject)module0661.$ic116$);
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                    module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                    module0642.f39020((SubLObject)$ic116$);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                     final SubLObject var26_65 = module0015.$g533$.currentBinding(var54);
                     try {
-                        module0015.$g533$.bind((SubLObject)module0661.T, var54);
+                        module0015.$g533$.bind((SubLObject)T, var54);
                         module0642.f39020(module0015.$g144$.getGlobalValue());
                         module0642.f39020(module0015.$g157$.getGlobalValue());
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                        module0642.f39020((SubLObject)module0661.$ic117$);
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                        module0642.f39020((SubLObject)$ic117$);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                         final SubLObject var26_66 = module0015.$g533$.currentBinding(var54);
                         try {
-                            module0015.$g533$.bind((SubLObject)module0661.T, var54);
+                            module0015.$g533$.bind((SubLObject)T, var54);
                             module0642.f39020(module0015.$g295$.getGlobalValue());
                             module0642.f39020(module0015.$g305$.getGlobalValue());
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39020((SubLObject)module0661.$ic118$);
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                            module0642.f39020((SubLObject)$ic118$);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                             module0642.f39020(module0015.$g302$.getGlobalValue());
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39020((SubLObject)module0661.$ic119$);
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                            module0642.f39020((SubLObject)$ic119$);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                             module0642.f39020(module0015.$g307$.getGlobalValue());
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39019((SubLObject)module0661.$ic120$);
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                            module0642.f39019((SubLObject)$ic120$);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                         }
                         finally {
                             module0015.$g533$.rebind(var26_66, var54);
                         }
                         module0642.f39020(module0015.$g145$.getGlobalValue());
-                        if (module0661.NIL != var59) {
+                        if (NIL != var59) {
                             module0642.f39020(module0015.$g189$.getGlobalValue());
-                            module0642.f39020((SubLObject)module0661.TWO_INTEGER);
-                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39020((SubLObject)TWO_INTEGER);
+                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                             module0642.f39019(var59);
                             module0642.f39020(module0015.$g190$.getGlobalValue());
-                            module0642.f39020((SubLObject)module0661.TWO_INTEGER);
-                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39020((SubLObject)TWO_INTEGER);
+                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                         }
-                        final SubLObject var62 = module0656.f39832((SubLObject)module0661.NIL);
+                        final SubLObject var62 = module0656.f39832((SubLObject)NIL);
                         module0642.f39020(module0015.$g282$.getGlobalValue());
                         module0642.f39020(module0015.$g284$.getGlobalValue());
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                         module0642.f39020(module0110.$g570$.getDynamicValue(var54));
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                         module0642.f39020(module0015.$g285$.getGlobalValue());
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                        module0642.f39020((SubLObject)module0661.$ic121$);
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                        if (module0661.NIL != var62) {
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                        module0642.f39020((SubLObject)$ic121$);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                        if (NIL != var62) {
                             module0642.f39020(module0015.$g286$.getGlobalValue());
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                             module0642.f39020(var62);
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                         }
-                        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                         final SubLObject var26_67 = module0015.$g533$.currentBinding(var54);
                         final SubLObject var63 = module0015.$g541$.currentBinding(var54);
                         final SubLObject var64 = module0015.$g539$.currentBinding(var54);
                         try {
-                            module0015.$g533$.bind((SubLObject)module0661.T, var54);
-                            module0015.$g541$.bind((SubLObject)module0661.T, var54);
+                            module0015.$g533$.bind((SubLObject)T, var54);
+                            module0015.$g541$.bind((SubLObject)T, var54);
                             module0015.$g539$.bind(module0015.f797(), var54);
-                            module0642.f39069((SubLObject)module0661.$ic122$, (SubLObject)module0661.T, (SubLObject)module0661.UNPROVIDED);
-                            module0656.f39870((SubLObject)module0661.$ic105$, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39026((SubLObject)module0661.TWO_INTEGER);
-                            module0642.f39073((SubLObject)module0661.$ic123$);
-                            module0642.f39032((SubLObject)module0661.UNPROVIDED);
-                            module0642.f39074((SubLObject)module0661.$ic124$, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39026((SubLObject)module0661.UNPROVIDED);
+                            module0642.f39069((SubLObject)$ic122$, (SubLObject)T, (SubLObject)UNPROVIDED);
+                            module0656.f39870((SubLObject)$ic105$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                            module0642.f39026((SubLObject)TWO_INTEGER);
+                            module0642.f39073((SubLObject)$ic123$);
+                            module0642.f39032((SubLObject)UNPROVIDED);
+                            module0642.f39074((SubLObject)$ic124$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                            module0642.f39026((SubLObject)UNPROVIDED);
                             module0659.f40134(var58);
-                            module0642.f39026((SubLObject)module0661.UNPROVIDED);
-                            module0642.f39068((SubLObject)module0661.$ic125$, (SubLObject)module0661.$ic125$, module0655.$g5140$.getDynamicValue(var54), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39027((SubLObject)module0661.$ic83$, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39019((SubLObject)module0661.$ic126$);
-                            module0642.f39026((SubLObject)module0661.UNPROVIDED);
-                            module0642.f39068((SubLObject)module0661.$ic127$, (SubLObject)module0661.$ic127$, module0655.$g5141$.getDynamicValue(var54), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39027((SubLObject)module0661.$ic83$, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39019((SubLObject)module0661.$ic128$);
-                            module0642.f39026((SubLObject)module0661.TWO_INTEGER);
-                            SubLObject var65 = module0661.$g5212$.getGlobalValue();
-                            SubLObject var66 = (SubLObject)module0661.NIL;
+                            module0642.f39026((SubLObject)UNPROVIDED);
+                            module0642.f39068((SubLObject)$ic125$, (SubLObject)$ic125$, module0655.$g5140$.getDynamicValue(var54), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                            module0642.f39027((SubLObject)$ic83$, (SubLObject)UNPROVIDED);
+                            module0642.f39019((SubLObject)$ic126$);
+                            module0642.f39026((SubLObject)UNPROVIDED);
+                            module0642.f39068((SubLObject)$ic127$, (SubLObject)$ic127$, module0655.$g5141$.getDynamicValue(var54), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                            module0642.f39027((SubLObject)$ic83$, (SubLObject)UNPROVIDED);
+                            module0642.f39019((SubLObject)$ic128$);
+                            module0642.f39026((SubLObject)TWO_INTEGER);
+                            SubLObject var65 = $g5212$.getGlobalValue();
+                            SubLObject var66 = (SubLObject)NIL;
                             var66 = var65.first();
-                            while (module0661.NIL != var65) {
-                                final SubLObject var26_68 = module0661.$g5213$.currentBinding(var54);
+                            while (NIL != var65) {
+                                final SubLObject var26_68 = $g5213$.currentBinding(var54);
                                 try {
-                                    module0661.$g5213$.bind(var58, var54);
-                                    if (module0661.NIL != conses_high.endp(conses_high.cddr(var66))) {
-                                        f40253(conses_high.cadr(var66), (SubLObject)module0661.T);
+                                    $g5213$.bind(var58, var54);
+                                    if (NIL != conses_high.endp(conses_high.cddr(var66))) {
+                                        f40253(conses_high.cadr(var66), (SubLObject)T);
                                     }
                                     else {
-                                        Mapping.mapc(Symbols.symbol_function((SubLObject)module0661.$ic129$), var66.rest(), module0661.EMPTY_SUBL_OBJECT_ARRAY);
+                                        Mapping.mapc(Symbols.symbol_function((SubLObject)$ic129$), var66.rest(), EMPTY_SUBL_OBJECT_ARRAY);
                                     }
                                 }
                                 finally {
-                                    module0661.$g5213$.rebind(var26_68, var54);
+                                    $g5213$.rebind(var26_68, var54);
                                 }
-                                module0642.f39026((SubLObject)module0661.UNPROVIDED);
+                                module0642.f39026((SubLObject)UNPROVIDED);
                                 var65 = var65.rest();
                                 var66 = var65.first();
                             }
@@ -950,85 +951,85 @@ public final class module0661 extends SubLTranslatedFile
                             module0015.$g533$.rebind(var26_67, var54);
                         }
                         module0642.f39020(module0015.$g283$.getGlobalValue());
-                        module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                        module0642.f39029((SubLObject)UNPROVIDED);
                         module0642.f39050();
                     }
                     finally {
                         module0015.$g533$.rebind(var26_65, var54);
                     }
                     module0642.f39020(module0015.$g134$.getGlobalValue());
-                    module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                    module0642.f39029((SubLObject)UNPROVIDED);
                 }
                 finally {
                     module0015.$g535$.rebind(var26_64, var54);
                 }
                 module0642.f39020(module0015.$g156$.getGlobalValue());
-                module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                module0642.f39029((SubLObject)UNPROVIDED);
             }
             finally {
                 module0015.$g538$.rebind(var60, var54);
             }
         }
         else {
-            cdestructuring_bind.cdestructuring_bind_error(var55, (SubLObject)module0661.$ic107$);
+            cdestructuring_bind.cdestructuring_bind_error(var55, (SubLObject)$ic107$);
         }
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40263(SubLObject var53) {
-        if (var53 == module0661.UNPROVIDED) {
-            var53 = (SubLObject)module0661.NIL;
+        if (var53 == UNPROVIDED) {
+            var53 = (SubLObject)NIL;
         }
         final SubLThread var54 = SubLProcess.currentSubLThread();
         SubLObject var56;
         final SubLObject var55 = var56 = var53;
-        SubLObject var57 = (SubLObject)module0661.NIL;
-        SubLObject var58 = (SubLObject)module0661.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var56, var55, (SubLObject)module0661.$ic131$);
+        SubLObject var57 = (SubLObject)NIL;
+        SubLObject var58 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var56, var55, (SubLObject)$ic131$);
         var57 = var56.first();
         var56 = var56.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var56, var55, (SubLObject)module0661.$ic131$);
+        cdestructuring_bind.destructuring_bind_must_consp(var56, var55, (SubLObject)$ic131$);
         var58 = var56.first();
         var56 = var56.rest();
-        if (module0661.NIL == var56) {
+        if (NIL == var56) {
             final SubLObject var59 = module0656.f39969(var58);
-            final SubLObject var60 = conses_high.assoc(Packages.intern(var57, (SubLObject)module0661.UNPROVIDED), module0661.$g5212$.getGlobalValue(), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED).rest();
-            if (module0661.NIL == module0656.f39930(var59)) {
-                module0656.f39789((SubLObject)module0661.$ic108$, var59, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                return (SubLObject)module0661.NIL;
+            final SubLObject var60 = conses_high.assoc(Packages.intern(var57, (SubLObject)UNPROVIDED), $g5212$.getGlobalValue(), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED).rest();
+            if (NIL == module0656.f39930(var59)) {
+                module0656.f39789((SubLObject)$ic108$, var59, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                return (SubLObject)NIL;
             }
-            final SubLObject var61 = (SubLObject)module0661.$ic132$;
+            final SubLObject var61 = (SubLObject)$ic132$;
             final SubLObject var62 = module0015.$g538$.currentBinding(var54);
             try {
-                module0015.$g538$.bind((module0661.NIL != module0057.f4158(module0015.$g538$.getDynamicValue(var54))) ? module0015.$g538$.getDynamicValue(var54) : module0057.f4173((SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED), var54);
-                module0642.f39020((SubLObject)module0661.$ic110$);
-                module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                module0015.$g538$.bind((NIL != module0057.f4158(module0015.$g538$.getDynamicValue(var54))) ? module0015.$g538$.getDynamicValue(var54) : module0057.f4173((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED), var54);
+                module0642.f39020((SubLObject)$ic110$);
+                module0642.f39029((SubLObject)UNPROVIDED);
                 module0642.f39020(module0015.$g155$.getGlobalValue());
                 module0642.f39020(module0015.$g153$.getGlobalValue());
                 module0015.f718();
                 module0655.f39766();
                 module0642.f39064(module0655.$g5143$.getDynamicValue(var54), module0655.$g5142$.getDynamicValue(var54));
-                final SubLObject var63 = module0014.f672((SubLObject)module0661.$ic111$);
-                module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                final SubLObject var63 = module0014.f672((SubLObject)$ic111$);
+                module0642.f39029((SubLObject)UNPROVIDED);
                 module0642.f39020(module0015.$g175$.getGlobalValue());
                 module0642.f39020(module0015.$g176$.getGlobalValue());
-                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                module0642.f39020((SubLObject)module0661.$ic112$);
-                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                if (module0661.NIL != var63) {
+                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                module0642.f39020((SubLObject)$ic112$);
+                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                if (NIL != var63) {
                     module0642.f39020(module0015.$g178$.getGlobalValue());
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                     module0642.f39020(var63);
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                 }
                 module0642.f39020(module0015.$g177$.getGlobalValue());
-                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                module0642.f39020((SubLObject)module0661.$ic113$);
-                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                module0642.f39020((SubLObject)$ic113$);
+                module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                 module0016.f941();
-                if (module0661.NIL != var61) {
-                    module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                if (NIL != var61) {
+                    module0642.f39029((SubLObject)UNPROVIDED);
                     module0642.f39020(module0015.$g173$.getGlobalValue());
                     module0642.f39019(var61);
                     module0642.f39020(module0015.$g174$.getGlobalValue());
@@ -1037,109 +1038,109 @@ public final class module0661 extends SubLTranslatedFile
                 module0666.f40487();
                 module0666.f40535();
                 module0642.f39020(module0015.$g154$.getGlobalValue());
-                module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                module0642.f39029((SubLObject)UNPROVIDED);
                 final SubLObject var26_77 = module0015.$g535$.currentBinding(var54);
                 try {
-                    module0015.$g535$.bind((SubLObject)module0661.T, var54);
+                    module0015.$g535$.bind((SubLObject)T, var54);
                     module0642.f39020(module0015.$g133$.getGlobalValue());
-                    if (module0661.NIL != module0015.$g132$.getDynamicValue(var54)) {
+                    if (NIL != module0015.$g132$.getDynamicValue(var54)) {
                         module0642.f39020(module0015.$g135$.getGlobalValue());
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                         module0642.f39020(module0642.f39042(module0015.$g132$.getDynamicValue(var54)));
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                     }
                     module0642.f39020(module0015.$g137$.getGlobalValue());
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                    module0642.f39020((SubLObject)module0661.$ic116$);
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                    module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                    module0642.f39020((SubLObject)$ic116$);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                     final SubLObject var26_78 = module0015.$g533$.currentBinding(var54);
                     try {
-                        module0015.$g533$.bind((SubLObject)module0661.T, var54);
+                        module0015.$g533$.bind((SubLObject)T, var54);
                         module0642.f39020(module0015.$g144$.getGlobalValue());
                         module0642.f39020(module0015.$g157$.getGlobalValue());
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                        module0642.f39020((SubLObject)module0661.$ic117$);
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                        module0642.f39020((SubLObject)$ic117$);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                         final SubLObject var26_79 = module0015.$g533$.currentBinding(var54);
                         try {
-                            module0015.$g533$.bind((SubLObject)module0661.T, var54);
+                            module0015.$g533$.bind((SubLObject)T, var54);
                             module0642.f39020(module0015.$g295$.getGlobalValue());
                             module0642.f39020(module0015.$g305$.getGlobalValue());
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39020((SubLObject)module0661.$ic118$);
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                            module0642.f39020((SubLObject)$ic118$);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                             module0642.f39020(module0015.$g302$.getGlobalValue());
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39020((SubLObject)module0661.$ic119$);
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                            module0642.f39020((SubLObject)$ic119$);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                             module0642.f39020(module0015.$g307$.getGlobalValue());
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39019((SubLObject)module0661.$ic120$);
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                            module0642.f39019((SubLObject)$ic120$);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                         }
                         finally {
                             module0015.$g533$.rebind(var26_79, var54);
                         }
                         module0642.f39020(module0015.$g145$.getGlobalValue());
-                        if (module0661.NIL != var61) {
+                        if (NIL != var61) {
                             module0642.f39020(module0015.$g189$.getGlobalValue());
-                            module0642.f39020((SubLObject)module0661.TWO_INTEGER);
-                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39020((SubLObject)TWO_INTEGER);
+                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                             module0642.f39019(var61);
                             module0642.f39020(module0015.$g190$.getGlobalValue());
-                            module0642.f39020((SubLObject)module0661.TWO_INTEGER);
-                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39020((SubLObject)TWO_INTEGER);
+                            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                         }
-                        final SubLObject var64 = module0656.f39832((SubLObject)module0661.NIL);
+                        final SubLObject var64 = module0656.f39832((SubLObject)NIL);
                         module0642.f39020(module0015.$g282$.getGlobalValue());
                         module0642.f39020(module0015.$g284$.getGlobalValue());
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                         module0642.f39020(module0110.$g570$.getDynamicValue(var54));
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                         module0642.f39020(module0015.$g285$.getGlobalValue());
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                        module0642.f39020((SubLObject)module0661.$ic121$);
-                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-                        if (module0661.NIL != var64) {
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                        module0642.f39020((SubLObject)$ic121$);
+                        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+                        if (NIL != var64) {
                             module0642.f39020(module0015.$g286$.getGlobalValue());
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                             module0642.f39020(var64);
-                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                         }
-                        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                         final SubLObject var26_80 = module0015.$g533$.currentBinding(var54);
                         final SubLObject var65 = module0015.$g541$.currentBinding(var54);
                         final SubLObject var66 = module0015.$g539$.currentBinding(var54);
                         try {
-                            module0015.$g533$.bind((SubLObject)module0661.T, var54);
-                            module0015.$g541$.bind((SubLObject)module0661.T, var54);
+                            module0015.$g533$.bind((SubLObject)T, var54);
+                            module0015.$g541$.bind((SubLObject)T, var54);
                             module0015.$g539$.bind(module0015.f797(), var54);
-                            module0642.f39069((SubLObject)module0661.$ic133$, (SubLObject)ConsesLow.list(var57, var58), (SubLObject)module0661.UNPROVIDED);
-                            module0656.f39790((SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39032((SubLObject)module0661.UNPROVIDED);
-                            module0642.f39073((SubLObject)module0661.$ic123$);
-                            module0642.f39032((SubLObject)module0661.UNPROVIDED);
-                            module0642.f39074((SubLObject)module0661.$ic124$, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39026((SubLObject)module0661.UNPROVIDED);
+                            module0642.f39069((SubLObject)$ic133$, (SubLObject)ConsesLow.list(var57, var58), (SubLObject)UNPROVIDED);
+                            module0656.f39790((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                            module0642.f39032((SubLObject)UNPROVIDED);
+                            module0642.f39073((SubLObject)$ic123$);
+                            module0642.f39032((SubLObject)UNPROVIDED);
+                            module0642.f39074((SubLObject)$ic124$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                            module0642.f39026((SubLObject)UNPROVIDED);
                             SubLObject var67 = var60;
-                            SubLObject var68 = (SubLObject)module0661.NIL;
+                            SubLObject var68 = (SubLObject)NIL;
                             var68 = var67.first();
-                            while (module0661.NIL != var67) {
-                                if (module0661.NIL != f40224(var68)) {
+                            while (NIL != var67) {
+                                if (NIL != f40224(var68)) {
                                     Functions.funcall(f40224(var68), var68, var59);
                                 }
                                 var67 = var67.rest();
                                 var68 = var67.first();
                             }
-                            module0642.f39026((SubLObject)module0661.UNPROVIDED);
-                            module0642.f39051((SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                            module0642.f39026((SubLObject)module0661.UNPROVIDED);
-                            module0642.f39073((SubLObject)module0661.$ic123$);
-                            module0642.f39032((SubLObject)module0661.UNPROVIDED);
-                            module0642.f39074((SubLObject)module0661.$ic124$, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+                            module0642.f39026((SubLObject)UNPROVIDED);
+                            module0642.f39051((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                            module0642.f39026((SubLObject)UNPROVIDED);
+                            module0642.f39073((SubLObject)$ic123$);
+                            module0642.f39032((SubLObject)UNPROVIDED);
+                            module0642.f39074((SubLObject)$ic124$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
                             module0015.f799(module0015.$g539$.getDynamicValue(var54));
                         }
                         finally {
@@ -1148,57 +1149,57 @@ public final class module0661 extends SubLTranslatedFile
                             module0015.$g533$.rebind(var26_80, var54);
                         }
                         module0642.f39020(module0015.$g283$.getGlobalValue());
-                        module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                        module0642.f39029((SubLObject)UNPROVIDED);
                         module0642.f39050();
                     }
                     finally {
                         module0015.$g533$.rebind(var26_78, var54);
                     }
                     module0642.f39020(module0015.$g134$.getGlobalValue());
-                    module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                    module0642.f39029((SubLObject)UNPROVIDED);
                 }
                 finally {
                     module0015.$g535$.rebind(var26_77, var54);
                 }
                 module0642.f39020(module0015.$g156$.getGlobalValue());
-                module0642.f39029((SubLObject)module0661.UNPROVIDED);
+                module0642.f39029((SubLObject)UNPROVIDED);
             }
             finally {
                 module0015.$g538$.rebind(var62, var54);
             }
         }
         else {
-            cdestructuring_bind.cdestructuring_bind_error(var55, (SubLObject)module0661.$ic131$);
+            cdestructuring_bind.cdestructuring_bind_error(var55, (SubLObject)$ic131$);
         }
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40264(final SubLObject var53) {
-        module0655.$g5140$.setDynamicValue((SubLObject)SubLObjectFactory.makeBoolean(module0661.NIL != module0642.f39104((SubLObject)module0661.$ic125$, var53)));
-        module0655.$g5141$.setDynamicValue((SubLObject)SubLObjectFactory.makeBoolean(module0661.NIL != module0642.f39104((SubLObject)module0661.$ic127$, var53)));
-        SubLObject var54 = module0661.$g5211$.getGlobalValue();
-        SubLObject var55 = (SubLObject)module0661.NIL;
+        module0655.$g5140$.setDynamicValue((SubLObject)makeBoolean(NIL != module0642.f39104((SubLObject)$ic125$, var53)));
+        module0655.$g5141$.setDynamicValue((SubLObject)makeBoolean(NIL != module0642.f39104((SubLObject)$ic127$, var53)));
+        SubLObject var54 = $g5211$.getGlobalValue();
+        SubLObject var55 = (SubLObject)NIL;
         var55 = var54.first();
-        while (module0661.NIL != var54) {
-            f40235(var55, (SubLObject)SubLObjectFactory.makeBoolean(module0661.NIL != module0642.f39104(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic81$, f40213(var55)), var53)));
+        while (NIL != var54) {
+            f40235(var55, (SubLObject)makeBoolean(NIL != module0642.f39104(PrintLow.format((SubLObject)NIL, (SubLObject)$ic81$, f40213(var55)), var53)));
             var54 = var54.rest();
             var55 = var54.first();
         }
         f40247();
-        module0656.f39793((SubLObject)module0661.$ic135$, (SubLObject)module0661.UNPROVIDED);
-        return (SubLObject)module0661.NIL;
+        module0656.f39793((SubLObject)$ic135$, (SubLObject)UNPROVIDED);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40265(final SubLObject var53) {
-        final SubLObject var54 = reader.read_from_string(var53.first(), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+        final SubLObject var54 = reader.read_from_string(var53.first(), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         final SubLObject var55 = Strings.string(var54.first());
         final SubLObject var56 = conses_high.cadr(var54);
         SubLObject var58;
-        final SubLObject var57 = var58 = conses_high.assoc(Packages.intern(var55, (SubLObject)module0661.UNPROVIDED), module0661.$g5212$.getGlobalValue(), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED).rest();
-        SubLObject var59 = (SubLObject)module0661.NIL;
+        final SubLObject var57 = var58 = conses_high.assoc(Packages.intern(var55, (SubLObject)UNPROVIDED), $g5212$.getGlobalValue(), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED).rest();
+        SubLObject var59 = (SubLObject)NIL;
         var59 = var58.first();
-        while (module0661.NIL != var58) {
-            if (module0661.NIL != f40225(var59)) {
+        while (NIL != var58) {
+            if (NIL != f40225(var59)) {
                 Functions.funcall(f40225(var59), var59, var53);
             }
             var58 = var58.rest();
@@ -1206,34 +1207,34 @@ public final class module0661 extends SubLTranslatedFile
         }
         f40247();
         f40262((SubLObject)ConsesLow.list(var56));
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40266(final SubLObject var61, SubLObject var82) {
-        if (var82 == module0661.UNPROVIDED) {
-            var82 = (SubLObject)module0661.NIL;
+        if (var82 == UNPROVIDED) {
+            var82 = (SubLObject)NIL;
         }
         final SubLThread var83 = SubLProcess.currentSubLThread();
-        if (module0661.NIL == var82) {
-            var82 = (SubLObject)module0661.$ic138$;
+        if (NIL == var82) {
+            var82 = (SubLObject)$ic138$;
         }
-        final SubLObject var84 = module0656.f39832((SubLObject)module0661.$ic139$);
+        final SubLObject var84 = module0656.f39832((SubLObject)$ic139$);
         module0642.f39020(module0015.$g381$.getGlobalValue());
         module0642.f39020(module0015.$g383$.getGlobalValue());
-        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
         module0655.f39768();
-        PrintLow.format(module0015.$g131$.getDynamicValue(var83), (SubLObject)module0661.$ic140$, module0656.f39931(var61));
-        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-        if (module0661.NIL != var84) {
+        PrintLow.format(module0015.$g131$.getDynamicValue(var83), (SubLObject)$ic140$, module0656.f39931(var61));
+        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+        if (NIL != var84) {
             module0642.f39020(module0015.$g387$.getGlobalValue());
-            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
             module0642.f39020(var84);
-            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
         }
-        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
         final SubLObject var85 = module0015.$g533$.currentBinding(var83);
         try {
-            module0015.$g533$.bind((SubLObject)module0661.T, var83);
+            module0015.$g533$.bind((SubLObject)T, var83);
             module0642.f39019(var82);
         }
         finally {
@@ -1244,98 +1245,98 @@ public final class module0661 extends SubLTranslatedFile
     }
     
     public static SubLObject f40267(final SubLObject var22, final SubLObject var61) {
-        module0642.f39051((SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+        module0642.f39051((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         module0642.f39020(module0015.$g234$.getGlobalValue());
-        if (module0661.NIL != f40218(var22)) {
+        if (NIL != f40218(var22)) {
             module0642.f39019(f40218(var22));
         }
-        module0642.f39019((SubLObject)module0661.$ic143$);
-        module0656.f39804(f40217(var22), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39019((SubLObject)module0661.$ic144$);
+        module0642.f39019((SubLObject)$ic143$);
+        module0656.f39804(f40217(var22), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        module0642.f39019((SubLObject)$ic144$);
         module0642.f39020(module0015.$g235$.getGlobalValue());
-        module0642.f39026((SubLObject)module0661.UNPROVIDED);
-        return (SubLObject)module0661.NIL;
+        module0642.f39026((SubLObject)UNPROVIDED);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40268(final SubLObject var22, final SubLObject var61) {
         f40267(var22, var61);
-        module0642.f39032((SubLObject)module0661.TWO_INTEGER);
-        module0642.f39019((SubLObject)module0661.$ic145$);
-        module0656.f39804(f40217(var22), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39019((SubLObject)module0661.$ic146$);
-        module0642.f39026((SubLObject)module0661.UNPROVIDED);
-        Functions.apply(Symbols.symbol_function((SubLObject)module0661.$ic147$), (SubLObject)ConsesLow.cons(f40213(var22), Functions.funcall(f40219(var22))));
-        return (SubLObject)module0661.NIL;
+        module0642.f39032((SubLObject)TWO_INTEGER);
+        module0642.f39019((SubLObject)$ic145$);
+        module0656.f39804(f40217(var22), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        module0642.f39019((SubLObject)$ic146$);
+        module0642.f39026((SubLObject)UNPROVIDED);
+        Functions.apply(Symbols.symbol_function((SubLObject)$ic147$), (SubLObject)ConsesLow.cons(f40213(var22), Functions.funcall(f40219(var22))));
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40269(final SubLObject var22, final SubLObject var61) {
         f40267(var22, var61);
         module0642.f39020(module0015.$g234$.getGlobalValue());
-        module0642.f39019((SubLObject)module0661.$ic148$);
+        module0642.f39019((SubLObject)$ic148$);
         module0642.f39020(module0015.$g235$.getGlobalValue());
-        module0642.f39026((SubLObject)module0661.UNPROVIDED);
-        module0642.f39032((SubLObject)module0661.SIX_INTEGER);
-        module0642.f39068(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic149$, f40213(var22)), (SubLObject)module0661.$ic150$, f40222(var22), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39032((SubLObject)module0661.FOUR_INTEGER);
-        module0656.f39972(Functions.funcall(f40219(var22)), PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic151$, f40213(var22)));
-        return (SubLObject)module0661.NIL;
+        module0642.f39026((SubLObject)UNPROVIDED);
+        module0642.f39032((SubLObject)SIX_INTEGER);
+        module0642.f39068(PrintLow.format((SubLObject)NIL, (SubLObject)$ic149$, f40213(var22)), (SubLObject)$ic150$, f40222(var22), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        module0642.f39032((SubLObject)FOUR_INTEGER);
+        module0656.f39972(Functions.funcall(f40219(var22)), PrintLow.format((SubLObject)NIL, (SubLObject)$ic151$, f40213(var22)));
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40270(final SubLObject var22, final SubLObject var61) {
         final SubLThread var62 = SubLProcess.currentSubLThread();
         f40267(var22, var61);
-        module0642.f39026((SubLObject)module0661.UNPROVIDED);
+        module0642.f39026((SubLObject)UNPROVIDED);
         final SubLObject var63 = module0217.f14363(var61);
         final SubLObject var64 = conses_high.copy_list(var63);
-        final SubLObject var65 = module0213.f13926(conses_high.union(var64, conses_high.copy_list(f40271()), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED), (SubLObject)module0661.NIL, (SubLObject)module0661.NIL, (SubLObject)module0661.T, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+        final SubLObject var65 = module0213.f13926(conses_high.union(var64, conses_high.copy_list(f40271()), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED), (SubLObject)NIL, (SubLObject)NIL, (SubLObject)T, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         module0642.f39020(module0015.$g346$.getGlobalValue());
         module0642.f39020(module0015.$g352$.getGlobalValue());
-        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39020((SubLObject)module0661.ZERO_INTEGER);
-        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+        module0642.f39020((SubLObject)ZERO_INTEGER);
+        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
         module0642.f39020(module0015.$g353$.getGlobalValue());
-        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39020((SubLObject)module0661.ZERO_INTEGER);
-        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+        module0642.f39020((SubLObject)ZERO_INTEGER);
+        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
         module0642.f39020(module0015.$g354$.getGlobalValue());
-        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39020((SubLObject)module0661.ZERO_INTEGER);
-        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+        module0642.f39020((SubLObject)ZERO_INTEGER);
+        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
         final SubLObject var66 = module0015.$g533$.currentBinding(var62);
         final SubLObject var67 = module0015.$g542$.currentBinding(var62);
         try {
-            module0015.$g533$.bind((SubLObject)module0661.T, var62);
-            module0015.$g542$.bind((SubLObject)module0661.THREE_INTEGER, var62);
-            SubLObject var68 = (SubLObject)module0661.ZERO_INTEGER;
-            SubLObject var69 = Numbers.max((SubLObject)module0661.ONE_INTEGER, Numbers.subtract(module0015.$g542$.getDynamicValue(var62), var68));
+            module0015.$g533$.bind((SubLObject)T, var62);
+            module0015.$g542$.bind((SubLObject)THREE_INTEGER, var62);
+            SubLObject var68 = (SubLObject)ZERO_INTEGER;
+            SubLObject var69 = Numbers.max((SubLObject)ONE_INTEGER, Numbers.subtract(module0015.$g542$.getDynamicValue(var62), var68));
             module0642.f39020(module0015.$g364$.getGlobalValue());
-            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
             final SubLObject var26_89 = module0015.$g533$.currentBinding(var62);
             try {
-                module0015.$g533$.bind((SubLObject)module0661.T, var62);
+                module0015.$g533$.bind((SubLObject)T, var62);
                 module0642.f39084(var68);
                 module0642.f39020(module0015.$g360$.getGlobalValue());
-                if (module0661.NIL != var69) {
+                if (NIL != var69) {
                     module0642.f39020(module0015.$g371$.getGlobalValue());
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                     module0642.f39020(var69);
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                 }
-                module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                 final SubLObject var26_90 = module0015.$g533$.currentBinding(var62);
                 try {
-                    module0015.$g533$.bind((SubLObject)module0661.T, var62);
-                    module0642.f39072((SubLObject)module0661.$ic152$, (SubLObject)module0661.$ic153$, (SubLObject)SubLObjectFactory.makeBoolean(module0661.NIL == f40245((SubLObject)module0661.$ic154$)), (SubLObject)module0661.UNPROVIDED);
-                    module0642.f39032((SubLObject)module0661.UNPROVIDED);
+                    module0015.$g533$.bind((SubLObject)T, var62);
+                    module0642.f39072((SubLObject)$ic152$, (SubLObject)$ic153$, (SubLObject)makeBoolean(NIL == f40245((SubLObject)$ic154$)), (SubLObject)UNPROVIDED);
+                    module0642.f39032((SubLObject)UNPROVIDED);
                     module0642.f39020(module0015.$g234$.getGlobalValue());
-                    module0642.f39019((SubLObject)module0661.$ic155$);
+                    module0642.f39019((SubLObject)$ic155$);
                     module0642.f39020(module0015.$g235$.getGlobalValue());
-                    module0642.f39026((SubLObject)module0661.UNPROVIDED);
-                    module0642.f39072((SubLObject)module0661.$ic152$, (SubLObject)module0661.$ic150$, f40245((SubLObject)module0661.$ic154$), (SubLObject)module0661.UNPROVIDED);
-                    module0642.f39032((SubLObject)module0661.UNPROVIDED);
+                    module0642.f39026((SubLObject)UNPROVIDED);
+                    module0642.f39072((SubLObject)$ic152$, (SubLObject)$ic150$, f40245((SubLObject)$ic154$), (SubLObject)UNPROVIDED);
+                    module0642.f39032((SubLObject)UNPROVIDED);
                     module0642.f39020(module0015.$g234$.getGlobalValue());
-                    module0642.f39019((SubLObject)module0661.$ic156$);
+                    module0642.f39019((SubLObject)$ic156$);
                     module0642.f39020(module0015.$g235$.getGlobalValue());
                 }
                 finally {
@@ -1347,48 +1348,48 @@ public final class module0661 extends SubLTranslatedFile
                 module0015.$g533$.rebind(var26_89, var62);
             }
             module0642.f39020(module0015.$g365$.getGlobalValue());
-            module0642.f39029((SubLObject)module0661.UNPROVIDED);
-            var68 = (SubLObject)module0661.ONE_INTEGER;
-            var69 = Numbers.max((SubLObject)module0661.ONE_INTEGER, Numbers.subtract(module0015.$g542$.getDynamicValue(var62), var68));
+            module0642.f39029((SubLObject)UNPROVIDED);
+            var68 = (SubLObject)ONE_INTEGER;
+            var69 = Numbers.max((SubLObject)ONE_INTEGER, Numbers.subtract(module0015.$g542$.getDynamicValue(var62), var68));
             module0642.f39020(module0015.$g364$.getGlobalValue());
-            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+            module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
             final SubLObject var26_91 = module0015.$g533$.currentBinding(var62);
             try {
-                module0015.$g533$.bind((SubLObject)module0661.T, var62);
+                module0015.$g533$.bind((SubLObject)T, var62);
                 module0642.f39084(var68);
                 module0642.f39020(module0015.$g360$.getGlobalValue());
-                if (module0661.NIL != var69) {
+                if (NIL != var69) {
                     module0642.f39020(module0015.$g371$.getGlobalValue());
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                     module0642.f39020(var69);
-                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+                    module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
                 }
-                module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+                module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
                 final SubLObject var26_92 = module0015.$g533$.currentBinding(var62);
                 try {
-                    module0015.$g533$.bind((SubLObject)module0661.T, var62);
-                    module0642.f39068((SubLObject)module0661.$ic157$, (SubLObject)module0661.$ic153$, module0655.f39751(), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-                    module0642.f39032((SubLObject)module0661.UNPROVIDED);
+                    module0015.$g533$.bind((SubLObject)T, var62);
+                    module0642.f39068((SubLObject)$ic157$, (SubLObject)$ic153$, module0655.f39751(), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                    module0642.f39032((SubLObject)UNPROVIDED);
                     module0642.f39020(module0015.$g234$.getGlobalValue());
-                    module0642.f39019((SubLObject)module0661.$ic158$);
+                    module0642.f39019((SubLObject)$ic158$);
                     module0642.f39020(module0015.$g235$.getGlobalValue());
-                    module0642.f39026((SubLObject)module0661.UNPROVIDED);
+                    module0642.f39026((SubLObject)UNPROVIDED);
                     SubLObject var70 = var65;
-                    SubLObject var71 = (SubLObject)module0661.NIL;
+                    SubLObject var71 = (SubLObject)NIL;
                     var71 = var70.first();
-                    while (module0661.NIL != var70) {
+                    while (NIL != var70) {
                         module0642.f39020(module0015.$g459$.getGlobalValue());
-                        module0642.f39068((SubLObject)module0661.$ic159$, var71, conses_high.member(var71, f40271(), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+                        module0642.f39068((SubLObject)$ic159$, var71, conses_high.member(var71, f40271(), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
                         module0642.f39020(module0015.$g460$.getGlobalValue());
-                        if (module0661.NIL != module0004.f104(var71, var63, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED)) {
+                        if (NIL != module0004.f104(var71, var63, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
                             module0642.f39020(module0015.$g234$.getGlobalValue());
-                            module0656.f39804(var71, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+                            module0656.f39804(var71, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
                             module0642.f39020(module0015.$g235$.getGlobalValue());
                         }
                         else {
-                            module0656.f39804(var71, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+                            module0656.f39804(var71, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
                         }
-                        module0642.f39032((SubLObject)module0661.TWO_INTEGER);
+                        module0642.f39032((SubLObject)TWO_INTEGER);
                         var70 = var70.rest();
                         var71 = var70.first();
                     }
@@ -1402,386 +1403,386 @@ public final class module0661 extends SubLTranslatedFile
                 module0015.$g533$.rebind(var26_91, var62);
             }
             module0642.f39020(module0015.$g365$.getGlobalValue());
-            module0642.f39029((SubLObject)module0661.UNPROVIDED);
-            module0642.f39083((SubLObject)module0661.THREE_INTEGER);
+            module0642.f39029((SubLObject)UNPROVIDED);
+            module0642.f39083((SubLObject)THREE_INTEGER);
         }
         finally {
             module0015.$g542$.rebind(var67, var62);
             module0015.$g533$.rebind(var66, var62);
         }
         module0642.f39020(module0015.$g347$.getGlobalValue());
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40272(final SubLObject var22, final SubLObject var61) {
         f40267(var22, var61);
-        module0642.f39026((SubLObject)module0661.UNPROVIDED);
-        module0642.f39019((SubLObject)module0661.$ic145$);
-        module0656.f39804(f40217(var22), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
-        module0642.f39019((SubLObject)module0661.$ic146$);
-        module0642.f39026((SubLObject)module0661.UNPROVIDED);
-        Functions.apply(Symbols.symbol_function((SubLObject)module0661.$ic160$), (SubLObject)ConsesLow.cons(f40213(var22), Functions.funcall(f40219(var22))));
-        return (SubLObject)module0661.NIL;
+        module0642.f39026((SubLObject)UNPROVIDED);
+        module0642.f39019((SubLObject)$ic145$);
+        module0656.f39804(f40217(var22), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        module0642.f39019((SubLObject)$ic146$);
+        module0642.f39026((SubLObject)UNPROVIDED);
+        Functions.apply(Symbols.symbol_function((SubLObject)$ic160$), (SubLObject)ConsesLow.cons(f40213(var22), Functions.funcall(f40219(var22))));
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40273(final SubLObject var22, final SubLObject var53) {
         final SubLObject var54 = f40258(f40213(var22), var53);
         Functions.funcall(f40220(var22), var54);
-        f40235(var22, (SubLObject)SubLObjectFactory.makeBoolean(module0661.NIL != var54));
-        return (SubLObject)module0661.NIL;
+        f40235(var22, (SubLObject)makeBoolean(NIL != var54));
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40274(final SubLObject var22, final SubLObject var53) {
         final SubLObject var54 = f40260(f40213(var22), var53);
         Functions.funcall(f40220(var22), var54);
-        f40235(var22, (SubLObject)SubLObjectFactory.makeBoolean(module0661.NIL != var54));
-        return (SubLObject)module0661.NIL;
+        f40235(var22, (SubLObject)makeBoolean(NIL != var54));
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40275(final SubLObject var22, final SubLObject var53) {
-        final SubLObject var54 = module0642.f39104(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic149$, f40213(var22)), var53);
-        if (var54.equal((SubLObject)module0661.$ic150$)) {
-            f40235(var22, (SubLObject)module0661.T);
-            Functions.funcall(f40220(var22), module0656.f39973(PrintLow.format((SubLObject)module0661.NIL, (SubLObject)module0661.$ic151$, f40213(var22)), var53));
+        final SubLObject var54 = module0642.f39104(PrintLow.format((SubLObject)NIL, (SubLObject)$ic149$, f40213(var22)), var53);
+        if (var54.equal((SubLObject)$ic150$)) {
+            f40235(var22, (SubLObject)T);
+            Functions.funcall(f40220(var22), module0656.f39973(PrintLow.format((SubLObject)NIL, (SubLObject)$ic151$, f40213(var22)), var53));
         }
         else {
-            f40235(var22, (SubLObject)module0661.NIL);
+            f40235(var22, (SubLObject)NIL);
         }
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40276(final SubLObject var22, final SubLObject var53) {
-        final SubLObject var54 = module0642.f39104((SubLObject)module0661.$ic152$, var53);
-        final SubLObject var55 = module0642.f39104((SubLObject)module0661.$ic157$, var53);
-        final SubLObject var56 = module0642.f39109((SubLObject)module0661.$ic159$, var53);
-        if (module0661.NIL != var55) {
-            module0655.f39752((SubLObject)module0661.T);
+        final SubLObject var54 = module0642.f39104((SubLObject)$ic152$, var53);
+        final SubLObject var55 = module0642.f39104((SubLObject)$ic157$, var53);
+        final SubLObject var56 = module0642.f39109((SubLObject)$ic159$, var53);
+        if (NIL != var55) {
+            module0655.f39752((SubLObject)T);
         }
         else {
-            module0655.f39752((SubLObject)module0661.NIL);
+            module0655.f39752((SubLObject)NIL);
         }
-        if (var54.equal((SubLObject)module0661.$ic153$)) {
-            f40235(var22, (SubLObject)module0661.NIL);
-            Functions.funcall(f40220(var22), (SubLObject)module0661.NIL);
+        if (var54.equal((SubLObject)$ic153$)) {
+            f40235(var22, (SubLObject)NIL);
+            Functions.funcall(f40220(var22), (SubLObject)NIL);
         }
         else {
-            f40235(var22, (SubLObject)module0661.T);
-            Functions.funcall(f40220(var22), (SubLObject)module0661.NIL);
+            f40235(var22, (SubLObject)T);
+            Functions.funcall(f40220(var22), (SubLObject)NIL);
             SubLObject var57 = var56;
-            SubLObject var58 = (SubLObject)module0661.NIL;
+            SubLObject var58 = (SubLObject)NIL;
             var58 = var57.first();
-            while (module0661.NIL != var57) {
-                Functions.funcall(f40220(var22), (SubLObject)ConsesLow.cons(module0656.f39943(var58, (SubLObject)module0661.UNPROVIDED), Functions.funcall(f40219(var22))));
+            while (NIL != var57) {
+                Functions.funcall(f40220(var22), (SubLObject)ConsesLow.cons(module0656.f39943(var58, (SubLObject)UNPROVIDED), Functions.funcall(f40219(var22))));
                 var57 = var57.rest();
                 var58 = var57.first();
             }
         }
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40277(final SubLObject var29) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0661.NIL != f40250(var29) || module0661.NIL == module0178.f11296(var29) || module0178.f11296(var29).numLE(f40278()));
+        return (SubLObject)makeBoolean(NIL != f40250(var29) || NIL == module0178.f11296(var29) || module0178.f11296(var29).numLE(f40278()));
     }
     
     public static SubLObject f40279(final SubLObject var29) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0661.NIL != f40250(var29) || module0661.NIL == module0178.f11296(var29) || f40280().numLE(module0178.f11296(var29)));
+        return (SubLObject)makeBoolean(NIL != f40250(var29) || NIL == module0178.f11296(var29) || f40280().numLE(module0178.f11296(var29)));
     }
     
     public static SubLObject f40281() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5216$.getDynamicValue(var4);
+        return $g5216$.getDynamicValue(var4);
     }
     
     public static SubLObject f40282(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5216$.setDynamicValue(var99, var100);
-        return module0661.$g5216$.getDynamicValue(var100);
+        $g5216$.setDynamicValue(var99, var100);
+        return $g5216$.getDynamicValue(var100);
     }
     
     public static SubLObject f40283() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5217$.getDynamicValue(var4);
+        return $g5217$.getDynamicValue(var4);
     }
     
     public static SubLObject f40284(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5217$.setDynamicValue(var99, var100);
-        return module0661.$g5217$.getDynamicValue(var100);
+        $g5217$.setDynamicValue(var99, var100);
+        return $g5217$.getDynamicValue(var100);
     }
     
     public static SubLObject f40285(final SubLObject var29) {
-        if (module0661.NIL == assertion_handles_oc.f11035(var29)) {
-            Errors.sublisp_break((SubLObject)module0661.$ic168$, module0661.EMPTY_SUBL_OBJECT_ARRAY);
+        if (NIL == assertion_handles_oc.f11035(var29)) {
+            Errors.sublisp_break((SubLObject)$ic168$, EMPTY_SUBL_OBJECT_ARRAY);
         }
-        if (module0661.NIL != f40250(var29)) {
-            return (SubLObject)module0661.T;
+        if (NIL != f40250(var29)) {
+            return (SubLObject)T;
         }
-        final SubLObject var30 = f40244((SubLObject)module0661.$ic163$);
-        return conses_high.member(Functions.funcall(f40227(var30), var29), Functions.funcall(f40219(var30)), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+        final SubLObject var30 = f40244((SubLObject)$ic163$);
+        return conses_high.member(Functions.funcall(f40227(var30), var29), Functions.funcall(f40219(var30)), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
     }
     
     public static SubLObject f40286() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5218$.getDynamicValue(var4);
+        return $g5218$.getDynamicValue(var4);
     }
     
     public static SubLObject f40287(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5218$.setDynamicValue(var99, var100);
-        return module0661.$g5218$.getDynamicValue(var100);
+        $g5218$.setDynamicValue(var99, var100);
+        return $g5218$.getDynamicValue(var100);
     }
     
     public static SubLObject f40288() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5219$.getDynamicValue(var4);
+        return $g5219$.getDynamicValue(var4);
     }
     
     public static SubLObject f40289(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5219$.setDynamicValue(var99, var100);
-        return module0661.$g5219$.getDynamicValue(var100);
+        $g5219$.setDynamicValue(var99, var100);
+        return $g5219$.getDynamicValue(var100);
     }
     
     public static SubLObject f40290(final SubLObject var29) {
-        if (module0661.NIL == assertion_handles_oc.f11035(var29)) {
-            Errors.sublisp_break((SubLObject)module0661.$ic168$, module0661.EMPTY_SUBL_OBJECT_ARRAY);
+        if (NIL == assertion_handles_oc.f11035(var29)) {
+            Errors.sublisp_break((SubLObject)$ic168$, EMPTY_SUBL_OBJECT_ARRAY);
         }
-        if (module0661.NIL != f40250(var29)) {
-            return (SubLObject)module0661.T;
+        if (NIL != f40250(var29)) {
+            return (SubLObject)T;
         }
-        final SubLObject var30 = f40244((SubLObject)module0661.$ic171$);
-        return conses_high.member(Functions.funcall(f40227(var30), var29), Functions.funcall(f40219(var30)), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+        final SubLObject var30 = f40244((SubLObject)$ic171$);
+        return conses_high.member(Functions.funcall(f40227(var30), var29), Functions.funcall(f40219(var30)), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
     }
     
     public static SubLObject f40291() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5220$.getDynamicValue(var4);
+        return $g5220$.getDynamicValue(var4);
     }
     
     public static SubLObject f40292(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5220$.setDynamicValue(var99, var100);
-        return module0661.$g5220$.getDynamicValue(var100);
+        $g5220$.setDynamicValue(var99, var100);
+        return $g5220$.getDynamicValue(var100);
     }
     
     public static SubLObject f40280() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5221$.getDynamicValue(var4);
+        return $g5221$.getDynamicValue(var4);
     }
     
     public static SubLObject f40293(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5221$.setDynamicValue(var99, var100);
-        return module0661.$g5221$.getDynamicValue(var100);
+        $g5221$.setDynamicValue(var99, var100);
+        return $g5221$.getDynamicValue(var100);
     }
     
     public static SubLObject f40294() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5222$.getDynamicValue(var4);
+        return $g5222$.getDynamicValue(var4);
     }
     
     public static SubLObject f40295(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5222$.setDynamicValue(var99, var100);
-        return module0661.$g5222$.getDynamicValue(var100);
+        $g5222$.setDynamicValue(var99, var100);
+        return $g5222$.getDynamicValue(var100);
     }
     
     public static SubLObject f40278() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5223$.getDynamicValue(var4);
+        return $g5223$.getDynamicValue(var4);
     }
     
     public static SubLObject f40296(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5223$.setDynamicValue(var99, var100);
-        return module0661.$g5223$.getDynamicValue(var100);
+        $g5223$.setDynamicValue(var99, var100);
+        return $g5223$.getDynamicValue(var100);
     }
     
     public static SubLObject f40297() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5224$.getDynamicValue(var4);
+        return $g5224$.getDynamicValue(var4);
     }
     
     public static SubLObject f40298(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5224$.setDynamicValue(var99, var100);
-        return module0661.$g5224$.getDynamicValue(var100);
+        $g5224$.setDynamicValue(var99, var100);
+        return $g5224$.getDynamicValue(var100);
     }
     
     public static SubLObject f40271() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5225$.getDynamicValue(var4);
+        return $g5225$.getDynamicValue(var4);
     }
     
     public static SubLObject f40299(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5225$.setDynamicValue(var99, var100);
-        return module0661.$g5225$.getDynamicValue(var100);
+        $g5225$.setDynamicValue(var99, var100);
+        return $g5225$.getDynamicValue(var100);
     }
     
     public static SubLObject f40300() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5226$.getDynamicValue(var4);
+        return $g5226$.getDynamicValue(var4);
     }
     
     public static SubLObject f40301(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5226$.setDynamicValue(var99, var100);
-        return module0661.$g5226$.getDynamicValue(var100);
+        $g5226$.setDynamicValue(var99, var100);
+        return $g5226$.getDynamicValue(var100);
     }
     
     public static SubLObject f40302() {
         final SubLThread var4 = SubLProcess.currentSubLThread();
-        return module0661.$g5227$.getDynamicValue(var4);
+        return $g5227$.getDynamicValue(var4);
     }
     
     public static SubLObject f40303(final SubLObject var99) {
         final SubLThread var100 = SubLProcess.currentSubLThread();
-        module0661.$g5227$.setDynamicValue(var99, var100);
-        return module0661.$g5227$.getDynamicValue(var100);
+        $g5227$.setDynamicValue(var99, var100);
+        return $g5227$.getDynamicValue(var100);
     }
     
     public static SubLObject f40304(final SubLObject var29) {
-        if (module0661.NIL == assertion_handles_oc.f11035(var29)) {
-            Errors.sublisp_break((SubLObject)module0661.$ic168$, module0661.EMPTY_SUBL_OBJECT_ARRAY);
+        if (NIL == assertion_handles_oc.f11035(var29)) {
+            Errors.sublisp_break((SubLObject)$ic168$, EMPTY_SUBL_OBJECT_ARRAY);
         }
-        if (module0661.NIL != f40250(var29)) {
-            return (SubLObject)module0661.T;
+        if (NIL != f40250(var29)) {
+            return (SubLObject)T;
         }
-        final SubLObject var30 = f40244((SubLObject)module0661.$ic195$);
-        return conses_high.member(Functions.funcall(f40227(var30), var29), Functions.funcall(f40219(var30)), (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED);
+        final SubLObject var30 = f40244((SubLObject)$ic195$);
+        return conses_high.member(Functions.funcall(f40227(var30), var29), Functions.funcall(f40219(var30)), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
     }
     
     public static SubLObject f40305() {
-        final SubLObject var100 = f40248((SubLObject)module0661.UNPROVIDED);
-        if (module0661.NIL == var100) {
-            return (SubLObject)module0661.NIL;
+        final SubLObject var100 = f40248((SubLObject)UNPROVIDED);
+        if (NIL == var100) {
+            return (SubLObject)NIL;
         }
-        if (module0661.NIL != conses_high.endp(var100.rest())) {
+        if (NIL != conses_high.endp(var100.rest())) {
             return f40223(var100.first());
         }
-        return (SubLObject)module0661.$ic200$;
+        return (SubLObject)$ic200$;
     }
     
     public static SubLObject f40306(final SubLObject var29) {
         SubLObject var31;
-        final SubLObject var30 = var31 = f40248((SubLObject)module0661.UNPROVIDED);
-        SubLObject var32 = (SubLObject)module0661.NIL;
+        final SubLObject var30 = var31 = f40248((SubLObject)UNPROVIDED);
+        SubLObject var32 = (SubLObject)NIL;
         var32 = var31.first();
-        while (module0661.NIL != var31) {
-            if (module0661.NIL == Functions.funcall(f40223(var32), var29)) {
-                return (SubLObject)module0661.NIL;
+        while (NIL != var31) {
+            if (NIL == Functions.funcall(f40223(var32), var29)) {
+                return (SubLObject)NIL;
             }
             var31 = var31.rest();
             var32 = var31.first();
         }
-        return (SubLObject)module0661.T;
+        return (SubLObject)T;
     }
     
     public static SubLObject f40307(final SubLObject var30, final SubLObject var31) {
         final SubLObject var32 = var30.rest();
         final SubLObject var34;
         final SubLObject var33 = var34 = var32;
-        return (SubLObject)ConsesLow.list((SubLObject)module0661.$ic76$, (SubLObject)module0661.$ic201$, reader.bq_cons((SubLObject)module0661.$ic66$, ConsesLow.append(var34, (SubLObject)module0661.NIL)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic76$, (SubLObject)$ic201$, reader.bq_cons((SubLObject)$ic66$, ConsesLow.append(var34, (SubLObject)NIL)));
     }
     
     public static SubLObject f40308(final SubLObject var30, final SubLObject var31) {
         SubLObject var33;
         final SubLObject var32 = var33 = var30.rest();
-        SubLObject var34 = (SubLObject)module0661.NIL;
-        SubLObject var35 = (SubLObject)module0661.NIL;
-        SubLObject var36 = (SubLObject)module0661.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)module0661.$ic202$);
+        SubLObject var34 = (SubLObject)NIL;
+        SubLObject var35 = (SubLObject)NIL;
+        SubLObject var36 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)$ic202$);
         var34 = var33.first();
         var33 = var33.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)module0661.$ic202$);
+        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)$ic202$);
         var35 = var33.first();
         var33 = var33.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)module0661.$ic202$);
+        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)$ic202$);
         var36 = var33.first();
         var33 = var33.rest();
-        SubLObject var37 = (SubLObject)module0661.NIL;
+        SubLObject var37 = (SubLObject)NIL;
         SubLObject var38 = var33;
-        SubLObject var39 = (SubLObject)module0661.NIL;
-        SubLObject var113_114 = (SubLObject)module0661.NIL;
-        while (module0661.NIL != var38) {
-            cdestructuring_bind.destructuring_bind_must_consp(var38, var32, (SubLObject)module0661.$ic202$);
+        SubLObject var39 = (SubLObject)NIL;
+        SubLObject var113_114 = (SubLObject)NIL;
+        while (NIL != var38) {
+            cdestructuring_bind.destructuring_bind_must_consp(var38, var32, (SubLObject)$ic202$);
             var113_114 = var38.first();
             var38 = var38.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var38, var32, (SubLObject)module0661.$ic202$);
-            if (module0661.NIL == conses_high.member(var113_114, (SubLObject)module0661.$ic203$, (SubLObject)module0661.UNPROVIDED, (SubLObject)module0661.UNPROVIDED)) {
-                var39 = (SubLObject)module0661.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var38, var32, (SubLObject)$ic202$);
+            if (NIL == conses_high.member(var113_114, (SubLObject)$ic203$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var39 = (SubLObject)T;
             }
-            if (var113_114 == module0661.$ic204$) {
+            if (var113_114 == $ic204$) {
                 var37 = var38.first();
             }
             var38 = var38.rest();
         }
-        if (module0661.NIL != var39 && module0661.NIL == var37) {
-            cdestructuring_bind.cdestructuring_bind_error(var32, (SubLObject)module0661.$ic202$);
+        if (NIL != var39 && NIL == var37) {
+            cdestructuring_bind.cdestructuring_bind_error(var32, (SubLObject)$ic202$);
         }
-        final SubLObject var40 = cdestructuring_bind.property_list_member((SubLObject)module0661.$ic205$, var33);
-        final SubLObject var41 = (SubLObject)((module0661.NIL != var40) ? conses_high.cadr(var40) : module0661.NIL);
-        return (SubLObject)ConsesLow.list((SubLObject)module0661.$ic206$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic207$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0661.$ic208$, (SubLObject)module0661.$ic209$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic210$, var41)), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic211$, (SubLObject)module0661.$ic212$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic213$, (SubLObject)module0661.$ic214$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic215$, var34, var35)), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic216$, (SubLObject)module0661.$ic214$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic215$, var34, var35)))), (SubLObject)ConsesLow.list((SubLObject)module0661.T, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic215$, var34, var36))));
+        final SubLObject var40 = cdestructuring_bind.property_list_member((SubLObject)$ic205$, var33);
+        final SubLObject var41 = (SubLObject)((NIL != var40) ? conses_high.cadr(var40) : NIL);
+        return (SubLObject)ConsesLow.list((SubLObject)$ic206$, (SubLObject)ConsesLow.list((SubLObject)$ic207$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic208$, (SubLObject)$ic209$, (SubLObject)ConsesLow.list((SubLObject)$ic210$, var41)), (SubLObject)ConsesLow.list((SubLObject)$ic211$, (SubLObject)$ic212$, (SubLObject)ConsesLow.list((SubLObject)$ic213$, (SubLObject)$ic214$, (SubLObject)ConsesLow.list((SubLObject)$ic215$, var34, var35)), (SubLObject)ConsesLow.list((SubLObject)$ic216$, (SubLObject)$ic214$, (SubLObject)ConsesLow.list((SubLObject)$ic215$, var34, var35)))), (SubLObject)ConsesLow.list((SubLObject)T, (SubLObject)ConsesLow.list((SubLObject)$ic215$, var34, var36))));
     }
     
     public static SubLObject f40309(final SubLObject var30, final SubLObject var31) {
         SubLObject var33;
         final SubLObject var32 = var33 = var30.rest();
-        SubLObject var34 = (SubLObject)module0661.NIL;
-        SubLObject var35 = (SubLObject)module0661.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)module0661.$ic217$);
+        SubLObject var34 = (SubLObject)NIL;
+        SubLObject var35 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)$ic217$);
         var34 = var33.first();
         var33 = var33.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)module0661.$ic217$);
+        cdestructuring_bind.destructuring_bind_must_consp(var33, var32, (SubLObject)$ic217$);
         var35 = var33.first();
         var33 = var33.rest();
-        if (module0661.NIL == var33) {
-            final SubLObject var36 = (SubLObject)module0661.$ic218$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0661.$ic76$, (SubLObject)ConsesLow.list(var36), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic206$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic211$, (SubLObject)module0661.$ic209$, (SubLObject)ConsesLow.list((SubLObject)module0661.$ic215$, var36, var34), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic215$, var36, var35))), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic219$, var36));
+        if (NIL == var33) {
+            final SubLObject var36 = (SubLObject)$ic218$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic76$, (SubLObject)ConsesLow.list(var36), (SubLObject)ConsesLow.list((SubLObject)$ic206$, (SubLObject)ConsesLow.list((SubLObject)$ic211$, (SubLObject)$ic209$, (SubLObject)ConsesLow.list((SubLObject)$ic215$, var36, var34), (SubLObject)ConsesLow.list((SubLObject)$ic215$, var36, var35))), (SubLObject)ConsesLow.list((SubLObject)$ic219$, var36));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var32, (SubLObject)module0661.$ic217$);
-        return (SubLObject)module0661.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var32, (SubLObject)$ic217$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40310(final SubLObject var22, SubLObject var82, SubLObject var61) {
-        if (var82 == module0661.UNPROVIDED) {
-            var82 = (SubLObject)module0661.NIL;
+        if (var82 == UNPROVIDED) {
+            var82 = (SubLObject)NIL;
         }
-        if (var61 == module0661.UNPROVIDED) {
-            var61 = (SubLObject)module0661.NIL;
+        if (var61 == UNPROVIDED) {
+            var61 = (SubLObject)NIL;
         }
         final SubLThread var83 = SubLProcess.currentSubLThread();
-        if (module0661.NIL == var82) {
+        if (NIL == var82) {
             var82 = f40213(var22);
         }
-        SubLObject var84 = (SubLObject)module0661.$ic220$;
+        SubLObject var84 = (SubLObject)$ic220$;
         final SubLObject var85 = module0655.$g5132$.getDynamicValue(var83);
-        if (var85 == module0661.$ic221$) {
-            var84 = (SubLObject)module0661.$ic222$;
+        if (var85 == $ic221$) {
+            var84 = (SubLObject)$ic222$;
         }
         final SubLObject var86 = module0656.f39832(var85);
         module0642.f39020(module0015.$g381$.getGlobalValue());
         module0642.f39020(module0015.$g383$.getGlobalValue());
-        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
         module0655.f39768();
-        if (module0661.NIL != var61) {
-            PrintLow.format(module0015.$g131$.getDynamicValue(var83), (SubLObject)module0661.$ic223$, new SubLObject[] { var84, f40216(var22), var61 });
+        if (NIL != var61) {
+            PrintLow.format(module0015.$g131$.getDynamicValue(var83), (SubLObject)$ic223$, new SubLObject[] { var84, f40216(var22), var61 });
         }
         else {
-            PrintLow.format(module0015.$g131$.getDynamicValue(var83), (SubLObject)module0661.$ic224$, var84, f40216(var22));
+            PrintLow.format(module0015.$g131$.getDynamicValue(var83), (SubLObject)$ic224$, var84, f40216(var22));
         }
-        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
-        if (module0661.NIL != var86) {
+        module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
+        if (NIL != var86) {
             module0642.f39020(module0015.$g387$.getGlobalValue());
-            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
             module0642.f39020(var86);
-            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0661.UNPROVIDED);
+            module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)UNPROVIDED);
         }
-        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0661.UNPROVIDED);
+        module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)UNPROVIDED);
         final SubLObject var87 = module0015.$g533$.currentBinding(var83);
         try {
-            module0015.$g533$.bind((SubLObject)module0661.T, var83);
+            module0015.$g533$.bind((SubLObject)T, var83);
             module0642.f39019(var82);
         }
         finally {
@@ -1892,78 +1893,78 @@ public final class module0661 extends SubLTranslatedFile
         SubLFiles.declareMacro("com.cyc.cycjava.cycl.module0661", "f40308", "S#44358");
         SubLFiles.declareMacro("com.cyc.cycjava.cycl.module0661", "f40309", "S#44359");
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0661", "f40310", "S#44360", 1, 2, false);
-        return (SubLObject)module0661.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40312() {
-        module0661.$g5209$ = SubLFiles.defparameter("S#44361", (SubLObject)module0661.NIL);
-        module0661.$g5210$ = SubLFiles.defconstant("S#44362", (SubLObject)module0661.$ic4$);
-        module0661.$g5211$ = SubLFiles.deflexical("S#44363", (SubLObject)((module0661.NIL != Symbols.boundp((SubLObject)module0661.$ic58$)) ? module0661.$g5211$.getGlobalValue() : module0661.NIL));
-        module0661.$g5212$ = SubLFiles.deflexical("S#44364", (SubLObject)((module0661.NIL != Symbols.boundp((SubLObject)module0661.$ic59$)) ? module0661.$g5212$.getGlobalValue() : module0661.NIL));
-        module0661.$g5213$ = SubLFiles.defparameter("S#44365", (SubLObject)module0661.NIL);
-        module0661.$g5214$ = SubLFiles.deflexical("S#44366", (SubLObject)module0661.NIL);
-        module0661.$g5215$ = SubLFiles.deflexical("S#44367", (SubLObject)module0661.$ic96$);
-        module0661.$g5216$ = SubLFiles.defparameter("S#44368", (SubLObject)module0661.NIL);
-        module0661.$g5217$ = SubLFiles.defparameter("S#44369", (SubLObject)module0661.NIL);
-        module0661.$g5218$ = SubLFiles.defparameter("S#44370", (SubLObject)module0661.NIL);
-        module0661.$g5219$ = SubLFiles.defparameter("S#44371", (SubLObject)module0661.NIL);
-        module0661.$g5220$ = SubLFiles.defparameter("S#44372", (SubLObject)module0661.NIL);
-        module0661.$g5221$ = SubLFiles.defparameter("S#44373", (SubLObject)module0661.NIL);
-        module0661.$g5222$ = SubLFiles.defparameter("S#44374", (SubLObject)module0661.NIL);
-        module0661.$g5223$ = SubLFiles.defparameter("S#44375", (SubLObject)module0661.NIL);
-        module0661.$g5224$ = SubLFiles.defparameter("S#44376", (SubLObject)module0661.NIL);
-        module0661.$g5225$ = SubLFiles.defparameter("S#44377", (SubLObject)module0661.NIL);
-        module0661.$g5226$ = SubLFiles.defparameter("S#44378", (SubLObject)module0661.NIL);
-        module0661.$g5227$ = SubLFiles.defparameter("S#44379", (SubLObject)module0661.NIL);
-        return (SubLObject)module0661.NIL;
+        $g5209$ = SubLFiles.defparameter("S#44361", (SubLObject)NIL);
+        $g5210$ = SubLFiles.defconstant("S#44362", (SubLObject)$ic4$);
+        $g5211$ = SubLFiles.deflexical("S#44363", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic58$)) ? $g5211$.getGlobalValue() : NIL));
+        $g5212$ = SubLFiles.deflexical("S#44364", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic59$)) ? $g5212$.getGlobalValue() : NIL));
+        $g5213$ = SubLFiles.defparameter("S#44365", (SubLObject)NIL);
+        $g5214$ = SubLFiles.deflexical("S#44366", (SubLObject)NIL);
+        $g5215$ = SubLFiles.deflexical("S#44367", (SubLObject)$ic96$);
+        $g5216$ = SubLFiles.defparameter("S#44368", (SubLObject)NIL);
+        $g5217$ = SubLFiles.defparameter("S#44369", (SubLObject)NIL);
+        $g5218$ = SubLFiles.defparameter("S#44370", (SubLObject)NIL);
+        $g5219$ = SubLFiles.defparameter("S#44371", (SubLObject)NIL);
+        $g5220$ = SubLFiles.defparameter("S#44372", (SubLObject)NIL);
+        $g5221$ = SubLFiles.defparameter("S#44373", (SubLObject)NIL);
+        $g5222$ = SubLFiles.defparameter("S#44374", (SubLObject)NIL);
+        $g5223$ = SubLFiles.defparameter("S#44375", (SubLObject)NIL);
+        $g5224$ = SubLFiles.defparameter("S#44376", (SubLObject)NIL);
+        $g5225$ = SubLFiles.defparameter("S#44377", (SubLObject)NIL);
+        $g5226$ = SubLFiles.defparameter("S#44378", (SubLObject)NIL);
+        $g5227$ = SubLFiles.defparameter("S#44379", (SubLObject)NIL);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f40313() {
-        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), module0661.$g5210$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0661.$ic11$));
-        SubLSpecialOperatorDeclarations.proclaim((SubLObject)module0661.$ic12$);
-        Structures.def_csetf((SubLObject)module0661.$ic13$, (SubLObject)module0661.$ic14$);
-        Structures.def_csetf((SubLObject)module0661.$ic15$, (SubLObject)module0661.$ic16$);
-        Structures.def_csetf((SubLObject)module0661.$ic17$, (SubLObject)module0661.$ic18$);
-        Structures.def_csetf((SubLObject)module0661.$ic19$, (SubLObject)module0661.$ic20$);
-        Structures.def_csetf((SubLObject)module0661.$ic21$, (SubLObject)module0661.$ic22$);
-        Structures.def_csetf((SubLObject)module0661.$ic23$, (SubLObject)module0661.$ic24$);
-        Structures.def_csetf((SubLObject)module0661.$ic25$, (SubLObject)module0661.$ic26$);
-        Structures.def_csetf((SubLObject)module0661.$ic27$, (SubLObject)module0661.$ic28$);
-        Structures.def_csetf((SubLObject)module0661.$ic29$, (SubLObject)module0661.$ic30$);
-        Structures.def_csetf((SubLObject)module0661.$ic31$, (SubLObject)module0661.$ic32$);
-        Structures.def_csetf((SubLObject)module0661.$ic33$, (SubLObject)module0661.$ic34$);
-        Structures.def_csetf((SubLObject)module0661.$ic35$, (SubLObject)module0661.$ic36$);
-        Structures.def_csetf((SubLObject)module0661.$ic37$, (SubLObject)module0661.$ic38$);
-        Equality.identity((SubLObject)module0661.$ic4$);
-        Structures.register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), module0661.$g5210$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0661.$ic57$));
-        module0003.f57((SubLObject)module0661.$ic58$);
-        module0003.f57((SubLObject)module0661.$ic59$);
-        Hashtables.sethash((SubLObject)module0661.$ic105$, module0014.$g125$.getGlobalValue(), (SubLObject)ConsesLow.list((SubLObject)module0661.$ic106$, (SubLObject)module0661.NIL));
-        module0015.f873((SubLObject)module0661.$ic130$);
-        module0015.f873((SubLObject)module0661.$ic134$);
-        module0015.f873((SubLObject)module0661.$ic136$);
-        module0015.f873((SubLObject)module0661.$ic137$);
-        module0656.f39840((SubLObject)module0661.$ic141$, (SubLObject)module0661.$ic142$, (SubLObject)module0661.TWO_INTEGER);
-        module0012.f441((SubLObject)module0661.$ic161$);
-        module0012.f441((SubLObject)module0661.$ic162$);
-        f40252((SubLObject)module0661.$ic163$, (SubLObject)module0661.$ic164$, (SubLObject)module0661.$ic165$, (SubLObject)module0661.$ic166$, (SubLObject)module0661.$ic167$);
-        module0012.f441((SubLObject)module0661.$ic169$);
-        module0012.f441((SubLObject)module0661.$ic170$);
-        f40252((SubLObject)module0661.$ic171$, (SubLObject)module0661.$ic172$, (SubLObject)module0661.$ic173$, (SubLObject)module0661.$ic174$, (SubLObject)module0661.$ic175$);
-        module0012.f441((SubLObject)module0661.$ic176$);
-        module0012.f441((SubLObject)module0661.$ic177$);
-        f40252((SubLObject)module0661.$ic178$, (SubLObject)module0661.$ic179$, (SubLObject)module0661.$ic180$, (SubLObject)module0661.$ic181$, (SubLObject)module0661.NIL);
-        module0012.f441((SubLObject)module0661.$ic182$);
-        module0012.f441((SubLObject)module0661.$ic183$);
-        f40252((SubLObject)module0661.$ic184$, (SubLObject)module0661.$ic185$, (SubLObject)module0661.$ic186$, (SubLObject)module0661.$ic187$, (SubLObject)module0661.NIL);
-        module0012.f441((SubLObject)module0661.$ic188$);
-        module0012.f441((SubLObject)module0661.$ic189$);
-        f40252((SubLObject)module0661.$ic154$, (SubLObject)module0661.$ic190$, (SubLObject)module0661.$ic191$, (SubLObject)module0661.$ic192$, (SubLObject)module0661.NIL);
-        module0012.f441((SubLObject)module0661.$ic193$);
-        module0012.f441((SubLObject)module0661.$ic194$);
-        f40252((SubLObject)module0661.$ic195$, (SubLObject)module0661.$ic196$, (SubLObject)module0661.$ic197$, (SubLObject)module0661.$ic198$, (SubLObject)module0661.$ic199$);
-        module0656.f39840((SubLObject)module0661.$ic86$, (SubLObject)module0661.$ic225$, (SubLObject)module0661.THREE_INTEGER);
-        return (SubLObject)module0661.NIL;
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $g5210$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic11$));
+        SubLSpecialOperatorDeclarations.proclaim((SubLObject)$ic12$);
+        Structures.def_csetf((SubLObject)$ic13$, (SubLObject)$ic14$);
+        Structures.def_csetf((SubLObject)$ic15$, (SubLObject)$ic16$);
+        Structures.def_csetf((SubLObject)$ic17$, (SubLObject)$ic18$);
+        Structures.def_csetf((SubLObject)$ic19$, (SubLObject)$ic20$);
+        Structures.def_csetf((SubLObject)$ic21$, (SubLObject)$ic22$);
+        Structures.def_csetf((SubLObject)$ic23$, (SubLObject)$ic24$);
+        Structures.def_csetf((SubLObject)$ic25$, (SubLObject)$ic26$);
+        Structures.def_csetf((SubLObject)$ic27$, (SubLObject)$ic28$);
+        Structures.def_csetf((SubLObject)$ic29$, (SubLObject)$ic30$);
+        Structures.def_csetf((SubLObject)$ic31$, (SubLObject)$ic32$);
+        Structures.def_csetf((SubLObject)$ic33$, (SubLObject)$ic34$);
+        Structures.def_csetf((SubLObject)$ic35$, (SubLObject)$ic36$);
+        Structures.def_csetf((SubLObject)$ic37$, (SubLObject)$ic38$);
+        Equality.identity((SubLObject)$ic4$);
+        Structures.register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $g5210$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic57$));
+        module0003.f57((SubLObject)$ic58$);
+        module0003.f57((SubLObject)$ic59$);
+        Hashtables.sethash((SubLObject)$ic105$, module0014.$g125$.getGlobalValue(), (SubLObject)ConsesLow.list((SubLObject)$ic106$, (SubLObject)NIL));
+        module0015.f873((SubLObject)$ic130$);
+        module0015.f873((SubLObject)$ic134$);
+        module0015.f873((SubLObject)$ic136$);
+        module0015.f873((SubLObject)$ic137$);
+        module0656.f39840((SubLObject)$ic141$, (SubLObject)$ic142$, (SubLObject)TWO_INTEGER);
+        module0012.f441((SubLObject)$ic161$);
+        module0012.f441((SubLObject)$ic162$);
+        f40252((SubLObject)$ic163$, (SubLObject)$ic164$, (SubLObject)$ic165$, (SubLObject)$ic166$, (SubLObject)$ic167$);
+        module0012.f441((SubLObject)$ic169$);
+        module0012.f441((SubLObject)$ic170$);
+        f40252((SubLObject)$ic171$, (SubLObject)$ic172$, (SubLObject)$ic173$, (SubLObject)$ic174$, (SubLObject)$ic175$);
+        module0012.f441((SubLObject)$ic176$);
+        module0012.f441((SubLObject)$ic177$);
+        f40252((SubLObject)$ic178$, (SubLObject)$ic179$, (SubLObject)$ic180$, (SubLObject)$ic181$, (SubLObject)NIL);
+        module0012.f441((SubLObject)$ic182$);
+        module0012.f441((SubLObject)$ic183$);
+        f40252((SubLObject)$ic184$, (SubLObject)$ic185$, (SubLObject)$ic186$, (SubLObject)$ic187$, (SubLObject)NIL);
+        module0012.f441((SubLObject)$ic188$);
+        module0012.f441((SubLObject)$ic189$);
+        f40252((SubLObject)$ic154$, (SubLObject)$ic190$, (SubLObject)$ic191$, (SubLObject)$ic192$, (SubLObject)NIL);
+        module0012.f441((SubLObject)$ic193$);
+        module0012.f441((SubLObject)$ic194$);
+        f40252((SubLObject)$ic195$, (SubLObject)$ic196$, (SubLObject)$ic197$, (SubLObject)$ic198$, (SubLObject)$ic199$);
+        module0656.f39840((SubLObject)$ic86$, (SubLObject)$ic225$, (SubLObject)THREE_INTEGER);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -1980,251 +1981,251 @@ public final class module0661 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0661();
-        module0661.$g5209$ = null;
-        module0661.$g5210$ = null;
-        module0661.$g5211$ = null;
-        module0661.$g5212$ = null;
-        module0661.$g5213$ = null;
-        module0661.$g5214$ = null;
-        module0661.$g5215$ = null;
-        module0661.$g5216$ = null;
-        module0661.$g5217$ = null;
-        module0661.$g5218$ = null;
-        module0661.$g5219$ = null;
-        module0661.$g5220$ = null;
-        module0661.$g5221$ = null;
-        module0661.$g5222$ = null;
-        module0661.$g5223$ = null;
-        module0661.$g5224$ = null;
-        module0661.$g5225$ = null;
-        module0661.$g5226$ = null;
-        module0661.$g5227$ = null;
-        $ic0$ = SubLObjectFactory.makeString("#");
-        $ic1$ = SubLObjectFactory.makeString("#<");
-        $ic2$ = SubLObjectFactory.makeKeyword("STREAM");
-        $ic3$ = SubLObjectFactory.makeKeyword("BASE");
-        $ic4$ = SubLObjectFactory.makeSymbol("S#44265", "CYC");
-        $ic5$ = SubLObjectFactory.makeSymbol("S#44266", "CYC");
-        $ic6$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeSymbol("S#29", "CYC"), SubLObjectFactory.makeSymbol("S#44380", "CYC"), SubLObjectFactory.makeSymbol("S#44381", "CYC"), SubLObjectFactory.makeSymbol("S#44382", "CYC"), SubLObjectFactory.makeSymbol("S#44383", "CYC"), SubLObjectFactory.makeSymbol("S#44384", "CYC"), SubLObjectFactory.makeSymbol("TYPE"), SubLObjectFactory.makeSymbol("S#44171", "CYC"), SubLObjectFactory.makeSymbol("S#44176", "CYC"), SubLObjectFactory.makeSymbol("S#44385", "CYC"), SubLObjectFactory.makeSymbol("S#44386", "CYC"), SubLObjectFactory.makeSymbol("S#44387", "CYC"), SubLObjectFactory.makeSymbol("S#44388", "CYC") });
-        $ic7$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("NAME"), SubLObjectFactory.makeKeyword("SUMMARY-NAME"), SubLObjectFactory.makeKeyword("LINKABLE-NAME"), SubLObjectFactory.makeKeyword("LINKNAME-PREFIX"), SubLObjectFactory.makeKeyword("FILTER-GETTER"), SubLObjectFactory.makeKeyword("FILTER-SETTER"), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("ACTIVE-P"), SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeKeyword("INITIAL-FILTER-VALUE"), SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME") });
-        $ic8$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeSymbol("S#44269", "CYC"), SubLObjectFactory.makeSymbol("S#44270", "CYC"), SubLObjectFactory.makeSymbol("S#44271", "CYC"), SubLObjectFactory.makeSymbol("S#44272", "CYC"), SubLObjectFactory.makeSymbol("S#44273", "CYC"), SubLObjectFactory.makeSymbol("S#44274", "CYC"), SubLObjectFactory.makeSymbol("S#44275", "CYC"), SubLObjectFactory.makeSymbol("S#44276", "CYC"), SubLObjectFactory.makeSymbol("S#44277", "CYC"), SubLObjectFactory.makeSymbol("S#44278", "CYC"), SubLObjectFactory.makeSymbol("S#44279", "CYC"), SubLObjectFactory.makeSymbol("S#44280", "CYC"), SubLObjectFactory.makeSymbol("S#44281", "CYC") });
-        $ic9$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeSymbol("S#44282", "CYC"), SubLObjectFactory.makeSymbol("S#44283", "CYC"), SubLObjectFactory.makeSymbol("S#44284", "CYC"), SubLObjectFactory.makeSymbol("S#44285", "CYC"), SubLObjectFactory.makeSymbol("S#44286", "CYC"), SubLObjectFactory.makeSymbol("S#44287", "CYC"), SubLObjectFactory.makeSymbol("S#44288", "CYC"), SubLObjectFactory.makeSymbol("S#44289", "CYC"), SubLObjectFactory.makeSymbol("S#44290", "CYC"), SubLObjectFactory.makeSymbol("S#44291", "CYC"), SubLObjectFactory.makeSymbol("S#44292", "CYC"), SubLObjectFactory.makeSymbol("S#44293", "CYC"), SubLObjectFactory.makeSymbol("S#44294", "CYC") });
-        $ic10$ = SubLObjectFactory.makeSymbol("S#44267", "CYC");
-        $ic11$ = SubLObjectFactory.makeSymbol("S#44268", "CYC");
-        $ic12$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OPTIMIZE-FUNCALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#44266", "CYC"));
-        $ic13$ = SubLObjectFactory.makeSymbol("S#44269", "CYC");
-        $ic14$ = SubLObjectFactory.makeSymbol("S#44282", "CYC");
-        $ic15$ = SubLObjectFactory.makeSymbol("S#44270", "CYC");
-        $ic16$ = SubLObjectFactory.makeSymbol("S#44283", "CYC");
-        $ic17$ = SubLObjectFactory.makeSymbol("S#44271", "CYC");
-        $ic18$ = SubLObjectFactory.makeSymbol("S#44284", "CYC");
-        $ic19$ = SubLObjectFactory.makeSymbol("S#44272", "CYC");
-        $ic20$ = SubLObjectFactory.makeSymbol("S#44285", "CYC");
-        $ic21$ = SubLObjectFactory.makeSymbol("S#44273", "CYC");
-        $ic22$ = SubLObjectFactory.makeSymbol("S#44286", "CYC");
-        $ic23$ = SubLObjectFactory.makeSymbol("S#44274", "CYC");
-        $ic24$ = SubLObjectFactory.makeSymbol("S#44287", "CYC");
-        $ic25$ = SubLObjectFactory.makeSymbol("S#44275", "CYC");
-        $ic26$ = SubLObjectFactory.makeSymbol("S#44288", "CYC");
-        $ic27$ = SubLObjectFactory.makeSymbol("S#44276", "CYC");
-        $ic28$ = SubLObjectFactory.makeSymbol("S#44289", "CYC");
-        $ic29$ = SubLObjectFactory.makeSymbol("S#44277", "CYC");
-        $ic30$ = SubLObjectFactory.makeSymbol("S#44290", "CYC");
-        $ic31$ = SubLObjectFactory.makeSymbol("S#44278", "CYC");
-        $ic32$ = SubLObjectFactory.makeSymbol("S#44291", "CYC");
-        $ic33$ = SubLObjectFactory.makeSymbol("S#44279", "CYC");
-        $ic34$ = SubLObjectFactory.makeSymbol("S#44292", "CYC");
-        $ic35$ = SubLObjectFactory.makeSymbol("S#44280", "CYC");
-        $ic36$ = SubLObjectFactory.makeSymbol("S#44293", "CYC");
-        $ic37$ = SubLObjectFactory.makeSymbol("S#44281", "CYC");
-        $ic38$ = SubLObjectFactory.makeSymbol("S#44294", "CYC");
-        $ic39$ = SubLObjectFactory.makeKeyword("NAME");
-        $ic40$ = SubLObjectFactory.makeKeyword("SUMMARY-NAME");
-        $ic41$ = SubLObjectFactory.makeKeyword("LINKABLE-NAME");
-        $ic42$ = SubLObjectFactory.makeKeyword("LINKNAME-PREFIX");
-        $ic43$ = SubLObjectFactory.makeKeyword("FILTER-GETTER");
-        $ic44$ = SubLObjectFactory.makeKeyword("FILTER-SETTER");
-        $ic45$ = SubLObjectFactory.makeKeyword("TYPE");
-        $ic46$ = SubLObjectFactory.makeKeyword("ACTIVE-P");
-        $ic47$ = SubLObjectFactory.makeKeyword("EFFECTIVE-FN");
-        $ic48$ = SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN");
-        $ic49$ = SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN");
-        $ic50$ = SubLObjectFactory.makeKeyword("INITIAL-FILTER-VALUE");
-        $ic51$ = SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME");
-        $ic52$ = SubLObjectFactory.makeString("Invalid slot ~S for construction function");
-        $ic53$ = SubLObjectFactory.makeKeyword("BEGIN");
-        $ic54$ = SubLObjectFactory.makeSymbol("S#44295", "CYC");
-        $ic55$ = SubLObjectFactory.makeKeyword("SLOT");
-        $ic56$ = SubLObjectFactory.makeKeyword("END");
-        $ic57$ = SubLObjectFactory.makeSymbol("S#44297", "CYC");
-        $ic58$ = SubLObjectFactory.makeSymbol("S#44363", "CYC");
-        $ic59$ = SubLObjectFactory.makeSymbol("S#44364", "CYC");
-        $ic60$ = SubLObjectFactory.makeSymbol("S#44300", "CYC");
-        $ic61$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#29", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&REST"), (SubLObject)SubLObjectFactory.makeSymbol("S#30", "CYC"));
-        $ic62$ = SubLObjectFactory.makeString("~A-FILTER");
-        $ic63$ = SubLObjectFactory.makeString("CB-~A");
-        $ic64$ = SubLObjectFactory.makeString("SET-~A");
-        $ic65$ = SubLObjectFactory.makeString("~A-EFFECTIVE-FN");
-        $ic66$ = SubLObjectFactory.makeSymbol("PROGN");
-        $ic67$ = SubLObjectFactory.makeSymbol("S#43625", "CYC");
-        $ic68$ = ConsesLow.list((SubLObject)module0661.NIL, (SubLObject)SubLObjectFactory.makeString("Automatically generated filter"));
-        $ic69$ = SubLObjectFactory.makeKeyword("LIST-OF-FORMS");
-        $ic70$ = SubLObjectFactory.makeSymbol("S#44306", "CYC");
-        $ic71$ = SubLObjectFactory.makeSymbol("QUOTE");
-        $ic72$ = SubLObjectFactory.makeSymbol("DEFINE");
-        $ic73$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC"));
-        $ic74$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PUNLESS"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION-P"), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BREAK"), (SubLObject)SubLObjectFactory.makeString("not an assertion")));
-        $ic75$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44304", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)module0661.T));
-        $ic76$ = SubLObjectFactory.makeSymbol("CLET");
-        $ic77$ = SubLObjectFactory.makeSymbol("S#44298", "CYC");
-        $ic78$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("MEMBER"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCALL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44281", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#44265", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCALL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44273", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#44265", "CYC"))))));
-        $ic79$ = ConsesLow.list((SubLObject)module0661.NIL);
-        $ic80$ = SubLObjectFactory.makeSymbol("CAR");
-        $ic81$ = SubLObjectFactory.makeString("activate-~A");
-        $ic82$ = SubLObjectFactory.makeString(":");
-        $ic83$ = SubLObjectFactory.makeKeyword("NBSP");
-        $ic84$ = SubLObjectFactory.makeKeyword("SINGLE-SIMPLE-DATE");
-        $ic85$ = SubLObjectFactory.makeString("~D");
-        $ic86$ = SubLObjectFactory.makeKeyword("EDIT-VIEWPOINT");
-        $ic87$ = SubLObjectFactory.makeString("Edit");
-        $ic88$ = SubLObjectFactory.makeSymbol("S#44307", "CYC");
-        $ic89$ = SubLObjectFactory.makeString("Complete");
-        $ic90$ = SubLObjectFactory.makeString("");
-        $ic91$ = SubLObjectFactory.makeString("cb-show-cyclist-~A");
-        $ic92$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Cyclist"));
-        $ic93$ = SubLObjectFactory.makeInteger(24);
-        $ic94$ = SubLObjectFactory.makeString("cb-show-cyclist1-~A");
-        $ic95$ = SubLObjectFactory.makeString("cb-show-cyclist2-~A");
-        $ic96$ = SubLObjectFactory.makeString("--------");
-        $ic97$ = SubLObjectFactory.makeString("Unknown ~A: ~S");
-        $ic98$ = SubLObjectFactory.makeString("cyclist");
-        $ic99$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Cyc-BasedProject"));
-        $ic100$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic101$ = SubLObjectFactory.makeString("project1-~A");
-        $ic102$ = SubLObjectFactory.makeString("project2-~A");
-        $ic103$ = SubLObjectFactory.makeString("project3-~A");
-        $ic104$ = SubLObjectFactory.makeString("project");
-        $ic105$ = SubLObjectFactory.makeKeyword("CB-VIEWPOINT");
-        $ic106$ = SubLObjectFactory.makeString("cb-viewpoint.html");
-        $ic107$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44182", "CYC"));
-        $ic108$ = SubLObjectFactory.makeString("~a does not specify an index");
-        $ic109$ = SubLObjectFactory.makeString("Viewpoint Filter Summary");
-        $ic110$ = SubLObjectFactory.makeString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-        $ic111$ = SubLObjectFactory.makeKeyword("CB-CYC");
-        $ic112$ = SubLObjectFactory.makeString("stylesheet");
-        $ic113$ = SubLObjectFactory.makeString("text/css");
-        $ic114$ = SubLObjectFactory.makeKeyword("SHA1");
-        $ic115$ = SubLObjectFactory.makeString("text/javascript");
-        $ic116$ = SubLObjectFactory.makeString("yui-skin-sam");
-        $ic117$ = SubLObjectFactory.makeString("reloadFrameButton");
-        $ic118$ = SubLObjectFactory.makeString("button");
-        $ic119$ = SubLObjectFactory.makeString("reload");
-        $ic120$ = SubLObjectFactory.makeString("Refresh Frames");
-        $ic121$ = SubLObjectFactory.makeString("post");
-        $ic122$ = SubLObjectFactory.makeString("cb-viewpoint-summary-handler");
-        $ic123$ = SubLObjectFactory.makeString("Current Values");
-        $ic124$ = SubLObjectFactory.makeString("Update Filter Settings");
-        $ic125$ = SubLObjectFactory.makeString("always-show-comments");
-        $ic126$ = SubLObjectFactory.makeString("Always show comments, regardless of other filter settings.");
-        $ic127$ = SubLObjectFactory.makeString("always-show-bookkeeping");
-        $ic128$ = SubLObjectFactory.makeString("Always show bookkeeping predicates, regardless of other filter settings.");
-        $ic129$ = SubLObjectFactory.makeSymbol("S#44315", "CYC");
-        $ic130$ = SubLObjectFactory.makeSymbol("CB-VIEWPOINT");
-        $ic131$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44380", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#44182", "CYC"));
-        $ic132$ = SubLObjectFactory.makeString("Viewpoint Filters");
-        $ic133$ = SubLObjectFactory.makeString("cb-viewpoint-handler");
-        $ic134$ = SubLObjectFactory.makeSymbol("CB-EV");
-        $ic135$ = SubLObjectFactory.makeString("Summary filters have been changed");
-        $ic136$ = SubLObjectFactory.makeSymbol("CB-VIEWPOINT-SUMMARY-HANDLER");
-        $ic137$ = SubLObjectFactory.makeSymbol("CB-VIEWPOINT-HANDLER");
-        $ic138$ = SubLObjectFactory.makeString("[Viewpoint]");
-        $ic139$ = SubLObjectFactory.makeKeyword("MAIN");
-        $ic140$ = SubLObjectFactory.makeString("cb-viewpoint&~A");
-        $ic141$ = SubLObjectFactory.makeKeyword("VIEWPOINT");
-        $ic142$ = SubLObjectFactory.makeSymbol("S#44316", "CYC");
-        $ic143$ = SubLObjectFactory.makeString(" ");
-        $ic144$ = SubLObjectFactory.makeString(" Filter");
-        $ic145$ = SubLObjectFactory.makeString("(Only those terms whose ");
-        $ic146$ = SubLObjectFactory.makeString(" field has a value equal to a term below will be presented. Leave blank to disable this filter.)");
-        $ic147$ = SubLObjectFactory.makeSymbol("S#44310", "CYC");
-        $ic148$ = SubLObjectFactory.makeString("Activate Filter");
-        $ic149$ = SubLObjectFactory.makeString("all-dates-~A");
-        $ic150$ = SubLObjectFactory.makeString("no");
-        $ic151$ = SubLObjectFactory.makeString("cb-show-start-~A");
-        $ic152$ = SubLObjectFactory.makeString("all");
-        $ic153$ = SubLObjectFactory.makeString("yes");
-        $ic154$ = SubLObjectFactory.makeSymbol("S#12701", "CYC");
-        $ic155$ = SubLObjectFactory.makeString("All Mts");
-        $ic156$ = SubLObjectFactory.makeString("Specify Mts");
-        $ic157$ = SubLObjectFactory.makeString("use-genl-mt");
-        $ic158$ = SubLObjectFactory.makeString("Include All Genl Mts");
-        $ic159$ = SubLObjectFactory.makeString("new-mt");
-        $ic160$ = SubLObjectFactory.makeSymbol("S#44313", "CYC");
-        $ic161$ = SubLObjectFactory.makeSymbol("S#44368", "CYC");
-        $ic162$ = SubLObjectFactory.makeSymbol("S#44369", "CYC");
-        $ic163$ = SubLObjectFactory.makeSymbol("S#44389", "CYC");
-        $ic164$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myCreator")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44318", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44322", "CYC"), SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME"), SubLObjectFactory.makeSymbol("ASSERTED-BY") });
-        $ic165$ = SubLObjectFactory.makeSymbol("S#44330", "CYC");
-        $ic166$ = SubLObjectFactory.makeSymbol("S#44331", "CYC");
-        $ic167$ = SubLObjectFactory.makeSymbol("S#44332", "CYC");
-        $ic168$ = SubLObjectFactory.makeString("not an assertion");
-        $ic169$ = SubLObjectFactory.makeSymbol("S#44370", "CYC");
-        $ic170$ = SubLObjectFactory.makeSymbol("S#44371", "CYC");
-        $ic171$ = SubLObjectFactory.makeSymbol("S#44390", "CYC");
-        $ic172$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myReviewer")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME"), SubLObjectFactory.makeSymbol("S#43931", "CYC"), SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44318", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44322", "CYC") });
-        $ic173$ = SubLObjectFactory.makeSymbol("S#44335", "CYC");
-        $ic174$ = SubLObjectFactory.makeSymbol("S#44336", "CYC");
-        $ic175$ = SubLObjectFactory.makeSymbol("S#44337", "CYC");
-        $ic176$ = SubLObjectFactory.makeSymbol("S#44372", "CYC");
-        $ic177$ = SubLObjectFactory.makeSymbol("S#44373", "CYC");
-        $ic178$ = SubLObjectFactory.makeSymbol("S#44391", "CYC");
-        $ic179$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKNAME-PREFIX"), SubLObjectFactory.makeString("After "), SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myCreationTime")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("SINGLE-SIMPLE-DATE"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), SubLObjectFactory.makeSymbol("S#44327", "CYC"), SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44319", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44324", "CYC"), SubLObjectFactory.makeKeyword("INITIAL-FILTER-VALUE"), SubLObjectFactory.makeInteger(19800101) });
-        $ic180$ = SubLObjectFactory.makeSymbol("S#44340", "CYC");
-        $ic181$ = SubLObjectFactory.makeSymbol("S#44341", "CYC");
-        $ic182$ = SubLObjectFactory.makeSymbol("S#44374", "CYC");
-        $ic183$ = SubLObjectFactory.makeSymbol("S#44375", "CYC");
-        $ic184$ = SubLObjectFactory.makeSymbol("S#44392", "CYC");
-        $ic185$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKNAME-PREFIX"), SubLObjectFactory.makeString("Before "), SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myCreationTime")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("SINGLE-SIMPLE-DATE"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), SubLObjectFactory.makeSymbol("S#44326", "CYC"), SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44319", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44324", "CYC"), SubLObjectFactory.makeKeyword("INITIAL-FILTER-VALUE"), SubLObjectFactory.makeInteger(29991231) });
-        $ic186$ = SubLObjectFactory.makeSymbol("S#44344", "CYC");
-        $ic187$ = SubLObjectFactory.makeSymbol("S#44345", "CYC");
-        $ic188$ = SubLObjectFactory.makeSymbol("S#44376", "CYC");
-        $ic189$ = SubLObjectFactory.makeSymbol("S#44377", "CYC");
-        $ic190$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), module0661.NIL, SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44320", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44325", "CYC") });
-        $ic191$ = SubLObjectFactory.makeSymbol("S#44348", "CYC");
-        $ic192$ = SubLObjectFactory.makeSymbol("S#44349", "CYC");
-        $ic193$ = SubLObjectFactory.makeSymbol("S#44378", "CYC");
-        $ic194$ = SubLObjectFactory.makeSymbol("S#44379", "CYC");
-        $ic195$ = SubLObjectFactory.makeSymbol("S#44393", "CYC");
-        $ic196$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myCreationPurpose")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44321", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44323", "CYC"), SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME"), SubLObjectFactory.makeSymbol("ASSERTED-WHY") });
-        $ic197$ = SubLObjectFactory.makeSymbol("S#44352", "CYC");
-        $ic198$ = SubLObjectFactory.makeSymbol("S#44353", "CYC");
-        $ic199$ = SubLObjectFactory.makeSymbol("S#44354", "CYC");
-        $ic200$ = SubLObjectFactory.makeSymbol("S#44356", "CYC");
-        $ic201$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43972", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44355", "CYC"))));
-        $ic202$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44394", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#44395", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#755", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#44396", "CYC"));
-        $ic203$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("SPECIFIED-MT"));
-        $ic204$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");
-        $ic205$ = SubLObjectFactory.makeKeyword("SPECIFIED-MT");
-        $ic206$ = SubLObjectFactory.makeSymbol("S#44357", "CYC");
-        $ic207$ = SubLObjectFactory.makeSymbol("PCOND");
-        $ic208$ = SubLObjectFactory.makeSymbol("CAND");
-        $ic209$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44299", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("S#12701", "CYC")));
-        $ic210$ = SubLObjectFactory.makeSymbol("CNOT");
-        $ic211$ = SubLObjectFactory.makeSymbol("PIF");
-        $ic212$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43648", "CYC"));
-        $ic213$ = SubLObjectFactory.makeSymbol("S#12292", "CYC");
-        $ic214$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44348", "CYC"));
-        $ic215$ = SubLObjectFactory.makeSymbol("CSETQ");
-        $ic216$ = SubLObjectFactory.makeSymbol("WITH-MT-LIST");
-        $ic217$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44397", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#44398", "CYC"));
-        $ic218$ = SubLObjectFactory.makeUninternedSymbol("US#703B6C2");
-        $ic219$ = SubLObjectFactory.makeSymbol("RET");
-        $ic220$ = SubLObjectFactory.makeString("cb-ev");
-        $ic221$ = SubLObjectFactory.makeKeyword("TOP");
-        $ic222$ = SubLObjectFactory.makeString("cb-start|cb-ev");
-        $ic223$ = SubLObjectFactory.makeString("~a&~a&~a");
-        $ic224$ = SubLObjectFactory.makeString("~a&~a");
-        $ic225$ = SubLObjectFactory.makeSymbol("S#44360", "CYC");
+        $g5209$ = null;
+        $g5210$ = null;
+        $g5211$ = null;
+        $g5212$ = null;
+        $g5213$ = null;
+        $g5214$ = null;
+        $g5215$ = null;
+        $g5216$ = null;
+        $g5217$ = null;
+        $g5218$ = null;
+        $g5219$ = null;
+        $g5220$ = null;
+        $g5221$ = null;
+        $g5222$ = null;
+        $g5223$ = null;
+        $g5224$ = null;
+        $g5225$ = null;
+        $g5226$ = null;
+        $g5227$ = null;
+        $ic0$ = makeString("#");
+        $ic1$ = makeString("#<");
+        $ic2$ = makeKeyword("STREAM");
+        $ic3$ = makeKeyword("BASE");
+        $ic4$ = makeSymbol("S#44265", "CYC");
+        $ic5$ = makeSymbol("S#44266", "CYC");
+        $ic6$ = ConsesLow.list(new SubLObject[] { makeSymbol("S#29", "CYC"), makeSymbol("S#44380", "CYC"), makeSymbol("S#44381", "CYC"), makeSymbol("S#44382", "CYC"), makeSymbol("S#44383", "CYC"), makeSymbol("S#44384", "CYC"), makeSymbol("TYPE"), makeSymbol("S#44171", "CYC"), makeSymbol("S#44176", "CYC"), makeSymbol("S#44385", "CYC"), makeSymbol("S#44386", "CYC"), makeSymbol("S#44387", "CYC"), makeSymbol("S#44388", "CYC") });
+        $ic7$ = ConsesLow.list(new SubLObject[] { makeKeyword("NAME"), makeKeyword("SUMMARY-NAME"), makeKeyword("LINKABLE-NAME"), makeKeyword("LINKNAME-PREFIX"), makeKeyword("FILTER-GETTER"), makeKeyword("FILTER-SETTER"), makeKeyword("TYPE"), makeKeyword("ACTIVE-P"), makeKeyword("EFFECTIVE-FN"), makeKeyword("VALUE-PROMPT-FN"), makeKeyword("VALUE-UPDATE-FN"), makeKeyword("INITIAL-FILTER-VALUE"), makeKeyword("EFFECTIVE-FN-SLOTNAME") });
+        $ic8$ = ConsesLow.list(new SubLObject[] { makeSymbol("S#44269", "CYC"), makeSymbol("S#44270", "CYC"), makeSymbol("S#44271", "CYC"), makeSymbol("S#44272", "CYC"), makeSymbol("S#44273", "CYC"), makeSymbol("S#44274", "CYC"), makeSymbol("S#44275", "CYC"), makeSymbol("S#44276", "CYC"), makeSymbol("S#44277", "CYC"), makeSymbol("S#44278", "CYC"), makeSymbol("S#44279", "CYC"), makeSymbol("S#44280", "CYC"), makeSymbol("S#44281", "CYC") });
+        $ic9$ = ConsesLow.list(new SubLObject[] { makeSymbol("S#44282", "CYC"), makeSymbol("S#44283", "CYC"), makeSymbol("S#44284", "CYC"), makeSymbol("S#44285", "CYC"), makeSymbol("S#44286", "CYC"), makeSymbol("S#44287", "CYC"), makeSymbol("S#44288", "CYC"), makeSymbol("S#44289", "CYC"), makeSymbol("S#44290", "CYC"), makeSymbol("S#44291", "CYC"), makeSymbol("S#44292", "CYC"), makeSymbol("S#44293", "CYC"), makeSymbol("S#44294", "CYC") });
+        $ic10$ = makeSymbol("S#44267", "CYC");
+        $ic11$ = makeSymbol("S#44268", "CYC");
+        $ic12$ = ConsesLow.list((SubLObject)makeSymbol("OPTIMIZE-FUNCALL"), (SubLObject)makeSymbol("S#44266", "CYC"));
+        $ic13$ = makeSymbol("S#44269", "CYC");
+        $ic14$ = makeSymbol("S#44282", "CYC");
+        $ic15$ = makeSymbol("S#44270", "CYC");
+        $ic16$ = makeSymbol("S#44283", "CYC");
+        $ic17$ = makeSymbol("S#44271", "CYC");
+        $ic18$ = makeSymbol("S#44284", "CYC");
+        $ic19$ = makeSymbol("S#44272", "CYC");
+        $ic20$ = makeSymbol("S#44285", "CYC");
+        $ic21$ = makeSymbol("S#44273", "CYC");
+        $ic22$ = makeSymbol("S#44286", "CYC");
+        $ic23$ = makeSymbol("S#44274", "CYC");
+        $ic24$ = makeSymbol("S#44287", "CYC");
+        $ic25$ = makeSymbol("S#44275", "CYC");
+        $ic26$ = makeSymbol("S#44288", "CYC");
+        $ic27$ = makeSymbol("S#44276", "CYC");
+        $ic28$ = makeSymbol("S#44289", "CYC");
+        $ic29$ = makeSymbol("S#44277", "CYC");
+        $ic30$ = makeSymbol("S#44290", "CYC");
+        $ic31$ = makeSymbol("S#44278", "CYC");
+        $ic32$ = makeSymbol("S#44291", "CYC");
+        $ic33$ = makeSymbol("S#44279", "CYC");
+        $ic34$ = makeSymbol("S#44292", "CYC");
+        $ic35$ = makeSymbol("S#44280", "CYC");
+        $ic36$ = makeSymbol("S#44293", "CYC");
+        $ic37$ = makeSymbol("S#44281", "CYC");
+        $ic38$ = makeSymbol("S#44294", "CYC");
+        $ic39$ = makeKeyword("NAME");
+        $ic40$ = makeKeyword("SUMMARY-NAME");
+        $ic41$ = makeKeyword("LINKABLE-NAME");
+        $ic42$ = makeKeyword("LINKNAME-PREFIX");
+        $ic43$ = makeKeyword("FILTER-GETTER");
+        $ic44$ = makeKeyword("FILTER-SETTER");
+        $ic45$ = makeKeyword("TYPE");
+        $ic46$ = makeKeyword("ACTIVE-P");
+        $ic47$ = makeKeyword("EFFECTIVE-FN");
+        $ic48$ = makeKeyword("VALUE-PROMPT-FN");
+        $ic49$ = makeKeyword("VALUE-UPDATE-FN");
+        $ic50$ = makeKeyword("INITIAL-FILTER-VALUE");
+        $ic51$ = makeKeyword("EFFECTIVE-FN-SLOTNAME");
+        $ic52$ = makeString("Invalid slot ~S for construction function");
+        $ic53$ = makeKeyword("BEGIN");
+        $ic54$ = makeSymbol("S#44295", "CYC");
+        $ic55$ = makeKeyword("SLOT");
+        $ic56$ = makeKeyword("END");
+        $ic57$ = makeSymbol("S#44297", "CYC");
+        $ic58$ = makeSymbol("S#44363", "CYC");
+        $ic59$ = makeSymbol("S#44364", "CYC");
+        $ic60$ = makeSymbol("S#44300", "CYC");
+        $ic61$ = ConsesLow.list((SubLObject)makeSymbol("S#29", "CYC"), (SubLObject)makeSymbol("&REST"), (SubLObject)makeSymbol("S#30", "CYC"));
+        $ic62$ = makeString("~A-FILTER");
+        $ic63$ = makeString("CB-~A");
+        $ic64$ = makeString("SET-~A");
+        $ic65$ = makeString("~A-EFFECTIVE-FN");
+        $ic66$ = makeSymbol("PROGN");
+        $ic67$ = makeSymbol("S#43625", "CYC");
+        $ic68$ = ConsesLow.list((SubLObject)NIL, (SubLObject)makeString("Automatically generated filter"));
+        $ic69$ = makeKeyword("LIST-OF-FORMS");
+        $ic70$ = makeSymbol("S#44306", "CYC");
+        $ic71$ = makeSymbol("QUOTE");
+        $ic72$ = makeSymbol("DEFINE");
+        $ic73$ = ConsesLow.list((SubLObject)makeSymbol("ASSERTION", "CYC"));
+        $ic74$ = ConsesLow.list((SubLObject)makeSymbol("PUNLESS"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("ASSERTION-P"), (SubLObject)makeSymbol("ASSERTION", "CYC")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("BREAK"), (SubLObject)makeString("not an assertion")));
+        $ic75$ = ConsesLow.list((SubLObject)makeSymbol("PWHEN"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#44304", "CYC"), (SubLObject)makeSymbol("ASSERTION", "CYC")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("RET"), (SubLObject)T));
+        $ic76$ = makeSymbol("CLET");
+        $ic77$ = makeSymbol("S#44298", "CYC");
+        $ic78$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("RET"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("MEMBER"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("FUNCALL"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#44281", "CYC"), (SubLObject)makeSymbol("S#44265", "CYC")), (SubLObject)makeSymbol("ASSERTION", "CYC")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("FUNCALL"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#44273", "CYC"), (SubLObject)makeSymbol("S#44265", "CYC"))))));
+        $ic79$ = ConsesLow.list((SubLObject)NIL);
+        $ic80$ = makeSymbol("CAR");
+        $ic81$ = makeString("activate-~A");
+        $ic82$ = makeString(":");
+        $ic83$ = makeKeyword("NBSP");
+        $ic84$ = makeKeyword("SINGLE-SIMPLE-DATE");
+        $ic85$ = makeString("~D");
+        $ic86$ = makeKeyword("EDIT-VIEWPOINT");
+        $ic87$ = makeString("Edit");
+        $ic88$ = makeSymbol("S#44307", "CYC");
+        $ic89$ = makeString("Complete");
+        $ic90$ = makeString("");
+        $ic91$ = makeString("cb-show-cyclist-~A");
+        $ic92$ = constant_handles_oc.f8479((SubLObject)makeString("Cyclist"));
+        $ic93$ = makeInteger(24);
+        $ic94$ = makeString("cb-show-cyclist1-~A");
+        $ic95$ = makeString("cb-show-cyclist2-~A");
+        $ic96$ = makeString("--------");
+        $ic97$ = makeString("Unknown ~A: ~S");
+        $ic98$ = makeString("cyclist");
+        $ic99$ = constant_handles_oc.f8479((SubLObject)makeString("Cyc-BasedProject"));
+        $ic100$ = constant_handles_oc.f8479((SubLObject)makeString("isa"));
+        $ic101$ = makeString("project1-~A");
+        $ic102$ = makeString("project2-~A");
+        $ic103$ = makeString("project3-~A");
+        $ic104$ = makeString("project");
+        $ic105$ = makeKeyword("CB-VIEWPOINT");
+        $ic106$ = makeString("cb-viewpoint.html");
+        $ic107$ = ConsesLow.list((SubLObject)makeSymbol("S#44182", "CYC"));
+        $ic108$ = makeString("~a does not specify an index");
+        $ic109$ = makeString("Viewpoint Filter Summary");
+        $ic110$ = makeString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+        $ic111$ = makeKeyword("CB-CYC");
+        $ic112$ = makeString("stylesheet");
+        $ic113$ = makeString("text/css");
+        $ic114$ = makeKeyword("SHA1");
+        $ic115$ = makeString("text/javascript");
+        $ic116$ = makeString("yui-skin-sam");
+        $ic117$ = makeString("reloadFrameButton");
+        $ic118$ = makeString("button");
+        $ic119$ = makeString("reload");
+        $ic120$ = makeString("Refresh Frames");
+        $ic121$ = makeString("post");
+        $ic122$ = makeString("cb-viewpoint-summary-handler");
+        $ic123$ = makeString("Current Values");
+        $ic124$ = makeString("Update Filter Settings");
+        $ic125$ = makeString("always-show-comments");
+        $ic126$ = makeString("Always show comments, regardless of other filter settings.");
+        $ic127$ = makeString("always-show-bookkeeping");
+        $ic128$ = makeString("Always show bookkeeping predicates, regardless of other filter settings.");
+        $ic129$ = makeSymbol("S#44315", "CYC");
+        $ic130$ = makeSymbol("CB-VIEWPOINT");
+        $ic131$ = ConsesLow.list((SubLObject)makeSymbol("S#44380", "CYC"), (SubLObject)makeSymbol("S#44182", "CYC"));
+        $ic132$ = makeString("Viewpoint Filters");
+        $ic133$ = makeString("cb-viewpoint-handler");
+        $ic134$ = makeSymbol("CB-EV");
+        $ic135$ = makeString("Summary filters have been changed");
+        $ic136$ = makeSymbol("CB-VIEWPOINT-SUMMARY-HANDLER");
+        $ic137$ = makeSymbol("CB-VIEWPOINT-HANDLER");
+        $ic138$ = makeString("[Viewpoint]");
+        $ic139$ = makeKeyword("MAIN");
+        $ic140$ = makeString("cb-viewpoint&~A");
+        $ic141$ = makeKeyword("VIEWPOINT");
+        $ic142$ = makeSymbol("S#44316", "CYC");
+        $ic143$ = makeString(" ");
+        $ic144$ = makeString(" Filter");
+        $ic145$ = makeString("(Only those terms whose ");
+        $ic146$ = makeString(" field has a value equal to a term below will be presented. Leave blank to disable this filter.)");
+        $ic147$ = makeSymbol("S#44310", "CYC");
+        $ic148$ = makeString("Activate Filter");
+        $ic149$ = makeString("all-dates-~A");
+        $ic150$ = makeString("no");
+        $ic151$ = makeString("cb-show-start-~A");
+        $ic152$ = makeString("all");
+        $ic153$ = makeString("yes");
+        $ic154$ = makeSymbol("S#12701", "CYC");
+        $ic155$ = makeString("All Mts");
+        $ic156$ = makeString("Specify Mts");
+        $ic157$ = makeString("use-genl-mt");
+        $ic158$ = makeString("Include All Genl Mts");
+        $ic159$ = makeString("new-mt");
+        $ic160$ = makeSymbol("S#44313", "CYC");
+        $ic161$ = makeSymbol("S#44368", "CYC");
+        $ic162$ = makeSymbol("S#44369", "CYC");
+        $ic163$ = makeSymbol("S#44389", "CYC");
+        $ic164$ = ConsesLow.list(new SubLObject[] { makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)makeString("myCreator")), makeKeyword("TYPE"), makeKeyword("LIST-OF-FORMS"), makeKeyword("ACTIVE-P"), NIL, makeKeyword("VALUE-PROMPT-FN"), makeSymbol("S#44318", "CYC"), makeKeyword("VALUE-UPDATE-FN"), makeSymbol("S#44322", "CYC"), makeKeyword("EFFECTIVE-FN-SLOTNAME"), makeSymbol("ASSERTED-BY") });
+        $ic165$ = makeSymbol("S#44330", "CYC");
+        $ic166$ = makeSymbol("S#44331", "CYC");
+        $ic167$ = makeSymbol("S#44332", "CYC");
+        $ic168$ = makeString("not an assertion");
+        $ic169$ = makeSymbol("S#44370", "CYC");
+        $ic170$ = makeSymbol("S#44371", "CYC");
+        $ic171$ = makeSymbol("S#44390", "CYC");
+        $ic172$ = ConsesLow.list(new SubLObject[] { makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)makeString("myReviewer")), makeKeyword("TYPE"), makeKeyword("LIST-OF-FORMS"), makeKeyword("ACTIVE-P"), NIL, makeKeyword("EFFECTIVE-FN-SLOTNAME"), makeSymbol("S#43931", "CYC"), makeKeyword("VALUE-PROMPT-FN"), makeSymbol("S#44318", "CYC"), makeKeyword("VALUE-UPDATE-FN"), makeSymbol("S#44322", "CYC") });
+        $ic173$ = makeSymbol("S#44335", "CYC");
+        $ic174$ = makeSymbol("S#44336", "CYC");
+        $ic175$ = makeSymbol("S#44337", "CYC");
+        $ic176$ = makeSymbol("S#44372", "CYC");
+        $ic177$ = makeSymbol("S#44373", "CYC");
+        $ic178$ = makeSymbol("S#44391", "CYC");
+        $ic179$ = ConsesLow.list(new SubLObject[] { makeKeyword("LINKNAME-PREFIX"), makeString("After "), makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)makeString("myCreationTime")), makeKeyword("TYPE"), makeKeyword("SINGLE-SIMPLE-DATE"), makeKeyword("ACTIVE-P"), NIL, makeKeyword("EFFECTIVE-FN"), makeSymbol("S#44327", "CYC"), makeKeyword("VALUE-PROMPT-FN"), makeSymbol("S#44319", "CYC"), makeKeyword("VALUE-UPDATE-FN"), makeSymbol("S#44324", "CYC"), makeKeyword("INITIAL-FILTER-VALUE"), makeInteger(19800101) });
+        $ic180$ = makeSymbol("S#44340", "CYC");
+        $ic181$ = makeSymbol("S#44341", "CYC");
+        $ic182$ = makeSymbol("S#44374", "CYC");
+        $ic183$ = makeSymbol("S#44375", "CYC");
+        $ic184$ = makeSymbol("S#44392", "CYC");
+        $ic185$ = ConsesLow.list(new SubLObject[] { makeKeyword("LINKNAME-PREFIX"), makeString("Before "), makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)makeString("myCreationTime")), makeKeyword("TYPE"), makeKeyword("SINGLE-SIMPLE-DATE"), makeKeyword("ACTIVE-P"), NIL, makeKeyword("EFFECTIVE-FN"), makeSymbol("S#44326", "CYC"), makeKeyword("VALUE-PROMPT-FN"), makeSymbol("S#44319", "CYC"), makeKeyword("VALUE-UPDATE-FN"), makeSymbol("S#44324", "CYC"), makeKeyword("INITIAL-FILTER-VALUE"), makeInteger(29991231) });
+        $ic186$ = makeSymbol("S#44344", "CYC");
+        $ic187$ = makeSymbol("S#44345", "CYC");
+        $ic188$ = makeSymbol("S#44376", "CYC");
+        $ic189$ = makeSymbol("S#44377", "CYC");
+        $ic190$ = ConsesLow.list(new SubLObject[] { makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)makeString("Microtheory")), makeKeyword("TYPE"), makeKeyword("LIST-OF-FORMS"), makeKeyword("ACTIVE-P"), NIL, makeKeyword("EFFECTIVE-FN"), NIL, makeKeyword("VALUE-PROMPT-FN"), makeSymbol("S#44320", "CYC"), makeKeyword("VALUE-UPDATE-FN"), makeSymbol("S#44325", "CYC") });
+        $ic191$ = makeSymbol("S#44348", "CYC");
+        $ic192$ = makeSymbol("S#44349", "CYC");
+        $ic193$ = makeSymbol("S#44378", "CYC");
+        $ic194$ = makeSymbol("S#44379", "CYC");
+        $ic195$ = makeSymbol("S#44393", "CYC");
+        $ic196$ = ConsesLow.list(new SubLObject[] { makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)makeString("myCreationPurpose")), makeKeyword("TYPE"), makeKeyword("LIST-OF-FORMS"), makeKeyword("ACTIVE-P"), NIL, makeKeyword("VALUE-PROMPT-FN"), makeSymbol("S#44321", "CYC"), makeKeyword("VALUE-UPDATE-FN"), makeSymbol("S#44323", "CYC"), makeKeyword("EFFECTIVE-FN-SLOTNAME"), makeSymbol("ASSERTED-WHY") });
+        $ic197$ = makeSymbol("S#44352", "CYC");
+        $ic198$ = makeSymbol("S#44353", "CYC");
+        $ic199$ = makeSymbol("S#44354", "CYC");
+        $ic200$ = makeSymbol("S#44356", "CYC");
+        $ic201$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#43972", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#44355", "CYC"))));
+        $ic202$ = ConsesLow.list((SubLObject)makeSymbol("S#44394", "CYC"), (SubLObject)makeSymbol("S#44395", "CYC"), (SubLObject)makeSymbol("S#755", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#44396", "CYC"));
+        $ic203$ = ConsesLow.list((SubLObject)makeKeyword("SPECIFIED-MT"));
+        $ic204$ = makeKeyword("ALLOW-OTHER-KEYS");
+        $ic205$ = makeKeyword("SPECIFIED-MT");
+        $ic206$ = makeSymbol("S#44357", "CYC");
+        $ic207$ = makeSymbol("PCOND");
+        $ic208$ = makeSymbol("CAND");
+        $ic209$ = ConsesLow.list((SubLObject)makeSymbol("S#44299", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("QUOTE"), (SubLObject)makeSymbol("S#12701", "CYC")));
+        $ic210$ = makeSymbol("CNOT");
+        $ic211$ = makeSymbol("PIF");
+        $ic212$ = ConsesLow.list((SubLObject)makeSymbol("S#43648", "CYC"));
+        $ic213$ = makeSymbol("S#12292", "CYC");
+        $ic214$ = ConsesLow.list((SubLObject)makeSymbol("S#44348", "CYC"));
+        $ic215$ = makeSymbol("CSETQ");
+        $ic216$ = makeSymbol("WITH-MT-LIST");
+        $ic217$ = ConsesLow.list((SubLObject)makeSymbol("S#44397", "CYC"), (SubLObject)makeSymbol("S#44398", "CYC"));
+        $ic218$ = makeUninternedSymbol("US#703B6C2");
+        $ic219$ = makeSymbol("RET");
+        $ic220$ = makeString("cb-ev");
+        $ic221$ = makeKeyword("TOP");
+        $ic222$ = makeString("cb-start|cb-ev");
+        $ic223$ = makeString("~a&~a&~a");
+        $ic224$ = makeString("~a&~a");
+        $ic225$ = makeSymbol("S#44360", "CYC");
     }
     
     public static final class $sX44265_native extends SubLStructNative
@@ -2369,7 +2370,7 @@ public final class module0661 extends SubLTranslatedFile
         }
         
         static {
-            structDecl = Structures.makeStructDeclNative((Class)$sX44265_native.class, module0661.$ic4$, module0661.$ic5$, module0661.$ic6$, module0661.$ic7$, new String[] { "$name", "$summary_name", "$linkable_name", "$linkname_prefix", "$filter_getter", "$filter_setter", "$type", "$active_p", "$effective_fn", "$value_prompt_fn", "$value_update_fn", "$initial_filter_value", "$effective_fn_slotname" }, module0661.$ic8$, module0661.$ic9$, module0661.$ic10$);
+            structDecl = Structures.makeStructDeclNative((Class)$sX44265_native.class, $ic4$, $ic5$, $ic6$, $ic7$, new String[] { "$name", "$summary_name", "$linkable_name", "$linkname_prefix", "$filter_getter", "$filter_setter", "$type", "$active_p", "$effective_fn", "$value_prompt_fn", "$value_update_fn", "$initial_filter_value", "$effective_fn_slotname" }, $ic8$, $ic9$, $ic10$);
         }
     }
     
@@ -2380,7 +2381,7 @@ public final class module0661 extends SubLTranslatedFile
         }
         
         public SubLObject processItem(final SubLObject var10) {
-            return module0661.f40215(var10);
+            return f40215(var10);
         }
     }
 }
@@ -2388,7 +2389,7 @@ public final class module0661 extends SubLTranslatedFile
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0661.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 712 ms
 	
 	Decompiled with Procyon 0.5.32.

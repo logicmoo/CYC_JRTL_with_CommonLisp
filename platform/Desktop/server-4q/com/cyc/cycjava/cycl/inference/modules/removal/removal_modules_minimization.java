@@ -10,6 +10,7 @@ import com.cyc.cycjava.cycl.mt_relevance_macros;
 import com.cyc.cycjava.cycl.iteration;
 import com.cyc.cycjava.cycl.kb_mapping_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.inference_completeness_utilities;
 import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

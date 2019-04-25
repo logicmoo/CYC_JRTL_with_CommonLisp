@@ -20,6 +20,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
@@ -238,235 +239,235 @@ public final class module0745 extends SubLTranslatedFile
     public static SubLObject f46215(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0745.$ic6$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic6$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0745.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0745.$ic6$);
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic6$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0745.NIL == var4) {
+        if (NIL == var4) {
             final SubLObject var7;
             var4 = (var7 = var5);
-            final SubLObject var8 = (SubLObject)module0745.$ic7$;
-            final SubLObject var9 = (SubLObject)module0745.$ic8$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0745.$ic9$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0745.$ic10$, var6), reader.bq_cons(var8, (SubLObject)module0745.$ic11$), reader.bq_cons(var9, (SubLObject)module0745.$ic12$)), (SubLObject)ConsesLow.list((SubLObject)module0745.$ic13$, (SubLObject)ConsesLow.listS((SubLObject)module0745.$ic14$, (SubLObject)ConsesLow.list((SubLObject)module0745.$ic15$, var6), ConsesLow.append(var7, (SubLObject)module0745.NIL)), (SubLObject)ConsesLow.list((SubLObject)module0745.$ic16$, var8, var9)));
+            final SubLObject var8 = (SubLObject)$ic7$;
+            final SubLObject var9 = (SubLObject)$ic8$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic9$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic10$, var6), reader.bq_cons(var8, (SubLObject)$ic11$), reader.bq_cons(var9, (SubLObject)$ic12$)), (SubLObject)ConsesLow.list((SubLObject)$ic13$, (SubLObject)ConsesLow.listS((SubLObject)$ic14$, (SubLObject)ConsesLow.list((SubLObject)$ic15$, var6), ConsesLow.append(var7, (SubLObject)NIL)), (SubLObject)ConsesLow.list((SubLObject)$ic16$, var8, var9)));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0745.$ic6$);
-        return (SubLObject)module0745.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic6$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46216() {
-        return module0745.$g5931$.getGlobalValue();
+        return $g5931$.getGlobalValue();
     }
     
     public static SubLObject f46217(final SubLObject var6) {
-        module0745.$g5931$.setGlobalValue((SubLObject)module0745.NIL);
-        module0745.$g5934$.setGlobalValue(Values.nth_value_step_2(Values.nth_value_step_1((SubLObject)module0745.ONE_INTEGER), module0075.f5195(var6)));
+        $g5931$.setGlobalValue((SubLObject)NIL);
+        $g5934$.setGlobalValue(Values.nth_value_step_2(Values.nth_value_step_1((SubLObject)ONE_INTEGER), module0075.f5195(var6)));
         f46218();
-        return module0745.$g5931$.getGlobalValue();
+        return $g5931$.getGlobalValue();
     }
     
     public static SubLObject f46219(final SubLObject var10, final SubLObject var9) {
-        module0745.$g5931$.setGlobalValue(var10);
-        module0745.$g5934$.setGlobalValue(var9);
-        return module0745.$g5931$.getGlobalValue();
+        $g5931$.setGlobalValue(var10);
+        $g5934$.setGlobalValue(var9);
+        return $g5931$.getGlobalValue();
     }
     
     public static SubLObject f46220(SubLObject var11) {
-        if (var11 == module0745.UNPROVIDED) {
+        if (var11 == UNPROVIDED) {
             var11 = module0018.f971();
         }
         final SubLThread var12 = SubLProcess.currentSubLThread();
-        if (module0745.NIL != module0004.f105(var11) && (!module0745.$g5932$.getDynamicValue(var12).isString() || module0745.NIL == Filesys.probe_file(module0745.$g5932$.getDynamicValue(var12)))) {
-            module0745.$g5932$.setDynamicValue(f46221(var11), var12);
+        if (NIL != module0004.f105(var11) && (!$g5932$.getDynamicValue(var12).isString() || NIL == Filesys.probe_file($g5932$.getDynamicValue(var12)))) {
+            $g5932$.setDynamicValue(f46221(var11), var12);
         }
-        return module0745.$g5932$.getDynamicValue(var12);
+        return $g5932$.getDynamicValue(var12);
     }
     
     public static SubLObject f46222() {
         SubLObject var11;
         SubLObject var12;
-        for (var11 = module0018.f971(), var12 = (SubLObject)module0745.NIL; module0745.NIL != module0004.f105(var11) && Numbers.subtract(module0018.f971(), var11).numLE(module0745.$g5936$.getGlobalValue()) && (!var12.isString() || module0745.NIL == Filesys.probe_file(var12)); var12 = f46221(var11), var11 = Numbers.subtract(var11, (SubLObject)module0745.ONE_INTEGER)) {}
+        for (var11 = module0018.f971(), var12 = (SubLObject)NIL; NIL != module0004.f105(var11) && Numbers.subtract(module0018.f971(), var11).numLE($g5936$.getGlobalValue()) && (!var12.isString() || NIL == Filesys.probe_file(var12)); var12 = f46221(var11), var11 = Numbers.subtract(var11, (SubLObject)ONE_INTEGER)) {}
         return var12;
     }
     
     public static SubLObject f46221(final SubLObject var11) {
-        final SubLObject var12 = Sequences.cconcatenate(module0236.$g2442$.getGlobalValue(), new SubLObject[] { module0574.f35166(var11), module0745.$ic19$, module0745.$g5934$.getGlobalValue() });
+        final SubLObject var12 = Sequences.cconcatenate(module0236.$g2442$.getGlobalValue(), new SubLObject[] { module0574.f35166(var11), $ic19$, $g5934$.getGlobalValue() });
         return var12;
     }
     
     public static SubLObject f46223() {
-        module0236.f15556(module0745.$g5931$.getGlobalValue());
-        return (SubLObject)module0745.NIL;
+        module0236.f15556($g5931$.getGlobalValue());
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46224() {
         final SubLThread var12 = SubLProcess.currentSubLThread();
-        module0745.$g5931$.setGlobalValue(module0236.f15555(module0745.$g5931$.getGlobalValue(), StreamsLow.$stream_initial_input_buffer_size$.getDynamicValue(var12)));
-        return (SubLObject)module0745.NIL;
+        $g5931$.setGlobalValue(module0236.f15555($g5931$.getGlobalValue(), StreamsLow.$stream_initial_input_buffer_size$.getDynamicValue(var12)));
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46225() {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0745.NIL != module0745.$g5931$.getGlobalValue() && module0745.NIL != module0236.f15557(module0745.$g5931$.getGlobalValue()));
+        return (SubLObject)makeBoolean(NIL != $g5931$.getGlobalValue() && NIL != module0236.f15557($g5931$.getGlobalValue()));
     }
     
     public static SubLObject f46226() {
-        if (module0745.NIL == module0018.f971()) {
+        if (NIL == module0018.f971()) {
             f46227();
         }
-        else if (module0745.NIL != module0236.f15526(module0745.$g5931$.getGlobalValue()) && module0574.f35163().isPositive()) {
+        else if (NIL != module0236.f15526($g5931$.getGlobalValue()) && module0574.f35163().isPositive()) {
             f46227();
         }
         else {
             f46218();
         }
-        return (SubLObject)module0745.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46218() {
         final SubLThread var12 = SubLProcess.currentSubLThread();
-        if (module0745.NIL != module0236.f15526(module0745.$g5931$.getGlobalValue()) && module0745.NIL != Filesys.probe_file(module0236.f15560(module0745.$g5931$.getGlobalValue())) && module0745.NIL != f46228()) {
+        if (NIL != module0236.f15526($g5931$.getGlobalValue()) && NIL != Filesys.probe_file(module0236.f15560($g5931$.getGlobalValue())) && NIL != f46228()) {
             f46227();
         }
-        else if (module0745.NIL != module0236.f15526(module0745.$g5931$.getGlobalValue()) && module0745.NIL != Filesys.probe_file(module0236.f15560(module0745.$g5931$.getGlobalValue())) && module0745.NIL != f46229()) {
+        else if (NIL != module0236.f15526($g5931$.getGlobalValue()) && NIL != Filesys.probe_file(module0236.f15560($g5931$.getGlobalValue())) && NIL != f46229()) {
             f46227();
         }
         else {
-            final SubLObject var13 = module0745.$g5931$.getGlobalValue();
-            final SubLObject var14 = module0745.$g5935$.getGlobalValue();
-            SubLObject var15 = (SubLObject)module0745.NIL;
+            final SubLObject var13 = $g5931$.getGlobalValue();
+            final SubLObject var14 = $g5935$.getGlobalValue();
+            SubLObject var15 = (SubLObject)NIL;
             try {
                 var15 = Locks.seize_lock(var14);
-                if (module0745.$g5931$.getGlobalValue().eql(var13)) {
+                if ($g5931$.getGlobalValue().eql(var13)) {
                     final SubLObject var16 = module0093.$g1217$.currentBinding(var12);
                     try {
-                        module0093.$g1217$.bind((SubLObject)module0745.$ic21$, var12);
+                        module0093.$g1217$.bind((SubLObject)$ic21$, var12);
                         final SubLObject var17 = f46222();
-                        module0745.$g5931$.setGlobalValue((SubLObject)((module0745.NIL != Filesys.probe_file(var17)) ? module0236.f15548(var17, module0745.$g5937$.getGlobalValue(), (SubLObject)module0745.T, module0093.$g1217$.getDynamicValue(var12), Symbols.symbol_function((SubLObject)module0745.EQUAL), (SubLObject)module0745.$ic22$) : module0745.NIL));
+                        $g5931$.setGlobalValue((SubLObject)((NIL != Filesys.probe_file(var17)) ? module0236.f15548(var17, $g5937$.getGlobalValue(), (SubLObject)T, module0093.$g1217$.getDynamicValue(var12), Symbols.symbol_function((SubLObject)EQUAL), (SubLObject)$ic22$) : NIL));
                     }
                     finally {
                         module0093.$g1217$.rebind(var16, var12);
                     }
-                    if (module0745.NIL != f46228() && module0574.f35163().isZero()) {
+                    if (NIL != f46228() && module0574.f35163().isZero()) {
                         f46230();
                     }
                 }
             }
             finally {
-                if (module0745.NIL != var15) {
+                if (NIL != var15) {
                     Locks.release_lock(var14);
                 }
             }
         }
-        return (SubLObject)module0745.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46227() {
-        if (module0745.NIL != module0745.$g5931$.getGlobalValue()) {
-            final SubLObject var18 = module0236.f15560(module0745.$g5931$.getGlobalValue());
-            final SubLObject var19 = (module0745.NIL != Filesys.probe_file(var18)) ? var18 : f46220((SubLObject)module0745.UNPROVIDED);
-            module0236.f15552(module0745.$g5931$.getGlobalValue(), var19);
+        if (NIL != $g5931$.getGlobalValue()) {
+            final SubLObject var18 = module0236.f15560($g5931$.getGlobalValue());
+            final SubLObject var19 = (NIL != Filesys.probe_file(var18)) ? var18 : f46220((SubLObject)UNPROVIDED);
+            module0236.f15552($g5931$.getGlobalValue(), var19);
         }
-        return module0745.$g5931$.getGlobalValue();
+        return $g5931$.getGlobalValue();
     }
     
     public static SubLObject f46228() {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0745.NIL != module0745.$g5931$.getGlobalValue() && conses_high.last(module0075.f5195(module0236.f15560(module0745.$g5931$.getGlobalValue())), (SubLObject)module0745.UNPROVIDED).equal(conses_high.last(module0075.f5195(f46220(module0018.f971())), (SubLObject)module0745.UNPROVIDED)));
+        return (SubLObject)makeBoolean(NIL != $g5931$.getGlobalValue() && conses_high.last(module0075.f5195(module0236.f15560($g5931$.getGlobalValue())), (SubLObject)UNPROVIDED).equal(conses_high.last(module0075.f5195(f46220(module0018.f971())), (SubLObject)UNPROVIDED)));
     }
     
     public static SubLObject f46229() {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0745.NIL != module0745.$g5931$.getGlobalValue() && conses_high.last(module0075.f5195(module0236.f15560(module0745.$g5931$.getGlobalValue())), (SubLObject)module0745.UNPROVIDED).equal(conses_high.last(module0075.f5195(f46222()), (SubLObject)module0745.UNPROVIDED)));
+        return (SubLObject)makeBoolean(NIL != $g5931$.getGlobalValue() && conses_high.last(module0075.f5195(module0236.f15560($g5931$.getGlobalValue())), (SubLObject)UNPROVIDED).equal(conses_high.last(module0075.f5195(f46222()), (SubLObject)UNPROVIDED)));
     }
     
     public static SubLObject f46231() {
-        final SubLObject var19 = module0745.$g5935$.getGlobalValue();
-        SubLObject var20 = (SubLObject)module0745.NIL;
+        final SubLObject var19 = $g5935$.getGlobalValue();
+        SubLObject var20 = (SubLObject)NIL;
         try {
             var20 = Locks.seize_lock(var19);
-            if (module0745.NIL != module0745.$g5931$.getGlobalValue()) {
-                module0745.$g5932$.setDynamicValue((SubLObject)module0745.NIL);
-                module0236.f15553(module0745.$g5931$.getGlobalValue(), (SubLObject)module0745.UNPROVIDED);
+            if (NIL != $g5931$.getGlobalValue()) {
+                $g5932$.setDynamicValue((SubLObject)NIL);
+                module0236.f15553($g5931$.getGlobalValue(), (SubLObject)UNPROVIDED);
             }
         }
         finally {
-            if (module0745.NIL != var20) {
+            if (NIL != var20) {
                 Locks.release_lock(var19);
             }
         }
-        return (SubLObject)module0745.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46232(SubLObject var8) {
-        if (var8 == module0745.UNPROVIDED) {
-            var8 = module0745.$g5931$.getGlobalValue();
+        if (var8 == UNPROVIDED) {
+            var8 = $g5931$.getGlobalValue();
         }
-        final SubLObject var9 = (SubLObject)((module0745.NIL != module0236.f15526(var8)) ? module0236.f15558((SubLObject)module0745.$ic23$, var8, (SubLObject)module0745.NIL, (SubLObject)module0745.UNPROVIDED) : module0745.NIL);
-        return (SubLObject)((module0745.NIL != var9) ? var9 : module0745.$ic24$);
+        final SubLObject var9 = (SubLObject)((NIL != module0236.f15526(var8)) ? module0236.f15558((SubLObject)$ic23$, var8, (SubLObject)NIL, (SubLObject)UNPROVIDED) : NIL);
+        return (SubLObject)((NIL != var9) ? var9 : $ic24$);
     }
     
     public static SubLObject f46233(SubLObject var8) {
-        if (var8 == module0745.UNPROVIDED) {
-            var8 = module0745.$g5931$.getGlobalValue();
+        if (var8 == UNPROVIDED) {
+            var8 = $g5931$.getGlobalValue();
         }
-        final SubLObject var9 = (SubLObject)((module0745.NIL != module0236.f15526(var8)) ? module0236.f15558((SubLObject)module0745.$ic25$, var8, (SubLObject)module0745.NIL, (SubLObject)module0745.UNPROVIDED) : module0745.NIL);
-        return (module0745.NIL != var9) ? var9 : f46234();
+        final SubLObject var9 = (SubLObject)((NIL != module0236.f15526(var8)) ? module0236.f15558((SubLObject)$ic25$, var8, (SubLObject)NIL, (SubLObject)UNPROVIDED) : NIL);
+        return (NIL != var9) ? var9 : f46234();
     }
     
     public static SubLObject f46234() {
-        return module0579.f35515((SubLObject)module0745.UNPROVIDED);
+        return module0579.f35515((SubLObject)UNPROVIDED);
     }
     
     public static SubLObject f46235() {
-        return (SubLObject)module0745.ONE_INTEGER;
+        return (SubLObject)ONE_INTEGER;
     }
     
     public static SubLObject f46236() {
-        return (SubLObject)module0745.$ic30$;
+        return (SubLObject)$ic30$;
     }
     
     public static SubLObject f46237(SubLObject var6, SubLObject var22, SubLObject var23, SubLObject var24) {
-        if (var6 == module0745.UNPROVIDED) {
-            var6 = f46220((SubLObject)module0745.UNPROVIDED);
+        if (var6 == UNPROVIDED) {
+            var6 = f46220((SubLObject)UNPROVIDED);
         }
-        if (var22 == module0745.UNPROVIDED) {
-            var22 = (SubLObject)module0745.$ic31$;
+        if (var22 == UNPROVIDED) {
+            var22 = (SubLObject)$ic31$;
         }
-        if (var23 == module0745.UNPROVIDED) {
+        if (var23 == UNPROVIDED) {
             var23 = f46234();
         }
-        if (var24 == module0745.UNPROVIDED) {
-            var24 = module0745.$g5940$.getDynamicValue();
+        if (var24 == UNPROVIDED) {
+            var24 = $g5940$.getDynamicValue();
         }
         final SubLThread var25 = SubLProcess.currentSubLThread();
-        if (module0745.NIL == Errors.$ignore_mustsP$.getDynamicValue(var25) && module0745.NIL == module0750.f46576() && module0745.NIL != module0750.f46577()) {
-            Errors.error((SubLObject)module0745.$ic32$);
+        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(var25) && NIL == module0750.f46576() && NIL != module0750.f46577()) {
+            Errors.error((SubLObject)$ic32$);
         }
-        PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic33$, var6);
-        assert module0745.NIL != module0161.f10481(var23) : var23;
-        final SubLObject var26 = module0745.$g5939$.currentBinding(var25);
-        final SubLObject var27 = module0745.$g5940$.currentBinding(var25);
-        final SubLObject var28 = module0745.$g5951$.currentBinding(var25);
+        PrintLow.format((SubLObject)T, (SubLObject)$ic33$, var6);
+        assert NIL != module0161.f10481(var23) : var23;
+        final SubLObject var26 = $g5939$.currentBinding(var25);
+        final SubLObject var27 = $g5940$.currentBinding(var25);
+        final SubLObject var28 = $g5951$.currentBinding(var25);
         try {
-            module0745.$g5939$.bind(var23, var25);
-            module0745.$g5940$.bind(var24, var25);
-            module0745.$g5951$.bind(f46238(var22), var25);
+            $g5939$.bind(var23, var25);
+            $g5940$.bind(var24, var25);
+            $g5951$.bind(f46238(var22), var25);
             module0569.f34932();
-            final SubLObject var29 = module0069.f4939(Sequences.cconcatenate(module0745.$g5951$.getDynamicValue(var25), (SubLObject)module0745.$ic35$));
-            final SubLObject var30 = Sequences.cconcatenate((SubLObject)module0745.$ic36$, new SubLObject[] { module0006.f203(module0745.$g5938$.getGlobalValue()), module0745.$ic37$ });
+            final SubLObject var29 = module0069.f4939(Sequences.cconcatenate($g5951$.getDynamicValue(var25), (SubLObject)$ic35$));
+            final SubLObject var30 = Sequences.cconcatenate((SubLObject)$ic36$, new SubLObject[] { module0006.f203($g5938$.getGlobalValue()), $ic37$ });
             final SubLObject var17_29 = module0012.$g75$.currentBinding(var25);
             final SubLObject var25_30 = module0012.$g76$.currentBinding(var25);
             final SubLObject var26_31 = module0012.$g77$.currentBinding(var25);
             final SubLObject var31 = module0012.$g78$.currentBinding(var25);
             try {
-                module0012.$g75$.bind((SubLObject)module0745.ZERO_INTEGER, var25);
-                module0012.$g76$.bind((SubLObject)module0745.NIL, var25);
-                module0012.$g77$.bind((SubLObject)module0745.T, var25);
+                module0012.$g75$.bind((SubLObject)ZERO_INTEGER, var25);
+                module0012.$g76$.bind((SubLObject)NIL, var25);
+                module0012.$g77$.bind((SubLObject)T, var25);
                 module0012.$g78$.bind(Time.get_universal_time(), var25);
                 module0012.f478(var30);
-                while (module0745.NIL == f46239()) {
+                while (NIL == f46239()) {
                     final SubLObject var32 = f46240();
-                    if (module0745.NIL != module0745.$g5944$.getDynamicValue(var25)) {
+                    if (NIL != $g5944$.getDynamicValue(var25)) {
                         f46241();
                     }
                     if (var32.isInteger()) {
@@ -481,131 +482,131 @@ public final class module0745 extends SubLTranslatedFile
                 module0012.$g76$.rebind(var25_30, var25);
                 module0012.$g75$.rebind(var17_29, var25);
             }
-            if (module0745.NIL != Filesys.probe_file(var6)) {
-                Errors.warn((SubLObject)module0745.$ic38$, var6);
+            if (NIL != Filesys.probe_file(var6)) {
+                Errors.warn((SubLObject)$ic38$, var6);
             }
             else {
-                f46242(var6, var24, var22, module0745.$g5951$.getDynamicValue(var25));
+                f46242(var6, var24, var22, $g5951$.getDynamicValue(var25));
             }
         }
         finally {
-            module0745.$g5951$.rebind(var28, var25);
-            module0745.$g5940$.rebind(var27, var25);
-            module0745.$g5939$.rebind(var26, var25);
+            $g5951$.rebind(var28, var25);
+            $g5940$.rebind(var27, var25);
+            $g5939$.rebind(var26, var25);
         }
         return var6;
     }
     
     public static SubLObject f46242(SubLObject var6, SubLObject var24, SubLObject var22, SubLObject var34) {
-        if (var6 == module0745.UNPROVIDED) {
-            var6 = f46220((SubLObject)module0745.UNPROVIDED);
+        if (var6 == UNPROVIDED) {
+            var6 = f46220((SubLObject)UNPROVIDED);
         }
-        if (var24 == module0745.UNPROVIDED) {
-            var24 = module0745.$g5940$.getDynamicValue();
+        if (var24 == UNPROVIDED) {
+            var24 = $g5940$.getDynamicValue();
         }
-        if (var22 == module0745.UNPROVIDED) {
-            var22 = (SubLObject)module0745.$ic31$;
+        if (var22 == UNPROVIDED) {
+            var22 = (SubLObject)$ic31$;
         }
-        if (var34 == module0745.UNPROVIDED) {
+        if (var34 == UNPROVIDED) {
             var34 = f46238(var22);
         }
-        f46243(module0077.f5313((SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED), var6, var24, var22, var34);
+        f46243(module0077.f5313((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED), var6, var24, var22, var34);
         return var6;
     }
     
     public static SubLObject f46243(final SubLObject var35, SubLObject var6, SubLObject var24, SubLObject var22, SubLObject var34) {
-        if (var6 == module0745.UNPROVIDED) {
-            var6 = f46220((SubLObject)module0745.UNPROVIDED);
+        if (var6 == UNPROVIDED) {
+            var6 = f46220((SubLObject)UNPROVIDED);
         }
-        if (var24 == module0745.UNPROVIDED) {
-            var24 = module0745.$g5940$.getDynamicValue();
+        if (var24 == UNPROVIDED) {
+            var24 = $g5940$.getDynamicValue();
         }
-        if (var22 == module0745.UNPROVIDED) {
-            var22 = (SubLObject)module0745.$ic31$;
+        if (var22 == UNPROVIDED) {
+            var22 = (SubLObject)$ic31$;
         }
-        if (var34 == module0745.UNPROVIDED) {
+        if (var34 == UNPROVIDED) {
             var34 = f46238(var22);
         }
         final SubLThread var36 = SubLProcess.currentSubLThread();
-        if (module0745.NIL == Errors.$ignore_mustsP$.getDynamicValue(var36) && module0745.NIL == module0077.f5302(var35)) {
-            Errors.error((SubLObject)module0745.$ic40$, var35);
+        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(var36) && NIL == module0077.f5302(var35)) {
+            Errors.error((SubLObject)$ic40$, var35);
         }
-        final SubLObject var37 = module0093.f6656(var6, var22, Symbols.symbol_function((SubLObject)module0745.EQUAL), (SubLObject)module0745.$ic22$);
-        final SubLObject var38 = (SubLObject)module0745.$ic41$;
-        assert module0745.NIL != Filesys.directory_p(var34) : var34;
-        SubLObject var39 = Filesys.directory(var34, (SubLObject)module0745.T);
+        final SubLObject var37 = module0093.f6656(var6, var22, Symbols.symbol_function((SubLObject)EQUAL), (SubLObject)$ic22$);
+        final SubLObject var38 = (SubLObject)$ic41$;
+        assert NIL != Filesys.directory_p(var34) : var34;
+        SubLObject var39 = Filesys.directory(var34, (SubLObject)T);
         final SubLObject var40 = var38;
         final SubLObject var41 = module0012.$silent_progressP$.currentBinding(var36);
         try {
-            module0012.$silent_progressP$.bind((SubLObject)SubLObjectFactory.makeBoolean(!var40.isString()), var36);
-            if (module0745.$ic43$.isFunctionSpec()) {
-                var39 = Sort.sort(var39, (SubLObject)module0745.$ic43$, (SubLObject)module0745.UNPROVIDED);
+            module0012.$silent_progressP$.bind((SubLObject)makeBoolean(!var40.isString()), var36);
+            if ($ic43$.isFunctionSpec()) {
+                var39 = Sort.sort(var39, (SubLObject)$ic43$, (SubLObject)UNPROVIDED);
             }
             final SubLObject var42 = var39;
             module0012.$g82$.setDynamicValue(var40, var36);
             module0012.$g73$.setDynamicValue(Time.get_universal_time(), var36);
             module0012.$g83$.setDynamicValue(Sequences.length(var42), var36);
-            module0012.$g84$.setDynamicValue((SubLObject)module0745.ZERO_INTEGER, var36);
+            module0012.$g84$.setDynamicValue((SubLObject)ZERO_INTEGER, var36);
             final SubLObject var17_40 = module0012.$g75$.currentBinding(var36);
             final SubLObject var43 = module0012.$g76$.currentBinding(var36);
             final SubLObject var44 = module0012.$g77$.currentBinding(var36);
             final SubLObject var45 = module0012.$g78$.currentBinding(var36);
             try {
-                module0012.$g75$.bind((SubLObject)module0745.ZERO_INTEGER, var36);
-                module0012.$g76$.bind((SubLObject)module0745.NIL, var36);
-                module0012.$g77$.bind((SubLObject)module0745.T, var36);
+                module0012.$g75$.bind((SubLObject)ZERO_INTEGER, var36);
+                module0012.$g76$.bind((SubLObject)NIL, var36);
+                module0012.$g77$.bind((SubLObject)T, var36);
                 module0012.$g78$.bind(Time.get_universal_time(), var36);
                 module0012.f478(module0012.$g82$.getDynamicValue(var36));
                 SubLObject var46 = var42;
-                SubLObject var47 = (SubLObject)module0745.NIL;
+                SubLObject var47 = (SubLObject)NIL;
                 var47 = var46.first();
-                while (module0745.NIL != var46) {
+                while (NIL != var46) {
                     module0012.note_percent_progress(module0012.$g84$.getDynamicValue(var36), module0012.$g83$.getDynamicValue(var36));
-                    module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var36), (SubLObject)module0745.ONE_INTEGER), var36);
-                    if (module0745.NIL != Filesys.directory_p(var47)) {
-                        if (module0745.NIL == Filesys.probe_file(Sequences.cconcatenate(var47, (SubLObject)module0745.$ic44$))) {
-                            Errors.warn((SubLObject)module0745.$ic45$, var47);
+                    module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var36), (SubLObject)ONE_INTEGER), var36);
+                    if (NIL != Filesys.directory_p(var47)) {
+                        if (NIL == Filesys.probe_file(Sequences.cconcatenate(var47, (SubLObject)$ic44$))) {
+                            Errors.warn((SubLObject)$ic45$, var47);
                         }
                         else {
-                            final SubLObject var48 = Equality.eql(module0018.f968(), module0069.f4939(Sequences.cconcatenate(var34, (SubLObject)module0745.$ic46$)));
-                            final SubLObject var49 = Sequences.cconcatenate(var47, (SubLObject)module0745.$ic47$);
-                            final SubLObject var50 = Sequences.cconcatenate(var47, (SubLObject)module0745.$ic48$);
-                            final SubLObject var51 = (module0745.NIL != var48 && module0745.NIL != Filesys.probe_file(var50)) ? var50 : var49;
-                            SubLObject var52 = (SubLObject)module0745.NIL;
-                            SubLObject var53 = (SubLObject)module0745.NIL;
-                            SubLObject var54 = (SubLObject)module0745.NIL;
-                            Errors.warn((SubLObject)module0745.$ic49$, var51);
-                            SubLObject var55 = (SubLObject)module0745.NIL;
+                            final SubLObject var48 = Equality.eql(module0018.f968(), module0069.f4939(Sequences.cconcatenate(var34, (SubLObject)$ic46$)));
+                            final SubLObject var49 = Sequences.cconcatenate(var47, (SubLObject)$ic47$);
+                            final SubLObject var50 = Sequences.cconcatenate(var47, (SubLObject)$ic48$);
+                            final SubLObject var51 = (NIL != var48 && NIL != Filesys.probe_file(var50)) ? var50 : var49;
+                            SubLObject var52 = (SubLObject)NIL;
+                            SubLObject var53 = (SubLObject)NIL;
+                            SubLObject var54 = (SubLObject)NIL;
+                            Errors.warn((SubLObject)$ic49$, var51);
+                            SubLObject var55 = (SubLObject)NIL;
                             try {
                                 final SubLObject var17_41 = stream_macros.$stream_requires_locking$.currentBinding(var36);
                                 try {
-                                    stream_macros.$stream_requires_locking$.bind((SubLObject)module0745.NIL, var36);
-                                    var55 = compatibility.open_binary(var51, (SubLObject)module0745.$ic50$);
+                                    stream_macros.$stream_requires_locking$.bind((SubLObject)NIL, var36);
+                                    var55 = compatibility.open_binary(var51, (SubLObject)$ic50$);
                                 }
                                 finally {
                                     stream_macros.$stream_requires_locking$.rebind(var17_41, var36);
                                 }
                                 if (!var55.isStream()) {
-                                    Errors.error((SubLObject)module0745.$ic51$, var51);
+                                    Errors.error((SubLObject)$ic51$, var51);
                                 }
                                 final SubLObject var52_53 = var55;
-                                while (module0745.NIL == var54) {
-                                    var52 = module0021.f1060(var52_53, (SubLObject)module0745.NIL, (SubLObject)module0745.$ic52$);
-                                    var53 = module0021.f1060(var52_53, (SubLObject)module0745.NIL, (SubLObject)module0745.UNPROVIDED);
-                                    if (module0745.$ic52$ == var52) {
-                                        var54 = (SubLObject)module0745.T;
+                                while (NIL == var54) {
+                                    var52 = module0021.f1060(var52_53, (SubLObject)NIL, (SubLObject)$ic52$);
+                                    var53 = module0021.f1060(var52_53, (SubLObject)NIL, (SubLObject)UNPROVIDED);
+                                    if ($ic52$ == var52) {
+                                        var54 = (SubLObject)T;
                                     }
-                                    else if (module0745.NIL == module0173.f10955(var52)) {
-                                        Errors.warn((SubLObject)module0745.$ic53$, var52, var51);
+                                    else if (NIL == module0173.f10955(var52)) {
+                                        Errors.warn((SubLObject)$ic53$, var52, var51);
                                     }
-                                    else if (!var53.isList() || module0745.NIL == module0035.f1995(var53, (SubLObject)module0745.FOUR_INTEGER, (SubLObject)module0745.UNPROVIDED)) {
-                                        Errors.warn((SubLObject)module0745.$ic54$, var52, var51, var53);
+                                    else if (!var53.isList() || NIL == module0035.f1995(var53, (SubLObject)FOUR_INTEGER, (SubLObject)UNPROVIDED)) {
+                                        Errors.warn((SubLObject)$ic54$, var52, var51, var53);
                                     }
-                                    else if (module0745.NIL != module0077.f5320(var52, var35)) {
-                                        Errors.warn((SubLObject)module0745.$ic55$, var52);
+                                    else if (NIL != module0077.f5320(var52, var35)) {
+                                        Errors.warn((SubLObject)$ic55$, var52);
                                     }
                                     else {
-                                        final SubLObject var56 = (SubLObject)((module0745.NIL != module0745.$g5956$.getDynamicValue(var36)) ? var53 : ConsesLow.cons(var53.first(), conses_high.second(var53)));
+                                        final SubLObject var56 = (SubLObject)((NIL != $g5956$.getDynamicValue(var36)) ? var53 : ConsesLow.cons(var53.first(), conses_high.second(var53)));
                                         module0093.f6657(var52, var37, var56);
                                     }
                                 }
@@ -613,9 +614,9 @@ public final class module0745 extends SubLTranslatedFile
                             finally {
                                 final SubLObject var17_42 = Threads.$is_thread_performing_cleanupP$.currentBinding(var36);
                                 try {
-                                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0745.T, var36);
+                                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)T, var36);
                                     if (var55.isStream()) {
-                                        streams_high.close(var55, (SubLObject)module0745.UNPROVIDED);
+                                        streams_high.close(var55, (SubLObject)UNPROVIDED);
                                     }
                                 }
                                 finally {
@@ -639,49 +640,49 @@ public final class module0745 extends SubLTranslatedFile
         finally {
             module0012.$silent_progressP$.rebind(var41, var36);
         }
-        module0093.f6657((SubLObject)module0745.$ic23$, var37, var24);
-        module0093.f6657((SubLObject)module0745.$ic25$, var37, module0745.$g5939$.getDynamicValue(var36));
-        module0093.f6658(var37, (SubLObject)module0745.$ic56$, (SubLObject)module0745.UNPROVIDED);
+        module0093.f6657((SubLObject)$ic23$, var37, var24);
+        module0093.f6657((SubLObject)$ic25$, var37, $g5939$.getDynamicValue(var36));
+        module0093.f6658(var37, (SubLObject)$ic56$, (SubLObject)UNPROVIDED);
         return var6;
     }
     
     public static SubLObject f46238(final SubLObject var56) {
         final SubLThread var57 = SubLProcess.currentSubLThread();
-        final SubLObject var58 = Sequences.cconcatenate(module0006.f203(var56), new SubLObject[] { module0745.$ic57$, module0006.f203(module0574.f35166(module0018.f968())), module0745.$ic19$ });
-        if (module0745.NIL == Filesys.directory_p(var58)) {
-            module0075.f5241(var58, (SubLObject)module0745.NIL, (SubLObject)module0745.$ic58$);
-            module0069.f4937(module0745.$g5953$.getGlobalValue(), Sequences.cconcatenate(var58, (SubLObject)module0745.$ic59$));
-            module0069.f4937(module0173.f10962(), Sequences.cconcatenate(var58, (SubLObject)module0745.$ic35$));
-            module0069.f4937(module0018.f968(), Sequences.cconcatenate(var58, (SubLObject)module0745.$ic46$));
-            module0069.f4941(module0745.$g5939$.getDynamicValue(var57), Sequences.cconcatenate(var58, (SubLObject)module0745.$ic60$));
+        final SubLObject var58 = Sequences.cconcatenate(module0006.f203(var56), new SubLObject[] { $ic57$, module0006.f203(module0574.f35166(module0018.f968())), $ic19$ });
+        if (NIL == Filesys.directory_p(var58)) {
+            module0075.f5241(var58, (SubLObject)NIL, (SubLObject)$ic58$);
+            module0069.f4937($g5953$.getGlobalValue(), Sequences.cconcatenate(var58, (SubLObject)$ic59$));
+            module0069.f4937(module0173.f10962(), Sequences.cconcatenate(var58, (SubLObject)$ic35$));
+            module0069.f4937(module0018.f968(), Sequences.cconcatenate(var58, (SubLObject)$ic46$));
+            module0069.f4941($g5939$.getDynamicValue(var57), Sequences.cconcatenate(var58, (SubLObject)$ic60$));
         }
         return var58;
     }
     
     public static SubLObject f46244(final SubLObject var34, final SubLObject var57, SubLObject var27, SubLObject var58) {
-        if (var27 == module0745.UNPROVIDED) {
-            var27 = (SubLObject)module0745.NIL;
+        if (var27 == UNPROVIDED) {
+            var27 = (SubLObject)NIL;
         }
-        if (var58 == module0745.UNPROVIDED) {
-            var58 = (SubLObject)module0745.NIL;
+        if (var58 == UNPROVIDED) {
+            var58 = (SubLObject)NIL;
         }
-        if (module0745.NIL == var27) {
-            var27 = module0069.f4939(Sequences.cconcatenate(var34, (SubLObject)module0745.$ic35$));
+        if (NIL == var27) {
+            var27 = module0069.f4939(Sequences.cconcatenate(var34, (SubLObject)$ic35$));
         }
-        if (module0745.NIL == var58) {
-            var58 = module0069.f4939(Sequences.cconcatenate(var34, (SubLObject)module0745.$ic59$));
+        if (NIL == var58) {
+            var58 = module0069.f4939(Sequences.cconcatenate(var34, (SubLObject)$ic59$));
         }
-        if (!Numbers.mod(var58, module0745.$g5952$.getGlobalValue()).isZero()) {
-            Errors.error((SubLObject)module0745.$ic61$, module0745.$g5952$.getGlobalValue());
+        if (!Numbers.mod(var58, $g5952$.getGlobalValue()).isZero()) {
+            Errors.error((SubLObject)$ic61$, $g5952$.getGlobalValue());
         }
-        final SubLObject var59 = module0048.f_1X(Numbers.floor(Numbers.log(var27, (SubLObject)module0745.TEN_INTEGER), (SubLObject)module0745.UNPROVIDED));
-        final SubLObject var60 = Sequences.cconcatenate((SubLObject)module0745.$ic62$, new SubLObject[] { print_high.princ_to_string(var59), module0745.$ic63$, print_high.princ_to_string(var59), module0745.$ic64$ });
+        final SubLObject var59 = module0048.f_1X(Numbers.floor(Numbers.log(var27, (SubLObject)TEN_INTEGER), (SubLObject)UNPROVIDED));
+        final SubLObject var60 = Sequences.cconcatenate((SubLObject)$ic62$, new SubLObject[] { print_high.princ_to_string(var59), $ic63$, print_high.princ_to_string(var59), $ic64$ });
         SubLObject var61 = Numbers.add(var57, module0048.f_1_(var58));
         final SubLObject var62 = Numbers.numGE(var61, var27);
-        if (module0745.NIL != var62) {
+        if (NIL != var62) {
             var61 = var27;
         }
-        final SubLObject var63 = Sequences.cconcatenate(var34, PrintLow.format((SubLObject)module0745.NIL, var60, var57, var61));
+        final SubLObject var63 = Sequences.cconcatenate(var34, PrintLow.format((SubLObject)NIL, var60, var57, var61));
         return Values.values(var63, var62, var61);
     }
     
@@ -693,36 +694,36 @@ public final class module0745 extends SubLTranslatedFile
         final SubLObject var15 = var12.thirdMultipleValue();
         final SubLObject var16 = var12.fourthMultipleValue();
         var12.resetMultipleValues();
-        if (module0745.NIL != Filesys.directory_p(var13)) {
+        if (NIL != Filesys.directory_p(var13)) {
             final SubLObject var17 = (SubLObject)ConsesLow.list(var16, var13, var14, var15);
-            final SubLObject var18 = Sequences.cconcatenate(var13, (SubLObject)module0745.$ic65$);
-            final SubLObject var19 = module0745.$g5954$.currentBinding(var12);
+            final SubLObject var18 = Sequences.cconcatenate(var13, (SubLObject)$ic65$);
+            final SubLObject var19 = $g5954$.currentBinding(var12);
             try {
-                module0745.$g5954$.bind(var17, var12);
-                PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic66$, var17);
-                streams_high.force_output((SubLObject)module0745.T);
-                if (module0745.NIL != module0745.$g5957$.getDynamicValue(var12)) {
-                    module0060.f4442((SubLObject)module0745.$ic67$, (SubLObject)module0745.$ic68$, var18);
+                $g5954$.bind(var17, var12);
+                PrintLow.format((SubLObject)T, (SubLObject)$ic66$, var17);
+                streams_high.force_output((SubLObject)T);
+                if (NIL != $g5957$.getDynamicValue(var12)) {
+                    module0060.f4442((SubLObject)$ic67$, (SubLObject)$ic68$, var18);
                 }
                 else {
                     final SubLObject var20 = f46246();
                     f46247(var20);
                 }
-                final SubLObject var20 = module0059.f4285(module0745.$g5955$.getGlobalValue());
-                PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic69$, var20, var17);
+                final SubLObject var20 = module0059.f4285($g5955$.getGlobalValue());
+                PrintLow.format((SubLObject)T, (SubLObject)$ic69$, var20, var17);
                 if (var16.eql(var20)) {
-                    PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic70$, var17);
+                    PrintLow.format((SubLObject)T, (SubLObject)$ic70$, var17);
                 }
                 else if (f46236().eql(var20)) {
                     f46248(var17);
-                    Errors.sublisp_break((SubLObject)module0745.$ic71$, new SubLObject[] { var17 });
+                    Errors.sublisp_break((SubLObject)$ic71$, new SubLObject[] { var17 });
                 }
                 else {
-                    Errors.sublisp_break((SubLObject)module0745.$ic72$, new SubLObject[] { var20 });
+                    Errors.sublisp_break((SubLObject)$ic72$, new SubLObject[] { var20 });
                 }
             }
             finally {
-                module0745.$g5954$.rebind(var19, var12);
+                $g5954$.rebind(var19, var12);
             }
         }
         return var15;
@@ -730,64 +731,64 @@ public final class module0745 extends SubLTranslatedFile
     
     public static SubLObject f46248(final SubLObject var69) {
         final SubLObject var70 = var69.first();
-        Errors.warn((SubLObject)module0745.$ic73$, var69);
-        module0077.f5326(var70, module0745.$g5958$.getGlobalValue());
-        return module0745.$g5958$.getGlobalValue();
+        Errors.warn((SubLObject)$ic73$, var69);
+        module0077.f5326(var70, $g5958$.getGlobalValue());
+        return $g5958$.getGlobalValue();
     }
     
     public static SubLObject f46249(final SubLObject var69) {
         final SubLObject var70 = var69.first();
-        return module0077.f5320(var70, module0745.$g5958$.getGlobalValue());
+        return module0077.f5320(var70, $g5958$.getGlobalValue());
     }
     
     public static SubLObject f46247(final SubLObject var68) {
-        PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic74$, var68);
-        return module0059.f4284(var68, module0745.$g5955$.getGlobalValue());
+        PrintLow.format((SubLObject)T, (SubLObject)$ic74$, var68);
+        return module0059.f4284(var68, $g5955$.getGlobalValue());
     }
     
     public static SubLObject f46246() {
         final SubLThread var12 = SubLProcess.currentSubLThread();
-        final SubLObject var13 = module0745.$g5954$.getDynamicValue(var12);
+        final SubLObject var13 = $g5954$.getDynamicValue(var12);
         SubLObject var14 = f46236();
-        Errors.warn((SubLObject)module0745.$ic75$, var13);
-        if (var13.isList() && module0745.NIL != module0035.f1995(var13, (SubLObject)module0745.FOUR_INTEGER, (SubLObject)module0745.UNPROVIDED)) {
+        Errors.warn((SubLObject)$ic75$, var13);
+        if (var13.isList() && NIL != module0035.f1995(var13, (SubLObject)FOUR_INTEGER, (SubLObject)UNPROVIDED)) {
             SubLObject var16;
             final SubLObject var15 = var16 = var13;
-            SubLObject var17 = (SubLObject)module0745.NIL;
-            SubLObject var18 = (SubLObject)module0745.NIL;
-            SubLObject var19 = (SubLObject)module0745.NIL;
-            SubLObject var20 = (SubLObject)module0745.NIL;
-            cdestructuring_bind.destructuring_bind_must_consp(var16, var15, (SubLObject)module0745.$ic76$);
+            SubLObject var17 = (SubLObject)NIL;
+            SubLObject var18 = (SubLObject)NIL;
+            SubLObject var19 = (SubLObject)NIL;
+            SubLObject var20 = (SubLObject)NIL;
+            cdestructuring_bind.destructuring_bind_must_consp(var16, var15, (SubLObject)$ic76$);
             var17 = var16.first();
             var16 = var16.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var16, var15, (SubLObject)module0745.$ic76$);
+            cdestructuring_bind.destructuring_bind_must_consp(var16, var15, (SubLObject)$ic76$);
             var18 = var16.first();
             var16 = var16.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var16, var15, (SubLObject)module0745.$ic76$);
+            cdestructuring_bind.destructuring_bind_must_consp(var16, var15, (SubLObject)$ic76$);
             var19 = var16.first();
             var16 = var16.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var16, var15, (SubLObject)module0745.$ic76$);
+            cdestructuring_bind.destructuring_bind_must_consp(var16, var15, (SubLObject)$ic76$);
             var20 = var16.first();
             var16 = var16.rest();
-            if (module0745.NIL == var16) {
-                if (module0745.NIL != Filesys.directory_p(var18)) {
+            if (NIL == var16) {
+                if (NIL != Filesys.directory_p(var18)) {
                     f46250(var18, var19, var20);
                 }
                 var14 = var17;
-                Errors.warn((SubLObject)module0745.$ic77$, var14);
+                Errors.warn((SubLObject)$ic77$, var14);
             }
             else {
-                cdestructuring_bind.cdestructuring_bind_error(var15, (SubLObject)module0745.$ic76$);
+                cdestructuring_bind.cdestructuring_bind_error(var15, (SubLObject)$ic76$);
             }
         }
         return var14;
     }
     
     public static SubLObject f46250(final SubLObject var64, final SubLObject var57, final SubLObject var61) {
-        final SubLObject var65 = Sequences.cconcatenate(var64, (SubLObject)module0745.$ic78$);
-        final SubLObject var66 = Sequences.cconcatenate(var64, (SubLObject)module0745.$ic79$);
-        final SubLObject var67 = module0077.f5313((SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED);
-        if (module0745.NIL != Filesys.probe_file(var65)) {
+        final SubLObject var65 = Sequences.cconcatenate(var64, (SubLObject)$ic78$);
+        final SubLObject var66 = Sequences.cconcatenate(var64, (SubLObject)$ic79$);
+        final SubLObject var67 = module0077.f5313((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        if (NIL != Filesys.probe_file(var65)) {
             f46251(var64, var67);
         }
         f46252(var64, var57, var61, var65, var66, var67);
@@ -796,39 +797,39 @@ public final class module0745 extends SubLTranslatedFile
     
     public static SubLObject f46245() {
         final SubLThread var12 = SubLProcess.currentSubLThread();
-        SubLObject var13 = (SubLObject)module0745.ONE_INTEGER;
-        SubLObject var14 = (SubLObject)module0745.NIL;
-        SubLObject var15 = (SubLObject)module0745.NIL;
-        SubLObject var16 = (SubLObject)module0745.NIL;
-        final SubLObject var17 = module0745.$g5951$.getDynamicValue(var12);
-        final SubLObject var18 = module0069.f4939(Sequences.cconcatenate(var17, (SubLObject)module0745.$ic35$));
-        final SubLObject var19 = module0069.f4939(Sequences.cconcatenate(var17, (SubLObject)module0745.$ic59$));
-        SubLObject var20 = (SubLObject)module0745.NIL;
-        while (module0745.NIL == var20) {
+        SubLObject var13 = (SubLObject)ONE_INTEGER;
+        SubLObject var14 = (SubLObject)NIL;
+        SubLObject var15 = (SubLObject)NIL;
+        SubLObject var16 = (SubLObject)NIL;
+        final SubLObject var17 = $g5951$.getDynamicValue(var12);
+        final SubLObject var18 = module0069.f4939(Sequences.cconcatenate(var17, (SubLObject)$ic35$));
+        final SubLObject var19 = module0069.f4939(Sequences.cconcatenate(var17, (SubLObject)$ic59$));
+        SubLObject var20 = (SubLObject)NIL;
+        while (NIL == var20) {
             var12.resetMultipleValues();
             final SubLObject var21 = f46244(var17, var13, var18, var19);
             final SubLObject var22 = var12.secondMultipleValue();
             final SubLObject var23 = var12.thirdMultipleValue();
             var12.resetMultipleValues();
-            final SubLObject var24 = module0035.sublisp_boolean(Filesys.make_directory(var21, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED));
-            if (module0745.NIL != var24) {
+            final SubLObject var24 = module0035.sublisp_boolean(Filesys.make_directory(var21, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED));
+            if (NIL != var24) {
                 var14 = var21;
-                var20 = (SubLObject)module0745.T;
+                var20 = (SubLObject)T;
             }
-            else if (module0745.NIL == Filesys.probe_file(Sequences.cconcatenate(var21, (SubLObject)module0745.$ic81$))) {
-                if (module0745.NIL != module0745.$g5959$.getDynamicValue(var12)) {
-                    SubLObject var25 = (SubLObject)module0745.NIL;
-                    SubLObject var26 = (SubLObject)module0745.NIL;
+            else if (NIL == Filesys.probe_file(Sequences.cconcatenate(var21, (SubLObject)$ic81$))) {
+                if (NIL != $g5959$.getDynamicValue(var12)) {
+                    SubLObject var25 = (SubLObject)NIL;
+                    SubLObject var26 = (SubLObject)NIL;
                     try {
-                        var12.throwStack.push(module0745.$ic82$);
+                        var12.throwStack.push($ic82$);
                         final SubLObject var27 = Errors.$error_handler$.currentBinding(var12);
                         try {
-                            Errors.$error_handler$.bind(Symbols.symbol_function((SubLObject)module0745.$ic83$), var12);
+                            Errors.$error_handler$.bind(Symbols.symbol_function((SubLObject)$ic83$), var12);
                             try {
-                                var25 = module0115.f7989((SubLObject)module0745.$ic84$, Environment.get_machine_name((SubLObject)module0745.UNPROVIDED), module0115.f7982());
+                                var25 = module0115.f7989((SubLObject)$ic84$, Environment.get_machine_name((SubLObject)UNPROVIDED), module0115.f7982());
                             }
                             catch (Throwable var28) {
-                                Errors.handleThrowable(var28, (SubLObject)module0745.NIL);
+                                Errors.handleThrowable(var28, (SubLObject)NIL);
                             }
                         }
                         finally {
@@ -836,25 +837,25 @@ public final class module0745 extends SubLTranslatedFile
                         }
                     }
                     catch (Throwable var29) {
-                        var26 = Errors.handleThrowable(var29, (SubLObject)module0745.$ic82$);
+                        var26 = Errors.handleThrowable(var29, (SubLObject)$ic82$);
                     }
                     finally {
                         var12.throwStack.pop();
                     }
-                    if (module0745.NIL != var25) {
+                    if (NIL != var25) {
                         var14 = var21;
-                        var20 = (SubLObject)module0745.T;
+                        var20 = (SubLObject)T;
                     }
                 }
             }
-            if (module0745.NIL != Filesys.directory_p(var14)) {
+            if (NIL != Filesys.directory_p(var14)) {
                 var15 = var23;
-                var16 = Numbers.mod(Numbers.integerDivide(var15, var19), (SubLObject)module0745.$ic30$);
+                var16 = Numbers.mod(Numbers.integerDivide(var15, var19), (SubLObject)$ic30$);
             }
-            if (module0745.NIL != var22) {
-                var20 = (SubLObject)module0745.T;
+            if (NIL != var22) {
+                var20 = (SubLObject)T;
             }
-            if (module0745.NIL == var20) {
+            if (NIL == var20) {
                 var13 = Numbers.add(var13, var19);
             }
         }
@@ -863,57 +864,57 @@ public final class module0745 extends SubLTranslatedFile
     
     public static SubLObject f46251(final SubLObject var64, final SubLObject var73) {
         final SubLThread var74 = SubLProcess.currentSubLThread();
-        final SubLObject var75 = Sequences.cconcatenate(var64, (SubLObject)module0745.$ic78$);
-        final SubLObject var76 = Sequences.cconcatenate(var64, (SubLObject)module0745.$ic79$);
-        final SubLObject var77 = Sequences.cconcatenate(var64, (SubLObject)module0745.$ic85$);
-        SubLObject var78 = (SubLObject)module0745.NIL;
+        final SubLObject var75 = Sequences.cconcatenate(var64, (SubLObject)$ic78$);
+        final SubLObject var76 = Sequences.cconcatenate(var64, (SubLObject)$ic79$);
+        final SubLObject var77 = Sequences.cconcatenate(var64, (SubLObject)$ic85$);
+        SubLObject var78 = (SubLObject)NIL;
         module0075.f5248(var75, var77);
-        SubLObject var79 = (SubLObject)module0745.NIL;
+        SubLObject var79 = (SubLObject)NIL;
         try {
             final SubLObject var80 = stream_macros.$stream_requires_locking$.currentBinding(var74);
             try {
-                stream_macros.$stream_requires_locking$.bind((SubLObject)module0745.NIL, var74);
-                var79 = compatibility.open_binary(var77, (SubLObject)module0745.$ic50$);
+                stream_macros.$stream_requires_locking$.bind((SubLObject)NIL, var74);
+                var79 = compatibility.open_binary(var77, (SubLObject)$ic50$);
             }
             finally {
                 stream_macros.$stream_requires_locking$.rebind(var80, var74);
             }
             if (!var79.isStream()) {
-                Errors.error((SubLObject)module0745.$ic51$, var77);
+                Errors.error((SubLObject)$ic51$, var77);
             }
             final SubLObject var52_82 = var79;
-            SubLObject var83_84 = (SubLObject)module0745.NIL;
+            SubLObject var83_84 = (SubLObject)NIL;
             try {
                 final SubLObject var81 = stream_macros.$stream_requires_locking$.currentBinding(var74);
                 try {
-                    stream_macros.$stream_requires_locking$.bind((SubLObject)module0745.NIL, var74);
-                    var83_84 = compatibility.open_binary(var75, (SubLObject)module0745.$ic86$);
+                    stream_macros.$stream_requires_locking$.bind((SubLObject)NIL, var74);
+                    var83_84 = compatibility.open_binary(var75, (SubLObject)$ic86$);
                 }
                 finally {
                     stream_macros.$stream_requires_locking$.rebind(var81, var74);
                 }
                 if (!var83_84.isStream()) {
-                    Errors.error((SubLObject)module0745.$ic51$, var75);
+                    Errors.error((SubLObject)$ic51$, var75);
                 }
                 final SubLObject var82 = var83_84;
-                SubLObject var86_87 = (SubLObject)module0745.NIL;
+                SubLObject var86_87 = (SubLObject)NIL;
                 try {
                     final SubLObject var83 = stream_macros.$stream_requires_locking$.currentBinding(var74);
                     try {
-                        stream_macros.$stream_requires_locking$.bind((SubLObject)module0745.NIL, var74);
-                        var86_87 = compatibility.open_binary(var76, (SubLObject)module0745.$ic86$);
+                        stream_macros.$stream_requires_locking$.bind((SubLObject)NIL, var74);
+                        var86_87 = compatibility.open_binary(var76, (SubLObject)$ic86$);
                     }
                     finally {
                         stream_macros.$stream_requires_locking$.rebind(var83, var74);
                     }
                     if (!var86_87.isStream()) {
-                        Errors.error((SubLObject)module0745.$ic51$, var76);
+                        Errors.error((SubLObject)$ic51$, var76);
                     }
                     final SubLObject var84 = var86_87;
-                    while (module0745.NIL == var78) {
-                        final SubLObject var85 = module0021.f1060(var52_82, (SubLObject)module0745.NIL, (SubLObject)module0745.$ic52$);
-                        final SubLObject var86 = module0021.f1060(var52_82, (SubLObject)module0745.NIL, (SubLObject)module0745.UNPROVIDED);
-                        if (module0745.NIL != module0173.f10955(var85)) {
+                    while (NIL == var78) {
+                        final SubLObject var85 = module0021.f1060(var52_82, (SubLObject)NIL, (SubLObject)$ic52$);
+                        final SubLObject var86 = module0021.f1060(var52_82, (SubLObject)NIL, (SubLObject)UNPROVIDED);
+                        if (NIL != module0173.f10955(var85)) {
                             module0021.f1040(var85, var82);
                             module0021.f1040(var86, var82);
                             module0021.f1038(var85, var84);
@@ -921,16 +922,16 @@ public final class module0745 extends SubLTranslatedFile
                             module0077.f5326(var85, var73);
                         }
                         else {
-                            var78 = (SubLObject)module0745.T;
+                            var78 = (SubLObject)T;
                         }
                     }
                 }
                 finally {
                     final SubLObject var87 = Threads.$is_thread_performing_cleanupP$.currentBinding(var74);
                     try {
-                        Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0745.T, var74);
+                        Threads.$is_thread_performing_cleanupP$.bind((SubLObject)T, var74);
                         if (var86_87.isStream()) {
-                            streams_high.close(var86_87, (SubLObject)module0745.UNPROVIDED);
+                            streams_high.close(var86_87, (SubLObject)UNPROVIDED);
                         }
                     }
                     finally {
@@ -941,9 +942,9 @@ public final class module0745 extends SubLTranslatedFile
             finally {
                 final SubLObject var88 = Threads.$is_thread_performing_cleanupP$.currentBinding(var74);
                 try {
-                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0745.T, var74);
+                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)T, var74);
                     if (var83_84.isStream()) {
-                        streams_high.close(var83_84, (SubLObject)module0745.UNPROVIDED);
+                        streams_high.close(var83_84, (SubLObject)UNPROVIDED);
                     }
                 }
                 finally {
@@ -954,9 +955,9 @@ public final class module0745 extends SubLTranslatedFile
         finally {
             final SubLObject var89 = Threads.$is_thread_performing_cleanupP$.currentBinding(var74);
             try {
-                Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0745.T, var74);
+                Threads.$is_thread_performing_cleanupP$.bind((SubLObject)T, var74);
                 if (var79.isStream()) {
-                    streams_high.close(var79, (SubLObject)module0745.UNPROVIDED);
+                    streams_high.close(var79, (SubLObject)UNPROVIDED);
                 }
             }
             finally {
@@ -975,107 +976,107 @@ public final class module0745 extends SubLTranslatedFile
         // 
         //     3: astore          var12
         //     5: aload_0         
-        //     6: getstatic       com/cyc/cycjava/cycl/module0745.$ic87$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //     6: getstatic       com/cyc/cycjava/cycl/$ic87$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //     9: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.cconcatenate:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //    12: astore          var89
-        //    14: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //    14: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //    17: astore          var49
-        //    19: getstatic       com/cyc/cycjava/cycl/module0745.ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //    19: getstatic       com/cyc/cycjava/cycl/ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //    22: astore          var90
-        //    24: getstatic       com/cyc/cycjava/cycl/module0745.$g5952$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //    24: getstatic       com/cyc/cycjava/cycl/$g5952$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //    27: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getGlobalValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //    32: astore          var91
-        //    34: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //    34: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //    37: astore          var92
-        //    39: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //    39: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //    42: astore          var93
         //    44: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_universal_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //    47: astore          var94
-        //    49: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //    49: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //    52: astore          var95
-        //    54: getstatic       com/cyc/cycjava/cycl/module0745.$g5939$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //    54: getstatic       com/cyc/cycjava/cycl/$g5939$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //    57: aload           var12
         //    59: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //    64: astore          var23
-        //    66: getstatic       com/cyc/cycjava/cycl/module0745.$g5940$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //    66: getstatic       com/cyc/cycjava/cycl/$g5940$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //    69: aload           var12
         //    71: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //    76: astore          var24
-        //    78: getstatic       com/cyc/cycjava/cycl/module0745.$g5945$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //    78: getstatic       com/cyc/cycjava/cycl/$g5945$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //    81: aload           var12
         //    83: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //    88: astore          var17
-        //    90: getstatic       com/cyc/cycjava/cycl/module0745.$g5946$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //    90: getstatic       com/cyc/cycjava/cycl/$g5946$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //    93: aload           var12
         //    95: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   100: astore          var25
-        //   102: getstatic       com/cyc/cycjava/cycl/module0745.$g5947$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   102: getstatic       com/cyc/cycjava/cycl/$g5947$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   105: aload           var12
         //   107: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   112: astore          var26
-        //   114: getstatic       com/cyc/cycjava/cycl/module0745.$g5948$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   114: getstatic       com/cyc/cycjava/cycl/$g5948$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   117: aload           var12
         //   119: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   124: astore          var32
-        //   126: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   126: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   129: aload           var12
         //   131: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   136: astore          var96
-        //   138: getstatic       com/cyc/cycjava/cycl/module0745.$g5950$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   138: getstatic       com/cyc/cycjava/cycl/$g5950$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   141: aload           var12
         //   143: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   148: astore          var97
-        //   150: getstatic       com/cyc/cycjava/cycl/module0745.$g5945$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   153: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   150: getstatic       com/cyc/cycjava/cycl/$g5945$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   153: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   156: aload           var12
         //   158: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   163: getstatic       com/cyc/cycjava/cycl/module0745.$g5946$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   166: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   163: getstatic       com/cyc/cycjava/cycl/$g5946$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   166: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   169: aload           var12
         //   171: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   176: getstatic       com/cyc/cycjava/cycl/module0745.$g5947$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   179: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   176: getstatic       com/cyc/cycjava/cycl/$g5947$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   179: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   182: aload           var12
         //   184: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   189: getstatic       com/cyc/cycjava/cycl/module0745.$g5948$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   192: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   189: getstatic       com/cyc/cycjava/cycl/$g5948$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   192: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   195: aload           var12
         //   197: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   202: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   205: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   202: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   205: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   208: aload           var12
         //   210: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   215: getstatic       com/cyc/cycjava/cycl/module0745.$g5950$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   218: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   215: getstatic       com/cyc/cycjava/cycl/$g5950$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   218: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   221: aload           var12
         //   223: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   228: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   228: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   231: astore          var98
         //   233: aload           var89
-        //   235: getstatic       com/cyc/cycjava/cycl/module0745.$ic88$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   235: getstatic       com/cyc/cycjava/cycl/$ic88$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   238: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/compatibility.open_text:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   241: astore          var98
         //   243: aload           var98
         //   245: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isStream:()Z
         //   250: ifne            262
-        //   253: getstatic       com/cyc/cycjava/cycl/module0745.$ic51$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //   253: getstatic       com/cyc/cycjava/cycl/$ic51$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //   256: aload           var89
         //   258: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.error:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   261: pop            
         //   262: aload           var98
         //   264: astore          var99
-        //   266: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   266: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   269: astore          var100_101
         //   271: getstatic       com/cyc/tool/subl/jrtl/translatedCode/sublisp/stream_macros.$stream_requires_locking$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   274: aload           var12
         //   276: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   281: astore          var17_102
         //   283: getstatic       com/cyc/tool/subl/jrtl/translatedCode/sublisp/stream_macros.$stream_requires_locking$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   286: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   286: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   289: aload           var12
         //   291: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //   296: aload_3         
-        //   297: getstatic       com/cyc/cycjava/cycl/module0745.$ic88$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   297: getstatic       com/cyc/cycjava/cycl/$ic88$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   300: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/compatibility.open_binary:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   303: astore          var100_101
         //   305: getstatic       com/cyc/tool/subl/jrtl/translatedCode/sublisp/stream_macros.$stream_requires_locking$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -1093,24 +1094,24 @@ public final class module0745 extends SubLTranslatedFile
         //   337: aload           var100_101
         //   339: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isStream:()Z
         //   344: ifne            355
-        //   347: getstatic       com/cyc/cycjava/cycl/module0745.$ic51$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //   347: getstatic       com/cyc/cycjava/cycl/$ic51$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //   350: aload_3         
         //   351: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.error:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   354: pop            
         //   355: aload           var100_101
         //   357: astore          var85
-        //   359: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   359: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   362: astore          var103_104
         //   364: getstatic       com/cyc/tool/subl/jrtl/translatedCode/sublisp/stream_macros.$stream_requires_locking$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   367: aload           var12
         //   369: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   374: astore          var17_105
         //   376: getstatic       com/cyc/tool/subl/jrtl/translatedCode/sublisp/stream_macros.$stream_requires_locking$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   379: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   379: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   382: aload           var12
         //   384: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //   389: aload           var45
-        //   391: getstatic       com/cyc/cycjava/cycl/module0745.$ic88$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //   391: getstatic       com/cyc/cycjava/cycl/$ic88$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   394: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/compatibility.open_binary:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   397: astore          var103_104
         //   399: getstatic       com/cyc/tool/subl/jrtl/translatedCode/sublisp/stream_macros.$stream_requires_locking$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -1128,7 +1129,7 @@ public final class module0745 extends SubLTranslatedFile
         //   431: aload           var103_104
         //   433: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isStream:()Z
         //   438: ifne            450
-        //   441: getstatic       com/cyc/cycjava/cycl/module0745.$ic51$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //   441: getstatic       com/cyc/cycjava/cycl/$ic51$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //   444: aload           var45
         //   446: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.error:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   449: pop            
@@ -1139,7 +1140,7 @@ public final class module0745 extends SubLTranslatedFile
         //   459: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   464: astore          var17_106
         //   466: getstatic       com/cyc/cycjava/cycl/module0580.$g4361$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   469: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   469: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   472: aload           var12
         //   474: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //   479: aload           var12
@@ -1196,12 +1197,12 @@ public final class module0745 extends SubLTranslatedFile
         //   619: aload           var112
         //   621: aload           var12
         //   623: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   628: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   628: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   631: astore          var114
-        //   633: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   633: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   636: aload           var112
         //   638: if_acmpeq       702
-        //   641: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   641: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   644: aload           var112
         //   646: invokestatic    com/cyc/cycjava/cycl/module0034.f1842:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   649: if_acmpne       702
@@ -1210,7 +1211,7 @@ public final class module0745 extends SubLTranslatedFile
         //   657: astore          var114
         //   659: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.current_process:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   662: astore          var115
-        //   664: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   664: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   667: aload           var114
         //   669: if_acmpne       683
         //   672: aload           var112
@@ -1222,7 +1223,7 @@ public final class module0745 extends SubLTranslatedFile
         //   685: aload           var115
         //   687: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.eql:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //   692: ifne            702
-        //   695: getstatic       com/cyc/cycjava/cycl/module0745.$ic89$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //   695: getstatic       com/cyc/cycjava/cycl/$ic89$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //   698: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.error:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   701: pop            
         //   702: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -1230,12 +1231,12 @@ public final class module0745 extends SubLTranslatedFile
         //   707: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   712: astore          var17_116
         //   714: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   717: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //   717: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //   720: aload           var12
         //   722: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   727: invokestatic    com/cyc/cycjava/cycl/oc_assertion_manager.f11128:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //   727: invokestatic    com/cyc/cycjava/cycl/assertion_manager_oc.f11128:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   730: pop            
-        //   731: invokestatic    com/cyc/cycjava/cycl/oc_assertion_manager.f11126:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //   731: invokestatic    com/cyc/cycjava/cycl/assertion_manager_oc.f11126:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   734: pop            
         //   735: getstatic       com/cyc/cycjava/cycl/module0012.$g75$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   738: aload           var12
@@ -1254,22 +1255,22 @@ public final class module0745 extends SubLTranslatedFile
         //   776: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   781: astore          var32_120
         //   783: getstatic       com/cyc/cycjava/cycl/module0012.$g75$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   786: getstatic       com/cyc/cycjava/cycl/module0745.ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //   786: getstatic       com/cyc/cycjava/cycl/ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //   789: aload           var12
         //   791: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //   796: getstatic       com/cyc/cycjava/cycl/module0012.$g76$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   799: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   799: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   802: aload           var12
         //   804: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //   809: getstatic       com/cyc/cycjava/cycl/module0012.$g77$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   812: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //   812: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //   815: aload           var12
         //   817: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //   822: getstatic       com/cyc/cycjava/cycl/module0012.$g78$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   825: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_universal_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   828: aload           var12
         //   830: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   835: getstatic       com/cyc/cycjava/cycl/module0745.$ic90$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //   835: getstatic       com/cyc/cycjava/cycl/$ic90$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //   838: iconst_4       
         //   839: anewarray       Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   842: dup            
@@ -1279,7 +1280,7 @@ public final class module0745 extends SubLTranslatedFile
         //   848: aastore        
         //   849: dup            
         //   850: iconst_1       
-        //   851: getstatic       com/cyc/cycjava/cycl/module0745.$ic91$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //   851: getstatic       com/cyc/cycjava/cycl/$ic91$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //   854: aastore        
         //   855: dup            
         //   856: iconst_2       
@@ -1288,7 +1289,7 @@ public final class module0745 extends SubLTranslatedFile
         //   861: aastore        
         //   862: dup            
         //   863: iconst_3       
-        //   864: getstatic       com/cyc/cycjava/cycl/module0745.$ic92$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //   864: getstatic       com/cyc/cycjava/cycl/$ic92$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //   867: aastore        
         //   868: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.cconcatenate:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;[Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   871: invokestatic    com/cyc/cycjava/cycl/module0012.f478:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -1298,14 +1299,14 @@ public final class module0745 extends SubLTranslatedFile
         //   880: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   885: astore          var17_121
         //   887: getstatic       com/cyc/cycjava/cycl/module0012.$silent_progressP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   890: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //   890: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //   893: aload           var12
         //   895: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   900: getstatic       com/cyc/cycjava/cycl/module0745.$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //   900: getstatic       com/cyc/cycjava/cycl/$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //   903: astore          var122
         //   905: invokestatic    com/cyc/cycjava/cycl/module0173.f10962:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   908: astore          var123
-        //   910: getstatic       com/cyc/cycjava/cycl/module0745.ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //   910: getstatic       com/cyc/cycjava/cycl/ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //   913: astore          var124
         //   915: getstatic       com/cyc/cycjava/cycl/module0012.$g75$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   918: aload           var12
@@ -1324,15 +1325,15 @@ public final class module0745 extends SubLTranslatedFile
         //   956: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   961: astore          var32_128
         //   963: getstatic       com/cyc/cycjava/cycl/module0012.$g75$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   966: getstatic       com/cyc/cycjava/cycl/module0745.ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //   966: getstatic       com/cyc/cycjava/cycl/ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //   969: aload           var12
         //   971: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //   976: getstatic       com/cyc/cycjava/cycl/module0012.$g76$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   979: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //   979: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //   982: aload           var12
         //   984: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //   989: getstatic       com/cyc/cycjava/cycl/module0012.$g77$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //   992: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //   992: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //   995: aload           var12
         //   997: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  1002: getstatic       com/cyc/cycjava/cycl/module0012.$g78$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -1342,14 +1343,14 @@ public final class module0745 extends SubLTranslatedFile
         //  1015: aload           var122
         //  1017: invokestatic    com/cyc/cycjava/cycl/module0012.f478:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1020: pop            
-        //  1021: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1021: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1024: astore          var129
         //  1026: invokestatic    com/cyc/cycjava/cycl/module0173.f10961:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1029: astore          var129
-        //  1031: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1031: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1034: aload           var49
         //  1036: if_acmpne       4318
-        //  1039: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1039: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1042: aload           var129
         //  1044: if_acmpeq       4318
         //  1047: aload           var129
@@ -1357,52 +1358,52 @@ public final class module0745 extends SubLTranslatedFile
         //  1054: astore          var130
         //  1056: aload           var130
         //  1058: astore          var131
-        //  1060: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1060: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1063: aload           var131
-        //  1065: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  1065: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  1068: invokestatic    com/cyc/cycjava/cycl/module0065.f4772:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1071: if_acmpne       4306
         //  1074: aload           var131
         //  1076: astore          var132_133
-        //  1078: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1078: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1081: aload           var132_133
-        //  1083: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  1083: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  1086: invokestatic    com/cyc/cycjava/cycl/module0065.f4775:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1089: if_acmpne       2775
         //  1092: aload           var132_133
         //  1094: invokestatic    com/cyc/cycjava/cycl/module0065.f4740:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1097: astore          var134
-        //  1099: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1099: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1102: astore          var135
         //  1104: aload           var134
         //  1106: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.length:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1109: astore          var136
-        //  1111: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1111: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1114: aload           var135
         //  1116: if_acmpeq       1139
         //  1119: aload           var136
-        //  1121: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  1121: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  1124: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.subtract:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
-        //  1127: getstatic       com/cyc/cycjava/cycl/module0745.MINUS_ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
-        //  1130: getstatic       com/cyc/cycjava/cycl/module0745.MINUS_ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  1127: getstatic       com/cyc/cycjava/cycl/MINUS_ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  1130: getstatic       com/cyc/cycjava/cycl/MINUS_ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  1133: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.list:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  1136: goto            1150
-        //  1139: getstatic       com/cyc/cycjava/cycl/module0745.ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  1139: getstatic       com/cyc/cycjava/cycl/ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  1142: aload           var136
-        //  1144: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  1144: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  1147: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.list:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  1150: astore          var137
         //  1152: aload           var137
         //  1154: astore          var138
-        //  1156: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1156: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1159: astore          var139
-        //  1161: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1161: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1164: astore          var140
-        //  1166: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1166: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1169: astore          var141
         //  1171: aload           var138
         //  1173: aload           var137
-        //  1175: getstatic       com/cyc/cycjava/cycl/module0745.$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
+        //  1175: getstatic       com/cyc/cycjava/cycl/$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  1178: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/cdestructuring_bind.destructuring_bind_must_consp:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1181: pop            
         //  1182: aload           var138
@@ -1413,7 +1414,7 @@ public final class module0745 extends SubLTranslatedFile
         //  1198: astore          var138
         //  1200: aload           var138
         //  1202: aload           var137
-        //  1204: getstatic       com/cyc/cycjava/cycl/module0745.$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
+        //  1204: getstatic       com/cyc/cycjava/cycl/$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  1207: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/cdestructuring_bind.destructuring_bind_must_consp:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1210: pop            
         //  1211: aload           var138
@@ -1424,7 +1425,7 @@ public final class module0745 extends SubLTranslatedFile
         //  1227: astore          var138
         //  1229: aload           var138
         //  1231: aload           var137
-        //  1233: getstatic       com/cyc/cycjava/cycl/module0745.$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
+        //  1233: getstatic       com/cyc/cycjava/cycl/$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  1236: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/cdestructuring_bind.destructuring_bind_must_consp:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1239: pop            
         //  1240: aload           var138
@@ -1433,22 +1434,22 @@ public final class module0745 extends SubLTranslatedFile
         //  1249: aload           var138
         //  1251: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.rest:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1256: astore          var138
-        //  1258: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1258: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1261: aload           var138
         //  1263: if_acmpne       2766
-        //  1266: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1266: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1269: aload           var49
         //  1271: if_acmpne       2775
         //  1274: aload           var140
         //  1276: astore          var142
-        //  1278: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1278: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1281: astore          var143
         //  1283: aload           var139
         //  1285: astore          var143
-        //  1287: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1287: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1290: aload           var49
         //  1292: if_acmpne       2763
-        //  1295: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1295: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1298: aload           var143
         //  1300: aload           var141
         //  1302: aload           var142
@@ -1458,22 +1459,22 @@ public final class module0745 extends SubLTranslatedFile
         //  1312: aload           var143
         //  1314: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Vectors.aref:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1317: astore          var47
-        //  1319: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1319: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1322: aload           var47
         //  1324: invokestatic    com/cyc/cycjava/cycl/module0065.f4749:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1327: if_acmpeq       1342
-        //  1330: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  1333: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  1330: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1333: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  1336: invokestatic    com/cyc/cycjava/cycl/module0065.f4773:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1339: if_acmpne       2751
-        //  1342: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1342: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1345: aload           var47
         //  1347: invokestatic    com/cyc/cycjava/cycl/module0065.f4749:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1350: if_acmpeq       1358
-        //  1353: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  1353: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  1356: astore          var47
         //  1358: aload           var124
-        //  1360: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  1360: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  1363: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.add:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1366: astore          var124
         //  1368: aload           var124
@@ -1481,7 +1482,7 @@ public final class module0745 extends SubLTranslatedFile
         //  1372: invokestatic    com/cyc/cycjava/cycl/module0012.note_percent_progress:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1375: pop            
         //  1376: aload           var90
-        //  1378: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  1378: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  1381: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.add:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1384: astore          var90
         //  1386: getstatic       com/cyc/cycjava/cycl/module0012.$silent_progressP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -1489,7 +1490,7 @@ public final class module0745 extends SubLTranslatedFile
         //  1391: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1396: astore          var17_144
         //  1398: getstatic       com/cyc/cycjava/cycl/module0012.$silent_progressP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  1401: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1401: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1404: aload           var12
         //  1406: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  1411: aload           var90
@@ -1517,30 +1518,30 @@ public final class module0745 extends SubLTranslatedFile
         //  1463: aload_1         
         //  1464: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.numL:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //  1469: ifne            2628
-        //  1472: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1472: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1475: aload           var47
         //  1477: aload           var73
         //  1479: invokestatic    com/cyc/cycjava/cycl/module0077.f5320:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1482: if_acmpne       2628
-        //  1485: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1485: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1488: aload           var47
-        //  1490: invokestatic    com/cyc/cycjava/cycl/module0745.f46253:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  1490: invokestatic    com/cyc/cycjava/cycl/f46253:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1493: if_acmpne       2628
-        //  1496: getstatic       com/cyc/cycjava/cycl/module0745.$g5943$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  1496: getstatic       com/cyc/cycjava/cycl/$g5943$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  1499: aload           var12
         //  1501: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1506: astore          var145
-        //  1508: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1508: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1511: astore          var146
-        //  1513: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1513: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1516: astore          var147
-        //  1518: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1518: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1521: astore          var148
-        //  1523: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1523: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1526: astore          var149
-        //  1528: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1528: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1531: astore          var150
-        //  1533: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1533: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1536: astore          var151
         //  1538: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_internal_real_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1541: astore          var152
@@ -1555,17 +1556,17 @@ public final class module0745 extends SubLTranslatedFile
         //  1565: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1570: astore          var17_154
         //  1572: getstatic       com/cyc/cycjava/cycl/module0003.$g4$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  1575: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  1575: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  1578: aload           var12
         //  1580: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  1585: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1585: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1588: astore          var155
         //  1590: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  1593: aload           var12
         //  1595: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1600: astore          var17_156
         //  1602: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  1605: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  1605: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  1608: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  1611: aload           var12
         //  1613: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -1582,7 +1583,7 @@ public final class module0745 extends SubLTranslatedFile
         //  1643: aload           var47
         //  1645: aload           var23
         //  1647: aload           var24
-        //  1649: invokestatic    com/cyc/cycjava/cycl/module0745.f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  1649: invokestatic    com/cyc/cycjava/cycl/f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1652: astore          var157_158
         //  1654: aload           var12
         //  1656: invokevirtual   com/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread.secondMultipleValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -1621,7 +1622,7 @@ public final class module0745 extends SubLTranslatedFile
         //  1734: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1739: astore          var17_165
         //  1741: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  1744: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  1744: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  1747: aload           var12
         //  1749: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  1754: aload           var155
@@ -1646,7 +1647,7 @@ public final class module0745 extends SubLTranslatedFile
         //  1802: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1807: astore          var17_165
         //  1809: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  1812: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  1812: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  1815: aload           var12
         //  1817: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  1822: aload           var155
@@ -1707,17 +1708,17 @@ public final class module0745 extends SubLTranslatedFile
         //  1961: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getGlobalValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1966: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.divide:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1969: astore          var147
-        //  1971: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1971: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  1974: aload           var146
         //  1976: if_acmpeq       2445
-        //  1979: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  1982: getstatic       com/cyc/cycjava/cycl/module0745.$g5942$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  1979: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  1982: getstatic       com/cyc/cycjava/cycl/$g5942$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  1985: aload           var12
         //  1987: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  1992: if_acmpeq       2445
-        //  1995: getstatic       com/cyc/cycjava/cycl/module0745.$ic96$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  1995: getstatic       com/cyc/cycjava/cycl/$ic96$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  1998: aload           var145
-        //  2000: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2000: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2003: invokestatic    com/cyc/cycjava/cycl/module0051.f3574:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2006: aload           var47
         //  2008: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -1735,17 +1736,17 @@ public final class module0745 extends SubLTranslatedFile
         //  2039: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2044: astore          var17_166
         //  2046: getstatic       com/cyc/cycjava/cycl/module0003.$g4$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  2049: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  2049: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  2052: aload           var12
         //  2054: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  2059: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2059: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2062: astore          var155
         //  2064: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2067: aload           var12
         //  2069: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2074: astore          var17_167
         //  2076: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  2079: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  2079: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  2082: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2085: aload           var12
         //  2087: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -1762,7 +1763,7 @@ public final class module0745 extends SubLTranslatedFile
         //  2117: aload           var47
         //  2119: aload           var23
         //  2121: aload           var24
-        //  2123: invokestatic    com/cyc/cycjava/cycl/module0745.f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  2123: invokestatic    com/cyc/cycjava/cycl/f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2126: astore          var168_169
         //  2128: aload           var12
         //  2130: invokevirtual   com/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread.secondMultipleValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -1801,7 +1802,7 @@ public final class module0745 extends SubLTranslatedFile
         //  2208: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2213: astore          var17_176
         //  2215: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  2218: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  2218: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  2221: aload           var12
         //  2223: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  2228: aload           var155
@@ -1826,7 +1827,7 @@ public final class module0745 extends SubLTranslatedFile
         //  2276: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2281: astore          var17_176
         //  2283: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  2286: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  2286: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  2289: aload           var12
         //  2291: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  2296: aload           var155
@@ -1891,20 +1892,20 @@ public final class module0745 extends SubLTranslatedFile
         //  2447: aload           var92
         //  2449: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  2452: astore          var92
-        //  2454: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2454: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2457: aload           var146
         //  2459: if_acmpeq       2516
-        //  2462: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  2465: getstatic       com/cyc/cycjava/cycl/module0745.$g5941$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2462: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2465: getstatic       com/cyc/cycjava/cycl/$g5941$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2468: aload           var12
         //  2470: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2475: if_acmpeq       2484
-        //  2478: getstatic       com/cyc/cycjava/cycl/module0745.$ic97$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2478: getstatic       com/cyc/cycjava/cycl/$ic97$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2481: goto            2487
-        //  2484: getstatic       com/cyc/cycjava/cycl/module0745.$ic98$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  2487: getstatic       com/cyc/cycjava/cycl/module0745.$ic99$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  2484: getstatic       com/cyc/cycjava/cycl/$ic98$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2487: getstatic       com/cyc/cycjava/cycl/$ic99$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  2490: aload           var145
-        //  2492: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2492: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2495: invokestatic    com/cyc/cycjava/cycl/module0051.f3574:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2498: aload           var47
         //  2500: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Functions.funcall:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -1914,11 +1915,11 @@ public final class module0745 extends SubLTranslatedFile
         //  2508: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  2511: astore          var93
         //  2513: goto            2628
-        //  2516: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2516: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2519: aload           var148
         //  2521: invokestatic    com/cyc/cycjava/cycl/module0209.f13550:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2524: if_acmpne       2548
-        //  2527: getstatic       com/cyc/cycjava/cycl/module0745.$ic100$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  2527: getstatic       com/cyc/cycjava/cycl/$ic100$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  2530: aload           var47
         //  2532: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2535: pop            
@@ -1927,12 +1928,12 @@ public final class module0745 extends SubLTranslatedFile
         //  2540: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  2543: astore          var93
         //  2545: goto            2628
-        //  2548: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2548: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2551: aload           var148
-        //  2553: getstatic       com/cyc/cycjava/cycl/module0745.$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  2553: getstatic       com/cyc/cycjava/cycl/$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  2556: invokestatic    com/cyc/cycjava/cycl/module0209.f13557:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2559: if_acmpeq       2583
-        //  2562: getstatic       com/cyc/cycjava/cycl/module0745.$ic101$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  2562: getstatic       com/cyc/cycjava/cycl/$ic101$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  2565: aload           var47
         //  2567: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2570: pop            
@@ -1968,29 +1969,29 @@ public final class module0745 extends SubLTranslatedFile
         //  2632: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.mod:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2635: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isZero:()Z
         //  2640: ifeq            2735
-        //  2643: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2643: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2646: aload           var92
         //  2648: invokestatic    com/cyc/cycjava/cycl/module0035.f2013:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2651: if_acmpeq       2735
-        //  2654: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  2657: invokestatic    com/cyc/cycjava/cycl/module0745.f46255:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  2654: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2657: invokestatic    com/cyc/cycjava/cycl/f46255:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2660: pop            
         //  2661: aload           var90
         //  2663: aload           var91
         //  2665: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.integerDivide:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2668: astore          var177
-        //  2670: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2670: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2673: aload           var177
         //  2675: aload           var93
         //  2677: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.length:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2680: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.list:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
-        //  2683: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2683: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2686: aload           var12
         //  2688: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2693: invokestatic    com/cyc/cycjava/cycl/module0035.f2083:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2696: aload           var12
         //  2698: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.setDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  2703: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2703: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2706: astore          var93
         //  2708: aload           var90
         //  2710: aload           var91
@@ -1999,17 +2000,17 @@ public final class module0745 extends SubLTranslatedFile
         //  2716: aload           var92
         //  2718: aload_0         
         //  2719: aload           var99
-        //  2721: invokestatic    com/cyc/cycjava/cycl/module0745.f46256:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  2721: invokestatic    com/cyc/cycjava/cycl/f46256:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2724: pop            
         //  2725: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_universal_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2728: astore          var94
-        //  2730: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2730: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2733: astore          var92
         //  2735: aload           var90
         //  2737: aload_2         
         //  2738: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.numGE:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //  2743: ifeq            2751
-        //  2746: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  2746: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  2749: astore          var49
         //  2751: aload           var143
         //  2753: aload           var141
@@ -2018,17 +2019,17 @@ public final class module0745 extends SubLTranslatedFile
         //  2760: goto            1287
         //  2763: goto            2775
         //  2766: aload           var137
-        //  2768: getstatic       com/cyc/cycjava/cycl/module0745.$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
+        //  2768: getstatic       com/cyc/cycjava/cycl/$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  2771: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/cdestructuring_bind.cdestructuring_bind_error:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2774: pop            
         //  2775: aload           var131
         //  2777: astore          var178_179
-        //  2779: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2779: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2782: aload           var178_179
         //  2784: invokestatic    com/cyc/cycjava/cycl/module0065.f4777:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2787: if_acmpeq       2802
-        //  2790: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  2793: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2790: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2793: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2796: invokestatic    com/cyc/cycjava/cycl/module0065.f4773:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2799: if_acmpne       4306
         //  2802: aload           var178_179
@@ -2040,19 +2041,19 @@ public final class module0745 extends SubLTranslatedFile
         //  2816: aload           var178_179
         //  2818: invokestatic    com/cyc/cycjava/cycl/module0065.f4734:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2821: astore          var181
-        //  2823: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  2826: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2823: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2826: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2829: invokestatic    com/cyc/cycjava/cycl/module0065.f4773:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2832: if_acmpeq       2841
-        //  2835: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2835: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2838: goto            2844
-        //  2841: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2841: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2844: astore          var182
         //  2846: aload           var143
         //  2848: aload           var181
         //  2850: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.numL:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //  2855: ifeq            4306
-        //  2858: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2858: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2861: aload           var49
         //  2863: if_acmpne       4306
         //  2866: aload           var143
@@ -2060,16 +2061,16 @@ public final class module0745 extends SubLTranslatedFile
         //  2870: aload           var182
         //  2872: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Hashtables.gethash_without_values:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2875: astore          var47
-        //  2877: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  2880: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  2877: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2880: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  2883: invokestatic    com/cyc/cycjava/cycl/module0065.f4773:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2886: if_acmpeq       2900
-        //  2889: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2889: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2892: aload           var47
         //  2894: invokestatic    com/cyc/cycjava/cycl/module0065.f4749:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2897: if_acmpne       4293
         //  2900: aload           var124
-        //  2902: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  2902: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  2905: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.add:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2908: astore          var124
         //  2910: aload           var124
@@ -2077,7 +2078,7 @@ public final class module0745 extends SubLTranslatedFile
         //  2914: invokestatic    com/cyc/cycjava/cycl/module0012.note_percent_progress:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2917: pop            
         //  2918: aload           var90
-        //  2920: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  2920: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  2923: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.add:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2926: astore          var90
         //  2928: getstatic       com/cyc/cycjava/cycl/module0012.$silent_progressP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -2085,7 +2086,7 @@ public final class module0745 extends SubLTranslatedFile
         //  2933: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  2938: astore          var17_183
         //  2940: getstatic       com/cyc/cycjava/cycl/module0012.$silent_progressP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  2943: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  2943: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  2946: aload           var12
         //  2948: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  2953: aload           var90
@@ -2113,30 +2114,30 @@ public final class module0745 extends SubLTranslatedFile
         //  3005: aload_1         
         //  3006: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.numL:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //  3011: ifne            4170
-        //  3014: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3014: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3017: aload           var47
         //  3019: aload           var73
         //  3021: invokestatic    com/cyc/cycjava/cycl/module0077.f5320:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3024: if_acmpne       4170
-        //  3027: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3027: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3030: aload           var47
-        //  3032: invokestatic    com/cyc/cycjava/cycl/module0745.f46253:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  3032: invokestatic    com/cyc/cycjava/cycl/f46253:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3035: if_acmpne       4170
-        //  3038: getstatic       com/cyc/cycjava/cycl/module0745.$g5943$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  3038: getstatic       com/cyc/cycjava/cycl/$g5943$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  3041: aload           var12
         //  3043: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3048: astore          var145
-        //  3050: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3050: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3053: astore          var146
-        //  3055: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3055: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3058: astore          var147
-        //  3060: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3060: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3063: astore          var148
-        //  3065: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3065: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3068: astore          var149
-        //  3070: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3070: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3073: astore          var150
-        //  3075: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3075: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3078: astore          var151
         //  3080: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_internal_real_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3083: astore          var152
@@ -2151,17 +2152,17 @@ public final class module0745 extends SubLTranslatedFile
         //  3107: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3112: astore          var17_184
         //  3114: getstatic       com/cyc/cycjava/cycl/module0003.$g4$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  3117: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  3117: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  3120: aload           var12
         //  3122: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  3127: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3127: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3130: astore          var155
         //  3132: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  3135: aload           var12
         //  3137: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3142: astore          var17_185
         //  3144: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  3147: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  3147: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  3150: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  3153: aload           var12
         //  3155: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -2178,7 +2179,7 @@ public final class module0745 extends SubLTranslatedFile
         //  3185: aload           var47
         //  3187: aload           var23
         //  3189: aload           var24
-        //  3191: invokestatic    com/cyc/cycjava/cycl/module0745.f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  3191: invokestatic    com/cyc/cycjava/cycl/f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3194: astore          var186_187
         //  3196: aload           var12
         //  3198: invokevirtual   com/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread.secondMultipleValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -2217,7 +2218,7 @@ public final class module0745 extends SubLTranslatedFile
         //  3276: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3281: astore          var17_194
         //  3283: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  3286: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  3286: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  3289: aload           var12
         //  3291: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  3296: aload           var155
@@ -2242,7 +2243,7 @@ public final class module0745 extends SubLTranslatedFile
         //  3344: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3349: astore          var17_194
         //  3351: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  3354: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  3354: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  3357: aload           var12
         //  3359: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  3364: aload           var155
@@ -2303,17 +2304,17 @@ public final class module0745 extends SubLTranslatedFile
         //  3503: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getGlobalValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3508: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.divide:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3511: astore          var147
-        //  3513: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3513: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3516: aload           var146
         //  3518: if_acmpeq       3987
-        //  3521: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  3524: getstatic       com/cyc/cycjava/cycl/module0745.$g5942$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  3521: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3524: getstatic       com/cyc/cycjava/cycl/$g5942$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  3527: aload           var12
         //  3529: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3534: if_acmpeq       3987
-        //  3537: getstatic       com/cyc/cycjava/cycl/module0745.$ic96$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  3537: getstatic       com/cyc/cycjava/cycl/$ic96$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  3540: aload           var145
-        //  3542: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  3542: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  3545: invokestatic    com/cyc/cycjava/cycl/module0051.f3574:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3548: aload           var47
         //  3550: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -2331,17 +2332,17 @@ public final class module0745 extends SubLTranslatedFile
         //  3581: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3586: astore          var17_195
         //  3588: getstatic       com/cyc/cycjava/cycl/module0003.$g4$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  3591: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  3591: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  3594: aload           var12
         //  3596: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  3601: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3601: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3604: astore          var155
         //  3606: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  3609: aload           var12
         //  3611: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3616: astore          var17_196
         //  3618: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  3621: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  3621: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  3624: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  3627: aload           var12
         //  3629: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -2358,7 +2359,7 @@ public final class module0745 extends SubLTranslatedFile
         //  3659: aload           var47
         //  3661: aload           var23
         //  3663: aload           var24
-        //  3665: invokestatic    com/cyc/cycjava/cycl/module0745.f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  3665: invokestatic    com/cyc/cycjava/cycl/f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3668: astore          var197_198
         //  3670: aload           var12
         //  3672: invokevirtual   com/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread.secondMultipleValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -2397,7 +2398,7 @@ public final class module0745 extends SubLTranslatedFile
         //  3750: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3755: astore          var17_205
         //  3757: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  3760: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  3760: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  3763: aload           var12
         //  3765: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  3770: aload           var155
@@ -2422,7 +2423,7 @@ public final class module0745 extends SubLTranslatedFile
         //  3818: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  3823: astore          var17_205
         //  3825: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  3828: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  3828: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  3831: aload           var12
         //  3833: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  3838: aload           var155
@@ -2487,20 +2488,20 @@ public final class module0745 extends SubLTranslatedFile
         //  3989: aload           var92
         //  3991: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  3994: astore          var92
-        //  3996: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  3996: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  3999: aload           var146
         //  4001: if_acmpeq       4058
-        //  4004: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  4007: getstatic       com/cyc/cycjava/cycl/module0745.$g5941$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  4004: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4007: getstatic       com/cyc/cycjava/cycl/$g5941$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  4010: aload           var12
         //  4012: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4017: if_acmpeq       4026
-        //  4020: getstatic       com/cyc/cycjava/cycl/module0745.$ic97$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  4020: getstatic       com/cyc/cycjava/cycl/$ic97$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  4023: goto            4029
-        //  4026: getstatic       com/cyc/cycjava/cycl/module0745.$ic98$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  4029: getstatic       com/cyc/cycjava/cycl/module0745.$ic99$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  4026: getstatic       com/cyc/cycjava/cycl/$ic98$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  4029: getstatic       com/cyc/cycjava/cycl/$ic99$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  4032: aload           var145
-        //  4034: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  4034: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  4037: invokestatic    com/cyc/cycjava/cycl/module0051.f3574:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4040: aload           var47
         //  4042: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Functions.funcall:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -2510,11 +2511,11 @@ public final class module0745 extends SubLTranslatedFile
         //  4050: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  4053: astore          var93
         //  4055: goto            4170
-        //  4058: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4058: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4061: aload           var148
         //  4063: invokestatic    com/cyc/cycjava/cycl/module0209.f13550:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4066: if_acmpne       4090
-        //  4069: getstatic       com/cyc/cycjava/cycl/module0745.$ic100$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  4069: getstatic       com/cyc/cycjava/cycl/$ic100$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  4072: aload           var47
         //  4074: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4077: pop            
@@ -2523,12 +2524,12 @@ public final class module0745 extends SubLTranslatedFile
         //  4082: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  4085: astore          var93
         //  4087: goto            4170
-        //  4090: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4090: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4093: aload           var148
-        //  4095: getstatic       com/cyc/cycjava/cycl/module0745.$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  4095: getstatic       com/cyc/cycjava/cycl/$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  4098: invokestatic    com/cyc/cycjava/cycl/module0209.f13557:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4101: if_acmpeq       4125
-        //  4104: getstatic       com/cyc/cycjava/cycl/module0745.$ic101$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  4104: getstatic       com/cyc/cycjava/cycl/$ic101$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  4107: aload           var47
         //  4109: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4112: pop            
@@ -2564,29 +2565,29 @@ public final class module0745 extends SubLTranslatedFile
         //  4174: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.mod:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4177: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isZero:()Z
         //  4182: ifeq            4277
-        //  4185: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4185: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4188: aload           var92
         //  4190: invokestatic    com/cyc/cycjava/cycl/module0035.f2013:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4193: if_acmpeq       4277
-        //  4196: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  4199: invokestatic    com/cyc/cycjava/cycl/module0745.f46255:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  4196: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  4199: invokestatic    com/cyc/cycjava/cycl/f46255:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4202: pop            
         //  4203: aload           var90
         //  4205: aload           var91
         //  4207: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.integerDivide:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4210: astore          var177
-        //  4212: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  4212: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  4215: aload           var177
         //  4217: aload           var93
         //  4219: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.length:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4222: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.list:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
-        //  4225: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  4225: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  4228: aload           var12
         //  4230: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4235: invokestatic    com/cyc/cycjava/cycl/module0035.f2083:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4238: aload           var12
         //  4240: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.setDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  4245: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4245: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4248: astore          var93
         //  4250: aload           var90
         //  4252: aload           var91
@@ -2595,20 +2596,20 @@ public final class module0745 extends SubLTranslatedFile
         //  4258: aload           var92
         //  4260: aload_0         
         //  4261: aload           var99
-        //  4263: invokestatic    com/cyc/cycjava/cycl/module0745.f46256:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  4263: invokestatic    com/cyc/cycjava/cycl/f46256:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4266: pop            
         //  4267: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_universal_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4270: astore          var94
-        //  4272: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4272: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4275: astore          var92
         //  4277: aload           var90
         //  4279: aload_2         
         //  4280: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.numGE:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //  4285: ifeq            4293
-        //  4288: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  4288: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  4291: astore          var49
         //  4293: aload           var143
-        //  4295: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  4295: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  4298: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.add:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4301: astore          var143
         //  4303: goto            2846
@@ -2704,23 +2705,23 @@ public final class module0745 extends SubLTranslatedFile
         //  4558: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  4563: aload           113
         //  4565: athrow         
-        //  4566: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4566: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4569: aload           var49
         //  4571: if_acmpeq       4588
         //  4574: aload_0         
-        //  4575: getstatic       com/cyc/cycjava/cycl/module0745.$ic81$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  4575: getstatic       com/cyc/cycjava/cycl/$ic81$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  4578: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.cconcatenate:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
-        //  4581: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4581: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4584: invokestatic    com/cyc/cycjava/cycl/module0075.f5237:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4587: pop            
-        //  4588: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4588: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4591: aload           var112
         //  4593: if_acmpeq       4613
-        //  4596: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4596: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4599: aload           var114
         //  4601: if_acmpne       4613
         //  4604: aload           var112
-        //  4606: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4606: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4609: invokestatic    com/cyc/cycjava/cycl/module0034.f1873:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4612: pop            
         //  4613: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -2742,12 +2743,12 @@ public final class module0745 extends SubLTranslatedFile
         //  4655: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4660: astore          var17_116
         //  4662: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  4665: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  4665: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  4668: aload           var12
         //  4670: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  4675: invokestatic    com/cyc/cycjava/cycl/oc_assertion_manager.f11128:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  4675: invokestatic    com/cyc/cycjava/cycl/assertion_manager_oc.f11128:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4678: pop            
-        //  4679: invokestatic    com/cyc/cycjava/cycl/oc_assertion_manager.f11126:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  4679: invokestatic    com/cyc/cycjava/cycl/assertion_manager_oc.f11126:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4682: pop            
         //  4683: getstatic       com/cyc/cycjava/cycl/module0012.$g75$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  4686: aload           var12
@@ -2766,22 +2767,22 @@ public final class module0745 extends SubLTranslatedFile
         //  4724: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4729: astore          var32_120
         //  4731: getstatic       com/cyc/cycjava/cycl/module0012.$g75$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  4734: getstatic       com/cyc/cycjava/cycl/module0745.ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  4734: getstatic       com/cyc/cycjava/cycl/ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  4737: aload           var12
         //  4739: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  4744: getstatic       com/cyc/cycjava/cycl/module0012.$g76$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  4747: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4747: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4750: aload           var12
         //  4752: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  4757: getstatic       com/cyc/cycjava/cycl/module0012.$g77$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  4760: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  4760: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  4763: aload           var12
         //  4765: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  4770: getstatic       com/cyc/cycjava/cycl/module0012.$g78$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  4773: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_universal_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4776: aload           var12
         //  4778: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  4783: getstatic       com/cyc/cycjava/cycl/module0745.$ic90$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  4783: getstatic       com/cyc/cycjava/cycl/$ic90$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  4786: iconst_4       
         //  4787: anewarray       Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4790: dup            
@@ -2791,7 +2792,7 @@ public final class module0745 extends SubLTranslatedFile
         //  4796: aastore        
         //  4797: dup            
         //  4798: iconst_1       
-        //  4799: getstatic       com/cyc/cycjava/cycl/module0745.$ic91$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  4799: getstatic       com/cyc/cycjava/cycl/$ic91$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  4802: aastore        
         //  4803: dup            
         //  4804: iconst_2       
@@ -2800,7 +2801,7 @@ public final class module0745 extends SubLTranslatedFile
         //  4809: aastore        
         //  4810: dup            
         //  4811: iconst_3       
-        //  4812: getstatic       com/cyc/cycjava/cycl/module0745.$ic92$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  4812: getstatic       com/cyc/cycjava/cycl/$ic92$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  4815: aastore        
         //  4816: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.cconcatenate:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;[Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4819: invokestatic    com/cyc/cycjava/cycl/module0012.f478:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -2810,14 +2811,14 @@ public final class module0745 extends SubLTranslatedFile
         //  4828: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4833: astore          var17_121
         //  4835: getstatic       com/cyc/cycjava/cycl/module0012.$silent_progressP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  4838: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  4838: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  4841: aload           var12
         //  4843: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  4848: getstatic       com/cyc/cycjava/cycl/module0745.$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  4848: getstatic       com/cyc/cycjava/cycl/$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  4851: astore          var122
         //  4853: invokestatic    com/cyc/cycjava/cycl/module0173.f10962:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4856: astore          var123
-        //  4858: getstatic       com/cyc/cycjava/cycl/module0745.ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  4858: getstatic       com/cyc/cycjava/cycl/ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  4861: astore          var124
         //  4863: getstatic       com/cyc/cycjava/cycl/module0012.$g75$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  4866: aload           var12
@@ -2836,15 +2837,15 @@ public final class module0745 extends SubLTranslatedFile
         //  4904: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4909: astore          var32_128
         //  4911: getstatic       com/cyc/cycjava/cycl/module0012.$g75$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  4914: getstatic       com/cyc/cycjava/cycl/module0745.ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  4914: getstatic       com/cyc/cycjava/cycl/ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  4917: aload           var12
         //  4919: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  4924: getstatic       com/cyc/cycjava/cycl/module0012.$g76$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  4927: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4927: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4930: aload           var12
         //  4932: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  4937: getstatic       com/cyc/cycjava/cycl/module0012.$g77$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  4940: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  4940: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  4943: aload           var12
         //  4945: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  4950: getstatic       com/cyc/cycjava/cycl/module0012.$g78$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -2854,14 +2855,14 @@ public final class module0745 extends SubLTranslatedFile
         //  4963: aload           var122
         //  4965: invokestatic    com/cyc/cycjava/cycl/module0012.f478:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4968: pop            
-        //  4969: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4969: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4972: astore          var129
         //  4974: invokestatic    com/cyc/cycjava/cycl/module0173.f10961:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4977: astore          var129
-        //  4979: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4979: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4982: aload           var49
         //  4984: if_acmpne       8266
-        //  4987: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  4987: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  4990: aload           var129
         //  4992: if_acmpeq       8266
         //  4995: aload           var129
@@ -2869,52 +2870,52 @@ public final class module0745 extends SubLTranslatedFile
         //  5002: astore          var130
         //  5004: aload           var130
         //  5006: astore          var131
-        //  5008: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5008: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5011: aload           var131
-        //  5013: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  5013: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  5016: invokestatic    com/cyc/cycjava/cycl/module0065.f4772:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5019: if_acmpne       8254
         //  5022: aload           var131
         //  5024: astore          var132_133
-        //  5026: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5026: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5029: aload           var132_133
-        //  5031: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  5031: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  5034: invokestatic    com/cyc/cycjava/cycl/module0065.f4775:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5037: if_acmpne       6723
         //  5040: aload           var132_133
         //  5042: invokestatic    com/cyc/cycjava/cycl/module0065.f4740:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5045: astore          var134
-        //  5047: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5047: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5050: astore          var135
         //  5052: aload           var134
         //  5054: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.length:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5057: astore          var136
-        //  5059: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5059: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5062: aload           var135
         //  5064: if_acmpeq       5087
         //  5067: aload           var136
-        //  5069: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  5069: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  5072: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.subtract:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
-        //  5075: getstatic       com/cyc/cycjava/cycl/module0745.MINUS_ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
-        //  5078: getstatic       com/cyc/cycjava/cycl/module0745.MINUS_ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  5075: getstatic       com/cyc/cycjava/cycl/MINUS_ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  5078: getstatic       com/cyc/cycjava/cycl/MINUS_ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  5081: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.list:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  5084: goto            5098
-        //  5087: getstatic       com/cyc/cycjava/cycl/module0745.ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  5087: getstatic       com/cyc/cycjava/cycl/ZERO_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  5090: aload           var136
-        //  5092: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  5092: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  5095: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.list:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  5098: astore          var137
         //  5100: aload           var137
         //  5102: astore          var138
-        //  5104: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5104: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5107: astore          var139
-        //  5109: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5109: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5112: astore          var140
-        //  5114: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5114: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5117: astore          var141
         //  5119: aload           var138
         //  5121: aload           var137
-        //  5123: getstatic       com/cyc/cycjava/cycl/module0745.$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
+        //  5123: getstatic       com/cyc/cycjava/cycl/$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  5126: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/cdestructuring_bind.destructuring_bind_must_consp:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5129: pop            
         //  5130: aload           var138
@@ -2925,7 +2926,7 @@ public final class module0745 extends SubLTranslatedFile
         //  5146: astore          var138
         //  5148: aload           var138
         //  5150: aload           var137
-        //  5152: getstatic       com/cyc/cycjava/cycl/module0745.$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
+        //  5152: getstatic       com/cyc/cycjava/cycl/$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  5155: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/cdestructuring_bind.destructuring_bind_must_consp:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5158: pop            
         //  5159: aload           var138
@@ -2936,7 +2937,7 @@ public final class module0745 extends SubLTranslatedFile
         //  5175: astore          var138
         //  5177: aload           var138
         //  5179: aload           var137
-        //  5181: getstatic       com/cyc/cycjava/cycl/module0745.$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
+        //  5181: getstatic       com/cyc/cycjava/cycl/$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  5184: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/cdestructuring_bind.destructuring_bind_must_consp:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5187: pop            
         //  5188: aload           var138
@@ -2945,22 +2946,22 @@ public final class module0745 extends SubLTranslatedFile
         //  5197: aload           var138
         //  5199: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.rest:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5204: astore          var138
-        //  5206: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5206: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5209: aload           var138
         //  5211: if_acmpne       6714
-        //  5214: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5214: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5217: aload           var49
         //  5219: if_acmpne       6723
         //  5222: aload           var140
         //  5224: astore          var142
-        //  5226: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5226: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5229: astore          var143
         //  5231: aload           var139
         //  5233: astore          var143
-        //  5235: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5235: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5238: aload           var49
         //  5240: if_acmpne       6711
-        //  5243: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5243: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5246: aload           var143
         //  5248: aload           var141
         //  5250: aload           var142
@@ -2970,22 +2971,22 @@ public final class module0745 extends SubLTranslatedFile
         //  5260: aload           var143
         //  5262: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Vectors.aref:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5265: astore          var47
-        //  5267: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5267: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5270: aload           var47
         //  5272: invokestatic    com/cyc/cycjava/cycl/module0065.f4749:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5275: if_acmpeq       5290
-        //  5278: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  5281: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  5278: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5281: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  5284: invokestatic    com/cyc/cycjava/cycl/module0065.f4773:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5287: if_acmpne       6699
-        //  5290: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5290: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5293: aload           var47
         //  5295: invokestatic    com/cyc/cycjava/cycl/module0065.f4749:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5298: if_acmpeq       5306
-        //  5301: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  5301: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  5304: astore          var47
         //  5306: aload           var124
-        //  5308: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  5308: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  5311: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.add:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5314: astore          var124
         //  5316: aload           var124
@@ -2993,7 +2994,7 @@ public final class module0745 extends SubLTranslatedFile
         //  5320: invokestatic    com/cyc/cycjava/cycl/module0012.note_percent_progress:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5323: pop            
         //  5324: aload           var90
-        //  5326: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  5326: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  5329: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.add:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5332: astore          var90
         //  5334: getstatic       com/cyc/cycjava/cycl/module0012.$silent_progressP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -3001,7 +3002,7 @@ public final class module0745 extends SubLTranslatedFile
         //  5339: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5344: astore          var17_144
         //  5346: getstatic       com/cyc/cycjava/cycl/module0012.$silent_progressP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  5349: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5349: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5352: aload           var12
         //  5354: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  5359: aload           var90
@@ -3029,30 +3030,30 @@ public final class module0745 extends SubLTranslatedFile
         //  5411: aload_1         
         //  5412: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.numL:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //  5417: ifne            6576
-        //  5420: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5420: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5423: aload           var47
         //  5425: aload           var73
         //  5427: invokestatic    com/cyc/cycjava/cycl/module0077.f5320:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5430: if_acmpne       6576
-        //  5433: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5433: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5436: aload           var47
-        //  5438: invokestatic    com/cyc/cycjava/cycl/module0745.f46253:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  5438: invokestatic    com/cyc/cycjava/cycl/f46253:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5441: if_acmpne       6576
-        //  5444: getstatic       com/cyc/cycjava/cycl/module0745.$g5943$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  5444: getstatic       com/cyc/cycjava/cycl/$g5943$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  5447: aload           var12
         //  5449: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5454: astore          var145
-        //  5456: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5456: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5459: astore          var146
-        //  5461: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5461: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5464: astore          var147
-        //  5466: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5466: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5469: astore          var148
-        //  5471: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5471: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5474: astore          var149
-        //  5476: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5476: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5479: astore          var150
-        //  5481: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5481: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5484: astore          var151
         //  5486: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_internal_real_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5489: astore          var152
@@ -3067,17 +3068,17 @@ public final class module0745 extends SubLTranslatedFile
         //  5513: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5518: astore          var17_154
         //  5520: getstatic       com/cyc/cycjava/cycl/module0003.$g4$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  5523: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  5523: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  5526: aload           var12
         //  5528: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  5533: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5533: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5536: astore          var155
         //  5538: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  5541: aload           var12
         //  5543: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5548: astore          var17_156
         //  5550: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  5553: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  5553: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  5556: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  5559: aload           var12
         //  5561: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3094,7 +3095,7 @@ public final class module0745 extends SubLTranslatedFile
         //  5591: aload           var47
         //  5593: aload           var23
         //  5595: aload           var24
-        //  5597: invokestatic    com/cyc/cycjava/cycl/module0745.f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  5597: invokestatic    com/cyc/cycjava/cycl/f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5600: astore          var157_158
         //  5602: aload           var12
         //  5604: invokevirtual   com/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread.secondMultipleValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3133,7 +3134,7 @@ public final class module0745 extends SubLTranslatedFile
         //  5682: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5687: astore          var17_165
         //  5689: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  5692: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  5692: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  5695: aload           var12
         //  5697: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  5702: aload           var155
@@ -3158,7 +3159,7 @@ public final class module0745 extends SubLTranslatedFile
         //  5750: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5755: astore          var17_165
         //  5757: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  5760: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  5760: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  5763: aload           var12
         //  5765: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  5770: aload           var155
@@ -3219,17 +3220,17 @@ public final class module0745 extends SubLTranslatedFile
         //  5909: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getGlobalValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5914: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.divide:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5917: astore          var147
-        //  5919: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5919: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  5922: aload           var146
         //  5924: if_acmpeq       6393
-        //  5927: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  5930: getstatic       com/cyc/cycjava/cycl/module0745.$g5942$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  5927: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  5930: getstatic       com/cyc/cycjava/cycl/$g5942$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  5933: aload           var12
         //  5935: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5940: if_acmpeq       6393
-        //  5943: getstatic       com/cyc/cycjava/cycl/module0745.$ic96$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  5943: getstatic       com/cyc/cycjava/cycl/$ic96$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  5946: aload           var145
-        //  5948: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  5948: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  5951: invokestatic    com/cyc/cycjava/cycl/module0051.f3574:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5954: aload           var47
         //  5956: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3247,17 +3248,17 @@ public final class module0745 extends SubLTranslatedFile
         //  5987: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  5992: astore          var17_166
         //  5994: getstatic       com/cyc/cycjava/cycl/module0003.$g4$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  5997: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  5997: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  6000: aload           var12
         //  6002: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  6007: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6007: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6010: astore          var155
         //  6012: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6015: aload           var12
         //  6017: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6022: astore          var17_167
         //  6024: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  6027: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  6027: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  6030: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6033: aload           var12
         //  6035: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3274,7 +3275,7 @@ public final class module0745 extends SubLTranslatedFile
         //  6065: aload           var47
         //  6067: aload           var23
         //  6069: aload           var24
-        //  6071: invokestatic    com/cyc/cycjava/cycl/module0745.f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  6071: invokestatic    com/cyc/cycjava/cycl/f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6074: astore          var168_169
         //  6076: aload           var12
         //  6078: invokevirtual   com/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread.secondMultipleValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3313,7 +3314,7 @@ public final class module0745 extends SubLTranslatedFile
         //  6156: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6161: astore          var17_176
         //  6163: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  6166: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  6166: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  6169: aload           var12
         //  6171: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  6176: aload           var155
@@ -3338,7 +3339,7 @@ public final class module0745 extends SubLTranslatedFile
         //  6224: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6229: astore          var17_176
         //  6231: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  6234: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  6234: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  6237: aload           var12
         //  6239: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  6244: aload           var155
@@ -3403,20 +3404,20 @@ public final class module0745 extends SubLTranslatedFile
         //  6395: aload           var92
         //  6397: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  6400: astore          var92
-        //  6402: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6402: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6405: aload           var146
         //  6407: if_acmpeq       6464
-        //  6410: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  6413: getstatic       com/cyc/cycjava/cycl/module0745.$g5941$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6410: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6413: getstatic       com/cyc/cycjava/cycl/$g5941$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6416: aload           var12
         //  6418: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6423: if_acmpeq       6432
-        //  6426: getstatic       com/cyc/cycjava/cycl/module0745.$ic97$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6426: getstatic       com/cyc/cycjava/cycl/$ic97$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6429: goto            6435
-        //  6432: getstatic       com/cyc/cycjava/cycl/module0745.$ic98$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  6435: getstatic       com/cyc/cycjava/cycl/module0745.$ic99$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  6432: getstatic       com/cyc/cycjava/cycl/$ic98$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6435: getstatic       com/cyc/cycjava/cycl/$ic99$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  6438: aload           var145
-        //  6440: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6440: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6443: invokestatic    com/cyc/cycjava/cycl/module0051.f3574:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6446: aload           var47
         //  6448: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Functions.funcall:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3426,11 +3427,11 @@ public final class module0745 extends SubLTranslatedFile
         //  6456: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  6459: astore          var93
         //  6461: goto            6576
-        //  6464: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6464: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6467: aload           var148
         //  6469: invokestatic    com/cyc/cycjava/cycl/module0209.f13550:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6472: if_acmpne       6496
-        //  6475: getstatic       com/cyc/cycjava/cycl/module0745.$ic100$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  6475: getstatic       com/cyc/cycjava/cycl/$ic100$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  6478: aload           var47
         //  6480: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6483: pop            
@@ -3439,12 +3440,12 @@ public final class module0745 extends SubLTranslatedFile
         //  6488: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  6491: astore          var93
         //  6493: goto            6576
-        //  6496: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6496: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6499: aload           var148
-        //  6501: getstatic       com/cyc/cycjava/cycl/module0745.$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  6501: getstatic       com/cyc/cycjava/cycl/$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  6504: invokestatic    com/cyc/cycjava/cycl/module0209.f13557:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6507: if_acmpeq       6531
-        //  6510: getstatic       com/cyc/cycjava/cycl/module0745.$ic101$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  6510: getstatic       com/cyc/cycjava/cycl/$ic101$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  6513: aload           var47
         //  6515: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6518: pop            
@@ -3480,29 +3481,29 @@ public final class module0745 extends SubLTranslatedFile
         //  6580: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.mod:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6583: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isZero:()Z
         //  6588: ifeq            6683
-        //  6591: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6591: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6594: aload           var92
         //  6596: invokestatic    com/cyc/cycjava/cycl/module0035.f2013:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6599: if_acmpeq       6683
-        //  6602: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  6605: invokestatic    com/cyc/cycjava/cycl/module0745.f46255:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  6602: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6605: invokestatic    com/cyc/cycjava/cycl/f46255:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6608: pop            
         //  6609: aload           var90
         //  6611: aload           var91
         //  6613: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.integerDivide:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6616: astore          var177
-        //  6618: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6618: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6621: aload           var177
         //  6623: aload           var93
         //  6625: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.length:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6628: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.list:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
-        //  6631: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6631: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6634: aload           var12
         //  6636: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6641: invokestatic    com/cyc/cycjava/cycl/module0035.f2083:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6644: aload           var12
         //  6646: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.setDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  6651: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6651: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6654: astore          var93
         //  6656: aload           var90
         //  6658: aload           var91
@@ -3511,17 +3512,17 @@ public final class module0745 extends SubLTranslatedFile
         //  6664: aload           var92
         //  6666: aload_0         
         //  6667: aload           var99
-        //  6669: invokestatic    com/cyc/cycjava/cycl/module0745.f46256:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  6669: invokestatic    com/cyc/cycjava/cycl/f46256:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6672: pop            
         //  6673: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_universal_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6676: astore          var94
-        //  6678: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6678: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6681: astore          var92
         //  6683: aload           var90
         //  6685: aload_2         
         //  6686: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.numGE:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //  6691: ifeq            6699
-        //  6694: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  6694: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  6697: astore          var49
         //  6699: aload           var143
         //  6701: aload           var141
@@ -3530,17 +3531,17 @@ public final class module0745 extends SubLTranslatedFile
         //  6708: goto            5235
         //  6711: goto            6723
         //  6714: aload           var137
-        //  6716: getstatic       com/cyc/cycjava/cycl/module0745.$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
+        //  6716: getstatic       com/cyc/cycjava/cycl/$ic95$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
         //  6719: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/cdestructuring_bind.cdestructuring_bind_error:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6722: pop            
         //  6723: aload           var131
         //  6725: astore          var178_179
-        //  6727: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6727: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6730: aload           var178_179
         //  6732: invokestatic    com/cyc/cycjava/cycl/module0065.f4777:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6735: if_acmpeq       6750
-        //  6738: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  6741: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6738: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6741: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6744: invokestatic    com/cyc/cycjava/cycl/module0065.f4773:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6747: if_acmpne       8254
         //  6750: aload           var178_179
@@ -3552,19 +3553,19 @@ public final class module0745 extends SubLTranslatedFile
         //  6764: aload           var178_179
         //  6766: invokestatic    com/cyc/cycjava/cycl/module0065.f4734:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6769: astore          var181
-        //  6771: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  6774: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6771: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6774: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6777: invokestatic    com/cyc/cycjava/cycl/module0065.f4773:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6780: if_acmpeq       6789
-        //  6783: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6783: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6786: goto            6792
-        //  6789: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6789: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6792: astore          var182
         //  6794: aload           var143
         //  6796: aload           var181
         //  6798: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.numL:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //  6803: ifeq            8254
-        //  6806: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6806: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6809: aload           var49
         //  6811: if_acmpne       8254
         //  6814: aload           var143
@@ -3572,16 +3573,16 @@ public final class module0745 extends SubLTranslatedFile
         //  6818: aload           var182
         //  6820: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Hashtables.gethash_without_values:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6823: astore          var47
-        //  6825: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  6828: getstatic       com/cyc/cycjava/cycl/module0745.$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6825: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6828: getstatic       com/cyc/cycjava/cycl/$ic94$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6831: invokestatic    com/cyc/cycjava/cycl/module0065.f4773:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6834: if_acmpeq       6848
-        //  6837: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6837: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6840: aload           var47
         //  6842: invokestatic    com/cyc/cycjava/cycl/module0065.f4749:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6845: if_acmpne       8241
         //  6848: aload           var124
-        //  6850: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  6850: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  6853: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.add:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6856: astore          var124
         //  6858: aload           var124
@@ -3589,7 +3590,7 @@ public final class module0745 extends SubLTranslatedFile
         //  6862: invokestatic    com/cyc/cycjava/cycl/module0012.note_percent_progress:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6865: pop            
         //  6866: aload           var90
-        //  6868: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  6868: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  6871: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.add:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6874: astore          var90
         //  6876: getstatic       com/cyc/cycjava/cycl/module0012.$silent_progressP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -3597,7 +3598,7 @@ public final class module0745 extends SubLTranslatedFile
         //  6881: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6886: astore          var17_183
         //  6888: getstatic       com/cyc/cycjava/cycl/module0012.$silent_progressP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  6891: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6891: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6894: aload           var12
         //  6896: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  6901: aload           var90
@@ -3625,30 +3626,30 @@ public final class module0745 extends SubLTranslatedFile
         //  6953: aload_1         
         //  6954: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.numL:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //  6959: ifne            8118
-        //  6962: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6962: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6965: aload           var47
         //  6967: aload           var73
         //  6969: invokestatic    com/cyc/cycjava/cycl/module0077.f5320:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6972: if_acmpne       8118
-        //  6975: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6975: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  6978: aload           var47
-        //  6980: invokestatic    com/cyc/cycjava/cycl/module0745.f46253:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  6980: invokestatic    com/cyc/cycjava/cycl/f46253:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6983: if_acmpne       8118
-        //  6986: getstatic       com/cyc/cycjava/cycl/module0745.$g5943$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  6986: getstatic       com/cyc/cycjava/cycl/$g5943$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  6989: aload           var12
         //  6991: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  6996: astore          var145
-        //  6998: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  6998: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  7001: astore          var146
-        //  7003: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7003: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  7006: astore          var147
-        //  7008: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7008: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  7011: astore          var148
-        //  7013: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7013: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  7016: astore          var149
-        //  7018: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7018: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  7021: astore          var150
-        //  7023: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7023: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  7026: astore          var151
         //  7028: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_internal_real_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7031: astore          var152
@@ -3663,17 +3664,17 @@ public final class module0745 extends SubLTranslatedFile
         //  7055: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7060: astore          var17_184
         //  7062: getstatic       com/cyc/cycjava/cycl/module0003.$g4$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  7065: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  7065: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  7068: aload           var12
         //  7070: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  7075: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7075: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  7078: astore          var155
         //  7080: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  7083: aload           var12
         //  7085: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7090: astore          var17_185
         //  7092: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  7095: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  7095: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  7098: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  7101: aload           var12
         //  7103: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3690,7 +3691,7 @@ public final class module0745 extends SubLTranslatedFile
         //  7133: aload           var47
         //  7135: aload           var23
         //  7137: aload           var24
-        //  7139: invokestatic    com/cyc/cycjava/cycl/module0745.f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  7139: invokestatic    com/cyc/cycjava/cycl/f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7142: astore          var186_187
         //  7144: aload           var12
         //  7146: invokevirtual   com/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread.secondMultipleValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3729,7 +3730,7 @@ public final class module0745 extends SubLTranslatedFile
         //  7224: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7229: astore          var17_194
         //  7231: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  7234: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  7234: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  7237: aload           var12
         //  7239: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  7244: aload           var155
@@ -3754,7 +3755,7 @@ public final class module0745 extends SubLTranslatedFile
         //  7292: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7297: astore          var17_194
         //  7299: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  7302: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  7302: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  7305: aload           var12
         //  7307: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  7312: aload           var155
@@ -3815,17 +3816,17 @@ public final class module0745 extends SubLTranslatedFile
         //  7451: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getGlobalValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7456: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.divide:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7459: astore          var147
-        //  7461: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7461: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  7464: aload           var146
         //  7466: if_acmpeq       7935
-        //  7469: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  7472: getstatic       com/cyc/cycjava/cycl/module0745.$g5942$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  7469: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7472: getstatic       com/cyc/cycjava/cycl/$g5942$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  7475: aload           var12
         //  7477: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7482: if_acmpeq       7935
-        //  7485: getstatic       com/cyc/cycjava/cycl/module0745.$ic96$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  7485: getstatic       com/cyc/cycjava/cycl/$ic96$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  7488: aload           var145
-        //  7490: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  7490: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  7493: invokestatic    com/cyc/cycjava/cycl/module0051.f3574:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7496: aload           var47
         //  7498: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3843,17 +3844,17 @@ public final class module0745 extends SubLTranslatedFile
         //  7529: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7534: astore          var17_195
         //  7536: getstatic       com/cyc/cycjava/cycl/module0003.$g4$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  7539: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  7539: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  7542: aload           var12
         //  7544: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  7549: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7549: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  7552: astore          var155
         //  7554: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  7557: aload           var12
         //  7559: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7564: astore          var17_196
         //  7566: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  7569: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  7569: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  7572: getstatic       com/cyc/cycjava/cycl/module0003.$g5$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  7575: aload           var12
         //  7577: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3870,7 +3871,7 @@ public final class module0745 extends SubLTranslatedFile
         //  7607: aload           var47
         //  7609: aload           var23
         //  7611: aload           var24
-        //  7613: invokestatic    com/cyc/cycjava/cycl/module0745.f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  7613: invokestatic    com/cyc/cycjava/cycl/f46254:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7616: astore          var197_198
         //  7618: aload           var12
         //  7620: invokevirtual   com/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread.secondMultipleValue:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -3909,7 +3910,7 @@ public final class module0745 extends SubLTranslatedFile
         //  7698: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7703: astore          var17_205
         //  7705: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  7708: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  7708: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  7711: aload           var12
         //  7713: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  7718: aload           var155
@@ -3934,7 +3935,7 @@ public final class module0745 extends SubLTranslatedFile
         //  7766: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7771: astore          var17_205
         //  7773: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  7776: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  7776: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  7779: aload           var12
         //  7781: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  7786: aload           var155
@@ -3999,20 +4000,20 @@ public final class module0745 extends SubLTranslatedFile
         //  7937: aload           var92
         //  7939: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  7942: astore          var92
-        //  7944: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7944: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  7947: aload           var146
         //  7949: if_acmpeq       8006
-        //  7952: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
-        //  7955: getstatic       com/cyc/cycjava/cycl/module0745.$g5941$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  7952: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  7955: getstatic       com/cyc/cycjava/cycl/$g5941$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  7958: aload           var12
         //  7960: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7965: if_acmpeq       7974
-        //  7968: getstatic       com/cyc/cycjava/cycl/module0745.$ic97$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  7968: getstatic       com/cyc/cycjava/cycl/$ic97$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  7971: goto            7977
-        //  7974: getstatic       com/cyc/cycjava/cycl/module0745.$ic98$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  7977: getstatic       com/cyc/cycjava/cycl/module0745.$ic99$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  7974: getstatic       com/cyc/cycjava/cycl/$ic98$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  7977: getstatic       com/cyc/cycjava/cycl/$ic99$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  7980: aload           var145
-        //  7982: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  7982: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  7985: invokestatic    com/cyc/cycjava/cycl/module0051.f3574:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  7988: aload           var47
         //  7990: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Functions.funcall:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -4022,11 +4023,11 @@ public final class module0745 extends SubLTranslatedFile
         //  7998: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  8001: astore          var93
         //  8003: goto            8118
-        //  8006: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8006: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8009: aload           var148
         //  8011: invokestatic    com/cyc/cycjava/cycl/module0209.f13550:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8014: if_acmpne       8038
-        //  8017: getstatic       com/cyc/cycjava/cycl/module0745.$ic100$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  8017: getstatic       com/cyc/cycjava/cycl/$ic100$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  8020: aload           var47
         //  8022: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8025: pop            
@@ -4035,12 +4036,12 @@ public final class module0745 extends SubLTranslatedFile
         //  8030: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.cons:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;
         //  8033: astore          var93
         //  8035: goto            8118
-        //  8038: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8038: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8041: aload           var148
-        //  8043: getstatic       com/cyc/cycjava/cycl/module0745.$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  8043: getstatic       com/cyc/cycjava/cycl/$ic93$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  8046: invokestatic    com/cyc/cycjava/cycl/module0209.f13557:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8049: if_acmpeq       8073
-        //  8052: getstatic       com/cyc/cycjava/cycl/module0745.$ic101$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  8052: getstatic       com/cyc/cycjava/cycl/$ic101$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  8055: aload           var47
         //  8057: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Errors.warn:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8060: pop            
@@ -4076,29 +4077,29 @@ public final class module0745 extends SubLTranslatedFile
         //  8122: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.mod:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8125: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isZero:()Z
         //  8130: ifeq            8225
-        //  8133: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8133: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8136: aload           var92
         //  8138: invokestatic    com/cyc/cycjava/cycl/module0035.f2013:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8141: if_acmpeq       8225
-        //  8144: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  8147: invokestatic    com/cyc/cycjava/cycl/module0745.f46255:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  8144: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  8147: invokestatic    com/cyc/cycjava/cycl/f46255:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8150: pop            
         //  8151: aload           var90
         //  8153: aload           var91
         //  8155: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.integerDivide:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8158: astore          var177
-        //  8160: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  8160: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  8163: aload           var177
         //  8165: aload           var93
         //  8167: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.length:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8170: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/ConsesLow.list:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLList;
-        //  8173: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  8173: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  8176: aload           var12
         //  8178: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8183: invokestatic    com/cyc/cycjava/cycl/module0035.f2083:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8186: aload           var12
         //  8188: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.setDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  8193: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8193: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8196: astore          var93
         //  8198: aload           var90
         //  8200: aload           var91
@@ -4107,20 +4108,20 @@ public final class module0745 extends SubLTranslatedFile
         //  8206: aload           var92
         //  8208: aload_0         
         //  8209: aload           var99
-        //  8211: invokestatic    com/cyc/cycjava/cycl/module0745.f46256:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  8211: invokestatic    com/cyc/cycjava/cycl/f46256:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8214: pop            
         //  8215: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Time.get_universal_time:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8218: astore          var94
-        //  8220: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8220: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8223: astore          var92
         //  8225: aload           var90
         //  8227: aload_2         
         //  8228: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.numGE:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Z
         //  8233: ifeq            8241
-        //  8236: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  8236: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  8239: astore          var49
         //  8241: aload           var143
-        //  8243: getstatic       com/cyc/cycjava/cycl/module0745.ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
+        //  8243: getstatic       com/cyc/cycjava/cycl/ONE_INTEGER:Lcom/cyc/tool/subl/jrtl/nativeCode/type/number/SubLFixnum;
         //  8246: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Numbers.add:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8249: astore          var143
         //  8251: goto            6794
@@ -4216,23 +4217,23 @@ public final class module0745 extends SubLTranslatedFile
         //  8506: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  8511: aload           191
         //  8513: athrow         
-        //  8514: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8514: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8517: aload           var49
         //  8519: if_acmpeq       8536
         //  8522: aload_0         
-        //  8523: getstatic       com/cyc/cycjava/cycl/module0745.$ic81$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
+        //  8523: getstatic       com/cyc/cycjava/cycl/$ic81$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLString;
         //  8526: invokestatic    com/cyc/tool/subl/jrtl/nativeCode/subLisp/Sequences.cconcatenate:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
-        //  8529: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8529: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8532: invokestatic    com/cyc/cycjava/cycl/module0075.f5237:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8535: pop            
-        //  8536: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8536: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8539: aload           var112
         //  8541: if_acmpeq       8561
-        //  8544: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8544: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8547: aload           var114
         //  8549: if_acmpne       8561
         //  8552: aload           var112
-        //  8554: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8554: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8557: invokestatic    com/cyc/cycjava/cycl/module0034.f1873:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8560: pop            
         //  8561: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -4274,9 +4275,9 @@ public final class module0745 extends SubLTranslatedFile
         //  8657: aload           194
         //  8659: athrow         
         //  8660: aload           var110
-        //  8662: getstatic       com/cyc/cycjava/cycl/module0745.$ic102$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  8662: getstatic       com/cyc/cycjava/cycl/$ic102$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  8665: if_acmpne       8701
-        //  8668: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8668: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8671: getstatic       com/cyc/cycjava/cycl/module0580.$g4358$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  8674: aload           var12
         //  8676: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.getDynamicValue:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
@@ -4304,10 +4305,10 @@ public final class module0745 extends SubLTranslatedFile
         //  8738: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8743: astore          var17_206
         //  8745: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  8748: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  8748: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  8751: aload           var12
         //  8753: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  8758: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8758: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8761: aload           var108
         //  8763: if_acmpne       8780
         //  8766: getstatic       com/cyc/cycjava/cycl/module0580.$g4362$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -4334,10 +4335,10 @@ public final class module0745 extends SubLTranslatedFile
         //  8822: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8827: astore          var17_206
         //  8829: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  8832: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  8832: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  8835: aload           var12
         //  8837: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  8842: getstatic       com/cyc/cycjava/cycl/module0745.NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
+        //  8842: getstatic       com/cyc/cycjava/cycl/NIL:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLNil;
         //  8845: aload           var108
         //  8847: if_acmpne       8864
         //  8850: getstatic       com/cyc/cycjava/cycl/module0580.$g4362$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -4388,14 +4389,14 @@ public final class module0745 extends SubLTranslatedFile
         //  8968: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  8973: astore          var17_207
         //  8975: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  8978: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  8978: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  8981: aload           var12
         //  8983: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  8988: aload           var103_104
         //  8990: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isStream:()Z
         //  8995: ifeq            9007
         //  8998: aload           var103_104
-        //  9000: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9000: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9003: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/streams_high.close:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9006: pop            
         //  9007: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -4417,14 +4418,14 @@ public final class module0745 extends SubLTranslatedFile
         //  9049: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9054: astore          var17_207
         //  9056: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  9059: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  9059: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  9062: aload           var12
         //  9064: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  9069: aload           var103_104
         //  9071: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isStream:()Z
         //  9076: ifeq            9088
         //  9079: aload           var103_104
-        //  9081: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9081: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9084: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/streams_high.close:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9087: pop            
         //  9088: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -4446,14 +4447,14 @@ public final class module0745 extends SubLTranslatedFile
         //  9128: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9133: astore          var17_208
         //  9135: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  9138: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  9138: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  9141: aload           var12
         //  9143: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  9148: aload           var100_101
         //  9150: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isStream:()Z
         //  9155: ifeq            9167
         //  9158: aload           var100_101
-        //  9160: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9160: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9163: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/streams_high.close:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9166: pop            
         //  9167: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -4475,14 +4476,14 @@ public final class module0745 extends SubLTranslatedFile
         //  9209: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9214: astore          var17_208
         //  9216: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  9219: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  9219: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  9222: aload           var12
         //  9224: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  9229: aload           var100_101
         //  9231: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isStream:()Z
         //  9236: ifeq            9248
         //  9239: aload           var100_101
-        //  9241: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9241: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9244: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/streams_high.close:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9247: pop            
         //  9248: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -4504,14 +4505,14 @@ public final class module0745 extends SubLTranslatedFile
         //  9288: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9293: astore          var17_209
         //  9295: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  9298: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  9298: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  9301: aload           var12
         //  9303: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  9308: aload           var98
         //  9310: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isStream:()Z
         //  9315: ifeq            9327
         //  9318: aload           var98
-        //  9320: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9320: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9323: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/streams_high.close:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9326: pop            
         //  9327: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -4533,14 +4534,14 @@ public final class module0745 extends SubLTranslatedFile
         //  9369: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.currentBinding:(Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9374: astore          var17_209
         //  9376: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
-        //  9379: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
+        //  9379: getstatic       com/cyc/cycjava/cycl/T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  9382: aload           var12
         //  9384: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  9389: aload           var98
         //  9391: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject.isStream:()Z
         //  9396: ifeq            9408
         //  9399: aload           var98
-        //  9401: getstatic       com/cyc/cycjava/cycl/module0745.UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9401: getstatic       com/cyc/cycjava/cycl/UNPROVIDED:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9404: invokestatic    com/cyc/tool/subl/jrtl/translatedCode/sublisp/streams_high.close:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  9407: pop            
         //  9408: getstatic       com/cyc/tool/subl/jrtl/nativeCode/subLisp/Threads.$is_thread_performing_cleanupP$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
@@ -4557,53 +4558,53 @@ public final class module0745 extends SubLTranslatedFile
         //  9439: athrow         
         //  9440: aload           211
         //  9442: athrow         
-        //  9443: getstatic       com/cyc/cycjava/cycl/module0745.$g5950$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9443: getstatic       com/cyc/cycjava/cycl/$g5950$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9446: aload           var97
         //  9448: aload           var12
         //  9450: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  9455: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9455: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9458: aload           var96
         //  9460: aload           var12
         //  9462: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  9467: getstatic       com/cyc/cycjava/cycl/module0745.$g5948$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9467: getstatic       com/cyc/cycjava/cycl/$g5948$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9470: aload           var32
         //  9472: aload           var12
         //  9474: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  9479: getstatic       com/cyc/cycjava/cycl/module0745.$g5947$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9479: getstatic       com/cyc/cycjava/cycl/$g5947$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9482: aload           var26
         //  9484: aload           var12
         //  9486: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  9491: getstatic       com/cyc/cycjava/cycl/module0745.$g5946$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9491: getstatic       com/cyc/cycjava/cycl/$g5946$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9494: aload           var25
         //  9496: aload           var12
         //  9498: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  9503: getstatic       com/cyc/cycjava/cycl/module0745.$g5945$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9503: getstatic       com/cyc/cycjava/cycl/$g5945$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9506: aload           var17
         //  9508: aload           var12
         //  9510: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
         //  9515: goto            9595
         //  9518: astore          214
-        //  9520: getstatic       com/cyc/cycjava/cycl/module0745.$g5950$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9520: getstatic       com/cyc/cycjava/cycl/$g5950$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9523: aload           var97
         //  9525: aload           var12
         //  9527: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  9532: getstatic       com/cyc/cycjava/cycl/module0745.$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9532: getstatic       com/cyc/cycjava/cycl/$g5949$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9535: aload           var96
         //  9537: aload           var12
         //  9539: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  9544: getstatic       com/cyc/cycjava/cycl/module0745.$g5948$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9544: getstatic       com/cyc/cycjava/cycl/$g5948$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9547: aload           var32
         //  9549: aload           var12
         //  9551: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  9556: getstatic       com/cyc/cycjava/cycl/module0745.$g5947$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9556: getstatic       com/cyc/cycjava/cycl/$g5947$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9559: aload           var26
         //  9561: aload           var12
         //  9563: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  9568: getstatic       com/cyc/cycjava/cycl/module0745.$g5946$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9568: getstatic       com/cyc/cycjava/cycl/$g5946$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9571: aload           var25
         //  9573: aload           var12
         //  9575: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  9580: getstatic       com/cyc/cycjava/cycl/module0745.$g5945$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
+        //  9580: getstatic       com/cyc/cycjava/cycl/$g5945$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  9583: aload           var17
         //  9585: aload           var12
         //  9587: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.rebind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
@@ -4826,40 +4827,40 @@ public final class module0745 extends SubLTranslatedFile
     }
     
     public static SubLObject f46257(SubLObject var210, SubLObject var211) {
-        if (var210 == module0745.UNPROVIDED) {
-            var210 = (SubLObject)module0745.$ic103$;
+        if (var210 == UNPROVIDED) {
+            var210 = (SubLObject)$ic103$;
         }
-        if (var211 == module0745.UNPROVIDED) {
-            var211 = (SubLObject)module0745.$ic103$;
+        if (var211 == UNPROVIDED) {
+            var211 = (SubLObject)$ic103$;
         }
         final SubLThread var212 = SubLProcess.currentSubLThread();
-        SubLObject var213 = (SubLObject)module0745.ZERO_INTEGER;
-        SubLObject var214 = (SubLObject)module0745.ZERO_INTEGER;
-        module0012.$g82$.setDynamicValue(Sequences.cconcatenate((SubLObject)module0745.$ic104$, new SubLObject[] { module0006.f207(var210), module0745.$ic105$ }), var212);
+        SubLObject var213 = (SubLObject)ZERO_INTEGER;
+        SubLObject var214 = (SubLObject)ZERO_INTEGER;
+        module0012.$g82$.setDynamicValue(Sequences.cconcatenate((SubLObject)$ic104$, new SubLObject[] { module0006.f207(var210), $ic105$ }), var212);
         module0012.$g73$.setDynamicValue(Time.get_universal_time(), var212);
         module0012.$g83$.setDynamicValue(var210, var212);
-        module0012.$g84$.setDynamicValue((SubLObject)module0745.ZERO_INTEGER, var212);
+        module0012.$g84$.setDynamicValue((SubLObject)ZERO_INTEGER, var212);
         SubLObject var215 = module0012.$g75$.currentBinding(var212);
         SubLObject var216 = module0012.$g76$.currentBinding(var212);
         SubLObject var217 = module0012.$g77$.currentBinding(var212);
         SubLObject var218 = module0012.$g78$.currentBinding(var212);
         try {
-            module0012.$g75$.bind((SubLObject)module0745.ZERO_INTEGER, var212);
-            module0012.$g76$.bind((SubLObject)module0745.NIL, var212);
-            module0012.$g77$.bind((SubLObject)module0745.T, var212);
+            module0012.$g75$.bind((SubLObject)ZERO_INTEGER, var212);
+            module0012.$g76$.bind((SubLObject)NIL, var212);
+            module0012.$g77$.bind((SubLObject)T, var212);
             module0012.$g78$.bind(Time.get_universal_time(), var212);
             module0012.f478(module0012.$g82$.getDynamicValue(var212));
             SubLObject var219;
             SubLObject var220;
-            for (var219 = (SubLObject)module0745.NIL, var219 = (SubLObject)module0745.ZERO_INTEGER; var219.numL(module0012.$g83$.getDynamicValue(var212)); var219 = Numbers.add(var219, (SubLObject)module0745.ONE_INTEGER)) {
+            for (var219 = (SubLObject)NIL, var219 = (SubLObject)ZERO_INTEGER; var219.numL(module0012.$g83$.getDynamicValue(var212)); var219 = Numbers.add(var219, (SubLObject)ONE_INTEGER)) {
                 module0012.note_percent_progress(module0012.$g84$.getDynamicValue(var212), module0012.$g83$.getDynamicValue(var212));
-                module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var212), (SubLObject)module0745.ONE_INTEGER), var212);
-                var220 = constants_high_oc.f10773((SubLObject)module0745.UNPROVIDED);
-                if (module0745.NIL != f46258(var220)) {
-                    var213 = Numbers.add(var213, (SubLObject)module0745.ONE_INTEGER);
+                module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var212), (SubLObject)ONE_INTEGER), var212);
+                var220 = constants_high_oc.f10773((SubLObject)UNPROVIDED);
+                if (NIL != f46258(var220)) {
+                    var213 = Numbers.add(var213, (SubLObject)ONE_INTEGER);
                 }
                 else {
-                    Errors.warn((SubLObject)module0745.$ic106$, var220, Values.arg2(var212.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46259(var220, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED))), Values.arg2(var212.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46254(var220, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED))));
+                    Errors.warn((SubLObject)$ic106$, var220, Values.arg2(var212.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46259(var220, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED))), Values.arg2(var212.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46254(var220, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED))));
                 }
             }
             module0012.f479();
@@ -4870,31 +4871,31 @@ public final class module0745 extends SubLTranslatedFile
             module0012.$g76$.rebind(var216, var212);
             module0012.$g75$.rebind(var215, var212);
         }
-        module0012.$g82$.setDynamicValue(Sequences.cconcatenate((SubLObject)module0745.$ic104$, new SubLObject[] { module0006.f207(var211), module0745.$ic107$ }), var212);
+        module0012.$g82$.setDynamicValue(Sequences.cconcatenate((SubLObject)$ic104$, new SubLObject[] { module0006.f207(var211), $ic107$ }), var212);
         module0012.$g73$.setDynamicValue(Time.get_universal_time(), var212);
         module0012.$g83$.setDynamicValue(var211, var212);
-        module0012.$g84$.setDynamicValue((SubLObject)module0745.ZERO_INTEGER, var212);
+        module0012.$g84$.setDynamicValue((SubLObject)ZERO_INTEGER, var212);
         var215 = module0012.$g75$.currentBinding(var212);
         var216 = module0012.$g76$.currentBinding(var212);
         var217 = module0012.$g77$.currentBinding(var212);
         var218 = module0012.$g78$.currentBinding(var212);
         try {
-            module0012.$g75$.bind((SubLObject)module0745.ZERO_INTEGER, var212);
-            module0012.$g76$.bind((SubLObject)module0745.NIL, var212);
-            module0012.$g77$.bind((SubLObject)module0745.T, var212);
+            module0012.$g75$.bind((SubLObject)ZERO_INTEGER, var212);
+            module0012.$g76$.bind((SubLObject)NIL, var212);
+            module0012.$g77$.bind((SubLObject)T, var212);
             module0012.$g78$.bind(Time.get_universal_time(), var212);
             module0012.f478(module0012.$g82$.getDynamicValue(var212));
             SubLObject var219;
             SubLObject var221;
-            for (var219 = (SubLObject)module0745.NIL, var219 = (SubLObject)module0745.ZERO_INTEGER; var219.numL(module0012.$g83$.getDynamicValue(var212)); var219 = Numbers.add(var219, (SubLObject)module0745.ONE_INTEGER)) {
+            for (var219 = (SubLObject)NIL, var219 = (SubLObject)ZERO_INTEGER; var219.numL(module0012.$g83$.getDynamicValue(var212)); var219 = Numbers.add(var219, (SubLObject)ONE_INTEGER)) {
                 module0012.note_percent_progress(module0012.$g84$.getDynamicValue(var212), module0012.$g83$.getDynamicValue(var212));
-                module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var212), (SubLObject)module0745.ONE_INTEGER), var212);
-                var221 = module0172.f10923((SubLObject)module0745.UNPROVIDED);
-                if (module0745.NIL != f46258(var221)) {
-                    var214 = Numbers.add(var214, (SubLObject)module0745.ONE_INTEGER);
+                module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var212), (SubLObject)ONE_INTEGER), var212);
+                var221 = module0172.f10923((SubLObject)UNPROVIDED);
+                if (NIL != f46258(var221)) {
+                    var214 = Numbers.add(var214, (SubLObject)ONE_INTEGER);
                 }
                 else {
-                    Errors.warn((SubLObject)module0745.$ic106$, var221, Values.arg2(var212.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46259(var221, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED))), Values.arg2(var212.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46254(var221, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED))));
+                    Errors.warn((SubLObject)$ic106$, var221, Values.arg2(var212.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46259(var221, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED))), Values.arg2(var212.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46254(var221, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED))));
                 }
             }
             module0012.f479();
@@ -4905,45 +4906,45 @@ public final class module0745 extends SubLTranslatedFile
             module0012.$g76$.rebind(var216, var212);
             module0012.$g75$.rebind(var215, var212);
         }
-        PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic108$, new SubLObject[] { var213, var210, module0048.f3314(var213, var210, (SubLObject)module0745.THREE_INTEGER) });
-        PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic109$, new SubLObject[] { var214, var211, module0048.f3314(var214, var211, (SubLObject)module0745.THREE_INTEGER) });
-        return (SubLObject)SubLObjectFactory.makeBoolean(var210.eql(var213) && var211.eql(var214));
+        PrintLow.format((SubLObject)T, (SubLObject)$ic108$, new SubLObject[] { var213, var210, module0048.f3314(var213, var210, (SubLObject)THREE_INTEGER) });
+        PrintLow.format((SubLObject)T, (SubLObject)$ic109$, new SubLObject[] { var214, var211, module0048.f3314(var214, var211, (SubLObject)THREE_INTEGER) });
+        return (SubLObject)makeBoolean(var210.eql(var213) && var211.eql(var214));
     }
     
     public static SubLObject f46258(final SubLObject var47) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0745.NIL != f46253(var47) || Values.arg2(Values.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46254(var47, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED))).equal(Values.arg2(Values.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46259(var47, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED)))));
+        return (SubLObject)makeBoolean(NIL != f46253(var47) || Values.arg2(Values.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46254(var47, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED))).equal(Values.arg2(Values.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46259(var47, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)))));
     }
     
     public static SubLObject f46239() {
         final SubLThread var12 = SubLProcess.currentSubLThread();
-        SubLObject var13 = (SubLObject)module0745.ONE_INTEGER;
-        SubLObject var14 = (SubLObject)module0745.NIL;
-        final SubLObject var15 = module0745.$g5951$.getDynamicValue(var12);
-        final SubLObject var16 = module0069.f4939(Sequences.cconcatenate(var15, (SubLObject)module0745.$ic35$));
-        final SubLObject var17 = module0069.f4939(Sequences.cconcatenate(var15, (SubLObject)module0745.$ic59$));
-        SubLObject var18 = (SubLObject)module0745.NIL;
-        while (module0745.NIL == var18) {
+        SubLObject var13 = (SubLObject)ONE_INTEGER;
+        SubLObject var14 = (SubLObject)NIL;
+        final SubLObject var15 = $g5951$.getDynamicValue(var12);
+        final SubLObject var16 = module0069.f4939(Sequences.cconcatenate(var15, (SubLObject)$ic35$));
+        final SubLObject var17 = module0069.f4939(Sequences.cconcatenate(var15, (SubLObject)$ic59$));
+        SubLObject var18 = (SubLObject)NIL;
+        while (NIL == var18) {
             var12.resetMultipleValues();
             final SubLObject var19 = f46244(var15, var13, var16, var17);
             final SubLObject var20 = var12.secondMultipleValue();
             var12.resetMultipleValues();
-            final SubLObject var21 = (SubLObject)SubLObjectFactory.makeBoolean(module0745.NIL == Filesys.directory_p(var19));
-            if (module0745.NIL != var21) {
+            final SubLObject var21 = (SubLObject)makeBoolean(NIL == Filesys.directory_p(var19));
+            if (NIL != var21) {
                 var14 = var19;
-                PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic110$, var19);
-                var18 = (SubLObject)module0745.T;
+                PrintLow.format((SubLObject)T, (SubLObject)$ic110$, var19);
+                var18 = (SubLObject)T;
             }
-            else if (module0745.NIL == Filesys.probe_file(Sequences.cconcatenate(var19, (SubLObject)module0745.$ic81$))) {
-                if (module0745.NIL != f46249((SubLObject)ConsesLow.list(var19))) {
-                    PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic111$, var19);
+            else if (NIL == Filesys.probe_file(Sequences.cconcatenate(var19, (SubLObject)$ic81$))) {
+                if (NIL != f46249((SubLObject)ConsesLow.list(var19))) {
+                    PrintLow.format((SubLObject)T, (SubLObject)$ic111$, var19);
                     var14 = var19;
-                    var18 = (SubLObject)module0745.T;
+                    var18 = (SubLObject)T;
                 }
             }
-            if (module0745.NIL != var20) {
-                var18 = (SubLObject)module0745.T;
+            if (NIL != var20) {
+                var18 = (SubLObject)T;
             }
-            if (module0745.NIL == var18) {
+            if (NIL == var18) {
                 var13 = Numbers.add(var13, var17);
             }
         }
@@ -4951,25 +4952,25 @@ public final class module0745 extends SubLTranslatedFile
     }
     
     public static SubLObject f46255(SubLObject var218) {
-        if (var218 == module0745.UNPROVIDED) {
-            var218 = (SubLObject)module0745.$ic112$;
+        if (var218 == UNPROVIDED) {
+            var218 = (SubLObject)$ic112$;
         }
         final SubLThread var219 = SubLProcess.currentSubLThread();
-        if (module0745.NIL != module0067.f4852(module0580.$g4358$.getDynamicValue(var219))) {
+        if (NIL != module0067.f4852(module0580.$g4358$.getDynamicValue(var219))) {
             SubLObject var220;
-            for (var220 = module0066.f4838(module0067.f4891(module0580.$g4358$.getDynamicValue(var219))); module0745.NIL == module0066.f4841(var220); var220 = module0066.f4840(var220)) {
+            for (var220 = module0066.f4838(module0067.f4891(module0580.$g4358$.getDynamicValue(var219))); NIL == module0066.f4841(var220); var220 = module0066.f4840(var220)) {
                 var219.resetMultipleValues();
                 final SubLObject var221 = module0066.f4839(var220);
                 final SubLObject var222 = var219.secondMultipleValue();
                 var219.resetMultipleValues();
-                if (module0745.NIL != module0067.f4852(var222) && module0067.f4861(var222).numG(var218)) {
-                    Errors.warn((SubLObject)module0745.$ic113$, var221);
+                if (NIL != module0067.f4852(var222) && module0067.f4861(var222).numG(var218)) {
+                    Errors.warn((SubLObject)$ic113$, var221);
                     module0067.f4881(var222);
                 }
             }
             module0066.f4842(var220);
         }
-        else if (module0745.NIL != module0034.f1839(module0580.$g4358$.getDynamicValue(var219))) {}
+        else if (NIL != module0034.f1839(module0580.$g4358$.getDynamicValue(var219))) {}
         return module0580.$g4358$.getDynamicValue(var219);
     }
     
@@ -4977,63 +4978,63 @@ public final class module0745 extends SubLTranslatedFile
         final SubLThread var96 = SubLProcess.currentSubLThread();
         final SubLObject var97 = Numbers.integerDivide(var90, var91);
         final SubLObject var98 = Numbers.subtract(Time.get_universal_time(), var94);
-        PrintLow.format(var52, (SubLObject)module0745.$ic114$, new SubLObject[] { var97, var91, module0051.f3574(var98, (SubLObject)module0745.ZERO_INTEGER) });
-        final SubLObject var99 = Functions.apply(Symbols.symbol_function((SubLObject)module0745.$ic115$), var92);
-        PrintLow.format(var52, (SubLObject)module0745.$ic116$, var99);
-        module0745.$g5946$.setDynamicValue(module0035.f2083((SubLObject)ConsesLow.list(var97, var99), module0745.$g5946$.getDynamicValue(var96)), var96);
-        final SubLObject var100 = module0048.f3387(var92, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED);
-        PrintLow.format(var52, (SubLObject)module0745.$ic117$, var100);
-        module0745.$g5945$.setDynamicValue(module0035.f2083((SubLObject)ConsesLow.list(var97, var100), module0745.$g5945$.getDynamicValue(var96)), var96);
-        SubLObject var101 = (SubLObject)module0745.NIL;
-        if (module0745.NIL == var101) {
-            SubLObject var102 = (SubLObject)module0745.NIL;
-            var102 = (SubLObject)module0745.ONE_INTEGER;
-            while (module0745.NIL == var101) {
-                if (var91.numGE(Numbers.divide(Numbers.expt((SubLObject)module0745.TEN_INTEGER, var102), (SubLObject)module0745.TWO_INTEGER))) {
-                    final SubLObject var103 = Numbers.subtract((SubLObject)module0745.ONE_INTEGER, Numbers.expt((SubLObject)module0745.TEN_INTEGER, Numbers.minus(var102)));
-                    PrintLow.format(var52, (SubLObject)module0745.$ic118$, Numbers.multiply(var103, (SubLObject)module0745.$ic21$), module0048.f3389(var92, var103, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED));
+        PrintLow.format(var52, (SubLObject)$ic114$, new SubLObject[] { var97, var91, module0051.f3574(var98, (SubLObject)ZERO_INTEGER) });
+        final SubLObject var99 = Functions.apply(Symbols.symbol_function((SubLObject)$ic115$), var92);
+        PrintLow.format(var52, (SubLObject)$ic116$, var99);
+        $g5946$.setDynamicValue(module0035.f2083((SubLObject)ConsesLow.list(var97, var99), $g5946$.getDynamicValue(var96)), var96);
+        final SubLObject var100 = module0048.f3387(var92, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        PrintLow.format(var52, (SubLObject)$ic117$, var100);
+        $g5945$.setDynamicValue(module0035.f2083((SubLObject)ConsesLow.list(var97, var100), $g5945$.getDynamicValue(var96)), var96);
+        SubLObject var101 = (SubLObject)NIL;
+        if (NIL == var101) {
+            SubLObject var102 = (SubLObject)NIL;
+            var102 = (SubLObject)ONE_INTEGER;
+            while (NIL == var101) {
+                if (var91.numGE(Numbers.divide(Numbers.expt((SubLObject)TEN_INTEGER, var102), (SubLObject)TWO_INTEGER))) {
+                    final SubLObject var103 = Numbers.subtract((SubLObject)ONE_INTEGER, Numbers.expt((SubLObject)TEN_INTEGER, Numbers.minus(var102)));
+                    PrintLow.format(var52, (SubLObject)$ic118$, Numbers.multiply(var103, (SubLObject)$ic21$), module0048.f3389(var92, var103, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED));
                 }
                 else {
-                    var101 = (SubLObject)module0745.T;
+                    var101 = (SubLObject)T;
                 }
                 var102 = module0048.f_1X(var102);
             }
         }
-        final SubLObject var104 = oc_assertion_manager.f11129();
-        PrintLow.format(var52, (SubLObject)module0745.$ic119$, module0051.f3574(var104, (SubLObject)module0745.UNPROVIDED));
-        module0745.$g5948$.setDynamicValue(module0035.f2083((SubLObject)ConsesLow.list(var97, var104), module0745.$g5948$.getDynamicValue(var96)), var96);
-        oc_assertion_manager.f11128();
-        if (module0745.NIL != module0745.$g5944$.getDynamicValue(var96)) {
+        final SubLObject var104 = assertion_manager_oc.f11129();
+        PrintLow.format(var52, (SubLObject)$ic119$, module0051.f3574(var104, (SubLObject)UNPROVIDED));
+        $g5948$.setDynamicValue(module0035.f2083((SubLObject)ConsesLow.list(var97, var104), $g5948$.getDynamicValue(var96)), var96);
+        assertion_manager_oc.f11128();
+        if (NIL != $g5944$.getDynamicValue(var96)) {
             f46260(var91, var34);
         }
         streams_high.force_output(var52);
-        return (SubLObject)module0745.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46260(final SubLObject var91, final SubLObject var70) {
         final SubLThread var92 = SubLProcess.currentSubLThread();
-        SubLObject var93 = (SubLObject)module0745.NIL;
-        SubLObject var229_230 = (SubLObject)module0745.NIL;
-        SubLObject var94 = (SubLObject)module0745.NIL;
-        SubLObject var232_233 = (SubLObject)module0745.NIL;
-        SubLObject var95 = (SubLObject)module0745.NIL;
-        SubLObject var235_236 = (SubLObject)module0745.NIL;
-        SubLObject var96 = (SubLObject)module0745.NIL;
-        SubLObject var238_239 = (SubLObject)module0745.NIL;
-        var93 = (SubLObject)ConsesLow.list(module0745.$g5946$.getDynamicValue(var92), module0745.$g5945$.getDynamicValue(var92), module0745.$g5947$.getDynamicValue(var92), module0745.$g5950$.getDynamicValue(var92), module0745.$g5948$.getDynamicValue(var92), module0745.$g5949$.getDynamicValue(var92));
+        SubLObject var93 = (SubLObject)NIL;
+        SubLObject var229_230 = (SubLObject)NIL;
+        SubLObject var94 = (SubLObject)NIL;
+        SubLObject var232_233 = (SubLObject)NIL;
+        SubLObject var95 = (SubLObject)NIL;
+        SubLObject var235_236 = (SubLObject)NIL;
+        SubLObject var96 = (SubLObject)NIL;
+        SubLObject var238_239 = (SubLObject)NIL;
+        var93 = (SubLObject)ConsesLow.list($g5946$.getDynamicValue(var92), $g5945$.getDynamicValue(var92), $g5947$.getDynamicValue(var92), $g5950$.getDynamicValue(var92), $g5948$.getDynamicValue(var92), $g5949$.getDynamicValue(var92));
         var229_230 = var93.first();
-        var94 = (SubLObject)module0745.$ic120$;
+        var94 = (SubLObject)$ic120$;
         var232_233 = var94.first();
-        var95 = (SubLObject)module0745.$ic121$;
+        var95 = (SubLObject)$ic121$;
         var235_236 = var95.first();
-        var96 = (SubLObject)module0745.$ic122$;
+        var96 = (SubLObject)$ic122$;
         var238_239 = var96.first();
-        while (module0745.NIL != var96 || module0745.NIL != var95 || module0745.NIL != var94 || module0745.NIL != var93) {
-            if (module0745.NIL != module0035.f2002(var229_230, (SubLObject)module0745.ONE_INTEGER, (SubLObject)module0745.UNPROVIDED)) {
-                final SubLObject var97 = PrintLow.format((SubLObject)module0745.NIL, var232_233, var91);
+        while (NIL != var96 || NIL != var95 || NIL != var94 || NIL != var93) {
+            if (NIL != module0035.f2002(var229_230, (SubLObject)ONE_INTEGER, (SubLObject)UNPROVIDED)) {
+                final SubLObject var97 = PrintLow.format((SubLObject)NIL, var232_233, var91);
                 final SubLObject var98 = Sequences.cconcatenate(var70, var235_236);
-                module0548.f33818((SubLObject)ConsesLow.list(var229_230), (SubLObject)ConsesLow.list((SubLObject)module0745.$ic123$, (SubLObject)module0745.$ic124$, (SubLObject)module0745.$ic125$, var238_239, (SubLObject)module0745.$ic126$, var97, (SubLObject)module0745.$ic127$, var98));
-                module0069.f4937(var229_230, Sequences.cconcatenate(var98, (SubLObject)module0745.$ic128$));
+                module0548.f33818((SubLObject)ConsesLow.list(var229_230), (SubLObject)ConsesLow.list((SubLObject)$ic123$, (SubLObject)$ic124$, (SubLObject)$ic125$, var238_239, (SubLObject)$ic126$, var97, (SubLObject)$ic127$, var98));
+                module0069.f4937(var229_230, Sequences.cconcatenate(var98, (SubLObject)$ic128$));
             }
             var93 = var93.rest();
             var229_230 = var93.first();
@@ -5044,59 +5045,59 @@ public final class module0745 extends SubLTranslatedFile
             var96 = var96.rest();
             var238_239 = var96.first();
         }
-        return (SubLObject)module0745.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46241() {
         final SubLThread var12 = SubLProcess.currentSubLThread();
-        SubLObject var13 = (SubLObject)module0745.NIL;
-        SubLObject var240_243 = (SubLObject)module0745.NIL;
-        SubLObject var14 = (SubLObject)module0745.NIL;
-        SubLObject var235_245 = (SubLObject)module0745.NIL;
-        SubLObject var15 = (SubLObject)module0745.NIL;
-        SubLObject var238_247 = (SubLObject)module0745.NIL;
-        var13 = (SubLObject)module0745.$ic129$;
+        SubLObject var13 = (SubLObject)NIL;
+        SubLObject var240_243 = (SubLObject)NIL;
+        SubLObject var14 = (SubLObject)NIL;
+        SubLObject var235_245 = (SubLObject)NIL;
+        SubLObject var15 = (SubLObject)NIL;
+        SubLObject var238_247 = (SubLObject)NIL;
+        var13 = (SubLObject)$ic129$;
         var240_243 = var13.first();
-        var14 = (SubLObject)module0745.$ic121$;
+        var14 = (SubLObject)$ic121$;
         var235_245 = var14.first();
-        var15 = (SubLObject)module0745.$ic122$;
+        var15 = (SubLObject)$ic122$;
         var238_247 = var15.first();
-        while (module0745.NIL != var15 || module0745.NIL != var14 || module0745.NIL != var13) {
-            final SubLObject var16 = (SubLObject)module0745.NIL;
-            final SubLObject var17 = module0745.$g5951$.getDynamicValue(var12);
-            SubLObject var18 = (SubLObject)module0745.NIL;
-            assert module0745.NIL != Filesys.directory_p(var17) : var17;
-            SubLObject var19 = Filesys.directory(var17, (SubLObject)module0745.T);
+        while (NIL != var15 || NIL != var14 || NIL != var13) {
+            final SubLObject var16 = (SubLObject)NIL;
+            final SubLObject var17 = $g5951$.getDynamicValue(var12);
+            SubLObject var18 = (SubLObject)NIL;
+            assert NIL != Filesys.directory_p(var17) : var17;
+            SubLObject var19 = Filesys.directory(var17, (SubLObject)T);
             final SubLObject var20 = var16;
             final SubLObject var21 = module0012.$silent_progressP$.currentBinding(var12);
             try {
-                module0012.$silent_progressP$.bind((SubLObject)SubLObjectFactory.makeBoolean(!var20.isString()), var12);
-                if (module0745.NIL.isFunctionSpec()) {
-                    var19 = Sort.sort(var19, (SubLObject)module0745.NIL, (SubLObject)module0745.UNPROVIDED);
+                module0012.$silent_progressP$.bind((SubLObject)makeBoolean(!var20.isString()), var12);
+                if (NIL.isFunctionSpec()) {
+                    var19 = Sort.sort(var19, (SubLObject)NIL, (SubLObject)UNPROVIDED);
                 }
                 final SubLObject var22 = var19;
                 module0012.$g82$.setDynamicValue(var20, var12);
                 module0012.$g73$.setDynamicValue(Time.get_universal_time(), var12);
                 module0012.$g83$.setDynamicValue(Sequences.length(var22), var12);
-                module0012.$g84$.setDynamicValue((SubLObject)module0745.ZERO_INTEGER, var12);
+                module0012.$g84$.setDynamicValue((SubLObject)ZERO_INTEGER, var12);
                 final SubLObject var17_249 = module0012.$g75$.currentBinding(var12);
                 final SubLObject var23 = module0012.$g76$.currentBinding(var12);
                 final SubLObject var24 = module0012.$g77$.currentBinding(var12);
                 final SubLObject var25 = module0012.$g78$.currentBinding(var12);
                 try {
-                    module0012.$g75$.bind((SubLObject)module0745.ZERO_INTEGER, var12);
-                    module0012.$g76$.bind((SubLObject)module0745.NIL, var12);
-                    module0012.$g77$.bind((SubLObject)module0745.T, var12);
+                    module0012.$g75$.bind((SubLObject)ZERO_INTEGER, var12);
+                    module0012.$g76$.bind((SubLObject)NIL, var12);
+                    module0012.$g77$.bind((SubLObject)T, var12);
                     module0012.$g78$.bind(Time.get_universal_time(), var12);
                     module0012.f478(module0012.$g82$.getDynamicValue(var12));
                     SubLObject var26 = var22;
-                    SubLObject var27 = (SubLObject)module0745.NIL;
+                    SubLObject var27 = (SubLObject)NIL;
                     var27 = var26.first();
-                    while (module0745.NIL != var26) {
+                    while (NIL != var26) {
                         module0012.note_percent_progress(module0012.$g84$.getDynamicValue(var12), module0012.$g83$.getDynamicValue(var12));
-                        module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var12), (SubLObject)module0745.ONE_INTEGER), var12);
-                        if (module0745.NIL != Filesys.directory_p(var27) && module0745.NIL != Filesys.probe_file(Sequences.cconcatenate(var27, new SubLObject[] { module0745.$ic19$, var235_245, module0745.$ic128$ }))) {
-                            final SubLObject var28 = module0069.f4939(Sequences.cconcatenate(var27, new SubLObject[] { module0745.$ic19$, var235_245, module0745.$ic128$ }));
+                        module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var12), (SubLObject)ONE_INTEGER), var12);
+                        if (NIL != Filesys.directory_p(var27) && NIL != Filesys.probe_file(Sequences.cconcatenate(var27, new SubLObject[] { $ic19$, var235_245, $ic128$ }))) {
+                            final SubLObject var28 = module0069.f4939(Sequences.cconcatenate(var27, new SubLObject[] { $ic19$, var235_245, $ic128$ }));
                             var18 = ConsesLow.append(var28, var18);
                         }
                         var26 = var26.rest();
@@ -5114,10 +5115,10 @@ public final class module0745 extends SubLTranslatedFile
             finally {
                 module0012.$silent_progressP$.rebind(var21, var12);
             }
-            var18 = Sort.sort(var18, Symbols.symbol_function((SubLObject)module0745.$ic130$), Symbols.symbol_function((SubLObject)module0745.$ic131$));
+            var18 = Sort.sort(var18, Symbols.symbol_function((SubLObject)$ic130$), Symbols.symbol_function((SubLObject)$ic131$));
             final SubLObject var29 = Sequences.cconcatenate(var17, var235_245);
-            module0548.f33818((SubLObject)ConsesLow.list(var18), (SubLObject)ConsesLow.list((SubLObject)module0745.$ic123$, (SubLObject)module0745.$ic124$, (SubLObject)module0745.$ic125$, var238_247, (SubLObject)module0745.$ic126$, var240_243, (SubLObject)module0745.$ic127$, var29));
-            module0069.f4937(var18, Sequences.cconcatenate(var29, (SubLObject)module0745.$ic128$));
+            module0548.f33818((SubLObject)ConsesLow.list(var18), (SubLObject)ConsesLow.list((SubLObject)$ic123$, (SubLObject)$ic124$, (SubLObject)$ic125$, var238_247, (SubLObject)$ic126$, var240_243, (SubLObject)$ic127$, var29));
+            module0069.f4937(var18, Sequences.cconcatenate(var29, (SubLObject)$ic128$));
             var13 = var13.rest();
             var240_243 = var13.first();
             var14 = var14.rest();
@@ -5125,35 +5126,35 @@ public final class module0745 extends SubLTranslatedFile
             var15 = var15.rest();
             var238_247 = var15.first();
         }
-        return (SubLObject)module0745.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46261() {
-        return module0745.$g5960$.getGlobalValue();
+        return $g5960$.getGlobalValue();
     }
     
     public static SubLObject f46254(final SubLObject var47, SubLObject var23, SubLObject var24) {
-        if (var23 == module0745.UNPROVIDED) {
+        if (var23 == UNPROVIDED) {
             var23 = f46234();
         }
-        if (var24 == module0745.UNPROVIDED) {
-            var24 = module0745.$g5940$.getDynamicValue();
+        if (var24 == UNPROVIDED) {
+            var24 = $g5940$.getDynamicValue();
         }
         final SubLThread var48 = SubLProcess.currentSubLThread();
-        SubLObject var49 = (SubLObject)module0745.NIL;
-        SubLObject var50 = (SubLObject)module0745.NIL;
-        SubLObject var51 = (SubLObject)module0745.NIL;
-        SubLObject var52 = (SubLObject)module0745.NIL;
-        final SubLObject var53 = module0745.$g5933$.currentBinding(var48);
+        SubLObject var49 = (SubLObject)NIL;
+        SubLObject var50 = (SubLObject)NIL;
+        SubLObject var51 = (SubLObject)NIL;
+        SubLObject var52 = (SubLObject)NIL;
+        final SubLObject var53 = $g5933$.currentBinding(var48);
         final SubLObject var54 = module0579.$g4246$.currentBinding(var48);
         final SubLObject var55 = module0579.$g4322$.currentBinding(var48);
         try {
-            module0745.$g5933$.bind((SubLObject)module0745.NIL, var48);
-            module0579.$g4246$.bind((SubLObject)module0745.$ic133$, var48);
-            module0579.$g4322$.bind((SubLObject)module0745.NIL, var48);
-            SubLObject var56 = (SubLObject)module0745.NIL;
+            $g5933$.bind((SubLObject)NIL, var48);
+            module0579.$g4246$.bind((SubLObject)$ic133$, var48);
+            module0579.$g4322$.bind((SubLObject)NIL, var48);
+            SubLObject var56 = (SubLObject)NIL;
             var48.resetMultipleValues();
-            final SubLObject var252_253 = module0770.f49050(var47, var24, (SubLObject)module0745.NIL, var23, module0745.$ic134$, (SubLObject)module0745.$ic135$, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED);
+            final SubLObject var252_253 = module0770.f49050(var47, var24, (SubLObject)NIL, var23, $ic134$, (SubLObject)$ic135$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
             final SubLObject var254_255 = var48.secondMultipleValue();
             final SubLObject var256_257 = var48.thirdMultipleValue();
             final SubLObject var258_259 = var48.fourthMultipleValue();
@@ -5168,21 +5169,21 @@ public final class module0745 extends SubLTranslatedFile
         finally {
             module0579.$g4322$.rebind(var55, var48);
             module0579.$g4246$.rebind(var54, var48);
-            module0745.$g5933$.rebind(var53, var48);
+            $g5933$.rebind(var53, var48);
         }
         return Values.values(var49, var50, var52, var51);
     }
     
     public static SubLObject f46262(final SubLObject var47) {
-        SubLObject var48 = (SubLObject)module0745.NIL;
-        final SubLObject var49 = (SubLObject)module0745.NIL;
-        if (module0745.NIL == f46253(var47)) {
-            final SubLObject var50 = Values.arg2(Values.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46259(var47, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED)));
-            if (module0745.NIL != module0209.f13550(var50.first())) {
-                final SubLObject var51 = Values.arg2(Values.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46254(var47, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED)));
-                if (!module0035.f2124((SubLObject)module0745.THREE_INTEGER, var51).equal(module0035.f2124((SubLObject)module0745.THREE_INTEGER, var50)) || (module0745.NIL != var49 && module0745.NIL == module0035.f2201(module0035.f2114(var51), module0035.f2114(var50), Symbols.symbol_function((SubLObject)module0745.EQUAL)))) {
-                    Errors.warn((SubLObject)module0745.$ic136$, var47, var50, var51);
-                    var48 = (SubLObject)module0745.T;
+        SubLObject var48 = (SubLObject)NIL;
+        final SubLObject var49 = (SubLObject)NIL;
+        if (NIL == f46253(var47)) {
+            final SubLObject var50 = Values.arg2(Values.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46259(var47, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)));
+            if (NIL != module0209.f13550(var50.first())) {
+                final SubLObject var51 = Values.arg2(Values.resetMultipleValues(), (SubLObject)Values.multiple_value_list(f46254(var47, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)));
+                if (!module0035.f2124((SubLObject)THREE_INTEGER, var51).equal(module0035.f2124((SubLObject)THREE_INTEGER, var50)) || (NIL != var49 && NIL == module0035.f2201(module0035.f2114(var51), module0035.f2114(var50), Symbols.symbol_function((SubLObject)EQUAL)))) {
+                    Errors.warn((SubLObject)$ic136$, var47, var50, var51);
+                    var48 = (SubLObject)T;
                 }
             }
         }
@@ -5190,130 +5191,130 @@ public final class module0745 extends SubLTranslatedFile
     }
     
     public static SubLObject f46263(SubLObject var266, SubLObject var267, SubLObject var268) {
-        if (var266 == module0745.UNPROVIDED) {
-            var266 = (SubLObject)module0745.$ic21$;
+        if (var266 == UNPROVIDED) {
+            var266 = (SubLObject)$ic21$;
         }
-        if (var267 == module0745.UNPROVIDED) {
-            var267 = (SubLObject)module0745.$ic137$;
+        if (var267 == UNPROVIDED) {
+            var267 = (SubLObject)$ic137$;
         }
-        if (var268 == module0745.UNPROVIDED) {
-            var268 = Numbers.multiply((SubLObject)module0745.TWO_INTEGER, var266);
+        if (var268 == UNPROVIDED) {
+            var268 = Numbers.multiply((SubLObject)TWO_INTEGER, var266);
         }
-        PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic138$, new SubLObject[] { module0236.f15560(module0745.$g5931$.getGlobalValue()), module0236.f15561(module0745.$g5931$.getGlobalValue()), module0574.f35164(), module0018.f968() });
-        final SubLObject var269 = module0077.f5313((SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED);
-        SubLObject var270 = (SubLObject)module0745.ZERO_INTEGER;
-        SubLObject var271 = (SubLObject)module0745.NIL;
-        SubLObject var272 = (SubLObject)module0745.ZERO_INTEGER;
-        SubLObject var273 = (SubLObject)module0745.NIL;
-        SubLObject var274 = (SubLObject)module0745.NIL;
-        final SubLObject var275 = Numbers.ceiling(Numbers.minus(Numbers.log(var267, (SubLObject)module0745.TEN_INTEGER)), (SubLObject)module0745.UNPROVIDED);
+        PrintLow.format((SubLObject)T, (SubLObject)$ic138$, new SubLObject[] { module0236.f15560($g5931$.getGlobalValue()), module0236.f15561($g5931$.getGlobalValue()), module0574.f35164(), module0018.f968() });
+        final SubLObject var269 = module0077.f5313((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        SubLObject var270 = (SubLObject)ZERO_INTEGER;
+        SubLObject var271 = (SubLObject)NIL;
+        SubLObject var272 = (SubLObject)ZERO_INTEGER;
+        SubLObject var273 = (SubLObject)NIL;
+        SubLObject var274 = (SubLObject)NIL;
+        final SubLObject var275 = Numbers.ceiling(Numbers.minus(Numbers.log(var267, (SubLObject)TEN_INTEGER)), (SubLObject)UNPROVIDED);
         SubLObject var276 = var266;
         while (!var276.isZero()) {
             final SubLObject var277 = module0173.f10963();
-            if (module0745.NIL == module0077.f5320(var277, var269)) {
-                if (module0745.NIL != f46262(var277)) {
+            if (NIL == module0077.f5320(var277, var269)) {
+                if (NIL != f46262(var277)) {
                     var271 = (SubLObject)ConsesLow.cons(var277, var271);
-                    var272 = Numbers.add(var272, (SubLObject)module0745.ONE_INTEGER);
+                    var272 = Numbers.add(var272, (SubLObject)ONE_INTEGER);
                 }
                 if (var270.numGE(Numbers.subtract(var268, var266))) {
                     final SubLObject var278 = Numbers.divide(var272, var270);
-                    if (Numbers.mod(var270, Numbers.integerDivide(var268, (SubLObject)module0745.TEN_INTEGER)).isZero()) {
-                        PrintLow.format((SubLObject)module0745.T, (SubLObject)module0745.$ic139$, var270, module0048.f3314(var278, (SubLObject)module0745.ONE_INTEGER, (SubLObject)module0745.FOUR_INTEGER));
+                    if (Numbers.mod(var270, Numbers.integerDivide(var268, (SubLObject)TEN_INTEGER)).isZero()) {
+                        PrintLow.format((SubLObject)T, (SubLObject)$ic139$, var270, module0048.f3314(var278, (SubLObject)ONE_INTEGER, (SubLObject)FOUR_INTEGER));
                     }
-                    if (module0745.NIL == var273 || var278.numL(var273)) {
+                    if (NIL == var273 || var278.numL(var273)) {
                         var273 = var278;
                     }
-                    if (module0745.NIL == var274 || var278.numG(var274)) {
+                    if (NIL == var274 || var278.numG(var274)) {
                         var274 = var278;
                     }
                     if (Numbers.subtract(var274, var273).numG(var267)) {
-                        Errors.warn((SubLObject)module0745.$ic140$, new SubLObject[] { var270, module0048.f3302(Numbers.subtract(var274, var273), var275), var267, var266 });
+                        Errors.warn((SubLObject)$ic140$, new SubLObject[] { var270, module0048.f3302(Numbers.subtract(var274, var273), var275), var267, var266 });
                         var276 = var266;
-                        var273 = (SubLObject)module0745.NIL;
-                        var274 = (SubLObject)module0745.NIL;
+                        var273 = (SubLObject)NIL;
+                        var274 = (SubLObject)NIL;
                     }
                     else {
-                        var276 = Numbers.subtract(var276, (SubLObject)module0745.ONE_INTEGER);
+                        var276 = Numbers.subtract(var276, (SubLObject)ONE_INTEGER);
                     }
                 }
                 module0077.f5326(var277, var269);
-                var270 = Numbers.add(var270, (SubLObject)module0745.ONE_INTEGER);
+                var270 = Numbers.add(var270, (SubLObject)ONE_INTEGER);
             }
         }
         final SubLObject var279 = print_high.princ_to_string(var275);
-        final SubLObject var280 = Sequences.cconcatenate((SubLObject)module0745.$ic141$, new SubLObject[] { var279, module0745.$ic142$, var279, module0745.$ic143$ });
-        PrintLow.format((SubLObject)module0745.T, var280, new SubLObject[] { var270, module0048.f3314(var273, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED), module0048.f3314(var274, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED) });
+        final SubLObject var280 = Sequences.cconcatenate((SubLObject)$ic141$, new SubLObject[] { var279, $ic142$, var279, $ic143$ });
+        PrintLow.format((SubLObject)T, var280, new SubLObject[] { var270, module0048.f3314(var273, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED), module0048.f3314(var274, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED) });
         return Values.values(var273, var274, var270);
     }
     
     public static SubLObject f46264(SubLObject var278) {
-        if (var278 == module0745.UNPROVIDED) {
-            var278 = module0745.$g5931$.getGlobalValue();
+        if (var278 == UNPROVIDED) {
+            var278 = $g5931$.getGlobalValue();
         }
         final SubLThread var279 = SubLProcess.currentSubLThread();
-        assert module0745.NIL != module0236.f15526(var278) : var278;
-        SubLObject var280 = (SubLObject)module0745.NIL;
-        final SubLObject var281 = (SubLObject)module0745.$ic145$;
+        assert NIL != module0236.f15526(var278) : var278;
+        SubLObject var280 = (SubLObject)NIL;
+        final SubLObject var281 = (SubLObject)$ic145$;
         final SubLObject var282 = module0173.f10962();
-        SubLObject var283 = (SubLObject)module0745.ZERO_INTEGER;
+        SubLObject var283 = (SubLObject)ZERO_INTEGER;
         final SubLObject var284 = module0012.$g75$.currentBinding(var279);
         final SubLObject var285 = module0012.$g76$.currentBinding(var279);
         final SubLObject var286 = module0012.$g77$.currentBinding(var279);
         final SubLObject var287 = module0012.$g78$.currentBinding(var279);
         try {
-            module0012.$g75$.bind((SubLObject)module0745.ZERO_INTEGER, var279);
-            module0012.$g76$.bind((SubLObject)module0745.NIL, var279);
-            module0012.$g77$.bind((SubLObject)module0745.T, var279);
+            module0012.$g75$.bind((SubLObject)ZERO_INTEGER, var279);
+            module0012.$g76$.bind((SubLObject)NIL, var279);
+            module0012.$g77$.bind((SubLObject)T, var279);
             module0012.$g78$.bind(Time.get_universal_time(), var279);
             module0012.f478(var281);
             SubLObject var288 = module0173.f10961();
-            SubLObject var289 = (SubLObject)module0745.NIL;
+            SubLObject var289 = (SubLObject)NIL;
             var289 = var288.first();
-            while (module0745.NIL != var288) {
+            while (NIL != var288) {
                 final SubLObject var290 = var289;
-                if (module0745.NIL == module0065.f4772(var290, (SubLObject)module0745.$ic94$)) {
+                if (NIL == module0065.f4772(var290, (SubLObject)$ic94$)) {
                     final SubLObject var132_281 = var290;
-                    if (module0745.NIL == module0065.f4775(var132_281, (SubLObject)module0745.$ic94$)) {
+                    if (NIL == module0065.f4775(var132_281, (SubLObject)$ic94$)) {
                         final SubLObject var291 = module0065.f4740(var132_281);
-                        final SubLObject var292 = (SubLObject)module0745.NIL;
+                        final SubLObject var292 = (SubLObject)NIL;
                         SubLObject var293;
                         SubLObject var294;
                         SubLObject var295;
                         SubLObject var296;
                         SubLObject var297;
-                        for (var293 = Sequences.length(var291), var294 = (SubLObject)module0745.NIL, var294 = (SubLObject)module0745.ZERO_INTEGER; var294.numL(var293); var294 = Numbers.add(var294, (SubLObject)module0745.ONE_INTEGER)) {
-                            var295 = ((module0745.NIL != var292) ? Numbers.subtract(var293, var294, (SubLObject)module0745.ONE_INTEGER) : var294);
+                        for (var293 = Sequences.length(var291), var294 = (SubLObject)NIL, var294 = (SubLObject)ZERO_INTEGER; var294.numL(var293); var294 = Numbers.add(var294, (SubLObject)ONE_INTEGER)) {
+                            var295 = ((NIL != var292) ? Numbers.subtract(var293, var294, (SubLObject)ONE_INTEGER) : var294);
                             var296 = Vectors.aref(var291, var295);
-                            if (module0745.NIL == module0065.f4749(var296) || module0745.NIL == module0065.f4773((SubLObject)module0745.$ic94$)) {
-                                if (module0745.NIL != module0065.f4749(var296)) {
-                                    var296 = (SubLObject)module0745.$ic94$;
+                            if (NIL == module0065.f4749(var296) || NIL == module0065.f4773((SubLObject)$ic94$)) {
+                                if (NIL != module0065.f4749(var296)) {
+                                    var296 = (SubLObject)$ic94$;
                                 }
-                                var283 = Numbers.add(var283, (SubLObject)module0745.ONE_INTEGER);
+                                var283 = Numbers.add(var283, (SubLObject)ONE_INTEGER);
                                 module0012.note_percent_progress(var283, var282);
-                                var297 = module0236.f15558(var296, var278, (SubLObject)module0745.$ic146$, (SubLObject)module0745.UNPROVIDED);
-                                if (var297 == module0745.$ic146$ && module0745.NIL == f46253(var296)) {
+                                var297 = module0236.f15558(var296, var278, (SubLObject)$ic146$, (SubLObject)UNPROVIDED);
+                                if (var297 == $ic146$ && NIL == f46253(var296)) {
                                     var280 = (SubLObject)ConsesLow.cons(var296, var280);
                                 }
                             }
                         }
                     }
                     final SubLObject var178_284 = var290;
-                    if (module0745.NIL == module0065.f4777(var178_284) || module0745.NIL == module0065.f4773((SubLObject)module0745.$ic94$)) {
+                    if (NIL == module0065.f4777(var178_284) || NIL == module0065.f4773((SubLObject)$ic94$)) {
                         final SubLObject var298 = module0065.f4738(var178_284);
                         SubLObject var299 = module0065.f4739(var178_284);
                         final SubLObject var300 = module0065.f4734(var178_284);
-                        final SubLObject var301 = (SubLObject)((module0745.NIL != module0065.f4773((SubLObject)module0745.$ic94$)) ? module0745.NIL : module0745.$ic94$);
+                        final SubLObject var301 = (SubLObject)((NIL != module0065.f4773((SubLObject)$ic94$)) ? NIL : $ic94$);
                         while (var299.numL(var300)) {
                             final SubLObject var302 = Hashtables.gethash_without_values(var299, var298, var301);
-                            if (module0745.NIL == module0065.f4773((SubLObject)module0745.$ic94$) || module0745.NIL == module0065.f4749(var302)) {
-                                var283 = Numbers.add(var283, (SubLObject)module0745.ONE_INTEGER);
+                            if (NIL == module0065.f4773((SubLObject)$ic94$) || NIL == module0065.f4749(var302)) {
+                                var283 = Numbers.add(var283, (SubLObject)ONE_INTEGER);
                                 module0012.note_percent_progress(var283, var282);
-                                final SubLObject var303 = module0236.f15558(var302, var278, (SubLObject)module0745.$ic146$, (SubLObject)module0745.UNPROVIDED);
-                                if (var303 == module0745.$ic146$ && module0745.NIL == f46253(var302)) {
+                                final SubLObject var303 = module0236.f15558(var302, var278, (SubLObject)$ic146$, (SubLObject)UNPROVIDED);
+                                if (var303 == $ic146$ && NIL == f46253(var302)) {
                                     var280 = (SubLObject)ConsesLow.cons(var302, var280);
                                 }
                             }
-                            var299 = Numbers.add(var299, (SubLObject)module0745.ONE_INTEGER);
+                            var299 = Numbers.add(var299, (SubLObject)ONE_INTEGER);
                         }
                     }
                 }
@@ -5332,56 +5333,56 @@ public final class module0745 extends SubLTranslatedFile
     }
     
     public static SubLObject f46265(final SubLObject var285, SubLObject var23, SubLObject var24) {
-        if (var23 == module0745.UNPROVIDED) {
-            var23 = module0745.$ic147$;
+        if (var23 == UNPROVIDED) {
+            var23 = $ic147$;
         }
-        if (var24 == module0745.UNPROVIDED) {
-            var24 = (SubLObject)module0745.$ic24$;
+        if (var24 == UNPROVIDED) {
+            var24 = (SubLObject)$ic24$;
         }
         final SubLThread var286 = SubLProcess.currentSubLThread();
-        final SubLObject var287 = module0093.f6610(var285, Symbols.symbol_function((SubLObject)module0745.EQUAL), (SubLObject)module0745.$ic22$);
-        final SubLObject var288 = module0236.f15548(var285, module0745.$g5937$.getGlobalValue(), (SubLObject)module0745.T, (SubLObject)module0745.$ic21$, Symbols.symbol_function((SubLObject)module0745.EQUAL), (SubLObject)module0745.$ic22$);
+        final SubLObject var287 = module0093.f6610(var285, Symbols.symbol_function((SubLObject)EQUAL), (SubLObject)$ic22$);
+        final SubLObject var288 = module0236.f15548(var285, $g5937$.getGlobalValue(), (SubLObject)T, (SubLObject)$ic21$, Symbols.symbol_function((SubLObject)EQUAL), (SubLObject)$ic22$);
         final SubLObject var290;
         final SubLObject var289 = var290 = f46264(var288);
-        module0012.$g82$.setDynamicValue((SubLObject)module0745.$ic148$, var286);
+        module0012.$g82$.setDynamicValue((SubLObject)$ic148$, var286);
         module0012.$g73$.setDynamicValue(Time.get_universal_time(), var286);
         module0012.$g83$.setDynamicValue(Sequences.length(var290), var286);
-        module0012.$g84$.setDynamicValue((SubLObject)module0745.ZERO_INTEGER, var286);
+        module0012.$g84$.setDynamicValue((SubLObject)ZERO_INTEGER, var286);
         final SubLObject var291 = module0012.$g75$.currentBinding(var286);
         final SubLObject var292 = module0012.$g76$.currentBinding(var286);
         final SubLObject var293 = module0012.$g77$.currentBinding(var286);
         final SubLObject var294 = module0012.$g78$.currentBinding(var286);
         try {
-            module0012.$g75$.bind((SubLObject)module0745.ZERO_INTEGER, var286);
-            module0012.$g76$.bind((SubLObject)module0745.NIL, var286);
-            module0012.$g77$.bind((SubLObject)module0745.T, var286);
+            module0012.$g75$.bind((SubLObject)ZERO_INTEGER, var286);
+            module0012.$g76$.bind((SubLObject)NIL, var286);
+            module0012.$g77$.bind((SubLObject)T, var286);
             module0012.$g78$.bind(Time.get_universal_time(), var286);
             module0012.f478(module0012.$g82$.getDynamicValue(var286));
             SubLObject var295 = var290;
-            SubLObject var296 = (SubLObject)module0745.NIL;
+            SubLObject var296 = (SubLObject)NIL;
             var296 = var295.first();
-            while (module0745.NIL != var295) {
+            while (NIL != var295) {
                 module0012.note_percent_progress(module0012.$g84$.getDynamicValue(var286), module0012.$g83$.getDynamicValue(var286));
-                module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var286), (SubLObject)module0745.ONE_INTEGER), var286);
-                if (module0745.NIL == f46253(var296)) {
-                    final SubLObject var297 = (SubLObject)module0745.$ic27$;
-                    SubLObject var298 = (SubLObject)module0745.NIL;
-                    SubLObject var299 = (SubLObject)module0745.NIL;
-                    SubLObject var300 = (SubLObject)module0745.NIL;
+                module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var286), (SubLObject)ONE_INTEGER), var286);
+                if (NIL == f46253(var296)) {
+                    final SubLObject var297 = (SubLObject)$ic27$;
+                    SubLObject var298 = (SubLObject)NIL;
+                    SubLObject var299 = (SubLObject)NIL;
+                    SubLObject var300 = (SubLObject)NIL;
                     final SubLObject var301 = module0003.f61();
                     try {
                         var286.throwStack.push(var301);
                         final SubLObject var17_287 = module0003.$g4$.currentBinding(var286);
                         try {
-                            module0003.$g4$.bind((SubLObject)module0745.T, var286);
-                            SubLObject var302 = (SubLObject)module0745.NIL;
+                            module0003.$g4$.bind((SubLObject)T, var286);
+                            SubLObject var302 = (SubLObject)NIL;
                             try {
                                 final SubLObject var17_288 = module0003.$g5$.currentBinding(var286);
                                 try {
-                                    module0003.$g5$.bind(Numbers.add((SubLObject)module0745.ONE_INTEGER, module0003.$g5$.getDynamicValue(var286)), var286);
+                                    module0003.$g5$.bind(Numbers.add((SubLObject)ONE_INTEGER, module0003.$g5$.getDynamicValue(var286)), var286);
                                     var302 = module0003.f62(var297, var301);
                                     var286.resetMultipleValues();
-                                    final SubLObject var289_290 = module0770.f49049(var296, var24, (SubLObject)module0745.NIL, var23, module0745.$ic134$, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED);
+                                    final SubLObject var289_290 = module0770.f49049(var296, var24, (SubLObject)NIL, var23, $ic134$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
                                     final SubLObject var291_292 = var286.secondMultipleValue();
                                     var286.resetMultipleValues();
                                     var299 = var289_290;
@@ -5394,7 +5395,7 @@ public final class module0745 extends SubLTranslatedFile
                             finally {
                                 final SubLObject var17_289 = Threads.$is_thread_performing_cleanupP$.currentBinding(var286);
                                 try {
-                                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0745.T, var286);
+                                    Threads.$is_thread_performing_cleanupP$.bind((SubLObject)T, var286);
                                     module0003.f64(var302);
                                 }
                                 finally {
@@ -5412,14 +5413,14 @@ public final class module0745 extends SubLTranslatedFile
                     finally {
                         var286.throwStack.pop();
                     }
-                    if (module0745.NIL != var298) {
-                        Errors.warn((SubLObject)module0745.$ic149$, var297, var296);
+                    if (NIL != var298) {
+                        Errors.warn((SubLObject)$ic149$, var297, var296);
                     }
-                    else if (module0745.NIL != module0038.f2653(var299)) {
+                    else if (NIL != module0038.f2653(var299)) {
                         module0093.f6618(var296, var287, (SubLObject)ConsesLow.cons(var299, var300));
                     }
-                    else if (module0745.NIL != module0038.f2608(var299)) {
-                        Errors.warn((SubLObject)module0745.$ic101$, var296);
+                    else if (NIL != module0038.f2608(var299)) {
+                        Errors.warn((SubLObject)$ic101$, var296);
                     }
                 }
                 var295 = var295.rest();
@@ -5438,56 +5439,56 @@ public final class module0745 extends SubLTranslatedFile
     }
     
     public static SubLObject f46266(final SubLObject var215) {
-        return Numbers.integerDivide(module0217.f14257(module0205.f13276(var215)), module0217.f14221(var215, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED));
+        return Numbers.integerDivide(module0217.f14257(module0205.f13276(var215)), module0217.f14221(var215, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED));
     }
     
     public static SubLObject f46253(final SubLObject var47) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0745.NIL != module0210.f13578(var47) || module0745.NIL != module0259.f16891(var47, module0745.$ic150$) || (module0745.NIL != module0167.f10813(var47) && (module0745.NIL != module0210.f13585(var47) || module0745.NIL != f46267(var47))));
+        return (SubLObject)makeBoolean(NIL != module0210.f13578(var47) || NIL != module0259.f16891(var47, $ic150$) || (NIL != module0167.f10813(var47) && (NIL != module0210.f13585(var47) || NIL != f46267(var47))));
     }
     
     public static SubLObject f46267(final SubLObject var215) {
         final SubLThread var216 = SubLProcess.currentSubLThread();
-        SubLObject var217 = (SubLObject)module0745.NIL;
+        SubLObject var217 = (SubLObject)NIL;
         final SubLObject var218 = module0147.$g2094$.currentBinding(var216);
         final SubLObject var219 = module0147.$g2095$.currentBinding(var216);
         try {
-            module0147.$g2094$.bind((SubLObject)module0745.$ic151$, var216);
-            module0147.$g2095$.bind(module0745.$ic152$, var216);
-            var217 = module0274.f18171(module0172.f10920(var215), (SubLObject)module0745.UNPROVIDED);
+            module0147.$g2094$.bind((SubLObject)$ic151$, var216);
+            module0147.$g2095$.bind($ic152$, var216);
+            var217 = module0274.f18171(module0172.f10920(var215), (SubLObject)UNPROVIDED);
         }
         finally {
             module0147.$g2095$.rebind(var219, var216);
             module0147.$g2094$.rebind(var218, var216);
         }
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0745.NIL == var217);
+        return (SubLObject)makeBoolean(NIL == var217);
     }
     
     public static SubLObject f46259(final SubLObject var47, SubLObject var278, SubLObject var295) {
-        if (var278 == module0745.UNPROVIDED) {
-            var278 = module0745.$g5931$.getGlobalValue();
+        if (var278 == UNPROVIDED) {
+            var278 = $g5931$.getGlobalValue();
         }
-        if (var295 == module0745.UNPROVIDED) {
-            var295 = (SubLObject)module0745.NIL;
+        if (var295 == UNPROVIDED) {
+            var295 = (SubLObject)NIL;
         }
         final SubLThread var296 = SubLProcess.currentSubLThread();
-        SubLObject var297 = (SubLObject)module0745.NIL;
-        SubLObject var298 = (SubLObject)module0745.NIL;
-        if (module0745.NIL == f46268(var47) && module0745.NIL != module0745.$g5933$.getDynamicValue(var296)) {
+        SubLObject var297 = (SubLObject)NIL;
+        SubLObject var298 = (SubLObject)NIL;
+        if (NIL == f46268(var47) && NIL != $g5933$.getDynamicValue(var296)) {
             try {
                 var296.throwStack.push(module0003.$g3$.getGlobalValue());
                 final SubLObject var299 = Errors.$error_handler$.currentBinding(var296);
                 try {
-                    Errors.$error_handler$.bind((SubLObject)module0745.$ic153$, var296);
+                    Errors.$error_handler$.bind((SubLObject)$ic153$, var296);
                     try {
-                        assert module0745.NIL != module0173.f10955(var47) : var47;
-                        if (var278.eql(module0745.$g5931$.getGlobalValue()) && module0745.NIL == module0236.f15526(var278)) {
+                        assert NIL != module0173.f10955(var47) : var47;
+                        if (var278.eql($g5931$.getGlobalValue()) && NIL == module0236.f15526(var278)) {
                             f46226();
-                            var278 = module0745.$g5931$.getGlobalValue();
+                            var278 = $g5931$.getGlobalValue();
                         }
-                        assert module0745.NIL != module0236.f15526(var278) : var278;
+                        assert NIL != module0236.f15526(var278) : var278;
                     }
                     catch (Throwable var300) {
-                        Errors.handleThrowable(var300, (SubLObject)module0745.NIL);
+                        Errors.handleThrowable(var300, (SubLObject)NIL);
                     }
                 }
                 finally {
@@ -5500,22 +5501,22 @@ public final class module0745 extends SubLTranslatedFile
             finally {
                 var296.throwStack.pop();
             }
-            if (module0745.NIL != var297) {
-                if (module0745.NIL != var295) {
+            if (NIL != var297) {
+                if (NIL != var295) {
                     Errors.warn(var297);
                 }
-                return Values.values((SubLObject)module0745.NIL, (SubLObject)module0745.NIL);
+                return Values.values((SubLObject)NIL, (SubLObject)NIL);
             }
             try {
                 var296.throwStack.push(module0003.$g3$.getGlobalValue());
                 final SubLObject var299 = Errors.$error_handler$.currentBinding(var296);
                 try {
-                    Errors.$error_handler$.bind((SubLObject)module0745.$ic153$, var296);
+                    Errors.$error_handler$.bind((SubLObject)$ic153$, var296);
                     try {
-                        var298 = module0236.f15558(var47, var278, var298, (SubLObject)module0745.T);
+                        var298 = module0236.f15558(var47, var278, var298, (SubLObject)T);
                     }
                     catch (Throwable var300) {
-                        Errors.handleThrowable(var300, (SubLObject)module0745.NIL);
+                        Errors.handleThrowable(var300, (SubLObject)NIL);
                     }
                 }
                 finally {
@@ -5528,44 +5529,44 @@ public final class module0745 extends SubLTranslatedFile
             finally {
                 var296.throwStack.pop();
             }
-            if (module0745.NIL != var297 && module0745.NIL != var295) {
+            if (NIL != var297 && NIL != var295) {
                 Errors.warn(var297);
             }
         }
-        if (module0745.NIL != module0035.f2014(var298) && module0745.NIL != module0035.f1995(var298, (SubLObject)module0745.FOUR_INTEGER, (SubLObject)module0745.UNPROVIDED) && module0745.NIL != module0209.f13550(var298.first()) && module0745.NIL == module0209.f13557((SubLObject)module0745.$ic93$, var298.first())) {
+        if (NIL != module0035.f2014(var298) && NIL != module0035.f1995(var298, (SubLObject)FOUR_INTEGER, (SubLObject)UNPROVIDED) && NIL != module0209.f13550(var298.first()) && NIL == module0209.f13557((SubLObject)$ic93$, var298.first())) {
             return module0004.values_list(var298);
         }
-        if (var298.isCons() && module0745.NIL != module0209.f13550(var298.first()) && module0745.NIL == module0209.f13557((SubLObject)module0745.$ic93$, var298.first())) {
-            return Values.values(var298.first(), var298.rest(), (SubLObject)module0745.NIL, (SubLObject)module0745.NIL);
+        if (var298.isCons() && NIL != module0209.f13550(var298.first()) && NIL == module0209.f13557((SubLObject)$ic93$, var298.first())) {
+            return Values.values(var298.first(), var298.rest(), (SubLObject)NIL, (SubLObject)NIL);
         }
-        return Values.values((SubLObject)module0745.NIL, (SubLObject)module0745.NIL, (SubLObject)module0745.NIL, (SubLObject)module0745.NIL);
+        return Values.values((SubLObject)NIL, (SubLObject)NIL, (SubLObject)NIL, (SubLObject)NIL);
     }
     
     public static SubLObject f46269(final SubLObject var47, final SubLObject var298, final SubLObject var299, SubLObject var151, SubLObject var300) {
-        if (var151 == module0745.UNPROVIDED) {
-            var151 = (SubLObject)module0745.NIL;
+        if (var151 == UNPROVIDED) {
+            var151 = (SubLObject)NIL;
         }
-        if (var300 == module0745.UNPROVIDED) {
-            var300 = (SubLObject)module0745.NIL;
+        if (var300 == UNPROVIDED) {
+            var300 = (SubLObject)NIL;
         }
         final SubLThread var301 = SubLProcess.currentSubLThread();
-        assert module0745.NIL != module0173.f10955(var47) : var47;
-        assert module0745.NIL != module0209.f13550(var298) : var298;
-        if (module0745.NIL != var299 && !module0745.areAssertionsDisabledFor(me) && module0745.NIL == module0173.f10955(var299)) {
+        assert NIL != module0173.f10955(var47) : var47;
+        assert NIL != module0209.f13550(var298) : var298;
+        if (NIL != var299 && !areAssertionsDisabledFor(me) && NIL == module0173.f10955(var299)) {
             throw new AssertionError(var299);
         }
-        if (module0745.NIL == module0745.$g5931$.getGlobalValue()) {
-            SubLObject var302 = (SubLObject)module0745.NIL;
+        if (NIL == $g5931$.getGlobalValue()) {
+            SubLObject var302 = (SubLObject)NIL;
             try {
                 var301.throwStack.push(module0003.$g3$.getGlobalValue());
                 final SubLObject var303 = Errors.$error_handler$.currentBinding(var301);
                 try {
-                    Errors.$error_handler$.bind((SubLObject)module0745.$ic153$, var301);
+                    Errors.$error_handler$.bind((SubLObject)$ic153$, var301);
                     try {
                         f46226();
                     }
                     catch (Throwable var304) {
-                        Errors.handleThrowable(var304, (SubLObject)module0745.NIL);
+                        Errors.handleThrowable(var304, (SubLObject)NIL);
                     }
                 }
                 finally {
@@ -5578,43 +5579,43 @@ public final class module0745 extends SubLTranslatedFile
             finally {
                 var301.throwStack.pop();
             }
-            if (module0745.NIL != var302) {
-                return Values.values((SubLObject)module0745.NIL, (SubLObject)module0745.NIL);
+            if (NIL != var302) {
+                return Values.values((SubLObject)NIL, (SubLObject)NIL);
             }
         }
-        return f46270(var47, var298, var299, var151, var300, module0745.$g5931$.getGlobalValue());
+        return f46270(var47, var298, var299, var151, var300, $g5931$.getGlobalValue());
     }
     
     public static SubLObject f46271(final SubLObject var47) {
-        module0077.f5326(var47, module0745.$g5962$.getGlobalValue());
+        module0077.f5326(var47, $g5962$.getGlobalValue());
         return var47;
     }
     
     public static SubLObject f46268(final SubLObject var47) {
-        return module0077.f5320(var47, module0745.$g5962$.getGlobalValue());
+        return module0077.f5320(var47, $g5962$.getGlobalValue());
     }
     
     public static SubLObject f46230() {
-        return module0077.f5328(module0745.$g5962$.getGlobalValue());
+        return module0077.f5328($g5962$.getGlobalValue());
     }
     
     public static SubLObject f46272(final SubLObject var47) {
         final SubLThread var48 = SubLProcess.currentSubLThread();
-        assert module0745.NIL != module0173.f10955(var47) : var47;
-        SubLObject var49 = module0745.$g5931$.getGlobalValue();
-        if (module0745.NIL == module0745.$g5931$.getGlobalValue()) {
-            SubLObject var50 = (SubLObject)module0745.NIL;
+        assert NIL != module0173.f10955(var47) : var47;
+        SubLObject var49 = $g5931$.getGlobalValue();
+        if (NIL == $g5931$.getGlobalValue()) {
+            SubLObject var50 = (SubLObject)NIL;
             try {
                 var48.throwStack.push(module0003.$g3$.getGlobalValue());
                 final SubLObject var51 = Errors.$error_handler$.currentBinding(var48);
                 try {
-                    Errors.$error_handler$.bind((SubLObject)module0745.$ic153$, var48);
+                    Errors.$error_handler$.bind((SubLObject)$ic153$, var48);
                     try {
                         f46226();
-                        var49 = module0745.$g5931$.getGlobalValue();
+                        var49 = $g5931$.getGlobalValue();
                     }
                     catch (Throwable var52) {
-                        Errors.handleThrowable(var52, (SubLObject)module0745.NIL);
+                        Errors.handleThrowable(var52, (SubLObject)NIL);
                     }
                 }
                 finally {
@@ -5627,17 +5628,17 @@ public final class module0745 extends SubLTranslatedFile
             finally {
                 var48.throwStack.pop();
             }
-            if (module0745.NIL != var50) {
-                return Values.values((SubLObject)module0745.NIL, (SubLObject)module0745.NIL);
+            if (NIL != var50) {
+                return Values.values((SubLObject)NIL, (SubLObject)NIL);
             }
         }
         f46271(var47);
-        return f46270(var47, (SubLObject)module0745.NIL, (SubLObject)module0745.NIL, (SubLObject)module0745.NIL, (SubLObject)module0745.NIL, var49);
+        return f46270(var47, (SubLObject)NIL, (SubLObject)NIL, (SubLObject)NIL, (SubLObject)NIL, var49);
     }
     
     public static SubLObject f46270(final SubLObject var47, final SubLObject var298, final SubLObject var299, final SubLObject var151, final SubLObject var300, final SubLObject var278) {
         final SubLThread var301 = SubLProcess.currentSubLThread();
-        final SubLObject var302 = (SubLObject)((module0745.NIL != module0745.$g5956$.getDynamicValue(var301)) ? ConsesLow.list(var298, var299, var151, var300) : ConsesLow.cons(var298, var299));
+        final SubLObject var302 = (SubLObject)((NIL != $g5956$.getDynamicValue(var301)) ? ConsesLow.list(var298, var299, var151, var300) : ConsesLow.cons(var298, var299));
         return module0236.f15559(var47, var302, var278);
     }
     
@@ -5700,57 +5701,57 @@ public final class module0745 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0745", "f46230", "S#50568", 0, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0745", "f46272", "S#37021", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0745", "f46270", "S#50569", 6, 0, false);
-        return (SubLObject)module0745.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46274() {
-        module0745.$g5931$ = SubLFiles.deflexical("S#50570", (SubLObject)((module0745.NIL != Symbols.boundp((SubLObject)module0745.$ic0$)) ? module0745.$g5931$.getGlobalValue() : module0745.NIL));
-        module0745.$g5932$ = SubLFiles.defparameter("S#50571", (SubLObject)module0745.NIL);
-        module0745.$g5933$ = SubLFiles.defparameter("S#50572", (SubLObject)module0745.T);
-        module0745.$g5934$ = SubLFiles.deflexical("S#50573", module0073.f5143((SubLObject)(module0745.$ic1$.isSymbol() ? Symbols.symbol_value((SubLObject)module0745.$ic1$) : module0745.$ic1$), (SubLObject)module0745.$ic2$, (SubLObject)(module0745.$ic3$.isSymbol() ? Symbols.symbol_value((SubLObject)module0745.$ic3$) : module0745.$ic3$), (SubLObject)module0745.$ic4$, (SubLObject)module0745.UNPROVIDED));
-        module0745.$g5935$ = SubLFiles.deflexical("S#50574", Locks.make_lock((SubLObject)module0745.$ic5$));
-        module0745.$g5936$ = SubLFiles.deflexical("S#50575", (SubLObject)module0745.FIVE_INTEGER);
-        module0745.$g5937$ = SubLFiles.deflexical("S#50576", (SubLObject)module0745.NIL);
-        module0745.$g5938$ = SubLFiles.deflexical("S#50577", module0051.f3556((SubLObject)module0745.UNPROVIDED, (SubLObject)module0745.UNPROVIDED));
-        module0745.$g5939$ = SubLFiles.defparameter("S#50578", (SubLObject)module0745.$ic26$);
-        module0745.$g5940$ = SubLFiles.defparameter("S#50579", (SubLObject)module0745.$ic24$);
-        module0745.$g5941$ = SubLFiles.defparameter("S#50580", (SubLObject)module0745.NIL);
-        module0745.$g5942$ = SubLFiles.defparameter("S#50581", (SubLObject)module0745.T);
-        module0745.$g5943$ = SubLFiles.defparameter("S#50582", (SubLObject)module0745.$ic27$);
-        module0745.$g5944$ = SubLFiles.defparameter("S#50583", (SubLObject)module0745.NIL);
-        module0745.$g5945$ = SubLFiles.defparameter("S#50584", (SubLObject)module0745.NIL);
-        module0745.$g5946$ = SubLFiles.defparameter("S#50585", (SubLObject)module0745.NIL);
-        module0745.$g5947$ = SubLFiles.defparameter("S#50586", (SubLObject)module0745.NIL);
-        module0745.$g5948$ = SubLFiles.defparameter("S#50587", (SubLObject)module0745.NIL);
-        module0745.$g5949$ = SubLFiles.defparameter("S#50588", (SubLObject)module0745.NIL);
-        module0745.$g5950$ = SubLFiles.defparameter("S#50589", (SubLObject)module0745.NIL);
-        module0745.$g5951$ = SubLFiles.defparameter("S#50590", (SubLObject)module0745.NIL);
-        module0745.$g5952$ = SubLFiles.deflexical("S#50591", (SubLObject)module0745.$ic21$);
-        module0745.$g5953$ = SubLFiles.deflexical("S#50592", (SubLObject)module0745.$ic28$);
-        module0745.$g5954$ = SubLFiles.defparameter("S#50593", (SubLObject)module0745.NIL);
-        module0745.$g5955$ = SubLFiles.deflexical("S#50594", module0059.f4283((SubLObject)module0745.$ic29$));
-        module0745.$g5956$ = SubLFiles.defparameter("S#50595", (SubLObject)module0745.T);
-        module0745.$g5957$ = SubLFiles.defparameter("S#50596", (SubLObject)module0745.NIL);
-        module0745.$g5958$ = SubLFiles.deflexical("S#50597", module0077.f5313(Symbols.symbol_function((SubLObject)module0745.EQUAL), (SubLObject)module0745.UNPROVIDED));
-        module0745.$g5959$ = SubLFiles.defparameter("S#50598", (SubLObject)module0745.NIL);
-        module0745.$g5960$ = SubLFiles.defconstant("S#50599", (SubLObject)module0745.$ic132$);
-        module0745.$g5961$ = SubLFiles.defparameter("S#50600", module0048.f3326());
-        module0745.$g5962$ = SubLFiles.deflexical("S#50601", (module0745.NIL != Symbols.boundp((SubLObject)module0745.$ic156$)) ? module0745.$g5962$.getGlobalValue() : module0077.f5313(Symbols.symbol_function((SubLObject)module0745.EQL), (SubLObject)module0745.UNPROVIDED));
-        return (SubLObject)module0745.NIL;
+        $g5931$ = SubLFiles.deflexical("S#50570", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic0$)) ? $g5931$.getGlobalValue() : NIL));
+        $g5932$ = SubLFiles.defparameter("S#50571", (SubLObject)NIL);
+        $g5933$ = SubLFiles.defparameter("S#50572", (SubLObject)T);
+        $g5934$ = SubLFiles.deflexical("S#50573", module0073.f5143((SubLObject)($ic1$.isSymbol() ? Symbols.symbol_value((SubLObject)$ic1$) : $ic1$), (SubLObject)$ic2$, (SubLObject)($ic3$.isSymbol() ? Symbols.symbol_value((SubLObject)$ic3$) : $ic3$), (SubLObject)$ic4$, (SubLObject)UNPROVIDED));
+        $g5935$ = SubLFiles.deflexical("S#50574", Locks.make_lock((SubLObject)$ic5$));
+        $g5936$ = SubLFiles.deflexical("S#50575", (SubLObject)FIVE_INTEGER);
+        $g5937$ = SubLFiles.deflexical("S#50576", (SubLObject)NIL);
+        $g5938$ = SubLFiles.deflexical("S#50577", module0051.f3556((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED));
+        $g5939$ = SubLFiles.defparameter("S#50578", (SubLObject)$ic26$);
+        $g5940$ = SubLFiles.defparameter("S#50579", (SubLObject)$ic24$);
+        $g5941$ = SubLFiles.defparameter("S#50580", (SubLObject)NIL);
+        $g5942$ = SubLFiles.defparameter("S#50581", (SubLObject)T);
+        $g5943$ = SubLFiles.defparameter("S#50582", (SubLObject)$ic27$);
+        $g5944$ = SubLFiles.defparameter("S#50583", (SubLObject)NIL);
+        $g5945$ = SubLFiles.defparameter("S#50584", (SubLObject)NIL);
+        $g5946$ = SubLFiles.defparameter("S#50585", (SubLObject)NIL);
+        $g5947$ = SubLFiles.defparameter("S#50586", (SubLObject)NIL);
+        $g5948$ = SubLFiles.defparameter("S#50587", (SubLObject)NIL);
+        $g5949$ = SubLFiles.defparameter("S#50588", (SubLObject)NIL);
+        $g5950$ = SubLFiles.defparameter("S#50589", (SubLObject)NIL);
+        $g5951$ = SubLFiles.defparameter("S#50590", (SubLObject)NIL);
+        $g5952$ = SubLFiles.deflexical("S#50591", (SubLObject)$ic21$);
+        $g5953$ = SubLFiles.deflexical("S#50592", (SubLObject)$ic28$);
+        $g5954$ = SubLFiles.defparameter("S#50593", (SubLObject)NIL);
+        $g5955$ = SubLFiles.deflexical("S#50594", module0059.f4283((SubLObject)$ic29$));
+        $g5956$ = SubLFiles.defparameter("S#50595", (SubLObject)T);
+        $g5957$ = SubLFiles.defparameter("S#50596", (SubLObject)NIL);
+        $g5958$ = SubLFiles.deflexical("S#50597", module0077.f5313(Symbols.symbol_function((SubLObject)EQUAL), (SubLObject)UNPROVIDED));
+        $g5959$ = SubLFiles.defparameter("S#50598", (SubLObject)NIL);
+        $g5960$ = SubLFiles.defconstant("S#50599", (SubLObject)$ic132$);
+        $g5961$ = SubLFiles.defparameter("S#50600", module0048.f3326());
+        $g5962$ = SubLFiles.deflexical("S#50601", (NIL != Symbols.boundp((SubLObject)$ic156$)) ? $g5962$.getGlobalValue() : module0077.f5313(Symbols.symbol_function((SubLObject)EQL), (SubLObject)UNPROVIDED));
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f46275() {
-        module0003.f57((SubLObject)module0745.$ic0$);
-        module0002.f50((SubLObject)module0745.$ic17$, (SubLObject)module0745.$ic18$);
-        module0002.f50((SubLObject)module0745.$ic15$, (SubLObject)module0745.$ic18$);
-        module0002.f50((SubLObject)module0745.$ic16$, (SubLObject)module0745.$ic18$);
-        module0012.f419((SubLObject)module0745.$ic20$);
-        module0002.f38((SubLObject)module0745.$ic39$);
-        module0012.f419((SubLObject)module0745.$ic68$);
-        module0012.f419((SubLObject)module0745.$ic67$);
-        module0012.f419((SubLObject)module0745.$ic80$);
-        module0003.f57((SubLObject)module0745.$ic156$);
-        return (SubLObject)module0745.NIL;
+        module0003.f57((SubLObject)$ic0$);
+        module0002.f50((SubLObject)$ic17$, (SubLObject)$ic18$);
+        module0002.f50((SubLObject)$ic15$, (SubLObject)$ic18$);
+        module0002.f50((SubLObject)$ic16$, (SubLObject)$ic18$);
+        module0012.f419((SubLObject)$ic20$);
+        module0002.f38((SubLObject)$ic39$);
+        module0012.f419((SubLObject)$ic68$);
+        module0012.f419((SubLObject)$ic67$);
+        module0012.f419((SubLObject)$ic80$);
+        module0003.f57((SubLObject)$ic156$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -5767,202 +5768,202 @@ public final class module0745 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0745();
-        module0745.$g5931$ = null;
-        module0745.$g5932$ = null;
-        module0745.$g5933$ = null;
-        module0745.$g5934$ = null;
-        module0745.$g5935$ = null;
-        module0745.$g5936$ = null;
-        module0745.$g5937$ = null;
-        module0745.$g5938$ = null;
-        module0745.$g5939$ = null;
-        module0745.$g5940$ = null;
-        module0745.$g5941$ = null;
-        module0745.$g5942$ = null;
-        module0745.$g5943$ = null;
-        module0745.$g5944$ = null;
-        module0745.$g5945$ = null;
-        module0745.$g5946$ = null;
-        module0745.$g5947$ = null;
-        module0745.$g5948$ = null;
-        module0745.$g5949$ = null;
-        module0745.$g5950$ = null;
-        module0745.$g5951$ = null;
-        module0745.$g5952$ = null;
-        module0745.$g5953$ = null;
-        module0745.$g5954$ = null;
-        module0745.$g5955$ = null;
-        module0745.$g5956$ = null;
-        module0745.$g5957$ = null;
-        module0745.$g5958$ = null;
-        module0745.$g5959$ = null;
-        module0745.$g5960$ = null;
-        module0745.$g5961$ = null;
-        module0745.$g5962$ = null;
-        $ic0$ = SubLObjectFactory.makeSymbol("S#50570", "CYC");
-        $ic1$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("application.file-backed-cache.generic-singular-nl-generation-fort-cache-file-name"));
-        $ic2$ = SubLObjectFactory.makeSymbol("S#50573", "CYC");
-        $ic3$ = SubLObjectFactory.makeString("generic-singular-nl-generation-fort-cache.fht");
-        $ic4$ = SubLObjectFactory.makeKeyword("LEXICAL");
-        $ic5$ = SubLObjectFactory.makeString("nl-generation-fht-lock");
-        $ic6$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#885", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic7$ = SubLObjectFactory.makeUninternedSymbol("US#7063A5B");
-        $ic8$ = SubLObjectFactory.makeUninternedSymbol("US#7ABB132");
-        $ic9$ = SubLObjectFactory.makeSymbol("CLET");
-        $ic10$ = SubLObjectFactory.makeSymbol("S#50571", "CYC");
-        $ic11$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#50519", "CYC")));
-        $ic12$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#50573", "CYC"));
-        $ic13$ = SubLObjectFactory.makeSymbol("CUNWIND-PROTECT");
-        $ic14$ = SubLObjectFactory.makeSymbol("PROGN");
-        $ic15$ = SubLObjectFactory.makeSymbol("S#50520", "CYC");
-        $ic16$ = SubLObjectFactory.makeSymbol("S#50521", "CYC");
-        $ic17$ = SubLObjectFactory.makeSymbol("S#50519", "CYC");
-        $ic18$ = SubLObjectFactory.makeSymbol("S#50518", "CYC");
-        $ic19$ = SubLObjectFactory.makeString("/");
-        $ic20$ = SubLObjectFactory.makeSymbol("S#50525", "CYC");
-        $ic21$ = SubLObjectFactory.makeInteger(100);
-        $ic22$ = SubLObjectFactory.makeKeyword("HL-EXTERNALIZED-KEYS");
-        $ic23$ = SubLObjectFactory.makeKeyword("NL-PREDS");
-        $ic24$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nonPlural-Generic")));
-        $ic25$ = SubLObjectFactory.makeKeyword("LANGUAGE-MT");
-        $ic26$ = SubLObjectFactory.makeKeyword("UNINITIALIZED");
-        $ic27$ = SubLObjectFactory.makeInteger(60);
-        $ic28$ = SubLObjectFactory.makeInteger(10000);
-        $ic29$ = SubLObjectFactory.makeString("NL FORT Generation Results Queue");
-        $ic30$ = SubLObjectFactory.makeInteger(255);
-        $ic31$ = SubLObjectFactory.makeString("tmp/");
-        $ic32$ = SubLObjectFactory.makeString("Gen-template store is stale.");
-        $ic33$ = SubLObjectFactory.makeString("Generating nl cache to file: ~A");
-        $ic34$ = SubLObjectFactory.makeSymbol("S#12263", "CYC");
-        $ic35$ = SubLObjectFactory.makeString("fort-count.cfasl");
-        $ic36$ = SubLObjectFactory.makeString("Generating FORT paraphrases (");
-        $ic37$ = SubLObjectFactory.makeString(")...");
-        $ic38$ = SubLObjectFactory.makeString("~S already exists.");
-        $ic39$ = SubLObjectFactory.makeSymbol("CREATE-FILTERED-NL-GENERATION-FHT-FROM-DATA");
-        $ic40$ = SubLObjectFactory.makeString("Cannot filter without a set, got ~A.");
-        $ic41$ = SubLObjectFactory.makeString("Compiling file hashtable from paraphrase data...");
-        $ic42$ = SubLObjectFactory.makeSymbol("DIRECTORY-P");
-        $ic43$ = SubLObjectFactory.makeSymbol("STRING<");
-        $ic44$ = SubLObjectFactory.makeString("/done");
-        $ic45$ = SubLObjectFactory.makeString("Skipping assignment directory with no \"done\" file: ~S");
-        $ic46$ = SubLObjectFactory.makeString("build-kb-loaded.cfasl");
-        $ic47$ = SubLObjectFactory.makeString("/results.cfasl");
-        $ic48$ = SubLObjectFactory.makeString("/fast-results.cfasl");
-        $ic49$ = SubLObjectFactory.makeString("Using results file ~S");
-        $ic50$ = SubLObjectFactory.makeKeyword("INPUT");
-        $ic51$ = SubLObjectFactory.makeString("Unable to open ~S");
-        $ic52$ = SubLObjectFactory.makeKeyword("EOF");
-        $ic53$ = SubLObjectFactory.makeString("Non-FORT ~S in paraphrase data: ~S");
-        $ic54$ = SubLObjectFactory.makeString("Bad paraphrase data for ~S in ~S:~% ~S");
-        $ic55$ = SubLObjectFactory.makeString("Skipping black-listed term ~A.~%");
-        $ic56$ = SubLObjectFactory.makeKeyword("USE-FIRST");
-        $ic57$ = SubLObjectFactory.makeString("nl-generation-cache-work/");
-        $ic58$ = SubLObjectFactory.makeString("777");
-        $ic59$ = SubLObjectFactory.makeString("assignment-size.cfasl");
-        $ic60$ = SubLObjectFactory.makeString("paraphrase-mt.cfasl");
-        $ic61$ = SubLObjectFactory.makeString("Assignment size is ~S. Must be a multiple of ~D.");
-        $ic62$ = SubLObjectFactory.makeString("~");
-        $ic63$ = SubLObjectFactory.makeString(",'0D-~");
-        $ic64$ = SubLObjectFactory.makeString(",'0D/");
-        $ic65$ = SubLObjectFactory.makeString("error-output.log");
-        $ic66$ = SubLObjectFactory.makeString("~&Assigning task ~S~%");
-        $ic67$ = SubLObjectFactory.makeSymbol("S#50543", "CYC");
-        $ic68$ = SubLObjectFactory.makeSymbol("S#50542", "CYC");
-        $ic69$ = SubLObjectFactory.makeString("~&Just dequeued ~S after enqueueing ~S~%");
-        $ic70$ = SubLObjectFactory.makeString("~&Successfully completed ~S~%");
-        $ic71$ = SubLObjectFactory.makeString("Received failure code on task ~S");
-        $ic72$ = SubLObjectFactory.makeString("Didn't recognize exit code ~S");
-        $ic73$ = SubLObjectFactory.makeString("NL FORT Generation subtask reported failure:~% ~S");
-        $ic74$ = SubLObjectFactory.makeString("~&About to enqueue new exit code ~S~%");
-        $ic75$ = SubLObjectFactory.makeString("Just received task specification ~S");
-        $ic76$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#50602", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#50603", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#50604", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#50605", "CYC"));
-        $ic77$ = SubLObjectFactory.makeString("Returning ~S");
-        $ic78$ = SubLObjectFactory.makeString("results.cfasl");
-        $ic79$ = SubLObjectFactory.makeString("fast-results.cfasl");
-        $ic80$ = SubLObjectFactory.makeSymbol("S#50544", "CYC");
-        $ic81$ = SubLObjectFactory.makeString("done");
-        $ic82$ = SubLObjectFactory.makeKeyword("IGNORE-ERRORS-TARGET");
-        $ic83$ = SubLObjectFactory.makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
-        $ic84$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#50541", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("S#6908", "CYC")));
-        $ic85$ = SubLObjectFactory.makeString("prior-results.cfasl");
-        $ic86$ = SubLObjectFactory.makeKeyword("OUTPUT");
-        $ic87$ = SubLObjectFactory.makeString("stats.log");
-        $ic88$ = SubLObjectFactory.makeKeyword("APPEND");
-        $ic89$ = SubLObjectFactory.makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-        $ic90$ = SubLObjectFactory.makeString("Generating nl for forts ");
-        $ic91$ = SubLObjectFactory.makeString(" through ");
-        $ic92$ = SubLObjectFactory.makeString(" ....");
-        $ic93$ = SubLObjectFactory.makeString("");
-        $ic94$ = SubLObjectFactory.makeKeyword("SKIP");
-        $ic95$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeUninternedSymbol("US#352B2C1"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#13A2892"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#1160044"));
-        $ic96$ = SubLObjectFactory.makeString("Timed out on first try after ~A generating paraphrase of ~S.~% Trying again...");
-        $ic97$ = SubLObjectFactory.makeSymbol("BREAK");
-        $ic98$ = SubLObjectFactory.makeSymbol("WARN");
-        $ic99$ = SubLObjectFactory.makeString("Timed out after ~A generating paraphrase of ~S");
-        $ic100$ = SubLObjectFactory.makeString("Failed to generate a string for ~S");
-        $ic101$ = SubLObjectFactory.makeString("Generated empty string for ~S");
-        $ic102$ = SubLObjectFactory.makeKeyword("NEW");
-        $ic103$ = SubLObjectFactory.makeInteger(500);
-        $ic104$ = SubLObjectFactory.makeString("Verifying ");
-        $ic105$ = SubLObjectFactory.makeString(" constants...");
-        $ic106$ = SubLObjectFactory.makeString("~S:~% Cached: ~S~% Generated: ~S~%");
-        $ic107$ = SubLObjectFactory.makeString(" NARTs...");
-        $ic108$ = SubLObjectFactory.makeString("~D of ~D constants verified (~F%)~%");
-        $ic109$ = SubLObjectFactory.makeString("~D of ~D narts verified (~F%)~%");
-        $ic110$ = SubLObjectFactory.makeString("~&First non-finished (missing) directory: ~S");
-        $ic111$ = SubLObjectFactory.makeString("~&First non-finished (failed) directory: ~S");
-        $ic112$ = SubLObjectFactory.makeInteger(128);
-        $ic113$ = SubLObjectFactory.makeString("Clearing PPH memoization for ~S");
-        $ic114$ = SubLObjectFactory.makeString("~&Paraphrased batch #~D of ~S FORTs in ~A~%");
-        $ic115$ = SubLObjectFactory.makeSymbol("+");
-        $ic116$ = SubLObjectFactory.makeString("~&Total paraphrase time: ~S~%");
-        $ic117$ = SubLObjectFactory.makeString("~&Median paraphrase time: ~S~%");
-        $ic118$ = SubLObjectFactory.makeString("~&~Sth percentile paraphrase time: ~S~%");
-        $ic119$ = SubLObjectFactory.makeString("~& (SWAP time: ~A)~%");
-        $ic120$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("Total FORT Paraphrase Time in ~D-FORT Batches"), (SubLObject)SubLObjectFactory.makeString("Median FORT Paraphrase Time in ~D-FORT Batches"), (SubLObject)SubLObjectFactory.makeString("Total CPU Time per ~D-FORT Batch"), (SubLObject)SubLObjectFactory.makeString("Total GC Time per ~D-FORT Batch"), (SubLObject)SubLObjectFactory.makeString("Total Swap Time per ~D-FORT Batch"), (SubLObject)SubLObjectFactory.makeString("Failed FORT count per ~D-FORT Batch"));
-        $ic121$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("total"), (SubLObject)SubLObjectFactory.makeString("median"), (SubLObject)SubLObjectFactory.makeString("cpu"), (SubLObject)SubLObjectFactory.makeString("gc"), (SubLObject)SubLObjectFactory.makeString("swap"), (SubLObject)SubLObjectFactory.makeString("failed-fort-count"));
-        $ic122$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("Seconds"), (SubLObject)SubLObjectFactory.makeString("Seconds"), (SubLObject)SubLObjectFactory.makeString("Seconds"), (SubLObject)SubLObjectFactory.makeString("Seconds"), (SubLObject)SubLObjectFactory.makeString("Seconds"), (SubLObject)SubLObjectFactory.makeString("FORTs"));
-        $ic123$ = SubLObjectFactory.makeKeyword("XLABEL");
-        $ic124$ = SubLObjectFactory.makeString("Batch #");
-        $ic125$ = SubLObjectFactory.makeKeyword("YLABEL");
-        $ic126$ = SubLObjectFactory.makeKeyword("PLOT-TITLE");
-        $ic127$ = SubLObjectFactory.makeKeyword("OUTPUT-FILE");
-        $ic128$ = SubLObjectFactory.makeString(".cfasl");
-        $ic129$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("Total FORT Paraphrase Time per Batch"), (SubLObject)SubLObjectFactory.makeString("Median FORT Paraphrase Time by Batch"), (SubLObject)SubLObjectFactory.makeString("Total CPU Time per Batch"), (SubLObject)SubLObjectFactory.makeString("Total GC Time per Batch"), (SubLObject)SubLObjectFactory.makeString("Total Swap Time per Batch"), (SubLObject)SubLObjectFactory.makeString("Failed FORT Count per Batch"));
-        $ic130$ = SubLObjectFactory.makeSymbol("<");
-        $ic131$ = SubLObjectFactory.makeSymbol("FIRST");
-        $ic132$ = SubLObjectFactory.makeInteger(1000000000);
-        $ic133$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#50606", "CYC"));
-        $ic134$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
-        $ic135$ = SubLObjectFactory.makeKeyword("TEXT");
-        $ic136$ = SubLObjectFactory.makeString("Cached paraphrase for ~S~% is ~S.~% Should be ~S.");
-        $ic137$ = (SubLFloat)SubLObjectFactory.makeDouble(0.001);
-        $ic138$ = SubLObjectFactory.makeString("~%Checking NL Generation cache based on~% ~S~% with ~S local cache entries~% against KB ~A started from KB ~S~%");
-        $ic139$ = SubLObjectFactory.makeString("~&Done ~D. Current estimate: ~,3F%~%");
-        $ic140$ = SubLObjectFactory.makeString("Done ~S, but variance of approximately ~S exceeds ~S. Doing at least ~S more.");
-        $ic141$ = SubLObjectFactory.makeString("~&The estimated staleness percentage of the NL generation FORT cache~% (based on ~D FORTs) is between ~,");
-        $ic142$ = SubLObjectFactory.makeString("F% and ~,");
-        $ic143$ = SubLObjectFactory.makeString("F%.~%");
-        $ic144$ = SubLObjectFactory.makeSymbol("S#18284", "CYC");
-        $ic145$ = SubLObjectFactory.makeString("Looking up nl generation for all forts ....");
-        $ic146$ = SubLObjectFactory.makeKeyword("NOT-FOUND");
-        $ic147$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EnglishParaphraseMt"));
-        $ic148$ = SubLObjectFactory.makeString("cdolist");
-        $ic149$ = SubLObjectFactory.makeString("Timed out after ~S seconds generating paraphrase of ~S");
-        $ic150$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LogicalFieldAttribute"));
-        $ic151$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic152$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic153$ = SubLObjectFactory.makeSymbol("S#38", "CYC");
-        $ic154$ = SubLObjectFactory.makeSymbol("FORT-P");
-        $ic155$ = SubLObjectFactory.makeSymbol("S#3935", "CYC");
-        $ic156$ = SubLObjectFactory.makeSymbol("S#50601", "CYC");
+        $g5931$ = null;
+        $g5932$ = null;
+        $g5933$ = null;
+        $g5934$ = null;
+        $g5935$ = null;
+        $g5936$ = null;
+        $g5937$ = null;
+        $g5938$ = null;
+        $g5939$ = null;
+        $g5940$ = null;
+        $g5941$ = null;
+        $g5942$ = null;
+        $g5943$ = null;
+        $g5944$ = null;
+        $g5945$ = null;
+        $g5946$ = null;
+        $g5947$ = null;
+        $g5948$ = null;
+        $g5949$ = null;
+        $g5950$ = null;
+        $g5951$ = null;
+        $g5952$ = null;
+        $g5953$ = null;
+        $g5954$ = null;
+        $g5955$ = null;
+        $g5956$ = null;
+        $g5957$ = null;
+        $g5958$ = null;
+        $g5959$ = null;
+        $g5960$ = null;
+        $g5961$ = null;
+        $g5962$ = null;
+        $ic0$ = makeSymbol("S#50570", "CYC");
+        $ic1$ = ConsesLow.list((SubLObject)makeString("application.file-backed-cache.generic-singular-nl-generation-fort-cache-file-name"));
+        $ic2$ = makeSymbol("S#50573", "CYC");
+        $ic3$ = makeString("generic-singular-nl-generation-fort-cache.fht");
+        $ic4$ = makeKeyword("LEXICAL");
+        $ic5$ = makeString("nl-generation-fht-lock");
+        $ic6$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#885", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic7$ = makeUninternedSymbol("US#7063A5B");
+        $ic8$ = makeUninternedSymbol("US#7ABB132");
+        $ic9$ = makeSymbol("CLET");
+        $ic10$ = makeSymbol("S#50571", "CYC");
+        $ic11$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#50519", "CYC")));
+        $ic12$ = ConsesLow.list((SubLObject)makeSymbol("S#50573", "CYC"));
+        $ic13$ = makeSymbol("CUNWIND-PROTECT");
+        $ic14$ = makeSymbol("PROGN");
+        $ic15$ = makeSymbol("S#50520", "CYC");
+        $ic16$ = makeSymbol("S#50521", "CYC");
+        $ic17$ = makeSymbol("S#50519", "CYC");
+        $ic18$ = makeSymbol("S#50518", "CYC");
+        $ic19$ = makeString("/");
+        $ic20$ = makeSymbol("S#50525", "CYC");
+        $ic21$ = makeInteger(100);
+        $ic22$ = makeKeyword("HL-EXTERNALIZED-KEYS");
+        $ic23$ = makeKeyword("NL-PREDS");
+        $ic24$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("nonPlural-Generic")));
+        $ic25$ = makeKeyword("LANGUAGE-MT");
+        $ic26$ = makeKeyword("UNINITIALIZED");
+        $ic27$ = makeInteger(60);
+        $ic28$ = makeInteger(10000);
+        $ic29$ = makeString("NL FORT Generation Results Queue");
+        $ic30$ = makeInteger(255);
+        $ic31$ = makeString("tmp/");
+        $ic32$ = makeString("Gen-template store is stale.");
+        $ic33$ = makeString("Generating nl cache to file: ~A");
+        $ic34$ = makeSymbol("S#12263", "CYC");
+        $ic35$ = makeString("fort-count.cfasl");
+        $ic36$ = makeString("Generating FORT paraphrases (");
+        $ic37$ = makeString(")...");
+        $ic38$ = makeString("~S already exists.");
+        $ic39$ = makeSymbol("CREATE-FILTERED-NL-GENERATION-FHT-FROM-DATA");
+        $ic40$ = makeString("Cannot filter without a set, got ~A.");
+        $ic41$ = makeString("Compiling file hashtable from paraphrase data...");
+        $ic42$ = makeSymbol("DIRECTORY-P");
+        $ic43$ = makeSymbol("STRING<");
+        $ic44$ = makeString("/done");
+        $ic45$ = makeString("Skipping assignment directory with no \"done\" file: ~S");
+        $ic46$ = makeString("build-kb-loaded.cfasl");
+        $ic47$ = makeString("/results.cfasl");
+        $ic48$ = makeString("/fast-results.cfasl");
+        $ic49$ = makeString("Using results file ~S");
+        $ic50$ = makeKeyword("INPUT");
+        $ic51$ = makeString("Unable to open ~S");
+        $ic52$ = makeKeyword("EOF");
+        $ic53$ = makeString("Non-FORT ~S in paraphrase data: ~S");
+        $ic54$ = makeString("Bad paraphrase data for ~S in ~S:~% ~S");
+        $ic55$ = makeString("Skipping black-listed term ~A.~%");
+        $ic56$ = makeKeyword("USE-FIRST");
+        $ic57$ = makeString("nl-generation-cache-work/");
+        $ic58$ = makeString("777");
+        $ic59$ = makeString("assignment-size.cfasl");
+        $ic60$ = makeString("paraphrase-mt.cfasl");
+        $ic61$ = makeString("Assignment size is ~S. Must be a multiple of ~D.");
+        $ic62$ = makeString("~");
+        $ic63$ = makeString(",'0D-~");
+        $ic64$ = makeString(",'0D/");
+        $ic65$ = makeString("error-output.log");
+        $ic66$ = makeString("~&Assigning task ~S~%");
+        $ic67$ = makeSymbol("S#50543", "CYC");
+        $ic68$ = makeSymbol("S#50542", "CYC");
+        $ic69$ = makeString("~&Just dequeued ~S after enqueueing ~S~%");
+        $ic70$ = makeString("~&Successfully completed ~S~%");
+        $ic71$ = makeString("Received failure code on task ~S");
+        $ic72$ = makeString("Didn't recognize exit code ~S");
+        $ic73$ = makeString("NL FORT Generation subtask reported failure:~% ~S");
+        $ic74$ = makeString("~&About to enqueue new exit code ~S~%");
+        $ic75$ = makeString("Just received task specification ~S");
+        $ic76$ = ConsesLow.list((SubLObject)makeSymbol("S#50602", "CYC"), (SubLObject)makeSymbol("S#50603", "CYC"), (SubLObject)makeSymbol("S#50604", "CYC"), (SubLObject)makeSymbol("S#50605", "CYC"));
+        $ic77$ = makeString("Returning ~S");
+        $ic78$ = makeString("results.cfasl");
+        $ic79$ = makeString("fast-results.cfasl");
+        $ic80$ = makeSymbol("S#50544", "CYC");
+        $ic81$ = makeString("done");
+        $ic82$ = makeKeyword("IGNORE-ERRORS-TARGET");
+        $ic83$ = makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
+        $ic84$ = ConsesLow.list((SubLObject)makeSymbol("S#50541", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("LIST"), (SubLObject)makeSymbol("S#6908", "CYC")));
+        $ic85$ = makeString("prior-results.cfasl");
+        $ic86$ = makeKeyword("OUTPUT");
+        $ic87$ = makeString("stats.log");
+        $ic88$ = makeKeyword("APPEND");
+        $ic89$ = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
+        $ic90$ = makeString("Generating nl for forts ");
+        $ic91$ = makeString(" through ");
+        $ic92$ = makeString(" ....");
+        $ic93$ = makeString("");
+        $ic94$ = makeKeyword("SKIP");
+        $ic95$ = ConsesLow.list((SubLObject)makeUninternedSymbol("US#352B2C1"), (SubLObject)makeUninternedSymbol("US#13A2892"), (SubLObject)makeUninternedSymbol("US#1160044"));
+        $ic96$ = makeString("Timed out on first try after ~A generating paraphrase of ~S.~% Trying again...");
+        $ic97$ = makeSymbol("BREAK");
+        $ic98$ = makeSymbol("WARN");
+        $ic99$ = makeString("Timed out after ~A generating paraphrase of ~S");
+        $ic100$ = makeString("Failed to generate a string for ~S");
+        $ic101$ = makeString("Generated empty string for ~S");
+        $ic102$ = makeKeyword("NEW");
+        $ic103$ = makeInteger(500);
+        $ic104$ = makeString("Verifying ");
+        $ic105$ = makeString(" constants...");
+        $ic106$ = makeString("~S:~% Cached: ~S~% Generated: ~S~%");
+        $ic107$ = makeString(" NARTs...");
+        $ic108$ = makeString("~D of ~D constants verified (~F%)~%");
+        $ic109$ = makeString("~D of ~D narts verified (~F%)~%");
+        $ic110$ = makeString("~&First non-finished (missing) directory: ~S");
+        $ic111$ = makeString("~&First non-finished (failed) directory: ~S");
+        $ic112$ = makeInteger(128);
+        $ic113$ = makeString("Clearing PPH memoization for ~S");
+        $ic114$ = makeString("~&Paraphrased batch #~D of ~S FORTs in ~A~%");
+        $ic115$ = makeSymbol("+");
+        $ic116$ = makeString("~&Total paraphrase time: ~S~%");
+        $ic117$ = makeString("~&Median paraphrase time: ~S~%");
+        $ic118$ = makeString("~&~Sth percentile paraphrase time: ~S~%");
+        $ic119$ = makeString("~& (SWAP time: ~A)~%");
+        $ic120$ = ConsesLow.list((SubLObject)makeString("Total FORT Paraphrase Time in ~D-FORT Batches"), (SubLObject)makeString("Median FORT Paraphrase Time in ~D-FORT Batches"), (SubLObject)makeString("Total CPU Time per ~D-FORT Batch"), (SubLObject)makeString("Total GC Time per ~D-FORT Batch"), (SubLObject)makeString("Total Swap Time per ~D-FORT Batch"), (SubLObject)makeString("Failed FORT count per ~D-FORT Batch"));
+        $ic121$ = ConsesLow.list((SubLObject)makeString("total"), (SubLObject)makeString("median"), (SubLObject)makeString("cpu"), (SubLObject)makeString("gc"), (SubLObject)makeString("swap"), (SubLObject)makeString("failed-fort-count"));
+        $ic122$ = ConsesLow.list((SubLObject)makeString("Seconds"), (SubLObject)makeString("Seconds"), (SubLObject)makeString("Seconds"), (SubLObject)makeString("Seconds"), (SubLObject)makeString("Seconds"), (SubLObject)makeString("FORTs"));
+        $ic123$ = makeKeyword("XLABEL");
+        $ic124$ = makeString("Batch #");
+        $ic125$ = makeKeyword("YLABEL");
+        $ic126$ = makeKeyword("PLOT-TITLE");
+        $ic127$ = makeKeyword("OUTPUT-FILE");
+        $ic128$ = makeString(".cfasl");
+        $ic129$ = ConsesLow.list((SubLObject)makeString("Total FORT Paraphrase Time per Batch"), (SubLObject)makeString("Median FORT Paraphrase Time by Batch"), (SubLObject)makeString("Total CPU Time per Batch"), (SubLObject)makeString("Total GC Time per Batch"), (SubLObject)makeString("Total Swap Time per Batch"), (SubLObject)makeString("Failed FORT Count per Batch"));
+        $ic130$ = makeSymbol("<");
+        $ic131$ = makeSymbol("FIRST");
+        $ic132$ = makeInteger(1000000000);
+        $ic133$ = ConsesLow.list((SubLObject)makeSymbol("S#50606", "CYC"));
+        $ic134$ = constant_handles_oc.f8479((SubLObject)makeString("InferencePSC"));
+        $ic135$ = makeKeyword("TEXT");
+        $ic136$ = makeString("Cached paraphrase for ~S~% is ~S.~% Should be ~S.");
+        $ic137$ = (SubLFloat)makeDouble(0.001);
+        $ic138$ = makeString("~%Checking NL Generation cache based on~% ~S~% with ~S local cache entries~% against KB ~A started from KB ~S~%");
+        $ic139$ = makeString("~&Done ~D. Current estimate: ~,3F%~%");
+        $ic140$ = makeString("Done ~S, but variance of approximately ~S exceeds ~S. Doing at least ~S more.");
+        $ic141$ = makeString("~&The estimated staleness percentage of the NL generation FORT cache~% (based on ~D FORTs) is between ~,");
+        $ic142$ = makeString("F% and ~,");
+        $ic143$ = makeString("F%.~%");
+        $ic144$ = makeSymbol("S#18284", "CYC");
+        $ic145$ = makeString("Looking up nl generation for all forts ....");
+        $ic146$ = makeKeyword("NOT-FOUND");
+        $ic147$ = constant_handles_oc.f8479((SubLObject)makeString("EnglishParaphraseMt"));
+        $ic148$ = makeString("cdolist");
+        $ic149$ = makeString("Timed out after ~S seconds generating paraphrase of ~S");
+        $ic150$ = constant_handles_oc.f8479((SubLObject)makeString("LogicalFieldAttribute"));
+        $ic151$ = makeSymbol("S#12274", "CYC");
+        $ic152$ = constant_handles_oc.f8479((SubLObject)makeString("EverythingPSC"));
+        $ic153$ = makeSymbol("S#38", "CYC");
+        $ic154$ = makeSymbol("FORT-P");
+        $ic155$ = makeSymbol("S#3935", "CYC");
+        $ic156$ = makeSymbol("S#50601", "CYC");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0745.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 3700 ms
 	 synthetic 
 	var64 

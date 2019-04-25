@@ -89,6 +89,7 @@ import com.cyc.cycjava.cycl.tva_cache;
 import com.cyc.cycjava.cycl.forts;
 import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;

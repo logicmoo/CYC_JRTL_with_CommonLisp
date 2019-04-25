@@ -3,6 +3,7 @@ package com.cyc.cycjava.cycl;
 import com.cyc.cycjava.cycl.cyc_testing.generic_testing;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;

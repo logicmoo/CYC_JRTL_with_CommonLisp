@@ -50,6 +50,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.cycjava.cycl.fort_types_interface;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.isa;
 import com.cyc.cycjava.cycl.inference.kb_query;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

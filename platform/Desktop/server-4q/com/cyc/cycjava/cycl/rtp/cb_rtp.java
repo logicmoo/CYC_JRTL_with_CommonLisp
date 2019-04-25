@@ -2,6 +2,7 @@ package com.cyc.cycjava.cycl.rtp;
 
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.cycjava.cycl.assertion_handles;
 import com.cyc.cycjava.cycl.string_utilities;

@@ -14,6 +14,7 @@ import com.cyc.cycjava.cycl.arguments;
 import com.cyc.cycjava.cycl.lexicon_accessors;
 import com.cyc.cycjava.cycl.pph_methods_lexicon;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;

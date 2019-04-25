@@ -2,6 +2,7 @@ package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.util.SubLFile;
@@ -19,22 +20,22 @@ public final class module0238 extends SubLTranslatedFile
     }
     
     public static SubLObject f15581(final SubLObject var1) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0238.NIL != module0178.f11284(var1) || module0238.NIL != module0191.f11952(var1));
+        return (SubLObject)makeBoolean(NIL != module0178.f11284(var1) || NIL != module0191.f11952(var1));
     }
     
     public static SubLObject f15582(final SubLObject var2) {
-        return (SubLObject)module0238.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f15583(final SubLObject var2) {
-        if (module0238.NIL != module0178.f11284(var2)) {
+        if (NIL != module0178.f11284(var2)) {
             return module0178.f11332(var2);
         }
-        if (module0238.NIL != module0191.f11952(var2)) {
+        if (NIL != module0191.f11952(var2)) {
             return f15584(var2);
         }
-        module0134.f8815((SubLObject)module0238.ONE_INTEGER, (SubLObject)module0238.$ic0$, var2, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED);
-        return (SubLObject)module0238.NIL;
+        module0134.f8815((SubLObject)ONE_INTEGER, (SubLObject)$ic0$, var2, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f15584(final SubLObject var3) {
@@ -42,36 +43,36 @@ public final class module0238 extends SubLTranslatedFile
     }
     
     public static SubLObject f15585(final SubLObject var2) {
-        if (module0238.NIL != module0178.f11284(var2)) {
+        if (NIL != module0178.f11284(var2)) {
             return module0178.f11334(var2);
         }
-        if (module0238.NIL != module0191.f11952(var2)) {
-            return module0205.f13387(module0191.f11967(var2), (SubLObject)module0238.UNPROVIDED);
+        if (NIL != module0191.f11952(var2)) {
+            return module0205.f13387(module0191.f11967(var2), (SubLObject)UNPROVIDED);
         }
-        module0134.f8815((SubLObject)module0238.ONE_INTEGER, (SubLObject)module0238.$ic0$, var2, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED);
-        return (SubLObject)module0238.NIL;
+        module0134.f8815((SubLObject)ONE_INTEGER, (SubLObject)$ic0$, var2, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f15586(final SubLObject var2) {
-        if (module0238.NIL != module0178.f11284(var2)) {
+        if (NIL != module0178.f11284(var2)) {
             return module0178.f11335(var2);
         }
-        if (module0238.NIL != module0191.f11952(var2)) {
-            return module0205.f13388(module0191.f11967(var2), (SubLObject)module0238.UNPROVIDED);
+        if (NIL != module0191.f11952(var2)) {
+            return module0205.f13388(module0191.f11967(var2), (SubLObject)UNPROVIDED);
         }
-        module0134.f8815((SubLObject)module0238.ONE_INTEGER, (SubLObject)module0238.$ic0$, var2, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED);
-        return (SubLObject)module0238.NIL;
+        module0134.f8815((SubLObject)ONE_INTEGER, (SubLObject)$ic0$, var2, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f15587(final SubLObject var2) {
-        if (module0238.NIL != module0178.f11284(var2)) {
+        if (NIL != module0178.f11284(var2)) {
             return module0178.f11287(var2);
         }
-        if (module0238.NIL != module0191.f11952(var2)) {
+        if (NIL != module0191.f11952(var2)) {
             return module0191.f11976(var2);
         }
-        module0134.f8815((SubLObject)module0238.ONE_INTEGER, (SubLObject)module0238.$ic0$, var2, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED, (SubLObject)module0238.UNPROVIDED);
-        return (SubLObject)module0238.NIL;
+        module0134.f8815((SubLObject)ONE_INTEGER, (SubLObject)$ic0$, var2, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f15588() {
@@ -83,15 +84,15 @@ public final class module0238 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0238", "f15585", "S#18347", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0238", "f15586", "S#18348", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0238", "f15587", "S#18349", 1, 0, false);
-        return (SubLObject)module0238.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f15589() {
-        return (SubLObject)module0238.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f15590() {
-        return (SubLObject)module0238.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -108,14 +109,14 @@ public final class module0238 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0238();
-        $ic0$ = SubLObjectFactory.makeString("Invalid ghl-edge ~a");
+        $ic0$ = makeString("Invalid ghl-edge ~a");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0238.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 49 ms
 	
 	Decompiled with Procyon 0.5.32.

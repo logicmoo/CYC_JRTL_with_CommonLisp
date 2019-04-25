@@ -47,6 +47,7 @@ import com.cyc.cycjava.cycl.isa;
 import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.cycjava.cycl.at_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.disjoint_with;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;

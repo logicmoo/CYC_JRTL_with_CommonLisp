@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
@@ -42,30 +43,30 @@ public final class module0010 extends SubLTranslatedFile
     private static final SubLString $ic11$;
     
     public static SubLObject f323() {
-        return (SubLObject)module0010.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f324() {
-        module0010.$g19$ = SubLFiles.defparameter("S#314", (SubLObject)module0010.$ic0$);
-        module0010.$g20$ = SubLFiles.defparameter("S#315", (SubLObject)module0010.TEN_INTEGER);
-        module0010.$g21$ = SubLFiles.defparameter("S#316", module0009.f318(module0009.f317(module0010.$g19$.getDynamicValue()), module0010.$g20$.getDynamicValue()));
-        module0010.$g22$ = SubLFiles.defparameter("S#317", module0009.f319(module0010.$g21$.getDynamicValue()));
-        module0010.$g23$ = SubLFiles.defparameter("S#318", (SubLObject)module0010.$ic1$);
-        module0010.$g24$ = SubLFiles.defparameter("S#319", (SubLObject)module0010.$ic2$);
-        module0010.$g25$ = SubLFiles.defparameter("S#320", (SubLObject)module0010.$ic3$);
-        module0010.$g26$ = SubLFiles.defparameter("S#321", (SubLObject)module0010.$ic4$);
-        module0010.$g27$ = SubLFiles.defparameter("S#322", (SubLObject)module0010.$ic5$);
-        module0010.$g28$ = SubLFiles.defparameter("S#323", (SubLObject)module0010.$ic6$);
-        module0010.$g29$ = SubLFiles.defparameter("S#324", (SubLObject)module0010.$ic7$);
-        module0010.$g30$ = SubLFiles.defparameter("S#325", (SubLObject)module0010.$ic8$);
-        module0010.$g31$ = SubLFiles.defparameter("S#326", (SubLObject)module0010.$ic9$);
-        module0010.$g32$ = SubLFiles.defparameter("S#327", (SubLObject)module0010.$ic10$);
-        module0010.$g33$ = SubLFiles.defparameter("S#328", (SubLObject)module0010.$ic11$);
-        return (SubLObject)module0010.NIL;
+        $g19$ = SubLFiles.defparameter("S#314", (SubLObject)$ic0$);
+        $g20$ = SubLFiles.defparameter("S#315", (SubLObject)TEN_INTEGER);
+        $g21$ = SubLFiles.defparameter("S#316", module0009.f318(module0009.f317($g19$.getDynamicValue()), $g20$.getDynamicValue()));
+        $g22$ = SubLFiles.defparameter("S#317", module0009.f319($g21$.getDynamicValue()));
+        $g23$ = SubLFiles.defparameter("S#318", (SubLObject)$ic1$);
+        $g24$ = SubLFiles.defparameter("S#319", (SubLObject)$ic2$);
+        $g25$ = SubLFiles.defparameter("S#320", (SubLObject)$ic3$);
+        $g26$ = SubLFiles.defparameter("S#321", (SubLObject)$ic4$);
+        $g27$ = SubLFiles.defparameter("S#322", (SubLObject)$ic5$);
+        $g28$ = SubLFiles.defparameter("S#323", (SubLObject)$ic6$);
+        $g29$ = SubLFiles.defparameter("S#324", (SubLObject)$ic7$);
+        $g30$ = SubLFiles.defparameter("S#325", (SubLObject)$ic8$);
+        $g31$ = SubLFiles.defparameter("S#326", (SubLObject)$ic9$);
+        $g32$ = SubLFiles.defparameter("S#327", (SubLObject)$ic10$);
+        $g33$ = SubLFiles.defparameter("S#328", (SubLObject)$ic11$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f325() {
-        return (SubLObject)module0010.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -82,40 +83,40 @@ public final class module0010 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0010();
-        module0010.$g19$ = null;
-        module0010.$g20$ = null;
-        module0010.$g21$ = null;
-        module0010.$g22$ = null;
-        module0010.$g23$ = null;
-        module0010.$g24$ = null;
-        module0010.$g25$ = null;
-        module0010.$g26$ = null;
-        module0010.$g27$ = null;
-        module0010.$g28$ = null;
-        module0010.$g29$ = null;
-        module0010.$g30$ = null;
-        module0010.$g31$ = null;
-        module0010.$g32$ = null;
-        module0010.$g33$ = null;
-        $ic0$ = SubLObjectFactory.makeString("$Revision: 140388 $");
-        $ic1$ = SubLObjectFactory.makeString("1.269");
-        $ic2$ = SubLObjectFactory.makeString("1.555");
-        $ic3$ = SubLObjectFactory.makeString("1.69");
-        $ic4$ = SubLObjectFactory.makeString("1.391");
-        $ic5$ = SubLObjectFactory.makeString("1.1767");
-        $ic6$ = SubLObjectFactory.makeString("1.319");
-        $ic7$ = SubLObjectFactory.makeString("1.907");
-        $ic8$ = SubLObjectFactory.makeString("1.437");
-        $ic9$ = SubLObjectFactory.makeString("1.277");
-        $ic10$ = SubLObjectFactory.makeString("1.652");
-        $ic11$ = SubLObjectFactory.makeString("");
+        $g19$ = null;
+        $g20$ = null;
+        $g21$ = null;
+        $g22$ = null;
+        $g23$ = null;
+        $g24$ = null;
+        $g25$ = null;
+        $g26$ = null;
+        $g27$ = null;
+        $g28$ = null;
+        $g29$ = null;
+        $g30$ = null;
+        $g31$ = null;
+        $g32$ = null;
+        $g33$ = null;
+        $ic0$ = makeString("$Revision: 140388 $");
+        $ic1$ = makeString("1.269");
+        $ic2$ = makeString("1.555");
+        $ic3$ = makeString("1.69");
+        $ic4$ = makeString("1.391");
+        $ic5$ = makeString("1.1767");
+        $ic6$ = makeString("1.319");
+        $ic7$ = makeString("1.907");
+        $ic8$ = makeString("1.437");
+        $ic9$ = makeString("1.277");
+        $ic10$ = makeString("1.652");
+        $ic11$ = makeString("");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0010.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 16 ms
 	
 	Decompiled with Procyon 0.5.32.

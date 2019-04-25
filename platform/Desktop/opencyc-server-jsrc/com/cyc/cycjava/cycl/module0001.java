@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
@@ -29,23 +30,23 @@ public final class module0001 extends SubLTranslatedFile
     public static SubLObject f3(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0001.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0001.$ic0$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic0$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        SubLObject var7 = (SubLObject)module0001.NIL;
+        SubLObject var7 = (SubLObject)NIL;
         SubLObject var8 = var5;
-        SubLObject var9 = (SubLObject)module0001.NIL;
+        SubLObject var9 = (SubLObject)NIL;
         var9 = var8.first();
-        while (module0001.NIL != var8) {
+        while (NIL != var8) {
             final SubLObject var10 = f4(var9);
-            var7 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(var9, (SubLObject)ConsesLow.list((SubLObject)module0001.$ic1$, var10)), var7);
+            var7 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(var9, (SubLObject)ConsesLow.list((SubLObject)$ic1$, var10)), var7);
             var8 = var8.rest();
             var9 = var8.first();
         }
         var7 = Sequences.nreverse(var7);
-        return (SubLObject)ConsesLow.listS((SubLObject)module0001.$ic2$, var7, ConsesLow.append(var6, (SubLObject)module0001.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic2$, var7, ConsesLow.append(var6, (SubLObject)NIL));
     }
     
     public static SubLObject f4(final SubLObject var11) {
@@ -55,28 +56,28 @@ public final class module0001 extends SubLTranslatedFile
         if (var11.isSymbol()) {
             return f4(Symbols.symbol_name(var11));
         }
-        return f4((SubLObject)module0001.$ic3$);
+        return f4((SubLObject)$ic3$);
     }
     
     public static SubLObject f5(final SubLObject var12, final SubLObject var13) {
-        assert module0001.NIL != Types.symbolp(var12) : var12;
-        assert module0001.NIL != Types.listp(var13) : var13;
-        return (SubLObject)module0001.NIL;
+        assert NIL != Types.symbolp(var12) : var12;
+        assert NIL != Types.listp(var13) : var13;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f6() {
         SubLFiles.declareMacro("com.cyc.cycjava.cycl.module0001", "f3", "S#1");
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0001", "f4", "S#2", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0001", "f5", "S#3", 2, 0, false);
-        return (SubLObject)module0001.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f7() {
-        return (SubLObject)module0001.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f8() {
-        return (SubLObject)module0001.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -93,19 +94,19 @@ public final class module0001 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0001();
-        $ic0$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#4", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic1$ = SubLObjectFactory.makeSymbol("QUOTE");
-        $ic2$ = SubLObjectFactory.makeSymbol("CLET");
-        $ic3$ = SubLObjectFactory.makeString("TEMP");
-        $ic4$ = SubLObjectFactory.makeSymbol("SYMBOLP");
-        $ic5$ = SubLObjectFactory.makeSymbol("LISTP");
+        $ic0$ = ConsesLow.list((SubLObject)makeSymbol("S#4", "CYC"), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic1$ = makeSymbol("QUOTE");
+        $ic2$ = makeSymbol("CLET");
+        $ic3$ = makeString("TEMP");
+        $ic4$ = makeSymbol("SYMBOLP");
+        $ic5$ = makeSymbol("LISTP");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0001.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 33 ms
 	
 	Decompiled with Procyon 0.5.32.

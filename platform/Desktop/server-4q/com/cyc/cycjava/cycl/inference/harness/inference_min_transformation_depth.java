@@ -5,6 +5,7 @@ import com.cyc.cycjava.cycl.clauses;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
 import com.cyc.cycjava.cycl.memoization_state;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;

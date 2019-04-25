@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
@@ -22,37 +23,37 @@ public final class module0632 extends SubLTranslatedFile
     
     public static SubLObject f38705() {
         final SubLThread var1 = SubLProcess.currentSubLThread();
-        return module0632.$g4937$.getDynamicValue(var1);
+        return $g4937$.getDynamicValue(var1);
     }
     
     public static SubLObject f38706(final SubLObject var2) {
         final SubLThread var3 = SubLProcess.currentSubLThread();
-        assert module0632.NIL != module0269.f17731(var2) : var2;
-        module0632.$g4937$.setDynamicValue(var2, var3);
-        return module0632.$g4937$.getDynamicValue(var3);
+        assert NIL != module0269.f17731(var2) : var2;
+        $g4937$.setDynamicValue(var2, var3);
+        return $g4937$.getDynamicValue(var3);
     }
     
     public static SubLObject f38707(SubLObject var2) {
-        if (var2 == module0632.UNPROVIDED) {
+        if (var2 == UNPROVIDED) {
             var2 = f38705();
         }
-        return module0633.f38742(var2, module0632.$ic2$, module0632.$ic3$);
+        return module0633.f38742(var2, $ic2$, $ic3$);
     }
     
     public static SubLObject f38708() {
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0632", "f38705", "S#32786", 0, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0632", "f38706", "S#42442", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0632", "f38707", "S#42443", 0, 1, false);
-        return (SubLObject)module0632.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38709() {
-        module0632.$g4937$ = SubLFiles.defparameter("S#42444", module0632.$ic0$);
-        return (SubLObject)module0632.NIL;
+        $g4937$ = SubLFiles.defparameter("S#42444", $ic0$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38710() {
-        return (SubLObject)module0632.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -69,18 +70,18 @@ public final class module0632 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0632();
-        module0632.$g4937$ = null;
-        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
-        $ic1$ = SubLObjectFactory.makeSymbol("S#16717", "CYC");
-        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
-        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Null-TimeParameter"));
+        $g4937$ = null;
+        $ic0$ = constant_handles_oc.f8479((SubLObject)makeString("TestVocabularyMt"));
+        $ic1$ = makeSymbol("S#16717", "CYC");
+        $ic2$ = constant_handles_oc.f8479((SubLObject)makeString("Now"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)makeString("Null-TimeParameter"));
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0632.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 36 ms
 	
 	Decompiled with Procyon 0.5.32.

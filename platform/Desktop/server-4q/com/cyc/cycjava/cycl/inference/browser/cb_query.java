@@ -46,6 +46,7 @@ import com.cyc.cycjava.cycl.assertions_high;
 import com.cyc.cycjava.cycl.assertion_handles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_parameters;
 import com.cyc.cycjava.cycl.cb_tools;

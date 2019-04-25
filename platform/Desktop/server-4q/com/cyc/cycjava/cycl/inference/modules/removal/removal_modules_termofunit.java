@@ -25,6 +25,7 @@ import com.cyc.cycjava.cycl.assertions_high;
 import com.cyc.cycjava.cycl.function_terms;
 import com.cyc.cycjava.cycl.kb_indexing;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.cycjava.cycl.arguments;
 import com.cyc.cycjava.cycl.mt_vars;

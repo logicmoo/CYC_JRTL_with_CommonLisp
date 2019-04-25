@@ -61,6 +61,7 @@ import com.cyc.cycjava.cycl.kb_mapping_utilities;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_debugging;
 import com.cyc.cycjava.cycl.sksi.create_sks.sksi_create_sks;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.cycl_grammar;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;

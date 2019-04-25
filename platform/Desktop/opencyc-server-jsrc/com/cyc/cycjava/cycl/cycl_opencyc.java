@@ -147,7 +147,7 @@ public class cycl_opencyc extends InitializingSubLFile
         initializeClass("com.cyc.cycjava.cycl.module0119");
         initializeClass("com.cyc.cycjava.cycl.module0120");
         initializeClass("com.cyc.cycjava.cycl.module0121");
-        initializeClass("com.cyc.cycjava.cycl.oc_hl_interface_infrastructure");
+        initializeClass("com.cyc.cycjava.cycl.hl_interface_infrastructure_oc");
         initializeClass("com.cyc.cycjava.cycl.module0123");
         initializeClass("com.cyc.cycjava.cycl.module0124");
         initializeClass("com.cyc.cycjava.cycl.module0125");
@@ -185,7 +185,7 @@ public class cycl_opencyc extends InitializingSubLFile
         initializeClass("com.cyc.cycjava.cycl.module0157");
         initializeClass("com.cyc.cycjava.cycl.module0158");
         initializeClass("com.cyc.cycjava.cycl.module0159");
-        initializeClass("com.cyc.cycjava.cycl.oc_kb_object_manager");
+        initializeClass("com.cyc.cycjava.cycl.kb_object_manager_oc");
         initializeClass("com.cyc.cycjava.cycl.module0161");
         initializeClass("com.cyc.cycjava.cycl.module0162");
         initializeClass("com.cyc.cycjava.cycl.module0163");
@@ -200,16 +200,16 @@ public class cycl_opencyc extends InitializingSubLFile
         initializeClass("com.cyc.cycjava.cycl.module0172");
         initializeClass("com.cyc.cycjava.cycl.module0173");
         initializeClass("com.cyc.cycjava.cycl.assertion_handles_oc");
-        initializeClass("com.cyc.cycjava.cycl.oc_assertions_interface");
-        initializeClass("com.cyc.cycjava.cycl.oc_assertion_manager");
-        initializeClass("com.cyc.cycjava.cycl.oc_assertions_low");
+        initializeClass("com.cyc.cycjava.cycl.assertions_interface_oc");
+        initializeClass("com.cyc.cycjava.cycl.assertion_manager_oc");
+        initializeClass("com.cyc.cycjava.cycl.assertions_low_oc");
         initializeClass("com.cyc.cycjava.cycl.module0178");
         initializeClass("com.cyc.cycjava.cycl.module0179");
         initializeClass("com.cyc.cycjava.cycl.module0180");
         initializeClass("com.cyc.cycjava.cycl.module0181");
         initializeClass("com.cyc.cycjava.cycl.module0182");
         initializeClass("com.cyc.cycjava.cycl.module0183");
-        initializeClass("com.cyc.cycjava.cycl.oc_deduction_handles");
+        initializeClass("com.cyc.cycjava.cycl.deduction_handles_oc");
         initializeClass("com.cyc.cycjava.cycl.module0185");
         initializeClass("com.cyc.cycjava.cycl.module0186");
         initializeClass("com.cyc.cycjava.cycl.module0187");
@@ -394,7 +394,7 @@ public class cycl_opencyc extends InitializingSubLFile
         initializeClass("com.cyc.cycjava.cycl.module0366");
         initializeClass("com.cyc.cycjava.cycl.module0367");
         initializeClass("com.cyc.cycjava.cycl.module0368");
-        initializeClass("com.cyc.cycjava.cycl.oc_inference_datastructures_inference");
+        initializeClass("com.cyc.cycjava.cycl.inference_datastructures_inference_oc");
         initializeClass("com.cyc.cycjava.cycl.module0370");
         initializeClass("com.cyc.cycjava.cycl.module0371");
         initializeClass("com.cyc.cycjava.cycl.module0372");
@@ -621,7 +621,7 @@ public class cycl_opencyc extends InitializingSubLFile
         initializeClass("com.cyc.cycjava.cycl.module0593");
         initializeClass("com.cyc.cycjava.cycl.module0594");
         initializeClass("com.cyc.cycjava.cycl.module0595");
-        initializeClass("com.cyc.cycjava.cycl.oc_kb_compare");
+        initializeClass("com.cyc.cycjava.cycl.kb_compare_oc");
         initializeClass("com.cyc.cycjava.cycl.module0597");
         initializeClass("com.cyc.cycjava.cycl.module0598");
         initializeClass("com.cyc.cycjava.cycl.module0599");
@@ -643,7 +643,7 @@ public class cycl_opencyc extends InitializingSubLFile
         initializeClass("com.cyc.cycjava.cycl.module0615");
         initializeClass("com.cyc.cycjava.cycl.module0616");
         initializeClass("com.cyc.cycjava.cycl.module0617");
-        initializeClass("com.cyc.cycjava.cycl.oc_dumper");
+        initializeClass("com.cyc.cycjava.cycl.dumper_oc");
         initializeClass("com.cyc.cycjava.cycl.module0619");
         initializeClass("com.cyc.cycjava.cycl.module0620");
         initializeClass("com.cyc.cycjava.cycl.module0621");
@@ -710,7 +710,7 @@ public class cycl_opencyc extends InitializingSubLFile
         initializeClass("com.cyc.cycjava.cycl.module0682");
         initializeClass("com.cyc.cycjava.cycl.module0683");
         initializeClass("com.cyc.cycjava.cycl.module0684");
-        initializeClass("com.cyc.cycjava.cycl.oc_cb_query_browser");
+        initializeClass("com.cyc.cycjava.cycl.cb_query_browser_oc");
         initializeClass("com.cyc.cycjava.cycl.module0686");
         initializeClass("com.cyc.cycjava.cycl.module0687");
         initializeClass("com.cyc.cycjava.cycl.module0688");
@@ -764,7 +764,7 @@ public class cycl_opencyc extends InitializingSubLFile
         initializeClass("com.cyc.cycjava.cycl.module0736");
         initializeClass("com.cyc.cycjava.cycl.module0737");
         initializeClass("com.cyc.cycjava.cycl.module0738");
-        initializeClass("com.cyc.cycjava.cycl.oc_nl_trie_completion");
+        initializeClass("com.cyc.cycjava.cycl.nl_trie_completion_oc");
         initializeClass("com.cyc.cycjava.cycl.module0740");
         initializeClass("com.cyc.cycjava.cycl.module0741");
         initializeClass("com.cyc.cycjava.cycl.module0742");
@@ -823,7 +823,7 @@ public class cycl_opencyc extends InitializingSubLFile
         initializeClass("com.cyc.cycjava.cycl.module0795");
         initializeClass("com.cyc.cycjava.cycl.module0796");
         initializeClass("com.cyc.cycjava.cycl.module0797");
-        initializeClass("com.cyc.cycjava.cycl.oc_cycml_generator");
+        initializeClass("com.cyc.cycjava.cycl.cycml_generator_oc");
         initializeClass("com.cyc.cycjava.cycl.module0799");
         initializeClass("com.cyc.cycjava.cycl.module0800");
         initializeClass("com.cyc.cycjava.cycl.module0801");

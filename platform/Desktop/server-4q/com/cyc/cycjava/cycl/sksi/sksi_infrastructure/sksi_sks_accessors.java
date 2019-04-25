@@ -23,6 +23,7 @@ import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.cycjava.cycl.hlmt;
 import com.cyc.cycjava.cycl.string_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.isa;
 import com.cyc.cycjava.cycl.forts;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;

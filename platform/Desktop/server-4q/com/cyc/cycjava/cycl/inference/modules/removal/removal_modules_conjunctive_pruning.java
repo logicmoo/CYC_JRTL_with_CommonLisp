@@ -54,6 +54,7 @@ import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_tactic;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.subl_promotions;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;

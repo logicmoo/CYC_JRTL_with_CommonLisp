@@ -2,6 +2,7 @@ package com.cyc.cycjava.cycl.sksi.data_warehousing;
 
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.cycjava.cycl.sksi.sksi_database_fusion;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;

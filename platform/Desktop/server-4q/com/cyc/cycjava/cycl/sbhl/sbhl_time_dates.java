@@ -22,6 +22,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
 import com.cyc.cycjava.cycl.binary_tree;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.date_utilities;
 import com.cyc.cycjava.cycl.numeric_date_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;

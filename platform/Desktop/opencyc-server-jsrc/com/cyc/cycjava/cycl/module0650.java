@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
@@ -35,8 +36,8 @@ public final class module0650 extends SubLTranslatedFile
     private static final SubLObject $ic13$;
     
     public static SubLObject f39690(final SubLObject var1, final SubLObject var2) {
-        SubLObject var3 = (SubLObject)module0650.NIL;
-        if (module0650.NIL != module0259.f16854(var1, module0650.$ic0$, var2, (SubLObject)module0650.UNPROVIDED)) {
+        SubLObject var3 = (SubLObject)NIL;
+        if (NIL != module0259.f16854(var1, $ic0$, var2, (SubLObject)UNPROVIDED)) {
             var3 = f39691(var1, var3, var2);
             var3 = f39692(var1, var3, var2);
             var3 = f39693(var1, var3, var2);
@@ -51,10 +52,10 @@ public final class module0650 extends SubLTranslatedFile
     }
     
     public static SubLObject f39700(final SubLObject var4, final SubLObject var2, final SubLObject var1, SubLObject var5) {
-        if (var5 == module0650.UNPROVIDED) {
-            var5 = (SubLObject)module0650.NIL;
+        if (var5 == UNPROVIDED) {
+            var5 = (SubLObject)NIL;
         }
-        if (module0650.NIL == var5) {
+        if (NIL == var5) {
             var5 = var2;
         }
         return module0293.f19713(var4, var2, f39690(var1, var5));
@@ -87,30 +88,30 @@ public final class module0650 extends SubLTranslatedFile
     }
     
     public static SubLObject f39702(final SubLObject var1, final SubLObject var3, final SubLObject var2) {
-        assert module0650.NIL != module0291.f19601((SubLObject)module0650.$ic1$) : module0650.$ic1$;
-        final SubLObject var4 = module0434.f30577((SubLObject)module0650.$ic3$, (SubLObject)ConsesLow.listS(module0650.$ic4$, var1, (SubLObject)module0650.$ic3$), var2, (SubLObject)module0650.ZERO_INTEGER, (SubLObject)module0650.UNPROVIDED, (SubLObject)module0650.UNPROVIDED, (SubLObject)module0650.UNPROVIDED);
-        return (module0650.NIL != var4) ? conses_high.putf(var3, (SubLObject)module0650.$ic1$, Mapping.mapcar(Symbols.symbol_function((SubLObject)module0650.$ic5$), Sort.sort(var4, Symbols.symbol_function((SubLObject)module0650.$ic6$), Symbols.symbol_function((SubLObject)module0650.$ic7$)))) : var3;
+        assert NIL != module0291.f19601((SubLObject)$ic1$) : $ic1$;
+        final SubLObject var4 = module0434.f30577((SubLObject)$ic3$, (SubLObject)ConsesLow.listS($ic4$, var1, (SubLObject)$ic3$), var2, (SubLObject)ZERO_INTEGER, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        return (NIL != var4) ? conses_high.putf(var3, (SubLObject)$ic1$, Mapping.mapcar(Symbols.symbol_function((SubLObject)$ic5$), Sort.sort(var4, Symbols.symbol_function((SubLObject)$ic6$), Symbols.symbol_function((SubLObject)$ic7$)))) : var3;
     }
     
     public static SubLObject f39701(final SubLObject var1, final SubLObject var3, final SubLObject var2) {
-        assert module0650.NIL != module0291.f19601((SubLObject)module0650.$ic8$) : module0650.$ic8$;
-        final SubLObject var4 = module0434.f30577((SubLObject)module0650.$ic9$, (SubLObject)ConsesLow.listS(module0650.$ic10$, var1, (SubLObject)module0650.$ic9$), var2, (SubLObject)module0650.ZERO_INTEGER, (SubLObject)module0650.UNPROVIDED, (SubLObject)module0650.UNPROVIDED, (SubLObject)module0650.UNPROVIDED);
-        final SubLObject var5 = Sort.sort(var4, Symbols.symbol_function((SubLObject)module0650.$ic6$), Symbols.symbol_function((SubLObject)module0650.$ic7$));
-        SubLObject var6 = (SubLObject)module0650.NIL;
+        assert NIL != module0291.f19601((SubLObject)$ic8$) : $ic8$;
+        final SubLObject var4 = module0434.f30577((SubLObject)$ic9$, (SubLObject)ConsesLow.listS($ic10$, var1, (SubLObject)$ic9$), var2, (SubLObject)ZERO_INTEGER, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        final SubLObject var5 = Sort.sort(var4, Symbols.symbol_function((SubLObject)$ic6$), Symbols.symbol_function((SubLObject)$ic7$));
+        SubLObject var6 = (SubLObject)NIL;
         SubLObject var7 = var5;
-        SubLObject var8 = (SubLObject)module0650.NIL;
+        SubLObject var8 = (SubLObject)NIL;
         var8 = var7.first();
-        while (module0650.NIL != var7) {
+        while (NIL != var7) {
             final SubLObject var9 = var8.first();
             final SubLObject var10 = module0288.f19338(var9, var2);
-            final SubLObject var11 = (SubLObject)((module0650.NIL != assertion_handles_oc.f11035(var10)) ? module0291.f19561(var10) : module0650.NIL);
-            if (module0650.NIL != module0295.f19791(var11)) {
+            final SubLObject var11 = (SubLObject)((NIL != assertion_handles_oc.f11035(var10)) ? module0291.f19561(var10) : NIL);
+            if (NIL != module0295.f19791(var11)) {
                 var6 = (SubLObject)ConsesLow.cons(var11, var6);
             }
             var7 = var7.rest();
             var8 = var7.first();
         }
-        return (module0650.NIL != var6) ? conses_high.putf(var3, (SubLObject)module0650.$ic8$, Sequences.nreverse(var6)) : var3;
+        return (NIL != var6) ? conses_high.putf(var3, (SubLObject)$ic8$, Sequences.nreverse(var6)) : var3;
     }
     
     public static SubLObject f39697(final SubLObject var1, final SubLObject var3, final SubLObject var2) {
@@ -127,9 +128,9 @@ public final class module0650 extends SubLTranslatedFile
     }
     
     public static SubLObject f39703(final SubLObject var1, final SubLObject var3, final SubLObject var2) {
-        assert module0650.NIL != module0291.f19601((SubLObject)module0650.$ic11$) : module0650.$ic11$;
-        final SubLObject var4 = module0434.f30577((SubLObject)module0650.$ic12$, (SubLObject)ConsesLow.listS(module0650.$ic13$, var1, (SubLObject)module0650.$ic12$), var2, (SubLObject)module0650.ZERO_INTEGER, (SubLObject)module0650.UNPROVIDED, (SubLObject)module0650.UNPROVIDED, (SubLObject)module0650.UNPROVIDED);
-        return (module0650.NIL != var4) ? conses_high.putf(var3, (SubLObject)module0650.$ic11$, Mapping.mapcar(Symbols.symbol_function((SubLObject)module0650.$ic5$), Sort.sort(var4, Symbols.symbol_function((SubLObject)module0650.$ic6$), Symbols.symbol_function((SubLObject)module0650.$ic7$)))) : var3;
+        assert NIL != module0291.f19601((SubLObject)$ic11$) : $ic11$;
+        final SubLObject var4 = module0434.f30577((SubLObject)$ic12$, (SubLObject)ConsesLow.listS($ic13$, var1, (SubLObject)$ic12$), var2, (SubLObject)ZERO_INTEGER, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+        return (NIL != var4) ? conses_high.putf(var3, (SubLObject)$ic11$, Mapping.mapcar(Symbols.symbol_function((SubLObject)$ic5$), Sort.sort(var4, Symbols.symbol_function((SubLObject)$ic6$), Symbols.symbol_function((SubLObject)$ic7$)))) : var3;
     }
     
     public static SubLObject f39704() {
@@ -147,15 +148,15 @@ public final class module0650 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0650", "f39698", "S#43593", 3, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0650", "f39699", "S#43594", 3, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0650", "f39703", "S#43595", 3, 0, false);
-        return (SubLObject)module0650.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f39705() {
-        return (SubLObject)module0650.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f39706() {
-        return (SubLObject)module0650.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -172,27 +173,27 @@ public final class module0650 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0650();
-        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationSpecification"));
-        $ic1$ = SubLObjectFactory.makeKeyword("META-PREDICATES");
-        $ic2$ = SubLObjectFactory.makeSymbol("S#22212", "CYC");
-        $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?PRED"), (SubLObject)SubLObjectFactory.makeSymbol("?POSITION"));
-        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("useMetaPredicateInReformulation"));
-        $ic5$ = SubLObjectFactory.makeSymbol("FIRST");
-        $ic6$ = SubLObjectFactory.makeSymbol("<");
-        $ic7$ = SubLObjectFactory.makeSymbol("SECOND");
-        $ic8$ = SubLObjectFactory.makeKeyword("REFORMULATOR-RULES");
-        $ic9$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?RULE"), (SubLObject)SubLObjectFactory.makeSymbol("?POSITION"));
-        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("useRuleInReformulation"));
-        $ic11$ = SubLObjectFactory.makeKeyword("IGNORE-RL-MODULES");
-        $ic12$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?MODULE"), (SubLObject)SubLObjectFactory.makeSymbol("?POSITION"));
-        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ignoreModuleInReformulation"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)makeString("ReformulationSpecification"));
+        $ic1$ = makeKeyword("META-PREDICATES");
+        $ic2$ = makeSymbol("S#22212", "CYC");
+        $ic3$ = ConsesLow.list((SubLObject)makeSymbol("?PRED"), (SubLObject)makeSymbol("?POSITION"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)makeString("useMetaPredicateInReformulation"));
+        $ic5$ = makeSymbol("FIRST");
+        $ic6$ = makeSymbol("<");
+        $ic7$ = makeSymbol("SECOND");
+        $ic8$ = makeKeyword("REFORMULATOR-RULES");
+        $ic9$ = ConsesLow.list((SubLObject)makeSymbol("?RULE"), (SubLObject)makeSymbol("?POSITION"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)makeString("useRuleInReformulation"));
+        $ic11$ = makeKeyword("IGNORE-RL-MODULES");
+        $ic12$ = ConsesLow.list((SubLObject)makeSymbol("?MODULE"), (SubLObject)makeSymbol("?POSITION"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)makeString("ignoreModuleInReformulation"));
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0650.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 73 ms
 	
 	Decompiled with Procyon 0.5.32.

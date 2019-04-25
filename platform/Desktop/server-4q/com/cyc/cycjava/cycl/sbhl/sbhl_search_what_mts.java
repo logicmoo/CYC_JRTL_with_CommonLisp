@@ -21,6 +21,7 @@ import com.cyc.cycjava.cycl.dictionary_contents;
 import com.cyc.cycjava.cycl.dictionary;
 import com.cyc.cycjava.cycl.function_terms;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;

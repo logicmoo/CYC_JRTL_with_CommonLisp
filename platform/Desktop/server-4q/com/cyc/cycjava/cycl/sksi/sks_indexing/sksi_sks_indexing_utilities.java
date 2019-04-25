@@ -4,6 +4,7 @@ import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.cycjava.cycl.cycl_grammar;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.bindings;
 import com.cyc.cycjava.cycl.unification;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;

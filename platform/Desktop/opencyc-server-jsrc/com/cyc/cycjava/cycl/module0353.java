@@ -11,15 +11,15 @@ public final class module0353 extends SubLTranslatedFile
     public static final String myFingerPrint = "928e08431ae07e39b623e7f67287e7915c39f941ec5c89afff6b2c089c015a19";
     
     public static SubLObject f23594() {
-        return (SubLObject)module0353.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f23595() {
-        return (SubLObject)module0353.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f23596() {
-        return (SubLObject)module0353.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -42,7 +42,7 @@ public final class module0353 extends SubLTranslatedFile
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0353.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 9 ms
 	
 	Decompiled with Procyon 0.5.32.

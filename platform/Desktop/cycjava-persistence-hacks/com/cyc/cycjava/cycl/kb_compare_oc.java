@@ -27,6 +27,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
@@ -43,10 +44,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class oc_kb_compare extends SubLTranslatedFile
+public final class kb_compare_oc extends SubLTranslatedFile
 {
   public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.oc_kb_compare";
+  public static final String myName = "com.cyc.cycjava.cycl.kb_compare_oc";
   public static final String myFingerPrint = "b2ea731310b46a25dd148004efbdcdcb07362e5689e648fc304f1cf0a573d814";
   private static SubLSymbol $g4556$;
   public static SubLSymbol $g4557$;
@@ -237,40 +238,40 @@ public final class oc_kb_compare extends SubLTranslatedFile
   {
     SubLObject var4;
     final SubLObject var3 = var4 = var1.rest();
-    SubLObject var5 = oc_kb_compare.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic2$ );
+    SubLObject var5 = kb_compare_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic2$ );
     var5 = var4.first();
     final SubLObject var6;
     var4 = ( var6 = var4.rest() );
-    return ConsesLow.list( oc_kb_compare.$ic3$, var5, ConsesLow.list( oc_kb_compare.$ic4$, oc_kb_compare.$ic5$, oc_kb_compare.$ic6$,
-        ConsesLow.listS( oc_kb_compare.$ic7$, oc_kb_compare.$ic8$, ConsesLow.append( var6, oc_kb_compare.NIL ) ) ) );
+    return ConsesLow.list( kb_compare_oc.$ic3$, var5, ConsesLow.list( kb_compare_oc.$ic4$, kb_compare_oc.$ic5$, kb_compare_oc.$ic6$,
+        ConsesLow.listS( kb_compare_oc.$ic7$, kb_compare_oc.$ic8$, ConsesLow.append( var6, kb_compare_oc.NIL ) ) ) );
   }
 
   public static SubLObject f36382()
   {
     final SubLThread var7 = SubLProcess.currentSubLThread();
     final SubLObject var8 = module0103.f7404();
-    if( oc_kb_compare.NIL != var8 )
+    if( kb_compare_oc.NIL != var8 )
     {
       final SubLObject var9 = module0103.f7401( var8 );
-      if( oc_kb_compare.$ic11$ == var9 )
+      if( kb_compare_oc.$ic11$ == var9 )
       {
-        SubLObject var10 = oc_kb_compare.NIL;
+        SubLObject var10 = kb_compare_oc.NIL;
         try
         {
-          var7.throwStack.push( oc_kb_compare.$ic12$ );
+          var7.throwStack.push( kb_compare_oc.$ic12$ );
           final SubLObject var11 = Errors.$error_handler$.currentBinding( var7 );
           try
           {
-            Errors.$error_handler$.bind( Symbols.symbol_function( oc_kb_compare.$ic13$ ), var7 );
+            Errors.$error_handler$.bind( Symbols.symbol_function( kb_compare_oc.$ic13$ ), var7 );
             try
             {
-              module0103.f7398( var8, ConsesLow.listS( oc_kb_compare.$ic14$, ConsesLow.list( oc_kb_compare.$ic15$, ConsesLow.list(
-                  oc_kb_compare.$ic16$, oc_kb_compare.$g4556$.getDynamicValue( var7 ) ) ), oc_kb_compare.$ic17$ ) );
+              module0103.f7398( var8, ConsesLow.listS( kb_compare_oc.$ic14$, ConsesLow.list( kb_compare_oc.$ic15$, ConsesLow.list(
+                  kb_compare_oc.$ic16$, kb_compare_oc.$g4556$.getDynamicValue( var7 ) ) ), kb_compare_oc.$ic17$ ) );
             }
             catch( final Throwable var12 )
             {
-              Errors.handleThrowable( var12, oc_kb_compare.NIL );
+              Errors.handleThrowable( var12, kb_compare_oc.NIL );
             }
           }
           finally
@@ -280,7 +281,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
         }
         catch( final Throwable var13 )
         {
-          var10 = Errors.handleThrowable( var13, oc_kb_compare.$ic12$ );
+          var10 = Errors.handleThrowable( var13, kb_compare_oc.$ic12$ );
         }
         finally
         {
@@ -289,122 +290,122 @@ public final class oc_kb_compare extends SubLTranslatedFile
       }
       else
       {
-        oc_kb_compare.$g4556$.setDynamicValue( oc_kb_compare.NIL, var7 );
+        kb_compare_oc.$g4556$.setDynamicValue( kb_compare_oc.NIL, var7 );
       }
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36383(final SubLObject var14, final SubLObject var15)
   {
-    f36384( var14, var15, oc_kb_compare.ZERO_INTEGER );
-    return oc_kb_compare.NIL;
+    f36384( var14, var15, kb_compare_oc.ZERO_INTEGER );
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36385(final SubLObject var14)
   {
-    return ( var14.getClass() == $sX40105_native.class ) ? oc_kb_compare.T : oc_kb_compare.NIL;
+    return ( var14.getClass() == $sX40105_native.class ) ? kb_compare_oc.T : kb_compare_oc.NIL;
   }
 
   public static SubLObject f36386(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36385( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36385( var14 ) : var14;
     return var14.getField2();
   }
 
   public static SubLObject f36387(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36385( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36385( var14 ) : var14;
     return var14.getField3();
   }
 
   public static SubLObject f36388(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36385( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36385( var14 ) : var14;
     return var14.getField4();
   }
 
   public static SubLObject f36389(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36385( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36385( var14 ) : var14;
     return var14.getField5();
   }
 
   public static SubLObject f36390(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36385( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36385( var14 ) : var14;
     return var14.getField6();
   }
 
   public static SubLObject f36391(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36385( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36385( var14 ) : var14;
     return var14.setField2( var17 );
   }
 
   public static SubLObject f36392(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36385( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36385( var14 ) : var14;
     return var14.setField3( var17 );
   }
 
   public static SubLObject f36393(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36385( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36385( var14 ) : var14;
     return var14.setField4( var17 );
   }
 
   public static SubLObject f36394(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36385( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36385( var14 ) : var14;
     return var14.setField5( var17 );
   }
 
   public static SubLObject f36395(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36385( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36385( var14 ) : var14;
     return var14.setField6( var17 );
   }
 
   public static SubLObject f36396(SubLObject var18)
   {
-    if( var18 == oc_kb_compare.UNPROVIDED )
+    if( var18 == kb_compare_oc.UNPROVIDED )
     {
-      var18 = oc_kb_compare.NIL;
+      var18 = kb_compare_oc.NIL;
     }
     final SubLObject var19 = new $sX40105_native();
     SubLObject var20;
     SubLObject var21;
     SubLObject var22;
     SubLObject var23;
-    for( var20 = oc_kb_compare.NIL, var20 = var18; oc_kb_compare.NIL != var20; var20 = conses_high.cddr( var20 ) )
+    for( var20 = kb_compare_oc.NIL, var20 = var18; kb_compare_oc.NIL != var20; var20 = conses_high.cddr( var20 ) )
     {
       var21 = var20.first();
       var22 = conses_high.cadr( var20 );
       var23 = var21;
-      if( var23.eql( oc_kb_compare.$ic37$ ) )
+      if( var23.eql( kb_compare_oc.$ic37$ ) )
       {
         f36391( var19, var22 );
       }
-      else if( var23.eql( oc_kb_compare.$ic38$ ) )
+      else if( var23.eql( kb_compare_oc.$ic38$ ) )
       {
         f36392( var19, var22 );
       }
-      else if( var23.eql( oc_kb_compare.$ic39$ ) )
+      else if( var23.eql( kb_compare_oc.$ic39$ ) )
       {
         f36393( var19, var22 );
       }
-      else if( var23.eql( oc_kb_compare.$ic40$ ) )
+      else if( var23.eql( kb_compare_oc.$ic40$ ) )
       {
         f36394( var19, var22 );
       }
-      else if( var23.eql( oc_kb_compare.$ic41$ ) )
+      else if( var23.eql( kb_compare_oc.$ic41$ ) )
       {
         f36395( var19, var22 );
       }
       else
       {
-        Errors.error( oc_kb_compare.$ic42$, var21 );
+        Errors.error( kb_compare_oc.$ic42$, var21 );
       }
     }
     return var19;
@@ -412,13 +413,13 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36397(final SubLObject var24, final SubLObject var25)
   {
-    Functions.funcall( var25, var24, oc_kb_compare.$ic43$, oc_kb_compare.$ic44$, oc_kb_compare.FIVE_INTEGER );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic37$, f36386( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic38$, f36387( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic39$, f36388( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic40$, f36389( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic41$, f36390( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic46$, oc_kb_compare.$ic44$, oc_kb_compare.FIVE_INTEGER );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic43$, kb_compare_oc.$ic44$, kb_compare_oc.FIVE_INTEGER );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic37$, f36386( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic38$, f36387( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic39$, f36388( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic40$, f36389( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic41$, f36390( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic46$, kb_compare_oc.$ic44$, kb_compare_oc.FIVE_INTEGER );
     return var24;
   }
 
@@ -429,18 +430,18 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36384(final SubLObject var26, final SubLObject var15, final SubLObject var27)
   {
-    PrintLow.format( var15, oc_kb_compare.$ic48$, f36399( var26 ) );
-    return oc_kb_compare.NIL;
+    PrintLow.format( var15, kb_compare_oc.$ic48$, f36399( var26 ) );
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36400(final SubLObject var5)
   {
-    final SubLObject var6 = f36396( oc_kb_compare.UNPROVIDED );
+    final SubLObject var6 = f36396( kb_compare_oc.UNPROVIDED );
     f36391( var6, var5 );
     f36392( var6, constant_handles_oc.f8432() );
     f36393( var6, module0167.f10795() );
     f36394( var6, assertion_handles_oc.f11018() );
-    f36395( var6, oc_deduction_handles.f11642() );
+    f36395( var6, deduction_handles_oc.f11642() );
     return var6;
   }
 
@@ -450,11 +451,11 @@ public final class oc_kb_compare extends SubLTranslatedFile
     module0065.f4762( f36388( var28 ) );
     module0065.f4762( f36389( var28 ) );
     module0065.f4762( f36390( var28 ) );
-    f36391( var28, oc_kb_compare.$ic49$ );
-    f36392( var28, oc_kb_compare.NIL );
-    f36393( var28, oc_kb_compare.NIL );
-    f36394( var28, oc_kb_compare.NIL );
-    f36395( var28, oc_kb_compare.NIL );
+    f36391( var28, kb_compare_oc.$ic49$ );
+    f36392( var28, kb_compare_oc.NIL );
+    f36393( var28, kb_compare_oc.NIL );
+    f36394( var28, kb_compare_oc.NIL );
+    f36395( var28, kb_compare_oc.NIL );
     return var28;
   }
 
@@ -470,33 +471,33 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36403(final SubLObject var28, final SubLObject var29, final SubLObject var30)
   {
-    assert oc_kb_compare.NIL != constant_handles_oc.f8449( var29 ) : var29;
-    assert oc_kb_compare.NIL != module0004.f106( var30 ) : var30;
+    assert kb_compare_oc.NIL != constant_handles_oc.f8449( var29 ) : var29;
+    assert kb_compare_oc.NIL != module0004.f106( var30 ) : var30;
     module0065.f4753( f36387( var28 ), constants_high_oc.f10749( var29 ), var30 );
     return var28;
   }
 
   public static SubLObject f36404(final SubLObject var28, final SubLObject var31, final SubLObject var30)
   {
-    assert oc_kb_compare.NIL != module0167.f10813( var31 ) : var31;
-    assert oc_kb_compare.NIL != module0004.f106( var30 ) : var30;
+    assert kb_compare_oc.NIL != module0167.f10813( var31 ) : var31;
+    assert kb_compare_oc.NIL != module0004.f106( var30 ) : var30;
     module0065.f4753( f36388( var28 ), module0167.f10803( var31 ), var30 );
     return var28;
   }
 
   public static SubLObject f36405(final SubLObject var28, final SubLObject var32, final SubLObject var30)
   {
-    assert oc_kb_compare.NIL != assertion_handles_oc.f11035( var32 ) : var32;
-    assert oc_kb_compare.NIL != module0004.f106( var30 ) : var30;
+    assert kb_compare_oc.NIL != assertion_handles_oc.f11035( var32 ) : var32;
+    assert kb_compare_oc.NIL != module0004.f106( var30 ) : var30;
     module0065.f4753( f36389( var28 ), assertion_handles_oc.f11025( var32 ), var30 );
     return var28;
   }
 
   public static SubLObject f36406(final SubLObject var28, final SubLObject var33, final SubLObject var30)
   {
-    assert oc_kb_compare.NIL != oc_deduction_handles.f11659( var33 ) : var33;
-    assert oc_kb_compare.NIL != module0004.f106( var30 ) : var30;
-    module0065.f4753( f36390( var28 ), oc_deduction_handles.f11649( var33 ), var30 );
+    assert kb_compare_oc.NIL != deduction_handles_oc.f11659( var33 ) : var33;
+    assert kb_compare_oc.NIL != module0004.f106( var30 ) : var30;
+    module0065.f4753( f36390( var28 ), deduction_handles_oc.f11649( var33 ), var30 );
     return var28;
   }
 
@@ -517,139 +518,139 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36410(final SubLObject var28, final SubLObject var29)
   {
-    return SubLObjectFactory.makeBoolean( oc_kb_compare.NIL != constant_handles_oc.f8449( var29 ) && oc_kb_compare.NIL != module0035.sublisp_boolean( f36411( var28, var29 ) ) );
+    return SubLObjectFactory.makeBoolean( kb_compare_oc.NIL != constant_handles_oc.f8449( var29 ) && kb_compare_oc.NIL != module0035.sublisp_boolean( f36411( var28, var29 ) ) );
   }
 
   public static SubLObject f36411(final SubLObject var28, final SubLObject var29)
   {
     final SubLObject var30 = f36387( var28 );
     final SubLObject var31 = constants_high_oc.f10749( var29 );
-    if( oc_kb_compare.NIL != var31 )
+    if( kb_compare_oc.NIL != var31 )
     {
-      return module0065.f4750( var30, var31, oc_kb_compare.UNPROVIDED );
+      return module0065.f4750( var30, var31, kb_compare_oc.UNPROVIDED );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36412(final SubLObject var28, final SubLObject var31)
   {
-    return SubLObjectFactory.makeBoolean( oc_kb_compare.NIL != module0167.f10813( var31 ) && oc_kb_compare.NIL != module0035.sublisp_boolean( f36413( var28, var31 ) ) );
+    return SubLObjectFactory.makeBoolean( kb_compare_oc.NIL != module0167.f10813( var31 ) && kb_compare_oc.NIL != module0035.sublisp_boolean( f36413( var28, var31 ) ) );
   }
 
   public static SubLObject f36413(final SubLObject var28, final SubLObject var31)
   {
     final SubLObject var32 = f36388( var28 );
     final SubLObject var33 = module0167.f10803( var31 );
-    if( oc_kb_compare.NIL != var33 )
+    if( kb_compare_oc.NIL != var33 )
     {
-      return module0065.f4750( var32, var33, oc_kb_compare.UNPROVIDED );
+      return module0065.f4750( var32, var33, kb_compare_oc.UNPROVIDED );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36414(final SubLObject var28, final SubLObject var32)
   {
-    return SubLObjectFactory.makeBoolean( oc_kb_compare.NIL != assertion_handles_oc.f11035( var32 ) && oc_kb_compare.NIL != module0035.sublisp_boolean( f36415( var28, var32 ) ) );
+    return SubLObjectFactory.makeBoolean( kb_compare_oc.NIL != assertion_handles_oc.f11035( var32 ) && kb_compare_oc.NIL != module0035.sublisp_boolean( f36415( var28, var32 ) ) );
   }
 
   public static SubLObject f36415(final SubLObject var28, final SubLObject var32)
   {
     final SubLObject var33 = f36389( var28 );
     final SubLObject var34 = assertion_handles_oc.f11025( var32 );
-    if( oc_kb_compare.NIL != var34 )
+    if( kb_compare_oc.NIL != var34 )
     {
-      return module0065.f4750( var33, var34, oc_kb_compare.UNPROVIDED );
+      return module0065.f4750( var33, var34, kb_compare_oc.UNPROVIDED );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36416(final SubLObject var28, final SubLObject var33)
   {
-    return SubLObjectFactory.makeBoolean( oc_kb_compare.NIL != oc_deduction_handles.f11659( var33 ) && oc_kb_compare.NIL != module0035.sublisp_boolean( f36417( var28, var33 ) ) );
+    return SubLObjectFactory.makeBoolean( kb_compare_oc.NIL != deduction_handles_oc.f11659( var33 ) && kb_compare_oc.NIL != module0035.sublisp_boolean( f36417( var28, var33 ) ) );
   }
 
   public static SubLObject f36417(final SubLObject var28, final SubLObject var33)
   {
     final SubLObject var34 = f36390( var28 );
-    final SubLObject var35 = oc_deduction_handles.f11649( var33 );
-    if( oc_kb_compare.NIL != var35 )
+    final SubLObject var35 = deduction_handles_oc.f11649( var33 );
+    if( kb_compare_oc.NIL != var35 )
     {
-      return module0065.f4750( var34, var35, oc_kb_compare.UNPROVIDED );
+      return module0065.f4750( var34, var35, kb_compare_oc.UNPROVIDED );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36418(final SubLObject var1, final SubLObject var2)
   {
     SubLObject var4;
     final SubLObject var3 = var4 = var1.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic57$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic57$ );
     final SubLObject var5 = var4.rest();
     var4 = var4.first();
-    SubLObject var6 = oc_kb_compare.NIL;
-    SubLObject var7 = oc_kb_compare.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic57$ );
+    SubLObject var6 = kb_compare_oc.NIL;
+    SubLObject var7 = kb_compare_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic57$ );
     var6 = var4.first();
     var4 = var4.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic57$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic57$ );
     var7 = var4.first();
     var4 = var4.rest();
-    SubLObject var8 = oc_kb_compare.NIL;
+    SubLObject var8 = kb_compare_oc.NIL;
     SubLObject var9 = var4;
-    SubLObject var10 = oc_kb_compare.NIL;
-    SubLObject var42_43 = oc_kb_compare.NIL;
-    while ( oc_kb_compare.NIL != var9)
+    SubLObject var10 = kb_compare_oc.NIL;
+    SubLObject var42_43 = kb_compare_oc.NIL;
+    while ( kb_compare_oc.NIL != var9)
     {
-      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, oc_kb_compare.$ic57$ );
+      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, kb_compare_oc.$ic57$ );
       var42_43 = var9.first();
       var9 = var9.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, oc_kb_compare.$ic57$ );
-      if( oc_kb_compare.NIL == conses_high.member( var42_43, oc_kb_compare.$ic58$, oc_kb_compare.UNPROVIDED, oc_kb_compare.UNPROVIDED ) )
+      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, kb_compare_oc.$ic57$ );
+      if( kb_compare_oc.NIL == conses_high.member( var42_43, kb_compare_oc.$ic58$, kb_compare_oc.UNPROVIDED, kb_compare_oc.UNPROVIDED ) )
       {
-        var10 = oc_kb_compare.T;
+        var10 = kb_compare_oc.T;
       }
-      if( var42_43 == oc_kb_compare.$ic59$ )
+      if( var42_43 == kb_compare_oc.$ic59$ )
       {
         var8 = var9.first();
       }
       var9 = var9.rest();
     }
-    if( oc_kb_compare.NIL != var10 && oc_kb_compare.NIL == var8 )
+    if( kb_compare_oc.NIL != var10 && kb_compare_oc.NIL == var8 )
     {
-      cdestructuring_bind.cdestructuring_bind_error( var3, oc_kb_compare.$ic57$ );
+      cdestructuring_bind.cdestructuring_bind_error( var3, kb_compare_oc.$ic57$ );
     }
-    final SubLObject var11 = cdestructuring_bind.property_list_member( oc_kb_compare.$ic60$, var4 );
-    final SubLObject var12 = ( oc_kb_compare.NIL != var11 ) ? conses_high.cadr( var11 ) : oc_kb_compare.NIL;
+    final SubLObject var11 = cdestructuring_bind.property_list_member( kb_compare_oc.$ic60$, var4 );
+    final SubLObject var12 = ( kb_compare_oc.NIL != var11 ) ? conses_high.cadr( var11 ) : kb_compare_oc.NIL;
     final SubLObject var13;
     var4 = ( var13 = var5 );
-    final SubLObject var14 = oc_kb_compare.$ic61$;
-    final SubLObject var15 = oc_kb_compare.$ic62$;
-    return ConsesLow.list( oc_kb_compare.$ic63$, ConsesLow.list( var14, var15, ConsesLow.list( oc_kb_compare.$ic50$, var7 ),
-        oc_kb_compare.$ic60$, var12 ), ConsesLow.list( oc_kb_compare.$ic64$, var15 ), ConsesLow.listS( oc_kb_compare.$ic4$, ConsesLow.list(
-            ConsesLow.list( var6, ConsesLow.list( oc_kb_compare.$ic65$, var14 ) ) ), ConsesLow.append( var13, oc_kb_compare.NIL ) ) );
+    final SubLObject var14 = kb_compare_oc.$ic61$;
+    final SubLObject var15 = kb_compare_oc.$ic62$;
+    return ConsesLow.list( kb_compare_oc.$ic63$, ConsesLow.list( var14, var15, ConsesLow.list( kb_compare_oc.$ic50$, var7 ),
+        kb_compare_oc.$ic60$, var12 ), ConsesLow.list( kb_compare_oc.$ic64$, var15 ), ConsesLow.listS( kb_compare_oc.$ic4$, ConsesLow.list(
+            ConsesLow.list( var6, ConsesLow.list( kb_compare_oc.$ic65$, var14 ) ) ), ConsesLow.append( var13, kb_compare_oc.NIL ) ) );
   }
 
   public static SubLObject f36419(final SubLObject var28, final SubLObject var31)
   {
     final SubLThread var32 = SubLProcess.currentSubLThread();
-    SubLObject var33 = oc_kb_compare.NIL;
+    SubLObject var33 = kb_compare_oc.NIL;
     try
     {
-      var32.throwStack.push( oc_kb_compare.$ic66$ );
-      final SubLObject var34 = oc_kb_compare.$g4558$.currentBinding( var32 );
+      var32.throwStack.push( kb_compare_oc.$ic66$ );
+      final SubLObject var34 = kb_compare_oc.$g4558$.currentBinding( var32 );
       try
       {
-        oc_kb_compare.$g4558$.bind( var28, var32 );
-        module0035.f2424( oc_kb_compare.$ic67$, module0205.f13218( var31 ), oc_kb_compare.UNPROVIDED );
+        kb_compare_oc.$g4558$.bind( var28, var32 );
+        module0035.f2424( kb_compare_oc.$ic67$, module0205.f13218( var31 ), kb_compare_oc.UNPROVIDED );
       }
       finally
       {
-        oc_kb_compare.$g4558$.rebind( var34, var32 );
+        kb_compare_oc.$g4558$.rebind( var34, var32 );
       }
     }
     catch( final Throwable var35 )
     {
-      var33 = Errors.handleThrowable( var35, oc_kb_compare.$ic66$ );
+      var33 = Errors.handleThrowable( var35, kb_compare_oc.$ic66$ );
     }
     finally
     {
@@ -661,36 +662,36 @@ public final class oc_kb_compare extends SubLTranslatedFile
   public static SubLObject f36420(final SubLObject var26)
   {
     final SubLThread var27 = SubLProcess.currentSubLThread();
-    if( ( oc_kb_compare.NIL != constant_handles_oc.f8449( var26 ) && oc_kb_compare.NIL == f36410( oc_kb_compare.$g4558$.getDynamicValue( var27 ), var26 ) ) || ( oc_kb_compare.NIL != module0167.f10813( var26 )
-        && oc_kb_compare.NIL != f36419( oc_kb_compare.$g4558$.getDynamicValue( var27 ), var26 ) ) )
+    if( ( kb_compare_oc.NIL != constant_handles_oc.f8449( var26 ) && kb_compare_oc.NIL == f36410( kb_compare_oc.$g4558$.getDynamicValue( var27 ), var26 ) ) || ( kb_compare_oc.NIL != module0167.f10813( var26 )
+        && kb_compare_oc.NIL != f36419( kb_compare_oc.$g4558$.getDynamicValue( var27 ), var26 ) ) )
     {
-      Dynamic.sublisp_throw( oc_kb_compare.$ic66$, oc_kb_compare.T );
+      Dynamic.sublisp_throw( kb_compare_oc.$ic66$, kb_compare_oc.T );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36421(final SubLObject var28, final SubLObject var32)
   {
     final SubLThread var33 = SubLProcess.currentSubLThread();
-    SubLObject var34 = oc_kb_compare.NIL;
+    SubLObject var34 = kb_compare_oc.NIL;
     try
     {
-      var33.throwStack.push( oc_kb_compare.$ic66$ );
-      final SubLObject var35 = oc_kb_compare.$g4558$.currentBinding( var33 );
+      var33.throwStack.push( kb_compare_oc.$ic66$ );
+      final SubLObject var35 = kb_compare_oc.$g4558$.currentBinding( var33 );
       try
       {
-        oc_kb_compare.$g4558$.bind( var28, var33 );
-        module0035.f2424( oc_kb_compare.$ic68$, module0178.f11289( var32 ), oc_kb_compare.UNPROVIDED );
-        module0205.f13228( oc_kb_compare.$ic68$, module0178.f11287( var32 ), oc_kb_compare.T, oc_kb_compare.UNPROVIDED );
+        kb_compare_oc.$g4558$.bind( var28, var33 );
+        module0035.f2424( kb_compare_oc.$ic68$, module0178.f11289( var32 ), kb_compare_oc.UNPROVIDED );
+        module0205.f13228( kb_compare_oc.$ic68$, module0178.f11287( var32 ), kb_compare_oc.T, kb_compare_oc.UNPROVIDED );
       }
       finally
       {
-        oc_kb_compare.$g4558$.rebind( var35, var33 );
+        kb_compare_oc.$g4558$.rebind( var35, var33 );
       }
     }
     catch( final Throwable var36 )
     {
-      var34 = Errors.handleThrowable( var36, oc_kb_compare.$ic66$ );
+      var34 = Errors.handleThrowable( var36, kb_compare_oc.$ic66$ );
     }
     finally
     {
@@ -702,40 +703,40 @@ public final class oc_kb_compare extends SubLTranslatedFile
   public static SubLObject f36422(final SubLObject var26)
   {
     final SubLThread var27 = SubLProcess.currentSubLThread();
-    if( ( oc_kb_compare.NIL != constant_handles_oc.f8449( var26 ) && oc_kb_compare.NIL == f36410( oc_kb_compare.$g4558$.getDynamicValue( var27 ), var26 ) ) || ( oc_kb_compare.NIL != module0167.f10813( var26 )
-        && oc_kb_compare.NIL == f36412( oc_kb_compare.$g4558$.getDynamicValue( var27 ), var26 ) ) || ( oc_kb_compare.NIL != assertion_handles_oc.f11035( var26 ) && oc_kb_compare.NIL != f36421( oc_kb_compare.$g4558$
+    if( ( kb_compare_oc.NIL != constant_handles_oc.f8449( var26 ) && kb_compare_oc.NIL == f36410( kb_compare_oc.$g4558$.getDynamicValue( var27 ), var26 ) ) || ( kb_compare_oc.NIL != module0167.f10813( var26 )
+        && kb_compare_oc.NIL == f36412( kb_compare_oc.$g4558$.getDynamicValue( var27 ), var26 ) ) || ( kb_compare_oc.NIL != assertion_handles_oc.f11035( var26 ) && kb_compare_oc.NIL != f36421( kb_compare_oc.$g4558$
             .getDynamicValue( var27 ), var26 ) ) )
     {
-      Dynamic.sublisp_throw( oc_kb_compare.$ic66$, oc_kb_compare.T );
+      Dynamic.sublisp_throw( kb_compare_oc.$ic66$, kb_compare_oc.T );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36423(final SubLObject var28, final SubLObject var33)
   {
     final SubLThread var34 = SubLProcess.currentSubLThread();
-    SubLObject var35 = oc_kb_compare.NIL;
+    SubLObject var35 = kb_compare_oc.NIL;
     try
     {
-      var34.throwStack.push( oc_kb_compare.$ic66$ );
-      final SubLObject var36 = oc_kb_compare.$g4558$.currentBinding( var34 );
+      var34.throwStack.push( kb_compare_oc.$ic66$ );
+      final SubLObject var36 = kb_compare_oc.$g4558$.currentBinding( var34 );
       try
       {
-        oc_kb_compare.$g4558$.bind( var28, var34 );
+        kb_compare_oc.$g4558$.bind( var28, var34 );
         f36424( module0188.f11781( var33 ) );
         SubLObject var37 = module0188.f11770( var33 );
-        SubLObject var38 = oc_kb_compare.NIL;
+        SubLObject var38 = kb_compare_oc.NIL;
         var38 = var37.first();
-        while ( oc_kb_compare.NIL != var37)
+        while ( kb_compare_oc.NIL != var37)
         {
-          if( oc_kb_compare.NIL != assertion_handles_oc.f11035( var38 ) )
+          if( kb_compare_oc.NIL != assertion_handles_oc.f11035( var38 ) )
           {
             f36424( var38 );
           }
           else
           {
-            module0035.f2424( oc_kb_compare.$ic69$, module0191.f11975( var38 ), oc_kb_compare.UNPROVIDED );
-            module0205.f13228( oc_kb_compare.$ic69$, module0191.f11976( var38 ), oc_kb_compare.T, oc_kb_compare.UNPROVIDED );
+            module0035.f2424( kb_compare_oc.$ic69$, module0191.f11975( var38 ), kb_compare_oc.UNPROVIDED );
+            module0205.f13228( kb_compare_oc.$ic69$, module0191.f11976( var38 ), kb_compare_oc.T, kb_compare_oc.UNPROVIDED );
           }
           var37 = var37.rest();
           var38 = var37.first();
@@ -743,12 +744,12 @@ public final class oc_kb_compare extends SubLTranslatedFile
       }
       finally
       {
-        oc_kb_compare.$g4558$.rebind( var36, var34 );
+        kb_compare_oc.$g4558$.rebind( var36, var34 );
       }
     }
     catch( final Throwable var39 )
     {
-      var35 = Errors.handleThrowable( var39, oc_kb_compare.$ic66$ );
+      var35 = Errors.handleThrowable( var39, kb_compare_oc.$ic66$ );
     }
     finally
     {
@@ -760,26 +761,26 @@ public final class oc_kb_compare extends SubLTranslatedFile
   public static SubLObject f36424(final SubLObject var26)
   {
     final SubLThread var27 = SubLProcess.currentSubLThread();
-    if( ( oc_kb_compare.NIL != constant_handles_oc.f8449( var26 ) && oc_kb_compare.NIL == f36410( oc_kb_compare.$g4558$.getDynamicValue( var27 ), var26 ) ) || ( oc_kb_compare.NIL != module0167.f10813( var26 )
-        && oc_kb_compare.NIL == f36412( oc_kb_compare.$g4558$.getDynamicValue( var27 ), var26 ) ) || ( oc_kb_compare.NIL != assertion_handles_oc.f11035( var26 ) && oc_kb_compare.NIL == f36414( oc_kb_compare.$g4558$
+    if( ( kb_compare_oc.NIL != constant_handles_oc.f8449( var26 ) && kb_compare_oc.NIL == f36410( kb_compare_oc.$g4558$.getDynamicValue( var27 ), var26 ) ) || ( kb_compare_oc.NIL != module0167.f10813( var26 )
+        && kb_compare_oc.NIL == f36412( kb_compare_oc.$g4558$.getDynamicValue( var27 ), var26 ) ) || ( kb_compare_oc.NIL != assertion_handles_oc.f11035( var26 ) && kb_compare_oc.NIL == f36414( kb_compare_oc.$g4558$
             .getDynamicValue( var27 ), var26 ) ) )
     {
-      Dynamic.sublisp_throw( oc_kb_compare.$ic66$, oc_kb_compare.T );
+      Dynamic.sublisp_throw( kb_compare_oc.$ic66$, kb_compare_oc.T );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36425(final SubLObject var50, final SubLObject var51)
   {
     final SubLThread var52 = SubLProcess.currentSubLThread();
-    SubLObject var53 = oc_kb_compare.NIL;
+    SubLObject var53 = kb_compare_oc.NIL;
     try
     {
       final SubLObject var54 = stream_macros.$stream_requires_locking$.currentBinding( var52 );
       try
       {
-        stream_macros.$stream_requires_locking$.bind( oc_kb_compare.NIL, var52 );
-        var53 = compatibility.open_text( var51, oc_kb_compare.$ic70$ );
+        stream_macros.$stream_requires_locking$.bind( kb_compare_oc.NIL, var52 );
+        var53 = compatibility.open_text( var51, kb_compare_oc.$ic70$ );
       }
       finally
       {
@@ -787,7 +788,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
       }
       if( !var53.isStream() )
       {
-        Errors.error( oc_kb_compare.$ic71$, var51 );
+        Errors.error( kb_compare_oc.$ic71$, var51 );
       }
       final SubLObject var55 = var53;
       f36426( var50, var55 );
@@ -797,10 +798,10 @@ public final class oc_kb_compare extends SubLTranslatedFile
       final SubLObject var56 = Threads.$is_thread_performing_cleanupP$.currentBinding( var52 );
       try
       {
-        Threads.$is_thread_performing_cleanupP$.bind( oc_kb_compare.T, var52 );
+        Threads.$is_thread_performing_cleanupP$.bind( kb_compare_oc.T, var52 );
         if( var53.isStream() )
         {
-          streams_high.close( var53, oc_kb_compare.UNPROVIDED );
+          streams_high.close( var53, kb_compare_oc.UNPROVIDED );
         }
       }
       finally
@@ -814,15 +815,15 @@ public final class oc_kb_compare extends SubLTranslatedFile
   public static SubLObject f36427(final SubLObject var5, final SubLObject var51)
   {
     final SubLThread var52 = SubLProcess.currentSubLThread();
-    SubLObject var53 = oc_kb_compare.NIL;
-    SubLObject var54 = oc_kb_compare.NIL;
+    SubLObject var53 = kb_compare_oc.NIL;
+    SubLObject var54 = kb_compare_oc.NIL;
     try
     {
       final SubLObject var55 = stream_macros.$stream_requires_locking$.currentBinding( var52 );
       try
       {
-        stream_macros.$stream_requires_locking$.bind( oc_kb_compare.NIL, var52 );
-        var54 = compatibility.open_text( var51, oc_kb_compare.$ic72$ );
+        stream_macros.$stream_requires_locking$.bind( kb_compare_oc.NIL, var52 );
+        var54 = compatibility.open_text( var51, kb_compare_oc.$ic72$ );
       }
       finally
       {
@@ -830,7 +831,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
       }
       if( !var54.isStream() )
       {
-        Errors.error( oc_kb_compare.$ic71$, var51 );
+        Errors.error( kb_compare_oc.$ic71$, var51 );
       }
       final SubLObject var56 = var54;
       var53 = f36428( var5, var56 );
@@ -840,10 +841,10 @@ public final class oc_kb_compare extends SubLTranslatedFile
       final SubLObject var57 = Threads.$is_thread_performing_cleanupP$.currentBinding( var52 );
       try
       {
-        Threads.$is_thread_performing_cleanupP$.bind( oc_kb_compare.T, var52 );
+        Threads.$is_thread_performing_cleanupP$.bind( kb_compare_oc.T, var52 );
         if( var54.isStream() )
         {
-          streams_high.close( var54, oc_kb_compare.UNPROVIDED );
+          streams_high.close( var54, kb_compare_oc.UNPROVIDED );
         }
       }
       finally
@@ -856,26 +857,26 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36426(final SubLObject var50, final SubLObject var15)
   {
-    oc_dumper.f38021( var15 );
-    module0021.f1038( oc_kb_compare.$ic73$, var15 );
-    f36429( f36387( var50 ), var15, oc_kb_compare.$ic74$ );
-    module0021.f1038( oc_kb_compare.$ic75$, var15 );
-    f36429( f36388( var50 ), var15, oc_kb_compare.$ic76$ );
-    module0021.f1038( oc_kb_compare.$ic77$, var15 );
-    f36429( f36389( var50 ), var15, oc_kb_compare.$ic78$ );
-    module0021.f1038( oc_kb_compare.$ic79$, var15 );
-    f36429( f36390( var50 ), var15, oc_kb_compare.$ic80$ );
+    dumper_oc.f38021( var15 );
+    module0021.f1038( kb_compare_oc.$ic73$, var15 );
+    f36429( f36387( var50 ), var15, kb_compare_oc.$ic74$ );
+    module0021.f1038( kb_compare_oc.$ic75$, var15 );
+    f36429( f36388( var50 ), var15, kb_compare_oc.$ic76$ );
+    module0021.f1038( kb_compare_oc.$ic77$, var15 );
+    f36429( f36389( var50 ), var15, kb_compare_oc.$ic78$ );
+    module0021.f1038( kb_compare_oc.$ic79$, var15 );
+    f36429( f36390( var50 ), var15, kb_compare_oc.$ic80$ );
     return var50;
   }
 
   public static SubLObject f36428(final SubLObject var5, final SubLObject var15)
   {
     final SubLObject var16 = f36400( var5 );
-    oc_dumper.f38022( var15 );
-    f36392( var16, f36430( oc_kb_compare.$ic73$, var15 ) );
-    f36393( var16, f36430( oc_kb_compare.$ic75$, var15 ) );
-    f36394( var16, f36430( oc_kb_compare.$ic77$, var15 ) );
-    f36395( var16, f36430( oc_kb_compare.$ic79$, var15 ) );
+    dumper_oc.f38022( var15 );
+    f36392( var16, f36430( kb_compare_oc.$ic73$, var15 ) );
+    f36393( var16, f36430( kb_compare_oc.$ic75$, var15 ) );
+    f36394( var16, f36430( kb_compare_oc.$ic77$, var15 ) );
+    f36395( var16, f36430( kb_compare_oc.$ic79$, var15 ) );
     return var16;
   }
 
@@ -883,7 +884,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
   {
     final SubLThread var57 = SubLProcess.currentSubLThread();
     final SubLObject var59;
-    final SubLObject var58 = var59 = Sequences.cconcatenate( oc_kb_compare.$ic81$, new SubLObject[] { module0006.f203( var56 ), oc_kb_compare.$ic82$
+    final SubLObject var58 = var59 = Sequences.cconcatenate( kb_compare_oc.$ic81$, new SubLObject[] { module0006.f203( var56 ), kb_compare_oc.$ic82$
     } );
     final SubLObject var60 = module0012.$g73$.currentBinding( var57 );
     final SubLObject var61 = module0012.$g65$.currentBinding( var57 );
@@ -897,12 +898,12 @@ public final class oc_kb_compare extends SubLTranslatedFile
     {
       module0012.$g73$.bind( Time.get_universal_time(), var57 );
       module0012.$g65$.bind( module0012.$g73$.getDynamicValue( var57 ), var57 );
-      module0012.$g67$.bind( oc_kb_compare.ONE_INTEGER, var57 );
-      module0012.$g68$.bind( oc_kb_compare.ZERO_INTEGER, var57 );
-      module0012.$g66$.bind( oc_kb_compare.ZERO_INTEGER, var57 );
-      module0012.$g69$.bind( oc_kb_compare.ZERO_INTEGER, var57 );
-      module0012.$g70$.bind( oc_kb_compare.T, var57 );
-      module0012.$silent_progressP$.bind( ( oc_kb_compare.NIL != var59 ) ? module0012.$silent_progressP$.getDynamicValue( var57 ) : oc_kb_compare.T, var57 );
+      module0012.$g67$.bind( kb_compare_oc.ONE_INTEGER, var57 );
+      module0012.$g68$.bind( kb_compare_oc.ZERO_INTEGER, var57 );
+      module0012.$g66$.bind( kb_compare_oc.ZERO_INTEGER, var57 );
+      module0012.$g69$.bind( kb_compare_oc.ZERO_INTEGER, var57 );
+      module0012.$g70$.bind( kb_compare_oc.T, var57 );
+      module0012.$silent_progressP$.bind( ( kb_compare_oc.NIL != var59 ) ? module0012.$silent_progressP$.getDynamicValue( var57 ) : kb_compare_oc.T, var57 );
       module0012.f474( var59 );
       module0021.f1038( f36431( var55 ), var15 );
       module0012.f475();
@@ -924,13 +925,13 @@ public final class oc_kb_compare extends SubLTranslatedFile
   public static SubLObject f36430(final SubLObject var56, final SubLObject var15)
   {
     final SubLThread var57 = SubLProcess.currentSubLThread();
-    final SubLObject var58 = Sequences.cconcatenate( oc_kb_compare.$ic83$, new SubLObject[] { module0006.f203( var56 ), oc_kb_compare.$ic82$
+    final SubLObject var58 = Sequences.cconcatenate( kb_compare_oc.$ic83$, new SubLObject[] { module0006.f203( var56 ), kb_compare_oc.$ic82$
     } );
-    final SubLObject var59 = module0021.f1060( var15, oc_kb_compare.UNPROVIDED, oc_kb_compare.UNPROVIDED );
-    SubLObject var60 = oc_kb_compare.NIL;
-    if( oc_kb_compare.NIL == Errors.$ignore_mustsP$.getDynamicValue( var57 ) && !var56.eql( var59 ) )
+    final SubLObject var59 = module0021.f1060( var15, kb_compare_oc.UNPROVIDED, kb_compare_oc.UNPROVIDED );
+    SubLObject var60 = kb_compare_oc.NIL;
+    if( kb_compare_oc.NIL == Errors.$ignore_mustsP$.getDynamicValue( var57 ) && !var56.eql( var59 ) )
     {
-      Errors.error( oc_kb_compare.$ic84$, var56, var59 );
+      Errors.error( kb_compare_oc.$ic84$, var56, var59 );
     }
     final SubLObject var61 = var58;
     final SubLObject var62 = module0012.$g73$.currentBinding( var57 );
@@ -945,17 +946,17 @@ public final class oc_kb_compare extends SubLTranslatedFile
     {
       module0012.$g73$.bind( Time.get_universal_time(), var57 );
       module0012.$g65$.bind( module0012.$g73$.getDynamicValue( var57 ), var57 );
-      module0012.$g67$.bind( oc_kb_compare.ONE_INTEGER, var57 );
-      module0012.$g68$.bind( oc_kb_compare.ZERO_INTEGER, var57 );
-      module0012.$g66$.bind( oc_kb_compare.ZERO_INTEGER, var57 );
-      module0012.$g69$.bind( oc_kb_compare.ZERO_INTEGER, var57 );
-      module0012.$g70$.bind( oc_kb_compare.T, var57 );
-      module0012.$silent_progressP$.bind( ( oc_kb_compare.NIL != var61 ) ? module0012.$silent_progressP$.getDynamicValue( var57 ) : oc_kb_compare.T, var57 );
+      module0012.$g67$.bind( kb_compare_oc.ONE_INTEGER, var57 );
+      module0012.$g68$.bind( kb_compare_oc.ZERO_INTEGER, var57 );
+      module0012.$g66$.bind( kb_compare_oc.ZERO_INTEGER, var57 );
+      module0012.$g69$.bind( kb_compare_oc.ZERO_INTEGER, var57 );
+      module0012.$g70$.bind( kb_compare_oc.T, var57 );
+      module0012.$silent_progressP$.bind( ( kb_compare_oc.NIL != var61 ) ? module0012.$silent_progressP$.getDynamicValue( var57 ) : kb_compare_oc.T, var57 );
       module0012.f474( var61 );
-      var60 = module0021.f1060( var15, oc_kb_compare.UNPROVIDED, oc_kb_compare.UNPROVIDED );
-      if( oc_kb_compare.NIL == Errors.$ignore_mustsP$.getDynamicValue( var57 ) && oc_kb_compare.NIL == module0065.f4719( var60 ) )
+      var60 = module0021.f1060( var15, kb_compare_oc.UNPROVIDED, kb_compare_oc.UNPROVIDED );
+      if( kb_compare_oc.NIL == Errors.$ignore_mustsP$.getDynamicValue( var57 ) && kb_compare_oc.NIL == module0065.f4719( var60 ) )
       {
-        Errors.error( oc_kb_compare.$ic85$, var60 );
+        Errors.error( kb_compare_oc.$ic85$, var60 );
       }
       module0012.f475();
     }
@@ -977,40 +978,40 @@ public final class oc_kb_compare extends SubLTranslatedFile
   {
     final SubLThread var56 = SubLProcess.currentSubLThread();
     final SubLObject var57 = module0065.f4797( var55 );
-    if( oc_kb_compare.NIL == module0065.f4772( var55, oc_kb_compare.$ic86$ ) )
+    if( kb_compare_oc.NIL == module0065.f4772( var55, kb_compare_oc.$ic86$ ) )
     {
-      if( oc_kb_compare.NIL == module0065.f4775( var55, oc_kb_compare.$ic86$ ) )
+      if( kb_compare_oc.NIL == module0065.f4775( var55, kb_compare_oc.$ic86$ ) )
       {
         final SubLObject var58 = module0065.f4740( var55 );
-        final SubLObject var59 = oc_kb_compare.NIL;
+        final SubLObject var59 = kb_compare_oc.NIL;
         SubLObject var60;
         SubLObject var61;
         SubLObject var62;
         SubLObject var63;
-        for( var60 = Sequences.length( var58 ), var61 = oc_kb_compare.NIL, var61 = oc_kb_compare.ZERO_INTEGER; var61.numL( var60 ); var61 = Numbers.add( var61,
-            oc_kb_compare.ONE_INTEGER ) )
+        for( var60 = Sequences.length( var58 ), var61 = kb_compare_oc.NIL, var61 = kb_compare_oc.ZERO_INTEGER; var61.numL( var60 ); var61 = Numbers.add( var61,
+            kb_compare_oc.ONE_INTEGER ) )
         {
-          var62 = ( ( oc_kb_compare.NIL != var59 ) ? Numbers.subtract( var60, var61, oc_kb_compare.ONE_INTEGER ) : var61 );
+          var62 = ( ( kb_compare_oc.NIL != var59 ) ? Numbers.subtract( var60, var61, kb_compare_oc.ONE_INTEGER ) : var61 );
           var63 = Vectors.aref( var58, var62 );
-          if( oc_kb_compare.NIL == module0065.f4749( var63 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4749( var63 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
           {
-            if( oc_kb_compare.NIL != module0065.f4749( var63 ) )
+            if( kb_compare_oc.NIL != module0065.f4749( var63 ) )
             {
-              var63 = oc_kb_compare.$ic86$;
+              var63 = kb_compare_oc.$ic86$;
             }
-            if( oc_kb_compare.NIL == Errors.$ignore_mustsP$.getDynamicValue( var56 ) && oc_kb_compare.NIL == module0004.f106( var63 ) )
+            if( kb_compare_oc.NIL == Errors.$ignore_mustsP$.getDynamicValue( var56 ) && kb_compare_oc.NIL == module0004.f106( var63 ) )
             {
-              Errors.error( oc_kb_compare.$ic87$, var62, var63 );
+              Errors.error( kb_compare_oc.$ic87$, var62, var63 );
             }
             module0065.f4753( var57, var63, var62 );
           }
         }
       }
-      if( oc_kb_compare.NIL == module0065.f4777( var55 ) )
+      if( kb_compare_oc.NIL == module0065.f4777( var55 ) )
       {
         final SubLObject var64 = module0065.f4738( var55 );
-        SubLObject var65 = oc_kb_compare.NIL;
-        SubLObject var66 = oc_kb_compare.NIL;
+        SubLObject var65 = kb_compare_oc.NIL;
+        SubLObject var66 = kb_compare_oc.NIL;
         final Iterator var67 = Hashtables.getEntrySetIterator( var64 );
         try
         {
@@ -1019,9 +1020,9 @@ public final class oc_kb_compare extends SubLTranslatedFile
             final Map.Entry var68 = Hashtables.iteratorNextEntry( var67 );
             var65 = Hashtables.getEntryKey( var68 );
             var66 = Hashtables.getEntryValue( var68 );
-            if( oc_kb_compare.NIL == Errors.$ignore_mustsP$.getDynamicValue( var56 ) && oc_kb_compare.NIL == module0004.f106( var66 ) )
+            if( kb_compare_oc.NIL == Errors.$ignore_mustsP$.getDynamicValue( var56 ) && kb_compare_oc.NIL == module0004.f106( var66 ) )
             {
-              Errors.error( oc_kb_compare.$ic87$, var65, var66 );
+              Errors.error( kb_compare_oc.$ic87$, var65, var66 );
             }
             module0065.f4753( var57, var66, var65 );
           }
@@ -1037,130 +1038,130 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36432(final SubLObject var14, final SubLObject var15)
   {
-    f36433( var14, var15, oc_kb_compare.ZERO_INTEGER );
-    return oc_kb_compare.NIL;
+    f36433( var14, var15, kb_compare_oc.ZERO_INTEGER );
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36434(final SubLObject var14)
   {
-    return ( var14.getClass() == $sX40109_native.class ) ? oc_kb_compare.T : oc_kb_compare.NIL;
+    return ( var14.getClass() == $sX40109_native.class ) ? kb_compare_oc.T : kb_compare_oc.NIL;
   }
 
   public static SubLObject f36435(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.getField2();
   }
 
   public static SubLObject f36436(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.getField3();
   }
 
   public static SubLObject f36437(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.getField4();
   }
 
   public static SubLObject f36438(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.getField5();
   }
 
   public static SubLObject f36439(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.getField6();
   }
 
   public static SubLObject f36440(final SubLObject var14)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.getField7();
   }
 
   public static SubLObject f36441(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.setField2( var17 );
   }
 
   public static SubLObject f36442(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.setField3( var17 );
   }
 
   public static SubLObject f36443(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.setField4( var17 );
   }
 
   public static SubLObject f36444(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.setField5( var17 );
   }
 
   public static SubLObject f36445(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.setField6( var17 );
   }
 
   public static SubLObject f36446(final SubLObject var14, final SubLObject var17)
   {
-    assert oc_kb_compare.NIL != f36434( var14 ) : var14;
+    assert kb_compare_oc.NIL != f36434( var14 ) : var14;
     return var14.setField7( var17 );
   }
 
   public static SubLObject f36447(SubLObject var18)
   {
-    if( var18 == oc_kb_compare.UNPROVIDED )
+    if( var18 == kb_compare_oc.UNPROVIDED )
     {
-      var18 = oc_kb_compare.NIL;
+      var18 = kb_compare_oc.NIL;
     }
     final SubLObject var19 = new $sX40109_native();
     SubLObject var20;
     SubLObject var21;
     SubLObject var22;
     SubLObject var23;
-    for( var20 = oc_kb_compare.NIL, var20 = var18; oc_kb_compare.NIL != var20; var20 = conses_high.cddr( var20 ) )
+    for( var20 = kb_compare_oc.NIL, var20 = var18; kb_compare_oc.NIL != var20; var20 = conses_high.cddr( var20 ) )
     {
       var21 = var20.first();
       var22 = conses_high.cadr( var20 );
       var23 = var21;
-      if( var23.eql( oc_kb_compare.$ic109$ ) )
+      if( var23.eql( kb_compare_oc.$ic109$ ) )
       {
         f36441( var19, var22 );
       }
-      else if( var23.eql( oc_kb_compare.$ic110$ ) )
+      else if( var23.eql( kb_compare_oc.$ic110$ ) )
       {
         f36442( var19, var22 );
       }
-      else if( var23.eql( oc_kb_compare.$ic73$ ) )
+      else if( var23.eql( kb_compare_oc.$ic73$ ) )
       {
         f36443( var19, var22 );
       }
-      else if( var23.eql( oc_kb_compare.$ic75$ ) )
+      else if( var23.eql( kb_compare_oc.$ic75$ ) )
       {
         f36444( var19, var22 );
       }
-      else if( var23.eql( oc_kb_compare.$ic77$ ) )
+      else if( var23.eql( kb_compare_oc.$ic77$ ) )
       {
         f36445( var19, var22 );
       }
-      else if( var23.eql( oc_kb_compare.$ic79$ ) )
+      else if( var23.eql( kb_compare_oc.$ic79$ ) )
       {
         f36446( var19, var22 );
       }
       else
       {
-        Errors.error( oc_kb_compare.$ic42$, var21 );
+        Errors.error( kb_compare_oc.$ic42$, var21 );
       }
     }
     return var19;
@@ -1168,14 +1169,14 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36448(final SubLObject var24, final SubLObject var25)
   {
-    Functions.funcall( var25, var24, oc_kb_compare.$ic43$, oc_kb_compare.$ic111$, oc_kb_compare.SIX_INTEGER );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic109$, f36435( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic110$, f36436( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic73$, f36437( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic75$, f36438( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic77$, f36439( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic45$, oc_kb_compare.$ic79$, f36440( var24 ) );
-    Functions.funcall( var25, var24, oc_kb_compare.$ic46$, oc_kb_compare.$ic111$, oc_kb_compare.SIX_INTEGER );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic43$, kb_compare_oc.$ic111$, kb_compare_oc.SIX_INTEGER );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic109$, f36435( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic110$, f36436( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic73$, f36437( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic75$, f36438( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic77$, f36439( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic45$, kb_compare_oc.$ic79$, f36440( var24 ) );
+    Functions.funcall( var25, var24, kb_compare_oc.$ic46$, kb_compare_oc.$ic111$, kb_compare_oc.SIX_INTEGER );
     return var24;
   }
 
@@ -1186,19 +1187,19 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36433(final SubLObject var26, final SubLObject var15, final SubLObject var27)
   {
-    PrintLow.format( var15, oc_kb_compare.$ic113$, f36450( var26 ) );
-    return oc_kb_compare.NIL;
+    PrintLow.format( var15, kb_compare_oc.$ic113$, f36450( var26 ) );
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36451(final SubLObject var28)
   {
-    final SubLObject var29 = f36447( oc_kb_compare.UNPROVIDED );
+    final SubLObject var29 = f36447( kb_compare_oc.UNPROVIDED );
     f36441( var29, var28 );
-    f36442( var29, module0067.f4880( Symbols.symbol_function( oc_kb_compare.EQL ), oc_kb_compare.UNPROVIDED ) );
-    f36443( var29, module0077.f5313( Symbols.symbol_function( oc_kb_compare.EQL ), oc_kb_compare.UNPROVIDED ) );
-    f36444( var29, module0077.f5313( Symbols.symbol_function( oc_kb_compare.EQL ), oc_kb_compare.UNPROVIDED ) );
-    f36445( var29, module0077.f5313( Symbols.symbol_function( oc_kb_compare.EQL ), oc_kb_compare.UNPROVIDED ) );
-    f36446( var29, module0077.f5313( Symbols.symbol_function( oc_kb_compare.EQL ), oc_kb_compare.UNPROVIDED ) );
+    f36442( var29, module0067.f4880( Symbols.symbol_function( kb_compare_oc.EQL ), kb_compare_oc.UNPROVIDED ) );
+    f36443( var29, module0077.f5313( Symbols.symbol_function( kb_compare_oc.EQL ), kb_compare_oc.UNPROVIDED ) );
+    f36444( var29, module0077.f5313( Symbols.symbol_function( kb_compare_oc.EQL ), kb_compare_oc.UNPROVIDED ) );
+    f36445( var29, module0077.f5313( Symbols.symbol_function( kb_compare_oc.EQL ), kb_compare_oc.UNPROVIDED ) );
+    f36446( var29, module0077.f5313( Symbols.symbol_function( kb_compare_oc.EQL ), kb_compare_oc.UNPROVIDED ) );
     return var29;
   }
 
@@ -1209,12 +1210,12 @@ public final class oc_kb_compare extends SubLTranslatedFile
     module0077.f5328( f36438( var84 ) );
     module0077.f5328( f36439( var84 ) );
     module0077.f5328( f36440( var84 ) );
-    f36441( var84, oc_kb_compare.$ic49$ );
-    f36442( var84, oc_kb_compare.NIL );
-    f36443( var84, oc_kb_compare.NIL );
-    f36444( var84, oc_kb_compare.NIL );
-    f36445( var84, oc_kb_compare.NIL );
-    f36446( var84, oc_kb_compare.NIL );
+    f36441( var84, kb_compare_oc.$ic49$ );
+    f36442( var84, kb_compare_oc.NIL );
+    f36443( var84, kb_compare_oc.NIL );
+    f36444( var84, kb_compare_oc.NIL );
+    f36445( var84, kb_compare_oc.NIL );
+    f36446( var84, kb_compare_oc.NIL );
     return var84;
   }
 
@@ -1252,273 +1253,273 @@ public final class oc_kb_compare extends SubLTranslatedFile
   {
     SubLObject var4;
     final SubLObject var3 = var4 = var1.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic124$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic124$ );
     final SubLObject var5 = var4.rest();
     var4 = var4.first();
-    SubLObject var6 = oc_kb_compare.NIL;
-    SubLObject var7 = oc_kb_compare.NIL;
-    SubLObject var8 = oc_kb_compare.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic124$ );
+    SubLObject var6 = kb_compare_oc.NIL;
+    SubLObject var7 = kb_compare_oc.NIL;
+    SubLObject var8 = kb_compare_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic124$ );
     var6 = var4.first();
     var4 = var4.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic124$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic124$ );
     var7 = var4.first();
     var4 = var4.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic124$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic124$ );
     var8 = var4.first();
     var4 = var4.rest();
-    SubLObject var9 = oc_kb_compare.NIL;
+    SubLObject var9 = kb_compare_oc.NIL;
     SubLObject var10 = var4;
-    SubLObject var11 = oc_kb_compare.NIL;
-    SubLObject var92_93 = oc_kb_compare.NIL;
-    while ( oc_kb_compare.NIL != var10)
+    SubLObject var11 = kb_compare_oc.NIL;
+    SubLObject var92_93 = kb_compare_oc.NIL;
+    while ( kb_compare_oc.NIL != var10)
     {
-      cdestructuring_bind.destructuring_bind_must_consp( var10, var3, oc_kb_compare.$ic124$ );
+      cdestructuring_bind.destructuring_bind_must_consp( var10, var3, kb_compare_oc.$ic124$ );
       var92_93 = var10.first();
       var10 = var10.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( var10, var3, oc_kb_compare.$ic124$ );
-      if( oc_kb_compare.NIL == conses_high.member( var92_93, oc_kb_compare.$ic125$, oc_kb_compare.UNPROVIDED, oc_kb_compare.UNPROVIDED ) )
+      cdestructuring_bind.destructuring_bind_must_consp( var10, var3, kb_compare_oc.$ic124$ );
+      if( kb_compare_oc.NIL == conses_high.member( var92_93, kb_compare_oc.$ic125$, kb_compare_oc.UNPROVIDED, kb_compare_oc.UNPROVIDED ) )
       {
-        var11 = oc_kb_compare.T;
+        var11 = kb_compare_oc.T;
       }
-      if( var92_93 == oc_kb_compare.$ic59$ )
+      if( var92_93 == kb_compare_oc.$ic59$ )
       {
         var9 = var10.first();
       }
       var10 = var10.rest();
     }
-    if( oc_kb_compare.NIL != var11 && oc_kb_compare.NIL == var9 )
+    if( kb_compare_oc.NIL != var11 && kb_compare_oc.NIL == var9 )
     {
-      cdestructuring_bind.cdestructuring_bind_error( var3, oc_kb_compare.$ic124$ );
+      cdestructuring_bind.cdestructuring_bind_error( var3, kb_compare_oc.$ic124$ );
     }
-    final SubLObject var12 = cdestructuring_bind.property_list_member( oc_kb_compare.$ic126$, var4 );
-    final SubLObject var13 = ( oc_kb_compare.NIL != var12 ) ? conses_high.cadr( var12 ) : oc_kb_compare.NIL;
+    final SubLObject var12 = cdestructuring_bind.property_list_member( kb_compare_oc.$ic126$, var4 );
+    final SubLObject var13 = ( kb_compare_oc.NIL != var12 ) ? conses_high.cadr( var12 ) : kb_compare_oc.NIL;
     final SubLObject var14;
     var4 = ( var14 = var5 );
-    return ConsesLow.listS( oc_kb_compare.$ic127$, ConsesLow.list( var6, var7, ConsesLow.list( oc_kb_compare.$ic114$, var8 ),
-        oc_kb_compare.$ic126$, var13 ), ConsesLow.append( var14, oc_kb_compare.NIL ) );
+    return ConsesLow.listS( kb_compare_oc.$ic127$, ConsesLow.list( var6, var7, ConsesLow.list( kb_compare_oc.$ic114$, var8 ),
+        kb_compare_oc.$ic126$, var13 ), ConsesLow.append( var14, kb_compare_oc.NIL ) );
   }
 
   public static SubLObject f36459(final SubLObject var1, final SubLObject var2)
   {
     SubLObject var4;
     final SubLObject var3 = var4 = var1.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic128$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic128$ );
     final SubLObject var5 = var4.rest();
     var4 = var4.first();
-    SubLObject var6 = oc_kb_compare.NIL;
-    SubLObject var7 = oc_kb_compare.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic128$ );
+    SubLObject var6 = kb_compare_oc.NIL;
+    SubLObject var7 = kb_compare_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic128$ );
     var6 = var4.first();
     var4 = var4.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic128$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic128$ );
     var7 = var4.first();
     var4 = var4.rest();
-    SubLObject var8 = oc_kb_compare.NIL;
+    SubLObject var8 = kb_compare_oc.NIL;
     SubLObject var9 = var4;
-    SubLObject var10 = oc_kb_compare.NIL;
-    SubLObject var102_103 = oc_kb_compare.NIL;
-    while ( oc_kb_compare.NIL != var9)
+    SubLObject var10 = kb_compare_oc.NIL;
+    SubLObject var102_103 = kb_compare_oc.NIL;
+    while ( kb_compare_oc.NIL != var9)
     {
-      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, oc_kb_compare.$ic128$ );
+      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, kb_compare_oc.$ic128$ );
       var102_103 = var9.first();
       var9 = var9.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, oc_kb_compare.$ic128$ );
-      if( oc_kb_compare.NIL == conses_high.member( var102_103, oc_kb_compare.$ic125$, oc_kb_compare.UNPROVIDED, oc_kb_compare.UNPROVIDED ) )
+      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, kb_compare_oc.$ic128$ );
+      if( kb_compare_oc.NIL == conses_high.member( var102_103, kb_compare_oc.$ic125$, kb_compare_oc.UNPROVIDED, kb_compare_oc.UNPROVIDED ) )
       {
-        var10 = oc_kb_compare.T;
+        var10 = kb_compare_oc.T;
       }
-      if( var102_103 == oc_kb_compare.$ic59$ )
+      if( var102_103 == kb_compare_oc.$ic59$ )
       {
         var8 = var9.first();
       }
       var9 = var9.rest();
     }
-    if( oc_kb_compare.NIL != var10 && oc_kb_compare.NIL == var8 )
+    if( kb_compare_oc.NIL != var10 && kb_compare_oc.NIL == var8 )
     {
-      cdestructuring_bind.cdestructuring_bind_error( var3, oc_kb_compare.$ic128$ );
+      cdestructuring_bind.cdestructuring_bind_error( var3, kb_compare_oc.$ic128$ );
     }
-    final SubLObject var11 = cdestructuring_bind.property_list_member( oc_kb_compare.$ic126$, var4 );
-    final SubLObject var12 = ( oc_kb_compare.NIL != var11 ) ? conses_high.cadr( var11 ) : oc_kb_compare.NIL;
+    final SubLObject var11 = cdestructuring_bind.property_list_member( kb_compare_oc.$ic126$, var4 );
+    final SubLObject var12 = ( kb_compare_oc.NIL != var11 ) ? conses_high.cadr( var11 ) : kb_compare_oc.NIL;
     final SubLObject var13;
     var4 = ( var13 = var5 );
-    return ConsesLow.listS( oc_kb_compare.$ic129$, ConsesLow.list( var6, ConsesLow.list( oc_kb_compare.$ic116$, var7 ), oc_kb_compare.$ic126$,
-        var12 ), ConsesLow.append( var13, oc_kb_compare.NIL ) );
+    return ConsesLow.listS( kb_compare_oc.$ic129$, ConsesLow.list( var6, ConsesLow.list( kb_compare_oc.$ic116$, var7 ), kb_compare_oc.$ic126$,
+        var12 ), ConsesLow.append( var13, kb_compare_oc.NIL ) );
   }
 
   public static SubLObject f36460(final SubLObject var1, final SubLObject var2)
   {
     SubLObject var4;
     final SubLObject var3 = var4 = var1.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic130$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic130$ );
     final SubLObject var5 = var4.rest();
     var4 = var4.first();
-    SubLObject var6 = oc_kb_compare.NIL;
-    SubLObject var7 = oc_kb_compare.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic130$ );
+    SubLObject var6 = kb_compare_oc.NIL;
+    SubLObject var7 = kb_compare_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic130$ );
     var6 = var4.first();
     var4 = var4.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic130$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic130$ );
     var7 = var4.first();
     var4 = var4.rest();
-    SubLObject var8 = oc_kb_compare.NIL;
+    SubLObject var8 = kb_compare_oc.NIL;
     SubLObject var9 = var4;
-    SubLObject var10 = oc_kb_compare.NIL;
-    SubLObject var111_112 = oc_kb_compare.NIL;
-    while ( oc_kb_compare.NIL != var9)
+    SubLObject var10 = kb_compare_oc.NIL;
+    SubLObject var111_112 = kb_compare_oc.NIL;
+    while ( kb_compare_oc.NIL != var9)
     {
-      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, oc_kb_compare.$ic130$ );
+      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, kb_compare_oc.$ic130$ );
       var111_112 = var9.first();
       var9 = var9.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, oc_kb_compare.$ic130$ );
-      if( oc_kb_compare.NIL == conses_high.member( var111_112, oc_kb_compare.$ic125$, oc_kb_compare.UNPROVIDED, oc_kb_compare.UNPROVIDED ) )
+      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, kb_compare_oc.$ic130$ );
+      if( kb_compare_oc.NIL == conses_high.member( var111_112, kb_compare_oc.$ic125$, kb_compare_oc.UNPROVIDED, kb_compare_oc.UNPROVIDED ) )
       {
-        var10 = oc_kb_compare.T;
+        var10 = kb_compare_oc.T;
       }
-      if( var111_112 == oc_kb_compare.$ic59$ )
+      if( var111_112 == kb_compare_oc.$ic59$ )
       {
         var8 = var9.first();
       }
       var9 = var9.rest();
     }
-    if( oc_kb_compare.NIL != var10 && oc_kb_compare.NIL == var8 )
+    if( kb_compare_oc.NIL != var10 && kb_compare_oc.NIL == var8 )
     {
-      cdestructuring_bind.cdestructuring_bind_error( var3, oc_kb_compare.$ic130$ );
+      cdestructuring_bind.cdestructuring_bind_error( var3, kb_compare_oc.$ic130$ );
     }
-    final SubLObject var11 = cdestructuring_bind.property_list_member( oc_kb_compare.$ic126$, var4 );
-    final SubLObject var12 = ( oc_kb_compare.NIL != var11 ) ? conses_high.cadr( var11 ) : oc_kb_compare.NIL;
+    final SubLObject var11 = cdestructuring_bind.property_list_member( kb_compare_oc.$ic126$, var4 );
+    final SubLObject var12 = ( kb_compare_oc.NIL != var11 ) ? conses_high.cadr( var11 ) : kb_compare_oc.NIL;
     final SubLObject var13;
     var4 = ( var13 = var5 );
-    return ConsesLow.listS( oc_kb_compare.$ic129$, ConsesLow.list( var6, ConsesLow.list( oc_kb_compare.$ic118$, var7 ), oc_kb_compare.$ic126$,
-        var12 ), ConsesLow.append( var13, oc_kb_compare.NIL ) );
+    return ConsesLow.listS( kb_compare_oc.$ic129$, ConsesLow.list( var6, ConsesLow.list( kb_compare_oc.$ic118$, var7 ), kb_compare_oc.$ic126$,
+        var12 ), ConsesLow.append( var13, kb_compare_oc.NIL ) );
   }
 
   public static SubLObject f36461(final SubLObject var1, final SubLObject var2)
   {
     SubLObject var4;
     final SubLObject var3 = var4 = var1.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic131$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic131$ );
     final SubLObject var5 = var4.rest();
     var4 = var4.first();
-    SubLObject var6 = oc_kb_compare.NIL;
-    SubLObject var7 = oc_kb_compare.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic131$ );
+    SubLObject var6 = kb_compare_oc.NIL;
+    SubLObject var7 = kb_compare_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic131$ );
     var6 = var4.first();
     var4 = var4.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic131$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic131$ );
     var7 = var4.first();
     var4 = var4.rest();
-    SubLObject var8 = oc_kb_compare.NIL;
+    SubLObject var8 = kb_compare_oc.NIL;
     SubLObject var9 = var4;
-    SubLObject var10 = oc_kb_compare.NIL;
-    SubLObject var120_121 = oc_kb_compare.NIL;
-    while ( oc_kb_compare.NIL != var9)
+    SubLObject var10 = kb_compare_oc.NIL;
+    SubLObject var120_121 = kb_compare_oc.NIL;
+    while ( kb_compare_oc.NIL != var9)
     {
-      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, oc_kb_compare.$ic131$ );
+      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, kb_compare_oc.$ic131$ );
       var120_121 = var9.first();
       var9 = var9.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, oc_kb_compare.$ic131$ );
-      if( oc_kb_compare.NIL == conses_high.member( var120_121, oc_kb_compare.$ic125$, oc_kb_compare.UNPROVIDED, oc_kb_compare.UNPROVIDED ) )
+      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, kb_compare_oc.$ic131$ );
+      if( kb_compare_oc.NIL == conses_high.member( var120_121, kb_compare_oc.$ic125$, kb_compare_oc.UNPROVIDED, kb_compare_oc.UNPROVIDED ) )
       {
-        var10 = oc_kb_compare.T;
+        var10 = kb_compare_oc.T;
       }
-      if( var120_121 == oc_kb_compare.$ic59$ )
+      if( var120_121 == kb_compare_oc.$ic59$ )
       {
         var8 = var9.first();
       }
       var9 = var9.rest();
     }
-    if( oc_kb_compare.NIL != var10 && oc_kb_compare.NIL == var8 )
+    if( kb_compare_oc.NIL != var10 && kb_compare_oc.NIL == var8 )
     {
-      cdestructuring_bind.cdestructuring_bind_error( var3, oc_kb_compare.$ic131$ );
+      cdestructuring_bind.cdestructuring_bind_error( var3, kb_compare_oc.$ic131$ );
     }
-    final SubLObject var11 = cdestructuring_bind.property_list_member( oc_kb_compare.$ic126$, var4 );
-    final SubLObject var12 = ( oc_kb_compare.NIL != var11 ) ? conses_high.cadr( var11 ) : oc_kb_compare.NIL;
+    final SubLObject var11 = cdestructuring_bind.property_list_member( kb_compare_oc.$ic126$, var4 );
+    final SubLObject var12 = ( kb_compare_oc.NIL != var11 ) ? conses_high.cadr( var11 ) : kb_compare_oc.NIL;
     final SubLObject var13;
     var4 = ( var13 = var5 );
-    return ConsesLow.listS( oc_kb_compare.$ic129$, ConsesLow.list( var6, ConsesLow.list( oc_kb_compare.$ic120$, var7 ), oc_kb_compare.$ic126$,
-        var12 ), ConsesLow.append( var13, oc_kb_compare.NIL ) );
+    return ConsesLow.listS( kb_compare_oc.$ic129$, ConsesLow.list( var6, ConsesLow.list( kb_compare_oc.$ic120$, var7 ), kb_compare_oc.$ic126$,
+        var12 ), ConsesLow.append( var13, kb_compare_oc.NIL ) );
   }
 
   public static SubLObject f36462(final SubLObject var1, final SubLObject var2)
   {
     SubLObject var4;
     final SubLObject var3 = var4 = var1.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic132$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic132$ );
     final SubLObject var5 = var4.rest();
     var4 = var4.first();
-    SubLObject var6 = oc_kb_compare.NIL;
-    SubLObject var7 = oc_kb_compare.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic132$ );
+    SubLObject var6 = kb_compare_oc.NIL;
+    SubLObject var7 = kb_compare_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic132$ );
     var6 = var4.first();
     var4 = var4.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, oc_kb_compare.$ic132$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var4, var3, kb_compare_oc.$ic132$ );
     var7 = var4.first();
     var4 = var4.rest();
-    SubLObject var8 = oc_kb_compare.NIL;
+    SubLObject var8 = kb_compare_oc.NIL;
     SubLObject var9 = var4;
-    SubLObject var10 = oc_kb_compare.NIL;
-    SubLObject var129_130 = oc_kb_compare.NIL;
-    while ( oc_kb_compare.NIL != var9)
+    SubLObject var10 = kb_compare_oc.NIL;
+    SubLObject var129_130 = kb_compare_oc.NIL;
+    while ( kb_compare_oc.NIL != var9)
     {
-      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, oc_kb_compare.$ic132$ );
+      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, kb_compare_oc.$ic132$ );
       var129_130 = var9.first();
       var9 = var9.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, oc_kb_compare.$ic132$ );
-      if( oc_kb_compare.NIL == conses_high.member( var129_130, oc_kb_compare.$ic125$, oc_kb_compare.UNPROVIDED, oc_kb_compare.UNPROVIDED ) )
+      cdestructuring_bind.destructuring_bind_must_consp( var9, var3, kb_compare_oc.$ic132$ );
+      if( kb_compare_oc.NIL == conses_high.member( var129_130, kb_compare_oc.$ic125$, kb_compare_oc.UNPROVIDED, kb_compare_oc.UNPROVIDED ) )
       {
-        var10 = oc_kb_compare.T;
+        var10 = kb_compare_oc.T;
       }
-      if( var129_130 == oc_kb_compare.$ic59$ )
+      if( var129_130 == kb_compare_oc.$ic59$ )
       {
         var8 = var9.first();
       }
       var9 = var9.rest();
     }
-    if( oc_kb_compare.NIL != var10 && oc_kb_compare.NIL == var8 )
+    if( kb_compare_oc.NIL != var10 && kb_compare_oc.NIL == var8 )
     {
-      cdestructuring_bind.cdestructuring_bind_error( var3, oc_kb_compare.$ic132$ );
+      cdestructuring_bind.cdestructuring_bind_error( var3, kb_compare_oc.$ic132$ );
     }
-    final SubLObject var11 = cdestructuring_bind.property_list_member( oc_kb_compare.$ic126$, var4 );
-    final SubLObject var12 = ( oc_kb_compare.NIL != var11 ) ? conses_high.cadr( var11 ) : oc_kb_compare.NIL;
+    final SubLObject var11 = cdestructuring_bind.property_list_member( kb_compare_oc.$ic126$, var4 );
+    final SubLObject var12 = ( kb_compare_oc.NIL != var11 ) ? conses_high.cadr( var11 ) : kb_compare_oc.NIL;
     final SubLObject var13;
     var4 = ( var13 = var5 );
-    return ConsesLow.listS( oc_kb_compare.$ic129$, ConsesLow.list( var6, ConsesLow.list( oc_kb_compare.$ic122$, var7 ), oc_kb_compare.$ic126$,
-        var12 ), ConsesLow.append( var13, oc_kb_compare.NIL ) );
+    return ConsesLow.listS( kb_compare_oc.$ic129$, ConsesLow.list( var6, ConsesLow.list( kb_compare_oc.$ic122$, var7 ), kb_compare_oc.$ic126$,
+        var12 ), ConsesLow.append( var13, kb_compare_oc.NIL ) );
   }
 
   public static SubLObject f36463(final SubLObject var84, final SubLObject var29, final SubLObject var88)
   {
-    assert oc_kb_compare.NIL != constant_handles_oc.f8449( var29 ) : var29;
-    assert oc_kb_compare.NIL != Types.stringp( var88 ) : var88;
+    assert kb_compare_oc.NIL != constant_handles_oc.f8449( var29 ) : var29;
+    assert kb_compare_oc.NIL != Types.stringp( var88 ) : var88;
     module0067.f4886( f36436( var84 ), var29, var88 );
     return var84;
   }
 
   public static SubLObject f36464(final SubLObject var84, final SubLObject var29)
   {
-    assert oc_kb_compare.NIL != constant_handles_oc.f8449( var29 ) : var29;
+    assert kb_compare_oc.NIL != constant_handles_oc.f8449( var29 ) : var29;
     module0077.f5326( var29, f36437( var84 ) );
     return var84;
   }
 
   public static SubLObject f36465(final SubLObject var84, final SubLObject var31)
   {
-    assert oc_kb_compare.NIL != module0167.f10813( var31 ) : var31;
+    assert kb_compare_oc.NIL != module0167.f10813( var31 ) : var31;
     module0077.f5326( var31, f36438( var84 ) );
     return var84;
   }
 
   public static SubLObject f36466(final SubLObject var84, final SubLObject var32)
   {
-    assert oc_kb_compare.NIL != assertion_handles_oc.f11035( var32 ) : var32;
+    assert kb_compare_oc.NIL != assertion_handles_oc.f11035( var32 ) : var32;
     module0077.f5326( var32, f36439( var84 ) );
     return var84;
   }
 
   public static SubLObject f36467(final SubLObject var84, final SubLObject var33)
   {
-    assert oc_kb_compare.NIL != oc_deduction_handles.f11659( var33 ) : var33;
+    assert kb_compare_oc.NIL != deduction_handles_oc.f11659( var33 ) : var33;
     module0077.f5326( var33, f36440( var84 ) );
     return var84;
   }
@@ -1550,50 +1551,50 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36473(final SubLObject var84)
   {
-    return Sort.sort( module0067.f4902( f36436( var84 ) ), Symbols.symbol_function( oc_kb_compare.$ic134$ ), oc_kb_compare.$ic135$ );
+    return Sort.sort( module0067.f4902( f36436( var84 ) ), Symbols.symbol_function( kb_compare_oc.$ic134$ ), kb_compare_oc.$ic135$ );
   }
 
   public static SubLObject f36474(final SubLObject var84)
   {
-    return Sort.sort( module0077.f5312( f36437( var84 ) ), Symbols.symbol_function( oc_kb_compare.$ic134$ ), oc_kb_compare.$ic135$ );
+    return Sort.sort( module0077.f5312( f36437( var84 ) ), Symbols.symbol_function( kb_compare_oc.$ic134$ ), kb_compare_oc.$ic135$ );
   }
 
   public static SubLObject f36475(final SubLObject var84)
   {
-    return Sort.sort( module0077.f5312( f36438( var84 ) ), Symbols.symbol_function( oc_kb_compare.$ic134$ ), oc_kb_compare.$ic136$ );
+    return Sort.sort( module0077.f5312( f36438( var84 ) ), Symbols.symbol_function( kb_compare_oc.$ic134$ ), kb_compare_oc.$ic136$ );
   }
 
   public static SubLObject f36476(final SubLObject var84)
   {
-    return Sort.sort( module0077.f5312( f36439( var84 ) ), Symbols.symbol_function( oc_kb_compare.$ic134$ ), oc_kb_compare.$ic137$ );
+    return Sort.sort( module0077.f5312( f36439( var84 ) ), Symbols.symbol_function( kb_compare_oc.$ic134$ ), kb_compare_oc.$ic137$ );
   }
 
   public static SubLObject f36477(final SubLObject var84)
   {
-    return Sort.sort( module0077.f5312( f36440( var84 ) ), Symbols.symbol_function( oc_kb_compare.$ic134$ ), oc_kb_compare.$ic138$ );
+    return Sort.sort( module0077.f5312( f36440( var84 ) ), Symbols.symbol_function( kb_compare_oc.$ic134$ ), kb_compare_oc.$ic138$ );
   }
 
   public static SubLObject f36478(final SubLObject var28)
   {
     final SubLThread var29 = SubLProcess.currentSubLThread();
-    assert oc_kb_compare.NIL != f36385( var28 ) : var28;
+    assert kb_compare_oc.NIL != f36385( var28 ) : var28;
     final SubLObject var30 = f36399( var28 );
     final SubLObject var31 = module0103.f7393( var30 );
     try
     {
       module0103.f7394( var31 );
       final SubLObject var32 = module0103.$g1343$.currentBinding( var29 );
-      final SubLObject var33 = oc_kb_compare.$g4556$.currentBinding( var29 );
+      final SubLObject var33 = kb_compare_oc.$g4556$.currentBinding( var29 );
       try
       {
         module0103.$g1343$.bind( var31, var29 );
-        oc_kb_compare.$g4556$.bind( oc_kb_compare.$g4556$.getDynamicValue( var29 ), var29 );
+        kb_compare_oc.$g4556$.bind( kb_compare_oc.$g4556$.getDynamicValue( var29 ), var29 );
         f36382();
         final SubLObject var11_133 = module0021.$g777$.currentBinding( var29 );
         try
         {
-          module0021.$g777$.bind( oc_kb_compare.NIL, var29 );
-          module0021.f1149( oc_kb_compare.$g4556$.getDynamicValue( var29 ) );
+          module0021.$g777$.bind( kb_compare_oc.NIL, var29 );
+          module0021.f1149( kb_compare_oc.$g4556$.getDynamicValue( var29 ) );
           f36479( var28 );
           f36480( var28 );
           f36481( var28 );
@@ -1606,7 +1607,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
       }
       finally
       {
-        oc_kb_compare.$g4556$.rebind( var33, var29 );
+        kb_compare_oc.$g4556$.rebind( var33, var29 );
         module0103.$g1343$.rebind( var32, var29 );
       }
     }
@@ -1615,7 +1616,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
       final SubLObject var34 = Threads.$is_thread_performing_cleanupP$.currentBinding( var29 );
       try
       {
-        Threads.$is_thread_performing_cleanupP$.bind( oc_kb_compare.T, var29 );
+        Threads.$is_thread_performing_cleanupP$.bind( kb_compare_oc.T, var29 );
         module0103.f7397( var31 );
       }
       finally
@@ -1629,51 +1630,51 @@ public final class oc_kb_compare extends SubLTranslatedFile
   public static SubLObject f36479(final SubLObject var28)
   {
     final SubLThread var29 = SubLProcess.currentSubLThread();
-    if( oc_kb_compare.NIL != f36483() )
+    if( kb_compare_oc.NIL != f36483() )
     {
       f36484( var28 );
-      final SubLObject var30 = Numbers.add( oc_kb_compare.ONE_INTEGER, module0164.f10677() );
+      final SubLObject var30 = Numbers.add( kb_compare_oc.ONE_INTEGER, module0164.f10677() );
       final SubLObject var31 = constant_handles_oc.f8425();
-      final SubLObject var32 = oc_kb_compare.$ic139$;
+      final SubLObject var32 = kb_compare_oc.$ic139$;
       final SubLObject var33 = module0065.f4733( var31 );
-      SubLObject var34 = oc_kb_compare.ZERO_INTEGER;
-      assert oc_kb_compare.NIL != Types.stringp( var32 ) : var32;
+      SubLObject var34 = kb_compare_oc.ZERO_INTEGER;
+      assert kb_compare_oc.NIL != Types.stringp( var32 ) : var32;
       final SubLObject var35 = module0012.$g75$.currentBinding( var29 );
       final SubLObject var36 = module0012.$g76$.currentBinding( var29 );
       final SubLObject var37 = module0012.$g77$.currentBinding( var29 );
       final SubLObject var38 = module0012.$g78$.currentBinding( var29 );
       try
       {
-        module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-        module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-        module0012.$g77$.bind( oc_kb_compare.T, var29 );
+        module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+        module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+        module0012.$g77$.bind( kb_compare_oc.T, var29 );
         module0012.$g78$.bind( Time.get_universal_time(), var29 );
         module0012.f478( var32 );
         final SubLObject var68_139 = var31;
-        if( oc_kb_compare.NIL == module0065.f4772( var68_139, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4772( var68_139, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var69_140 = var68_139;
-          if( oc_kb_compare.NIL == module0065.f4775( var69_140, oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4775( var69_140, kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var39 = module0065.f4740( var69_140 );
-            final SubLObject var40 = oc_kb_compare.NIL;
+            final SubLObject var40 = kb_compare_oc.NIL;
             SubLObject var41;
             SubLObject var42;
             SubLObject var43;
             SubLObject var44;
-            for( var41 = Sequences.length( var39 ), var42 = oc_kb_compare.NIL, var42 = oc_kb_compare.ZERO_INTEGER; var42.numL( var41 ); var42 = Numbers.add( var42,
-                oc_kb_compare.ONE_INTEGER ) )
+            for( var41 = Sequences.length( var39 ), var42 = kb_compare_oc.NIL, var42 = kb_compare_oc.ZERO_INTEGER; var42.numL( var41 ); var42 = Numbers.add( var42,
+                kb_compare_oc.ONE_INTEGER ) )
             {
-              var43 = ( ( oc_kb_compare.NIL != var40 ) ? Numbers.subtract( var41, var42, oc_kb_compare.ONE_INTEGER ) : var42 );
+              var43 = ( ( kb_compare_oc.NIL != var40 ) ? Numbers.subtract( var41, var42, kb_compare_oc.ONE_INTEGER ) : var42 );
               var44 = Vectors.aref( var39, var43 );
-              if( oc_kb_compare.NIL == module0065.f4749( var44 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+              if( kb_compare_oc.NIL == module0065.f4749( var44 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
               {
-                if( oc_kb_compare.NIL != module0065.f4749( var44 ) )
+                if( kb_compare_oc.NIL != module0065.f4749( var44 ) )
                 {
-                  var44 = oc_kb_compare.$ic86$;
+                  var44 = kb_compare_oc.$ic86$;
                 }
                 module0012.note_percent_progress( var34, var33 );
-                var34 = Numbers.add( var34, oc_kb_compare.ONE_INTEGER );
+                var34 = Numbers.add( var34, kb_compare_oc.ONE_INTEGER );
                 if( !var43.numL( var30 ) )
                 {
                   f36485( var28, var44 );
@@ -1682,25 +1683,25 @@ public final class oc_kb_compare extends SubLTranslatedFile
             }
           }
           final SubLObject var142_143 = var68_139;
-          if( oc_kb_compare.NIL == module0065.f4777( var142_143 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4777( var142_143 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var45 = module0065.f4738( var142_143 );
             SubLObject var46 = module0065.f4739( var142_143 );
             final SubLObject var47 = module0065.f4734( var142_143 );
-            final SubLObject var48 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+            final SubLObject var48 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
             while ( var46.numL( var47 ))
             {
               final SubLObject var49 = Hashtables.gethash_without_values( var46, var45, var48 );
-              if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var49 ) )
+              if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var49 ) )
               {
                 module0012.note_percent_progress( var34, var33 );
-                var34 = Numbers.add( var34, oc_kb_compare.ONE_INTEGER );
+                var34 = Numbers.add( var34, kb_compare_oc.ONE_INTEGER );
                 if( !var46.numL( var30 ) )
                 {
                   f36485( var28, var49 );
                 }
               }
-              var46 = Numbers.add( var46, oc_kb_compare.ONE_INTEGER );
+              var46 = Numbers.add( var46, kb_compare_oc.ONE_INTEGER );
             }
           }
         }
@@ -1717,67 +1718,67 @@ public final class oc_kb_compare extends SubLTranslatedFile
     else
     {
       final SubLObject var50 = constant_handles_oc.f8425();
-      final SubLObject var51 = oc_kb_compare.$ic140$;
+      final SubLObject var51 = kb_compare_oc.$ic140$;
       final SubLObject var52 = module0065.f4733( var50 );
-      SubLObject var53 = oc_kb_compare.ZERO_INTEGER;
-      assert oc_kb_compare.NIL != Types.stringp( var51 ) : var51;
+      SubLObject var53 = kb_compare_oc.ZERO_INTEGER;
+      assert kb_compare_oc.NIL != Types.stringp( var51 ) : var51;
       final SubLObject var54 = module0012.$g75$.currentBinding( var29 );
       final SubLObject var55 = module0012.$g76$.currentBinding( var29 );
       final SubLObject var56 = module0012.$g77$.currentBinding( var29 );
       final SubLObject var57 = module0012.$g78$.currentBinding( var29 );
       try
       {
-        module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-        module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-        module0012.$g77$.bind( oc_kb_compare.T, var29 );
+        module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+        module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+        module0012.$g77$.bind( kb_compare_oc.T, var29 );
         module0012.$g78$.bind( Time.get_universal_time(), var29 );
         module0012.f478( var51 );
         final SubLObject var68_140 = var50;
-        if( oc_kb_compare.NIL == module0065.f4772( var68_140, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4772( var68_140, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var69_141 = var68_140;
-          if( oc_kb_compare.NIL == module0065.f4775( var69_141, oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4775( var69_141, kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var58 = module0065.f4740( var69_141 );
-            final SubLObject var59 = oc_kb_compare.NIL;
+            final SubLObject var59 = kb_compare_oc.NIL;
             SubLObject var49;
             SubLObject var60;
             SubLObject var61;
             SubLObject var62;
-            for( var60 = Sequences.length( var58 ), var61 = oc_kb_compare.NIL, var61 = oc_kb_compare.ZERO_INTEGER; var61.numL( var60 ); var61 = Numbers.add( var61,
-                oc_kb_compare.ONE_INTEGER ) )
+            for( var60 = Sequences.length( var58 ), var61 = kb_compare_oc.NIL, var61 = kb_compare_oc.ZERO_INTEGER; var61.numL( var60 ); var61 = Numbers.add( var61,
+                kb_compare_oc.ONE_INTEGER ) )
             {
-              var62 = ( ( oc_kb_compare.NIL != var59 ) ? Numbers.subtract( var60, var61, oc_kb_compare.ONE_INTEGER ) : var61 );
+              var62 = ( ( kb_compare_oc.NIL != var59 ) ? Numbers.subtract( var60, var61, kb_compare_oc.ONE_INTEGER ) : var61 );
               var49 = Vectors.aref( var58, var62 );
-              if( oc_kb_compare.NIL == module0065.f4749( var49 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+              if( kb_compare_oc.NIL == module0065.f4749( var49 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
               {
-                if( oc_kb_compare.NIL != module0065.f4749( var49 ) )
+                if( kb_compare_oc.NIL != module0065.f4749( var49 ) )
                 {
-                  var49 = oc_kb_compare.$ic86$;
+                  var49 = kb_compare_oc.$ic86$;
                 }
                 module0012.note_percent_progress( var53, var52 );
-                var53 = Numbers.add( var53, oc_kb_compare.ONE_INTEGER );
+                var53 = Numbers.add( var53, kb_compare_oc.ONE_INTEGER );
                 f36485( var28, var49 );
               }
             }
           }
           final SubLObject var142_144 = var68_140;
-          if( oc_kb_compare.NIL == module0065.f4777( var142_144 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4777( var142_144 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var63 = module0065.f4738( var142_144 );
             SubLObject var64 = module0065.f4739( var142_144 );
             final SubLObject var65 = module0065.f4734( var142_144 );
-            final SubLObject var66 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+            final SubLObject var66 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
             while ( var64.numL( var65 ))
             {
               final SubLObject var67 = Hashtables.gethash_without_values( var64, var63, var66 );
-              if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var67 ) )
+              if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var67 ) )
               {
                 module0012.note_percent_progress( var53, var52 );
-                var53 = Numbers.add( var53, oc_kb_compare.ONE_INTEGER );
+                var53 = Numbers.add( var53, kb_compare_oc.ONE_INTEGER );
                 f36485( var28, var67 );
               }
-              var64 = Numbers.add( var64, oc_kb_compare.ONE_INTEGER );
+              var64 = Numbers.add( var64, kb_compare_oc.ONE_INTEGER );
             }
           }
         }
@@ -1798,75 +1799,75 @@ public final class oc_kb_compare extends SubLTranslatedFile
   {
     final SubLThread var29 = SubLProcess.currentSubLThread();
     final SubLObject var30 = f36486();
-    final SubLObject var31 = module0078.f5367( var30, Symbols.symbol_function( oc_kb_compare.EQL ), oc_kb_compare.UNPROVIDED );
+    final SubLObject var31 = module0078.f5367( var30, Symbols.symbol_function( kb_compare_oc.EQL ), kb_compare_oc.UNPROVIDED );
     final SubLObject var32 = module0164.f10677();
-    final SubLObject var33 = oc_kb_compare.NIL;
-    SubLObject var34 = oc_kb_compare.NIL;
+    final SubLObject var33 = kb_compare_oc.NIL;
+    SubLObject var34 = kb_compare_oc.NIL;
     final SubLObject var35 = constant_handles_oc.f8425();
-    final SubLObject var36 = oc_kb_compare.$ic141$;
+    final SubLObject var36 = kb_compare_oc.$ic141$;
     final SubLObject var37 = module0065.f4733( var35 );
-    SubLObject var38 = oc_kb_compare.ZERO_INTEGER;
-    assert oc_kb_compare.NIL != Types.stringp( var36 ) : var36;
+    SubLObject var38 = kb_compare_oc.ZERO_INTEGER;
+    assert kb_compare_oc.NIL != Types.stringp( var36 ) : var36;
     final SubLObject var39 = module0012.$g75$.currentBinding( var29 );
     final SubLObject var40 = module0012.$g76$.currentBinding( var29 );
     final SubLObject var41 = module0012.$g77$.currentBinding( var29 );
     final SubLObject var42 = module0012.$g78$.currentBinding( var29 );
     try
     {
-      module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-      module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-      module0012.$g77$.bind( oc_kb_compare.T, var29 );
+      module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+      module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+      module0012.$g77$.bind( kb_compare_oc.T, var29 );
       module0012.$g78$.bind( Time.get_universal_time(), var29 );
       module0012.f478( var36 );
       final SubLObject var68_156 = var35;
-      if( oc_kb_compare.NIL == module0065.f4772( var68_156, oc_kb_compare.$ic86$ ) )
+      if( kb_compare_oc.NIL == module0065.f4772( var68_156, kb_compare_oc.$ic86$ ) )
       {
         final SubLObject var69_157 = var68_156;
-        if( oc_kb_compare.NIL == module0065.f4775( var69_157, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4775( var69_157, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var43 = module0065.f4740( var69_157 );
-          final SubLObject var44 = oc_kb_compare.NIL;
+          final SubLObject var44 = kb_compare_oc.NIL;
           final SubLObject var45 = Sequences.length( var43 );
           SubLObject var47;
-          final SubLObject var46 = var47 = ( oc_kb_compare.NIL != var44 ) ? ConsesLow.list( Numbers.subtract( var45, oc_kb_compare.ONE_INTEGER ), oc_kb_compare.MINUS_ONE_INTEGER,
-              oc_kb_compare.MINUS_ONE_INTEGER ) : ConsesLow.list( oc_kb_compare.ZERO_INTEGER, var45, oc_kb_compare.ONE_INTEGER );
-          SubLObject var48 = oc_kb_compare.NIL;
-          SubLObject var49 = oc_kb_compare.NIL;
-          SubLObject var50 = oc_kb_compare.NIL;
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          final SubLObject var46 = var47 = ( kb_compare_oc.NIL != var44 ) ? ConsesLow.list( Numbers.subtract( var45, kb_compare_oc.ONE_INTEGER ), kb_compare_oc.MINUS_ONE_INTEGER,
+              kb_compare_oc.MINUS_ONE_INTEGER ) : ConsesLow.list( kb_compare_oc.ZERO_INTEGER, var45, kb_compare_oc.ONE_INTEGER );
+          SubLObject var48 = kb_compare_oc.NIL;
+          SubLObject var49 = kb_compare_oc.NIL;
+          SubLObject var50 = kb_compare_oc.NIL;
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var48 = var47.first();
           var47 = var47.rest();
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var49 = var47.first();
           var47 = var47.rest();
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var50 = var47.first();
           var47 = var47.rest();
-          if( oc_kb_compare.NIL == var47 )
+          if( kb_compare_oc.NIL == var47 )
           {
-            if( oc_kb_compare.NIL == var34 )
+            if( kb_compare_oc.NIL == var34 )
             {
               SubLObject var51;
               SubLObject var52;
               SubLObject var53;
               SubLObject var154_165;
               SubLObject var54;
-              for( var51 = var49, var52 = oc_kb_compare.NIL, var52 = var48; oc_kb_compare.NIL == var34 && oc_kb_compare.NIL == module0005.f124( var52, var50, var51 ); var52 = Numbers.add( var52, var50 ) )
+              for( var51 = var49, var52 = kb_compare_oc.NIL, var52 = var48; kb_compare_oc.NIL == var34 && kb_compare_oc.NIL == module0005.f124( var52, var50, var51 ); var52 = Numbers.add( var52, var50 ) )
               {
                 var53 = Vectors.aref( var43, var52 );
-                if( oc_kb_compare.NIL == module0065.f4749( var53 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+                if( kb_compare_oc.NIL == module0065.f4749( var53 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
                 {
-                  if( oc_kb_compare.NIL != module0065.f4749( var53 ) )
+                  if( kb_compare_oc.NIL != module0065.f4749( var53 ) )
                   {
-                    var53 = oc_kb_compare.$ic86$;
+                    var53 = kb_compare_oc.$ic86$;
                   }
                   module0012.note_percent_progress( var38, var37 );
-                  var38 = Numbers.add( var38, oc_kb_compare.ONE_INTEGER );
+                  var38 = Numbers.add( var38, kb_compare_oc.ONE_INTEGER );
                   var154_165 = Numbers.numL( var32, var52 );
-                  if( oc_kb_compare.NIL == var154_165 )
+                  if( kb_compare_oc.NIL == var154_165 )
                   {
                     var54 = constants_high_oc.f10749( var53 );
-                    if( oc_kb_compare.NIL == module0077.f5320( var54, var31 ) )
+                    if( kb_compare_oc.NIL == module0077.f5320( var54, var31 ) )
                     {
                       f36403( var28, var53, var54 );
                     }
@@ -1878,35 +1879,35 @@ public final class oc_kb_compare extends SubLTranslatedFile
           }
           else
           {
-            cdestructuring_bind.cdestructuring_bind_error( var46, oc_kb_compare.$ic142$ );
+            cdestructuring_bind.cdestructuring_bind_error( var46, kb_compare_oc.$ic142$ );
           }
         }
         final SubLObject var142_166 = var68_156;
-        if( oc_kb_compare.NIL == module0065.f4777( var142_166 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4777( var142_166 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var55 = module0065.f4738( var142_166 );
           SubLObject var56 = module0065.f4739( var142_166 );
           final SubLObject var57 = module0065.f4734( var142_166 );
-          final SubLObject var58 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
-          while ( var56.numL( var57 ) && oc_kb_compare.NIL == var34)
+          final SubLObject var58 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
+          while ( var56.numL( var57 ) && kb_compare_oc.NIL == var34)
           {
             final SubLObject var59 = Hashtables.gethash_without_values( var56, var55, var58 );
-            if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var59 ) )
+            if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var59 ) )
             {
               module0012.note_percent_progress( var38, var37 );
-              var38 = Numbers.add( var38, oc_kb_compare.ONE_INTEGER );
+              var38 = Numbers.add( var38, kb_compare_oc.ONE_INTEGER );
               final SubLObject var154_166 = Numbers.numL( var32, var56 );
-              if( oc_kb_compare.NIL == var154_166 )
+              if( kb_compare_oc.NIL == var154_166 )
               {
                 final SubLObject var60 = constants_high_oc.f10749( var59 );
-                if( oc_kb_compare.NIL == module0077.f5320( var60, var31 ) )
+                if( kb_compare_oc.NIL == module0077.f5320( var60, var31 ) )
                 {
                   f36403( var28, var59, var60 );
                 }
               }
               var34 = var154_166;
             }
-            var56 = Numbers.add( var56, oc_kb_compare.ONE_INTEGER );
+            var56 = Numbers.add( var56, kb_compare_oc.ONE_INTEGER );
           }
         }
       }
@@ -1919,67 +1920,67 @@ public final class oc_kb_compare extends SubLTranslatedFile
       module0012.$g76$.rebind( var40, var29 );
       module0012.$g75$.rebind( var39, var29 );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36485(final SubLObject var28, final SubLObject var29)
   {
     final SubLObject var30 = f36487( var29 );
-    if( oc_kb_compare.NIL != var30 )
+    if( kb_compare_oc.NIL != var30 )
     {
       f36403( var28, var29, var30 );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36480(final SubLObject var28)
   {
     final SubLThread var29 = SubLProcess.currentSubLThread();
-    if( oc_kb_compare.NIL != f36488() )
+    if( kb_compare_oc.NIL != f36488() )
     {
       f36489( var28 );
-      final SubLObject var30 = Numbers.add( oc_kb_compare.ONE_INTEGER, module0167.f10810() );
+      final SubLObject var30 = Numbers.add( kb_compare_oc.ONE_INTEGER, module0167.f10810() );
       final SubLObject var31 = module0167.f10788();
-      final SubLObject var32 = oc_kb_compare.$ic143$;
+      final SubLObject var32 = kb_compare_oc.$ic143$;
       final SubLObject var33 = module0065.f4733( var31 );
-      SubLObject var34 = oc_kb_compare.ZERO_INTEGER;
-      assert oc_kb_compare.NIL != Types.stringp( var32 ) : var32;
+      SubLObject var34 = kb_compare_oc.ZERO_INTEGER;
+      assert kb_compare_oc.NIL != Types.stringp( var32 ) : var32;
       final SubLObject var35 = module0012.$g75$.currentBinding( var29 );
       final SubLObject var36 = module0012.$g76$.currentBinding( var29 );
       final SubLObject var37 = module0012.$g77$.currentBinding( var29 );
       final SubLObject var38 = module0012.$g78$.currentBinding( var29 );
       try
       {
-        module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-        module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-        module0012.$g77$.bind( oc_kb_compare.T, var29 );
+        module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+        module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+        module0012.$g77$.bind( kb_compare_oc.T, var29 );
         module0012.$g78$.bind( Time.get_universal_time(), var29 );
         module0012.f478( var32 );
         final SubLObject var68_169 = var31;
-        if( oc_kb_compare.NIL == module0065.f4772( var68_169, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4772( var68_169, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var69_170 = var68_169;
-          if( oc_kb_compare.NIL == module0065.f4775( var69_170, oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4775( var69_170, kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var39 = module0065.f4740( var69_170 );
-            final SubLObject var40 = oc_kb_compare.NIL;
+            final SubLObject var40 = kb_compare_oc.NIL;
             SubLObject var41;
             SubLObject var42;
             SubLObject var43;
             SubLObject var44;
-            for( var41 = Sequences.length( var39 ), var42 = oc_kb_compare.NIL, var42 = oc_kb_compare.ZERO_INTEGER; var42.numL( var41 ); var42 = Numbers.add( var42,
-                oc_kb_compare.ONE_INTEGER ) )
+            for( var41 = Sequences.length( var39 ), var42 = kb_compare_oc.NIL, var42 = kb_compare_oc.ZERO_INTEGER; var42.numL( var41 ); var42 = Numbers.add( var42,
+                kb_compare_oc.ONE_INTEGER ) )
             {
-              var43 = ( ( oc_kb_compare.NIL != var40 ) ? Numbers.subtract( var41, var42, oc_kb_compare.ONE_INTEGER ) : var42 );
+              var43 = ( ( kb_compare_oc.NIL != var40 ) ? Numbers.subtract( var41, var42, kb_compare_oc.ONE_INTEGER ) : var42 );
               var44 = Vectors.aref( var39, var43 );
-              if( oc_kb_compare.NIL == module0065.f4749( var44 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+              if( kb_compare_oc.NIL == module0065.f4749( var44 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
               {
-                if( oc_kb_compare.NIL != module0065.f4749( var44 ) )
+                if( kb_compare_oc.NIL != module0065.f4749( var44 ) )
                 {
-                  var44 = oc_kb_compare.$ic86$;
+                  var44 = kb_compare_oc.$ic86$;
                 }
                 module0012.note_percent_progress( var34, var33 );
-                var34 = Numbers.add( var34, oc_kb_compare.ONE_INTEGER );
+                var34 = Numbers.add( var34, kb_compare_oc.ONE_INTEGER );
                 if( !var43.numL( var30 ) )
                 {
                   f36490( var28, var44 );
@@ -1988,25 +1989,25 @@ public final class oc_kb_compare extends SubLTranslatedFile
             }
           }
           final SubLObject var142_171 = var68_169;
-          if( oc_kb_compare.NIL == module0065.f4777( var142_171 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4777( var142_171 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var45 = module0065.f4738( var142_171 );
             SubLObject var46 = module0065.f4739( var142_171 );
             final SubLObject var47 = module0065.f4734( var142_171 );
-            final SubLObject var48 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+            final SubLObject var48 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
             while ( var46.numL( var47 ))
             {
               final SubLObject var49 = Hashtables.gethash_without_values( var46, var45, var48 );
-              if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var49 ) )
+              if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var49 ) )
               {
                 module0012.note_percent_progress( var34, var33 );
-                var34 = Numbers.add( var34, oc_kb_compare.ONE_INTEGER );
+                var34 = Numbers.add( var34, kb_compare_oc.ONE_INTEGER );
                 if( !var46.numL( var30 ) )
                 {
                   f36490( var28, var49 );
                 }
               }
-              var46 = Numbers.add( var46, oc_kb_compare.ONE_INTEGER );
+              var46 = Numbers.add( var46, kb_compare_oc.ONE_INTEGER );
             }
           }
         }
@@ -2023,67 +2024,67 @@ public final class oc_kb_compare extends SubLTranslatedFile
     else
     {
       final SubLObject var50 = module0167.f10788();
-      final SubLObject var51 = oc_kb_compare.$ic144$;
+      final SubLObject var51 = kb_compare_oc.$ic144$;
       final SubLObject var52 = module0065.f4733( var50 );
-      SubLObject var53 = oc_kb_compare.ZERO_INTEGER;
-      assert oc_kb_compare.NIL != Types.stringp( var51 ) : var51;
+      SubLObject var53 = kb_compare_oc.ZERO_INTEGER;
+      assert kb_compare_oc.NIL != Types.stringp( var51 ) : var51;
       final SubLObject var54 = module0012.$g75$.currentBinding( var29 );
       final SubLObject var55 = module0012.$g76$.currentBinding( var29 );
       final SubLObject var56 = module0012.$g77$.currentBinding( var29 );
       final SubLObject var57 = module0012.$g78$.currentBinding( var29 );
       try
       {
-        module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-        module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-        module0012.$g77$.bind( oc_kb_compare.T, var29 );
+        module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+        module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+        module0012.$g77$.bind( kb_compare_oc.T, var29 );
         module0012.$g78$.bind( Time.get_universal_time(), var29 );
         module0012.f478( var51 );
         final SubLObject var68_170 = var50;
-        if( oc_kb_compare.NIL == module0065.f4772( var68_170, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4772( var68_170, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var69_171 = var68_170;
-          if( oc_kb_compare.NIL == module0065.f4775( var69_171, oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4775( var69_171, kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var58 = module0065.f4740( var69_171 );
-            final SubLObject var59 = oc_kb_compare.NIL;
+            final SubLObject var59 = kb_compare_oc.NIL;
             SubLObject var49;
             SubLObject var60;
             SubLObject var61;
             SubLObject var62;
-            for( var60 = Sequences.length( var58 ), var61 = oc_kb_compare.NIL, var61 = oc_kb_compare.ZERO_INTEGER; var61.numL( var60 ); var61 = Numbers.add( var61,
-                oc_kb_compare.ONE_INTEGER ) )
+            for( var60 = Sequences.length( var58 ), var61 = kb_compare_oc.NIL, var61 = kb_compare_oc.ZERO_INTEGER; var61.numL( var60 ); var61 = Numbers.add( var61,
+                kb_compare_oc.ONE_INTEGER ) )
             {
-              var62 = ( ( oc_kb_compare.NIL != var59 ) ? Numbers.subtract( var60, var61, oc_kb_compare.ONE_INTEGER ) : var61 );
+              var62 = ( ( kb_compare_oc.NIL != var59 ) ? Numbers.subtract( var60, var61, kb_compare_oc.ONE_INTEGER ) : var61 );
               var49 = Vectors.aref( var58, var62 );
-              if( oc_kb_compare.NIL == module0065.f4749( var49 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+              if( kb_compare_oc.NIL == module0065.f4749( var49 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
               {
-                if( oc_kb_compare.NIL != module0065.f4749( var49 ) )
+                if( kb_compare_oc.NIL != module0065.f4749( var49 ) )
                 {
-                  var49 = oc_kb_compare.$ic86$;
+                  var49 = kb_compare_oc.$ic86$;
                 }
                 module0012.note_percent_progress( var53, var52 );
-                var53 = Numbers.add( var53, oc_kb_compare.ONE_INTEGER );
+                var53 = Numbers.add( var53, kb_compare_oc.ONE_INTEGER );
                 f36490( var28, var49 );
               }
             }
           }
           final SubLObject var142_172 = var68_170;
-          if( oc_kb_compare.NIL == module0065.f4777( var142_172 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4777( var142_172 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var63 = module0065.f4738( var142_172 );
             SubLObject var64 = module0065.f4739( var142_172 );
             final SubLObject var65 = module0065.f4734( var142_172 );
-            final SubLObject var66 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+            final SubLObject var66 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
             while ( var64.numL( var65 ))
             {
               final SubLObject var67 = Hashtables.gethash_without_values( var64, var63, var66 );
-              if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var67 ) )
+              if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var67 ) )
               {
                 module0012.note_percent_progress( var53, var52 );
-                var53 = Numbers.add( var53, oc_kb_compare.ONE_INTEGER );
+                var53 = Numbers.add( var53, kb_compare_oc.ONE_INTEGER );
                 f36490( var28, var67 );
               }
-              var64 = Numbers.add( var64, oc_kb_compare.ONE_INTEGER );
+              var64 = Numbers.add( var64, kb_compare_oc.ONE_INTEGER );
             }
           }
         }
@@ -2104,75 +2105,75 @@ public final class oc_kb_compare extends SubLTranslatedFile
   {
     final SubLThread var29 = SubLProcess.currentSubLThread();
     final SubLObject var30 = f36491();
-    final SubLObject var31 = module0078.f5367( var30, Symbols.symbol_function( oc_kb_compare.EQL ), oc_kb_compare.UNPROVIDED );
+    final SubLObject var31 = module0078.f5367( var30, Symbols.symbol_function( kb_compare_oc.EQL ), kb_compare_oc.UNPROVIDED );
     final SubLObject var32 = module0167.f10810();
-    final SubLObject var33 = oc_kb_compare.NIL;
-    SubLObject var34 = oc_kb_compare.NIL;
+    final SubLObject var33 = kb_compare_oc.NIL;
+    SubLObject var34 = kb_compare_oc.NIL;
     final SubLObject var35 = module0167.f10788();
-    final SubLObject var36 = oc_kb_compare.$ic145$;
+    final SubLObject var36 = kb_compare_oc.$ic145$;
     final SubLObject var37 = module0065.f4733( var35 );
-    SubLObject var38 = oc_kb_compare.ZERO_INTEGER;
-    assert oc_kb_compare.NIL != Types.stringp( var36 ) : var36;
+    SubLObject var38 = kb_compare_oc.ZERO_INTEGER;
+    assert kb_compare_oc.NIL != Types.stringp( var36 ) : var36;
     final SubLObject var39 = module0012.$g75$.currentBinding( var29 );
     final SubLObject var40 = module0012.$g76$.currentBinding( var29 );
     final SubLObject var41 = module0012.$g77$.currentBinding( var29 );
     final SubLObject var42 = module0012.$g78$.currentBinding( var29 );
     try
     {
-      module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-      module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-      module0012.$g77$.bind( oc_kb_compare.T, var29 );
+      module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+      module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+      module0012.$g77$.bind( kb_compare_oc.T, var29 );
       module0012.$g78$.bind( Time.get_universal_time(), var29 );
       module0012.f478( var36 );
       final SubLObject var68_176 = var35;
-      if( oc_kb_compare.NIL == module0065.f4772( var68_176, oc_kb_compare.$ic86$ ) )
+      if( kb_compare_oc.NIL == module0065.f4772( var68_176, kb_compare_oc.$ic86$ ) )
       {
         final SubLObject var69_177 = var68_176;
-        if( oc_kb_compare.NIL == module0065.f4775( var69_177, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4775( var69_177, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var43 = module0065.f4740( var69_177 );
-          final SubLObject var44 = oc_kb_compare.NIL;
+          final SubLObject var44 = kb_compare_oc.NIL;
           final SubLObject var45 = Sequences.length( var43 );
           SubLObject var47;
-          final SubLObject var46 = var47 = ( oc_kb_compare.NIL != var44 ) ? ConsesLow.list( Numbers.subtract( var45, oc_kb_compare.ONE_INTEGER ), oc_kb_compare.MINUS_ONE_INTEGER,
-              oc_kb_compare.MINUS_ONE_INTEGER ) : ConsesLow.list( oc_kb_compare.ZERO_INTEGER, var45, oc_kb_compare.ONE_INTEGER );
-          SubLObject var48 = oc_kb_compare.NIL;
-          SubLObject var49 = oc_kb_compare.NIL;
-          SubLObject var50 = oc_kb_compare.NIL;
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          final SubLObject var46 = var47 = ( kb_compare_oc.NIL != var44 ) ? ConsesLow.list( Numbers.subtract( var45, kb_compare_oc.ONE_INTEGER ), kb_compare_oc.MINUS_ONE_INTEGER,
+              kb_compare_oc.MINUS_ONE_INTEGER ) : ConsesLow.list( kb_compare_oc.ZERO_INTEGER, var45, kb_compare_oc.ONE_INTEGER );
+          SubLObject var48 = kb_compare_oc.NIL;
+          SubLObject var49 = kb_compare_oc.NIL;
+          SubLObject var50 = kb_compare_oc.NIL;
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var48 = var47.first();
           var47 = var47.rest();
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var49 = var47.first();
           var47 = var47.rest();
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var50 = var47.first();
           var47 = var47.rest();
-          if( oc_kb_compare.NIL == var47 )
+          if( kb_compare_oc.NIL == var47 )
           {
-            if( oc_kb_compare.NIL == var34 )
+            if( kb_compare_oc.NIL == var34 )
             {
               SubLObject var51;
               SubLObject var52;
               SubLObject var53;
               SubLObject var154_180;
               SubLObject var54;
-              for( var51 = var49, var52 = oc_kb_compare.NIL, var52 = var48; oc_kb_compare.NIL == var34 && oc_kb_compare.NIL == module0005.f124( var52, var50, var51 ); var52 = Numbers.add( var52, var50 ) )
+              for( var51 = var49, var52 = kb_compare_oc.NIL, var52 = var48; kb_compare_oc.NIL == var34 && kb_compare_oc.NIL == module0005.f124( var52, var50, var51 ); var52 = Numbers.add( var52, var50 ) )
               {
                 var53 = Vectors.aref( var43, var52 );
-                if( oc_kb_compare.NIL == module0065.f4749( var53 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+                if( kb_compare_oc.NIL == module0065.f4749( var53 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
                 {
-                  if( oc_kb_compare.NIL != module0065.f4749( var53 ) )
+                  if( kb_compare_oc.NIL != module0065.f4749( var53 ) )
                   {
-                    var53 = oc_kb_compare.$ic86$;
+                    var53 = kb_compare_oc.$ic86$;
                   }
                   module0012.note_percent_progress( var38, var37 );
-                  var38 = Numbers.add( var38, oc_kb_compare.ONE_INTEGER );
+                  var38 = Numbers.add( var38, kb_compare_oc.ONE_INTEGER );
                   var154_180 = Numbers.numL( var32, var52 );
-                  if( oc_kb_compare.NIL == var154_180 )
+                  if( kb_compare_oc.NIL == var154_180 )
                   {
                     var54 = module0167.f10803( var53 );
-                    if( oc_kb_compare.NIL == module0077.f5320( var54, var31 ) )
+                    if( kb_compare_oc.NIL == module0077.f5320( var54, var31 ) )
                     {
                       f36404( var28, var53, var54 );
                     }
@@ -2184,35 +2185,35 @@ public final class oc_kb_compare extends SubLTranslatedFile
           }
           else
           {
-            cdestructuring_bind.cdestructuring_bind_error( var46, oc_kb_compare.$ic142$ );
+            cdestructuring_bind.cdestructuring_bind_error( var46, kb_compare_oc.$ic142$ );
           }
         }
         final SubLObject var142_181 = var68_176;
-        if( oc_kb_compare.NIL == module0065.f4777( var142_181 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4777( var142_181 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var55 = module0065.f4738( var142_181 );
           SubLObject var56 = module0065.f4739( var142_181 );
           final SubLObject var57 = module0065.f4734( var142_181 );
-          final SubLObject var58 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
-          while ( var56.numL( var57 ) && oc_kb_compare.NIL == var34)
+          final SubLObject var58 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
+          while ( var56.numL( var57 ) && kb_compare_oc.NIL == var34)
           {
             final SubLObject var59 = Hashtables.gethash_without_values( var56, var55, var58 );
-            if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var59 ) )
+            if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var59 ) )
             {
               module0012.note_percent_progress( var38, var37 );
-              var38 = Numbers.add( var38, oc_kb_compare.ONE_INTEGER );
+              var38 = Numbers.add( var38, kb_compare_oc.ONE_INTEGER );
               final SubLObject var154_181 = Numbers.numL( var32, var56 );
-              if( oc_kb_compare.NIL == var154_181 )
+              if( kb_compare_oc.NIL == var154_181 )
               {
                 final SubLObject var60 = module0167.f10803( var59 );
-                if( oc_kb_compare.NIL == module0077.f5320( var60, var31 ) )
+                if( kb_compare_oc.NIL == module0077.f5320( var60, var31 ) )
                 {
                   f36404( var28, var59, var60 );
                 }
               }
               var34 = var154_181;
             }
-            var56 = Numbers.add( var56, oc_kb_compare.ONE_INTEGER );
+            var56 = Numbers.add( var56, kb_compare_oc.ONE_INTEGER );
           }
         }
       }
@@ -2225,70 +2226,70 @@ public final class oc_kb_compare extends SubLTranslatedFile
       module0012.$g76$.rebind( var40, var29 );
       module0012.$g75$.rebind( var39, var29 );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36490(final SubLObject var28, final SubLObject var31)
   {
-    if( oc_kb_compare.NIL == f36419( var28, var31 ) )
+    if( kb_compare_oc.NIL == f36419( var28, var31 ) )
     {
       final SubLObject var32 = f36492( var31 );
-      if( oc_kb_compare.NIL != var32 )
+      if( kb_compare_oc.NIL != var32 )
       {
         f36404( var28, var31, var32 );
       }
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36481(final SubLObject var28)
   {
     final SubLThread var29 = SubLProcess.currentSubLThread();
-    if( oc_kb_compare.NIL != f36493() )
+    if( kb_compare_oc.NIL != f36493() )
     {
       f36494( var28 );
-      final SubLObject var30 = Numbers.add( oc_kb_compare.ONE_INTEGER, assertion_handles_oc.f11032() );
+      final SubLObject var30 = Numbers.add( kb_compare_oc.ONE_INTEGER, assertion_handles_oc.f11032() );
       final SubLObject var31 = assertion_handles_oc.f11010();
-      final SubLObject var32 = oc_kb_compare.$ic146$;
+      final SubLObject var32 = kb_compare_oc.$ic146$;
       final SubLObject var33 = module0065.f4733( var31 );
-      SubLObject var34 = oc_kb_compare.ZERO_INTEGER;
-      assert oc_kb_compare.NIL != Types.stringp( var32 ) : var32;
+      SubLObject var34 = kb_compare_oc.ZERO_INTEGER;
+      assert kb_compare_oc.NIL != Types.stringp( var32 ) : var32;
       final SubLObject var35 = module0012.$g75$.currentBinding( var29 );
       final SubLObject var36 = module0012.$g76$.currentBinding( var29 );
       final SubLObject var37 = module0012.$g77$.currentBinding( var29 );
       final SubLObject var38 = module0012.$g78$.currentBinding( var29 );
       try
       {
-        module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-        module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-        module0012.$g77$.bind( oc_kb_compare.T, var29 );
+        module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+        module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+        module0012.$g77$.bind( kb_compare_oc.T, var29 );
         module0012.$g78$.bind( Time.get_universal_time(), var29 );
         module0012.f478( var32 );
         final SubLObject var68_184 = var31;
-        if( oc_kb_compare.NIL == module0065.f4772( var68_184, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4772( var68_184, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var69_185 = var68_184;
-          if( oc_kb_compare.NIL == module0065.f4775( var69_185, oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4775( var69_185, kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var39 = module0065.f4740( var69_185 );
-            final SubLObject var40 = oc_kb_compare.NIL;
+            final SubLObject var40 = kb_compare_oc.NIL;
             SubLObject var41;
             SubLObject var42;
             SubLObject var43;
             SubLObject var44;
-            for( var41 = Sequences.length( var39 ), var42 = oc_kb_compare.NIL, var42 = oc_kb_compare.ZERO_INTEGER; var42.numL( var41 ); var42 = Numbers.add( var42,
-                oc_kb_compare.ONE_INTEGER ) )
+            for( var41 = Sequences.length( var39 ), var42 = kb_compare_oc.NIL, var42 = kb_compare_oc.ZERO_INTEGER; var42.numL( var41 ); var42 = Numbers.add( var42,
+                kb_compare_oc.ONE_INTEGER ) )
             {
-              var43 = ( ( oc_kb_compare.NIL != var40 ) ? Numbers.subtract( var41, var42, oc_kb_compare.ONE_INTEGER ) : var42 );
+              var43 = ( ( kb_compare_oc.NIL != var40 ) ? Numbers.subtract( var41, var42, kb_compare_oc.ONE_INTEGER ) : var42 );
               var44 = Vectors.aref( var39, var43 );
-              if( oc_kb_compare.NIL == module0065.f4749( var44 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+              if( kb_compare_oc.NIL == module0065.f4749( var44 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
               {
-                if( oc_kb_compare.NIL != module0065.f4749( var44 ) )
+                if( kb_compare_oc.NIL != module0065.f4749( var44 ) )
                 {
-                  var44 = oc_kb_compare.$ic86$;
+                  var44 = kb_compare_oc.$ic86$;
                 }
                 module0012.note_percent_progress( var34, var33 );
-                var34 = Numbers.add( var34, oc_kb_compare.ONE_INTEGER );
+                var34 = Numbers.add( var34, kb_compare_oc.ONE_INTEGER );
                 if( !var43.numL( var30 ) )
                 {
                   f36495( var28, var44 );
@@ -2297,25 +2298,25 @@ public final class oc_kb_compare extends SubLTranslatedFile
             }
           }
           final SubLObject var142_186 = var68_184;
-          if( oc_kb_compare.NIL == module0065.f4777( var142_186 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4777( var142_186 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var45 = module0065.f4738( var142_186 );
             SubLObject var46 = module0065.f4739( var142_186 );
             final SubLObject var47 = module0065.f4734( var142_186 );
-            final SubLObject var48 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+            final SubLObject var48 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
             while ( var46.numL( var47 ))
             {
               final SubLObject var49 = Hashtables.gethash_without_values( var46, var45, var48 );
-              if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var49 ) )
+              if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var49 ) )
               {
                 module0012.note_percent_progress( var34, var33 );
-                var34 = Numbers.add( var34, oc_kb_compare.ONE_INTEGER );
+                var34 = Numbers.add( var34, kb_compare_oc.ONE_INTEGER );
                 if( !var46.numL( var30 ) )
                 {
                   f36495( var28, var49 );
                 }
               }
-              var46 = Numbers.add( var46, oc_kb_compare.ONE_INTEGER );
+              var46 = Numbers.add( var46, kb_compare_oc.ONE_INTEGER );
             }
           }
         }
@@ -2332,67 +2333,67 @@ public final class oc_kb_compare extends SubLTranslatedFile
     else
     {
       final SubLObject var50 = assertion_handles_oc.f11010();
-      final SubLObject var51 = oc_kb_compare.$ic147$;
+      final SubLObject var51 = kb_compare_oc.$ic147$;
       final SubLObject var52 = module0065.f4733( var50 );
-      SubLObject var53 = oc_kb_compare.ZERO_INTEGER;
-      assert oc_kb_compare.NIL != Types.stringp( var51 ) : var51;
+      SubLObject var53 = kb_compare_oc.ZERO_INTEGER;
+      assert kb_compare_oc.NIL != Types.stringp( var51 ) : var51;
       final SubLObject var54 = module0012.$g75$.currentBinding( var29 );
       final SubLObject var55 = module0012.$g76$.currentBinding( var29 );
       final SubLObject var56 = module0012.$g77$.currentBinding( var29 );
       final SubLObject var57 = module0012.$g78$.currentBinding( var29 );
       try
       {
-        module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-        module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-        module0012.$g77$.bind( oc_kb_compare.T, var29 );
+        module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+        module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+        module0012.$g77$.bind( kb_compare_oc.T, var29 );
         module0012.$g78$.bind( Time.get_universal_time(), var29 );
         module0012.f478( var51 );
         final SubLObject var68_185 = var50;
-        if( oc_kb_compare.NIL == module0065.f4772( var68_185, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4772( var68_185, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var69_186 = var68_185;
-          if( oc_kb_compare.NIL == module0065.f4775( var69_186, oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4775( var69_186, kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var58 = module0065.f4740( var69_186 );
-            final SubLObject var59 = oc_kb_compare.NIL;
+            final SubLObject var59 = kb_compare_oc.NIL;
             SubLObject var49;
             SubLObject var60;
             SubLObject var61;
             SubLObject var62;
-            for( var60 = Sequences.length( var58 ), var61 = oc_kb_compare.NIL, var61 = oc_kb_compare.ZERO_INTEGER; var61.numL( var60 ); var61 = Numbers.add( var61,
-                oc_kb_compare.ONE_INTEGER ) )
+            for( var60 = Sequences.length( var58 ), var61 = kb_compare_oc.NIL, var61 = kb_compare_oc.ZERO_INTEGER; var61.numL( var60 ); var61 = Numbers.add( var61,
+                kb_compare_oc.ONE_INTEGER ) )
             {
-              var62 = ( ( oc_kb_compare.NIL != var59 ) ? Numbers.subtract( var60, var61, oc_kb_compare.ONE_INTEGER ) : var61 );
+              var62 = ( ( kb_compare_oc.NIL != var59 ) ? Numbers.subtract( var60, var61, kb_compare_oc.ONE_INTEGER ) : var61 );
               var49 = Vectors.aref( var58, var62 );
-              if( oc_kb_compare.NIL == module0065.f4749( var49 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+              if( kb_compare_oc.NIL == module0065.f4749( var49 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
               {
-                if( oc_kb_compare.NIL != module0065.f4749( var49 ) )
+                if( kb_compare_oc.NIL != module0065.f4749( var49 ) )
                 {
-                  var49 = oc_kb_compare.$ic86$;
+                  var49 = kb_compare_oc.$ic86$;
                 }
                 module0012.note_percent_progress( var53, var52 );
-                var53 = Numbers.add( var53, oc_kb_compare.ONE_INTEGER );
+                var53 = Numbers.add( var53, kb_compare_oc.ONE_INTEGER );
                 f36495( var28, var49 );
               }
             }
           }
           final SubLObject var142_187 = var68_185;
-          if( oc_kb_compare.NIL == module0065.f4777( var142_187 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4777( var142_187 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var63 = module0065.f4738( var142_187 );
             SubLObject var64 = module0065.f4739( var142_187 );
             final SubLObject var65 = module0065.f4734( var142_187 );
-            final SubLObject var66 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+            final SubLObject var66 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
             while ( var64.numL( var65 ))
             {
               final SubLObject var67 = Hashtables.gethash_without_values( var64, var63, var66 );
-              if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var67 ) )
+              if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var67 ) )
               {
                 module0012.note_percent_progress( var53, var52 );
-                var53 = Numbers.add( var53, oc_kb_compare.ONE_INTEGER );
+                var53 = Numbers.add( var53, kb_compare_oc.ONE_INTEGER );
                 f36495( var28, var67 );
               }
-              var64 = Numbers.add( var64, oc_kb_compare.ONE_INTEGER );
+              var64 = Numbers.add( var64, kb_compare_oc.ONE_INTEGER );
             }
           }
         }
@@ -2413,75 +2414,75 @@ public final class oc_kb_compare extends SubLTranslatedFile
   {
     final SubLThread var29 = SubLProcess.currentSubLThread();
     final SubLObject var30 = f36496();
-    final SubLObject var31 = module0078.f5367( var30, Symbols.symbol_function( oc_kb_compare.EQL ), oc_kb_compare.UNPROVIDED );
+    final SubLObject var31 = module0078.f5367( var30, Symbols.symbol_function( kb_compare_oc.EQL ), kb_compare_oc.UNPROVIDED );
     final SubLObject var32 = assertion_handles_oc.f11032();
-    final SubLObject var33 = oc_kb_compare.NIL;
-    SubLObject var34 = oc_kb_compare.NIL;
+    final SubLObject var33 = kb_compare_oc.NIL;
+    SubLObject var34 = kb_compare_oc.NIL;
     final SubLObject var35 = assertion_handles_oc.f11010();
-    final SubLObject var36 = oc_kb_compare.$ic148$;
+    final SubLObject var36 = kb_compare_oc.$ic148$;
     final SubLObject var37 = module0065.f4733( var35 );
-    SubLObject var38 = oc_kb_compare.ZERO_INTEGER;
-    assert oc_kb_compare.NIL != Types.stringp( var36 ) : var36;
+    SubLObject var38 = kb_compare_oc.ZERO_INTEGER;
+    assert kb_compare_oc.NIL != Types.stringp( var36 ) : var36;
     final SubLObject var39 = module0012.$g75$.currentBinding( var29 );
     final SubLObject var40 = module0012.$g76$.currentBinding( var29 );
     final SubLObject var41 = module0012.$g77$.currentBinding( var29 );
     final SubLObject var42 = module0012.$g78$.currentBinding( var29 );
     try
     {
-      module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-      module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-      module0012.$g77$.bind( oc_kb_compare.T, var29 );
+      module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+      module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+      module0012.$g77$.bind( kb_compare_oc.T, var29 );
       module0012.$g78$.bind( Time.get_universal_time(), var29 );
       module0012.f478( var36 );
       final SubLObject var68_191 = var35;
-      if( oc_kb_compare.NIL == module0065.f4772( var68_191, oc_kb_compare.$ic86$ ) )
+      if( kb_compare_oc.NIL == module0065.f4772( var68_191, kb_compare_oc.$ic86$ ) )
       {
         final SubLObject var69_192 = var68_191;
-        if( oc_kb_compare.NIL == module0065.f4775( var69_192, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4775( var69_192, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var43 = module0065.f4740( var69_192 );
-          final SubLObject var44 = oc_kb_compare.NIL;
+          final SubLObject var44 = kb_compare_oc.NIL;
           final SubLObject var45 = Sequences.length( var43 );
           SubLObject var47;
-          final SubLObject var46 = var47 = ( oc_kb_compare.NIL != var44 ) ? ConsesLow.list( Numbers.subtract( var45, oc_kb_compare.ONE_INTEGER ), oc_kb_compare.MINUS_ONE_INTEGER,
-              oc_kb_compare.MINUS_ONE_INTEGER ) : ConsesLow.list( oc_kb_compare.ZERO_INTEGER, var45, oc_kb_compare.ONE_INTEGER );
-          SubLObject var48 = oc_kb_compare.NIL;
-          SubLObject var49 = oc_kb_compare.NIL;
-          SubLObject var50 = oc_kb_compare.NIL;
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          final SubLObject var46 = var47 = ( kb_compare_oc.NIL != var44 ) ? ConsesLow.list( Numbers.subtract( var45, kb_compare_oc.ONE_INTEGER ), kb_compare_oc.MINUS_ONE_INTEGER,
+              kb_compare_oc.MINUS_ONE_INTEGER ) : ConsesLow.list( kb_compare_oc.ZERO_INTEGER, var45, kb_compare_oc.ONE_INTEGER );
+          SubLObject var48 = kb_compare_oc.NIL;
+          SubLObject var49 = kb_compare_oc.NIL;
+          SubLObject var50 = kb_compare_oc.NIL;
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var48 = var47.first();
           var47 = var47.rest();
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var49 = var47.first();
           var47 = var47.rest();
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var50 = var47.first();
           var47 = var47.rest();
-          if( oc_kb_compare.NIL == var47 )
+          if( kb_compare_oc.NIL == var47 )
           {
-            if( oc_kb_compare.NIL == var34 )
+            if( kb_compare_oc.NIL == var34 )
             {
               SubLObject var51;
               SubLObject var52;
               SubLObject var53;
               SubLObject var154_195;
               SubLObject var54;
-              for( var51 = var49, var52 = oc_kb_compare.NIL, var52 = var48; oc_kb_compare.NIL == var34 && oc_kb_compare.NIL == module0005.f124( var52, var50, var51 ); var52 = Numbers.add( var52, var50 ) )
+              for( var51 = var49, var52 = kb_compare_oc.NIL, var52 = var48; kb_compare_oc.NIL == var34 && kb_compare_oc.NIL == module0005.f124( var52, var50, var51 ); var52 = Numbers.add( var52, var50 ) )
               {
                 var53 = Vectors.aref( var43, var52 );
-                if( oc_kb_compare.NIL == module0065.f4749( var53 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+                if( kb_compare_oc.NIL == module0065.f4749( var53 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
                 {
-                  if( oc_kb_compare.NIL != module0065.f4749( var53 ) )
+                  if( kb_compare_oc.NIL != module0065.f4749( var53 ) )
                   {
-                    var53 = oc_kb_compare.$ic86$;
+                    var53 = kb_compare_oc.$ic86$;
                   }
                   module0012.note_percent_progress( var38, var37 );
-                  var38 = Numbers.add( var38, oc_kb_compare.ONE_INTEGER );
+                  var38 = Numbers.add( var38, kb_compare_oc.ONE_INTEGER );
                   var154_195 = Numbers.numL( var32, var52 );
-                  if( oc_kb_compare.NIL == var154_195 )
+                  if( kb_compare_oc.NIL == var154_195 )
                   {
                     var54 = assertion_handles_oc.f11025( var53 );
-                    if( oc_kb_compare.NIL == module0077.f5320( var54, var31 ) )
+                    if( kb_compare_oc.NIL == module0077.f5320( var54, var31 ) )
                     {
                       f36405( var28, var53, var54 );
                     }
@@ -2493,35 +2494,35 @@ public final class oc_kb_compare extends SubLTranslatedFile
           }
           else
           {
-            cdestructuring_bind.cdestructuring_bind_error( var46, oc_kb_compare.$ic142$ );
+            cdestructuring_bind.cdestructuring_bind_error( var46, kb_compare_oc.$ic142$ );
           }
         }
         final SubLObject var142_196 = var68_191;
-        if( oc_kb_compare.NIL == module0065.f4777( var142_196 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4777( var142_196 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var55 = module0065.f4738( var142_196 );
           SubLObject var56 = module0065.f4739( var142_196 );
           final SubLObject var57 = module0065.f4734( var142_196 );
-          final SubLObject var58 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
-          while ( var56.numL( var57 ) && oc_kb_compare.NIL == var34)
+          final SubLObject var58 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
+          while ( var56.numL( var57 ) && kb_compare_oc.NIL == var34)
           {
             final SubLObject var59 = Hashtables.gethash_without_values( var56, var55, var58 );
-            if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var59 ) )
+            if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var59 ) )
             {
               module0012.note_percent_progress( var38, var37 );
-              var38 = Numbers.add( var38, oc_kb_compare.ONE_INTEGER );
+              var38 = Numbers.add( var38, kb_compare_oc.ONE_INTEGER );
               final SubLObject var154_196 = Numbers.numL( var32, var56 );
-              if( oc_kb_compare.NIL == var154_196 )
+              if( kb_compare_oc.NIL == var154_196 )
               {
                 final SubLObject var60 = assertion_handles_oc.f11025( var59 );
-                if( oc_kb_compare.NIL == module0077.f5320( var60, var31 ) )
+                if( kb_compare_oc.NIL == module0077.f5320( var60, var31 ) )
                 {
                   f36405( var28, var59, var60 );
                 }
               }
               var34 = var154_196;
             }
-            var56 = Numbers.add( var56, oc_kb_compare.ONE_INTEGER );
+            var56 = Numbers.add( var56, kb_compare_oc.ONE_INTEGER );
           }
         }
       }
@@ -2534,70 +2535,70 @@ public final class oc_kb_compare extends SubLTranslatedFile
       module0012.$g76$.rebind( var40, var29 );
       module0012.$g75$.rebind( var39, var29 );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36495(final SubLObject var28, final SubLObject var32)
   {
-    if( oc_kb_compare.NIL == f36421( var28, var32 ) )
+    if( kb_compare_oc.NIL == f36421( var28, var32 ) )
     {
       final SubLObject var33 = f36497( var32 );
-      if( oc_kb_compare.NIL != var33 )
+      if( kb_compare_oc.NIL != var33 )
       {
         f36405( var28, var32, var33 );
       }
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36482(final SubLObject var28)
   {
     final SubLThread var29 = SubLProcess.currentSubLThread();
-    if( oc_kb_compare.NIL != f36498() )
+    if( kb_compare_oc.NIL != f36498() )
     {
       f36499( var28 );
-      final SubLObject var30 = Numbers.add( oc_kb_compare.ONE_INTEGER, oc_deduction_handles.f11656() );
-      final SubLObject var31 = oc_deduction_handles.f11634();
-      final SubLObject var32 = oc_kb_compare.$ic149$;
+      final SubLObject var30 = Numbers.add( kb_compare_oc.ONE_INTEGER, deduction_handles_oc.f11656() );
+      final SubLObject var31 = deduction_handles_oc.f11634();
+      final SubLObject var32 = kb_compare_oc.$ic149$;
       final SubLObject var33 = module0065.f4733( var31 );
-      SubLObject var34 = oc_kb_compare.ZERO_INTEGER;
-      assert oc_kb_compare.NIL != Types.stringp( var32 ) : var32;
+      SubLObject var34 = kb_compare_oc.ZERO_INTEGER;
+      assert kb_compare_oc.NIL != Types.stringp( var32 ) : var32;
       final SubLObject var35 = module0012.$g75$.currentBinding( var29 );
       final SubLObject var36 = module0012.$g76$.currentBinding( var29 );
       final SubLObject var37 = module0012.$g77$.currentBinding( var29 );
       final SubLObject var38 = module0012.$g78$.currentBinding( var29 );
       try
       {
-        module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-        module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-        module0012.$g77$.bind( oc_kb_compare.T, var29 );
+        module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+        module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+        module0012.$g77$.bind( kb_compare_oc.T, var29 );
         module0012.$g78$.bind( Time.get_universal_time(), var29 );
         module0012.f478( var32 );
         final SubLObject var68_199 = var31;
-        if( oc_kb_compare.NIL == module0065.f4772( var68_199, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4772( var68_199, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var69_200 = var68_199;
-          if( oc_kb_compare.NIL == module0065.f4775( var69_200, oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4775( var69_200, kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var39 = module0065.f4740( var69_200 );
-            final SubLObject var40 = oc_kb_compare.NIL;
+            final SubLObject var40 = kb_compare_oc.NIL;
             SubLObject var41;
             SubLObject var42;
             SubLObject var43;
             SubLObject var44;
-            for( var41 = Sequences.length( var39 ), var42 = oc_kb_compare.NIL, var42 = oc_kb_compare.ZERO_INTEGER; var42.numL( var41 ); var42 = Numbers.add( var42,
-                oc_kb_compare.ONE_INTEGER ) )
+            for( var41 = Sequences.length( var39 ), var42 = kb_compare_oc.NIL, var42 = kb_compare_oc.ZERO_INTEGER; var42.numL( var41 ); var42 = Numbers.add( var42,
+                kb_compare_oc.ONE_INTEGER ) )
             {
-              var43 = ( ( oc_kb_compare.NIL != var40 ) ? Numbers.subtract( var41, var42, oc_kb_compare.ONE_INTEGER ) : var42 );
+              var43 = ( ( kb_compare_oc.NIL != var40 ) ? Numbers.subtract( var41, var42, kb_compare_oc.ONE_INTEGER ) : var42 );
               var44 = Vectors.aref( var39, var43 );
-              if( oc_kb_compare.NIL == module0065.f4749( var44 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+              if( kb_compare_oc.NIL == module0065.f4749( var44 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
               {
-                if( oc_kb_compare.NIL != module0065.f4749( var44 ) )
+                if( kb_compare_oc.NIL != module0065.f4749( var44 ) )
                 {
-                  var44 = oc_kb_compare.$ic86$;
+                  var44 = kb_compare_oc.$ic86$;
                 }
                 module0012.note_percent_progress( var34, var33 );
-                var34 = Numbers.add( var34, oc_kb_compare.ONE_INTEGER );
+                var34 = Numbers.add( var34, kb_compare_oc.ONE_INTEGER );
                 if( !var43.numL( var30 ) )
                 {
                   f36500( var28, var44 );
@@ -2606,25 +2607,25 @@ public final class oc_kb_compare extends SubLTranslatedFile
             }
           }
           final SubLObject var142_201 = var68_199;
-          if( oc_kb_compare.NIL == module0065.f4777( var142_201 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4777( var142_201 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var45 = module0065.f4738( var142_201 );
             SubLObject var46 = module0065.f4739( var142_201 );
             final SubLObject var47 = module0065.f4734( var142_201 );
-            final SubLObject var48 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+            final SubLObject var48 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
             while ( var46.numL( var47 ))
             {
               final SubLObject var49 = Hashtables.gethash_without_values( var46, var45, var48 );
-              if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var49 ) )
+              if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var49 ) )
               {
                 module0012.note_percent_progress( var34, var33 );
-                var34 = Numbers.add( var34, oc_kb_compare.ONE_INTEGER );
+                var34 = Numbers.add( var34, kb_compare_oc.ONE_INTEGER );
                 if( !var46.numL( var30 ) )
                 {
                   f36500( var28, var49 );
                 }
               }
-              var46 = Numbers.add( var46, oc_kb_compare.ONE_INTEGER );
+              var46 = Numbers.add( var46, kb_compare_oc.ONE_INTEGER );
             }
           }
         }
@@ -2640,48 +2641,48 @@ public final class oc_kb_compare extends SubLTranslatedFile
     }
     else
     {
-      final SubLObject var50 = oc_deduction_handles.f11634();
-      final SubLObject var51 = oc_kb_compare.$ic150$;
+      final SubLObject var50 = deduction_handles_oc.f11634();
+      final SubLObject var51 = kb_compare_oc.$ic150$;
       final SubLObject var52 = module0065.f4733( var50 );
-      SubLObject var53 = oc_kb_compare.ZERO_INTEGER;
-      assert oc_kb_compare.NIL != Types.stringp( var51 ) : var51;
+      SubLObject var53 = kb_compare_oc.ZERO_INTEGER;
+      assert kb_compare_oc.NIL != Types.stringp( var51 ) : var51;
       final SubLObject var54 = module0012.$g75$.currentBinding( var29 );
       final SubLObject var55 = module0012.$g76$.currentBinding( var29 );
       final SubLObject var56 = module0012.$g77$.currentBinding( var29 );
       final SubLObject var57 = module0012.$g78$.currentBinding( var29 );
       try
       {
-        module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-        module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-        module0012.$g77$.bind( oc_kb_compare.T, var29 );
+        module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+        module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+        module0012.$g77$.bind( kb_compare_oc.T, var29 );
         module0012.$g78$.bind( Time.get_universal_time(), var29 );
         module0012.f478( var51 );
         final SubLObject var68_200 = var50;
-        if( oc_kb_compare.NIL == module0065.f4772( var68_200, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4772( var68_200, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var69_201 = var68_200;
-          if( oc_kb_compare.NIL == module0065.f4775( var69_201, oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4775( var69_201, kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var58 = module0065.f4740( var69_201 );
-            final SubLObject var59 = oc_kb_compare.NIL;
+            final SubLObject var59 = kb_compare_oc.NIL;
             SubLObject var49;
             SubLObject var60;
             SubLObject var61;
             SubLObject var62;
-            for( var60 = Sequences.length( var58 ), var61 = oc_kb_compare.NIL, var61 = oc_kb_compare.ZERO_INTEGER; var61.numL( var60 ); var61 = Numbers.add( var61,
-                oc_kb_compare.ONE_INTEGER ) )
+            for( var60 = Sequences.length( var58 ), var61 = kb_compare_oc.NIL, var61 = kb_compare_oc.ZERO_INTEGER; var61.numL( var60 ); var61 = Numbers.add( var61,
+                kb_compare_oc.ONE_INTEGER ) )
             {
-              var62 = ( ( oc_kb_compare.NIL != var59 ) ? Numbers.subtract( var60, var61, oc_kb_compare.ONE_INTEGER ) : var61 );
+              var62 = ( ( kb_compare_oc.NIL != var59 ) ? Numbers.subtract( var60, var61, kb_compare_oc.ONE_INTEGER ) : var61 );
               var49 = Vectors.aref( var58, var62 );
-              if( oc_kb_compare.NIL == module0065.f4749( var49 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+              if( kb_compare_oc.NIL == module0065.f4749( var49 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
               {
-                if( oc_kb_compare.NIL != module0065.f4749( var49 ) )
+                if( kb_compare_oc.NIL != module0065.f4749( var49 ) )
                 {
-                  var49 = oc_kb_compare.$ic86$;
+                  var49 = kb_compare_oc.$ic86$;
                 }
                 module0012.note_percent_progress( var53, var52 );
-                var53 = Numbers.add( var53, oc_kb_compare.ONE_INTEGER );
-                if( oc_kb_compare.NIL != oc_deduction_handles.f11665( var49, oc_kb_compare.T ) )
+                var53 = Numbers.add( var53, kb_compare_oc.ONE_INTEGER );
+                if( kb_compare_oc.NIL != deduction_handles_oc.f11665( var49, kb_compare_oc.T ) )
                 {
                   f36500( var28, var49 );
                 }
@@ -2689,25 +2690,25 @@ public final class oc_kb_compare extends SubLTranslatedFile
             }
           }
           final SubLObject var142_202 = var68_200;
-          if( oc_kb_compare.NIL == module0065.f4777( var142_202 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+          if( kb_compare_oc.NIL == module0065.f4777( var142_202 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
           {
             final SubLObject var63 = module0065.f4738( var142_202 );
             SubLObject var64 = module0065.f4739( var142_202 );
             final SubLObject var65 = module0065.f4734( var142_202 );
-            final SubLObject var66 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+            final SubLObject var66 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
             while ( var64.numL( var65 ))
             {
               final SubLObject var67 = Hashtables.gethash_without_values( var64, var63, var66 );
-              if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var67 ) )
+              if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var67 ) )
               {
                 module0012.note_percent_progress( var53, var52 );
-                var53 = Numbers.add( var53, oc_kb_compare.ONE_INTEGER );
-                if( oc_kb_compare.NIL != oc_deduction_handles.f11665( var67, oc_kb_compare.T ) )
+                var53 = Numbers.add( var53, kb_compare_oc.ONE_INTEGER );
+                if( kb_compare_oc.NIL != deduction_handles_oc.f11665( var67, kb_compare_oc.T ) )
                 {
                   f36500( var28, var67 );
                 }
               }
-              var64 = Numbers.add( var64, oc_kb_compare.ONE_INTEGER );
+              var64 = Numbers.add( var64, kb_compare_oc.ONE_INTEGER );
             }
           }
         }
@@ -2728,75 +2729,75 @@ public final class oc_kb_compare extends SubLTranslatedFile
   {
     final SubLThread var29 = SubLProcess.currentSubLThread();
     final SubLObject var30 = f36501();
-    final SubLObject var31 = module0078.f5367( var30, Symbols.symbol_function( oc_kb_compare.EQL ), oc_kb_compare.UNPROVIDED );
-    final SubLObject var32 = oc_deduction_handles.f11656();
-    final SubLObject var33 = oc_kb_compare.NIL;
-    SubLObject var34 = oc_kb_compare.NIL;
-    final SubLObject var35 = oc_deduction_handles.f11634();
-    final SubLObject var36 = oc_kb_compare.$ic151$;
+    final SubLObject var31 = module0078.f5367( var30, Symbols.symbol_function( kb_compare_oc.EQL ), kb_compare_oc.UNPROVIDED );
+    final SubLObject var32 = deduction_handles_oc.f11656();
+    final SubLObject var33 = kb_compare_oc.NIL;
+    SubLObject var34 = kb_compare_oc.NIL;
+    final SubLObject var35 = deduction_handles_oc.f11634();
+    final SubLObject var36 = kb_compare_oc.$ic151$;
     final SubLObject var37 = module0065.f4733( var35 );
-    SubLObject var38 = oc_kb_compare.ZERO_INTEGER;
-    assert oc_kb_compare.NIL != Types.stringp( var36 ) : var36;
+    SubLObject var38 = kb_compare_oc.ZERO_INTEGER;
+    assert kb_compare_oc.NIL != Types.stringp( var36 ) : var36;
     final SubLObject var39 = module0012.$g75$.currentBinding( var29 );
     final SubLObject var40 = module0012.$g76$.currentBinding( var29 );
     final SubLObject var41 = module0012.$g77$.currentBinding( var29 );
     final SubLObject var42 = module0012.$g78$.currentBinding( var29 );
     try
     {
-      module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var29 );
-      module0012.$g76$.bind( oc_kb_compare.NIL, var29 );
-      module0012.$g77$.bind( oc_kb_compare.T, var29 );
+      module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var29 );
+      module0012.$g76$.bind( kb_compare_oc.NIL, var29 );
+      module0012.$g77$.bind( kb_compare_oc.T, var29 );
       module0012.$g78$.bind( Time.get_universal_time(), var29 );
       module0012.f478( var36 );
       final SubLObject var68_206 = var35;
-      if( oc_kb_compare.NIL == module0065.f4772( var68_206, oc_kb_compare.$ic86$ ) )
+      if( kb_compare_oc.NIL == module0065.f4772( var68_206, kb_compare_oc.$ic86$ ) )
       {
         final SubLObject var69_207 = var68_206;
-        if( oc_kb_compare.NIL == module0065.f4775( var69_207, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4775( var69_207, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var43 = module0065.f4740( var69_207 );
-          final SubLObject var44 = oc_kb_compare.NIL;
+          final SubLObject var44 = kb_compare_oc.NIL;
           final SubLObject var45 = Sequences.length( var43 );
           SubLObject var47;
-          final SubLObject var46 = var47 = ( oc_kb_compare.NIL != var44 ) ? ConsesLow.list( Numbers.subtract( var45, oc_kb_compare.ONE_INTEGER ), oc_kb_compare.MINUS_ONE_INTEGER,
-              oc_kb_compare.MINUS_ONE_INTEGER ) : ConsesLow.list( oc_kb_compare.ZERO_INTEGER, var45, oc_kb_compare.ONE_INTEGER );
-          SubLObject var48 = oc_kb_compare.NIL;
-          SubLObject var49 = oc_kb_compare.NIL;
-          SubLObject var50 = oc_kb_compare.NIL;
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          final SubLObject var46 = var47 = ( kb_compare_oc.NIL != var44 ) ? ConsesLow.list( Numbers.subtract( var45, kb_compare_oc.ONE_INTEGER ), kb_compare_oc.MINUS_ONE_INTEGER,
+              kb_compare_oc.MINUS_ONE_INTEGER ) : ConsesLow.list( kb_compare_oc.ZERO_INTEGER, var45, kb_compare_oc.ONE_INTEGER );
+          SubLObject var48 = kb_compare_oc.NIL;
+          SubLObject var49 = kb_compare_oc.NIL;
+          SubLObject var50 = kb_compare_oc.NIL;
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var48 = var47.first();
           var47 = var47.rest();
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var49 = var47.first();
           var47 = var47.rest();
-          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, oc_kb_compare.$ic142$ );
+          cdestructuring_bind.destructuring_bind_must_consp( var47, var46, kb_compare_oc.$ic142$ );
           var50 = var47.first();
           var47 = var47.rest();
-          if( oc_kb_compare.NIL == var47 )
+          if( kb_compare_oc.NIL == var47 )
           {
-            if( oc_kb_compare.NIL == var34 )
+            if( kb_compare_oc.NIL == var34 )
             {
               SubLObject var51;
               SubLObject var52;
               SubLObject var53;
               SubLObject var154_210;
               SubLObject var54;
-              for( var51 = var49, var52 = oc_kb_compare.NIL, var52 = var48; oc_kb_compare.NIL == var34 && oc_kb_compare.NIL == module0005.f124( var52, var50, var51 ); var52 = Numbers.add( var52, var50 ) )
+              for( var51 = var49, var52 = kb_compare_oc.NIL, var52 = var48; kb_compare_oc.NIL == var34 && kb_compare_oc.NIL == module0005.f124( var52, var50, var51 ); var52 = Numbers.add( var52, var50 ) )
               {
                 var53 = Vectors.aref( var43, var52 );
-                if( oc_kb_compare.NIL == module0065.f4749( var53 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+                if( kb_compare_oc.NIL == module0065.f4749( var53 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
                 {
-                  if( oc_kb_compare.NIL != module0065.f4749( var53 ) )
+                  if( kb_compare_oc.NIL != module0065.f4749( var53 ) )
                   {
-                    var53 = oc_kb_compare.$ic86$;
+                    var53 = kb_compare_oc.$ic86$;
                   }
                   module0012.note_percent_progress( var38, var37 );
-                  var38 = Numbers.add( var38, oc_kb_compare.ONE_INTEGER );
+                  var38 = Numbers.add( var38, kb_compare_oc.ONE_INTEGER );
                   var154_210 = Numbers.numL( var32, var52 );
-                  if( oc_kb_compare.NIL == var154_210 )
+                  if( kb_compare_oc.NIL == var154_210 )
                   {
-                    var54 = oc_deduction_handles.f11649( var53 );
-                    if( oc_kb_compare.NIL == module0077.f5320( var54, var31 ) )
+                    var54 = deduction_handles_oc.f11649( var53 );
+                    if( kb_compare_oc.NIL == module0077.f5320( var54, var31 ) )
                     {
                       f36406( var28, var53, var54 );
                     }
@@ -2808,35 +2809,35 @@ public final class oc_kb_compare extends SubLTranslatedFile
           }
           else
           {
-            cdestructuring_bind.cdestructuring_bind_error( var46, oc_kb_compare.$ic142$ );
+            cdestructuring_bind.cdestructuring_bind_error( var46, kb_compare_oc.$ic142$ );
           }
         }
         final SubLObject var142_211 = var68_206;
-        if( oc_kb_compare.NIL == module0065.f4777( var142_211 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4777( var142_211 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var55 = module0065.f4738( var142_211 );
           SubLObject var56 = module0065.f4739( var142_211 );
           final SubLObject var57 = module0065.f4734( var142_211 );
-          final SubLObject var58 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
-          while ( var56.numL( var57 ) && oc_kb_compare.NIL == var34)
+          final SubLObject var58 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
+          while ( var56.numL( var57 ) && kb_compare_oc.NIL == var34)
           {
             final SubLObject var59 = Hashtables.gethash_without_values( var56, var55, var58 );
-            if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var59 ) )
+            if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var59 ) )
             {
               module0012.note_percent_progress( var38, var37 );
-              var38 = Numbers.add( var38, oc_kb_compare.ONE_INTEGER );
+              var38 = Numbers.add( var38, kb_compare_oc.ONE_INTEGER );
               final SubLObject var154_211 = Numbers.numL( var32, var56 );
-              if( oc_kb_compare.NIL == var154_211 )
+              if( kb_compare_oc.NIL == var154_211 )
               {
-                final SubLObject var60 = oc_deduction_handles.f11649( var59 );
-                if( oc_kb_compare.NIL == module0077.f5320( var60, var31 ) )
+                final SubLObject var60 = deduction_handles_oc.f11649( var59 );
+                if( kb_compare_oc.NIL == module0077.f5320( var60, var31 ) )
                 {
                   f36406( var28, var59, var60 );
                 }
               }
               var34 = var154_211;
             }
-            var56 = Numbers.add( var56, oc_kb_compare.ONE_INTEGER );
+            var56 = Numbers.add( var56, kb_compare_oc.ONE_INTEGER );
           }
         }
       }
@@ -2849,43 +2850,43 @@ public final class oc_kb_compare extends SubLTranslatedFile
       module0012.$g76$.rebind( var40, var29 );
       module0012.$g75$.rebind( var39, var29 );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36500(final SubLObject var28, final SubLObject var33)
   {
-    if( oc_kb_compare.NIL == f36423( var28, var33 ) )
+    if( kb_compare_oc.NIL == f36423( var28, var33 ) )
     {
       final SubLObject var34 = f36502( var33 );
-      if( oc_kb_compare.NIL != var34 )
+      if( kb_compare_oc.NIL != var34 )
       {
         f36406( var28, var33, var34 );
       }
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36503(final SubLObject var84)
   {
     final SubLThread var85 = SubLProcess.currentSubLThread();
-    assert oc_kb_compare.NIL != f36434( var84 ) : var84;
+    assert kb_compare_oc.NIL != f36434( var84 ) : var84;
     final SubLObject var86 = f36468( var84 );
     final SubLObject var87 = module0103.f7393( var86 );
     try
     {
       module0103.f7394( var87 );
       final SubLObject var88 = module0103.$g1343$.currentBinding( var85 );
-      final SubLObject var89 = oc_kb_compare.$g4556$.currentBinding( var85 );
+      final SubLObject var89 = kb_compare_oc.$g4556$.currentBinding( var85 );
       try
       {
         module0103.$g1343$.bind( var87, var85 );
-        oc_kb_compare.$g4556$.bind( oc_kb_compare.$g4556$.getDynamicValue( var85 ), var85 );
+        kb_compare_oc.$g4556$.bind( kb_compare_oc.$g4556$.getDynamicValue( var85 ), var85 );
         f36382();
         final SubLObject var11_213 = module0021.$g777$.currentBinding( var85 );
         try
         {
-          module0021.$g777$.bind( oc_kb_compare.NIL, var85 );
-          module0021.f1149( oc_kb_compare.$g4556$.getDynamicValue( var85 ) );
+          module0021.$g777$.bind( kb_compare_oc.NIL, var85 );
+          module0021.f1149( kb_compare_oc.$g4556$.getDynamicValue( var85 ) );
           f36504( var84 );
           f36505( var84 );
           f36506( var84 );
@@ -2899,7 +2900,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
       }
       finally
       {
-        oc_kb_compare.$g4556$.rebind( var89, var85 );
+        kb_compare_oc.$g4556$.rebind( var89, var85 );
         module0103.$g1343$.rebind( var88, var85 );
       }
     }
@@ -2908,7 +2909,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
       final SubLObject var90 = Threads.$is_thread_performing_cleanupP$.currentBinding( var85 );
       try
       {
-        Threads.$is_thread_performing_cleanupP$.bind( oc_kb_compare.T, var85 );
+        Threads.$is_thread_performing_cleanupP$.bind( kb_compare_oc.T, var85 );
         module0103.f7397( var87 );
       }
       finally
@@ -2923,31 +2924,31 @@ public final class oc_kb_compare extends SubLTranslatedFile
   {
     final SubLThread var85 = SubLProcess.currentSubLThread();
     final SubLObject var86 = f36450( var84 );
-    final SubLObject var87 = oc_kb_compare.$ic152$;
+    final SubLObject var87 = kb_compare_oc.$ic152$;
     final SubLObject var88 = f36402( var86 );
     final SubLObject var89 = var87;
     final SubLObject var90 = module0065.f4733( var88 );
-    SubLObject var91 = oc_kb_compare.ZERO_INTEGER;
-    assert oc_kb_compare.NIL != Types.stringp( var89 ) : var89;
+    SubLObject var91 = kb_compare_oc.ZERO_INTEGER;
+    assert kb_compare_oc.NIL != Types.stringp( var89 ) : var89;
     final SubLObject var92 = module0012.$g75$.currentBinding( var85 );
     final SubLObject var93 = module0012.$g76$.currentBinding( var85 );
     final SubLObject var94 = module0012.$g77$.currentBinding( var85 );
     final SubLObject var95 = module0012.$g78$.currentBinding( var85 );
     try
     {
-      module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var85 );
-      module0012.$g76$.bind( oc_kb_compare.NIL, var85 );
-      module0012.$g77$.bind( oc_kb_compare.T, var85 );
+      module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var85 );
+      module0012.$g76$.bind( kb_compare_oc.NIL, var85 );
+      module0012.$g77$.bind( kb_compare_oc.T, var85 );
       module0012.$g78$.bind( Time.get_universal_time(), var85 );
       module0012.f478( var89 );
       final SubLObject var68_214 = var88;
-      if( oc_kb_compare.NIL == module0065.f4772( var68_214, oc_kb_compare.$ic86$ ) )
+      if( kb_compare_oc.NIL == module0065.f4772( var68_214, kb_compare_oc.$ic86$ ) )
       {
         final SubLObject var69_215 = var68_214;
-        if( oc_kb_compare.NIL == module0065.f4775( var69_215, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4775( var69_215, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var96 = module0065.f4740( var69_215 );
-          final SubLObject var97 = oc_kb_compare.NIL;
+          final SubLObject var97 = kb_compare_oc.NIL;
           SubLObject var98;
           SubLObject var99;
           SubLObject var100;
@@ -2955,19 +2956,19 @@ public final class oc_kb_compare extends SubLTranslatedFile
           SubLObject var102;
           SubLObject var30_218;
           SubLObject var103;
-          for( var98 = Sequences.length( var96 ), var99 = oc_kb_compare.NIL, var99 = oc_kb_compare.ZERO_INTEGER; var99.numL( var98 ); var99 = Numbers.add( var99,
-              oc_kb_compare.ONE_INTEGER ) )
+          for( var98 = Sequences.length( var96 ), var99 = kb_compare_oc.NIL, var99 = kb_compare_oc.ZERO_INTEGER; var99.numL( var98 ); var99 = Numbers.add( var99,
+              kb_compare_oc.ONE_INTEGER ) )
           {
-            var100 = ( ( oc_kb_compare.NIL != var97 ) ? Numbers.subtract( var98, var99, oc_kb_compare.ONE_INTEGER ) : var99 );
+            var100 = ( ( kb_compare_oc.NIL != var97 ) ? Numbers.subtract( var98, var99, kb_compare_oc.ONE_INTEGER ) : var99 );
             var101 = Vectors.aref( var96, var100 );
-            if( oc_kb_compare.NIL == module0065.f4749( var101 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+            if( kb_compare_oc.NIL == module0065.f4749( var101 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
             {
-              if( oc_kb_compare.NIL != module0065.f4749( var101 ) )
+              if( kb_compare_oc.NIL != module0065.f4749( var101 ) )
               {
-                var101 = oc_kb_compare.$ic86$;
+                var101 = kb_compare_oc.$ic86$;
               }
               module0012.note_percent_progress( var91, var90 );
-              var91 = Numbers.add( var91, oc_kb_compare.ONE_INTEGER );
+              var91 = Numbers.add( var91, kb_compare_oc.ONE_INTEGER );
               var102 = constants_high_oc.f10752( var100 );
               var30_218 = f36411( var86, var102 );
               var103 = f36509( var30_218 );
@@ -2979,11 +2980,11 @@ public final class oc_kb_compare extends SubLTranslatedFile
           }
         }
         final SubLObject var76_219 = var68_214;
-        if( oc_kb_compare.NIL == module0065.f4777( var76_219 ) )
+        if( kb_compare_oc.NIL == module0065.f4777( var76_219 ) )
         {
           final SubLObject var104 = module0065.f4738( var76_219 );
-          SubLObject var105 = oc_kb_compare.NIL;
-          SubLObject var106 = oc_kb_compare.NIL;
+          SubLObject var105 = kb_compare_oc.NIL;
+          SubLObject var106 = kb_compare_oc.NIL;
           final Iterator var107 = Hashtables.getEntrySetIterator( var104 );
           try
           {
@@ -2993,7 +2994,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
               var105 = Hashtables.getEntryKey( var108 );
               var106 = Hashtables.getEntryValue( var108 );
               module0012.note_percent_progress( var91, var90 );
-              var91 = Numbers.add( var91, oc_kb_compare.ONE_INTEGER );
+              var91 = Numbers.add( var91, kb_compare_oc.ONE_INTEGER );
               final SubLObject var109 = constants_high_oc.f10752( var105 );
               final SubLObject var30_219 = f36411( var86, var109 );
               final SubLObject var110 = f36509( var30_219 );
@@ -3018,7 +3019,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
       module0012.$g76$.rebind( var93, var85 );
       module0012.$g75$.rebind( var92, var85 );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36505(final SubLObject var84)
@@ -3026,47 +3027,47 @@ public final class oc_kb_compare extends SubLTranslatedFile
     final SubLThread var85 = SubLProcess.currentSubLThread();
     final SubLObject var86 = f36450( var84 );
     final SubLObject var87 = constant_handles_oc.f8425();
-    final SubLObject var88 = oc_kb_compare.$ic153$;
+    final SubLObject var88 = kb_compare_oc.$ic153$;
     final SubLObject var89 = module0065.f4733( var87 );
-    SubLObject var90 = oc_kb_compare.ZERO_INTEGER;
-    assert oc_kb_compare.NIL != Types.stringp( var88 ) : var88;
+    SubLObject var90 = kb_compare_oc.ZERO_INTEGER;
+    assert kb_compare_oc.NIL != Types.stringp( var88 ) : var88;
     final SubLObject var91 = module0012.$g75$.currentBinding( var85 );
     final SubLObject var92 = module0012.$g76$.currentBinding( var85 );
     final SubLObject var93 = module0012.$g77$.currentBinding( var85 );
     final SubLObject var94 = module0012.$g78$.currentBinding( var85 );
     try
     {
-      module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var85 );
-      module0012.$g76$.bind( oc_kb_compare.NIL, var85 );
-      module0012.$g77$.bind( oc_kb_compare.T, var85 );
+      module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var85 );
+      module0012.$g76$.bind( kb_compare_oc.NIL, var85 );
+      module0012.$g77$.bind( kb_compare_oc.T, var85 );
       module0012.$g78$.bind( Time.get_universal_time(), var85 );
       module0012.f478( var88 );
       final SubLObject var68_221 = var87;
-      if( oc_kb_compare.NIL == module0065.f4772( var68_221, oc_kb_compare.$ic86$ ) )
+      if( kb_compare_oc.NIL == module0065.f4772( var68_221, kb_compare_oc.$ic86$ ) )
       {
         final SubLObject var69_222 = var68_221;
-        if( oc_kb_compare.NIL == module0065.f4775( var69_222, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4775( var69_222, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var95 = module0065.f4740( var69_222 );
-          final SubLObject var96 = oc_kb_compare.NIL;
+          final SubLObject var96 = kb_compare_oc.NIL;
           SubLObject var97;
           SubLObject var98;
           SubLObject var99;
           SubLObject var100;
-          for( var97 = Sequences.length( var95 ), var98 = oc_kb_compare.NIL, var98 = oc_kb_compare.ZERO_INTEGER; var98.numL( var97 ); var98 = Numbers.add( var98,
-              oc_kb_compare.ONE_INTEGER ) )
+          for( var97 = Sequences.length( var95 ), var98 = kb_compare_oc.NIL, var98 = kb_compare_oc.ZERO_INTEGER; var98.numL( var97 ); var98 = Numbers.add( var98,
+              kb_compare_oc.ONE_INTEGER ) )
           {
-            var99 = ( ( oc_kb_compare.NIL != var96 ) ? Numbers.subtract( var97, var98, oc_kb_compare.ONE_INTEGER ) : var98 );
+            var99 = ( ( kb_compare_oc.NIL != var96 ) ? Numbers.subtract( var97, var98, kb_compare_oc.ONE_INTEGER ) : var98 );
             var100 = Vectors.aref( var95, var99 );
-            if( oc_kb_compare.NIL == module0065.f4749( var100 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+            if( kb_compare_oc.NIL == module0065.f4749( var100 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
             {
-              if( oc_kb_compare.NIL != module0065.f4749( var100 ) )
+              if( kb_compare_oc.NIL != module0065.f4749( var100 ) )
               {
-                var100 = oc_kb_compare.$ic86$;
+                var100 = kb_compare_oc.$ic86$;
               }
               module0012.note_percent_progress( var90, var89 );
-              var90 = Numbers.add( var90, oc_kb_compare.ONE_INTEGER );
-              if( oc_kb_compare.NIL == f36410( var86, var100 ) )
+              var90 = Numbers.add( var90, kb_compare_oc.ONE_INTEGER );
+              if( kb_compare_oc.NIL == f36410( var86, var100 ) )
               {
                 f36464( var84, var100 );
               }
@@ -3074,25 +3075,25 @@ public final class oc_kb_compare extends SubLTranslatedFile
           }
         }
         final SubLObject var142_223 = var68_221;
-        if( oc_kb_compare.NIL == module0065.f4777( var142_223 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4777( var142_223 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var101 = module0065.f4738( var142_223 );
           SubLObject var102 = module0065.f4739( var142_223 );
           final SubLObject var103 = module0065.f4734( var142_223 );
-          final SubLObject var104 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+          final SubLObject var104 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
           while ( var102.numL( var103 ))
           {
             final SubLObject var105 = Hashtables.gethash_without_values( var102, var101, var104 );
-            if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var105 ) )
+            if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var105 ) )
             {
               module0012.note_percent_progress( var90, var89 );
-              var90 = Numbers.add( var90, oc_kb_compare.ONE_INTEGER );
-              if( oc_kb_compare.NIL == f36410( var86, var105 ) )
+              var90 = Numbers.add( var90, kb_compare_oc.ONE_INTEGER );
+              if( kb_compare_oc.NIL == f36410( var86, var105 ) )
               {
                 f36464( var84, var105 );
               }
             }
-            var102 = Numbers.add( var102, oc_kb_compare.ONE_INTEGER );
+            var102 = Numbers.add( var102, kb_compare_oc.ONE_INTEGER );
           }
         }
       }
@@ -3105,7 +3106,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
       module0012.$g76$.rebind( var92, var85 );
       module0012.$g75$.rebind( var91, var85 );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36506(final SubLObject var84)
@@ -3113,47 +3114,47 @@ public final class oc_kb_compare extends SubLTranslatedFile
     final SubLThread var85 = SubLProcess.currentSubLThread();
     final SubLObject var86 = f36450( var84 );
     final SubLObject var87 = module0167.f10788();
-    final SubLObject var88 = oc_kb_compare.$ic154$;
+    final SubLObject var88 = kb_compare_oc.$ic154$;
     final SubLObject var89 = module0065.f4733( var87 );
-    SubLObject var90 = oc_kb_compare.ZERO_INTEGER;
-    assert oc_kb_compare.NIL != Types.stringp( var88 ) : var88;
+    SubLObject var90 = kb_compare_oc.ZERO_INTEGER;
+    assert kb_compare_oc.NIL != Types.stringp( var88 ) : var88;
     final SubLObject var91 = module0012.$g75$.currentBinding( var85 );
     final SubLObject var92 = module0012.$g76$.currentBinding( var85 );
     final SubLObject var93 = module0012.$g77$.currentBinding( var85 );
     final SubLObject var94 = module0012.$g78$.currentBinding( var85 );
     try
     {
-      module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var85 );
-      module0012.$g76$.bind( oc_kb_compare.NIL, var85 );
-      module0012.$g77$.bind( oc_kb_compare.T, var85 );
+      module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var85 );
+      module0012.$g76$.bind( kb_compare_oc.NIL, var85 );
+      module0012.$g77$.bind( kb_compare_oc.T, var85 );
       module0012.$g78$.bind( Time.get_universal_time(), var85 );
       module0012.f478( var88 );
       final SubLObject var68_224 = var87;
-      if( oc_kb_compare.NIL == module0065.f4772( var68_224, oc_kb_compare.$ic86$ ) )
+      if( kb_compare_oc.NIL == module0065.f4772( var68_224, kb_compare_oc.$ic86$ ) )
       {
         final SubLObject var69_225 = var68_224;
-        if( oc_kb_compare.NIL == module0065.f4775( var69_225, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4775( var69_225, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var95 = module0065.f4740( var69_225 );
-          final SubLObject var96 = oc_kb_compare.NIL;
+          final SubLObject var96 = kb_compare_oc.NIL;
           SubLObject var97;
           SubLObject var98;
           SubLObject var99;
           SubLObject var100;
-          for( var97 = Sequences.length( var95 ), var98 = oc_kb_compare.NIL, var98 = oc_kb_compare.ZERO_INTEGER; var98.numL( var97 ); var98 = Numbers.add( var98,
-              oc_kb_compare.ONE_INTEGER ) )
+          for( var97 = Sequences.length( var95 ), var98 = kb_compare_oc.NIL, var98 = kb_compare_oc.ZERO_INTEGER; var98.numL( var97 ); var98 = Numbers.add( var98,
+              kb_compare_oc.ONE_INTEGER ) )
           {
-            var99 = ( ( oc_kb_compare.NIL != var96 ) ? Numbers.subtract( var97, var98, oc_kb_compare.ONE_INTEGER ) : var98 );
+            var99 = ( ( kb_compare_oc.NIL != var96 ) ? Numbers.subtract( var97, var98, kb_compare_oc.ONE_INTEGER ) : var98 );
             var100 = Vectors.aref( var95, var99 );
-            if( oc_kb_compare.NIL == module0065.f4749( var100 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+            if( kb_compare_oc.NIL == module0065.f4749( var100 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
             {
-              if( oc_kb_compare.NIL != module0065.f4749( var100 ) )
+              if( kb_compare_oc.NIL != module0065.f4749( var100 ) )
               {
-                var100 = oc_kb_compare.$ic86$;
+                var100 = kb_compare_oc.$ic86$;
               }
               module0012.note_percent_progress( var90, var89 );
-              var90 = Numbers.add( var90, oc_kb_compare.ONE_INTEGER );
-              if( oc_kb_compare.NIL == f36412( var86, var100 ) )
+              var90 = Numbers.add( var90, kb_compare_oc.ONE_INTEGER );
+              if( kb_compare_oc.NIL == f36412( var86, var100 ) )
               {
                 f36465( var84, var100 );
               }
@@ -3161,25 +3162,25 @@ public final class oc_kb_compare extends SubLTranslatedFile
           }
         }
         final SubLObject var142_226 = var68_224;
-        if( oc_kb_compare.NIL == module0065.f4777( var142_226 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4777( var142_226 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var101 = module0065.f4738( var142_226 );
           SubLObject var102 = module0065.f4739( var142_226 );
           final SubLObject var103 = module0065.f4734( var142_226 );
-          final SubLObject var104 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+          final SubLObject var104 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
           while ( var102.numL( var103 ))
           {
             final SubLObject var105 = Hashtables.gethash_without_values( var102, var101, var104 );
-            if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var105 ) )
+            if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var105 ) )
             {
               module0012.note_percent_progress( var90, var89 );
-              var90 = Numbers.add( var90, oc_kb_compare.ONE_INTEGER );
-              if( oc_kb_compare.NIL == f36412( var86, var105 ) )
+              var90 = Numbers.add( var90, kb_compare_oc.ONE_INTEGER );
+              if( kb_compare_oc.NIL == f36412( var86, var105 ) )
               {
                 f36465( var84, var105 );
               }
             }
-            var102 = Numbers.add( var102, oc_kb_compare.ONE_INTEGER );
+            var102 = Numbers.add( var102, kb_compare_oc.ONE_INTEGER );
           }
         }
       }
@@ -3192,7 +3193,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
       module0012.$g76$.rebind( var92, var85 );
       module0012.$g75$.rebind( var91, var85 );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36507(final SubLObject var84)
@@ -3200,47 +3201,47 @@ public final class oc_kb_compare extends SubLTranslatedFile
     final SubLThread var85 = SubLProcess.currentSubLThread();
     final SubLObject var86 = f36450( var84 );
     final SubLObject var87 = assertion_handles_oc.f11010();
-    final SubLObject var88 = oc_kb_compare.$ic155$;
+    final SubLObject var88 = kb_compare_oc.$ic155$;
     final SubLObject var89 = module0065.f4733( var87 );
-    SubLObject var90 = oc_kb_compare.ZERO_INTEGER;
-    assert oc_kb_compare.NIL != Types.stringp( var88 ) : var88;
+    SubLObject var90 = kb_compare_oc.ZERO_INTEGER;
+    assert kb_compare_oc.NIL != Types.stringp( var88 ) : var88;
     final SubLObject var91 = module0012.$g75$.currentBinding( var85 );
     final SubLObject var92 = module0012.$g76$.currentBinding( var85 );
     final SubLObject var93 = module0012.$g77$.currentBinding( var85 );
     final SubLObject var94 = module0012.$g78$.currentBinding( var85 );
     try
     {
-      module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var85 );
-      module0012.$g76$.bind( oc_kb_compare.NIL, var85 );
-      module0012.$g77$.bind( oc_kb_compare.T, var85 );
+      module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var85 );
+      module0012.$g76$.bind( kb_compare_oc.NIL, var85 );
+      module0012.$g77$.bind( kb_compare_oc.T, var85 );
       module0012.$g78$.bind( Time.get_universal_time(), var85 );
       module0012.f478( var88 );
       final SubLObject var68_227 = var87;
-      if( oc_kb_compare.NIL == module0065.f4772( var68_227, oc_kb_compare.$ic86$ ) )
+      if( kb_compare_oc.NIL == module0065.f4772( var68_227, kb_compare_oc.$ic86$ ) )
       {
         final SubLObject var69_228 = var68_227;
-        if( oc_kb_compare.NIL == module0065.f4775( var69_228, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4775( var69_228, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var95 = module0065.f4740( var69_228 );
-          final SubLObject var96 = oc_kb_compare.NIL;
+          final SubLObject var96 = kb_compare_oc.NIL;
           SubLObject var97;
           SubLObject var98;
           SubLObject var99;
           SubLObject var100;
-          for( var97 = Sequences.length( var95 ), var98 = oc_kb_compare.NIL, var98 = oc_kb_compare.ZERO_INTEGER; var98.numL( var97 ); var98 = Numbers.add( var98,
-              oc_kb_compare.ONE_INTEGER ) )
+          for( var97 = Sequences.length( var95 ), var98 = kb_compare_oc.NIL, var98 = kb_compare_oc.ZERO_INTEGER; var98.numL( var97 ); var98 = Numbers.add( var98,
+              kb_compare_oc.ONE_INTEGER ) )
           {
-            var99 = ( ( oc_kb_compare.NIL != var96 ) ? Numbers.subtract( var97, var98, oc_kb_compare.ONE_INTEGER ) : var98 );
+            var99 = ( ( kb_compare_oc.NIL != var96 ) ? Numbers.subtract( var97, var98, kb_compare_oc.ONE_INTEGER ) : var98 );
             var100 = Vectors.aref( var95, var99 );
-            if( oc_kb_compare.NIL == module0065.f4749( var100 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+            if( kb_compare_oc.NIL == module0065.f4749( var100 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
             {
-              if( oc_kb_compare.NIL != module0065.f4749( var100 ) )
+              if( kb_compare_oc.NIL != module0065.f4749( var100 ) )
               {
-                var100 = oc_kb_compare.$ic86$;
+                var100 = kb_compare_oc.$ic86$;
               }
               module0012.note_percent_progress( var90, var89 );
-              var90 = Numbers.add( var90, oc_kb_compare.ONE_INTEGER );
-              if( oc_kb_compare.NIL == f36414( var86, var100 ) )
+              var90 = Numbers.add( var90, kb_compare_oc.ONE_INTEGER );
+              if( kb_compare_oc.NIL == f36414( var86, var100 ) )
               {
                 f36466( var84, var100 );
               }
@@ -3248,25 +3249,25 @@ public final class oc_kb_compare extends SubLTranslatedFile
           }
         }
         final SubLObject var142_229 = var68_227;
-        if( oc_kb_compare.NIL == module0065.f4777( var142_229 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4777( var142_229 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var101 = module0065.f4738( var142_229 );
           SubLObject var102 = module0065.f4739( var142_229 );
           final SubLObject var103 = module0065.f4734( var142_229 );
-          final SubLObject var104 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+          final SubLObject var104 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
           while ( var102.numL( var103 ))
           {
             final SubLObject var105 = Hashtables.gethash_without_values( var102, var101, var104 );
-            if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var105 ) )
+            if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var105 ) )
             {
               module0012.note_percent_progress( var90, var89 );
-              var90 = Numbers.add( var90, oc_kb_compare.ONE_INTEGER );
-              if( oc_kb_compare.NIL == f36414( var86, var105 ) )
+              var90 = Numbers.add( var90, kb_compare_oc.ONE_INTEGER );
+              if( kb_compare_oc.NIL == f36414( var86, var105 ) )
               {
                 f36466( var84, var105 );
               }
             }
-            var102 = Numbers.add( var102, oc_kb_compare.ONE_INTEGER );
+            var102 = Numbers.add( var102, kb_compare_oc.ONE_INTEGER );
           }
         }
       }
@@ -3279,55 +3280,55 @@ public final class oc_kb_compare extends SubLTranslatedFile
       module0012.$g76$.rebind( var92, var85 );
       module0012.$g75$.rebind( var91, var85 );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36508(final SubLObject var84)
   {
     final SubLThread var85 = SubLProcess.currentSubLThread();
     final SubLObject var86 = f36450( var84 );
-    final SubLObject var87 = oc_deduction_handles.f11634();
-    final SubLObject var88 = oc_kb_compare.$ic156$;
+    final SubLObject var87 = deduction_handles_oc.f11634();
+    final SubLObject var88 = kb_compare_oc.$ic156$;
     final SubLObject var89 = module0065.f4733( var87 );
-    SubLObject var90 = oc_kb_compare.ZERO_INTEGER;
-    assert oc_kb_compare.NIL != Types.stringp( var88 ) : var88;
+    SubLObject var90 = kb_compare_oc.ZERO_INTEGER;
+    assert kb_compare_oc.NIL != Types.stringp( var88 ) : var88;
     final SubLObject var91 = module0012.$g75$.currentBinding( var85 );
     final SubLObject var92 = module0012.$g76$.currentBinding( var85 );
     final SubLObject var93 = module0012.$g77$.currentBinding( var85 );
     final SubLObject var94 = module0012.$g78$.currentBinding( var85 );
     try
     {
-      module0012.$g75$.bind( oc_kb_compare.ZERO_INTEGER, var85 );
-      module0012.$g76$.bind( oc_kb_compare.NIL, var85 );
-      module0012.$g77$.bind( oc_kb_compare.T, var85 );
+      module0012.$g75$.bind( kb_compare_oc.ZERO_INTEGER, var85 );
+      module0012.$g76$.bind( kb_compare_oc.NIL, var85 );
+      module0012.$g77$.bind( kb_compare_oc.T, var85 );
       module0012.$g78$.bind( Time.get_universal_time(), var85 );
       module0012.f478( var88 );
       final SubLObject var68_230 = var87;
-      if( oc_kb_compare.NIL == module0065.f4772( var68_230, oc_kb_compare.$ic86$ ) )
+      if( kb_compare_oc.NIL == module0065.f4772( var68_230, kb_compare_oc.$ic86$ ) )
       {
         final SubLObject var69_231 = var68_230;
-        if( oc_kb_compare.NIL == module0065.f4775( var69_231, oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4775( var69_231, kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var95 = module0065.f4740( var69_231 );
-          final SubLObject var96 = oc_kb_compare.NIL;
+          final SubLObject var96 = kb_compare_oc.NIL;
           SubLObject var97;
           SubLObject var98;
           SubLObject var99;
           SubLObject var100;
-          for( var97 = Sequences.length( var95 ), var98 = oc_kb_compare.NIL, var98 = oc_kb_compare.ZERO_INTEGER; var98.numL( var97 ); var98 = Numbers.add( var98,
-              oc_kb_compare.ONE_INTEGER ) )
+          for( var97 = Sequences.length( var95 ), var98 = kb_compare_oc.NIL, var98 = kb_compare_oc.ZERO_INTEGER; var98.numL( var97 ); var98 = Numbers.add( var98,
+              kb_compare_oc.ONE_INTEGER ) )
           {
-            var99 = ( ( oc_kb_compare.NIL != var96 ) ? Numbers.subtract( var97, var98, oc_kb_compare.ONE_INTEGER ) : var98 );
+            var99 = ( ( kb_compare_oc.NIL != var96 ) ? Numbers.subtract( var97, var98, kb_compare_oc.ONE_INTEGER ) : var98 );
             var100 = Vectors.aref( var95, var99 );
-            if( oc_kb_compare.NIL == module0065.f4749( var100 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+            if( kb_compare_oc.NIL == module0065.f4749( var100 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
             {
-              if( oc_kb_compare.NIL != module0065.f4749( var100 ) )
+              if( kb_compare_oc.NIL != module0065.f4749( var100 ) )
               {
-                var100 = oc_kb_compare.$ic86$;
+                var100 = kb_compare_oc.$ic86$;
               }
               module0012.note_percent_progress( var90, var89 );
-              var90 = Numbers.add( var90, oc_kb_compare.ONE_INTEGER );
-              if( oc_kb_compare.NIL == f36416( var86, var100 ) )
+              var90 = Numbers.add( var90, kb_compare_oc.ONE_INTEGER );
+              if( kb_compare_oc.NIL == f36416( var86, var100 ) )
               {
                 f36467( var84, var100 );
               }
@@ -3335,25 +3336,25 @@ public final class oc_kb_compare extends SubLTranslatedFile
           }
         }
         final SubLObject var142_232 = var68_230;
-        if( oc_kb_compare.NIL == module0065.f4777( var142_232 ) || oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) )
+        if( kb_compare_oc.NIL == module0065.f4777( var142_232 ) || kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) )
         {
           final SubLObject var101 = module0065.f4738( var142_232 );
           SubLObject var102 = module0065.f4739( var142_232 );
           final SubLObject var103 = module0065.f4734( var142_232 );
-          final SubLObject var104 = ( oc_kb_compare.NIL != module0065.f4773( oc_kb_compare.$ic86$ ) ) ? oc_kb_compare.NIL : oc_kb_compare.$ic86$;
+          final SubLObject var104 = ( kb_compare_oc.NIL != module0065.f4773( kb_compare_oc.$ic86$ ) ) ? kb_compare_oc.NIL : kb_compare_oc.$ic86$;
           while ( var102.numL( var103 ))
           {
             final SubLObject var105 = Hashtables.gethash_without_values( var102, var101, var104 );
-            if( oc_kb_compare.NIL == module0065.f4773( oc_kb_compare.$ic86$ ) || oc_kb_compare.NIL == module0065.f4749( var105 ) )
+            if( kb_compare_oc.NIL == module0065.f4773( kb_compare_oc.$ic86$ ) || kb_compare_oc.NIL == module0065.f4749( var105 ) )
             {
               module0012.note_percent_progress( var90, var89 );
-              var90 = Numbers.add( var90, oc_kb_compare.ONE_INTEGER );
-              if( oc_kb_compare.NIL == f36416( var86, var105 ) )
+              var90 = Numbers.add( var90, kb_compare_oc.ONE_INTEGER );
+              if( kb_compare_oc.NIL == f36416( var86, var105 ) )
               {
                 f36467( var84, var105 );
               }
             }
-            var102 = Numbers.add( var102, oc_kb_compare.ONE_INTEGER );
+            var102 = Numbers.add( var102, kb_compare_oc.ONE_INTEGER );
           }
         }
       }
@@ -3366,14 +3367,14 @@ public final class oc_kb_compare extends SubLTranslatedFile
       module0012.$g76$.rebind( var92, var85 );
       module0012.$g75$.rebind( var91, var85 );
     }
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36510(final SubLObject var233, final SubLObject var234, SubLObject var9)
   {
-    if( var9 == oc_kb_compare.UNPROVIDED )
+    if( var9 == kb_compare_oc.UNPROVIDED )
     {
-      var9 = oc_kb_compare.$ic11$;
+      var9 = kb_compare_oc.$ic11$;
     }
     final SubLObject var235 = module0103.f7380( var233, var234, var9 );
     final SubLObject var236 = f36478( f36400( var235 ) );
@@ -3382,9 +3383,9 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36511(final SubLObject var233, final SubLObject var234, SubLObject var9)
   {
-    if( var9 == oc_kb_compare.UNPROVIDED )
+    if( var9 == kb_compare_oc.UNPROVIDED )
     {
-      var9 = oc_kb_compare.$ic11$;
+      var9 = kb_compare_oc.$ic11$;
     }
     final SubLObject var235 = f36510( var233, var234, var9 );
     final SubLObject var236 = f36503( f36451( var235 ) );
@@ -3393,7 +3394,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
 
   public static SubLObject f36512(final SubLObject var84, SubLObject var15)
   {
-    if( var15 == oc_kb_compare.UNPROVIDED )
+    if( var15 == kb_compare_oc.UNPROVIDED )
     {
       var15 = StreamsLow.$standard_output$.getDynamicValue();
     }
@@ -3402,85 +3403,85 @@ public final class oc_kb_compare extends SubLTranslatedFile
     final SubLObject var87 = f36475( var84 );
     final SubLObject var88 = f36476( var84 );
     final SubLObject var89 = f36477( var84 );
-    if( oc_kb_compare.NIL == var85 && oc_kb_compare.NIL == var86 && oc_kb_compare.NIL == var87 && oc_kb_compare.NIL == var88 && oc_kb_compare.NIL == var89 )
+    if( kb_compare_oc.NIL == var85 && kb_compare_oc.NIL == var86 && kb_compare_oc.NIL == var87 && kb_compare_oc.NIL == var88 && kb_compare_oc.NIL == var89 )
     {
-      PrintLow.format( var15, oc_kb_compare.$ic157$ );
+      PrintLow.format( var15, kb_compare_oc.$ic157$ );
     }
     else
     {
-      if( oc_kb_compare.NIL != var85 )
+      if( kb_compare_oc.NIL != var85 )
       {
-        PrintLow.format( var15, oc_kb_compare.$ic158$ );
+        PrintLow.format( var15, kb_compare_oc.$ic158$ );
         SubLObject var90 = var85;
-        SubLObject var91 = oc_kb_compare.NIL;
+        SubLObject var91 = kb_compare_oc.NIL;
         var91 = var90.first();
-        while ( oc_kb_compare.NIL != var90)
+        while ( kb_compare_oc.NIL != var90)
         {
           final SubLObject var92 = f36472( var84, var91 );
-          PrintLow.format( var15, oc_kb_compare.$ic159$, var91, var92 );
+          PrintLow.format( var15, kb_compare_oc.$ic159$, var91, var92 );
           var90 = var90.rest();
           var91 = var90.first();
         }
         streams_high.terpri( var15 );
       }
-      if( oc_kb_compare.NIL != var86 )
+      if( kb_compare_oc.NIL != var86 )
       {
-        PrintLow.format( var15, oc_kb_compare.$ic160$ );
+        PrintLow.format( var15, kb_compare_oc.$ic160$ );
         SubLObject var90 = var86;
-        SubLObject var91 = oc_kb_compare.NIL;
+        SubLObject var91 = kb_compare_oc.NIL;
         var91 = var90.first();
-        while ( oc_kb_compare.NIL != var90)
+        while ( kb_compare_oc.NIL != var90)
         {
-          PrintLow.format( var15, oc_kb_compare.$ic161$, var91 );
+          PrintLow.format( var15, kb_compare_oc.$ic161$, var91 );
           var90 = var90.rest();
           var91 = var90.first();
         }
         streams_high.terpri( var15 );
       }
-      if( oc_kb_compare.NIL != var87 )
+      if( kb_compare_oc.NIL != var87 )
       {
-        PrintLow.format( var15, oc_kb_compare.$ic162$ );
+        PrintLow.format( var15, kb_compare_oc.$ic162$ );
         SubLObject var90 = var87;
-        SubLObject var93 = oc_kb_compare.NIL;
+        SubLObject var93 = kb_compare_oc.NIL;
         var93 = var90.first();
-        while ( oc_kb_compare.NIL != var90)
+        while ( kb_compare_oc.NIL != var90)
         {
-          PrintLow.format( var15, oc_kb_compare.$ic161$, var93 );
+          PrintLow.format( var15, kb_compare_oc.$ic161$, var93 );
           var90 = var90.rest();
           var93 = var90.first();
         }
         streams_high.terpri( var15 );
       }
-      if( oc_kb_compare.NIL != var88 )
+      if( kb_compare_oc.NIL != var88 )
       {
-        PrintLow.format( var15, oc_kb_compare.$ic163$ );
+        PrintLow.format( var15, kb_compare_oc.$ic163$ );
         SubLObject var90 = var88;
-        SubLObject var94 = oc_kb_compare.NIL;
+        SubLObject var94 = kb_compare_oc.NIL;
         var94 = var90.first();
-        while ( oc_kb_compare.NIL != var90)
+        while ( kb_compare_oc.NIL != var90)
         {
-          PrintLow.format( var15, oc_kb_compare.$ic161$, var94 );
+          PrintLow.format( var15, kb_compare_oc.$ic161$, var94 );
           var90 = var90.rest();
           var94 = var90.first();
         }
         streams_high.terpri( var15 );
       }
-      if( oc_kb_compare.NIL != var89 )
+      if( kb_compare_oc.NIL != var89 )
       {
-        PrintLow.format( var15, oc_kb_compare.$ic164$ );
+        PrintLow.format( var15, kb_compare_oc.$ic164$ );
         SubLObject var90 = var89;
-        SubLObject var95 = oc_kb_compare.NIL;
+        SubLObject var95 = kb_compare_oc.NIL;
         var95 = var90.first();
-        while ( oc_kb_compare.NIL != var90)
+        while ( kb_compare_oc.NIL != var90)
         {
           final SubLObject var96 = module0188.f11781( var95 );
-          PrintLow.format( var15, oc_kb_compare.$ic165$, var96 );
+          PrintLow.format( var15, kb_compare_oc.$ic165$, var96 );
           SubLObject var48_241 = module0188.f11770( var95 );
-          SubLObject var97 = oc_kb_compare.NIL;
+          SubLObject var97 = kb_compare_oc.NIL;
           var97 = var48_241.first();
-          while ( oc_kb_compare.NIL != var48_241)
+          while ( kb_compare_oc.NIL != var48_241)
           {
-            PrintLow.format( var15, oc_kb_compare.$ic161$, var97 );
+            PrintLow.format( var15, kb_compare_oc.$ic161$, var97 );
             var48_241 = var48_241.rest();
             var97 = var48_241.first();
           }
@@ -3496,77 +3497,77 @@ public final class oc_kb_compare extends SubLTranslatedFile
   public static SubLObject f36483()
   {
     final SubLObject var242 = constant_handles_oc.f8437();
-    return module0103.f7405( ConsesLow.listS( oc_kb_compare.$ic166$, var242, oc_kb_compare.$ic167$ ) );
+    return module0103.f7405( ConsesLow.listS( kb_compare_oc.$ic166$, var242, kb_compare_oc.$ic167$ ) );
   }
 
   public static SubLObject f36486()
   {
-    return module0103.f7405( oc_kb_compare.$ic168$ );
+    return module0103.f7405( kb_compare_oc.$ic168$ );
   }
 
   public static SubLObject f36487(final SubLObject var29)
   {
-    return module0103.f7405( ConsesLow.list( oc_kb_compare.$ic169$, ConsesLow.list( oc_kb_compare.$ic16$, constants_high_oc.f10757( var29 ) ) ) );
+    return module0103.f7405( ConsesLow.list( kb_compare_oc.$ic169$, ConsesLow.list( kb_compare_oc.$ic16$, constants_high_oc.f10757( var29 ) ) ) );
   }
 
   public static SubLObject f36509(final SubLObject var30)
   {
-    return module0103.f7405( ConsesLow.list( oc_kb_compare.$ic170$, var30 ) );
+    return module0103.f7405( ConsesLow.list( kb_compare_oc.$ic170$, var30 ) );
   }
 
   public static SubLObject f36488()
   {
     final SubLObject var243 = module0167.f10800();
-    return module0103.f7405( ConsesLow.listS( oc_kb_compare.$ic166$, var243, oc_kb_compare.$ic171$ ) );
+    return module0103.f7405( ConsesLow.listS( kb_compare_oc.$ic166$, var243, kb_compare_oc.$ic171$ ) );
   }
 
   public static SubLObject f36491()
   {
-    return module0103.f7405( oc_kb_compare.$ic172$ );
+    return module0103.f7405( kb_compare_oc.$ic172$ );
   }
 
   public static SubLObject f36492(final SubLObject var31)
   {
-    return module0103.f7405( ConsesLow.list( oc_kb_compare.$ic173$, ConsesLow.list( oc_kb_compare.$ic16$, module0172.f10915( var31 ) ) ) );
+    return module0103.f7405( ConsesLow.list( kb_compare_oc.$ic173$, ConsesLow.list( kb_compare_oc.$ic16$, module0172.f10915( var31 ) ) ) );
   }
 
   public static SubLObject f36493()
   {
     final SubLObject var244 = assertion_handles_oc.f11022();
-    return module0103.f7405( ConsesLow.listS( oc_kb_compare.$ic166$, var244, oc_kb_compare.$ic174$ ) );
+    return module0103.f7405( ConsesLow.listS( kb_compare_oc.$ic166$, var244, kb_compare_oc.$ic174$ ) );
   }
 
   public static SubLObject f36496()
   {
-    return module0103.f7405( oc_kb_compare.$ic175$ );
+    return module0103.f7405( kb_compare_oc.$ic175$ );
   }
 
   public static SubLObject f36497(final SubLObject var32)
   {
-    return module0103.f7405( ConsesLow.list( oc_kb_compare.$ic176$, ConsesLow.list( oc_kb_compare.$ic16$, module0178.f11282( var32 ) ), ConsesLow.list(
-        oc_kb_compare.$ic16$, module0178.f11287( var32 ) ) ) );
+    return module0103.f7405( ConsesLow.list( kb_compare_oc.$ic176$, ConsesLow.list( kb_compare_oc.$ic16$, module0178.f11282( var32 ) ), ConsesLow.list(
+        kb_compare_oc.$ic16$, module0178.f11287( var32 ) ) ) );
   }
 
   public static SubLObject f36498()
   {
-    final SubLObject var245 = oc_deduction_handles.f11646();
-    return module0103.f7405( ConsesLow.listS( oc_kb_compare.$ic166$, var245, oc_kb_compare.$ic177$ ) );
+    final SubLObject var245 = deduction_handles_oc.f11646();
+    return module0103.f7405( ConsesLow.listS( kb_compare_oc.$ic166$, var245, kb_compare_oc.$ic177$ ) );
   }
 
   public static SubLObject f36501()
   {
-    return module0103.f7405( oc_kb_compare.$ic178$ );
+    return module0103.f7405( kb_compare_oc.$ic178$ );
   }
 
   public static SubLObject f36502(final SubLObject var33)
   {
-    return module0103.f7405( ConsesLow.list( oc_kb_compare.$ic179$, module0035.f2241( module0188.f11781( var33 ) ), ConsesLow.list( oc_kb_compare.$ic16$, module0188
+    return module0103.f7405( ConsesLow.list( kb_compare_oc.$ic179$, module0035.f2241( module0188.f11781( var33 ) ), ConsesLow.list( kb_compare_oc.$ic16$, module0188
         .f11770( var33 ) ), module0191.f11924( var33 ) ) );
   }
 
   public static SubLObject f36513()
   {
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.oc_kb_compare", "f36381", "S#40111" );
+    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_compare_oc", "f36381", "S#40111" );
     SubLFiles.declareFunction( myName, "f36382", "S#40112", 0, 0, false );
     SubLFiles.declareFunction( myName, "f36383", "S#40113", 2, 0, false );
     SubLFiles.declareFunction( myName, "f36385", "S#40106", 1, 0, false );
@@ -3604,7 +3605,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
     SubLFiles.declareFunction( myName, "f36415", "S#40144", 2, 0, false );
     SubLFiles.declareFunction( myName, "f36416", "S#40145", 2, 0, false );
     SubLFiles.declareFunction( myName, "f36417", "S#40146", 2, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.oc_kb_compare", "f36418", "S#40147" );
+    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_compare_oc", "f36418", "S#40147" );
     SubLFiles.declareFunction( myName, "f36419", "S#40148", 2, 0, false );
     SubLFiles.declareFunction( myName, "f36420", "S#40149", 1, 0, false );
     SubLFiles.declareFunction( myName, "f36421", "S#40150", 2, 0, false );
@@ -3645,11 +3646,11 @@ public final class oc_kb_compare extends SubLTranslatedFile
     SubLFiles.declareFunction( myName, "f36455", "S#40183", 1, 0, false );
     SubLFiles.declareFunction( myName, "f36456", "S#40184", 1, 0, false );
     SubLFiles.declareFunction( myName, "f36457", "S#40185", 1, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.oc_kb_compare", "f36458", "S#40186" );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.oc_kb_compare", "f36459", "S#40187" );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.oc_kb_compare", "f36460", "S#40188" );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.oc_kb_compare", "f36461", "S#40189" );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.oc_kb_compare", "f36462", "S#40190" );
+    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_compare_oc", "f36458", "S#40186" );
+    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_compare_oc", "f36459", "S#40187" );
+    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_compare_oc", "f36460", "S#40188" );
+    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_compare_oc", "f36461", "S#40189" );
+    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.kb_compare_oc", "f36462", "S#40190" );
     SubLFiles.declareFunction( myName, "f36463", "S#40191", 3, 0, false );
     SubLFiles.declareFunction( myName, "f36464", "S#40192", 2, 0, false );
     SubLFiles.declareFunction( myName, "f36465", "S#40193", 2, 0, false );
@@ -3700,48 +3701,48 @@ public final class oc_kb_compare extends SubLTranslatedFile
     SubLFiles.declareFunction( myName, "f36498", "S#40238", 0, 0, false );
     SubLFiles.declareFunction( myName, "f36501", "S#40239", 0, 0, false );
     SubLFiles.declareFunction( myName, "f36502", "S#40240", 1, 0, false );
-    return oc_kb_compare.NIL;
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36514()
   {
-    oc_kb_compare.$g4556$ = SubLFiles.defparameter( "S#40241", ConsesLow.append( oc_kb_compare.$ic0$, oc_kb_compare.$ic1$, ConsesLow.append( module0130.f8510(), module0130.f8519(), module0333
+    kb_compare_oc.$g4556$ = SubLFiles.defparameter( "S#40241", ConsesLow.append( kb_compare_oc.$ic0$, kb_compare_oc.$ic1$, ConsesLow.append( module0130.f8510(), module0130.f8519(), module0333
         .f22420() ) ) );
-    oc_kb_compare.$g4557$ = SubLFiles.defconstant( "S#40242", oc_kb_compare.$ic18$ );
-    oc_kb_compare.$g4558$ = SubLFiles.defparameter( "S#40243", oc_kb_compare.NIL );
-    oc_kb_compare.$g4559$ = SubLFiles.defconstant( "S#40244", oc_kb_compare.$ic88$ );
-    return oc_kb_compare.NIL;
+    kb_compare_oc.$g4557$ = SubLFiles.defconstant( "S#40242", kb_compare_oc.$ic18$ );
+    kb_compare_oc.$g4558$ = SubLFiles.defparameter( "S#40243", kb_compare_oc.NIL );
+    kb_compare_oc.$g4559$ = SubLFiles.defconstant( "S#40244", kb_compare_oc.$ic88$ );
+    return kb_compare_oc.NIL;
   }
 
   public static SubLObject f36515()
   {
-    module0002.f50( oc_kb_compare.$ic9$, oc_kb_compare.$ic10$ );
-    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), oc_kb_compare.$g4557$.getGlobalValue(), Symbols.symbol_function( oc_kb_compare.$ic25$ ) );
-    SubLSpecialOperatorDeclarations.proclaim( oc_kb_compare.$ic26$ );
-    Structures.def_csetf( oc_kb_compare.$ic27$, oc_kb_compare.$ic28$ );
-    Structures.def_csetf( oc_kb_compare.$ic29$, oc_kb_compare.$ic30$ );
-    Structures.def_csetf( oc_kb_compare.$ic31$, oc_kb_compare.$ic32$ );
-    Structures.def_csetf( oc_kb_compare.$ic33$, oc_kb_compare.$ic34$ );
-    Structures.def_csetf( oc_kb_compare.$ic35$, oc_kb_compare.$ic36$ );
-    Equality.identity( oc_kb_compare.$ic18$ );
-    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), oc_kb_compare.$g4557$.getGlobalValue(), Symbols.symbol_function( oc_kb_compare.$ic47$ ) );
-    module0002.f50( oc_kb_compare.$ic50$, oc_kb_compare.$ic51$ );
-    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), oc_kb_compare.$g4559$.getGlobalValue(), Symbols.symbol_function( oc_kb_compare.$ic95$ ) );
-    SubLSpecialOperatorDeclarations.proclaim( oc_kb_compare.$ic96$ );
-    Structures.def_csetf( oc_kb_compare.$ic97$, oc_kb_compare.$ic98$ );
-    Structures.def_csetf( oc_kb_compare.$ic99$, oc_kb_compare.$ic100$ );
-    Structures.def_csetf( oc_kb_compare.$ic101$, oc_kb_compare.$ic102$ );
-    Structures.def_csetf( oc_kb_compare.$ic103$, oc_kb_compare.$ic104$ );
-    Structures.def_csetf( oc_kb_compare.$ic105$, oc_kb_compare.$ic106$ );
-    Structures.def_csetf( oc_kb_compare.$ic107$, oc_kb_compare.$ic108$ );
-    Equality.identity( oc_kb_compare.$ic88$ );
-    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), oc_kb_compare.$g4559$.getGlobalValue(), Symbols.symbol_function( oc_kb_compare.$ic112$ ) );
-    module0002.f50( oc_kb_compare.$ic114$, oc_kb_compare.$ic115$ );
-    module0002.f50( oc_kb_compare.$ic116$, oc_kb_compare.$ic117$ );
-    module0002.f50( oc_kb_compare.$ic118$, oc_kb_compare.$ic119$ );
-    module0002.f50( oc_kb_compare.$ic120$, oc_kb_compare.$ic121$ );
-    module0002.f50( oc_kb_compare.$ic122$, oc_kb_compare.$ic123$ );
-    return oc_kb_compare.NIL;
+    module0002.f50( kb_compare_oc.$ic9$, kb_compare_oc.$ic10$ );
+    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), kb_compare_oc.$g4557$.getGlobalValue(), Symbols.symbol_function( kb_compare_oc.$ic25$ ) );
+    SubLSpecialOperatorDeclarations.proclaim( kb_compare_oc.$ic26$ );
+    Structures.def_csetf( kb_compare_oc.$ic27$, kb_compare_oc.$ic28$ );
+    Structures.def_csetf( kb_compare_oc.$ic29$, kb_compare_oc.$ic30$ );
+    Structures.def_csetf( kb_compare_oc.$ic31$, kb_compare_oc.$ic32$ );
+    Structures.def_csetf( kb_compare_oc.$ic33$, kb_compare_oc.$ic34$ );
+    Structures.def_csetf( kb_compare_oc.$ic35$, kb_compare_oc.$ic36$ );
+    Equality.identity( kb_compare_oc.$ic18$ );
+    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), kb_compare_oc.$g4557$.getGlobalValue(), Symbols.symbol_function( kb_compare_oc.$ic47$ ) );
+    module0002.f50( kb_compare_oc.$ic50$, kb_compare_oc.$ic51$ );
+    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), kb_compare_oc.$g4559$.getGlobalValue(), Symbols.symbol_function( kb_compare_oc.$ic95$ ) );
+    SubLSpecialOperatorDeclarations.proclaim( kb_compare_oc.$ic96$ );
+    Structures.def_csetf( kb_compare_oc.$ic97$, kb_compare_oc.$ic98$ );
+    Structures.def_csetf( kb_compare_oc.$ic99$, kb_compare_oc.$ic100$ );
+    Structures.def_csetf( kb_compare_oc.$ic101$, kb_compare_oc.$ic102$ );
+    Structures.def_csetf( kb_compare_oc.$ic103$, kb_compare_oc.$ic104$ );
+    Structures.def_csetf( kb_compare_oc.$ic105$, kb_compare_oc.$ic106$ );
+    Structures.def_csetf( kb_compare_oc.$ic107$, kb_compare_oc.$ic108$ );
+    Equality.identity( kb_compare_oc.$ic88$ );
+    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), kb_compare_oc.$g4559$.getGlobalValue(), Symbols.symbol_function( kb_compare_oc.$ic112$ ) );
+    module0002.f50( kb_compare_oc.$ic114$, kb_compare_oc.$ic115$ );
+    module0002.f50( kb_compare_oc.$ic116$, kb_compare_oc.$ic117$ );
+    module0002.f50( kb_compare_oc.$ic118$, kb_compare_oc.$ic119$ );
+    module0002.f50( kb_compare_oc.$ic120$, kb_compare_oc.$ic121$ );
+    module0002.f50( kb_compare_oc.$ic122$, kb_compare_oc.$ic123$ );
+    return kb_compare_oc.NIL;
   }
 
   @Override
@@ -3763,12 +3764,12 @@ public final class oc_kb_compare extends SubLTranslatedFile
   }
   static
   {
-    me = new oc_kb_compare();
-    oc_kb_compare.$g4556$ = null;
-    oc_kb_compare.$g4557$ = null;
-    oc_kb_compare.$g4558$ = null;
-    oc_kb_compare.$g4559$ = null;
-    $ic0$ = ConsesLow.list( oc_kb_compare.T );
+    me = new kb_compare_oc();
+    kb_compare_oc.$g4556$ = null;
+    kb_compare_oc.$g4557$ = null;
+    kb_compare_oc.$g4558$ = null;
+    kb_compare_oc.$g4559$ = null;
+    $ic0$ = ConsesLow.list( kb_compare_oc.T );
     $ic1$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#14155", "CYC" ), SubLObjectFactory.makeSymbol( "S#14588", "CYC" ), SubLObjectFactory.makeSymbol( "S#13563", "CYC" ),
         SubLObjectFactory.makeSymbol( "S#13568", "CYC" ), SubLObjectFactory.makeSymbol( "S#13747", "CYC" ) );
     $ic2$ = ConsesLow.list( SubLObjectFactory.makeSymbol( "S#9280", "CYC" ), SubLObjectFactory.makeSymbol( "&BODY" ), SubLObjectFactory.makeSymbol( "S#5", "CYC" ) );
@@ -4052,9 +4053,9 @@ public final class oc_kb_compare extends SubLTranslatedFile
     }
     static
     {
-      structDecl = Structures.makeStructDeclNative( $sX40105_native.class, oc_kb_compare.$ic18$, oc_kb_compare.$ic19$, oc_kb_compare.$ic20$, oc_kb_compare.$ic21$, new String[] { "$remote_image",
+      structDecl = Structures.makeStructDeclNative( $sX40105_native.class, kb_compare_oc.$ic18$, kb_compare_oc.$ic19$, kb_compare_oc.$ic20$, kb_compare_oc.$ic21$, new String[] { "$remote_image",
         "$constant_index", "$nart_index", "$assertion_index", "$deduction_index"
-      }, oc_kb_compare.$ic22$, oc_kb_compare.$ic23$, oc_kb_compare.$ic24$ );
+      }, kb_compare_oc.$ic22$, kb_compare_oc.$ic23$, kb_compare_oc.$ic24$ );
     }
   }
 
@@ -4068,7 +4069,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
     @Override
     public SubLObject processItem(final SubLObject var16)
     {
-      return oc_kb_compare.f36385( var16 );
+      return kb_compare_oc.f36385( var16 );
     }
   }
 
@@ -4171,9 +4172,9 @@ public final class oc_kb_compare extends SubLTranslatedFile
     }
     static
     {
-      structDecl = Structures.makeStructDeclNative( $sX40109_native.class, oc_kb_compare.$ic88$, oc_kb_compare.$ic89$, oc_kb_compare.$ic90$, oc_kb_compare.$ic91$, new String[] { "$common_intersection",
+      structDecl = Structures.makeStructDeclNative( $sX40109_native.class, kb_compare_oc.$ic88$, kb_compare_oc.$ic89$, kb_compare_oc.$ic90$, kb_compare_oc.$ic91$, new String[] { "$common_intersection",
         "$renamed_constants", "$constants", "$narts", "$assertions", "$deductions"
-      }, oc_kb_compare.$ic92$, oc_kb_compare.$ic93$, oc_kb_compare.$ic94$ );
+      }, kb_compare_oc.$ic92$, kb_compare_oc.$ic93$, kb_compare_oc.$ic94$ );
     }
   }
 
@@ -4187,7 +4188,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
     @Override
     public SubLObject processItem(final SubLObject var16)
     {
-      return oc_kb_compare.f36434( var16 );
+      return kb_compare_oc.f36434( var16 );
     }
   }
 }
@@ -4196,7 +4197,7 @@ public final class oc_kb_compare extends SubLTranslatedFile
  *
  * Decompiled from:
  * G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/
- * cycjava/cycl/oc_kb_compare.class Total time: 1090 ms
+ * cycjava/cycl/kb_compare_oc.class Total time: 1090 ms
  *
  * Decompiled with Procyon 0.5.32.
  */

@@ -51,6 +51,7 @@ import com.cyc.cycjava.cycl.dictionary;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.hlmt;
 import com.cyc.cycjava.cycl.file_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;

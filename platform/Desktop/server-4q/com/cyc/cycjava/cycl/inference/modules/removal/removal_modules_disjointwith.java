@@ -18,6 +18,7 @@ import com.cyc.cycjava.cycl.genls;
 import com.cyc.cycjava.cycl.cardinality_estimates;
 import com.cyc.cycjava.cycl.forts;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.inference_trampolines;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.cycjava.cycl.backward;

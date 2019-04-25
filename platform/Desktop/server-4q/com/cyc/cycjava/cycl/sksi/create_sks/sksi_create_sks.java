@@ -3,6 +3,7 @@ package com.cyc.cycjava.cycl.sksi.create_sks;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_sks_manager;
 import com.cyc.cycjava.cycl.cyc_kernel;

@@ -10,6 +10,7 @@ import com.cyc.cycjava.cycl.pred_relevance_macros;
 import com.cyc.cycjava.cycl.ghl_link_iterators;
 import com.cyc.cycjava.cycl.ghl_search_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
 import com.cyc.cycjava.cycl.memoization_state;

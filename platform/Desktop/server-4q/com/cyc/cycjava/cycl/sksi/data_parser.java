@@ -23,6 +23,7 @@ import com.cyc.cycjava.cycl.methods;
 import com.cyc.cycjava.cycl.term_lexicon;
 import com.cyc.cycjava.cycl.cardinality_estimates;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.rkf_relevance_utilities;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.cycjava.cycl.defns;

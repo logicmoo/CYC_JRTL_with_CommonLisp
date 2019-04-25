@@ -7,6 +7,7 @@ import com.cyc.cycjava.cycl.subl_promotions;
 import com.cyc.cycjava.cycl.kb_accessors;
 import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.fort_types_interface;
 import com.cyc.cycjava.cycl.forts;
 import com.cyc.cycjava.cycl.cycl_utilities;

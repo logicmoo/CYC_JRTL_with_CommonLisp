@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
@@ -69,60 +70,60 @@ public final class module0640 extends SubLTranslatedFile
     
     public static SubLObject f38974() {
         final SubLThread var1 = SubLProcess.currentSubLThread();
-        final SubLObject var2 = (SubLObject)ConsesLow.list((SubLObject)module0640.$ic3$, module0018.f967(), module0110.$g1378$.getDynamicValue(var1));
-        module0640.$g4958$.setGlobalValue((SubLObject)module0640.NIL);
-        module0640.$g4958$.setGlobalValue(Tcp.open_tcp_stream(module0640.$g4956$.getGlobalValue(), module0640.$g4957$.getGlobalValue()));
+        final SubLObject var2 = (SubLObject)ConsesLow.list((SubLObject)$ic3$, module0018.f967(), module0110.$g1378$.getDynamicValue(var1));
+        $g4958$.setGlobalValue((SubLObject)NIL);
+        $g4958$.setGlobalValue(Tcp.open_tcp_stream($g4956$.getGlobalValue(), $g4957$.getGlobalValue()));
         f38975(var2);
-        module0640.$g4959$.setGlobalValue(Packages.intern(Sequences.cconcatenate((SubLObject)module0640.$ic4$, module0018.f967()), (SubLObject)module0640.UNPROVIDED));
+        $g4959$.setGlobalValue(Packages.intern(Sequences.cconcatenate((SubLObject)$ic4$, module0018.f967()), (SubLObject)UNPROVIDED));
         f38976();
-        return (SubLObject)module0640.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38975(final SubLObject var2) {
-        module0021.f1038(var2, module0640.$g4958$.getGlobalValue());
-        streams_high.force_output(module0640.$g4958$.getGlobalValue());
-        return (SubLObject)module0640.NIL;
+        module0021.f1038(var2, $g4958$.getGlobalValue());
+        streams_high.force_output($g4958$.getGlobalValue());
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38976() {
-        if (module0640.NIL != module0640.$g4960$.getGlobalValue()) {
+        if (NIL != $g4960$.getGlobalValue()) {
             f38977();
         }
-        module0640.$g4960$.setGlobalValue(Threads.make_process((SubLObject)module0640.$ic5$, Symbols.symbol_function((SubLObject)module0640.$ic6$)));
-        return (SubLObject)module0640.NIL;
+        $g4960$.setGlobalValue(Threads.make_process((SubLObject)$ic5$, Symbols.symbol_function((SubLObject)$ic6$)));
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38977() {
-        if (module0640.NIL != module0640.$g4960$.getGlobalValue()) {
-            Threads.kill_process(module0640.$g4960$.getGlobalValue());
-            module0640.$g4960$.setGlobalValue((SubLObject)module0640.NIL);
+        if (NIL != $g4960$.getGlobalValue()) {
+            Threads.kill_process($g4960$.getGlobalValue());
+            $g4960$.setGlobalValue((SubLObject)NIL);
         }
-        return (SubLObject)module0640.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38978() {
         final SubLThread var1 = SubLProcess.currentSubLThread();
-        SubLObject var2 = (SubLObject)module0640.NIL;
-        SubLObject var3 = (SubLObject)module0640.NIL;
+        SubLObject var2 = (SubLObject)NIL;
+        SubLObject var3 = (SubLObject)NIL;
         try {
-            var1.throwStack.push(module0640.$ic7$);
+            var1.throwStack.push($ic7$);
             final SubLObject var4 = Errors.$error_handler$.currentBinding(var1);
             try {
-                Errors.$error_handler$.bind(Symbols.symbol_function((SubLObject)module0640.$ic8$), var1);
+                Errors.$error_handler$.bind(Symbols.symbol_function((SubLObject)$ic8$), var1);
                 try {
                     try {
                         while (true) {
-                            var2 = module0021.f1060(module0640.$g4958$.getGlobalValue(), (SubLObject)module0640.NIL, (SubLObject)module0640.UNPROVIDED);
-                            module0112.f7744((SubLObject)module0640.$ic9$, var2, (SubLObject)module0640.UNPROVIDED, (SubLObject)module0640.UNPROVIDED);
-                            PrintLow.format((SubLObject)module0640.NIL, (SubLObject)module0640.$ic10$, var2);
+                            var2 = module0021.f1060($g4958$.getGlobalValue(), (SubLObject)NIL, (SubLObject)UNPROVIDED);
+                            module0112.f7744((SubLObject)$ic9$, var2, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
+                            PrintLow.format((SubLObject)NIL, (SubLObject)$ic10$, var2);
                         }
                     }
                     finally {
                         final SubLObject var5_6 = Threads.$is_thread_performing_cleanupP$.currentBinding(var1);
                         try {
-                            Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0640.T, var1);
+                            Threads.$is_thread_performing_cleanupP$.bind((SubLObject)T, var1);
                             f38977();
-                            PrintLow.format((SubLObject)module0640.NIL, (SubLObject)module0640.$ic11$);
+                            PrintLow.format((SubLObject)NIL, (SubLObject)$ic11$);
                         }
                         finally {
                             Threads.$is_thread_performing_cleanupP$.rebind(var5_6, var1);
@@ -136,29 +137,29 @@ public final class module0640 extends SubLTranslatedFile
             }
         }
         catch (Throwable var5) {
-            var3 = Errors.handleThrowable(var5, (SubLObject)module0640.$ic7$);
+            var3 = Errors.handleThrowable(var5, (SubLObject)$ic7$);
         }
         finally {
             var1.throwStack.pop();
         }
-        return (SubLObject)module0640.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38979(final SubLObject var9) {
-        assert module0640.NIL != Types.listp(var9) : var9;
-        SubLObject var10 = (SubLObject)module0640.NIL;
-        SubLObject var11 = (SubLObject)module0640.NIL;
-        SubLObject var12 = (SubLObject)module0640.NIL;
-        SubLObject var13 = (SubLObject)module0640.NIL;
-        SubLObject var14 = (SubLObject)module0640.NIL;
-        var14 = Packages.intern(Sequences.cconcatenate((SubLObject)module0640.$ic13$, module0018.f967()), (SubLObject)module0640.UNPROVIDED);
-        var12 = (SubLObject)ConsesLow.list(new SubLObject[] { module0640.$ic14$, module0640.$ic15$, ConsesLow.list((SubLObject)module0640.$ic16$, (SubLObject)module0640.$ic17$, var14), module0640.$ic18$, ConsesLow.list((SubLObject)module0640.$ic19$, (SubLObject)ConsesLow.list((SubLObject)module0640.$ic16$, (SubLObject)module0640.$ic17$, var14)), module0640.$ic20$, var9, module0640.$ic21$, module0640.$ic22$, module0640.$ic23$, module0640.$ic24$, module0640.$ic25$, module0640.$ic26$ });
+        assert NIL != Types.listp(var9) : var9;
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var12 = (SubLObject)NIL;
+        SubLObject var13 = (SubLObject)NIL;
+        SubLObject var14 = (SubLObject)NIL;
+        var14 = Packages.intern(Sequences.cconcatenate((SubLObject)$ic13$, module0018.f967()), (SubLObject)UNPROVIDED);
+        var12 = (SubLObject)ConsesLow.list(new SubLObject[] { $ic14$, $ic15$, ConsesLow.list((SubLObject)$ic16$, (SubLObject)$ic17$, var14), $ic18$, ConsesLow.list((SubLObject)$ic19$, (SubLObject)ConsesLow.list((SubLObject)$ic16$, (SubLObject)$ic17$, var14)), $ic20$, var9, $ic21$, $ic22$, $ic23$, $ic24$, $ic25$, $ic26$ });
         var11 = module0639.f38965(var12);
-        var10 = (SubLObject)ConsesLow.list(new SubLObject[] { module0640.$ic27$, module0640.$ic28$, var14, module0640.$ic29$, var14, module0640.$ic30$, Time.get_universal_time(), module0640.$ic31$, module0640.$ic32$ });
-        PrintLow.format((SubLObject)module0640.NIL, (SubLObject)module0640.$ic33$, var10);
+        var10 = (SubLObject)ConsesLow.list(new SubLObject[] { $ic27$, $ic28$, var14, $ic29$, var14, $ic30$, Time.get_universal_time(), $ic31$, $ic32$ });
+        PrintLow.format((SubLObject)NIL, (SubLObject)$ic33$, var10);
         var13 = module0639.f38960(var10, var11);
         f38975(var13);
-        return (SubLObject)module0640.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38980() {
@@ -168,21 +169,21 @@ public final class module0640 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0640", "f38977", "S#42706", 0, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0640", "f38978", "S#42707", 0, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0640", "f38979", "S#42708", 1, 0, false);
-        return (SubLObject)module0640.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38981() {
-        module0640.$g4956$ = SubLFiles.deflexical("S#42709", (SubLObject)module0640.$ic0$);
-        module0640.$g4957$ = SubLFiles.deflexical("S#42710", (SubLObject)module0640.$ic1$);
-        module0640.$g4958$ = SubLFiles.deflexical("S#42711", (SubLObject)module0640.NIL);
-        module0640.$g4959$ = SubLFiles.deflexical("S#42712", (SubLObject)module0640.NIL);
-        module0640.$g4960$ = SubLFiles.deflexical("S#42713", (SubLObject)((module0640.NIL != Symbols.boundp((SubLObject)module0640.$ic2$)) ? module0640.$g4960$.getGlobalValue() : module0640.NIL));
-        return (SubLObject)module0640.NIL;
+        $g4956$ = SubLFiles.deflexical("S#42709", (SubLObject)$ic0$);
+        $g4957$ = SubLFiles.deflexical("S#42710", (SubLObject)$ic1$);
+        $g4958$ = SubLFiles.deflexical("S#42711", (SubLObject)NIL);
+        $g4959$ = SubLFiles.deflexical("S#42712", (SubLObject)NIL);
+        $g4960$ = SubLFiles.deflexical("S#42713", (SubLObject)((NIL != Symbols.boundp((SubLObject)$ic2$)) ? $g4960$.getGlobalValue() : NIL));
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38982() {
-        module0003.f57((SubLObject)module0640.$ic2$);
-        return (SubLObject)module0640.NIL;
+        module0003.f57((SubLObject)$ic2$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -199,52 +200,52 @@ public final class module0640 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0640();
-        module0640.$g4956$ = null;
-        module0640.$g4957$ = null;
-        module0640.$g4958$ = null;
-        module0640.$g4959$ = null;
-        module0640.$g4960$ = null;
-        $ic0$ = SubLObjectFactory.makeString("localhost");
-        $ic1$ = SubLObjectFactory.makeInteger(4444);
-        $ic2$ = SubLObjectFactory.makeSymbol("S#42713", "CYC");
-        $ic3$ = SubLObjectFactory.makeSymbol("S#42714", "CYC");
-        $ic4$ = SubLObjectFactory.makeString("cyc-api-service-");
-        $ic5$ = SubLObjectFactory.makeString("Agent received-message handler");
-        $ic6$ = SubLObjectFactory.makeSymbol("S#42707", "CYC");
-        $ic7$ = SubLObjectFactory.makeKeyword("IGNORE-ERRORS-TARGET");
-        $ic8$ = SubLObjectFactory.makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
-        $ic9$ = SubLObjectFactory.makeString("fipa-transport-message");
-        $ic10$ = SubLObjectFactory.makeString("~%Received fipa-transport-message~%~S");
-        $ic11$ = SubLObjectFactory.makeString("Agent received-message handler process ended");
-        $ic12$ = SubLObjectFactory.makeSymbol("LISTP");
-        $ic13$ = SubLObjectFactory.makeString("cyc-echo-");
-        $ic14$ = SubLObjectFactory.makeSymbol("S#42715", "CYC");
-        $ic15$ = SubLObjectFactory.makeKeyword("SENDER");
-        $ic16$ = SubLObjectFactory.makeSymbol("S#42716", "CYC");
-        $ic17$ = SubLObjectFactory.makeKeyword("NAME");
-        $ic18$ = SubLObjectFactory.makeKeyword("RECEIVER");
-        $ic19$ = SubLObjectFactory.makeSymbol("SET");
-        $ic20$ = SubLObjectFactory.makeKeyword("CONTENT");
-        $ic21$ = SubLObjectFactory.makeKeyword("LANGUAGE");
-        $ic22$ = SubLObjectFactory.makeKeyword("CYCL");
-        $ic23$ = SubLObjectFactory.makeKeyword("ONTOLOGY");
-        $ic24$ = SubLObjectFactory.makeKeyword("CYC-API-SERVICE-ECHO");
-        $ic25$ = SubLObjectFactory.makeKeyword("PROTOCOL");
-        $ic26$ = SubLObjectFactory.makeKeyword("FIPA-INFORM");
-        $ic27$ = SubLObjectFactory.makeSymbol("S#42693", "CYC");
-        $ic28$ = SubLObjectFactory.makeKeyword("TO");
-        $ic29$ = SubLObjectFactory.makeKeyword("FROM");
-        $ic30$ = SubLObjectFactory.makeKeyword("DATE");
-        $ic31$ = SubLObjectFactory.makeKeyword("X-AGENT-COMMUNITY");
-        $ic32$ = SubLObjectFactory.makeKeyword("COABS");
-        $ic33$ = SubLObjectFactory.makeString("~%envelope~%~S");
+        $g4956$ = null;
+        $g4957$ = null;
+        $g4958$ = null;
+        $g4959$ = null;
+        $g4960$ = null;
+        $ic0$ = makeString("localhost");
+        $ic1$ = makeInteger(4444);
+        $ic2$ = makeSymbol("S#42713", "CYC");
+        $ic3$ = makeSymbol("S#42714", "CYC");
+        $ic4$ = makeString("cyc-api-service-");
+        $ic5$ = makeString("Agent received-message handler");
+        $ic6$ = makeSymbol("S#42707", "CYC");
+        $ic7$ = makeKeyword("IGNORE-ERRORS-TARGET");
+        $ic8$ = makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
+        $ic9$ = makeString("fipa-transport-message");
+        $ic10$ = makeString("~%Received fipa-transport-message~%~S");
+        $ic11$ = makeString("Agent received-message handler process ended");
+        $ic12$ = makeSymbol("LISTP");
+        $ic13$ = makeString("cyc-echo-");
+        $ic14$ = makeSymbol("S#42715", "CYC");
+        $ic15$ = makeKeyword("SENDER");
+        $ic16$ = makeSymbol("S#42716", "CYC");
+        $ic17$ = makeKeyword("NAME");
+        $ic18$ = makeKeyword("RECEIVER");
+        $ic19$ = makeSymbol("SET");
+        $ic20$ = makeKeyword("CONTENT");
+        $ic21$ = makeKeyword("LANGUAGE");
+        $ic22$ = makeKeyword("CYCL");
+        $ic23$ = makeKeyword("ONTOLOGY");
+        $ic24$ = makeKeyword("CYC-API-SERVICE-ECHO");
+        $ic25$ = makeKeyword("PROTOCOL");
+        $ic26$ = makeKeyword("FIPA-INFORM");
+        $ic27$ = makeSymbol("S#42693", "CYC");
+        $ic28$ = makeKeyword("TO");
+        $ic29$ = makeKeyword("FROM");
+        $ic30$ = makeKeyword("DATE");
+        $ic31$ = makeKeyword("X-AGENT-COMMUNITY");
+        $ic32$ = makeKeyword("COABS");
+        $ic33$ = makeString("~%envelope~%~S");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0640.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 74 ms
 	
 	Decompiled with Procyon 0.5.32.

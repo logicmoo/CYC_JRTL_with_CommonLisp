@@ -13,6 +13,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.assertions_high;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.iteration;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time;
 import com.cyc.cycjava.cycl.utilities_macros;

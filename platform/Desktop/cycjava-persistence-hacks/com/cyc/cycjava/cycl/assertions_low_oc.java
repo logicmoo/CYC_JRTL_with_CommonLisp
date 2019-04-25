@@ -19,6 +19,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -37,10 +38,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class oc_assertions_low extends SubLTranslatedFile
+public final class assertions_low_oc extends SubLTranslatedFile
 {
   public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.oc_assertions_low";
+  public static final String myName = "com.cyc.cycjava.cycl.assertions_low_oc";
   public static final String myFingerPrint = "d6a28cded254899746fc5661baf502f0489f0a7ed3d58e4e10ba7ea7c33a84c9";
   public static SubLSymbol $g2199$;
   private static SubLSymbol $g2200$;
@@ -121,114 +122,114 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11136(final SubLObject var1, final SubLObject var2)
   {
-    compatibility.default_struct_print_function( var1, var2, oc_assertions_low.ZERO_INTEGER );
-    return oc_assertions_low.NIL;
+    compatibility.default_struct_print_function( var1, var2, assertions_low_oc.ZERO_INTEGER );
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11137(final SubLObject var1)
   {
-    return ( var1.getClass() == $sX13955_native.class ) ? oc_assertions_low.T : oc_assertions_low.NIL;
+    return ( var1.getClass() == $sX13955_native.class ) ? assertions_low_oc.T : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11138(final SubLObject var1)
   {
-    assert oc_assertions_low.NIL != f11137( var1 ) : var1;
+    assert assertions_low_oc.NIL != f11137( var1 ) : var1;
     return var1.getField2();
   }
 
   public static SubLObject f11139(final SubLObject var1)
   {
-    assert oc_assertions_low.NIL != f11137( var1 ) : var1;
+    assert assertions_low_oc.NIL != f11137( var1 ) : var1;
     return var1.getField3();
   }
 
   public static SubLObject f11140(final SubLObject var1)
   {
-    assert oc_assertions_low.NIL != f11137( var1 ) : var1;
+    assert assertions_low_oc.NIL != f11137( var1 ) : var1;
     return var1.getField4();
   }
 
   public static SubLObject f11141(final SubLObject var1)
   {
-    assert oc_assertions_low.NIL != f11137( var1 ) : var1;
+    assert assertions_low_oc.NIL != f11137( var1 ) : var1;
     return var1.getField5();
   }
 
   public static SubLObject f11142(final SubLObject var1)
   {
-    assert oc_assertions_low.NIL != f11137( var1 ) : var1;
+    assert assertions_low_oc.NIL != f11137( var1 ) : var1;
     return var1.getField6();
   }
 
   public static SubLObject f11143(final SubLObject var1, final SubLObject var4)
   {
-    assert oc_assertions_low.NIL != f11137( var1 ) : var1;
+    assert assertions_low_oc.NIL != f11137( var1 ) : var1;
     return var1.setField2( var4 );
   }
 
   public static SubLObject f11144(final SubLObject var1, final SubLObject var4)
   {
-    assert oc_assertions_low.NIL != f11137( var1 ) : var1;
+    assert assertions_low_oc.NIL != f11137( var1 ) : var1;
     return var1.setField3( var4 );
   }
 
   public static SubLObject f11145(final SubLObject var1, final SubLObject var4)
   {
-    assert oc_assertions_low.NIL != f11137( var1 ) : var1;
+    assert assertions_low_oc.NIL != f11137( var1 ) : var1;
     return var1.setField4( var4 );
   }
 
   public static SubLObject f11146(final SubLObject var1, final SubLObject var4)
   {
-    assert oc_assertions_low.NIL != f11137( var1 ) : var1;
+    assert assertions_low_oc.NIL != f11137( var1 ) : var1;
     return var1.setField5( var4 );
   }
 
   public static SubLObject f11147(final SubLObject var1, final SubLObject var4)
   {
-    assert oc_assertions_low.NIL != f11137( var1 ) : var1;
+    assert assertions_low_oc.NIL != f11137( var1 ) : var1;
     return var1.setField6( var4 );
   }
 
   public static SubLObject f11148(SubLObject var5)
   {
-    if( var5 == oc_assertions_low.UNPROVIDED )
+    if( var5 == assertions_low_oc.UNPROVIDED )
     {
-      var5 = oc_assertions_low.NIL;
+      var5 = assertions_low_oc.NIL;
     }
     final SubLObject var6 = new $sX13955_native();
     SubLObject var7;
     SubLObject var8;
     SubLObject var9;
     SubLObject var10;
-    for( var7 = oc_assertions_low.NIL, var7 = var5; oc_assertions_low.NIL != var7; var7 = conses_high.cddr( var7 ) )
+    for( var7 = assertions_low_oc.NIL, var7 = var5; assertions_low_oc.NIL != var7; var7 = conses_high.cddr( var7 ) )
     {
       var8 = var7.first();
       var9 = conses_high.cadr( var7 );
       var10 = var8;
-      if( var10.eql( oc_assertions_low.$ic20$ ) )
+      if( var10.eql( assertions_low_oc.$ic20$ ) )
       {
         f11143( var6, var9 );
       }
-      else if( var10.eql( oc_assertions_low.$ic21$ ) )
+      else if( var10.eql( assertions_low_oc.$ic21$ ) )
       {
         f11144( var6, var9 );
       }
-      else if( var10.eql( oc_assertions_low.$ic22$ ) )
+      else if( var10.eql( assertions_low_oc.$ic22$ ) )
       {
         f11145( var6, var9 );
       }
-      else if( var10.eql( oc_assertions_low.$ic23$ ) )
+      else if( var10.eql( assertions_low_oc.$ic23$ ) )
       {
         f11146( var6, var9 );
       }
-      else if( var10.eql( oc_assertions_low.$ic24$ ) )
+      else if( var10.eql( assertions_low_oc.$ic24$ ) )
       {
         f11147( var6, var9 );
       }
       else
       {
-        Errors.error( oc_assertions_low.$ic25$, var8 );
+        Errors.error( assertions_low_oc.$ic25$, var8 );
       }
     }
     return var6;
@@ -236,13 +237,13 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11149(final SubLObject var11, final SubLObject var12)
   {
-    Functions.funcall( var12, var11, oc_assertions_low.$ic26$, oc_assertions_low.$ic27$, oc_assertions_low.FIVE_INTEGER );
-    Functions.funcall( var12, var11, oc_assertions_low.$ic28$, oc_assertions_low.$ic20$, f11138( var11 ) );
-    Functions.funcall( var12, var11, oc_assertions_low.$ic28$, oc_assertions_low.$ic21$, f11139( var11 ) );
-    Functions.funcall( var12, var11, oc_assertions_low.$ic28$, oc_assertions_low.$ic22$, f11140( var11 ) );
-    Functions.funcall( var12, var11, oc_assertions_low.$ic28$, oc_assertions_low.$ic23$, f11141( var11 ) );
-    Functions.funcall( var12, var11, oc_assertions_low.$ic28$, oc_assertions_low.$ic24$, f11142( var11 ) );
-    Functions.funcall( var12, var11, oc_assertions_low.$ic29$, oc_assertions_low.$ic27$, oc_assertions_low.FIVE_INTEGER );
+    Functions.funcall( var12, var11, assertions_low_oc.$ic26$, assertions_low_oc.$ic27$, assertions_low_oc.FIVE_INTEGER );
+    Functions.funcall( var12, var11, assertions_low_oc.$ic28$, assertions_low_oc.$ic20$, f11138( var11 ) );
+    Functions.funcall( var12, var11, assertions_low_oc.$ic28$, assertions_low_oc.$ic21$, f11139( var11 ) );
+    Functions.funcall( var12, var11, assertions_low_oc.$ic28$, assertions_low_oc.$ic22$, f11140( var11 ) );
+    Functions.funcall( var12, var11, assertions_low_oc.$ic28$, assertions_low_oc.$ic23$, f11141( var11 ) );
+    Functions.funcall( var12, var11, assertions_low_oc.$ic28$, assertions_low_oc.$ic24$, f11142( var11 ) );
+    Functions.funcall( var12, var11, assertions_low_oc.$ic29$, assertions_low_oc.$ic27$, assertions_low_oc.FIVE_INTEGER );
     return var11;
   }
 
@@ -253,87 +254,87 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11151(final SubLObject var13)
   {
-    SubLObject var14 = oc_assertions_low.NIL;
-    var14 = f11148( oc_assertions_low.UNPROVIDED );
-    f11143( var14, oc_assertions_low.NIL );
+    SubLObject var14 = assertions_low_oc.NIL;
+    var14 = f11148( assertions_low_oc.UNPROVIDED );
+    f11143( var14, assertions_low_oc.NIL );
     f11144( var14, var13 );
-    f11145( var14, oc_assertions_low.$g2200$.getGlobalValue() );
-    f11146( var14, oc_assertions_low.NIL );
-    f11147( var14, oc_assertions_low.NIL );
+    f11145( var14, assertions_low_oc.$g2200$.getGlobalValue() );
+    f11146( var14, assertions_low_oc.NIL );
+    f11147( var14, assertions_low_oc.NIL );
     return var14;
   }
 
   public static SubLObject f11152(final SubLObject var15)
   {
-    final SubLObject var16 = oc_assertion_manager.f11114( var15 );
-    if( oc_assertions_low.NIL != f11137( var16 ) )
+    final SubLObject var16 = assertion_manager_oc.f11114( var15 );
+    if( assertions_low_oc.NIL != f11137( var16 ) )
     {
-      oc_assertion_manager.f11124( var15 );
-      f11143( var16, oc_assertions_low.NIL );
-      f11144( var16, oc_assertions_low.NIL );
-      f11145( var16, oc_assertions_low.NIL );
-      f11146( var16, oc_assertions_low.NIL );
-      f11147( var16, oc_assertions_low.NIL );
-      return oc_assertions_low.T;
+      assertion_manager_oc.f11124( var15 );
+      f11143( var16, assertions_low_oc.NIL );
+      f11144( var16, assertions_low_oc.NIL );
+      f11145( var16, assertions_low_oc.NIL );
+      f11146( var16, assertions_low_oc.NIL );
+      f11147( var16, assertions_low_oc.NIL );
+      return assertions_low_oc.T;
     }
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11153(final SubLObject var15)
   {
-    final SubLObject var16 = oc_assertion_manager.f11114( var15 );
-    return ( oc_assertions_low.NIL != var16 ) ? f11138( var16 ) : oc_assertions_low.NIL;
+    final SubLObject var16 = assertion_manager_oc.f11114( var15 );
+    return ( assertions_low_oc.NIL != var16 ) ? f11138( var16 ) : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11154(final SubLObject var15)
   {
-    final SubLObject var16 = oc_assertion_manager.f11114( var15 );
-    return ( oc_assertions_low.NIL != var16 ) ? f11139( var16 ) : oc_assertions_low.NIL;
+    final SubLObject var16 = assertion_manager_oc.f11114( var15 );
+    return ( assertions_low_oc.NIL != var16 ) ? f11139( var16 ) : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11155(final SubLObject var15)
   {
-    final SubLObject var16 = oc_assertion_manager.f11114( var15 );
-    return ( oc_assertions_low.NIL != var16 ) ? f11140( var16 ) : oc_assertions_low.NIL;
+    final SubLObject var16 = assertion_manager_oc.f11114( var15 );
+    return ( assertions_low_oc.NIL != var16 ) ? f11140( var16 ) : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11156(final SubLObject var15)
   {
-    final SubLObject var16 = oc_assertion_manager.f11114( var15 );
-    return ( oc_assertions_low.NIL != var16 ) ? f11141( var16 ) : oc_assertions_low.NIL;
+    final SubLObject var16 = assertion_manager_oc.f11114( var15 );
+    return ( assertions_low_oc.NIL != var16 ) ? f11141( var16 ) : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11157(final SubLObject var15)
   {
-    final SubLObject var16 = oc_assertion_manager.f11114( var15 );
-    return ( oc_assertions_low.NIL != var16 ) ? f11142( var16 ) : oc_assertions_low.NIL;
+    final SubLObject var16 = assertion_manager_oc.f11114( var15 );
+    return ( assertions_low_oc.NIL != var16 ) ? f11142( var16 ) : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11158(final SubLObject var15, final SubLObject var17)
   {
-    f11143( oc_assertion_manager.f11114( var15 ), var17 );
-    oc_assertion_manager.f11125( var15 );
+    f11143( assertion_manager_oc.f11114( var15 ), var17 );
+    assertion_manager_oc.f11125( var15 );
     return var15;
   }
 
   public static SubLObject f11159(final SubLObject var15, final SubLObject var18)
   {
-    f11145( oc_assertion_manager.f11114( var15 ), var18 );
-    oc_assertion_manager.f11125( var15 );
+    f11145( assertion_manager_oc.f11114( var15 ), var18 );
+    assertion_manager_oc.f11125( var15 );
     return var15;
   }
 
   public static SubLObject f11160(final SubLObject var15, final SubLObject var19)
   {
-    f11146( oc_assertion_manager.f11114( var15 ), var19 );
-    oc_assertion_manager.f11125( var15 );
+    f11146( assertion_manager_oc.f11114( var15 ), var19 );
+    assertion_manager_oc.f11125( var15 );
     return var15;
   }
 
   public static SubLObject f11161(final SubLObject var15, final SubLObject var20)
   {
-    f11147( oc_assertion_manager.f11114( var15 ), var20 );
-    oc_assertion_manager.f11125( var15 );
+    f11147( assertion_manager_oc.f11114( var15 ), var20 );
+    assertion_manager_oc.f11125( var15 );
     return var15;
   }
 
@@ -354,15 +355,15 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11165(final SubLObject var21)
   {
-    SubLObject var22 = oc_assertions_low.NIL;
+    SubLObject var22 = assertions_low_oc.NIL;
     SubLObject var23;
     SubLObject var24;
     SubLObject var25;
-    for( var23 = oc_assertions_low.NIL, var23 = f11168( var21 ); oc_assertions_low.NIL != var23; var23 = conses_high.cddr( var23 ) )
+    for( var23 = assertions_low_oc.NIL, var23 = f11168( var21 ); assertions_low_oc.NIL != var23; var23 = conses_high.cddr( var23 ) )
     {
       var24 = var23.first();
       var25 = conses_high.cadr( var23 );
-      if( var24 == oc_assertions_low.$ic31$ )
+      if( var24 == assertions_low_oc.$ic31$ )
       {
         var22 = conses_high.putf( var22, var24, module0032.f1753( var25 ) );
       }
@@ -381,11 +382,11 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11169(final SubLObject var21, final SubLObject var30, SubLObject var15)
   {
-    if( var15 == oc_assertions_low.UNPROVIDED )
+    if( var15 == assertions_low_oc.UNPROVIDED )
     {
-      var15 = oc_assertions_low.NIL;
+      var15 = assertions_low_oc.NIL;
     }
-    if( oc_assertions_low.NIL == var15 )
+    if( assertions_low_oc.NIL == var15 )
     {
       var15 = assertion_handles_oc.f11025( var21 );
     }
@@ -403,22 +404,22 @@ public final class oc_assertions_low extends SubLTranslatedFile
   public static SubLObject f11171(final SubLObject var21, final SubLObject var2)
   {
     final SubLObject var22 = assertion_handles_oc.f11025( var21 );
-    final SubLObject var23 = module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED );
-    final SubLObject var24 = module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED );
-    final SubLObject var25 = module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED );
-    final SubLObject var26 = module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED );
-    final SubLObject var27 = module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED );
+    final SubLObject var23 = module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED );
+    final SubLObject var24 = module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED );
+    final SubLObject var25 = module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED );
+    final SubLObject var26 = module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED );
+    final SubLObject var27 = module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED );
     f11172( var22, var23, var24, var25, var26, var27 );
     return var21;
   }
 
   public static SubLObject f11173(final SubLObject var15, final SubLObject var2)
   {
-    final SubLObject var16 = module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED );
-    final SubLObject var17 = module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED );
-    final SubLObject var18 = module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED );
-    final SubLObject var19 = module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED );
-    final SubLObject var20 = module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED );
+    final SubLObject var16 = module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED );
+    final SubLObject var17 = module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED );
+    final SubLObject var18 = module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED );
+    final SubLObject var19 = module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED );
+    final SubLObject var20 = module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED );
     return f11167( var16, var17, var18, var19, var20 );
   }
 
@@ -426,12 +427,12 @@ public final class oc_assertions_low extends SubLTranslatedFile
   {
     final SubLThread var31 = SubLProcess.currentSubLThread();
     final SubLObject var32 = assertion_handles_oc.f11025( var21 );
-    SubLObject var33 = oc_assertions_low.NIL;
+    SubLObject var33 = assertions_low_oc.NIL;
     final SubLObject var34 = module0021.$g750$.currentBinding( var31 );
     try
     {
-      module0021.$g750$.bind( oc_assertions_low.NIL, var31 );
-      var33 = module0093.f6621( var32, var30, oc_assertions_low.$ic32$ );
+      module0021.$g750$.bind( assertions_low_oc.NIL, var31 );
+      var33 = module0093.f6621( var32, var30, assertions_low_oc.$ic32$ );
     }
     finally
     {
@@ -439,36 +440,36 @@ public final class oc_assertions_low extends SubLTranslatedFile
     }
     if( !var33.isList() )
     {
-      return oc_assertions_low.NIL;
+      return assertions_low_oc.NIL;
     }
     SubLObject var36;
     final SubLObject var35 = var36 = var33;
-    SubLObject var37 = oc_assertions_low.NIL;
-    SubLObject var38 = oc_assertions_low.NIL;
-    SubLObject var39 = oc_assertions_low.NIL;
-    SubLObject var40 = oc_assertions_low.NIL;
-    SubLObject var41 = oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var36, var35, oc_assertions_low.$ic3$ );
+    SubLObject var37 = assertions_low_oc.NIL;
+    SubLObject var38 = assertions_low_oc.NIL;
+    SubLObject var39 = assertions_low_oc.NIL;
+    SubLObject var40 = assertions_low_oc.NIL;
+    SubLObject var41 = assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var36, var35, assertions_low_oc.$ic3$ );
     var37 = var36.first();
     var36 = var36.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var36, var35, oc_assertions_low.$ic3$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var36, var35, assertions_low_oc.$ic3$ );
     var38 = var36.first();
     var36 = var36.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var36, var35, oc_assertions_low.$ic3$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var36, var35, assertions_low_oc.$ic3$ );
     var39 = var36.first();
     var36 = var36.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var36, var35, oc_assertions_low.$ic3$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var36, var35, assertions_low_oc.$ic3$ );
     var40 = var36.first();
     var36 = var36.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var36, var35, oc_assertions_low.$ic3$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var36, var35, assertions_low_oc.$ic3$ );
     var41 = var36.first();
     var36 = var36.rest();
-    if( oc_assertions_low.NIL == var36 )
+    if( assertions_low_oc.NIL == var36 )
     {
       return f11172( var32, var37, var38, var39, var40, var41 );
     }
-    cdestructuring_bind.cdestructuring_bind_error( var35, oc_assertions_low.$ic3$ );
-    return oc_assertions_low.NIL;
+    cdestructuring_bind.cdestructuring_bind_error( var35, assertions_low_oc.$ic3$ );
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11172(final SubLObject var15, final SubLObject var26, final SubLObject var13, final SubLObject var27, final SubLObject var28, final SubLObject var29)
@@ -478,14 +479,14 @@ public final class oc_assertions_low extends SubLTranslatedFile
     f11145( var30, var27 );
     f11146( var30, var28 );
     f11147( var30, var29 );
-    oc_assertion_manager.f11123( var15, var30 );
+    assertion_manager_oc.f11123( var15, var30 );
     return var15;
   }
 
   public static SubLObject f11175(final SubLObject var21)
   {
     final SubLObject var22 = f11176( var21 );
-    if( oc_assertions_low.NIL != module0192.f12006( var22 ) )
+    if( assertions_low_oc.NIL != module0192.f12006( var22 ) )
     {
       return module0192.f12017( var22 );
     }
@@ -494,7 +495,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11177(final SubLObject var21)
   {
-    return ( oc_assertions_low.NIL != f11178( var21 ) ) ? f11175( var21 ) : oc_assertions_low.NIL;
+    return ( assertions_low_oc.NIL != f11178( var21 ) ) ? f11175( var21 ) : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11179(final SubLObject var21)
@@ -504,12 +505,12 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11180(final SubLObject var21)
   {
-    if( oc_assertions_low.NIL == f11181( var21 ) )
+    if( assertions_low_oc.NIL == f11181( var21 ) )
     {
-      return oc_assertions_low.NIL;
+      return assertions_low_oc.NIL;
     }
     final SubLObject var22 = f11163( var21 );
-    if( oc_assertions_low.NIL != module0192.f12006( var22 ) )
+    if( assertions_low_oc.NIL != module0192.f12006( var22 ) )
     {
       return f11182( module0192.f12017( var22 ) );
     }
@@ -518,7 +519,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11183(final SubLObject var21)
   {
-    return ( oc_assertions_low.NIL != f11181( var21 ) ) ? module0178.f11288( var21 ) : f11175( var21 );
+    return ( assertions_low_oc.NIL != f11181( var21 ) ) ? module0178.f11288( var21 ) : f11175( var21 );
   }
 
   public static SubLObject f11184(final SubLObject var21)
@@ -538,38 +539,38 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11187(final SubLObject var21)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
     final SubLObject var22 = f11164( var21 );
-    if( oc_assertions_low.NIL == var22 )
+    if( assertions_low_oc.NIL == var22 )
     {
-      Errors.error( oc_assertions_low.$ic34$, var21, assertion_handles_oc.f11025( var21 ) );
+      Errors.error( assertions_low_oc.$ic34$, var21, assertion_handles_oc.f11025( var21 ) );
     }
     return module0130.f8522( f11189( var22 ) );
   }
 
   public static SubLObject f11190(final SubLObject var21)
   {
-    return f11191( var21, oc_assertions_low.$ic35$, oc_assertions_low.UNPROVIDED );
+    return f11191( var21, assertions_low_oc.$ic35$, assertions_low_oc.UNPROVIDED );
   }
 
   public static SubLObject f11192(final SubLObject var21)
   {
-    return ( oc_assertions_low.NIL != module0178.f11375( var21 ) ) ? f11193( f11194( var21 ) ) : oc_assertions_low.NIL;
+    return ( assertions_low_oc.NIL != module0178.f11375( var21 ) ) ? f11193( f11194( var21 ) ) : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11195(final SubLObject var21)
   {
-    return ( oc_assertions_low.NIL != module0178.f11375( var21 ) ) ? f11196( f11194( var21 ) ) : oc_assertions_low.NIL;
+    return ( assertions_low_oc.NIL != module0178.f11375( var21 ) ) ? f11196( f11194( var21 ) ) : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11197(final SubLObject var21)
   {
-    return ( oc_assertions_low.NIL != module0178.f11375( var21 ) ) ? f11198( f11194( var21 ) ) : oc_assertions_low.NIL;
+    return ( assertions_low_oc.NIL != module0178.f11375( var21 ) ) ? f11198( f11194( var21 ) ) : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11199(final SubLObject var21)
   {
-    return ( oc_assertions_low.NIL != module0178.f11375( var21 ) ) ? f11200( f11194( var21 ) ) : oc_assertions_low.NIL;
+    return ( assertions_low_oc.NIL != module0178.f11375( var21 ) ) ? f11200( f11194( var21 ) ) : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11201(final SubLObject var21)
@@ -579,41 +580,41 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11202(final SubLObject var21)
   {
-    SubLObject var22 = f11191( var21, oc_assertions_low.$ic31$, oc_assertions_low.UNPROVIDED );
-    if( var22.isList() && oc_assertions_low.NIL != module0035.f2002( var22, oc_assertions_low.$ic36$, oc_assertions_low.UNPROVIDED ) )
+    SubLObject var22 = f11191( var21, assertions_low_oc.$ic31$, assertions_low_oc.UNPROVIDED );
+    if( var22.isList() && assertions_low_oc.NIL != module0035.f2002( var22, assertions_low_oc.$ic36$, assertions_low_oc.UNPROVIDED ) )
     {
-      var22 = module0076.f5288( module0032.f1753( var22 ), oc_assertions_low.EQL, oc_assertions_low.UNPROVIDED );
-      f11203( var21, oc_assertions_low.$ic31$, var22 );
+      var22 = module0076.f5288( module0032.f1753( var22 ), assertions_low_oc.EQL, assertions_low_oc.UNPROVIDED );
+      f11203( var21, assertions_low_oc.$ic31$, var22 );
     }
     return var22;
   }
 
   public static SubLObject f11163(final SubLObject var21)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
     return f11153( assertion_handles_oc.f11025( var21 ) );
   }
 
   public static SubLObject f11204(final SubLObject var21, final SubLObject var17)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
     f11158( assertion_handles_oc.f11025( var21 ), var17 );
     return var21;
   }
 
   public static SubLObject f11176(final SubLObject var21)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
     final SubLObject var22 = f11163( var21 );
-    if( oc_assertions_low.NIL != module0192.f12006( var22 ) )
+    if( assertions_low_oc.NIL != module0192.f12006( var22 ) )
     {
       return var22;
     }
-    if( oc_assertions_low.NIL == var22 )
+    if( assertions_low_oc.NIL == var22 )
     {
       return var22;
     }
-    if( oc_assertions_low.NIL == f11181( var21 ) )
+    if( assertions_low_oc.NIL == f11181( var21 ) )
     {
       return var22;
     }
@@ -622,24 +623,24 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11206(final SubLObject var21, final SubLObject var17)
   {
-    if( oc_assertions_low.NIL != module0192.f12006( var17 ) )
+    if( assertions_low_oc.NIL != module0192.f12006( var17 ) )
     {
       f11207( var21, var17 );
     }
-    else if( oc_assertions_low.NIL == var17 )
+    else if( assertions_low_oc.NIL == var17 )
     {
       f11208( var21 );
     }
-    else if( oc_assertions_low.NIL != module0232.f15320( var17 ) )
+    else if( assertions_low_oc.NIL != module0232.f15320( var17 ) )
     {
       f11209( var21, var17 );
     }
     else
     {
-      if( oc_assertions_low.NIL == module0202.f12590( var17 ) )
+      if( assertions_low_oc.NIL == module0202.f12590( var17 ) )
       {
-        Errors.error( oc_assertions_low.$ic37$, var17 );
-        return oc_assertions_low.NIL;
+        Errors.error( assertions_low_oc.$ic37$, var17 );
+        return assertions_low_oc.NIL;
       }
       f11210( var21, var17 );
     }
@@ -649,13 +650,13 @@ public final class oc_assertions_low extends SubLTranslatedFile
   public static SubLObject f11211(final SubLObject var21)
   {
     final SubLObject var22 = f11163( var21 );
-    return ( oc_assertions_low.NIL != module0192.f12006( var22 ) ) ? var22 : oc_assertions_low.NIL;
+    return ( assertions_low_oc.NIL != module0192.f12006( var22 ) ) ? var22 : assertions_low_oc.NIL;
   }
 
   public static SubLObject f11209(final SubLObject var21, final SubLObject var38)
   {
     final SubLObject var39 = f11212( var38 );
-    f11204( var21, ( oc_assertions_low.NIL != var39 ) ? f11182( var38 ) : var38 );
+    f11204( var21, ( assertions_low_oc.NIL != var39 ) ? f11182( var38 ) : var38 );
     f11213( var21, var39 );
     return var21;
   }
@@ -664,7 +665,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
   {
     final SubLObject var41 = module0192.f12017( var40 );
     f11204( var21, var40 );
-    if( oc_assertions_low.NIL == var41 )
+    if( assertions_low_oc.NIL == var41 )
     {
       return f11208( var21 );
     }
@@ -675,14 +676,14 @@ public final class oc_assertions_low extends SubLTranslatedFile
   public static SubLObject f11210(final SubLObject var21, final SubLObject var42)
   {
     f11204( var21, var42 );
-    f11213( var21, oc_assertions_low.T );
+    f11213( var21, assertions_low_oc.T );
     return var21;
   }
 
   public static SubLObject f11208(final SubLObject var21)
   {
-    f11204( var21, oc_assertions_low.NIL );
-    f11213( var21, oc_assertions_low.T );
+    f11204( var21, assertions_low_oc.NIL );
+    f11213( var21, assertions_low_oc.T );
     return var21;
   }
 
@@ -694,7 +695,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11215(final SubLObject var21, final SubLObject var18)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
     final SubLObject var22 = f11164( var21 );
     if( !var22.eql( var18 ) )
     {
@@ -705,32 +706,32 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11216(final SubLObject var27)
   {
-    return bytes.ldb( oc_assertions_low.$g2201$.getGlobalValue(), var27 );
+    return bytes.ldb( assertions_low_oc.$g2201$.getGlobalValue(), var27 );
   }
 
   public static SubLObject f11217(final SubLObject var27, final SubLObject var43)
   {
-    return bytes.dpb( var43, oc_assertions_low.$g2201$.getGlobalValue(), var27 );
+    return bytes.dpb( var43, assertions_low_oc.$g2201$.getGlobalValue(), var27 );
   }
 
   public static SubLObject f11185(final SubLObject var27)
   {
-    return bytes.ldb( oc_assertions_low.$g2202$.getGlobalValue(), var27 );
+    return bytes.ldb( assertions_low_oc.$g2202$.getGlobalValue(), var27 );
   }
 
   public static SubLObject f11218(final SubLObject var27, final SubLObject var43)
   {
-    return bytes.dpb( var43, oc_assertions_low.$g2202$.getGlobalValue(), var27 );
+    return bytes.dpb( var43, assertions_low_oc.$g2202$.getGlobalValue(), var27 );
   }
 
   public static SubLObject f11189(final SubLObject var27)
   {
-    return bytes.ldb( oc_assertions_low.$g2203$.getGlobalValue(), var27 );
+    return bytes.ldb( assertions_low_oc.$g2203$.getGlobalValue(), var27 );
   }
 
   public static SubLObject f11219(final SubLObject var27, final SubLObject var43)
   {
-    return bytes.dpb( var43, oc_assertions_low.$g2203$.getGlobalValue(), var27 );
+    return bytes.dpb( var43, assertions_low_oc.$g2203$.getGlobalValue(), var27 );
   }
 
   public static SubLObject f11220(final SubLObject var21)
@@ -741,7 +742,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
   public static SubLObject f11221(final SubLObject var21, final SubLObject var39)
   {
     final SubLObject var40 = module0048.f3276( var39 );
-    if( oc_assertions_low.NIL != var40 )
+    if( assertions_low_oc.NIL != var40 )
     {
       f11215( var21, f11217( f11164( var21 ), var40 ) );
     }
@@ -750,124 +751,124 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11222()
   {
-    return SubLObjectFactory.makeBoolean( oc_assertions_low.NIL != oc_assertions_low.$g2205$.getGlobalValue() && oc_assertions_low.NIL != oc_assertions_low.$g2204$.getGlobalValue() );
+    return SubLObjectFactory.makeBoolean( assertions_low_oc.NIL != assertions_low_oc.$g2205$.getGlobalValue() && assertions_low_oc.NIL != assertions_low_oc.$g2204$.getGlobalValue() );
   }
 
   public static SubLObject f11223(final SubLObject var45)
   {
-    assert oc_assertions_low.NIL != module0004.f106( var45 ) : var45;
-    final SubLObject var46 = Numbers.ceiling( Numbers.divide( var45, oc_assertions_low.$g2206$.getGlobalValue() ), oc_assertions_low.UNPROVIDED );
-    oc_assertions_low.$g2204$.setGlobalValue( module0031.f1685( var46, Symbols.symbol_function( oc_assertions_low.EQ ) ) );
-    return oc_assertions_low.T;
+    assert assertions_low_oc.NIL != module0004.f106( var45 ) : var45;
+    final SubLObject var46 = Numbers.ceiling( Numbers.divide( var45, assertions_low_oc.$g2206$.getGlobalValue() ), assertions_low_oc.UNPROVIDED );
+    assertions_low_oc.$g2204$.setGlobalValue( module0031.f1685( var46, Symbols.symbol_function( assertions_low_oc.EQ ) ) );
+    return assertions_low_oc.T;
   }
 
   public static SubLObject f11224()
   {
-    return oc_assertions_low.$g2204$.getGlobalValue();
+    return assertions_low_oc.$g2204$.getGlobalValue();
   }
 
   public static SubLObject f11181(final SubLObject var21)
   {
-    if( oc_assertions_low.NIL != f11222() && oc_assertions_low.NIL != oc_assertion_manager.f11113( var21 ) )
+    if( assertions_low_oc.NIL != f11222() && assertions_low_oc.NIL != assertion_manager_oc.f11113( var21 ) )
     {
-      return SubLObjectFactory.makeBoolean( oc_assertions_low.NIL == module0031.f1688( var21, oc_assertions_low.$g2204$.getGlobalValue() ) );
+      return SubLObjectFactory.makeBoolean( assertions_low_oc.NIL == module0031.f1688( var21, assertions_low_oc.$g2204$.getGlobalValue() ) );
     }
-    if( oc_assertions_low.NIL != assertion_handles_oc.f11047( var21 ) )
+    if( assertions_low_oc.NIL != assertion_handles_oc.f11047( var21 ) )
     {
       return f11220( var21 );
     }
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11225(final SubLObject var21)
   {
-    if( oc_assertions_low.NIL != f11222() && oc_assertions_low.NIL != oc_assertion_manager.f11113( var21 ) )
+    if( assertions_low_oc.NIL != f11222() && assertions_low_oc.NIL != assertion_manager_oc.f11113( var21 ) )
     {
-      return module0031.f1688( var21, oc_assertions_low.$g2204$.getGlobalValue() );
+      return module0031.f1688( var21, assertions_low_oc.$g2204$.getGlobalValue() );
     }
-    if( oc_assertions_low.NIL != assertion_handles_oc.f11047( var21 ) )
+    if( assertions_low_oc.NIL != assertion_handles_oc.f11047( var21 ) )
     {
-      return SubLObjectFactory.makeBoolean( oc_assertions_low.NIL == f11220( var21 ) );
+      return SubLObjectFactory.makeBoolean( assertions_low_oc.NIL == f11220( var21 ) );
     }
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11226()
   {
     final SubLThread var32 = SubLProcess.currentSubLThread();
-    if( oc_assertions_low.NIL != oc_assertions_low.$g2204$.getGlobalValue() )
+    if( assertions_low_oc.NIL != assertions_low_oc.$g2204$.getGlobalValue() )
     {
-      return module0031.f1670( oc_assertions_low.$g2204$.getGlobalValue() );
+      return module0031.f1670( assertions_low_oc.$g2204$.getGlobalValue() );
     }
-    SubLObject var33 = oc_assertions_low.ZERO_INTEGER;
+    SubLObject var33 = assertions_low_oc.ZERO_INTEGER;
     final SubLObject var34 = assertion_handles_oc.f11010();
-    final SubLObject var35 = oc_assertions_low.$ic44$;
+    final SubLObject var35 = assertions_low_oc.$ic44$;
     final SubLObject var36 = module0065.f4733( var34 );
-    SubLObject var37 = oc_assertions_low.ZERO_INTEGER;
-    assert oc_assertions_low.NIL != Types.stringp( var35 ) : var35;
+    SubLObject var37 = assertions_low_oc.ZERO_INTEGER;
+    assert assertions_low_oc.NIL != Types.stringp( var35 ) : var35;
     final SubLObject var38 = module0012.$g75$.currentBinding( var32 );
     final SubLObject var39 = module0012.$g76$.currentBinding( var32 );
     final SubLObject var40 = module0012.$g77$.currentBinding( var32 );
     final SubLObject var41 = module0012.$g78$.currentBinding( var32 );
     try
     {
-      module0012.$g75$.bind( oc_assertions_low.ZERO_INTEGER, var32 );
-      module0012.$g76$.bind( oc_assertions_low.NIL, var32 );
-      module0012.$g77$.bind( oc_assertions_low.T, var32 );
+      module0012.$g75$.bind( assertions_low_oc.ZERO_INTEGER, var32 );
+      module0012.$g76$.bind( assertions_low_oc.NIL, var32 );
+      module0012.$g77$.bind( assertions_low_oc.T, var32 );
       module0012.$g78$.bind( Time.get_universal_time(), var32 );
       module0012.f478( var35 );
       final SubLObject var55_56 = var34;
-      if( oc_assertions_low.NIL == module0065.f4772( var55_56, oc_assertions_low.$ic46$ ) )
+      if( assertions_low_oc.NIL == module0065.f4772( var55_56, assertions_low_oc.$ic46$ ) )
       {
         final SubLObject var57_58 = var55_56;
-        if( oc_assertions_low.NIL == module0065.f4775( var57_58, oc_assertions_low.$ic46$ ) )
+        if( assertions_low_oc.NIL == module0065.f4775( var57_58, assertions_low_oc.$ic46$ ) )
         {
           final SubLObject var42 = module0065.f4740( var57_58 );
-          final SubLObject var43 = oc_assertions_low.NIL;
+          final SubLObject var43 = assertions_low_oc.NIL;
           SubLObject var44;
           SubLObject var45;
           SubLObject var46;
           SubLObject var47;
-          for( var44 = Sequences.length( var42 ), var45 = oc_assertions_low.NIL, var45 = oc_assertions_low.ZERO_INTEGER; var45.numL( var44 ); var45 = Numbers.add( var45,
-              oc_assertions_low.ONE_INTEGER ) )
+          for( var44 = Sequences.length( var42 ), var45 = assertions_low_oc.NIL, var45 = assertions_low_oc.ZERO_INTEGER; var45.numL( var44 ); var45 = Numbers.add( var45,
+              assertions_low_oc.ONE_INTEGER ) )
           {
-            var46 = ( ( oc_assertions_low.NIL != var43 ) ? Numbers.subtract( var44, var45, oc_assertions_low.ONE_INTEGER ) : var45 );
+            var46 = ( ( assertions_low_oc.NIL != var43 ) ? Numbers.subtract( var44, var45, assertions_low_oc.ONE_INTEGER ) : var45 );
             var47 = Vectors.aref( var42, var46 );
-            if( oc_assertions_low.NIL == module0065.f4749( var47 ) || oc_assertions_low.NIL == module0065.f4773( oc_assertions_low.$ic46$ ) )
+            if( assertions_low_oc.NIL == module0065.f4749( var47 ) || assertions_low_oc.NIL == module0065.f4773( assertions_low_oc.$ic46$ ) )
             {
-              if( oc_assertions_low.NIL != module0065.f4749( var47 ) )
+              if( assertions_low_oc.NIL != module0065.f4749( var47 ) )
               {
-                var47 = oc_assertions_low.$ic46$;
+                var47 = assertions_low_oc.$ic46$;
               }
               module0012.note_percent_progress( var37, var36 );
-              var37 = Numbers.add( var37, oc_assertions_low.ONE_INTEGER );
-              if( oc_assertions_low.NIL != f11225( var47 ) )
+              var37 = Numbers.add( var37, assertions_low_oc.ONE_INTEGER );
+              if( assertions_low_oc.NIL != f11225( var47 ) )
               {
-                var33 = Numbers.add( var33, oc_assertions_low.ONE_INTEGER );
+                var33 = Numbers.add( var33, assertions_low_oc.ONE_INTEGER );
               }
             }
           }
         }
         final SubLObject var65_66 = var55_56;
-        if( oc_assertions_low.NIL == module0065.f4777( var65_66 ) || oc_assertions_low.NIL == module0065.f4773( oc_assertions_low.$ic46$ ) )
+        if( assertions_low_oc.NIL == module0065.f4777( var65_66 ) || assertions_low_oc.NIL == module0065.f4773( assertions_low_oc.$ic46$ ) )
         {
           final SubLObject var48 = module0065.f4738( var65_66 );
           SubLObject var49 = module0065.f4739( var65_66 );
           final SubLObject var50 = module0065.f4734( var65_66 );
-          final SubLObject var51 = ( oc_assertions_low.NIL != module0065.f4773( oc_assertions_low.$ic46$ ) ) ? oc_assertions_low.NIL : oc_assertions_low.$ic46$;
+          final SubLObject var51 = ( assertions_low_oc.NIL != module0065.f4773( assertions_low_oc.$ic46$ ) ) ? assertions_low_oc.NIL : assertions_low_oc.$ic46$;
           while ( var49.numL( var50 ))
           {
             final SubLObject var52 = Hashtables.gethash_without_values( var49, var48, var51 );
-            if( oc_assertions_low.NIL == module0065.f4773( oc_assertions_low.$ic46$ ) || oc_assertions_low.NIL == module0065.f4749( var52 ) )
+            if( assertions_low_oc.NIL == module0065.f4773( assertions_low_oc.$ic46$ ) || assertions_low_oc.NIL == module0065.f4749( var52 ) )
             {
               module0012.note_percent_progress( var37, var36 );
-              var37 = Numbers.add( var37, oc_assertions_low.ONE_INTEGER );
-              if( oc_assertions_low.NIL != f11225( var52 ) )
+              var37 = Numbers.add( var37, assertions_low_oc.ONE_INTEGER );
+              if( assertions_low_oc.NIL != f11225( var52 ) )
               {
-                var33 = Numbers.add( var33, oc_assertions_low.ONE_INTEGER );
+                var33 = Numbers.add( var33, assertions_low_oc.ONE_INTEGER );
               }
             }
-            var49 = Numbers.add( var49, oc_assertions_low.ONE_INTEGER );
+            var49 = Numbers.add( var49, assertions_low_oc.ONE_INTEGER );
           }
         }
       }
@@ -890,15 +891,15 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11213(final SubLObject var21, final SubLObject var39)
   {
-    if( oc_assertions_low.NIL != oc_assertions_low.$g2204$.getGlobalValue() )
+    if( assertions_low_oc.NIL != assertions_low_oc.$g2204$.getGlobalValue() )
     {
-      if( oc_assertions_low.NIL != var39 )
+      if( assertions_low_oc.NIL != var39 )
       {
-        module0031.f1691( var21, oc_assertions_low.$g2204$.getGlobalValue() );
+        module0031.f1691( var21, assertions_low_oc.$g2204$.getGlobalValue() );
       }
       else
       {
-        module0031.f1690( var21, oc_assertions_low.$g2204$.getGlobalValue() );
+        module0031.f1690( var21, assertions_low_oc.$g2204$.getGlobalValue() );
       }
     }
     return f11221( var21, var39 );
@@ -906,47 +907,47 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11228(final SubLObject var21)
   {
-    if( oc_assertions_low.NIL != oc_assertions_low.$g2204$.getGlobalValue() && oc_assertions_low.NIL != f11225( var21 ) )
+    if( assertions_low_oc.NIL != assertions_low_oc.$g2204$.getGlobalValue() && assertions_low_oc.NIL != f11225( var21 ) )
     {
-      return module0031.f1691( var21, oc_assertions_low.$g2204$.getGlobalValue() );
+      return module0031.f1691( var21, assertions_low_oc.$g2204$.getGlobalValue() );
     }
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11214(final SubLObject var21)
   {
     final SubLObject var22 = f11163( var21 );
-    SubLObject var23 = oc_assertions_low.NIL;
-    if( oc_assertions_low.NIL != module0192.f12006( var22 ) )
+    SubLObject var23 = assertions_low_oc.NIL;
+    if( assertions_low_oc.NIL != module0192.f12006( var22 ) )
     {
       var23 = f11212( module0192.f12017( var22 ) );
     }
-    else if( oc_assertions_low.NIL != module0232.f15320( var22 ) )
+    else if( assertions_low_oc.NIL != module0232.f15320( var22 ) )
     {
       var23 = f11212( var22 );
     }
     else
     {
-      var23 = oc_assertions_low.T;
+      var23 = assertions_low_oc.T;
     }
     return f11213( var21, var23 );
   }
 
   public static SubLObject f11212(final SubLObject var70)
   {
-    assert oc_assertions_low.NIL != module0232.f15320( var70 ) : var70;
+    assert assertions_low_oc.NIL != module0232.f15320( var70 ) : var70;
     return module0232.f15322( var70 );
   }
 
   public static SubLObject f11229(final SubLObject var2)
   {
-    return module0021.f1038( oc_assertions_low.$g2204$.getGlobalValue(), var2 );
+    return module0021.f1038( assertions_low_oc.$g2204$.getGlobalValue(), var2 );
   }
 
   public static SubLObject f11230(final SubLObject var2)
   {
-    oc_assertions_low.$g2204$.setGlobalValue( module0021.f1060( var2, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED ) );
-    return module0031.f1670( oc_assertions_low.$g2204$.getGlobalValue() );
+    assertions_low_oc.$g2204$.setGlobalValue( module0021.f1060( var2, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED ) );
+    return module0031.f1670( assertions_low_oc.$g2204$.getGlobalValue() );
   }
 
   public static SubLObject f11231()
@@ -954,66 +955,66 @@ public final class oc_assertions_low extends SubLTranslatedFile
     final SubLThread var32 = SubLProcess.currentSubLThread();
     f11223( assertion_handles_oc.f11019() );
     final SubLObject var33 = assertion_handles_oc.f11010();
-    final SubLObject var34 = oc_assertions_low.$ic48$;
+    final SubLObject var34 = assertions_low_oc.$ic48$;
     final SubLObject var35 = module0065.f4733( var33 );
-    SubLObject var36 = oc_assertions_low.ZERO_INTEGER;
-    assert oc_assertions_low.NIL != Types.stringp( var34 ) : var34;
+    SubLObject var36 = assertions_low_oc.ZERO_INTEGER;
+    assert assertions_low_oc.NIL != Types.stringp( var34 ) : var34;
     final SubLObject var37 = module0012.$g75$.currentBinding( var32 );
     final SubLObject var38 = module0012.$g76$.currentBinding( var32 );
     final SubLObject var39 = module0012.$g77$.currentBinding( var32 );
     final SubLObject var40 = module0012.$g78$.currentBinding( var32 );
     try
     {
-      module0012.$g75$.bind( oc_assertions_low.ZERO_INTEGER, var32 );
-      module0012.$g76$.bind( oc_assertions_low.NIL, var32 );
-      module0012.$g77$.bind( oc_assertions_low.T, var32 );
+      module0012.$g75$.bind( assertions_low_oc.ZERO_INTEGER, var32 );
+      module0012.$g76$.bind( assertions_low_oc.NIL, var32 );
+      module0012.$g77$.bind( assertions_low_oc.T, var32 );
       module0012.$g78$.bind( Time.get_universal_time(), var32 );
       module0012.f478( var34 );
       final SubLObject var55_71 = var33;
-      if( oc_assertions_low.NIL == module0065.f4772( var55_71, oc_assertions_low.$ic46$ ) )
+      if( assertions_low_oc.NIL == module0065.f4772( var55_71, assertions_low_oc.$ic46$ ) )
       {
         final SubLObject var57_72 = var55_71;
-        if( oc_assertions_low.NIL == module0065.f4775( var57_72, oc_assertions_low.$ic46$ ) )
+        if( assertions_low_oc.NIL == module0065.f4775( var57_72, assertions_low_oc.$ic46$ ) )
         {
           final SubLObject var41 = module0065.f4740( var57_72 );
-          final SubLObject var42 = oc_assertions_low.NIL;
+          final SubLObject var42 = assertions_low_oc.NIL;
           SubLObject var43;
           SubLObject var44;
           SubLObject var45;
           SubLObject var46;
           SubLObject var47;
           SubLObject var33_75;
-          for( var43 = Sequences.length( var41 ), var44 = oc_assertions_low.NIL, var44 = oc_assertions_low.ZERO_INTEGER; var44.numL( var43 ); var44 = Numbers.add( var44,
-              oc_assertions_low.ONE_INTEGER ) )
+          for( var43 = Sequences.length( var41 ), var44 = assertions_low_oc.NIL, var44 = assertions_low_oc.ZERO_INTEGER; var44.numL( var43 ); var44 = Numbers.add( var44,
+              assertions_low_oc.ONE_INTEGER ) )
           {
-            var45 = ( ( oc_assertions_low.NIL != var42 ) ? Numbers.subtract( var43, var44, oc_assertions_low.ONE_INTEGER ) : var44 );
+            var45 = ( ( assertions_low_oc.NIL != var42 ) ? Numbers.subtract( var43, var44, assertions_low_oc.ONE_INTEGER ) : var44 );
             var46 = Vectors.aref( var41, var45 );
-            if( oc_assertions_low.NIL == module0065.f4749( var46 ) || oc_assertions_low.NIL == module0065.f4773( oc_assertions_low.$ic46$ ) )
+            if( assertions_low_oc.NIL == module0065.f4749( var46 ) || assertions_low_oc.NIL == module0065.f4773( assertions_low_oc.$ic46$ ) )
             {
-              if( oc_assertions_low.NIL != module0065.f4749( var46 ) )
+              if( assertions_low_oc.NIL != module0065.f4749( var46 ) )
               {
-                var46 = oc_assertions_low.$ic46$;
+                var46 = assertions_low_oc.$ic46$;
               }
               module0012.note_percent_progress( var36, var35 );
-              var36 = Numbers.add( var36, oc_assertions_low.ONE_INTEGER );
-              var47 = oc_assertions_low.NIL;
+              var36 = Numbers.add( var36, assertions_low_oc.ONE_INTEGER );
+              var47 = assertions_low_oc.NIL;
               try
               {
                 var32.throwStack.push( module0003.$g3$.getGlobalValue() );
                 var33_75 = Errors.$error_handler$.currentBinding( var32 );
                 try
                 {
-                  Errors.$error_handler$.bind( oc_assertions_low.$ic49$, var32 );
+                  Errors.$error_handler$.bind( assertions_low_oc.$ic49$, var32 );
                   try
                   {
-                    if( oc_assertions_low.NIL != assertion_handles_oc.f11046( var46 ) && oc_assertions_low.NIL == f11220( var46 ) )
+                    if( assertions_low_oc.NIL != assertion_handles_oc.f11046( var46 ) && assertions_low_oc.NIL == f11220( var46 ) )
                     {
-                      module0031.f1690( var46, oc_assertions_low.$g2204$.getGlobalValue() );
+                      module0031.f1690( var46, assertions_low_oc.$g2204$.getGlobalValue() );
                     }
                   }
                   catch( final Throwable var48 )
                   {
-                    Errors.handleThrowable( var48, oc_assertions_low.NIL );
+                    Errors.handleThrowable( var48, assertions_low_oc.NIL );
                   }
                 }
                 finally
@@ -1031,43 +1032,43 @@ public final class oc_assertions_low extends SubLTranslatedFile
               }
               if( var47.isString() )
               {
-                Errors.warn( oc_assertions_low.$ic50$, var47 );
+                Errors.warn( assertions_low_oc.$ic50$, var47 );
               }
             }
           }
         }
         final SubLObject var65_78 = var55_71;
-        if( oc_assertions_low.NIL == module0065.f4777( var65_78 ) || oc_assertions_low.NIL == module0065.f4773( oc_assertions_low.$ic46$ ) )
+        if( assertions_low_oc.NIL == module0065.f4777( var65_78 ) || assertions_low_oc.NIL == module0065.f4773( assertions_low_oc.$ic46$ ) )
         {
           final SubLObject var50 = module0065.f4738( var65_78 );
           SubLObject var51 = module0065.f4739( var65_78 );
           final SubLObject var52 = module0065.f4734( var65_78 );
-          final SubLObject var53 = ( oc_assertions_low.NIL != module0065.f4773( oc_assertions_low.$ic46$ ) ) ? oc_assertions_low.NIL : oc_assertions_low.$ic46$;
+          final SubLObject var53 = ( assertions_low_oc.NIL != module0065.f4773( assertions_low_oc.$ic46$ ) ) ? assertions_low_oc.NIL : assertions_low_oc.$ic46$;
           while ( var51.numL( var52 ))
           {
             final SubLObject var54 = Hashtables.gethash_without_values( var51, var50, var53 );
-            if( oc_assertions_low.NIL == module0065.f4773( oc_assertions_low.$ic46$ ) || oc_assertions_low.NIL == module0065.f4749( var54 ) )
+            if( assertions_low_oc.NIL == module0065.f4773( assertions_low_oc.$ic46$ ) || assertions_low_oc.NIL == module0065.f4749( var54 ) )
             {
               module0012.note_percent_progress( var36, var35 );
-              var36 = Numbers.add( var36, oc_assertions_low.ONE_INTEGER );
-              SubLObject var55 = oc_assertions_low.NIL;
+              var36 = Numbers.add( var36, assertions_low_oc.ONE_INTEGER );
+              SubLObject var55 = assertions_low_oc.NIL;
               try
               {
                 var32.throwStack.push( module0003.$g3$.getGlobalValue() );
                 final SubLObject var33_76 = Errors.$error_handler$.currentBinding( var32 );
                 try
                 {
-                  Errors.$error_handler$.bind( oc_assertions_low.$ic49$, var32 );
+                  Errors.$error_handler$.bind( assertions_low_oc.$ic49$, var32 );
                   try
                   {
-                    if( oc_assertions_low.NIL != assertion_handles_oc.f11046( var54 ) && oc_assertions_low.NIL == f11220( var54 ) )
+                    if( assertions_low_oc.NIL != assertion_handles_oc.f11046( var54 ) && assertions_low_oc.NIL == f11220( var54 ) )
                     {
-                      module0031.f1690( var54, oc_assertions_low.$g2204$.getGlobalValue() );
+                      module0031.f1690( var54, assertions_low_oc.$g2204$.getGlobalValue() );
                     }
                   }
                   catch( final Throwable var56 )
                   {
-                    Errors.handleThrowable( var56, oc_assertions_low.NIL );
+                    Errors.handleThrowable( var56, assertions_low_oc.NIL );
                   }
                 }
                 finally
@@ -1085,10 +1086,10 @@ public final class oc_assertions_low extends SubLTranslatedFile
               }
               if( var55.isString() )
               {
-                Errors.warn( oc_assertions_low.$ic50$, var55 );
+                Errors.warn( assertions_low_oc.$ic50$, var55 );
               }
             }
-            var51 = Numbers.add( var51, oc_assertions_low.ONE_INTEGER );
+            var51 = Numbers.add( var51, assertions_low_oc.ONE_INTEGER );
           }
         }
       }
@@ -1101,7 +1102,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
       module0012.$g76$.rebind( var38, var32 );
       module0012.$g75$.rebind( var37, var32 );
     }
-    return module0031.f1670( oc_assertions_low.$g2204$.getGlobalValue() );
+    return module0031.f1670( assertions_low_oc.$g2204$.getGlobalValue() );
   }
 
   public static SubLObject f11205(final SubLObject var80)
@@ -1116,24 +1117,24 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11232(final SubLObject var21, final SubLObject var81)
   {
-    if( oc_assertions_low.NIL != module0178.f11284( var21 ) )
+    if( assertions_low_oc.NIL != module0178.f11284( var21 ) )
     {
       f11233( var21, var81 );
     }
     else
     {
-      module0217.f14367( var21, oc_assertions_low.UNPROVIDED );
+      module0217.f14367( var21, assertions_low_oc.UNPROVIDED );
       f11233( var21, var81 );
-      module0217.f14364( var21, oc_assertions_low.UNPROVIDED );
+      module0217.f14364( var21, assertions_low_oc.UNPROVIDED );
     }
     return var21;
   }
 
   public static SubLObject f11233(final SubLObject var21, final SubLObject var81)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
     final SubLObject var82 = module0130.f8504( var81 );
-    if( oc_assertions_low.NIL != var82 )
+    if( assertions_low_oc.NIL != var82 )
     {
       f11215( var21, f11218( f11164( var21 ), var82 ) );
     }
@@ -1142,9 +1143,9 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11234(final SubLObject var21, final SubLObject var83)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
     final SubLObject var84 = module0130.f8521( var83 );
-    if( oc_assertions_low.NIL != var84 )
+    if( assertions_low_oc.NIL != var84 )
     {
       f11215( var21, f11219( f11164( var21 ), var84 ) );
     }
@@ -1172,17 +1173,17 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11237(final SubLObject var21, final SubLObject var29)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
-    assert oc_assertions_low.NIL != Types.listp( var29 ) : var29;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != Types.listp( var29 ) : var29;
     f11161( assertion_handles_oc.f11025( var21 ), var29 );
     return var21;
   }
 
   public static SubLObject f11191(final SubLObject var21, final SubLObject var89, SubLObject var90)
   {
-    if( var90 == oc_assertions_low.UNPROVIDED )
+    if( var90 == assertions_low_oc.UNPROVIDED )
     {
-      var90 = oc_assertions_low.NIL;
+      var90 = assertions_low_oc.NIL;
     }
     return conses_high.getf( f11168( var21 ), var89, var90 );
   }
@@ -1205,36 +1206,36 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11239(final SubLObject var21, final SubLObject var92)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
-    assert oc_assertions_low.NIL != module0035.f2015( var92 ) : var92;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != module0035.f2015( var92 ) : var92;
     SubLObject var93 = var92;
-    SubLObject var94 = oc_assertions_low.NIL;
+    SubLObject var94 = assertions_low_oc.NIL;
     var94 = var93.first();
-    while ( oc_assertions_low.NIL != var93)
+    while ( assertions_low_oc.NIL != var93)
     {
-      assert oc_assertions_low.NIL != Types.stringp( var94 ) : var94;
+      assert assertions_low_oc.NIL != Types.stringp( var94 ) : var94;
       var93 = var93.rest();
       var94 = var93.first();
     }
-    if( oc_assertions_low.NIL != var92 )
+    if( assertions_low_oc.NIL != var92 )
     {
-      f11203( var21, oc_assertions_low.$ic35$, var92 );
+      f11203( var21, assertions_low_oc.$ic35$, var92 );
     }
     else
     {
-      f11238( var21, oc_assertions_low.$ic35$ );
+      f11238( var21, assertions_low_oc.$ic35$ );
     }
     return var21;
   }
 
   public static SubLObject f11240(final SubLObject var21)
   {
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11241(final SubLObject var21)
   {
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11242(final SubLObject var21)
@@ -1244,12 +1245,12 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11243(final SubLObject var21)
   {
-    return oc_assertions_low.T;
+    return assertions_low_oc.T;
   }
 
   public static SubLObject f11244(final SubLObject var21, final SubLObject var96)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
     if( var96.eql( module0212.f13757() ) )
     {
       module0212.f13758( var21 );
@@ -1270,109 +1271,109 @@ public final class oc_assertions_low extends SubLTranslatedFile
   {
     SubLObject var100;
     final SubLObject var99 = var100 = var97.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var100, var99, oc_assertions_low.$ic53$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var100, var99, assertions_low_oc.$ic53$ );
     final SubLObject var101 = var100.rest();
     var100 = var100.first();
-    SubLObject var102 = oc_assertions_low.NIL;
-    SubLObject var103 = oc_assertions_low.NIL;
-    SubLObject var104 = oc_assertions_low.NIL;
-    SubLObject var105 = oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( var100, var99, oc_assertions_low.$ic53$ );
+    SubLObject var102 = assertions_low_oc.NIL;
+    SubLObject var103 = assertions_low_oc.NIL;
+    SubLObject var104 = assertions_low_oc.NIL;
+    SubLObject var105 = assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_consp( var100, var99, assertions_low_oc.$ic53$ );
     var102 = var100.first();
     var100 = var100.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var100, var99, oc_assertions_low.$ic53$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var100, var99, assertions_low_oc.$ic53$ );
     var103 = var100.first();
     var100 = var100.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var100, var99, oc_assertions_low.$ic53$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var100, var99, assertions_low_oc.$ic53$ );
     var104 = var100.first();
     var100 = var100.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( var100, var99, oc_assertions_low.$ic53$ );
+    cdestructuring_bind.destructuring_bind_must_consp( var100, var99, assertions_low_oc.$ic53$ );
     var105 = var100.first();
     var100 = var100.rest();
-    if( oc_assertions_low.NIL == var100 )
+    if( assertions_low_oc.NIL == var100 )
     {
       var100 = var101;
-      SubLObject var106 = oc_assertions_low.NIL;
-      cdestructuring_bind.destructuring_bind_must_consp( var100, var99, oc_assertions_low.$ic53$ );
+      SubLObject var106 = assertions_low_oc.NIL;
+      cdestructuring_bind.destructuring_bind_must_consp( var100, var99, assertions_low_oc.$ic53$ );
       var106 = var100.first();
       final SubLObject var107;
       var100 = ( var107 = var100.rest() );
-      return ConsesLow.listS( oc_assertions_low.$ic54$, ConsesLow.list( oc_assertions_low.$ic55$, var102, var103, var104, var105 ), var106, ConsesLow.append( var107,
-          oc_assertions_low.NIL ) );
+      return ConsesLow.listS( assertions_low_oc.$ic54$, ConsesLow.list( assertions_low_oc.$ic55$, var102, var103, var104, var105 ), var106, ConsesLow.append( var107,
+          assertions_low_oc.NIL ) );
     }
-    cdestructuring_bind.cdestructuring_bind_error( var99, oc_assertions_low.$ic53$ );
-    return oc_assertions_low.NIL;
+    cdestructuring_bind.cdestructuring_bind_error( var99, assertions_low_oc.$ic53$ );
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11194(final SubLObject var21)
   {
-    final SubLObject var22 = f11191( var21, oc_assertions_low.$ic56$, oc_assertions_low.UNPROVIDED );
-    if( oc_assertions_low.NIL != var22 )
+    final SubLObject var22 = f11191( var21, assertions_low_oc.$ic56$, assertions_low_oc.UNPROVIDED );
+    if( assertions_low_oc.NIL != var22 )
     {
       return var22;
     }
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11247(final SubLObject var21, final SubLObject var108)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
-    if( oc_assertions_low.NIL != var108 )
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    if( assertions_low_oc.NIL != var108 )
     {
-      f11203( var21, oc_assertions_low.$ic56$, var108 );
+      f11203( var21, assertions_low_oc.$ic56$, var108 );
     }
     else
     {
-      f11238( var21, oc_assertions_low.$ic56$ );
+      f11238( var21, assertions_low_oc.$ic56$ );
     }
     return var21;
   }
 
   public static SubLObject f11248(final SubLObject var21)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
-    if( oc_assertions_low.NIL != module0178.f11375( var21 ) )
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    if( assertions_low_oc.NIL != module0178.f11375( var21 ) )
     {
       return module0035.sublisp_boolean( f11194( var21 ) );
     }
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11249(SubLObject var102, SubLObject var103, SubLObject var104, SubLObject var105)
   {
-    if( var102 == oc_assertions_low.UNPROVIDED )
+    if( var102 == assertions_low_oc.UNPROVIDED )
     {
-      var102 = oc_assertions_low.NIL;
+      var102 = assertions_low_oc.NIL;
     }
-    if( var103 == oc_assertions_low.UNPROVIDED )
+    if( var103 == assertions_low_oc.UNPROVIDED )
     {
-      var103 = oc_assertions_low.NIL;
+      var103 = assertions_low_oc.NIL;
     }
-    if( var104 == oc_assertions_low.UNPROVIDED )
+    if( var104 == assertions_low_oc.UNPROVIDED )
     {
-      var104 = oc_assertions_low.NIL;
+      var104 = assertions_low_oc.NIL;
     }
-    if( var105 == oc_assertions_low.UNPROVIDED )
+    if( var105 == assertions_low_oc.UNPROVIDED )
     {
-      var105 = oc_assertions_low.NIL;
+      var105 = assertions_low_oc.NIL;
     }
-    if( oc_assertions_low.NIL != var105 )
+    if( assertions_low_oc.NIL != var105 )
     {
       return ConsesLow.list( var102, var103, var104, var105 );
     }
-    if( oc_assertions_low.NIL != var104 )
+    if( assertions_low_oc.NIL != var104 )
     {
       return ConsesLow.list( var102, var103, var104 );
     }
-    if( oc_assertions_low.NIL != var103 )
+    if( assertions_low_oc.NIL != var103 )
     {
       return ConsesLow.list( var102, var103 );
     }
-    if( oc_assertions_low.NIL != var102 )
+    if( assertions_low_oc.NIL != var102 )
     {
       return ConsesLow.list( var102 );
     }
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11193(final SubLObject var106)
@@ -1399,96 +1400,96 @@ public final class oc_assertions_low extends SubLTranslatedFile
   {
     SubLObject var111;
     final SubLObject var110 = var111 = f11194( var21 );
-    final SubLObject var112 = var111.isCons() ? var111.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var111, var110, oc_assertions_low.$ic57$ );
+    final SubLObject var112 = var111.isCons() ? var111.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var111, var110, assertions_low_oc.$ic57$ );
     var111 = var111.rest();
-    final SubLObject var113 = var111.isCons() ? var111.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var111, var110, oc_assertions_low.$ic57$ );
+    final SubLObject var113 = var111.isCons() ? var111.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var111, var110, assertions_low_oc.$ic57$ );
     var111 = var111.rest();
-    final SubLObject var114 = var111.isCons() ? var111.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var111, var110, oc_assertions_low.$ic57$ );
+    final SubLObject var114 = var111.isCons() ? var111.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var111, var110, assertions_low_oc.$ic57$ );
     var111 = var111.rest();
-    final SubLObject var115 = var111.isCons() ? var111.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var111, var110, oc_assertions_low.$ic57$ );
+    final SubLObject var115 = var111.isCons() ? var111.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var111, var110, assertions_low_oc.$ic57$ );
     var111 = var111.rest();
-    if( oc_assertions_low.NIL == var111 )
+    if( assertions_low_oc.NIL == var111 )
     {
       return f11247( var21, f11249( var109, var113, var114, var115 ) );
     }
-    cdestructuring_bind.cdestructuring_bind_error( var110, oc_assertions_low.$ic57$ );
-    return oc_assertions_low.NIL;
+    cdestructuring_bind.cdestructuring_bind_error( var110, assertions_low_oc.$ic57$ );
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11251(final SubLObject var21, final SubLObject var112)
   {
     SubLObject var114;
     final SubLObject var113 = var114 = f11194( var21 );
-    final SubLObject var115 = var114.isCons() ? var114.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var114, var113, oc_assertions_low.$ic57$ );
+    final SubLObject var115 = var114.isCons() ? var114.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var114, var113, assertions_low_oc.$ic57$ );
     var114 = var114.rest();
-    final SubLObject var116 = var114.isCons() ? var114.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var114, var113, oc_assertions_low.$ic57$ );
+    final SubLObject var116 = var114.isCons() ? var114.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var114, var113, assertions_low_oc.$ic57$ );
     var114 = var114.rest();
-    final SubLObject var117 = var114.isCons() ? var114.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var114, var113, oc_assertions_low.$ic57$ );
+    final SubLObject var117 = var114.isCons() ? var114.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var114, var113, assertions_low_oc.$ic57$ );
     var114 = var114.rest();
-    final SubLObject var118 = var114.isCons() ? var114.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var114, var113, oc_assertions_low.$ic57$ );
+    final SubLObject var118 = var114.isCons() ? var114.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var114, var113, assertions_low_oc.$ic57$ );
     var114 = var114.rest();
-    if( oc_assertions_low.NIL == var114 )
+    if( assertions_low_oc.NIL == var114 )
     {
       return f11247( var21, f11249( var115, var112, var117, var118 ) );
     }
-    cdestructuring_bind.cdestructuring_bind_error( var113, oc_assertions_low.$ic57$ );
-    return oc_assertions_low.NIL;
+    cdestructuring_bind.cdestructuring_bind_error( var113, assertions_low_oc.$ic57$ );
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11252(final SubLObject var21, final SubLObject var115)
   {
     SubLObject var117;
     final SubLObject var116 = var117 = f11194( var21 );
-    final SubLObject var118 = var117.isCons() ? var117.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var117, var116, oc_assertions_low.$ic57$ );
+    final SubLObject var118 = var117.isCons() ? var117.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var117, var116, assertions_low_oc.$ic57$ );
     var117 = var117.rest();
-    final SubLObject var119 = var117.isCons() ? var117.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var117, var116, oc_assertions_low.$ic57$ );
+    final SubLObject var119 = var117.isCons() ? var117.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var117, var116, assertions_low_oc.$ic57$ );
     var117 = var117.rest();
-    final SubLObject var120 = var117.isCons() ? var117.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var117, var116, oc_assertions_low.$ic57$ );
+    final SubLObject var120 = var117.isCons() ? var117.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var117, var116, assertions_low_oc.$ic57$ );
     var117 = var117.rest();
-    final SubLObject var121 = var117.isCons() ? var117.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var117, var116, oc_assertions_low.$ic57$ );
+    final SubLObject var121 = var117.isCons() ? var117.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var117, var116, assertions_low_oc.$ic57$ );
     var117 = var117.rest();
-    if( oc_assertions_low.NIL == var117 )
+    if( assertions_low_oc.NIL == var117 )
     {
       return f11247( var21, f11249( var118, var119, var115, var121 ) );
     }
-    cdestructuring_bind.cdestructuring_bind_error( var116, oc_assertions_low.$ic57$ );
-    return oc_assertions_low.NIL;
+    cdestructuring_bind.cdestructuring_bind_error( var116, assertions_low_oc.$ic57$ );
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11253(final SubLObject var21, final SubLObject var118)
   {
     SubLObject var120;
     final SubLObject var119 = var120 = f11194( var21 );
-    final SubLObject var121 = var120.isCons() ? var120.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var120, var119, oc_assertions_low.$ic57$ );
+    final SubLObject var121 = var120.isCons() ? var120.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var120, var119, assertions_low_oc.$ic57$ );
     var120 = var120.rest();
-    final SubLObject var122 = var120.isCons() ? var120.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var120, var119, oc_assertions_low.$ic57$ );
+    final SubLObject var122 = var120.isCons() ? var120.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var120, var119, assertions_low_oc.$ic57$ );
     var120 = var120.rest();
-    final SubLObject var123 = var120.isCons() ? var120.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var120, var119, oc_assertions_low.$ic57$ );
+    final SubLObject var123 = var120.isCons() ? var120.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var120, var119, assertions_low_oc.$ic57$ );
     var120 = var120.rest();
-    final SubLObject var124 = var120.isCons() ? var120.first() : oc_assertions_low.NIL;
-    cdestructuring_bind.destructuring_bind_must_listp( var120, var119, oc_assertions_low.$ic57$ );
+    final SubLObject var124 = var120.isCons() ? var120.first() : assertions_low_oc.NIL;
+    cdestructuring_bind.destructuring_bind_must_listp( var120, var119, assertions_low_oc.$ic57$ );
     var120 = var120.rest();
-    if( oc_assertions_low.NIL == var120 )
+    if( assertions_low_oc.NIL == var120 )
     {
       return f11247( var21, f11249( var121, var122, var123, var118 ) );
     }
-    cdestructuring_bind.cdestructuring_bind_error( var119, oc_assertions_low.$ic57$ );
-    return oc_assertions_low.NIL;
+    cdestructuring_bind.cdestructuring_bind_error( var119, assertions_low_oc.$ic57$ );
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11254(final SubLObject var21)
@@ -1497,33 +1498,33 @@ public final class oc_assertions_low extends SubLTranslatedFile
     final SubLObject var23 = module0178.f11300( var21 );
     final SubLObject var24 = f11190( var21 );
     final SubLObject var25 = f11242( var21 );
-    return SubLObjectFactory.makeBoolean( oc_assertions_low.NIL != module0161.f10571( f11179( var21 ), oc_assertions_low.UNPROVIDED ) && oc_assertions_low.NIL != module0130.f8520( f11187(
-        var21 ) ) && var22.isCons() && oc_assertions_low.NIL != module0035.f2370( Symbols.symbol_function( oc_assertions_low.$ic58$ ), var22, oc_assertions_low.UNPROVIDED )
-        && oc_assertions_low.NIL != module0032.f1724( var23 ) && oc_assertions_low.NIL != module0035.f2370( Symbols.symbol_function( oc_assertions_low.$ic58$ ), module0032.f1753( var23 ),
-            oc_assertions_low.UNPROVIDED ) && var24.isList() && oc_assertions_low.NIL != module0035.f2370( Symbols.symbol_function( oc_assertions_low.$ic45$ ), var24,
-                oc_assertions_low.UNPROVIDED ) && oc_assertions_low.NIL != module0130.f8503( module0178.f11291( var21 ) ) && oc_assertions_low.NIL != module0212.f13775( var25 ) );
+    return SubLObjectFactory.makeBoolean( assertions_low_oc.NIL != module0161.f10571( f11179( var21 ), assertions_low_oc.UNPROVIDED ) && assertions_low_oc.NIL != module0130.f8520( f11187(
+        var21 ) ) && var22.isCons() && assertions_low_oc.NIL != module0035.f2370( Symbols.symbol_function( assertions_low_oc.$ic58$ ), var22, assertions_low_oc.UNPROVIDED )
+        && assertions_low_oc.NIL != module0032.f1724( var23 ) && assertions_low_oc.NIL != module0035.f2370( Symbols.symbol_function( assertions_low_oc.$ic58$ ), module0032.f1753( var23 ),
+            assertions_low_oc.UNPROVIDED ) && var24.isList() && assertions_low_oc.NIL != module0035.f2370( Symbols.symbol_function( assertions_low_oc.$ic45$ ), var24,
+                assertions_low_oc.UNPROVIDED ) && assertions_low_oc.NIL != module0130.f8503( module0178.f11291( var21 ) ) && assertions_low_oc.NIL != module0212.f13775( var25 ) );
   }
 
   public static SubLObject f11178(final SubLObject var21)
   {
     final SubLThread var22 = SubLProcess.currentSubLThread();
     final SubLObject var23 = assertion_handles_oc.f11025( var21 );
-    SubLObject var24 = oc_assertions_low.NIL;
-    SubLObject var25 = oc_assertions_low.NIL;
+    SubLObject var24 = assertions_low_oc.NIL;
+    SubLObject var25 = assertions_low_oc.NIL;
     try
     {
-      var22.throwStack.push( oc_assertions_low.$ic59$ );
+      var22.throwStack.push( assertions_low_oc.$ic59$ );
       final SubLObject var26 = Errors.$error_handler$.currentBinding( var22 );
       try
       {
-        Errors.$error_handler$.bind( Symbols.symbol_function( oc_assertions_low.$ic60$ ), var22 );
+        Errors.$error_handler$.bind( Symbols.symbol_function( assertions_low_oc.$ic60$ ), var22 );
         try
         {
-          var24 = oc_assertion_manager.f11114( var23 );
+          var24 = assertion_manager_oc.f11114( var23 );
         }
         catch( final Throwable var27 )
         {
-          Errors.handleThrowable( var27, oc_assertions_low.NIL );
+          Errors.handleThrowable( var27, assertions_low_oc.NIL );
         }
       }
       finally
@@ -1533,7 +1534,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
     }
     catch( final Throwable var28 )
     {
-      var25 = Errors.handleThrowable( var28, oc_assertions_low.$ic59$ );
+      var25 = Errors.handleThrowable( var28, assertions_low_oc.$ic59$ );
     }
     finally
     {
@@ -1545,7 +1546,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
   public static SubLObject f11255(final SubLObject var70, final SubLObject var13, final SubLObject var125, final SubLObject var126, final SubLObject var127, final SubLObject var128, final SubLObject var129)
   {
     SubLObject var130 = module0217.f14416( var70, var13 );
-    if( oc_assertions_low.NIL != var130 )
+    if( assertions_low_oc.NIL != var130 )
     {
       return assertion_handles_oc.f11025( var130 );
     }
@@ -1559,32 +1560,32 @@ public final class oc_assertions_low extends SubLTranslatedFile
       final SubLObject var128, final SubLObject var129)
   {
     final SubLObject var131 = f11151( var13 );
-    oc_assertion_manager.f11123( var130, var131 );
+    assertion_manager_oc.f11123( var130, var131 );
     f11239( var21, var125 );
     f11234( var21, module0130.f8529( var127, var128 ) );
     final SubLObject var132 = f11257( var70 );
     f11258( var21, var132 );
     f11232( var21, var126 );
-    if( oc_assertions_low.NIL != var129 )
+    if( assertions_low_oc.NIL != var129 )
     {
       f11259( var21, var129 );
     }
-    if( var126 == oc_assertions_low.$ic61$ )
+    if( var126 == assertions_low_oc.$ic61$ )
     {
       module0528.f32917( var21 );
     }
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11260(final SubLObject var130)
   {
     final SubLObject var131 = assertion_handles_oc.f11053( var130 );
-    return ( oc_assertions_low.NIL != var131 ) ? var131 : assertion_handles_oc.f11049( var130 );
+    return ( assertions_low_oc.NIL != var131 ) ? var131 : assertion_handles_oc.f11049( var130 );
   }
 
   public static SubLObject f11257(final SubLObject var70)
   {
-    if( oc_assertions_low.NIL != module0232.f15322( var70 ) )
+    if( assertions_low_oc.NIL != module0232.f15322( var70 ) )
     {
       return f11261( module0204.f13047( var70 ) );
     }
@@ -1594,10 +1595,10 @@ public final class oc_assertions_low extends SubLTranslatedFile
   public static SubLObject f11262(final SubLObject var70)
   {
     final SubLObject var71 = module0217.f14418( var70 );
-    if( oc_assertions_low.NIL != var71 )
+    if( assertions_low_oc.NIL != var71 )
     {
       final SubLObject var72 = f11211( var71 );
-      return ( oc_assertions_low.NIL != var72 ) ? var72 : var71;
+      return ( assertions_low_oc.NIL != var72 ) ? var72 : var71;
     }
     return var70;
   }
@@ -1605,10 +1606,10 @@ public final class oc_assertions_low extends SubLTranslatedFile
   public static SubLObject f11261(final SubLObject var80)
   {
     final SubLObject var81 = module0217.f14423( var80 );
-    if( oc_assertions_low.NIL != var81 )
+    if( assertions_low_oc.NIL != var81 )
     {
       final SubLObject var82 = f11211( var81 );
-      return ( oc_assertions_low.NIL != var82 ) ? var82 : var81;
+      return ( assertions_low_oc.NIL != var82 ) ? var82 : var81;
     }
     return var80;
   }
@@ -1616,18 +1617,18 @@ public final class oc_assertions_low extends SubLTranslatedFile
   public static SubLObject f11258(final SubLObject var21, final SubLObject var131)
   {
     f11263( var21, var131 );
-    module0217.f14364( var21, oc_assertions_low.UNPROVIDED );
+    module0217.f14364( var21, assertions_low_oc.UNPROVIDED );
     return var21;
   }
 
   public static SubLObject f11263(final SubLObject var21, final SubLObject var131)
   {
     SubLObject var132 = var131;
-    if( oc_assertions_low.NIL != module0192.f12006( var131 ) )
+    if( assertions_low_oc.NIL != module0192.f12006( var131 ) )
     {
       module0192.f12039( var131, var21 );
     }
-    else if( oc_assertions_low.NIL != assertion_handles_oc.f11035( var131 ) )
+    else if( assertions_low_oc.NIL != assertion_handles_oc.f11035( var131 ) )
     {
       final SubLObject var133 = module0178.f11282( var131 );
       final SubLObject var134 = module0192.f12034( var133 );
@@ -1636,12 +1637,12 @@ public final class oc_assertions_low extends SubLTranslatedFile
       var132 = var134;
       f11207( var131, var132 );
     }
-    else if( oc_assertions_low.NIL == module0232.f15320( var131 ) )
+    else if( assertions_low_oc.NIL == module0232.f15320( var131 ) )
     {
-      if( oc_assertions_low.NIL == module0202.f12590( var131 ) )
+      if( assertions_low_oc.NIL == module0202.f12590( var131 ) )
       {
-        Errors.error( oc_assertions_low.$ic62$, var131 );
-        return oc_assertions_low.NIL;
+        Errors.error( assertions_low_oc.$ic62$, var131 );
+        return assertions_low_oc.NIL;
       }
     }
     f11206( var21, var132 );
@@ -1655,7 +1656,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
     f11152( var22 );
     assertion_handles_oc.f11028( var22 );
     assertion_handles_oc.f11044( var21 );
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11266(final SubLObject var21, final SubLObject var38)
@@ -1663,12 +1664,12 @@ public final class oc_assertions_low extends SubLTranslatedFile
     f11265( var21 );
     final SubLObject var39 = f11262( var38 );
     f11258( var21, var39 );
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11265(final SubLObject var21)
   {
-    module0217.f14367( var21, oc_assertions_low.UNPROVIDED );
+    module0217.f14367( var21, assertions_low_oc.UNPROVIDED );
     f11267( var21 );
     return var21;
   }
@@ -1676,7 +1677,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
   public static SubLObject f11267(final SubLObject var21)
   {
     final SubLObject var22 = f11211( var21 );
-    if( oc_assertions_low.NIL != var22 )
+    if( assertions_low_oc.NIL != var22 )
     {
       module0192.f12042( var22, var21 );
     }
@@ -1692,62 +1693,62 @@ public final class oc_assertions_low extends SubLTranslatedFile
 
   public static SubLObject f11268(final SubLObject var21, final SubLObject var135)
   {
-    f11160( assertion_handles_oc.f11025( var21 ), module0035.f2073( var135, module0178.f11299( var21 ), oc_assertions_low.UNPROVIDED ) );
+    f11160( assertion_handles_oc.f11025( var21 ), module0035.f2073( var135, module0178.f11299( var21 ), assertions_low_oc.UNPROVIDED ) );
     return var21;
   }
 
   public static SubLObject f11269(final SubLObject var21, final SubLObject var136)
   {
-    assert oc_assertions_low.NIL != module0032.f1724( var136 ) : var136;
-    if( oc_assertions_low.NIL != var136 )
+    assert assertions_low_oc.NIL != module0032.f1724( var136 ) : var136;
+    if( assertions_low_oc.NIL != var136 )
     {
-      f11203( var21, oc_assertions_low.$ic31$, var136 );
+      f11203( var21, assertions_low_oc.$ic31$, var136 );
     }
     else
     {
-      f11238( var21, oc_assertions_low.$ic31$ );
+      f11238( var21, assertions_low_oc.$ic31$ );
     }
     return var21;
   }
 
   public static SubLObject f11270(final SubLObject var21, final SubLObject var135)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
-    assert oc_assertions_low.NIL != module0191.f11910( var135 ) : var135;
-    f11269( var21, module0032.f1736( var135, f11202( var21 ), oc_assertions_low.UNPROVIDED ) );
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != module0191.f11910( var135 ) : var135;
+    f11269( var21, module0032.f1736( var135, f11202( var21 ), assertions_low_oc.UNPROVIDED ) );
     return var21;
   }
 
   public static SubLObject f11271(final SubLObject var21, final SubLObject var135)
   {
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
-    assert oc_assertions_low.NIL != module0191.f11910( var135 ) : var135;
-    f11269( var21, module0032.f1737( var135, f11202( var21 ), oc_assertions_low.UNPROVIDED ) );
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    assert assertions_low_oc.NIL != module0191.f11910( var135 ) : var135;
+    f11269( var21, module0032.f1737( var135, f11202( var21 ), assertions_low_oc.UNPROVIDED ) );
     return var21;
   }
 
   public static SubLObject f11272(final SubLObject var21)
   {
     final SubLThread var22 = SubLProcess.currentSubLThread();
-    assert oc_assertions_low.NIL != assertion_handles_oc.f11035( var21 ) : var21;
-    SubLObject var23 = oc_assertions_low.NIL;
-    SubLObject var24 = oc_assertions_low.NIL;
+    assert assertions_low_oc.NIL != assertion_handles_oc.f11035( var21 ) : var21;
+    SubLObject var23 = assertions_low_oc.NIL;
+    SubLObject var24 = assertions_low_oc.NIL;
     final SubLObject var25 = module0032.f1728( f11202( var21 ) );
-    final SubLObject var26 = oc_assertions_low.$g2208$.currentBinding( var22 );
-    final SubLObject var27 = oc_assertions_low.$g2207$.currentBinding( var22 );
+    final SubLObject var26 = assertions_low_oc.$g2208$.currentBinding( var22 );
+    final SubLObject var27 = assertions_low_oc.$g2207$.currentBinding( var22 );
     try
     {
-      oc_assertions_low.$g2208$.bind( Hashtables.make_hash_table( Numbers.integerDivide( var25, oc_assertions_low.TWO_INTEGER ), oc_assertions_low.UNPROVIDED,
-          oc_assertions_low.UNPROVIDED ), var22 );
-      oc_assertions_low.$g2207$.bind( Hashtables.make_hash_table( var25, oc_assertions_low.UNPROVIDED, oc_assertions_low.UNPROVIDED ), var22 );
+      assertions_low_oc.$g2208$.bind( Hashtables.make_hash_table( Numbers.integerDivide( var25, assertions_low_oc.TWO_INTEGER ), assertions_low_oc.UNPROVIDED,
+          assertions_low_oc.UNPROVIDED ), var22 );
+      assertions_low_oc.$g2207$.bind( Hashtables.make_hash_table( var25, assertions_low_oc.UNPROVIDED, assertions_low_oc.UNPROVIDED ), var22 );
       f11273( var21 );
-      var23 = oc_assertions_low.$g2208$.getDynamicValue( var22 );
-      var24 = oc_assertions_low.$g2207$.getDynamicValue( var22 );
+      var23 = assertions_low_oc.$g2208$.getDynamicValue( var22 );
+      var24 = assertions_low_oc.$g2207$.getDynamicValue( var22 );
     }
     finally
     {
-      oc_assertions_low.$g2207$.rebind( var27, var22 );
-      oc_assertions_low.$g2208$.rebind( var26, var22 );
+      assertions_low_oc.$g2207$.rebind( var27, var22 );
+      assertions_low_oc.$g2208$.rebind( var26, var22 );
     }
     return Values.values( var23, var24 );
   }
@@ -1755,65 +1756,65 @@ public final class oc_assertions_low extends SubLTranslatedFile
   public static SubLObject f11273(final SubLObject var21)
   {
     final SubLThread var22 = SubLProcess.currentSubLThread();
-    if( oc_assertions_low.NIL == Hashtables.gethash( var21, oc_assertions_low.$g2208$.getDynamicValue( var22 ), oc_assertions_low.UNPROVIDED ) )
+    if( assertions_low_oc.NIL == Hashtables.gethash( var21, assertions_low_oc.$g2208$.getDynamicValue( var22 ), assertions_low_oc.UNPROVIDED ) )
     {
-      Hashtables.sethash( var21, oc_assertions_low.$g2208$.getDynamicValue( var22 ), oc_assertions_low.T );
+      Hashtables.sethash( var21, assertions_low_oc.$g2208$.getDynamicValue( var22 ), assertions_low_oc.T );
       final SubLObject var23 = f11202( var21 );
       SubLObject var24;
       SubLObject var25;
       SubLObject var26;
-      for( var24 = module0032.f1741( var23 ), var25 = oc_assertions_low.NIL, var25 = module0032.f1742( var24, var23 ); oc_assertions_low.NIL == module0032.f1744( var24, var25 ); var25 = module0032.f1743(
+      for( var24 = module0032.f1741( var23 ), var25 = assertions_low_oc.NIL, var25 = module0032.f1742( var24, var23 ); assertions_low_oc.NIL == module0032.f1744( var24, var25 ); var25 = module0032.f1743(
           var25 ) )
       {
         var26 = module0032.f1745( var24, var25 );
-        if( oc_assertions_low.NIL != module0032.f1746( var25, var26 ) )
+        if( assertions_low_oc.NIL != module0032.f1746( var25, var26 ) )
         {
           f11274( var26 );
         }
       }
     }
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11274(final SubLObject var143)
   {
     final SubLThread var144 = SubLProcess.currentSubLThread();
-    assert oc_assertions_low.NIL != oc_deduction_handles.f11659( var143 ) : var143;
-    if( oc_assertions_low.NIL == Hashtables.gethash( var143, oc_assertions_low.$g2207$.getDynamicValue( var144 ), oc_assertions_low.UNPROVIDED ) )
+    assert assertions_low_oc.NIL != deduction_handles_oc.f11659( var143 ) : var143;
+    if( assertions_low_oc.NIL == Hashtables.gethash( var143, assertions_low_oc.$g2207$.getDynamicValue( var144 ), assertions_low_oc.UNPROVIDED ) )
     {
-      Hashtables.sethash( var143, oc_assertions_low.$g2207$.getDynamicValue( var144 ), oc_assertions_low.T );
+      Hashtables.sethash( var143, assertions_low_oc.$g2207$.getDynamicValue( var144 ), assertions_low_oc.T );
       final SubLObject var145 = module0188.f11781( var143 );
-      if( oc_assertions_low.NIL != assertion_handles_oc.f11035( var145 ) )
+      if( assertions_low_oc.NIL != assertion_handles_oc.f11035( var145 ) )
       {
         SubLObject var146 = f11201( var145 );
-        SubLObject var147 = oc_assertions_low.NIL;
+        SubLObject var147 = assertions_low_oc.NIL;
         var147 = var146.first();
-        while ( oc_assertions_low.NIL != var146)
+        while ( assertions_low_oc.NIL != var146)
         {
-          if( oc_assertions_low.NIL == oc_deduction_handles.f11659( var147 ) || oc_assertions_low.NIL == Hashtables.gethash( var143, oc_assertions_low.$g2207$.getDynamicValue( var144 ),
-              oc_assertions_low.UNPROVIDED ) )
+          if( assertions_low_oc.NIL == deduction_handles_oc.f11659( var147 ) || assertions_low_oc.NIL == Hashtables.gethash( var143, assertions_low_oc.$g2207$.getDynamicValue( var144 ),
+              assertions_low_oc.UNPROVIDED ) )
           {
-            return oc_assertions_low.NIL;
+            return assertions_low_oc.NIL;
           }
           f11273( var145 );
           var146 = var146.rest();
           var147 = var146.first();
         }
       }
-      else if( oc_assertions_low.NIL != module0179.f11424( var145 ) )
+      else if( assertions_low_oc.NIL != module0179.f11424( var145 ) )
       {
       }
     }
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11275(SubLObject var145)
   {
-    if( var145 == oc_assertions_low.UNPROVIDED )
+    if( var145 == assertions_low_oc.UNPROVIDED )
     {
-      var145 = oc_assertions_low.NIL;
+      var145 = assertions_low_oc.NIL;
     }
-    return oc_assertion_manager.f11132( oc_assertions_low.$ic1$, var145 );
+    return assertion_manager_oc.f11132( assertions_low_oc.$ic1$, var145 );
   }
 
   public static SubLObject f11276()
@@ -1923,7 +1924,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
     SubLFiles.declareFunction( myName, "f11243", "S#14049", 1, 0, false );
     SubLFiles.declareFunction( myName, "f11244", "S#14050", 2, 0, false );
     SubLFiles.declareFunction( myName, "f11245", "S#14051", 1, 0, false );
-    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.oc_assertions_low", "f11246", "S#14052" );
+    SubLFiles.declareMacro( "com.cyc.cycjava.cycl.assertions_low_oc", "f11246", "S#14052" );
     SubLFiles.declareFunction( myName, "f11194", "S#14053", 1, 0, false );
     SubLFiles.declareFunction( myName, "f11247", "S#14054", 2, 0, false );
     SubLFiles.declareFunction( myName, "f11248", "S#14055", 1, 0, false );
@@ -1959,41 +1960,41 @@ public final class oc_assertions_low extends SubLTranslatedFile
     SubLFiles.declareFunction( myName, "f11273", "S#14073", 1, 0, false );
     SubLFiles.declareFunction( myName, "f11274", "S#14074", 1, 0, false );
     SubLFiles.declareFunction( myName, "f11275", "S#14075", 0, 1, false );
-    return oc_assertions_low.NIL;
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11277()
   {
-    oc_assertions_low.$g2199$ = SubLFiles.defconstant( "S#14076", oc_assertions_low.$ic0$ );
-    oc_assertions_low.$g2200$ = SubLFiles.deflexical( "S#14077", oc_assertions_low.ZERO_INTEGER );
-    oc_assertions_low.$g2201$ = SubLFiles.defconstant( "S#14078", bytes.sublisp_byte( oc_assertions_low.ONE_INTEGER, oc_assertions_low.ZERO_INTEGER ) );
-    oc_assertions_low.$g2202$ = SubLFiles.defconstant( "S#14079", bytes.sublisp_byte( oc_assertions_low.TWO_INTEGER, oc_assertions_low.ONE_INTEGER ) );
-    oc_assertions_low.$g2203$ = SubLFiles.defconstant( "S#14080", bytes.sublisp_byte( oc_assertions_low.THREE_INTEGER, oc_assertions_low.THREE_INTEGER ) );
-    oc_assertions_low.$g2204$ = SubLFiles.deflexical( "S#14081", ( oc_assertions_low.NIL != Symbols.boundp( oc_assertions_low.$ic38$ ) ) ? oc_assertions_low.$g2204$.getGlobalValue()
-        : oc_assertions_low.NIL );
-    oc_assertions_low.$g2205$ = SubLFiles.deflexical( "S#14082", ( oc_assertions_low.NIL != Symbols.boundp( oc_assertions_low.$ic39$ ) ) ? oc_assertions_low.$g2205$.getGlobalValue()
-        : oc_assertions_low.T );
-    oc_assertions_low.$g2206$ = SubLFiles.deflexical( "S#14083", oc_assertions_low.$ic40$ );
-    oc_assertions_low.$g2207$ = SubLFiles.defparameter( "S#14084", oc_assertions_low.NIL );
-    oc_assertions_low.$g2208$ = SubLFiles.defparameter( "S#14085", oc_assertions_low.NIL );
-    return oc_assertions_low.NIL;
+    assertions_low_oc.$g2199$ = SubLFiles.defconstant( "S#14076", assertions_low_oc.$ic0$ );
+    assertions_low_oc.$g2200$ = SubLFiles.deflexical( "S#14077", assertions_low_oc.ZERO_INTEGER );
+    assertions_low_oc.$g2201$ = SubLFiles.defconstant( "S#14078", bytes.sublisp_byte( assertions_low_oc.ONE_INTEGER, assertions_low_oc.ZERO_INTEGER ) );
+    assertions_low_oc.$g2202$ = SubLFiles.defconstant( "S#14079", bytes.sublisp_byte( assertions_low_oc.TWO_INTEGER, assertions_low_oc.ONE_INTEGER ) );
+    assertions_low_oc.$g2203$ = SubLFiles.defconstant( "S#14080", bytes.sublisp_byte( assertions_low_oc.THREE_INTEGER, assertions_low_oc.THREE_INTEGER ) );
+    assertions_low_oc.$g2204$ = SubLFiles.deflexical( "S#14081", ( assertions_low_oc.NIL != Symbols.boundp( assertions_low_oc.$ic38$ ) ) ? assertions_low_oc.$g2204$.getGlobalValue()
+        : assertions_low_oc.NIL );
+    assertions_low_oc.$g2205$ = SubLFiles.deflexical( "S#14082", ( assertions_low_oc.NIL != Symbols.boundp( assertions_low_oc.$ic39$ ) ) ? assertions_low_oc.$g2205$.getGlobalValue()
+        : assertions_low_oc.T );
+    assertions_low_oc.$g2206$ = SubLFiles.deflexical( "S#14083", assertions_low_oc.$ic40$ );
+    assertions_low_oc.$g2207$ = SubLFiles.defparameter( "S#14084", assertions_low_oc.NIL );
+    assertions_low_oc.$g2208$ = SubLFiles.defparameter( "S#14085", assertions_low_oc.NIL );
+    return assertions_low_oc.NIL;
   }
 
   public static SubLObject f11278()
   {
-    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), oc_assertions_low.$g2199$.getGlobalValue(), Symbols.symbol_function( oc_assertions_low.$ic8$ ) );
-    SubLSpecialOperatorDeclarations.proclaim( oc_assertions_low.$ic9$ );
-    Structures.def_csetf( oc_assertions_low.$ic10$, oc_assertions_low.$ic11$ );
-    Structures.def_csetf( oc_assertions_low.$ic12$, oc_assertions_low.$ic13$ );
-    Structures.def_csetf( oc_assertions_low.$ic14$, oc_assertions_low.$ic15$ );
-    Structures.def_csetf( oc_assertions_low.$ic16$, oc_assertions_low.$ic17$ );
-    Structures.def_csetf( oc_assertions_low.$ic18$, oc_assertions_low.$ic19$ );
-    Equality.identity( oc_assertions_low.$ic0$ );
-    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), oc_assertions_low.$g2199$.getGlobalValue(), Symbols.symbol_function( oc_assertions_low.$ic30$ ) );
-    module0003.f57( oc_assertions_low.$ic38$ );
-    module0003.f57( oc_assertions_low.$ic39$ );
-    module0002.f50( oc_assertions_low.$ic42$, oc_assertions_low.$ic43$ );
-    return oc_assertions_low.NIL;
+    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), assertions_low_oc.$g2199$.getGlobalValue(), Symbols.symbol_function( assertions_low_oc.$ic8$ ) );
+    SubLSpecialOperatorDeclarations.proclaim( assertions_low_oc.$ic9$ );
+    Structures.def_csetf( assertions_low_oc.$ic10$, assertions_low_oc.$ic11$ );
+    Structures.def_csetf( assertions_low_oc.$ic12$, assertions_low_oc.$ic13$ );
+    Structures.def_csetf( assertions_low_oc.$ic14$, assertions_low_oc.$ic15$ );
+    Structures.def_csetf( assertions_low_oc.$ic16$, assertions_low_oc.$ic17$ );
+    Structures.def_csetf( assertions_low_oc.$ic18$, assertions_low_oc.$ic19$ );
+    Equality.identity( assertions_low_oc.$ic0$ );
+    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), assertions_low_oc.$g2199$.getGlobalValue(), Symbols.symbol_function( assertions_low_oc.$ic30$ ) );
+    module0003.f57( assertions_low_oc.$ic38$ );
+    module0003.f57( assertions_low_oc.$ic39$ );
+    module0002.f50( assertions_low_oc.$ic42$, assertions_low_oc.$ic43$ );
+    return assertions_low_oc.NIL;
   }
 
   @Override
@@ -2015,17 +2016,17 @@ public final class oc_assertions_low extends SubLTranslatedFile
   }
   static
   {
-    me = new oc_assertions_low();
-    oc_assertions_low.$g2199$ = null;
-    oc_assertions_low.$g2200$ = null;
-    oc_assertions_low.$g2201$ = null;
-    oc_assertions_low.$g2202$ = null;
-    oc_assertions_low.$g2203$ = null;
-    oc_assertions_low.$g2204$ = null;
-    oc_assertions_low.$g2205$ = null;
-    oc_assertions_low.$g2206$ = null;
-    oc_assertions_low.$g2207$ = null;
-    oc_assertions_low.$g2208$ = null;
+    me = new assertions_low_oc();
+    assertions_low_oc.$g2199$ = null;
+    assertions_low_oc.$g2200$ = null;
+    assertions_low_oc.$g2201$ = null;
+    assertions_low_oc.$g2202$ = null;
+    assertions_low_oc.$g2203$ = null;
+    assertions_low_oc.$g2204$ = null;
+    assertions_low_oc.$g2205$ = null;
+    assertions_low_oc.$g2206$ = null;
+    assertions_low_oc.$g2207$ = null;
+    assertions_low_oc.$g2208$ = null;
     $ic0$ = SubLObjectFactory.makeSymbol( "S#13955", "CYC" );
     $ic1$ = SubLObjectFactory.makeSymbol( "S#13956", "CYC" );
     $ic2$ = SubLObjectFactory.makeInteger( 148 );
@@ -2186,9 +2187,9 @@ public final class oc_assertions_low extends SubLTranslatedFile
     }
     static
     {
-      structDecl = Structures.makeStructDeclNative( $sX13955_native.class, oc_assertions_low.$ic0$, oc_assertions_low.$ic1$, oc_assertions_low.$ic3$, oc_assertions_low.$ic4$, new String[] { "$formula_data",
+      structDecl = Structures.makeStructDeclNative( $sX13955_native.class, assertions_low_oc.$ic0$, assertions_low_oc.$ic1$, assertions_low_oc.$ic3$, assertions_low_oc.$ic4$, new String[] { "$formula_data",
         "$mt", "$flags", "$arguments", "$plist"
-      }, oc_assertions_low.$ic5$, oc_assertions_low.$ic6$, oc_assertions_low.$ic7$ );
+      }, assertions_low_oc.$ic5$, assertions_low_oc.$ic6$, assertions_low_oc.$ic7$ );
     }
   }
 
@@ -2202,7 +2203,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
     @Override
     public SubLObject processItem(final SubLObject var3)
     {
-      return oc_assertions_low.f11137( var3 );
+      return assertions_low_oc.f11137( var3 );
     }
   }
 }
@@ -2211,7 +2212,7 @@ public final class oc_assertions_low extends SubLTranslatedFile
  *
  * Decompiled from:
  * G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/
- * cycjava/cycl/oc_assertions_low.class Total time: 477 ms
+ * cycjava/cycl/assertions_low_oc.class Total time: 477 ms
  *
  * Decompiled with Procyon 0.5.32.
  */

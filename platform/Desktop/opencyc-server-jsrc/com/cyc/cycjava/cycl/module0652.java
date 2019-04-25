@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
@@ -37,26 +38,26 @@ public final class module0652 extends SubLTranslatedFile
     private static final SubLString $ic10$;
     
     public static SubLObject f39723() {
-        return (SubLObject)module0652.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f39724() {
-        module0652.$g5065$ = SubLFiles.defparameter("S#43607", (SubLObject)module0652.$ic0$);
-        module0652.$g5066$ = SubLFiles.defparameter("S#43608", (SubLObject)module0652.$ic1$);
-        module0652.$g5067$ = SubLFiles.defparameter("S#43609", (SubLObject)module0652.$ic2$);
-        module0652.$g5068$ = SubLFiles.defparameter("S#43610", (SubLObject)module0652.$ic3$);
-        module0652.$g5069$ = SubLFiles.defparameter("S#43611", (SubLObject)module0652.$ic4$);
-        module0652.$g5070$ = SubLFiles.defparameter("S#43612", (SubLObject)module0652.$ic5$);
-        module0652.$g5071$ = SubLFiles.defparameter("S#43613", (SubLObject)module0652.$ic6$);
-        module0652.$g5072$ = SubLFiles.defparameter("S#43614", (SubLObject)module0652.$ic7$);
-        module0652.$g5073$ = SubLFiles.defparameter("S#43615", (SubLObject)module0652.$ic8$);
-        module0652.$g5074$ = SubLFiles.defparameter("S#43616", (SubLObject)module0652.$ic9$);
-        module0652.$g5075$ = SubLFiles.defparameter("S#43617", (SubLObject)module0652.$ic10$);
-        return (SubLObject)module0652.NIL;
+        $g5065$ = SubLFiles.defparameter("S#43607", (SubLObject)$ic0$);
+        $g5066$ = SubLFiles.defparameter("S#43608", (SubLObject)$ic1$);
+        $g5067$ = SubLFiles.defparameter("S#43609", (SubLObject)$ic2$);
+        $g5068$ = SubLFiles.defparameter("S#43610", (SubLObject)$ic3$);
+        $g5069$ = SubLFiles.defparameter("S#43611", (SubLObject)$ic4$);
+        $g5070$ = SubLFiles.defparameter("S#43612", (SubLObject)$ic5$);
+        $g5071$ = SubLFiles.defparameter("S#43613", (SubLObject)$ic6$);
+        $g5072$ = SubLFiles.defparameter("S#43614", (SubLObject)$ic7$);
+        $g5073$ = SubLFiles.defparameter("S#43615", (SubLObject)$ic8$);
+        $g5074$ = SubLFiles.defparameter("S#43616", (SubLObject)$ic9$);
+        $g5075$ = SubLFiles.defparameter("S#43617", (SubLObject)$ic10$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f39725() {
-        return (SubLObject)module0652.NIL;
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -73,35 +74,35 @@ public final class module0652 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0652();
-        module0652.$g5065$ = null;
-        module0652.$g5066$ = null;
-        module0652.$g5067$ = null;
-        module0652.$g5068$ = null;
-        module0652.$g5069$ = null;
-        module0652.$g5070$ = null;
-        module0652.$g5071$ = null;
-        module0652.$g5072$ = null;
-        module0652.$g5073$ = null;
-        module0652.$g5074$ = null;
-        module0652.$g5075$ = null;
-        $ic0$ = SubLObjectFactory.makeString("assert-sent ");
-        $ic1$ = SubLObjectFactory.makeString("assertion ");
-        $ic2$ = SubLObjectFactory.makeString("assert ");
-        $ic3$ = SubLObjectFactory.makeString("rule ");
-        $ic4$ = SubLObjectFactory.makeString("nat ");
-        $ic5$ = SubLObjectFactory.makeString("cons ");
-        $ic6$ = SubLObjectFactory.makeString("string ");
-        $ic7$ = SubLObjectFactory.makeString("edit ");
-        $ic8$ = SubLObjectFactory.makeString("noedit ");
-        $ic9$ = SubLObjectFactory.makeString("lex ");
-        $ic10$ = SubLObjectFactory.makeString("warn ");
+        $g5065$ = null;
+        $g5066$ = null;
+        $g5067$ = null;
+        $g5068$ = null;
+        $g5069$ = null;
+        $g5070$ = null;
+        $g5071$ = null;
+        $g5072$ = null;
+        $g5073$ = null;
+        $g5074$ = null;
+        $g5075$ = null;
+        $ic0$ = makeString("assert-sent ");
+        $ic1$ = makeString("assertion ");
+        $ic2$ = makeString("assert ");
+        $ic3$ = makeString("rule ");
+        $ic4$ = makeString("nat ");
+        $ic5$ = makeString("cons ");
+        $ic6$ = makeString("string ");
+        $ic7$ = makeString("edit ");
+        $ic8$ = makeString("noedit ");
+        $ic9$ = makeString("lex ");
+        $ic10$ = makeString("warn ");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0652.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 15 ms
 	
 	Decompiled with Procyon 0.5.32.

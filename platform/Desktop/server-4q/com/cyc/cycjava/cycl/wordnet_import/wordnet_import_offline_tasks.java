@@ -5,6 +5,7 @@ import com.cyc.cycjava.cycl.access_macros;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.cycjava.cycl.cb_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.cycjava.cycl.file_utilities;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;

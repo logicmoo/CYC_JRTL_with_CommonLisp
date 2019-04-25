@@ -70,6 +70,7 @@ import com.cyc.cycjava.cycl.relation_evaluation;
 import com.cyc.cycjava.cycl.mt_relevance_macros;
 import com.cyc.cycjava.cycl.string_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.sdbc;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

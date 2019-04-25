@@ -10,6 +10,7 @@ import com.cyc.cycjava.cycl.set_contents;
 import com.cyc.cycjava.cycl.numeric_quantification;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker_join_ordered;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.kb_mapping_utilities;
 import com.cyc.cycjava.cycl.somewhere_cache;
 import com.cyc.cycjava.cycl.fort_types_interface;

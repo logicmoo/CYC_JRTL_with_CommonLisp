@@ -2,6 +2,7 @@ package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -24,60 +25,60 @@ public final class module0523 extends SubLTranslatedFile
     private static final SubLList $ic6$;
     
     public static SubLObject f32661(final SubLObject var1, SubLObject var2) {
-        if (var2 == module0523.UNPROVIDED) {
-            var2 = (SubLObject)module0523.NIL;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)NIL;
         }
-        final SubLObject var3 = module0205.f13387(var1, (SubLObject)module0523.UNPROVIDED);
-        final SubLObject var4 = module0205.f13388(var1, (SubLObject)module0523.UNPROVIDED);
+        final SubLObject var3 = module0205.f13387(var1, (SubLObject)UNPROVIDED);
+        final SubLObject var4 = module0205.f13388(var1, (SubLObject)UNPROVIDED);
         return f32662(var3, var4);
     }
     
     public static SubLObject f32662(final SubLObject var3, final SubLObject var5) {
-        if (module0523.NIL != module0193.f12105(var5)) {
-            return module0523.$g3859$.getGlobalValue();
+        if (NIL != module0193.f12105(var5)) {
+            return $g3859$.getGlobalValue();
         }
-        if (module0523.NIL != module0202.f12925(var5)) {
-            if (var3.eql(module0523.$ic3$)) {
-                return module0411.f28638(var5, (SubLObject)module0523.$ic4$, (SubLObject)module0523.UNPROVIDED, (SubLObject)module0523.UNPROVIDED);
+        if (NIL != module0202.f12925(var5)) {
+            if (var3.eql($ic3$)) {
+                return module0411.f28638(var5, (SubLObject)$ic4$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
             }
         }
-        else if (module0523.NIL != module0202.f12595(var5) && var3.eql(module0523.$ic3$)) {
+        else if (NIL != module0202.f12595(var5) && var3.eql($ic3$)) {
             return module0522.f32650(var5);
         }
-        return (SubLObject)module0523.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f32663(final SubLObject var1, SubLObject var2) {
-        if (var2 == module0523.UNPROVIDED) {
-            var2 = (SubLObject)module0523.NIL;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)NIL;
         }
-        final SubLObject var3 = module0205.f13387(var1, (SubLObject)module0523.UNPROVIDED);
-        final SubLObject var4 = module0205.f13388(var1, (SubLObject)module0523.UNPROVIDED);
+        final SubLObject var3 = module0205.f13387(var1, (SubLObject)UNPROVIDED);
+        final SubLObject var4 = module0205.f13388(var1, (SubLObject)UNPROVIDED);
         final SubLObject var5 = module0373.f26143();
-        if (var3.eql(module0523.$ic3$)) {
+        if (var3.eql($ic3$)) {
             return module0522.f32654(var4, var5, var2);
         }
-        return (SubLObject)module0523.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f32664(final SubLObject var1, SubLObject var2) {
-        if (var2 == module0523.UNPROVIDED) {
-            var2 = (SubLObject)module0523.NIL;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)NIL;
         }
-        return module0523.$g3859$.getGlobalValue();
+        return $g3859$.getGlobalValue();
     }
     
     public static SubLObject f32665(final SubLObject var1, SubLObject var2) {
-        if (var2 == module0523.UNPROVIDED) {
-            var2 = (SubLObject)module0523.NIL;
+        if (var2 == UNPROVIDED) {
+            var2 = (SubLObject)NIL;
         }
-        final SubLObject var3 = module0205.f13387(var1, (SubLObject)module0523.UNPROVIDED);
-        final SubLObject var4 = module0205.f13388(var1, (SubLObject)module0523.UNPROVIDED);
+        final SubLObject var3 = module0205.f13387(var1, (SubLObject)UNPROVIDED);
+        final SubLObject var4 = module0205.f13388(var1, (SubLObject)UNPROVIDED);
         final SubLObject var5 = module0373.f26143();
-        if (var3.eql(module0523.$ic3$)) {
+        if (var3.eql($ic3$)) {
             return module0522.f32657(var4, var5, var2);
         }
-        return (SubLObject)module0523.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f32666() {
@@ -86,19 +87,19 @@ public final class module0523 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0523", "f32663", "S#36109", 1, 1, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0523", "f32664", "S#36110", 1, 1, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0523", "f32665", "S#36111", 1, 1, false);
-        return (SubLObject)module0523.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f32667() {
-        module0523.$g3859$ = SubLFiles.deflexical("S#36112", module0018.$g661$.getGlobalValue());
-        return (SubLObject)module0523.NIL;
+        $g3859$ = SubLFiles.deflexical("S#36112", module0018.$g661$.getGlobalValue());
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f32668() {
-        module0340.f22938(module0523.$ic0$);
-        module0340.f22941((SubLObject)module0523.$ic1$, (SubLObject)module0523.$ic2$);
-        module0340.f22941((SubLObject)module0523.$ic5$, (SubLObject)module0523.$ic6$);
-        return (SubLObject)module0523.NIL;
+        module0340.f22938($ic0$);
+        module0340.f22941((SubLObject)$ic1$, (SubLObject)$ic2$);
+        module0340.f22941((SubLObject)$ic5$, (SubLObject)$ic6$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -115,21 +116,21 @@ public final class module0523 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0523();
-        module0523.$g3859$ = null;
-        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sourceSentence"));
-        $ic1$ = SubLObjectFactory.makeKeyword("REMOVAL-SOURCE-SENTENCE-LOOKUP-POS");
-        $ic2$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("POS"), SubLObjectFactory.makeKeyword("PREDICATE"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sourceSentence")), SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sourceSentence")), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("OR"), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND"), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND")), (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#26073", "CYC")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING")))), SubLObjectFactory.makeKeyword("COST"), SubLObjectFactory.makeSymbol("S#36107", "CYC"), SubLObjectFactory.makeKeyword("COMPLETENESS"), SubLObjectFactory.makeKeyword("COMPLETE"), SubLObjectFactory.makeKeyword("EXPAND"), SubLObjectFactory.makeSymbol("S#36109", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("(#$sourceSentence <SOURCE> \n                      (:or\n                        (:fully-bound . :fully-bound)\n                        ((:test inference-predicate-p) . :anything)\n                        (#$and . :anything)\n                      ))"), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$sourceSentence #$NWS-KS (#$weather #$CityOfLosAngelesCA ?WHAT))") });
-        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheCurrentCycKB"));
-        $ic4$ = SubLObjectFactory.makeKeyword("POS");
-        $ic5$ = SubLObjectFactory.makeKeyword("REMOVAL-SOURCE-SENTENCE-CHECK-NEG");
-        $ic6$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("NEG"), SubLObjectFactory.makeKeyword("PREDICATE"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sourceSentence")), SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sourceSentence")), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("OR"), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND"), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND")), (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#26073", "CYC")), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND")))), SubLObjectFactory.makeKeyword("COST"), SubLObjectFactory.makeSymbol("S#36110", "CYC"), SubLObjectFactory.makeKeyword("COMPLETENESS"), SubLObjectFactory.makeKeyword("COMPLETE"), SubLObjectFactory.makeKeyword("EXPAND"), SubLObjectFactory.makeSymbol("S#36111", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("(#$not (#$sourceSentence <fully-bound> <fully-bound>))"), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$not (#$sourceSentence #$NWS-KS (#$weather #$CityOfLosAngelesCA #$Snowy)))") });
+        $g3859$ = null;
+        $ic0$ = constant_handles_oc.f8479((SubLObject)makeString("sourceSentence"));
+        $ic1$ = makeKeyword("REMOVAL-SOURCE-SENTENCE-LOOKUP-POS");
+        $ic2$ = ConsesLow.list(new SubLObject[] { makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), constant_handles_oc.f8479((SubLObject)makeString("sourceSentence")), makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("sourceSentence")), (SubLObject)makeKeyword("FULLY-BOUND"), (SubLObject)ConsesLow.list((SubLObject)makeKeyword("OR"), (SubLObject)ConsesLow.cons((SubLObject)makeKeyword("FULLY-BOUND"), (SubLObject)makeKeyword("FULLY-BOUND")), (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list((SubLObject)makeKeyword("TEST"), (SubLObject)makeSymbol("S#26073", "CYC")), (SubLObject)makeKeyword("ANYTHING")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)makeString("and")), (SubLObject)makeKeyword("ANYTHING")))), makeKeyword("COST"), makeSymbol("S#36107", "CYC"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("S#36109", "CYC"), makeKeyword("DOCUMENTATION"), makeString("(#$sourceSentence <SOURCE> \n                      (:or\n                        (:fully-bound . :fully-bound)\n                        ((:test inference-predicate-p) . :anything)\n                        (#$and . :anything)\n                      ))"), makeKeyword("EXAMPLE"), makeString("(#$sourceSentence #$NWS-KS (#$weather #$CityOfLosAngelesCA ?WHAT))") });
+        $ic3$ = constant_handles_oc.f8479((SubLObject)makeString("TheCurrentCycKB"));
+        $ic4$ = makeKeyword("POS");
+        $ic5$ = makeKeyword("REMOVAL-SOURCE-SENTENCE-CHECK-NEG");
+        $ic6$ = ConsesLow.list(new SubLObject[] { makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), constant_handles_oc.f8479((SubLObject)makeString("sourceSentence")), makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("sourceSentence")), (SubLObject)makeKeyword("FULLY-BOUND"), (SubLObject)ConsesLow.list((SubLObject)makeKeyword("OR"), (SubLObject)ConsesLow.cons((SubLObject)makeKeyword("FULLY-BOUND"), (SubLObject)makeKeyword("FULLY-BOUND")), (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list((SubLObject)makeKeyword("TEST"), (SubLObject)makeSymbol("S#26073", "CYC")), (SubLObject)makeKeyword("FULLY-BOUND")))), makeKeyword("COST"), makeSymbol("S#36110", "CYC"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("S#36111", "CYC"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$sourceSentence <fully-bound> <fully-bound>))"), makeKeyword("EXAMPLE"), makeString("(#$not (#$sourceSentence #$NWS-KS (#$weather #$CityOfLosAngelesCA #$Snowy)))") });
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0523.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 77 ms
 	
 	Decompiled with Procyon 0.5.32.

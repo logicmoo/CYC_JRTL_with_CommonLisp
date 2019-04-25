@@ -43,6 +43,7 @@ import com.cyc.cycjava.cycl.narts_high;
 import com.cyc.cycjava.cycl.el_utilities;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.sksi.query_sks.sksi_query_utilities;
 import com.cyc.cycjava.cycl.number_utilities;
 import com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate;

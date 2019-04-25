@@ -7,6 +7,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
@@ -62,55 +63,55 @@ public final class module0703 extends SubLTranslatedFile
     public static SubLObject f42864(final SubLObject var1, final SubLObject var2) {
         final SubLObject var3 = f42863(var1);
         final SubLObject var4 = f42863(var2);
-        return (var3.isString() && var4.isString()) ? Strings.stringL(var3, var4, (SubLObject)module0703.UNPROVIDED, (SubLObject)module0703.UNPROVIDED, (SubLObject)module0703.UNPROVIDED, (SubLObject)module0703.UNPROVIDED) : ((var3.isNumber() && var4.isNumber()) ? Numbers.numL(var3, var4) : Strings.stringL(print_high.princ_to_string(var3), print_high.princ_to_string(var4), (SubLObject)module0703.UNPROVIDED, (SubLObject)module0703.UNPROVIDED, (SubLObject)module0703.UNPROVIDED, (SubLObject)module0703.UNPROVIDED));
+        return (var3.isString() && var4.isString()) ? Strings.stringL(var3, var4, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED) : ((var3.isNumber() && var4.isNumber()) ? Numbers.numL(var3, var4) : Strings.stringL(print_high.princ_to_string(var3), print_high.princ_to_string(var4), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED));
     }
     
     public static SubLObject f42865(final SubLObject var5, final SubLObject var6) {
-        f42866(var5, var6, (SubLObject)module0703.ZERO_INTEGER);
-        return (SubLObject)module0703.NIL;
+        f42866(var5, var6, (SubLObject)ZERO_INTEGER);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f42867(final SubLObject var5) {
-        return (SubLObject)((var5.getClass() == $sX46902_native.class) ? module0703.T : module0703.NIL);
+        return (SubLObject)((var5.getClass() == $sX46902_native.class) ? T : NIL);
     }
     
     public static SubLObject f42868(final SubLObject var5) {
-        assert module0703.NIL != f42867(var5) : var5;
+        assert NIL != f42867(var5) : var5;
         return var5.getField2();
     }
     
     public static SubLObject f42869(final SubLObject var5, final SubLObject var8) {
-        assert module0703.NIL != f42867(var5) : var5;
+        assert NIL != f42867(var5) : var5;
         return var5.setField2(var8);
     }
     
     public static SubLObject f42870(SubLObject var9) {
-        if (var9 == module0703.UNPROVIDED) {
-            var9 = (SubLObject)module0703.NIL;
+        if (var9 == UNPROVIDED) {
+            var9 = (SubLObject)NIL;
         }
         final SubLObject var10 = (SubLObject)new $sX46902_native();
         SubLObject var11;
         SubLObject var12;
         SubLObject var13;
         SubLObject var14;
-        for (var11 = (SubLObject)module0703.NIL, var11 = var9; module0703.NIL != var11; var11 = conses_high.cddr(var11)) {
+        for (var11 = (SubLObject)NIL, var11 = var9; NIL != var11; var11 = conses_high.cddr(var11)) {
             var12 = var11.first();
             var13 = conses_high.cadr(var11);
             var14 = var12;
-            if (var14.eql((SubLObject)module0703.$ic11$)) {
+            if (var14.eql((SubLObject)$ic11$)) {
                 f42869(var10, var13);
             }
             else {
-                Errors.error((SubLObject)module0703.$ic12$, var12);
+                Errors.error((SubLObject)$ic12$, var12);
             }
         }
         return var10;
     }
     
     public static SubLObject f42871(final SubLObject var15, final SubLObject var16) {
-        Functions.funcall(var16, var15, (SubLObject)module0703.$ic13$, (SubLObject)module0703.$ic14$, (SubLObject)module0703.ONE_INTEGER);
-        Functions.funcall(var16, var15, (SubLObject)module0703.$ic15$, (SubLObject)module0703.$ic11$, f42868(var15));
-        Functions.funcall(var16, var15, (SubLObject)module0703.$ic16$, (SubLObject)module0703.$ic14$, (SubLObject)module0703.ONE_INTEGER);
+        Functions.funcall(var16, var15, (SubLObject)$ic13$, (SubLObject)$ic14$, (SubLObject)ONE_INTEGER);
+        Functions.funcall(var16, var15, (SubLObject)$ic15$, (SubLObject)$ic11$, f42868(var15));
+        Functions.funcall(var16, var15, (SubLObject)$ic16$, (SubLObject)$ic14$, (SubLObject)ONE_INTEGER);
         return var15;
     }
     
@@ -119,23 +120,23 @@ public final class module0703 extends SubLTranslatedFile
     }
     
     public static SubLObject f42866(final SubLObject var17, final SubLObject var6, final SubLObject var18) {
-        PrintLow.format(var6, (SubLObject)module0703.$ic18$, f42868(var17));
+        PrintLow.format(var6, (SubLObject)$ic18$, f42868(var17));
         return var17;
     }
     
     public static SubLObject f42873(final SubLObject var19) {
-        final SubLObject var20 = f42870((SubLObject)module0703.UNPROVIDED);
+        final SubLObject var20 = f42870((SubLObject)UNPROVIDED);
         f42869(var20, var19);
         return var20;
     }
     
     public static SubLObject f42874(final SubLObject var20) {
-        assert module0703.NIL != f42867(var20) : var20;
+        assert NIL != f42867(var20) : var20;
         return print_high.princ_to_string(f42868(var20));
     }
     
     public static SubLObject f42863(final SubLObject var20) {
-        assert module0703.NIL != f42867(var20) : var20;
+        assert NIL != f42867(var20) : var20;
         return f42868(var20);
     }
     
@@ -164,23 +165,23 @@ public final class module0703 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0703", "f42863", "S#46912", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0703", "f42875", "S#46913", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0703", "f42876", "S#46914", 1, 0, false);
-        return (SubLObject)module0703.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f42878() {
-        module0703.$g5515$ = SubLFiles.defconstant("S#46915", (SubLObject)module0703.$ic0$);
-        return (SubLObject)module0703.NIL;
+        $g5515$ = SubLFiles.defconstant("S#46915", (SubLObject)$ic0$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f42879() {
-        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), module0703.$g5515$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0703.$ic7$));
-        SubLSpecialOperatorDeclarations.proclaim((SubLObject)module0703.$ic8$);
-        Structures.def_csetf((SubLObject)module0703.$ic9$, (SubLObject)module0703.$ic10$);
-        Equality.identity((SubLObject)module0703.$ic0$);
-        Structures.register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), module0703.$g5515$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0703.$ic17$));
-        module0012.f419((SubLObject)module0703.$ic6$);
-        Structures.register_method(Sxhash.$sxhash_method_table$.getGlobalValue(), module0703.$g5515$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0703.$ic19$));
-        return (SubLObject)module0703.NIL;
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $g5515$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic7$));
+        SubLSpecialOperatorDeclarations.proclaim((SubLObject)$ic8$);
+        Structures.def_csetf((SubLObject)$ic9$, (SubLObject)$ic10$);
+        Equality.identity((SubLObject)$ic0$);
+        Structures.register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $g5515$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic17$));
+        module0012.f419((SubLObject)$ic6$);
+        Structures.register_method(Sxhash.$sxhash_method_table$.getGlobalValue(), $g5515$.getGlobalValue(), Symbols.symbol_function((SubLObject)$ic19$));
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -197,27 +198,27 @@ public final class module0703 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0703();
-        module0703.$g5515$ = null;
-        $ic0$ = SubLObjectFactory.makeSymbol("S#46902", "CYC");
-        $ic1$ = SubLObjectFactory.makeSymbol("S#46522", "CYC");
-        $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#1519", "CYC"));
-        $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ID"));
-        $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#46905", "CYC"));
-        $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#46906", "CYC"));
-        $ic6$ = SubLObjectFactory.makeSymbol("S#46910", "CYC");
-        $ic7$ = SubLObjectFactory.makeSymbol("S#46904", "CYC");
-        $ic8$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OPTIMIZE-FUNCALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#46522", "CYC"));
-        $ic9$ = SubLObjectFactory.makeSymbol("S#46905", "CYC");
-        $ic10$ = SubLObjectFactory.makeSymbol("S#46906", "CYC");
-        $ic11$ = SubLObjectFactory.makeKeyword("ID");
-        $ic12$ = SubLObjectFactory.makeString("Invalid slot ~S for construction function");
-        $ic13$ = SubLObjectFactory.makeKeyword("BEGIN");
-        $ic14$ = SubLObjectFactory.makeSymbol("S#46907", "CYC");
-        $ic15$ = SubLObjectFactory.makeKeyword("SLOT");
-        $ic16$ = SubLObjectFactory.makeKeyword("END");
-        $ic17$ = SubLObjectFactory.makeSymbol("S#46909", "CYC");
-        $ic18$ = SubLObjectFactory.makeString("<RDF-BLANK-NODE ~S>");
-        $ic19$ = SubLObjectFactory.makeSymbol("S#46913", "CYC");
+        $g5515$ = null;
+        $ic0$ = makeSymbol("S#46902", "CYC");
+        $ic1$ = makeSymbol("S#46522", "CYC");
+        $ic2$ = ConsesLow.list((SubLObject)makeSymbol("S#1519", "CYC"));
+        $ic3$ = ConsesLow.list((SubLObject)makeKeyword("ID"));
+        $ic4$ = ConsesLow.list((SubLObject)makeSymbol("S#46905", "CYC"));
+        $ic5$ = ConsesLow.list((SubLObject)makeSymbol("S#46906", "CYC"));
+        $ic6$ = makeSymbol("S#46910", "CYC");
+        $ic7$ = makeSymbol("S#46904", "CYC");
+        $ic8$ = ConsesLow.list((SubLObject)makeSymbol("OPTIMIZE-FUNCALL"), (SubLObject)makeSymbol("S#46522", "CYC"));
+        $ic9$ = makeSymbol("S#46905", "CYC");
+        $ic10$ = makeSymbol("S#46906", "CYC");
+        $ic11$ = makeKeyword("ID");
+        $ic12$ = makeString("Invalid slot ~S for construction function");
+        $ic13$ = makeKeyword("BEGIN");
+        $ic14$ = makeSymbol("S#46907", "CYC");
+        $ic15$ = makeKeyword("SLOT");
+        $ic16$ = makeKeyword("END");
+        $ic17$ = makeSymbol("S#46909", "CYC");
+        $ic18$ = makeString("<RDF-BLANK-NODE ~S>");
+        $ic19$ = makeSymbol("S#46913", "CYC");
     }
     
     public static final class $sX46902_native extends SubLStructNative
@@ -242,7 +243,7 @@ public final class module0703 extends SubLTranslatedFile
         }
         
         static {
-            structDecl = Structures.makeStructDeclNative((Class)$sX46902_native.class, module0703.$ic0$, module0703.$ic1$, module0703.$ic2$, module0703.$ic3$, new String[] { "$id" }, module0703.$ic4$, module0703.$ic5$, module0703.$ic6$);
+            structDecl = Structures.makeStructDeclNative((Class)$sX46902_native.class, $ic0$, $ic1$, $ic2$, $ic3$, new String[] { "$id" }, $ic4$, $ic5$, $ic6$);
         }
     }
     
@@ -253,7 +254,7 @@ public final class module0703 extends SubLTranslatedFile
         }
         
         public SubLObject processItem(final SubLObject var7) {
-            return module0703.f42867(var7);
+            return f42867(var7);
         }
     }
 }
@@ -261,7 +262,7 @@ public final class module0703 extends SubLTranslatedFile
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0703.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 68 ms
 	
 	Decompiled with Procyon 0.5.32.

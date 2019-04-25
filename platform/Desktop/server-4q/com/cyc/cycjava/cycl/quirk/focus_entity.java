@@ -16,6 +16,7 @@ import com.cyc.cycjava.cycl.object;
 import com.cyc.cycjava.cycl.collection_defns;
 import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.cycjava.cycl.number_utilities;
 import com.cyc.cycjava.cycl.subl_promotions;

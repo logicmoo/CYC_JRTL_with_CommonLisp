@@ -46,6 +46,7 @@ import com.cyc.cycjava.cycl.hl_supports;
 import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.cycjava.cycl.inference.harness.removal_module_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.inference.inference_trampolines;
 import com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_sks_predicate_indexing;
 import com.cyc.cycjava.cycl.arguments;

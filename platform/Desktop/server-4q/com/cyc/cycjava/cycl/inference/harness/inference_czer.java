@@ -18,6 +18,7 @@ import com.cyc.cycjava.cycl.bindings;
 import com.cyc.cycjava.cycl.transform_list_utilities;
 import com.cyc.cycjava.cycl.fort_types_interface;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.cycjava.cycl.fi;
 import com.cyc.cycjava.cycl.assertion_handles;

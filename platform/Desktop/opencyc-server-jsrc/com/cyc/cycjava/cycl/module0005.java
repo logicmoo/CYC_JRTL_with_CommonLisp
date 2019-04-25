@@ -3,6 +3,7 @@ package com.cyc.cycjava.cycl;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic;
@@ -327,113 +328,113 @@ public final class module0005 extends SubLTranslatedFile
     public static SubLObject f119(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic1$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic1$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic2$, (SubLObject)module0005.NIL, (SubLObject)ConsesLow.list(var5), ConsesLow.append(var6, (SubLObject)module0005.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic2$, (SubLObject)NIL, (SubLObject)ConsesLow.list(var5), ConsesLow.append(var6, (SubLObject)NIL));
     }
     
     public static SubLObject f120(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic1$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic1$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic0$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic4$, var5), ConsesLow.append(var6, (SubLObject)module0005.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic0$, (SubLObject)ConsesLow.list((SubLObject)$ic4$, var5), ConsesLow.append(var6, (SubLObject)NIL));
     }
     
     public static SubLObject f121(final SubLObject var1, final SubLObject var2) {
         final SubLObject var3 = var1.rest();
         final SubLObject var5;
         final SubLObject var4 = var5 = var3;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic3$, (SubLObject)module0005.T, ConsesLow.append(var5, (SubLObject)module0005.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic3$, (SubLObject)T, ConsesLow.append(var5, (SubLObject)NIL));
     }
     
     public static SubLObject f122(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic7$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic7$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic7$);
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic7$);
         var6 = var4.first();
         var4 = var4.rest();
-        SubLObject var7 = (SubLObject)module0005.NIL;
+        SubLObject var7 = (SubLObject)NIL;
         SubLObject var8 = var4;
-        SubLObject var9 = (SubLObject)module0005.NIL;
-        SubLObject var18_19 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var8) {
-            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)module0005.$ic7$);
+        SubLObject var9 = (SubLObject)NIL;
+        SubLObject var18_19 = (SubLObject)NIL;
+        while (NIL != var8) {
+            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)$ic7$);
             var18_19 = var8.first();
             var8 = var8.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)module0005.$ic7$);
-            if (module0005.NIL == conses_high.member(var18_19, (SubLObject)module0005.$ic8$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var9 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)$ic7$);
+            if (NIL == conses_high.member(var18_19, (SubLObject)$ic8$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var9 = (SubLObject)T;
             }
-            if (var18_19 == module0005.$ic9$) {
+            if (var18_19 == $ic9$) {
                 var7 = var8.first();
             }
             var8 = var8.rest();
         }
-        if (module0005.NIL != var9 && module0005.NIL == var7) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic7$);
+        if (NIL != var9 && NIL == var7) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic7$);
         }
-        final SubLObject var10 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic10$, var4);
-        final SubLObject var11 = (SubLObject)((module0005.NIL != var10) ? conses_high.cadr(var10) : module0005.ZERO_INTEGER);
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic11$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.NIL);
-        final SubLObject var14 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic12$, var4);
-        final SubLObject var15 = (SubLObject)((module0005.NIL != var14) ? conses_high.cadr(var14) : module0005.ONE_INTEGER);
-        final SubLObject var16 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var17 = (SubLObject)((module0005.NIL != var16) ? conses_high.cadr(var16) : module0005.NIL);
+        final SubLObject var10 = cdestructuring_bind.property_list_member((SubLObject)$ic10$, var4);
+        final SubLObject var11 = (SubLObject)((NIL != var10) ? conses_high.cadr(var10) : ZERO_INTEGER);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic11$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : NIL);
+        final SubLObject var14 = cdestructuring_bind.property_list_member((SubLObject)$ic12$, var4);
+        final SubLObject var15 = (SubLObject)((NIL != var14) ? conses_high.cadr(var14) : ONE_INTEGER);
+        final SubLObject var16 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var17 = (SubLObject)((NIL != var16) ? conses_high.cadr(var16) : NIL);
         final SubLObject var18;
         var4 = (var18 = var5);
-        if (module0005.ZERO_INTEGER.eql(var11) && var13.isInteger() && !var13.isNegative() && module0005.ONE_INTEGER.eql(var15) && module0005.NIL == var17) {
-            return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic14$, (SubLObject)ConsesLow.list(var6, var13), ConsesLow.append(var18, (SubLObject)module0005.NIL));
+        if (ZERO_INTEGER.eql(var11) && var13.isInteger() && !var13.isNegative() && ONE_INTEGER.eql(var15) && NIL == var17) {
+            return (SubLObject)ConsesLow.listS((SubLObject)$ic14$, (SubLObject)ConsesLow.list(var6, var13), ConsesLow.append(var18, (SubLObject)NIL));
         }
-        SubLObject var19 = (SubLObject)module0005.NIL;
-        SubLObject var20 = (SubLObject)module0005.NIL;
-        SubLObject var21 = (SubLObject)module0005.NIL;
-        SubLObject var22 = (SubLObject)module0005.NIL;
-        SubLObject var23 = (SubLObject)module0005.NIL;
-        if (module0005.ONE_INTEGER.eql(var15)) {
-            var20 = (SubLObject)module0005.ONE_INTEGER;
-            var21 = (SubLObject)ConsesLow.list((SubLObject)module0005.$ic15$, var6);
+        SubLObject var19 = (SubLObject)NIL;
+        SubLObject var20 = (SubLObject)NIL;
+        SubLObject var21 = (SubLObject)NIL;
+        SubLObject var22 = (SubLObject)NIL;
+        SubLObject var23 = (SubLObject)NIL;
+        if (ONE_INTEGER.eql(var15)) {
+            var20 = (SubLObject)ONE_INTEGER;
+            var21 = (SubLObject)ConsesLow.list((SubLObject)$ic15$, var6);
         }
         else if (var15.isAtom()) {
             var20 = var15;
-            var21 = (SubLObject)ConsesLow.list((SubLObject)module0005.$ic16$, var6, var15);
+            var21 = (SubLObject)ConsesLow.list((SubLObject)$ic16$, var6, var15);
         }
         else {
-            final SubLObject var24 = (SubLObject)module0005.$ic17$;
+            final SubLObject var24 = (SubLObject)$ic17$;
             var19 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(var24, var15), var19);
             var20 = var24;
-            var21 = (SubLObject)ConsesLow.list((SubLObject)module0005.$ic16$, var6, var24);
+            var21 = (SubLObject)ConsesLow.list((SubLObject)$ic16$, var6, var24);
         }
-        if (module0005.NIL != var13) {
-            final SubLObject var25 = (SubLObject)module0005.$ic18$;
+        if (NIL != var13) {
+            final SubLObject var25 = (SubLObject)$ic18$;
             var19 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(var25, var13), var19);
-            var22 = (SubLObject)ConsesLow.list((SubLObject)module0005.$ic19$, var6, var20, var25);
+            var22 = (SubLObject)ConsesLow.list((SubLObject)$ic19$, var6, var20, var25);
         }
-        if (module0005.NIL != var17) {
-            if (module0005.NIL != var22) {
-                var22 = (SubLObject)ConsesLow.list((SubLObject)module0005.$ic20$, var17, var22);
+        if (NIL != var17) {
+            if (NIL != var22) {
+                var22 = (SubLObject)ConsesLow.list((SubLObject)$ic20$, var17, var22);
             }
             else {
                 var22 = var17;
             }
         }
-        var23 = (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, var11, var21)), (SubLObject)ConsesLow.list(var22), ConsesLow.append(var18, (SubLObject)module0005.NIL));
-        if (module0005.NIL != var19) {
-            var23 = (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, var19, var23);
+        var23 = (SubLObject)ConsesLow.listS((SubLObject)$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, var11, var21)), (SubLObject)ConsesLow.list(var22), ConsesLow.append(var18, (SubLObject)NIL));
+        if (NIL != var19) {
+            var23 = (SubLObject)ConsesLow.list((SubLObject)$ic21$, var19, var23);
         }
-        if (module0005.NIL != var17) {
-            var23 = (SubLObject)ConsesLow.list((SubLObject)module0005.$ic22$, var17, var23);
+        if (NIL != var17) {
+            var23 = (SubLObject)ConsesLow.list((SubLObject)$ic22$, var17, var23);
         }
         return var23;
     }
@@ -441,32 +442,32 @@ public final class module0005 extends SubLTranslatedFile
     public static SubLObject f123(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic23$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic23$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic23$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic23$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic23$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic23$);
         var7 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL != var4) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic23$);
-            return (SubLObject)module0005.NIL;
+        if (NIL != var4) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic23$);
+            return (SubLObject)NIL;
         }
         if (!var6.isNumber()) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic27$, var5, var6, var7);
+            return (SubLObject)ConsesLow.list((SubLObject)$ic27$, var5, var6, var7);
         }
         if (var6.isPositive()) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic24$, var5, var7);
+            return (SubLObject)ConsesLow.list((SubLObject)$ic24$, var5, var7);
         }
         if (var6.isNegative()) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic25$, var5, var7);
+            return (SubLObject)ConsesLow.list((SubLObject)$ic25$, var5, var7);
         }
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic26$, var5, var7);
+        return (SubLObject)ConsesLow.list((SubLObject)$ic26$, var5, var7);
     }
     
     public static SubLObject f124(final SubLObject var37, final SubLObject var25, final SubLObject var23) {
@@ -482,1004 +483,1004 @@ public final class module0005 extends SubLTranslatedFile
     public static SubLObject f125(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic29$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic29$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic29$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic29$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic29$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic29$);
         var7 = var4.first();
         var4 = var4.rest();
-        SubLObject var8 = (SubLObject)module0005.NIL;
+        SubLObject var8 = (SubLObject)NIL;
         SubLObject var9 = var4;
-        SubLObject var10 = (SubLObject)module0005.NIL;
-        SubLObject var46_47 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var9) {
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic29$);
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var46_47 = (SubLObject)NIL;
+        while (NIL != var9) {
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic29$);
             var46_47 = var9.first();
             var9 = var9.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic29$);
-            if (module0005.NIL == conses_high.member(var46_47, (SubLObject)module0005.$ic30$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var10 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic29$);
+            if (NIL == conses_high.member(var46_47, (SubLObject)$ic30$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var10 = (SubLObject)T;
             }
-            if (var46_47 == module0005.$ic9$) {
+            if (var46_47 == $ic9$) {
                 var8 = var9.first();
             }
             var9 = var9.rest();
         }
-        if (module0005.NIL != var10 && module0005.NIL == var8) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic29$);
+        if (NIL != var10 && NIL == var8) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic29$);
         }
-        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var12 = (SubLObject)((module0005.NIL != var11) ? conses_high.cadr(var11) : module0005.NIL);
-        final SubLObject var13 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic31$, var4);
-        final SubLObject var14 = (SubLObject)((module0005.NIL != var13) ? conses_high.cadr(var13) : module0005.NIL);
+        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var12 = (SubLObject)((NIL != var11) ? conses_high.cadr(var11) : NIL);
+        final SubLObject var13 = cdestructuring_bind.property_list_member((SubLObject)$ic31$, var4);
+        final SubLObject var14 = (SubLObject)((NIL != var13) ? conses_high.cadr(var13) : NIL);
         final SubLObject var15;
         var4 = (var15 = var5);
-        if (module0005.NIL != var14) {
-            final SubLObject var16 = (SubLObject)module0005.$ic32$;
-            final SubLObject var17 = (SubLObject)module0005.$ic33$;
-            final SubLObject var18 = (SubLObject)module0005.$ic34$;
-            final SubLObject var19 = (SubLObject)module0005.$ic35$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var16, var14), (SubLObject)ConsesLow.list(var17, var7), reader.bq_cons(var18, (SubLObject)module0005.$ic36$), (SubLObject)ConsesLow.list(var19, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic37$, var17))), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic38$, var16, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic28$, (SubLObject)ConsesLow.list(var6, var17, (SubLObject)module0005.$ic13$, var12), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic39$, var18, var19), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic40$, var18), ConsesLow.append(var15, (SubLObject)module0005.NIL))));
+        if (NIL != var14) {
+            final SubLObject var16 = (SubLObject)$ic32$;
+            final SubLObject var17 = (SubLObject)$ic33$;
+            final SubLObject var18 = (SubLObject)$ic34$;
+            final SubLObject var19 = (SubLObject)$ic35$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var16, var14), (SubLObject)ConsesLow.list(var17, var7), reader.bq_cons(var18, (SubLObject)$ic36$), (SubLObject)ConsesLow.list(var19, (SubLObject)ConsesLow.list((SubLObject)$ic37$, var17))), (SubLObject)ConsesLow.list((SubLObject)$ic38$, var16, (SubLObject)ConsesLow.listS((SubLObject)$ic28$, (SubLObject)ConsesLow.list(var6, var17, (SubLObject)$ic13$, var12), (SubLObject)ConsesLow.list((SubLObject)$ic39$, var18, var19), (SubLObject)ConsesLow.list((SubLObject)$ic40$, var18), ConsesLow.append(var15, (SubLObject)NIL))));
         }
-        if (module0005.NIL != var12) {
-            final SubLObject var55_56 = (SubLObject)module0005.$ic41$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var55_56, var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic42$, var55_56))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0005.$ic20$, var12, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic43$, var55_56))), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic44$, var55_56))), ConsesLow.append(var15, (SubLObject)module0005.NIL)));
+        if (NIL != var12) {
+            final SubLObject var55_56 = (SubLObject)$ic41$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var55_56, var7, (SubLObject)ConsesLow.list((SubLObject)$ic42$, var55_56))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic20$, var12, (SubLObject)ConsesLow.list((SubLObject)$ic43$, var55_56))), (SubLObject)ConsesLow.listS((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, (SubLObject)ConsesLow.list((SubLObject)$ic44$, var55_56))), ConsesLow.append(var15, (SubLObject)NIL)));
         }
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic45$, (SubLObject)ConsesLow.list(var6, var7), ConsesLow.append(var15, (SubLObject)module0005.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic45$, (SubLObject)ConsesLow.list(var6, var7), ConsesLow.append(var15, (SubLObject)NIL));
     }
     
     public static SubLObject f126(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic47$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic47$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic47$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic47$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic47$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic47$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic47$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic47$);
         var8 = var4.first();
         var4 = var4.rest();
-        SubLObject var9 = (SubLObject)module0005.NIL;
+        SubLObject var9 = (SubLObject)NIL;
         SubLObject var10 = var4;
-        SubLObject var11 = (SubLObject)module0005.NIL;
-        SubLObject var65_66 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var10) {
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic47$);
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var65_66 = (SubLObject)NIL;
+        while (NIL != var10) {
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic47$);
             var65_66 = var10.first();
             var10 = var10.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic47$);
-            if (module0005.NIL == conses_high.member(var65_66, (SubLObject)module0005.$ic48$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var11 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic47$);
+            if (NIL == conses_high.member(var65_66, (SubLObject)$ic48$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var11 = (SubLObject)T;
             }
-            if (var65_66 == module0005.$ic9$) {
+            if (var65_66 == $ic9$) {
                 var9 = var10.first();
             }
             var10 = var10.rest();
         }
-        if (module0005.NIL != var11 && module0005.NIL == var9) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic47$);
+        if (NIL != var11 && NIL == var9) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic47$);
         }
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.NIL);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : NIL);
         final SubLObject var14;
         var4 = (var14 = var5);
-        final SubLObject var15 = (SubLObject)module0005.$ic49$;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var15, var8, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic42$, var15)), (SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic44$, var15), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic44$, var15)), (SubLObject)ConsesLow.list(var6, (SubLObject)module0005.ZERO_INTEGER, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic15$, var6))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0005.$ic20$, var13, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic43$, var15))), ConsesLow.append(var14, (SubLObject)module0005.NIL));
+        final SubLObject var15 = (SubLObject)$ic49$;
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var15, var8, (SubLObject)ConsesLow.list((SubLObject)$ic42$, var15)), (SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)$ic44$, var15), (SubLObject)ConsesLow.list((SubLObject)$ic44$, var15)), (SubLObject)ConsesLow.list(var6, (SubLObject)ZERO_INTEGER, (SubLObject)ConsesLow.list((SubLObject)$ic15$, var6))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic20$, var13, (SubLObject)ConsesLow.list((SubLObject)$ic43$, var15))), ConsesLow.append(var14, (SubLObject)NIL));
     }
     
     public static SubLObject f127(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic51$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic51$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic51$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic51$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic51$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic51$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic51$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic51$);
         var8 = var4.first();
         var4 = var4.rest();
-        SubLObject var9 = (SubLObject)module0005.NIL;
+        SubLObject var9 = (SubLObject)NIL;
         SubLObject var10 = var4;
-        SubLObject var11 = (SubLObject)module0005.NIL;
-        SubLObject var75_76 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var10) {
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic51$);
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var75_76 = (SubLObject)NIL;
+        while (NIL != var10) {
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic51$);
             var75_76 = var10.first();
             var10 = var10.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic51$);
-            if (module0005.NIL == conses_high.member(var75_76, (SubLObject)module0005.$ic52$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var11 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic51$);
+            if (NIL == conses_high.member(var75_76, (SubLObject)$ic52$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var11 = (SubLObject)T;
             }
-            if (var75_76 == module0005.$ic9$) {
+            if (var75_76 == $ic9$) {
                 var9 = var10.first();
             }
             var10 = var10.rest();
         }
-        if (module0005.NIL != var11 && module0005.NIL == var9) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic51$);
+        if (NIL != var11 && NIL == var9) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic51$);
         }
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic53$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.NIL);
-        final SubLObject var14 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var15 = (SubLObject)((module0005.NIL != var14) ? conses_high.cadr(var14) : module0005.NIL);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic53$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : NIL);
+        final SubLObject var14 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var15 = (SubLObject)((NIL != var14) ? conses_high.cadr(var14) : NIL);
         final SubLObject var16;
         var4 = (var16 = var5);
-        if (module0005.NIL != var13) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list(reader.bq_cons(var13, (SubLObject)module0005.$ic36$)), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic50$, (SubLObject)ConsesLow.list(var6, var7, var8, (SubLObject)module0005.$ic13$, var15), ConsesLow.append(var16, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0005.$ic40$, var13)))));
+        if (NIL != var13) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list(reader.bq_cons(var13, (SubLObject)$ic36$)), (SubLObject)ConsesLow.listS((SubLObject)$ic50$, (SubLObject)ConsesLow.list(var6, var7, var8, (SubLObject)$ic13$, var15), ConsesLow.append(var16, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic40$, var13)))));
         }
-        final SubLObject var17 = (SubLObject)module0005.$ic54$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic28$, (SubLObject)ConsesLow.list(var17, var8, (SubLObject)module0005.$ic13$, var15), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic55$, reader.bq_cons(var6, var7), var17, ConsesLow.append(var16, (SubLObject)module0005.NIL)));
+        final SubLObject var17 = (SubLObject)$ic54$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic28$, (SubLObject)ConsesLow.list(var17, var8, (SubLObject)$ic13$, var15), (SubLObject)ConsesLow.listS((SubLObject)$ic55$, reader.bq_cons(var6, var7), var17, ConsesLow.append(var16, (SubLObject)NIL)));
     }
     
     public static SubLObject f128(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic57$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic57$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic57$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic57$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic57$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic57$);
         var7 = var4.first();
         var4 = var4.rest();
-        SubLObject var8 = (SubLObject)module0005.NIL;
+        SubLObject var8 = (SubLObject)NIL;
         SubLObject var9 = var4;
-        SubLObject var10 = (SubLObject)module0005.NIL;
-        SubLObject var87_88 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var9) {
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic57$);
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var87_88 = (SubLObject)NIL;
+        while (NIL != var9) {
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic57$);
             var87_88 = var9.first();
             var9 = var9.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic57$);
-            if (module0005.NIL == conses_high.member(var87_88, (SubLObject)module0005.$ic48$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var10 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic57$);
+            if (NIL == conses_high.member(var87_88, (SubLObject)$ic48$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var10 = (SubLObject)T;
             }
-            if (var87_88 == module0005.$ic9$) {
+            if (var87_88 == $ic9$) {
                 var8 = var9.first();
             }
             var9 = var9.rest();
         }
-        if (module0005.NIL != var10 && module0005.NIL == var8) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic57$);
+        if (NIL != var10 && NIL == var8) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic57$);
         }
-        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var12 = (SubLObject)((module0005.NIL != var11) ? conses_high.cadr(var11) : module0005.NIL);
+        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var12 = (SubLObject)((NIL != var11) ? conses_high.cadr(var11) : NIL);
         final SubLObject var13;
         var4 = (var13 = var5);
-        final SubLObject var14 = (SubLObject)module0005.$ic58$;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic50$, (SubLObject)ConsesLow.list(var14, var6, var7, (SubLObject)module0005.$ic13$, var12), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var14), ConsesLow.append(var13, (SubLObject)module0005.NIL));
+        final SubLObject var14 = (SubLObject)$ic58$;
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic50$, (SubLObject)ConsesLow.list(var14, var6, var7, (SubLObject)$ic13$, var12), (SubLObject)ConsesLow.list((SubLObject)$ic59$, var14), ConsesLow.append(var13, (SubLObject)NIL));
     }
     
     public static SubLObject f129(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic61$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic61$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic61$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic61$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic61$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic61$);
         var7 = var4.first();
         var4 = var4.rest();
-        SubLObject var8 = (SubLObject)module0005.NIL;
+        SubLObject var8 = (SubLObject)NIL;
         SubLObject var9 = var4;
-        SubLObject var10 = (SubLObject)module0005.NIL;
-        SubLObject var96_97 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var9) {
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic61$);
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var96_97 = (SubLObject)NIL;
+        while (NIL != var9) {
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic61$);
             var96_97 = var9.first();
             var9 = var9.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic61$);
-            if (module0005.NIL == conses_high.member(var96_97, (SubLObject)module0005.$ic48$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var10 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic61$);
+            if (NIL == conses_high.member(var96_97, (SubLObject)$ic48$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var10 = (SubLObject)T;
             }
-            if (var96_97 == module0005.$ic9$) {
+            if (var96_97 == $ic9$) {
                 var8 = var9.first();
             }
             var9 = var9.rest();
         }
-        if (module0005.NIL != var10 && module0005.NIL == var8) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic61$);
+        if (NIL != var10 && NIL == var8) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic61$);
         }
-        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var12 = (SubLObject)((module0005.NIL != var11) ? conses_high.cadr(var11) : module0005.NIL);
+        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var12 = (SubLObject)((NIL != var11) ? conses_high.cadr(var11) : NIL);
         final SubLObject var13;
         var4 = (var13 = var5);
-        final SubLObject var14 = (SubLObject)module0005.$ic62$;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic50$, (SubLObject)ConsesLow.list(var6, var14, var7, (SubLObject)module0005.$ic13$, var12), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var14), ConsesLow.append(var13, (SubLObject)module0005.NIL));
+        final SubLObject var14 = (SubLObject)$ic62$;
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic50$, (SubLObject)ConsesLow.list(var6, var14, var7, (SubLObject)$ic13$, var12), (SubLObject)ConsesLow.list((SubLObject)$ic59$, var14), ConsesLow.append(var13, (SubLObject)NIL));
     }
     
     public static SubLObject f130(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic64$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic64$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic64$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic64$);
         var6 = var4.first();
         var4 = var4.rest();
-        final SubLObject var7 = (SubLObject)(var4.isCons() ? var4.first() : module0005.EQL);
-        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)module0005.$ic64$);
+        final SubLObject var7 = (SubLObject)(var4.isCons() ? var4.first() : EQL);
+        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)$ic64$);
         var4 = var4.rest();
-        final SubLObject var8 = (SubLObject)(var4.isCons() ? var4.first() : module0005.ONE_INTEGER);
-        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)module0005.$ic64$);
+        final SubLObject var8 = (SubLObject)(var4.isCons() ? var4.first() : ONE_INTEGER);
+        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)$ic64$);
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            final SubLObject var9 = (SubLObject)module0005.$ic65$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var9, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic66$, var5, var6, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic67$, var7)))), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic22$, var9, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic68$, var9, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic69$, var5, (SubLObject)module0005.$ic36$)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic70$, var9, var6)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic71$, var9, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic16$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic42$, var9), var8)));
+        if (NIL == var4) {
+            final SubLObject var9 = (SubLObject)$ic65$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var9, (SubLObject)ConsesLow.list((SubLObject)$ic66$, var5, var6, (SubLObject)ConsesLow.list((SubLObject)$ic67$, var7)))), (SubLObject)ConsesLow.list((SubLObject)$ic22$, var9, (SubLObject)ConsesLow.list((SubLObject)$ic68$, var9, (SubLObject)ConsesLow.listS((SubLObject)$ic69$, var5, (SubLObject)$ic36$)), (SubLObject)ConsesLow.list((SubLObject)$ic70$, var9, var6)), (SubLObject)ConsesLow.list((SubLObject)$ic71$, var9, (SubLObject)ConsesLow.list((SubLObject)$ic16$, (SubLObject)ConsesLow.list((SubLObject)$ic42$, var9), var8)));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic64$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic64$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f131(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic73$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic73$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic73$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic73$);
         var6 = var4.first();
         var4 = var4.rest();
-        final SubLObject var7 = (SubLObject)(var4.isCons() ? var4.first() : module0005.EQL);
-        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)module0005.$ic73$);
+        final SubLObject var7 = (SubLObject)(var4.isCons() ? var4.first() : EQL);
+        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)$ic73$);
         var4 = var4.rest();
-        final SubLObject var8 = (SubLObject)(var4.isCons() ? var4.first() : module0005.ONE_INTEGER);
-        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)module0005.$ic73$);
+        final SubLObject var8 = (SubLObject)(var4.isCons() ? var4.first() : ONE_INTEGER);
+        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)$ic73$);
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic63$, var5, var6, var7, Numbers.minus(var8));
+        if (NIL == var4) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic63$, var5, var6, var7, Numbers.minus(var8));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic73$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic73$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f132(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic75$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic75$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic75$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic75$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic75$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic75$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic75$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic75$);
         var8 = var4.first();
         var4 = var4.rest();
-        SubLObject var9 = (SubLObject)module0005.NIL;
+        SubLObject var9 = (SubLObject)NIL;
         SubLObject var10 = var4;
-        SubLObject var11 = (SubLObject)module0005.NIL;
-        SubLObject var114_115 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var10) {
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic75$);
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var114_115 = (SubLObject)NIL;
+        while (NIL != var10) {
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic75$);
             var114_115 = var10.first();
             var10 = var10.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic75$);
-            if (module0005.NIL == conses_high.member(var114_115, (SubLObject)module0005.$ic48$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var11 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic75$);
+            if (NIL == conses_high.member(var114_115, (SubLObject)$ic48$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var11 = (SubLObject)T;
             }
-            if (var114_115 == module0005.$ic9$) {
+            if (var114_115 == $ic9$) {
                 var9 = var10.first();
             }
             var10 = var10.rest();
         }
-        if (module0005.NIL != var11 && module0005.NIL == var9) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic75$);
+        if (NIL != var11 && NIL == var9) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic75$);
         }
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.NIL);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : NIL);
         final SubLObject var14;
         var4 = (var14 = var5);
-        final SubLObject var15 = (SubLObject)module0005.$ic76$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var15, var8, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic77$, var15))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0005.$ic20$, var13, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic43$, var15))), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic44$, var15)), (SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic78$, var15))), ConsesLow.append(var14, (SubLObject)module0005.NIL)));
+        final SubLObject var15 = (SubLObject)$ic76$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var15, var8, (SubLObject)ConsesLow.list((SubLObject)$ic77$, var15))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic20$, var13, (SubLObject)ConsesLow.list((SubLObject)$ic43$, var15))), (SubLObject)ConsesLow.listS((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, (SubLObject)ConsesLow.list((SubLObject)$ic44$, var15)), (SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)$ic78$, var15))), ConsesLow.append(var14, (SubLObject)NIL)));
     }
     
     public static SubLObject f133(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic80$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic80$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic80$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic80$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic80$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic80$);
         var7 = var4.first();
         var4 = var4.rest();
-        SubLObject var8 = (SubLObject)module0005.NIL;
+        SubLObject var8 = (SubLObject)NIL;
         SubLObject var9 = var4;
-        SubLObject var10 = (SubLObject)module0005.NIL;
-        SubLObject var124_125 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var9) {
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic80$);
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var124_125 = (SubLObject)NIL;
+        while (NIL != var9) {
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic80$);
             var124_125 = var9.first();
             var9 = var9.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic80$);
-            if (module0005.NIL == conses_high.member(var124_125, (SubLObject)module0005.$ic48$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var10 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic80$);
+            if (NIL == conses_high.member(var124_125, (SubLObject)$ic48$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var10 = (SubLObject)T;
             }
-            if (var124_125 == module0005.$ic9$) {
+            if (var124_125 == $ic9$) {
                 var8 = var9.first();
             }
             var9 = var9.rest();
         }
-        if (module0005.NIL != var10 && module0005.NIL == var8) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic80$);
+        if (NIL != var10 && NIL == var8) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic80$);
         }
-        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var12 = (SubLObject)((module0005.NIL != var11) ? conses_high.cadr(var11) : module0005.NIL);
+        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var12 = (SubLObject)((NIL != var11) ? conses_high.cadr(var11) : NIL);
         final SubLObject var13;
         var4 = (var13 = var5);
-        final SubLObject var14 = (SubLObject)module0005.$ic81$;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic74$, (SubLObject)ConsesLow.list(var6, var14, var7, (SubLObject)module0005.$ic13$, var12), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var14), ConsesLow.append(var13, (SubLObject)module0005.NIL));
+        final SubLObject var14 = (SubLObject)$ic81$;
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic74$, (SubLObject)ConsesLow.list(var6, var14, var7, (SubLObject)$ic13$, var12), (SubLObject)ConsesLow.list((SubLObject)$ic59$, var14), ConsesLow.append(var13, (SubLObject)NIL));
     }
     
     public static SubLObject f134(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic83$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic83$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic83$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic83$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic83$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic83$);
         var7 = var4.first();
         var4 = var4.rest();
-        SubLObject var8 = (SubLObject)module0005.NIL;
+        SubLObject var8 = (SubLObject)NIL;
         SubLObject var9 = var4;
-        SubLObject var10 = (SubLObject)module0005.NIL;
-        SubLObject var133_134 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var9) {
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic83$);
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var133_134 = (SubLObject)NIL;
+        while (NIL != var9) {
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic83$);
             var133_134 = var9.first();
             var9 = var9.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic83$);
-            if (module0005.NIL == conses_high.member(var133_134, (SubLObject)module0005.$ic48$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var10 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic83$);
+            if (NIL == conses_high.member(var133_134, (SubLObject)$ic48$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var10 = (SubLObject)T;
             }
-            if (var133_134 == module0005.$ic9$) {
+            if (var133_134 == $ic9$) {
                 var8 = var9.first();
             }
             var9 = var9.rest();
         }
-        if (module0005.NIL != var10 && module0005.NIL == var8) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic83$);
+        if (NIL != var10 && NIL == var8) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic83$);
         }
-        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var12 = (SubLObject)((module0005.NIL != var11) ? conses_high.cadr(var11) : module0005.NIL);
+        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var12 = (SubLObject)((NIL != var11) ? conses_high.cadr(var11) : NIL);
         final SubLObject var13;
         var4 = (var13 = var5);
-        final SubLObject var14 = (SubLObject)module0005.$ic84$;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic74$, (SubLObject)ConsesLow.list(var14, var6, var7, (SubLObject)module0005.$ic13$, var12), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var14), ConsesLow.append(var13, (SubLObject)module0005.NIL));
+        final SubLObject var14 = (SubLObject)$ic84$;
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic74$, (SubLObject)ConsesLow.list(var14, var6, var7, (SubLObject)$ic13$, var12), (SubLObject)ConsesLow.list((SubLObject)$ic59$, var14), ConsesLow.append(var13, (SubLObject)NIL));
     }
     
     public static SubLObject f135(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic85$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic85$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic85$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic85$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic85$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic85$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic85$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic85$);
         var8 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
+        if (NIL == var4) {
             final SubLObject var9;
             var4 = (var9 = var5);
-            return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic28$, (SubLObject)ConsesLow.list(var6, var7, (SubLObject)module0005.$ic13$, var8), ConsesLow.append(var9, (SubLObject)module0005.NIL));
+            return (SubLObject)ConsesLow.listS((SubLObject)$ic28$, (SubLObject)ConsesLow.list(var6, var7, (SubLObject)$ic13$, var8), ConsesLow.append(var9, (SubLObject)NIL));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic85$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic85$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f136(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic87$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic87$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic87$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic87$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic87$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic87$);
         var7 = var4.first();
         var4 = var4.rest();
-        SubLObject var8 = (SubLObject)module0005.NIL;
+        SubLObject var8 = (SubLObject)NIL;
         SubLObject var9 = var4;
-        SubLObject var10 = (SubLObject)module0005.NIL;
-        SubLObject var147_148 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var9) {
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic87$);
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var147_148 = (SubLObject)NIL;
+        while (NIL != var9) {
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic87$);
             var147_148 = var9.first();
             var9 = var9.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic87$);
-            if (module0005.NIL == conses_high.member(var147_148, (SubLObject)module0005.$ic48$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var10 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic87$);
+            if (NIL == conses_high.member(var147_148, (SubLObject)$ic48$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var10 = (SubLObject)T;
             }
-            if (var147_148 == module0005.$ic9$) {
+            if (var147_148 == $ic9$) {
                 var8 = var9.first();
             }
             var9 = var9.rest();
         }
-        if (module0005.NIL != var10 && module0005.NIL == var8) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic87$);
+        if (NIL != var10 && NIL == var8) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic87$);
         }
-        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var12 = (SubLObject)((module0005.NIL != var11) ? conses_high.cadr(var11) : module0005.NIL);
+        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var12 = (SubLObject)((NIL != var11) ? conses_high.cadr(var11) : NIL);
         final SubLObject var13;
         var4 = (var13 = var5);
-        if (module0005.NIL != var12) {
-            return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic42$, var6))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0005.$ic20$, var12, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic88$, var6))), ConsesLow.append(var13, (SubLObject)module0005.NIL));
+        if (NIL != var12) {
+            return (SubLObject)ConsesLow.listS((SubLObject)$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, var7, (SubLObject)ConsesLow.list((SubLObject)$ic42$, var6))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic20$, var12, (SubLObject)ConsesLow.list((SubLObject)$ic88$, var6))), ConsesLow.append(var13, (SubLObject)NIL));
         }
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic42$, var6))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0005.$ic88$, var6)), ConsesLow.append(var13, (SubLObject)module0005.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic2$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, var7, (SubLObject)ConsesLow.list((SubLObject)$ic42$, var6))), (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic88$, var6)), ConsesLow.append(var13, (SubLObject)NIL));
     }
     
     public static SubLObject f137(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic90$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic90$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic90$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic90$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic90$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic90$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic90$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic90$);
         var8 = var4.first();
         var4 = var4.rest();
-        SubLObject var9 = (SubLObject)module0005.NIL;
+        SubLObject var9 = (SubLObject)NIL;
         SubLObject var10 = var4;
-        SubLObject var11 = (SubLObject)module0005.NIL;
-        SubLObject var158_159 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var10) {
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic90$);
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var158_159 = (SubLObject)NIL;
+        while (NIL != var10) {
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic90$);
             var158_159 = var10.first();
             var10 = var10.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic90$);
-            if (module0005.NIL == conses_high.member(var158_159, (SubLObject)module0005.$ic48$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var11 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic90$);
+            if (NIL == conses_high.member(var158_159, (SubLObject)$ic48$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var11 = (SubLObject)T;
             }
-            if (var158_159 == module0005.$ic9$) {
+            if (var158_159 == $ic9$) {
                 var9 = var10.first();
             }
             var10 = var10.rest();
         }
-        if (module0005.NIL != var11 && module0005.NIL == var9) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic90$);
+        if (NIL != var11 && NIL == var9) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic90$);
         }
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.NIL);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : NIL);
         final SubLObject var14;
         var4 = (var14 = var5);
-        final SubLObject var15 = (SubLObject)module0005.$ic91$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic86$, (SubLObject)ConsesLow.list(var15, var8, (SubLObject)module0005.$ic13$, var13), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic92$, var15))), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic93$, (SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic94$, var15), var13), ConsesLow.append(var14, (SubLObject)module0005.NIL))));
+        final SubLObject var15 = (SubLObject)$ic91$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic86$, (SubLObject)ConsesLow.list(var15, var8, (SubLObject)$ic13$, var13), (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, (SubLObject)ConsesLow.list((SubLObject)$ic92$, var15))), (SubLObject)ConsesLow.listS((SubLObject)$ic93$, (SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)$ic94$, var15), var13), ConsesLow.append(var14, (SubLObject)NIL))));
     }
     
     public static SubLObject f138(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic96$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic96$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic96$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic96$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic96$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic96$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic96$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic96$);
         var8 = var4.first();
         var4 = var4.rest();
-        SubLObject var9 = (SubLObject)module0005.NIL;
+        SubLObject var9 = (SubLObject)NIL;
         SubLObject var10 = var4;
-        SubLObject var11 = (SubLObject)module0005.NIL;
-        SubLObject var169_170 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var10) {
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic96$);
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var169_170 = (SubLObject)NIL;
+        while (NIL != var10) {
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic96$);
             var169_170 = var10.first();
             var10 = var10.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic96$);
-            if (module0005.NIL == conses_high.member(var169_170, (SubLObject)module0005.$ic48$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var11 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic96$);
+            if (NIL == conses_high.member(var169_170, (SubLObject)$ic48$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var11 = (SubLObject)T;
             }
-            if (var169_170 == module0005.$ic9$) {
+            if (var169_170 == $ic9$) {
                 var9 = var10.first();
             }
             var10 = var10.rest();
         }
-        if (module0005.NIL != var11 && module0005.NIL == var9) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic96$);
+        if (NIL != var11 && NIL == var9) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic96$);
         }
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.NIL);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : NIL);
         final SubLObject var14;
         var4 = (var14 = var5);
-        final SubLObject var15 = (SubLObject)module0005.$ic97$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic86$, (SubLObject)ConsesLow.list(var15, var8, (SubLObject)module0005.$ic13$, var13), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic44$, var15)), (SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic42$, var15))), ConsesLow.append(var14, (SubLObject)module0005.NIL)));
+        final SubLObject var15 = (SubLObject)$ic97$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic86$, (SubLObject)ConsesLow.list(var15, var8, (SubLObject)$ic13$, var13), (SubLObject)ConsesLow.listS((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, (SubLObject)ConsesLow.list((SubLObject)$ic44$, var15)), (SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)$ic42$, var15))), ConsesLow.append(var14, (SubLObject)NIL)));
     }
     
     public static SubLObject f139(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic99$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic99$);
         final SubLObject var5 = var4.rest();
         final SubLObject var6;
         var4 = (var6 = var4.first());
         final SubLObject var7;
         var4 = (var7 = var5);
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        SubLObject var9 = (SubLObject)module0005.NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        SubLObject var9 = (SubLObject)NIL;
         SubLObject var10 = var6;
-        SubLObject var11 = (SubLObject)module0005.NIL;
+        SubLObject var11 = (SubLObject)NIL;
         var11 = var10.first();
-        while (module0005.NIL != var10) {
+        while (NIL != var10) {
             final SubLObject var12 = var11.first();
             final SubLObject var13 = conses_high.cadr(var11);
-            final SubLObject var14 = Symbols.make_symbol(PrintLow.format((SubLObject)module0005.NIL, (SubLObject)module0005.$ic100$, var12));
-            var8 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(var14, var13, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic42$, var14)), var8);
-            var8 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(var12, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic44$, var14), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic44$, var14)), var8);
+            final SubLObject var14 = Symbols.make_symbol(PrintLow.format((SubLObject)NIL, (SubLObject)$ic100$, var12));
+            var8 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(var14, var13, (SubLObject)ConsesLow.list((SubLObject)$ic42$, var14)), var8);
+            var8 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(var12, (SubLObject)ConsesLow.list((SubLObject)$ic44$, var14), (SubLObject)ConsesLow.list((SubLObject)$ic44$, var14)), var8);
             var10 = var10.rest();
             var11 = var10.first();
         }
         var8 = Sequences.nreverse(var8);
-        SubLObject var15 = (SubLObject)module0005.NIL;
-        SubLObject var16 = (SubLObject)module0005.NIL;
+        SubLObject var15 = (SubLObject)NIL;
+        SubLObject var16 = (SubLObject)NIL;
         var15 = var8;
         var16 = conses_high.caar(var15);
-        while (module0005.NIL != var15) {
+        while (NIL != var15) {
             var9 = (SubLObject)ConsesLow.cons(var16, var9);
             var15 = conses_high.cddr(var15);
             var16 = conses_high.caar(var15);
         }
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic2$, var8, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0005.$ic4$, reader.bq_cons((SubLObject)module0005.$ic101$, ConsesLow.append(var9, (SubLObject)module0005.NIL)))), ConsesLow.append(var7, (SubLObject)module0005.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic2$, var8, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic4$, reader.bq_cons((SubLObject)$ic101$, ConsesLow.append(var9, (SubLObject)NIL)))), ConsesLow.append(var7, (SubLObject)NIL));
     }
     
     public static SubLObject f140(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic103$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic103$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic103$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic103$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic103$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic103$);
         var7 = var4.first();
         var4 = var4.rest();
-        SubLObject var8 = (SubLObject)module0005.NIL;
+        SubLObject var8 = (SubLObject)NIL;
         SubLObject var9 = var4;
-        SubLObject var10 = (SubLObject)module0005.NIL;
-        SubLObject var192_193 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var9) {
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic103$);
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var192_193 = (SubLObject)NIL;
+        while (NIL != var9) {
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic103$);
             var192_193 = var9.first();
             var9 = var9.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic103$);
-            if (module0005.NIL == conses_high.member(var192_193, (SubLObject)module0005.$ic104$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var10 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic103$);
+            if (NIL == conses_high.member(var192_193, (SubLObject)$ic104$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var10 = (SubLObject)T;
             }
-            if (var192_193 == module0005.$ic9$) {
+            if (var192_193 == $ic9$) {
                 var8 = var9.first();
             }
             var9 = var9.rest();
         }
-        if (module0005.NIL != var10 && module0005.NIL == var8) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic103$);
+        if (NIL != var10 && NIL == var8) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic103$);
         }
-        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic10$, var4);
-        final SubLObject var12 = (SubLObject)((module0005.NIL != var11) ? conses_high.cadr(var11) : module0005.ZERO_INTEGER);
-        final SubLObject var13 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic11$, var4);
-        final SubLObject var14 = (SubLObject)((module0005.NIL != var13) ? conses_high.cadr(var13) : module0005.NIL);
-        final SubLObject var15 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic105$, var4);
-        final SubLObject var16 = (SubLObject)((module0005.NIL != var15) ? conses_high.cadr(var15) : module0005.NIL);
-        final SubLObject var17 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var18 = (SubLObject)((module0005.NIL != var17) ? conses_high.cadr(var17) : module0005.NIL);
+        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)$ic10$, var4);
+        final SubLObject var12 = (SubLObject)((NIL != var11) ? conses_high.cadr(var11) : ZERO_INTEGER);
+        final SubLObject var13 = cdestructuring_bind.property_list_member((SubLObject)$ic11$, var4);
+        final SubLObject var14 = (SubLObject)((NIL != var13) ? conses_high.cadr(var13) : NIL);
+        final SubLObject var15 = cdestructuring_bind.property_list_member((SubLObject)$ic105$, var4);
+        final SubLObject var16 = (SubLObject)((NIL != var15) ? conses_high.cadr(var15) : NIL);
+        final SubLObject var17 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var18 = (SubLObject)((NIL != var17) ? conses_high.cadr(var17) : NIL);
         final SubLObject var19;
         var4 = (var19 = var5);
-        if (module0005.NIL != var16) {
-            return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic106$, (SubLObject)ConsesLow.list(new SubLObject[] { var16, var6, var7, module0005.$ic10$, var12, module0005.$ic11$, var14, module0005.$ic13$, var18 }), ConsesLow.append(var19, (SubLObject)module0005.NIL));
+        if (NIL != var16) {
+            return (SubLObject)ConsesLow.listS((SubLObject)$ic106$, (SubLObject)ConsesLow.list(new SubLObject[] { var16, var6, var7, $ic10$, var12, $ic11$, var14, $ic13$, var18 }), ConsesLow.append(var19, (SubLObject)NIL));
         }
-        final SubLObject var197_199 = (SubLObject)module0005.$ic107$;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic102$, (SubLObject)ConsesLow.list(new SubLObject[] { var6, var7, module0005.$ic105$, var197_199, module0005.$ic10$, var12, module0005.$ic11$, var14, module0005.$ic13$, var18 }), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var197_199), ConsesLow.append(var19, (SubLObject)module0005.NIL));
+        final SubLObject var197_199 = (SubLObject)$ic107$;
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic102$, (SubLObject)ConsesLow.list(new SubLObject[] { var6, var7, $ic105$, var197_199, $ic10$, var12, $ic11$, var14, $ic13$, var18 }), (SubLObject)ConsesLow.list((SubLObject)$ic59$, var197_199), ConsesLow.append(var19, (SubLObject)NIL));
     }
     
     public static SubLObject f141(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic108$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic108$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic108$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic108$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic108$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic108$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic108$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic108$);
         var8 = var4.first();
         var4 = var4.rest();
-        SubLObject var9 = (SubLObject)module0005.NIL;
+        SubLObject var9 = (SubLObject)NIL;
         SubLObject var10 = var4;
-        SubLObject var11 = (SubLObject)module0005.NIL;
-        SubLObject var206_207 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var10) {
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic108$);
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var206_207 = (SubLObject)NIL;
+        while (NIL != var10) {
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic108$);
             var206_207 = var10.first();
             var10 = var10.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic108$);
-            if (module0005.NIL == conses_high.member(var206_207, (SubLObject)module0005.$ic109$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var11 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic108$);
+            if (NIL == conses_high.member(var206_207, (SubLObject)$ic109$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var11 = (SubLObject)T;
             }
-            if (var206_207 == module0005.$ic9$) {
+            if (var206_207 == $ic9$) {
                 var9 = var10.first();
             }
             var10 = var10.rest();
         }
-        if (module0005.NIL != var11 && module0005.NIL == var9) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic108$);
+        if (NIL != var11 && NIL == var9) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic108$);
         }
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic10$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.ZERO_INTEGER);
-        final SubLObject var14 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic11$, var4);
-        final SubLObject var15 = (SubLObject)((module0005.NIL != var14) ? conses_high.cadr(var14) : module0005.NIL);
-        final SubLObject var16 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var17 = (SubLObject)((module0005.NIL != var16) ? conses_high.cadr(var16) : module0005.NIL);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic10$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : ZERO_INTEGER);
+        final SubLObject var14 = cdestructuring_bind.property_list_member((SubLObject)$ic11$, var4);
+        final SubLObject var15 = (SubLObject)((NIL != var14) ? conses_high.cadr(var14) : NIL);
+        final SubLObject var16 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var17 = (SubLObject)((NIL != var16) ? conses_high.cadr(var16) : NIL);
         final SubLObject var18;
         var4 = (var18 = var5);
-        final SubLObject var19 = (SubLObject)module0005.$ic110$;
-        final SubLObject var20 = (SubLObject)module0005.$ic111$;
-        SubLObject var21 = (SubLObject)module0005.NIL;
+        final SubLObject var19 = (SubLObject)$ic110$;
+        final SubLObject var20 = (SubLObject)$ic111$;
+        SubLObject var21 = (SubLObject)NIL;
         if (var15.isInteger()) {
             var21 = var15;
         }
-        else if (module0005.NIL == var15) {
-            var21 = (SubLObject)ConsesLow.list((SubLObject)module0005.$ic37$, var19);
+        else if (NIL == var15) {
+            var21 = (SubLObject)ConsesLow.list((SubLObject)$ic37$, var19);
         }
         else {
-            var21 = (SubLObject)ConsesLow.list((SubLObject)module0005.$ic112$, var15, var15, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic37$, var19));
+            var21 = (SubLObject)ConsesLow.list((SubLObject)$ic112$, var15, var15, (SubLObject)ConsesLow.list((SubLObject)$ic37$, var19));
         }
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var19, var8), (SubLObject)ConsesLow.list(var20, var21)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic6$, (SubLObject)ConsesLow.list(var6, (SubLObject)module0005.$ic10$, var13, (SubLObject)module0005.$ic11$, var20, (SubLObject)module0005.$ic13$, var17), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic113$, var19, var6))), ConsesLow.append(var18, (SubLObject)module0005.NIL))));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var19, var8), (SubLObject)ConsesLow.list(var20, var21)), (SubLObject)ConsesLow.list((SubLObject)$ic6$, (SubLObject)ConsesLow.list(var6, (SubLObject)$ic10$, var13, (SubLObject)$ic11$, var20, (SubLObject)$ic13$, var17), (SubLObject)ConsesLow.listS((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)$ic113$, var19, var6))), ConsesLow.append(var18, (SubLObject)NIL))));
     }
     
     public static SubLObject f142(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic115$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic115$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic115$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic115$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic115$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic115$);
         var7 = var4.first();
         var4 = var4.rest();
-        SubLObject var8 = (SubLObject)module0005.NIL;
+        SubLObject var8 = (SubLObject)NIL;
         SubLObject var9 = var4;
-        SubLObject var10 = (SubLObject)module0005.NIL;
-        SubLObject var220_221 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var9) {
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic115$);
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var220_221 = (SubLObject)NIL;
+        while (NIL != var9) {
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic115$);
             var220_221 = var9.first();
             var9 = var9.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic115$);
-            if (module0005.NIL == conses_high.member(var220_221, (SubLObject)module0005.$ic116$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var10 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic115$);
+            if (NIL == conses_high.member(var220_221, (SubLObject)$ic116$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var10 = (SubLObject)T;
             }
-            if (var220_221 == module0005.$ic9$) {
+            if (var220_221 == $ic9$) {
                 var8 = var9.first();
             }
             var9 = var9.rest();
         }
-        if (module0005.NIL != var10 && module0005.NIL == var8) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic115$);
+        if (NIL != var10 && NIL == var8) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic115$);
         }
-        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic117$, var4);
-        final SubLObject var12 = (SubLObject)((module0005.NIL != var11) ? conses_high.cadr(var11) : module0005.NIL);
-        final SubLObject var13 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var14 = (SubLObject)((module0005.NIL != var13) ? conses_high.cadr(var13) : module0005.NIL);
-        final SubLObject var15 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic118$, var4);
-        final SubLObject var16 = (SubLObject)((module0005.NIL != var15) ? conses_high.cadr(var15) : module0005.NIL);
+        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)$ic117$, var4);
+        final SubLObject var12 = (SubLObject)((NIL != var11) ? conses_high.cadr(var11) : NIL);
+        final SubLObject var13 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var14 = (SubLObject)((NIL != var13) ? conses_high.cadr(var13) : NIL);
+        final SubLObject var15 = cdestructuring_bind.property_list_member((SubLObject)$ic118$, var4);
+        final SubLObject var16 = (SubLObject)((NIL != var15) ? conses_high.cadr(var15) : NIL);
         final SubLObject var17;
         var4 = (var17 = var5);
-        if (module0005.NIL != var12) {
-            return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic119$, (SubLObject)ConsesLow.list(var12, var6, var7, (SubLObject)module0005.$ic13$, var14, (SubLObject)module0005.$ic118$, var16), ConsesLow.append(var17, (SubLObject)module0005.NIL));
+        if (NIL != var12) {
+            return (SubLObject)ConsesLow.listS((SubLObject)$ic119$, (SubLObject)ConsesLow.list(var12, var6, var7, (SubLObject)$ic13$, var14, (SubLObject)$ic118$, var16), ConsesLow.append(var17, (SubLObject)NIL));
         }
-        final SubLObject var223_227 = (SubLObject)module0005.$ic120$;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic119$, (SubLObject)ConsesLow.list(var223_227, var6, var7, (SubLObject)module0005.$ic13$, var14, (SubLObject)module0005.$ic118$, var16), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var223_227), ConsesLow.append(var17, (SubLObject)module0005.NIL));
+        final SubLObject var223_227 = (SubLObject)$ic120$;
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic119$, (SubLObject)ConsesLow.list(var223_227, var6, var7, (SubLObject)$ic13$, var14, (SubLObject)$ic118$, var16), (SubLObject)ConsesLow.list((SubLObject)$ic59$, var223_227), ConsesLow.append(var17, (SubLObject)NIL));
     }
     
     public static SubLObject f143(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic121$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic121$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic121$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic121$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic121$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic121$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic121$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic121$);
         var8 = var4.first();
         var4 = var4.rest();
-        SubLObject var9 = (SubLObject)module0005.NIL;
+        SubLObject var9 = (SubLObject)NIL;
         SubLObject var10 = var4;
-        SubLObject var11 = (SubLObject)module0005.NIL;
-        SubLObject var234_235 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var10) {
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic121$);
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var234_235 = (SubLObject)NIL;
+        while (NIL != var10) {
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic121$);
             var234_235 = var10.first();
             var10 = var10.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic121$);
-            if (module0005.NIL == conses_high.member(var234_235, (SubLObject)module0005.$ic122$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var11 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic121$);
+            if (NIL == conses_high.member(var234_235, (SubLObject)$ic122$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var11 = (SubLObject)T;
             }
-            if (var234_235 == module0005.$ic9$) {
+            if (var234_235 == $ic9$) {
                 var9 = var10.first();
             }
             var10 = var10.rest();
         }
-        if (module0005.NIL != var11 && module0005.NIL == var9) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic121$);
+        if (NIL != var11 && NIL == var9) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic121$);
         }
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.NIL);
-        final SubLObject var14 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic118$, var4);
-        final SubLObject var15 = (SubLObject)((module0005.NIL != var14) ? conses_high.cadr(var14) : module0005.NIL);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : NIL);
+        final SubLObject var14 = cdestructuring_bind.property_list_member((SubLObject)$ic118$, var4);
+        final SubLObject var15 = (SubLObject)((NIL != var14) ? conses_high.cadr(var14) : NIL);
         final SubLObject var16;
         var4 = (var16 = var5);
-        final SubLObject var17 = (SubLObject)module0005.$ic123$;
-        final SubLObject var18 = (SubLObject)module0005.$ic124$;
-        final SubLObject var19 = (SubLObject)module0005.$ic125$;
-        if (module0005.NIL != var13) {
-            final SubLObject var20 = (SubLObject)module0005.$ic126$;
-            final SubLObject var21 = (SubLObject)module0005.$ic127$;
-            final SubLObject var22 = (SubLObject)module0005.$ic128$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var17, var8), (SubLObject)ConsesLow.list(var18, var15), (SubLObject)ConsesLow.list(var19, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic37$, var17))), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic55$, (SubLObject)ConsesLow.list(var20, var21, var22), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic112$, var18, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic129$, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic130$, var19, (SubLObject)module0005.$ic131$), (SubLObject)module0005.$ic132$), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic129$, (SubLObject)module0005.ZERO_INTEGER, var19, (SubLObject)module0005.$ic131$)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic6$, (SubLObject)ConsesLow.list(new SubLObject[] { var6, module0005.$ic10$, var20, module0005.$ic11$, var21, module0005.$ic13$, var13, module0005.$ic12$, var22 }), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic133$, var17, var6))), ConsesLow.append(var16, (SubLObject)module0005.NIL)))));
+        final SubLObject var17 = (SubLObject)$ic123$;
+        final SubLObject var18 = (SubLObject)$ic124$;
+        final SubLObject var19 = (SubLObject)$ic125$;
+        if (NIL != var13) {
+            final SubLObject var20 = (SubLObject)$ic126$;
+            final SubLObject var21 = (SubLObject)$ic127$;
+            final SubLObject var22 = (SubLObject)$ic128$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var17, var8), (SubLObject)ConsesLow.list(var18, var15), (SubLObject)ConsesLow.list(var19, (SubLObject)ConsesLow.list((SubLObject)$ic37$, var17))), (SubLObject)ConsesLow.list((SubLObject)$ic55$, (SubLObject)ConsesLow.list(var20, var21, var22), (SubLObject)ConsesLow.list((SubLObject)$ic112$, var18, (SubLObject)ConsesLow.listS((SubLObject)$ic129$, (SubLObject)ConsesLow.listS((SubLObject)$ic130$, var19, (SubLObject)$ic131$), (SubLObject)$ic132$), (SubLObject)ConsesLow.listS((SubLObject)$ic129$, (SubLObject)ZERO_INTEGER, var19, (SubLObject)$ic131$)), (SubLObject)ConsesLow.list((SubLObject)$ic6$, (SubLObject)ConsesLow.list(new SubLObject[] { var6, $ic10$, var20, $ic11$, var21, $ic13$, var13, $ic12$, var22 }), (SubLObject)ConsesLow.listS((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)$ic133$, var17, var6))), ConsesLow.append(var16, (SubLObject)NIL)))));
         }
-        final SubLObject var23 = (SubLObject)module0005.$ic134$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var17, var8), (SubLObject)ConsesLow.list(var18, var15), (SubLObject)ConsesLow.list(var19, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic37$, var17))), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic14$, (SubLObject)ConsesLow.list(var23, var19), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic112$, var18, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic130$, var19, var23, (SubLObject)module0005.$ic131$), var23)), (SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic133$, var17, var6))), ConsesLow.append(var16, (SubLObject)module0005.NIL))));
+        final SubLObject var23 = (SubLObject)$ic134$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var17, var8), (SubLObject)ConsesLow.list(var18, var15), (SubLObject)ConsesLow.list(var19, (SubLObject)ConsesLow.list((SubLObject)$ic37$, var17))), (SubLObject)ConsesLow.list((SubLObject)$ic14$, (SubLObject)ConsesLow.list(var23, var19), (SubLObject)ConsesLow.listS((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var6, (SubLObject)ConsesLow.list((SubLObject)$ic112$, var18, (SubLObject)ConsesLow.listS((SubLObject)$ic130$, var19, var23, (SubLObject)$ic131$), var23)), (SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)$ic133$, var17, var6))), ConsesLow.append(var16, (SubLObject)NIL))));
     }
     
     public static SubLObject f144(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic136$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic136$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic136$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic136$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic136$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic136$);
         var7 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
+        if (NIL == var4) {
             final SubLObject var8;
             var4 = (var8 = var5);
-            return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic114$, (SubLObject)ConsesLow.list(var6, var7), ConsesLow.append(var8, (SubLObject)module0005.NIL));
+            return (SubLObject)ConsesLow.listS((SubLObject)$ic114$, (SubLObject)ConsesLow.list(var6, var7), ConsesLow.append(var8, (SubLObject)NIL));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic136$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic136$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f145(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic138$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic138$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic138$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic138$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic138$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic138$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic138$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic138$);
         var8 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
+        if (NIL == var4) {
             final SubLObject var9;
             var4 = (var9 = var5);
-            return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic114$, (SubLObject)ConsesLow.list(var6, var7, (SubLObject)module0005.$ic13$, var8), ConsesLow.append(var9, (SubLObject)module0005.NIL));
+            return (SubLObject)ConsesLow.listS((SubLObject)$ic114$, (SubLObject)ConsesLow.list(var6, var7, (SubLObject)$ic13$, var8), ConsesLow.append(var9, (SubLObject)NIL));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic138$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic138$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f146(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic138$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic138$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic138$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic138$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic138$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic138$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic138$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic138$);
         var8 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
+        if (NIL == var4) {
             final SubLObject var9;
             var4 = (var9 = var5);
-            return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic114$, (SubLObject)ConsesLow.list(var6, var7, (SubLObject)module0005.$ic13$, var8), ConsesLow.append(var9, (SubLObject)module0005.NIL));
+            return (SubLObject)ConsesLow.listS((SubLObject)$ic114$, (SubLObject)ConsesLow.list(var6, var7, (SubLObject)$ic13$, var8), ConsesLow.append(var9, (SubLObject)NIL));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic138$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic138$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f147(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic141$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic141$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic141$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic141$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic141$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic141$);
         var7 = var4.first();
         var4 = var4.rest();
-        SubLObject var8 = (SubLObject)module0005.NIL;
+        SubLObject var8 = (SubLObject)NIL;
         SubLObject var9 = var4;
-        SubLObject var10 = (SubLObject)module0005.NIL;
-        SubLObject var258_259 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var9) {
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic141$);
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var258_259 = (SubLObject)NIL;
+        while (NIL != var9) {
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic141$);
             var258_259 = var9.first();
             var9 = var9.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)module0005.$ic141$);
-            if (module0005.NIL == conses_high.member(var258_259, (SubLObject)module0005.$ic142$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var10 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var9, var3, (SubLObject)$ic141$);
+            if (NIL == conses_high.member(var258_259, (SubLObject)$ic142$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var10 = (SubLObject)T;
             }
-            if (var258_259 == module0005.$ic9$) {
+            if (var258_259 == $ic9$) {
                 var8 = var9.first();
             }
             var9 = var9.rest();
         }
-        if (module0005.NIL != var10 && module0005.NIL == var8) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic141$);
+        if (NIL != var10 && NIL == var8) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic141$);
         }
-        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic117$, var4);
-        final SubLObject var12 = (SubLObject)((module0005.NIL != var11) ? conses_high.cadr(var11) : module0005.NIL);
-        final SubLObject var13 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var14 = (SubLObject)((module0005.NIL != var13) ? conses_high.cadr(var13) : module0005.NIL);
+        final SubLObject var11 = cdestructuring_bind.property_list_member((SubLObject)$ic117$, var4);
+        final SubLObject var12 = (SubLObject)((NIL != var11) ? conses_high.cadr(var11) : NIL);
+        final SubLObject var13 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var14 = (SubLObject)((NIL != var13) ? conses_high.cadr(var13) : NIL);
         final SubLObject var15;
         var4 = (var15 = var5);
-        if (module0005.NIL != var12) {
-            return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic143$, (SubLObject)ConsesLow.list(var12, var6, var7, (SubLObject)module0005.$ic13$, var14), ConsesLow.append(var15, (SubLObject)module0005.NIL));
+        if (NIL != var12) {
+            return (SubLObject)ConsesLow.listS((SubLObject)$ic143$, (SubLObject)ConsesLow.list(var12, var6, var7, (SubLObject)$ic13$, var14), ConsesLow.append(var15, (SubLObject)NIL));
         }
-        final SubLObject var223_262 = (SubLObject)module0005.$ic144$;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic143$, (SubLObject)ConsesLow.list(var223_262, var6, var7, (SubLObject)module0005.$ic13$, var14), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var223_262), ConsesLow.append(var15, (SubLObject)module0005.NIL));
+        final SubLObject var223_262 = (SubLObject)$ic144$;
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic143$, (SubLObject)ConsesLow.list(var223_262, var6, var7, (SubLObject)$ic13$, var14), (SubLObject)ConsesLow.list((SubLObject)$ic59$, var223_262), ConsesLow.append(var15, (SubLObject)NIL));
     }
     
     public static SubLObject f148(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic145$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic145$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic145$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic145$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic145$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic145$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic145$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic145$);
         var8 = var4.first();
         var4 = var4.rest();
-        SubLObject var9 = (SubLObject)module0005.NIL;
+        SubLObject var9 = (SubLObject)NIL;
         SubLObject var10 = var4;
-        SubLObject var11 = (SubLObject)module0005.NIL;
-        SubLObject var271_272 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var10) {
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic145$);
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var271_272 = (SubLObject)NIL;
+        while (NIL != var10) {
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic145$);
             var271_272 = var10.first();
             var10 = var10.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic145$);
-            if (module0005.NIL == conses_high.member(var271_272, (SubLObject)module0005.$ic48$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var11 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic145$);
+            if (NIL == conses_high.member(var271_272, (SubLObject)$ic48$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var11 = (SubLObject)T;
             }
-            if (var271_272 == module0005.$ic9$) {
+            if (var271_272 == $ic9$) {
                 var9 = var10.first();
             }
             var10 = var10.rest();
         }
-        if (module0005.NIL != var11 && module0005.NIL == var9) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic145$);
+        if (NIL != var11 && NIL == var9) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic145$);
         }
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.NIL);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : NIL);
         final SubLObject var14;
         var4 = (var14 = var5);
-        final SubLObject var15 = (SubLObject)module0005.$ic146$;
-        final SubLObject var16 = (SubLObject)module0005.$ic147$;
-        final SubLObject var17 = (SubLObject)module0005.$ic148$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var15, var8), (SubLObject)ConsesLow.list(var16, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic149$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic150$, var15), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic37$, var15))), reader.bq_cons(var6, (SubLObject)module0005.$ic36$), (SubLObject)ConsesLow.list(var17, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic151$, var6, var16, var15))), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic3$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic101$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic4$, var17), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic4$, var13)), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic152$, var6, var15))), ConsesLow.append(var14, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0005.$ic153$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic68$, var15, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic154$, var15)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic40$, var6), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic68$, var17, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic151$, var6, var16, var15))))))));
+        final SubLObject var15 = (SubLObject)$ic146$;
+        final SubLObject var16 = (SubLObject)$ic147$;
+        final SubLObject var17 = (SubLObject)$ic148$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var15, var8), (SubLObject)ConsesLow.list(var16, (SubLObject)ConsesLow.list((SubLObject)$ic149$, (SubLObject)ConsesLow.list((SubLObject)$ic150$, var15), (SubLObject)ConsesLow.list((SubLObject)$ic37$, var15))), reader.bq_cons(var6, (SubLObject)$ic36$), (SubLObject)ConsesLow.list(var17, (SubLObject)ConsesLow.list((SubLObject)$ic151$, var6, var16, var15))), (SubLObject)ConsesLow.list((SubLObject)$ic3$, (SubLObject)ConsesLow.list((SubLObject)$ic101$, (SubLObject)ConsesLow.list((SubLObject)$ic4$, var17), (SubLObject)ConsesLow.list((SubLObject)$ic4$, var13)), (SubLObject)ConsesLow.listS((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.list((SubLObject)$ic152$, var6, var15))), ConsesLow.append(var14, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic153$, (SubLObject)ConsesLow.list((SubLObject)$ic68$, var15, (SubLObject)ConsesLow.list((SubLObject)$ic154$, var15)), (SubLObject)ConsesLow.list((SubLObject)$ic40$, var6), (SubLObject)ConsesLow.list((SubLObject)$ic68$, var17, (SubLObject)ConsesLow.list((SubLObject)$ic151$, var6, var16, var15))))))));
     }
     
     public static SubLObject f149(final SubLObject var78, final SubLObject var275, final SubLObject var254) {
@@ -1509,269 +1510,269 @@ public final class module0005 extends SubLTranslatedFile
     public static SubLObject f152(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic156$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic156$);
         final SubLObject var5 = var4.rest();
         var4 = var4.first();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        SubLObject var8 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic156$);
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        SubLObject var8 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic156$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic156$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic156$);
         var7 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic156$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic156$);
         var8 = var4.first();
         var4 = var4.rest();
-        SubLObject var9 = (SubLObject)module0005.NIL;
+        SubLObject var9 = (SubLObject)NIL;
         SubLObject var10 = var4;
-        SubLObject var11 = (SubLObject)module0005.NIL;
-        SubLObject var284_285 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var10) {
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic156$);
+        SubLObject var11 = (SubLObject)NIL;
+        SubLObject var284_285 = (SubLObject)NIL;
+        while (NIL != var10) {
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic156$);
             var284_285 = var10.first();
             var10 = var10.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)module0005.$ic156$);
-            if (module0005.NIL == conses_high.member(var284_285, (SubLObject)module0005.$ic30$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var11 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var10, var3, (SubLObject)$ic156$);
+            if (NIL == conses_high.member(var284_285, (SubLObject)$ic30$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var11 = (SubLObject)T;
             }
-            if (var284_285 == module0005.$ic9$) {
+            if (var284_285 == $ic9$) {
                 var9 = var10.first();
             }
             var10 = var10.rest();
         }
-        if (module0005.NIL != var11 && module0005.NIL == var9) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic156$);
+        if (NIL != var11 && NIL == var9) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic156$);
         }
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic13$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.NIL);
-        final SubLObject var14 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic31$, var4);
-        final SubLObject var15 = (SubLObject)((module0005.NIL != var14) ? conses_high.cadr(var14) : module0005.NIL);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic13$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : NIL);
+        final SubLObject var14 = cdestructuring_bind.property_list_member((SubLObject)$ic31$, var4);
+        final SubLObject var15 = (SubLObject)((NIL != var14) ? conses_high.cadr(var14) : NIL);
         final SubLObject var16;
         var4 = (var16 = var5);
-        if (module0005.NIL != var15) {
-            final SubLObject var17 = (SubLObject)module0005.$ic157$;
-            final SubLObject var18 = (SubLObject)module0005.$ic158$;
-            final SubLObject var19 = (SubLObject)module0005.$ic159$;
-            final SubLObject var20 = (SubLObject)module0005.$ic160$;
-            final SubLObject var21 = (SubLObject)module0005.$ic161$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var17, var15), reader.bq_cons(var18, (SubLObject)module0005.$ic162$), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic163$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic20$, var18, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic43$, var17)))), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic38$, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic164$, var17, (SubLObject)module0005.$ic165$), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var19, var8), reader.bq_cons(var20, (SubLObject)module0005.$ic36$), (SubLObject)ConsesLow.list(var21, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic166$, var19))), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic155$, (SubLObject)ConsesLow.list(var6, var7, var19, (SubLObject)module0005.$ic13$, var13), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0005.$ic163$, var18)), ConsesLow.append(var16, (SubLObject)module0005.NIL)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic68$, var20, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic15$, var20)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic39$, var20, var21)))));
+        if (NIL != var15) {
+            final SubLObject var17 = (SubLObject)$ic157$;
+            final SubLObject var18 = (SubLObject)$ic158$;
+            final SubLObject var19 = (SubLObject)$ic159$;
+            final SubLObject var20 = (SubLObject)$ic160$;
+            final SubLObject var21 = (SubLObject)$ic161$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var17, var15), reader.bq_cons(var18, (SubLObject)$ic162$), (SubLObject)ConsesLow.list((SubLObject)$ic163$, (SubLObject)ConsesLow.list((SubLObject)$ic20$, var18, (SubLObject)ConsesLow.list((SubLObject)$ic43$, var17)))), (SubLObject)ConsesLow.list((SubLObject)$ic38$, (SubLObject)ConsesLow.listS((SubLObject)$ic164$, var17, (SubLObject)$ic165$), (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var19, var8), reader.bq_cons(var20, (SubLObject)$ic36$), (SubLObject)ConsesLow.list(var21, (SubLObject)ConsesLow.list((SubLObject)$ic166$, var19))), (SubLObject)ConsesLow.list((SubLObject)$ic155$, (SubLObject)ConsesLow.list(var6, var7, var19, (SubLObject)$ic13$, var13), (SubLObject)ConsesLow.listS((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)$ic163$, var18)), ConsesLow.append(var16, (SubLObject)NIL)), (SubLObject)ConsesLow.list((SubLObject)$ic68$, var20, (SubLObject)ConsesLow.list((SubLObject)$ic15$, var20)), (SubLObject)ConsesLow.list((SubLObject)$ic39$, var20, var21)))));
         }
-        if (module0005.NIL != var13) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic22$, var13, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic167$, (SubLObject)module0005.$ic168$, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic155$, (SubLObject)ConsesLow.list(var6, var7, var8), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic169$, var13), ConsesLow.append(var16, (SubLObject)module0005.NIL))));
+        if (NIL != var13) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic22$, var13, (SubLObject)ConsesLow.list((SubLObject)$ic167$, (SubLObject)$ic168$, (SubLObject)ConsesLow.listS((SubLObject)$ic155$, (SubLObject)ConsesLow.list(var6, var7, var8), (SubLObject)ConsesLow.list((SubLObject)$ic169$, var13), ConsesLow.append(var16, (SubLObject)NIL))));
         }
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic170$, (SubLObject)ConsesLow.list(var6, var7, var8), ConsesLow.append(var16, (SubLObject)module0005.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic170$, (SubLObject)ConsesLow.list(var6, var7, var8), ConsesLow.append(var16, (SubLObject)NIL));
     }
     
     public static SubLObject f153(final SubLObject var27) {
-        if (module0005.NIL != var27) {
-            Dynamic.sublisp_throw((SubLObject)module0005.$ic168$, (SubLObject)module0005.NIL);
+        if (NIL != var27) {
+            Dynamic.sublisp_throw((SubLObject)$ic168$, (SubLObject)NIL);
         }
-        return (SubLObject)module0005.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f154(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic171$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic171$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        final SubLObject var7 = (SubLObject)module0005.$ic172$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list(var7), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var7), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic173$, var5, var7, ConsesLow.append(var6, (SubLObject)module0005.NIL)));
+        final SubLObject var7 = (SubLObject)$ic172$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list(var7), (SubLObject)ConsesLow.list((SubLObject)$ic59$, var7), (SubLObject)ConsesLow.listS((SubLObject)$ic173$, var5, var7, ConsesLow.append(var6, (SubLObject)NIL)));
     }
     
     public static SubLObject f155(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic175$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic175$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        final SubLObject var7 = (SubLObject)module0005.$ic176$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list(var7), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic177$, (SubLObject)ConsesLow.list(var7), var5), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic22$, var7, ConsesLow.append(var6, (SubLObject)module0005.NIL)));
+        final SubLObject var7 = (SubLObject)$ic176$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list(var7), (SubLObject)ConsesLow.list((SubLObject)$ic177$, (SubLObject)ConsesLow.list(var7), var5), (SubLObject)ConsesLow.listS((SubLObject)$ic22$, var7, ConsesLow.append(var6, (SubLObject)NIL)));
     }
     
     public static SubLObject f156(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic175$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic175$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        final SubLObject var7 = (SubLObject)module0005.$ic179$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list(var7), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic177$, (SubLObject)ConsesLow.list(var7), var5), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic180$, var7, ConsesLow.append(var6, (SubLObject)module0005.NIL)));
+        final SubLObject var7 = (SubLObject)$ic179$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list(var7), (SubLObject)ConsesLow.list((SubLObject)$ic177$, (SubLObject)ConsesLow.list(var7), var5), (SubLObject)ConsesLow.listS((SubLObject)$ic180$, var7, ConsesLow.append(var6, (SubLObject)NIL)));
     }
     
     public static SubLObject f157(final SubLObject var1, final SubLObject var2) {
         final SubLObject var3 = var1.rest();
         final SubLObject var5;
         final SubLObject var4 = var5 = var3;
-        final SubLObject var6 = (SubLObject)module0005.$ic182$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list(var6), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic177$, (SubLObject)ConsesLow.list(var6), ConsesLow.append(var5, (SubLObject)module0005.NIL)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic180$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic183$, var6), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic184$, (SubLObject)module0005.$ic185$, var6)));
+        final SubLObject var6 = (SubLObject)$ic182$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list(var6), (SubLObject)ConsesLow.listS((SubLObject)$ic177$, (SubLObject)ConsesLow.list(var6), ConsesLow.append(var5, (SubLObject)NIL)), (SubLObject)ConsesLow.list((SubLObject)$ic180$, (SubLObject)ConsesLow.list((SubLObject)$ic183$, var6), (SubLObject)ConsesLow.list((SubLObject)$ic184$, (SubLObject)$ic185$, var6)));
     }
     
     public static SubLObject f158(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic187$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic187$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic188$, var5, reader.bq_cons((SubLObject)module0005.$ic181$, ConsesLow.append(var6, (SubLObject)module0005.NIL)), reader.bq_cons((SubLObject)module0005.$ic153$, ConsesLow.append(var6, (SubLObject)module0005.NIL)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic188$, var5, reader.bq_cons((SubLObject)$ic181$, ConsesLow.append(var6, (SubLObject)NIL)), reader.bq_cons((SubLObject)$ic153$, ConsesLow.append(var6, (SubLObject)NIL)));
     }
     
     public static SubLObject f159(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic187$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic187$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic188$, var5, reader.bq_cons((SubLObject)module0005.$ic190$, ConsesLow.append(var6, (SubLObject)module0005.NIL)), reader.bq_cons((SubLObject)module0005.$ic153$, ConsesLow.append(var6, (SubLObject)module0005.NIL)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic188$, var5, reader.bq_cons((SubLObject)$ic190$, ConsesLow.append(var6, (SubLObject)NIL)), reader.bq_cons((SubLObject)$ic153$, ConsesLow.append(var6, (SubLObject)NIL)));
     }
     
     public static SubLObject f160(final SubLObject var1, final SubLObject var2) {
         final SubLObject var3 = var1.rest();
         final SubLObject var5;
         final SubLObject var4 = var5 = var3;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic192$, (SubLObject)module0005.NIL, ConsesLow.append(var5, (SubLObject)module0005.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic192$, (SubLObject)NIL, ConsesLow.append(var5, (SubLObject)NIL));
     }
     
     public static SubLObject f161(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic194$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic194$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        final SubLObject var7 = (SubLObject)module0005.$ic195$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list(var7), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic196$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic153$, var5, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic68$, var7, (SubLObject)module0005.$ic197$)), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic22$, var7, ConsesLow.append(var6, (SubLObject)module0005.NIL))));
+        final SubLObject var7 = (SubLObject)$ic195$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list(var7), (SubLObject)ConsesLow.list((SubLObject)$ic196$, (SubLObject)ConsesLow.list((SubLObject)$ic153$, var5, (SubLObject)ConsesLow.listS((SubLObject)$ic68$, var7, (SubLObject)$ic197$)), (SubLObject)ConsesLow.listS((SubLObject)$ic22$, var7, ConsesLow.append(var6, (SubLObject)NIL))));
     }
     
     public static SubLObject f162(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic199$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic199$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic199$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic199$);
         var6 = var4.first();
         final SubLObject var7;
         var4 = (var7 = var4.rest());
-        final SubLObject var8 = (SubLObject)module0005.$ic200$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list(var8), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic196$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic153$, var5, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic68$, var8, (SubLObject)module0005.$ic197$)), (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic196$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic22$, var8, var6), ConsesLow.append(var7, (SubLObject)module0005.NIL))));
+        final SubLObject var8 = (SubLObject)$ic200$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list(var8), (SubLObject)ConsesLow.list((SubLObject)$ic196$, (SubLObject)ConsesLow.list((SubLObject)$ic153$, var5, (SubLObject)ConsesLow.listS((SubLObject)$ic68$, var8, (SubLObject)$ic197$)), (SubLObject)ConsesLow.listS((SubLObject)$ic196$, (SubLObject)ConsesLow.list((SubLObject)$ic22$, var8, var6), ConsesLow.append(var7, (SubLObject)NIL))));
     }
     
     public static SubLObject f163(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic203$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic203$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic203$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic203$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL != var4) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic203$);
-            return (SubLObject)module0005.NIL;
+        if (NIL != var4) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic203$);
+            return (SubLObject)NIL;
         }
-        if (module0005.NIL != module0005.$g10$.getGlobalValue()) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var5);
+        if (NIL != $g10$.getGlobalValue()) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic59$, var5);
         }
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic204$, var5, var6);
+        return (SubLObject)ConsesLow.list((SubLObject)$ic204$, var5, var6);
     }
     
     public static SubLObject f164(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic203$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic203$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic203$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic203$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL != var4) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic203$);
-            return (SubLObject)module0005.NIL;
+        if (NIL != var4) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic203$);
+            return (SubLObject)NIL;
         }
-        if (module0005.NIL != module0005.$g10$.getGlobalValue()) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var5);
+        if (NIL != $g10$.getGlobalValue()) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic59$, var5);
         }
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic206$, var5, var6);
+        return (SubLObject)ConsesLow.list((SubLObject)$ic206$, var5, var6);
     }
     
     public static SubLObject f165(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic208$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic208$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic208$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic208$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL != var4) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic208$);
-            return (SubLObject)module0005.NIL;
+        if (NIL != var4) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic208$);
+            return (SubLObject)NIL;
         }
-        if (module0005.NIL != module0005.$g10$.getGlobalValue()) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var5);
+        if (NIL != $g10$.getGlobalValue()) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic59$, var5);
         }
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic209$, var5, var6);
+        return (SubLObject)ConsesLow.list((SubLObject)$ic209$, var5, var6);
     }
     
     public static SubLObject f166(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic211$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic211$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic211$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic211$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL != var4) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic211$);
-            return (SubLObject)module0005.NIL;
+        if (NIL != var4) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic211$);
+            return (SubLObject)NIL;
         }
-        if (module0005.NIL != module0005.$g10$.getGlobalValue()) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic59$, var5);
+        if (NIL != $g10$.getGlobalValue()) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic59$, var5);
         }
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic212$, var5, var6);
+        return (SubLObject)ConsesLow.list((SubLObject)$ic212$, var5, var6);
     }
     
     public static SubLObject f167(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic214$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic214$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic214$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic214$);
         var6 = var4.first();
         final SubLObject var7;
         var4 = (var7 = var4.rest());
-        if (module0005.NIL != module0005.$g10$.getGlobalValue()) {
-            return (SubLObject)module0005.$ic215$;
+        if (NIL != $g10$.getGlobalValue()) {
+            return (SubLObject)$ic215$;
         }
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic216$, var5, var6, ConsesLow.append(var7, (SubLObject)module0005.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic216$, var5, var6, ConsesLow.append(var7, (SubLObject)NIL));
     }
     
     public static SubLObject f168(final SubLObject var1, final SubLObject var2) {
@@ -1779,67 +1780,67 @@ public final class module0005 extends SubLTranslatedFile
         final SubLObject var3 = var4 = var1.rest();
         SubLObject var6;
         final SubLObject var5 = var6 = var4;
-        SubLObject var7 = (SubLObject)module0005.NIL;
+        SubLObject var7 = (SubLObject)NIL;
         var7 = var6.first();
-        while (module0005.NIL != var6) {
+        while (NIL != var6) {
             SubLObject var337_338;
             final SubLObject var335_336 = var337_338 = var7;
-            SubLObject var8 = (SubLObject)module0005.NIL;
-            SubLObject var9 = (SubLObject)module0005.NIL;
-            cdestructuring_bind.destructuring_bind_must_consp(var337_338, var335_336, (SubLObject)module0005.$ic218$);
+            SubLObject var8 = (SubLObject)NIL;
+            SubLObject var9 = (SubLObject)NIL;
+            cdestructuring_bind.destructuring_bind_must_consp(var337_338, var335_336, (SubLObject)$ic218$);
             var8 = var337_338.first();
             var337_338 = (var9 = var337_338.rest());
-            if (module0005.$ic219$ == var8 || module0005.NIL != f169(var8)) {
-                return reader.bq_cons((SubLObject)module0005.$ic153$, ConsesLow.append(var9, (SubLObject)module0005.NIL));
+            if ($ic219$ == var8 || NIL != f169(var8)) {
+                return reader.bq_cons((SubLObject)$ic153$, ConsesLow.append(var9, (SubLObject)NIL));
             }
             var6 = var6.rest();
             var7 = var6.first();
         }
-        return (SubLObject)module0005.$ic215$;
+        return (SubLObject)$ic215$;
     }
     
     public static SubLObject f170(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic221$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic221$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic221$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic221$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic221$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic221$);
         var7 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic217$, (SubLObject)ConsesLow.list(var5, var6), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic219$, var7));
+        if (NIL == var4) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic217$, (SubLObject)ConsesLow.list(var5, var6), (SubLObject)ConsesLow.list((SubLObject)$ic219$, var7));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic221$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic221$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f171(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic224$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic224$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic217$, reader.bq_cons(var5, ConsesLow.append(var6, (SubLObject)module0005.NIL)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic217$, reader.bq_cons(var5, ConsesLow.append(var6, (SubLObject)NIL)));
     }
     
     public static SubLObject f172(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic224$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic224$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic217$, (SubLObject)ConsesLow.list(var5), reader.bq_cons((SubLObject)module0005.$ic219$, ConsesLow.append(var6, (SubLObject)module0005.NIL)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic217$, (SubLObject)ConsesLow.list(var5), reader.bq_cons((SubLObject)$ic219$, ConsesLow.append(var6, (SubLObject)NIL)));
     }
     
     public static SubLObject f173(final SubLObject var1, final SubLObject var2) {
@@ -1847,105 +1848,105 @@ public final class module0005 extends SubLTranslatedFile
         final SubLObject var3 = var4 = var1.rest();
         SubLObject var6;
         final SubLObject var5 = var6 = var4;
-        SubLObject var7 = (SubLObject)module0005.NIL;
+        SubLObject var7 = (SubLObject)NIL;
         var7 = var6.first();
-        while (module0005.NIL != var6) {
+        while (NIL != var6) {
             SubLObject var352_353;
             final SubLObject var350_351 = var352_353 = var7;
-            SubLObject var8 = (SubLObject)module0005.NIL;
-            SubLObject var9 = (SubLObject)module0005.NIL;
-            cdestructuring_bind.destructuring_bind_must_consp(var352_353, var350_351, (SubLObject)module0005.$ic227$);
+            SubLObject var8 = (SubLObject)NIL;
+            SubLObject var9 = (SubLObject)NIL;
+            cdestructuring_bind.destructuring_bind_must_consp(var352_353, var350_351, (SubLObject)$ic227$);
             var8 = var352_353.first();
             var352_353 = var352_353.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var352_353, var350_351, (SubLObject)module0005.$ic227$);
+            cdestructuring_bind.destructuring_bind_must_consp(var352_353, var350_351, (SubLObject)$ic227$);
             var9 = var352_353.first();
             var352_353 = var352_353.rest();
-            if (module0005.NIL == var352_353) {
-                if (module0005.$ic219$ == var8 || module0005.NIL != f169(var8)) {
+            if (NIL == var352_353) {
+                if ($ic219$ == var8 || NIL != f169(var8)) {
                     return var9;
                 }
             }
             else {
-                cdestructuring_bind.cdestructuring_bind_error(var350_351, (SubLObject)module0005.$ic227$);
+                cdestructuring_bind.cdestructuring_bind_error(var350_351, (SubLObject)$ic227$);
             }
             var6 = var6.rest();
             var7 = var6.first();
         }
-        return (SubLObject)module0005.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f174(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        SubLObject var7 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic221$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        SubLObject var7 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic221$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic221$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic221$);
         var6 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic221$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic221$);
         var7 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic226$, (SubLObject)ConsesLow.list(var5, var6), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic219$, var7));
+        if (NIL == var4) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic226$, (SubLObject)ConsesLow.list(var5, var6), (SubLObject)ConsesLow.list((SubLObject)$ic219$, var7));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic221$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic221$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f175(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic224$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic224$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic226$, reader.bq_cons(var5, ConsesLow.append(var6, (SubLObject)module0005.NIL)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic226$, reader.bq_cons(var5, ConsesLow.append(var6, (SubLObject)NIL)));
     }
     
     public static SubLObject f176(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic231$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic231$);
         var5 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic229$, var5, (SubLObject)module0005.$ic197$);
+        if (NIL == var4) {
+            return (SubLObject)ConsesLow.listS((SubLObject)$ic229$, var5, (SubLObject)$ic197$);
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic231$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic231$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f177(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic224$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic224$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic226$, reader.bq_cons(var5, (SubLObject)module0005.$ic233$), reader.bq_cons((SubLObject)module0005.$ic219$, ConsesLow.append(var6, (SubLObject)module0005.NIL)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic226$, reader.bq_cons(var5, (SubLObject)$ic233$), reader.bq_cons((SubLObject)$ic219$, ConsesLow.append(var6, (SubLObject)NIL)));
     }
     
     public static SubLObject f178(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic224$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic224$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic226$, reader.bq_cons(var5, ConsesLow.append(var6, (SubLObject)module0005.NIL)), (SubLObject)module0005.$ic235$);
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic226$, reader.bq_cons(var5, ConsesLow.append(var6, (SubLObject)NIL)), (SubLObject)$ic235$);
     }
     
     public static SubLObject f179(final SubLObject var364) {
         final SubLThread var365 = SubLProcess.currentSubLThread();
-        return (SubLObject)((module0005.NIL != conses_high.member(var364, reader.$features$.getDynamicValue(var365), (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) ? module0005.T : module0005.NIL);
+        return (SubLObject)((NIL != conses_high.member(var364, reader.$features$.getDynamicValue(var365), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) ? T : NIL);
     }
     
     public static SubLObject f169(final SubLObject var339) {
@@ -1955,323 +1956,323 @@ public final class module0005 extends SubLTranslatedFile
             }
         }
         else {
-            SubLObject var340 = (SubLObject)module0005.NIL;
-            SubLObject var341 = (SubLObject)module0005.NIL;
-            cdestructuring_bind.destructuring_bind_must_consp(var339, var339, (SubLObject)module0005.$ic238$);
+            SubLObject var340 = (SubLObject)NIL;
+            SubLObject var341 = (SubLObject)NIL;
+            cdestructuring_bind.destructuring_bind_must_consp(var339, var339, (SubLObject)$ic238$);
             var340 = var339.first();
             final SubLObject var342 = var341 = var339.rest();
             final SubLObject var343 = var340;
-            if (var343.eql((SubLObject)module0005.$ic239$) || var343.eql((SubLObject)module0005.$ic240$) || var343.eql((SubLObject)module0005.$ic4$)) {
-                return (SubLObject)SubLObjectFactory.makeBoolean(module0005.NIL == f169(var341.first()));
+            if (var343.eql((SubLObject)$ic239$) || var343.eql((SubLObject)$ic240$) || var343.eql((SubLObject)$ic4$)) {
+                return (SubLObject)makeBoolean(NIL == f169(var341.first()));
             }
-            if (var343.eql((SubLObject)module0005.$ic241$) || var343.eql((SubLObject)module0005.$ic242$) || var343.eql((SubLObject)module0005.$ic20$)) {
-                SubLObject var344 = (SubLObject)module0005.NIL;
-                if (module0005.NIL == var344) {
+            if (var343.eql((SubLObject)$ic241$) || var343.eql((SubLObject)$ic242$) || var343.eql((SubLObject)$ic20$)) {
+                SubLObject var344 = (SubLObject)NIL;
+                if (NIL == var344) {
                     SubLObject var345;
                     SubLObject var346;
-                    for (var345 = var341, var346 = (SubLObject)module0005.NIL, var346 = var345.first(); module0005.NIL == var344 && module0005.NIL != var345; var344 = f169(var346), var345 = var345.rest(), var346 = var345.first()) {}
+                    for (var345 = var341, var346 = (SubLObject)NIL, var346 = var345.first(); NIL == var344 && NIL != var345; var344 = f169(var346), var345 = var345.rest(), var346 = var345.first()) {}
                 }
                 return var344;
             }
-            if (var343.eql((SubLObject)module0005.$ic243$) || var343.eql((SubLObject)module0005.$ic244$) || var343.eql((SubLObject)module0005.$ic101$)) {
-                SubLObject var347 = (SubLObject)module0005.NIL;
-                if (module0005.NIL == var347) {
+            if (var343.eql((SubLObject)$ic243$) || var343.eql((SubLObject)$ic244$) || var343.eql((SubLObject)$ic101$)) {
+                SubLObject var347 = (SubLObject)NIL;
+                if (NIL == var347) {
                     SubLObject var345;
                     SubLObject var346;
-                    for (var345 = var341, var346 = (SubLObject)module0005.NIL, var346 = var345.first(); module0005.NIL == var347 && module0005.NIL != var345; var347 = (SubLObject)SubLObjectFactory.makeBoolean(module0005.NIL == f169(var346)), var345 = var345.rest(), var346 = var345.first()) {}
+                    for (var345 = var341, var346 = (SubLObject)NIL, var346 = var345.first(); NIL == var347 && NIL != var345; var347 = (SubLObject)makeBoolean(NIL == f169(var346)), var345 = var345.rest(), var346 = var345.first()) {}
                 }
-                return (SubLObject)SubLObjectFactory.makeBoolean(module0005.NIL == var347);
+                return (SubLObject)makeBoolean(NIL == var347);
             }
         }
-        Errors.error((SubLObject)module0005.$ic245$, var339);
-        return (SubLObject)module0005.NIL;
+        Errors.error((SubLObject)$ic245$, var339);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f180(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic247$);
+        SubLObject var5 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic247$);
         var5 = var4.first();
         final SubLObject var6;
         var4 = (var6 = var4.rest());
-        if (module0005.NIL == var5) {
-            return (SubLObject)module0005.$ic248$;
+        if (NIL == var5) {
+            return (SubLObject)$ic248$;
         }
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic249$, var5, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic250$, var5, ConsesLow.append(var6, (SubLObject)module0005.NIL)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic249$, var5, (SubLObject)ConsesLow.listS((SubLObject)$ic250$, var5, ConsesLow.append(var6, (SubLObject)NIL)));
     }
     
     public static SubLObject f181(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic252$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic252$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic252$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic252$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            final SubLObject var7 = (SubLObject)module0005.$ic253$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var7, var5)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic180$, var7, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic70$, var7, var6)));
+        if (NIL == var4) {
+            final SubLObject var7 = (SubLObject)$ic253$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var7, var5)), (SubLObject)ConsesLow.list((SubLObject)$ic180$, var7, (SubLObject)ConsesLow.list((SubLObject)$ic70$, var7, var6)));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic252$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic252$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f182(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic255$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic255$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic255$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic255$);
         var6 = var4.first();
         var4 = var4.rest();
-        final SubLObject var7 = (SubLObject)(var4.isCons() ? var4.first() : module0005.$ic256$);
-        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)module0005.$ic255$);
+        final SubLObject var7 = (SubLObject)(var4.isCons() ? var4.first() : $ic256$);
+        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)$ic255$);
         var4 = var4.rest();
-        final SubLObject var8 = (SubLObject)(var4.isCons() ? var4.first() : module0005.$ic257$);
-        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)module0005.$ic255$);
+        final SubLObject var8 = (SubLObject)(var4.isCons() ? var4.first() : $ic257$);
+        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)$ic255$);
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            final SubLObject var9 = (SubLObject)module0005.$ic258$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var9, var5)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic180$, var9, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic259$, var9, var6, var7, var8)));
+        if (NIL == var4) {
+            final SubLObject var9 = (SubLObject)$ic258$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var9, var5)), (SubLObject)ConsesLow.list((SubLObject)$ic180$, var9, (SubLObject)ConsesLow.list((SubLObject)$ic259$, var9, var6, var7, var8)));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic255$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic255$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f183(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic261$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic261$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic261$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic261$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            final SubLObject var7 = (SubLObject)module0005.$ic262$;
-            final SubLObject var8 = (SubLObject)module0005.$ic263$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var8, var5)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic188$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic264$, var8), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic114$, (SubLObject)ConsesLow.list(var7, var8), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic70$, var7, var6)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic45$, (SubLObject)ConsesLow.list(var7, var8), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic70$, var7, var6))));
+        if (NIL == var4) {
+            final SubLObject var7 = (SubLObject)$ic262$;
+            final SubLObject var8 = (SubLObject)$ic263$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var8, var5)), (SubLObject)ConsesLow.list((SubLObject)$ic188$, (SubLObject)ConsesLow.list((SubLObject)$ic264$, var8), (SubLObject)ConsesLow.list((SubLObject)$ic114$, (SubLObject)ConsesLow.list(var7, var8), (SubLObject)ConsesLow.list((SubLObject)$ic70$, var7, var6)), (SubLObject)ConsesLow.list((SubLObject)$ic45$, (SubLObject)ConsesLow.list(var7, var8), (SubLObject)ConsesLow.list((SubLObject)$ic70$, var7, var6))));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic261$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic261$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f184(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic266$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic266$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic266$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic266$);
         var6 = var4.first();
         var4 = var4.rest();
-        final SubLObject var7 = (SubLObject)(var4.isCons() ? var4.first() : module0005.$ic256$);
-        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)module0005.$ic266$);
+        final SubLObject var7 = (SubLObject)(var4.isCons() ? var4.first() : $ic256$);
+        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)$ic266$);
         var4 = var4.rest();
-        final SubLObject var8 = (SubLObject)(var4.isCons() ? var4.first() : module0005.$ic257$);
-        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)module0005.$ic266$);
+        final SubLObject var8 = (SubLObject)(var4.isCons() ? var4.first() : $ic257$);
+        cdestructuring_bind.destructuring_bind_must_listp(var4, var3, (SubLObject)$ic266$);
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            final SubLObject var9 = (SubLObject)module0005.$ic267$;
-            final SubLObject var10 = (SubLObject)module0005.$ic268$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var10, var5)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic188$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic264$, var10), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic114$, (SubLObject)ConsesLow.list(var9, var10), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic259$, var9, var6, var7, var8)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic45$, (SubLObject)ConsesLow.list(var9, var10), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic259$, var9, var6, var7, var8))));
+        if (NIL == var4) {
+            final SubLObject var9 = (SubLObject)$ic267$;
+            final SubLObject var10 = (SubLObject)$ic268$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var10, var5)), (SubLObject)ConsesLow.list((SubLObject)$ic188$, (SubLObject)ConsesLow.list((SubLObject)$ic264$, var10), (SubLObject)ConsesLow.list((SubLObject)$ic114$, (SubLObject)ConsesLow.list(var9, var10), (SubLObject)ConsesLow.list((SubLObject)$ic259$, var9, var6, var7, var8)), (SubLObject)ConsesLow.list((SubLObject)$ic45$, (SubLObject)ConsesLow.list(var9, var10), (SubLObject)ConsesLow.list((SubLObject)$ic259$, var9, var6, var7, var8))));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic266$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic266$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f185(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic270$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic270$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic270$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic270$);
         var6 = var4.first();
         var4 = var4.rest();
-        SubLObject var7 = (SubLObject)module0005.NIL;
+        SubLObject var7 = (SubLObject)NIL;
         SubLObject var8 = var4;
-        SubLObject var9 = (SubLObject)module0005.NIL;
-        SubLObject var395_396 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var8) {
-            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)module0005.$ic270$);
+        SubLObject var9 = (SubLObject)NIL;
+        SubLObject var395_396 = (SubLObject)NIL;
+        while (NIL != var8) {
+            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)$ic270$);
             var395_396 = var8.first();
             var8 = var8.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)module0005.$ic270$);
-            if (module0005.NIL == conses_high.member(var395_396, (SubLObject)module0005.$ic271$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var9 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)$ic270$);
+            if (NIL == conses_high.member(var395_396, (SubLObject)$ic271$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var9 = (SubLObject)T;
             }
-            if (var395_396 == module0005.$ic9$) {
+            if (var395_396 == $ic9$) {
                 var7 = var8.first();
             }
             var8 = var8.rest();
         }
-        if (module0005.NIL != var9 && module0005.NIL == var7) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic270$);
+        if (NIL != var9 && NIL == var7) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic270$);
         }
-        final SubLObject var10 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic272$, var4);
-        final SubLObject var11 = (SubLObject)((module0005.NIL != var10) ? conses_high.cadr(var10) : module0005.$ic256$);
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic273$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.$ic257$);
-        if (!var13.equal((SubLObject)module0005.$ic257$)) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic274$, var6, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic275$, var5, var6, var11, var13));
+        final SubLObject var10 = cdestructuring_bind.property_list_member((SubLObject)$ic272$, var4);
+        final SubLObject var11 = (SubLObject)((NIL != var10) ? conses_high.cadr(var10) : $ic256$);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic273$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : $ic257$);
+        if (!var13.equal((SubLObject)$ic257$)) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic274$, var6, (SubLObject)ConsesLow.list((SubLObject)$ic275$, var5, var6, var11, var13));
         }
-        if (var11.equal((SubLObject)module0005.$ic256$)) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic274$, var6, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic275$, var5, var6));
+        if (var11.equal((SubLObject)$ic256$)) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic274$, var6, (SubLObject)ConsesLow.list((SubLObject)$ic275$, var5, var6));
         }
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic274$, var6, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic275$, var5, var6, var11));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic274$, var6, (SubLObject)ConsesLow.list((SubLObject)$ic275$, var5, var6, var11));
     }
     
     public static SubLObject f186(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic252$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic252$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic252$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic252$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            final SubLObject var7 = (SubLObject)module0005.$ic277$;
-            final SubLObject var8 = (SubLObject)module0005.$ic278$;
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic69$, var5, (SubLObject)module0005.$ic233$)), (SubLObject)ConsesLow.list(var8, var6)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic188$, var8, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic279$, var8, var7), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic274$, var6, var7)));
+        if (NIL == var4) {
+            final SubLObject var7 = (SubLObject)$ic277$;
+            final SubLObject var8 = (SubLObject)$ic278$;
+            return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var7, (SubLObject)ConsesLow.listS((SubLObject)$ic69$, var5, (SubLObject)$ic233$)), (SubLObject)ConsesLow.list(var8, var6)), (SubLObject)ConsesLow.list((SubLObject)$ic188$, var8, (SubLObject)ConsesLow.list((SubLObject)$ic279$, var8, var7), (SubLObject)ConsesLow.list((SubLObject)$ic274$, var6, var7)));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic252$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic252$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f187(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic270$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic270$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic270$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic270$);
         var6 = var4.first();
         var4 = var4.rest();
-        SubLObject var7 = (SubLObject)module0005.NIL;
+        SubLObject var7 = (SubLObject)NIL;
         SubLObject var8 = var4;
-        SubLObject var9 = (SubLObject)module0005.NIL;
-        SubLObject var407_408 = (SubLObject)module0005.NIL;
-        while (module0005.NIL != var8) {
-            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)module0005.$ic270$);
+        SubLObject var9 = (SubLObject)NIL;
+        SubLObject var407_408 = (SubLObject)NIL;
+        while (NIL != var8) {
+            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)$ic270$);
             var407_408 = var8.first();
             var8 = var8.rest();
-            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)module0005.$ic270$);
-            if (module0005.NIL == conses_high.member(var407_408, (SubLObject)module0005.$ic271$, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-                var9 = (SubLObject)module0005.T;
+            cdestructuring_bind.destructuring_bind_must_consp(var8, var3, (SubLObject)$ic270$);
+            if (NIL == conses_high.member(var407_408, (SubLObject)$ic271$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+                var9 = (SubLObject)T;
             }
-            if (var407_408 == module0005.$ic9$) {
+            if (var407_408 == $ic9$) {
                 var7 = var8.first();
             }
             var8 = var8.rest();
         }
-        if (module0005.NIL != var9 && module0005.NIL == var7) {
-            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic270$);
+        if (NIL != var9 && NIL == var7) {
+            cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic270$);
         }
-        final SubLObject var10 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic272$, var4);
-        final SubLObject var11 = (SubLObject)((module0005.NIL != var10) ? conses_high.cadr(var10) : module0005.$ic256$);
-        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)module0005.$ic273$, var4);
-        final SubLObject var13 = (SubLObject)((module0005.NIL != var12) ? conses_high.cadr(var12) : module0005.$ic257$);
-        final SubLObject var14 = (SubLObject)module0005.$ic281$;
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var14, var5)), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic22$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic282$, var14, var6, var11, var13), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic276$, var14, var6)));
+        final SubLObject var10 = cdestructuring_bind.property_list_member((SubLObject)$ic272$, var4);
+        final SubLObject var11 = (SubLObject)((NIL != var10) ? conses_high.cadr(var10) : $ic256$);
+        final SubLObject var12 = cdestructuring_bind.property_list_member((SubLObject)$ic273$, var4);
+        final SubLObject var13 = (SubLObject)((NIL != var12) ? conses_high.cadr(var12) : $ic257$);
+        final SubLObject var14 = (SubLObject)$ic281$;
+        return (SubLObject)ConsesLow.list((SubLObject)$ic21$, (SubLObject)ConsesLow.list((SubLObject)ConsesLow.list(var14, var5)), (SubLObject)ConsesLow.list((SubLObject)$ic22$, (SubLObject)ConsesLow.list((SubLObject)$ic282$, var14, var6, var11, var13), (SubLObject)ConsesLow.list((SubLObject)$ic276$, var14, var6)));
     }
     
     public static SubLObject f188(final SubLObject var412, final SubLObject var413) {
-        return ConsesLow.rplacd(conses_high.last(var412, (SubLObject)module0005.UNPROVIDED), var413);
+        return ConsesLow.rplacd(conses_high.last(var412, (SubLObject)UNPROVIDED), var413);
     }
     
     public static SubLObject f189(final SubLObject var1, final SubLObject var2) {
         final SubLObject var3 = var1.rest();
         final SubLObject var5;
         final SubLObject var4 = var5 = var3;
-        return (SubLObject)ConsesLow.listS((SubLObject)module0005.$ic21$, (SubLObject)module0005.$ic284$, ConsesLow.append(var5, (SubLObject)module0005.NIL));
+        return (SubLObject)ConsesLow.listS((SubLObject)$ic21$, (SubLObject)$ic284$, ConsesLow.append(var5, (SubLObject)NIL));
     }
     
     public static SubLObject f190(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic286$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic286$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic286$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic286$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic20$, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic4$, var5), var6);
+        if (NIL == var4) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic20$, (SubLObject)ConsesLow.list((SubLObject)$ic4$, var5), var6);
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic286$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic286$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f191(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic288$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic288$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic288$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic288$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic4$, (SubLObject)ConsesLow.list((SubLObject)module0005.EQ, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic4$, var5), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic4$, var6)));
+        if (NIL == var4) {
+            return (SubLObject)ConsesLow.list((SubLObject)$ic4$, (SubLObject)ConsesLow.list((SubLObject)EQ, (SubLObject)ConsesLow.list((SubLObject)$ic4$, var5), (SubLObject)ConsesLow.list((SubLObject)$ic4$, var6)));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic288$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic288$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f192(final SubLObject var1, final SubLObject var2) {
         SubLObject var4;
         final SubLObject var3 = var4 = var1.rest();
-        SubLObject var5 = (SubLObject)module0005.NIL;
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic288$);
+        SubLObject var5 = (SubLObject)NIL;
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic288$);
         var5 = var4.first();
         var4 = var4.rest();
-        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)module0005.$ic288$);
+        cdestructuring_bind.destructuring_bind_must_consp(var4, var3, (SubLObject)$ic288$);
         var6 = var4.first();
         var4 = var4.rest();
-        if (module0005.NIL == var4) {
-            return (SubLObject)ConsesLow.list((SubLObject)module0005.EQ, (SubLObject)ConsesLow.list((SubLObject)module0005.$ic4$, var5), (SubLObject)ConsesLow.list((SubLObject)module0005.$ic4$, var6));
+        if (NIL == var4) {
+            return (SubLObject)ConsesLow.list((SubLObject)EQ, (SubLObject)ConsesLow.list((SubLObject)$ic4$, var5), (SubLObject)ConsesLow.list((SubLObject)$ic4$, var6));
         }
-        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)module0005.$ic288$);
-        return (SubLObject)module0005.NIL;
+        cdestructuring_bind.cdestructuring_bind_error(var3, (SubLObject)$ic288$);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f193(final SubLObject var1, final SubLObject var2) {
         final SubLThread var3 = SubLProcess.currentSubLThread();
         SubLObject var5;
         final SubLObject var4 = var5 = var1.rest();
-        SubLObject var6 = (SubLObject)module0005.NIL;
-        cdestructuring_bind.destructuring_bind_must_consp(var5, var4, (SubLObject)module0005.$ic290$);
+        SubLObject var6 = (SubLObject)NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(var5, var4, (SubLObject)$ic290$);
         var6 = var5.first();
         final SubLObject var7;
         var5 = (var7 = var5.rest());
-        if (module0005.NIL != Sequences.find((SubLObject)module0005.$ic291$, reader.$features$.getDynamicValue(var3), (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED, (SubLObject)module0005.UNPROVIDED)) {
-            return reader.bq_cons((SubLObject)module0005.$ic153$, ConsesLow.append(var7, (SubLObject)module0005.NIL));
+        if (NIL != Sequences.find((SubLObject)$ic291$, reader.$features$.getDynamicValue(var3), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED)) {
+            return reader.bq_cons((SubLObject)$ic153$, ConsesLow.append(var7, (SubLObject)NIL));
         }
-        return (SubLObject)ConsesLow.list((SubLObject)module0005.$ic188$, var6, reader.bq_cons((SubLObject)module0005.$ic292$, ConsesLow.append(var7, (SubLObject)module0005.NIL)), reader.bq_cons((SubLObject)module0005.$ic153$, ConsesLow.append(var7, (SubLObject)module0005.NIL)));
+        return (SubLObject)ConsesLow.list((SubLObject)$ic188$, var6, reader.bq_cons((SubLObject)$ic292$, ConsesLow.append(var7, (SubLObject)NIL)), reader.bq_cons((SubLObject)$ic153$, ConsesLow.append(var7, (SubLObject)NIL)));
     }
     
     public static SubLObject f194() {
@@ -2350,91 +2351,91 @@ public final class module0005 extends SubLTranslatedFile
         SubLFiles.declareMacro("com.cyc.cycjava.cycl.module0005", "f191", "FXOR");
         SubLFiles.declareMacro("com.cyc.cycjava.cycl.module0005", "f192", "FEQUIV");
         SubLFiles.declareMacro("com.cyc.cycjava.cycl.module0005", "f193", "S#121");
-        return (SubLObject)module0005.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f195() {
-        module0005.$g10$ = SubLFiles.deflexical("*IGNORE-ASSERT-TYPES?*", (SubLObject)module0005.T);
-        return (SubLObject)module0005.NIL;
+        $g10$ = SubLFiles.deflexical("*IGNORE-ASSERT-TYPES?*", (SubLObject)T);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f196() {
-        module0002.f38((SubLObject)module0005.$ic0$);
-        module0002.f38((SubLObject)module0005.$ic3$);
-        module0002.f38((SubLObject)module0005.$ic5$);
-        module0002.f38((SubLObject)module0005.$ic6$);
-        module0002.f50((SubLObject)module0005.$ic19$, (SubLObject)module0005.$ic6$);
-        module0002.f50((SubLObject)module0005.$ic27$, (SubLObject)module0005.$ic6$);
-        module0002.f38((SubLObject)module0005.$ic28$);
-        module0002.f38((SubLObject)module0005.$ic46$);
-        module0002.f38((SubLObject)module0005.$ic50$);
-        module0002.f38((SubLObject)module0005.$ic56$);
-        module0002.f38((SubLObject)module0005.$ic60$);
-        module0002.f38((SubLObject)module0005.$ic63$);
-        module0002.f38((SubLObject)module0005.$ic72$);
-        module0002.f38((SubLObject)module0005.$ic74$);
-        module0002.f38((SubLObject)module0005.$ic79$);
-        module0002.f38((SubLObject)module0005.$ic82$);
-        module0002.f38((SubLObject)module0005.$ic86$);
-        module0002.f38((SubLObject)module0005.$ic89$);
-        module0002.f38((SubLObject)module0005.$ic95$);
-        module0002.f38((SubLObject)module0005.$ic98$);
-        module0002.f38((SubLObject)module0005.$ic102$);
-        module0002.f38((SubLObject)module0005.$ic106$);
-        module0002.f38((SubLObject)module0005.$ic114$);
-        module0002.f38((SubLObject)module0005.$ic119$);
-        module0002.f38((SubLObject)module0005.$ic135$);
-        module0002.f38((SubLObject)module0005.$ic137$);
-        module0002.f38((SubLObject)module0005.$ic139$);
-        module0002.f38((SubLObject)module0005.$ic140$);
-        module0002.f38((SubLObject)module0005.$ic143$);
-        module0002.f50((SubLObject)module0005.$ic151$, (SubLObject)module0005.$ic143$);
-        module0002.f50((SubLObject)module0005.$ic152$, (SubLObject)module0005.$ic143$);
-        module0002.f50((SubLObject)module0005.$ic154$, (SubLObject)module0005.$ic143$);
-        module0002.f38((SubLObject)module0005.$ic155$);
-        module0002.f50((SubLObject)module0005.$ic169$, (SubLObject)module0005.$ic155$);
-        module0002.f38((SubLObject)module0005.$ic167$);
-        module0002.f38((SubLObject)module0005.$ic174$);
-        module0002.f38((SubLObject)module0005.$ic178$);
-        module0002.f38((SubLObject)module0005.$ic181$);
-        module0002.f38((SubLObject)module0005.$ic186$);
-        module0002.f38((SubLObject)module0005.$ic189$);
-        module0002.f38((SubLObject)module0005.$ic191$);
-        module0002.f38((SubLObject)module0005.$ic193$);
-        module0002.f38((SubLObject)module0005.$ic198$);
-        module0002.f38((SubLObject)module0005.$ic201$);
-        module0002.f38((SubLObject)module0005.$ic202$);
-        module0002.f38((SubLObject)module0005.$ic205$);
-        module0002.f38((SubLObject)module0005.$ic207$);
-        module0002.f38((SubLObject)module0005.$ic210$);
-        module0002.f38((SubLObject)module0005.$ic213$);
-        module0002.f38((SubLObject)module0005.$ic217$);
-        module0002.f38((SubLObject)module0005.$ic220$);
-        module0001.f5((SubLObject)module0005.$ic220$, (SubLObject)module0005.$ic222$);
-        module0002.f38((SubLObject)module0005.$ic223$);
-        module0002.f38((SubLObject)module0005.$ic225$);
-        module0002.f38((SubLObject)module0005.$ic226$);
-        module0002.f38((SubLObject)module0005.$ic228$);
-        module0001.f5((SubLObject)module0005.$ic228$, (SubLObject)module0005.$ic222$);
-        module0002.f38((SubLObject)module0005.$ic229$);
-        module0002.f38((SubLObject)module0005.$ic230$);
-        module0002.f38((SubLObject)module0005.$ic232$);
-        module0002.f38((SubLObject)module0005.$ic234$);
-        module0002.f38((SubLObject)module0005.$ic236$);
-        module0002.f38((SubLObject)module0005.$ic237$);
-        module0002.f38((SubLObject)module0005.$ic246$);
-        module0002.f38((SubLObject)module0005.$ic251$);
-        module0002.f38((SubLObject)module0005.$ic254$);
-        module0002.f38((SubLObject)module0005.$ic260$);
-        module0002.f38((SubLObject)module0005.$ic265$);
-        module0002.f38((SubLObject)module0005.$ic269$);
-        module0002.f38((SubLObject)module0005.$ic276$);
-        module0002.f38((SubLObject)module0005.$ic280$);
-        module0002.f38((SubLObject)module0005.$ic283$);
-        module0002.f38((SubLObject)module0005.$ic285$);
-        module0002.f38((SubLObject)module0005.$ic287$);
-        module0002.f38((SubLObject)module0005.$ic289$);
-        return (SubLObject)module0005.NIL;
+        module0002.f38((SubLObject)$ic0$);
+        module0002.f38((SubLObject)$ic3$);
+        module0002.f38((SubLObject)$ic5$);
+        module0002.f38((SubLObject)$ic6$);
+        module0002.f50((SubLObject)$ic19$, (SubLObject)$ic6$);
+        module0002.f50((SubLObject)$ic27$, (SubLObject)$ic6$);
+        module0002.f38((SubLObject)$ic28$);
+        module0002.f38((SubLObject)$ic46$);
+        module0002.f38((SubLObject)$ic50$);
+        module0002.f38((SubLObject)$ic56$);
+        module0002.f38((SubLObject)$ic60$);
+        module0002.f38((SubLObject)$ic63$);
+        module0002.f38((SubLObject)$ic72$);
+        module0002.f38((SubLObject)$ic74$);
+        module0002.f38((SubLObject)$ic79$);
+        module0002.f38((SubLObject)$ic82$);
+        module0002.f38((SubLObject)$ic86$);
+        module0002.f38((SubLObject)$ic89$);
+        module0002.f38((SubLObject)$ic95$);
+        module0002.f38((SubLObject)$ic98$);
+        module0002.f38((SubLObject)$ic102$);
+        module0002.f38((SubLObject)$ic106$);
+        module0002.f38((SubLObject)$ic114$);
+        module0002.f38((SubLObject)$ic119$);
+        module0002.f38((SubLObject)$ic135$);
+        module0002.f38((SubLObject)$ic137$);
+        module0002.f38((SubLObject)$ic139$);
+        module0002.f38((SubLObject)$ic140$);
+        module0002.f38((SubLObject)$ic143$);
+        module0002.f50((SubLObject)$ic151$, (SubLObject)$ic143$);
+        module0002.f50((SubLObject)$ic152$, (SubLObject)$ic143$);
+        module0002.f50((SubLObject)$ic154$, (SubLObject)$ic143$);
+        module0002.f38((SubLObject)$ic155$);
+        module0002.f50((SubLObject)$ic169$, (SubLObject)$ic155$);
+        module0002.f38((SubLObject)$ic167$);
+        module0002.f38((SubLObject)$ic174$);
+        module0002.f38((SubLObject)$ic178$);
+        module0002.f38((SubLObject)$ic181$);
+        module0002.f38((SubLObject)$ic186$);
+        module0002.f38((SubLObject)$ic189$);
+        module0002.f38((SubLObject)$ic191$);
+        module0002.f38((SubLObject)$ic193$);
+        module0002.f38((SubLObject)$ic198$);
+        module0002.f38((SubLObject)$ic201$);
+        module0002.f38((SubLObject)$ic202$);
+        module0002.f38((SubLObject)$ic205$);
+        module0002.f38((SubLObject)$ic207$);
+        module0002.f38((SubLObject)$ic210$);
+        module0002.f38((SubLObject)$ic213$);
+        module0002.f38((SubLObject)$ic217$);
+        module0002.f38((SubLObject)$ic220$);
+        module0001.f5((SubLObject)$ic220$, (SubLObject)$ic222$);
+        module0002.f38((SubLObject)$ic223$);
+        module0002.f38((SubLObject)$ic225$);
+        module0002.f38((SubLObject)$ic226$);
+        module0002.f38((SubLObject)$ic228$);
+        module0001.f5((SubLObject)$ic228$, (SubLObject)$ic222$);
+        module0002.f38((SubLObject)$ic229$);
+        module0002.f38((SubLObject)$ic230$);
+        module0002.f38((SubLObject)$ic232$);
+        module0002.f38((SubLObject)$ic234$);
+        module0002.f38((SubLObject)$ic236$);
+        module0002.f38((SubLObject)$ic237$);
+        module0002.f38((SubLObject)$ic246$);
+        module0002.f38((SubLObject)$ic251$);
+        module0002.f38((SubLObject)$ic254$);
+        module0002.f38((SubLObject)$ic260$);
+        module0002.f38((SubLObject)$ic265$);
+        module0002.f38((SubLObject)$ic269$);
+        module0002.f38((SubLObject)$ic276$);
+        module0002.f38((SubLObject)$ic280$);
+        module0002.f38((SubLObject)$ic283$);
+        module0002.f38((SubLObject)$ic285$);
+        module0002.f38((SubLObject)$ic287$);
+        module0002.f38((SubLObject)$ic289$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -2451,307 +2452,307 @@ public final class module0005 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0005();
-        module0005.$g10$ = null;
-        $ic0$ = SubLObjectFactory.makeSymbol("UNTIL");
-        $ic1$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#122", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic2$ = SubLObjectFactory.makeSymbol("CDO");
-        $ic3$ = SubLObjectFactory.makeSymbol("WHILE");
-        $ic4$ = SubLObjectFactory.makeSymbol("CNOT");
-        $ic5$ = SubLObjectFactory.makeSymbol("REPEAT-FOREVER");
-        $ic6$ = SubLObjectFactory.makeSymbol("DO-NUMBERS");
-        $ic7$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#123", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)module0005.ZERO_INTEGER), (SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#126", "CYC"), (SubLObject)module0005.ONE_INTEGER), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic8$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("START"), (SubLObject)SubLObjectFactory.makeKeyword("END"), (SubLObject)SubLObjectFactory.makeKeyword("DELTA"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"));
-        $ic9$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");
-        $ic10$ = SubLObjectFactory.makeKeyword("START");
-        $ic11$ = SubLObjectFactory.makeKeyword("END");
-        $ic12$ = SubLObjectFactory.makeKeyword("DELTA");
-        $ic13$ = SubLObjectFactory.makeKeyword("DONE");
-        $ic14$ = SubLObjectFactory.makeSymbol("CDOTIMES");
-        $ic15$ = SubLObjectFactory.makeSymbol("1+");
-        $ic16$ = SubLObjectFactory.makeSymbol("+");
-        $ic17$ = SubLObjectFactory.makeUninternedSymbol("US#3D54294");
-        $ic18$ = SubLObjectFactory.makeUninternedSymbol("US#36A439E");
-        $ic19$ = SubLObjectFactory.makeSymbol("S#113", "CYC");
-        $ic20$ = SubLObjectFactory.makeSymbol("COR");
-        $ic21$ = SubLObjectFactory.makeSymbol("CLET");
-        $ic22$ = SubLObjectFactory.makeSymbol("PUNLESS");
-        $ic23$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#123", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#128", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#129", "CYC"));
-        $ic24$ = SubLObjectFactory.makeSymbol(">=");
-        $ic25$ = SubLObjectFactory.makeSymbol("<=");
-        $ic26$ = SubLObjectFactory.makeSymbol("=");
-        $ic27$ = SubLObjectFactory.makeSymbol("S#114", "CYC");
-        $ic28$ = SubLObjectFactory.makeSymbol("DO-LIST");
-        $ic29$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic30$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("DONE"), (SubLObject)SubLObjectFactory.makeKeyword("PROGRESS-MESSAGE"));
-        $ic31$ = SubLObjectFactory.makeKeyword("PROGRESS-MESSAGE");
-        $ic32$ = SubLObjectFactory.makeUninternedSymbol("US#7028EF8");
-        $ic33$ = SubLObjectFactory.makeUninternedSymbol("US#713E610");
-        $ic34$ = SubLObjectFactory.makeUninternedSymbol("US#53EB1D3");
-        $ic35$ = SubLObjectFactory.makeUninternedSymbol("US#13E86D7");
-        $ic36$ = ConsesLow.list((SubLObject)module0005.ZERO_INTEGER);
-        $ic37$ = SubLObjectFactory.makeSymbol("LENGTH");
-        $ic38$ = SubLObjectFactory.makeSymbol("NOTING-PERCENT-PROGRESS");
-        $ic39$ = SubLObjectFactory.makeSymbol("NOTE-PERCENT-PROGRESS");
-        $ic40$ = SubLObjectFactory.makeSymbol("CINC");
-        $ic41$ = SubLObjectFactory.makeUninternedSymbol("US#71690C3");
-        $ic42$ = SubLObjectFactory.makeSymbol("CDR");
-        $ic43$ = SubLObjectFactory.makeSymbol("NULL");
-        $ic44$ = SubLObjectFactory.makeSymbol("CAR");
-        $ic45$ = SubLObjectFactory.makeSymbol("CDOLIST");
-        $ic46$ = SubLObjectFactory.makeSymbol("DO-LIST-INDEX");
-        $ic47$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic48$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("DONE"));
-        $ic49$ = SubLObjectFactory.makeUninternedSymbol("US#713E610");
-        $ic50$ = SubLObjectFactory.makeSymbol("DO-ALIST");
-        $ic51$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#133", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#134", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic52$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("INDEX"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"));
-        $ic53$ = SubLObjectFactory.makeKeyword("INDEX");
-        $ic54$ = SubLObjectFactory.makeUninternedSymbol("US#53E18C3");
-        $ic55$ = SubLObjectFactory.makeSymbol("CDESTRUCTURING-BIND");
-        $ic56$ = SubLObjectFactory.makeSymbol("DO-ALIST-VALUES");
-        $ic57$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#133", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic58$ = SubLObjectFactory.makeUninternedSymbol("US#3165895");
-        $ic59$ = SubLObjectFactory.makeSymbol("IGNORE");
-        $ic60$ = SubLObjectFactory.makeSymbol("DO-ALIST-KEYS");
-        $ic61$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#133", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic62$ = SubLObjectFactory.makeUninternedSymbol("US#1069245");
-        $ic63$ = SubLObjectFactory.makeSymbol("CINC-ALIST");
-        $ic64$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#133", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#122", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)module0005.EQL)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#135", "CYC"), (SubLObject)module0005.ONE_INTEGER));
-        $ic65$ = SubLObjectFactory.makeUninternedSymbol("US#13A0444");
-        $ic66$ = SubLObjectFactory.makeSymbol("ASSOC");
-        $ic67$ = SubLObjectFactory.makeSymbol("QUOTE");
-        $ic68$ = SubLObjectFactory.makeSymbol("CSETQ");
-        $ic69$ = SubLObjectFactory.makeSymbol("CONS");
-        $ic70$ = SubLObjectFactory.makeSymbol("CPUSH");
-        $ic71$ = SubLObjectFactory.makeSymbol("RPLACD");
-        $ic72$ = SubLObjectFactory.makeSymbol("CDEC-ALIST");
-        $ic73$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#133", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#122", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)module0005.EQL)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#136", "CYC"), (SubLObject)module0005.ONE_INTEGER));
-        $ic74$ = SubLObjectFactory.makeSymbol("DO-PLIST");
-        $ic75$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#137", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#138", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic76$ = SubLObjectFactory.makeUninternedSymbol("US#3853685");
-        $ic77$ = SubLObjectFactory.makeSymbol("CDDR");
-        $ic78$ = SubLObjectFactory.makeSymbol("CADR");
-        $ic79$ = SubLObjectFactory.makeSymbol("DO-PLIST-PROPERTIES");
-        $ic80$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#137", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#138", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic81$ = SubLObjectFactory.makeUninternedSymbol("US#1069245");
-        $ic82$ = SubLObjectFactory.makeSymbol("DO-PLIST-VALUES");
-        $ic83$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#138", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic84$ = SubLObjectFactory.makeUninternedSymbol("US#5DE2218");
-        $ic85$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("S#139", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic86$ = SubLObjectFactory.makeSymbol("CDOCONS");
-        $ic87$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic88$ = SubLObjectFactory.makeSymbol("ATOM");
-        $ic89$ = SubLObjectFactory.makeSymbol("DO-PAIRS");
-        $ic90$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#141", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#142", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic91$ = SubLObjectFactory.makeUninternedSymbol("US#72660C3");
-        $ic92$ = SubLObjectFactory.makeSymbol("FIRST");
-        $ic93$ = SubLObjectFactory.makeSymbol("CSOME");
-        $ic94$ = SubLObjectFactory.makeSymbol("REST");
-        $ic95$ = SubLObjectFactory.makeSymbol("DO-LIST-WITH-TAIL");
-        $ic96$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#143", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#144", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic97$ = SubLObjectFactory.makeUninternedSymbol("US#742739B");
-        $ic98$ = SubLObjectFactory.makeSymbol("DOLISTS");
-        $ic99$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("&REST"), (SubLObject)SubLObjectFactory.makeSymbol("SPECS")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic100$ = SubLObjectFactory.makeString("CURRENT-~A");
-        $ic101$ = SubLObjectFactory.makeSymbol("CAND");
-        $ic102$ = SubLObjectFactory.makeSymbol("DO-STRING");
-        $ic103$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CHAR"), (SubLObject)SubLObjectFactory.makeSymbol("STRING"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)module0005.ZERO_INTEGER), (SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#145", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic104$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("START"), (SubLObject)SubLObjectFactory.makeKeyword("END"), (SubLObject)SubLObjectFactory.makeKeyword("CHAR-NUM"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"));
-        $ic105$ = SubLObjectFactory.makeKeyword("CHAR-NUM");
-        $ic106$ = SubLObjectFactory.makeSymbol("DO-STRING-INDEX");
-        $ic107$ = SubLObjectFactory.makeUninternedSymbol("US#1919E0D");
-        $ic108$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#145", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CHAR"), (SubLObject)SubLObjectFactory.makeSymbol("STRING"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)module0005.ZERO_INTEGER), (SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic109$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("START"), (SubLObject)SubLObjectFactory.makeKeyword("END"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"));
-        $ic110$ = SubLObjectFactory.makeUninternedSymbol("US#4E23580");
-        $ic111$ = SubLObjectFactory.makeUninternedSymbol("US#36A439E");
-        $ic112$ = SubLObjectFactory.makeSymbol("FIF");
-        $ic113$ = SubLObjectFactory.makeSymbol("CHAR");
-        $ic114$ = SubLObjectFactory.makeSymbol("DO-VECTOR");
-        $ic115$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VECTOR"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#146", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#147", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic116$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ELEMENT-NUM"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"), (SubLObject)SubLObjectFactory.makeKeyword("BACKWARD?"));
-        $ic117$ = SubLObjectFactory.makeKeyword("ELEMENT-NUM");
-        $ic118$ = SubLObjectFactory.makeKeyword("BACKWARD?");
-        $ic119$ = SubLObjectFactory.makeSymbol("DO-VECTOR-INDEX");
-        $ic120$ = SubLObjectFactory.makeUninternedSymbol("US#13ADC23");
-        $ic121$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VECTOR"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#147", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic122$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("DONE"), (SubLObject)SubLObjectFactory.makeKeyword("BACKWARD?"));
-        $ic123$ = SubLObjectFactory.makeUninternedSymbol("US#6A35D19");
-        $ic124$ = SubLObjectFactory.makeUninternedSymbol("US#4FA4FBF");
-        $ic125$ = SubLObjectFactory.makeUninternedSymbol("US#5044AD7");
-        $ic126$ = SubLObjectFactory.makeUninternedSymbol("US#352B2C1");
-        $ic127$ = SubLObjectFactory.makeUninternedSymbol("US#13A2892");
-        $ic128$ = SubLObjectFactory.makeUninternedSymbol("US#1160044");
-        $ic129$ = SubLObjectFactory.makeSymbol("LIST");
-        $ic130$ = SubLObjectFactory.makeSymbol("-");
-        $ic131$ = ConsesLow.list((SubLObject)module0005.ONE_INTEGER);
-        $ic132$ = ConsesLow.list((SubLObject)module0005.MINUS_ONE_INTEGER, (SubLObject)module0005.MINUS_ONE_INTEGER);
-        $ic133$ = SubLObjectFactory.makeSymbol("AREF");
-        $ic134$ = SubLObjectFactory.makeUninternedSymbol("US#2676A7E");
-        $ic135$ = SubLObjectFactory.makeSymbol("CDOVECTOR");
-        $ic136$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VECTOR")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic137$ = SubLObjectFactory.makeSymbol("CSOME-VECTOR");
-        $ic138$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VECTOR"), (SubLObject)SubLObjectFactory.makeSymbol("S#139", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic139$ = SubLObjectFactory.makeSymbol("SMART-CSOMEVECTOR");
-        $ic140$ = SubLObjectFactory.makeSymbol("DO-SEQUENCE");
-        $ic141$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("SEQUENCE"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#146", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic142$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ELEMENT-NUM"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"));
-        $ic143$ = SubLObjectFactory.makeSymbol("DO-SEQUENCE-INDEX");
-        $ic144$ = SubLObjectFactory.makeUninternedSymbol("US#13ADC23");
-        $ic145$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#148", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#149", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("SEQUENCE"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic146$ = SubLObjectFactory.makeUninternedSymbol("US#1E66264");
-        $ic147$ = SubLObjectFactory.makeUninternedSymbol("US#1A98E9B");
-        $ic148$ = SubLObjectFactory.makeUninternedSymbol("US#5FA2DE2");
-        $ic149$ = SubLObjectFactory.makeSymbol("FUNLESS");
-        $ic150$ = SubLObjectFactory.makeSymbol("LISTP");
-        $ic151$ = SubLObjectFactory.makeSymbol("S#116", "CYC");
-        $ic152$ = SubLObjectFactory.makeSymbol("S#117", "CYC");
-        $ic153$ = SubLObjectFactory.makeSymbol("PROGN");
-        $ic154$ = SubLObjectFactory.makeSymbol("S#118", "CYC");
-        $ic155$ = SubLObjectFactory.makeSymbol("DO-HASH-TABLE");
-        $ic156$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("HASH-TABLE"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic157$ = SubLObjectFactory.makeUninternedSymbol("US#7028EF8");
-        $ic158$ = SubLObjectFactory.makeUninternedSymbol("US#2D3BFD5");
-        $ic159$ = SubLObjectFactory.makeUninternedSymbol("US#7C5C08F");
-        $ic160$ = SubLObjectFactory.makeUninternedSymbol("US#3F92607");
-        $ic161$ = SubLObjectFactory.makeUninternedSymbol("US#1FD7008");
-        $ic162$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("*SILENT-PROGRESS?*"));
-        $ic163$ = SubLObjectFactory.makeSymbol("*SILENT-PROGRESS?*");
-        $ic164$ = SubLObjectFactory.makeSymbol("FIRST-OF");
-        $ic165$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeString(""));
-        $ic166$ = SubLObjectFactory.makeSymbol("HASH-TABLE-COUNT");
-        $ic167$ = SubLObjectFactory.makeSymbol("CCATCH-IGNORE");
-        $ic168$ = SubLObjectFactory.makeKeyword("DO-HASH-TABLE");
-        $ic169$ = SubLObjectFactory.makeSymbol("S#119", "CYC");
-        $ic170$ = SubLObjectFactory.makeSymbol("CDOHASH");
-        $ic171$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#150", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic172$ = SubLObjectFactory.makeUninternedSymbol("US#3C57E05");
-        $ic173$ = SubLObjectFactory.makeSymbol("CCATCH");
-        $ic174$ = SubLObjectFactory.makeSymbol("PUNLESS-ERROR");
-        $ic175$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#151", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic176$ = SubLObjectFactory.makeUninternedSymbol("US#54A01D8");
-        $ic177$ = SubLObjectFactory.makeSymbol("CATCH-ERROR-MESSAGE");
-        $ic178$ = SubLObjectFactory.makeSymbol("PWHEN-ERROR");
-        $ic179$ = SubLObjectFactory.makeUninternedSymbol("US#54A01D8");
-        $ic180$ = SubLObjectFactory.makeSymbol("PWHEN");
-        $ic181$ = SubLObjectFactory.makeSymbol("WARN-ON-ERRORS");
-        $ic182$ = SubLObjectFactory.makeUninternedSymbol("US#7028EF8");
-        $ic183$ = SubLObjectFactory.makeSymbol("STRINGP");
-        $ic184$ = SubLObjectFactory.makeSymbol("WARN");
-        $ic185$ = SubLObjectFactory.makeString("~A");
-        $ic186$ = SubLObjectFactory.makeSymbol("POSSIBLY-WARN-ON-ERRORS");
-        $ic187$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic188$ = SubLObjectFactory.makeSymbol("PIF");
-        $ic189$ = SubLObjectFactory.makeSymbol("POSSIBLY-IGNORE-ERRORS");
-        $ic190$ = SubLObjectFactory.makeSymbol("IGNORE-ERRORS");
-        $ic191$ = SubLObjectFactory.makeSymbol("WITH-DEFAULT-ERROR-HANDLING");
-        $ic192$ = SubLObjectFactory.makeSymbol("WITH-ERROR-HANDLER");
-        $ic193$ = SubLObjectFactory.makeSymbol("CUNWIND-ON-FAILURE");
-        $ic194$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#152", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic195$ = SubLObjectFactory.makeUninternedSymbol("US#5877CEC");
-        $ic196$ = SubLObjectFactory.makeSymbol("CUNWIND-PROTECT");
-        $ic197$ = ConsesLow.list((SubLObject)module0005.T);
-        $ic198$ = SubLObjectFactory.makeSymbol("CUNWIND-PROTECT-WITH-FAIL-CLAUSE");
-        $ic199$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#152", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#153", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic200$ = SubLObjectFactory.makeUninternedSymbol("US#5877CEC");
-        $ic201$ = SubLObjectFactory.makeSymbol("*IGNORE-ASSERT-TYPES?*");
-        $ic202$ = SubLObjectFactory.makeSymbol("ASSERT-TYPE");
-        $ic203$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"));
-        $ic204$ = SubLObjectFactory.makeSymbol("CHECK-TYPE");
-        $ic205$ = SubLObjectFactory.makeSymbol("ASSERT-TYPE-IF-PRESENT");
-        $ic206$ = SubLObjectFactory.makeSymbol("S#156", "CYC");
-        $ic207$ = SubLObjectFactory.makeSymbol("ASSERT-LIST-TYPE");
-        $ic208$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"));
-        $ic209$ = SubLObjectFactory.makeSymbol("S#157", "CYC");
-        $ic210$ = SubLObjectFactory.makeSymbol("ASSERT-PLIST-TYPE");
-        $ic211$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#138", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"));
-        $ic212$ = SubLObjectFactory.makeSymbol("S#158", "CYC");
-        $ic213$ = SubLObjectFactory.makeSymbol("ASSERT-MUST");
-        $ic214$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#151", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#159", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&REST"), (SubLObject)SubLObjectFactory.makeSymbol("S#160", "CYC"));
-        $ic215$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PROGN"));
-        $ic216$ = SubLObjectFactory.makeSymbol("MUST");
-        $ic217$ = SubLObjectFactory.makeSymbol("PCASE-FEATURE");
-        $ic218$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#161", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic219$ = SubLObjectFactory.makeSymbol("OTHERWISE");
-        $ic220$ = SubLObjectFactory.makeSymbol("PIF-FEATURE");
-        $ic221$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#162", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#163", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#164", "CYC"));
-        $ic222$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#162", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#165", "CYC"));
-        $ic223$ = SubLObjectFactory.makeSymbol("PWHEN-FEATURE");
-        $ic224$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#162", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic225$ = SubLObjectFactory.makeSymbol("PUNLESS-FEATURE");
-        $ic226$ = SubLObjectFactory.makeSymbol("FCASE-FEATURE");
-        $ic227$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#161", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#151", "CYC"));
-        $ic228$ = SubLObjectFactory.makeSymbol("FIF-FEATURE");
-        $ic229$ = SubLObjectFactory.makeSymbol("FWHEN-FEATURE");
-        $ic230$ = SubLObjectFactory.makeSymbol("FEATURE-MATCH");
-        $ic231$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#162", "CYC"));
-        $ic232$ = SubLObjectFactory.makeSymbol("FUNLESS-FEATURE");
-        $ic233$ = ConsesLow.list((SubLObject)module0005.NIL);
-        $ic234$ = SubLObjectFactory.makeSymbol("FIMPLIES-FEATURE");
-        $ic235$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OTHERWISE"), (SubLObject)module0005.T));
-        $ic236$ = SubLObjectFactory.makeSymbol("ATOMIC-FEATURE-MATCH");
-        $ic237$ = SubLObjectFactory.makeSymbol("FEATURE-EXPRESSION-MATCH");
-        $ic238$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#166", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#167", "CYC"));
-        $ic239$ = SubLObjectFactory.makeKeyword("NOT");
-        $ic240$ = SubLObjectFactory.makeSymbol("NOT");
-        $ic241$ = SubLObjectFactory.makeKeyword("OR");
-        $ic242$ = SubLObjectFactory.makeSymbol("OR");
-        $ic243$ = SubLObjectFactory.makeKeyword("AND");
-        $ic244$ = SubLObjectFactory.makeSymbol("AND");
-        $ic245$ = SubLObjectFactory.makeString("~S is not a well-formed feature expression");
-        $ic246$ = SubLObjectFactory.makeSymbol("FUNCALL-IF");
-        $ic247$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#168", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&REST"), (SubLObject)SubLObjectFactory.makeSymbol("S#105", "CYC"));
-        $ic248$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FALSE"));
-        $ic249$ = SubLObjectFactory.makeSymbol("FWHEN");
-        $ic250$ = SubLObjectFactory.makeSymbol("FUNCALL");
-        $ic251$ = SubLObjectFactory.makeSymbol("CPUSH-IF");
-        $ic252$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#143", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC"));
-        $ic253$ = SubLObjectFactory.makeUninternedSymbol("US#506B097");
-        $ic254$ = SubLObjectFactory.makeSymbol("CPUSHNEW-IF");
-        $ic255$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#143", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#122", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)module0005.EQL))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)module0005.IDENTITY))));
-        $ic256$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)module0005.EQL);
-        $ic257$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)module0005.IDENTITY);
-        $ic258$ = SubLObjectFactory.makeUninternedSymbol("US#506B097");
-        $ic259$ = SubLObjectFactory.makeSymbol("CPUSHNEW");
-        $ic260$ = SubLObjectFactory.makeSymbol("CPUSH-ALL");
-        $ic261$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#170", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC"));
-        $ic262$ = SubLObjectFactory.makeUninternedSymbol("US#35248DF");
-        $ic263$ = SubLObjectFactory.makeUninternedSymbol("US#191238F");
-        $ic264$ = SubLObjectFactory.makeSymbol("VECTORP");
-        $ic265$ = SubLObjectFactory.makeSymbol("CPUSHNEW-ALL");
-        $ic266$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#170", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#122", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)module0005.EQL))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)module0005.IDENTITY))));
-        $ic267$ = SubLObjectFactory.makeUninternedSymbol("US#35248DF");
-        $ic268$ = SubLObjectFactory.makeUninternedSymbol("US#191238F");
-        $ic269$ = SubLObjectFactory.makeSymbol("CSETF-DELETE");
-        $ic270$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#143", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#122", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)module0005.EQL))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)module0005.IDENTITY))));
-        $ic271$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeKeyword("KEY"));
-        $ic272$ = SubLObjectFactory.makeKeyword("TEST");
-        $ic273$ = SubLObjectFactory.makeKeyword("KEY");
-        $ic274$ = SubLObjectFactory.makeSymbol("CSETF");
-        $ic275$ = SubLObjectFactory.makeSymbol("DELETE");
-        $ic276$ = SubLObjectFactory.makeSymbol("CPUSH-END");
-        $ic277$ = SubLObjectFactory.makeUninternedSymbol("US#6C59149");
-        $ic278$ = SubLObjectFactory.makeUninternedSymbol("US#72660C3");
-        $ic279$ = SubLObjectFactory.makeSymbol("S#120", "CYC");
-        $ic280$ = SubLObjectFactory.makeSymbol("CPUSHNEW-END");
-        $ic281$ = SubLObjectFactory.makeUninternedSymbol("US#367CE0C");
-        $ic282$ = SubLObjectFactory.makeSymbol("MEMBER");
-        $ic283$ = SubLObjectFactory.makeSymbol("SILENTLY");
-        $ic284$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("*IGNORE-WARNS?*"), (SubLObject)module0005.T), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("*IGNORE-BREAKS?*"), (SubLObject)module0005.T), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("*SILENT-PROGRESS?*"), (SubLObject)module0005.T), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("*CONTINUE-CERROR?*"), (SubLObject)module0005.T), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("*STANDARD-OUTPUT*"), (SubLObject)SubLObjectFactory.makeSymbol("*NULL-OUTPUT*")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("*ERROR-OUTPUT*"), (SubLObject)SubLObjectFactory.makeSymbol("*NULL-OUTPUT*")));
-        $ic285$ = SubLObjectFactory.makeSymbol("FIMPLIES");
-        $ic286$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#171", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#172", "CYC"));
-        $ic287$ = SubLObjectFactory.makeSymbol("FXOR");
-        $ic288$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#173", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#174", "CYC"));
-        $ic289$ = SubLObjectFactory.makeSymbol("FEQUIV");
-        $ic290$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#175", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic291$ = SubLObjectFactory.makeKeyword("SL2JAVA");
-        $ic292$ = SubLObjectFactory.makeSymbol("WITH-STATIC-AREA");
+        $g10$ = null;
+        $ic0$ = makeSymbol("UNTIL");
+        $ic1$ = ConsesLow.list((SubLObject)makeSymbol("S#122", "CYC"), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic2$ = makeSymbol("CDO");
+        $ic3$ = makeSymbol("WHILE");
+        $ic4$ = makeSymbol("CNOT");
+        $ic5$ = makeSymbol("REPEAT-FOREVER");
+        $ic6$ = makeSymbol("DO-NUMBERS");
+        $ic7$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#123", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)ZERO_INTEGER), (SubLObject)makeSymbol("S#125", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#126", "CYC"), (SubLObject)ONE_INTEGER), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic8$ = ConsesLow.list((SubLObject)makeKeyword("START"), (SubLObject)makeKeyword("END"), (SubLObject)makeKeyword("DELTA"), (SubLObject)makeKeyword("DONE"));
+        $ic9$ = makeKeyword("ALLOW-OTHER-KEYS");
+        $ic10$ = makeKeyword("START");
+        $ic11$ = makeKeyword("END");
+        $ic12$ = makeKeyword("DELTA");
+        $ic13$ = makeKeyword("DONE");
+        $ic14$ = makeSymbol("CDOTIMES");
+        $ic15$ = makeSymbol("1+");
+        $ic16$ = makeSymbol("+");
+        $ic17$ = makeUninternedSymbol("US#3D54294");
+        $ic18$ = makeUninternedSymbol("US#36A439E");
+        $ic19$ = makeSymbol("S#113", "CYC");
+        $ic20$ = makeSymbol("COR");
+        $ic21$ = makeSymbol("CLET");
+        $ic22$ = makeSymbol("PUNLESS");
+        $ic23$ = ConsesLow.list((SubLObject)makeSymbol("S#123", "CYC"), (SubLObject)makeSymbol("S#128", "CYC"), (SubLObject)makeSymbol("S#129", "CYC"));
+        $ic24$ = makeSymbol(">=");
+        $ic25$ = makeSymbol("<=");
+        $ic26$ = makeSymbol("=");
+        $ic27$ = makeSymbol("S#114", "CYC");
+        $ic28$ = makeSymbol("DO-LIST");
+        $ic29$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("VAR", "CYC"), (SubLObject)makeSymbol("LIST"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC"), (SubLObject)makeSymbol("S#130", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic30$ = ConsesLow.list((SubLObject)makeKeyword("DONE"), (SubLObject)makeKeyword("PROGRESS-MESSAGE"));
+        $ic31$ = makeKeyword("PROGRESS-MESSAGE");
+        $ic32$ = makeUninternedSymbol("US#7028EF8");
+        $ic33$ = makeUninternedSymbol("US#713E610");
+        $ic34$ = makeUninternedSymbol("US#53EB1D3");
+        $ic35$ = makeUninternedSymbol("US#13E86D7");
+        $ic36$ = ConsesLow.list((SubLObject)ZERO_INTEGER);
+        $ic37$ = makeSymbol("LENGTH");
+        $ic38$ = makeSymbol("NOTING-PERCENT-PROGRESS");
+        $ic39$ = makeSymbol("NOTE-PERCENT-PROGRESS");
+        $ic40$ = makeSymbol("CINC");
+        $ic41$ = makeUninternedSymbol("US#71690C3");
+        $ic42$ = makeSymbol("CDR");
+        $ic43$ = makeSymbol("NULL");
+        $ic44$ = makeSymbol("CAR");
+        $ic45$ = makeSymbol("CDOLIST");
+        $ic46$ = makeSymbol("DO-LIST-INDEX");
+        $ic47$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#131", "CYC"), (SubLObject)makeSymbol("S#132", "CYC"), (SubLObject)makeSymbol("LIST"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic48$ = ConsesLow.list((SubLObject)makeKeyword("DONE"));
+        $ic49$ = makeUninternedSymbol("US#713E610");
+        $ic50$ = makeSymbol("DO-ALIST");
+        $ic51$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#131", "CYC"), (SubLObject)makeSymbol("S#132", "CYC"), (SubLObject)makeSymbol("S#133", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#134", "CYC"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic52$ = ConsesLow.list((SubLObject)makeKeyword("INDEX"), (SubLObject)makeKeyword("DONE"));
+        $ic53$ = makeKeyword("INDEX");
+        $ic54$ = makeUninternedSymbol("US#53E18C3");
+        $ic55$ = makeSymbol("CDESTRUCTURING-BIND");
+        $ic56$ = makeSymbol("DO-ALIST-VALUES");
+        $ic57$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#132", "CYC"), (SubLObject)makeSymbol("S#133", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic58$ = makeUninternedSymbol("US#3165895");
+        $ic59$ = makeSymbol("IGNORE");
+        $ic60$ = makeSymbol("DO-ALIST-KEYS");
+        $ic61$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#131", "CYC"), (SubLObject)makeSymbol("S#133", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic62$ = makeUninternedSymbol("US#1069245");
+        $ic63$ = makeSymbol("CINC-ALIST");
+        $ic64$ = ConsesLow.list((SubLObject)makeSymbol("S#131", "CYC"), (SubLObject)makeSymbol("S#133", "CYC"), (SubLObject)makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#122", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("QUOTE"), (SubLObject)EQL)), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#135", "CYC"), (SubLObject)ONE_INTEGER));
+        $ic65$ = makeUninternedSymbol("US#13A0444");
+        $ic66$ = makeSymbol("ASSOC");
+        $ic67$ = makeSymbol("QUOTE");
+        $ic68$ = makeSymbol("CSETQ");
+        $ic69$ = makeSymbol("CONS");
+        $ic70$ = makeSymbol("CPUSH");
+        $ic71$ = makeSymbol("RPLACD");
+        $ic72$ = makeSymbol("CDEC-ALIST");
+        $ic73$ = ConsesLow.list((SubLObject)makeSymbol("S#131", "CYC"), (SubLObject)makeSymbol("S#133", "CYC"), (SubLObject)makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#122", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("QUOTE"), (SubLObject)EQL)), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#136", "CYC"), (SubLObject)ONE_INTEGER));
+        $ic74$ = makeSymbol("DO-PLIST");
+        $ic75$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#137", "CYC"), (SubLObject)makeSymbol("S#132", "CYC"), (SubLObject)makeSymbol("S#138", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic76$ = makeUninternedSymbol("US#3853685");
+        $ic77$ = makeSymbol("CDDR");
+        $ic78$ = makeSymbol("CADR");
+        $ic79$ = makeSymbol("DO-PLIST-PROPERTIES");
+        $ic80$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#137", "CYC"), (SubLObject)makeSymbol("S#138", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic81$ = makeUninternedSymbol("US#1069245");
+        $ic82$ = makeSymbol("DO-PLIST-VALUES");
+        $ic83$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#132", "CYC"), (SubLObject)makeSymbol("S#138", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic84$ = makeUninternedSymbol("US#5DE2218");
+        $ic85$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("VAR", "CYC"), (SubLObject)makeSymbol("LIST"), (SubLObject)makeSymbol("S#139", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic86$ = makeSymbol("CDOCONS");
+        $ic87$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("VAR", "CYC"), (SubLObject)makeSymbol("S#140", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic88$ = makeSymbol("ATOM");
+        $ic89$ = makeSymbol("DO-PAIRS");
+        $ic90$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#141", "CYC"), (SubLObject)makeSymbol("S#142", "CYC"), (SubLObject)makeSymbol("S#140", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic91$ = makeUninternedSymbol("US#72660C3");
+        $ic92$ = makeSymbol("FIRST");
+        $ic93$ = makeSymbol("CSOME");
+        $ic94$ = makeSymbol("REST");
+        $ic95$ = makeSymbol("DO-LIST-WITH-TAIL");
+        $ic96$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#143", "CYC"), (SubLObject)makeSymbol("S#144", "CYC"), (SubLObject)makeSymbol("S#140", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic97$ = makeUninternedSymbol("US#742739B");
+        $ic98$ = makeSymbol("DOLISTS");
+        $ic99$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("&REST"), (SubLObject)makeSymbol("SPECS")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic100$ = makeString("CURRENT-~A");
+        $ic101$ = makeSymbol("CAND");
+        $ic102$ = makeSymbol("DO-STRING");
+        $ic103$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("CHAR"), (SubLObject)makeSymbol("STRING"), (SubLObject)makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)ZERO_INTEGER), (SubLObject)makeSymbol("S#125", "CYC"), (SubLObject)makeSymbol("S#145", "CYC"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic104$ = ConsesLow.list((SubLObject)makeKeyword("START"), (SubLObject)makeKeyword("END"), (SubLObject)makeKeyword("CHAR-NUM"), (SubLObject)makeKeyword("DONE"));
+        $ic105$ = makeKeyword("CHAR-NUM");
+        $ic106$ = makeSymbol("DO-STRING-INDEX");
+        $ic107$ = makeUninternedSymbol("US#1919E0D");
+        $ic108$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#145", "CYC"), (SubLObject)makeSymbol("CHAR"), (SubLObject)makeSymbol("STRING"), (SubLObject)makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#124", "CYC"), (SubLObject)ZERO_INTEGER), (SubLObject)makeSymbol("S#125", "CYC"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic109$ = ConsesLow.list((SubLObject)makeKeyword("START"), (SubLObject)makeKeyword("END"), (SubLObject)makeKeyword("DONE"));
+        $ic110$ = makeUninternedSymbol("US#4E23580");
+        $ic111$ = makeUninternedSymbol("US#36A439E");
+        $ic112$ = makeSymbol("FIF");
+        $ic113$ = makeSymbol("CHAR");
+        $ic114$ = makeSymbol("DO-VECTOR");
+        $ic115$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("VAR", "CYC"), (SubLObject)makeSymbol("VECTOR"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#146", "CYC"), (SubLObject)makeSymbol("S#127", "CYC"), (SubLObject)makeSymbol("S#147", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic116$ = ConsesLow.list((SubLObject)makeKeyword("ELEMENT-NUM"), (SubLObject)makeKeyword("DONE"), (SubLObject)makeKeyword("BACKWARD?"));
+        $ic117$ = makeKeyword("ELEMENT-NUM");
+        $ic118$ = makeKeyword("BACKWARD?");
+        $ic119$ = makeSymbol("DO-VECTOR-INDEX");
+        $ic120$ = makeUninternedSymbol("US#13ADC23");
+        $ic121$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#131", "CYC"), (SubLObject)makeSymbol("S#132", "CYC"), (SubLObject)makeSymbol("VECTOR"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC"), (SubLObject)makeSymbol("S#147", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic122$ = ConsesLow.list((SubLObject)makeKeyword("DONE"), (SubLObject)makeKeyword("BACKWARD?"));
+        $ic123$ = makeUninternedSymbol("US#6A35D19");
+        $ic124$ = makeUninternedSymbol("US#4FA4FBF");
+        $ic125$ = makeUninternedSymbol("US#5044AD7");
+        $ic126$ = makeUninternedSymbol("US#352B2C1");
+        $ic127$ = makeUninternedSymbol("US#13A2892");
+        $ic128$ = makeUninternedSymbol("US#1160044");
+        $ic129$ = makeSymbol("LIST");
+        $ic130$ = makeSymbol("-");
+        $ic131$ = ConsesLow.list((SubLObject)ONE_INTEGER);
+        $ic132$ = ConsesLow.list((SubLObject)MINUS_ONE_INTEGER, (SubLObject)MINUS_ONE_INTEGER);
+        $ic133$ = makeSymbol("AREF");
+        $ic134$ = makeUninternedSymbol("US#2676A7E");
+        $ic135$ = makeSymbol("CDOVECTOR");
+        $ic136$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("VAR", "CYC"), (SubLObject)makeSymbol("VECTOR")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic137$ = makeSymbol("CSOME-VECTOR");
+        $ic138$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("VAR", "CYC"), (SubLObject)makeSymbol("VECTOR"), (SubLObject)makeSymbol("S#139", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic139$ = makeSymbol("SMART-CSOMEVECTOR");
+        $ic140$ = makeSymbol("DO-SEQUENCE");
+        $ic141$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("VAR", "CYC"), (SubLObject)makeSymbol("SEQUENCE"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#146", "CYC"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic142$ = ConsesLow.list((SubLObject)makeKeyword("ELEMENT-NUM"), (SubLObject)makeKeyword("DONE"));
+        $ic143$ = makeSymbol("DO-SEQUENCE-INDEX");
+        $ic144$ = makeUninternedSymbol("US#13ADC23");
+        $ic145$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#148", "CYC"), (SubLObject)makeSymbol("S#149", "CYC"), (SubLObject)makeSymbol("SEQUENCE"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic146$ = makeUninternedSymbol("US#1E66264");
+        $ic147$ = makeUninternedSymbol("US#1A98E9B");
+        $ic148$ = makeUninternedSymbol("US#5FA2DE2");
+        $ic149$ = makeSymbol("FUNLESS");
+        $ic150$ = makeSymbol("LISTP");
+        $ic151$ = makeSymbol("S#116", "CYC");
+        $ic152$ = makeSymbol("S#117", "CYC");
+        $ic153$ = makeSymbol("PROGN");
+        $ic154$ = makeSymbol("S#118", "CYC");
+        $ic155$ = makeSymbol("DO-HASH-TABLE");
+        $ic156$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#131", "CYC"), (SubLObject)makeSymbol("S#132", "CYC"), (SubLObject)makeSymbol("HASH-TABLE"), (SubLObject)makeSymbol("&KEY"), (SubLObject)makeSymbol("S#127", "CYC"), (SubLObject)makeSymbol("S#130", "CYC")), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic157$ = makeUninternedSymbol("US#7028EF8");
+        $ic158$ = makeUninternedSymbol("US#2D3BFD5");
+        $ic159$ = makeUninternedSymbol("US#7C5C08F");
+        $ic160$ = makeUninternedSymbol("US#3F92607");
+        $ic161$ = makeUninternedSymbol("US#1FD7008");
+        $ic162$ = ConsesLow.list((SubLObject)makeSymbol("*SILENT-PROGRESS?*"));
+        $ic163$ = makeSymbol("*SILENT-PROGRESS?*");
+        $ic164$ = makeSymbol("FIRST-OF");
+        $ic165$ = ConsesLow.list((SubLObject)makeString(""));
+        $ic166$ = makeSymbol("HASH-TABLE-COUNT");
+        $ic167$ = makeSymbol("CCATCH-IGNORE");
+        $ic168$ = makeKeyword("DO-HASH-TABLE");
+        $ic169$ = makeSymbol("S#119", "CYC");
+        $ic170$ = makeSymbol("CDOHASH");
+        $ic171$ = ConsesLow.list((SubLObject)makeSymbol("S#150", "CYC"), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic172$ = makeUninternedSymbol("US#3C57E05");
+        $ic173$ = makeSymbol("CCATCH");
+        $ic174$ = makeSymbol("PUNLESS-ERROR");
+        $ic175$ = ConsesLow.list((SubLObject)makeSymbol("S#151", "CYC"), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic176$ = makeUninternedSymbol("US#54A01D8");
+        $ic177$ = makeSymbol("CATCH-ERROR-MESSAGE");
+        $ic178$ = makeSymbol("PWHEN-ERROR");
+        $ic179$ = makeUninternedSymbol("US#54A01D8");
+        $ic180$ = makeSymbol("PWHEN");
+        $ic181$ = makeSymbol("WARN-ON-ERRORS");
+        $ic182$ = makeUninternedSymbol("US#7028EF8");
+        $ic183$ = makeSymbol("STRINGP");
+        $ic184$ = makeSymbol("WARN");
+        $ic185$ = makeString("~A");
+        $ic186$ = makeSymbol("POSSIBLY-WARN-ON-ERRORS");
+        $ic187$ = ConsesLow.list((SubLObject)makeSymbol("VAR", "CYC"), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic188$ = makeSymbol("PIF");
+        $ic189$ = makeSymbol("POSSIBLY-IGNORE-ERRORS");
+        $ic190$ = makeSymbol("IGNORE-ERRORS");
+        $ic191$ = makeSymbol("WITH-DEFAULT-ERROR-HANDLING");
+        $ic192$ = makeSymbol("WITH-ERROR-HANDLER");
+        $ic193$ = makeSymbol("CUNWIND-ON-FAILURE");
+        $ic194$ = ConsesLow.list((SubLObject)makeSymbol("S#152", "CYC"), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic195$ = makeUninternedSymbol("US#5877CEC");
+        $ic196$ = makeSymbol("CUNWIND-PROTECT");
+        $ic197$ = ConsesLow.list((SubLObject)T);
+        $ic198$ = makeSymbol("CUNWIND-PROTECT-WITH-FAIL-CLAUSE");
+        $ic199$ = ConsesLow.list((SubLObject)makeSymbol("S#152", "CYC"), (SubLObject)makeSymbol("S#153", "CYC"), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic200$ = makeUninternedSymbol("US#5877CEC");
+        $ic201$ = makeSymbol("*IGNORE-ASSERT-TYPES?*");
+        $ic202$ = makeSymbol("ASSERT-TYPE");
+        $ic203$ = ConsesLow.list((SubLObject)makeSymbol("OBJECT", "CYC"), (SubLObject)makeSymbol("S#155", "CYC"));
+        $ic204$ = makeSymbol("CHECK-TYPE");
+        $ic205$ = makeSymbol("ASSERT-TYPE-IF-PRESENT");
+        $ic206$ = makeSymbol("S#156", "CYC");
+        $ic207$ = makeSymbol("ASSERT-LIST-TYPE");
+        $ic208$ = ConsesLow.list((SubLObject)makeSymbol("LIST"), (SubLObject)makeSymbol("S#155", "CYC"));
+        $ic209$ = makeSymbol("S#157", "CYC");
+        $ic210$ = makeSymbol("ASSERT-PLIST-TYPE");
+        $ic211$ = ConsesLow.list((SubLObject)makeSymbol("S#138", "CYC"), (SubLObject)makeSymbol("S#155", "CYC"));
+        $ic212$ = makeSymbol("S#158", "CYC");
+        $ic213$ = makeSymbol("ASSERT-MUST");
+        $ic214$ = ConsesLow.list((SubLObject)makeSymbol("S#151", "CYC"), (SubLObject)makeSymbol("S#159", "CYC"), (SubLObject)makeSymbol("&REST"), (SubLObject)makeSymbol("S#160", "CYC"));
+        $ic215$ = ConsesLow.list((SubLObject)makeSymbol("PROGN"));
+        $ic216$ = makeSymbol("MUST");
+        $ic217$ = makeSymbol("PCASE-FEATURE");
+        $ic218$ = (SubLList)ConsesLow.cons((SubLObject)makeSymbol("S#161", "CYC"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic219$ = makeSymbol("OTHERWISE");
+        $ic220$ = makeSymbol("PIF-FEATURE");
+        $ic221$ = ConsesLow.list((SubLObject)makeSymbol("S#162", "CYC"), (SubLObject)makeSymbol("S#163", "CYC"), (SubLObject)makeSymbol("S#164", "CYC"));
+        $ic222$ = ConsesLow.list((SubLObject)makeSymbol("S#162", "CYC"), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#165", "CYC"));
+        $ic223$ = makeSymbol("PWHEN-FEATURE");
+        $ic224$ = ConsesLow.list((SubLObject)makeSymbol("S#162", "CYC"), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic225$ = makeSymbol("PUNLESS-FEATURE");
+        $ic226$ = makeSymbol("FCASE-FEATURE");
+        $ic227$ = ConsesLow.list((SubLObject)makeSymbol("S#161", "CYC"), (SubLObject)makeSymbol("S#151", "CYC"));
+        $ic228$ = makeSymbol("FIF-FEATURE");
+        $ic229$ = makeSymbol("FWHEN-FEATURE");
+        $ic230$ = makeSymbol("FEATURE-MATCH");
+        $ic231$ = ConsesLow.list((SubLObject)makeSymbol("S#162", "CYC"));
+        $ic232$ = makeSymbol("FUNLESS-FEATURE");
+        $ic233$ = ConsesLow.list((SubLObject)NIL);
+        $ic234$ = makeSymbol("FIMPLIES-FEATURE");
+        $ic235$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("OTHERWISE"), (SubLObject)T));
+        $ic236$ = makeSymbol("ATOMIC-FEATURE-MATCH");
+        $ic237$ = makeSymbol("FEATURE-EXPRESSION-MATCH");
+        $ic238$ = (SubLList)ConsesLow.cons((SubLObject)makeSymbol("S#166", "CYC"), (SubLObject)makeSymbol("S#167", "CYC"));
+        $ic239$ = makeKeyword("NOT");
+        $ic240$ = makeSymbol("NOT");
+        $ic241$ = makeKeyword("OR");
+        $ic242$ = makeSymbol("OR");
+        $ic243$ = makeKeyword("AND");
+        $ic244$ = makeSymbol("AND");
+        $ic245$ = makeString("~S is not a well-formed feature expression");
+        $ic246$ = makeSymbol("FUNCALL-IF");
+        $ic247$ = ConsesLow.list((SubLObject)makeSymbol("S#168", "CYC"), (SubLObject)makeSymbol("&REST"), (SubLObject)makeSymbol("S#105", "CYC"));
+        $ic248$ = ConsesLow.list((SubLObject)makeSymbol("FALSE"));
+        $ic249$ = makeSymbol("FWHEN");
+        $ic250$ = makeSymbol("FUNCALL");
+        $ic251$ = makeSymbol("CPUSH-IF");
+        $ic252$ = ConsesLow.list((SubLObject)makeSymbol("S#143", "CYC"), (SubLObject)makeSymbol("S#169", "CYC"));
+        $ic253$ = makeUninternedSymbol("US#506B097");
+        $ic254$ = makeSymbol("CPUSHNEW-IF");
+        $ic255$ = ConsesLow.list((SubLObject)makeSymbol("S#143", "CYC"), (SubLObject)makeSymbol("S#169", "CYC"), (SubLObject)makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#122", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("FUNCTION"), (SubLObject)EQL))), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#131", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("FUNCTION"), (SubLObject)IDENTITY))));
+        $ic256$ = ConsesLow.list((SubLObject)makeSymbol("FUNCTION"), (SubLObject)EQL);
+        $ic257$ = ConsesLow.list((SubLObject)makeSymbol("FUNCTION"), (SubLObject)IDENTITY);
+        $ic258$ = makeUninternedSymbol("US#506B097");
+        $ic259$ = makeSymbol("CPUSHNEW");
+        $ic260$ = makeSymbol("CPUSH-ALL");
+        $ic261$ = ConsesLow.list((SubLObject)makeSymbol("S#170", "CYC"), (SubLObject)makeSymbol("S#169", "CYC"));
+        $ic262$ = makeUninternedSymbol("US#35248DF");
+        $ic263$ = makeUninternedSymbol("US#191238F");
+        $ic264$ = makeSymbol("VECTORP");
+        $ic265$ = makeSymbol("CPUSHNEW-ALL");
+        $ic266$ = ConsesLow.list((SubLObject)makeSymbol("S#170", "CYC"), (SubLObject)makeSymbol("S#169", "CYC"), (SubLObject)makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#122", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("FUNCTION"), (SubLObject)EQL))), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#131", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("FUNCTION"), (SubLObject)IDENTITY))));
+        $ic267$ = makeUninternedSymbol("US#35248DF");
+        $ic268$ = makeUninternedSymbol("US#191238F");
+        $ic269$ = makeSymbol("CSETF-DELETE");
+        $ic270$ = ConsesLow.list((SubLObject)makeSymbol("S#143", "CYC"), (SubLObject)makeSymbol("S#169", "CYC"), (SubLObject)makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#122", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("FUNCTION"), (SubLObject)EQL))), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("S#131", "CYC"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("QUOTE"), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("FUNCTION"), (SubLObject)IDENTITY))));
+        $ic271$ = ConsesLow.list((SubLObject)makeKeyword("TEST"), (SubLObject)makeKeyword("KEY"));
+        $ic272$ = makeKeyword("TEST");
+        $ic273$ = makeKeyword("KEY");
+        $ic274$ = makeSymbol("CSETF");
+        $ic275$ = makeSymbol("DELETE");
+        $ic276$ = makeSymbol("CPUSH-END");
+        $ic277$ = makeUninternedSymbol("US#6C59149");
+        $ic278$ = makeUninternedSymbol("US#72660C3");
+        $ic279$ = makeSymbol("S#120", "CYC");
+        $ic280$ = makeSymbol("CPUSHNEW-END");
+        $ic281$ = makeUninternedSymbol("US#367CE0C");
+        $ic282$ = makeSymbol("MEMBER");
+        $ic283$ = makeSymbol("SILENTLY");
+        $ic284$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)makeSymbol("*IGNORE-WARNS?*"), (SubLObject)T), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("*IGNORE-BREAKS?*"), (SubLObject)T), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("*SILENT-PROGRESS?*"), (SubLObject)T), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("*CONTINUE-CERROR?*"), (SubLObject)T), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("*STANDARD-OUTPUT*"), (SubLObject)makeSymbol("*NULL-OUTPUT*")), (SubLObject)ConsesLow.list((SubLObject)makeSymbol("*ERROR-OUTPUT*"), (SubLObject)makeSymbol("*NULL-OUTPUT*")));
+        $ic285$ = makeSymbol("FIMPLIES");
+        $ic286$ = ConsesLow.list((SubLObject)makeSymbol("S#171", "CYC"), (SubLObject)makeSymbol("S#172", "CYC"));
+        $ic287$ = makeSymbol("FXOR");
+        $ic288$ = ConsesLow.list((SubLObject)makeSymbol("S#173", "CYC"), (SubLObject)makeSymbol("S#174", "CYC"));
+        $ic289$ = makeSymbol("FEQUIV");
+        $ic290$ = ConsesLow.list((SubLObject)makeSymbol("S#175", "CYC"), (SubLObject)makeSymbol("&BODY"), (SubLObject)makeSymbol("S#5", "CYC"));
+        $ic291$ = makeKeyword("SL2JAVA");
+        $ic292$ = makeSymbol("WITH-STATIC-AREA");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0005.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 670 ms
 	
 	Decompiled with Procyon 0.5.32.

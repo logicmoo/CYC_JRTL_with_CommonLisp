@@ -9,6 +9,7 @@ import java.util.Iterator;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.cycjava.cycl.string_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.system_parameters;
 import com.cyc.cycjava.cycl.cb_utilities;
 import com.cyc.cycjava.cycl.html_script_utilities;

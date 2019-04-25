@@ -1,6 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
@@ -45,80 +46,80 @@ public final class module0627 extends SubLTranslatedFile
     
     public static SubLObject f38578() {
         final SubLThread var1 = SubLProcess.currentSubLThread();
-        return module0627.$g4826$.getDynamicValue(var1);
+        return $g4826$.getDynamicValue(var1);
     }
     
     public static SubLObject f38579() {
         final SubLThread var1 = SubLProcess.currentSubLThread();
-        return module0627.$g4827$.getDynamicValue(var1);
+        return $g4827$.getDynamicValue(var1);
     }
     
     public static SubLObject f38580(final SubLObject var2, final SubLObject var3, SubLObject var4, SubLObject var5) {
-        if (var4 == module0627.UNPROVIDED) {
-            var4 = (SubLObject)module0627.ONE_INTEGER;
+        if (var4 == UNPROVIDED) {
+            var4 = (SubLObject)ONE_INTEGER;
         }
-        if (var5 == module0627.UNPROVIDED) {
-            var5 = (SubLObject)module0627.NIL;
+        if (var5 == UNPROVIDED) {
+            var5 = (SubLObject)NIL;
         }
         final SubLObject var6 = module0213.f13917(var2);
-        final SubLObject var7 = Mapping.mapcar((SubLObject)module0627.$ic3$, var3);
-        final SubLObject var8 = (module0627.NIL != var5) ? module0213.f13917(var5) : f38578();
+        final SubLObject var7 = Mapping.mapcar((SubLObject)$ic3$, var3);
+        final SubLObject var8 = (NIL != var5) ? module0213.f13917(var5) : f38578();
         return f38581(var6, var7, var4, var8);
     }
     
     public static SubLObject f38581(final SubLObject var6, final SubLObject var7, SubLObject var4, SubLObject var8) {
-        if (var4 == module0627.UNPROVIDED) {
-            var4 = module0627.$g4828$.getDynamicValue();
+        if (var4 == UNPROVIDED) {
+            var4 = $g4828$.getDynamicValue();
         }
-        if (var8 == module0627.UNPROVIDED) {
+        if (var8 == UNPROVIDED) {
             var8 = f38578();
         }
         final SubLThread var9 = SubLProcess.currentSubLThread();
-        SubLObject var10 = (SubLObject)module0627.NIL;
-        SubLObject var11 = (SubLObject)module0627.NIL;
+        SubLObject var10 = (SubLObject)NIL;
+        SubLObject var11 = (SubLObject)NIL;
         final SubLObject var12 = (SubLObject)ConsesLow.cons(var6, var7);
-        if (module0627.NIL == module0202.f12691(var12, (SubLObject)module0627.UNPROVIDED)) {
-            var10 = (SubLObject)module0627.$ic5$;
-            var11 = (SubLObject)module0627.$ic6$;
+        if (NIL == module0202.f12691(var12, (SubLObject)UNPROVIDED)) {
+            var10 = (SubLObject)$ic5$;
+            var11 = (SubLObject)$ic6$;
         }
-        if (module0627.NIL == module0552.f34027(var12)) {
-            var10 = (SubLObject)module0627.$ic5$;
-            var11 = Sequences.cconcatenate((SubLObject)module0627.$ic7$, new SubLObject[] { module0006.f205(var12), module0627.$ic8$ });
+        if (NIL == module0552.f34027(var12)) {
+            var10 = (SubLObject)$ic5$;
+            var11 = Sequences.cconcatenate((SubLObject)$ic7$, new SubLObject[] { module0006.f205(var12), $ic8$ });
         }
-        if (module0627.NIL == var10 && module0627.NIL == module0274.f18060(module0278.f18389(var12, var8), var8, (SubLObject)module0627.UNPROVIDED)) {
-            var10 = (SubLObject)module0627.$ic9$;
-            var11 = Sequences.cconcatenate(module0006.f205(var12), (SubLObject)module0627.$ic10$);
+        if (NIL == var10 && NIL == module0274.f18060(module0278.f18389(var12, var8), var8, (SubLObject)UNPROVIDED)) {
+            var10 = (SubLObject)$ic9$;
+            var11 = Sequences.cconcatenate(module0006.f205(var12), (SubLObject)$ic10$);
         }
-        if (module0627.NIL == var10) {
-            final SubLObject var13 = module0361.f24136((SubLObject)module0627.UNPROVIDED);
-            final SubLObject var14 = Numbers.divide(var4, (SubLObject)module0627.TWO_INTEGER);
-            final SubLObject var15 = (SubLObject)ConsesLow.listS((SubLObject)module0627.$ic11$, var14, (SubLObject)module0627.$ic12$, var13, (SubLObject)module0627.$ic13$);
+        if (NIL == var10) {
+            final SubLObject var13 = module0361.f24136((SubLObject)UNPROVIDED);
+            final SubLObject var14 = Numbers.divide(var4, (SubLObject)TWO_INTEGER);
+            final SubLObject var15 = (SubLObject)ConsesLow.listS((SubLObject)$ic11$, var14, (SubLObject)$ic12$, var13, (SubLObject)$ic13$);
             var9.resetMultipleValues();
             SubLObject var16 = module0409.f28506(var12, var8, var15);
             final SubLObject var17 = var9.secondMultipleValue();
             final SubLObject var18 = var9.thirdMultipleValue();
             var9.resetMultipleValues();
-            if (var17 == module0627.$ic11$) {
-                var10 = (SubLObject)module0627.$ic5$;
-                var11 = Sequences.copy_seq((SubLObject)module0627.$ic14$);
+            if (var17 == $ic11$) {
+                var10 = (SubLObject)$ic5$;
+                var11 = Sequences.copy_seq((SubLObject)$ic14$);
             }
-            if (module0627.NIL != module0540.f33533(var16)) {
-                var10 = (SubLObject)module0627.$ic15$;
+            if (NIL != module0540.f33533(var16)) {
+                var10 = (SubLObject)$ic15$;
             }
-            if (module0627.NIL == var10) {
-                final SubLObject var19 = Numbers.subtract(var4, oc_inference_datastructures_inference.f25706(var18, (SubLObject)module0627.NIL));
-                final SubLObject var20 = (SubLObject)ConsesLow.list(module0627.$ic16$, var12);
-                final SubLObject var14_20 = (SubLObject)ConsesLow.list((SubLObject)module0627.$ic11$, var19, (SubLObject)module0627.$ic12$, var13);
-                oc_inference_datastructures_inference.f25471(var18);
+            if (NIL == var10) {
+                final SubLObject var19 = Numbers.subtract(var4, inference_datastructures_inference_oc.f25706(var18, (SubLObject)NIL));
+                final SubLObject var20 = (SubLObject)ConsesLow.list($ic16$, var12);
+                final SubLObject var14_20 = (SubLObject)ConsesLow.list((SubLObject)$ic11$, var19, (SubLObject)$ic12$, var13);
+                inference_datastructures_inference_oc.f25471(var18);
                 var16 = module0409.f28506(var20, var8, var14_20);
-                if (module0627.NIL != module0540.f33533(var16)) {
-                    var10 = (SubLObject)module0627.$ic9$;
+                if (NIL != module0540.f33533(var16)) {
+                    var10 = (SubLObject)$ic9$;
                 }
             }
             module0361.f24005(var13);
         }
-        if (module0627.NIL == var10) {
-            var10 = (SubLObject)module0627.$ic17$;
+        if (NIL == var10) {
+            var10 = (SubLObject)$ic17$;
         }
         return (SubLObject)ConsesLow.list(var10, var11);
     }
@@ -128,21 +129,21 @@ public final class module0627 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0627", "f38579", "S#42212", 0, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0627", "f38580", "SIMPLE-BOOLEAN-QUERY-EXTERNAL-ID", 2, 2, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0627", "f38581", "SIMPLE-BOOLEAN-QUERY-CYCL", 2, 2, false);
-        return (SubLObject)module0627.NIL;
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38583() {
-        module0627.$g4826$ = SubLFiles.defparameter("S#42213", (SubLObject)module0627.$ic0$);
-        module0627.$g4827$ = SubLFiles.defparameter("S#42214", module0627.$ic1$);
-        module0627.$g4828$ = SubLFiles.defparameter("S#42215", (SubLObject)module0627.ONE_INTEGER);
-        module0627.$g4829$ = SubLFiles.defparameter("S#42216", (SubLObject)module0627.TWENTY_INTEGER);
-        return (SubLObject)module0627.NIL;
+        $g4826$ = SubLFiles.defparameter("S#42213", (SubLObject)$ic0$);
+        $g4827$ = SubLFiles.defparameter("S#42214", $ic1$);
+        $g4828$ = SubLFiles.defparameter("S#42215", (SubLObject)ONE_INTEGER);
+        $g4829$ = SubLFiles.defparameter("S#42216", (SubLObject)TWENTY_INTEGER);
+        return (SubLObject)NIL;
     }
     
     public static SubLObject f38584() {
-        module0002.f38((SubLObject)module0627.$ic2$);
-        module0002.f38((SubLObject)module0627.$ic4$);
-        return (SubLObject)module0627.NIL;
+        module0002.f38((SubLObject)$ic2$);
+        module0002.f38((SubLObject)$ic4$);
+        return (SubLObject)NIL;
     }
     
     public void declareFunctions() {
@@ -159,35 +160,35 @@ public final class module0627 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0627();
-        module0627.$g4826$ = null;
-        module0627.$g4827$ = null;
-        module0627.$g4828$ = null;
-        module0627.$g4829$ = null;
-        $ic0$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtSpace")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now"))), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtUnionFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AssistedReaderSourceSpindleCollectorMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AllGeneralEnglishValidatedLexicalMicrotheoryPSC"))));
-        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("RelationParaphraseMt"));
-        $ic2$ = SubLObjectFactory.makeSymbol("SIMPLE-BOOLEAN-QUERY-EXTERNAL-ID");
-        $ic3$ = SubLObjectFactory.makeSymbol("FIND-OBJECT-BY-COMPACT-HL-EXTERNAL-ID-STRING");
-        $ic4$ = SubLObjectFactory.makeSymbol("SIMPLE-BOOLEAN-QUERY-CYCL");
-        $ic5$ = SubLObjectFactory.makeKeyword("ERROR");
-        $ic6$ = SubLObjectFactory.makeString("The sentence contains an open variable.");
-        $ic7$ = SubLObjectFactory.makeString("The sentence ");
-        $ic8$ = SubLObjectFactory.makeString(" is not a valid CycL sentence.");
-        $ic9$ = SubLObjectFactory.makeKeyword("FALSE");
-        $ic10$ = SubLObjectFactory.makeString(" is not semantically well-formed");
-        $ic11$ = SubLObjectFactory.makeKeyword("MAX-TIME");
-        $ic12$ = SubLObjectFactory.makeKeyword("PROBLEM-STORE");
-        $ic13$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BROWSABLE?"), (SubLObject)module0627.T);
-        $ic14$ = SubLObjectFactory.makeString("Timed out");
-        $ic15$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("not"));
-        $ic17$ = SubLObjectFactory.makeKeyword("UNKNOWN");
+        $g4826$ = null;
+        $g4827$ = null;
+        $g4828$ = null;
+        $g4829$ = null;
+        $ic0$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("MtSpace")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("MtTimeDimFn")), constant_handles_oc.f8479((SubLObject)makeString("Now"))), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)makeString("MtUnionFn")), constant_handles_oc.f8479((SubLObject)makeString("AssistedReaderSourceSpindleCollectorMt")), constant_handles_oc.f8479((SubLObject)makeString("AllGeneralEnglishValidatedLexicalMicrotheoryPSC"))));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)makeString("RelationParaphraseMt"));
+        $ic2$ = makeSymbol("SIMPLE-BOOLEAN-QUERY-EXTERNAL-ID");
+        $ic3$ = makeSymbol("FIND-OBJECT-BY-COMPACT-HL-EXTERNAL-ID-STRING");
+        $ic4$ = makeSymbol("SIMPLE-BOOLEAN-QUERY-CYCL");
+        $ic5$ = makeKeyword("ERROR");
+        $ic6$ = makeString("The sentence contains an open variable.");
+        $ic7$ = makeString("The sentence ");
+        $ic8$ = makeString(" is not a valid CycL sentence.");
+        $ic9$ = makeKeyword("FALSE");
+        $ic10$ = makeString(" is not semantically well-formed");
+        $ic11$ = makeKeyword("MAX-TIME");
+        $ic12$ = makeKeyword("PROBLEM-STORE");
+        $ic13$ = ConsesLow.list((SubLObject)makeKeyword("BROWSABLE?"), (SubLObject)T);
+        $ic14$ = makeString("Timed out");
+        $ic15$ = makeKeyword("TRUE");
+        $ic16$ = constant_handles_oc.f8479((SubLObject)makeString("not"));
+        $ic17$ = makeKeyword("UNKNOWN");
     }
 }
 
 /*
 	DECOMPILATION REPORT
 
-	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/module0627.class
+	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 105 ms
 	
 	Decompiled with Procyon 0.5.32.

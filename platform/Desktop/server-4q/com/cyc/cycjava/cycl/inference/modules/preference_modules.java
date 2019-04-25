@@ -33,6 +33,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.cycjava.cycl.enumeration_types;
 import com.cyc.cycjava.cycl.forts;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.cycjava.cycl.inference.harness.inference_utilities;

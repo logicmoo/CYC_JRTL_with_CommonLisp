@@ -33,6 +33,7 @@ import com.cyc.cycjava.cycl.assertions_high;
 import com.cyc.cycjava.cycl.assertion_handles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.genl_predicates;
 import com.cyc.cycjava.cycl.forts;
 import com.cyc.cycjava.cycl.cycl_utilities;

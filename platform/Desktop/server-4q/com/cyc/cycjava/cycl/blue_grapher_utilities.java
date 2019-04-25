@@ -14,6 +14,7 @@ import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rtv;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks;
 import com.cyc.cycjava.cycl.sbhl.sbhl_search_what_mts;

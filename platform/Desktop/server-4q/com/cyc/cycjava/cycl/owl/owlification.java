@@ -53,6 +53,7 @@ import com.cyc.cycjava.cycl.format_nil;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time;
 import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import com.cyc.cycjava.cycl.isa;
 import com.cyc.cycjava.cycl.fort_types_interface;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
