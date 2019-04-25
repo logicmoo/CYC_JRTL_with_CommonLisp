@@ -197,7 +197,7 @@ public final class module0107 extends SubLTranslatedFile
         module0195.f12176();
         module0222.f14648();
         module0361.f24004();
-        module0369.f25647((SubLObject)module0107.$ic7$);
+        oc_inference_datastructures_inference.f25647((SubLObject)module0107.$ic7$);
         return (SubLObject)module0107.T;
     }
     
@@ -256,7 +256,7 @@ public final class module0107 extends SubLTranslatedFile
         }
         if (module0107.NIL != f7594(var8, var7)) {
             module0186.f11718();
-            module0176.f11131();
+            oc_assertion_manager.f11131();
             module0164.f10694();
             module0169.f10865();
             module0170.f10892();
@@ -301,7 +301,7 @@ public final class module0107 extends SubLTranslatedFile
                 try {
                     Errors.$error_handler$.bind((SubLObject)module0107.$ic15$, var8);
                     try {
-                        var7 = module0618.f38027(f7589());
+                        var7 = oc_dumper.f38027(f7589());
                     }
                     catch (Throwable var11) {
                         Errors.handleThrowable(var11, (SubLObject)module0107.NIL);
@@ -330,7 +330,7 @@ public final class module0107 extends SubLTranslatedFile
     }
     
     public static SubLObject f7592() {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0107.NIL != module0186.f11706() && module0107.NIL != module0176.f11111() && module0107.NIL != module0164.f10674() && module0107.NIL != module0169.f10854() && module0107.NIL != module0189.f11809() && module0107.NIL != module0242.f15657());
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0107.NIL != module0186.f11706() && module0107.NIL != oc_assertion_manager.f11111() && module0107.NIL != module0164.f10674() && module0107.NIL != module0169.f10854() && module0107.NIL != module0189.f11809() && module0107.NIL != module0242.f15657());
     }
     
     public static SubLObject f7597(final SubLObject var13, final SubLObject var14) {
@@ -343,7 +343,7 @@ public final class module0107 extends SubLTranslatedFile
     }
     
     public static SubLObject f7598() {
-        if (module0107.NIL != module0618.f37906()) {
+        if (module0107.NIL != oc_dumper.f37906()) {
             Errors.error((SubLObject)module0107.$ic19$);
         }
         return f7589();
@@ -353,7 +353,7 @@ public final class module0107 extends SubLTranslatedFile
         if (module0107.$g1363$.getGlobalValue().isString()) {
             return module0107.$g1363$.getGlobalValue();
         }
-        if (module0107.NIL == module0618.f37906()) {
+        if (module0107.NIL == oc_dumper.f37906()) {
             f7595(f7599());
         }
         return module0107.$g1363$.getGlobalValue();

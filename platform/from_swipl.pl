@@ -3,9 +3,9 @@
 :- load_files(library(prolog_stack)).
 prolog_stack:stack_guard(none).
 
-dmiles_machine:- fail, once((gethostname('gitlab.logicmoo.org') ; gethostname('i74930k'))).
+dmiles_machine:- fail, once((gethostname('gitlab.logicmoo.org'); gethostname('gitlab') ; gethostname('i74930k'))).
 
-ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactexitive(false)]).
+ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(false)]).
 
 :- use_module(library(apply)).
 
@@ -21,15 +21,25 @@ ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactexitive
 :- multifile user:file_search_path/2.
 :- dynamic   user:file_search_path/2.
 :- asserta((user:file_search_path(jar, ('.')))).
-user:file_search_path(runtime, ('.')).
+:- asserta((user:file_search_path(runtime, ('.')))).
 
 :- use_module(library(logicmoo_utils_all)).
-:- use_module(library(dictoo)).
+% in case it creates too many problems
+% :- use_module(library(dictoo)).
 
 to_string(O,S):- jpl_object(O),jpl_call(O,toString,[],S),!.
 to_string(O,O):-!.
 
-po(O):- atomic(O), format(user_error,'~N% LO: ~w ;; ~w~n',[O.toString,O.getClass.getSimpleName]),!.
+jpl_getval(O,call(P),R):- !, call(P,O,R), !. 
+jpl_getval(O,[],R):-!, O = R.
+jpl_getval(O,[H|T],R):- !, jpl_getval(O,H,M),jpl_getval(M,T,R).
+jpl_getval(O,f(F),R):- !, jpl_get(O, F, R).
+jpl_getval(O,P,R):- compound(P), !, compound_name_arguments(P,F,Args), jpl_call(O, F, Args, R). 
+jpl_getval(O,P,R):- jpl_call(O, P, [], R). 
+
+class_simple_name(O,SN):- jpl_getval(O,[getClass,getSimpleName],SN).
+
+po(O):- atomic(O), to_string(O,OS),class_simple_name(O,SN), format(user_error,'~N% LO: ~w ;; ~w~n',[OS,SN]),!.
 po(O):- format(user_error,'~N% PO: ~q ~n',[O]),!.
 
 dwq(Q):- format(user_error,'~N% DWQ: ~q~n',[Q]).
@@ -43,7 +53,10 @@ dwq_call(Q):- Q *-> dwq(success:Q); (dwq(failed:Q),!,fail).
 */
 sys :- set_prolog_flag(access_level,system).
 usys :- set_prolog_flag(access_level,user).
-mp_test:- sys, meta_predicate(system: write(7)), meta_predicate(system: writeq(7)), meta_predicate(system:is(7,7)),meta_predicate(system: =:=(7,7)),usys.
+
+mp_test:- sys, meta_predicate(system: write(7)), meta_predicate(system: writeq(7)), 
+  meta_predicate(system:is(7,7)),
+  meta_predicate(system: =:=(7,7)),usys.
 
 :- use_module(library(base32)).
 
@@ -391,7 +404,7 @@ call_jmain(Class,Args):- jpl,
   main_args_to_jref(Args, JRef),
   jpl_call(Class,main,[JRef],_Out).
 
-call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--eval','(init-cyc)','--load','cyc'| Args]).
+call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--opencyc', '--eval','(init-cyc)','--load','cyc'| Args]).
 call_main(Args):- call_jmain('org.armedbear.lisp.Main',['--load','abclc-rc.lisp'| Args]).
 call_main(Args):- call_jmain('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',['--load','abclc-rc.lisp'| Args]).
 
@@ -475,8 +488,9 @@ on_bg_repl:- thread_signal(main, call(call,lmmud)).
 
 :- jpl.
 %program_init :-startBG.
+
 program_init :- 
-  catch(lmmud,E,dmsg(lmmud=E)),
+  % catch(lmmud,E,dmsg(lmmud=E)),
   threads,
   catch(fg_abcl,E2,dmsg(fg_abcl=E2)),
   prolog.
@@ -488,18 +502,13 @@ program_init :-
 :- initialization(program_init, program).
 
 
-end_of_file.
 
+old_tests(1):- cl_eval(['cyc:safely-rename-or-merge',"Rebelliousness","vtRebelliousnessFeeling"]).
+old_tests(2):- cl_eval(['cyc-rename-fast',"Rebelliousness","vtRebelliousnessFeeling"]).
+old_tests(3):- do_rn('Rebelliousness', vtRebelliousnessFeeling).
 
-
-
-cl_eval(['cyc:safely-rename-or-merge',"Rebelliousness","vtRebelliousnessFeeling"]).
-cl_eval(['cyc-rename-fast',"Rebelliousness","vtRebelliousnessFeeling"]).
-
-do_rn('Rebelliousness', vtRebelliousnessFeeling).
-
-bsh % org.jpl7.Query.oneSolution("thread_self(ID)");
-
+%   bsh % org.jpl7.Query.oneSolution("thread_self(ID)");
+/*
 Target exception: org.jpl7.JPLException: unknown term type=8
 
 (gdb)
@@ -510,4 +519,9 @@ Target exception: org.jpl7.JPLException: unknown term type=8
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
+*/
+:- at_halt( shell(reset)).
+
+end_of_file.
+
 

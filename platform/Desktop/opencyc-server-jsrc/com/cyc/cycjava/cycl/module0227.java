@@ -998,9 +998,9 @@ public final class module0227 extends SubLTranslatedFile
         $ic10$ = SubLObjectFactory.makeSymbol("S#17944", "CYC");
         $ic11$ = SubLObjectFactory.makeInteger(100);
         $ic12$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#17958", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#17959", "CYC"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic14$ = SubLObjectFactory.makeString("~A is neither SET-P nor LISTP.");
-        $ic15$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic15$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic16$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10388", "CYC"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#346C856"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#34E0056"));
         $ic17$ = SubLObjectFactory.makeSymbol("S#17948", "CYC");
         $ic18$ = SubLObjectFactory.makeSymbol("S#17949", "CYC");

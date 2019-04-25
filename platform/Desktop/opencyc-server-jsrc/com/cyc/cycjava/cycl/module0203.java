@@ -142,13 +142,13 @@ public final class module0203 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0203();
         $ic0$ = SubLObjectFactory.makeString("A KB-dependent numerical quantification function was called, but the current Cyc KB does not contain knowledge about numerical quantification.");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntervalMinFn"));
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Unity"));
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("PlusInfinity"));
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntervalMaxFn"));
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("thereExistAtLeast"));
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("thereExistAtMost"));
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("thereExistExactly"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntervalMinFn"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Unity"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PlusInfinity"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntervalMaxFn"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("thereExistAtLeast"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("thereExistAtMost"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("thereExistExactly"));
     }
 }
 

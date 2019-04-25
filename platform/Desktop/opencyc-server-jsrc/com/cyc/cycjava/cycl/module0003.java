@@ -489,7 +489,7 @@ public final class module0003 extends SubLTranslatedFile
         $ic8$ = SubLObjectFactory.makeKeyword("WORLD");
         $ic9$ = SubLObjectFactory.makeSymbol("*CATCH-ERROR-MESSAGE-TARGET*");
         $ic10$ = SubLObjectFactory.makeString("ERROR");
-        $ic11$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic11$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic12$ = SubLObjectFactory.makeSymbol("CCATCH");
         $ic13$ = SubLObjectFactory.makeSymbol("WITH-ERROR-HANDLER");
         $ic14$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("S#38", "CYC"));

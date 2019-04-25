@@ -239,13 +239,13 @@ public final class module0619 extends SubLTranslatedFile
     }
     
     public static SubLObject f38180(final SubLObject var2, final SubLObject var3) {
-        module0618.f37949(var2);
+        oc_dumper.load_kb(var2);
         f38181(var3);
         return (SubLObject)module0619.NIL;
     }
     
     public static SubLObject f38182(final SubLObject var4, final SubLObject var3) {
-        module0618.f37949(var4);
+        oc_dumper.load_kb(var4);
         f38179();
         f38181(var3);
         return (SubLObject)module0619.NIL;
@@ -288,7 +288,7 @@ public final class module0619 extends SubLTranslatedFile
     }
     
     public static SubLObject f38187(final SubLObject var11) {
-        module0618.f37949(var11);
+        oc_dumper.load_kb(var11);
         module0107.f7576((SubLObject)module0619.UNPROVIDED);
         return module0018.f971();
     }
@@ -304,7 +304,7 @@ public final class module0619 extends SubLTranslatedFile
         module0213.f13896();
         Storage.room((SubLObject)module0619.UNPROVIDED);
         module0213.f13862((SubLObject)module0619.UNPROVIDED);
-        return module0618.f37924(var11);
+        return oc_dumper.f37924(var11);
     }
     
     public static SubLObject f38190() {
@@ -1282,7 +1282,7 @@ public final class module0619 extends SubLTranslatedFile
                 Errors.$error_handler$.bind((SubLObject)module0619.$ic118$, var136);
                 try {
                     module0018.f970(Numbers.subtract(var137, (SubLObject)module0619.ONE_INTEGER));
-                    module0618.f37926(var135);
+                    oc_dumper.dump_kb(var135);
                 }
                 catch (Throwable var140) {
                     Errors.handleThrowable(var140, (SubLObject)module0619.NIL);
@@ -2233,7 +2233,7 @@ public final class module0619 extends SubLTranslatedFile
         $ic28$ = SubLObjectFactory.makeString("The agenda is not running.  Fix your init files, probably parameters.lisp.");
         $ic29$ = SubLObjectFactory.makeKeyword("RECEIVE-ONLY");
         $ic30$ = SubLObjectFactory.makeString("TheBuilder");
-        $ic31$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
+        $ic31$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
         $ic32$ = SubLObjectFactory.makeString("CycAdministrator");
         $ic33$ = SubLObjectFactory.makeString("Getting caught up~%");
         $ic34$ = SubLObjectFactory.makeString("Builder's transcript-loading server - DO NOT USE");
@@ -2295,23 +2295,23 @@ public final class module0619 extends SubLTranslatedFile
         $ic90$ = SubLObjectFactory.makeKeyword("STICKY");
         $ic91$ = SubLObjectFactory.makeKeyword("UNDEFINED");
         $ic92$ = SubLObjectFactory.makeKeyword("ALL");
-        $ic93$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
-        $ic94$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic93$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic94$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic95$ = SubLObjectFactory.makeKeyword("SWAPOUT");
         $ic96$ = SubLObjectFactory.makeInteger(500);
         $ic97$ = SubLObjectFactory.makeInteger(200);
-        $ic98$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("negationPreds"));
+        $ic98$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("negationPreds"));
         $ic99$ = SubLObjectFactory.makeInteger(100);
-        $ic100$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith"));
-        $ic101$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
-        $ic102$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("negationInverse"));
-        $ic103$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic100$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith"));
+        $ic101$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
+        $ic102$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("negationInverse"));
+        $ic103$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic104$ = SubLObjectFactory.makeInteger(5000);
         $ic105$ = SubLObjectFactory.makeInteger(2000);
-        $ic106$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic106$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic107$ = SubLObjectFactory.makeInteger(10000);
         $ic108$ = SubLObjectFactory.makeInteger(8000);
-        $ic109$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
+        $ic109$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
         $ic110$ = SubLObjectFactory.makeInteger(4000);
         $ic111$ = SubLObjectFactory.makeInteger(1000);
         $ic112$ = SubLObjectFactory.makeSymbol("S#6424", "CYC");
@@ -2339,15 +2339,15 @@ public final class module0619 extends SubLTranslatedFile
         $ic134$ = SubLObjectFactory.makeString("Mini KB Dumper");
         $ic135$ = SubLObjectFactory.makeString("mini-dump-finished.text");
         $ic136$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic137$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic138$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Collection"));
+        $ic137$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic138$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Collection"));
         $ic139$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
         $ic140$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic141$ = SubLObjectFactory.makeSymbol("S#41828", "CYC");
         $ic142$ = SubLObjectFactory.makeSymbol("<");
         $ic143$ = SubLObjectFactory.makeSymbol("S#17475", "CYC");
         $ic144$ = SubLObjectFactory.makeKeyword("ASCENDING");
-        $ic145$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CollectionType"));
+        $ic145$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CollectionType"));
         $ic146$ = SubLObjectFactory.makeString("Nothing to clip.");
         $ic147$ = SubLObjectFactory.makeKeyword("PERCENTAGE");
         $ic148$ = SubLObjectFactory.makeString("Invalid percentage ~A: cannot clip from ~A to ~A.");

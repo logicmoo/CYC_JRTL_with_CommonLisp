@@ -470,7 +470,7 @@ public final class module0296 extends SubLTranslatedFile
     public static SubLObject f19925(final SubLObject var1, final SubLObject var13, final SubLObject var2, final SubLObject var18, final SubLObject var6, final SubLObject var20, final SubLObject var7) {
         SubLObject var21 = (SubLObject)module0296.NIL;
         SubLObject var22 = (SubLObject)module0296.NIL;
-        if (module0296.NIL != module0128.f8449(var1)) {
+        if (module0296.NIL != constant_handles_oc.f8449(var1)) {
             var21 = Hashtables.gethash(var1, module0295.f19837(), (SubLObject)module0296.UNPROVIDED);
         }
         else if (module0296.NIL != module0167.f10813(var1)) {
@@ -1114,7 +1114,7 @@ public final class module0296 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0296();
         module0296.$g2692$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorRuleUnifier"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorRuleUnifier"));
         $ic1$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("REQUIRED"), SubLObjectFactory.makeSymbol("TRUE"), SubLObjectFactory.makeKeyword("COST"), SubLObjectFactory.makeSymbol("S#22567", "CYC"), SubLObjectFactory.makeKeyword("REFORMULATE"), SubLObjectFactory.makeSymbol("S#22568", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("The fallback mechanism for the reformulator.\n    Unifies the input expression with applicable reformulator rules."), SubLObjectFactory.makeKeyword("EXAMPLE-SOURCE"), SubLObjectFactory.makeString("(#$implies (#$isa ?X #$Dog) (#$isa ?X #$Animal))"), SubLObjectFactory.makeKeyword("EXAMPLE-TARGET"), SubLObjectFactory.makeString("(#$genls #$Dog #$Animal)") });
         $ic2$ = SubLObjectFactory.makeKeyword("KB");
         $ic3$ = SubLObjectFactory.makeSymbol("S#22571", "CYC");
@@ -1122,14 +1122,14 @@ public final class module0296 extends SubLTranslatedFile
         $ic5$ = SubLObjectFactory.makeKeyword("NO-SEARCH");
         $ic6$ = SubLObjectFactory.makeInteger(64);
         $ic7$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("notAssertible"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("notAssertible"));
         $ic9$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationBackwardDirection"));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("expansion"));
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("expansionAxiom"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationBackwardDirection"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("expansion"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("expansionAxiom"));
         $ic13$ = SubLObjectFactory.makeSymbol("CAR");
         $ic14$ = SubLObjectFactory.makeSymbol("CDR");
-        $ic15$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationNeitherDirection"));
+        $ic15$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationNeitherDirection"));
         $ic16$ = SubLObjectFactory.makeSymbol("S#22595", "CYC");
         $ic17$ = SubLObjectFactory.makeKeyword("FALSE");
         $ic18$ = SubLObjectFactory.makeSymbol("S#12276", "CYC");

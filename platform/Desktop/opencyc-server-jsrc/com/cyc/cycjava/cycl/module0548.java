@@ -639,7 +639,7 @@ public final class module0548 extends SubLTranslatedFile
     
     public static SubLObject f33868(final SubLObject var51) {
         SubLObject var52 = (SubLObject)module0548.NIL;
-        final SubLObject var53 = module0369.f25492(var51);
+        final SubLObject var53 = oc_inference_datastructures_inference.f25492(var51);
         if (module0548.NIL == module0065.f4772(var53, (SubLObject)module0548.$ic39$)) {
             final SubLObject var106_107 = var53;
             if (module0548.NIL == module0065.f4775(var106_107, (SubLObject)module0548.$ic39$)) {
@@ -658,8 +658,8 @@ public final class module0548 extends SubLTranslatedFile
                         if (module0548.NIL != module0065.f4749(var59)) {
                             var59 = (SubLObject)module0548.$ic39$;
                         }
-                        var114_115 = module0369.f25629(var59);
-                        var60 = module0369.f25623(var59, (SubLObject)module0548.NIL);
+                        var114_115 = oc_inference_datastructures_inference.f25629(var59);
+                        var60 = oc_inference_datastructures_inference.f25623(var59, (SubLObject)module0548.NIL);
                         var52 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(var60, var114_115), var52);
                     }
                 }
@@ -673,8 +673,8 @@ public final class module0548 extends SubLTranslatedFile
                 while (var62.numL(var63)) {
                     final SubLObject var65 = Hashtables.gethash_without_values(var62, var61, var64);
                     if (module0548.NIL == module0065.f4773((SubLObject)module0548.$ic39$) || module0548.NIL == module0065.f4749(var65)) {
-                        final SubLObject var114_116 = module0369.f25629(var65);
-                        final SubLObject var66 = module0369.f25623(var65, (SubLObject)module0548.NIL);
+                        final SubLObject var114_116 = oc_inference_datastructures_inference.f25629(var65);
+                        final SubLObject var66 = oc_inference_datastructures_inference.f25623(var65, (SubLObject)module0548.NIL);
                         var52 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(var66, var114_116), var52);
                     }
                     var62 = Numbers.add(var62, (SubLObject)module0548.ONE_INTEGER);

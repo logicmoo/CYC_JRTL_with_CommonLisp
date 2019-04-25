@@ -363,7 +363,7 @@ public final class module0682 extends SubLTranslatedFile
         if (var14 == module0682.UNPROVIDED) {
             var14 = (SubLObject)module0682.NIL;
         }
-        assert module0682.NIL != module0369.f25275(var16) : var16;
+        assert module0682.NIL != oc_inference_datastructures_inference.f25275(var16) : var16;
         if (module0682.NIL != var14 && !module0682.areAssertionsDisabledFor(me) && module0682.NIL == module0686.f42037(var14)) {
             throw new AssertionError(var14);
         }
@@ -371,10 +371,10 @@ public final class module0682 extends SubLTranslatedFile
         f41641(var17, module0684.f41928(var16));
         f41645(var17, module0423.f29580());
         f41646(var17, var16);
-        f41647(var17, (SubLObject)ConsesLow.list(module0369.f25423(var16)));
-        f41648(var17, (SubLObject)ConsesLow.list(module0369.f25424(var16)));
-        f41652(var17, module0369.f25483(var16));
-        f41653(var17, module0369.f25482(var16));
+        f41647(var17, (SubLObject)ConsesLow.list(oc_inference_datastructures_inference.f25423(var16)));
+        f41648(var17, (SubLObject)ConsesLow.list(oc_inference_datastructures_inference.f25424(var16)));
+        f41652(var17, oc_inference_datastructures_inference.f25483(var16));
+        f41653(var17, oc_inference_datastructures_inference.f25482(var16));
         f41654(var17, (SubLObject)module0682.NIL);
         return var17;
     }

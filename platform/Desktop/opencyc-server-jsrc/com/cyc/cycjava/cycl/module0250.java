@@ -3659,10 +3659,10 @@ public final class module0250 extends SubLTranslatedFile
         if (module0250.NIL != module0173.f10955(var57) && module0250.NIL != var56) {
             final SubLObject var58 = (var54 == module0250.$ic85$) ? module0202.f12768(var57, var52, var51) : module0202.f12768(var57, var51, var52);
             final SubLObject var59 = f16105(var58, var56, var55);
-            if (module0250.NIL == module0174.f11035(var59)) {
+            if (module0250.NIL == assertion_handles_oc.f11035(var59)) {
                 Errors.sublisp_break((SubLObject)module0250.$ic86$, new SubLObject[] { var51, var52, var54 });
             }
-            if (module0250.NIL != module0174.f11035(var59)) {
+            if (module0250.NIL != assertion_handles_oc.f11035(var59)) {
                 return module0159.f10364(var59);
             }
         }
@@ -3818,13 +3818,13 @@ public final class module0250 extends SubLTranslatedFile
         $ic15$ = SubLObjectFactory.makeKeyword("VERBOSE");
         $ic16$ = SubLObjectFactory.makeString("incorrect justification assembly ~a");
         $ic17$ = SubLObjectFactory.makeKeyword("REFLEXIVE");
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
-        $ic19$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("MonotonicallyTrue"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
+        $ic19$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MonotonicallyTrue"));
         $ic20$ = SubLObjectFactory.makeSymbol("S#11667", "CYC");
         $ic21$ = SubLObjectFactory.makeSymbol("S#11668", "CYC");
         $ic22$ = SubLObjectFactory.makeString("~S is not a transitive module");
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
-        $ic24$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
+        $ic24$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith"));
         $ic25$ = SubLObjectFactory.makeSymbol("S#11503", "CYC");
         $ic26$ = SubLObjectFactory.makeSymbol("S#11502", "CYC");
         $ic27$ = SubLObjectFactory.makeSymbol("S#18935", "CYC");
@@ -3877,11 +3877,11 @@ public final class module0250 extends SubLTranslatedFile
         $ic74$ = SubLObjectFactory.makeString("continue anyway");
         $ic75$ = SubLObjectFactory.makeKeyword("WARN");
         $ic76$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic77$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
+        $ic77$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
         $ic78$ = SubLObjectFactory.makeKeyword("RESOURCE");
         $ic79$ = SubLObjectFactory.makeSymbol("S#18932", "CYC");
-        $ic80$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
-        $ic81$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic80$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
+        $ic81$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic82$ = SubLObjectFactory.makeSymbol("S#18934", "CYC");
         $ic83$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("PREDICATE"), (SubLObject)SubLObjectFactory.makeKeyword("INVERSE"));
         $ic84$ = SubLObjectFactory.makeString("Unexpected direction : ~S");

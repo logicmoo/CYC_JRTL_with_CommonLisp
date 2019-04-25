@@ -1278,7 +1278,7 @@ public final class module0593 extends SubLTranslatedFile
         $ic54$ = SubLObjectFactory.makeString("Unable to open ~S");
         $ic55$ = SubLObjectFactory.makeString("~s~%");
         $ic56$ = SubLObjectFactory.makeSymbol("FI-TIMESTAMP-ASSERTION");
-        $ic57$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
+        $ic57$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
         $ic58$ = ConsesLow.list((SubLObject)module0593.NIL, (SubLObject)module0593.NIL, (SubLObject)module0593.NIL);
         $ic59$ = SubLObjectFactory.makeInteger(120);
         $ic60$ = SubLObjectFactory.makeSymbol("S#40055", "CYC");

@@ -58,7 +58,7 @@ public final class module0351 extends SubLTranslatedFile
     
     public static SubLObject f23568(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        assert module0351.NIL != module0174.f11035(var1) : var1;
+        assert module0351.NIL != assertion_handles_oc.f11035(var1) : var1;
         final SubLObject var3 = module0178.f11291(var1);
         if (module0351.NIL != module0131.f8587() && module0351.NIL == module0131.$g60$.getDynamicValue(var2)) {
             return conses_high.member(var3, module0351.$g2990$.getGlobalValue(), (SubLObject)module0351.UNPROVIDED, (SubLObject)module0351.UNPROVIDED);
@@ -101,7 +101,7 @@ public final class module0351 extends SubLTranslatedFile
         }
         SubLObject var13 = (SubLObject)module0351.NIL;
         SubLObject var14 = (SubLObject)module0351.NIL;
-        if (module0351.NIL != module0174.f11035(var8)) {
+        if (module0351.NIL != assertion_handles_oc.f11035(var8)) {
             final SubLObject var15 = module0178.f11282(var8);
             var13 = ((module0351.NIL != module0204.f13049(var15)) ? module0204.f13033(module0232.f15306(var15).first()) : var15);
         }
@@ -323,11 +323,11 @@ public final class module0351 extends SubLTranslatedFile
         $ic1$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BACKWARD"), (SubLObject)SubLObjectFactory.makeKeyword("FORWARD"));
         $ic2$ = SubLObjectFactory.makeSymbol("ASSERTION-P");
         $ic3$ = SubLObjectFactory.makeSymbol("VARIABLE-P");
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
-        $ic7$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing")));
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("abnormal"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
+        $ic7$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing")));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("abnormal"));
         $ic9$ = SubLObjectFactory.makeKeyword("NEG");
         $ic10$ = SubLObjectFactory.makeKeyword("POS");
         $ic11$ = SubLObjectFactory.makeSymbol("LISTP");

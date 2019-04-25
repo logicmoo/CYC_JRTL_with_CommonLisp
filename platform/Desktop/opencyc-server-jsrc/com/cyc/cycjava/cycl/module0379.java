@@ -394,7 +394,7 @@ public final class module0379 extends SubLTranslatedFile
                         }
                         if (module0379.NIL != module0363.f24547(var18, var54)) {
                             var55 = var54;
-                            var56 = module0077.f5333(module0369.f25473(var55));
+                            var56 = module0077.f5333(oc_inference_datastructures_inference.f25473(var55));
                             for (var57 = module0032.f1741(var56), var58 = (SubLObject)module0379.NIL, var58 = module0032.f1742(var57, var56); module0379.NIL == module0032.f1744(var57, var58); var58 = module0032.f1743(var58)) {
                                 var59 = module0032.f1745(var57, var58);
                                 if (module0379.NIL != module0032.f1746(var58, var59)) {
@@ -418,7 +418,7 @@ public final class module0379 extends SubLTranslatedFile
                         var62 = Hashtables.getEntryValue(var64);
                         if (module0379.NIL != module0363.f24547(var18, var62)) {
                             final SubLObject var65 = var62;
-                            final SubLObject var66 = module0077.f5333(module0369.f25473(var65));
+                            final SubLObject var66 = module0077.f5333(oc_inference_datastructures_inference.f25473(var65));
                             SubLObject var67;
                             SubLObject var68;
                             SubLObject var69;

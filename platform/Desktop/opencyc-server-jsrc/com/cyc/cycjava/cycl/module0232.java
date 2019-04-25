@@ -437,7 +437,7 @@ public final class module0232 extends SubLTranslatedFile
         me = (SubLFile)new module0232();
         module0232.$g2426$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("CLAUSE-P");
-        $ic1$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic1$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic2$ = SubLObjectFactory.makeString("Returns T iff OBJECT is either a CNF or DNF clause.");
         $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
         $ic4$ = SubLObjectFactory.makeSymbol("LISTP");
@@ -481,10 +481,10 @@ public final class module0232 extends SubLTranslatedFile
         $ic42$ = SubLObjectFactory.makeString("Return T iff CNF is a cnf representation of a gaf formula.");
         $ic43$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic44$ = SubLObjectFactory.makeSymbol("TRUTH-P");
-        $ic45$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("and"));
-        $ic46$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("or"));
-        $ic47$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
-        $ic48$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("not"));
+        $ic45$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and"));
+        $ic46$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("or"));
+        $ic47$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
+        $ic48$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("not"));
         $ic49$ = SubLObjectFactory.makeKeyword("FALSE");
         $ic50$ = SubLObjectFactory.makeSymbol("CNF-FORMULA");
         $ic51$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13916", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12576", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("TRUE")));

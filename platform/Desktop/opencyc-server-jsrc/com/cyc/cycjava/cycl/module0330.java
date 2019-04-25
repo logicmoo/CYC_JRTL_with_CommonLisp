@@ -59,7 +59,7 @@ public final class module0330 extends SubLTranslatedFile
     
     public static SubLObject f22359() {
         final SubLThread var3 = SubLProcess.currentSubLThread();
-        if (module0330.NIL != module0128.f8463(module0330.$ic0$, (SubLObject)module0330.UNPROVIDED)) {
+        if (module0330.NIL != constant_handles_oc.f8463(module0330.$ic0$, (SubLObject)module0330.UNPROVIDED)) {
             final SubLObject var4 = (SubLObject)module0330.$ic3$;
             final SubLObject var5 = module0012.$g73$.currentBinding(var3);
             final SubLObject var6 = module0012.$g65$.currentBinding(var3);
@@ -393,15 +393,15 @@ public final class module0330 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0330();
         module0330.$g2844$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
         $ic1$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic2$ = SubLObjectFactory.makeSymbol("S#24883", "CYC");
         $ic3$ = SubLObjectFactory.makeString("Initializing some equality assertions somewhere...");
         $ic4$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic6$ = SubLObjectFactory.makeKeyword("GAF");
         $ic7$ = SubLObjectFactory.makeSymbol("DECACHE-SOME-EQUALITY-ASSERTIONS-SOMEWHERE");
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("rewriteOf"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("rewriteOf"));
     }
 }
 

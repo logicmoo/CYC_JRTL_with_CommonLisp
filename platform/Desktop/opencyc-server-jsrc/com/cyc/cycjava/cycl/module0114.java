@@ -431,7 +431,7 @@ public final class module0114 extends SubLTranslatedFile
         }
         final SubLObject var36 = module0035.f2439(Symbols.symbol_function((SubLObject)module0114.$ic21$), var34, (SubLObject)module0114.UNPROVIDED);
         if (module0114.NIL != var36) {
-            final SubLObject var37 = module0166.f10743(var36);
+            final SubLObject var37 = constants_high_oc.f10743(var36);
             if (var37.isString()) {
                 Errors.error((SubLObject)module0114.$ic22$, var37);
             }

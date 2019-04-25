@@ -1173,7 +1173,7 @@ public final class module0350 extends SubLTranslatedFile
         $ic7$ = SubLObjectFactory.makeSymbol("S#26229", "CYC");
         $ic8$ = SubLObjectFactory.makeSymbol("S#26235", "CYC");
         $ic9$ = SubLObjectFactory.makeKeyword("IGNORE");
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic11$ = SubLObjectFactory.makeSymbol("S#26247", "CYC");
     }
 }

@@ -172,7 +172,7 @@ public final class module0603 extends SubLTranslatedFile
     }
     
     public static SubLObject f36838(final SubLObject var12) {
-        if (module0603.NIL != module0174.f11035(var12)) {
+        if (module0603.NIL != assertion_handles_oc.f11035(var12)) {
             return f36838(module0538.f33478(var12, (SubLObject)module0603.UNPROVIDED));
         }
         if (var12.isCons()) {
@@ -195,7 +195,7 @@ public final class module0603 extends SubLTranslatedFile
     }
     
     public static SubLObject f36839(final SubLObject var15) {
-        final SubLObject var16 = module0174.f11053(var15);
+        final SubLObject var16 = assertion_handles_oc.f11053(var15);
         if (module0603.NIL != var16) {
             return f36838(var16);
         }
@@ -203,7 +203,7 @@ public final class module0603 extends SubLTranslatedFile
     }
     
     public static SubLObject f36840(final SubLObject var12) {
-        return module0166.f10743(var12.first());
+        return constants_high_oc.f10743(var12.first());
     }
     
     public static SubLObject f36841(final SubLObject var16) {
@@ -220,7 +220,7 @@ public final class module0603 extends SubLTranslatedFile
     }
     
     public static SubLObject f36843(final SubLObject var16) {
-        return Values.values((SubLObject)module0603.$ic15$, module0166.f10749(var16));
+        return Values.values((SubLObject)module0603.$ic15$, constants_high_oc.f10749(var16));
     }
     
     public static SubLObject f36844(final SubLObject var16) {
@@ -236,11 +236,11 @@ public final class module0603 extends SubLTranslatedFile
     }
     
     public static SubLObject f36847(final SubLObject var16) {
-        return Values.values((SubLObject)module0603.$ic21$, module0174.f11025(var16));
+        return Values.values((SubLObject)module0603.$ic21$, assertion_handles_oc.f11025(var16));
     }
     
     public static SubLObject f36848(final SubLObject var16) {
-        return Values.values((SubLObject)module0603.$ic23$, module0184.f11649(var16));
+        return Values.values((SubLObject)module0603.$ic23$, oc_deduction_handles.f11649(var16));
     }
     
     public static SubLObject f36849(final SubLObject var18, final SubLObject var19) {
@@ -287,8 +287,8 @@ public final class module0603 extends SubLTranslatedFile
         if (module0603.NIL != module0167.f10813(var24)) {
             return Numbers.minus(module0167.f10803(var24));
         }
-        if (module0603.NIL != module0128.f8449(var24)) {
-            return module0166.f10749(var24);
+        if (module0603.NIL != constant_handles_oc.f8449(var24)) {
+            return constants_high_oc.f10749(var24);
         }
         return (SubLObject)module0603.NIL;
     }
@@ -302,13 +302,13 @@ public final class module0603 extends SubLTranslatedFile
             var20 = module0167.f10832(Numbers.minus(var19));
         }
         else {
-            var20 = module0166.f10752(var19);
+            var20 = constants_high_oc.f10752(var19);
         }
         return f36838(var20);
     }
     
     public static SubLObject f36855(final SubLObject var26) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0603.NIL == module0128.f8449(var26));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0603.NIL == constant_handles_oc.f8449(var26));
     }
     
     public static SubLObject f36856(final SubLObject var12) {
@@ -370,7 +370,7 @@ public final class module0603 extends SubLTranslatedFile
             SubLObject var38 = (SubLObject)module0603.NIL;
             try {
                 var28.throwStack.push(module0603.$ic37$);
-                final SubLObject var39 = module0174.f11010();
+                final SubLObject var39 = assertion_handles_oc.f11010();
                 final SubLObject var40 = (SubLObject)module0603.$ic38$;
                 final SubLObject var41 = module0065.f4733(var39);
                 SubLObject var42 = (SubLObject)module0603.ZERO_INTEGER;
@@ -455,8 +455,8 @@ public final class module0603 extends SubLTranslatedFile
     }
     
     public static SubLObject f36861(final SubLObject var26) {
-        if (module0603.NIL != module0128.f8449(var26)) {
-            final SubLObject var27 = module0166.f10743(var26);
+        if (module0603.NIL != constant_handles_oc.f8449(var26)) {
+            final SubLObject var27 = constants_high_oc.f10743(var26);
             if (var27.isString()) {
                 return var27;
             }
@@ -529,7 +529,7 @@ public final class module0603 extends SubLTranslatedFile
                 }
             }
             else if (var33.eql((SubLObject)module0603.$ic36$) && module0603.NIL != module0158.f10286(var27, (SubLObject)module0603.NIL)) {
-                final SubLObject var42 = module0174.f11010();
+                final SubLObject var42 = assertion_handles_oc.f11010();
                 final SubLObject var43 = (SubLObject)module0603.$ic38$;
                 final SubLObject var44 = module0065.f4733(var42);
                 SubLObject var45 = (SubLObject)module0603.ZERO_INTEGER;
@@ -622,7 +622,7 @@ public final class module0603 extends SubLTranslatedFile
                         final SubLObject var35 = module0052.f3695(var32, var34);
                         final SubLObject var36 = (SubLObject)SubLObjectFactory.makeBoolean(!var34.eql(var35));
                         if (module0603.NIL != var36) {
-                            var29 = (SubLObject)ConsesLow.cons(module0174.f11025(var35), var29);
+                            var29 = (SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var35), var29);
                         }
                         var33 = (SubLObject)SubLObjectFactory.makeBoolean(module0603.NIL == var36);
                     }
@@ -642,7 +642,7 @@ public final class module0603 extends SubLTranslatedFile
             }
         }
         else if (var30.eql((SubLObject)module0603.$ic36$) && module0603.NIL != module0158.f10286(var27, (SubLObject)module0603.NIL)) {
-            final SubLObject var38 = module0174.f11010();
+            final SubLObject var38 = assertion_handles_oc.f11010();
             final SubLObject var39 = (SubLObject)module0603.$ic38$;
             final SubLObject var40 = module0065.f4733(var38);
             SubLObject var41 = (SubLObject)module0603.ZERO_INTEGER;
@@ -677,7 +677,7 @@ public final class module0603 extends SubLTranslatedFile
                                 module0012.note_percent_progress(var41, var40);
                                 var41 = Numbers.add(var41, (SubLObject)module0603.ONE_INTEGER);
                                 if (module0603.NIL != module0158.f10287(var51, var27, (SubLObject)module0603.NIL, (SubLObject)module0603.NIL)) {
-                                    var29 = (SubLObject)ConsesLow.cons(module0174.f11025(var51), var29);
+                                    var29 = (SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var51), var29);
                                 }
                             }
                         }
@@ -694,7 +694,7 @@ public final class module0603 extends SubLTranslatedFile
                                 module0012.note_percent_progress(var41, var40);
                                 var41 = Numbers.add(var41, (SubLObject)module0603.ONE_INTEGER);
                                 if (module0603.NIL != module0158.f10287(var56, var27, (SubLObject)module0603.NIL, (SubLObject)module0603.NIL)) {
-                                    var29 = (SubLObject)ConsesLow.cons(module0174.f11025(var56), var29);
+                                    var29 = (SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var56), var29);
                                 }
                             }
                             var53 = Numbers.add(var53, (SubLObject)module0603.ONE_INTEGER);
@@ -894,9 +894,9 @@ public final class module0603 extends SubLTranslatedFile
         if (var95 == module0603.UNPROVIDED) {
             var95 = module0603.$ic51$;
         }
-        assert module0603.NIL != module0128.f8463(var95, (SubLObject)module0603.UNPROVIDED) : var95;
-        SubLObject var96 = module0166.f10737(var58);
-        if (module0603.NIL == module0128.f8463(var96, (SubLObject)module0603.UNPROVIDED)) {
+        assert module0603.NIL != constant_handles_oc.f8463(var95, (SubLObject)module0603.UNPROVIDED) : var95;
+        SubLObject var96 = constants_high_oc.f10737(var58);
+        if (module0603.NIL == constant_handles_oc.f8463(var96, (SubLObject)module0603.UNPROVIDED)) {
             var96 = var95;
         }
         return var96;
@@ -1090,11 +1090,11 @@ public final class module0603 extends SubLTranslatedFile
     }
     
     public static SubLObject f36884() {
-        Structures.register_method(module0603.$g4665$.getGlobalValue(), module0128.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0603.$ic16$));
+        Structures.register_method(module0603.$g4665$.getGlobalValue(), constant_handles_oc.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0603.$ic16$));
         Structures.register_method(module0603.$g4665$.getGlobalValue(), module0167.$g2182$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0603.$ic17$));
         Structures.register_method(module0603.$g4665$.getGlobalValue(), module0193.$g2259$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0603.$ic20$));
-        Structures.register_method(module0603.$g4665$.getGlobalValue(), module0174.$g2194$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0603.$ic22$));
-        Structures.register_method(module0603.$g4665$.getGlobalValue(), module0184.$g2229$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0603.$ic24$));
+        Structures.register_method(module0603.$g4665$.getGlobalValue(), assertion_handles_oc.$g2194$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0603.$ic22$));
+        Structures.register_method(module0603.$g4665$.getGlobalValue(), oc_deduction_handles.$g2229$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0603.$ic24$));
         f36850((SubLObject)module0603.$ic15$, (SubLObject)module0603.$ic26$);
         f36850((SubLObject)module0603.$ic18$, (SubLObject)module0603.$ic27$);
         f36850((SubLObject)module0603.$ic19$, (SubLObject)module0603.$ic28$);
@@ -1123,12 +1123,12 @@ public final class module0603 extends SubLTranslatedFile
         module0603.$g4665$ = null;
         module0603.$g4666$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic2$ = SubLObjectFactory.makeString("~%Collecting proprietary constants ... ");
         $ic3$ = SubLObjectFactory.makeString("~%  ~s ... ");
         $ic4$ = SubLObjectFactory.makeString("~s found.");
         $ic5$ = SubLObjectFactory.makeString("~%Preparing to kill ~s proprietary constants.  Go ahead? ");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory"));
         $ic7$ = SubLObjectFactory.makeString("~%~s terms killed.");
         $ic8$ = SubLObjectFactory.makeString("~%Done.");
         $ic9$ = SubLObjectFactory.makeString("~%Returning to Lisp Interactor.");
@@ -1169,14 +1169,14 @@ public final class module0603 extends SubLTranslatedFile
         $ic44$ = SubLObjectFactory.makeSymbol("S#16701", "CYC");
         $ic45$ = SubLObjectFactory.makeString("~s is not a microtheory.");
         $ic46$ = SubLObjectFactory.makeKeyword("DEFAULT");
-        $ic47$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SpeechPart"));
+        $ic47$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SpeechPart"));
         $ic48$ = SubLObjectFactory.makeKeyword("CHECKED");
         $ic49$ = SubLObjectFactory.makeString("~&'~a' does not refer to a valid term~%");
         $ic50$ = SubLObjectFactory.makeKeyword("EOF");
-        $ic51$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DeadTerm"));
+        $ic51$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DeadTerm"));
         $ic52$ = SubLObjectFactory.makeSymbol("VALID-CONSTANT?");
-        $ic53$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InstanceNamedFn"));
-        $ic54$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InstanceNamedFn-Ternary"));
+        $ic53$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InstanceNamedFn"));
+        $ic54$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InstanceNamedFn-Ternary"));
         $ic55$ = SubLObjectFactory.makeSymbol("GET-CYC-TERM-EXTERNAL-IDENTIFIERS");
         $ic56$ = SubLObjectFactory.makeString("\"");
         $ic57$ = SubLObjectFactory.makeSymbol("GET-CYC-TERM-EXTERNAL-IDENITIFIERS-FOR-LIST");

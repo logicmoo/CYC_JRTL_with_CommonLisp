@@ -69,7 +69,7 @@ public final class module0346 extends SubLTranslatedFile
     
     public static SubLObject f23313(final SubLObject var10) {
         final SubLThread var11 = SubLProcess.currentSubLThread();
-        assert module0346.NIL != module0184.f11659(var10) : var10;
+        assert module0346.NIL != oc_deduction_handles.f11659(var10) : var10;
         final SubLObject var12 = module0188.f11770(var10);
         final SubLObject var13 = module0191.f11926(var10);
         final SubLObject var14 = f23311(var12, module0191.f11924(var10));
@@ -83,13 +83,13 @@ public final class module0346 extends SubLTranslatedFile
     }
     
     public static SubLObject f23314(final SubLObject var14) {
-        assert module0346.NIL != module0174.f11035(var14) : var14;
+        assert module0346.NIL != assertion_handles_oc.f11035(var14) : var14;
         final SubLObject var15 = module0178.f11299(var14);
         final SubLObject var16 = module0178.f11302(var14);
         final SubLObject var17 = f23315(var15);
         if (!var16.eql(var17)) {
-            module0175.f11078(var14, module0130.f8524(var17));
-            module0175.f11079(var14, module0130.f8523(var17));
+            oc_assertions_interface.f11078(var14, module0130.f8524(var17));
+            oc_assertions_interface.f11079(var14, module0130.f8523(var17));
             module0248.f15964(var14, var16);
         }
         return var17;

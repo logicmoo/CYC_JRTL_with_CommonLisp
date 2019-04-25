@@ -336,7 +336,7 @@ public final class module0147 extends SubLTranslatedFile
     }
     
     public static SubLObject f9508(final SubLObject var26) {
-        if (module0147.NIL != module0174.f11035(var26)) {
+        if (module0147.NIL != assertion_handles_oc.f11035(var26)) {
             return (SubLObject)SubLObjectFactory.makeBoolean(module0147.NIL != f9509() || module0147.NIL != f9507(module0178.f11287(var26)));
         }
         return (SubLObject)module0147.NIL;
@@ -985,7 +985,7 @@ public final class module0147 extends SubLTranslatedFile
         $ic11$ = SubLObjectFactory.makeSymbol("HLMT-EQUAL");
         $ic12$ = SubLObjectFactory.makeSymbol("S#10715", "CYC");
         $ic13$ = SubLObjectFactory.makeSymbol("S#10714", "CYC");
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TimePoint"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TimePoint"));
         $ic15$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
         $ic16$ = SubLObjectFactory.makeSymbol("S#12275", "CYC");
         $ic17$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
@@ -1003,12 +1003,12 @@ public final class module0147 extends SubLTranslatedFile
         $ic29$ = SubLObjectFactory.makeSymbol("CANONICALIZE-HLMT");
         $ic30$ = SubLObjectFactory.makeSymbol("WITH-MT");
         $ic31$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("S#12274", "CYC"));
-        $ic32$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic32$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic33$ = SubLObjectFactory.makeSymbol("WITH-ALL-MTS");
         $ic34$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic35$ = SubLObjectFactory.makeString("All mts are relevant within BODY.");
         $ic36$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("S#12275", "CYC"));
-        $ic37$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic37$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic38$ = SubLObjectFactory.makeSymbol("WITH-ANY-MT");
         $ic39$ = SubLObjectFactory.makeString("Any mt can be used for relevance for a particular inference within &BODY.");
         $ic40$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("S#12276", "CYC"));
@@ -1058,7 +1058,7 @@ public final class module0147 extends SubLTranslatedFile
         $ic84$ = SubLObjectFactory.makeSymbol("S#12331", "CYC");
         $ic85$ = SubLObjectFactory.makeSymbol("S#12314", "CYC");
         $ic86$ = SubLObjectFactory.makeSymbol("S#12332", "CYC");
-        $ic87$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtUnionFn"));
+        $ic87$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtUnionFn"));
         $ic88$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12316", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic89$ = SubLObjectFactory.makeSymbol("PCOND");
         $ic90$ = SubLObjectFactory.makeSymbol("S#12268", "CYC");
@@ -1066,9 +1066,9 @@ public final class module0147 extends SubLTranslatedFile
         $ic92$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("S#12275", "CYC")));
         $ic93$ = SubLObjectFactory.makeSymbol("S#12333", "CYC");
         $ic94$ = SubLObjectFactory.makeSymbol("S#12293", "CYC");
-        $ic95$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic95$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic96$ = SubLObjectFactory.makeSymbol("DO-ALL-FORT-INSTANCES");
-        $ic97$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory")));
+        $ic97$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory")));
         $ic98$ = SubLObjectFactory.makeSymbol("MAP-MTS");
         $ic99$ = SubLObjectFactory.makeString("Iterate over all microtheories, binding VAR to an mt and executing BODY.");
     }

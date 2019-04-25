@@ -99,8 +99,8 @@ public final class module0372 extends SubLTranslatedFile
         var9 = var8.first();
         while (module0372.NIL != var8) {
             if (!var9.isFixnum()) {
-                if (module0372.NIL != module0128.f8449(var9)) {
-                    var9 = Guids.guid_to_string(module0166.f10757(var9));
+                if (module0372.NIL != constant_handles_oc.f8449(var9)) {
+                    var9 = Guids.guid_to_string(constants_high_oc.f10757(var9));
                 }
                 else if (var9.isSymbol()) {
                     var9 = module0038.f2624(var9);
@@ -123,7 +123,7 @@ public final class module0372 extends SubLTranslatedFile
     
     public static SubLObject f26078(final SubLObject var1) {
         final SubLObject var2 = module0409.f28515(var1, (SubLObject)module0372.UNPROVIDED, (SubLObject)module0372.UNPROVIDED);
-        final SubLObject var3 = module0369.f25487(var2);
+        final SubLObject var3 = oc_inference_datastructures_inference.f25487(var2);
         return var3;
     }
     
@@ -555,7 +555,7 @@ public final class module0372 extends SubLTranslatedFile
         module0372.$g3166$ = null;
         module0372.$g3167$ = null;
         $ic0$ = SubLObjectFactory.makeKeyword("NON-PROVIDED");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
         $ic2$ = SubLObjectFactory.makeString("localhost");
         $ic3$ = SubLObjectFactory.makeInteger(2112);
         $ic4$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#57", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#58", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));

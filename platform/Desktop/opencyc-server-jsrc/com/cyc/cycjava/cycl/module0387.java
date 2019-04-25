@@ -129,8 +129,8 @@ public final class module0387 extends SubLTranslatedFile
         try {
             module0339.$g2902$.bind(var1, var2);
             module0367.f25108(var1);
-            module0369.f25575(module0367.f25037(var1));
-            module0369.f25576(module0367.f25037(var1));
+            oc_inference_datastructures_inference.f25575(module0367.f25037(var1));
+            oc_inference_datastructures_inference.f25576(module0367.f25037(var1));
             module0367.f25109(var1, (SubLObject)module0387.$ic0$, (SubLObject)module0387.UNPROVIDED, (SubLObject)module0387.UNPROVIDED, (SubLObject)module0387.UNPROVIDED, (SubLObject)module0387.UNPROVIDED, (SubLObject)module0387.UNPROVIDED);
         }
         finally {
@@ -235,7 +235,7 @@ public final class module0387 extends SubLTranslatedFile
     }
     
     public static SubLObject f27481(final SubLObject var1) {
-        return module0369.f25606(module0367.f25037(var1));
+        return oc_inference_datastructures_inference.f25606(module0367.f25037(var1));
     }
     
     public static SubLObject f27482(final SubLObject var1) {
@@ -247,7 +247,7 @@ public final class module0387 extends SubLTranslatedFile
     }
     
     public static SubLObject f27484(final SubLObject var1) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0387.NIL != f27482(var1) && module0387.NIL != module0369.f25514(module0367.f25037(var1)));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0387.NIL != f27482(var1) && module0387.NIL != oc_inference_datastructures_inference.f25514(module0367.f25037(var1)));
     }
     
     public static SubLObject f27485(final SubLObject var25, final SubLObject var26) {
@@ -571,7 +571,7 @@ public final class module0387 extends SubLTranslatedFile
         assert module0387.NIL != module0367.f24997(var1) : var1;
         assert module0387.NIL != module0365.f24819(var4) : var4;
         if (module0387.NIL != module0365.f24882(var4)) {
-            module0369.f25818(module0367.f25037(var1), var4);
+            oc_inference_datastructures_inference.f25818(module0367.f25037(var1), var4);
             final SubLObject var6 = module0339.$g2902$.currentBinding(var5);
             try {
                 module0339.$g2902$.bind(var1, var5);
@@ -616,7 +616,7 @@ public final class module0387 extends SubLTranslatedFile
     
     public static SubLObject f27516(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0387.NIL == module0361.f24164(module0367.f25044(var1)) || (module0387.NIL != module0387.$g3239$.getDynamicValue(var2) && module0387.NIL == module0369.f25432(module0367.f25037(var1)) && module0387.NIL != f27517(var1)));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0387.NIL == module0361.f24164(module0367.f25044(var1)) || (module0387.NIL != module0387.$g3239$.getDynamicValue(var2) && module0387.NIL == oc_inference_datastructures_inference.f25432(module0367.f25037(var1)) && module0387.NIL != f27517(var1)));
     }
     
     public static SubLObject f27517(final SubLObject var1) {
@@ -1340,7 +1340,7 @@ public final class module0387 extends SubLTranslatedFile
         $ic47$ = SubLObjectFactory.makeKeyword("NEG");
         $ic48$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#13100", "CYC"));
         $ic49$ = SubLObjectFactory.makeKeyword("POS");
-        $ic50$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termChosen"));
+        $ic50$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termChosen"));
         $ic51$ = SubLObjectFactory.makeSymbol("VARIABLE-P");
         $ic52$ = SubLObjectFactory.makeKeyword("RESIDUAL-TRANSFORMATION");
         $ic53$ = SubLObjectFactory.makeKeyword("RESTRICTION");

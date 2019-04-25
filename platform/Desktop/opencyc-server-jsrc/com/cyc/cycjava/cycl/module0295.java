@@ -575,7 +575,7 @@ public final class module0295 extends SubLTranslatedFile
     }
     
     public static SubLObject f19819(final SubLObject var20) {
-        return module0174.f11025(f19834(var20));
+        return assertion_handles_oc.f11025(f19834(var20));
     }
     
     public static SubLObject f19825(final SubLObject var20) {
@@ -846,7 +846,7 @@ public final class module0295 extends SubLTranslatedFile
     
     public static SubLObject f19862(final SubLObject var61, final SubLObject var22, final SubLObject var23) {
         SubLObject var62 = (SubLObject)module0295.NIL;
-        if (module0295.NIL != module0128.f8449(var61)) {
+        if (module0295.NIL != constant_handles_oc.f8449(var61)) {
             if (module0295.NIL != var23) {
                 SubLObject var63 = (SubLObject)module0295.NIL;
                 try {
@@ -938,7 +938,7 @@ public final class module0295 extends SubLTranslatedFile
     
     public static SubLObject f19864(final SubLObject var61, final SubLObject var22) {
         final SubLThread var62 = SubLProcess.currentSubLThread();
-        if (module0295.NIL != module0128.f8449(var61)) {
+        if (module0295.NIL != constant_handles_oc.f8449(var61)) {
             final SubLObject var63 = module0291.$g2668$.getDynamicValue(var62);
             SubLObject var64 = (SubLObject)module0295.NIL;
             try {
@@ -1408,7 +1408,7 @@ public final class module0295 extends SubLTranslatedFile
     
     public static SubLObject f19877(final SubLObject var25) {
         SubLObject var26 = (SubLObject)module0295.NIL;
-        SubLObject var27 = module0177.f11242(var25);
+        SubLObject var27 = oc_assertions_low.f11242(var25);
         SubLObject var28 = (SubLObject)module0295.NIL;
         var28 = var27.first();
         while (module0295.NIL != var27) {
@@ -1442,7 +1442,7 @@ public final class module0295 extends SubLTranslatedFile
     
     public static SubLObject f19878(final SubLObject var25) {
         SubLObject var26 = (SubLObject)module0295.NIL;
-        SubLObject var27 = module0177.f11242(var25);
+        SubLObject var27 = oc_assertions_low.f11242(var25);
         SubLObject var28 = (SubLObject)module0295.NIL;
         var28 = var27.first();
         while (module0295.NIL != var27) {
@@ -1501,7 +1501,7 @@ public final class module0295 extends SubLTranslatedFile
     
     public static SubLObject f19879(final SubLObject var25) {
         SubLObject var26 = (SubLObject)module0295.NIL;
-        SubLObject var27 = module0177.f11242(var25);
+        SubLObject var27 = oc_assertions_low.f11242(var25);
         SubLObject var28 = (SubLObject)module0295.NIL;
         var28 = var27.first();
         while (module0295.NIL != var27) {
@@ -1680,7 +1680,7 @@ public final class module0295 extends SubLTranslatedFile
         for (var7 = module0021.f1060(var2, (SubLObject)module0295.UNPROVIDED, (SubLObject)module0295.UNPROVIDED), var5 = (SubLObject)module0295.NIL, var5 = (SubLObject)module0295.ZERO_INTEGER; var5.numL(var7); var5 = Numbers.add(var5, (SubLObject)module0295.ONE_INTEGER)) {
             var8 = module0021.f1060(var2, (SubLObject)module0295.UNPROVIDED, (SubLObject)module0295.UNPROVIDED);
             var9 = (SubLObject)module0295.NIL;
-            if (module0295.NIL != module0174.f11035(var8)) {
+            if (module0295.NIL != assertion_handles_oc.f11035(var8)) {
                 var9 = Hashtables.gethash_without_values(var8, module0295.$g2683$.getGlobalValue(), (SubLObject)module0295.UNPROVIDED);
             }
             else {
@@ -1765,7 +1765,7 @@ public final class module0295 extends SubLTranslatedFile
             var179 = var178.first();
             while (module0295.NIL != var178) {
                 final SubLObject var180 = var179.first();
-                final SubLObject var181 = module0174.f11053(var180);
+                final SubLObject var181 = assertion_handles_oc.f11053(var180);
                 final SubLObject var182 = var179.rest();
                 f19916(var182);
                 ConsesLow.rplaca(var179, var181);
@@ -1781,7 +1781,7 @@ public final class module0295 extends SubLTranslatedFile
     public static SubLObject f19916(final SubLObject var20) {
         final SubLObject var21 = f19797(var20);
         if (var21.isInteger()) {
-            final SubLObject var22 = module0174.f11053(var21);
+            final SubLObject var22 = assertion_handles_oc.f11053(var21);
             f19806(var20, var22);
             return (SubLObject)module0295.T;
         }
@@ -1804,7 +1804,7 @@ public final class module0295 extends SubLTranslatedFile
                 var181 = (var183 = var181.rest());
                 SubLObject var184_185;
                 for (var184_185 = (SubLObject)module0295.NIL, var184_185 = var183; !var184_185.isAtom(); var184_185 = var184_185.rest()) {
-                    ConsesLow.rplaca(var184_185, module0174.f11053(var184_185.first()));
+                    ConsesLow.rplaca(var184_185, assertion_handles_oc.f11053(var184_185.first()));
                 }
                 var178 = var178.rest();
                 var179 = var178.first();
@@ -1831,7 +1831,7 @@ public final class module0295 extends SubLTranslatedFile
                 var181 = (var183 = var181.rest());
                 SubLObject var184_188;
                 for (var184_188 = (SubLObject)module0295.NIL, var184_188 = var183; !var184_188.isAtom(); var184_188 = var184_188.rest()) {
-                    ConsesLow.rplaca(var184_188, module0174.f11053(var184_188.first()));
+                    ConsesLow.rplaca(var184_188, assertion_handles_oc.f11053(var184_188.first()));
                 }
                 var178 = var178.rest();
                 var179 = var178.first();
@@ -1858,7 +1858,7 @@ public final class module0295 extends SubLTranslatedFile
                 var181 = (var183 = var181.rest());
                 SubLObject var184_191;
                 for (var184_191 = (SubLObject)module0295.NIL, var184_191 = var183; !var184_191.isAtom(); var184_191 = var184_191.rest()) {
-                    ConsesLow.rplaca(var184_191, module0174.f11053(var184_191.first()));
+                    ConsesLow.rplaca(var184_191, assertion_handles_oc.f11053(var184_191.first()));
                 }
                 var178 = var178.rest();
                 var179 = var178.first();
@@ -2116,7 +2116,7 @@ public final class module0295 extends SubLTranslatedFile
         $ic26$ = SubLObjectFactory.makeSymbol("S#22439", "CYC");
         $ic27$ = SubLObjectFactory.makeSymbol("S#22427", "CYC");
         $ic28$ = SubLObjectFactory.makeSymbol("S#22164", "CYC");
-        $ic29$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeSymbol("S#22555", "CYC"), SubLObjectFactory.makeSymbol("S#22556", "CYC"), SubLObjectFactory.makeSymbol("S#11445", "CYC"), SubLObjectFactory.makeSymbol("S#22557", "CYC"), SubLObjectFactory.makeSymbol("S#22558", "CYC"), SubLObjectFactory.makeSymbol("S#12582", "CYC"), SubLObjectFactory.makeSymbol("S#22559", "CYC"), SubLObjectFactory.makeSymbol("S#22560", "CYC"), SubLObjectFactory.makeSymbol("S#5852", "CYC") });
+        $ic29$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeSymbol("S#22555", "CYC"), SubLObjectFactory.makeSymbol("S#22556", "CYC"), SubLObjectFactory.makeSymbol("S#11445", "CYC"), SubLObjectFactory.makeSymbol("S#22557", "CYC"), SubLObjectFactory.makeSymbol("S#22558", "CYC"), SubLObjectFactory.makeSymbol("ASSERTION", "CYC"), SubLObjectFactory.makeSymbol("S#22559", "CYC"), SubLObjectFactory.makeSymbol("S#22560", "CYC"), SubLObjectFactory.makeSymbol("S#5852", "CYC") });
         $ic30$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("FIRST-RT"), SubLObjectFactory.makeKeyword("SECOND-RT"), SubLObjectFactory.makeKeyword("MT"), SubLObjectFactory.makeKeyword("WFF-DEGREE"), SubLObjectFactory.makeKeyword("DIRECTIONS"), SubLObjectFactory.makeKeyword("ASSERTION"), SubLObjectFactory.makeKeyword("RULE-PRED"), SubLObjectFactory.makeKeyword("PRECONDITIONS"), SubLObjectFactory.makeKeyword("PROPERTIES") });
         $ic31$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeSymbol("S#22441", "CYC"), SubLObjectFactory.makeSymbol("S#22442", "CYC"), SubLObjectFactory.makeSymbol("S#22443", "CYC"), SubLObjectFactory.makeSymbol("S#22444", "CYC"), SubLObjectFactory.makeSymbol("S#22445", "CYC"), SubLObjectFactory.makeSymbol("S#22446", "CYC"), SubLObjectFactory.makeSymbol("S#22447", "CYC"), SubLObjectFactory.makeSymbol("S#22448", "CYC"), SubLObjectFactory.makeSymbol("S#22449", "CYC") });
         $ic32$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeSymbol("S#22450", "CYC"), SubLObjectFactory.makeSymbol("S#22451", "CYC"), SubLObjectFactory.makeSymbol("S#22452", "CYC"), SubLObjectFactory.makeSymbol("S#22453", "CYC"), SubLObjectFactory.makeSymbol("S#22454", "CYC"), SubLObjectFactory.makeSymbol("S#22455", "CYC"), SubLObjectFactory.makeSymbol("S#22456", "CYC"), SubLObjectFactory.makeSymbol("S#22457", "CYC"), SubLObjectFactory.makeSymbol("S#22458", "CYC") });
@@ -2158,8 +2158,8 @@ public final class module0295 extends SubLTranslatedFile
         $ic68$ = SubLObjectFactory.makeString("#<REFORMULATOR-RULE:~s:~s:~s>");
         $ic69$ = SubLObjectFactory.makeString("#<REFORMULATOR-RULE:~s:~s:~s:~s:~s:~s:~s>");
         $ic70$ = SubLObjectFactory.makeString("#<REFORMULATOR-RULE:~s:~s:~s:~s:~s:~s:~s:~s:~s>");
-        $ic71$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationForwardDirection"));
-        $ic72$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationBackwardDirection"));
+        $ic71$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationForwardDirection"));
+        $ic72$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationBackwardDirection"));
         $ic73$ = SubLObjectFactory.makeSymbol("S#22545", "CYC");
         $ic74$ = SubLObjectFactory.makeSymbol("S#22546", "CYC");
         $ic75$ = SubLObjectFactory.makeSymbol("S#22547", "CYC");
@@ -2167,7 +2167,7 @@ public final class module0295 extends SubLTranslatedFile
         $ic77$ = SubLObjectFactory.makeSymbol("S#22549", "CYC");
         $ic78$ = SubLObjectFactory.makeString("Found an ill-formed reformulation assertion: ~s - ignoring it~%");
         $ic79$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic80$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic80$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic81$ = SubLObjectFactory.makeSymbol("GATHER-PREDICATE-EXTENT-INDEX");
         $ic82$ = SubLObjectFactory.makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
         $ic83$ = SubLObjectFactory.makeString("Initializing Reformulator Rules");
@@ -2202,16 +2202,16 @@ public final class module0295 extends SubLTranslatedFile
         $ic112$ = SubLObjectFactory.makeSymbol("S#22498", "CYC");
         $ic113$ = SubLObjectFactory.makeInteger(100);
         $ic114$ = SubLObjectFactory.makeSymbol("S#22503", "CYC");
-        $ic115$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SkolemFunctionFn"));
+        $ic115$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SkolemFunctionFn"));
         $ic116$ = SubLObjectFactory.makeSymbol("EL-VARIABLE?");
-        $ic117$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulationPrecondition"));
-        $ic118$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulationDirectionInMode"));
-        $ic119$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorRuleProperties"));
+        $ic117$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulationPrecondition"));
+        $ic118$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulationDirectionInMode"));
+        $ic119$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorRuleProperties"));
         $ic120$ = SubLObjectFactory.makeSymbol("S#22521", "CYC");
-        $ic121$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorHighlyRelevantFORT"));
-        $ic122$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("expansion"));
-        $ic123$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("rewriteOf"));
-        $ic124$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ELRelation"));
+        $ic121$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorHighlyRelevantFORT"));
+        $ic122$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("expansion"));
+        $ic123$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("rewriteOf"));
+        $ic124$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ELRelation"));
         $ic125$ = SubLObjectFactory.makeString("This code can only handle reformulator unit version 1.  Got version ~a, but will try anyway...");
         $ic126$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeUninternedSymbol("US#3165895"), (SubLObject)SubLObjectFactory.makeSymbol("S#22562", "CYC"));
     }

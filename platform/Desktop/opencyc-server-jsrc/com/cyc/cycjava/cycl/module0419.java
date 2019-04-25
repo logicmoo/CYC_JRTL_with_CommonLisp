@@ -883,7 +883,7 @@ public final class module0419 extends SubLTranslatedFile
                         var113 = (SubLObject)module0419.$ic101$;
                     }
                     if (module0419.NIL == var111) {
-                        module0369.f25476(var118);
+                        oc_inference_datastructures_inference.f25476(var118);
                     }
                 }
                 catch (Throwable var120) {
@@ -1124,37 +1124,37 @@ public final class module0419 extends SubLTranslatedFile
         $ic54$ = SubLObjectFactory.makeKeyword("MT");
         $ic55$ = SubLObjectFactory.makeSymbol("S#32507", "CYC");
         $ic56$ = SubLObjectFactory.makeSymbol("S#32506", "CYC");
-        $ic57$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)SubLObjectFactory.makeSymbol("S#32521", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2607", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("FULL")), (SubLObject)SubLObjectFactory.makeSymbol("S#32522", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#2605", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2608", "CYC"), (SubLObject)module0419.T));
+        $ic57$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)SubLObjectFactory.makeSymbol("S#32521", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2607", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("FULL")), (SubLObject)SubLObjectFactory.makeSymbol("S#32522", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#2605", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2608", "CYC"), (SubLObject)module0419.T));
         $ic58$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MT"), (SubLObject)SubLObjectFactory.makeKeyword("KB"), (SubLObject)SubLObjectFactory.makeKeyword("TESTS"), (SubLObject)SubLObjectFactory.makeKeyword("OWNER"), (SubLObject)SubLObjectFactory.makeKeyword("WORKING?"));
-        $ic59$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic59$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic60$ = SubLObjectFactory.makeKeyword("TESTS");
         $ic61$ = SubLObjectFactory.makeKeyword("WORKING?");
         $ic62$ = SubLObjectFactory.makeSymbol("S#32508", "CYC");
         $ic63$ = SubLObjectFactory.makeSymbol("DEFINE-SIMPLE-EVALUATABLE-FUNCTION-TEST-BLOCK");
         $ic64$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)SubLObjectFactory.makeSymbol("S#32521", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic65$ = SubLObjectFactory.makeKeyword("ILL-FORMED");
-        $ic66$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("trueSubL"));
-        $ic67$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLQuoteFn"));
+        $ic66$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("trueSubL"));
+        $ic67$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLQuoteFn"));
         $ic68$ = SubLObjectFactory.makeSymbol("CNOT");
         $ic69$ = SubLObjectFactory.makeSymbol("EL-WFF?");
         $ic70$ = SubLObjectFactory.makeSymbol("QUOTE");
-        $ic71$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("evaluate"));
+        $ic71$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("evaluate"));
         $ic72$ = SubLObjectFactory.makeSymbol("?RESULT");
         $ic73$ = SubLObjectFactory.makeKeyword("UNEVALUATABLE");
-        $ic74$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("unknownSentence"));
-        $ic75$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("thereExists"));
-        $ic76$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
+        $ic74$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("unknownSentence"));
+        $ic75$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("thereExists"));
+        $ic76$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
         $ic77$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#63", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#3267", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("DONT-CARE")));
         $ic78$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#717", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#1519", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#14349", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#3267", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("DONT-CARE")), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2607", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("FULL")), (SubLObject)SubLObjectFactory.makeSymbol("S#2605", "CYC"));
         $ic79$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("RESULT"), (SubLObject)SubLObjectFactory.makeKeyword("MT"), (SubLObject)SubLObjectFactory.makeKeyword("KB"), (SubLObject)SubLObjectFactory.makeKeyword("OWNER"));
         $ic80$ = SubLObjectFactory.makeSymbol("S#32510", "CYC");
         $ic81$ = SubLObjectFactory.makeSymbol("S#32509", "CYC");
-        $ic82$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#717", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#32521", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2607", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("FULL")), (SubLObject)SubLObjectFactory.makeSymbol("S#2605", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#32522", "CYC"));
+        $ic82$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#717", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#32521", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2607", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("FULL")), (SubLObject)SubLObjectFactory.makeSymbol("S#2605", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#32522", "CYC"));
         $ic83$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MT"), (SubLObject)SubLObjectFactory.makeKeyword("KB"), (SubLObject)SubLObjectFactory.makeKeyword("OWNER"), (SubLObject)SubLObjectFactory.makeKeyword("TESTS"));
         $ic84$ = SubLObjectFactory.makeSymbol("S#32511", "CYC");
         $ic85$ = SubLObjectFactory.makeSymbol("DEFINE-SIMPLE-EVALUATABLE-PREDICATE-TEST-BLOCK");
         $ic86$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#717", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#32521", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic87$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("and"));
+        $ic87$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and"));
         $ic88$ = SubLObjectFactory.makeKeyword("FALSE");
         $ic89$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#14349", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#3267", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("TRUE")));
         $ic90$ = SubLObjectFactory.makeKeyword("TRUE");

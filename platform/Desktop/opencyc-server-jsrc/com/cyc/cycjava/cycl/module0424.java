@@ -1474,7 +1474,7 @@ public final class module0424 extends SubLTranslatedFile
             final SubLObject var145 = var126.secondMultipleValue();
             final SubLObject var146 = var126.thirdMultipleValue();
             var126.resetMultipleValues();
-            module0006.f218(module0424.$g3453$.getDynamicValue(var126), (SubLObject)module0424.$ic116$, module0369.f25595(var144, var145, var146), (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED);
+            module0006.f218(module0424.$g3453$.getDynamicValue(var126), (SubLObject)module0424.$ic116$, oc_inference_datastructures_inference.f25595(var144, var145, var146), (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED, (SubLObject)module0424.UNPROVIDED);
         }
         final SubLObject var147 = module0424.$g3443$.currentBinding(var126);
         try {
@@ -1584,9 +1584,9 @@ public final class module0424 extends SubLTranslatedFile
                                         Errors.warn((SubLObject)module0424.$ic121$, var121);
                                         var140 = (SubLObject)module0424.$ic122$;
                                         f29717(module0424.$g3443$.getDynamicValue(var126), (SubLObject)module0424.$ic123$);
-                                        if (module0424.NIL != module0369.f25417(var136)) {
-                                            var139 = module0409.f28524(var136, module0369.f25657(var136));
-                                            var141 = module0369.f25804(var136);
+                                        if (module0424.NIL != oc_inference_datastructures_inference.f25417(var136)) {
+                                            var139 = module0409.f28524(var136, oc_inference_datastructures_inference.f25657(var136));
+                                            var141 = oc_inference_datastructures_inference.f25804(var136);
                                         }
                                     }
                                     if (module0424.NIL == var137) {
@@ -1637,8 +1637,8 @@ public final class module0424 extends SubLTranslatedFile
                     if (module0424.NIL != module0360.f23866(var140) && module0424.$ic128$ != var140) {
                         Errors.warn((SubLObject)module0424.$ic129$, var140, var121);
                     }
-                    if (module0424.NIL == f29714(module0424.$g3442$.getDynamicValue(var126)) && module0424.NIL != module0018.$g738$.getDynamicValue(var126) && module0424.NIL != module0369.f25417(var136)) {
-                        module0369.f25476(var136);
+                    if (module0424.NIL == f29714(module0424.$g3442$.getDynamicValue(var126)) && module0424.NIL != module0018.$g738$.getDynamicValue(var126) && module0424.NIL != oc_inference_datastructures_inference.f25417(var136)) {
+                        oc_inference_datastructures_inference.f25476(var136);
                     }
                 }
                 finally {
@@ -1679,7 +1679,7 @@ public final class module0424 extends SubLTranslatedFile
         final SubLObject var183 = var177.sixthMultipleValue();
         var177.resetMultipleValues();
         if (module0424.NIL != var176) {
-            module0369.f25476(var178);
+            oc_inference_datastructures_inference.f25476(var178);
         }
         return Values.values(var178, var179, var180, var181, var182, var183);
     }
@@ -1896,10 +1896,10 @@ public final class module0424 extends SubLTranslatedFile
             if (module0424.NIL != f29725(var193)) {
                 final SubLObject var214 = f29743(module0424.$g3442$.getDynamicValue(var212));
                 final SubLObject var215 = f29744(var214);
-                final SubLObject var216 = module0369.f25484(var215);
-                final SubLObject var217 = module0369.f25483(var215);
-                final SubLObject var218 = module0369.f25485(var215);
-                final SubLObject var219 = module0369.f25421(var215);
+                final SubLObject var216 = oc_inference_datastructures_inference.f25484(var215);
+                final SubLObject var217 = oc_inference_datastructures_inference.f25483(var215);
+                final SubLObject var218 = oc_inference_datastructures_inference.f25485(var215);
+                final SubLObject var219 = oc_inference_datastructures_inference.f25421(var215);
                 if (module0424.NIL == f29745(var193, var219, var218, var216, var217, var205, var211) || module0424.NIL == f29746(var193, var219, var218, var216, var217, var205) || module0424.NIL == f29747(var193, var219, var218, var216, var217, var205)) {
                     return (SubLObject)module0424.$ic1$;
                 }
@@ -2545,7 +2545,7 @@ public final class module0424 extends SubLTranslatedFile
         if (var304.isString()) {
             Errors.warn((SubLObject)module0424.$ic183$, var304);
         }
-        final SubLObject var308 = module0369.f25470();
+        final SubLObject var308 = oc_inference_datastructures_inference.f25470();
         return f29772(var286, var296, var308, var299);
     }
     
@@ -2561,7 +2561,7 @@ public final class module0424 extends SubLTranslatedFile
         finally {
             module0018.$g738$.rebind(var299, var297);
         }
-        return Sequences.length(module0369.f25470());
+        return Sequences.length(oc_inference_datastructures_inference.f25470());
     }
     
     public static SubLObject f29772(final SubLObject var286, final SubLObject var296, final SubLObject var307, final SubLObject var303) {
@@ -3713,8 +3713,8 @@ public final class module0424 extends SubLTranslatedFile
         assert module0424.NIL != f29719(var213) : var213;
         f29837(f29867(var213));
         f29873(var213, (SubLObject)module0424.NIL);
-        if (module0424.NIL != module0369.f25417(f29824(var213))) {
-            module0369.f25476(f29824(var213));
+        if (module0424.NIL != oc_inference_datastructures_inference.f25417(f29824(var213))) {
+            oc_inference_datastructures_inference.f25476(f29824(var213));
         }
         f29875(var213, (SubLObject)module0424.NIL);
         f29874(var213, (SubLObject)module0424.NIL);
@@ -3748,7 +3748,7 @@ public final class module0424 extends SubLTranslatedFile
     }
     
     public static SubLObject f29826(final SubLObject var213, final SubLObject var134) {
-        assert module0424.NIL != module0369.f25275(var134) : var134;
+        assert module0424.NIL != oc_inference_datastructures_inference.f25275(var134) : var134;
         assert module0424.NIL != f29719(var213) : var213;
         final SubLObject var214 = f29868(var213);
         SubLObject var215 = (SubLObject)module0424.NIL;
@@ -7510,7 +7510,7 @@ public final class module0424 extends SubLTranslatedFile
         $ic62$ = (SubLFloat)SubLObjectFactory.makeDouble(0.1);
         $ic63$ = (SubLFloat)SubLObjectFactory.makeDouble(0.01);
         $ic64$ = SubLObjectFactory.makeKeyword("INFERENCE-PROOF-SPEC");
-        $ic65$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("sentenceTruth"));
+        $ic65$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sentenceTruth"));
         $ic66$ = SubLObjectFactory.makeInteger(-2);
         $ic67$ = SubLObjectFactory.makeSymbol("FIRST");
         $ic68$ = SubLObjectFactory.makeKeyword("TEST");
@@ -7577,16 +7577,16 @@ public final class module0424 extends SubLTranslatedFile
         $ic129$ = SubLObjectFactory.makeString("Avoided (due to ~S) :~%~S");
         $ic130$ = SubLObjectFactory.makeKeyword("OVERRIDING-QUERY-PROPERTIES");
         $ic131$ = SubLObjectFactory.makeKeyword("ABORT");
-        $ic132$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("sksiModulesNeeded"));
-        $ic133$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testFollowupTestFormula-All"));
-        $ic134$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testFollowupTestFormula-Some"));
-        $ic135$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testFollowupTestFormula-None"));
+        $ic132$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sksiModulesNeeded"));
+        $ic133$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testFollowupTestFormula-All"));
+        $ic134$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testFollowupTestFormula-Some"));
+        $ic135$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testFollowupTestFormula-None"));
         $ic136$ = SubLObjectFactory.makeSymbol("S#32762", "CYC");
         $ic137$ = SubLObjectFactory.makeKeyword("RETURN");
         $ic138$ = SubLObjectFactory.makeKeyword("BINDINGS-AND-HYPOTHETICAL-BINDINGS");
-        $ic139$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-HaltReason"));
+        $ic139$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-HaltReason"));
         $ic140$ = SubLObjectFactory.makeString("Unsupported metric ~S");
-        $ic141$ = ConsesLow.list((SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-TotalTime")), (SubLObject)SubLObjectFactory.makeKeyword("TOTAL-TIME")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-TimeToFirstAnswer")), (SubLObject)SubLObjectFactory.makeKeyword("TIME-TO-FIRST-ANSWER")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-TimeToLastAnswer")), (SubLObject)SubLObjectFactory.makeKeyword("TIME-TO-LAST-ANSWER")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-AnswerCount")), (SubLObject)SubLObjectFactory.makeKeyword("ANSWER-COUNT")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-AnswerCountAt30Seconds")), (SubLObject)SubLObjectFactory.makeKeyword("ANSWER-COUNT-AT-30-SECONDS")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-AnswerCountAt60Seconds")), (SubLObject)SubLObjectFactory.makeKeyword("ANSWER-COUNT-AT-60-SECONDS")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-ProblemStoreProofCount")), (SubLObject)SubLObjectFactory.makeKeyword("PROOF-COUNT")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-ProblemStoreProblemCount")), (SubLObject)SubLObjectFactory.makeKeyword("PROBLEM-COUNT")));
+        $ic141$ = ConsesLow.list((SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-TotalTime")), (SubLObject)SubLObjectFactory.makeKeyword("TOTAL-TIME")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-TimeToFirstAnswer")), (SubLObject)SubLObjectFactory.makeKeyword("TIME-TO-FIRST-ANSWER")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-TimeToLastAnswer")), (SubLObject)SubLObjectFactory.makeKeyword("TIME-TO-LAST-ANSWER")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-AnswerCount")), (SubLObject)SubLObjectFactory.makeKeyword("ANSWER-COUNT")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-AnswerCountAt30Seconds")), (SubLObject)SubLObjectFactory.makeKeyword("ANSWER-COUNT-AT-30-SECONDS")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-AnswerCountAt60Seconds")), (SubLObject)SubLObjectFactory.makeKeyword("ANSWER-COUNT-AT-60-SECONDS")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-ProblemStoreProofCount")), (SubLObject)SubLObjectFactory.makeKeyword("PROOF-COUNT")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric-ProblemStoreProblemCount")), (SubLObject)SubLObjectFactory.makeKeyword("PROBLEM-COUNT")));
         $ic142$ = SubLObjectFactory.makeKeyword("PROBLEM-STORE");
         $ic143$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CONDITIONAL-SENTENCE?"), (SubLObject)module0424.NIL);
         $ic144$ = SubLObjectFactory.makeString("Expected ");
@@ -7610,16 +7610,16 @@ public final class module0424 extends SubLTranslatedFile
         $ic162$ = SubLObjectFactory.makeString("~&;; ~A~%~%");
         $ic163$ = SubLObjectFactory.makeString("Unrunnable query : ~S");
         $ic164$ = SubLObjectFactory.makeSymbol("S#32652", "CYC");
-        $ic165$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic165$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic166$ = SubLObjectFactory.makeSymbol("S#32912", "CYC");
         $ic167$ = SubLObjectFactory.makeSymbol("S#32914", "CYC");
         $ic168$ = SubLObjectFactory.makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
         $ic169$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-        $ic170$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic171$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("elementOf"));
+        $ic170$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic171$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("elementOf"));
         $ic172$ = SubLObjectFactory.makeSymbol("?OBJ");
         $ic173$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ANSWER-LANGUAGE"), (SubLObject)SubLObjectFactory.makeKeyword("HL"), (SubLObject)SubLObjectFactory.makeKeyword("PRODUCTIVITY-LIMIT"), (SubLObject)SubLObjectFactory.makeKeyword("POSITIVE-INFINITY"));
-        $ic174$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("evaluate")), (SubLObject)SubLObjectFactory.makeKeyword("SET"), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("SetExtentFn")), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf")), (SubLObject)SubLObjectFactory.makeSymbol("?QUERY"), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("thereExists")), (SubLObject)SubLObjectFactory.makeSymbol("?TEST"), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("and")), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("knownSentence")), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)SubLObjectFactory.makeSymbol("?TEST"), (SubLObject)SubLObjectFactory.makeKeyword("TEST-COLLECTION"))), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("assertedSentence")), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("testQuerySpecification")), (SubLObject)SubLObjectFactory.makeSymbol("?TEST"), (SubLObject)SubLObjectFactory.makeSymbol("?QUERY"))))))));
+        $ic174$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("evaluate")), (SubLObject)SubLObjectFactory.makeKeyword("SET"), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SetExtentFn")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf")), (SubLObject)SubLObjectFactory.makeSymbol("?QUERY"), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("thereExists")), (SubLObject)SubLObjectFactory.makeSymbol("?TEST"), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("knownSentence")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)SubLObjectFactory.makeSymbol("?TEST"), (SubLObject)SubLObjectFactory.makeKeyword("TEST-COLLECTION"))), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("assertedSentence")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testQuerySpecification")), (SubLObject)SubLObjectFactory.makeSymbol("?TEST"), (SubLObject)SubLObjectFactory.makeSymbol("?QUERY"))))))));
         $ic175$ = SubLObjectFactory.makeKeyword("TEST-COLLECTION");
         $ic176$ = SubLObjectFactory.makeKeyword("SET");
         $ic177$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ANSWER-LANGUAGE"), (SubLObject)SubLObjectFactory.makeKeyword("HL"));
@@ -7846,8 +7846,8 @@ public final class module0424 extends SubLTranslatedFile
         $ic398$ = SubLObjectFactory.makeString("unanswerable sub-run of :");
         $ic399$ = SubLObjectFactory.makeSymbol("ZEROP");
         $ic400$ = SubLObjectFactory.makeString("failing sub-run of :~%~A");
-        $ic401$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CommonSenseTest"));
-        $ic402$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentRegressionTest"));
+        $ic401$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CommonSenseTest"));
+        $ic402$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentRegressionTest"));
         $ic403$ = SubLObjectFactory.makeString("~s sub-run of :~%~A");
         $ic404$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#33265", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33266", "CYC"));
         $ic405$ = SubLObjectFactory.makeSymbol("S#3302", "CYC");
@@ -7960,7 +7960,7 @@ public final class module0424 extends SubLTranslatedFile
         $ic512$ = SubLObjectFactory.makeString("~&*** ~A ***~%");
         $ic513$ = SubLObjectFactory.makeString("*** overriding-query-properties: ~A ***~%");
         $ic514$ = SubLObjectFactory.makeString("Tests run in System ~A KB ~A~%");
-        $ic515$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSet"));
+        $ic515$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSet"));
         $ic516$ = SubLObjectFactory.makeSymbol("S#32761", "CYC");
         $ic517$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ANSWER-COUNT"), (SubLObject)SubLObjectFactory.makeKeyword("TIME-TO-FIRST-ANSWER"), (SubLObject)SubLObjectFactory.makeKeyword("SKSI-QUERY-TOTAL-TIME"), (SubLObject)SubLObjectFactory.makeKeyword("SKSI-QUERY-START-TIMES"), (SubLObject)SubLObjectFactory.makeKeyword("TOTAL-TIME"));
         $ic518$ = SubLObjectFactory.makeString(" #ANS  TTFS    TTFA #SQ    SKSI +  CYC =  TOTAL   (%SQ)  TEST~%");

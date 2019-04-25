@@ -66,7 +66,7 @@ public final class module0718 extends SubLTranslatedFile
     }
     
     public static SubLObject f44009(final SubLObject var2) {
-        assert module0718.NIL != module0174.f11035(var2) : var2;
+        assert module0718.NIL != assertion_handles_oc.f11035(var2) : var2;
         if (module0718.NIL != module0004.f104(module0205.f13132(module0178.f11303(var2)), f44008((SubLObject)module0718.UNPROVIDED), (SubLObject)module0718.UNPROVIDED, (SubLObject)module0718.UNPROVIDED)) {
             return (SubLObject)module0718.T;
         }
@@ -80,11 +80,11 @@ public final class module0718 extends SubLTranslatedFile
     
     public static SubLObject f44011(final SubLObject var2) {
         assert module0718.NIL != f44009(var2) : var2;
-        return module0174.f11025(var2);
+        return assertion_handles_oc.f11025(var2);
     }
     
     public static SubLObject f44012(final SubLObject var3) {
-        return module0174.f11053(var3);
+        return assertion_handles_oc.f11053(var3);
     }
     
     public static SubLObject f44013(final SubLObject var2) {
@@ -382,22 +382,22 @@ public final class module0718 extends SubLTranslatedFile
         module0718.$g5675$ = null;
         module0718.$g5676$ = null;
         module0718.$g5677$ = null;
-        $ic0$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("facets-Partition")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("partitionedInto")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("facets-Strict")));
-        $ic1$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("facets-Covering")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("covering")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("facets-Generic")));
+        $ic0$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("facets-Partition")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("partitionedInto")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("facets-Strict")));
+        $ic1$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("facets-Covering")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("covering")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("facets-Generic")));
         $ic2$ = SubLObjectFactory.makeKeyword("DISJOINT");
         $ic3$ = SubLObjectFactory.makeKeyword("NOT-DISJOINT");
         $ic4$ = SubLObjectFactory.makeSymbol("ASSERTION-P");
         $ic5$ = SubLObjectFactory.makeSymbol("S#48180", "CYC");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ThePartition"));
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheCovering"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ThePartition"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheCovering"));
         $ic8$ = SubLObjectFactory.makeSymbol("S#17515", "CYC");
         $ic9$ = SubLObjectFactory.makeSymbol("APPEND");
         $ic10$ = SubLObjectFactory.makeSymbol("COLLECTION-P");
         $ic11$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("facets-Partition"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("partitionedInto"));
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("facets-Strict"));
-        $ic15$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ArbitraryUnion")));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("facets-Partition"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("partitionedInto"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("facets-Strict"));
+        $ic15$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ArbitraryUnion")));
         $ic16$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic17$ = SubLObjectFactory.makeKeyword("FALSE");
         $ic18$ = SubLObjectFactory.makeKeyword("ASSERTED-TRUE");

@@ -738,10 +738,10 @@ public final class module0444 extends SubLTranslatedFile
         module0444.$g3551$ = null;
         module0444.$g3552$ = null;
         module0444.$g3553$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAll"));
-        $ic1$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("implies")), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("and")), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAll")), (SubLObject)SubLObjectFactory.makeSymbol("?PRED"), (SubLObject)SubLObjectFactory.makeSymbol("?COL")), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)SubLObjectFactory.makeSymbol("?OBJ"), (SubLObject)SubLObjectFactory.makeSymbol("?COL"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?PRED"), (SubLObject)SubLObjectFactory.makeSymbol("?OBJ")));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAll"));
+        $ic1$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("implies")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAll")), (SubLObject)SubLObjectFactory.makeSymbol("?PRED"), (SubLObject)SubLObjectFactory.makeSymbol("?COL")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)SubLObjectFactory.makeSymbol("?OBJ"), (SubLObject)SubLObjectFactory.makeSymbol("?COL"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?PRED"), (SubLObject)SubLObjectFactory.makeSymbol("?OBJ")));
         $ic2$ = SubLObjectFactory.makeSymbol("S#34046", "CYC");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
         $ic4$ = SubLObjectFactory.makeKeyword("CODE");
         $ic5$ = SubLObjectFactory.makeKeyword("TRUE-MON");
         $ic6$ = (SubLFloat)SubLObjectFactory.makeDouble(1.5);
@@ -750,7 +750,7 @@ public final class module0444 extends SubLTranslatedFile
         $ic9$ = SubLObjectFactory.makeKeyword("REMOVAL-RELATION-ALL-CHECK");
         $ic10$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("POS"), SubLObjectFactory.makeKeyword("ARITY"), module0444.ONE_INTEGER, SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("FORT"), (SubLObject)SubLObjectFactory.makeKeyword("FORT")), SubLObjectFactory.makeKeyword("REQUIRED"), SubLObjectFactory.makeSymbol("S#34037", "CYC"), SubLObjectFactory.makeKeyword("COST-EXPRESSION"), SubLObjectFactory.makeSymbol("S#34047", "CYC"), SubLObjectFactory.makeKeyword("EXPAND"), SubLObjectFactory.makeSymbol("S#34038", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("(<predicate> <object>) where <object> is a FORT\nfrom (#$relationAll <predicate> <collection>) \nand (#$isa <object> <collection>)"), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$temporallyContinuous #$AbrahamLincoln)\nfrom (#$relationAll #$temporallyContinuous #$Entity)\nand (#$isa #$AbrahamLincoln #$Entity)") });
         $ic11$ = SubLObjectFactory.makeKeyword("ISA");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic13$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic14$ = SubLObjectFactory.makeKeyword("BREADTH");
         $ic15$ = SubLObjectFactory.makeKeyword("DEPTH");

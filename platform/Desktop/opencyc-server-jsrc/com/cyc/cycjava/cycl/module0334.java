@@ -266,7 +266,7 @@ public final class module0334 extends SubLTranslatedFile
         $ic19$ = SubLObjectFactory.makeKeyword("HALT");
         $ic20$ = SubLObjectFactory.makeKeyword("DEBUG");
         $ic21$ = SubLObjectFactory.makeString("leave the kb inconsistent for now and resolve the conflict later");
-        $ic22$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls")));
+        $ic22$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")));
         $ic23$ = SubLObjectFactory.makeSymbol("WITH-ERROR-HANDLER");
         $ic24$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)SubLObjectFactory.makeSymbol("S#25135", "CYC"));
         $ic25$ = SubLObjectFactory.makeSymbol("CLET");

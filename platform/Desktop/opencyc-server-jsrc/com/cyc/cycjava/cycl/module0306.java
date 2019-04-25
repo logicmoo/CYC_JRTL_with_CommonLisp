@@ -4229,7 +4229,7 @@ public final class module0306 extends SubLTranslatedFile
         $ic30$ = SubLObjectFactory.makeString("continue anyway");
         $ic31$ = SubLObjectFactory.makeKeyword("WARN");
         $ic32$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic33$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic33$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic34$ = SubLObjectFactory.makeString("~A is neither SET-P nor LISTP.");
         $ic35$ = SubLObjectFactory.makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
         $ic36$ = SubLObjectFactory.makeString("Node ~a does not pass sbhl-type-test ~a~%");
@@ -4248,16 +4248,16 @@ public final class module0306 extends SubLTranslatedFile
         $ic49$ = SubLObjectFactory.makeSymbol("S#23315", "CYC");
         $ic50$ = SubLObjectFactory.makeKeyword("MAL-ARG-WRT-QUOTED-NEC-DEFN");
         $ic51$ = SubLObjectFactory.makeKeyword("MAL-ARG-WRT-NEC-DEFN");
-        $ic52$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic52$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic53$ = SubLObjectFactory.makeKeyword("GENLS");
         $ic54$ = SubLObjectFactory.makeSymbol("S#23327", "CYC");
         $ic55$ = SubLObjectFactory.makeSymbol("S#23326", "CYC");
         $ic56$ = SubLObjectFactory.makeSymbol("S#23325", "CYC");
         $ic57$ = SubLObjectFactory.makeSymbol("S#23282", "CYC");
-        $ic58$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STRINGP"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CharacterString"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("PositiveInteger"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NON-NEGATIVE-INTEGER-P"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("NonNegativeInteger"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INTEGERP"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Integer"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FLOATP"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("RealNumber"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TRUE"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing"))));
+        $ic58$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STRINGP"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CharacterString"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PositiveInteger"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NON-NEGATIVE-INTEGER-P"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("NonNegativeInteger"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INTEGERP"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Integer"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FLOATP"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("RealNumber"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TRUE"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing"))));
         $ic59$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12453", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12458", "CYC"));
         $ic60$ = SubLObjectFactory.makeKeyword("ASCENDING");
-        $ic61$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STRINGP"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLString"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INTEGERP"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLInteger"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FLOATP"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLRealNumber"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("SYMBOLP"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLSymbol"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycLConstant"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NART-P"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycLNonAtomicReifiedTerm"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION-P"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycLAssertion"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TRUE"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycLExpression"))));
+        $ic61$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("STRINGP"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLString"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("INTEGERP"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLInteger"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FLOATP"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLRealNumber"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("SYMBOLP"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLSymbol"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycLConstant"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NART-P"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycLNonAtomicReifiedTerm"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION-P"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycLAssertion"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("TRUE"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycLExpression"))));
         $ic62$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#23379", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12458", "CYC"));
         $ic63$ = SubLObjectFactory.makeKeyword("IFF");
         $ic64$ = SubLObjectFactory.makeSymbol("NEW-ADD-IFF-DEFN");
@@ -4294,14 +4294,14 @@ public final class module0306 extends SubLTranslatedFile
         $ic95$ = SubLObjectFactory.makeInteger(400);
         $ic96$ = SubLObjectFactory.makeInteger(100);
         $ic97$ = SubLObjectFactory.makeString("Initializing defns...");
-        $ic98$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("defnIff"));
+        $ic98$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defnIff"));
         $ic99$ = SubLObjectFactory.makeKeyword("GAF");
         $ic100$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic101$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("defnSufficient"));
-        $ic102$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("defnNecessary"));
-        $ic103$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnIff"));
-        $ic104$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnSufficient"));
-        $ic105$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnNecessary"));
+        $ic101$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defnSufficient"));
+        $ic102$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defnNecessary"));
+        $ic103$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnIff"));
+        $ic104$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnSufficient"));
+        $ic105$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnNecessary"));
     }
     
     public static final class $f20664$UnaryFunction extends UnaryFunction

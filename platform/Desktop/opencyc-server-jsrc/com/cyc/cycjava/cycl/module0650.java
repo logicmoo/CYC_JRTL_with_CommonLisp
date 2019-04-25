@@ -103,7 +103,7 @@ public final class module0650 extends SubLTranslatedFile
         while (module0650.NIL != var7) {
             final SubLObject var9 = var8.first();
             final SubLObject var10 = module0288.f19338(var9, var2);
-            final SubLObject var11 = (SubLObject)((module0650.NIL != module0174.f11035(var10)) ? module0291.f19561(var10) : module0650.NIL);
+            final SubLObject var11 = (SubLObject)((module0650.NIL != assertion_handles_oc.f11035(var10)) ? module0291.f19561(var10) : module0650.NIL);
             if (module0650.NIL != module0295.f19791(var11)) {
                 var6 = (SubLObject)ConsesLow.cons(var11, var6);
             }
@@ -172,20 +172,20 @@ public final class module0650 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0650();
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationSpecification"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulationSpecification"));
         $ic1$ = SubLObjectFactory.makeKeyword("META-PREDICATES");
         $ic2$ = SubLObjectFactory.makeSymbol("S#22212", "CYC");
         $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?PRED"), (SubLObject)SubLObjectFactory.makeSymbol("?POSITION"));
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("useMetaPredicateInReformulation"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("useMetaPredicateInReformulation"));
         $ic5$ = SubLObjectFactory.makeSymbol("FIRST");
         $ic6$ = SubLObjectFactory.makeSymbol("<");
         $ic7$ = SubLObjectFactory.makeSymbol("SECOND");
         $ic8$ = SubLObjectFactory.makeKeyword("REFORMULATOR-RULES");
         $ic9$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?RULE"), (SubLObject)SubLObjectFactory.makeSymbol("?POSITION"));
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("useRuleInReformulation"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("useRuleInReformulation"));
         $ic11$ = SubLObjectFactory.makeKeyword("IGNORE-RL-MODULES");
         $ic12$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?MODULE"), (SubLObject)SubLObjectFactory.makeSymbol("?POSITION"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ignoreModuleInReformulation"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ignoreModuleInReformulation"));
     }
 }
 

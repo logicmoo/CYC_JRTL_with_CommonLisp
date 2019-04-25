@@ -721,7 +721,7 @@ public final class module0179 extends SubLTranslatedFile
         module0179.$g2215$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("S#14250", "CYC");
         $ic1$ = SubLObjectFactory.makeSymbol("SECOND");
-        $ic2$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC"), (SubLObject)SubLObjectFactory.makeString("mapping Cyc KB HL supports")), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic2$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC"), (SubLObject)SubLObjectFactory.makeString("mapping Cyc KB HL supports")), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("PROGRESS-MESSAGE"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"));
         $ic4$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");
         $ic5$ = SubLObjectFactory.makeKeyword("PROGRESS-MESSAGE");
@@ -736,7 +736,7 @@ public final class module0179 extends SubLTranslatedFile
         $ic14$ = SubLObjectFactory.makeString("Determining maximum KB HL support ID");
         $ic15$ = SubLObjectFactory.makeSymbol("STRINGP");
         $ic16$ = SubLObjectFactory.makeKeyword("SKIP");
-        $ic17$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic17$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic18$ = SubLObjectFactory.makeSymbol("S#10461", "CYC");
         $ic19$ = SubLObjectFactory.makeSymbol("S#10462", "CYC");
         $ic20$ = SubLObjectFactory.makeSymbol("S#14196", "CYC");
@@ -762,7 +762,7 @@ public final class module0179 extends SubLTranslatedFile
         $ic40$ = SubLObjectFactory.makeString("#<KB HL SUPPORT ~s>");
         $ic41$ = SubLObjectFactory.makeInteger(787);
         $ic42$ = SubLObjectFactory.makeSymbol("S#14199", "CYC");
-        $ic43$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic43$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic44$ = SubLObjectFactory.makeString("Return T iff OBJECT is a CycL KB HL support");
         $ic45$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
         $ic46$ = SubLObjectFactory.makeSymbol("FIXNUMP");

@@ -1371,10 +1371,10 @@ public final class module0262 extends SubLTranslatedFile
         module0262.$g2509$ = null;
         module0262.$g2510$ = null;
         module0262.$g2511$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory"));
         $ic2$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic4$ = SubLObjectFactory.makeSymbol("S#19885", "CYC");
         $ic5$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
         $ic6$ = SubLObjectFactory.makeSymbol("EL-FORT-P");

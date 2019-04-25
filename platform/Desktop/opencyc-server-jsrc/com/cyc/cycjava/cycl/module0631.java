@@ -239,8 +239,8 @@ public final class module0631 extends SubLTranslatedFile
     private static final SubLSymbol $ic113$;
     
     public static SubLObject f38678() {
-        module0631.$g4837$.setGlobalValue(module0038.f2624(module0166.f10757(module0631.$ic18$)));
-        module0631.$g4838$.setGlobalValue(module0038.f2624(module0166.f10757(module0631.$ic19$)));
+        module0631.$g4837$.setGlobalValue(module0038.f2624(constants_high_oc.f10757(module0631.$ic18$)));
+        module0631.$g4838$.setGlobalValue(module0038.f2624(constants_high_oc.f10757(module0631.$ic19$)));
         module0631.$g4839$.setGlobalValue((SubLObject)module0631.$ic20$);
         module0631.$g4840$.setGlobalValue(module0233.f15415((SubLObject)ConsesLow.list(module0233.f15418((SubLObject)module0631.$ic21$, (SubLObject)module0631.$ic22$))));
         module0631.$g4841$.setGlobalValue(module0233.f15415((SubLObject)ConsesLow.list(module0233.f15418((SubLObject)module0631.$ic23$, (SubLObject)module0631.$ic24$))));
@@ -250,13 +250,13 @@ public final class module0631 extends SubLTranslatedFile
         module0631.$g4845$.setGlobalValue((SubLObject)module0631.$ic27$);
         module0631.$g4846$.setGlobalValue(module0631.$ic28$);
         module0631.$g4847$.setGlobalValue(module0631.$ic29$);
-        module0631.$g4848$.setGlobalValue(module0038.f2624(module0166.f10757(module0631.$ic30$)));
-        module0631.$g4849$.setGlobalValue(module0038.f2624(module0166.f10757(module0631.$ic31$)));
-        module0631.$g4850$.setGlobalValue(module0038.f2624(module0166.f10757(module0631.$ic32$)));
-        module0631.$g4851$.setGlobalValue(module0038.f2624(module0166.f10757(module0631.$ic33$)));
+        module0631.$g4848$.setGlobalValue(module0038.f2624(constants_high_oc.f10757(module0631.$ic30$)));
+        module0631.$g4849$.setGlobalValue(module0038.f2624(constants_high_oc.f10757(module0631.$ic31$)));
+        module0631.$g4850$.setGlobalValue(module0038.f2624(constants_high_oc.f10757(module0631.$ic32$)));
+        module0631.$g4851$.setGlobalValue(module0038.f2624(constants_high_oc.f10757(module0631.$ic33$)));
         module0631.$g4852$.setGlobalValue((SubLObject)module0631.$ic34$);
         module0631.$g4853$.setGlobalValue(module0631.$ic28$);
-        module0631.$g4854$.setGlobalValue(module0038.f2624(module0166.f10757(module0631.$ic32$)));
+        module0631.$g4854$.setGlobalValue(module0038.f2624(constants_high_oc.f10757(module0631.$ic32$)));
         return (SubLObject)module0631.T;
     }
     
@@ -360,7 +360,7 @@ public final class module0631 extends SubLTranslatedFile
     }
     
     public static SubLObject f38697(final SubLObject var17) {
-        assert module0631.NIL != module0128.f8449(var17) : var17;
+        assert module0631.NIL != constant_handles_oc.f8449(var17) : var17;
         return module0594.f36343(var17);
     }
     
@@ -670,8 +670,8 @@ public final class module0631 extends SubLTranslatedFile
         $ic15$ = SubLObjectFactory.makeSymbol("S#42356", "CYC");
         $ic16$ = SubLObjectFactory.makeSymbol("S#42357", "CYC");
         $ic17$ = SubLObjectFactory.makeSymbol("S#42358", "CYC");
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestResultNotification-EmailBrief"));
-        $ic19$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TKBTemplateTestForMissingMt"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestResultNotification-EmailBrief"));
+        $ic19$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TKBTemplateTestForMissingMt"));
         $ic20$ = SubLObjectFactory.makeString("(#$TheSet (#$ELInferenceBindingFn ?SOMETHING \"A SOMETHING\"))");
         $ic21$ = SubLObjectFactory.makeSymbol("?SOMETHING");
         $ic22$ = SubLObjectFactory.makeString("A SOMETHING");
@@ -679,14 +679,14 @@ public final class module0631 extends SubLTranslatedFile
         $ic24$ = SubLObjectFactory.makeString("ANOTHER THING");
         $ic25$ = SubLObjectFactory.makeSymbol("?ANOTHERTHING");
         $ic26$ = SubLObjectFactory.makeString("YET ANOTHER THING");
-        $ic27$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Collection")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing")));
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
-        $ic29$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TKBTemplateTestForMissingExplanation"));
-        $ic31$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TKBTemplateTestForMissingExample"));
-        $ic32$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TKBTemplateIntegrityTest"));
-        $ic33$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TKB-RTVQueries"));
-        $ic34$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Collection")), (SubLObject)SubLObjectFactory.makeSymbol("?WHAT"));
+        $ic27$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Collection")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing")));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic29$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TKBTemplateTestForMissingExplanation"));
+        $ic31$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TKBTemplateTestForMissingExample"));
+        $ic32$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TKBTemplateIntegrityTest"));
+        $ic33$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TKB-RTVQueries"));
+        $ic34$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Collection")), (SubLObject)SubLObjectFactory.makeSymbol("?WHAT"));
         $ic35$ = SubLObjectFactory.makeKeyword("TEXT");
         $ic36$ = SubLObjectFactory.makeKeyword("HTML");
         $ic37$ = SubLObjectFactory.makeKeyword("BRIEF");
@@ -760,11 +760,11 @@ public final class module0631 extends SubLTranslatedFile
         $ic105$ = SubLObjectFactory.makeKeyword("FALSE-DEF");
         $ic106$ = SubLObjectFactory.makeKeyword("FALSE-MON");
         $ic107$ = SubLObjectFactory.makeSymbol("KEYWORDP");
-        $ic108$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IndividualTestMetric"));
-        $ic109$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CollectionTestMetric"));
+        $ic108$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IndividualTestMetric"));
+        $ic109$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CollectionTestMetric"));
         $ic110$ = SubLObjectFactory.makeSymbol("CONSTANT-P");
-        $ic111$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric"));
-        $ic112$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UnsupportedTestMetric"));
+        $ic111$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestMetric"));
+        $ic112$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UnsupportedTestMetric"));
         $ic113$ = SubLObjectFactory.makeSymbol("S#42338", "CYC");
     }
 }

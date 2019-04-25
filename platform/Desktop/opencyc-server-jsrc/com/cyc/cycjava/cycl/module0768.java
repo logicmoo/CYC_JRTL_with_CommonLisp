@@ -173,10 +173,10 @@ public final class module0768 extends SubLTranslatedFile
         $ic3$ = SubLObjectFactory.makeKeyword("SKSI-SUPPORTED-EXTERNAL-TERM");
         $ic4$ = SubLObjectFactory.makeKeyword("BEST");
         $ic5$ = SubLObjectFactory.makeKeyword("RESOURCE-WITH-URI");
-        $ic6$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ResourceWithURIFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#39641", "CYC")));
+        $ic6$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ResourceWithURIFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#39641", "CYC")));
         $ic7$ = SubLObjectFactory.makeSymbol("S#52705", "CYC");
         $ic8$ = SubLObjectFactory.makeSymbol("S#12275", "CYC");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic10$ = SubLObjectFactory.makeString("en");
     }
 }

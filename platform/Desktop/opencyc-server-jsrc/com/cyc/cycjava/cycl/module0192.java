@@ -203,7 +203,7 @@ public final class module0192 extends SubLTranslatedFile
     public static SubLObject f12005(final SubLObject var13, final SubLObject var2, final SubLObject var14) {
         final SubLThread var15 = SubLProcess.currentSubLThread();
         if (module0192.NIL != f12016(var13, (SubLObject)module0192.UNPROVIDED)) {
-            final SubLObject var16 = (module0192.NIL != module0174.$g2195$.getDynamicValue(var15)) ? f12017(var13) : f12018(var13, module0018.$g583$.getDynamicValue(var15));
+            final SubLObject var16 = (module0192.NIL != assertion_handles_oc.$g2195$.getDynamicValue(var15)) ? f12017(var13) : f12018(var13, module0018.$g583$.getDynamicValue(var15));
             print_high.princ((SubLObject)module0192.$ic25$, var2);
             if (var16.isCons()) {
                 print_high.prin1(var16, var2);
@@ -455,7 +455,7 @@ public final class module0192 extends SubLTranslatedFile
     }
     
     public static SubLObject f12039(final SubLObject var19, final SubLObject var45) {
-        assert module0192.NIL != module0174.f11035(var45) : var45;
+        assert module0192.NIL != assertion_handles_oc.f11035(var45) : var45;
         assert module0192.NIL != f12006(var19) : var19;
         f12030(var19, (SubLObject)ConsesLow.cons(var45, f12029(var19)));
         return var19;
@@ -469,7 +469,7 @@ public final class module0192 extends SubLTranslatedFile
     }
     
     public static SubLObject f12042(final SubLObject var19, final SubLObject var45) {
-        assert module0192.NIL != module0174.f11035(var45) : var45;
+        assert module0192.NIL != assertion_handles_oc.f11035(var45) : var45;
         assert module0192.NIL != f12006(var19) : var19;
         f12030(var19, module0035.f2073(var45, f12029(var19), (SubLObject)module0192.UNPROVIDED));
         return f12043(var19);
@@ -481,7 +481,7 @@ public final class module0192 extends SubLTranslatedFile
         if (module0192.NIL != module0035.f1997(var20)) {
             final SubLObject var21 = var20.first();
             final SubLObject var22 = f12017(var19);
-            module0177.f11206(var21, var22);
+            oc_assertions_low.f11206(var21, var22);
             f12040(var19);
             return (SubLObject)module0192.T;
         }
@@ -1262,7 +1262,7 @@ public final class module0192 extends SubLTranslatedFile
         $ic44$ = SubLObjectFactory.makeString("create-sample-invalid-clause-struc not implemented");
         $ic45$ = SubLObjectFactory.makeSymbol("ASSERTION-P");
         $ic46$ = SubLObjectFactory.makeSymbol("S#14840", "CYC");
-        $ic47$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC"), (SubLObject)SubLObjectFactory.makeString("mapping Cyc clause structs")), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic47$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC"), (SubLObject)SubLObjectFactory.makeString("mapping Cyc clause structs")), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic48$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("PROGRESS-MESSAGE"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"));
         $ic49$ = SubLObjectFactory.makeKeyword("PROGRESS-MESSAGE");
         $ic50$ = SubLObjectFactory.makeString("mapping Cyc clause structs");

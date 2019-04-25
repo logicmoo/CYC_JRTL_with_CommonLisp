@@ -1755,14 +1755,14 @@ public final class module0692 extends SubLTranslatedFile
         $ic54$ = SubLObjectFactory.makeSymbol("S#3971", "CYC");
         $ic55$ = SubLObjectFactory.makeSymbol("S#44216", "CYC");
         $ic56$ = SubLObjectFactory.makeKeyword("MT");
-        $ic57$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CyclistsMt"));
+        $ic57$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CyclistsMt"));
         $ic58$ = SubLObjectFactory.makeString("initial arghash");
         $ic59$ = SubLObjectFactory.makeString(" : ");
         $ic60$ = SubLObjectFactory.makeSymbol("STRING<");
         $ic61$ = SubLObjectFactory.makeSymbol("SYMBOL-NAME");
         $ic62$ = SubLObjectFactory.makeString("validation");
-        $ic63$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Predicate"));
-        $ic64$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory"));
+        $ic63$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Predicate"));
+        $ic64$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory"));
         $ic65$ = SubLObjectFactory.makeString("arghash after validation");
         $ic66$ = SubLObjectFactory.makeString("(user-action-data user-action) after update from arghash");
         $ic67$ = SubLObjectFactory.makeString("Blue Grapher - Building Graph");

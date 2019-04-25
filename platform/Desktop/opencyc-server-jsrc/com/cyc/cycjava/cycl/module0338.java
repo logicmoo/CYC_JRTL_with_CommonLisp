@@ -155,7 +155,7 @@ public final class module0338 extends SubLTranslatedFile
         if (module0338.NIL != f22655()) {
             module0021.f1086(module0338.$g2882$.getGlobalValue(), var9);
             f22659(var8, var9);
-            final SubLObject var10 = module0166.f10743(var8);
+            final SubLObject var10 = constants_high_oc.f10743(var8);
             if (var10.isString()) {
                 module0021.f1144(var10, var9);
             }
@@ -211,17 +211,17 @@ public final class module0338 extends SubLTranslatedFile
         if (module0338.NIL != f22657(var8)) {
             return f22660(var8, var9);
         }
-        final SubLObject var10 = module0166.f10757(var8);
+        final SubLObject var10 = constants_high_oc.f10757(var8);
         module0021.f1038(var10, var9);
         return var8;
     }
     
     public static SubLObject f22664(final SubLObject var9) {
         final SubLObject var10 = module0021.f1060(var9, (SubLObject)module0338.UNPROVIDED, (SubLObject)module0338.UNPROVIDED);
-        if (module0338.NIL != module0166.f10734(var10)) {
-            return module0166.f10751(var10);
+        if (module0338.NIL != constants_high_oc.f10734(var10)) {
+            return constants_high_oc.f10751(var10);
         }
-        if (module0338.NIL != module0166.f10753(var10)) {
+        if (module0338.NIL != constants_high_oc.f10753(var10)) {
             return f22667(var10);
         }
         return (SubLObject)module0338.NIL;
@@ -239,19 +239,19 @@ public final class module0338 extends SubLTranslatedFile
     
     public static SubLObject f22668(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
-        if (module0338.NIL != module0128.f8467(var8, (SubLObject)module0338.UNPROVIDED)) {
+        if (module0338.NIL != constant_handles_oc.f8467(var8, (SubLObject)module0338.UNPROVIDED)) {
             return (SubLObject)module0338.MINUS_ONE_INTEGER;
         }
         final SubLObject var10 = module0111.$g1393$.getDynamicValue(var9);
         if (module0338.NIL == var10) {
-            return module0166.f10749(var8);
+            return constants_high_oc.f10749(var8);
         }
         final SubLObject var11 = var10;
         if (var11.eql((SubLObject)module0338.$ic9$)) {
-            return module0166.f10749(var8);
+            return constants_high_oc.f10749(var8);
         }
         if (var11.eql((SubLObject)module0338.$ic10$)) {
-            return module0166.f10780(var8);
+            return constants_high_oc.f10780(var8);
         }
         return Functions.funcall(var10, var8);
     }
@@ -263,14 +263,14 @@ public final class module0338 extends SubLTranslatedFile
         }
         final SubLObject var16 = module0111.$g1394$.getDynamicValue(var15);
         if (module0338.NIL == var16) {
-            return module0166.f10752(var14);
+            return constants_high_oc.f10752(var14);
         }
         final SubLObject var17 = var16;
         if (var17.eql((SubLObject)module0338.$ic11$)) {
-            return module0166.f10752(var14);
+            return constants_high_oc.f10752(var14);
         }
         if (var17.eql((SubLObject)module0338.$ic12$)) {
-            return module0166.f10781(var14);
+            return constants_high_oc.f10781(var14);
         }
         return Functions.funcall(var16, var14);
     }
@@ -447,11 +447,11 @@ public final class module0338 extends SubLTranslatedFile
         }
         final SubLObject var22 = module0111.$g1397$.getDynamicValue(var21);
         if (module0338.NIL == var22) {
-            return module0174.f11025(var20);
+            return assertion_handles_oc.f11025(var20);
         }
         final SubLObject var23 = var22;
         if (var23.eql((SubLObject)module0338.$ic27$)) {
-            return module0174.f11025(var20);
+            return assertion_handles_oc.f11025(var20);
         }
         if (var23.eql((SubLObject)module0338.$ic28$)) {
             return module0178.f11391(var20);
@@ -466,11 +466,11 @@ public final class module0338 extends SubLTranslatedFile
         }
         final SubLObject var16 = module0111.$g1398$.getDynamicValue(var15);
         if (module0338.NIL == var16) {
-            return module0174.f11053(var14);
+            return assertion_handles_oc.f11053(var14);
         }
         final SubLObject var17 = var16;
         if (var17.eql((SubLObject)module0338.$ic29$)) {
-            return module0174.f11053(var14);
+            return assertion_handles_oc.f11053(var14);
         }
         if (var17.eql((SubLObject)module0338.$ic30$)) {
             return module0178.f11392(var14);
@@ -548,11 +548,11 @@ public final class module0338 extends SubLTranslatedFile
         }
         final SubLObject var26 = module0111.$g1399$.getDynamicValue(var25);
         if (module0338.NIL == var26) {
-            return module0184.f11649(var24);
+            return oc_deduction_handles.f11649(var24);
         }
         final SubLObject var27 = var26;
         if (var27.eql((SubLObject)module0338.$ic35$)) {
-            return module0184.f11649(var24);
+            return oc_deduction_handles.f11649(var24);
         }
         if (var27.eql((SubLObject)module0338.$ic36$)) {
             return module0188.f11796(var24);
@@ -567,11 +567,11 @@ public final class module0338 extends SubLTranslatedFile
         }
         final SubLObject var16 = module0111.$g1400$.getDynamicValue(var15);
         if (module0338.NIL == var16) {
-            return module0184.f11675(var14);
+            return oc_deduction_handles.f11675(var14);
         }
         final SubLObject var17 = var16;
         if (var17.eql((SubLObject)module0338.$ic37$)) {
-            return module0184.f11675(var14);
+            return oc_deduction_handles.f11675(var14);
         }
         if (var17.eql((SubLObject)module0338.$ic38$)) {
             return module0188.f11797(var14);
@@ -954,14 +954,14 @@ public final class module0338 extends SubLTranslatedFile
         module0338.$g2880$ = SubLFiles.defparameter("S#25344", (SubLObject)module0338.NIL);
         module0338.$g2881$ = SubLFiles.defconstant("S#25345", (SubLObject)module0338.$ic3$);
         module0338.$g2882$ = SubLFiles.defconstant("S#25346", (SubLObject)module0338.$ic5$);
-        module0338.$g2883$ = SubLFiles.deflexical("S#25347", (module0338.NIL != Symbols.boundp((SubLObject)module0338.$ic8$)) ? module0338.$g2883$.getGlobalValue() : module0128.f8481());
+        module0338.$g2883$ = SubLFiles.deflexical("S#25347", (module0338.NIL != Symbols.boundp((SubLObject)module0338.$ic8$)) ? module0338.$g2883$.getGlobalValue() : constant_handles_oc.f8481());
         module0338.$g2884$ = SubLFiles.defconstant("S#25348", (SubLObject)module0338.$ic13$);
         module0338.$g2885$ = SubLFiles.deflexical("S#25349", (module0338.NIL != Symbols.boundp((SubLObject)module0338.$ic16$)) ? module0338.$g2885$.getGlobalValue() : module0167.f10830());
         module0338.$g2886$ = SubLFiles.defconstant("S#25350", (SubLObject)module0338.$ic21$);
         module0338.$g2887$ = SubLFiles.defparameter("S#25351", (SubLObject)module0338.NIL);
-        module0338.$g2888$ = SubLFiles.deflexical("S#25352", (module0338.NIL != Symbols.boundp((SubLObject)module0338.$ic24$)) ? module0338.$g2888$.getGlobalValue() : module0174.f11050());
+        module0338.$g2888$ = SubLFiles.deflexical("S#25352", (module0338.NIL != Symbols.boundp((SubLObject)module0338.$ic24$)) ? module0338.$g2888$.getGlobalValue() : assertion_handles_oc.f11050());
         module0338.$g2889$ = SubLFiles.defconstant("S#25353", (SubLObject)module0338.$ic31$);
-        module0338.$g2890$ = SubLFiles.deflexical("S#25354", (module0338.NIL != Symbols.boundp((SubLObject)module0338.$ic34$)) ? module0338.$g2890$.getGlobalValue() : module0184.f11673());
+        module0338.$g2890$ = SubLFiles.deflexical("S#25354", (module0338.NIL != Symbols.boundp((SubLObject)module0338.$ic34$)) ? module0338.$g2890$.getGlobalValue() : oc_deduction_handles.f11673());
         module0338.$g2891$ = SubLFiles.defconstant("S#25355", (SubLObject)module0338.$ic39$);
         module0338.$g2892$ = SubLFiles.deflexical("S#25356", (module0338.NIL != Symbols.boundp((SubLObject)module0338.$ic42$)) ? module0338.$g2892$.getGlobalValue() : module0179.f11440());
         module0338.$g2893$ = SubLFiles.defconstant("S#25357", (SubLObject)module0338.$ic47$);
@@ -978,16 +978,16 @@ public final class module0338 extends SubLTranslatedFile
     public static SubLObject f22737() {
         module0021.f1098(module0338.$g2881$.getGlobalValue(), (SubLObject)module0338.$ic4$);
         module0021.f1098(module0338.$g2882$.getGlobalValue(), (SubLObject)module0338.$ic6$);
-        Structures.register_method(module0021.$g749$.getGlobalValue(), module0128.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0338.$ic7$));
+        Structures.register_method(module0021.$g749$.getGlobalValue(), constant_handles_oc.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0338.$ic7$));
         module0003.f57((SubLObject)module0338.$ic8$);
         module0021.f1098(module0338.$g2884$.getGlobalValue(), (SubLObject)module0338.$ic14$);
         Structures.register_method(module0021.$g749$.getGlobalValue(), module0167.$g2182$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0338.$ic15$));
         module0003.f57((SubLObject)module0338.$ic16$);
         module0021.f1098(module0338.$g2886$.getGlobalValue(), (SubLObject)module0338.$ic22$);
-        Structures.register_method(module0021.$g749$.getGlobalValue(), module0174.$g2194$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0338.$ic23$));
+        Structures.register_method(module0021.$g749$.getGlobalValue(), assertion_handles_oc.$g2194$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0338.$ic23$));
         module0003.f57((SubLObject)module0338.$ic24$);
         module0021.f1098(module0338.$g2889$.getGlobalValue(), (SubLObject)module0338.$ic32$);
-        Structures.register_method(module0021.$g749$.getGlobalValue(), module0184.$g2229$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0338.$ic33$));
+        Structures.register_method(module0021.$g749$.getGlobalValue(), oc_deduction_handles.$g2229$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0338.$ic33$));
         module0003.f57((SubLObject)module0338.$ic34$);
         module0021.f1098(module0338.$g2891$.getGlobalValue(), (SubLObject)module0338.$ic40$);
         Structures.register_method(module0021.$g749$.getGlobalValue(), module0179.$g2214$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0338.$ic41$));

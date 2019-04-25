@@ -1025,8 +1025,8 @@ public final class module0261 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0261();
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("negationPreds"));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("negationInverse"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("negationPreds"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("negationInverse"));
         $ic2$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#19844", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MT"), (SubLObject)SubLObjectFactory.makeKeyword("TV"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"));
         $ic4$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");

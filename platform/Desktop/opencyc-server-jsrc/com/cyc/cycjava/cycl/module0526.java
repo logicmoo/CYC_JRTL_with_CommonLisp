@@ -590,7 +590,7 @@ public final class module0526 extends SubLTranslatedFile
         $ic4$ = SubLObjectFactory.makeSymbol("HL-VARIABLE-P");
         $ic5$ = SubLObjectFactory.makeSymbol("S#36302", "CYC");
         $ic6$ = SubLObjectFactory.makeSymbol("S#36309", "CYC");
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("interArgDependentCardinality"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("interArgDependentCardinality"));
         $ic8$ = ConsesLow.list((SubLObject)module0526.TWO_INTEGER, (SubLObject)module0526.THREE_INTEGER, (SubLObject)module0526.FOUR_INTEGER, (SubLObject)module0526.FIVE_INTEGER, (SubLObject)module0526.SIX_INTEGER);
         $ic9$ = SubLObjectFactory.makeInteger(100);
         $ic10$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
@@ -598,11 +598,11 @@ public final class module0526 extends SubLTranslatedFile
         $ic12$ = SubLObjectFactory.makeInteger(1024);
         $ic13$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#13100", "CYC"));
         $ic14$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13112", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#25108", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#770", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#25109", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#36323", "CYC"));
-        $ic15$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
+        $ic15$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
         $ic16$ = SubLObjectFactory.makeSymbol("CAR");
         $ic17$ = SubLObjectFactory.makeString("-");
         $ic18$ = SubLObjectFactory.makeSymbol("S#13459", "CYC");
-        $ic19$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("equalSymbols"));
+        $ic19$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("equalSymbols"));
         $ic20$ = ConsesLow.list((SubLObject)module0526.TWO_INTEGER);
     }
     

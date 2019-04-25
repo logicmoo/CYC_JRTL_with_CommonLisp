@@ -134,7 +134,7 @@ public final class module0560 extends SubLTranslatedFile
         module0021.f1038(var18, var9);
         module0021.f1038(var19, var9);
         module0021.f1038(module0051.f3557((SubLObject)module0560.UNPROVIDED, (SubLObject)module0560.UNPROVIDED), var9);
-        module0618.f38026(var21, var9);
+        oc_dumper.f38026(var21, var9);
         return var21;
     }
     
@@ -181,7 +181,7 @@ public final class module0560 extends SubLTranslatedFile
         final SubLObject var11 = module0021.f1060(var6, (SubLObject)module0560.UNPROVIDED, (SubLObject)module0560.UNPROVIDED);
         final SubLObject var12 = module0021.f1060(var6, (SubLObject)module0560.UNPROVIDED, (SubLObject)module0560.UNPROVIDED);
         assert module0560.NIL != Types.integerp(var10) : var10;
-        final SubLObject var13 = module0166.f10765(var10);
+        final SubLObject var13 = constants_high_oc.f10765(var10);
         module0021.f1038(var10, var9);
         module0021.f1038(var11, var9);
         module0021.f1038(var13, var9);

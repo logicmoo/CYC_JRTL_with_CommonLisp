@@ -72,7 +72,7 @@ public final class module0786 extends SubLTranslatedFile
     private static final SubLList $ic36$;
     
     public static SubLObject f50433(final SubLObject var1) {
-        return module0128.f8449(var1);
+        return constant_handles_oc.f8449(var1);
     }
     
     public static SubLObject f50434(final SubLObject var2) {
@@ -831,15 +831,15 @@ public final class module0786 extends SubLTranslatedFile
         $ic9$ = SubLObjectFactory.makeInteger(256);
         $ic10$ = SubLObjectFactory.makeSymbol("S#55014", "CYC");
         $ic11$ = SubLObjectFactory.makeKeyword("INFL");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DerivationalAffix"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DerivationalAffix"));
         $ic13$ = SubLObjectFactory.makeString("Getting rule constraints...");
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UnproductiveLexicalAffix"));
-        $ic15$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("regularSuffix"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UnproductiveLexicalAffix"));
+        $ic15$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("regularSuffix"));
         $ic16$ = SubLObjectFactory.makeKeyword("GAF");
         $ic17$ = SubLObjectFactory.makeKeyword("POS");
         $ic18$ = SubLObjectFactory.makeSymbol("S#55001", "CYC");
         $ic19$ = SubLObjectFactory.makeSymbol("?POS");
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("derivationalAffixBasePOS"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("derivationalAffixBasePOS"));
         $ic21$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?POS"));
         $ic22$ = SubLObjectFactory.makeSymbol("S#55015", "CYC");
         $ic23$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
@@ -849,11 +849,11 @@ public final class module0786 extends SubLTranslatedFile
         $ic27$ = SubLObjectFactory.makeString("Getting rule result specs...");
         $ic28$ = SubLObjectFactory.makeSymbol("S#55008", "CYC");
         $ic29$ = SubLObjectFactory.makeSymbol("?SEMX");
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("affixSemantics"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("affixSemantics"));
         $ic31$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?SEMX"));
         $ic32$ = SubLObjectFactory.makeSymbol("S#55018", "CYC");
         $ic33$ = SubLObjectFactory.makeSymbol("S#48871", "CYC");
-        $ic34$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("derivationalAffixResultPOS"));
+        $ic34$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("derivationalAffixResultPOS"));
         $ic35$ = SubLObjectFactory.makeSymbol("S#55019", "CYC");
         $ic36$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13097", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("SPECS"));
     }

@@ -4095,7 +4095,7 @@ public final class module0256 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0256();
         module0256.$g2484$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic1$ = SubLObjectFactory.makeSymbol("MIN-GENLS");
         $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12455", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"));
         $ic3$ = SubLObjectFactory.makeString("Returns the most-specific genls of collection COL");
@@ -4116,7 +4116,7 @@ public final class module0256 extends SubLTranslatedFile
         $ic18$ = SubLObjectFactory.makeSymbol("ALL-GENLS");
         $ic19$ = SubLObjectFactory.makeString("Returns all genls of collection COL\n   (ascending transitive closure; inexpensive)");
         $ic20$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic21$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic21$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic22$ = SubLObjectFactory.makeSymbol("S#12276", "CYC");
         $ic23$ = SubLObjectFactory.makeSymbol("S#12280", "CYC");
         $ic24$ = SubLObjectFactory.makeSymbol("ALL-SPECS");
@@ -4190,7 +4190,7 @@ public final class module0256 extends SubLTranslatedFile
         $ic92$ = SubLObjectFactory.makeSymbol("SPEC?");
         $ic93$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12112", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12109", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"));
         $ic94$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12112", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("EL-FORT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12109", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("EL-FORT-P")));
-        $ic95$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("preservesGenlsInArg"));
+        $ic95$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("preservesGenlsInArg"));
         $ic96$ = SubLObjectFactory.makeSymbol("ANY-GENL?");
         $ic97$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12109", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"));
         $ic98$ = SubLObjectFactory.makeString("(any-genl? spec genls) is t iff (genl? spec genl) for some genl in genls\n   (ascending transitive search; inexpensive)");
@@ -4237,12 +4237,12 @@ public final class module0256 extends SubLTranslatedFile
         $ic139$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12109", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12112", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11669", "CYC"));
         $ic140$ = SubLObjectFactory.makeString("Justification of (genls SPEC GENL)");
         $ic141$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("LISTP"));
-        $ic142$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic142$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
         $ic143$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TRUE"));
-        $ic144$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultGenl"));
-        $ic145$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultGenlArg"));
-        $ic146$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultGenl"));
-        $ic147$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultGenlReln"));
+        $ic144$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultGenl"));
+        $ic145$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultGenlArg"));
+        $ic146$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultGenl"));
+        $ic147$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultGenlReln"));
         $ic148$ = SubLObjectFactory.makeSymbol("WHY-NOT-GENL?");
         $ic149$ = SubLObjectFactory.makeString("Justification of (not (genls SPEC GENL))");
         $ic150$ = SubLObjectFactory.makeSymbol("WHY-NOT-ASSERT-GENLS?");
@@ -4280,7 +4280,7 @@ public final class module0256 extends SubLTranslatedFile
         $ic182$ = SubLObjectFactory.makeSymbol("MAX-FLOOR-MTS-OF-GENLS-PATHS");
         $ic183$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12109", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12112", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"));
         $ic184$ = SubLObjectFactory.makeString("@return listp; Returns in what (most-genl) mts GENL is a genls of SPEC");
-        $ic185$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("coExtensional"));
+        $ic185$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("coExtensional"));
         $ic186$ = SubLObjectFactory.makeSymbol("GENLS-AFTER-ADDING");
         $ic187$ = SubLObjectFactory.makeSymbol("GENLS-AFTER-REMOVING");
     }

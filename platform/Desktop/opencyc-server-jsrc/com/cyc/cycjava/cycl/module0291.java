@@ -1503,7 +1503,7 @@ public final class module0291 extends SubLTranslatedFile
         module0291.$g2670$ = null;
         module0291.$g2671$ = null;
         $ic0$ = (SubLFloat)SubLObjectFactory.makeDouble(0.9);
-        $ic1$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorRule")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorEquals")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorEquiv")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulationPrecondition")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorRuleProperties")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorDirectivePredicate")));
+        $ic1$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorRule")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorEquals")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorEquiv")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulationPrecondition")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorRuleProperties")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorDirectivePredicate")));
         $ic2$ = SubLObjectFactory.makeSymbol("VALID-CONSTANT?");
         $ic3$ = SubLObjectFactory.makeString("A KB-dependent reformulator function was called, but the current Cyc KB does not contain knowledge necessary for reformulation.");
         $ic4$ = SubLObjectFactory.makeSymbol("S#22181", "CYC");
@@ -1533,11 +1533,11 @@ public final class module0291 extends SubLTranslatedFile
         $ic28$ = SubLObjectFactory.makeSymbol("S#22184", "CYC");
         $ic29$ = SubLObjectFactory.makeKeyword("REUSED");
         $ic30$ = SubLObjectFactory.makeKeyword("NEW");
-        $ic31$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulationPrecondition"));
-        $ic32$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulationDirectionInMode"));
-        $ic33$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("defaultReformulationDirectionInModeForPred"));
-        $ic34$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorRuleProperties"));
-        $ic35$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("defaultReformulatorModePrecedence"));
+        $ic31$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulationPrecondition"));
+        $ic32$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulationDirectionInMode"));
+        $ic33$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defaultReformulationDirectionInModeForPred"));
+        $ic34$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorRuleProperties"));
+        $ic35$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defaultReformulatorModePrecedence"));
         $ic36$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#22299", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic37$ = SubLObjectFactory.makeSymbol("CDOHASH");
         $ic38$ = SubLObjectFactory.makeSymbol("S#131", "CYC");
@@ -1550,7 +1550,7 @@ public final class module0291 extends SubLTranslatedFile
         $ic45$ = SubLObjectFactory.makeKeyword("RECURSION-LIMIT");
         $ic46$ = SubLObjectFactory.makeKeyword("MODES");
         $ic47$ = SubLObjectFactory.makeSymbol("S#22222", "CYC");
-        $ic48$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorMode"));
+        $ic48$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorMode"));
         $ic49$ = SubLObjectFactory.makeSymbol("S#22297", "CYC");
         $ic50$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
         $ic51$ = SubLObjectFactory.makeString("Found invalid reformulation mode ~s within reformulation mode precedence list ~s - ignoring the invalid mode");
@@ -1565,7 +1565,7 @@ public final class module0291 extends SubLTranslatedFile
         $ic60$ = SubLObjectFactory.makeString("Found invalid reformulator rule assertion ~s among the assertions explicitly specified to be skipped -- ignoring it");
         $ic61$ = SubLObjectFactory.makeString("Found sentence to skip ~s which did not correspond to a CycL assertion visible in mt ~s -- ignoring it~%");
         $ic62$ = SubLObjectFactory.makeKeyword("META-PREDICATES");
-        $ic63$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UnaryPredicate"));
+        $ic63$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UnaryPredicate"));
         $ic64$ = SubLObjectFactory.makeString("Found a reformulator meta-predicate ~s which is not a unary predicate in mt ~s -- ignoring it~%");
         $ic65$ = SubLObjectFactory.makeKeyword("PRECONDITION-CHECKING");
         $ic66$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("REMOVAL-ONLY-ASK"));
@@ -1591,11 +1591,11 @@ public final class module0291 extends SubLTranslatedFile
         $ic86$ = SubLObjectFactory.makeKeyword("FALSE");
         $ic87$ = SubLObjectFactory.makeString("Tried to get an undefined default for setting ~s");
         $ic88$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic89$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic90$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorIrrelevantFORT"));
-        $ic91$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorDirectivePredicate"));
-        $ic92$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycLReformulationRulePredicate"));
-        $ic93$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorRule"));
+        $ic89$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic90$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorIrrelevantFORT"));
+        $ic91$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorDirectivePredicate"));
+        $ic92$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycLReformulationRulePredicate"));
+        $ic93$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reformulatorRule"));
         $ic94$ = SubLObjectFactory.makeSymbol("GENL-MT?");
         $ic95$ = SubLObjectFactory.makeSymbol("SECOND");
     }

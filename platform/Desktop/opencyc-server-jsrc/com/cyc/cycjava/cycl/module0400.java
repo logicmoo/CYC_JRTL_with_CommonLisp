@@ -310,7 +310,7 @@ public final class module0400 extends SubLTranslatedFile
             if (module0400.NIL != module0032.f1746(var13, var14) && module0400.NIL != module0364.f24748(var14, (SubLObject)module0400.$ic14$)) {
                 var15 = module0377.f26758(var14);
                 if (module0400.NIL != var15 && module0400.NIL == module0363.f24547(var15, module0367.f25037(var6))) {
-                    module0369.f25678(module0367.f25037(var6), var15);
+                    oc_inference_datastructures_inference.f25678(module0367.f25037(var6), var15);
                     module0373.f26297(var6, var15);
                 }
                 f28249(var6, var14);
@@ -352,7 +352,7 @@ public final class module0400 extends SubLTranslatedFile
         module0373.f26130(var6, var15);
         if (module0400.NIL == module0380.f26969(var15) || module0400.NIL == module0380.f26994()) {
             if (module0400.NIL == module0384.f27277(var6, var15)) {
-                if (module0400.NIL != module0369.f25432(module0367.f25037(var6)) && module0400.NIL != module0384.f27285(var6, var15)) {
+                if (module0400.NIL != oc_inference_datastructures_inference.f25432(module0367.f25037(var6)) && module0400.NIL != module0384.f27285(var6, var15)) {
                     if (module0400.NIL != module0387.f27533(var15)) {
                         module0398.f28172(var6, var15);
                     }

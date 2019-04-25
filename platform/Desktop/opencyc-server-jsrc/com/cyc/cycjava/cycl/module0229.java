@@ -686,8 +686,8 @@ public final class module0229 extends SubLTranslatedFile
         module0229.$g2423$ = null;
         module0229.$g2424$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("evaluationDefn"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("evaluationDefn"));
         $ic3$ = SubLObjectFactory.makeSymbol("SUPPORT-P");
         $ic4$ = SubLObjectFactory.makeSymbol("S#14596", "CYC");
         $ic5$ = SubLObjectFactory.makeKeyword("TRUE");
@@ -698,7 +698,7 @@ public final class module0229 extends SubLTranslatedFile
         $ic10$ = SubLObjectFactory.makeKeyword("UNEVALUATABLE");
         $ic11$ = SubLObjectFactory.makeSymbol("IGNORE");
         $ic12$ = SubLObjectFactory.makeSymbol("S#18010", "CYC");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UnknownScalarInterval"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UnknownScalarInterval"));
         $ic14$ = SubLObjectFactory.makeSymbol("THROW-UNEVALUATABLE");
         $ic15$ = SubLObjectFactory.makeKeyword("RECURSION-LIMIT-EXCEEDED");
         $ic16$ = SubLObjectFactory.makeSymbol("S#17991", "CYC");
@@ -708,7 +708,7 @@ public final class module0229 extends SubLTranslatedFile
         $ic20$ = SubLObjectFactory.makeSymbol("S#18031", "CYC");
         $ic21$ = SubLObjectFactory.makeSymbol("S#17992", "CYC");
         $ic22$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("FunctionToArg"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("FunctionToArg"));
         $ic24$ = SubLObjectFactory.makeSymbol("?VALUE");
         $ic25$ = SubLObjectFactory.makeSymbol("S#14186", "CYC");
         $ic26$ = SubLObjectFactory.makeKeyword("MAX-NUMBER");

@@ -501,7 +501,7 @@ public final class module0159 extends SubLTranslatedFile
         $ic36$ = SubLObjectFactory.makeSymbol("<");
         $ic37$ = SubLObjectFactory.makeSymbol("<=");
         $ic38$ = SubLObjectFactory.makeSymbol("SECOND");
-        $ic39$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#13151", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("COUNT"));
+        $ic39$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#13151", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("COUNT"));
         $ic40$ = SubLObjectFactory.makeString("~%;; ~A");
     }
 }

@@ -128,7 +128,7 @@ public final class module0556 extends SubLTranslatedFile
                 var6 = f34240(var1.first(), var6);
                 var6 = f34240(var1.rest(), var6);
             }
-            else if (module0556.NIL != module0174.f11035(var1)) {
+            else if (module0556.NIL != assertion_handles_oc.f11035(var1)) {
                 var6 = f34240(module0178.f11289(var1), var6);
             }
         }
@@ -666,7 +666,7 @@ public final class module0556 extends SubLTranslatedFile
         SubLObject var9 = (SubLObject)module0556.ZERO_INTEGER;
         SubLObject var10 = (SubLObject)module0556.ZERO_INTEGER;
         SubLObject var11 = (SubLObject)module0556.ZERO_INTEGER;
-        final SubLObject var12 = module0174.f11010();
+        final SubLObject var12 = assertion_handles_oc.f11010();
         final SubLObject var13 = (SubLObject)module0556.$ic25$;
         final SubLObject var14 = module0065.f4733(var12);
         SubLObject var15 = (SubLObject)module0556.ZERO_INTEGER;
@@ -830,7 +830,7 @@ public final class module0556 extends SubLTranslatedFile
         $ic9$ = SubLObjectFactory.makeKeyword("MIDDLE");
         $ic10$ = SubLObjectFactory.makeKeyword("LOWER");
         $ic11$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic13$ = SubLObjectFactory.makeString("Computing collection generalization counts");
         $ic14$ = SubLObjectFactory.makeKeyword("SKIP");
         $ic15$ = SubLObjectFactory.makeSymbol(">");
@@ -841,7 +841,7 @@ public final class module0556 extends SubLTranslatedFile
         $ic20$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#37500", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#37501", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#37502", "CYC"));
         $ic21$ = SubLObjectFactory.makeString("Computing relation ontology layers");
         $ic22$ = SubLObjectFactory.makeSymbol("NUM-INDEX");
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CoreUnionConstant"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CoreUnionConstant"));
         $ic24$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#37503", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#37504", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#37505", "CYC"));
         $ic25$ = SubLObjectFactory.makeString("Computing assertion ontology layer");
         $ic26$ = SubLObjectFactory.makeSymbol("STRINGP");

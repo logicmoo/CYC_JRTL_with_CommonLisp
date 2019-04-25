@@ -152,7 +152,7 @@ public final class module0565 extends SubLTranslatedFile
     
     public static SubLObject f34847() {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        final SubLObject var3 = module0174.f11010();
+        final SubLObject var3 = assertion_handles_oc.f11010();
         final SubLObject var4 = (SubLObject)module0565.$ic3$;
         final SubLObject var5 = module0065.f4733(var3);
         SubLObject var6 = (SubLObject)module0565.ZERO_INTEGER;
@@ -224,7 +224,7 @@ public final class module0565 extends SubLTranslatedFile
     
     public static SubLObject f34848() {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        final SubLObject var3 = module0184.f11634();
+        final SubLObject var3 = oc_deduction_handles.f11634();
         final SubLObject var4 = (SubLObject)module0565.$ic5$;
         final SubLObject var5 = module0065.f4733(var3);
         SubLObject var6 = (SubLObject)module0565.ZERO_INTEGER;
@@ -313,7 +313,7 @@ public final class module0565 extends SubLTranslatedFile
                 }
             }
             try {
-                final SubLObject var8 = module0174.f11010();
+                final SubLObject var8 = assertion_handles_oc.f11010();
                 final SubLObject var9 = (SubLObject)module0565.$ic7$;
                 final SubLObject var10 = module0065.f4733(var8);
                 SubLObject var11 = (SubLObject)module0565.ZERO_INTEGER;
@@ -444,7 +444,7 @@ public final class module0565 extends SubLTranslatedFile
     }
     
     public static SubLObject f34854(final SubLObject var33) {
-        if (module0565.NIL != module0174.f11035(var33)) {
+        if (module0565.NIL != assertion_handles_oc.f11035(var33)) {
             module0565.$g4132$.setGlobalValue((SubLObject)ConsesLow.cons(var33, module0565.$g4132$.getGlobalValue()));
         }
         return (SubLObject)module0565.NIL;
@@ -549,7 +549,7 @@ public final class module0565 extends SubLTranslatedFile
         $ic7$ = SubLObjectFactory.makeString("cleaning KBS assert info");
         $ic8$ = SubLObjectFactory.makeKeyword("UNCHANGED");
         $ic9$ = SubLObjectFactory.makeSymbol("S#38227", "CYC");
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic11$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
         $ic12$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("FUNCTION"), (SubLObject)SubLObjectFactory.makeSymbol("S#38228", "CYC")));
         $ic13$ = SubLObjectFactory.makeString("scoping KBS splicing assertions");

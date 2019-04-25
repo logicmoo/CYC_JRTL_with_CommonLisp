@@ -1183,12 +1183,12 @@ public final class module0347 extends SubLTranslatedFile
         $ic45$ = SubLObjectFactory.makeKeyword("INFERENCE");
         $ic46$ = SubLObjectFactory.makeString("Unexpected pruning mode : ~S");
         $ic47$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MAX-NUMBER"), (SubLObject)module0347.ONE_INTEGER);
-        $ic48$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("assertedSentence"));
+        $ic48$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("assertedSentence"));
         $ic49$ = SubLObjectFactory.makeSymbol("ATOMIC-SENTENCE-PREDICATE");
-        $ic50$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls")));
-        $ic51$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic52$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
-        $ic53$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic50$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")));
+        $ic51$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic52$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic53$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
         $ic54$ = ConsesLow.list((SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("NO-POS"), (SubLObject)SubLObjectFactory.makeKeyword("POS")), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("NO-NEG"), (SubLObject)SubLObjectFactory.makeKeyword("NEG")), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("YES-POS"), (SubLObject)SubLObjectFactory.makeKeyword("POS")), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("YES-NEG"), (SubLObject)SubLObjectFactory.makeKeyword("NEG")));
     }
 }

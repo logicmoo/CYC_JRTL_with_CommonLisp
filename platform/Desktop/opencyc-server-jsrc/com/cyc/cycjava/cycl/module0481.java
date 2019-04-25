@@ -1889,7 +1889,7 @@ public final class module0481 extends SubLTranslatedFile
         $ic3$ = SubLObjectFactory.makeSymbol("PWHEN");
         $ic4$ = SubLObjectFactory.makeSymbol("INDEXED-TERM-P");
         $ic5$ = SubLObjectFactory.makeSymbol("S#15323", "CYC");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("functionCorrespondingPredicate-Canonical"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("functionCorrespondingPredicate-Canonical"));
         $ic7$ = SubLObjectFactory.makeSymbol("DO-GAF-ARG-INDEX");
         $ic8$ = SubLObjectFactory.makeKeyword("INDEX");
         $ic9$ = SubLObjectFactory.makeKeyword("PREDICATE");
@@ -1907,7 +1907,7 @@ public final class module0481 extends SubLTranslatedFile
         $ic21$ = SubLObjectFactory.makeString("continue anyway");
         $ic22$ = SubLObjectFactory.makeKeyword("WARN");
         $ic23$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic24$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic24$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic25$ = SubLObjectFactory.makeKeyword("GAF");
         $ic26$ = SubLObjectFactory.makeKeyword("IGNORE");
         $ic27$ = SubLObjectFactory.makeString("~A is neither SET-P nor LISTP.");
@@ -1934,7 +1934,7 @@ public final class module0481 extends SubLTranslatedFile
         $ic48$ = SubLObjectFactory.makeSymbol("S#35165", "CYC");
         $ic49$ = SubLObjectFactory.makeSymbol("S#12347", "CYC");
         $ic50$ = SubLObjectFactory.makeSymbol("S#12348", "CYC");
-        $ic51$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("evaluate"));
+        $ic51$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("evaluate"));
     }
     
     public static final class $f31828$UnaryFunction extends UnaryFunction

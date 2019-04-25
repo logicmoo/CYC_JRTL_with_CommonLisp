@@ -424,12 +424,12 @@ public final class module0725 extends SubLTranslatedFile
         $ic32$ = SubLObjectFactory.makeString(" ~S");
         $ic33$ = SubLObjectFactory.makeString(">");
         $ic34$ = SubLObjectFactory.makeSymbol("CYCL-DENOTATIONAL-TERM-P");
-        $ic35$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentTestSpecificationType"));
+        $ic35$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentTestSpecificationType"));
         $ic36$ = SubLObjectFactory.makeString("Got bad constant-id in test-query-suite-get!");
         $ic37$ = SubLObjectFactory.makeSymbol("S#16717", "CYC");
-        $ic38$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic38$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic39$ = SubLObjectFactory.makeSymbol("?TEST");
-        $ic40$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestQueryFn"));
+        $ic40$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestQueryFn"));
         $ic41$ = SubLObjectFactory.makeString("");
         $ic42$ = SubLObjectFactory.makeSymbol("STRING-LESSP");
         $ic43$ = SubLObjectFactory.makeSymbol("S#48554", "CYC");

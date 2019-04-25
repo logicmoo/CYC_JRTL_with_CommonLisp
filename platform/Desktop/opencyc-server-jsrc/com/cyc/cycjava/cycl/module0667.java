@@ -3242,7 +3242,7 @@ public final class module0667 extends SubLTranslatedFile
         $ic117$ = SubLObjectFactory.makeSymbol("SET-NAVIGATOR-PREFERENCES");
         $ic118$ = SubLObjectFactory.makeInteger(200);
         $ic119$ = SubLObjectFactory.makeSymbol("HANDLE-NAVIGATOR-PREFERENCES");
-        $ic120$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
+        $ic120$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
         $ic121$ = SubLObjectFactory.makeString("Please Login Now");
         $ic122$ = SubLObjectFactory.makeSymbol("GUEST-WARN");
         $ic123$ = SubLObjectFactory.makeString("Sorry, ~a cannot be used by people logged in as ");

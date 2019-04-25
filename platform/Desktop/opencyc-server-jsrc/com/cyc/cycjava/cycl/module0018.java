@@ -526,7 +526,7 @@ public final class module0018 extends SubLTranslatedFile
     }
     
     public static SubLObject f973() {
-        return Numbers.numG(module0128.f8433(), (SubLObject)module0018.$ic28$);
+        return Numbers.numG(constant_handles_oc.f8433(), (SubLObject)module0018.$ic28$);
     }
     
     public static SubLObject f974() {

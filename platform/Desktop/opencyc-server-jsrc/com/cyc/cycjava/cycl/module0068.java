@@ -277,7 +277,7 @@ public final class module0068 extends SubLTranslatedFile
     
     public static SubLObject f4930(final SubLObject var4) {
         final SubLThread var5 = SubLProcess.currentSubLThread();
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0068.NIL == var4 || var4.isFixnum() || module0068.NIL != module0021.f1140(var4) || module0068.NIL != module0206.f13500(var4) || (module0068.NIL == module0021.f1102() && module0068.NIL == conses_high.getf(module0068.$g1096$.getDynamicValue(var5), (SubLObject)module0068.$ic33$, (SubLObject)module0068.UNPROVIDED) && (module0068.NIL != module0128.f8449(var4) || module0068.NIL != module0167.f10813(var4) || module0068.NIL != module0174.f11035(var4))));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0068.NIL == var4 || var4.isFixnum() || module0068.NIL != module0021.f1140(var4) || module0068.NIL != module0206.f13500(var4) || (module0068.NIL == module0021.f1102() && module0068.NIL == conses_high.getf(module0068.$g1096$.getDynamicValue(var5), (SubLObject)module0068.$ic33$, (SubLObject)module0068.UNPROVIDED) && (module0068.NIL != constant_handles_oc.f8449(var4) || module0068.NIL != module0167.f10813(var4) || module0068.NIL != assertion_handles_oc.f11035(var4))));
     }
     
     public static SubLObject f4923(final SubLObject var31) {
@@ -507,7 +507,7 @@ public final class module0068 extends SubLTranslatedFile
         $ic35$ = SubLObjectFactory.makeSymbol("S#748", "CYC");
         $ic36$ = SubLObjectFactory.makeSymbol("S#6490", "CYC");
         $ic37$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#6507", "CYC"), (SubLObject)module0068.NIL));
-        $ic38$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("COUNT"));
+        $ic38$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("COUNT"));
         $ic39$ = SubLObjectFactory.makeString("~&CFASL compression dictionary:~%");
         $ic40$ = SubLObjectFactory.makeSymbol(">");
         $ic41$ = SubLObjectFactory.makeSymbol("CDR");

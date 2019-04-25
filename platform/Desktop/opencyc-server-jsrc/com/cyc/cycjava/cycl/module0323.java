@@ -1357,7 +1357,7 @@ public final class module0323 extends SubLTranslatedFile
         $ic19$ = SubLObjectFactory.makeSymbol("S#24481", "CYC");
         $ic20$ = SubLObjectFactory.makeKeyword("WEAK");
         $ic21$ = SubLObjectFactory.makeSymbol("INTEGERP");
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("weak-HL-TimePrecedence"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("weak-HL-TimePrecedence"));
         $ic23$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#24484", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#24485", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#13149", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#24486", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("S#24487", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic24$ = SubLObjectFactory.makeUninternedSymbol("US#33798D3");
         $ic25$ = SubLObjectFactory.makeSymbol("S#24463", "CYC");

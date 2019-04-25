@@ -135,7 +135,7 @@ public final class module0799 extends SubLTranslatedFile
     public static SubLObject f51069(final SubLObject var6) {
         assert module0799.NIL != Types.stringp(var6) : var6;
         Storage.gc_full();
-        module0618.f37949(var6);
+        oc_dumper.load_kb(var6);
         module0110.f7677((SubLObject)module0799.$ic21$, (SubLObject)module0799.UNPROVIDED);
         return (SubLObject)module0799.NIL;
     }
@@ -218,9 +218,9 @@ public final class module0799 extends SubLTranslatedFile
         $ic4$ = SubLObjectFactory.makeKeyword("CYC-API");
         $ic5$ = SubLObjectFactory.makeKeyword("CFASL");
         $ic6$ = SubLObjectFactory.makeString("~&Ready for services.~%");
-        $ic7$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycAdministrator")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("HumanCyclist")));
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CyclistDefinitionalMt"));
-        $ic9$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistPrimaryProject")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycAdministrator")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("OpenCycProject")));
+        $ic7$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycAdministrator")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HumanCyclist")));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CyclistDefinitionalMt"));
+        $ic9$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistPrimaryProject")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycAdministrator")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("OpenCycProject")));
         $ic10$ = SubLObjectFactory.makeSymbol("S#55678", "CYC");
         $ic11$ = SubLObjectFactory.makeSymbol("OPEN-CYC-BUILD-WORLD");
         $ic12$ = SubLObjectFactory.makeSymbol("STRINGP");

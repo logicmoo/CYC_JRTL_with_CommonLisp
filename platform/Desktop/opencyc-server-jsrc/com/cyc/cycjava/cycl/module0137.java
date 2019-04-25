@@ -1284,15 +1284,15 @@ public final class module0137 extends SubLTranslatedFile
         $ic125$ = SubLObjectFactory.makeSymbol("S#11190", "CYC");
         $ic126$ = SubLObjectFactory.makeSymbol("FIF");
         $ic127$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11190", "CYC"));
-        $ic128$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DirectedMultigraph"));
-        $ic129$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Multigraph"));
+        $ic128$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DirectedMultigraph"));
+        $ic129$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Multigraph"));
         $ic130$ = SubLObjectFactory.makeString("Term, ~a, is not used to specify directed nor undirected graphs");
         $ic131$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeUninternedSymbol("US#3165895"), (SubLObject)SubLObjectFactory.makeSymbol("S#205", "CYC"));
         $ic132$ = SubLObjectFactory.makeSymbol("S#11182", "CYC");
         $ic133$ = SubLObjectFactory.makeSymbol(">");
         $ic134$ = SubLObjectFactory.makeSymbol("SECOND");
         $ic135$ = SubLObjectFactory.makeSymbol("FIRST");
-        $ic136$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic136$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
     }
     
     public static final class $sX11098_native extends SubLStructNative

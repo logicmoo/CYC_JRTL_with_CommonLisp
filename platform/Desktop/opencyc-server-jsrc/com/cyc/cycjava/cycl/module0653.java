@@ -274,7 +274,7 @@ public final class module0653 extends SubLTranslatedFile
         $ic5$ = SubLObjectFactory.makeSymbol("S#9932", "CYC");
         $ic6$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC"));
         $ic7$ = SubLObjectFactory.makeSymbol("1+");
-        $ic8$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#43628", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("COMMENT"));
+        $ic8$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#43628", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("COMMENT"));
         $ic9$ = SubLObjectFactory.makeUninternedSymbol("US#68619E7");
         $ic10$ = SubLObjectFactory.makeString("SET-~A");
         $ic11$ = SubLObjectFactory.makeSymbol("S#439", "CYC");
@@ -288,7 +288,7 @@ public final class module0653 extends SubLTranslatedFile
         $ic19$ = SubLObjectFactory.makeSymbol("S#43624", "CYC");
         $ic20$ = SubLObjectFactory.makeString("Should we use the content of ~A. This is set to nil when the user is not filtering based on this parameter.");
         $ic21$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43629", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic22$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43630", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#43631", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43632", "CYC"), (SubLObject)SubLObjectFactory.makeInteger(50)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43633", "CYC"), (SubLObject)module0653.THREE_INTEGER), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43634", "CYC"), (SubLObject)module0653.NIL), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43635", "CYC"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing"))));
+        $ic22$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43630", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#43631", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43632", "CYC"), (SubLObject)SubLObjectFactory.makeInteger(50)), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43633", "CYC"), (SubLObject)module0653.THREE_INTEGER), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43634", "CYC"), (SubLObject)module0653.NIL), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#43635", "CYC"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing"))));
         $ic23$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MAX-RESULTS"), (SubLObject)SubLObjectFactory.makeKeyword("MIN-QUERY-LENGTH"), (SubLObject)SubLObjectFactory.makeKeyword("EMBEDDED-IN-TOOLBAR-FRAME?"), (SubLObject)SubLObjectFactory.makeKeyword("FILTER-TERM"));
         $ic24$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");
         $ic25$ = SubLObjectFactory.makeKeyword("MAX-RESULTS");
@@ -296,7 +296,7 @@ public final class module0653 extends SubLTranslatedFile
         $ic27$ = SubLObjectFactory.makeKeyword("MIN-QUERY-LENGTH");
         $ic28$ = SubLObjectFactory.makeKeyword("EMBEDDED-IN-TOOLBAR-FRAME?");
         $ic29$ = SubLObjectFactory.makeKeyword("FILTER-TERM");
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
         $ic31$ = SubLObjectFactory.makeSymbol("S#1635", "CYC");
     }
 }

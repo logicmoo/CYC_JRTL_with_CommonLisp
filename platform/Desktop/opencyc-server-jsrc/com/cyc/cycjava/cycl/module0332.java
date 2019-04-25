@@ -172,10 +172,10 @@ public final class module0332 extends SubLTranslatedFile
     }
     
     public static SubLObject f22403(final SubLObject var2, final SubLObject var5, final SubLObject var6, final SubLObject var12) {
-        assert module0332.NIL != module0174.f11035(var2) : var2;
+        assert module0332.NIL != assertion_handles_oc.f11035(var2) : var2;
         assert module0332.NIL != module0173.f10955(var5) : var5;
         assert module0332.NIL != module0173.f10955(var6) : var6;
-        assert module0332.NIL != module0174.f11035(var12) : var12;
+        assert module0332.NIL != assertion_handles_oc.f11035(var12) : var12;
         final SubLObject var13 = module0211.f13654(var2);
         if (module0332.NIL != f22407(var13, var5, var6)) {
             final SubLObject var14 = f22408(var13, var5, var6);
@@ -386,11 +386,11 @@ public final class module0332 extends SubLTranslatedFile
         module0332.$g2846$ = null;
         module0332.$g2847$ = null;
         module0332.$g2848$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("rewriteOf"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("rewriteOf"));
         $ic1$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic2$ = SubLObjectFactory.makeSymbol("REWRITE-OF-AFTER-ADDING");
         $ic3$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic5$ = SubLObjectFactory.makeSymbol("S#24914", "CYC");
         $ic6$ = SubLObjectFactory.makeSymbol("S#24912", "CYC");
         $ic7$ = SubLObjectFactory.makeKeyword("GAF");
@@ -399,7 +399,7 @@ public final class module0332 extends SubLTranslatedFile
         $ic10$ = SubLObjectFactory.makeKeyword("PROPAGATE-REWRITE-OF-CNF");
         $ic11$ = SubLObjectFactory.makeSymbol("S#16025", "CYC");
         $ic12$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
     }
     
     public static final class $f22406$UnaryFunction extends UnaryFunction

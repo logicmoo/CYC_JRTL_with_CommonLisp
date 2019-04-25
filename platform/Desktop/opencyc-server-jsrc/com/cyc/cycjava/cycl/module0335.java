@@ -150,7 +150,7 @@ public final class module0335 extends SubLTranslatedFile
     }
     
     public static SubLObject f22579(final SubLObject var26) {
-        assert module0335.NIL != module0174.f11035(var26) : var26;
+        assert module0335.NIL != assertion_handles_oc.f11035(var26) : var26;
         return (SubLObject)ConsesLow.list(module0178.f11287(var26), module0178.f11282(var26));
     }
     
@@ -540,7 +540,7 @@ public final class module0335 extends SubLTranslatedFile
                 cdestructuring_bind.destructuring_bind_must_consp(var114_115, var112_113, (SubLObject)module0335.$ic41$);
                 var58 = var114_115.first();
                 var114_115 = (var59 = var114_115.rest());
-                if (module0335.NIL != module0174.f11035(var55)) {
+                if (module0335.NIL != assertion_handles_oc.f11035(var55)) {
                     var52.resetMultipleValues();
                     final SubLObject var60 = f22592(Mapping.mapcar(Symbols.symbol_function((SubLObject)module0335.$ic42$), var56));
                     final SubLObject var61 = var52.secondMultipleValue();
@@ -569,7 +569,7 @@ public final class module0335 extends SubLTranslatedFile
                             var70 = var126_127.first();
                             final SubLObject var71;
                             var126_127 = (var71 = var126_127.rest());
-                            if (module0335.NIL != module0174.f11035(var69) && module0335.NIL == module0178.f11284(var69)) {
+                            if (module0335.NIL != assertion_handles_oc.f11035(var69) && module0335.NIL == module0178.f11284(var69)) {
                                 SubLObject var131_132;
                                 final SubLObject var129_130 = var131_132 = var68;
                                 SubLObject var72 = (SubLObject)module0335.NIL;
@@ -734,7 +734,7 @@ public final class module0335 extends SubLTranslatedFile
         $ic37$ = SubLObjectFactory.makeString("stop");
         $ic38$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#25185", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#25186", "CYC"));
         $ic39$ = SubLObjectFactory.makeSymbol("S#25160", "CYC");
-        $ic40$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#25187", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#25188", "CYC"));
+        $ic40$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#25187", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#25188", "CYC"));
         $ic41$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#25189", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12576", "CYC"));
         $ic42$ = SubLObjectFactory.makeSymbol("CAR");
         $ic43$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#25190", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#14595", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#25174", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&REST"), (SubLObject)SubLObjectFactory.makeSymbol("S#24422", "CYC"));

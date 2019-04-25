@@ -897,7 +897,7 @@ public final class module0427 extends SubLTranslatedFile
         final SubLObject var73 = module0428.f30340(var71);
         final SubLObject var74 = module0428.f30341(var71);
         final SubLObject var75 = f30237(var1);
-        if (module0427.NIL == module0166.f10737(var75)) {
+        if (module0427.NIL == constants_high_oc.f10737(var75)) {
             final SubLObject var76 = module0543.f33623(var75, (SubLObject)module0427.UNPROVIDED);
             if (module0427.NIL != var70) {
                 module0543.f33631((SubLObject)ConsesLow.listS(module0427.$ic57$, var76, (SubLObject)module0427.$ic58$), module0427.$ic59$, (SubLObject)module0427.UNPROVIDED, (SubLObject)module0427.UNPROVIDED);
@@ -924,7 +924,7 @@ public final class module0427 extends SubLTranslatedFile
     }
     
     public static SubLObject f30239(final SubLObject var36) {
-        final SubLObject var37 = module0166.f10743(var36);
+        final SubLObject var37 = constants_high_oc.f10743(var36);
         return module0038.f2703(var37, (SubLObject)Characters.CHAR_hyphen);
     }
     
@@ -1828,7 +1828,7 @@ public final class module0427 extends SubLTranslatedFile
     public static SubLObject f30260() {
         final SubLThread var44 = SubLProcess.currentSubLThread();
         SubLObject var45 = (SubLObject)module0427.NIL;
-        final SubLObject var46 = module0174.f11010();
+        final SubLObject var46 = assertion_handles_oc.f11010();
         final SubLObject var47 = (SubLObject)module0427.$ic113$;
         final SubLObject var48 = module0065.f4733(var46);
         SubLObject var49 = (SubLObject)module0427.ZERO_INTEGER;
@@ -1901,7 +1901,7 @@ public final class module0427 extends SubLTranslatedFile
     public static SubLObject f30261() {
         final SubLThread var44 = SubLProcess.currentSubLThread();
         SubLObject var45 = (SubLObject)module0427.NIL;
-        final SubLObject var46 = module0174.f11010();
+        final SubLObject var46 = assertion_handles_oc.f11010();
         final SubLObject var47 = (SubLObject)module0427.$ic115$;
         final SubLObject var48 = module0065.f4733(var46);
         SubLObject var49 = (SubLObject)module0427.ZERO_INTEGER;
@@ -2680,7 +2680,7 @@ public final class module0427 extends SubLTranslatedFile
         final SubLThread var44 = SubLProcess.currentSubLThread();
         SubLObject var45 = (SubLObject)module0427.NIL;
         final SubLObject var46 = (SubLObject)module0427.$ic120$;
-        final SubLObject var47 = module0177.f11226();
+        final SubLObject var47 = oc_assertions_low.f11226();
         SubLObject var48 = (SubLObject)module0427.ZERO_INTEGER;
         final SubLObject var49 = module0012.$g75$.currentBinding(var44);
         final SubLObject var50 = module0012.$g76$.currentBinding(var44);
@@ -2692,7 +2692,7 @@ public final class module0427 extends SubLTranslatedFile
             module0012.$g77$.bind((SubLObject)module0427.T, var44);
             module0012.$g78$.bind(Time.get_universal_time(), var44);
             module0012.f478(var46);
-            final SubLObject var53 = module0031.f1696(module0177.f11224());
+            final SubLObject var53 = module0031.f1696(oc_assertions_low.f11224());
             final SubLObject var54 = (SubLObject)module0427.NIL;
             SubLObject var55;
             SubLObject var56;
@@ -2735,7 +2735,7 @@ public final class module0427 extends SubLTranslatedFile
         for (var252 = module0032.f1741(var251), var253 = (SubLObject)module0427.NIL, var253 = module0032.f1742(var252, var251); module0427.NIL == module0032.f1744(var252, var253); var253 = module0032.f1743(var253)) {
             var254 = module0032.f1745(var252, var253);
             if (module0427.NIL != module0032.f1746(var253, var254)) {
-                if (module0427.NIL == module0184.f11659(var254)) {
+                if (module0427.NIL == oc_deduction_handles.f11659(var254)) {
                     return (SubLObject)module0427.T;
                 }
                 if (module0427.NIL == module0211.f13649(module0188.f11781(var254), module0427.$ic121$)) {
@@ -2789,7 +2789,7 @@ public final class module0427 extends SubLTranslatedFile
         final SubLThread var44 = SubLProcess.currentSubLThread();
         SubLObject var45 = (SubLObject)module0427.NIL;
         final SubLObject var46 = (SubLObject)module0427.$ic120$;
-        final SubLObject var47 = module0177.f11226();
+        final SubLObject var47 = oc_assertions_low.f11226();
         SubLObject var48 = (SubLObject)module0427.ZERO_INTEGER;
         final SubLObject var49 = module0012.$g75$.currentBinding(var44);
         final SubLObject var50 = module0012.$g76$.currentBinding(var44);
@@ -2801,7 +2801,7 @@ public final class module0427 extends SubLTranslatedFile
             module0012.$g77$.bind((SubLObject)module0427.T, var44);
             module0012.$g78$.bind(Time.get_universal_time(), var44);
             module0012.f478(var46);
-            final SubLObject var53 = module0031.f1696(module0177.f11224());
+            final SubLObject var53 = module0031.f1696(oc_assertions_low.f11224());
             final SubLObject var54 = (SubLObject)module0427.NIL;
             SubLObject var55;
             SubLObject var56;
@@ -6203,7 +6203,7 @@ public final class module0427 extends SubLTranslatedFile
     public static SubLObject f30324(final SubLObject var515) {
         SubLObject var516 = (SubLObject)module0427.$ic228$;
         SubLObject var517 = (SubLObject)module0427.ZERO_INTEGER;
-        final SubLObject var518 = module0369.f25791(var515);
+        final SubLObject var518 = oc_inference_datastructures_inference.f25791(var515);
         if (module0427.NIL != var518) {
             SubLObject var519 = module0366.f24977(var518);
             SubLObject var520 = (SubLObject)module0427.NIL;
@@ -6242,7 +6242,7 @@ public final class module0427 extends SubLTranslatedFile
         final SubLObject var528 = var525.secondMultipleValue();
         final SubLObject var529 = var525.thirdMultipleValue();
         var525.resetMultipleValues();
-        final SubLObject var530 = module0369.f25597(var529);
+        final SubLObject var530 = oc_inference_datastructures_inference.f25597(var529);
         SubLObject var531 = module0363.f24517(var530);
         SubLObject var532 = (SubLObject)module0427.NIL;
         var532 = var531.first();
@@ -6259,9 +6259,9 @@ public final class module0427 extends SubLTranslatedFile
     }
     
     public static SubLObject f30327(final SubLObject var515) {
-        final SubLObject var516 = module0369.f25597(var515);
+        final SubLObject var516 = oc_inference_datastructures_inference.f25597(var515);
         if (module0427.NIL != var516) {
-            return f30328(var516, module0369.f25606(var515));
+            return f30328(var516, oc_inference_datastructures_inference.f25606(var515));
         }
         return (SubLObject)module0427.NIL;
     }
@@ -6495,9 +6495,9 @@ public final class module0427 extends SubLTranslatedFile
         $ic24$ = SubLObjectFactory.makeSymbol("FWHEN");
         $ic25$ = SubLObjectFactory.makeSymbol("S#33418", "CYC");
         $ic26$ = SubLObjectFactory.makeSymbol("S#32922", "CYC");
-        $ic27$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentLeviathanQuery"));
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("HALOLeviathanQuery"));
-        $ic29$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery"));
+        $ic27$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentLeviathanQuery"));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HALOLeviathanQuery"));
+        $ic29$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery"));
         $ic30$ = SubLObjectFactory.makeString("data/haystacks/");
         $ic31$ = SubLObjectFactory.makeString("-haystack-");
         $ic32$ = SubLObjectFactory.makeString(".cfasl");
@@ -6525,16 +6525,16 @@ public final class module0427 extends SubLTranslatedFile
         $ic54$ = SubLObjectFactory.makeString("~%~%Total crippled haystacks: ~a");
         $ic55$ = SubLObjectFactory.makeString("Reifying all instantiated haystacks");
         $ic56$ = SubLObjectFactory.makeString("Reifying all crippled haystacks");
-        $ic57$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic58$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Uncrippled")));
-        $ic59$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
-        $ic60$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Crippled")));
-        $ic61$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
-        $ic62$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueInSpecification"));
-        $ic63$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferenceMaxTransformationStepsParameter"));
-        $ic64$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("canonicalizerDirectiveForArg")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueInSpecification")), (SubLObject)module0427.TWO_INTEGER, module0128.f8479((SubLObject)SubLObjectFactory.makeString("LeaveSomeTermsAtEL")));
-        $ic65$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyImplementationMt"));
-        $ic66$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferenceAllowedRulesParameter"));
+        $ic57$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic58$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Uncrippled")));
+        $ic59$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
+        $ic60$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Crippled")));
+        $ic61$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
+        $ic62$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueInSpecification"));
+        $ic63$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferenceMaxTransformationStepsParameter"));
+        $ic64$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("canonicalizerDirectiveForArg")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueInSpecification")), (SubLObject)module0427.TWO_INTEGER, constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LeaveSomeTermsAtEL")));
+        $ic65$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyImplementationMt"));
+        $ic66$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferenceAllowedRulesParameter"));
         $ic67$ = SubLObjectFactory.makeString("LeviathanHaystack-");
         $ic68$ = SubLObjectFactory.makeKeyword("MAX-TRANSFORMATION-DEPTH");
         $ic69$ = SubLObjectFactory.makeString("Removing duplicate haystacks");
@@ -6542,19 +6542,19 @@ public final class module0427 extends SubLTranslatedFile
         $ic71$ = SubLObjectFactory.makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
         $ic72$ = SubLObjectFactory.makeString("haystacks-20050425-focused");
         $ic73$ = SubLObjectFactory.makeString("haystacks-20050425-exploratory");
-        $ic74$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedHaystackQuery")));
-        $ic75$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Uncrippled"));
+        $ic74$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedHaystackQuery")));
+        $ic75$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Uncrippled"));
         $ic76$ = SubLObjectFactory.makeString("deep-queries-with-1-backchain");
-        $ic77$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentLeviathanQuery")));
-        $ic78$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentLeviathanQuery-Training"));
-        $ic79$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentLeviathanQuery-Blind"));
-        $ic80$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("HALOLeviathanQuery-Training"));
-        $ic81$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("HALOLeviathanQuery-Blind"));
-        $ic82$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Uncrippled-Training"));
-        $ic83$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Uncrippled-Blind"));
-        $ic84$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Crippled"));
-        $ic85$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Crippled-Training"));
-        $ic86$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Crippled-Blind"));
+        $ic77$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentLeviathanQuery")));
+        $ic78$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentLeviathanQuery-Training"));
+        $ic79$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentLeviathanQuery-Blind"));
+        $ic80$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HALOLeviathanQuery-Training"));
+        $ic81$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HALOLeviathanQuery-Blind"));
+        $ic82$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Uncrippled-Training"));
+        $ic83$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Uncrippled-Blind"));
+        $ic84$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Crippled"));
+        $ic85$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Crippled-Training"));
+        $ic86$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Crippled-Blind"));
         $ic87$ = (SubLFloat)SubLObjectFactory.makeDouble(0.8);
         $ic88$ = SubLObjectFactory.makeString("Oops, off by one error in first-n / last-n");
         $ic89$ = SubLObjectFactory.makeString("could not unassert ~a at Cyc layer");
@@ -6563,8 +6563,8 @@ public final class module0427 extends SubLTranslatedFile
         $ic92$ = SubLObjectFactory.makeString("kb-content-training-justifications-rabbit-hole-20050426");
         $ic93$ = SubLObjectFactory.makeString("Asserting allowed rules for answerable queries");
         $ic94$ = SubLObjectFactory.makeSymbol("S#12732", "CYC");
-        $ic95$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
-        $ic96$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("LeviathanQuery-Training"));
+        $ic95$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
+        $ic96$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LeviathanQuery-Training"));
         $ic97$ = SubLObjectFactory.makeKeyword("BREADTH");
         $ic98$ = SubLObjectFactory.makeKeyword("QUEUE");
         $ic99$ = SubLObjectFactory.makeKeyword("STACK");
@@ -6589,7 +6589,7 @@ public final class module0427 extends SubLTranslatedFile
         $ic118$ = SubLObjectFactory.makeSymbol("TRANSFORMATION-RULE-SUCCESS-COUNT");
         $ic119$ = SubLObjectFactory.makeString("cdolist");
         $ic120$ = SubLObjectFactory.makeString("mapping Cyc rules");
-        $ic121$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("skolem"));
+        $ic121$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("skolem"));
         $ic122$ = SubLObjectFactory.makeSymbol("S#38", "CYC");
         $ic123$ = SubLObjectFactory.makeString("~A");
         $ic124$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SUCKY-SKOLEM-RULE"), SubLObjectFactory.makeKeyword("NEGATIVE-UTILITY-SKOLEM-RULE"), SubLObjectFactory.makeKeyword("SUCKY-RULE"), SubLObjectFactory.makeKeyword("INERT-SKOLEM-RULE"), SubLObjectFactory.makeKeyword("NEVER-CONSIDERED-FORWARD-SKOLEM-RULE"), SubLObjectFactory.makeKeyword("NEVER-CONSIDERED-BACKWARD-SKOLEM-RULE"), SubLObjectFactory.makeKeyword("INERT-RULE"), SubLObjectFactory.makeKeyword("UNSUCCESSFUL-FORWARD-RULE"), SubLObjectFactory.makeKeyword("UNSUCCESSFUL-BACKWARD-RULE-WITH-DEPENDENTS"), SubLObjectFactory.makeKeyword("SUCCESSFUL-SKOLEM-RULE"), SubLObjectFactory.makeKeyword("BACKWARD-SUCCESSFUL-BACKWARD-RULE"), SubLObjectFactory.makeKeyword("BACKWARD-SUCCESSFUL-FORWARD-RULE"), SubLObjectFactory.makeKeyword("SUCCESSFUL-FORWARD-RULE"), SubLObjectFactory.makeKeyword("OTHER") });
@@ -6607,12 +6607,12 @@ public final class module0427 extends SubLTranslatedFile
         $ic136$ = SubLObjectFactory.makeKeyword("UNSUCCESSFUL-FORWARD-RULE");
         $ic137$ = SubLObjectFactory.makeKeyword("UNSUCCESSFUL-BACKWARD-RULE-WITH-DEPENDENTS");
         $ic138$ = SubLObjectFactory.makeKeyword("OTHER");
-        $ic139$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Training"));
-        $ic140$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycLQuerySpecification"));
+        $ic139$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AutogeneratedLeviathanQuery-Training"));
+        $ic140$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycLQuerySpecification"));
         $ic141$ = SubLObjectFactory.makeKeyword("CONDITIONAL-SENTENCE?");
-        $ic142$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
-        $ic143$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferenceConditionalSentenceParameter"));
-        $ic144$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True"));
+        $ic142$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic143$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferenceConditionalSentenceParameter"));
+        $ic144$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True"));
         $ic145$ = SubLObjectFactory.makeString("pre-halo-training-rule-bindings-to-closed-20050506");
         $ic146$ = SubLObjectFactory.makeKeyword("TRANSFORMATION-RULE-BINDINGS-TO-CLOSED");
         $ic147$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13097", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#713", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"));
@@ -6627,7 +6627,7 @@ public final class module0427 extends SubLTranslatedFile
         $ic156$ = SubLObjectFactory.makeString("Oracularly Answerable vs. Unanswerable ");
         $ic157$ = SubLObjectFactory.makeSymbol("S#33555", "CYC");
         $ic158$ = SubLObjectFactory.makeString("halo-queries-with-1-backchain-823-0524");
-        $ic159$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("HALOLeviathanQuery")));
+        $ic159$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HALOLeviathanQuery")));
         $ic160$ = SubLObjectFactory.makeString("Leviathan Training");
         $ic161$ = SubLObjectFactory.makeString(":0");
         $ic162$ = SubLObjectFactory.makeSymbol("S#8004", "CYC");

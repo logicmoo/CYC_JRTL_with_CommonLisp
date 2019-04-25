@@ -347,7 +347,7 @@ public final class module0136 extends SubLTranslatedFile
         $ic0$ = SubLObjectFactory.makeSymbol("CLET");
         $ic1$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11090", "CYC"), (SubLObject)module0136.NIL));
         $ic2$ = SubLObjectFactory.makeKeyword("ERROR");
-        $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11097", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#696", "CYC"), (SubLObject)module0136.ONE_INTEGER));
+        $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11097", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#696", "CYC"), (SubLObject)module0136.ONE_INTEGER));
         $ic4$ = SubLObjectFactory.makeSymbol("PWHEN");
         $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11075", "CYC"));
         $ic6$ = SubLObjectFactory.makeSymbol("PUNLESS");

@@ -322,23 +322,23 @@ public final class module0771 extends SubLTranslatedFile
         $ic2$ = SubLObjectFactory.makeKeyword("DECENT");
         $ic3$ = SubLObjectFactory.makeString("The steps in the script ~S:~%~%");
         $ic4$ = SubLObjectFactory.makeSymbol("S#15431", "CYC");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SomeFn"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SomeFn"));
         $ic6$ = SubLObjectFactory.makeString("PPH-HASH-ONE-ARG-KEYWORD: Hashing ~S -> ~S.~%");
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic8$ = SubLObjectFactory.makeString("(PPH error level ");
         $ic9$ = SubLObjectFactory.makeString(") ");
         $ic10$ = SubLObjectFactory.makeString("~&PPH-ADD-CONSTRAINTS: Non-binary constraint: ~S.~%");
         $ic11$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#750", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#751", "CYC"));
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationToFn"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationFromFn"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationToFn"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationFromFn"));
         $ic14$ = SubLObjectFactory.makeKeyword("ARG1");
-        $ic15$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Agent-Generic"));
+        $ic15$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Agent-Generic"));
         $ic16$ = SubLObjectFactory.makeString("PPH-ISA-CONSTRAINT-ON-ARG-KEYWORD: ~D #$isa constraints on ~S.~%");
-        $ic17$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("eventSequence"));
+        $ic17$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("eventSequence"));
         $ic18$ = SubLObjectFactory.makeString("~D. ~A");
         $ic19$ = SubLObjectFactory.makeString("~&PPH-REPHRASE-CLAUSE: Substituting ~S for~% ~S.~%");
         $ic20$ = SubLObjectFactory.makeString("~&PPH-REPHRASE-CLAUSE: Replacing ~s with ~s.~%");
-        $ic21$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheInstance"));
+        $ic21$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheInstance"));
     }
 }
 

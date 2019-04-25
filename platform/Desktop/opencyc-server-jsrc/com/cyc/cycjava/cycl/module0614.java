@@ -1279,20 +1279,20 @@ public final class module0614 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0614();
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TimeIntervalInclusiveFn"));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TimeIntervalBetweenFn"));
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("StartFn"));
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EndFn"));
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntervalStartedByFn"));
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntervalEndedByFn"));
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntervalStartedByFn-Inclusive"));
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntervalEndedByFn-Inclusive"));
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DateBeforeFn"));
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DateAfterFn"));
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntervalAfterFn"));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntervalBeforeFn"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TimeIntervalInclusiveFn"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TimeIntervalBetweenFn"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("StartFn"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EndFn"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntervalStartedByFn"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntervalEndedByFn"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntervalStartedByFn-Inclusive"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntervalEndedByFn-Inclusive"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DateBeforeFn"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DateAfterFn"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntervalAfterFn"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntervalBeforeFn"));
         $ic12$ = SubLObjectFactory.makeSymbol("S#34878", "CYC");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SomeTimeInIntervalFn"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SomeTimeInIntervalFn"));
         $ic14$ = SubLObjectFactory.makeInteger(36);
         $ic15$ = SubLObjectFactory.makeString("~a is not a proper time interval.");
         $ic16$ = SubLObjectFactory.makeKeyword("END");
@@ -1303,17 +1303,17 @@ public final class module0614 extends SubLTranslatedFile
         $ic21$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#124", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#34883", "CYC"));
         $ic22$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#125", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#34883", "CYC"));
         $ic23$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#41321", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#1519", "CYC"));
-        $ic24$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Always-TimeInterval"));
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ContinuousTimeInterval"));
-        $ic26$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheEmptyTimeInterval"));
+        $ic24$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Always-TimeInterval"));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ContinuousTimeInterval"));
+        $ic26$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheEmptyTimeInterval"));
         $ic27$ = SubLObjectFactory.makeSymbol("S#41116", "CYC");
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
-        $ic29$ = ConsesLow.list(new SubLObject[] { module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarSecond")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarMinute")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarHour")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarDay")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarMonth")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarYear")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarWeek")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarQuarter")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarDecade")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarCentury")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarHalfCentury")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarMillennium")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarWorkWeek")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarWeekend")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Weekday")) });
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("NthMetricallyPrecedingTimeIntervalOfTypeFn"));
-        $ic31$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("NthMetricallySucceedingTimeIntervalOfTypeFn"));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
+        $ic29$ = ConsesLow.list(new SubLObject[] { constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarSecond")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarMinute")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarHour")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarDay")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarMonth")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarYear")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarWeek")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarQuarter")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarDecade")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarCentury")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarHalfCentury")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarMillennium")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarWorkWeek")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarWeekend")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Weekday")) });
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("NthMetricallyPrecedingTimeIntervalOfTypeFn"));
+        $ic31$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("NthMetricallySucceedingTimeIntervalOfTypeFn"));
         $ic32$ = SubLObjectFactory.makeString("~a not a date-interval-p");
         $ic33$ = SubLObjectFactory.makeSymbol("S#34853", "CYC");
-        $ic34$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TimePointsDuration"));
+        $ic34$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TimePointsDuration"));
     }
 }
 

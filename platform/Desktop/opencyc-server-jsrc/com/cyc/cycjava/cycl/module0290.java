@@ -290,11 +290,11 @@ public final class module0290 extends SubLTranslatedFile
     }
     
     public static SubLObject f19519(final SubLObject var28) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0290.NIL != module0174.f11035(var28) || module0290.NIL != module0167.f10813(var28) || module0290.NIL != module0193.f12067(var28));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0290.NIL != assertion_handles_oc.f11035(var28) || module0290.NIL != module0167.f10813(var28) || module0290.NIL != module0193.f12067(var28));
     }
     
     public static SubLObject f19520(final SubLObject var28) {
-        if (module0290.NIL != module0174.f11035(var28)) {
+        if (module0290.NIL != assertion_handles_oc.f11035(var28)) {
             return f19521(var28);
         }
         if (module0290.NIL != module0167.f10813(var28)) {
@@ -357,7 +357,7 @@ public final class module0290 extends SubLTranslatedFile
         final SubLObject var38 = module0205.f13368(var37, (SubLObject)module0290.UNPROVIDED);
         final SubLObject var39 = f19510(module0205.f13277(var37, (SubLObject)module0290.UNPROVIDED));
         final SubLObject var40 = f19506(var38, var39);
-        if (module0290.NIL != module0174.f11035(var40)) {
+        if (module0290.NIL != assertion_handles_oc.f11035(var40)) {
             return var40;
         }
         module0202.f12747((SubLObject)module0290.THREE_INTEGER, (SubLObject)module0290.$ic17$, var37, (SubLObject)module0290.UNPROVIDED, (SubLObject)module0290.UNPROVIDED);
@@ -683,18 +683,18 @@ public final class module0290 extends SubLTranslatedFile
         module0290.$g2657$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("ASSERTION-P");
         $ic1$ = SubLObjectFactory.makeSymbol("S#22114", "CYC");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
         $ic3$ = SubLObjectFactory.makeSymbol("S#22132", "CYC");
         $ic4$ = SubLObjectFactory.makeSymbol("S#14910", "CYC");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("and"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and"));
         $ic6$ = SubLObjectFactory.makeSymbol("S#22110", "CYC");
         $ic7$ = SubLObjectFactory.makeSymbol("S#14108", "CYC");
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("or"));
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("not"));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TLAssertionFn"));
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TLReifiedNatFn"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TLVariableFn"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("or"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("not"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TLAssertionFn"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TLReifiedNatFn"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TLVariableFn"));
         $ic14$ = SubLObjectFactory.makeString("referenced assertion not found: ~%  ~s");
         $ic15$ = SubLObjectFactory.makeString("referenced function not found: ~%  ~s");
         $ic16$ = SubLObjectFactory.makeSymbol("QUOTE");

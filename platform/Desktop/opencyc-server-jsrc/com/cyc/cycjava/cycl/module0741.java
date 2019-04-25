@@ -1166,7 +1166,7 @@ public final class module0741 extends SubLTranslatedFile
     }
     
     public static SubLObject f45914(final SubLObject var152) {
-        final SubLObject var153 = module0618.f37917((SubLObject)module0741.$ic40$, var152, (SubLObject)module0741.UNPROVIDED);
+        final SubLObject var153 = oc_dumper.f37917((SubLObject)module0741.$ic40$, var152, (SubLObject)module0741.UNPROVIDED);
         if (module0741.NIL != module0067.f4852(module0741.$g5882$.getGlobalValue())) {
             return f45915(module0741.$g5882$.getGlobalValue(), var153, (SubLObject)module0741.UNPROVIDED);
         }
@@ -1234,7 +1234,7 @@ public final class module0741 extends SubLTranslatedFile
             var165 = module0018.f971();
         }
         if (module0741.NIL != module0004.f105(var165) && (!module0741.$g5880$.getGlobalValue().isString() || module0741.NIL == Filesys.probe_file(module0741.$g5880$.getGlobalValue()))) {
-            module0741.$g5880$.setGlobalValue(module0618.f37917((SubLObject)module0741.$ic40$, module0107.f7598(), (SubLObject)module0741.UNPROVIDED));
+            module0741.$g5880$.setGlobalValue(oc_dumper.f37917((SubLObject)module0741.$ic40$, module0107.f7598(), (SubLObject)module0741.UNPROVIDED));
         }
         return module0741.$g5880$.getGlobalValue();
     }
@@ -1338,14 +1338,14 @@ public final class module0741 extends SubLTranslatedFile
         $ic20$ = SubLObjectFactory.makeInteger(1000);
         $ic21$ = SubLObjectFactory.makeKeyword("UNINITIALIZED");
         $ic22$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic24$ = SubLObjectFactory.makeString("Indexing arg ");
         $ic25$ = SubLObjectFactory.makeString(" of ");
         $ic26$ = SubLObjectFactory.makeKeyword("GAF");
         $ic27$ = SubLObjectFactory.makeKeyword("ADDED");
         $ic28$ = SubLObjectFactory.makeString("Un-indexing arg ");
         $ic29$ = SubLObjectFactory.makeSymbol("S#36113", "CYC");
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("indexSubWordsForArg"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("indexSubWordsForArg"));
         $ic31$ = SubLObjectFactory.makeSymbol("S#50154", "CYC");
         $ic32$ = SubLObjectFactory.makeInteger(100);
         $ic33$ = SubLObjectFactory.makeKeyword("IMAGE-INDEPENDENT-CFASL");

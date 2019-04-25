@@ -1509,8 +1509,8 @@ public final class module0360 extends SubLTranslatedFile
     }
     
     public static SubLObject f23987(final SubLObject var42) {
-        assert module0360.NIL != module0369.f25275(var42) : var42;
-        final SubLObject var43 = module0369.f25483(var42);
+        assert module0360.NIL != oc_inference_datastructures_inference.f25275(var42) : var42;
+        final SubLObject var43 = oc_inference_datastructures_inference.f25483(var42);
         SubLObject var44 = (SubLObject)module0360.NIL;
         SubLObject var45;
         SubLObject var46;

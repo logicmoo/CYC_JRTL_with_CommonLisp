@@ -301,25 +301,25 @@ public final class module0298 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0298();
         module0298.$g2694$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("QueryProcessingRLModule"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("QueryProcessingRLModule"));
         $ic1$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("REQUIRED"), SubLObjectFactory.makeSymbol("S#22630", "CYC"), SubLObjectFactory.makeKeyword("COST"), SubLObjectFactory.makeSymbol("S#22628", "CYC"), SubLObjectFactory.makeKeyword("REFORMULATE"), SubLObjectFactory.makeSymbol("S#22636", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("Reformulates #$VariableFn expressions so that queries search for bindings of the appropriate type."), SubLObjectFactory.makeKeyword("EXAMPLE-SOURCE"), SubLObjectFactory.makeString("(#$contains-Underspecified (#$VariableFn ?WHICH-THING #$DNAMolecule)\n    #$Ribose)"), SubLObjectFactory.makeKeyword("EXAMPLE-TARGET"), SubLObjectFactory.makeString("(#$and\n     (#$genls ?WHICH-THING #$DNAMolecule)\n     (#$implies\n      (#$isa ?X ?WHICH-THING)\n      (#$contains-Underspecified ?WHICH-THING #$Ribose)))") });
         $ic2$ = SubLObjectFactory.makeInteger(1200);
         $ic3$ = SubLObjectFactory.makeKeyword("IGNORE");
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("VariableFn"));
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("noNotableInstances"));
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("QuantityVariableFn"));
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CardinalityOfFn"));
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("extentCardinality"));
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("and"));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("VariableFn"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("noNotableInstances"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("QuantityVariableFn"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CardinalityOfFn"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("extentCardinality"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic12$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?CARDIN"));
         $ic13$ = SubLObjectFactory.makeString("#$QuantityVariableFn");
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("is-Underspecified"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("is-Underspecified"));
         $ic15$ = SubLObjectFactory.makeString("CardinalityOfFn (QP) 1");
         $ic16$ = SubLObjectFactory.makeString("CardinalityOfFn 2");
-        $ic17$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic17$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic19$ = SubLObjectFactory.makeString("VariableFn specs");
         $ic20$ = SubLObjectFactory.makeString("VariableFn instances");
     }

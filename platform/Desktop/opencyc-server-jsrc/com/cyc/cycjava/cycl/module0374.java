@@ -24,14 +24,14 @@ public final class module0374 extends SubLTranslatedFile
     }
     
     public static SubLObject f26530(final SubLObject var2) {
-        assert module0374.NIL != module0369.f25275(var2) : var2;
+        assert module0374.NIL != oc_inference_datastructures_inference.f25275(var2) : var2;
         final SubLObject var3 = f26531(var2);
-        module0369.f25555(var2, var3);
+        oc_inference_datastructures_inference.f25555(var2, var3);
         return var3;
     }
     
     public static SubLObject f26531(final SubLObject var2) {
-        final SubLObject var3 = module0369.f25488(var2);
+        final SubLObject var3 = oc_inference_datastructures_inference.f25488(var2);
         final SubLObject var4 = module0364.f24730(var2, (SubLObject)module0374.$ic0$);
         f26532(var4, var3);
         return var4;

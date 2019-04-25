@@ -805,7 +805,7 @@ public final class module0417 extends SubLTranslatedFile
                         var77 = (SubLObject)module0417.$ic78$;
                     }
                     if (module0417.NIL == var58) {
-                        module0369.f25476(var81);
+                        oc_inference_datastructures_inference.f25476(var81);
                     }
                 }
                 catch (Throwable var85) {
@@ -1065,10 +1065,10 @@ public final class module0417 extends SubLTranslatedFile
         $ic54$ = SubLObjectFactory.makeSymbol("HL-MODULE-NAME");
         $ic55$ = SubLObjectFactory.makeSymbol("<");
         $ic56$ = SubLObjectFactory.makeSymbol("S#2609", "CYC");
-        $ic57$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeSymbol("S#29", "CYC"), SubLObjectFactory.makeSymbol("S#1519", "CYC"), SubLObjectFactory.makeSymbol("S#14349", "CYC"), SubLObjectFactory.makeSymbol("&KEY"), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"))), SubLObjectFactory.makeSymbol("S#5852", "CYC"), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2607", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("TINY")), SubLObjectFactory.makeSymbol("S#2605", "CYC"), SubLObjectFactory.makeSymbol("COMMENT"), SubLObjectFactory.makeSymbol("S#32378", "CYC"), SubLObjectFactory.makeSymbol("S#32379", "CYC"), SubLObjectFactory.makeSymbol("CREATOR"), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2608", "CYC"), (SubLObject)module0417.T) });
+        $ic57$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeSymbol("S#29", "CYC"), SubLObjectFactory.makeSymbol("S#1519", "CYC"), SubLObjectFactory.makeSymbol("S#14349", "CYC"), SubLObjectFactory.makeSymbol("&KEY"), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"))), SubLObjectFactory.makeSymbol("S#5852", "CYC"), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2607", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("TINY")), SubLObjectFactory.makeSymbol("S#2605", "CYC"), SubLObjectFactory.makeSymbol("COMMENT"), SubLObjectFactory.makeSymbol("S#32378", "CYC"), SubLObjectFactory.makeSymbol("S#32379", "CYC"), SubLObjectFactory.makeSymbol("CREATOR"), ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#2608", "CYC"), (SubLObject)module0417.T) });
         $ic58$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("MT"), SubLObjectFactory.makeKeyword("PROPERTIES"), SubLObjectFactory.makeKeyword("KB"), SubLObjectFactory.makeKeyword("OWNER"), SubLObjectFactory.makeKeyword("COMMENT"), SubLObjectFactory.makeKeyword("BUG"), SubLObjectFactory.makeKeyword("CREATED"), SubLObjectFactory.makeKeyword("CREATOR"), SubLObjectFactory.makeKeyword("WORKING?") });
         $ic59$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");
-        $ic60$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic60$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
         $ic61$ = SubLObjectFactory.makeKeyword("TINY");
         $ic62$ = SubLObjectFactory.makeKeyword("BUG");
         $ic63$ = SubLObjectFactory.makeKeyword("CREATED");

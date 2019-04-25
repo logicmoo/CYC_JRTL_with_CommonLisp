@@ -281,13 +281,13 @@ public final class module0435 extends SubLTranslatedFile
         module0435.$g3535$ = null;
         module0435.$g3536$ = null;
         module0435.$g3537$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic1$ = SubLObjectFactory.makeKeyword("ISA");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
         $ic3$ = SubLObjectFactory.makeKeyword("GENLPREDS");
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic5$ = SubLObjectFactory.makeKeyword("CODE");
-        $ic6$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("equals")), (SubLObject)SubLObjectFactory.makeSymbol("?X"), (SubLObject)SubLObjectFactory.makeSymbol("?X"));
+        $ic6$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("equals")), (SubLObject)SubLObjectFactory.makeSymbol("?X"), (SubLObject)SubLObjectFactory.makeSymbol("?X"));
         $ic7$ = SubLObjectFactory.makeKeyword("TRUE-MON");
         $ic8$ = SubLObjectFactory.makeString("~%;;; System ~a HL module statistics");
         $ic9$ = SubLObjectFactory.makeString("~%HL Modules                   : ~6,' D");

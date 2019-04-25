@@ -194,7 +194,7 @@ public final class module0489 extends SubLTranslatedFile
     public static SubLObject f32011() {
         final SubLObject var14 = module0339.f22757();
         if (module0489.NIL != var14) {
-            final SubLObject var15 = module0369.f25421(var14);
+            final SubLObject var15 = oc_inference_datastructures_inference.f25421(var14);
             return module0507.f32383(var15);
         }
         return (SubLObject)module0489.NIL;
@@ -275,45 +275,45 @@ public final class module0489 extends SubLTranslatedFile
         module0489.$g3722$ = null;
         module0489.$g3723$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("CYC-INDEXICAL-REFERENT");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent"));
         $ic2$ = SubLObjectFactory.makeKeyword("POS");
         $ic3$ = SubLObjectFactory.makeKeyword("REMOVAL-INDEXICAL-REFERENT-POS");
-        $ic4$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("POS"), SubLObjectFactory.makeKeyword("PREDICATE"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent")), SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("AND"), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#35335", "CYC"))), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING")), SubLObjectFactory.makeKeyword("COST-EXPRESSION"), SubLObjectFactory.makeSymbol("S#35355", "CYC"), SubLObjectFactory.makeKeyword("COMPLETENESS"), SubLObjectFactory.makeKeyword("COMPLETE"), SubLObjectFactory.makeKeyword("INPUT-EXTRACT-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEMPLATE"), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#35357", "CYC")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)SubLObjectFactory.makeSymbol("S#35357", "CYC"))), SubLObjectFactory.makeKeyword("OUTPUT-GENERATE-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#10716", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#35339", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("INPUT"))), SubLObjectFactory.makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)SubLObjectFactory.makeSymbol("S#35357", "CYC")), (SubLObject)SubLObjectFactory.makeKeyword("INPUT")) });
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("HypotheticalContext"));
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termDependsOn"));
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("QueryMt"));
+        $ic4$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("POS"), SubLObjectFactory.makeKeyword("PREDICATE"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent")), SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("AND"), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#35335", "CYC"))), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING")), SubLObjectFactory.makeKeyword("COST-EXPRESSION"), SubLObjectFactory.makeSymbol("S#35355", "CYC"), SubLObjectFactory.makeKeyword("COMPLETENESS"), SubLObjectFactory.makeKeyword("COMPLETE"), SubLObjectFactory.makeKeyword("INPUT-EXTRACT-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEMPLATE"), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#35357", "CYC")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)SubLObjectFactory.makeSymbol("S#35357", "CYC"))), SubLObjectFactory.makeKeyword("OUTPUT-GENERATE-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#10716", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#35339", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("INPUT"))), SubLObjectFactory.makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)SubLObjectFactory.makeSymbol("S#35357", "CYC")), (SubLObject)SubLObjectFactory.makeKeyword("INPUT")) });
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HypotheticalContext"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termDependsOn"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("QueryMt"));
         $ic8$ = SubLObjectFactory.makeSymbol("S#35340", "CYC");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("HypothesisMt"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HypothesisMt"));
         $ic10$ = SubLObjectFactory.makeSymbol("S#35341", "CYC");
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheUser"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheUser"));
         $ic12$ = SubLObjectFactory.makeSymbol("S#35343", "CYC");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("GeneralCycKE"));
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ThePurpose"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("GeneralCycKE"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ThePurpose"));
         $ic15$ = SubLObjectFactory.makeSymbol("S#35344", "CYC");
         $ic16$ = SubLObjectFactory.makeSymbol("S#35348", "CYC");
         $ic17$ = SubLObjectFactory.makeSymbol("S#35356", "CYC");
         $ic18$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-        $ic19$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheCycProcessOwner"));
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheCurrentKBNumber"));
+        $ic19$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheCycProcessOwner"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheCurrentKBNumber"));
         $ic21$ = SubLObjectFactory.makeSymbol("S#35349", "CYC");
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheCurrentSystemNumber"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheCurrentSystemNumber"));
         $ic23$ = SubLObjectFactory.makeSymbol("S#35350", "CYC");
-        $ic24$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheCurrentHostName"));
+        $ic24$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheCurrentHostName"));
         $ic25$ = SubLObjectFactory.makeSymbol("S#35351", "CYC");
-        $ic26$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ThisInference"));
+        $ic26$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ThisInference"));
         $ic27$ = SubLObjectFactory.makeSymbol("S#35352", "CYC");
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ThisProblemStore"));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ThisProblemStore"));
         $ic29$ = SubLObjectFactory.makeSymbol("S#35353", "CYC");
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
         $ic31$ = SubLObjectFactory.makeSymbol("S#31692", "CYC");
-        $ic32$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Now-Indexical"));
-        $ic33$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Today-Indexical"));
+        $ic32$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now-Indexical"));
+        $ic33$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Today-Indexical"));
         $ic34$ = SubLObjectFactory.makeSymbol("S#35358", "CYC");
-        $ic35$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Tomorrow-Indexical"));
+        $ic35$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Tomorrow-Indexical"));
         $ic36$ = SubLObjectFactory.makeSymbol("S#35359", "CYC");
-        $ic37$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Yesterday-Indexical"));
+        $ic37$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Yesterday-Indexical"));
         $ic38$ = SubLObjectFactory.makeSymbol("S#35360", "CYC");
-        $ic39$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SecondsSince1970-Indexical"));
+        $ic39$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SecondsSince1970-Indexical"));
         $ic40$ = SubLObjectFactory.makeSymbol("S#35361", "CYC");
     }
     

@@ -1984,7 +1984,7 @@ public final class module0361 extends SubLTranslatedFile
                         if (module0361.NIL != module0065.f4749(var9)) {
                             var9 = (SubLObject)module0361.$ic278$;
                         }
-                        module0369.f25477(var9);
+                        oc_inference_datastructures_inference.f25477(var9);
                     }
                 }
             }
@@ -1999,7 +1999,7 @@ public final class module0361 extends SubLTranslatedFile
                         final Map.Entry var14 = Hashtables.iteratorNextEntry(var13);
                         var11 = Hashtables.getEntryKey(var14);
                         var12 = Hashtables.getEntryValue(var14);
-                        module0369.f25477(var12);
+                        oc_inference_datastructures_inference.f25477(var12);
                     }
                 }
                 finally {
@@ -2534,7 +2534,7 @@ public final class module0361 extends SubLTranslatedFile
                         if (module0361.NIL != module0065.f4749(var10)) {
                             var10 = (SubLObject)module0361.$ic278$;
                         }
-                        var20_208 = module0369.f25422(var10);
+                        var20_208 = oc_inference_datastructures_inference.f25422(var10);
                         if (var20_208.numL(var2)) {
                             var3 = var10;
                             var2 = var20_208;
@@ -2553,7 +2553,7 @@ public final class module0361 extends SubLTranslatedFile
                         final Map.Entry var15 = Hashtables.iteratorNextEntry(var14);
                         var12 = Hashtables.getEntryKey(var15);
                         var13 = Hashtables.getEntryValue(var15);
-                        final SubLObject var20_209 = module0369.f25422(var13);
+                        final SubLObject var20_209 = oc_inference_datastructures_inference.f25422(var13);
                         if (var20_209.numL(var2)) {
                             var3 = var13;
                             var2 = var20_209;
@@ -2589,7 +2589,7 @@ public final class module0361 extends SubLTranslatedFile
                         if (module0361.NIL != module0065.f4749(var10)) {
                             var10 = (SubLObject)module0361.$ic278$;
                         }
-                        var20_214 = module0369.f25422(var10);
+                        var20_214 = oc_inference_datastructures_inference.f25422(var10);
                         if (var20_214.numG(var2)) {
                             var3 = var10;
                             var2 = var20_214;
@@ -2608,7 +2608,7 @@ public final class module0361 extends SubLTranslatedFile
                         final Map.Entry var15 = Hashtables.iteratorNextEntry(var14);
                         var12 = Hashtables.getEntryKey(var15);
                         var13 = Hashtables.getEntryValue(var15);
-                        final SubLObject var20_215 = module0369.f25422(var13);
+                        final SubLObject var20_215 = oc_inference_datastructures_inference.f25422(var13);
                         if (var20_215.numG(var2)) {
                             var3 = var13;
                             var2 = var20_215;
@@ -2626,7 +2626,7 @@ public final class module0361 extends SubLTranslatedFile
     public static SubLObject f24199(final SubLObject var1) {
         final SubLObject var2 = f24196(var1);
         if (module0361.NIL != var2) {
-            return module0369.f25514(var2);
+            return oc_inference_datastructures_inference.f25514(var2);
         }
         return (SubLObject)module0361.NIL;
     }
@@ -7251,7 +7251,7 @@ public final class module0361 extends SubLTranslatedFile
     }
     
     public static SubLObject f24361(final SubLObject var1, final SubLObject var141) {
-        final SubLObject var142 = module0369.f25422(var141);
+        final SubLObject var142 = oc_inference_datastructures_inference.f25422(var141);
         final SubLObject var143 = f24115(var1);
         SubLObject var144 = (SubLObject)module0361.NIL;
         try {
@@ -7267,7 +7267,7 @@ public final class module0361 extends SubLTranslatedFile
     }
     
     public static SubLObject f24362(final SubLObject var1, final SubLObject var141) {
-        final SubLObject var142 = module0369.f25422(var141);
+        final SubLObject var142 = oc_inference_datastructures_inference.f25422(var141);
         final SubLObject var143 = f24115(var1);
         SubLObject var144 = (SubLObject)module0361.NIL;
         try {

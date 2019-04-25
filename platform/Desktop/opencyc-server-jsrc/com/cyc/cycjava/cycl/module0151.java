@@ -357,7 +357,7 @@ public final class module0151 extends SubLTranslatedFile
         $ic39$ = SubLObjectFactory.makeSymbol("S#12489", "CYC");
         $ic40$ = SubLObjectFactory.makeSymbol("S#12490", "CYC");
         $ic41$ = SubLObjectFactory.makeSymbol("S#12488", "CYC");
-        $ic42$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#9672", "CYC"));
+        $ic42$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#9672", "CYC"));
         $ic43$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12506", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic44$ = SubLObjectFactory.makeUninternedSymbol("US#75A9897");
         $ic45$ = SubLObjectFactory.makeSymbol("S#12507", "CYC");

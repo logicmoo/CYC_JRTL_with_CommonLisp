@@ -100,7 +100,7 @@ public final class module0212 extends SubLTranslatedFile
             return Numbers.round(Numbers.multiply(var2, module0212.$g2344$.getGlobalValue()), (SubLObject)module0212.UNPROVIDED);
         }
         if (module0212.NIL != module0018.f971()) {
-            return Numbers.round(Numbers.multiply(module0174.f11019(), module0212.$g2344$.getGlobalValue()), (SubLObject)module0212.UNPROVIDED);
+            return Numbers.round(Numbers.multiply(assertion_handles_oc.f11019(), module0212.$g2344$.getGlobalValue()), (SubLObject)module0212.UNPROVIDED);
         }
         return (SubLObject)module0212.$ic2$;
     }
@@ -149,8 +149,8 @@ public final class module0212 extends SubLTranslatedFile
         if (module0212.NIL != module0173.f10955(var7)) {
             return module0173.f10969(var7);
         }
-        if (module0212.NIL != module0174.f11035(var7)) {
-            return module0174.f11041(var7, (SubLObject)module0212.UNPROVIDED);
+        if (module0212.NIL != assertion_handles_oc.f11035(var7)) {
+            return assertion_handles_oc.f11041(var7, (SubLObject)module0212.UNPROVIDED);
         }
         if (module0212.NIL != f13763(var7)) {
             return (SubLObject)module0212.T;
@@ -162,8 +162,8 @@ public final class module0212 extends SubLTranslatedFile
         if (module0212.NIL != module0173.f10955(var7)) {
             return module0173.f10970(var7);
         }
-        if (module0212.NIL != module0174.f11035(var7)) {
-            return module0177.f11254(var7);
+        if (module0212.NIL != assertion_handles_oc.f11035(var7)) {
+            return oc_assertions_low.f11254(var7);
         }
         if (module0212.NIL != f13763(var7)) {
             return (SubLObject)module0212.T;
@@ -252,8 +252,8 @@ public final class module0212 extends SubLTranslatedFile
     }
     
     public static SubLObject f13787(final SubLObject var17) {
-        if (module0212.NIL != module0128.f8449(var17)) {
-            if (module0212.NIL != module0128.f8463(var17, (SubLObject)module0212.UNPROVIDED)) {
+        if (module0212.NIL != constant_handles_oc.f8449(var17)) {
+            if (module0212.NIL != constant_handles_oc.f8463(var17, (SubLObject)module0212.UNPROVIDED)) {
                 return module0165.f10719(var17);
             }
         }
@@ -263,8 +263,8 @@ public final class module0212 extends SubLTranslatedFile
             }
         }
         else {
-            if (module0212.NIL != module0174.f11035(var17)) {
-                return module0177.f11242(var17);
+            if (module0212.NIL != assertion_handles_oc.f11035(var17)) {
+                return oc_assertions_low.f11242(var17);
             }
             if (module0212.NIL != f13763(var17)) {
                 return module0190.f11878(var17);
@@ -277,8 +277,8 @@ public final class module0212 extends SubLTranslatedFile
     }
     
     public static SubLObject f13788(final SubLObject var17) {
-        if (module0212.NIL != module0128.f8449(var17)) {
-            if (module0212.NIL != module0128.f8463(var17, (SubLObject)module0212.UNPROVIDED)) {
+        if (module0212.NIL != constant_handles_oc.f8449(var17)) {
+            if (module0212.NIL != constant_handles_oc.f8463(var17, (SubLObject)module0212.UNPROVIDED)) {
                 return module0165.f10720(var17);
             }
         }
@@ -288,8 +288,8 @@ public final class module0212 extends SubLTranslatedFile
             }
         }
         else {
-            if (module0212.NIL != module0174.f11035(var17)) {
-                return module0177.f11243(var17);
+            if (module0212.NIL != assertion_handles_oc.f11035(var17)) {
+                return oc_assertions_low.f11243(var17);
             }
             if (module0212.NIL != f13763(var17)) {
                 return module0190.f11879(var17);
@@ -306,8 +306,8 @@ public final class module0212 extends SubLTranslatedFile
             module0173.f10965(var17, var6);
         }
         else if (module0212.NIL == module0161.f10481(var17)) {
-            if (module0212.NIL != module0174.f11035(var17)) {
-                module0177.f11244(var17, var6);
+            if (module0212.NIL != assertion_handles_oc.f11035(var17)) {
+                oc_assertions_low.f11244(var17, var6);
             }
             else if (module0212.NIL != f13763(var17)) {
                 module0190.f11883(var17, var6, (SubLObject)module0212.T);
@@ -327,8 +327,8 @@ public final class module0212 extends SubLTranslatedFile
             module0173.f10966(var17);
         }
         else if (module0212.NIL == module0161.f10481(var17)) {
-            if (module0212.NIL != module0174.f11035(var17)) {
-                module0177.f11245(var17);
+            if (module0212.NIL != assertion_handles_oc.f11035(var17)) {
+                oc_assertions_low.f11245(var17);
             }
             else if (module0212.NIL != f13763(var17)) {
                 module0190.f11884(var17);
@@ -911,7 +911,7 @@ public final class module0212 extends SubLTranslatedFile
     }
     
     public static SubLObject f13856(final SubLObject var7) {
-        return module0174.f11035(var7);
+        return assertion_handles_oc.f11035(var7);
     }
     
     public static SubLObject f13857(final SubLObject var7) {
@@ -1075,12 +1075,12 @@ public final class module0212 extends SubLTranslatedFile
         $ic0$ = SubLObjectFactory.makeSymbol("S#16670", "CYC");
         $ic1$ = (SubLFloat)SubLObjectFactory.makeDouble(0.015);
         $ic2$ = SubLObjectFactory.makeInteger(64);
-        $ic3$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("implies")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("and")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("or")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("not")));
+        $ic3$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("implies")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("or")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("not")));
         $ic4$ = SubLObjectFactory.makeSymbol("INDEXED-TERM-P");
-        $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic6$ = SubLObjectFactory.makeString("Returns T iff OBJECT is an indexed CycL term, e.g. a fort or assertion.");
         $ic7$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
-        $ic8$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#295", "CYC"), (SubLObject)SubLObjectFactory.makeString("mapping Cyc indexed terms"))), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic8$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#295", "CYC"), (SubLObject)SubLObjectFactory.makeString("mapping Cyc indexed terms"))), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic9$ = SubLObjectFactory.makeString("mapping Cyc indexed terms");
         $ic10$ = SubLObjectFactory.makeSymbol("PROGN");
         $ic11$ = SubLObjectFactory.makeSymbol("DO-FORTS");

@@ -90,7 +90,7 @@ public final class module0791 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0791();
         module0791.$g6313$ = null;
-        $ic0$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("synonymousExternalConcept")));
+        $ic0$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("synonymousExternalConcept")));
         $ic1$ = SubLObjectFactory.makeSymbol("VALID-CONSTANT?");
         $ic2$ = SubLObjectFactory.makeSymbol("S#55076", "CYC");
     }

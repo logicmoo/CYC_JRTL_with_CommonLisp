@@ -2900,7 +2900,7 @@ public final class module0048 extends SubLTranslatedFile
         $ic3$ = SubLObjectFactory.makeSymbol("NUMBERP");
         $ic4$ = SubLObjectFactory.makeInteger(256);
         $ic5$ = SubLObjectFactory.makeSymbol("NIL-OR-INTEGER-P");
-        $ic6$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic6$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic7$ = SubLObjectFactory.makeString("Return T iff OBJECT is either an integer or NIL");
         $ic8$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
         $ic9$ = SubLObjectFactory.makeKeyword("IGNORE-ERRORS-TARGET");

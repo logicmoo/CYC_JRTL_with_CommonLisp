@@ -130,7 +130,7 @@ public final class module0539 extends SubLTranslatedFile
     }
     
     public static SubLObject f33495(final SubLObject var9) {
-        assert module0539.NIL != module0174.f11035(var9) : var9;
+        assert module0539.NIL != assertion_handles_oc.f11035(var9) : var9;
         final SubLObject var10 = module0178.f11295(var9);
         final SubLObject var11 = module0178.f11296(var9);
         final SubLObject var12 = module0178.f11297(var9);
@@ -213,7 +213,7 @@ public final class module0539 extends SubLTranslatedFile
         $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#36905", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic3$ = SubLObjectFactory.makeSymbol("CLET");
         $ic4$ = SubLObjectFactory.makeSymbol("S#9974", "CYC");
-        $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic6$ = SubLObjectFactory.makeUninternedSymbol("US#7D717B6");
         $ic7$ = SubLObjectFactory.makeSymbol("*THE-CYCLIST*");
         $ic8$ = SubLObjectFactory.makeSymbol("ASSERTED-BY");

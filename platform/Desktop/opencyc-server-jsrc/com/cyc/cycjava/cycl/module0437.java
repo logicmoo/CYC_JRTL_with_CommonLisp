@@ -190,13 +190,13 @@ public final class module0437 extends SubLTranslatedFile
         me = (SubLFile)new module0437();
         module0437.$g3538$ = null;
         module0437.$g3539$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("unknownSentence"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("unknownSentence"));
         $ic1$ = SubLObjectFactory.makeKeyword("MINIMIZE");
         $ic2$ = SubLObjectFactory.makeKeyword("TRUE-DEF");
         $ic3$ = SubLObjectFactory.makeKeyword("COMPLETENESS-MINIMIZATION-ALLOWED?");
         $ic4$ = SubLObjectFactory.makeKeyword("UNKNOWN");
         $ic5$ = (SubLFloat)SubLObjectFactory.makeDouble(1.5);
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("minimizeExtent"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("minimizeExtent"));
         $ic7$ = SubLObjectFactory.makeKeyword("GAF");
         $ic8$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic9$ = SubLObjectFactory.makeKeyword("REMOVAL-MINIMIZE-EXTENT");

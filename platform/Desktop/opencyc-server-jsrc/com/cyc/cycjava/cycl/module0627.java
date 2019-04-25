@@ -106,10 +106,10 @@ public final class module0627 extends SubLTranslatedFile
                 var10 = (SubLObject)module0627.$ic15$;
             }
             if (module0627.NIL == var10) {
-                final SubLObject var19 = Numbers.subtract(var4, module0369.f25706(var18, (SubLObject)module0627.NIL));
+                final SubLObject var19 = Numbers.subtract(var4, oc_inference_datastructures_inference.f25706(var18, (SubLObject)module0627.NIL));
                 final SubLObject var20 = (SubLObject)ConsesLow.list(module0627.$ic16$, var12);
                 final SubLObject var14_20 = (SubLObject)ConsesLow.list((SubLObject)module0627.$ic11$, var19, (SubLObject)module0627.$ic12$, var13);
-                module0369.f25471(var18);
+                oc_inference_datastructures_inference.f25471(var18);
                 var16 = module0409.f28506(var20, var8, var14_20);
                 if (module0627.NIL != module0540.f33533(var16)) {
                     var10 = (SubLObject)module0627.$ic9$;
@@ -163,8 +163,8 @@ public final class module0627 extends SubLTranslatedFile
         module0627.$g4827$ = null;
         module0627.$g4828$ = null;
         module0627.$g4829$ = null;
-        $ic0$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtSpace")), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Now"))), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtUnionFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("AssistedReaderSourceSpindleCollectorMt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("AllGeneralEnglishValidatedLexicalMicrotheoryPSC"))));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("RelationParaphraseMt"));
+        $ic0$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtSpace")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now"))), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtUnionFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AssistedReaderSourceSpindleCollectorMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AllGeneralEnglishValidatedLexicalMicrotheoryPSC"))));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("RelationParaphraseMt"));
         $ic2$ = SubLObjectFactory.makeSymbol("SIMPLE-BOOLEAN-QUERY-EXTERNAL-ID");
         $ic3$ = SubLObjectFactory.makeSymbol("FIND-OBJECT-BY-COMPACT-HL-EXTERNAL-ID-STRING");
         $ic4$ = SubLObjectFactory.makeSymbol("SIMPLE-BOOLEAN-QUERY-CYCL");
@@ -179,7 +179,7 @@ public final class module0627 extends SubLTranslatedFile
         $ic13$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BROWSABLE?"), (SubLObject)module0627.T);
         $ic14$ = SubLObjectFactory.makeString("Timed out");
         $ic15$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("not"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("not"));
         $ic17$ = SubLObjectFactory.makeKeyword("UNKNOWN");
     }
 }

@@ -529,7 +529,7 @@ public final class module0153 extends SubLTranslatedFile
         $ic39$ = SubLObjectFactory.makeSymbol("CCATCH-IGNORE");
         $ic40$ = SubLObjectFactory.makeKeyword("GT-ERROR");
         $ic41$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12065", "CYC"), (SubLObject)module0153.T));
-        $ic42$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("TYPE"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#696", "CYC"), (SubLObject)module0153.THREE_INTEGER));
+        $ic42$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("TYPE"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#696", "CYC"), (SubLObject)module0153.THREE_INTEGER));
         $ic43$ = SubLObjectFactory.makeSymbol("PUNLESS");
         $ic44$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("COR"), (SubLObject)SubLObjectFactory.makeSymbol("*SUSPEND-TYPE-CHECKING?*"), (SubLObject)SubLObjectFactory.makeSymbol("S#12065", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("*IGNORE-MUSTS?*"));
         $ic45$ = SubLObjectFactory.makeSymbol("S#12579", "CYC");
@@ -557,7 +557,7 @@ public final class module0153 extends SubLTranslatedFile
         $ic67$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12580", "CYC"), (SubLObject)module0153.NIL));
         $ic68$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)SubLObjectFactory.makeSymbol("S#12055", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol(">="), (SubLObject)SubLObjectFactory.makeSymbol("S#12057", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12056", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#422", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject)SubLObjectFactory.makeSymbol("S#12580", "CYC"), (SubLObject)module0153.T)));
         $ic69$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CINC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12057", "CYC"));
-        $ic70$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic70$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic71$ = SubLObjectFactory.makeSymbol("S#12060", "CYC");
         $ic72$ = SubLObjectFactory.makeSymbol("CPUSH");
         $ic73$ = SubLObjectFactory.makeSymbol("LIST");

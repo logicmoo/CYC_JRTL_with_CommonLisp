@@ -405,7 +405,7 @@ public final class module0720 extends SubLTranslatedFile
         if (module0720.NIL == var15) {
             var15 = (SubLObject)module0720.$ic40$;
         }
-        assert module0720.NIL != module0369.f25275(var14) : var14;
+        assert module0720.NIL != oc_inference_datastructures_inference.f25275(var14) : var14;
         final SubLObject var17 = module0656.f39832((SubLObject)module0720.$ic42$);
         module0642.f39020(module0015.$g381$.getGlobalValue());
         module0642.f39020(module0015.$g383$.getGlobalValue());
@@ -442,7 +442,7 @@ public final class module0720 extends SubLTranslatedFile
             return (SubLObject)module0720.NIL;
         }
         final SubLObject var20 = module0683.f41671(var18);
-        if (module0720.NIL == module0369.f25275(var20)) {
+        if (module0720.NIL == oc_inference_datastructures_inference.f25275(var20)) {
             return module0656.f39789((SubLObject)module0720.$ic47$, (SubLObject)module0720.UNPROVIDED, (SubLObject)module0720.UNPROVIDED, (SubLObject)module0720.UNPROVIDED, (SubLObject)module0720.UNPROVIDED, (SubLObject)module0720.UNPROVIDED);
         }
         return f44145(var20);
@@ -647,7 +647,7 @@ public final class module0720 extends SubLTranslatedFile
         }
         module0642.f39026((SubLObject)module0720.UNPROVIDED);
         module0642.f39026((SubLObject)module0720.TWO_INTEGER);
-        module0685.f41964(var14, (SubLObject)module0720.UNPROVIDED);
+        oc_cb_query_browser.f41964(var14, (SubLObject)module0720.UNPROVIDED);
         return var14;
     }
     
@@ -1697,12 +1697,12 @@ public final class module0720 extends SubLTranslatedFile
         SubLObject var36 = (SubLObject)module0720.NIL;
         SubLObject var37 = (SubLObject)module0720.NIL;
         SubLObject var38 = (SubLObject)module0720.NIL;
-        if (module0720.NIL != module0369.f25275(var34)) {
+        if (module0720.NIL != oc_inference_datastructures_inference.f25275(var34)) {
             final SubLObject var39 = var34;
-            var37 = module0369.f25423(var39);
-            var38 = module0369.f25424(var39);
+            var37 = oc_inference_datastructures_inference.f25423(var39);
+            var38 = oc_inference_datastructures_inference.f25424(var39);
             var35 = module0409.f28530(var39);
-            var36 = module0369.f25433(var39);
+            var36 = oc_inference_datastructures_inference.f25433(var39);
         }
         else {
             var37 = var34.first();
@@ -1724,7 +1724,7 @@ public final class module0720 extends SubLTranslatedFile
     public static SubLObject f44177(final SubLObject var82, final SubLObject var32, final SubLObject var83, final SubLObject var91, final SubLObject var34) {
         final SubLThread var92 = SubLProcess.currentSubLThread();
         if (module0720.NIL != module0360.f23871(var83)) {
-            module0685.f41966(var83);
+            oc_cb_query_browser.f41966(var83);
             return (SubLObject)module0720.NIL;
         }
         final SubLObject var93 = var32.first();
@@ -1873,15 +1873,15 @@ public final class module0720 extends SubLTranslatedFile
         module0642.f39026((SubLObject)module0720.UNPROVIDED);
         module0642.f39019((SubLObject)module0720.$ic131$);
         final SubLObject var123 = conses_high.second(var120);
-        if (module0720.NIL != module0369.f25275(var123)) {
+        if (module0720.NIL != oc_inference_datastructures_inference.f25275(var123)) {
             final SubLObject var124 = var123;
             module0656.f39804(var124, (SubLObject)module0720.UNPROVIDED, (SubLObject)module0720.UNPROVIDED);
             module0642.f39019((SubLObject)module0720.$ic132$);
             module0642.f39026((SubLObject)module0720.UNPROVIDED);
-            module0656.f39804(module0369.f25423(var124), (SubLObject)module0720.ZERO_INTEGER, (SubLObject)module0720.T);
+            module0656.f39804(oc_inference_datastructures_inference.f25423(var124), (SubLObject)module0720.ZERO_INTEGER, (SubLObject)module0720.T);
             module0642.f39026((SubLObject)module0720.UNPROVIDED);
             module0642.f39019((SubLObject)module0720.$ic130$);
-            module0656.f39804(module0369.f25424(var124), (SubLObject)module0720.UNPROVIDED, (SubLObject)module0720.UNPROVIDED);
+            module0656.f39804(oc_inference_datastructures_inference.f25424(var124), (SubLObject)module0720.UNPROVIDED, (SubLObject)module0720.UNPROVIDED);
         }
         else {
             SubLObject var126;
@@ -1915,9 +1915,9 @@ public final class module0720 extends SubLTranslatedFile
         final SubLObject var20 = module0577.f35456(var19);
         final SubLObject var21 = module0577.f35443(var20).first();
         final SubLObject var22 = conses_high.second(var21);
-        final SubLObject var23 = (SubLObject)((module0720.NIL != module0369.f25275(var22)) ? var22 : module0720.NIL);
-        final SubLObject var24 = (SubLObject)((module0720.NIL != module0369.f25275(var22)) ? module0720.NIL : var22.first());
-        final SubLObject var25 = (SubLObject)((module0720.NIL != module0369.f25275(var22)) ? module0720.NIL : conses_high.second(var22));
+        final SubLObject var23 = (SubLObject)((module0720.NIL != oc_inference_datastructures_inference.f25275(var22)) ? var22 : module0720.NIL);
+        final SubLObject var24 = (SubLObject)((module0720.NIL != oc_inference_datastructures_inference.f25275(var22)) ? module0720.NIL : var22.first());
+        final SubLObject var25 = (SubLObject)((module0720.NIL != oc_inference_datastructures_inference.f25275(var22)) ? module0720.NIL : conses_high.second(var22));
         final SubLObject var26 = conses_high.second(module0577.f35443(var20));
         final SubLObject var27 = (SubLObject)module0720.$ic137$;
         final SubLObject var28 = module0015.$g538$.currentBinding(var18);
@@ -2043,7 +2043,7 @@ public final class module0720 extends SubLTranslatedFile
                         module0642.f39026((SubLObject)module0720.UNPROVIDED);
                         if (module0720.NIL != var23) {
                             module0642.f39021((SubLObject)module0720.$ic140$);
-                            module0685.f41964(var23, (SubLObject)module0720.UNPROVIDED);
+                            oc_cb_query_browser.f41964(var23, (SubLObject)module0720.UNPROVIDED);
                         }
                         else {
                             module0683.f41820(var24, var25, (SubLObject)module0720.$ic141$);

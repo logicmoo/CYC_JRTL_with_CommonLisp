@@ -404,7 +404,7 @@ public final class module0727 extends SubLTranslatedFile
                                 module0601.$g4652$.bind(Numbers.add(module0601.$g4653$.getDynamicValue(var33), module0601.$g4652$.getDynamicValue(var33)), var33);
                                 module0601.$g4654$.bind(module0601.$g4652$.getDynamicValue(var33), var33);
                                 module0601.f36758((SubLObject)module0727.$ic78$, (SubLObject)module0727.NIL, (SubLObject)module0727.NIL, (SubLObject)module0727.NIL);
-                                module0798.f51056(f44407(var32));
+                                oc_cycml_generator.f51056(f44407(var32));
                             }
                             finally {
                                 module0601.$g4654$.rebind(var39_41, var33);
@@ -464,7 +464,7 @@ public final class module0727 extends SubLTranslatedFile
                                     SubLObject var40 = (SubLObject)module0727.NIL;
                                     var40 = var39.first();
                                     while (module0727.NIL != var39) {
-                                        module0798.f51056(var40);
+                                        oc_cycml_generator.f51056(var40);
                                         var39 = var39.rest();
                                         var40 = var39.first();
                                     }
@@ -498,7 +498,7 @@ public final class module0727 extends SubLTranslatedFile
                                     SubLObject var41 = (SubLObject)module0727.NIL;
                                     var41 = var39.first();
                                     while (module0727.NIL != var39) {
-                                        module0798.f51056(var41);
+                                        oc_cycml_generator.f51056(var41);
                                         var39 = var39.rest();
                                         var41 = var39.first();
                                     }

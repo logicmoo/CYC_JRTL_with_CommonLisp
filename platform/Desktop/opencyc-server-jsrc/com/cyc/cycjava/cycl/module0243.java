@@ -407,7 +407,7 @@ public final class module0243 extends SubLTranslatedFile
     }
     
     public static SubLObject f15706(final SubLObject var27) {
-        return module0618.f37916((SubLObject)module0243.$ic31$, var27, (SubLObject)module0243.UNPROVIDED);
+        return oc_dumper.f37916((SubLObject)module0243.$ic31$, var27, (SubLObject)module0243.UNPROVIDED);
     }
     
     public static SubLObject f15708() {
@@ -769,12 +769,12 @@ public final class module0243 extends SubLTranslatedFile
         $ic36$ = SubLObjectFactory.makeKeyword("DONE");
         $ic37$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#205", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18495", "CYC"));
         $ic38$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#11098", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#7999", "CYC"));
-        $ic39$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
-        $ic40$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
+        $ic39$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic40$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
         $ic41$ = SubLObjectFactory.makeSymbol(">");
         $ic42$ = SubLObjectFactory.makeSymbol("S#18496", "CYC");
-        $ic43$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
-        $ic44$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic43$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic44$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
         $ic45$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#18497", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18498", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12141", "CYC"));
     }
 }

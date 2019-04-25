@@ -1112,10 +1112,10 @@ public final class module0317 extends SubLTranslatedFile
         $ic1$ = SubLObjectFactory.makeString("(#$transitiveViaArg ~s ~s 2) not declared");
         $ic2$ = SubLObjectFactory.makeString("(#$transitiveViaArgInverse ~s ~s 1) not declared");
         $ic3$ = SubLObjectFactory.makeString("(#$transitiveViaArgInverse ~s ~s 2) not declared");
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
         $ic5$ = ConsesLow.list((SubLObject)module0317.ONE_INTEGER);
         $ic6$ = ConsesLow.list((SubLObject)module0317.TWO_INTEGER);
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
         $ic8$ = SubLObjectFactory.makeInteger(128);
         $ic9$ = SubLObjectFactory.makeString("invalid gtm method: ~s");
         $ic10$ = SubLObjectFactory.makeString("method ~s maps into illegal gt function ~s)");
@@ -1142,7 +1142,7 @@ public final class module0317 extends SubLTranslatedFile
         $ic31$ = SubLObjectFactory.makeSymbol("S#23754", "CYC");
         $ic32$ = SubLObjectFactory.makeSymbol("S#23757", "CYC");
         $ic33$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic34$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic34$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic35$ = SubLObjectFactory.makeSymbol("S#23788", "CYC");
         $ic36$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#9182", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"));
         $ic37$ = SubLObjectFactory.makeKeyword("HIERARCHICALLY-DIRECT");

@@ -625,8 +625,8 @@ public final class module0558 extends SubLTranslatedFile
         SubLObject var8 = f34319(var7);
         if (module0558.NIL == module0361.f24009(var8)) {
             final SubLObject var9 = module0339.f22757();
-            if (module0558.NIL != module0369.f25275(var9)) {
-                var8 = module0369.f25421(var9);
+            if (module0558.NIL != oc_inference_datastructures_inference.f25275(var9)) {
+                var8 = oc_inference_datastructures_inference.f25421(var9);
             }
             else {
                 var8 = module0361.f24136((SubLObject)module0558.$ic27$);
@@ -739,7 +739,7 @@ public final class module0558 extends SubLTranslatedFile
         $ic10$ = SubLObjectFactory.makeKeyword("UNKNOWN");
         $ic11$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic12$ = SubLObjectFactory.makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-        $ic13$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#14271", "CYC"));
+        $ic13$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#14271", "CYC"));
         $ic14$ = SubLObjectFactory.makeSymbol("S#37578", "CYC");
         $ic15$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic16$ = SubLObjectFactory.makeKeyword("FALSE");
@@ -748,7 +748,7 @@ public final class module0558 extends SubLTranslatedFile
         $ic19$ = SubLObjectFactory.makeSymbol("S#16025", "CYC");
         $ic20$ = (SubLFloat)SubLObjectFactory.makeDouble(1.2);
         $ic21$ = SubLObjectFactory.makeSymbol("NUMBERP");
-        $ic22$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("S#14271", "CYC"));
+        $ic22$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("S#14271", "CYC"));
         $ic23$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#37593", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#37594", "CYC"));
         $ic24$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#37595", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#37596", "CYC"));
         $ic25$ = SubLObjectFactory.makeSymbol("S#37580", "CYC");
@@ -759,7 +759,7 @@ public final class module0558 extends SubLTranslatedFile
         $ic30$ = SubLObjectFactory.makeKeyword("JUSTIFY?");
         $ic31$ = SubLObjectFactory.makeKeyword("CONSIDER-META-ASSERTIONS?");
         $ic32$ = SubLObjectFactory.makeKeyword("IRRELEVANT-PREDICATES");
-        $ic33$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")));
+        $ic33$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")));
         $ic34$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("RETURN"), (SubLObject)SubLObjectFactory.makeKeyword("BINDINGS-AND-SUPPORTS"), (SubLObject)SubLObjectFactory.makeKeyword("CONTINUABLE?"), (SubLObject)module0558.NIL);
     }
 }

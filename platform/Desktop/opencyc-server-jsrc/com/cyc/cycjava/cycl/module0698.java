@@ -1061,7 +1061,7 @@ public final class module0698 extends SubLTranslatedFile
                     module0642.f39020(module0015.$g381$.getGlobalValue());
                     module0642.f39020(module0015.$g383$.getGlobalValue());
                     module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0698.UNPROVIDED);
-                    PrintLow.format(module0015.$g131$.getDynamicValue(var56), (SubLObject)module0698.$ic79$, module0174.f11025(var68));
+                    PrintLow.format(module0015.$g131$.getDynamicValue(var56), (SubLObject)module0698.$ic79$, assertion_handles_oc.f11025(var68));
                     module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0698.UNPROVIDED);
                     module0642.f39012((SubLObject)Characters.CHAR_greater, (SubLObject)module0698.UNPROVIDED);
                     final SubLObject var5_69 = module0015.$g533$.currentBinding(var56);
@@ -1716,9 +1716,9 @@ public final class module0698 extends SubLTranslatedFile
         $ic54$ = SubLObjectFactory.makeKeyword("CENTER");
         $ic55$ = SubLObjectFactory.makeString("&nbsp;");
         $ic56$ = SubLObjectFactory.makeKeyword("LEFT");
-        $ic57$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic58$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
-        $ic59$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic57$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic58$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic59$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic60$ = SubLObjectFactory.makeString("(");
         $ic61$ = SubLObjectFactory.makeString(")");
         $ic62$ = SubLObjectFactory.makeInteger(32);

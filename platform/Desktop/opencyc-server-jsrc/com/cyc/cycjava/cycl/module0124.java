@@ -37,7 +37,7 @@ public final class module0124 extends SubLTranslatedFile
     public static SubLObject f8360(final SubLObject var1, final SubLObject var2, final SubLObject var3) {
         final SubLThread var4 = SubLProcess.currentSubLThread();
         SubLObject var5 = module0063.f4581(module0124.$g1494$.getGlobalValue(), var1, (SubLObject)module0124.T, var2, var3);
-        if (module0124.NIL != module0128.f8449(var5) && module0124.NIL != module0124.$g1495$.getDynamicValue(var4) && module0124.NIL == module0128.f8461(var5)) {
+        if (module0124.NIL != constant_handles_oc.f8449(var5) && module0124.NIL != module0124.$g1495$.getDynamicValue(var4) && module0124.NIL == constant_handles_oc.f8461(var5)) {
             var5 = (SubLObject)module0124.NIL;
         }
         return var5;
@@ -68,7 +68,7 @@ public final class module0124 extends SubLTranslatedFile
         SubLObject var14 = (SubLObject)module0124.NIL;
         var14 = var13.first();
         while (module0124.NIL != var13) {
-            final SubLObject var15 = module0166.f10743(var14);
+            final SubLObject var15 = constants_high_oc.f10743(var14);
             final SubLObject var16 = Sequences.length(var15);
             final SubLObject var17 = (module0124.NIL != var3) ? var3 : Sequences.length(var10);
             final SubLObject var18 = Numbers.subtract(var17, var2);
@@ -121,14 +121,14 @@ public final class module0124 extends SubLTranslatedFile
     }
     
     public static SubLObject f8369(final SubLObject var28, final SubLObject var1) {
-        assert module0124.NIL != module0128.f8449(var28) : var28;
+        assert module0124.NIL != constant_handles_oc.f8449(var28) : var28;
         assert module0124.NIL != Types.stringp(var1) : var1;
         module0063.f4562(module0124.$g1494$.getGlobalValue(), var1, var28, (SubLObject)module0124.UNPROVIDED, (SubLObject)module0124.UNPROVIDED);
         return var28;
     }
     
     public static SubLObject f8370(final SubLObject var28, final SubLObject var1) {
-        assert module0124.NIL != module0128.f8449(var28) : var28;
+        assert module0124.NIL != constant_handles_oc.f8449(var28) : var28;
         assert module0124.NIL != Types.stringp(var1) : var1;
         module0063.f4577(module0124.$g1494$.getGlobalValue(), var1, var28, (SubLObject)module0124.UNPROVIDED, (SubLObject)module0124.UNPROVIDED);
         return var28;

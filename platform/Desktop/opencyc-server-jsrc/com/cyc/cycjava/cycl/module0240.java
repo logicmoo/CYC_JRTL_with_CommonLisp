@@ -241,7 +241,7 @@ public final class module0240 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0240();
         module0240.$g2447$ = null;
-        $ic0$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic0$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic1$ = SubLObjectFactory.makeSymbol("CLET");
         $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#18386", "CYC"));
         $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#29", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));

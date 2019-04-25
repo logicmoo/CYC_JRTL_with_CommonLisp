@@ -143,11 +143,11 @@ public final class module0301 extends SubLTranslatedFile
         module0301.$g2698$ = null;
         module0301.$g2699$ = null;
         module0301.$g2700$ = null;
-        $ic0$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("FOCUS"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("QueryProcessingRLModule")));
+        $ic0$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("FOCUS"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("QueryProcessingRLModule")));
         $ic1$ = SubLObjectFactory.makeKeyword("RECURSION-LIMIT");
-        $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("FOCUS"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("WffViolationResolutionRLModule")));
-        $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("FOCUS"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("DatesReformulatorRLModule")));
-        $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MODES"), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorMode-Simplify"))));
+        $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("FOCUS"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("WffViolationResolutionRLModule")));
+        $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("FOCUS"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DatesReformulatorRLModule")));
+        $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MODES"), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorMode-Simplify"))));
     }
 }
 

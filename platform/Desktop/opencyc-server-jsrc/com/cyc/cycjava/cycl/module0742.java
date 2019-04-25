@@ -471,7 +471,7 @@ public final class module0742 extends SubLTranslatedFile
         SubLObject var30 = (SubLObject)module0742.NIL;
         var30 = var29.first();
         while (module0742.NIL != var29) {
-            if (module0742.NIL != module0174.f11035(var30)) {
+            if (module0742.NIL != assertion_handles_oc.f11035(var30)) {
                 var27 = (SubLObject)ConsesLow.cons(var30, var27);
             }
             else {
@@ -1695,7 +1695,7 @@ public final class module0742 extends SubLTranslatedFile
                                     SubLObject var166 = (SubLObject)module0742.NIL;
                                     var166 = var165.first();
                                     while (module0742.NIL != var165) {
-                                        if (module0742.NIL != module0174.f11035(var166)) {
+                                        if (module0742.NIL != assertion_handles_oc.f11035(var166)) {
                                             var158 = (SubLObject)SubLObjectFactory.makeBoolean(module0742.NIL == module0161.f10514(module0178.f11287(var166), var157));
                                             if (module0742.NIL != var158) {
                                                 var157 = module0178.f11287(var166);
@@ -1766,7 +1766,7 @@ public final class module0742 extends SubLTranslatedFile
         final SubLThread var170 = SubLProcess.currentSubLThread();
         final SubLObject var171 = f45941(var169);
         final SubLObject var172 = module0035.f2293(module0742.$g5886$.getGlobalValue(), var171, (SubLObject)module0742.EQL, (SubLObject)module0742.UNPROVIDED);
-        final SubLObject var173 = Sequences.cconcatenate((SubLObject)module0742.$ic94$, new SubLObject[] { module0006.f203(module0174.f11025(var169)), module0742.$ic95$, module0006.f203(var172), module0742.$ic96$ });
+        final SubLObject var173 = Sequences.cconcatenate((SubLObject)module0742.$ic94$, new SubLObject[] { module0006.f203(assertion_handles_oc.f11025(var169)), module0742.$ic95$, module0006.f203(var172), module0742.$ic96$ });
         final SubLObject var174 = module0035.f2293(module0742.$g5887$.getGlobalValue(), var171, (SubLObject)module0742.EQL, (SubLObject)module0742.UNPROVIDED);
         final SubLObject var175 = module0035.f2293(module0742.$g5888$.getGlobalValue(), var171, (SubLObject)module0742.EQL, (SubLObject)module0742.UNPROVIDED);
         module0642.f39020(module0015.$g381$.getGlobalValue());
@@ -1837,7 +1837,7 @@ public final class module0742 extends SubLTranslatedFile
         final SubLObject var171 = f45943(var169);
         final SubLObject var172 = (SubLObject)((module0742.NIL != var171) ? module0742.$ic99$ : module0742.$ic100$);
         final SubLObject var173 = (SubLObject)((module0742.NIL != var171) ? module0742.$ic101$ : module0742.$ic102$);
-        final SubLObject var174 = Sequences.cconcatenate((SubLObject)module0742.$ic103$, new SubLObject[] { module0006.f203(module0174.f11025(var169)), module0742.$ic95$, module0006.f203(var172), module0742.$ic96$ });
+        final SubLObject var174 = Sequences.cconcatenate((SubLObject)module0742.$ic103$, new SubLObject[] { module0006.f203(assertion_handles_oc.f11025(var169)), module0742.$ic95$, module0006.f203(var172), module0742.$ic96$ });
         final SubLObject var175 = (SubLObject)((module0742.NIL != var171) ? module0742.$ic104$ : module0742.$ic105$);
         module0642.f39020(module0015.$g381$.getGlobalValue());
         module0642.f39020(module0015.$g383$.getGlobalValue());
@@ -3992,7 +3992,7 @@ public final class module0742 extends SubLTranslatedFile
     }
     
     public static SubLObject f45983(final SubLObject var351) {
-        if (module0742.NIL != module0174.f11035(var351)) {
+        if (module0742.NIL != assertion_handles_oc.f11035(var351)) {
             module0656.f39916(var351, (SubLObject)module0742.T, (SubLObject)module0742.T);
         }
         else {
@@ -4245,11 +4245,11 @@ public final class module0742 extends SubLTranslatedFile
         $ic57$ = SubLObjectFactory.makeKeyword("TOP");
         $ic58$ = SubLObjectFactory.makeInteger(80);
         $ic59$ = SubLObjectFactory.makeString(":");
-        $ic60$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("comment")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("expansion")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("exampleAssertions")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("exampleSentences")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("exampleNATs")));
+        $ic60$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comment")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("expansion")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("exampleAssertions")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("exampleSentences")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("exampleNATs")));
         $ic61$ = SubLObjectFactory.makeKeyword("SELF");
         $ic62$ = SubLObjectFactory.makeSymbol("SHOW-GENERATION-FUNCTION-DOCUMENTATION");
-        $ic63$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("NLGenerationFunction"));
-        $ic64$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic63$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("NLGenerationFunction"));
+        $ic64$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic65$ = SubLObjectFactory.makeKeyword("BREADTH");
         $ic66$ = SubLObjectFactory.makeKeyword("QUEUE");
         $ic67$ = SubLObjectFactory.makeKeyword("STACK");
@@ -4276,9 +4276,9 @@ public final class module0742 extends SubLTranslatedFile
         $ic88$ = SubLObjectFactory.makeSymbol("GENLS?");
         $ic89$ = SubLObjectFactory.makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
         $ic90$ = SubLObjectFactory.makeKeyword("NEW");
-        $ic91$ = ConsesLow.list((SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("PrimaryLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("default")), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("DEFAULT"), (SubLObject)SubLObjectFactory.makeString("context")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ContextuallyDependentLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("vanishing")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("VanishinglyRareLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("primary")));
-        $ic92$ = ConsesLow.list((SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("PrimaryLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("Primary lexical mapping.  Click to weaken to default strength.")), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("DEFAULT"), (SubLObject)SubLObjectFactory.makeString("Default strength mapping. Click to make this a contextually dependent mapping.")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ContextuallyDependentLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("Contextually dependent lexical mapping. Click to make this a vanishingly rare mapping.")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("VanishinglyRareLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("Vanishingly rare lexical mapping. Click to make this a primary mapping.")));
-        $ic93$ = ConsesLow.list((SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("PrimaryLexicalMapping")), (SubLObject)SubLObjectFactory.makeKeyword("HTML-PRIMARY-LEXICAL-IMG")), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("DEFAULT"), (SubLObject)SubLObjectFactory.makeKeyword("HTML-NOT-CONTEXTUAL-LEXICAL-IMG")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ContextuallyDependentLexicalMapping")), (SubLObject)SubLObjectFactory.makeKeyword("HTML-CONTEXTUAL-LEXICAL-IMG")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("VanishinglyRareLexicalMapping")), (SubLObject)SubLObjectFactory.makeKeyword("HTML-VANISHING-LEXICAL-IMG")));
+        $ic91$ = ConsesLow.list((SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PrimaryLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("default")), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("DEFAULT"), (SubLObject)SubLObjectFactory.makeString("context")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ContextuallyDependentLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("vanishing")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("VanishinglyRareLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("primary")));
+        $ic92$ = ConsesLow.list((SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PrimaryLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("Primary lexical mapping.  Click to weaken to default strength.")), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("DEFAULT"), (SubLObject)SubLObjectFactory.makeString("Default strength mapping. Click to make this a contextually dependent mapping.")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ContextuallyDependentLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("Contextually dependent lexical mapping. Click to make this a vanishingly rare mapping.")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("VanishinglyRareLexicalMapping")), (SubLObject)SubLObjectFactory.makeString("Vanishingly rare lexical mapping. Click to make this a primary mapping.")));
+        $ic93$ = ConsesLow.list((SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PrimaryLexicalMapping")), (SubLObject)SubLObjectFactory.makeKeyword("HTML-PRIMARY-LEXICAL-IMG")), (SubLObject)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("DEFAULT"), (SubLObject)SubLObjectFactory.makeKeyword("HTML-NOT-CONTEXTUAL-LEXICAL-IMG")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ContextuallyDependentLexicalMapping")), (SubLObject)SubLObjectFactory.makeKeyword("HTML-CONTEXTUAL-LEXICAL-IMG")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("VanishinglyRareLexicalMapping")), (SubLObject)SubLObjectFactory.makeKeyword("HTML-VANISHING-LEXICAL-IMG")));
         $ic94$ = SubLObjectFactory.makeString("javascript:setStrength('");
         $ic95$ = SubLObjectFactory.makeString("', '");
         $ic96$ = SubLObjectFactory.makeString("', this);");
@@ -4292,14 +4292,14 @@ public final class module0742 extends SubLTranslatedFile
         $ic104$ = SubLObjectFactory.makeKeyword("HTML-GENSTRING-IMG");
         $ic105$ = SubLObjectFactory.makeKeyword("HTML-NOT-GENSTRING-IMG");
         $ic106$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic107$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic108$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("strengthOfLexicalMapping"));
+        $ic107$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic108$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("strengthOfLexicalMapping"));
         $ic109$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
         $ic110$ = SubLObjectFactory.makeKeyword("DEFAULT");
-        $ic111$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ContextuallyDependentLexicalMapping"));
-        $ic112$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("PrimaryLexicalMapping"));
-        $ic113$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("VanishinglyRareLexicalMapping"));
-        $ic114$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genStringAssertion"));
+        $ic111$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ContextuallyDependentLexicalMapping"));
+        $ic112$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PrimaryLexicalMapping"));
+        $ic113$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("VanishinglyRareLexicalMapping"));
+        $ic114$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genStringAssertion"));
         $ic115$ = SubLObjectFactory.makeString("genstring-gray-20x20.png");
         $ic116$ = SubLObjectFactory.makeString("[Add genStringAssertion]");
         $ic117$ = SubLObjectFactory.makeString("genstring-purple-20x20.png");
@@ -4328,7 +4328,7 @@ public final class module0742 extends SubLTranslatedFile
         $ic140$ = SubLObjectFactory.makeString("~S");
         $ic141$ = SubLObjectFactory.makeString("Lexical Info for ");
         $ic142$ = SubLObjectFactory.makeKeyword("HTML");
-        $ic143$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic143$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic144$ = SubLObjectFactory.makeKeyword("ALL");
         $ic145$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ABBREVS"), (SubLObject)SubLObjectFactory.makeKeyword("ACRONYMS"));
         $ic146$ = SubLObjectFactory.makeString("Default generated phrase");

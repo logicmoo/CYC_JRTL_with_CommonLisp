@@ -2684,18 +2684,18 @@ public final class module0648 extends SubLTranslatedFile
         $ic101$ = SubLObjectFactory.makeString("glfHasSemantic");
         $ic102$ = SubLObjectFactory.makeString("glfSemanticForArcs");
         $ic103$ = SubLObjectFactory.makeString("glfSemanticForArc");
-        $ic104$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic105$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Graph-CW")));
-        $ic106$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("correspondingAIS"));
+        $ic104$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic105$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Graph-CW")));
+        $ic106$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("correspondingAIS"));
         $ic107$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("AIS"));
-        $ic108$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("GLFNode"));
-        $ic109$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("GLFArc"));
+        $ic108$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("GLFNode"));
+        $ic109$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("GLFArc"));
         $ic110$ = SubLObjectFactory.makeKeyword("NODE");
-        $ic111$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("nodeInSystem"));
+        $ic111$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nodeInSystem"));
         $ic112$ = SubLObjectFactory.makeKeyword("SOURCE");
-        $ic113$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("sourceNodeInSystem"));
+        $ic113$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sourceNodeInSystem"));
         $ic114$ = SubLObjectFactory.makeKeyword("ARC");
-        $ic115$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("linkInSystem"));
+        $ic115$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("linkInSystem"));
         $ic116$ = SubLObjectFactory.makeSymbol("S#43361", "CYC");
         $ic117$ = SubLObjectFactory.makeSymbol("S#43362", "CYC");
         $ic118$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#1519", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#43467", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10127", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#43478", "CYC"));
@@ -2721,7 +2721,7 @@ public final class module0648 extends SubLTranslatedFile
         $ic138$ = SubLObjectFactory.makeString(" of graph ");
         $ic139$ = SubLObjectFactory.makeString(" with semantics ");
         $ic140$ = SubLObjectFactory.makeString(" without semantics ");
-        $ic141$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("glfNodeSemantics-Underspecified"));
+        $ic141$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("glfNodeSemantics-Underspecified"));
         $ic142$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("SEMANTICS"));
         $ic143$ = SubLObjectFactory.makeSymbol("S#43363", "CYC");
         $ic144$ = SubLObjectFactory.makeSymbol("S#43364", "CYC");
@@ -2752,10 +2752,10 @@ public final class module0648 extends SubLTranslatedFile
         $ic169$ = SubLObjectFactory.makeString(" from: ");
         $ic170$ = SubLObjectFactory.makeString(" to:   ");
         $ic171$ = SubLObjectFactory.makeString(" meaning: ");
-        $ic172$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("variableMappingTableForGLFArcInDiagram"));
-        $ic173$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AISForFn"));
+        $ic172$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("variableMappingTableForGLFArcInDiagram"));
+        $ic173$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AISForFn"));
         $ic174$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?FROM"), (SubLObject)SubLObjectFactory.makeSymbol("?TO"));
-        $ic175$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("linkFromToInSystem"));
+        $ic175$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("linkFromToInSystem"));
         $ic176$ = SubLObjectFactory.makeSymbol("?FROM");
         $ic177$ = SubLObjectFactory.makeSymbol("?TO");
         $ic178$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10134", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#1553", "CYC"));
@@ -2775,7 +2775,7 @@ public final class module0648 extends SubLTranslatedFile
         $ic192$ = SubLObjectFactory.makeSymbol("S#43460", "CYC");
         $ic193$ = SubLObjectFactory.makeString("#<GLF-Rendering ");
         $ic194$ = SubLObjectFactory.makeString(" label: ");
-        $ic195$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("glfComponentLabel"));
+        $ic195$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("glfComponentLabel"));
     }
     
     public static final class $sX43359_native extends SubLStructNative

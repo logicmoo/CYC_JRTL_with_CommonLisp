@@ -195,20 +195,20 @@ public final class module0684 extends SubLTranslatedFile
     
     public static SubLObject f41926(final SubLObject var1, final SubLObject var2) {
         final SubLThread var3 = SubLProcess.currentSubLThread();
-        assert module0684.NIL != module0369.f25275(var1) : var1;
+        assert module0684.NIL != oc_inference_datastructures_inference.f25275(var1) : var1;
         assert module0684.NIL != module0423.f29532(var2) : var2;
         return Hashtables.sethash(var1, module0684.$g5385$.getDynamicValue(var3), var2);
     }
     
     public static SubLObject f41927(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        assert module0684.NIL != module0369.f25275(var1) : var1;
+        assert module0684.NIL != oc_inference_datastructures_inference.f25275(var1) : var1;
         return Hashtables.remhash(var1, module0684.$g5385$.getDynamicValue(var2));
     }
     
     public static SubLObject f41928(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        assert module0684.NIL != module0369.f25275(var1) : var1;
+        assert module0684.NIL != oc_inference_datastructures_inference.f25275(var1) : var1;
         return Hashtables.gethash(var1, module0684.$g5385$.getDynamicValue(var2), (SubLObject)module0684.UNPROVIDED);
     }
     
@@ -336,7 +336,7 @@ public final class module0684 extends SubLTranslatedFile
         if (module0684.NIL == var8) {
             var8 = (SubLObject)module0684.$ic17$;
         }
-        assert module0684.NIL != module0369.f25275(var1) : var1;
+        assert module0684.NIL != oc_inference_datastructures_inference.f25275(var1) : var1;
         final SubLObject var10 = module0656.f39832((SubLObject)module0684.$ic18$);
         if (module0684.$ic19$.isString()) {
             final SubLObject var11 = module0644.f39202((SubLObject)module0684.$ic19$, (SubLObject)module0684.NIL, (SubLObject)module0684.NIL, (SubLObject)module0684.NIL);
@@ -344,7 +344,7 @@ public final class module0684 extends SubLTranslatedFile
             module0642.f39020(module0015.$g383$.getGlobalValue());
             module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0684.UNPROVIDED);
             module0655.f39768();
-            PrintLow.format(module0015.$g131$.getDynamicValue(var9), (SubLObject)module0684.$ic20$, module0361.f23996(module0369.f25421(var1)), module0369.f25422(var1));
+            PrintLow.format(module0015.$g131$.getDynamicValue(var9), (SubLObject)module0684.$ic20$, module0361.f23996(oc_inference_datastructures_inference.f25421(var1)), oc_inference_datastructures_inference.f25422(var1));
             module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0684.UNPROVIDED);
             if (module0684.NIL != var10) {
                 module0642.f39020(module0015.$g387$.getGlobalValue());
@@ -1419,7 +1419,7 @@ public final class module0684 extends SubLTranslatedFile
         if (module0684.NIL == module0126.f8389(module0682.f41628(var39))) {
             return module0656.f39789((SubLObject)module0684.$ic154$, module0682.f41628(var39), (SubLObject)module0684.UNPROVIDED, (SubLObject)module0684.UNPROVIDED, (SubLObject)module0684.UNPROVIDED, (SubLObject)module0684.UNPROVIDED);
         }
-        final SubLObject var122 = module0166.f10737(module0682.f41628(var39));
+        final SubLObject var122 = constants_high_oc.f10737(module0682.f41628(var39));
         SubLObject var123 = (SubLObject)module0684.NIL;
         if (module0684.NIL != var122) {
             return module0656.f39789((SubLObject)module0684.$ic155$, module0682.f41628(var39), (SubLObject)module0684.UNPROVIDED, (SubLObject)module0684.UNPROVIDED, (SubLObject)module0684.UNPROVIDED, (SubLObject)module0684.UNPROVIDED);
@@ -1432,7 +1432,7 @@ public final class module0684 extends SubLTranslatedFile
         module0682.f41641(var39, var123);
         module0423.f29533(module0682.f41627(var39), module0682.f41660(var39), module0682.f41662(var39), module0412.f28669(module0682.f41638(var39), module0682.f41660(var39)), module0682.f41631(var39), module0682.f41639(var39), module0682.f41640(var39));
         module0423.f29554(module0682.f41627(var39), module0682.f41635(var39), module0682.f41637(var39), module0682.f41636(var39), module0682.f41631(var39));
-        if (module0684.NIL != module0128.f8449(var123)) {
+        if (module0684.NIL != constant_handles_oc.f8449(var123)) {
             module0677.f41359(var123);
         }
         else if (module0684.NIL != module0167.f10813(var123)) {
@@ -1566,7 +1566,7 @@ public final class module0684 extends SubLTranslatedFile
         $ic13$ = SubLObjectFactory.makeKeyword("KBQ-ASK-IN-PROOF-CHECKER");
         $ic14$ = SubLObjectFactory.makeSymbol("S#45931", "CYC");
         $ic15$ = SubLObjectFactory.makeSymbol("CB-ASK-KB-QUERY-IN-PROOF-CHECKER");
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("queryPracticeRules"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("queryPracticeRules"));
         $ic17$ = SubLObjectFactory.makeString("[Save As Query]");
         $ic18$ = SubLObjectFactory.makeKeyword("SELF");
         $ic19$ = SubLObjectFactory.makeString("Create an instance of #$CycLQuerySpecification with the focal inference's sentence, microtheory and inference settings.");

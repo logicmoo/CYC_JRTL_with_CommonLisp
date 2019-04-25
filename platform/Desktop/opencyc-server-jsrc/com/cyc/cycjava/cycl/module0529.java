@@ -127,9 +127,9 @@ public final class module0529 extends SubLTranslatedFile
     }
     
     public static SubLObject f33003(final SubLObject var23) {
-        assert module0529.NIL != module0174.f11035(var23) : var23;
+        assert module0529.NIL != assertion_handles_oc.f11035(var23) : var23;
         if (module0529.NIL == module0178.f11314(var23)) {
-            module0175.f11077(var23, (SubLObject)module0529.$ic7$);
+            oc_assertions_interface.f11077(var23, (SubLObject)module0529.$ic7$);
             return module0178.f11314(var23);
         }
         return (SubLObject)module0529.NIL;
@@ -301,8 +301,8 @@ public final class module0529 extends SubLTranslatedFile
                         try {
                             var14 = Values.nth_value_step_2(Values.nth_value_step_1((SubLObject)module0529.TWO_INTEGER), module0409.f28508(var11, var2, (SubLObject)module0529.NIL, var13));
                             if (module0529.NIL != var14) {
-                                final SubLObject var15 = module0369.f25606(var14);
-                                final SubLObject var16 = module0369.f25597(var14);
+                                final SubLObject var15 = oc_inference_datastructures_inference.f25606(var14);
+                                final SubLObject var16 = oc_inference_datastructures_inference.f25597(var14);
                                 final SubLObject var17 = module0363.f24618(var16);
                                 final SubLObject var18 = Sequences.find((SubLObject)module0529.$ic19$, var17, Symbols.symbol_function((SubLObject)module0529.EQ), Symbols.symbol_function((SubLObject)module0529.$ic20$), (SubLObject)module0529.UNPROVIDED, (SubLObject)module0529.UNPROVIDED);
                                 if (module0529.NIL != var18) {
@@ -393,7 +393,7 @@ public final class module0529 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0529();
         module0529.$g3898$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic1$ = SubLObjectFactory.makeSymbol("S#12732", "CYC");
         $ic2$ = SubLObjectFactory.makeString("Triggering rule ");
         $ic3$ = SubLObjectFactory.makeSymbol("NON-NEGATIVE-INTEGER-P");

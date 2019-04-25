@@ -152,7 +152,7 @@ public final class module0531 extends SubLTranslatedFile
             var5 = (SubLObject)module0531.NIL;
         }
         final SubLThread var14 = SubLProcess.currentSubLThread();
-        assert module0531.NIL != module0174.f11035(var13) : var13;
+        assert module0531.NIL != assertion_handles_oc.f11035(var13) : var13;
         assert module0531.NIL != module0161.f10481(var2) : var2;
         SubLObject var15 = (SubLObject)module0531.NIL;
         final SubLObject var16 = module0131.$g60$.currentBinding(var14);
@@ -534,7 +534,7 @@ public final class module0531 extends SubLTranslatedFile
         $ic2$ = SubLObjectFactory.makeSymbol("ASSERTION-P");
         $ic3$ = SubLObjectFactory.makeString("ASSERTIONS was not a list of assertions");
         $ic4$ = SubLObjectFactory.makeSymbol("S#28174", "CYC");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic6$ = SubLObjectFactory.makeKeyword("ERROR");
         $ic7$ = SubLObjectFactory.makeKeyword("MAX-TIME");
         $ic8$ = SubLObjectFactory.makeKeyword("EXHAUST-TOTAL");

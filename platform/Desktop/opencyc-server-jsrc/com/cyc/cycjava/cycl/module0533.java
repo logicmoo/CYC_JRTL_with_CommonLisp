@@ -309,7 +309,7 @@ public final class module0533 extends SubLTranslatedFile
     public static SubLObject f33222() {
         final SubLThread var1 = SubLProcess.currentSubLThread();
         final SubLObject var2 = module0067.f4880(Symbols.symbol_function((SubLObject)module0533.EQL), (SubLObject)module0533.UNPROVIDED);
-        final SubLObject var3 = module0128.f8425();
+        final SubLObject var3 = constant_handles_oc.f8425();
         final SubLObject var4 = (SubLObject)module0533.$ic24$;
         final SubLObject var5 = module0065.f4733(var3);
         SubLObject var6 = (SubLObject)module0533.ZERO_INTEGER;
@@ -486,14 +486,14 @@ public final class module0533 extends SubLTranslatedFile
         $ic3$ = SubLObjectFactory.makeSymbol("HL-PROTOTYPICAL-INSTANCE-AFTER-ADDING");
         $ic4$ = SubLObjectFactory.makeSymbol("HL-PROTOTYPICAL-INSTANCE-AFTER-REMOVING");
         $ic5$ = SubLObjectFactory.makeSymbol("S#36664", "CYC");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
-        $ic7$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("HLPrototypicalTerm")));
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("keIrrelevantTerm"));
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
+        $ic7$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HLPrototypicalTerm")));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("keIrrelevantTerm"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
         $ic10$ = SubLObjectFactory.makeSymbol("S#36686", "CYC");
         $ic11$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("hlPrototypicalInstance"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("hlPrototypicalInstance"));
         $ic14$ = SubLObjectFactory.makeSymbol("S#690", "CYC");
         $ic15$ = SubLObjectFactory.makeKeyword("ALL");
         $ic16$ = SubLObjectFactory.makeString("ThePrototypical");

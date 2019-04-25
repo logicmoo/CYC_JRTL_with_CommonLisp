@@ -31,32 +31,32 @@ public final class module0170 extends SubLTranslatedFile
     private static final SubLInteger $ic8$;
     
     public static SubLObject f10873(final SubLObject var1, final SubLObject var2) {
-        module0170.$g2186$.setGlobalValue(module0160.f10412((SubLObject)module0170.$ic3$, var1, module0170.$g2187$.getGlobalValue(), module0170.$g2188$.getGlobalValue(), (SubLObject)module0170.$ic4$, var2));
+        module0170.$g2186$.setGlobalValue(oc_kb_object_manager.new_kb_object_manager((SubLObject)module0170.$ic3$, var1, module0170.$g2187$.getGlobalValue(), module0170.$g2188$.getGlobalValue(), (SubLObject)module0170.$ic4$, var2));
         return (SubLObject)module0170.T;
     }
     
     public static SubLObject f10874(final SubLObject var3) {
-        return module0160.f10430(module0170.$g2186$.getGlobalValue(), var3);
+        return oc_kb_object_manager.f10430(module0170.$g2186$.getGlobalValue(), var3);
     }
     
     public static SubLObject f10875() {
-        return module0160.f10431(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10431(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10876() {
-        return module0160.f10446(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10446(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10877() {
-        return module0160.f10447(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10447(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10878() {
-        return module0160.f10437(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10437(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10879() {
-        return module0160.f10438(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10438(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10880() {
@@ -64,54 +64,54 @@ public final class module0170 extends SubLTranslatedFile
     }
     
     public static SubLObject f10881(final SubLObject var4) {
-        return module0160.f10442(module0170.$g2186$.getGlobalValue(), var4);
+        return oc_kb_object_manager.f10442(module0170.$g2186$.getGlobalValue(), var4);
     }
     
     public static SubLObject f10882() {
-        return module0160.f10458(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10458(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10883() {
         if (module0167.f10796().isZero()) {
             return (SubLObject)module0170.NIL;
         }
-        return module0160.f10445(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10445(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10884(final SubLObject var4, final SubLObject var5) {
-        return module0160.f10448(module0170.$g2186$.getGlobalValue(), var4, var5);
+        return oc_kb_object_manager.f10448(module0170.$g2186$.getGlobalValue(), var4, var5);
     }
     
     public static SubLObject f10885(final SubLObject var4) {
-        return module0160.f10449(module0170.$g2186$.getGlobalValue(), var4);
+        return oc_kb_object_manager.f10449(module0170.$g2186$.getGlobalValue(), var4);
     }
     
     public static SubLObject f10886(final SubLObject var4) {
-        return module0160.f10454(module0170.$g2186$.getGlobalValue(), var4);
+        return oc_kb_object_manager.f10454(module0170.$g2186$.getGlobalValue(), var4);
     }
     
     public static SubLObject f10887() {
-        return module0160.f10455(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10455(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10888() {
-        return module0160.f10456(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10456(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10889() {
-        return module0160.f10457(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10457(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10890() {
-        return module0160.f10436(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10436(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10891() {
-        return module0160.f10462(module0170.$g2186$.getGlobalValue());
+        return oc_kb_object_manager.f10462(module0170.$g2186$.getGlobalValue());
     }
     
     public static SubLObject f10892() {
-        return module0160.f10426(module0170.$g2186$.getGlobalValue(), (SubLObject)module0170.$ic3$, (SubLObject)module0170.$ic5$);
+        return oc_kb_object_manager.f10426(module0170.$g2186$.getGlobalValue(), (SubLObject)module0170.$ic3$, (SubLObject)module0170.$ic5$);
     }
     
     public static SubLObject f10893() {
@@ -123,7 +123,7 @@ public final class module0170 extends SubLTranslatedFile
             final SubLObject var1 = module0065.f4739(module0170.$g2189$.getGlobalValue());
             final SubLObject var2 = Numbers.min(module0170.$g2188$.getGlobalValue(), Numbers.multiply(Numbers.integerDivide(var1, (SubLObject)module0170.$ic8$), module0170.$g2187$.getGlobalValue()));
             final SubLObject var3 = module0089.f6070(var2, (SubLObject)module0170.UNPROVIDED);
-            module0170.$g2186$.setGlobalValue(module0160.f10429((SubLObject)module0170.$ic3$, module0170.$g2187$.getGlobalValue(), module0170.$g2188$.getGlobalValue(), module0170.$g2189$.getGlobalValue(), var3, (SubLObject)module0170.$ic1$, (SubLObject)module0170.$ic4$));
+            module0170.$g2186$.setGlobalValue(oc_kb_object_manager.f10429((SubLObject)module0170.$ic3$, module0170.$g2187$.getGlobalValue(), module0170.$g2188$.getGlobalValue(), module0170.$g2189$.getGlobalValue(), var3, (SubLObject)module0170.$ic1$, (SubLObject)module0170.$ic4$));
             return (SubLObject)module0170.T;
         }
         return (SubLObject)module0170.NIL;

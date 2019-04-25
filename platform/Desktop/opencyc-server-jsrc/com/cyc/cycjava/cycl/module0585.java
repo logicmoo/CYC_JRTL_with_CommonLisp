@@ -396,8 +396,8 @@ public final class module0585 extends SubLTranslatedFile
         $ic8$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("S#39490", "CYC"));
         $ic9$ = SubLObjectFactory.makeSymbol("S#39491", "CYC");
         $ic10$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("S#39491", "CYC"));
-        $ic11$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39563", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39564", "CYC"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("LexicalAffix"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#295", "CYC"), (SubLObject)SubLObjectFactory.makeString("Mapping reified affixes"))), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("LexicalAffix"));
+        $ic11$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39563", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39564", "CYC"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LexicalAffix"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#295", "CYC"), (SubLObject)SubLObjectFactory.makeString("Mapping reified affixes"))), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LexicalAffix"));
         $ic13$ = SubLObjectFactory.makeString("Mapping reified affixes");
         $ic14$ = SubLObjectFactory.makeUninternedSymbol("US#13E86D7");
         $ic15$ = SubLObjectFactory.makeUninternedSymbol("US#32A3846");

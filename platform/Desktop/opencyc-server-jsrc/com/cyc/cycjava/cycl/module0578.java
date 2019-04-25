@@ -341,7 +341,7 @@ public final class module0578 extends SubLTranslatedFile
         $ic25$ = SubLObjectFactory.makeSymbol("S#38912", "CYC");
         $ic26$ = SubLObjectFactory.makeSymbol("CERROR");
         $ic27$ = SubLObjectFactory.makeString("continue anyway");
-        $ic28$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"));
+        $ic28$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"));
         $ic29$ = SubLObjectFactory.makeSymbol("PCASE-FEATURE");
         $ic30$ = SubLObjectFactory.makeKeyword("CYC-MAINT");
         $ic31$ = SubLObjectFactory.makeSymbol("COR");

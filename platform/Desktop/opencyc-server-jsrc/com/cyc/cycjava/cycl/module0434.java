@@ -440,13 +440,13 @@ public final class module0434 extends SubLTranslatedFile
             var15 = conses_high.putf(var15, (SubLObject)module0434.$ic57$, (SubLObject)module0434.ONE_INTEGER);
         }
         SubLObject var17 = module0339.f22757();
-        if (module0434.NIL != module0369.f25275(var17)) {
+        if (module0434.NIL != oc_inference_datastructures_inference.f25275(var17)) {
             SubLObject var18 = module0018.$g632$.getDynamicValue(var14);
             SubLObject var19 = (SubLObject)module0434.NIL;
             var19 = var18.first();
             while (module0434.NIL != var18) {
                 if (module0434.NIL == conses_high.getf(var15, var19, (SubLObject)module0434.UNPROVIDED)) {
-                    final SubLObject var20 = module0369.f25591(var17, var19, (SubLObject)module0434.UNPROVIDED);
+                    final SubLObject var20 = oc_inference_datastructures_inference.f25591(var17, var19, (SubLObject)module0434.UNPROVIDED);
                     if (module0434.NIL != var20) {
                         var15 = conses_high.putf(var15, var19, var20);
                     }
@@ -459,7 +459,7 @@ public final class module0434 extends SubLTranslatedFile
             var15 = conses_high.putf(var15, (SubLObject)module0434.$ic5$, (SubLObject)module0434.$ic7$);
         }
         var17 = module0339.f22757();
-        if (module0434.NIL != module0369.f25429(var17) && module0434.NIL != module0434.$g3528$.getDynamicValue(var14) && module0434.NIL != module0369.f25515(var17)) {
+        if (module0434.NIL != oc_inference_datastructures_inference.f25429(var17) && module0434.NIL != module0434.$g3528$.getDynamicValue(var14) && module0434.NIL != oc_inference_datastructures_inference.f25515(var17)) {
             var15 = conses_high.putf(var15, (SubLObject)module0434.$ic58$, (SubLObject)module0434.T);
         }
         SubLObject var21 = (SubLObject)module0434.NIL;
@@ -1247,7 +1247,7 @@ public final class module0434 extends SubLTranslatedFile
         $ic68$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MAX-NUMBER"), (SubLObject)module0434.ONE_INTEGER);
         $ic69$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VARIABLE"), (SubLObject)SubLObjectFactory.makeSymbol("S#9148", "CYC"));
         $ic70$ = SubLObjectFactory.makeSymbol("FIRST");
-        $ic71$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
+        $ic71$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
         $ic72$ = SubLObjectFactory.makeKeyword("NO-THE-SET-OF-EXPRESSION-FOUND");
         $ic73$ = SubLObjectFactory.makeKeyword("THE-SET-OF-VIA-GENERALIZED-QUERY-NOT-ALLOWED");
         $ic74$ = SubLObjectFactory.makeKeyword("PROBLEM-NOT-VALID");
@@ -1261,7 +1261,7 @@ public final class module0434 extends SubLTranslatedFile
         $ic82$ = SubLObjectFactory.makeString("  Restricted  query: (new-cyc-query ~S ~S ~S)~%");
         $ic83$ = SubLObjectFactory.makeString("  Missed answer: ~S -> ~S~%");
         $ic84$ = SubLObjectFactory.makeKeyword("FALLTHROUGH-NIL");
-        $ic85$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("predNotAllowedInGeneralizedQueryForTheSetOf"));
+        $ic85$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("predNotAllowedInGeneralizedQueryForTheSetOf"));
         $ic86$ = SubLObjectFactory.makeSymbol("S#15606", "CYC");
         $ic87$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#33868", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33869", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#27384", "CYC"));
         $ic88$ = SubLObjectFactory.makeSymbol("S#29224", "CYC");

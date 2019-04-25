@@ -540,7 +540,7 @@ public final class module0230 extends SubLTranslatedFile
         me = (SubLFile)new module0230();
         module0230.$g2425$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic2$ = SubLObjectFactory.makeKeyword("RULE");
         $ic3$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic4$ = SubLObjectFactory.makeKeyword("GAF");
@@ -549,9 +549,9 @@ public final class module0230 extends SubLTranslatedFile
         $ic7$ = SubLObjectFactory.makeKeyword("UNINITIALIZED");
         $ic8$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
         $ic9$ = SubLObjectFactory.makeSymbol("S#18039", "CYC");
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
     }
 }
 

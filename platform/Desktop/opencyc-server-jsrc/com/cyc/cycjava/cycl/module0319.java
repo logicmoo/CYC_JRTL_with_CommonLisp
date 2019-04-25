@@ -1035,7 +1035,7 @@ public final class module0319 extends SubLTranslatedFile
     }
     
     public static SubLObject f21548(final SubLObject var19, final SubLObject var23, final SubLObject var30) {
-        if (module0319.NIL != module0174.f11035(var30) && module0319.NIL != module0211.f13700(var30)) {
+        if (module0319.NIL != assertion_handles_oc.f11035(var30) && module0319.NIL != module0211.f13700(var30)) {
             SubLObject var32;
             final SubLObject var31 = var32 = module0220.f14598(var30, module0319.$ic131$, (SubLObject)module0319.THREE_INTEGER, (SubLObject)module0319.$ic132$, (SubLObject)module0319.UNPROVIDED);
             SubLObject var33 = (SubLObject)module0319.NIL;
@@ -1373,12 +1373,12 @@ public final class module0319 extends SubLTranslatedFile
         $ic68$ = SubLObjectFactory.makeKeyword("PRECOMPUTED-CLOSURE");
         $ic69$ = SubLObjectFactory.makeKeyword("CALCULATE-CLOSURE");
         $ic70$ = SubLObjectFactory.makeKeyword("PREDICATE-EXTENT");
-        $ic71$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
-        $ic72$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("conservativeViaArg"));
-        $ic73$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
-        $ic74$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("conservativeViaArgInverse"));
-        $ic75$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
-        $ic76$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
+        $ic71$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
+        $ic72$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("conservativeViaArg"));
+        $ic73$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
+        $ic74$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("conservativeViaArgInverse"));
+        $ic75$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic76$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
         $ic77$ = SubLObjectFactory.makeString("Continue?");
         $ic78$ = SubLObjectFactory.makeString("Error in predicate ~a");
         $ic79$ = SubLObjectFactory.makeKeyword("BACKWARD");
@@ -1420,7 +1420,7 @@ public final class module0319 extends SubLTranslatedFile
         $ic115$ = SubLObjectFactory.makeSymbol("S#23979", "CYC");
         $ic116$ = SubLObjectFactory.makeSymbol("S#24037", "CYC");
         $ic117$ = SubLObjectFactory.makeSymbol("PIF");
-        $ic118$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")));
+        $ic118$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")));
         $ic119$ = SubLObjectFactory.makeSymbol("S#11102", "CYC");
         $ic120$ = SubLObjectFactory.makeSymbol("S#15273", "CYC");
         $ic121$ = SubLObjectFactory.makeSymbol("S#20058", "CYC");
@@ -1430,10 +1430,10 @@ public final class module0319 extends SubLTranslatedFile
         $ic125$ = SubLObjectFactory.makeSymbol("DO-PREDICATE-EXTENT-INDEX");
         $ic126$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#23954", "CYC"));
         $ic127$ = SubLObjectFactory.makeSymbol("S#24102", "CYC");
-        $ic128$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("temporallySubsumes"));
+        $ic128$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("temporallySubsumes"));
         $ic129$ = SubLObjectFactory.makeKeyword("TIME");
         $ic130$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#24103", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10878", "CYC"));
-        $ic131$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("exceptForInArg"));
+        $ic131$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("exceptForInArg"));
         $ic132$ = ConsesLow.list((SubLObject)module0319.ONE_INTEGER, (SubLObject)module0319.TWO_INTEGER);
         $ic133$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#24104", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#24105", "CYC"));
         $ic134$ = SubLObjectFactory.makeString("Continue Anyway?");

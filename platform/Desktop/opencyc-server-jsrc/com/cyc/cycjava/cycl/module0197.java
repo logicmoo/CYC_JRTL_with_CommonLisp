@@ -164,7 +164,7 @@ public final class module0197 extends SubLTranslatedFile
     
     public static SubLObject f12257(final SubLObject var4) {
         if (module0197.NIL != f12249((SubLObject)module0197.$ic4$)) {
-            return f12250((SubLObject)module0197.$ic4$, (SubLObject)ConsesLow.list((SubLObject)module0197.$ic46$, module0196.f12243(var4), (SubLObject)module0197.$ic43$, module0196.f12243(module0166.f10757(var4))));
+            return f12250((SubLObject)module0197.$ic4$, (SubLObject)ConsesLow.list((SubLObject)module0197.$ic46$, module0196.f12243(var4), (SubLObject)module0197.$ic43$, module0196.f12243(constants_high_oc.f10757(var4))));
         }
         return (SubLObject)module0197.NIL;
     }
@@ -1021,7 +1021,7 @@ public final class module0197 extends SubLTranslatedFile
         $ic49$ = SubLObjectFactory.makeKeyword("NART-HL-FORMULA");
         $ic50$ = SubLObjectFactory.makeKeyword("CNF");
         $ic51$ = SubLObjectFactory.makeKeyword("MT");
-        $ic52$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic52$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
         $ic53$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic54$ = SubLObjectFactory.makeKeyword("SENTENCE");
         $ic55$ = SubLObjectFactory.makeKeyword("GAF");

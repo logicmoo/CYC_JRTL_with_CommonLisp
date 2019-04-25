@@ -95,13 +95,13 @@ public final class module0165 extends SubLTranslatedFile
     public static SubLObject f10707(final SubLObject var8, final SubLObject var9) {
         SubLObject var10 = f10701(var9);
         if (module0165.NIL != var10) {
-            return module0166.f10749(var10);
+            return constants_high_oc.f10749(var10);
         }
-        final SubLObject var11 = module0128.f8444();
-        var10 = module0128.f8477(var8, (SubLObject)module0165.T);
-        module0128.f8485(var10, var11);
+        final SubLObject var11 = constant_handles_oc.f8444();
+        var10 = constant_handles_oc.f8477(var8, (SubLObject)module0165.T);
+        constant_handles_oc.f8485(var10, var11);
         if (var8.isString()) {
-            module0128.f8473(var8);
+            constant_handles_oc.f8473(var8);
         }
         f10708(var10, var8, var9);
         return var11;
@@ -116,18 +116,18 @@ public final class module0165 extends SubLTranslatedFile
     }
     
     public static SubLObject f10710(final SubLObject var8, final SubLObject var11) {
-        final SubLObject var12 = module0128.f8477(var8, (SubLObject)module0165.T);
+        final SubLObject var12 = constant_handles_oc.f8477(var8, (SubLObject)module0165.T);
         f10711(var12, var11);
         if (var8.isString()) {
-            module0128.f8473(var8);
+            constant_handles_oc.f8473(var8);
         }
         return var12;
     }
     
     public static SubLObject f10709(final SubLObject var7, final SubLObject var9) {
         SubLObject var10 = (SubLObject)module0165.NIL;
-        if (module0165.NIL != module0166.f10766(var9)) {
-            var10 = module0166.f10765(var9);
+        if (module0165.NIL != constants_high_oc.f10766(var9)) {
+            var10 = constants_high_oc.f10765(var9);
         }
         else if (module0165.NIL != Guids.guid_p(var9)) {
             var10 = var9;
@@ -137,23 +137,23 @@ public final class module0165 extends SubLTranslatedFile
     }
     
     public static SubLObject f10711(final SubLObject var7, final SubLObject var11) {
-        return module0128.f8485(var7, var11);
+        return constant_handles_oc.f8485(var7, var11);
     }
     
     public static SubLObject f10713(final SubLObject var7) {
         final SubLObject var8 = f10714(var7);
         if (var8.isString()) {
             module0124.f8370(var7, var8);
-            module0128.f8473(var8);
+            constant_handles_oc.f8473(var8);
         }
         f10715(var7);
         f10716(var7);
-        module0128.f8460(var7);
+        constant_handles_oc.f8460(var7);
         return (SubLObject)module0165.NIL;
     }
     
     public static SubLObject f10715(final SubLObject var7) {
-        final SubLObject var8 = module0128.f8440(var7);
+        final SubLObject var8 = constant_handles_oc.f8440(var7);
         if (var8.isInteger()) {
             module0164.f10686(var8);
         }
@@ -161,37 +161,37 @@ public final class module0165 extends SubLTranslatedFile
     }
     
     public static SubLObject f10716(final SubLObject var7) {
-        SubLObject var8 = module0166.f10744(var7);
+        SubLObject var8 = constants_high_oc.f10744(var7);
         if (module0165.NIL != Guids.guid_p(var8)) {
-            f10704(module0128.f8440(var7), var8);
+            f10704(constant_handles_oc.f8440(var7), var8);
         }
-        var8 = module0166.f10745(var7);
+        var8 = constants_high_oc.f10745(var7);
         if (module0165.NIL != Guids.guid_p(var8)) {
-            f10705(module0128.f8440(var7), var8);
+            f10705(constant_handles_oc.f8440(var7), var8);
         }
-        final SubLObject var9 = module0128.f8440(var7);
+        final SubLObject var9 = constant_handles_oc.f8440(var7);
         if (var9.isInteger()) {
-            module0128.f8443(var9);
+            constant_handles_oc.f8443(var9);
         }
         return var7;
     }
     
     public static SubLObject f10717(final SubLObject var7) {
-        final SubLObject var8 = module0128.f8440(var7);
+        final SubLObject var8 = constant_handles_oc.f8440(var7);
         return f10699(var8);
     }
     
     public static SubLObject f10718(final SubLObject var7) {
-        final SubLObject var8 = module0128.f8440(var7);
+        final SubLObject var8 = constant_handles_oc.f8440(var7);
         return f10700(var8);
     }
     
     public static SubLObject f10714(final SubLObject var7) {
-        return module0128.f8451(var7);
+        return constant_handles_oc.f8451(var7);
     }
     
     public static SubLObject f10719(final SubLObject var7) {
-        final SubLObject var8 = module0128.f8440(var7);
+        final SubLObject var8 = constant_handles_oc.f8440(var7);
         if (module0165.NIL != var8) {
             return module0164.f10675(var8);
         }
@@ -200,7 +200,7 @@ public final class module0165 extends SubLTranslatedFile
     
     public static SubLObject f10720(final SubLObject var7) {
         module0425.f30055(var7);
-        final SubLObject var8 = module0128.f8440(var7);
+        final SubLObject var8 = constant_handles_oc.f8440(var7);
         if (module0165.NIL != var8) {
             return module0164.f10676(var8);
         }
@@ -208,12 +208,12 @@ public final class module0165 extends SubLTranslatedFile
     }
     
     public static SubLObject f10721() {
-        final SubLObject var12 = module0128.f8423();
+        final SubLObject var12 = constant_handles_oc.f8423();
         return module0052.f3724(var12, (SubLObject)module0165.$ic5$, (SubLObject)module0165.UNPROVIDED);
     }
     
     public static SubLObject f10722(final SubLObject var7) {
-        final SubLObject var8 = module0128.f8440(var7);
+        final SubLObject var8 = constant_handles_oc.f8440(var7);
         final SubLObject var9 = f10714(var7);
         final SubLObject var10 = (SubLObject)(var8.isInteger() ? f10717(var7) : module0165.NIL);
         return (SubLObject)ConsesLow.list(var8, var9, var10);
@@ -223,65 +223,65 @@ public final class module0165 extends SubLTranslatedFile
         if (module0165.NIL != module0163.f10657(var13)) {
             Errors.error((SubLObject)module0165.$ic6$, var13);
         }
-        final SubLObject var14 = module0166.f10743(var7);
+        final SubLObject var14 = constants_high_oc.f10743(var7);
         if (var14.isString()) {
             module0124.f8370(var7, var14);
-            module0128.f8473(var14);
+            constant_handles_oc.f8473(var14);
         }
         f10724(var7, var13);
         if (var13.isString()) {
             module0124.f8369(var7, var13);
-            module0128.f8472(var13, var7);
+            constant_handles_oc.f8472(var13, var7);
         }
         return var7;
     }
     
     public static SubLObject f10724(final SubLObject var7, final SubLObject var13) {
-        module0128.f8453(var7, var13);
+        constant_handles_oc.f8453(var7, var13);
         return var7;
     }
     
     public static SubLObject f10725(final SubLObject var7, final SubLObject var15) {
-        module0164.f10685(module0128.f8440(var7), var15);
+        module0164.f10685(constant_handles_oc.f8440(var7), var15);
         return var7;
     }
     
     public static SubLObject f10712(final SubLObject var7, final SubLObject var5) {
-        assert module0165.NIL != module0128.f8449(var7) : var7;
+        assert module0165.NIL != constant_handles_oc.f8449(var7) : var7;
         assert module0165.NIL != Guids.guid_p(var5) : var5;
-        if (module0165.NIL == Guids.guid_p(module0166.f10744(var7))) {
+        if (module0165.NIL == Guids.guid_p(constants_high_oc.f10744(var7))) {
             f10726(var7, var5);
         }
         return var7;
     }
     
     public static SubLObject f10726(final SubLObject var7, final SubLObject var16) {
-        f10702(module0128.f8440(var7), var16, var7);
+        f10702(constant_handles_oc.f8440(var7), var16, var7);
         return var7;
     }
     
     public static SubLObject f10727(final SubLObject var7, final SubLObject var16) {
-        assert module0165.NIL != module0128.f8449(var7) : var7;
+        assert module0165.NIL != constant_handles_oc.f8449(var7) : var7;
         assert module0165.NIL != Guids.guid_p(var16) : var16;
-        if (module0165.NIL != Guids.guid_p(module0166.f10744(var7))) {
-            f10703(module0128.f8440(var7), var16, var7);
+        if (module0165.NIL != Guids.guid_p(constants_high_oc.f10744(var7))) {
+            f10703(constant_handles_oc.f8440(var7), var16, var7);
         }
         return var7;
     }
     
     public static SubLObject f10728(final SubLObject var7, final SubLObject var16) {
-        assert module0165.NIL != module0128.f8449(var7) : var7;
+        assert module0165.NIL != constant_handles_oc.f8449(var7) : var7;
         assert module0165.NIL != Guids.guid_p(var16) : var16;
-        if (module0165.NIL != Guids.guid_p(module0166.f10744(var7))) {
-            f10705(module0128.f8440(var7), var16);
+        if (module0165.NIL != Guids.guid_p(constants_high_oc.f10744(var7))) {
+            f10705(constant_handles_oc.f8440(var7), var16);
         }
         return var7;
     }
     
     public static SubLObject f10729(final SubLObject var7, final SubLObject var17, final SubLObject var5) {
         final SubLObject var18 = f10714(var7);
-        module0128.f8485(var7, var17);
-        module0128.f8473(var18);
+        constant_handles_oc.f8485(var7, var17);
+        constant_handles_oc.f8473(var18);
         f10708(var7, var18, var5);
         return var7;
     }

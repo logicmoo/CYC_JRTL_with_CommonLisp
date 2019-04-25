@@ -644,10 +644,10 @@ public final class module0769 extends SubLTranslatedFile
     }
     
     public static SubLObject f49029(final SubLObject var47) {
-        final SubLObject var48 = module0166.f10737((SubLObject)module0769.$ic52$);
-        final SubLObject var49 = module0166.f10737((SubLObject)module0769.$ic53$);
-        final SubLObject var50 = module0166.f10737((SubLObject)module0769.$ic54$);
-        if (module0769.NIL == module0128.f8465(var48, (SubLObject)module0769.UNPROVIDED) || module0769.NIL == module0128.f8465(var49, (SubLObject)module0769.UNPROVIDED) || module0769.NIL == module0128.f8465(var50, (SubLObject)module0769.UNPROVIDED)) {
+        final SubLObject var48 = constants_high_oc.f10737((SubLObject)module0769.$ic52$);
+        final SubLObject var49 = constants_high_oc.f10737((SubLObject)module0769.$ic53$);
+        final SubLObject var50 = constants_high_oc.f10737((SubLObject)module0769.$ic54$);
+        if (module0769.NIL == constant_handles_oc.f8465(var48, (SubLObject)module0769.UNPROVIDED) || module0769.NIL == constant_handles_oc.f8465(var49, (SubLObject)module0769.UNPROVIDED) || module0769.NIL == constant_handles_oc.f8465(var50, (SubLObject)module0769.UNPROVIDED)) {
             return (SubLObject)module0769.NIL;
         }
         final SubLObject var51 = (SubLObject)module0769.$ic55$;
@@ -1043,9 +1043,9 @@ public final class module0769 extends SubLTranslatedFile
         $ic18$ = SubLObjectFactory.makeString("</a>");
         $ic19$ = SubLObjectFactory.makeString("naut");
         $ic20$ = SubLObjectFactory.makeSymbol("S#51671", "CYC");
-        $ic21$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("URLFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("URL-P")));
+        $ic21$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("URLFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("URL-P")));
         $ic22$ = SubLObjectFactory.makeSymbol("?URL");
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("salientURL"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("salientURL"));
         $ic24$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?URL"));
         $ic25$ = SubLObjectFactory.makeSymbol("S#39059", "CYC");
         $ic26$ = SubLObjectFactory.makeKeyword("NONE");
@@ -1059,7 +1059,7 @@ public final class module0769 extends SubLTranslatedFile
         $ic34$ = SubLObjectFactory.makeString("(PPH error level ");
         $ic35$ = SubLObjectFactory.makeString(") ");
         $ic36$ = SubLObjectFactory.makeString("~&Adding tag to string containing tag: ~S ~S~%");
-        $ic37$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntermediateVocabTerm"));
+        $ic37$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntermediateVocabTerm"));
         $ic38$ = SubLObjectFactory.makeSymbol("<");
         $ic39$ = SubLObjectFactory.makeSymbol("CAR");
         $ic40$ = SubLObjectFactory.makeSymbol("S#53502", "CYC");
@@ -1067,9 +1067,9 @@ public final class module0769 extends SubLTranslatedFile
         $ic42$ = SubLObjectFactory.makeString(", ");
         $ic43$ = SubLObjectFactory.makeString("Source: ");
         $ic44$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-        $ic45$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("citationStringForStyleAndRendering"));
+        $ic45$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("citationStringForStyleAndRendering"));
         $ic46$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?X"), (SubLObject)SubLObjectFactory.makeSymbol("?Y"), (SubLObject)SubLObjectFactory.makeSymbol("?TEXT"));
-        $ic47$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic47$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic48$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MAX-TIME"), (SubLObject)module0769.FIVE_INTEGER);
         $ic49$ = SubLObjectFactory.makeSymbol("?TEXT");
         $ic50$ = SubLObjectFactory.makeString("[");

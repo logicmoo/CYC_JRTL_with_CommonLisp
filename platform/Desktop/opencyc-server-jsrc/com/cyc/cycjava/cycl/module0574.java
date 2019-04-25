@@ -1847,36 +1847,36 @@ public final class module0574 extends SubLTranslatedFile
             var140 = (SubLObject)module0574.$ic149$;
         }
         final SubLThread var141 = SubLProcess.currentSubLThread();
-        final SubLObject var142 = module0176.$g2196$.getGlobalValue();
-        final SubLObject var143 = module0160.f10437(var142);
-        final SubLObject var144 = module0160.f10418(var142);
+        final SubLObject var142 = oc_assertion_manager.$assertion_content_manager$.getGlobalValue();
+        final SubLObject var143 = oc_kb_object_manager.f10437(var142);
+        final SubLObject var144 = oc_kb_object_manager.f10418(var142);
         try {
-            module0160.f10447(var142);
-            module0160.f10417(var142);
+            oc_kb_object_manager.f10447(var142);
+            oc_kb_object_manager.f10417(var142);
             final SubLObject var141_144 = module0186.$g2230$.getGlobalValue();
-            final SubLObject var142_145 = module0160.f10437(var141_144);
-            final SubLObject var143_146 = module0160.f10418(var141_144);
+            final SubLObject var142_145 = oc_kb_object_manager.f10437(var141_144);
+            final SubLObject var143_146 = oc_kb_object_manager.f10418(var141_144);
             try {
-                module0160.f10447(var141_144);
-                module0160.f10417(var141_144);
+                oc_kb_object_manager.f10447(var141_144);
+                oc_kb_object_manager.f10417(var141_144);
                 final SubLObject var141_145 = module0181.$g2216$.getGlobalValue();
-                final SubLObject var142_146 = module0160.f10437(var141_145);
-                final SubLObject var143_147 = module0160.f10418(var141_145);
+                final SubLObject var142_146 = oc_kb_object_manager.f10437(var141_145);
+                final SubLObject var143_147 = oc_kb_object_manager.f10418(var141_145);
                 try {
-                    module0160.f10447(var141_145);
-                    module0160.f10417(var141_145);
+                    oc_kb_object_manager.f10447(var141_145);
+                    oc_kb_object_manager.f10417(var141_145);
                     final SubLObject var141_146 = module0169.$g2183$.getGlobalValue();
-                    final SubLObject var142_147 = module0160.f10437(var141_146);
-                    final SubLObject var143_148 = module0160.f10418(var141_146);
+                    final SubLObject var142_147 = oc_kb_object_manager.f10437(var141_146);
+                    final SubLObject var143_148 = oc_kb_object_manager.f10418(var141_146);
                     try {
-                        module0160.f10447(var141_146);
-                        module0160.f10417(var141_146);
+                        oc_kb_object_manager.f10447(var141_146);
+                        oc_kb_object_manager.f10417(var141_146);
                         final SubLObject var141_147 = module0164.$g2172$.getGlobalValue();
-                        final SubLObject var142_148 = module0160.f10437(var141_147);
-                        final SubLObject var143_149 = module0160.f10418(var141_147);
+                        final SubLObject var142_148 = oc_kb_object_manager.f10437(var141_147);
+                        final SubLObject var143_149 = oc_kb_object_manager.f10418(var141_147);
                         try {
-                            module0160.f10447(var141_147);
-                            module0160.f10417(var141_147);
+                            oc_kb_object_manager.f10447(var141_147);
+                            oc_kb_object_manager.f10417(var141_147);
                             final SubLObject var145 = module0018.$g694$.currentBinding(var141);
                             try {
                                 module0018.$g694$.bind((SubLObject)module0574.NIL, var141);
@@ -1897,13 +1897,13 @@ public final class module0574 extends SubLTranslatedFile
                                     module0018.f970(Numbers.subtract(var147, (SubLObject)module0574.ONE_INTEGER));
                                     final SubLObject var148 = var140;
                                     if (var148.eql((SubLObject)module0574.$ic153$)) {
-                                        module0618.f37926(var139);
+                                        oc_dumper.dump_kb(var139);
                                     }
                                     else if (var148.eql((SubLObject)module0574.$ic154$)) {
-                                        module0618.f37924(var139);
+                                        oc_dumper.f37924(var139);
                                     }
                                     else if (var148.eql((SubLObject)module0574.$ic149$)) {
-                                        module0618.f37933(var139);
+                                        oc_dumper.f37933(var139);
                                     }
                                     else {
                                         Errors.error((SubLObject)module0574.$ic155$, var140);
@@ -1931,10 +1931,10 @@ public final class module0574 extends SubLTranslatedFile
                             try {
                                 Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0574.T, var141);
                                 if (module0574.NIL != var142_148) {
-                                    module0160.f10446(var141_147);
+                                    oc_kb_object_manager.f10446(var141_147);
                                 }
                                 if (module0574.NIL == var143_149) {
-                                    module0160.f10414(var141_147, (SubLObject)module0574.$ic156$, (SubLObject)module0574.$ic157$);
+                                    oc_kb_object_manager.f10414(var141_147, (SubLObject)module0574.$ic156$, (SubLObject)module0574.$ic157$);
                                 }
                             }
                             finally {
@@ -1947,10 +1947,10 @@ public final class module0574 extends SubLTranslatedFile
                         try {
                             Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0574.T, var141);
                             if (module0574.NIL != var142_147) {
-                                module0160.f10446(var141_146);
+                                oc_kb_object_manager.f10446(var141_146);
                             }
                             if (module0574.NIL == var143_148) {
-                                module0160.f10414(var141_146, (SubLObject)module0574.$ic156$, (SubLObject)module0574.$ic157$);
+                                oc_kb_object_manager.f10414(var141_146, (SubLObject)module0574.$ic156$, (SubLObject)module0574.$ic157$);
                             }
                         }
                         finally {
@@ -1963,10 +1963,10 @@ public final class module0574 extends SubLTranslatedFile
                     try {
                         Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0574.T, var141);
                         if (module0574.NIL != var142_146) {
-                            module0160.f10446(var141_145);
+                            oc_kb_object_manager.f10446(var141_145);
                         }
                         if (module0574.NIL == var143_147) {
-                            module0160.f10414(var141_145, (SubLObject)module0574.$ic156$, (SubLObject)module0574.$ic157$);
+                            oc_kb_object_manager.f10414(var141_145, (SubLObject)module0574.$ic156$, (SubLObject)module0574.$ic157$);
                         }
                     }
                     finally {
@@ -1979,10 +1979,10 @@ public final class module0574 extends SubLTranslatedFile
                 try {
                     Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0574.T, var141);
                     if (module0574.NIL != var142_145) {
-                        module0160.f10446(var141_144);
+                        oc_kb_object_manager.f10446(var141_144);
                     }
                     if (module0574.NIL == var143_146) {
-                        module0160.f10414(var141_144, (SubLObject)module0574.$ic156$, (SubLObject)module0574.$ic157$);
+                        oc_kb_object_manager.f10414(var141_144, (SubLObject)module0574.$ic156$, (SubLObject)module0574.$ic157$);
                     }
                 }
                 finally {
@@ -1995,10 +1995,10 @@ public final class module0574 extends SubLTranslatedFile
             try {
                 Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0574.T, var141);
                 if (module0574.NIL != var143) {
-                    module0160.f10446(var142);
+                    oc_kb_object_manager.f10446(var142);
                 }
                 if (module0574.NIL == var144) {
-                    module0160.f10414(var142, (SubLObject)module0574.$ic156$, (SubLObject)module0574.$ic157$);
+                    oc_kb_object_manager.f10414(var142, (SubLObject)module0574.$ic156$, (SubLObject)module0574.$ic157$);
                 }
             }
             finally {
@@ -2012,7 +2012,7 @@ public final class module0574 extends SubLTranslatedFile
         if (var159 == module0574.UNPROVIDED) {
             var159 = (SubLObject)module0574.NIL;
         }
-        final SubLObject var160 = var159.isString() ? module0618.f37915(module0018.f971(), (SubLObject)ConsesLow.list(var159)) : module0618.f37915(module0018.f971(), (SubLObject)module0574.UNPROVIDED);
+        final SubLObject var160 = var159.isString() ? oc_dumper.f37915(module0018.f971(), (SubLObject)ConsesLow.list(var159)) : oc_dumper.f37915(module0018.f971(), (SubLObject)module0574.UNPROVIDED);
         final SubLObject var161 = module0038.f2624(module0038.f2637(var160));
         final SubLObject var162 = module0038.f2666(var160, (SubLObject)module0574.UNPROVIDED);
         return Sequences.cconcatenate(var162, new SubLObject[] { module0574.$ic158$, module0038.f2624(f35163()), var161 });
@@ -2020,7 +2020,7 @@ public final class module0574 extends SubLTranslatedFile
     
     public static SubLObject f35238(final SubLObject var139) {
         final SubLThread var140 = SubLProcess.currentSubLThread();
-        module0618.f37949(var139);
+        oc_dumper.load_kb(var139);
         streams_high.terpri((SubLObject)module0574.UNPROVIDED);
         final SubLObject var141 = (SubLObject)module0574.$ic159$;
         final SubLObject var142 = module0012.$g73$.currentBinding(var140);
@@ -2063,11 +2063,11 @@ public final class module0574 extends SubLTranslatedFile
     }
     
     public static SubLObject f35236(final SubLObject var139) {
-        return module0618.f37916((SubLObject)module0574.$ic160$, var139, (SubLObject)module0574.UNPROVIDED);
+        return oc_dumper.f37916((SubLObject)module0574.$ic160$, var139, (SubLObject)module0574.UNPROVIDED);
     }
     
     public static SubLObject f35237(final SubLObject var139) {
-        return module0618.f37916((SubLObject)module0574.$ic161$, var139, (SubLObject)module0574.UNPROVIDED);
+        return oc_dumper.f37916((SubLObject)module0574.$ic161$, var139, (SubLObject)module0574.UNPROVIDED);
     }
     
     public static SubLObject f35235() {
@@ -2353,14 +2353,14 @@ public final class module0574 extends SubLTranslatedFile
         $ic20$ = SubLObjectFactory.makeSymbol("S#38661", "CYC");
         $ic21$ = SubLObjectFactory.makeSymbol("S#38662", "CYC");
         $ic22$ = SubLObjectFactory.makeSymbol("THE-CYCLIST");
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
         $ic24$ = SubLObjectFactory.makeSymbol("THE-CYCLIST-IS-GUEST?");
         $ic25$ = SubLObjectFactory.makeString("Return T iff the current CyclIst is the #$Guest account.");
         $ic26$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP")));
         $ic27$ = SubLObjectFactory.makeSymbol("IMAGE-REQUIRES-AUTHENTICATION?");
         $ic28$ = SubLObjectFactory.makeString("@return non-NIL iff this Cyc image requires authentication.");
         $ic29$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycBrowser"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycBrowser"));
         $ic31$ = SubLObjectFactory.makeSymbol("STRINGP");
         $ic32$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic33$ = SubLObjectFactory.makeSymbol("AUTHENTICATE-THE-CYCLIST");
@@ -2368,10 +2368,10 @@ public final class module0574 extends SubLTranslatedFile
         $ic35$ = SubLObjectFactory.makeString("Ensure that the encrypted passphrase (e.g. SHA1 of password and user name, or similar)\n   is the one recorded for APPLICATION for the Cyclist identified by NAME\n   in the current KB.\n   Otherwise, sets the cyclist to #$Guest.\n   @return FORT-P the current cyclist\n   @see THE-CYCLIST-IS-GUEST?");
         $ic36$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#29", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#38675", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("STRINGP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#38676", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")));
         $ic37$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FORT-P"));
-        $ic38$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CyclistsMt"));
-        $ic39$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UserOfProgramFn"));
+        $ic38$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CyclistsMt"));
+        $ic39$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UserOfProgramFn"));
         $ic40$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
-        $ic41$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("encryptedPasswordForUser"));
+        $ic41$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("encryptedPasswordForUser"));
         $ic42$ = SubLObjectFactory.makeString("Please login to specify authentication information for others.");
         $ic43$ = SubLObjectFactory.makeSymbol("S#38", "CYC");
         $ic44$ = SubLObjectFactory.makeString("Cyclists can only edit their own passwords.");

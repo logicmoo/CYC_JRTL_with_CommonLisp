@@ -298,7 +298,7 @@ public final class module0415 extends SubLTranslatedFile
     public static SubLObject f29028(final SubLObject var22) {
         final SubLThread var23 = SubLProcess.currentSubLThread();
         final SubLObject var24 = Hashtables.gethash_without_values(var22, module0415.$g3398$.getDynamicValue(var23), (SubLObject)module0415.UNPROVIDED);
-        if (module0415.NIL == Errors.$ignore_mustsP$.getDynamicValue(var23) && module0415.NIL == module0128.f8449(var24)) {
+        if (module0415.NIL == Errors.$ignore_mustsP$.getDynamicValue(var23) && module0415.NIL == constant_handles_oc.f8449(var24)) {
             Errors.error((SubLObject)module0415.$ic31$, var22);
         }
         return var24;
@@ -494,7 +494,7 @@ public final class module0415 extends SubLTranslatedFile
     
     public static SubLObject f29040(final SubLObject var58) {
         final SubLThread var59 = SubLProcess.currentSubLThread();
-        if (module0415.NIL != module0128.f8449(var58)) {
+        if (module0415.NIL != constant_handles_oc.f8449(var58)) {
             module0077.f5326(var58, module0415.$g3399$.getDynamicValue(var59));
             return (SubLObject)module0415.T;
         }

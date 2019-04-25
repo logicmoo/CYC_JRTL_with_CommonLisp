@@ -210,7 +210,7 @@ public final class module0730 extends SubLTranslatedFile
     
     public static SubLObject f44559() {
         if (module0730.NIL == module0730.$g5741$.getGlobalValue()) {
-            module0730.$g5741$.setGlobalValue(module0166.f10746(Guids.string_to_guid((SubLObject)module0730.$ic3$)));
+            module0730.$g5741$.setGlobalValue(constants_high_oc.f10746(Guids.string_to_guid((SubLObject)module0730.$ic3$)));
         }
         return module0730.$g5741$.getGlobalValue();
     }
@@ -1889,7 +1889,7 @@ public final class module0730 extends SubLTranslatedFile
                 if (module0730.NIL == var158) {
                     if (module0730.NIL == var161 && module0730.NIL != var155) {
                         if (module0730.NIL == f44585(var13, var6, var18)) {
-                            if (module0730.NIL != ((module0730.NIL != module0128.f8463(module0730.$ic80$, (SubLObject)module0730.UNPROVIDED)) ? module0731.f44702(var13, module0730.$ic80$, (SubLObject)module0730.UNPROVIDED) : SubLObjectFactory.makeBoolean(module0730.NIL != module0128.f8463(module0730.$ic81$, (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, module0730.$ic81$, (SubLObject)module0730.UNPROVIDED))) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
+                            if (module0730.NIL != ((module0730.NIL != constant_handles_oc.f8463(module0730.$ic80$, (SubLObject)module0730.UNPROVIDED)) ? module0731.f44702(var13, module0730.$ic80$, (SubLObject)module0730.UNPROVIDED) : SubLObjectFactory.makeBoolean(module0730.NIL != constant_handles_oc.f8463(module0730.$ic81$, (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, module0730.$ic81$, (SubLObject)module0730.UNPROVIDED))) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
                                 if (module0730.NIL == var158) {
                                     SubLObject var162 = f44565(var6, module0730.$ic84$, var18, var136, var137, (SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
                                     SubLObject var166 = (SubLObject)module0730.NIL;
@@ -1906,7 +1906,7 @@ public final class module0730 extends SubLTranslatedFile
                                     }
                                 }
                             }
-                            else if (module0730.NIL != module0128.f8463(f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
+                            else if (module0730.NIL != constant_handles_oc.f8463(f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
                                 final SubLObject var169 = f44605(var13);
                                 if (var169.isString() && module0730.NIL == var158) {
                                     SubLObject var170 = f44565(var6, module0730.$ic86$, var18, var136, var137, (SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
@@ -2038,7 +2038,7 @@ public final class module0730 extends SubLTranslatedFile
                 if (module0730.NIL == var158) {
                     if (module0730.NIL == var161 && module0730.NIL != var155) {
                         if (module0730.NIL == f44585(var13, var6, var18)) {
-                            if (module0730.NIL != ((module0730.NIL != module0128.f8463(module0730.$ic80$, (SubLObject)module0730.UNPROVIDED)) ? module0731.f44702(var13, module0730.$ic80$, (SubLObject)module0730.UNPROVIDED) : SubLObjectFactory.makeBoolean(module0730.NIL != module0128.f8463(module0730.$ic81$, (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, module0730.$ic81$, (SubLObject)module0730.UNPROVIDED))) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
+                            if (module0730.NIL != ((module0730.NIL != constant_handles_oc.f8463(module0730.$ic80$, (SubLObject)module0730.UNPROVIDED)) ? module0731.f44702(var13, module0730.$ic80$, (SubLObject)module0730.UNPROVIDED) : SubLObjectFactory.makeBoolean(module0730.NIL != constant_handles_oc.f8463(module0730.$ic81$, (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, module0730.$ic81$, (SubLObject)module0730.UNPROVIDED))) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
                                 if (module0730.NIL == var158) {
                                     SubLObject var162 = f44565(var6, module0730.$ic84$, var18, var136, var137, (SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
                                     SubLObject var166 = (SubLObject)module0730.NIL;
@@ -2055,7 +2055,7 @@ public final class module0730 extends SubLTranslatedFile
                                     }
                                 }
                             }
-                            else if (module0730.NIL != module0128.f8463(f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
+                            else if (module0730.NIL != constant_handles_oc.f8463(f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
                                 final SubLObject var169 = f44605(var13);
                                 if (var169.isString() && module0730.NIL == var158) {
                                     SubLObject var170 = f44565(var6, module0730.$ic86$, var18, var136, var137, (SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
@@ -2187,7 +2187,7 @@ public final class module0730 extends SubLTranslatedFile
                 if (module0730.NIL == var158) {
                     if (module0730.NIL == var161 && module0730.NIL != var155) {
                         if (module0730.NIL == f44585(var13, var6, var18)) {
-                            if (module0730.NIL != ((module0730.NIL != module0128.f8463(module0730.$ic80$, (SubLObject)module0730.UNPROVIDED)) ? module0731.f44702(var13, module0730.$ic80$, (SubLObject)module0730.UNPROVIDED) : SubLObjectFactory.makeBoolean(module0730.NIL != module0128.f8463(module0730.$ic81$, (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, module0730.$ic81$, (SubLObject)module0730.UNPROVIDED))) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
+                            if (module0730.NIL != ((module0730.NIL != constant_handles_oc.f8463(module0730.$ic80$, (SubLObject)module0730.UNPROVIDED)) ? module0731.f44702(var13, module0730.$ic80$, (SubLObject)module0730.UNPROVIDED) : SubLObjectFactory.makeBoolean(module0730.NIL != constant_handles_oc.f8463(module0730.$ic81$, (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, module0730.$ic81$, (SubLObject)module0730.UNPROVIDED))) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
                                 if (module0730.NIL == var158) {
                                     SubLObject var162 = f44565(var6, module0730.$ic84$, var18, var136, var137, (SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
                                     SubLObject var166 = (SubLObject)module0730.NIL;
@@ -2204,7 +2204,7 @@ public final class module0730 extends SubLTranslatedFile
                                     }
                                 }
                             }
-                            else if (module0730.NIL != module0128.f8463(f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
+                            else if (module0730.NIL != constant_handles_oc.f8463(f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
                                 final SubLObject var169 = f44605(var13);
                                 if (var169.isString() && module0730.NIL == var158) {
                                     SubLObject var170 = f44565(var6, module0730.$ic86$, var18, var136, var137, (SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
@@ -2336,7 +2336,7 @@ public final class module0730 extends SubLTranslatedFile
                 if (module0730.NIL == var158) {
                     if (module0730.NIL == var161 && module0730.NIL != var155) {
                         if (module0730.NIL == f44585(var13, var6, var18)) {
-                            if (module0730.NIL != ((module0730.NIL != module0128.f8463(module0730.$ic80$, (SubLObject)module0730.UNPROVIDED)) ? module0731.f44702(var13, module0730.$ic80$, (SubLObject)module0730.UNPROVIDED) : SubLObjectFactory.makeBoolean(module0730.NIL != module0128.f8463(module0730.$ic81$, (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, module0730.$ic81$, (SubLObject)module0730.UNPROVIDED))) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
+                            if (module0730.NIL != ((module0730.NIL != constant_handles_oc.f8463(module0730.$ic80$, (SubLObject)module0730.UNPROVIDED)) ? module0731.f44702(var13, module0730.$ic80$, (SubLObject)module0730.UNPROVIDED) : SubLObjectFactory.makeBoolean(module0730.NIL != constant_handles_oc.f8463(module0730.$ic81$, (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, module0730.$ic81$, (SubLObject)module0730.UNPROVIDED))) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
                                 if (module0730.NIL == var158) {
                                     SubLObject var162 = f44565(var6, module0730.$ic84$, var18, var136, var137, (SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
                                     SubLObject var166 = (SubLObject)module0730.NIL;
@@ -2353,7 +2353,7 @@ public final class module0730 extends SubLTranslatedFile
                                     }
                                 }
                             }
-                            else if (module0730.NIL != module0128.f8463(f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
+                            else if (module0730.NIL != constant_handles_oc.f8463(f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != module0731.f44702(var13, f44559(), (SubLObject)module0730.UNPROVIDED) && module0730.NIL != ((module0730.NIL != module0161.f10481(var18)) ? module0731.f44644(var18, module0730.$ic82$) : module0147.f9507(module0730.$ic82$))) {
                                 final SubLObject var169 = f44605(var13);
                                 if (var169.isString() && module0730.NIL == var158) {
                                     SubLObject var170 = f44565(var6, module0730.$ic86$, var18, var136, var137, (SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
@@ -2482,10 +2482,10 @@ public final class module0730 extends SubLTranslatedFile
             var211 = (SubLObject)module0730.NIL;
         }
         final SubLObject var212 = f44607(var211);
-        if (module0730.NIL == module0174.f11035(var209)) {
+        if (module0730.NIL == assertion_handles_oc.f11035(var209)) {
             return (SubLObject)module0730.NIL;
         }
-        if (module0730.NIL == module0174.f11035(var210)) {
+        if (module0730.NIL == assertion_handles_oc.f11035(var210)) {
             return (SubLObject)module0730.T;
         }
         if (module0730.NIL != module0222.f14635(var212, var209, (SubLObject)module0730.TWO_INTEGER, (SubLObject)module0730.UNPROVIDED) && module0730.NIL == module0222.f14635(var212, var210, (SubLObject)module0730.TWO_INTEGER, (SubLObject)module0730.UNPROVIDED)) {
@@ -2535,7 +2535,7 @@ public final class module0730 extends SubLTranslatedFile
     }
     
     public static SubLObject f44609(final SubLObject var213) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0730.NIL != module0174.f11035(var213) && module0205.f13132(var213).eql(module0730.$ic87$));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0730.NIL != assertion_handles_oc.f11035(var213) && module0205.f13132(var213).eql(module0730.$ic87$));
     }
     
     public static SubLObject f44607(final SubLObject var211) {
@@ -3159,8 +3159,8 @@ public final class module0730 extends SubLTranslatedFile
                 SubLObject var12 = (SubLObject)module0730.NIL;
                 var12 = var11.first();
                 while (module0730.NIL == module0584.$g4396$.getDynamicValue(var10) && module0730.NIL != var11) {
-                    final SubLObject var13 = module0166.f10737(var12);
-                    if (module0730.NIL != module0128.f8463(var13, (SubLObject)module0730.UNPROVIDED)) {
+                    final SubLObject var13 = constants_high_oc.f10737(var12);
+                    if (module0730.NIL != constant_handles_oc.f8463(var13, (SubLObject)module0730.UNPROVIDED)) {
                         final SubLObject var14 = module0162.f10628(module0161.f10518((SubLObject)ConsesLow.list(var13, module0730.$ic134$)));
                         module0584.$g4396$.setDynamicValue((module0730.NIL != module0161.f10571(var14, (SubLObject)module0730.UNPROVIDED)) ? var14 : var13, var10);
                     }
@@ -3189,7 +3189,7 @@ public final class module0730 extends SubLTranslatedFile
     }
     
     public static SubLObject f44632() {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0730.NIL != module0584.$g4429$.getGlobalValue() && module0730.NIL != module0584.$g4428$.getGlobalValue() && module0730.NIL != module0584.$g4427$.getGlobalValue() && module0730.NIL != module0737.f45538() && module0730.NIL == module0737.f45545(module0737.f45538()) && module0730.NIL != module0739.$g5755$.getGlobalValue());
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0730.NIL != module0584.$g4429$.getGlobalValue() && module0730.NIL != module0584.$g4428$.getGlobalValue() && module0730.NIL != module0584.$g4427$.getGlobalValue() && module0730.NIL != module0737.f45538() && module0730.NIL == module0737.f45545(module0737.f45538()) && module0730.NIL != oc_nl_trie_completion.$g5755$.getGlobalValue());
     }
     
     public static SubLObject f44633(final SubLObject var260) {
@@ -3205,7 +3205,7 @@ public final class module0730 extends SubLTranslatedFile
             SubLObject var267 = (SubLObject)module0730.NIL;
             try {
                 var267 = module0095.f6845(var265, var266, (SubLObject)module0730.$ic139$, (SubLObject)module0730.$ic138$, (SubLObject)module0730.$ic138$, (SubLObject)module0730.UNPROVIDED);
-                module0618.f38021(module0095.f6852(var267));
+                oc_dumper.f38021(module0095.f6852(var267));
                 final SubLObject var268 = (SubLObject)module0730.$ic140$;
                 final SubLObject var12_266 = module0012.$g73$.currentBinding(var261);
                 final SubLObject var36_267 = module0012.$g65$.currentBinding(var261);
@@ -3273,8 +3273,8 @@ public final class module0730 extends SubLTranslatedFile
                     Threads.$is_thread_performing_cleanupP$.rebind(var12_268, var261);
                 }
             }
-            module0618.f37914(var266);
-            module0618.f37914(var265);
+            oc_dumper.f37914(var266);
+            oc_dumper.f37914(var265);
         }
         finally {
             StreamsLow.$stream_initial_output_buffer_size$.rebind(var264, var261);
@@ -3289,7 +3289,7 @@ public final class module0730 extends SubLTranslatedFile
         }
         final SubLThread var261 = SubLProcess.currentSubLThread();
         if (module0730.NIL == var260) {
-            var260 = module0618.f37915((SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
+            var260 = oc_dumper.f37915((SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
         }
         final SubLObject var262 = f44630(var260);
         if (module0730.NIL == Filesys.probe_file(var262)) {
@@ -3337,8 +3337,8 @@ public final class module0730 extends SubLTranslatedFile
                             if (module0730.NIL != module0075.f5218(var273) && module0730.NIL != module0075.f5218(var274)) {
                                 module0737.f45584(var273, var274, (SubLObject)module0730.UNPROVIDED);
                             }
-                            module0618.f37914(var274);
-                            module0618.f37914(var273);
+                            oc_dumper.f37914(var274);
+                            oc_dumper.f37914(var273);
                             module0737.f45581(var272_279);
                         }
                         finally {
@@ -3386,14 +3386,14 @@ public final class module0730 extends SubLTranslatedFile
         if (var260 == module0730.UNPROVIDED) {
             var260 = (SubLObject)module0730.NIL;
         }
-        return module0618.f37916((SubLObject)module0730.$ic145$, var260, (SubLObject)module0730.UNPROVIDED);
+        return oc_dumper.f37916((SubLObject)module0730.$ic145$, var260, (SubLObject)module0730.UNPROVIDED);
     }
     
     public static SubLObject f44635(SubLObject var260) {
         if (var260 == module0730.UNPROVIDED) {
             var260 = (SubLObject)module0730.NIL;
         }
-        return module0618.f37916((SubLObject)module0730.$ic146$, var260, (SubLObject)module0730.UNPROVIDED);
+        return oc_dumper.f37916((SubLObject)module0730.$ic146$, var260, (SubLObject)module0730.UNPROVIDED);
     }
     
     public static SubLObject f44638(SubLObject var260) {
@@ -3401,7 +3401,7 @@ public final class module0730 extends SubLTranslatedFile
             var260 = (SubLObject)module0730.NIL;
         }
         if (module0730.NIL == var260) {
-            var260 = module0618.f37915((SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
+            var260 = oc_dumper.f37915((SubLObject)module0730.UNPROVIDED, (SubLObject)module0730.UNPROVIDED);
         }
         return f44633(var260);
     }
@@ -3592,7 +3592,7 @@ public final class module0730 extends SubLTranslatedFile
         $ic15$ = SubLObjectFactory.makeKeyword("DEPTH");
         $ic16$ = SubLObjectFactory.makeKeyword("STACK");
         $ic17$ = SubLObjectFactory.makeKeyword("QUEUE");
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
         $ic19$ = SubLObjectFactory.makeSymbol("S#11450", "CYC");
         $ic20$ = SubLObjectFactory.makeKeyword("ERROR");
         $ic21$ = SubLObjectFactory.makeString("~A is not a ~A");
@@ -3601,11 +3601,11 @@ public final class module0730 extends SubLTranslatedFile
         $ic24$ = SubLObjectFactory.makeString("continue anyway");
         $ic25$ = SubLObjectFactory.makeKeyword("WARN");
         $ic26$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic27$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic27$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic28$ = SubLObjectFactory.makeString("~A is neither SET-P nor LISTP.");
         $ic29$ = SubLObjectFactory.makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
         $ic30$ = SubLObjectFactory.makeString("Node ~a does not pass sbhl-type-test ~a~%");
-        $ic31$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("regularSuffix"));
+        $ic31$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("regularSuffix"));
         $ic32$ = SubLObjectFactory.makeSymbol("LISTP");
         $ic33$ = SubLObjectFactory.makeSymbol("S#48752", "CYC");
         $ic34$ = SubLObjectFactory.makeSymbol("S#48789", "CYC");
@@ -3616,9 +3616,9 @@ public final class module0730 extends SubLTranslatedFile
         $ic39$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
         $ic40$ = SubLObjectFactory.makeSymbol("S#15517", "CYC");
         $ic41$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic42$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic42$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic43$ = SubLObjectFactory.makeSymbol("S#12275", "CYC");
-        $ic44$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic44$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic45$ = SubLObjectFactory.makeSymbol("S#12280", "CYC");
         $ic46$ = SubLObjectFactory.makeSymbol("S#48784", "CYC");
         $ic47$ = SubLObjectFactory.makeSymbol(">");
@@ -3649,66 +3649,66 @@ public final class module0730 extends SubLTranslatedFile
         $ic72$ = SubLObjectFactory.makeKeyword("RETURN");
         $ic73$ = SubLObjectFactory.makeKeyword("BINDINGS-AND-SUPPORTS");
         $ic74$ = SubLObjectFactory.makeKeyword("BINDINGS");
-        $ic75$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("and"));
+        $ic75$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and"));
         $ic76$ = SubLObjectFactory.makeSymbol("FIRST");
         $ic77$ = SubLObjectFactory.makeSymbol("S#48799", "CYC");
         $ic78$ = SubLObjectFactory.makeInteger(200);
         $ic79$ = SubLObjectFactory.makeSymbol("S#48802", "CYC");
-        $ic80$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("simpleFuture-Generic"));
-        $ic81$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("futureTense-Generic"));
-        $ic82$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EnglishMt"));
+        $ic80$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("simpleFuture-Generic"));
+        $ic81$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("futureTense-Generic"));
+        $ic82$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EnglishMt"));
         $ic83$ = SubLObjectFactory.makeString("will ");
-        $ic84$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("infinitive"));
+        $ic84$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("infinitive"));
         $ic85$ = SubLObjectFactory.makeString(" ");
-        $ic86$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("perfect"));
-        $ic87$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("abbreviationForLexicalWord"));
+        $ic86$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("perfect"));
+        $ic87$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("abbreviationForLexicalWord"));
         $ic88$ = SubLObjectFactory.makeKeyword("GAF");
         $ic89$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic90$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("futurePerfect-Universal"));
+        $ic90$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("futurePerfect-Universal"));
         $ic91$ = SubLObjectFactory.makeString("will have");
-        $ic92$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("pastPerfect-Universal"));
+        $ic92$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("pastPerfect-Universal"));
         $ic93$ = SubLObjectFactory.makeString("had");
-        $ic94$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("firstPersonSg-PresentPerfect"));
-        $ic95$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("secondPersonSg-PresentPerfect"));
-        $ic96$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("pluralVerb-PresentPerfect"));
+        $ic94$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("firstPersonSg-PresentPerfect"));
+        $ic95$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("secondPersonSg-PresentPerfect"));
+        $ic96$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("pluralVerb-PresentPerfect"));
         $ic97$ = SubLObjectFactory.makeString("have");
-        $ic98$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("thirdPersonSg-PresentPerfect"));
+        $ic98$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("thirdPersonSg-PresentPerfect"));
         $ic99$ = SubLObjectFactory.makeString("has");
-        $ic100$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("dispreferredLexification"));
+        $ic100$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("dispreferredLexification"));
         $ic101$ = SubLObjectFactory.makeKeyword("MONOTONIC");
         $ic102$ = SubLObjectFactory.makeKeyword("DEFAULT");
         $ic103$ = SubLObjectFactory.makeKeyword("TERSE");
-        $ic104$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genStringAssertion-Terse"));
+        $ic104$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genStringAssertion-Terse"));
         $ic105$ = SubLObjectFactory.makeKeyword("PRECISE");
-        $ic106$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genStringAssertion-Precise"));
-        $ic107$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genStringAssertion"));
+        $ic106$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genStringAssertion-Precise"));
+        $ic107$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genStringAssertion"));
         $ic108$ = SubLObjectFactory.makeSymbol("SECOND");
-        $ic109$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("verbStrings"));
-        $ic110$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("simpleNounStrings"));
-        $ic111$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("plural-Generic"));
-        $ic112$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("singular-Generic"));
-        $ic113$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ProperNoun"));
-        $ic114$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CountNoun-Generic"));
-        $ic115$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("MassNoun-Generic"));
+        $ic109$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("verbStrings"));
+        $ic110$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("simpleNounStrings"));
+        $ic111$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("plural-Generic"));
+        $ic112$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("singular-Generic"));
+        $ic113$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ProperNoun"));
+        $ic114$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CountNoun-Generic"));
+        $ic115$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MassNoun-Generic"));
         $ic116$ = SubLObjectFactory.makeInteger(400);
-        $ic117$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("tensed"));
-        $ic118$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("presentTense-Generic"));
+        $ic117$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("tensed"));
+        $ic118$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("presentTense-Generic"));
         $ic119$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#48838", "CYC"));
         $ic120$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#48834", "CYC"), (SubLObject)module0730.T), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#48839", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("COR"), (SubLObject)SubLObjectFactory.makeSymbol("S#48839", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CNOT"), (SubLObject)SubLObjectFactory.makeSymbol("S#48846", "CYC")))));
-        $ic121$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("adverbStrings"));
-        $ic122$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("adjStrings"));
-        $ic123$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("regularDegree"));
-        $ic124$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("regularAdverb"));
-        $ic125$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Noun"));
-        $ic126$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("comparativeDegree"));
-        $ic127$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("comparativeAdverb"));
-        $ic128$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("superlativeDegree"));
-        $ic129$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("superlativeAdverb"));
+        $ic121$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("adverbStrings"));
+        $ic122$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("adjStrings"));
+        $ic123$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("regularDegree"));
+        $ic124$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("regularAdverb"));
+        $ic125$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Noun"));
+        $ic126$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comparativeDegree"));
+        $ic127$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comparativeAdverb"));
+        $ic128$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("superlativeDegree"));
+        $ic129$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("superlativeAdverb"));
         $ic130$ = SubLObjectFactory.makeString("est");
         $ic131$ = SubLObjectFactory.makeString("er");
-        $ic132$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("LexicalWord")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("nameString")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("termStrings")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("GeneralLexiconMt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("AllLexicalMicrotheoryPSC")));
+        $ic132$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LexicalWord")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nameString")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termStrings")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("GeneralLexiconMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AllLexicalMicrotheoryPSC")));
         $ic133$ = SubLObjectFactory.makeSymbol("VALID-CONSTANT?");
-        $ic134$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AnytimePSC"));
+        $ic134$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AnytimePSC"));
         $ic135$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("AllEnglishValidatedLexicalMicrotheoryPSC"), (SubLObject)SubLObjectFactory.makeString("AllEnglishLexicalMicrotheoryPSC"), (SubLObject)SubLObjectFactory.makeString("EnglishMt"), (SubLObject)SubLObjectFactory.makeString("BaseKB"));
         $ic136$ = SubLObjectFactory.makeString("lexicon-cache");
         $ic137$ = SubLObjectFactory.makeString("cfasl");

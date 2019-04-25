@@ -1159,7 +1159,7 @@ public final class module0416 extends SubLTranslatedFile
             SubLObject var160 = (SubLObject)module0416.NIL;
             var160 = var159.first();
             while (module0416.NIL != var159) {
-                module0369.f25476(var160);
+                oc_inference_datastructures_inference.f25476(var160);
                 var159 = var159.rest();
                 var160 = var159.first();
             }
@@ -1180,12 +1180,12 @@ public final class module0416 extends SubLTranslatedFile
             return f29175(var24, var137, var30, var39, var32, var80, var136, var120, var127, var128, (SubLObject)module0416.T, var53, var122, var4);
         }
         if (module0416.$ic84$ == var159) {
-            var159 = module0202.f12782(module0369.f25484(var137), module0369.f25485(var137));
+            var159 = module0202.f12782(oc_inference_datastructures_inference.f25484(var137), oc_inference_datastructures_inference.f25485(var137));
         }
         SubLObject var160 = var159;
         assert module0416.NIL != module0207.f13509(var160) : var160;
         if (module0416.NIL != var137) {
-            final SubLObject var161 = module0369.f25421(var137);
+            final SubLObject var161 = oc_inference_datastructures_inference.f25421(var137);
             var160 = f29178(var161, var160);
             var32 = f29178(var161, var32);
         }
@@ -1202,7 +1202,7 @@ public final class module0416 extends SubLTranslatedFile
             f29179(var4, var120, var160, var30, var136, var32, var162, var80, var163);
             return Values.values(var164, var165, var166);
         }
-        final SubLObject var167 = module0369.f25421(var137);
+        final SubLObject var167 = oc_inference_datastructures_inference.f25421(var137);
         var30 = conses_high.putf(conses_high.copy_list(var30), (SubLObject)module0416.$ic137$, var167);
         return f29175(var24, var160, var30, var39, var32, var80, var136, var120, var127, var128, (SubLObject)module0416.T, var53, var122, var4);
     }
@@ -1226,7 +1226,7 @@ public final class module0416 extends SubLTranslatedFile
                         if (module0416.NIL != module0065.f4749(var167)) {
                             var167 = (SubLObject)module0416.$ic140$;
                         }
-                        var168 = module0369.f25491(var167);
+                        var168 = oc_inference_datastructures_inference.f25491(var167);
                         var28 = module0233.f15362(var168, var28);
                     }
                 }
@@ -1242,7 +1242,7 @@ public final class module0416 extends SubLTranslatedFile
                         final Map.Entry var173 = Hashtables.iteratorNextEntry(var172);
                         var170 = Hashtables.getEntryKey(var173);
                         var171 = Hashtables.getEntryValue(var173);
-                        final SubLObject var174 = module0369.f25491(var171);
+                        final SubLObject var174 = oc_inference_datastructures_inference.f25491(var171);
                         var28 = module0233.f15362(var174, var28);
                     }
                 }
@@ -1266,7 +1266,7 @@ public final class module0416 extends SubLTranslatedFile
         if (module0416.NIL != var127) {
             var30 = conses_high.putf(conses_high.copy_list(var30), (SubLObject)module0416.$ic143$, (SubLObject)module0416.T);
         }
-        if (module0416.NIL != module0416.$g3408$.getDynamicValue(var183) && module0416.NIL != var182 && module0416.NIL == f29180(var53) && module0416.NIL == module0369.f25275(var181)) {
+        if (module0416.NIL != module0416.$g3408$.getDynamicValue(var183) && module0416.NIL != var182 && module0416.NIL == f29180(var53) && module0416.NIL == oc_inference_datastructures_inference.f25275(var181)) {
             final SubLObject var187 = module0409.f28519(module0360.f23793(var30));
             var30 = conses_high.putf(conses_high.copy_list(var30), (SubLObject)module0416.$ic137$, var187);
         }
@@ -1285,7 +1285,7 @@ public final class module0416 extends SubLTranslatedFile
             final ArrayList var197 = Dynamic.extract_dynamic_values(var196);
             try {
                 Dynamic.bind_dynamic_vars(var196, module0107.f7636(var39));
-                if (module0416.NIL != module0369.f25275(var181)) {
+                if (module0416.NIL != oc_inference_datastructures_inference.f25275(var181)) {
                     final SubLObject var198 = Time.get_internal_real_time();
                     var183.resetMultipleValues();
                     final SubLObject var191_192 = module0409.f28521(var181, var30);
@@ -1418,8 +1418,8 @@ public final class module0416 extends SubLTranslatedFile
     
     public static SubLObject f29185() {
         final SubLObject var157 = f29184();
-        final SubLObject var158 = module0369.f25597(var157);
-        final SubLObject var159 = module0369.f25606(var157);
+        final SubLObject var158 = oc_inference_datastructures_inference.f25597(var157);
+        final SubLObject var159 = oc_inference_datastructures_inference.f25606(var157);
         return Values.values(var158, var159);
     }
     

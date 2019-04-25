@@ -168,16 +168,16 @@ public final class module0329 extends SubLTranslatedFile
         me = (SubLFile)new module0329();
         $ic0$ = SubLObjectFactory.makeSymbol("CYC-TEMPORAL-INTERSECTION");
         $ic1$ = SubLObjectFactory.makeSymbol("CYC-INTERVAL-ENDED-BY-LAST-SUBINTERVAL-OF-TYPE");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntervalEndedByLastSubintervalOfTypeFn"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntervalEndedByLastSubintervalOfTypeFn"));
         $ic3$ = SubLObjectFactory.makeSymbol("CYC-EL-INTERVAL-ENDED-BY-LAST-SUBINTERVAL-OF-TYPE");
         $ic4$ = SubLObjectFactory.makeSymbol("CYC-INTERVAL-STARTED-BY-FIRST-SUBINTERVAL-OF-TYPE");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntervalStartedByFirstSubintervalOfTypeFn"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntervalStartedByFirstSubintervalOfTypeFn"));
         $ic6$ = SubLObjectFactory.makeSymbol("CYC-EL-INTERVAL-STARTED-BY-FIRST-SUBINTERVAL-OF-TYPE");
         $ic7$ = SubLObjectFactory.makeSymbol("CYC-NTH-METRICALLY-PRECEDING-TIME-INTERVAL-OF-TYPE");
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("NthMetricallyPrecedingTimeIntervalOfTypeFn"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("NthMetricallyPrecedingTimeIntervalOfTypeFn"));
         $ic9$ = SubLObjectFactory.makeSymbol("CYC-EL-NTH-METRICALLY-PRECEDING-TIME-INTERVAL-OF-TYPE");
         $ic10$ = SubLObjectFactory.makeSymbol("CYC-NTH-METRICALLY-SUCCEEDING-TIME-INTERVAL-OF-TYPE");
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("NthMetricallySucceedingTimeIntervalOfTypeFn"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("NthMetricallySucceedingTimeIntervalOfTypeFn"));
         $ic12$ = SubLObjectFactory.makeSymbol("CYC-EL-NTH-METRICALLY-SUCCEEDING-TIME-INTERVAL-OF-TYPE");
     }
 }

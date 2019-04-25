@@ -653,15 +653,15 @@ public final class module0697 extends SubLTranslatedFile
         $ic5$ = SubLObjectFactory.makeKeyword("IMPLIED");
         $ic6$ = SubLObjectFactory.makeInteger(64);
         $ic7$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic9$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic10$ = SubLObjectFactory.makeSymbol("S#12276", "CYC");
         $ic11$ = SubLObjectFactory.makeKeyword("GAF");
         $ic12$ = ConsesLow.list((SubLObject)module0697.ONE_INTEGER);
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
-        $ic15$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic15$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
         $ic17$ = SubLObjectFactory.makeSymbol("S#46484", "CYC");
     }
 }

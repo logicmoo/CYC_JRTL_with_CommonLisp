@@ -596,7 +596,7 @@ public final class module0327 extends SubLTranslatedFile
         SubLObject var52 = (SubLObject)module0327.NIL;
         var52 = var51.first();
         while (module0327.NIL != var51) {
-            if (module0327.NIL != module0174.f11035(var52) && module0327.NIL == module0178.f11361(var52, (SubLObject)module0327.UNPROVIDED)) {
+            if (module0327.NIL != assertion_handles_oc.f11035(var52) && module0327.NIL == module0178.f11361(var52, (SubLObject)module0327.UNPROVIDED)) {
                 var50 = Sequences.remove(var52, var50, (SubLObject)module0327.UNPROVIDED, (SubLObject)module0327.UNPROVIDED, (SubLObject)module0327.UNPROVIDED, (SubLObject)module0327.UNPROVIDED, (SubLObject)module0327.UNPROVIDED);
             }
             var51 = var51.rest();
@@ -628,7 +628,7 @@ public final class module0327 extends SubLTranslatedFile
         SubLObject var49 = (SubLObject)module0327.NIL;
         var49 = var48.first();
         while (module0327.NIL != var48) {
-            if (module0327.NIL != module0174.f11035(var49) && module0327.NIL == module0178.f11361(var49, (SubLObject)module0327.UNPROVIDED)) {
+            if (module0327.NIL != assertion_handles_oc.f11035(var49) && module0327.NIL == module0178.f11361(var49, (SubLObject)module0327.UNPROVIDED)) {
                 var47 = Sequences.remove(var49, var47, (SubLObject)module0327.UNPROVIDED, (SubLObject)module0327.UNPROVIDED, (SubLObject)module0327.UNPROVIDED, (SubLObject)module0327.UNPROVIDED, (SubLObject)module0327.UNPROVIDED);
             }
             var48 = var48.rest();
@@ -640,7 +640,7 @@ public final class module0327 extends SubLTranslatedFile
         else {
             module0326.f22024(var29, var9, var45, var30);
             Hashtables.remhash(var46, module0142.$g1720$.getGlobalValue());
-            if (module0327.NIL != module0174.f11035(var25)) {
+            if (module0327.NIL != assertion_handles_oc.f11035(var25)) {
                 f22119(var29);
                 f22119(var30);
                 f22120(var29);
@@ -1998,9 +1998,9 @@ public final class module0327 extends SubLTranslatedFile
         module0327.$g2465$ = null;
         module0327.$g2841$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("S#24723", "CYC");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
         $ic2$ = SubLObjectFactory.makeSymbol("S#24724", "CYC");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("HL-StartFn"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HL-StartFn"));
         $ic4$ = SubLObjectFactory.makeSymbol("S#3302", "CYC");
         $ic5$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
         $ic6$ = SubLObjectFactory.makeString("skip subsumption op");
@@ -2038,7 +2038,7 @@ public final class module0327 extends SubLTranslatedFile
         $ic38$ = SubLObjectFactory.makeSymbol("S#24726", "CYC");
         $ic39$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic40$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic41$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic41$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic42$ = SubLObjectFactory.makeKeyword("GAF");
         $ic43$ = SubLObjectFactory.makeString("sbhl conflict: ~s ~a ~a~%");
         $ic44$ = SubLObjectFactory.makeString("sbhl conflict: ~s ~a ~a~%      because:");

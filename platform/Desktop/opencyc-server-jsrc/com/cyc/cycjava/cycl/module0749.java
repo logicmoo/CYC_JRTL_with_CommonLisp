@@ -511,7 +511,7 @@ public final class module0749 extends SubLTranslatedFile
         if (module0749.NIL != var15 && !module0749.areAssertionsDisabledFor(me) && module0749.NIL == module0756.f47497(var15, (SubLObject)module0749.UNPROVIDED)) {
             throw new AssertionError(var15);
         }
-        if (module0749.NIL != var30 && !module0749.areAssertionsDisabledFor(me) && module0749.NIL == module0174.f11035(var30)) {
+        if (module0749.NIL != var30 && !module0749.areAssertionsDisabledFor(me) && module0749.NIL == assertion_handles_oc.f11035(var30)) {
             throw new AssertionError(var30);
         }
         final SubLObject var31 = f46358((SubLObject)module0749.UNPROVIDED);
@@ -561,7 +561,7 @@ public final class module0749 extends SubLTranslatedFile
     
     public static SubLObject f46366(final SubLObject var14) {
         final SubLObject var15 = f46354(var14);
-        if (module0749.NIL != module0174.f11035(var15)) {
+        if (module0749.NIL != assertion_handles_oc.f11035(var15)) {
             return var15;
         }
         if (module0749.NIL != module0161.f10479(var15)) {
@@ -574,7 +574,7 @@ public final class module0749 extends SubLTranslatedFile
     
     public static SubLObject f46367(final SubLObject var14) {
         final SubLObject var15 = f46354(var14);
-        if (module0749.NIL != module0174.f11035(var15)) {
+        if (module0749.NIL != assertion_handles_oc.f11035(var15)) {
             return module0178.f11287(var15);
         }
         if (module0749.NIL != module0161.f10479(var15)) {
@@ -2940,7 +2940,7 @@ public final class module0749 extends SubLTranslatedFile
         $ic6$ = SubLObjectFactory.makeKeyword("CLEARED");
         $ic7$ = SubLObjectFactory.makeSymbol("S#50672", "CYC");
         $ic8$ = SubLObjectFactory.makeSymbol("S#50673", "CYC");
-        $ic9$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39298", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#43350", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC"));
+        $ic9$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39298", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#43350", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC"));
         $ic10$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("PHRASE"), (SubLObject)SubLObjectFactory.makeKeyword("CONSTRAINT"), (SubLObject)SubLObjectFactory.makeKeyword("ASSERTION"));
         $ic11$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#50718", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#50719", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#50720", "CYC"));
         $ic12$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#50721", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#50722", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#50723", "CYC"));

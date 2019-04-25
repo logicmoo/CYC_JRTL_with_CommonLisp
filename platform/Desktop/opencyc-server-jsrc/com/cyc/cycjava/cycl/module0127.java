@@ -41,7 +41,7 @@ public final class module0127 extends SubLTranslatedFile
     }
     
     public static SubLObject f8414(final SubLObject var1) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0127.NIL != module0128.f8449(var1) && module0127.NIL != conses_high.member(module0166.f10743(var1), module0127.$g1498$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0127.EQUAL), (SubLObject)module0127.UNPROVIDED));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0127.NIL != constant_handles_oc.f8449(var1) && module0127.NIL != conses_high.member(constants_high_oc.f10743(var1), module0127.$g1498$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0127.EQUAL), (SubLObject)module0127.UNPROVIDED));
     }
     
     public static SubLObject f8415() {
@@ -49,9 +49,9 @@ public final class module0127 extends SubLTranslatedFile
     }
     
     public static SubLObject f8416() {
-        if (module0127.ZERO_INTEGER.numE(module0128.f8433())) {
+        if (module0127.ZERO_INTEGER.numE(constant_handles_oc.f8433())) {
             module0127.$g1498$.setGlobalValue((SubLObject)module0127.NIL);
-            SubLObject var2 = module0128.f8469();
+            SubLObject var2 = constant_handles_oc.f8469();
             SubLObject var3 = (SubLObject)module0127.NIL;
             var3 = var2.first();
             while (module0127.NIL != var2) {
@@ -91,8 +91,8 @@ public final class module0127 extends SubLTranslatedFile
                 SubLObject var15 = (SubLObject)module0127.NIL;
                 var15 = var14.first();
                 while (module0127.NIL != var14) {
-                    final SubLObject var16 = module0166.f10737(var15);
-                    if (module0127.NIL != module0166.f10755(var16)) {
+                    final SubLObject var16 = constants_high_oc.f10737(var15);
+                    if (module0127.NIL != constants_high_oc.f10755(var16)) {
                         module0127.$g1499$.setGlobalValue((SubLObject)ConsesLow.cons(var15, module0127.$g1499$.getGlobalValue()));
                     }
                     var14 = var14.rest();
@@ -138,13 +138,13 @@ public final class module0127 extends SubLTranslatedFile
     
     public static SubLObject f8419() {
         SubLObject var17 = (SubLObject)module0127.NIL;
-        SubLObject var18 = module0128.f8469();
+        SubLObject var18 = constant_handles_oc.f8469();
         SubLObject var19 = (SubLObject)module0127.NIL;
         var19 = var18.first();
         while (module0127.NIL != var18) {
             if (var19.isString()) {
-                final SubLObject var20 = module0166.f10737(var19);
-                if (module0127.NIL == var20 || module0127.NIL != module0166.f10755(var20)) {
+                final SubLObject var20 = constants_high_oc.f10737(var19);
+                if (module0127.NIL == var20 || module0127.NIL != constants_high_oc.f10755(var20)) {
                     var17 = (SubLObject)ConsesLow.cons(var19, var17);
                 }
             }

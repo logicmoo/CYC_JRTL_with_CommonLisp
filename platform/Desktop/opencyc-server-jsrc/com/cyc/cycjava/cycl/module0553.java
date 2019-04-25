@@ -103,7 +103,7 @@ public final class module0553 extends SubLTranslatedFile
             if (module0553.NIL == Sequences.find(var13, module0553.$g4006$.getDynamicValue(var7), (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED) && (!var13.isChar() || module0553.NIL == Sequences.find(Characters.char_code(var13), (SubLObject)module0553.$ic3$, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED)) && module0553.NIL == var10 && module0553.NIL == module0038.f2727(Sequences.subseq(var6, var9, Sequences.position_if(Symbols.symbol_function((SubLObject)module0553.$ic4$), var6, Symbols.symbol_function((SubLObject)module0553.IDENTITY), var9, (SubLObject)module0553.UNPROVIDED))) && (!var13.eql((SubLObject)Characters.CHAR_hyphen) || !var15.isChar() || module0553.NIL == Characters.digit_char_p(var15, (SubLObject)module0553.UNPROVIDED)) && (!module0038.f2856((SubLObject)ConsesLow.list(var13, var15, var16)).equalp((SubLObject)module0553.$ic5$) || module0553.NIL == Sequences.find(var17, (SubLObject)module0553.$ic6$, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED)) && (module0553.NIL != Sequences.find(var14, (SubLObject)module0553.$ic7$, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED, (SubLObject)module0553.UNPROVIDED) || module0553.NIL == var14)) {
                 Vectors.set_aref(var8, var12, (SubLObject)Characters.CHAR_hash);
                 var12 = Numbers.add(var12, (SubLObject)module0553.ONE_INTEGER);
-                Vectors.set_aref(var8, var12, module0129.f8494());
+                Vectors.set_aref(var8, var12, constant_reader_oc.f8494());
                 var12 = Numbers.add(var12, (SubLObject)module0553.ONE_INTEGER);
                 Vectors.set_aref(var8, var12, var13);
                 var9 = Numbers.add(var9, (SubLObject)module0553.ONE_INTEGER);
@@ -136,8 +136,8 @@ public final class module0553 extends SubLTranslatedFile
         final SubLThread var7 = SubLProcess.currentSubLThread();
         if (module0553.NIL != module0038.f2653(var6)) {
             if (module0553.NIL != module0126.f8389(var6)) {
-                final SubLObject var8 = module0166.f10737(var6);
-                if (module0553.NIL != module0128.f8463(var8, (SubLObject)module0553.UNPROVIDED)) {
+                final SubLObject var8 = constants_high_oc.f10737(var6);
+                if (module0553.NIL != constant_handles_oc.f8463(var8, (SubLObject)module0553.UNPROVIDED)) {
                     return var8;
                 }
             }
@@ -154,7 +154,7 @@ public final class module0553 extends SubLTranslatedFile
                 }
             }
             else if (module0553.NIL != Guids.guid_string_p(var6)) {
-                final SubLObject var9 = module0166.f10747(var6);
+                final SubLObject var9 = constants_high_oc.f10747(var6);
                 if (module0553.NIL != var9) {
                     return var9;
                 }
@@ -331,7 +331,7 @@ public final class module0553 extends SubLTranslatedFile
         $ic10$ = SubLObjectFactory.makeInteger(127);
         $ic11$ = SubLObjectFactory.makeKeyword("TV");
         $ic12$ = SubLObjectFactory.makeKeyword("UNKNOWN");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DefaultMonotonicPredicate"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DefaultMonotonicPredicate"));
         $ic14$ = SubLObjectFactory.makeKeyword("MONOTONIC");
         $ic15$ = SubLObjectFactory.makeKeyword("DEFAULT");
         $ic16$ = SubLObjectFactory.makeKeyword("ALREADY-CREATED");

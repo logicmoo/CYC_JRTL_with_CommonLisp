@@ -457,8 +457,8 @@ public final class module0594 extends SubLTranslatedFile
         $ic0$ = SubLObjectFactory.makeSymbol("S#40088", "CYC");
         $ic1$ = SubLObjectFactory.makeSymbol("S#40089", "CYC");
         $ic2$ = SubLObjectFactory.makeSymbol("S#40090", "CYC");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("subLIdentifier"));
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("uniquelyIdentifiedInType"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("subLIdentifier"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("uniquelyIdentifiedInType"));
         $ic5$ = SubLObjectFactory.makeString("More than one Cyc entity found for ID ~A and domain ~A.");
         $ic6$ = SubLObjectFactory.makeKeyword("ADD");
         $ic7$ = SubLObjectFactory.makeKeyword("REMOVE");
@@ -466,7 +466,7 @@ public final class module0594 extends SubLTranslatedFile
         $ic9$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic10$ = SubLObjectFactory.makeString("Unknown sublid-domain-to-forts-update operation ~A");
         $ic11$ = SubLObjectFactory.makeSymbol("S#40069", "CYC");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLSymbolEntityFn"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLSymbolEntityFn"));
         $ic13$ = SubLObjectFactory.makeString("Unknown sublid-forts-update operation ~A");
         $ic14$ = SubLObjectFactory.makeSymbol("NAT-FUNCTOR");
         $ic15$ = SubLObjectFactory.makeKeyword("GAF");

@@ -558,7 +558,7 @@ public final class module0607 extends SubLTranslatedFile
         $ic0$ = SubLObjectFactory.makeSymbol("S#4666", "CYC");
         $ic1$ = SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P");
         $ic2$ = SubLObjectFactory.makeSymbol("INTEGERP");
-        $ic3$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ScientificNumberFn")), (SubLObject)SubLObjectFactory.makeInteger("2718281828459045"), (SubLObject)module0607.ZERO_INTEGER);
+        $ic3$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScientificNumberFn")), (SubLObject)SubLObjectFactory.makeInteger("2718281828459045"), (SubLObject)module0607.ZERO_INTEGER);
         $ic4$ = SubLObjectFactory.makeSymbol("S#4668", "CYC");
         $ic5$ = (SubLFloat)SubLObjectFactory.makeDouble(0.5);
     }

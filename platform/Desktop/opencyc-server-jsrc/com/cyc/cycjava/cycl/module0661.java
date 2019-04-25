@@ -1510,7 +1510,7 @@ public final class module0661 extends SubLTranslatedFile
     }
     
     public static SubLObject f40285(final SubLObject var29) {
-        if (module0661.NIL == module0174.f11035(var29)) {
+        if (module0661.NIL == assertion_handles_oc.f11035(var29)) {
             Errors.sublisp_break((SubLObject)module0661.$ic168$, module0661.EMPTY_SUBL_OBJECT_ARRAY);
         }
         if (module0661.NIL != f40250(var29)) {
@@ -1543,7 +1543,7 @@ public final class module0661 extends SubLTranslatedFile
     }
     
     public static SubLObject f40290(final SubLObject var29) {
-        if (module0661.NIL == module0174.f11035(var29)) {
+        if (module0661.NIL == assertion_handles_oc.f11035(var29)) {
             Errors.sublisp_break((SubLObject)module0661.$ic168$, module0661.EMPTY_SUBL_OBJECT_ARRAY);
         }
         if (module0661.NIL != f40250(var29)) {
@@ -1642,7 +1642,7 @@ public final class module0661 extends SubLTranslatedFile
     }
     
     public static SubLObject f40304(final SubLObject var29) {
-        if (module0661.NIL == module0174.f11035(var29)) {
+        if (module0661.NIL == assertion_handles_oc.f11035(var29)) {
             Errors.sublisp_break((SubLObject)module0661.$ic168$, module0661.EMPTY_SUBL_OBJECT_ARRAY);
         }
         if (module0661.NIL != f40250(var29)) {
@@ -2072,12 +2072,12 @@ public final class module0661 extends SubLTranslatedFile
         $ic70$ = SubLObjectFactory.makeSymbol("S#44306", "CYC");
         $ic71$ = SubLObjectFactory.makeSymbol("QUOTE");
         $ic72$ = SubLObjectFactory.makeSymbol("DEFINE");
-        $ic73$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC"));
-        $ic74$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PUNLESS"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION-P"), (SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BREAK"), (SubLObject)SubLObjectFactory.makeString("not an assertion")));
-        $ic75$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44304", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)module0661.T));
+        $ic73$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC"));
+        $ic74$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PUNLESS"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION-P"), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BREAK"), (SubLObject)SubLObjectFactory.makeString("not an assertion")));
+        $ic75$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44304", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)module0661.T));
         $ic76$ = SubLObjectFactory.makeSymbol("CLET");
         $ic77$ = SubLObjectFactory.makeSymbol("S#44298", "CYC");
-        $ic78$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("MEMBER"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCALL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44281", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#44265", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCALL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44273", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#44265", "CYC"))))));
+        $ic78$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("RET"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("MEMBER"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCALL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44281", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#44265", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("FUNCALL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#44273", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#44265", "CYC"))))));
         $ic79$ = ConsesLow.list((SubLObject)module0661.NIL);
         $ic80$ = SubLObjectFactory.makeSymbol("CAR");
         $ic81$ = SubLObjectFactory.makeString("activate-~A");
@@ -2091,15 +2091,15 @@ public final class module0661 extends SubLTranslatedFile
         $ic89$ = SubLObjectFactory.makeString("Complete");
         $ic90$ = SubLObjectFactory.makeString("");
         $ic91$ = SubLObjectFactory.makeString("cb-show-cyclist-~A");
-        $ic92$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Cyclist"));
+        $ic92$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Cyclist"));
         $ic93$ = SubLObjectFactory.makeInteger(24);
         $ic94$ = SubLObjectFactory.makeString("cb-show-cyclist1-~A");
         $ic95$ = SubLObjectFactory.makeString("cb-show-cyclist2-~A");
         $ic96$ = SubLObjectFactory.makeString("--------");
         $ic97$ = SubLObjectFactory.makeString("Unknown ~A: ~S");
         $ic98$ = SubLObjectFactory.makeString("cyclist");
-        $ic99$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Cyc-BasedProject"));
-        $ic100$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic99$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Cyc-BasedProject"));
+        $ic100$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic101$ = SubLObjectFactory.makeString("project1-~A");
         $ic102$ = SubLObjectFactory.makeString("project2-~A");
         $ic103$ = SubLObjectFactory.makeString("project3-~A");
@@ -2163,7 +2163,7 @@ public final class module0661 extends SubLTranslatedFile
         $ic161$ = SubLObjectFactory.makeSymbol("S#44368", "CYC");
         $ic162$ = SubLObjectFactory.makeSymbol("S#44369", "CYC");
         $ic163$ = SubLObjectFactory.makeSymbol("S#44389", "CYC");
-        $ic164$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("myCreator")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44318", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44322", "CYC"), SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME"), SubLObjectFactory.makeSymbol("ASSERTED-BY") });
+        $ic164$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myCreator")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44318", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44322", "CYC"), SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME"), SubLObjectFactory.makeSymbol("ASSERTED-BY") });
         $ic165$ = SubLObjectFactory.makeSymbol("S#44330", "CYC");
         $ic166$ = SubLObjectFactory.makeSymbol("S#44331", "CYC");
         $ic167$ = SubLObjectFactory.makeSymbol("S#44332", "CYC");
@@ -2171,31 +2171,31 @@ public final class module0661 extends SubLTranslatedFile
         $ic169$ = SubLObjectFactory.makeSymbol("S#44370", "CYC");
         $ic170$ = SubLObjectFactory.makeSymbol("S#44371", "CYC");
         $ic171$ = SubLObjectFactory.makeSymbol("S#44390", "CYC");
-        $ic172$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("myReviewer")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME"), SubLObjectFactory.makeSymbol("S#43931", "CYC"), SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44318", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44322", "CYC") });
+        $ic172$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myReviewer")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME"), SubLObjectFactory.makeSymbol("S#43931", "CYC"), SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44318", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44322", "CYC") });
         $ic173$ = SubLObjectFactory.makeSymbol("S#44335", "CYC");
         $ic174$ = SubLObjectFactory.makeSymbol("S#44336", "CYC");
         $ic175$ = SubLObjectFactory.makeSymbol("S#44337", "CYC");
         $ic176$ = SubLObjectFactory.makeSymbol("S#44372", "CYC");
         $ic177$ = SubLObjectFactory.makeSymbol("S#44373", "CYC");
         $ic178$ = SubLObjectFactory.makeSymbol("S#44391", "CYC");
-        $ic179$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKNAME-PREFIX"), SubLObjectFactory.makeString("After "), SubLObjectFactory.makeKeyword("LINKABLE-NAME"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("myCreationTime")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("SINGLE-SIMPLE-DATE"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), SubLObjectFactory.makeSymbol("S#44327", "CYC"), SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44319", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44324", "CYC"), SubLObjectFactory.makeKeyword("INITIAL-FILTER-VALUE"), SubLObjectFactory.makeInteger(19800101) });
+        $ic179$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKNAME-PREFIX"), SubLObjectFactory.makeString("After "), SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myCreationTime")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("SINGLE-SIMPLE-DATE"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), SubLObjectFactory.makeSymbol("S#44327", "CYC"), SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44319", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44324", "CYC"), SubLObjectFactory.makeKeyword("INITIAL-FILTER-VALUE"), SubLObjectFactory.makeInteger(19800101) });
         $ic180$ = SubLObjectFactory.makeSymbol("S#44340", "CYC");
         $ic181$ = SubLObjectFactory.makeSymbol("S#44341", "CYC");
         $ic182$ = SubLObjectFactory.makeSymbol("S#44374", "CYC");
         $ic183$ = SubLObjectFactory.makeSymbol("S#44375", "CYC");
         $ic184$ = SubLObjectFactory.makeSymbol("S#44392", "CYC");
-        $ic185$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKNAME-PREFIX"), SubLObjectFactory.makeString("Before "), SubLObjectFactory.makeKeyword("LINKABLE-NAME"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("myCreationTime")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("SINGLE-SIMPLE-DATE"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), SubLObjectFactory.makeSymbol("S#44326", "CYC"), SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44319", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44324", "CYC"), SubLObjectFactory.makeKeyword("INITIAL-FILTER-VALUE"), SubLObjectFactory.makeInteger(29991231) });
+        $ic185$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKNAME-PREFIX"), SubLObjectFactory.makeString("Before "), SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myCreationTime")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("SINGLE-SIMPLE-DATE"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), SubLObjectFactory.makeSymbol("S#44326", "CYC"), SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44319", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44324", "CYC"), SubLObjectFactory.makeKeyword("INITIAL-FILTER-VALUE"), SubLObjectFactory.makeInteger(29991231) });
         $ic186$ = SubLObjectFactory.makeSymbol("S#44344", "CYC");
         $ic187$ = SubLObjectFactory.makeSymbol("S#44345", "CYC");
         $ic188$ = SubLObjectFactory.makeSymbol("S#44376", "CYC");
         $ic189$ = SubLObjectFactory.makeSymbol("S#44377", "CYC");
-        $ic190$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), module0661.NIL, SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44320", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44325", "CYC") });
+        $ic190$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), module0661.NIL, SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44320", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44325", "CYC") });
         $ic191$ = SubLObjectFactory.makeSymbol("S#44348", "CYC");
         $ic192$ = SubLObjectFactory.makeSymbol("S#44349", "CYC");
         $ic193$ = SubLObjectFactory.makeSymbol("S#44378", "CYC");
         $ic194$ = SubLObjectFactory.makeSymbol("S#44379", "CYC");
         $ic195$ = SubLObjectFactory.makeSymbol("S#44393", "CYC");
-        $ic196$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("myCreationPurpose")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44321", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44323", "CYC"), SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME"), SubLObjectFactory.makeSymbol("ASSERTED-WHY") });
+        $ic196$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("LINKABLE-NAME"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myCreationPurpose")), SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("LIST-OF-FORMS"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0661.NIL, SubLObjectFactory.makeKeyword("VALUE-PROMPT-FN"), SubLObjectFactory.makeSymbol("S#44321", "CYC"), SubLObjectFactory.makeKeyword("VALUE-UPDATE-FN"), SubLObjectFactory.makeSymbol("S#44323", "CYC"), SubLObjectFactory.makeKeyword("EFFECTIVE-FN-SLOTNAME"), SubLObjectFactory.makeSymbol("ASSERTED-WHY") });
         $ic197$ = SubLObjectFactory.makeSymbol("S#44352", "CYC");
         $ic198$ = SubLObjectFactory.makeSymbol("S#44353", "CYC");
         $ic199$ = SubLObjectFactory.makeSymbol("S#44354", "CYC");

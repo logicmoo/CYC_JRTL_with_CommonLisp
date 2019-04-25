@@ -94,7 +94,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11284(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -171,7 +171,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var13 == module0214.UNPROVIDED) {
             var13 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11284(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -245,7 +245,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11284(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -273,7 +273,7 @@ public final class module0214 extends SubLTranslatedFile
     }
     
     public static SubLObject f14099(final SubLObject var1, final SubLObject var2) {
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11284(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -301,7 +301,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -337,7 +337,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14101(var1, var6, var15, var5, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var15) {
                 if (module0214.NIL != var5) {
@@ -390,7 +390,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -426,7 +426,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14104(var1, var6, var15, var5, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var15) {
                 if (module0214.NIL != var5) {
@@ -472,7 +472,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -500,7 +500,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var15 == module0214.UNPROVIDED) {
             var15 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14107(var1, var6, var15, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var15) {
                 final SubLObject var16 = module0178.f11291(var1);
@@ -541,7 +541,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -577,7 +577,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14110(var1, var27, var15, var5, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var15) {
                 if (module0214.NIL != var5) {
@@ -633,7 +633,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -669,7 +669,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14113(var1, var27, var15, var5, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var15) {
                 if (module0214.NIL != var5) {
@@ -725,7 +725,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -761,7 +761,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14116(var1, var27, var15, var5, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var15) {
                 if (module0214.NIL != var5) {
@@ -817,7 +817,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -853,7 +853,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14119(var1, var35, var15, var5, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var15) {
                 if (module0214.NIL != var5) {
@@ -906,7 +906,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -927,7 +927,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14122(var1, var13, var5, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var5) {
                 final SubLObject var14 = module0178.f11291(var1);
@@ -966,7 +966,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -987,7 +987,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14125(var1, var39, var5, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var5) {
                 final SubLObject var40 = module0178.f11291(var1);
@@ -1010,7 +1010,7 @@ public final class module0214 extends SubLTranslatedFile
         if (!module0214.$ic18$.eql(var40)) {
             return (SubLObject)module0214.NIL;
         }
-        if (module0214.NIL == module0174.f11035(var39)) {
+        if (module0214.NIL == assertion_handles_oc.f11035(var39)) {
             return (SubLObject)module0214.NIL;
         }
         return Equality.eq(module0202.f12835(var22, (SubLObject)module0214.UNPROVIDED), var39);
@@ -1023,7 +1023,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -1044,7 +1044,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14128(var1, var39, var5, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var5) {
                 final SubLObject var40 = module0178.f11291(var1);
@@ -1067,7 +1067,7 @@ public final class module0214 extends SubLTranslatedFile
         if (!module0214.$ic20$.eql(var40)) {
             return (SubLObject)module0214.NIL;
         }
-        if (module0214.NIL == module0174.f11035(var39)) {
+        if (module0214.NIL == assertion_handles_oc.f11035(var39)) {
             return (SubLObject)module0214.NIL;
         }
         return Equality.eq(module0202.f12835(var22, (SubLObject)module0214.UNPROVIDED), var39);
@@ -1083,7 +1083,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0178.f11290(var1)) {
             return (SubLObject)module0214.NIL;
         }
@@ -1117,7 +1117,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var5 == module0214.UNPROVIDED) {
             var5 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL != f14131(var1, var15, var5, (SubLObject)module0214.UNPROVIDED)) {
             if (module0214.NIL != var15) {
                 if (module0214.NIL != var5) {
@@ -1153,13 +1153,13 @@ public final class module0214 extends SubLTranslatedFile
     }
     
     public static SubLObject f14133(final SubLObject var1, final SubLObject var5) {
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         final SubLObject var6 = module0178.f11287(var1);
         return (SubLObject)SubLObjectFactory.makeBoolean(module0214.NIL != module0161.f10513(var6, var5) && module0214.NIL == module0217.f14342(module0161.f10557(var5)));
     }
     
     public static SubLObject f14134(final SubLObject var1, final SubLObject var2) {
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         if (module0214.NIL == module0035.f2428(var2, module0178.f11282(var1), Symbols.symbol_function((SubLObject)module0214.EQUAL), (SubLObject)module0214.UNPROVIDED) && module0214.NIL == module0205.f13220(var2, module0178.f11287(var1), (SubLObject)module0214.NIL, Symbols.symbol_function((SubLObject)module0214.EQUAL), (SubLObject)module0214.UNPROVIDED)) {
             return (SubLObject)module0214.NIL;
         }
@@ -1172,7 +1172,7 @@ public final class module0214 extends SubLTranslatedFile
     }
     
     public static SubLObject f14136(final SubLObject var2, final SubLObject var45, final SubLObject var1) {
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         final SubLObject var46 = conses_high.adjoin(var1, var45, (SubLObject)module0214.UNPROVIDED, (SubLObject)module0214.UNPROVIDED);
         if (!var45.eql(var46)) {
             module0212.f13800(var2, var46);
@@ -1187,7 +1187,7 @@ public final class module0214 extends SubLTranslatedFile
     }
     
     public static SubLObject f14139(final SubLObject var2, final SubLObject var45, final SubLObject var1) {
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         final SubLObject var46 = module0035.f2073(var1, var45, (SubLObject)module0214.UNPROVIDED);
         if (!var45.eql(var46)) {
             module0212.f13800(var2, var46);
@@ -1205,7 +1205,7 @@ public final class module0214 extends SubLTranslatedFile
         if (var16 == module0214.UNPROVIDED) {
             var16 = (SubLObject)module0214.NIL;
         }
-        assert module0214.NIL != module0174.f11035(var1) : var1;
+        assert module0214.NIL != assertion_handles_oc.f11035(var1) : var1;
         return (SubLObject)SubLObjectFactory.makeBoolean((module0214.NIL == var47 || module0214.NIL != module0178.f11343(var1, var47)) && (module0214.NIL == var48 || module0214.NIL != module0178.f11321(var1, var48)) && (module0214.NIL == var16 || module0214.NIL != module0178.f11340(var1, var16)));
     }
     
@@ -1362,7 +1362,7 @@ public final class module0214 extends SubLTranslatedFile
             module0012.$g76$.rebind(var59, var54);
             module0012.$g75$.rebind(var58, var54);
         }
-        final SubLObject var76 = module0174.f11010();
+        final SubLObject var76 = assertion_handles_oc.f11010();
         final SubLObject var77 = (SubLObject)module0214.$ic30$;
         final SubLObject var78 = module0065.f4733(var76);
         SubLObject var79 = (SubLObject)module0214.ZERO_INTEGER;
@@ -1577,25 +1577,25 @@ public final class module0214 extends SubLTranslatedFile
         module0214.$g2383$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("ASSERTION-P");
         $ic1$ = SubLObjectFactory.makeSymbol("HLMT-EQUAL");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
         $ic3$ = SubLObjectFactory.makeKeyword("POS");
         $ic4$ = SubLObjectFactory.makeSymbol("S#16975", "CYC");
         $ic5$ = SubLObjectFactory.makeSymbol("S#16978", "CYC");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
         $ic7$ = SubLObjectFactory.makeSymbol("S#16981", "CYC");
         $ic8$ = SubLObjectFactory.makeSymbol("S#16984", "CYC");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic10$ = SubLObjectFactory.makeSymbol("S#16987", "CYC");
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
         $ic12$ = SubLObjectFactory.makeSymbol("S#16990", "CYC");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic14$ = SubLObjectFactory.makeSymbol("S#16993", "CYC");
-        $ic15$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic15$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
         $ic16$ = SubLObjectFactory.makeSymbol("S#16996", "CYC");
         $ic17$ = SubLObjectFactory.makeSymbol("S#16999", "CYC");
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("abnormal"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("abnormal"));
         $ic19$ = SubLObjectFactory.makeSymbol("S#16959", "CYC");
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("meetsPragmaticRequirement"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("meetsPragmaticRequirement"));
         $ic21$ = SubLObjectFactory.makeSymbol("CLET");
         $ic22$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#17020", "CYC"), (SubLObject)module0214.T), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#17021", "CYC"), (SubLObject)module0214.NIL));
         $ic23$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("PWHEN"), (SubLObject)SubLObjectFactory.makeSymbol("S#17021", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#17011", "CYC"))));

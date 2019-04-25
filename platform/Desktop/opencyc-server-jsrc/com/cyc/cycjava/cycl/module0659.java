@@ -607,13 +607,13 @@ public final class module0659 extends SubLTranslatedFile
     
     public static SubLObject f40107(final SubLObject var22, final SubLObject var36) {
         if (var22.eql((SubLObject)module0659.$ic79$)) {
-            return module0174.f11025(var36);
+            return assertion_handles_oc.f11025(var36);
         }
         if (var22.eql((SubLObject)module0659.$ic80$)) {
-            return module0184.f11649(var36);
+            return oc_deduction_handles.f11649(var36);
         }
         if (var22.eql((SubLObject)module0659.$ic81$)) {
-            return module0166.f10743(var36);
+            return constants_high_oc.f10743(var36);
         }
         if (var22.eql((SubLObject)module0659.$ic82$) || var22.eql((SubLObject)module0659.$ic83$) || var22.eql((SubLObject)module0659.$ic84$) || var22.eql((SubLObject)module0659.$ic85$)) {
             return module0656.f39842(var36);
@@ -981,7 +981,7 @@ public final class module0659 extends SubLTranslatedFile
     }
     
     public static SubLObject f40120(final SubLObject var61) {
-        return module0128.f8449(var61);
+        return constant_handles_oc.f8449(var61);
     }
     
     public static SubLObject f40121(final SubLObject var60, final SubLObject var37, final SubLObject var38, SubLObject var40) {
@@ -2156,7 +2156,7 @@ public final class module0659 extends SubLTranslatedFile
         $ic108$ = SubLObjectFactory.makeString("bl_menu.gif");
         $ic109$ = ConsesLow.list((SubLObject)module0659.ONE_INTEGER, (SubLObject)module0659.TWO_INTEGER);
         $ic110$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic111$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic111$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic112$ = SubLObjectFactory.makeKeyword("RED-DIAMOND");
         $ic113$ = SubLObjectFactory.makeString("red_diam.gif");
         $ic114$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("TYPE"), SubLObjectFactory.makeKeyword("GAF-ARG-PREDICATE"), SubLObjectFactory.makeKeyword("ACTIVE-P"), module0659.T, SubLObjectFactory.makeKeyword("IMAGE"), SubLObjectFactory.makeKeyword("RED-DIAMOND"), SubLObjectFactory.makeKeyword("IMAGE-ALT"), SubLObjectFactory.makeString("[Hier]"), SubLObjectFactory.makeKeyword("EFFECTIVE-FN"), SubLObjectFactory.makeSymbol("S#44134", "CYC"), SubLObjectFactory.makeKeyword("HANDLER"), SubLObjectFactory.makeString("cb-hier"), SubLObjectFactory.makeKeyword("TOOL"), SubLObjectFactory.makeKeyword("HIERARCHY-BROWSER"), SubLObjectFactory.makeKeyword("TITLE"), SubLObjectFactory.makeString("Hierarchy Browser"), SubLObjectFactory.makeKeyword("COMMENT"), SubLObjectFactory.makeString("Lets you browse the isa hierarchy.") });

@@ -441,7 +441,7 @@ public final class module0038 extends SubLTranslatedFile
     }
     
     public static SubLObject f2619(final SubLObject var35) {
-        if (module0038.NIL != module0128.f8449(var35)) {
+        if (module0038.NIL != constant_handles_oc.f8449(var35)) {
             return f2618(var35);
         }
         if (module0038.NIL != module0167.f10813(var35)) {
@@ -1237,27 +1237,27 @@ public final class module0038 extends SubLTranslatedFile
     
     public static SubLObject f2694(final SubLObject var9) {
         assert module0038.NIL != Types.stringp(var9) : var9;
-        return f2684(var9, module0129.f8495());
+        return f2684(var9, constant_reader_oc.f8495());
     }
     
     public static SubLObject f2695(final SubLObject var9) {
         assert module0038.NIL != Types.stringp(var9) : var9;
-        return f2668(module0129.f8495(), var9, (SubLObject)module0038.UNPROVIDED, (SubLObject)module0038.UNPROVIDED, (SubLObject)module0038.UNPROVIDED);
+        return f2668(constant_reader_oc.f8495(), var9, (SubLObject)module0038.UNPROVIDED, (SubLObject)module0038.UNPROVIDED, (SubLObject)module0038.UNPROVIDED);
     }
     
     public static SubLObject f2696(final SubLObject var9) {
         assert module0038.NIL != Types.stringp(var9) : var9;
-        return Sequences.cconcatenate(module0129.f8495(), var9);
+        return Sequences.cconcatenate(constant_reader_oc.f8495(), var9);
     }
     
     public static SubLObject f2697(final SubLObject var9) {
         assert module0038.NIL != Types.stringp(var9) : var9;
-        return f2674(var9, module0129.f8495(), (SubLObject)module0038.UNPROVIDED);
+        return f2674(var9, constant_reader_oc.f8495(), (SubLObject)module0038.UNPROVIDED);
     }
     
     public static SubLObject f2698(final SubLObject var9) {
         assert module0038.NIL != Types.stringp(var9) : var9;
-        return f2699(module0038.$g916$.getGlobalValue(), module0129.f8495(), var9, (SubLObject)module0038.UNPROVIDED);
+        return f2699(module0038.$g916$.getGlobalValue(), constant_reader_oc.f8495(), var9, (SubLObject)module0038.UNPROVIDED);
     }
     
     public static SubLObject f2700(final SubLObject var9, final SubLObject var117, SubLObject var53) {
@@ -4406,8 +4406,8 @@ public final class module0038 extends SubLTranslatedFile
         if (module0038.NIL != module0167.f10813(var35)) {
             return f2638(module0172.f10915(var35));
         }
-        if (module0038.NIL != module0128.f8449(var35)) {
-            return module0166.f10743(var35);
+        if (module0038.NIL != constant_handles_oc.f8449(var35)) {
+            return constants_high_oc.f10743(var35);
         }
         return f2638(var35);
     }
@@ -4445,8 +4445,8 @@ public final class module0038 extends SubLTranslatedFile
         if (var19.isString()) {
             return var19;
         }
-        if (module0038.NIL != module0128.f8449(var19)) {
-            return module0166.f10743(var19);
+        if (module0038.NIL != constant_handles_oc.f8449(var19)) {
+            return constants_high_oc.f10743(var19);
         }
         return f2638(var19);
     }
@@ -4690,7 +4690,7 @@ public final class module0038 extends SubLTranslatedFile
     
     public static SubLObject f2922(SubLObject var370, final SubLObject var448) {
         if (module0038.NIL == f2896(var448) && module0038.NIL == f2897(var448) && module0038.NIL == f2898(var448) && module0038.NIL == f2903(var448) && module0038.NIL == f2900(var448) && module0038.NIL != module0126.f8394(var370, (SubLObject)module0038.UNPROVIDED, (SubLObject)module0038.UNPROVIDED)) {
-            final SubLObject var449 = module0166.f10737(var370);
+            final SubLObject var449 = constants_high_oc.f10737(var370);
             if (module0038.NIL == conses_high.member(var449, f2895(var448), Symbols.symbol_function((SubLObject)module0038.EQL), Symbols.symbol_function((SubLObject)module0038.IDENTITY))) {
                 f2907(var448, (SubLObject)ConsesLow.cons(var449, f2895(var448)));
             }
@@ -4843,7 +4843,7 @@ public final class module0038 extends SubLTranslatedFile
                     f2927(f2638(var362), var359);
                     var358 = Numbers.add(var358, (SubLObject)module0038.ONE_INTEGER);
                 }
-                else if (module0038.NIL != Characters.charE(var362, (SubLObject)Characters.CHAR_hash) && module0038.NIL != Characters.charE(Strings.sublisp_char(var355, module0048.f_1X(var361)), module0129.f8494())) {
+                else if (module0038.NIL != Characters.charE(var362, (SubLObject)Characters.CHAR_hash) && module0038.NIL != Characters.charE(Strings.sublisp_char(var355, module0048.f_1X(var361)), constant_reader_oc.f8494())) {
                     f2910(var359, (SubLObject)module0038.T);
                     f2927(f2638(var362), var359);
                     var358 = Numbers.add(var358, (SubLObject)module0038.ONE_INTEGER);
@@ -4899,7 +4899,7 @@ public final class module0038 extends SubLTranslatedFile
         SubLObject var475;
         for (var469 = (SubLObject)module0038.NIL, var469 = Sequences.position((SubLObject)Characters.CHAR_hash, var9, Symbols.symbol_function((SubLObject)module0038.EQL), Symbols.symbol_function((SubLObject)module0038.IDENTITY), var466, (SubLObject)module0038.UNPROVIDED); module0038.NIL != var469; var469 = Sequences.position((SubLObject)Characters.CHAR_hash, var9, Symbols.symbol_function((SubLObject)module0038.EQL), Symbols.symbol_function((SubLObject)module0038.IDENTITY), var466, (SubLObject)module0038.UNPROVIDED)) {
             var470 = Numbers.add(var469, (SubLObject)module0038.ONE_INTEGER);
-            if (var470.numE(var465) || !Strings.sublisp_char(var9, var470).eql(module0129.f8494())) {
+            if (var470.numE(var465) || !Strings.sublisp_char(var9, var470).eql(constant_reader_oc.f8494())) {
                 var466 = var470;
             }
             else {
@@ -4933,7 +4933,7 @@ public final class module0038 extends SubLTranslatedFile
                     }
                 }
                 if (module0038.NIL != var474) {
-                    var475 = module0166.f10743(var474);
+                    var475 = constants_high_oc.f10743(var474);
                     if (module0038.NIL == conses_high.member(var475, var467, Symbols.symbol_function((SubLObject)module0038.EQUAL), Symbols.symbol_function((SubLObject)module0038.IDENTITY))) {
                         var467 = (SubLObject)ConsesLow.cons(var475, var467);
                     }

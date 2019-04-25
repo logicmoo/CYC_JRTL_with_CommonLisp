@@ -2100,7 +2100,7 @@ public final class module0678 extends SubLTranslatedFile
                 if (!var4.eql(module0018.$g679$.getGlobalValue().first())) {
                     module0642.f39026((SubLObject)module0678.UNPROVIDED);
                 }
-                if (module0678.NIL != module0174.f11035(var4)) {
+                if (module0678.NIL != assertion_handles_oc.f11035(var4)) {
                     module0656.f39916(var4, (SubLObject)module0678.T, (SubLObject)module0678.UNPROVIDED);
                 }
                 else {
@@ -7122,7 +7122,7 @@ public final class module0678 extends SubLTranslatedFile
                         SubLObject var365 = (SubLObject)module0678.NIL;
                         var365 = var364.first();
                         while (module0678.NIL != var364) {
-                            final SubLObject var366 = module0166.f10737(conses_high.third(var365));
+                            final SubLObject var366 = constants_high_oc.f10737(conses_high.third(var365));
                             if (module0678.NIL != var366) {
                                 module0656.f39804(var366, (SubLObject)module0678.UNPROVIDED, (SubLObject)module0678.UNPROVIDED);
                             }
@@ -7146,7 +7146,7 @@ public final class module0678 extends SubLTranslatedFile
                         while (module0678.NIL != var364) {
                             module0642.f39019(conses_high.third(var367));
                             module0642.f39019((SubLObject)module0678.$ic499$);
-                            final SubLObject var366 = module0166.f10737(conses_high.fourth(var367));
+                            final SubLObject var366 = constants_high_oc.f10737(conses_high.fourth(var367));
                             if (module0678.NIL != var366) {
                                 module0656.f39804(var366, (SubLObject)module0678.UNPROVIDED, (SubLObject)module0678.UNPROVIDED);
                             }
@@ -8258,7 +8258,7 @@ public final class module0678 extends SubLTranslatedFile
         $ic62$ = SubLObjectFactory.makeString("kb_checkpoint");
         $ic63$ = SubLObjectFactory.makeKeyword("USE-CURRENT-CHECK-POINT");
         $ic64$ = SubLObjectFactory.makeSymbol("S#45481", "CYC");
-        $ic65$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Cyc-BasedProject"));
+        $ic65$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Cyc-BasedProject"));
         $ic66$ = SubLObjectFactory.makeSymbol("S#45482", "CYC");
         $ic67$ = SubLObjectFactory.makeString("filters?");
         $ic68$ = SubLObjectFactory.makeSymbol("CB-MODE-HANDLER");
@@ -8500,8 +8500,8 @@ public final class module0678 extends SubLTranslatedFile
         $ic304$ = SubLObjectFactory.makeString("No Project Selected");
         $ic305$ = SubLObjectFactory.makeString("Reset");
         $ic306$ = SubLObjectFactory.makeSymbol("CB-CHOOSE-PROJECT");
-        $ic307$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic308$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("OngoingStatus"));
+        $ic307$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic308$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("OngoingStatus"));
         $ic309$ = SubLObjectFactory.makeString("nil");
         $ic310$ = SubLObjectFactory.makeString("Project has been changed.");
         $ic311$ = SubLObjectFactory.makeSymbol("CB-CHOOSE-PROJECT-HANDLER");
@@ -8509,9 +8509,9 @@ public final class module0678 extends SubLTranslatedFile
         $ic313$ = SubLObjectFactory.makeString("cb-choose-project");
         $ic314$ = SubLObjectFactory.makeKeyword("CHOOSE-PROJECT");
         $ic315$ = SubLObjectFactory.makeSymbol("S#45446", "CYC");
-        $ic316$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycBrowser"));
+        $ic316$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycBrowser"));
         $ic317$ = SubLObjectFactory.makeSymbol("?PROJECT");
-        $ic318$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistPrimaryProject"));
+        $ic318$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistPrimaryProject"));
         $ic319$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?PROJECT"));
         $ic320$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MAX-NUMBER"), (SubLObject)module0678.ONE_INTEGER);
         $ic321$ = SubLObjectFactory.makeKeyword("CB-LOGIN");
@@ -8552,7 +8552,7 @@ public final class module0678 extends SubLTranslatedFile
         $ic356$ = SubLObjectFactory.makeString("cb-force-logout");
         $ic357$ = SubLObjectFactory.makeSymbol("S#45451", "CYC");
         $ic358$ = SubLObjectFactory.makeString("Complete");
-        $ic359$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("HumanCyclist"));
+        $ic359$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HumanCyclist"));
         $ic360$ = SubLObjectFactory.makeInteger(27);
         $ic361$ = SubLObjectFactory.makeString("Clear");
         $ic362$ = SubLObjectFactory.makeString("cb-notify-all-users");
@@ -8562,7 +8562,7 @@ public final class module0678 extends SubLTranslatedFile
         $ic366$ = SubLObjectFactory.makeString("Please enter the message you wish to send to the following users.");
         $ic367$ = SubLObjectFactory.makeString("cb-send-email-to-selected-users");
         $ic368$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#9603", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#9126", "CYC"));
-        $ic369$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
+        $ic369$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
         $ic370$ = SubLObjectFactory.makeKeyword("CENTER");
         $ic371$ = SubLObjectFactory.makeString("To:");
         $ic372$ = SubLObjectFactory.makeSymbol("SECOND");
@@ -8581,9 +8581,9 @@ public final class module0678 extends SubLTranslatedFile
         $ic385$ = SubLObjectFactory.makeSymbol("S#45487", "CYC");
         $ic386$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
         $ic387$ = SubLObjectFactory.makeKeyword("ADDRESS");
-        $ic388$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("preferredEMailAddressText"));
+        $ic388$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("preferredEMailAddressText"));
         $ic389$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ADDRESS"));
-        $ic390$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CyclistsMt"));
+        $ic390$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CyclistsMt"));
         $ic391$ = SubLObjectFactory.makeString("Sending Message");
         $ic392$ = SubLObjectFactory.makeString("Sending message with following content:");
         $ic393$ = SubLObjectFactory.makeString("Subject");
@@ -8615,17 +8615,17 @@ public final class module0678 extends SubLTranslatedFile
         $ic419$ = SubLObjectFactory.makeString("Your project is currently not set.");
         $ic420$ = SubLObjectFactory.makeString("Choose Project");
         $ic421$ = SubLObjectFactory.makeString("Login");
-        $ic422$ = ConsesLow.list((SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Dr")), (SubLObject)SubLObjectFactory.makeString("Dr.")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Reverend-Title")), (SubLObject)SubLObjectFactory.makeString("Rev.")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Prof")), (SubLObject)SubLObjectFactory.makeString("Prof.")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("President-Title")), (SubLObject)SubLObjectFactory.makeString("President")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Sir")), (SubLObject)SubLObjectFactory.makeString("Sir")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Major-Title")), (SubLObject)SubLObjectFactory.makeString("Maj.")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Lieutenant-Title")), (SubLObject)SubLObjectFactory.makeString("Lt.")), (SubLObject)ConsesLow.cons(module0128.f8479((SubLObject)SubLObjectFactory.makeString("LieutenantColonel-Title")), (SubLObject)SubLObjectFactory.makeString("Ltc.")));
+        $ic422$ = ConsesLow.list((SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Dr")), (SubLObject)SubLObjectFactory.makeString("Dr.")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Reverend-Title")), (SubLObject)SubLObjectFactory.makeString("Rev.")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Prof")), (SubLObject)SubLObjectFactory.makeString("Prof.")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("President-Title")), (SubLObject)SubLObjectFactory.makeString("President")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Sir")), (SubLObject)SubLObjectFactory.makeString("Sir")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Major-Title")), (SubLObject)SubLObjectFactory.makeString("Maj.")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Lieutenant-Title")), (SubLObject)SubLObjectFactory.makeString("Lt.")), (SubLObject)ConsesLow.cons(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LieutenantColonel-Title")), (SubLObject)SubLObjectFactory.makeString("Ltc.")));
         $ic423$ = SubLObjectFactory.makeSymbol("?TITLE");
-        $ic424$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("titleOfPerson"));
+        $ic424$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("titleOfPerson"));
         $ic425$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?TITLE"));
-        $ic426$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic426$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic427$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#45491", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#45492", "CYC"));
-        $ic428$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Sir"));
-        $ic429$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("givenNames"));
-        $ic430$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("familyName"));
+        $ic428$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Sir"));
+        $ic429$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("givenNames"));
+        $ic430$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("familyName"));
         $ic431$ = SubLObjectFactory.makeKeyword("NONE");
-        $ic432$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("givenNames")));
+        $ic432$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("givenNames")));
         $ic433$ = SubLObjectFactory.makeString("Unknown Cyclist");
         $ic434$ = SubLObjectFactory.makeString("cb-create-new-cyclist");
         $ic435$ = SubLObjectFactory.makeString("The name ");
@@ -8633,8 +8633,8 @@ public final class module0678 extends SubLTranslatedFile
         $ic437$ = SubLObjectFactory.makeString("Do you want to create a new Cyc constant with this name?  You will be able to use this constant as you would any other in the Knowledge Base as well as login with this new name.");
         $ic438$ = SubLObjectFactory.makeString("Yes, Create Cyclist");
         $ic439$ = SubLObjectFactory.makeString("creating new cyclists");
-        $ic440$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic441$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("HumanCyclist")));
+        $ic440$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic441$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HumanCyclist")));
         $ic442$ = SubLObjectFactory.makeString("Unable to create a new cyclist (why?");
         $ic443$ = SubLObjectFactory.makeSymbol("CB-CREATE-NEW-CYCLIST");
         $ic444$ = SubLObjectFactory.makeString("sha1.js");
@@ -8668,7 +8668,7 @@ public final class module0678 extends SubLTranslatedFile
         $ic472$ = SubLObjectFactory.makeString("Please fill in all fields.");
         $ic473$ = SubLObjectFactory.makeString("No known cyclist by this name.");
         $ic474$ = SubLObjectFactory.makeString("The name could mean any of following cyclists: ");
-        $ic475$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("encryptedPasswordForUser")));
+        $ic475$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("encryptedPasswordForUser")));
         $ic476$ = SubLObjectFactory.makeSymbol("CB-SET-PASSWORD-HANDLER");
         $ic477$ = SubLObjectFactory.makeKeyword("CB-TRANSCRIPT-VIEWER");
         $ic478$ = SubLObjectFactory.makeString("cb-transcript-viewer.html");

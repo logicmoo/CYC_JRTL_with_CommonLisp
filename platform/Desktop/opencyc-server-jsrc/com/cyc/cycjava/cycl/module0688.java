@@ -79,7 +79,7 @@ public final class module0688 extends SubLTranslatedFile
             return (SubLObject)module0688.NIL;
         }
         final SubLObject var4 = module0656.f39970(var2);
-        if (module0688.NIL == module0174.f11035(var4)) {
+        if (module0688.NIL == assertion_handles_oc.f11035(var4)) {
             return module0656.f39789((SubLObject)module0688.$ic8$, var2, (SubLObject)module0688.UNPROVIDED, (SubLObject)module0688.UNPROVIDED, (SubLObject)module0688.UNPROVIDED, (SubLObject)module0688.UNPROVIDED);
         }
         return f42239(var4);
@@ -102,7 +102,7 @@ public final class module0688 extends SubLTranslatedFile
         var3 = var3.rest();
         if (module0688.NIL == var3) {
             final SubLObject var5 = module0656.f39970(var4);
-            if (module0688.NIL == module0174.f11035(var5)) {
+            if (module0688.NIL == assertion_handles_oc.f11035(var5)) {
                 module0656.f39789((SubLObject)module0688.$ic11$, var4, (SubLObject)module0688.UNPROVIDED, (SubLObject)module0688.UNPROVIDED, (SubLObject)module0688.UNPROVIDED, (SubLObject)module0688.UNPROVIDED);
                 return (SubLObject)module0688.NIL;
             }
@@ -127,7 +127,7 @@ public final class module0688 extends SubLTranslatedFile
         module0642.f39020(module0015.$g383$.getGlobalValue());
         module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0688.UNPROVIDED);
         module0655.f39768();
-        PrintLow.format(module0015.$g131$.getDynamicValue(var10), (SubLObject)module0688.$ic15$, module0174.f11025(var5));
+        PrintLow.format(module0015.$g131$.getDynamicValue(var10), (SubLObject)module0688.$ic15$, assertion_handles_oc.f11025(var5));
         module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0688.UNPROVIDED);
         if (module0688.NIL != var11) {
             module0642.f39020(module0015.$g387$.getGlobalValue());

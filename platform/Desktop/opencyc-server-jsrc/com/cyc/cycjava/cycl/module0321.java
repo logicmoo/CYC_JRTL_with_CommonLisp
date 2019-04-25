@@ -2044,7 +2044,7 @@ public final class module0321 extends SubLTranslatedFile
         $ic56$ = SubLObjectFactory.makeKeyword("FAIL");
         $ic57$ = SubLObjectFactory.makeKeyword("NONE");
         $ic58$ = SubLObjectFactory.makeKeyword("TVA-MAX-TIME");
-        $ic59$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic59$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic60$ = SubLObjectFactory.makeSymbol("S#11450", "CYC");
         $ic61$ = SubLObjectFactory.makeKeyword("ERROR");
         $ic62$ = SubLObjectFactory.makeString("~A is not a ~A");
@@ -2053,7 +2053,7 @@ public final class module0321 extends SubLTranslatedFile
         $ic65$ = SubLObjectFactory.makeString("continue anyway");
         $ic66$ = SubLObjectFactory.makeKeyword("WARN");
         $ic67$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic68$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
+        $ic68$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
         $ic69$ = SubLObjectFactory.makeKeyword("OLD");
         $ic70$ = SubLObjectFactory.makeKeyword("RESOURCE");
         $ic71$ = SubLObjectFactory.makeKeyword("DEPTH");
@@ -2069,14 +2069,14 @@ public final class module0321 extends SubLTranslatedFile
         $ic81$ = SubLObjectFactory.makeSymbol("S#24261", "CYC");
         $ic82$ = SubLObjectFactory.makeSymbol("S#24262", "CYC");
         $ic83$ = SubLObjectFactory.makeSymbol("S#24263", "CYC");
-        $ic84$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#15200", "CYC"));
+        $ic84$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#15200", "CYC"));
         $ic85$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#5090", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#24245", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#24286", "CYC"));
         $ic86$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#713", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#14595", "CYC"));
         $ic87$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#5432", "CYC"));
         $ic88$ = SubLObjectFactory.makeSymbol("S#24267", "CYC");
         $ic89$ = SubLObjectFactory.makeSymbol("S#24268", "CYC");
         $ic90$ = SubLObjectFactory.makeSymbol("S#24269", "CYC");
-        $ic91$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#5090", "CYC"));
+        $ic91$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#5090", "CYC"));
     }
     
     public static final class $sX24186_native extends SubLStructNative

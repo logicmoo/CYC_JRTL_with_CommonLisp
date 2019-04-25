@@ -639,7 +639,7 @@ public final class module0413 extends SubLTranslatedFile
     
     public static SubLObject f28741(final SubLObject var19, final SubLObject var20, final SubLObject var21) {
         assert module0413.NIL != f28724(var19) : var19;
-        assert module0413.NIL != module0369.f25275(var20) : var20;
+        assert module0413.NIL != oc_inference_datastructures_inference.f25275(var20) : var20;
         assert module0413.NIL != module0361.f24009(var21) : var21;
         final SubLObject var22 = f28738(var19);
         final SubLObject var23 = f28739(var19);
@@ -1025,15 +1025,15 @@ public final class module0413 extends SubLTranslatedFile
     }
     
     public static SubLObject f28820(final SubLObject var20) {
-        return module0369.f25642(var20, (SubLObject)module0413.$ic318$);
+        return oc_inference_datastructures_inference.f25642(var20, (SubLObject)module0413.$ic318$);
     }
     
     public static SubLObject f28821(final SubLObject var20) {
-        return module0369.f25642(var20, (SubLObject)module0413.$ic319$);
+        return oc_inference_datastructures_inference.f25642(var20, (SubLObject)module0413.$ic319$);
     }
     
     public static SubLObject f28822(final SubLObject var20) {
-        return module0369.f25642(var20, (SubLObject)module0413.$ic320$);
+        return oc_inference_datastructures_inference.f25642(var20, (SubLObject)module0413.$ic320$);
     }
     
     public static SubLObject f28823(final SubLObject var20) {
@@ -1064,10 +1064,10 @@ public final class module0413 extends SubLTranslatedFile
     
     public static SubLObject f28825(final SubLObject var20) {
         final SubLThread var21 = SubLProcess.currentSubLThread();
-        if (module0413.NIL != module0413.$g3368$.getDynamicValue(var21) || module0413.NIL != module0369.f25602(var20, (SubLObject)module0413.$ic276$)) {
-            final SubLObject var22 = module0369.f25421(var20);
+        if (module0413.NIL != module0413.$g3368$.getDynamicValue(var21) || module0413.NIL != oc_inference_datastructures_inference.f25602(var20, (SubLObject)module0413.$ic276$)) {
+            final SubLObject var22 = oc_inference_datastructures_inference.f25421(var20);
             final SubLObject var23 = f28826(var20);
-            final SubLObject var24 = module0369.f25533(var20);
+            final SubLObject var24 = oc_inference_datastructures_inference.f25533(var20);
             final SubLObject var25 = (SubLObject)ConsesLow.list(module0361.f24229(var22), module0159.$g2147$.getDynamicValue(var21), module0159.$g2148$.getDynamicValue(var21), module0363.f24552(Functions.funcall((SubLObject)SubLObjectFactory.makeSymbol("S#31868", "CYC"), var22)), module0159.$g2143$.getGlobalValue(), module0159.$g2144$.getGlobalValue(), var24);
             Hashtables.sethash(var24, var23, var25);
         }
@@ -1077,7 +1077,7 @@ public final class module0413 extends SubLTranslatedFile
     public static SubLObject f28826(final SubLObject var20) {
         final SubLThread var21 = SubLProcess.currentSubLThread();
         SubLObject var22 = (SubLObject)module0413.NIL;
-        final SubLObject var23 = module0361.f24117(module0369.f25421(var20));
+        final SubLObject var23 = module0361.f24117(oc_inference_datastructures_inference.f25421(var20));
         final SubLObject var24 = module0034.$g879$.currentBinding(var21);
         try {
             module0034.$g879$.bind(var23, var21);
@@ -1140,15 +1140,15 @@ public final class module0413 extends SubLTranslatedFile
     
     public static SubLObject f28829(final SubLObject var20) {
         if (module0413.NIL != f28830(var20)) {
-            final SubLObject var21 = module0369.f25421(var20);
+            final SubLObject var21 = oc_inference_datastructures_inference.f25421(var20);
             final SubLObject var22 = f28831(var20);
-            final SubLObject var23 = module0369.f25533(var20);
-            final SubLObject var24 = module0361.f24229(module0369.f25421(var20));
+            final SubLObject var23 = oc_inference_datastructures_inference.f25533(var20);
+            final SubLObject var24 = module0361.f24229(oc_inference_datastructures_inference.f25421(var20));
             final SubLObject var25 = Numbers.add((SubLObject)module0413.MINUS_ONE_INTEGER, var23, var24);
             final SubLObject var26 = (SubLObject)ConsesLow.list(new SubLObject[] { module0413.$ic326$, var25, module0413.$ic66$, var24, module0413.$ic327$, var23, module0413.$ic328$, module0425.f30062(), module0413.$ic329$, module0425.f30065(), module0413.$ic330$, module0425.f30058(), module0413.$ic331$, module0425.f30061(), module0413.$ic332$, Functions.funcall((SubLObject)SubLObjectFactory.makeSymbol("S#31868", "CYC"), var21) });
             Hashtables.sethash(var25, var22, var26);
             if (module0413.NIL == Hashtables.gethash((SubLObject)module0413.ONE_INTEGER, var22, (SubLObject)module0413.UNPROVIDED)) {
-                final SubLObject var27 = (SubLObject)ConsesLow.list(new SubLObject[] { module0413.$ic326$, module0413.ONE_INTEGER, module0413.$ic66$, module0413.ONE_INTEGER, module0413.$ic327$, module0413.ONE_INTEGER, module0413.$ic328$, module0413.ZERO_INTEGER, module0413.$ic329$, module0413.ZERO_INTEGER, module0413.$ic330$, module0413.NIL, module0413.$ic331$, module0413.NIL, module0413.$ic332$, module0369.f25597(var20) });
+                final SubLObject var27 = (SubLObject)ConsesLow.list(new SubLObject[] { module0413.$ic326$, module0413.ONE_INTEGER, module0413.$ic66$, module0413.ONE_INTEGER, module0413.$ic327$, module0413.ONE_INTEGER, module0413.$ic328$, module0413.ZERO_INTEGER, module0413.$ic329$, module0413.ZERO_INTEGER, module0413.$ic330$, module0413.NIL, module0413.$ic331$, module0413.NIL, module0413.$ic332$, oc_inference_datastructures_inference.f25597(var20) });
                 Hashtables.sethash((SubLObject)module0413.ONE_INTEGER, var22, var27);
             }
         }
@@ -1157,13 +1157,13 @@ public final class module0413 extends SubLTranslatedFile
     
     public static SubLObject f28830(final SubLObject var20) {
         final SubLThread var21 = SubLProcess.currentSubLThread();
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0413.NIL != module0369.f25417(var20) && (module0413.NIL != module0413.$g3369$.getDynamicValue(var21) || module0413.NIL != module0369.f25602(var20, (SubLObject)module0413.$ic278$)));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0413.NIL != oc_inference_datastructures_inference.f25417(var20) && (module0413.NIL != module0413.$g3369$.getDynamicValue(var21) || module0413.NIL != oc_inference_datastructures_inference.f25602(var20, (SubLObject)module0413.$ic278$)));
     }
     
     public static SubLObject f28831(final SubLObject var20) {
         final SubLThread var21 = SubLProcess.currentSubLThread();
         SubLObject var22 = (SubLObject)module0413.NIL;
-        final SubLObject var23 = module0361.f24117(module0369.f25421(var20));
+        final SubLObject var23 = module0361.f24117(oc_inference_datastructures_inference.f25421(var20));
         final SubLObject var24 = module0034.$g879$.currentBinding(var21);
         try {
             module0034.$g879$.bind(var23, var21);
@@ -1209,8 +1209,8 @@ public final class module0413 extends SubLTranslatedFile
     }
     
     public static SubLObject f28833(final SubLObject var20) {
-        final SubLObject var21 = module0369.f25533(var20);
-        final SubLObject var22 = module0361.f24229(module0369.f25421(var20));
+        final SubLObject var21 = oc_inference_datastructures_inference.f25533(var20);
+        final SubLObject var22 = module0361.f24229(oc_inference_datastructures_inference.f25421(var20));
         final SubLObject var23 = Numbers.add((SubLObject)module0413.MINUS_ONE_INTEGER, var21, var22);
         return var23;
     }
@@ -1218,7 +1218,7 @@ public final class module0413 extends SubLTranslatedFile
     public static SubLObject f28834(final SubLObject var20) {
         final SubLThread var21 = SubLProcess.currentSubLThread();
         SubLObject var22 = (SubLObject)module0413.NIL;
-        final SubLObject var23 = module0361.f24117(module0369.f25421(var20));
+        final SubLObject var23 = module0361.f24117(oc_inference_datastructures_inference.f25421(var20));
         final SubLObject var24 = module0034.$g879$.currentBinding(var21);
         try {
             module0034.$g879$.bind(var23, var21);
@@ -1320,7 +1320,7 @@ public final class module0413 extends SubLTranslatedFile
             var20 = module0339.f22757();
         }
         final SubLThread var21 = SubLProcess.currentSubLThread();
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0413.NIL != module0369.f25417(var20) && (module0413.NIL != module0413.$g3370$.getDynamicValue(var21) || module0413.NIL != module0369.f25602(var20, (SubLObject)module0413.$ic280$)));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0413.NIL != oc_inference_datastructures_inference.f25417(var20) && (module0413.NIL != module0413.$g3370$.getDynamicValue(var21) || module0413.NIL != oc_inference_datastructures_inference.f25602(var20, (SubLObject)module0413.$ic280$)));
     }
     
     public static SubLObject f28839(SubLObject var59) {
@@ -1671,7 +1671,7 @@ public final class module0413 extends SubLTranslatedFile
             final SubLObject var101 = cdestructuring_bind.property_list_member((SubLObject)module0413.$ic362$, var89);
             final SubLObject var102 = (SubLObject)((module0413.NIL != var101) ? conses_high.cadr(var101) : module0413.NIL);
             var85 = Numbers.add(var85, var96);
-            PrintLow.format(var3, (SubLObject)module0413.$ic373$, new SubLObject[] { var96, var100, var94, module0174.f11025(var94) });
+            PrintLow.format(var3, (SubLObject)module0413.$ic373$, new SubLObject[] { var96, var100, var94, assertion_handles_oc.f11025(var94) });
             if (module0413.NIL != var98) {
                 PrintLow.format(var3, (SubLObject)module0413.$ic374$, var98);
             }

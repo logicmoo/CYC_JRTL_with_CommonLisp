@@ -838,7 +838,7 @@ public final class module0545 extends SubLTranslatedFile
     }
     
     public static SubLObject f33752(final SubLObject var68, final SubLObject var46) {
-        assert module0545.NIL != module0128.f8449(var68) : var68;
+        assert module0545.NIL != constant_handles_oc.f8449(var68) : var68;
         assert module0545.NIL != Types.stringp(var46) : var46;
         SubLObject var69 = (SubLObject)module0545.NIL;
         try {
@@ -871,7 +871,7 @@ public final class module0545 extends SubLTranslatedFile
         final SubLThread var69 = SubLProcess.currentSubLThread();
         f33739(var16);
         PrintLow.format(var16, (SubLObject)module0545.$ic53$, var68);
-        PrintLow.format(var16, (SubLObject)module0545.$ic54$, module0166.f10743(var68), module0166.f10757(var68));
+        PrintLow.format(var16, (SubLObject)module0545.$ic54$, constants_high_oc.f10743(var68), constants_high_oc.f10757(var68));
         final SubLObject var70 = module0545.$g3969$.currentBinding(var69);
         final SubLObject var71 = module0545.$g3970$.currentBinding(var69);
         final SubLObject var72 = module0147.$g2094$.currentBinding(var69);
@@ -1006,7 +1006,7 @@ public final class module0545 extends SubLTranslatedFile
         $ic14$ = SubLObjectFactory.makeKeyword("OUTPUT");
         $ic15$ = SubLObjectFactory.makeString("Unable to open ~S");
         $ic16$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic17$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic17$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic18$ = SubLObjectFactory.makeKeyword("POS");
         $ic19$ = SubLObjectFactory.makeKeyword("NEG");
         $ic20$ = SubLObjectFactory.makeString(";;; -*- Mode: LISP; Package: CYC; Syntax: ANSI-Common-Lisp -*-");
@@ -1045,7 +1045,7 @@ public final class module0545 extends SubLTranslatedFile
         $ic53$ = SubLObjectFactory.makeString(";; Archive of ~S");
         $ic54$ = SubLObjectFactory.makeString("~%~%(fi-find-or-create ~S ~S)");
         $ic55$ = SubLObjectFactory.makeSymbol("S#37148", "CYC");
-        $ic56$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")));
+        $ic56$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")));
         $ic57$ = SubLObjectFactory.makeString("~%~%(ke-assert '");
         $ic58$ = SubLObjectFactory.makeString("~% '~S");
         $ic59$ = SubLObjectFactory.makeString("~% ~S ~S)");

@@ -684,7 +684,7 @@ public final class module0430 extends SubLTranslatedFile
         module0430.$g3505$ = null;
         module0430.$g3506$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("S#33603", "CYC");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SpecsFn"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SpecsFn"));
         $ic2$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic3$ = SubLObjectFactory.makeSymbol("S#33673", "CYC");
         $ic4$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
@@ -692,7 +692,7 @@ public final class module0430 extends SubLTranslatedFile
         $ic6$ = SubLObjectFactory.makeSymbol("S#33645", "CYC");
         $ic7$ = SubLObjectFactory.makeSymbol("S#33674", "CYC");
         $ic8$ = SubLObjectFactory.makeSymbol("S#33602", "CYC");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic10$ = SubLObjectFactory.makeKeyword("BREADTH");
         $ic11$ = SubLObjectFactory.makeKeyword("QUEUE");
         $ic12$ = SubLObjectFactory.makeKeyword("STACK");

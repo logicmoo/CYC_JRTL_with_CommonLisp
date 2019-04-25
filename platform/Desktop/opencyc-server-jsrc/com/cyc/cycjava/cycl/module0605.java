@@ -591,7 +591,7 @@ public final class module0605 extends SubLTranslatedFile
         }
         final SubLObject var46 = module0116.f8053(var9);
         if (var46.eql((SubLObject)module0605.$ic34$)) {
-            if ((module0605.$ic33$ == var45 || module0605.$ic35$ == var45) && module0605.NIL != module0128.f8449(var44) && module0166.f10757(var44).equalp(module0196.f12244(module0197.f12259(var9)))) {
+            if ((module0605.$ic33$ == var45 || module0605.$ic35$ == var45) && module0605.NIL != constant_handles_oc.f8449(var44) && constants_high_oc.f10757(var44).equalp(module0196.f12244(module0197.f12259(var9)))) {
                 return (SubLObject)ConsesLow.list((SubLObject)module0605.$ic36$, (SubLObject)module0605.$ic37$, (SubLObject)module0605.$ic38$, (SubLObject)module0605.$ic39$, (SubLObject)module0605.$ic40$, var44, (SubLObject)module0605.$ic41$, var44);
             }
         }
@@ -2461,7 +2461,7 @@ public final class module0605 extends SubLTranslatedFile
         $ic53$ = SubLObjectFactory.makeKeyword("COLLECTION-MODIFIED");
         $ic54$ = SubLObjectFactory.makeKeyword("ADDED-VALUE");
         $ic55$ = SubLObjectFactory.makeKeyword("INSTANCE-ADDED");
-        $ic56$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic56$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic57$ = SubLObjectFactory.makeKeyword("IMMEDIATE-INSTANTIATIONS");
         $ic58$ = SubLObjectFactory.makeKeyword("LOCAL-CHANGE");
         $ic59$ = SubLObjectFactory.makeKeyword("ASSERTION-ADDED");

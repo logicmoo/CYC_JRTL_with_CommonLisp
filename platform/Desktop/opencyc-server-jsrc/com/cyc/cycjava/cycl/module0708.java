@@ -918,7 +918,7 @@ public final class module0708 extends SubLTranslatedFile
         $ic24$ = SubLObjectFactory.makeString("-");
         $ic25$ = SubLObjectFactory.makeKeyword("UPCASE");
         $ic26$ = SubLObjectFactory.makeKeyword("DOWNCASE");
-        $ic27$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic27$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic28$ = SubLObjectFactory.makeSymbol("S#47056", "CYC");
         $ic29$ = SubLObjectFactory.makeSymbol("S#17609", "CYC");
         $ic30$ = SubLObjectFactory.makeSymbol("S#3946", "CYC");
@@ -933,8 +933,8 @@ public final class module0708 extends SubLTranslatedFile
         $ic39$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#10299", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#47091", "CYC"));
         $ic40$ = SubLObjectFactory.makeString(":");
         $ic41$ = SubLObjectFactory.makeSymbol("S#47063", "CYC");
-        $ic42$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termActedOnDuringOWLImport"));
-        $ic43$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic42$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termActedOnDuringOWLImport"));
+        $ic43$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
         $ic44$ = SubLObjectFactory.makeSymbol("S#46652", "CYC");
         $ic45$ = SubLObjectFactory.makeString("subClassOf");
         $ic46$ = SubLObjectFactory.makeString("type");

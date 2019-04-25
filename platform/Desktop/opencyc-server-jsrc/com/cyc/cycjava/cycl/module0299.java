@@ -233,23 +233,23 @@ public final class module0299 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0299();
         module0299.$g2695$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("WffViolationResolutionRLModule"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("WffViolationResolutionRLModule"));
         $ic1$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("REQUIRED"), SubLObjectFactory.makeSymbol("S#22642", "CYC"), SubLObjectFactory.makeKeyword("COST"), SubLObjectFactory.makeSymbol("S#22643", "CYC"), SubLObjectFactory.makeKeyword("REFORMULATE"), SubLObjectFactory.makeSymbol("S#22644", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("Returns wff alternatives to several common instance-type violations."), SubLObjectFactory.makeKeyword("EXAMPLE-SOURCE"), SubLObjectFactory.makeString("(#$hasPhysicalPartTypes #$Cell #$CellNucleus)"), SubLObjectFactory.makeKeyword("EXAMPLE-TARGET"), SubLObjectFactory.makeString("(#$relationAllInstance #$hasPhysicalPartTypes #$Cell #$CellNucleus)") });
         $ic2$ = SubLObjectFactory.makeInteger(20000);
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic4$ = SubLObjectFactory.makeKeyword("MAL-ARG-WRT-ARG-ISA");
         $ic5$ = SubLObjectFactory.makeSymbol("FIRST");
         $ic6$ = SubLObjectFactory.makeKeyword("IGNORE");
         $ic7$ = SubLObjectFactory.makeKeyword("MAL-ARG-WRT-INTER-ARG-ISA");
-        $ic8$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("SingleEntry")));
-        $ic9$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("singleEntryFormatInArgs")));
+        $ic8$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SingleEntry")));
+        $ic9$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("singleEntryFormatInArgs")));
         $ic10$ = SubLObjectFactory.makeString("Wff Options 1.1a");
         $ic11$ = SubLObjectFactory.makeString("Wff Options 1.1b");
         $ic12$ = SubLObjectFactory.makeString("Wff Options 2.1");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("forAll"));
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
-        $ic15$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("thereExists"));
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("and"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("forAll"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
+        $ic15$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("thereExists"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and"));
     }
 }
 

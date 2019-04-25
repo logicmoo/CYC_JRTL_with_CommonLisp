@@ -72,14 +72,14 @@ public final class module0348 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0348();
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic1$ = SubLObjectFactory.makeSymbol("S#12330", "CYC");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic3$ = SubLObjectFactory.makeSymbol("S#12329", "CYC");
         $ic4$ = SubLObjectFactory.makeSymbol("S#26072", "CYC");
         $ic5$ = SubLObjectFactory.makeSymbol("S#12331", "CYC");
         $ic6$ = SubLObjectFactory.makeSymbol("S#12332", "CYC");
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ProblemSolvingCntxt"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ProblemSolvingCntxt"));
     }
 }
 

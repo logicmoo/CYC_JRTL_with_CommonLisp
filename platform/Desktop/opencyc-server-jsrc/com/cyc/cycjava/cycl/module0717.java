@@ -746,7 +746,7 @@ public final class module0717 extends SubLTranslatedFile
         $ic6$ = SubLObjectFactory.makeKeyword("TERM-NAME-FORMAT");
         $ic7$ = SubLObjectFactory.makeKeyword("SHORT");
         $ic8$ = SubLObjectFactory.makeKeyword("ONTOLOGY-TERM");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Ontology"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Ontology"));
         $ic10$ = SubLObjectFactory.makeKeyword("IMPORT-FILENAME");
         $ic11$ = SubLObjectFactory.makeKeyword("IMPORT-FROM-URI");
         $ic12$ = SubLObjectFactory.makeKeyword("IMPORT-URI");

@@ -335,8 +335,8 @@ public final class module0595 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0595();
         module0595.$g4555$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic2$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
         $ic3$ = SubLObjectFactory.makeSymbol("S#12629", "CYC");
         $ic4$ = SubLObjectFactory.makeKeyword("ISA");
@@ -345,7 +345,7 @@ public final class module0595 extends SubLTranslatedFile
         $ic7$ = SubLObjectFactory.makeSymbol("QUERY-PROPERTY-P");
         $ic8$ = SubLObjectFactory.makeKeyword("UNINITIALIZED");
         $ic9$ = SubLObjectFactory.makeSymbol("?REFERENT");
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent"));
         $ic11$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?REFERENT"));
         $ic12$ = SubLObjectFactory.makeSymbol("S#40102", "CYC");
         $ic13$ = SubLObjectFactory.makeSymbol("S#40101", "CYC");

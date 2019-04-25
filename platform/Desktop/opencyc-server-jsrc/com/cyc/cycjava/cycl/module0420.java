@@ -150,14 +150,14 @@ public final class module0420 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0420();
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Predicate"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Predicate"));
         $ic1$ = SubLObjectFactory.makeSymbol("S#32523", "CYC");
         $ic2$ = SubLObjectFactory.makeSymbol("CSETQ");
         $ic3$ = SubLObjectFactory.makeSymbol("PRINT-CREATE");
         $ic4$ = SubLObjectFactory.makeSymbol("QUOTE");
         $ic5$ = SubLObjectFactory.makeSymbol("APPEND");
         $ic6$ = SubLObjectFactory.makeSymbol("LIST");
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic8$ = SubLObjectFactory.makeSymbol("DECLARE");
         $ic9$ = SubLObjectFactory.makeSymbol("SPECIAL");
     }

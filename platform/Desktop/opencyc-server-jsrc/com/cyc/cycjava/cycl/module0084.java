@@ -1627,7 +1627,7 @@ public final class module0084 extends SubLTranslatedFile
         SubLObject var200 = (SubLObject)module0084.NIL;
         SubLObject var201;
         for (var201 = (SubLObject)module0084.NIL, var201 = (SubLObject)module0084.ZERO_INTEGER; var201.numL(var9); var201 = Numbers.add(var201, (SubLObject)module0084.ONE_INTEGER)) {
-            var199 = module0035.f2063(var199, module0166.f10752(var201), var201, (SubLObject)module0084.UNPROVIDED);
+            var199 = module0035.f2063(var199, constants_high_oc.f10752(var201), var201, (SubLObject)module0084.UNPROVIDED);
         }
         final SubLObject var202 = Time.get_internal_real_time();
         SubLObject var203;
@@ -1636,7 +1636,7 @@ public final class module0084 extends SubLTranslatedFile
         SubLObject var206;
         for (var203 = Numbers.divide(var198, var9), var204 = (SubLObject)module0084.NIL, var204 = (SubLObject)module0084.ZERO_INTEGER; var204.numL(var203); var204 = Numbers.add(var204, (SubLObject)module0084.ONE_INTEGER)) {
             for (var205 = (SubLObject)module0084.NIL, var205 = (SubLObject)module0084.ZERO_INTEGER; var205.numL(var9); var205 = Numbers.add(var205, (SubLObject)module0084.ONE_INTEGER)) {
-                var206 = module0035.f2293(var199, module0166.f10752(var205), (SubLObject)module0084.UNPROVIDED, (SubLObject)module0084.UNPROVIDED);
+                var206 = module0035.f2293(var199, constants_high_oc.f10752(var205), (SubLObject)module0084.UNPROVIDED, (SubLObject)module0084.UNPROVIDED);
             }
         }
         var200 = Numbers.divide(Numbers.subtract(Time.get_internal_real_time(), var202), time_high.$internal_time_units_per_second$.getGlobalValue());
@@ -1648,7 +1648,7 @@ public final class module0084 extends SubLTranslatedFile
         SubLObject var200 = (SubLObject)module0084.NIL;
         SubLObject var201;
         for (var201 = (SubLObject)module0084.NIL, var201 = (SubLObject)module0084.ZERO_INTEGER; var201.numL(var9); var201 = Numbers.add(var201, (SubLObject)module0084.ONE_INTEGER)) {
-            Hashtables.sethash(module0166.f10752(var201), var199, var201);
+            Hashtables.sethash(constants_high_oc.f10752(var201), var199, var201);
         }
         final SubLObject var202 = Time.get_internal_real_time();
         SubLObject var203;
@@ -1657,7 +1657,7 @@ public final class module0084 extends SubLTranslatedFile
         SubLObject var206;
         for (var203 = Numbers.divide(var198, var9), var204 = (SubLObject)module0084.NIL, var204 = (SubLObject)module0084.ZERO_INTEGER; var204.numL(var203); var204 = Numbers.add(var204, (SubLObject)module0084.ONE_INTEGER)) {
             for (var205 = (SubLObject)module0084.NIL, var205 = (SubLObject)module0084.ZERO_INTEGER; var205.numL(var9); var205 = Numbers.add(var205, (SubLObject)module0084.ONE_INTEGER)) {
-                var206 = Hashtables.gethash(module0166.f10752(var205), var199, (SubLObject)module0084.UNPROVIDED);
+                var206 = Hashtables.gethash(constants_high_oc.f10752(var205), var199, (SubLObject)module0084.UNPROVIDED);
             }
         }
         var200 = Numbers.divide(Numbers.subtract(Time.get_internal_real_time(), var202), time_high.$internal_time_units_per_second$.getGlobalValue());

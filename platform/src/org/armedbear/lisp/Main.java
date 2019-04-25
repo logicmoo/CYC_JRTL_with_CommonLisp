@@ -200,6 +200,7 @@ public final class Main {
             noPrologJNI = true;
         }
         if (argsList.remove("--opencyc")) {
+          SubLMain.OPENCYC = true;
             try {
                 UpdateZip.updateUnits();
             } catch (MalformedURLException e) {
@@ -215,11 +216,10 @@ public final class Main {
                     throw new AbstractMethodError("Main.extractOptions throw IOException");
 
             }
-            SubLMain.OPENCYC = true;
-            needSubLMAIN = true;
+            //needSubLMAIN = true;
             //Main.subLisp = "opencyc-init";
-            Main.needABCL = false;
-            SubLMain.noInitCyc = false;
+            //Main.needABCL = false;
+            //SubLMain.noInitCyc = false;
         }
         if (argsList.remove("--cyc")) {
             Main.subLisp = "cyc-init";

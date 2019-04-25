@@ -2122,7 +2122,7 @@ public final class module0219 extends SubLTranslatedFile
                         SubLObject var201 = (SubLObject)module0219.NIL;
                         try {
                             var199.throwStack.push(module0219.$ic17$);
-                            final SubLObject var202 = module0174.f11010();
+                            final SubLObject var202 = assertion_handles_oc.f11010();
                             final SubLObject var203 = (SubLObject)module0219.$ic34$;
                             final SubLObject var204 = module0065.f4733(var202);
                             SubLObject var205 = (SubLObject)module0219.ZERO_INTEGER;
@@ -4190,7 +4190,7 @@ public final class module0219 extends SubLTranslatedFile
         $ic51$ = SubLObjectFactory.makeString("So don't!");
         $ic52$ = SubLObjectFactory.makeString("Can't gather unknown auxiliary index ~s~%");
         $ic53$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic54$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic54$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic55$ = SubLObjectFactory.makeSymbol("GATHER-INDEX-IN-ANY-MT");
         $ic56$ = SubLObjectFactory.makeString("Return a list of all assertions indexed via TERM.\nIf REMOVE-DUPLICATES? is non-nil, assertions are guaranteed to only be listed once.");
         $ic57$ = SubLObjectFactory.makeKeyword("TRUE");

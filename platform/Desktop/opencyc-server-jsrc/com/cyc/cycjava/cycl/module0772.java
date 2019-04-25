@@ -1488,7 +1488,7 @@ public final class module0772 extends SubLTranslatedFile
     
     public static SubLObject f49168(final SubLObject var212) {
         final SubLThread var213 = SubLProcess.currentSubLThread();
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0772.NIL != module0174.f11041(var212, (SubLObject)module0772.UNPROVIDED) && module0772.NIL != module0751.f47007(module0579.$g4260$.getDynamicValue(var213), module0178.f11287(var212)));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0772.NIL != assertion_handles_oc.f11041(var212, (SubLObject)module0772.UNPROVIDED) && module0772.NIL != module0751.f47007(module0579.$g4260$.getDynamicValue(var213), module0178.f11287(var212)));
     }
     
     public static SubLObject f49169(final SubLObject var199) {
@@ -4089,7 +4089,7 @@ public final class module0772 extends SubLTranslatedFile
         $ic7$ = SubLObjectFactory.makeSymbol("S#38", "CYC");
         $ic8$ = SubLObjectFactory.makeString("~% Top-level CycL: ~S");
         $ic9$ = SubLObjectFactory.makeSymbol("S#52542", "CYC");
-        $ic10$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("tensed")));
+        $ic10$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("tensed")));
         $ic11$ = SubLObjectFactory.makeSymbol("S#53593", "CYC");
         $ic12$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#53604", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#53674", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#53650", "CYC"));
         $ic13$ = SubLObjectFactory.makeKeyword("UNSPECIFIED");
@@ -4099,7 +4099,7 @@ public final class module0772 extends SubLTranslatedFile
         $ic17$ = SubLObjectFactory.makeString("Failed to paraphrase 'givens': ~S");
         $ic18$ = SubLObjectFactory.makeString("~&Leaving PPH-POSSIBLY-BINDING-VARIABLES(~S), vars in local *pph-var-types* were ~s ");
         $ic19$ = SubLObjectFactory.makeString("~&... and *pph-var-types* are now ~S~%");
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("tensed"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("tensed"));
         $ic21$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
         $ic22$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
         $ic23$ = SubLObjectFactory.makeKeyword("ARG1");
@@ -4107,13 +4107,13 @@ public final class module0772 extends SubLTranslatedFile
         $ic25$ = SubLObjectFactory.makeKeyword("EXISTENTIAL");
         $ic26$ = SubLObjectFactory.makeString("if");
         $ic27$ = ConsesLow.list((SubLObject)module0772.ZERO_INTEGER);
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
         $ic29$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#53604", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#53674", "CYC"));
         $ic30$ = SubLObjectFactory.makeSymbol("S#53602", "CYC");
-        $ic31$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("pastTense-Generic"));
+        $ic31$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("pastTense-Generic"));
         $ic32$ = SubLObjectFactory.makeSymbol("S#53700", "CYC");
         $ic33$ = SubLObjectFactory.makeKeyword("IGNORE");
-        $ic34$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genQuestion"));
+        $ic34$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genQuestion"));
         $ic35$ = SubLObjectFactory.makeKeyword("GAF");
         $ic36$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic37$ = SubLObjectFactory.makeString("~&Trying~% ~S");
@@ -4125,8 +4125,8 @@ public final class module0772 extends SubLTranslatedFile
         $ic43$ = SubLObjectFactory.makeSymbol("ADD-GEN-TEMPLATE-QUERY-SENTENCE");
         $ic44$ = SubLObjectFactory.makeSymbol("REMOVE-GEN-TEMPLATE-QUERY-SENTENCE");
         $ic45$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic46$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic47$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genTemplate-QuerySentence"));
+        $ic46$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic47$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genTemplate-QuerySentence"));
         $ic48$ = SubLObjectFactory.makeSymbol("INDEXED-TERM-P");
         $ic49$ = SubLObjectFactory.makeSymbol("S#53614", "CYC");
         $ic50$ = SubLObjectFactory.makeSymbol("CAR");
@@ -4162,8 +4162,8 @@ public final class module0772 extends SubLTranslatedFile
         $ic80$ = SubLObjectFactory.makeString("GTQS: Couldn't find ~S in~% ~S~%");
         $ic81$ = SubLObjectFactory.makeString("GTQS: Replacing ~S with ~S ~S");
         $ic82$ = SubLObjectFactory.makeString("GTQS: Couldn't replace ~S for ~S in ~S");
-        $ic83$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
-        $ic84$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InstanceNamedFn-Ternary"));
+        $ic83$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
+        $ic84$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InstanceNamedFn-Ternary"));
         $ic85$ = SubLObjectFactory.makeString("example");
         $ic86$ = SubLObjectFactory.makeInteger(30);
         $ic87$ = SubLObjectFactory.makeString("Checking #$genTemplate-QuerySentence assertions...");
@@ -4175,7 +4175,7 @@ public final class module0772 extends SubLTranslatedFile
         $ic93$ = SubLObjectFactory.makeKeyword("BLANKS");
         $ic94$ = SubLObjectFactory.makeKeyword("VARS");
         $ic95$ = SubLObjectFactory.makeSymbol("S#3593", "CYC");
-        $ic96$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("not"));
+        $ic96$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("not"));
         $ic97$ = SubLObjectFactory.makeString("was ");
         $ic98$ = SubLObjectFactory.makeString("is ");
         $ic99$ = SubLObjectFactory.makeString("it ");
@@ -4186,21 +4186,21 @@ public final class module0772 extends SubLTranslatedFile
         $ic104$ = SubLObjectFactory.makeString("were");
         $ic105$ = SubLObjectFactory.makeString("are");
         $ic106$ = SubLObjectFactory.makeString(" there such that");
-        $ic107$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("plural-Generic")));
+        $ic107$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("plural-Generic")));
         $ic108$ = SubLObjectFactory.makeKeyword("AND");
         $ic109$ = SubLObjectFactory.makeString("what values of");
         $ic110$ = SubLObjectFactory.makeString("~&Setting arg-position of ~S to ~S from ~S.~%");
         $ic111$ = SubLObjectFactory.makeSymbol("S#51694", "CYC");
         $ic112$ = SubLObjectFactory.makeSymbol("S#50950", "CYC");
         $ic113$ = SubLObjectFactory.makeKeyword("ERROR");
-        $ic114$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("WHWord"));
-        $ic115$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AuxVerb"));
+        $ic114$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("WHWord"));
+        $ic115$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AuxVerb"));
         $ic116$ = SubLObjectFactory.makeSymbol("S#53662", "CYC");
-        $ic117$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheResultOfParsing"));
-        $ic118$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("nounStrings"));
-        $ic119$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Determiner"));
+        $ic117$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheResultOfParsing"));
+        $ic118$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nounStrings"));
+        $ic119$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Determiner"));
         $ic120$ = SubLObjectFactory.makeSymbol("TRUE");
-        $ic121$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Integer"));
+        $ic121$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Integer"));
         $ic122$ = SubLObjectFactory.makeSymbol("S#51007", "CYC");
         $ic123$ = SubLObjectFactory.makeString("~&~S determined to be a number var in ~S~%");
         $ic124$ = SubLObjectFactory.makeString("No number vars in ~S~%");
@@ -4210,7 +4210,7 @@ public final class module0772 extends SubLTranslatedFile
         $ic128$ = SubLObjectFactory.makeString("in generate-phrase-with-subj-aux-inversion string is ~S; trying again~%");
         $ic129$ = SubLObjectFactory.makeString("~&Not subject-head-verb-initial:~% ~S");
         $ic130$ = SubLObjectFactory.makeSymbol("S#51409", "CYC");
-        $ic131$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Verb"));
+        $ic131$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Verb"));
         $ic132$ = SubLObjectFactory.makeString("~&Couldn't find question subphrase:~% ~S");
         $ic133$ = SubLObjectFactory.makeString("~&Subject dtr of ~S is a wh-phrase; returning template as is.~%");
         $ic134$ = SubLObjectFactory.makeString("~&~S has no head verb; MAKE-QUESTION-TEMPLATE returning NIL.~%");
@@ -4225,27 +4225,27 @@ public final class module0772 extends SubLTranslatedFile
         $ic143$ = SubLObjectFactory.makeString("Found question phrase: ~S");
         $ic144$ = SubLObjectFactory.makeKeyword("NOT-FOUND");
         $ic145$ = SubLObjectFactory.makeSymbol("INTEGERP");
-        $ic146$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Agent-Generic"));
-        $ic147$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Person"));
+        $ic146$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Agent-Generic"));
+        $ic147$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Person"));
         $ic148$ = SubLObjectFactory.makeString("in STRING-FOR-VAR-IN-QUESTION-PHRASE: var is ~S~%");
         $ic149$ = SubLObjectFactory.makeString("pph-var-type for ~S: ~S~%");
         $ic150$ = SubLObjectFactory.makeString("how many");
-        $ic151$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("nonPlural-Generic"));
-        $ic152$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("nonSingular-Generic"));
+        $ic151$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nonPlural-Generic"));
+        $ic152$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nonSingular-Generic"));
         $ic153$ = SubLObjectFactory.makeKeyword("WHAT");
-        $ic154$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("NounPhrase"));
+        $ic154$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("NounPhrase"));
         $ic155$ = SubLObjectFactory.makeString("what");
         $ic156$ = SubLObjectFactory.makeKeyword("ACCUSATIVE");
         $ic157$ = SubLObjectFactory.makeString("whom");
         $ic158$ = SubLObjectFactory.makeString("who");
         $ic159$ = SubLObjectFactory.makeString(" or what");
         $ic160$ = SubLObjectFactory.makeString("when");
-        $ic161$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic161$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic162$ = SubLObjectFactory.makeKeyword("ANYTHING");
         $ic163$ = SubLObjectFactory.makeKeyword("BREADTH");
         $ic164$ = SubLObjectFactory.makeKeyword("QUEUE");
         $ic165$ = SubLObjectFactory.makeKeyword("STACK");
-        $ic166$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
+        $ic166$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
         $ic167$ = SubLObjectFactory.makeSymbol("S#11450", "CYC");
         $ic168$ = SubLObjectFactory.makeString("~A is not a ~A");
         $ic169$ = SubLObjectFactory.makeSymbol("S#11592", "CYC");
@@ -4253,15 +4253,15 @@ public final class module0772 extends SubLTranslatedFile
         $ic171$ = SubLObjectFactory.makeString("continue anyway");
         $ic172$ = SubLObjectFactory.makeKeyword("WARN");
         $ic173$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic174$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
-        $ic175$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("FacetingCollectionType"));
-        $ic176$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DisjointCollectionType"));
+        $ic174$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic175$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("FacetingCollectionType"));
+        $ic176$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DisjointCollectionType"));
         $ic177$ = SubLObjectFactory.makeString("~A is neither SET-P nor LISTP.");
         $ic178$ = SubLObjectFactory.makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
         $ic179$ = SubLObjectFactory.makeString("Node ~a does not pass sbhl-type-test ~a~%");
         $ic180$ = SubLObjectFactory.makeSymbol("S#51948", "CYC");
-        $ic181$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Modal"));
-        $ic182$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("partOfSpeech"));
+        $ic181$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Modal"));
+        $ic182$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("partOfSpeech"));
         $ic183$ = SubLObjectFactory.makeSymbol("S#53708", "CYC");
         $ic184$ = SubLObjectFactory.makeSymbol("S#51947", "CYC");
         $ic185$ = SubLObjectFactory.makeSymbol("S#53709", "CYC");

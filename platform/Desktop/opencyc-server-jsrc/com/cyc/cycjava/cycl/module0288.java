@@ -294,7 +294,7 @@ public final class module0288 extends SubLTranslatedFile
     
     public static SubLObject f19315(final SubLObject var32) {
         if (module0288.NIL != module0035.f1997(var32)) {
-            return module0174.f11035(var32.first());
+            return assertion_handles_oc.f11035(var32.first());
         }
         if (module0288.NIL != var32) {
             SubLObject var33 = (SubLObject)module0288.NIL;
@@ -305,7 +305,7 @@ public final class module0288 extends SubLTranslatedFile
                 var36 = var35.first();
                 while (module0288.NIL == var34 && module0288.NIL != var35) {
                     if (module0288.NIL != var33) {
-                        var34 = (SubLObject)SubLObjectFactory.makeBoolean(module0288.NIL == module0174.f11035(var36) || !var33.equal(module0289.f19396(var36)));
+                        var34 = (SubLObject)SubLObjectFactory.makeBoolean(module0288.NIL == assertion_handles_oc.f11035(var36) || !var33.equal(module0289.f19396(var36)));
                     }
                     else {
                         var33 = module0289.f19396(var36);
@@ -662,7 +662,7 @@ public final class module0288 extends SubLTranslatedFile
     
     public static SubLObject f19350() {
         final SubLThread var8 = SubLProcess.currentSubLThread();
-        if (module0288.NIL != module0174.f11035(module0018.$g581$.getDynamicValue(var8))) {
+        if (module0288.NIL != assertion_handles_oc.f11035(module0018.$g581$.getDynamicValue(var8))) {
             return module0289.f19396(module0018.$g581$.getDynamicValue(var8));
         }
         return (SubLObject)module0288.NIL;
@@ -670,7 +670,7 @@ public final class module0288 extends SubLTranslatedFile
     
     public static SubLObject f19351() {
         final SubLThread var8 = SubLProcess.currentSubLThread();
-        if (module0288.NIL != module0174.f11035(module0018.$g581$.getDynamicValue(var8))) {
+        if (module0288.NIL != assertion_handles_oc.f11035(module0018.$g581$.getDynamicValue(var8))) {
             return module0538.f33478(module0018.$g581$.getDynamicValue(var8), (SubLObject)module0288.T);
         }
         return (SubLObject)module0288.NIL;
@@ -1153,7 +1153,7 @@ public final class module0288 extends SubLTranslatedFile
     }
     
     public static SubLObject f19375(final SubLObject var119) {
-        if (module0288.NIL != module0174.f11035(var119)) {
+        if (module0288.NIL != assertion_handles_oc.f11035(var119)) {
             return var119;
         }
         if (module0288.NIL != module0202.f12590(var119)) {
@@ -1631,7 +1631,7 @@ public final class module0288 extends SubLTranslatedFile
         $ic6$ = SubLObjectFactory.makeSymbol("S#16466", "CYC");
         $ic7$ = SubLObjectFactory.makeSymbol("S#21938", "CYC");
         $ic8$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic10$ = SubLObjectFactory.makeSymbol("S#21999", "CYC");
         $ic11$ = SubLObjectFactory.makeSymbol("S#21915", "CYC");
         $ic12$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
@@ -1646,8 +1646,8 @@ public final class module0288 extends SubLTranslatedFile
         $ic21$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#13916", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#22002", "CYC"));
         $ic22$ = SubLObjectFactory.makeKeyword("ASSERT");
         $ic23$ = SubLObjectFactory.makeString("Cannot set tense czer to invalid mode.");
-        $ic24$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True"));
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False"));
+        $ic24$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True"));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False"));
         $ic26$ = SubLObjectFactory.makeSymbol("S#21918", "CYC");
         $ic27$ = SubLObjectFactory.makeSymbol("S#21982", "CYC");
         $ic28$ = SubLObjectFactory.makeSymbol("S#21919", "CYC");

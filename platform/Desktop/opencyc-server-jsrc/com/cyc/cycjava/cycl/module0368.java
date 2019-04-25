@@ -229,7 +229,7 @@ public final class module0368 extends SubLTranslatedFile
         SubLObject var23 = (SubLObject)module0368.NIL;
         var23 = var22.first();
         while (module0368.NIL != var22) {
-            assert module0368.NIL != module0174.f11035(var23) : var23;
+            assert module0368.NIL != assertion_handles_oc.f11035(var23) : var23;
             var22 = var22.rest();
             var23 = var22.first();
         }

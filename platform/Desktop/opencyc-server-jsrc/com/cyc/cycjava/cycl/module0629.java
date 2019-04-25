@@ -370,8 +370,8 @@ public final class module0629 extends SubLTranslatedFile
         $ic6$ = SubLObjectFactory.makeString("CU2FN_");
         $ic7$ = ConsesLow.list((SubLObject)Characters.CHAR_underbar);
         $ic8$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CollectionUnionFn"));
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSet"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CollectionUnionFn"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSet"));
         $ic11$ = SubLObjectFactory.makeString("CU3FN_");
         $ic12$ = SubLObjectFactory.makeString("Unable to find a constant when executing (CONSTANT-FROM-TREE-TERM ~S)");
         $ic13$ = SubLObjectFactory.makeString("CU2FN_1");
@@ -379,7 +379,7 @@ public final class module0629 extends SubLTranslatedFile
         $ic15$ = SubLObjectFactory.makeString("CU3FN_1");
         $ic16$ = SubLObjectFactory.makeString("_3");
         $ic17$ = SubLObjectFactory.makeString("Invalid NAT being converted to tree-term: ~S");
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CurrentWorldDataCollectorMt-NonHomocentric"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CurrentWorldDataCollectorMt-NonHomocentric"));
         $ic19$ = SubLObjectFactory.makeSymbol("TERM-CLASSIFICATION-TREE-MT");
         $ic20$ = SubLObjectFactory.makeSymbol("SET-TERM-CLASSIFICATION-TREE-MT");
         $ic21$ = SubLObjectFactory.makeSymbol("S#12263", "CYC");

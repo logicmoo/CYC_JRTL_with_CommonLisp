@@ -3126,7 +3126,7 @@ public final class module0075 extends SubLTranslatedFile
         $ic71$ = SubLObjectFactory.makeSymbol("WRITE-BYTE");
         $ic72$ = SubLObjectFactory.makeString("~S is not a valid mode.");
         $ic73$ = SubLObjectFactory.makeKeyword("APPEND");
-        $ic74$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#2813", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic74$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#2813", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic75$ = SubLObjectFactory.makeUninternedSymbol("US#52B2EDB");
         $ic76$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("INPUT"));
         $ic77$ = SubLObjectFactory.makeSymbol("CDO");

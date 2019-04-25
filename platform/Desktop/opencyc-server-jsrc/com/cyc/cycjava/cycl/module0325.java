@@ -1096,7 +1096,7 @@ public final class module0325 extends SubLTranslatedFile
                     if (!var72.eql(var70.first())) {
                         module0642.f39026((SubLObject)module0325.UNPROVIDED);
                     }
-                    if (module0325.NIL != module0174.f11035(var72)) {
+                    if (module0325.NIL != assertion_handles_oc.f11035(var72)) {
                         module0656.f39916(var72, (SubLObject)module0325.T, (SubLObject)module0325.UNPROVIDED);
                     }
                     else {
@@ -1478,7 +1478,7 @@ public final class module0325 extends SubLTranslatedFile
         $ic20$ = SubLObjectFactory.makeKeyword("DO-HASH-TABLE");
         $ic21$ = SubLObjectFactory.makeInteger(-2);
         $ic22$ = SubLObjectFactory.makeKeyword("REFLEXIVE");
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
         $ic24$ = SubLObjectFactory.makeKeyword("EQUALITY");
     }
 }

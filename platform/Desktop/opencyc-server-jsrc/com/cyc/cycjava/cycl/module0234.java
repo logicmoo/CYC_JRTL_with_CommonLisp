@@ -104,10 +104,10 @@ public final class module0234 extends SubLTranslatedFile
         if (module0234.NIL == var7) {
             return (SubLObject)module0234.NIL;
         }
-        if (module0234.NIL != module0128.f8449(var11)) {
+        if (module0234.NIL != constant_handles_oc.f8449(var11)) {
             return f15442(var11, var7);
         }
-        if (module0234.NIL != module0128.f8449(var7)) {
+        if (module0234.NIL != constant_handles_oc.f8449(var7)) {
             return f15442(var7, var11);
         }
         if (module0234.NIL != module0193.f12105(var7) && module0234.NIL != module0331.f22370(var11, var7, (SubLObject)module0234.UNPROVIDED, (SubLObject)module0234.UNPROVIDED)) {
@@ -373,10 +373,10 @@ public final class module0234 extends SubLTranslatedFile
         if (module0234.NIL == var7) {
             return f15449(var11, var7);
         }
-        if (module0234.NIL != module0128.f8449(var11)) {
+        if (module0234.NIL != constant_handles_oc.f8449(var11)) {
             return f15459(var11, var7, var23);
         }
-        if (module0234.NIL != module0128.f8449(var7)) {
+        if (module0234.NIL != constant_handles_oc.f8449(var7)) {
             return f15459(var7, var11, var23);
         }
         if (module0234.NIL != module0193.f12105(var7) && module0234.NIL != module0331.f22370(var11, var7, (SubLObject)module0234.UNPROVIDED, (SubLObject)module0234.UNPROVIDED)) {
@@ -615,7 +615,7 @@ public final class module0234 extends SubLTranslatedFile
         $ic3$ = SubLObjectFactory.makeSymbol("S#18087", "CYC");
         $ic4$ = SubLObjectFactory.makeKeyword("UNIFY-FAILURE");
         $ic5$ = SubLObjectFactory.makeKeyword("EQUALITY");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
         $ic7$ = SubLObjectFactory.makeInteger(100);
         $ic8$ = SubLObjectFactory.makeSymbol("VARIABLE-P");
         $ic9$ = SubLObjectFactory.makeSymbol("S#18077", "CYC");

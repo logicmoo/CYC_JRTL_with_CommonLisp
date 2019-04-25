@@ -177,7 +177,7 @@ public final class module0586 extends SubLTranslatedFile
                                     if (module0586.NIL != module0065.f4749(var25)) {
                                         var25 = (SubLObject)module0586.$ic19$;
                                     }
-                                    var13 = module0369.f25515(var25);
+                                    var13 = oc_inference_datastructures_inference.f25515(var25);
                                 }
                             }
                         }
@@ -201,7 +201,7 @@ public final class module0586 extends SubLTranslatedFile
                                 var28 = Hashtables.getEntryKey(var31);
                                 var29 = Hashtables.getEntryValue(var31);
                                 module0005.f153(var13);
-                                var13 = module0369.f25515(var29);
+                                var13 = oc_inference_datastructures_inference.f25515(var29);
                             }
                         }
                         finally {

@@ -1769,8 +1769,8 @@ public final class module0304 extends SubLTranslatedFile
         $ic4$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic5$ = SubLObjectFactory.makeKeyword("STRONG-FORT");
         $ic6$ = SubLObjectFactory.makeKeyword("ISA");
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
         $ic9$ = SubLObjectFactory.makeKeyword("GENLS");
         $ic10$ = SubLObjectFactory.makeInteger(512);
         $ic11$ = SubLObjectFactory.makeSymbol("CONSP");
@@ -1779,12 +1779,12 @@ public final class module0304 extends SubLTranslatedFile
         $ic14$ = SubLObjectFactory.makeString("no mapping method defiend for sbhl-table ~s");
         $ic15$ = SubLObjectFactory.makeKeyword("GAF");
         $ic16$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic17$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("argsIsa"));
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("argIsa"));
+        $ic17$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argsIsa"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argIsa"));
         $ic19$ = SubLObjectFactory.makeSymbol("S#22944", "CYC");
         $ic20$ = SubLObjectFactory.makeSymbol("S#12585", "CYC");
         $ic21$ = SubLObjectFactory.makeSymbol("S#22950", "CYC");
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("argsGenl"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argsGenl"));
         $ic23$ = SubLObjectFactory.makeSymbol("S#22953", "CYC");
     }
     

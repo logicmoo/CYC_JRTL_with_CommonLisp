@@ -104,7 +104,7 @@ import com.cyc.cycjava.cycl.constant_completion_low;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.constant_reader;
 import com.cyc.cycjava.cycl.module0000;
-import com.cyc.cycjava.cycl.module0166;
+import com.cyc.cycjava.cycl.constants_high_oc;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
@@ -2444,7 +2444,7 @@ public class BeanShellCntrl
       return constant;
     if( SubLMain.OPENCYC )
     {
-      return module0166.f10737( name );
+      return constants_high_oc.f10737( name );
     }
     if( constant_completion_low.$require_valid_constants$ == null )
       return constant;
@@ -2720,9 +2720,23 @@ public class BeanShellCntrl
     scanForExports( BeanShellCntrl.class );
   }
 
-  public static void main(String[] args) throws InterruptedException
+  public static void main(String[] args0) throws Throwable
   {
-    String[] argsNew = Main.extractOptions( args );
+    try
+    {
+      main0( args0 );
+    }
+    catch( Throwable e )
+    {
+      e.printStackTrace();
+      throw e;
+      // TODO: handle exception
+    }
+  }
+
+  public static void main0(String[] args0)
+  {
+    String[] argsNew = Main.extractOptions( args0 );
     start_lisp_from_prolog();
     Runnable runnable;
     if( Main.needSubLMAIN )

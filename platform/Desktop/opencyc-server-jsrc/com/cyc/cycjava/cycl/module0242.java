@@ -708,7 +708,7 @@ public final class module0242 extends SubLTranslatedFile
         SubLObject var87;
         SubLObject var88;
         for (var85 = (SubLObject)module0242.NIL, var85 = (SubLObject)module0242.ZERO_INTEGER; var85.numL(var82); var85 = Numbers.add(var85, (SubLObject)module0242.ONE_INTEGER)) {
-            var86 = module0166.f10773((SubLObject)module0242.UNPROVIDED);
+            var86 = constants_high_oc.f10773((SubLObject)module0242.UNPROVIDED);
             var87 = (SubLObject)module0242.NIL;
             try {
                 var84.throwStack.push(module0003.$g3$.getGlobalValue());
@@ -958,11 +958,11 @@ public final class module0242 extends SubLTranslatedFile
         $ic49$ = (SubLFloat)SubLObjectFactory.makeDouble(0.1);
         $ic50$ = SubLObjectFactory.makeSymbol("VALID-PROCESS-P");
         $ic51$ = SubLObjectFactory.makeSymbol("S#38", "CYC");
-        $ic52$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Individual"));
+        $ic52$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Individual"));
         $ic53$ = SubLObjectFactory.makeString("Concurrent Cache Strategy Stress Test Problems");
-        $ic54$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Organism")));
+        $ic54$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Organism")));
         $ic55$ = SubLObjectFactory.makeSymbol("S#18436", "CYC");
-        $ic56$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic56$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
     }
 }
 

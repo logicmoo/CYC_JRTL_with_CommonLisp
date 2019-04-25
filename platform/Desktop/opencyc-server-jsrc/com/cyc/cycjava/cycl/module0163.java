@@ -64,17 +64,17 @@ public final class module0163 extends SubLTranslatedFile
     
     public static SubLObject f10653(final SubLObject var1, final SubLObject var2) {
         assert module0163.NIL != module0126.f8391(var1) : var1;
-        assert module0163.NIL != module0166.f10734(var2) : var2;
-        module0122.f8308();
-        module0122.f8341((SubLObject)module0163.$ic2$, var1, var2, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED);
-        if (module0163.NIL != module0122.f8289()) {
+        assert module0163.NIL != constants_high_oc.f10734(var2) : var2;
+        oc_hl_interface_infrastructure.f8308();
+        oc_hl_interface_infrastructure.f8341((SubLObject)module0163.$ic2$, var1, var2, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED);
+        if (module0163.NIL != oc_hl_interface_infrastructure.f8289()) {
             final SubLObject var3 = module0018.$g573$.getGlobalValue();
             SubLObject var4 = (SubLObject)module0163.NIL;
             try {
                 var4 = Locks.seize_lock(var3);
-                final SubLObject var5 = (module0163.NIL != module0122.f8288()) ? f10654(var1, var2) : f10655(var1, var2);
+                final SubLObject var5 = (module0163.NIL != oc_hl_interface_infrastructure.f8288()) ? f10654(var1, var2) : f10655(var1, var2);
                 module0197.f12248(var1, var2);
-                module0122.f8309();
+                oc_hl_interface_infrastructure.f8309();
                 return var5;
             }
             finally {
@@ -88,40 +88,40 @@ public final class module0163 extends SubLTranslatedFile
     
     public static SubLObject f10654(final SubLObject var1, final SubLObject var2) {
         final SubLThread var3 = SubLProcess.currentSubLThread();
-        final SubLObject var4 = module0122.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic8$, module0035.f2241(var1), module0035.f2241(var2)));
+        final SubLObject var4 = oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic8$, module0035.f2241(var1), module0035.f2241(var2)));
         SubLObject var5 = (SubLObject)module0163.NIL;
-        final SubLObject var6 = module0122.$g1483$.currentBinding(var3);
+        final SubLObject var6 = oc_hl_interface_infrastructure.$g1483$.currentBinding(var3);
         try {
-            module0122.$g1483$.bind((SubLObject)module0163.T, var3);
+            oc_hl_interface_infrastructure.$g1483$.bind((SubLObject)module0163.T, var3);
             var5 = module0165.f10710(var1, var4);
-            if (module0163.NIL != module0122.f8287()) {
+            if (module0163.NIL != oc_hl_interface_infrastructure.f8287()) {
                 module0165.f10708(var5, var1, var2);
             }
         }
         finally {
-            module0122.$g1483$.rebind(var6, var3);
+            oc_hl_interface_infrastructure.$g1483$.rebind(var6, var3);
         }
         return var5;
     }
     
     public static SubLObject f10655(final SubLObject var1, final SubLObject var2) {
         final SubLObject var3 = module0165.f10707(var1, var2);
-        return module0166.f10752(var3);
+        return constants_high_oc.f10752(var3);
     }
     
     public static SubLObject f10656(final SubLObject var5) {
         final SubLThread var6 = SubLProcess.currentSubLThread();
-        assert module0163.NIL != module0128.f8449(var5) : var5;
+        assert module0163.NIL != constant_handles_oc.f8449(var5) : var5;
         SubLObject var7 = (SubLObject)module0163.NIL;
-        module0122.f8308();
-        module0122.f8341((SubLObject)module0163.$ic10$, var5, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED);
-        if (module0163.NIL != module0122.f8288()) {
-            var7 = module0122.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic10$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var5)));
+        oc_hl_interface_infrastructure.f8308();
+        oc_hl_interface_infrastructure.f8341((SubLObject)module0163.$ic10$, var5, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED);
+        if (module0163.NIL != oc_hl_interface_infrastructure.f8288()) {
+            var7 = oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic10$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var5)));
         }
-        if (module0163.NIL != module0122.f8287()) {
-            final SubLObject var8 = module0122.$g1483$.currentBinding(var6);
+        if (module0163.NIL != oc_hl_interface_infrastructure.f8287()) {
+            final SubLObject var8 = oc_hl_interface_infrastructure.$g1483$.currentBinding(var6);
             try {
-                module0122.$g1483$.bind((SubLObject)module0163.T, var6);
+                oc_hl_interface_infrastructure.$g1483$.bind((SubLObject)module0163.T, var6);
                 final SubLObject var9 = module0018.$g573$.getGlobalValue();
                 SubLObject var10 = (SubLObject)module0163.NIL;
                 try {
@@ -136,7 +136,7 @@ public final class module0163 extends SubLTranslatedFile
                 }
             }
             finally {
-                module0122.$g1483$.rebind(var8, var6);
+                oc_hl_interface_infrastructure.$g1483$.rebind(var8, var6);
             }
         }
         return var7;
@@ -144,63 +144,63 @@ public final class module0163 extends SubLTranslatedFile
     
     public static SubLObject f10657(final SubLObject var1) {
         assert module0163.NIL != Types.stringp(var1) : var1;
-        if (module0163.NIL != module0122.f8291()) {
-            return module0122.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic17$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var1)));
+        if (module0163.NIL != oc_hl_interface_infrastructure.f8291()) {
+            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic17$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var1)));
         }
         return module0124.f8359(var1);
     }
     
     public static SubLObject f10658(final SubLObject var5) {
-        assert module0163.NIL != module0128.f8449(var5) : var5;
-        if (module0163.NIL != module0122.f8291()) {
-            return module0122.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic22$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var5)));
+        assert module0163.NIL != constant_handles_oc.f8449(var5) : var5;
+        if (module0163.NIL != oc_hl_interface_infrastructure.f8291()) {
+            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic22$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var5)));
         }
         return module0165.f10714(var5);
     }
     
     public static SubLObject f10659(final SubLObject var12) {
         assert module0163.NIL != Guids.guid_p(var12) : var12;
-        if (module0163.NIL != module0122.f8291()) {
-            return module0122.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic26$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var12)));
+        if (module0163.NIL != oc_hl_interface_infrastructure.f8291()) {
+            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic26$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var12)));
         }
         return module0165.f10701(var12);
     }
     
     public static SubLObject f10660(final SubLObject var5) {
-        assert module0163.NIL != module0128.f8449(var5) : var5;
-        if (module0163.NIL != module0122.f8291()) {
-            return module0122.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic30$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var5)));
+        assert module0163.NIL != constant_handles_oc.f8449(var5) : var5;
+        if (module0163.NIL != oc_hl_interface_infrastructure.f8291()) {
+            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic30$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var5)));
         }
         return module0165.f10717(var5);
     }
     
     public static SubLObject f10661(final SubLObject var5) {
-        assert module0163.NIL != module0128.f8449(var5) : var5;
-        if (module0163.NIL != module0122.f8291()) {
-            return module0122.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic33$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var5)));
+        assert module0163.NIL != constant_handles_oc.f8449(var5) : var5;
+        if (module0163.NIL != oc_hl_interface_infrastructure.f8291()) {
+            return oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic33$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var5)));
         }
         return module0165.f10718(var5);
     }
     
     public static SubLObject f10662(final SubLObject var5, final SubLObject var13) {
         final SubLThread var14 = SubLProcess.currentSubLThread();
-        assert module0163.NIL != module0128.f8449(var5) : var5;
+        assert module0163.NIL != constant_handles_oc.f8449(var5) : var5;
         assert module0163.NIL != module0126.f8389(var13) : var13;
         SubLObject var15 = (SubLObject)module0163.NIL;
-        module0122.f8308();
-        module0122.f8341((SubLObject)module0163.$ic36$, var5, var13, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED);
-        if (module0163.NIL != module0122.f8288()) {
-            var15 = module0122.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic36$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var5), (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var13)));
+        oc_hl_interface_infrastructure.f8308();
+        oc_hl_interface_infrastructure.f8341((SubLObject)module0163.$ic36$, var5, var13, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED, (SubLObject)module0163.UNPROVIDED);
+        if (module0163.NIL != oc_hl_interface_infrastructure.f8288()) {
+            var15 = oc_hl_interface_infrastructure.f8304((SubLObject)ConsesLow.list((SubLObject)module0163.$ic36$, (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var5), (SubLObject)ConsesLow.list((SubLObject)module0163.$ic11$, var13)));
         }
-        if (module0163.NIL != module0122.f8287()) {
-            final SubLObject var16 = module0122.$g1483$.currentBinding(var14);
+        if (module0163.NIL != oc_hl_interface_infrastructure.f8287()) {
+            final SubLObject var16 = oc_hl_interface_infrastructure.$g1483$.currentBinding(var14);
             try {
-                module0122.$g1483$.bind((SubLObject)module0163.T, var14);
+                oc_hl_interface_infrastructure.$g1483$.bind((SubLObject)module0163.T, var14);
                 final SubLObject var17 = module0018.$g573$.getGlobalValue();
                 SubLObject var18 = (SubLObject)module0163.NIL;
                 try {
                     var18 = Locks.seize_lock(var17);
-                    final SubLObject var19 = module0166.f10743(var5);
+                    final SubLObject var19 = constants_high_oc.f10743(var5);
                     SubLObject var17_18 = (SubLObject)module0163.NIL;
                     var17_18 = module0165.f10723(var5, var13);
                     module0197.f12253(var5, var19, var13);
@@ -213,7 +213,7 @@ public final class module0163 extends SubLTranslatedFile
                 }
             }
             finally {
-                module0122.$g1483$.rebind(var16, var14);
+                oc_hl_interface_infrastructure.$g1483$.rebind(var16, var14);
             }
         }
         return var15;
@@ -223,7 +223,7 @@ public final class module0163 extends SubLTranslatedFile
         if (var19 == module0163.UNPROVIDED) {
             var19 = (SubLObject)module0163.ONE_INTEGER;
         }
-        return module0122.f8328((SubLObject)module0163.$ic40$, var19);
+        return oc_hl_interface_infrastructure.f8328((SubLObject)module0163.$ic40$, var19);
     }
     
     public static SubLObject f10664() {
@@ -283,9 +283,9 @@ public final class module0163 extends SubLTranslatedFile
         $ic9$ = SubLObjectFactory.makeSymbol("CONSTANT-P");
         $ic10$ = SubLObjectFactory.makeSymbol("KB-REMOVE-CONSTANT");
         $ic11$ = SubLObjectFactory.makeSymbol("QUOTE");
-        $ic12$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10505", "CYC"));
+        $ic12$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT", "CYC"));
         $ic13$ = SubLObjectFactory.makeString("Remove CONSTANT from the KB.");
-        $ic14$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10505", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")));
+        $ic14$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")));
         $ic15$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NULL"));
         $ic16$ = SubLObjectFactory.makeSymbol("STRINGP");
         $ic17$ = SubLObjectFactory.makeSymbol("KB-LOOKUP-CONSTANT-BY-NAME");
@@ -308,9 +308,9 @@ public final class module0163 extends SubLTranslatedFile
         $ic34$ = SubLObjectFactory.makeString("Return the external merged ID for CONSTANT.");
         $ic35$ = SubLObjectFactory.makeSymbol("VALID-CONSTANT-NAME-P");
         $ic36$ = SubLObjectFactory.makeSymbol("KB-RENAME-CONSTANT");
-        $ic37$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10505", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#13498", "CYC"));
+        $ic37$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#13498", "CYC"));
         $ic38$ = SubLObjectFactory.makeString("Rename CONSTANT to have NEW-NAME as its name.  The constant is returned.");
-        $ic39$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10505", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13498", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VALID-CONSTANT-NAME-P")));
+        $ic39$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13498", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VALID-CONSTANT-NAME-P")));
         $ic40$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13499", "CYC"));
     }
 }

@@ -66,7 +66,7 @@ public final class module0246 extends SubLTranslatedFile
     
     public static SubLObject f15863(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        assert module0246.NIL != module0174.f11035(var1) : var1;
+        assert module0246.NIL != assertion_handles_oc.f11035(var1) : var1;
         final SubLObject var3 = module0178.f11334(var1);
         SubLObject var4 = (SubLObject)module0246.NIL;
         SubLObject var5 = module0147.$g2094$.currentBinding(var2);
@@ -547,11 +547,11 @@ public final class module0246 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0246();
         $ic0$ = SubLObjectFactory.makeSymbol("S#18609", "CYC");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
         $ic2$ = SubLObjectFactory.makeSymbol("ASSERTION-P");
         $ic3$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtUnionFn"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtUnionFn"));
         $ic6$ = SubLObjectFactory.makeSymbol("S#18610", "CYC");
         $ic7$ = SubLObjectFactory.makeSymbol("S#17786", "CYC");
         $ic8$ = SubLObjectFactory.makeSymbol("S#17788", "CYC");
@@ -566,19 +566,19 @@ public final class module0246 extends SubLTranslatedFile
         $ic17$ = SubLObjectFactory.makeSymbol("S#17780", "CYC");
         $ic18$ = SubLObjectFactory.makeSymbol("S#18612", "CYC");
         $ic19$ = SubLObjectFactory.makeSymbol("S#18613", "CYC");
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultGenl"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultGenl"));
         $ic21$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultGenlArg"));
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultGenl"));
-        $ic24$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultGenlReln"));
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa"));
-        $ic26$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultIsaArg"));
-        $ic27$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultIsa"));
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultIsaReln"));
-        $ic29$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultIsaArgIsa"));
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("closedUnder"));
-        $ic31$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("evaluationResultQuotedIsa"));
-        $ic32$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultQuotedIsa"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultGenlArg"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultGenl"));
+        $ic24$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultGenlReln"));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa"));
+        $ic26$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultIsaArg"));
+        $ic27$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultIsa"));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("interArgResultIsaReln"));
+        $ic29$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultIsaArgIsa"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("closedUnder"));
+        $ic31$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("evaluationResultQuotedIsa"));
+        $ic32$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultQuotedIsa"));
         $ic33$ = SubLObjectFactory.makeSymbol("RESULT-GENL");
         $ic34$ = SubLObjectFactory.makeSymbol("RESULT-ISA");
         $ic35$ = SubLObjectFactory.makeSymbol("EVALUATION-RESULT-QUOTED-ISA");

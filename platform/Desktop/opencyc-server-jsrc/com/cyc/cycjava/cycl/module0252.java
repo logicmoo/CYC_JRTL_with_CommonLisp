@@ -13211,12 +13211,12 @@ public final class module0252 extends SubLTranslatedFile
         $ic6$ = SubLObjectFactory.makeString("continue anyway");
         $ic7$ = SubLObjectFactory.makeKeyword("WARN");
         $ic8$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
         $ic10$ = SubLObjectFactory.makeKeyword("OLD");
         $ic11$ = SubLObjectFactory.makeSymbol("S#18870", "CYC");
         $ic12$ = SubLObjectFactory.makeKeyword("RESOURCE");
         $ic13$ = SubLObjectFactory.makeSymbol("S#11593", "CYC");
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False-JustificationTruth"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False-JustificationTruth"));
         $ic15$ = SubLObjectFactory.makeString("Node ~a does not pass sbhl-type-test ~a~%");
         $ic16$ = SubLObjectFactory.makeSymbol("S#18872", "CYC");
         $ic17$ = SubLObjectFactory.makeKeyword("CLOSURE");
@@ -13238,7 +13238,7 @@ public final class module0252 extends SubLTranslatedFile
         $ic33$ = SubLObjectFactory.makeKeyword("FORWARD");
         $ic34$ = SubLObjectFactory.makeKeyword("BACKWARD");
         $ic35$ = SubLObjectFactory.makeSymbol("S#18978", "CYC");
-        $ic36$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
+        $ic36$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
         $ic37$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic38$ = SubLObjectFactory.makeSymbol("+");
         $ic39$ = SubLObjectFactory.makeSymbol("GENL-CARDINALITY");
@@ -13250,7 +13250,7 @@ public final class module0252 extends SubLTranslatedFile
         $ic45$ = SubLObjectFactory.makeSymbol("S#18808", "CYC");
         $ic46$ = SubLObjectFactory.makeKeyword("BOOLEAN");
         $ic47$ = SubLObjectFactory.makeSymbol("S#15382", "CYC");
-        $ic48$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("negationInverse"));
+        $ic48$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("negationInverse"));
         $ic49$ = SubLObjectFactory.makeSymbol("S#15385", "CYC");
         $ic50$ = SubLObjectFactory.makeSymbol("S#19074", "CYC");
         $ic51$ = SubLObjectFactory.makeSymbol("S#19079", "CYC");

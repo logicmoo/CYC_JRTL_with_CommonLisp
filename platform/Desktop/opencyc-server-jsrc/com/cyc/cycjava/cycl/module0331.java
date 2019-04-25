@@ -446,7 +446,7 @@ public final class module0331 extends SubLTranslatedFile
     }
     
     public static SubLObject f22385(final SubLObject var53) {
-        if (module0331.NIL != module0128.f8463(module0331.$ic14$, (SubLObject)module0331.UNPROVIDED)) {
+        if (module0331.NIL != constant_handles_oc.f8463(module0331.$ic14$, (SubLObject)module0331.UNPROVIDED)) {
             return (SubLObject)SubLObjectFactory.makeBoolean(module0331.NIL == module0226.f15164(var53));
         }
         return (SubLObject)SubLObjectFactory.makeBoolean(module0331.NIL == module0349.f23399(var53));
@@ -536,21 +536,21 @@ public final class module0331 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0331();
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
         $ic1$ = SubLObjectFactory.makeKeyword("REFLEXIVE");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("rewriteOf"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("rewriteOf"));
         $ic4$ = SubLObjectFactory.makeSymbol("S#747", "CYC");
         $ic5$ = SubLObjectFactory.makeSymbol("FORT-P");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("different"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("different"));
         $ic7$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic8$ = SubLObjectFactory.makeKeyword("FALSE");
         $ic9$ = SubLObjectFactory.makeKeyword("OPAQUE");
         $ic10$ = SubLObjectFactory.makeKeyword("ISA");
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic12$ = SubLObjectFactory.makeKeyword("DISJOINTWITH");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith"));
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TermExemptFromUniqueNamesAssumption"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TermExemptFromUniqueNamesAssumption"));
         $ic15$ = SubLObjectFactory.makeKeyword("IGNORE");
     }
 }

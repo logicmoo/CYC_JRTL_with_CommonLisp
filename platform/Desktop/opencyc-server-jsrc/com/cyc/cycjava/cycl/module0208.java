@@ -153,11 +153,11 @@ public final class module0208 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0208();
         module0208.$g919$ = null;
-        $ic0$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("UnicodeStringFn")), (SubLObject)SubLObjectFactory.makeString(""));
+        $ic0$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UnicodeStringFn")), (SubLObject)SubLObjectFactory.makeString(""));
         $ic1$ = SubLObjectFactory.makeSymbol("S#16379", "CYC");
         $ic2$ = SubLObjectFactory.makeSymbol("S#16378", "CYC");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UnicodeStringFn"));
-        $ic4$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("UnicodeStringFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#4375", "CYC")));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UnicodeStringFn"));
+        $ic4$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UnicodeStringFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#4375", "CYC")));
         $ic5$ = SubLObjectFactory.makeSymbol("S#4375", "CYC");
         $ic6$ = SubLObjectFactory.makeString("&u");
         $ic7$ = SubLObjectFactory.makeSymbol("CHAR-EQUAL");

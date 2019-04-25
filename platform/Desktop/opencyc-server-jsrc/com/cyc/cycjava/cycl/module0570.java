@@ -187,8 +187,8 @@ public final class module0570 extends SubLTranslatedFile
         $ic0$ = SubLObjectFactory.makeString("mapping Cyc FORTs");
         $ic1$ = SubLObjectFactory.makeKeyword("SKIP");
         $ic2$ = SubLObjectFactory.makeSymbol("FORT-P");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
     }
 }
 

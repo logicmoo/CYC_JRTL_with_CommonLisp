@@ -871,7 +871,7 @@ public final class module0394 extends SubLTranslatedFile
             SubLObject var44;
             for (var42 = (SubLObject)module0394.NIL, var43 = (SubLObject)module0394.NIL, var43 = module0363.f24517(module0365.f24850(var40)); module0394.NIL == var42 && module0394.NIL != var43; var43 = var43.rest()) {
                 var44 = var43.first();
-                if (module0394.NIL != module0363.f24524(var44, (SubLObject)module0394.$ic35$) && module0394.NIL != module0363.f24518(var44, (SubLObject)module0394.$ic36$) && !var44.eql(var40) && module0394.NIL == module0369.f25613(var41, module0365.f24865(var44))) {
+                if (module0394.NIL != module0363.f24524(var44, (SubLObject)module0394.$ic35$) && module0394.NIL != module0363.f24518(var44, (SubLObject)module0394.$ic36$) && !var44.eql(var40) && module0394.NIL == oc_inference_datastructures_inference.f25613(var41, module0365.f24865(var44))) {
                     var42 = (SubLObject)module0394.T;
                 }
             }

@@ -1504,10 +1504,10 @@ public final class module0714 extends SubLTranslatedFile
             var123 = module0701.f42635(f43917(var7), var16.isInteger() ? module0006.f206(var16) : reader.parse_integer(var16, (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED), (SubLObject)module0714.NIL, module0701.f42807((SubLObject)module0714.$ic143$));
         }
         else if (var16.isString()) {
-            var123 = module0701.f42635(f43917(var7), var16, (SubLObject)((module0714.NIL != module0174.f11035(var121)) ? f43944(module0178.f11287(var121)) : module0714.NIL), (SubLObject)module0714.UNPROVIDED);
+            var123 = module0701.f42635(f43917(var7), var16, (SubLObject)((module0714.NIL != assertion_handles_oc.f11035(var121)) ? f43944(module0178.f11287(var121)) : module0714.NIL), (SubLObject)module0714.UNPROVIDED);
         }
         else if (module0714.NIL != module0208.f13537(var16, (SubLObject)module0714.UNPROVIDED)) {
-            var123 = module0701.f42635(f43917(var7), module0208.f13536(var16), (SubLObject)((module0714.NIL != module0174.f11035(var121)) ? f43944(module0178.f11287(var121)) : module0714.NIL), (SubLObject)module0714.UNPROVIDED);
+            var123 = module0701.f42635(f43917(var7), module0208.f13536(var16), (SubLObject)((module0714.NIL != assertion_handles_oc.f11035(var121)) ? f43944(module0178.f11287(var121)) : module0714.NIL), (SubLObject)module0714.UNPROVIDED);
         }
         else if (module0714.NIL != var118 && var16.eql(module0714.$ic141$)) {
             var123 = module0702.f42814(module0712.f43676(var16, (SubLObject)module0714.UNPROVIDED), (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED);
@@ -1573,7 +1573,7 @@ public final class module0714 extends SubLTranslatedFile
             if (var16.eql(f43873(var7)) && module0714.NIL != module0589.f35907(f43875(var7, (SubLObject)module0714.$ic167$, (SubLObject)module0714.UNPROVIDED), (SubLObject)module0714.UNPROVIDED)) {
                 return module0702.f42814(f43875(var7, (SubLObject)module0714.$ic167$, (SubLObject)module0714.UNPROVIDED), (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED);
             }
-            if (module0714.NIL != module0128.f8449(var16) && (module0714.NIL != module0038.f2668((SubLObject)module0714.$ic168$, module0166.f10743(var16), (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED) || module0714.NIL != module0038.f2668((SubLObject)module0714.$ic169$, module0166.f10743(var16), (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED)) && module0714.NIL != module0259.f16976(var16, module0714.$ic170$)) {
+            if (module0714.NIL != constant_handles_oc.f8449(var16) && (module0714.NIL != module0038.f2668((SubLObject)module0714.$ic168$, constants_high_oc.f10743(var16), (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED) || module0714.NIL != module0038.f2668((SubLObject)module0714.$ic169$, constants_high_oc.f10743(var16), (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED, (SubLObject)module0714.UNPROVIDED)) && module0714.NIL != module0259.f16976(var16, module0714.$ic170$)) {
                 var18 = module0703.f42873(f43948(var7));
             }
             else if (module0714.NIL != module0167.f10813(var16) && module0205.f13276(var16).eql(module0714.$ic171$)) {
@@ -1849,7 +1849,7 @@ public final class module0714 extends SubLTranslatedFile
     
     public static SubLObject f43954(final SubLObject var7, final SubLObject var154) {
         assert module0714.NIL != f43872(var7) : var7;
-        assert module0714.NIL != module0174.f11035(var154) : var154;
+        assert module0714.NIL != assertion_handles_oc.f11035(var154) : var154;
         final SubLObject var155 = f43917(var7);
         final SubLObject var156 = module0178.f11332(var154);
         final SubLObject var157 = module0178.f11334(var154);
@@ -1877,7 +1877,7 @@ public final class module0714 extends SubLTranslatedFile
     
     public static SubLObject f43955(final SubLObject var7, final SubLObject var158) {
         assert module0714.NIL != f43872(var7) : var7;
-        assert module0714.NIL != module0174.f11035(var158) : var158;
+        assert module0714.NIL != assertion_handles_oc.f11035(var158) : var158;
         final SubLObject var159 = f43917(var7);
         final SubLObject var160 = module0178.f11332(var158);
         final SubLObject var161 = module0178.f11334(var158);
@@ -4424,16 +4424,16 @@ public final class module0714 extends SubLTranslatedFile
         $ic18$ = SubLObjectFactory.makeSymbol("OWL-EXPORT-TERMS-TO-STREAM");
         $ic19$ = SubLObjectFactory.makeString("owl-export-terms-to-stream");
         $ic20$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TERMS"), (SubLObject)SubLObjectFactory.makeKeyword("EXPORTER-OPTIONS"));
-        $ic21$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termTypeForOntology"));
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("synonymousExternalConcept"));
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("overlappingExternalConcept"));
+        $ic21$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termTypeForOntology"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("synonymousExternalConcept"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("overlappingExternalConcept"));
         $ic24$ = SubLObjectFactory.makeString("~A: FILENAME ~S already exists~%");
         $ic25$ = SubLObjectFactory.makeKeyword("EXPORTER-OPTIONS");
         $ic26$ = SubLObjectFactory.makeString("~A: EXPORTER-OPTIONS ~S is not a valid property list~%");
         $ic27$ = SubLObjectFactory.makeKeyword("CYCLIST");
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Cyclist"));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Cyclist"));
         $ic29$ = SubLObjectFactory.makeString("~A: EXPORTER-OPTIONS :cyclist ~A is not a #$Cyclist~%");
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Guest"));
         $ic31$ = SubLObjectFactory.makeString("~A: Please log in with (set-the-cyclist [Cyc Account])~%");
         $ic32$ = SubLObjectFactory.makeString("~A: EXPORTER-OPTIONS has invalid keys: ~A~%");
         $ic33$ = SubLObjectFactory.makeString("Errors found, aborting export...");
@@ -4443,7 +4443,7 @@ public final class module0714 extends SubLTranslatedFile
         $ic37$ = SubLObjectFactory.makeKeyword("BASE-URI");
         $ic38$ = SubLObjectFactory.makeKeyword("VERBOSE?");
         $ic39$ = SubLObjectFactory.makeKeyword("ALL");
-        $ic40$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("contextOfPCW"));
+        $ic40$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("contextOfPCW"));
         $ic41$ = SubLObjectFactory.makeKeyword("OPENCYC-EXPORT?");
         $ic42$ = SubLObjectFactory.makeString("Performing OpenCyc export...~%");
         $ic43$ = SubLObjectFactory.makeKeyword("OPENCYC");
@@ -4460,8 +4460,8 @@ public final class module0714 extends SubLTranslatedFile
         $ic54$ = SubLObjectFactory.makeKeyword("UNVERSIONED");
         $ic55$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("DBPEDIA"), (SubLObject)SubLObjectFactory.makeKeyword("UMBEL"), (SubLObject)SubLObjectFactory.makeKeyword("OPENCYC"), (SubLObject)SubLObjectFactory.makeKeyword("OPENCYC-VERSIONED"));
         $ic56$ = SubLObjectFactory.makeString("Invalid opencyc export type: ~A.  Defaulting to readable.");
-        $ic57$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("baseNamespaceForSKS"));
-        $ic58$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("uriString"));
+        $ic57$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("baseNamespaceForSKS"));
+        $ic58$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("uriString"));
         $ic59$ = SubLObjectFactory.makeSymbol("S#48153", "CYC");
         $ic60$ = SubLObjectFactory.makeString("$revision: 1.2 $");
         $ic61$ = SubLObjectFactory.makeSymbol("DIGIT-CHAR-P");
@@ -4516,11 +4516,11 @@ public final class module0714 extends SubLTranslatedFile
         $ic110$ = SubLObjectFactory.makeSymbol("S#48068", "CYC");
         $ic111$ = SubLObjectFactory.makeString("<OWL-EXPORTER ~D for ~A>");
         $ic112$ = SubLObjectFactory.makeSymbol("S#748", "CYC");
-        $ic113$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SoftwareVersionFn"));
-        $ic114$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("OWLExporter-Cyc"));
-        $ic115$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UserOfProgramFn"));
-        $ic116$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("retainTerm"));
-        $ic117$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic113$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SoftwareVersionFn"));
+        $ic114$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("OWLExporter-Cyc"));
+        $ic115$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UserOfProgramFn"));
+        $ic116$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("retainTerm"));
+        $ic117$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
         $ic118$ = SubLObjectFactory.makeSymbol("S#48155", "CYC");
         $ic119$ = SubLObjectFactory.makeSymbol("S#48156", "CYC");
         $ic120$ = SubLObjectFactory.makeSymbol("S#46652", "CYC");
@@ -4544,78 +4544,78 @@ public final class module0714 extends SubLTranslatedFile
         $ic138$ = SubLObjectFactory.makeString("Adding all KB non-collections to export graph...");
         $ic139$ = SubLObjectFactory.makeString("~A triple~:p~%");
         $ic140$ = SubLObjectFactory.makeString("~A node~:p~%");
-        $ic141$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheEmptyList"));
+        $ic141$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheEmptyList"));
         $ic142$ = SubLObjectFactory.makeString("owl:sameAs");
         $ic143$ = SubLObjectFactory.makeString("xsd:int");
-        $ic144$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("comment")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("coExtensional")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa")));
+        $ic144$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comment")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("coExtensional")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa")));
         $ic145$ = SubLObjectFactory.makeSymbol("S#48108", "CYC");
-        $ic146$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ResourceWithURIFn"));
-        $ic147$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("owl:Class"));
-        $ic148$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("owl:Restriction"));
-        $ic149$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("URIFn"));
+        $ic146$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ResourceWithURIFn"));
+        $ic147$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("owl:Class"));
+        $ic148$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("owl:Restriction"));
+        $ic149$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("URIFn"));
         $ic150$ = SubLObjectFactory.makeString("rdf:nil");
-        $ic151$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic151$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic152$ = SubLObjectFactory.makeString("rdf:type");
-        $ic153$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic153$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic154$ = SubLObjectFactory.makeString("rdfs:subClassOf");
-        $ic155$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic155$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic156$ = SubLObjectFactory.makeString("rdfs:subPropertyOf");
-        $ic157$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("comment"));
+        $ic157$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comment"));
         $ic158$ = SubLObjectFactory.makeString("rdfs:comment");
-        $ic159$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("coExtensional"));
+        $ic159$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("coExtensional"));
         $ic160$ = SubLObjectFactory.makeString("owl:equivalentClass");
-        $ic161$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith"));
+        $ic161$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith"));
         $ic162$ = SubLObjectFactory.makeString("owl:disjointWith");
-        $ic163$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa"));
+        $ic163$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa"));
         $ic164$ = SubLObjectFactory.makeString("rdfs:domain");
-        $ic165$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa"));
+        $ic165$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa"));
         $ic166$ = SubLObjectFactory.makeString("rdfs:range");
         $ic167$ = SubLObjectFactory.makeKeyword("ONTOLOGY-URI");
         $ic168$ = SubLObjectFactory.makeString("Indeterminate");
         $ic169$ = SubLObjectFactory.makeString("Anonymous");
-        $ic170$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IndeterminateTerm"));
-        $ic171$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheCollection"));
+        $ic170$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IndeterminateTerm"));
+        $ic171$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheCollection"));
         $ic172$ = SubLObjectFactory.makeKeyword("SYNONYMOUS-EXTERNAL-CONCEPT");
         $ic173$ = SubLObjectFactory.makeKeyword("SUPPRESS-HUMANLY-READABLE-NON-OPENCYC-URIS");
-        $ic174$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("rdfURI"));
+        $ic174$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("rdfURI"));
         $ic175$ = SubLObjectFactory.makeString("~A has more than one #$rdfURI assertion in ~A");
         $ic176$ = SubLObjectFactory.makeString("Cannot find best node for term ~A, using mycyc:");
         $ic177$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
         $ic178$ = SubLObjectFactory.makeSymbol("GAF-ARG3");
         $ic179$ = ConsesLow.list((SubLObject)Characters.CHAR_colon);
         $ic180$ = SubLObjectFactory.makeKeyword("BLANK-NODE-COUNT");
-        $ic181$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExists")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllOnly")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllInstance")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsCount")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMin")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMax")));
+        $ic181$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExists")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllOnly")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllInstance")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsCount")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMin")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMax")));
         $ic182$ = SubLObjectFactory.makeKeyword("RULE-MACRO-PRED-ASSERTION-TERM-NOT-EXPORTABLE");
         $ic183$ = SubLObjectFactory.makeKeyword("RULES-NOT-EXPORTABLE");
         $ic184$ = SubLObjectFactory.makeKeyword("NON-BINARY-PREDICATE");
         $ic185$ = SubLObjectFactory.makeKeyword("UNEXPORTABLE-PREDICATE");
         $ic186$ = SubLObjectFactory.makeKeyword("SUBJECT-NOT-EXPORTABLE");
-        $ic187$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("owlDataTypeSemanticCorrelation"));
+        $ic187$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("owlDataTypeSemanticCorrelation"));
         $ic188$ = SubLObjectFactory.makeKeyword("OBJECT-NOT-EXPORTABLE");
         $ic189$ = SubLObjectFactory.makeKeyword("SUPPRESS-EXPORT-OF-DERIVED-KNOWLEDGE?");
         $ic190$ = SubLObjectFactory.makeString("Could not export assertion ~A");
         $ic191$ = SubLObjectFactory.makeSymbol("ASSERTION-P");
         $ic192$ = SubLObjectFactory.makeString("owl:onProperty");
-        $ic193$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExists"));
+        $ic193$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExists"));
         $ic194$ = SubLObjectFactory.makeString("owl:someValuesFrom");
-        $ic195$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllOnly"));
+        $ic195$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllOnly"));
         $ic196$ = SubLObjectFactory.makeString("owl:allValuesFrom");
-        $ic197$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllInstance"));
+        $ic197$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllInstance"));
         $ic198$ = SubLObjectFactory.makeString("owl:hasValue");
-        $ic199$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsCount")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMin")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMax")));
+        $ic199$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsCount")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMin")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMax")));
         $ic200$ = SubLObjectFactory.makeString("owl:valuesFrom");
         $ic201$ = SubLObjectFactory.makeString("owl:Restriction");
-        $ic202$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsCount"));
+        $ic202$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsCount"));
         $ic203$ = SubLObjectFactory.makeString("owl:cardinality");
-        $ic204$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMin"));
+        $ic204$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMin"));
         $ic205$ = SubLObjectFactory.makeString("owl:minCardinality");
-        $ic206$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMax"));
+        $ic206$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllExistsMax"));
         $ic207$ = SubLObjectFactory.makeString("owl:maxCardinality");
         $ic208$ = SubLObjectFactory.makeString("Unhandled rmp pred for assertion ~A");
         $ic209$ = SubLObjectFactory.makeKeyword("SUPPRESS-ADDITIONAL-TYPE-TRIPLES?");
-        $ic210$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Ontology"));
+        $ic210$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Ontology"));
         $ic211$ = SubLObjectFactory.makeString("owl:Ontology");
-        $ic212$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("OwlSemanticDataType"));
+        $ic212$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("OwlSemanticDataType"));
         $ic213$ = SubLObjectFactory.makeString("owl:DatatypeProperty");
         $ic214$ = SubLObjectFactory.makeString("owl:ObjectProperty");
         $ic215$ = SubLObjectFactory.makeString("owl:Class");
@@ -4635,12 +4635,12 @@ public final class module0714 extends SubLTranslatedFile
         $ic229$ = SubLObjectFactory.makeKeyword("OPENCYC-UNVERSIONED");
         $ic230$ = SubLObjectFactory.makeKeyword("CYC");
         $ic231$ = SubLObjectFactory.makeKeyword("DBPEDIA");
-        $ic232$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("MappingMtFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("DBPediaTripleStore")));
+        $ic232$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MappingMtFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DBPediaTripleStore")));
         $ic233$ = SubLObjectFactory.makeKeyword("ADD-PRETTY-STRINGS");
-        $ic234$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("prettyString"));
+        $ic234$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("prettyString"));
         $ic235$ = SubLObjectFactory.makeString("en");
         $ic236$ = SubLObjectFactory.makeKeyword("ADD-PRETTY-STRING-CANONICAL");
-        $ic237$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("prettyString-Canonical"));
+        $ic237$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("prettyString-Canonical"));
         $ic238$ = SubLObjectFactory.makeKeyword("NEW");
         $ic239$ = SubLObjectFactory.makeKeyword("ONTOLOGY-TERM");
         $ic240$ = SubLObjectFactory.makeString("owl:versionInfo");
@@ -4659,7 +4659,7 @@ public final class module0714 extends SubLTranslatedFile
         $ic253$ = SubLObjectFactory.makeString("Removing (rdfs:domain ?X owl:Thing) triples");
         $ic254$ = SubLObjectFactory.makeString("base:uri");
         $ic255$ = SubLObjectFactory.makeString("xmlns");
-        $ic256$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("nameSpacePrefixForSKS"));
+        $ic256$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nameSpacePrefixForSKS"));
         $ic257$ = ConsesLow.list((SubLObject)module0714.TWO_INTEGER, (SubLObject)module0714.THREE_INTEGER);
         $ic258$ = SubLObjectFactory.makeString("rdf");
         $ic259$ = SubLObjectFactory.makeString("http://www.w3.org/1999/02/22-rdf-syntax-ns#");

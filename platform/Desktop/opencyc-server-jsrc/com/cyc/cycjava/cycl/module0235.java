@@ -1104,27 +1104,27 @@ public final class module0235 extends SubLTranslatedFile
         $ic18$ = SubLObjectFactory.makeInteger(512);
         $ic19$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
         $ic20$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
-        $ic21$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("retainTerm"));
+        $ic21$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("retainTerm"));
         $ic22$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#18277", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18278", "CYC"));
         $ic23$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#18279", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18280", "CYC"));
         $ic24$ = SubLObjectFactory.makeSymbol("OBJECT-TO-STRING");
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Always-TimeInterval"));
-        $ic26$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TimePoint"));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Always-TimeInterval"));
+        $ic26$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TimePoint"));
         $ic27$ = SubLObjectFactory.makeSymbol("S#18265", "CYC");
         $ic28$ = SubLObjectFactory.makeSymbol("S#18274", "CYC");
         $ic29$ = SubLObjectFactory.makeInteger(256);
         $ic30$ = SubLObjectFactory.makeSymbol("S#18224", "CYC");
-        $ic31$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeWithGranularityDimFn"));
+        $ic31$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeWithGranularityDimFn"));
         $ic32$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#18281", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18282", "CYC"));
-        $ic33$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn"));
-        $ic34$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Null-TimeParameter"));
+        $ic33$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn"));
+        $ic34$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Null-TimeParameter"));
         $ic35$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#18281", "CYC"));
         $ic36$ = SubLObjectFactory.makeKeyword("GENLMT");
-        $ic37$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic37$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
         $ic38$ = SubLObjectFactory.makeKeyword("TIME");
-        $ic39$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("temporallySubsumes"));
-        $ic40$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("temporallySubsumes-InsType"));
-        $ic41$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("temporallySubsumes-TypeType"));
+        $ic39$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("temporallySubsumes"));
+        $ic40$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("temporallySubsumes-InsType"));
+        $ic41$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("temporallySubsumes-TypeType"));
     }
     
     public static final class $f15484$BinaryFunction extends BinaryFunction

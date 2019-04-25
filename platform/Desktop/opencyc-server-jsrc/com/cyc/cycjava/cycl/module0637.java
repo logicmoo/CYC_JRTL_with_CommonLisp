@@ -1135,7 +1135,7 @@ public final class module0637 extends SubLTranslatedFile
         $ic54$ = SubLObjectFactory.makeKeyword("INFERENCE-MODE");
         $ic55$ = SubLObjectFactory.makeSymbol("S#12753", "CYC");
         $ic56$ = SubLObjectFactory.makeSymbol("S#16717", "CYC");
-        $ic57$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheNthFn"));
+        $ic57$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheNthFn"));
         $ic58$ = SubLObjectFactory.makeSymbol("CYCL-DENOTATIONAL-TERM-P");
         $ic59$ = SubLObjectFactory.makeSymbol("S#42636", "CYC");
         $ic60$ = SubLObjectFactory.makeSymbol("S#42651", "CYC");
@@ -1143,11 +1143,11 @@ public final class module0637 extends SubLTranslatedFile
         $ic62$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#12141", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#42661", "CYC"));
         $ic63$ = SubLObjectFactory.makeString("Insufficient number of substitutions -- indexicals ~A unaccounted for.");
         $ic64$ = SubLObjectFactory.makeSymbol("S#42657", "CYC");
-        $ic65$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferenceParameter"));
-        $ic66$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycAPIMt"));
-        $ic67$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("subLIdentifier"));
+        $ic65$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferenceParameter"));
+        $ic66$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycAPIMt"));
+        $ic67$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("subLIdentifier"));
         $ic68$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic69$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLQuoteFn"));
+        $ic69$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLQuoteFn"));
     }
     
     public static final class $sX42591_native extends SubLStructNative

@@ -127,7 +127,7 @@ public final class module0780 extends SubLTranslatedFile
     
     public static SubLObject f50268(final SubLObject var4) {
         final SubLObject var5 = f50260(var4);
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0780.NIL == module0128.f8467(var5, (SubLObject)module0780.UNPROVIDED) && module0780.NIL == module0172.f10918(var5, (SubLObject)module0780.UNPROVIDED) && (module0780.NIL != module0206.f13453(var5) || module0780.NIL != module0128.f8449(var5)));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0780.NIL == constant_handles_oc.f8467(var5, (SubLObject)module0780.UNPROVIDED) && module0780.NIL == module0172.f10918(var5, (SubLObject)module0780.UNPROVIDED) && (module0780.NIL != module0206.f13453(var5) || module0780.NIL != constant_handles_oc.f8449(var5)));
     }
     
     public static SubLObject f50269(final SubLObject var4) {
@@ -270,7 +270,7 @@ public final class module0780 extends SubLTranslatedFile
         final SubLThread var19 = SubLProcess.currentSubLThread();
         SubLObject var20 = (SubLObject)module0780.ZERO_INTEGER;
         final SubLObject var21 = (module0780.NIL != var17) ? var17 : module0173.f10962();
-        final SubLObject var22 = module0128.f8425();
+        final SubLObject var22 = constant_handles_oc.f8425();
         final SubLObject var23 = (SubLObject)module0780.$ic8$;
         final SubLObject var24 = module0065.f4733(var22);
         SubLObject var25 = (SubLObject)module0780.ZERO_INTEGER;
@@ -391,8 +391,8 @@ public final class module0780 extends SubLTranslatedFile
         me = (SubLFile)new module0780();
         module0780.$g6285$ = null;
         module0780.$g6286$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termStrings-GuessedFromName"));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TemporaryLexicalAssertions-GuessedMt"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termStrings-GuessedFromName"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TemporaryLexicalAssertions-GuessedMt"));
         $ic2$ = SubLObjectFactory.makeSymbol("S#38849", "CYC");
         $ic3$ = SubLObjectFactory.makeKeyword("CYCLIST");
         $ic4$ = SubLObjectFactory.makeKeyword("TYPE-KEY");

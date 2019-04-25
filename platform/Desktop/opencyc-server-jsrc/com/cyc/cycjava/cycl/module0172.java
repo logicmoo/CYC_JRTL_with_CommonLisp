@@ -415,7 +415,7 @@ public final class module0172 extends SubLTranslatedFile
             final SubLObject var5 = module0018.$g587$.currentBinding(var2);
             final SubLObject var6 = module0018.$g584$.currentBinding(var2);
             try {
-                module0018.$g587$.bind(module0177.f11272(var3), var2);
+                module0018.$g587$.bind(oc_assertions_low.f11272(var3), var2);
                 module0018.$g584$.bind(Hashtables.make_hash_table(Numbers.integerDivide(module0217.f14357(var1), (SubLObject)module0172.FOUR_INTEGER), (SubLObject)module0172.UNPROVIDED, (SubLObject)module0172.UNPROVIDED), var2);
                 final SubLObject var17_57 = module0147.$g2094$.currentBinding(var2);
                 final SubLObject var43_58 = module0147.$g2095$.currentBinding(var2);
@@ -709,7 +709,7 @@ public final class module0172 extends SubLTranslatedFile
         $ic4$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13601", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("NART-P")));
         $ic5$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#664", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSP")));
         $ic6$ = SubLObjectFactory.makeSymbol("NAUT-P");
-        $ic7$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic7$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic8$ = SubLObjectFactory.makeString("Return T iff OBJECT is a datastructure implementing a non-atomic unreified term (NAUT).\n   By definition, this satisies @xref CYCL-NAT-P but not @xref NART-P.");
         $ic9$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
         $ic10$ = SubLObjectFactory.makeSymbol("NART-EL-FORMULA");
@@ -735,9 +735,9 @@ public final class module0172 extends SubLTranslatedFile
         $ic30$ = SubLObjectFactory.makeSymbol("CLET");
         $ic31$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13752", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#13612", "CYC"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#9677", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("S#13739", "CYC"))));
         $ic32$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic33$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic33$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic34$ = SubLObjectFactory.makeKeyword("RULE");
-        $ic35$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("forwardReificationRule"));
+        $ic35$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("forwardReificationRule"));
         $ic36$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
         $ic37$ = SubLObjectFactory.makeSymbol("S#13746", "CYC");
         $ic38$ = SubLObjectFactory.makeString("Looking for bad narts");

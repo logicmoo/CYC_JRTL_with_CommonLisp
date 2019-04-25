@@ -274,7 +274,7 @@ public final class module0271 extends SubLTranslatedFile
                     module0139.$g1632$.bind(var16, var10);
                     module0139.$g1630$.bind((SubLObject)module0271.T, var10);
                     module0139.$g1631$.bind(module0139.f9023(module0139.$g1632$.getDynamicValue(var10)), var10);
-                    final SubLObject var19 = module0174.f11010();
+                    final SubLObject var19 = assertion_handles_oc.f11010();
                     final SubLObject var20 = (SubLObject)module0271.$ic8$;
                     final SubLObject var21 = module0065.f4733(var19);
                     SubLObject var22 = (SubLObject)module0271.ZERO_INTEGER;
@@ -308,10 +308,10 @@ public final class module0271 extends SubLTranslatedFile
                                         }
                                         module0012.note_percent_progress(var22, var21);
                                         var22 = Numbers.add(var22, (SubLObject)module0271.ONE_INTEGER);
-                                        if (module0174.f11025(var29).numGE(var9) && module0271.NIL != module0147.f9556(var29, var8) && module0271.NIL != f17865(var29)) {
-                                            module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var29), module0271.$g2566$.getGlobalValue()));
+                                        if (assertion_handles_oc.f11025(var29).numGE(var9) && module0271.NIL != module0147.f9556(var29, var8) && module0271.NIL != f17865(var29)) {
+                                            module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var29), module0271.$g2566$.getGlobalValue()));
                                         }
-                                        module0271.$g2568$.setGlobalValue(module0174.f11025(var29));
+                                        module0271.$g2568$.setGlobalValue(assertion_handles_oc.f11025(var29));
                                         module0271.$g2567$.setGlobalValue(Numbers.add(module0271.$g2567$.getGlobalValue(), (SubLObject)module0271.ONE_INTEGER));
                                     }
                                 }
@@ -327,10 +327,10 @@ public final class module0271 extends SubLTranslatedFile
                                     if (module0271.NIL == module0065.f4773((SubLObject)module0271.$ic10$) || module0271.NIL == module0065.f4749(var34)) {
                                         module0012.note_percent_progress(var22, var21);
                                         var22 = Numbers.add(var22, (SubLObject)module0271.ONE_INTEGER);
-                                        if (module0174.f11025(var34).numGE(var9) && module0271.NIL != module0147.f9556(var34, var8) && module0271.NIL != f17865(var34)) {
-                                            module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var34), module0271.$g2566$.getGlobalValue()));
+                                        if (assertion_handles_oc.f11025(var34).numGE(var9) && module0271.NIL != module0147.f9556(var34, var8) && module0271.NIL != f17865(var34)) {
+                                            module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var34), module0271.$g2566$.getGlobalValue()));
                                         }
-                                        module0271.$g2568$.setGlobalValue(module0174.f11025(var34));
+                                        module0271.$g2568$.setGlobalValue(assertion_handles_oc.f11025(var34));
                                         module0271.$g2567$.setGlobalValue(Numbers.add(module0271.$g2567$.getGlobalValue(), (SubLObject)module0271.ONE_INTEGER));
                                     }
                                     var31 = Numbers.add(var31, (SubLObject)module0271.ONE_INTEGER);
@@ -404,7 +404,7 @@ public final class module0271 extends SubLTranslatedFile
                     module0139.$g1632$.bind(var16, var10);
                     module0139.$g1630$.bind((SubLObject)module0271.T, var10);
                     module0139.$g1631$.bind(module0139.f9023(module0139.$g1632$.getDynamicValue(var10)), var10);
-                    final SubLObject var19 = module0174.f11010();
+                    final SubLObject var19 = assertion_handles_oc.f11010();
                     final SubLObject var20 = (SubLObject)module0271.$ic8$;
                     final SubLObject var21 = module0065.f4733(var19);
                     SubLObject var22 = (SubLObject)module0271.ZERO_INTEGER;
@@ -440,7 +440,7 @@ public final class module0271 extends SubLTranslatedFile
                                         }
                                         module0012.note_percent_progress(var22, var21);
                                         var22 = Numbers.add(var22, (SubLObject)module0271.ONE_INTEGER);
-                                        if (module0174.f11025(var29).numGE(var9)) {
+                                        if (assertion_handles_oc.f11025(var29).numGE(var9)) {
                                             var30 = (SubLObject)module0271.NIL;
                                             try {
                                                 var10.throwStack.push(module0003.$g3$.getGlobalValue());
@@ -449,7 +449,7 @@ public final class module0271 extends SubLTranslatedFile
                                                     Errors.$error_handler$.bind((SubLObject)module0271.$ic11$, var10);
                                                     try {
                                                         if (module0271.NIL != f17865(var29)) {
-                                                            module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var29), module0271.$g2566$.getGlobalValue()));
+                                                            module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var29), module0271.$g2566$.getGlobalValue()));
                                                         }
                                                     }
                                                     catch (Throwable var31) {
@@ -467,10 +467,10 @@ public final class module0271 extends SubLTranslatedFile
                                                 var10.throwStack.pop();
                                             }
                                             if (module0271.NIL != var30) {
-                                                module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var29), module0271.$g2570$.getGlobalValue()));
+                                                module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var29), module0271.$g2570$.getGlobalValue()));
                                             }
                                         }
-                                        module0271.$g2568$.setGlobalValue(module0174.f11025(var29));
+                                        module0271.$g2568$.setGlobalValue(assertion_handles_oc.f11025(var29));
                                         module0271.$g2567$.setGlobalValue(Numbers.add(module0271.$g2567$.getGlobalValue(), (SubLObject)module0271.ONE_INTEGER));
                                     }
                                 }
@@ -486,7 +486,7 @@ public final class module0271 extends SubLTranslatedFile
                                     if (module0271.NIL == module0065.f4773((SubLObject)module0271.$ic10$) || module0271.NIL == module0065.f4749(var37)) {
                                         module0012.note_percent_progress(var22, var21);
                                         var22 = Numbers.add(var22, (SubLObject)module0271.ONE_INTEGER);
-                                        if (module0174.f11025(var37).numGE(var9)) {
+                                        if (assertion_handles_oc.f11025(var37).numGE(var9)) {
                                             SubLObject var38 = (SubLObject)module0271.NIL;
                                             try {
                                                 var10.throwStack.push(module0003.$g3$.getGlobalValue());
@@ -495,7 +495,7 @@ public final class module0271 extends SubLTranslatedFile
                                                     Errors.$error_handler$.bind((SubLObject)module0271.$ic11$, var10);
                                                     try {
                                                         if (module0271.NIL != f17865(var37)) {
-                                                            module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var37), module0271.$g2566$.getGlobalValue()));
+                                                            module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var37), module0271.$g2566$.getGlobalValue()));
                                                         }
                                                     }
                                                     catch (Throwable var39) {
@@ -513,10 +513,10 @@ public final class module0271 extends SubLTranslatedFile
                                                 var10.throwStack.pop();
                                             }
                                             if (module0271.NIL != var38) {
-                                                module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var37), module0271.$g2570$.getGlobalValue()));
+                                                module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var37), module0271.$g2570$.getGlobalValue()));
                                             }
                                         }
-                                        module0271.$g2568$.setGlobalValue(module0174.f11025(var37));
+                                        module0271.$g2568$.setGlobalValue(assertion_handles_oc.f11025(var37));
                                         module0271.$g2567$.setGlobalValue(Numbers.add(module0271.$g2567$.getGlobalValue(), (SubLObject)module0271.ONE_INTEGER));
                                     }
                                     var34 = Numbers.add(var34, (SubLObject)module0271.ONE_INTEGER);
@@ -598,7 +598,7 @@ public final class module0271 extends SubLTranslatedFile
                                 module0139.$g1632$.bind(var66, var57);
                                 module0139.$g1630$.bind((SubLObject)module0271.T, var57);
                                 module0139.$g1631$.bind(module0139.f9023(module0139.$g1632$.getDynamicValue(var57)), var57);
-                                final SubLObject var69 = module0174.f11010();
+                                final SubLObject var69 = assertion_handles_oc.f11010();
                                 final SubLObject var70 = var60;
                                 final SubLObject var71 = module0065.f4733(var69);
                                 SubLObject var72 = (SubLObject)module0271.ZERO_INTEGER;
@@ -647,16 +647,16 @@ public final class module0271 extends SubLTranslatedFile
                                                             }
                                                             module0012.note_percent_progress(var72, var71);
                                                             var72 = Numbers.add(var72, (SubLObject)module0271.ONE_INTEGER);
-                                                            if (module0174.f11025(var84).numGE(var9)) {
-                                                                if (module0174.f11025(var84).numGE(var56)) {
+                                                            if (assertion_handles_oc.f11025(var84).numGE(var9)) {
+                                                                if (assertion_handles_oc.f11025(var84).numGE(var56)) {
                                                                     var59 = (SubLObject)module0271.T;
                                                                 }
                                                                 if (module0271.NIL != f17865(var84)) {
-                                                                    module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var84), module0271.$g2566$.getGlobalValue()));
+                                                                    module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var84), module0271.$g2566$.getGlobalValue()));
                                                                 }
                                                                 module0271.$g2567$.setGlobalValue(Numbers.add(module0271.$g2567$.getGlobalValue(), (SubLObject)module0271.ONE_INTEGER));
                                                             }
-                                                            module0271.$g2568$.setGlobalValue(module0174.f11025(var84));
+                                                            module0271.$g2568$.setGlobalValue(assertion_handles_oc.f11025(var84));
                                                         }
                                                     }
                                                 }
@@ -676,16 +676,16 @@ public final class module0271 extends SubLTranslatedFile
                                                 if (module0271.NIL == module0065.f4773((SubLObject)module0271.$ic10$) || module0271.NIL == module0065.f4749(var89)) {
                                                     module0012.note_percent_progress(var72, var71);
                                                     var72 = Numbers.add(var72, (SubLObject)module0271.ONE_INTEGER);
-                                                    if (module0174.f11025(var89).numGE(var9)) {
-                                                        if (module0174.f11025(var89).numGE(var56)) {
+                                                    if (assertion_handles_oc.f11025(var89).numGE(var9)) {
+                                                        if (assertion_handles_oc.f11025(var89).numGE(var56)) {
                                                             var59 = (SubLObject)module0271.T;
                                                         }
                                                         if (module0271.NIL != f17865(var89)) {
-                                                            module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var89), module0271.$g2566$.getGlobalValue()));
+                                                            module0271.$g2566$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var89), module0271.$g2566$.getGlobalValue()));
                                                         }
                                                         module0271.$g2567$.setGlobalValue(Numbers.add(module0271.$g2567$.getGlobalValue(), (SubLObject)module0271.ONE_INTEGER));
                                                     }
-                                                    module0271.$g2568$.setGlobalValue(module0174.f11025(var89));
+                                                    module0271.$g2568$.setGlobalValue(assertion_handles_oc.f11025(var89));
                                                 }
                                                 var86 = Numbers.add(var86, (SubLObject)module0271.ONE_INTEGER);
                                             }
@@ -888,7 +888,7 @@ public final class module0271 extends SubLTranslatedFile
                     module0139.$g1632$.bind(var89, var83);
                     module0139.$g1630$.bind((SubLObject)module0271.T, var83);
                     module0139.$g1631$.bind(module0139.f9023(module0139.$g1632$.getDynamicValue(var83)), var83);
-                    final SubLObject var92 = module0174.f11010();
+                    final SubLObject var92 = assertion_handles_oc.f11010();
                     final SubLObject var93 = (SubLObject)module0271.$ic8$;
                     final SubLObject var94 = module0065.f4733(var92);
                     SubLObject var95 = (SubLObject)module0271.ZERO_INTEGER;
@@ -922,8 +922,8 @@ public final class module0271 extends SubLTranslatedFile
                                         }
                                         module0012.note_percent_progress(var95, var94);
                                         var95 = Numbers.add(var95, (SubLObject)module0271.ONE_INTEGER);
-                                        if (module0174.f11025(var102).numGE(var9) && module0271.NIL != module0147.f9556(var102, var8) && (module0271.NIL == var56 || module0174.f11025(var102).numLE(var56))) {
-                                            Hashtables.sethash(module0174.f11025(var102), module0271.$g2571$.getGlobalValue(), f17865(var102));
+                                        if (assertion_handles_oc.f11025(var102).numGE(var9) && module0271.NIL != module0147.f9556(var102, var8) && (module0271.NIL == var56 || assertion_handles_oc.f11025(var102).numLE(var56))) {
+                                            Hashtables.sethash(assertion_handles_oc.f11025(var102), module0271.$g2571$.getGlobalValue(), f17865(var102));
                                         }
                                     }
                                 }
@@ -939,8 +939,8 @@ public final class module0271 extends SubLTranslatedFile
                                     if (module0271.NIL == module0065.f4773((SubLObject)module0271.$ic10$) || module0271.NIL == module0065.f4749(var107)) {
                                         module0012.note_percent_progress(var95, var94);
                                         var95 = Numbers.add(var95, (SubLObject)module0271.ONE_INTEGER);
-                                        if (module0174.f11025(var107).numGE(var9) && module0271.NIL != module0147.f9556(var107, var8) && (module0271.NIL == var56 || module0174.f11025(var107).numLE(var56))) {
-                                            Hashtables.sethash(module0174.f11025(var107), module0271.$g2571$.getGlobalValue(), f17865(var107));
+                                        if (assertion_handles_oc.f11025(var107).numGE(var9) && module0271.NIL != module0147.f9556(var107, var8) && (module0271.NIL == var56 || assertion_handles_oc.f11025(var107).numLE(var56))) {
+                                            Hashtables.sethash(assertion_handles_oc.f11025(var107), module0271.$g2571$.getGlobalValue(), f17865(var107));
                                         }
                                     }
                                     var104 = Numbers.add(var104, (SubLObject)module0271.ONE_INTEGER);
@@ -1021,7 +1021,7 @@ public final class module0271 extends SubLTranslatedFile
                     module0139.$g1632$.bind(var89, var83);
                     module0139.$g1630$.bind((SubLObject)module0271.T, var83);
                     module0139.$g1631$.bind(module0139.f9023(module0139.$g1632$.getDynamicValue(var83)), var83);
-                    final SubLObject var92 = module0174.f11010();
+                    final SubLObject var92 = assertion_handles_oc.f11010();
                     final SubLObject var93 = (SubLObject)module0271.$ic8$;
                     final SubLObject var94 = module0065.f4733(var92);
                     SubLObject var95 = (SubLObject)module0271.ZERO_INTEGER;
@@ -1055,8 +1055,8 @@ public final class module0271 extends SubLTranslatedFile
                                         }
                                         module0012.note_percent_progress(var95, var94);
                                         var95 = Numbers.add(var95, (SubLObject)module0271.ONE_INTEGER);
-                                        if (module0174.f11025(var102).numGE(var9) && module0271.NIL != module0147.f9556(var102, var8) && (module0271.NIL == var56 || module0174.f11025(var102).numLE(var56))) {
-                                            Hashtables.sethash(module0174.f11025(var102), module0271.$g2572$.getGlobalValue(), f17865(var102));
+                                        if (assertion_handles_oc.f11025(var102).numGE(var9) && module0271.NIL != module0147.f9556(var102, var8) && (module0271.NIL == var56 || assertion_handles_oc.f11025(var102).numLE(var56))) {
+                                            Hashtables.sethash(assertion_handles_oc.f11025(var102), module0271.$g2572$.getGlobalValue(), f17865(var102));
                                         }
                                     }
                                 }
@@ -1072,8 +1072,8 @@ public final class module0271 extends SubLTranslatedFile
                                     if (module0271.NIL == module0065.f4773((SubLObject)module0271.$ic10$) || module0271.NIL == module0065.f4749(var107)) {
                                         module0012.note_percent_progress(var95, var94);
                                         var95 = Numbers.add(var95, (SubLObject)module0271.ONE_INTEGER);
-                                        if (module0174.f11025(var107).numGE(var9) && module0271.NIL != module0147.f9556(var107, var8) && (module0271.NIL == var56 || module0174.f11025(var107).numLE(var56))) {
-                                            Hashtables.sethash(module0174.f11025(var107), module0271.$g2572$.getGlobalValue(), f17865(var107));
+                                        if (assertion_handles_oc.f11025(var107).numGE(var9) && module0271.NIL != module0147.f9556(var107, var8) && (module0271.NIL == var56 || assertion_handles_oc.f11025(var107).numLE(var56))) {
+                                            Hashtables.sethash(assertion_handles_oc.f11025(var107), module0271.$g2572$.getGlobalValue(), f17865(var107));
                                         }
                                     }
                                     var104 = Numbers.add(var104, (SubLObject)module0271.ONE_INTEGER);
@@ -1164,8 +1164,8 @@ public final class module0271 extends SubLTranslatedFile
     
     public static SubLObject f17899(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        assert module0271.NIL != module0174.f11035(var1) : var1;
-        final SubLObject var3 = module0174.f11025(var1);
+        assert module0271.NIL != assertion_handles_oc.f11035(var1) : var1;
+        final SubLObject var3 = assertion_handles_oc.f11025(var1);
         return module0035.sublisp_boolean(Hashtables.gethash(var3, module0271.$g2573$.getDynamicValue(var2), (SubLObject)module0271.UNPROVIDED));
     }
     
@@ -1174,15 +1174,15 @@ public final class module0271 extends SubLTranslatedFile
             var108 = module0574.f35164();
         }
         final SubLThread var109 = SubLProcess.currentSubLThread();
-        assert module0271.NIL != module0174.f11035(var1) : var1;
-        final SubLObject var110 = module0174.f11025(var1);
+        assert module0271.NIL != assertion_handles_oc.f11035(var1) : var1;
+        final SubLObject var110 = assertion_handles_oc.f11025(var1);
         return Hashtables.sethash(var110, module0271.$g2573$.getDynamicValue(var109), var108);
     }
     
     public static SubLObject f17901(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        assert module0271.NIL != module0174.f11035(var1) : var1;
-        final SubLObject var3 = module0174.f11025(var1);
+        assert module0271.NIL != assertion_handles_oc.f11035(var1) : var1;
+        final SubLObject var3 = assertion_handles_oc.f11025(var1);
         return Hashtables.remhash(var3, module0271.$g2573$.getDynamicValue(var2));
     }
     
@@ -1193,8 +1193,8 @@ public final class module0271 extends SubLTranslatedFile
     
     public static SubLObject f17903(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        assert module0271.NIL != module0174.f11035(var1) : var1;
-        final SubLObject var3 = module0174.f11025(var1);
+        assert module0271.NIL != assertion_handles_oc.f11035(var1) : var1;
+        final SubLObject var3 = assertion_handles_oc.f11025(var1);
         return Hashtables.gethash(var3, module0271.$g2573$.getDynamicValue(var2), (SubLObject)module0271.UNPROVIDED);
     }
     
@@ -1308,7 +1308,7 @@ public final class module0271 extends SubLTranslatedFile
                     module0139.$g1632$.bind(var131, var111);
                     module0139.$g1630$.bind((SubLObject)module0271.T, var111);
                     module0139.$g1631$.bind(module0139.f9023(module0139.$g1632$.getDynamicValue(var111)), var111);
-                    final SubLObject var134 = module0174.f11010();
+                    final SubLObject var134 = assertion_handles_oc.f11010();
                     final SubLObject var135 = (SubLObject)module0271.$ic8$;
                     final SubLObject var136 = module0065.f4733(var134);
                     SubLObject var137 = (SubLObject)module0271.ZERO_INTEGER;
@@ -1356,7 +1356,7 @@ public final class module0271 extends SubLTranslatedFile
                                         }
                                         module0012.note_percent_progress(var137, var136);
                                         var137 = Numbers.add(var137, (SubLObject)module0271.ONE_INTEGER);
-                                        if (module0174.f11025(var144).numGE(var112)) {
+                                        if (assertion_handles_oc.f11025(var144).numGE(var112)) {
                                             module0271.$g2576$.setDynamicValue(var144, var111);
                                             var145 = (SubLObject)module0271.NIL;
                                             var146 = (SubLObject)module0271.NIL;
@@ -1447,7 +1447,7 @@ public final class module0271 extends SubLTranslatedFile
                                                 var111.throwStack.pop();
                                             }
                                             if (module0271.NIL != var145) {
-                                                module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var144), module0271.$g2570$.getGlobalValue()));
+                                                module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var144), module0271.$g2570$.getGlobalValue()));
                                                 var153 = (SubLObject)module0271.NIL;
                                                 try {
                                                     var153 = compatibility.open_text(var109, (SubLObject)module0271.$ic30$);
@@ -1471,7 +1471,7 @@ public final class module0271 extends SubLTranslatedFile
                                                 }
                                             }
                                         }
-                                        module0271.$g2568$.setGlobalValue(module0174.f11025(var144));
+                                        module0271.$g2568$.setGlobalValue(assertion_handles_oc.f11025(var144));
                                         module0271.$g2567$.setGlobalValue(Numbers.add(module0271.$g2567$.getGlobalValue(), (SubLObject)module0271.ONE_INTEGER));
                                     }
                                 }
@@ -1487,7 +1487,7 @@ public final class module0271 extends SubLTranslatedFile
                                     if (module0271.NIL == module0065.f4773((SubLObject)module0271.$ic10$) || module0271.NIL == module0065.f4749(var158)) {
                                         module0012.note_percent_progress(var137, var136);
                                         var137 = Numbers.add(var137, (SubLObject)module0271.ONE_INTEGER);
-                                        if (module0174.f11025(var158).numGE(var112)) {
+                                        if (assertion_handles_oc.f11025(var158).numGE(var112)) {
                                             module0271.$g2576$.setDynamicValue(var158, var111);
                                             SubLObject var159 = (SubLObject)module0271.NIL;
                                             SubLObject var160 = (SubLObject)module0271.NIL;
@@ -1578,7 +1578,7 @@ public final class module0271 extends SubLTranslatedFile
                                                 var111.throwStack.pop();
                                             }
                                             if (module0271.NIL != var159) {
-                                                module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var158), module0271.$g2570$.getGlobalValue()));
+                                                module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var158), module0271.$g2570$.getGlobalValue()));
                                                 SubLObject var167 = (SubLObject)module0271.NIL;
                                                 try {
                                                     var167 = compatibility.open_text(var109, (SubLObject)module0271.$ic30$);
@@ -1602,7 +1602,7 @@ public final class module0271 extends SubLTranslatedFile
                                                 }
                                             }
                                         }
-                                        module0271.$g2568$.setGlobalValue(module0174.f11025(var158));
+                                        module0271.$g2568$.setGlobalValue(assertion_handles_oc.f11025(var158));
                                         module0271.$g2567$.setGlobalValue(Numbers.add(module0271.$g2567$.getGlobalValue(), (SubLObject)module0271.ONE_INTEGER));
                                     }
                                     var155 = Numbers.add(var155, (SubLObject)module0271.ONE_INTEGER);
@@ -1671,7 +1671,7 @@ public final class module0271 extends SubLTranslatedFile
             return PrintLow.format((SubLObject)module0271.NIL, (SubLObject)module0271.$ic35$);
         }
         final SubLObject var151 = module0271.$g2567$.getGlobalValue();
-        final SubLObject var152 = module0174.f11019();
+        final SubLObject var152 = assertion_handles_oc.f11019();
         final SubLObject var153 = (module0271.NIL != module0271.$g2575$.getGlobalValue()) ? module0271.$g2575$.getGlobalValue() : Time.get_universal_time();
         final SubLObject var154 = Numbers.subtract(var153, module0271.$g2574$.getGlobalValue());
         final SubLObject var155 = Numbers.truncate(Numbers.multiply(var154, Numbers.divide(var152, var151)), (SubLObject)module0271.UNPROVIDED);
@@ -1758,8 +1758,8 @@ public final class module0271 extends SubLTranslatedFile
             while (module0271.NIL != var11) {
                 module0012.note_percent_progress(module0012.$g84$.getDynamicValue(var5), module0012.$g83$.getDynamicValue(var5));
                 module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var5), (SubLObject)module0271.ONE_INTEGER), var5);
-                final SubLObject var13 = module0174.f11053(var12);
-                if (module0271.NIL != module0174.f11035(var13)) {
+                final SubLObject var13 = assertion_handles_oc.f11053(var12);
+                if (module0271.NIL != assertion_handles_oc.f11035(var13)) {
                     f17900(var13, (SubLObject)module0271.UNPROVIDED);
                 }
                 var11 = var11.rest();
@@ -1825,7 +1825,7 @@ public final class module0271 extends SubLTranslatedFile
                         var119 = Hashtables.getEntryValue(var121);
                         module0012.note_percent_progress(module0012.$g84$.getDynamicValue(var110), module0012.$g83$.getDynamicValue(var110));
                         module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var110), (SubLObject)module0271.ONE_INTEGER), var110);
-                        final SubLObject var122 = module0174.f11053(var118);
+                        final SubLObject var122 = assertion_handles_oc.f11053(var118);
                         SubLObject var123 = (SubLObject)module0271.NIL;
                         if (module0271.NIL != module0178.f11361(var122, (SubLObject)module0271.UNPROVIDED)) {
                             var123 = module0213.f13920(var122);
@@ -1896,7 +1896,7 @@ public final class module0271 extends SubLTranslatedFile
                         var119 = Hashtables.getEntryValue(var121);
                         module0012.note_percent_progress(module0012.$g84$.getDynamicValue(var110), module0012.$g83$.getDynamicValue(var110));
                         module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var110), (SubLObject)module0271.ONE_INTEGER), var110);
-                        final SubLObject var122 = module0174.f11053(var118);
+                        final SubLObject var122 = assertion_handles_oc.f11053(var118);
                         if (module0271.NIL != module0178.f11361(var122, (SubLObject)module0271.UNPROVIDED)) {
                             PrintLow.format(var112, (SubLObject)module0271.$ic31$, var118, var119);
                         }
@@ -1941,7 +1941,7 @@ public final class module0271 extends SubLTranslatedFile
         while (module0271.NIL != var171) {
             if (var172.isInteger()) {
                 if (var170.eql((SubLObject)module0271.$ic49$)) {
-                    PrintLow.format(var116, (SubLObject)module0271.$ic54$, module0213.f13920(module0174.f11053(var172)));
+                    PrintLow.format(var116, (SubLObject)module0271.$ic54$, module0213.f13920(assertion_handles_oc.f11053(var172)));
                 }
                 else if (var170.eql((SubLObject)module0271.$ic51$)) {
                     PrintLow.format(var116, (SubLObject)module0271.$ic54$, var172);
@@ -2034,18 +2034,18 @@ public final class module0271 extends SubLTranslatedFile
         else if (var163.first() == module0271.$ic58$) {
             if (module0271.NIL != module0213.f13913(conses_high.second(var163))) {
                 final SubLObject var165 = module0213.f13921(conses_high.second(var163));
-                if (module0271.NIL != module0174.f11035(var165)) {
-                    if (module0174.f11025(var165).isInteger()) {
-                        module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(module0174.f11025(var165), module0271.$g2570$.getGlobalValue()));
+                if (module0271.NIL != assertion_handles_oc.f11035(var165)) {
+                    if (assertion_handles_oc.f11025(var165).isInteger()) {
+                        module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(assertion_handles_oc.f11025(var165), module0271.$g2570$.getGlobalValue()));
                     }
                     else if (module0271.NIL != module0271.$g2579$.getDynamicValue(var164)) {
                         Errors.warn((SubLObject)module0271.$ic59$, conses_high.second(var163));
                     }
                 }
             }
-            else if (module0271.NIL != module0174.f11048(conses_high.second(var163))) {
-                final SubLObject var165 = module0174.f11053(conses_high.second(var163));
-                if (module0271.NIL != module0174.f11035(var165)) {
+            else if (module0271.NIL != assertion_handles_oc.f11048(conses_high.second(var163))) {
+                final SubLObject var165 = assertion_handles_oc.f11053(conses_high.second(var163));
+                if (module0271.NIL != assertion_handles_oc.f11035(var165)) {
                     module0271.$g2570$.setGlobalValue((SubLObject)ConsesLow.cons(conses_high.second(var163), module0271.$g2570$.getGlobalValue()));
                 }
             }
@@ -2059,8 +2059,8 @@ public final class module0271 extends SubLTranslatedFile
                 Errors.warn((SubLObject)module0271.$ic60$, var163.first());
             }
         }
-        else if (module0271.NIL != module0174.f11048(var163.first())) {
-            final SubLObject var165 = module0174.f11053(var163.first());
+        else if (module0271.NIL != assertion_handles_oc.f11048(var163.first())) {
+            final SubLObject var165 = assertion_handles_oc.f11053(var163.first());
             if (module0271.NIL != module0178.f11361(var165, (SubLObject)module0271.UNPROVIDED)) {
                 f17900(var165, conses_high.second(var163));
             }
@@ -2256,7 +2256,7 @@ public final class module0271 extends SubLTranslatedFile
         $ic13$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeUninternedSymbol("US#352B2C1"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#13A2892"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#1160044"));
         $ic14$ = SubLObjectFactory.makeSymbol("S#20453", "CYC");
         $ic15$ = SubLObjectFactory.makeSymbol("S#20454", "CYC");
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
         $ic17$ = SubLObjectFactory.makeString("it is not the case that (#$genlMt ~s ~s)");
         $ic18$ = SubLObjectFactory.makeInteger(100);
         $ic19$ = SubLObjectFactory.makeInteger(1000);

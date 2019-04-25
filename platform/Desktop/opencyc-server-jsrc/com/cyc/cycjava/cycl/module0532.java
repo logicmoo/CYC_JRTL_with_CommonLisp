@@ -224,10 +224,10 @@ public final class module0532 extends SubLTranslatedFile
         module0532.$g3905$ = null;
         module0532.$g3906$ = null;
         module0532.$g3907$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("abnormal"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("abnormal"));
         $ic1$ = SubLObjectFactory.makeSymbol("S#17993", "CYC");
         $ic2$ = SubLObjectFactory.makeKeyword("PROBLEM-STORE");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
         $ic4$ = SubLObjectFactory.makeKeyword("MAX-NUMBER");
         $ic5$ = SubLObjectFactory.makeKeyword("MAX-TRANSFORMATION-DEPTH");
         $ic6$ = SubLObjectFactory.makeKeyword("RESULT-UNIQUENESS");

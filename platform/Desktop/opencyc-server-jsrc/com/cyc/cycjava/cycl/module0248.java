@@ -992,7 +992,7 @@ public final class module0248 extends SubLTranslatedFile
     public static SubLObject f15945() {
         final SubLThread var10 = SubLProcess.currentSubLThread();
         f15946();
-        final SubLObject var11 = module0174.f11010();
+        final SubLObject var11 = assertion_handles_oc.f11010();
         final SubLObject var12 = (SubLObject)module0248.$ic20$;
         final SubLObject var13 = module0065.f4733(var11);
         SubLObject var14 = (SubLObject)module0248.ZERO_INTEGER;
@@ -1209,7 +1209,7 @@ public final class module0248 extends SubLTranslatedFile
         final SubLObject var11 = module0018.$g673$.currentBinding(var10);
         try {
             module0018.$g673$.bind((SubLObject)module0248.T, var10);
-            final SubLObject var12 = module0174.f11010();
+            final SubLObject var12 = assertion_handles_oc.f11010();
             final SubLObject var13 = (SubLObject)module0248.$ic32$;
             final SubLObject var14 = module0065.f4733(var12);
             SubLObject var15 = (SubLObject)module0248.ZERO_INTEGER;
@@ -2957,23 +2957,23 @@ public final class module0248 extends SubLTranslatedFile
         $ic11$ = SubLObjectFactory.makeString("continue anyway");
         $ic12$ = SubLObjectFactory.makeKeyword("WARN");
         $ic13$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
         $ic15$ = SubLObjectFactory.makeString("tv, ~a, does not satisfy sbhl-true-tv-p");
         $ic16$ = SubLObjectFactory.makeString("sbhl-link-nodes never called.");
-        $ic17$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False-JustificationTruth"));
+        $ic17$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False-JustificationTruth"));
         $ic18$ = SubLObjectFactory.makeString("tv, ~a, does not satisfy sbhl-false-tv-p");
         $ic19$ = SubLObjectFactory.makeKeyword("UNKNOWN");
         $ic20$ = SubLObjectFactory.makeString("Initializing all SBHL Graph Links");
         $ic21$ = SubLObjectFactory.makeSymbol("STRINGP");
         $ic22$ = SubLObjectFactory.makeKeyword("SKIP");
         $ic23$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic24$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic24$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic25$ = SubLObjectFactory.makeString("Initializing ");
         $ic26$ = SubLObjectFactory.makeString(" SBHL Graph Links");
         $ic27$ = SubLObjectFactory.makeKeyword("GAF");
         $ic28$ = SubLObjectFactory.makeKeyword("DEFINITIONAL");
         $ic29$ = SubLObjectFactory.makeKeyword("COORDINATE");
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Always-TimeInterval"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Always-TimeInterval"));
         $ic31$ = SubLObjectFactory.makeKeyword("WEAK");
         $ic32$ = SubLObjectFactory.makeString("Initializing SBHL Time Links");
         $ic33$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeUninternedSymbol("US#3165895"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#12F0EC7"));
@@ -2985,8 +2985,8 @@ public final class module0248 extends SubLTranslatedFile
         $ic39$ = SubLObjectFactory.makeString("Removing ~a from ~a backward direction link");
         $ic40$ = SubLObjectFactory.makeSymbol("S#18758", "CYC");
         $ic41$ = SubLObjectFactory.makeInteger(200);
-        $ic42$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic43$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic42$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic43$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic44$ = SubLObjectFactory.makeSymbol("S#11592", "CYC");
         $ic45$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#18762", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18763", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18764", "CYC"));
         $ic46$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#15396", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12141", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
@@ -2996,7 +2996,7 @@ public final class module0248 extends SubLTranslatedFile
         $ic50$ = SubLObjectFactory.makeUninternedSymbol("US#35B6E1E");
         $ic51$ = SubLObjectFactory.makeUninternedSymbol("US#35BE29E");
         $ic52$ = SubLObjectFactory.makeSymbol("CLET");
-        $ic53$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11102", "CYC"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"))));
+        $ic53$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11102", "CYC"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"))));
         $ic54$ = SubLObjectFactory.makeSymbol("S#11611", "CYC");
         $ic55$ = SubLObjectFactory.makeSymbol("S#11609", "CYC");
         $ic56$ = SubLObjectFactory.makeSymbol("S#11176", "CYC");
@@ -3011,7 +3011,7 @@ public final class module0248 extends SubLTranslatedFile
         $ic65$ = SubLObjectFactory.makeSymbol("S#15243", "CYC");
         $ic66$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11219", "CYC"));
         $ic67$ = SubLObjectFactory.makeSymbol("S#18759", "CYC");
-        $ic68$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
+        $ic68$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
         $ic69$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#18762", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18765", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18766", "CYC"));
         $ic70$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#15400", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12141", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic71$ = SubLObjectFactory.makeUninternedSymbol("US#12F0EC7");

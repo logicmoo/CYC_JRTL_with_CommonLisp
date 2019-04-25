@@ -164,7 +164,7 @@ public final class module0425 extends SubLTranslatedFile
     
     public static SubLObject f30054(final SubLObject var2) {
         final SubLThread var3 = SubLProcess.currentSubLThread();
-        if (module0425.NIL != module0174.f11041(var2, (SubLObject)module0425.UNPROVIDED)) {
+        if (module0425.NIL != assertion_handles_oc.f11041(var2, (SubLObject)module0425.UNPROVIDED)) {
             module0159.f10363(var2);
             if (module0425.NIL != module0159.$g2139$.getDynamicValue(var3) && module0159.$g2147$.getDynamicValue(var3).isNumber()) {
                 module0159.$g2147$.setDynamicValue(Numbers.add(module0159.$g2147$.getDynamicValue(var3), (SubLObject)module0425.ONE_INTEGER), var3);
@@ -210,13 +210,13 @@ public final class module0425 extends SubLTranslatedFile
     }
     
     public static SubLObject f30057(final SubLObject var5) {
-        if (module0425.NIL != module0128.f8449(var5)) {
+        if (module0425.NIL != constant_handles_oc.f8449(var5)) {
             f30055(var5);
         }
         else if (module0425.NIL != module0167.f10813(var5)) {
             f30056(var5);
         }
-        else if (module0425.NIL != module0174.f11035(var5)) {
+        else if (module0425.NIL != assertion_handles_oc.f11035(var5)) {
             f30054(var5);
         }
         return (SubLObject)module0425.NIL;
@@ -649,8 +649,8 @@ public final class module0425 extends SubLTranslatedFile
     
     public static SubLObject f30090() {
         final SubLThread var1 = SubLProcess.currentSubLThread();
-        final SubLObject var2 = module0067.f4880(Symbols.symbol_function((SubLObject)module0425.EQUAL), module0174.f11019());
-        final SubLObject var3 = module0174.f11010();
+        final SubLObject var2 = module0067.f4880(Symbols.symbol_function((SubLObject)module0425.EQUAL), assertion_handles_oc.f11019());
+        final SubLObject var3 = assertion_handles_oc.f11010();
         final SubLObject var4 = (SubLObject)module0425.$ic79$;
         final SubLObject var5 = module0065.f4733(var3);
         SubLObject var6 = (SubLObject)module0425.ZERO_INTEGER;
@@ -685,7 +685,7 @@ public final class module0425 extends SubLTranslatedFile
                             }
                             module0012.note_percent_progress(var6, var5);
                             var6 = Numbers.add(var6, (SubLObject)module0425.ONE_INTEGER);
-                            for (var17 = (SubLObject)module0425.NIL, var17 = module0177.f11163(var16); !var17.isAtom(); var17 = var17.rest()) {
+                            for (var17 = (SubLObject)module0425.NIL, var17 = oc_assertions_low.f11163(var16); !var17.isAtom(); var17 = var17.rest()) {
                                 module0084.f5775(var2, var17, (SubLObject)module0425.UNPROVIDED);
                             }
                         }
@@ -703,7 +703,7 @@ public final class module0425 extends SubLTranslatedFile
                             module0012.note_percent_progress(var6, var5);
                             var6 = Numbers.add(var6, (SubLObject)module0425.ONE_INTEGER);
                             SubLObject var23;
-                            for (var23 = (SubLObject)module0425.NIL, var23 = module0177.f11163(var22); !var23.isAtom(); var23 = var23.rest()) {
+                            for (var23 = (SubLObject)module0425.NIL, var23 = oc_assertions_low.f11163(var22); !var23.isAtom(); var23 = var23.rest()) {
                                 module0084.f5775(var2, var23, (SubLObject)module0425.UNPROVIDED);
                             }
                         }
@@ -1191,13 +1191,13 @@ public final class module0425 extends SubLTranslatedFile
         $ic85$ = SubLObjectFactory.makeString("");
         $ic86$ = SubLObjectFactory.makeString("~%Hybridized with:~%");
         $ic87$ = SubLObjectFactory.makeSymbol("S#33322", "CYC");
-        $ic88$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("performSubL"));
-        $ic89$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("trueSubL"));
+        $ic88$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("performSubL"));
+        $ic89$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("trueSubL"));
         $ic90$ = SubLObjectFactory.makeKeyword("CONDITIONAL-SENTENCE?");
-        $ic91$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("and"));
+        $ic91$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and"));
         $ic92$ = SubLObjectFactory.makeKeyword("IGNORE");
         $ic93$ = SubLObjectFactory.makeSymbol("CONSTANT-P");
-        $ic94$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("nthLargestElement")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("extentCardinality")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("PlusAll")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Average")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("ratioOfCollectionToDifferentiatedCollection")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("performsActsOfType-Percentage")));
+        $ic94$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nthLargestElement")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("extentCardinality")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PlusAll")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Average")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ratioOfCollectionToDifferentiatedCollection")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("performsActsOfType-Percentage")));
     }
 }
 

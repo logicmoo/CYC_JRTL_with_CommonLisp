@@ -104,7 +104,7 @@ public final class module0428 extends SubLTranslatedFile
         if (module0428.$g3488$.getGlobalValue().isHashtable() && module0428.NIL == var3) {
             return module0428.$g3488$.getGlobalValue();
         }
-        final SubLObject var5 = module0174.f11010();
+        final SubLObject var5 = assertion_handles_oc.f11010();
         final SubLObject var6 = (SubLObject)module0428.$ic3$;
         final SubLObject var7 = module0065.f4733(var5);
         SubLObject var8 = (SubLObject)module0428.ZERO_INTEGER;
@@ -217,7 +217,7 @@ public final class module0428 extends SubLTranslatedFile
                 SubLObject var37 = (SubLObject)module0428.NIL;
                 var37 = var36.first();
                 while (module0428.NIL != var36) {
-                    if (module0428.NIL != module0184.f11659(var37)) {
+                    if (module0428.NIL != oc_deduction_handles.f11659(var37)) {
                         SubLObject var33_35 = module0188.f11770(var37);
                         SubLObject var38 = (SubLObject)module0428.NIL;
                         var38 = var33_35.first();
@@ -250,7 +250,7 @@ public final class module0428 extends SubLTranslatedFile
         SubLObject var34 = (SubLObject)module0428.NIL;
         var34 = var33.first();
         while (module0428.NIL != var33) {
-            if (module0428.NIL == module0184.f11659(var34) || module0428.NIL == f30337(var34)) {
+            if (module0428.NIL == oc_deduction_handles.f11659(var34) || module0428.NIL == f30337(var34)) {
                 return (SubLObject)module0428.NIL;
             }
             var32 = (SubLObject)module0428.T;
@@ -552,11 +552,11 @@ public final class module0428 extends SubLTranslatedFile
             var91 = var91.rest();
             if (module0428.NIL == var91) {
                 if (module0428.NIL != var92) {
-                    final SubLObject var94 = module0369.f25616(var89, (SubLObject)module0428.ZERO_INTEGER);
-                    final SubLObject var95 = module0035.remove_if_not((SubLObject)module0428.$ic23$, module0369.f25744(var94), (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED);
+                    final SubLObject var94 = oc_inference_datastructures_inference.f25616(var89, (SubLObject)module0428.ZERO_INTEGER);
+                    final SubLObject var95 = module0035.remove_if_not((SubLObject)module0428.$ic23$, oc_inference_datastructures_inference.f25744(var94), (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED);
                     if (module0428.NIL != var95) {
                         final SubLObject var96 = module0035.f2099(var95);
-                        final SubLObject var97 = module0369.f25775(var96);
+                        final SubLObject var97 = oc_inference_datastructures_inference.f25775(var96);
                         final SubLObject var98 = module0035.remove_if_not((SubLObject)module0428.$ic8$, var97, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED);
                         final SubLObject var99 = module0035.remove_if_not((SubLObject)module0428.$ic24$, var97, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED);
                         var86 = (SubLObject)ConsesLow.list(var93, var99, var98);
@@ -567,7 +567,7 @@ public final class module0428 extends SubLTranslatedFile
                 cdestructuring_bind.cdestructuring_bind_error(var90, (SubLObject)module0428.$ic22$);
             }
         }
-        module0369.f25476(var89);
+        oc_inference_datastructures_inference.f25476(var89);
         return var86;
     }
     
@@ -707,7 +707,7 @@ public final class module0428 extends SubLTranslatedFile
     }
     
     public static SubLObject f30359(final SubLObject var101) {
-        return module0035.sublisp_boolean(Sequences.find_if((SubLObject)module0428.$ic8$, module0369.f25775(var101), (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED));
+        return module0035.sublisp_boolean(Sequences.find_if((SubLObject)module0428.$ic8$, oc_inference_datastructures_inference.f25775(var101), (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED, (SubLObject)module0428.UNPROVIDED));
     }
     
     public static SubLObject f30360() {
@@ -913,12 +913,12 @@ public final class module0428 extends SubLTranslatedFile
         $ic3$ = SubLObjectFactory.makeString("Looking for deeply deduced gafs");
         $ic4$ = SubLObjectFactory.makeSymbol("STRINGP");
         $ic5$ = SubLObjectFactory.makeKeyword("SKIP");
-        $ic6$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("KleinTest2Mt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("TMSLoopMt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("EasyTMSLoopMt")));
-        $ic7$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("DeonticReasoning-LogicMt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReasoningWithTense-LogicMt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReasoningWithTense-LogicMt-LinearTime")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("NecessityMt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReasoningWithMultiFuture-LogicMt")));
+        $ic6$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KleinTest2Mt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TMSLoopMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EasyTMSLoopMt")));
+        $ic7$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DeonticReasoning-LogicMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReasoningWithTense-LogicMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReasoningWithTense-LogicMt-LinearTime")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("NecessityMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReasoningWithMultiFuture-LogicMt")));
         $ic8$ = SubLObjectFactory.makeSymbol("S#12732", "CYC");
         $ic9$ = SubLObjectFactory.makeSymbol("ASSERTION-MT");
         $ic10$ = SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P");
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic12$ = SubLObjectFactory.makeKeyword("IGNORE");
         $ic13$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#33595", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33596", "CYC"));
         $ic14$ = SubLObjectFactory.makeSymbol("S#33577", "CYC");
@@ -943,9 +943,9 @@ public final class module0428 extends SubLTranslatedFile
         $ic33$ = (SubLFloat)SubLObjectFactory.makeDouble(0.95);
         $ic34$ = SubLObjectFactory.makeKeyword("RETURN");
         $ic35$ = SubLObjectFactory.makeKeyword("BINDINGS-AND-SUPPORTS");
-        $ic36$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
-        $ic37$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic38$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing")));
+        $ic36$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
+        $ic37$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic38$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing")));
         $ic39$ = SubLObjectFactory.makeString("?VAR");
         $ic40$ = SubLObjectFactory.makeSymbol("S#33594", "CYC");
         $ic41$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");

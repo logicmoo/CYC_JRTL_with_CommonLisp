@@ -10186,12 +10186,12 @@ public final class module0035 extends SubLTranslatedFile
         $ic1$ = SubLObjectFactory.makeString("nth-cycling: width must be greater than zero");
         $ic2$ = SubLObjectFactory.makeString("nth-cycling: width must be less than or equal to list length");
         $ic3$ = SubLObjectFactory.makeString("nth-cycling: width overruns offset");
-        $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC"));
+        $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC"));
         $ic5$ = SubLObjectFactory.makeSymbol("PROGN");
         $ic6$ = SubLObjectFactory.makeSymbol("CSETQ");
         $ic7$ = SubLObjectFactory.makeSymbol("FIRST");
         $ic8$ = SubLObjectFactory.makeSymbol("CPOP");
-        $ic9$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic9$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic10$ = SubLObjectFactory.makeSymbol("CLET");
         $ic11$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#143", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#169", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#3837", "CYC"));
         $ic12$ = SubLObjectFactory.makeSymbol("CSETF");
@@ -10200,7 +10200,7 @@ public final class module0035 extends SubLTranslatedFile
         $ic15$ = SubLObjectFactory.makeSymbol("-");
         $ic16$ = ConsesLow.list((SubLObject)module0035.ONE_INTEGER);
         $ic17$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("&REST"), (SubLObject)SubLObjectFactory.makeSymbol("S#3838", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
-        $ic18$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC"));
+        $ic18$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC"));
         $ic19$ = SubLObjectFactory.makeSymbol("CDR");
         $ic20$ = SubLObjectFactory.makeSymbol("CAR");
         $ic21$ = SubLObjectFactory.makeSymbol("NULL");
@@ -10217,7 +10217,7 @@ public final class module0035 extends SubLTranslatedFile
         $ic32$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#3839", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#123", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic33$ = SubLObjectFactory.makeUninternedSymbol("US#713E610");
         $ic34$ = SubLObjectFactory.makeSymbol("+");
-        $ic35$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic35$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic36$ = SubLObjectFactory.makeSymbol("CDOLIST");
         $ic37$ = SubLObjectFactory.makeSymbol("REVERSE");
         $ic38$ = SubLObjectFactory.makeUninternedSymbol("US#713E610");
@@ -10369,7 +10369,7 @@ public final class module0035 extends SubLTranslatedFile
         $ic184$ = SubLObjectFactory.makeSymbol("S#3780", "CYC");
         $ic185$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#74", "CYC"));
         $ic186$ = SubLObjectFactory.makeKeyword("DOCUMENTATION");
-        $ic187$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#3267", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("LIST")), (SubLObject)SubLObjectFactory.makeSymbol("EXP"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic187$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#3267", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("LIST")), (SubLObject)SubLObjectFactory.makeSymbol("EXP"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic188$ = SubLObjectFactory.makeSymbol("KEYWORDP");
         $ic189$ = SubLObjectFactory.makeSymbol("SYMBOLP");
         $ic190$ = SubLObjectFactory.makeString("Expected ~S, got ~S");

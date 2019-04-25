@@ -1176,8 +1176,8 @@ public final class module0572 extends SubLTranslatedFile
     
     public static SubLObject f35066(final SubLObject var120) {
         final SubLObject var121 = module0571.f34996(var120);
-        if (module0572.NIL != module0128.f8449(var121)) {
-            return module0166.f10743(var121);
+        if (module0572.NIL != constant_handles_oc.f8449(var121)) {
+            return constants_high_oc.f10743(var121);
         }
         return print_high.princ_to_string(var121);
     }
@@ -1924,7 +1924,7 @@ public final class module0572 extends SubLTranslatedFile
         $ic89$ = SubLObjectFactory.makeString("In Mt: ");
         $ic90$ = SubLObjectFactory.makeKeyword("UNKNOWN");
         $ic91$ = SubLObjectFactory.makeString("Truth Value: :unknown.");
-        $ic92$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DefaultMonotonicPredicate"));
+        $ic92$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DefaultMonotonicPredicate"));
         $ic93$ = SubLObjectFactory.makeKeyword("DEFAULT");
         $ic94$ = SubLObjectFactory.makeString("Truth Value: :default.");
         $ic95$ = SubLObjectFactory.makeKeyword("MONOTONIC");

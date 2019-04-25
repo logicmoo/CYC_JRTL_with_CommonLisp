@@ -70,10 +70,10 @@ public final class module0632 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0632();
         module0632.$g4937$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
         $ic1$ = SubLObjectFactory.makeSymbol("S#16717", "CYC");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Null-TimeParameter"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Null-TimeParameter"));
     }
 }
 

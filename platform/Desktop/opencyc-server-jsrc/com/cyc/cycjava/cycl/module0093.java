@@ -6321,10 +6321,10 @@ public final class module0093 extends SubLTranslatedFile
     public static SubLObject f6820() {
         final SubLThread var79 = SubLProcess.currentSubLThread();
         if (module0093.NIL == module0093.$g1256$.getDynamicValue(var79)) {
-            final SubLObject var80 = module0166.f10773((SubLObject)module0093.UNPROVIDED);
-            final SubLObject var81 = module0128.f8440(var80);
-            final SubLObject var82 = module0166.f10744(var80);
-            final SubLObject var83 = module0166.f10743(var80);
+            final SubLObject var80 = constants_high_oc.f10773((SubLObject)module0093.UNPROVIDED);
+            final SubLObject var81 = constant_handles_oc.f8440(var80);
+            final SubLObject var82 = constants_high_oc.f10744(var80);
+            final SubLObject var83 = constants_high_oc.f10743(var80);
             module0093.$g1256$.setDynamicValue((SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0093.$ic143$, (SubLObject)ConsesLow.cons((SubLObject)Characters.CHAR_I, var81), (SubLObject)module0093.$ic531$, var82), (SubLObject)ConsesLow.list((SubLObject)module0093.$ic143$, (SubLObject)ConsesLow.cons((SubLObject)Characters.CHAR_G, var82), (SubLObject)module0093.$ic531$, var81), (SubLObject)ConsesLow.list((SubLObject)module0093.$ic143$, (SubLObject)ConsesLow.cons((SubLObject)Characters.CHAR_T, var83), (SubLObject)module0093.$ic531$, var81), (SubLObject)ConsesLow.list((SubLObject)module0093.$ic143$, (SubLObject)ConsesLow.cons((SubLObject)Characters.CHAR_S, var81), (SubLObject)module0093.$ic531$, var83)), var79);
         }
         return module0093.$g1256$.getDynamicValue(var79);

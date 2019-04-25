@@ -57,8 +57,8 @@ public final class module0726 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0726();
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SlangSpeech"));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ArchaicSpeech"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SlangSpeech"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ArchaicSpeech"));
     }
 }
 

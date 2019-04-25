@@ -451,10 +451,10 @@ public final class module0228 extends SubLTranslatedFile
     
     public static SubLObject f15233() {
         module0002.f35((SubLObject)module0228.$ic0$, (SubLObject)module0228.NIL);
-        Structures.register_method(module0228.$g2418$.getGlobalValue(), module0128.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0228.$ic8$));
+        Structures.register_method(module0228.$g2418$.getGlobalValue(), constant_handles_oc.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0228.$ic8$));
         Structures.register_method(module0228.$g2418$.getGlobalValue(), module0167.$g2182$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0228.$ic9$));
         Structures.register_method(module0228.$g2418$.getGlobalValue(), Types.$dtp_cons$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0228.$ic11$));
-        Structures.register_method(module0228.$g2419$.getGlobalValue(), module0128.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0228.$ic12$));
+        Structures.register_method(module0228.$g2419$.getGlobalValue(), constant_handles_oc.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0228.$ic12$));
         Structures.register_method(module0228.$g2419$.getGlobalValue(), module0167.$g2182$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0228.$ic13$));
         Structures.register_method(module0228.$g2419$.getGlobalValue(), Types.$dtp_cons$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0228.$ic15$));
         return (SubLObject)module0228.NIL;
@@ -479,10 +479,10 @@ public final class module0228 extends SubLTranslatedFile
         $ic0$ = SubLObjectFactory.makeSymbol("TERM-OF-UNIT");
         $ic1$ = SubLObjectFactory.makeSymbol("NART-P");
         $ic2$ = SubLObjectFactory.makeSymbol("S#12276", "CYC");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
         $ic4$ = SubLObjectFactory.makeKeyword("GAF");
         $ic5$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic7$ = SubLObjectFactory.makeInteger(256);
         $ic8$ = SubLObjectFactory.makeSymbol("S#17966", "CYC");
         $ic9$ = SubLObjectFactory.makeSymbol("S#17967", "CYC");

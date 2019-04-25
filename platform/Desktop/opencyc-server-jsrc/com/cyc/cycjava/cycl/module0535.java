@@ -291,13 +291,13 @@ public final class module0535 extends SubLTranslatedFile
         $ic6$ = SubLObjectFactory.makeSymbol("VARIABLE-P");
         $ic7$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#36738", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#36739", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#36740", "CYC"));
         $ic8$ = ConsesLow.list((SubLObject)module0535.NIL, (SubLObject)module0535.NIL, (SubLObject)module0535.NIL);
-        $ic9$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#8667", "CYC"));
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic9$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#8667", "CYC"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic13$ = SubLObjectFactory.makeSymbol("FIRST");
-        $ic14$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)SubLObjectFactory.makeKeyword("NOT-FULLY-BOUND"), (SubLObject)SubLObjectFactory.makeKeyword("NOT-FULLY-BOUND"));
-        $ic15$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls")), (SubLObject)SubLObjectFactory.makeKeyword("NOT-FULLY-BOUND"), (SubLObject)SubLObjectFactory.makeKeyword("NOT-FULLY-BOUND"));
+        $ic14$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)SubLObjectFactory.makeKeyword("NOT-FULLY-BOUND"), (SubLObject)SubLObjectFactory.makeKeyword("NOT-FULLY-BOUND"));
+        $ic15$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")), (SubLObject)SubLObjectFactory.makeKeyword("NOT-FULLY-BOUND"), (SubLObject)SubLObjectFactory.makeKeyword("NOT-FULLY-BOUND"));
     }
 }
 

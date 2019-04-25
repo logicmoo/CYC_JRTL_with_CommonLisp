@@ -1086,7 +1086,7 @@ public final class module0007 extends SubLTranslatedFile
         $ic46$ = SubLObjectFactory.makeSymbol("S#288", "CYC");
         $ic47$ = SubLObjectFactory.makeInteger(1024);
         $ic48$ = SubLObjectFactory.makeSymbol("STRINGP");
-        $ic49$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#208", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#295", "CYC"), (SubLObject)SubLObjectFactory.makeString("mapping modules"))), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic49$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#208", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#295", "CYC"), (SubLObject)SubLObjectFactory.makeString("mapping modules"))), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic50$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("SYSTEM"), (SubLObject)SubLObjectFactory.makeKeyword("MESSAGE"));
         $ic51$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");
         $ic52$ = SubLObjectFactory.makeKeyword("MESSAGE");

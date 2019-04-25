@@ -807,10 +807,10 @@ public final class module0656 extends SubLTranslatedFile
         if (module0656.NIL != module0167.f10813(var35)) {
             return module0048.f_1_(var36);
         }
-        if (module0656.NIL != module0128.f8449(var35) && Sequences.length(module0166.f10743(var35)).numG(var37)) {
+        if (module0656.NIL != constant_handles_oc.f8449(var35) && Sequences.length(constants_high_oc.f10743(var35)).numG(var37)) {
             return module0048.f_1_(var36);
         }
-        if (module0656.NIL != module0128.f8449(var35)) {
+        if (module0656.NIL != constant_handles_oc.f8449(var35)) {
             return var36;
         }
         if (var35.isString() && Sequences.length(var35).numG(var37)) {
@@ -1395,7 +1395,7 @@ public final class module0656 extends SubLTranslatedFile
         }
         final SubLThread var113 = SubLProcess.currentSubLThread();
         if (module0656.NIL == var111) {
-            var111 = module0166.f10743(var110);
+            var111 = constants_high_oc.f10743(var110);
         }
         SubLObject var114 = module0656.$g5152$.getDynamicValue(var113);
         final SubLObject var115 = module0655.$g5132$.getDynamicValue(var113);
@@ -1459,7 +1459,7 @@ public final class module0656 extends SubLTranslatedFile
                 }
                 module0642.f39020(module0015.$g432$.getGlobalValue());
             }
-            else if (module0656.NIL != module0128.f8463(var110, (SubLObject)module0656.UNPROVIDED)) {
+            else if (module0656.NIL != constant_handles_oc.f8463(var110, (SubLObject)module0656.UNPROVIDED)) {
                 module0642.f39019(var111);
             }
             else {
@@ -1716,7 +1716,7 @@ public final class module0656 extends SubLTranslatedFile
     
     public static SubLObject f39852(final SubLObject var127, final SubLObject var1, final SubLObject var88, final SubLObject var128) {
         final SubLThread var129 = SubLProcess.currentSubLThread();
-        final SubLObject var130 = module0174.f11025(var127);
+        final SubLObject var130 = assertion_handles_oc.f11025(var127);
         final SubLObject var131 = (module0656.NIL != module0178.f11375(var127) && module0656.NIL != module0674.f41166(var127)) ? module0652.$g5072$.getDynamicValue(var129) : module0652.$g5073$.getDynamicValue(var129);
         final SubLObject var132 = (SubLObject)((module0656.NIL != module0178.f11290(var127)) ? module0652.$g5068$.getDynamicValue(var129) : module0656.$ic80$);
         final SubLObject var133 = Sequences.cconcatenate(module0652.$g5067$.getDynamicValue(var129), new SubLObject[] { var131, var132 });
@@ -1910,7 +1910,7 @@ public final class module0656 extends SubLTranslatedFile
         module0642.f39020(module0015.$g383$.getGlobalValue());
         module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0656.UNPROVIDED);
         module0655.f39768();
-        PrintLow.format(module0015.$g131$.getDynamicValue(var140), (SubLObject)module0656.$ic133$, var141, module0174.f11025(var127));
+        PrintLow.format(module0015.$g131$.getDynamicValue(var140), (SubLObject)module0656.$ic133$, var141, assertion_handles_oc.f11025(var127));
         module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0656.UNPROVIDED);
         if (module0656.NIL != var143) {
             module0642.f39020(module0015.$g386$.getGlobalValue());
@@ -2088,7 +2088,7 @@ public final class module0656 extends SubLTranslatedFile
             var138 = (SubLObject)ConsesLow.cons(f39865(var134), var138);
             if (module0656.NIL != module0173.f10969(var129)) {
                 var138 = (SubLObject)ConsesLow.cons((SubLObject)module0656.$ic196$, var138);
-                var138 = (SubLObject)ConsesLow.cons((module0656.NIL != module0131.f8548()) ? module0770.f49049(var129, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED) : module0166.f10743(var129), var138);
+                var138 = (SubLObject)ConsesLow.cons((module0656.NIL != module0131.f8548()) ? module0770.f49049(var129, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED) : constants_high_oc.f10743(var129), var138);
                 if (module0656.NIL != var130) {
                     var138 = (SubLObject)ConsesLow.cons((SubLObject)module0656.$ic197$, var138);
                     var128.resetMultipleValues();
@@ -2105,7 +2105,7 @@ public final class module0656 extends SubLTranslatedFile
                 }
                 if (module0656.NIL != module0173.f10969(var131)) {
                     var138 = (SubLObject)ConsesLow.cons((SubLObject)module0656.$ic201$, var138);
-                    var138 = (SubLObject)ConsesLow.cons(module0166.f10743(var131), var138);
+                    var138 = (SubLObject)ConsesLow.cons(constants_high_oc.f10743(var131), var138);
                 }
                 if (module0656.NIL != module0178.f11376(var127)) {
                     var138 = (SubLObject)ConsesLow.cons((SubLObject)module0656.$ic202$, var138);
@@ -3255,11 +3255,11 @@ public final class module0656 extends SubLTranslatedFile
                 f39804(var127, (SubLObject)module0656.ZERO_INTEGER, (SubLObject)module0656.T);
                 if (module0656.NIL != var232) {
                     final SubLObject var235 = module0178.f11287(var127);
-                    if (module0656.NIL == module0128.f8449(var235)) {
+                    if (module0656.NIL == constant_handles_oc.f8449(var235)) {
                         module0642.f39026((SubLObject)module0656.UNPROVIDED);
                     }
                     module0642.f39019((SubLObject)module0656.$ic290$);
-                    if (module0656.NIL != module0128.f8449(var235)) {
+                    if (module0656.NIL != constant_handles_oc.f8449(var235)) {
                         f39804(var235, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED);
                     }
                     else {
@@ -3357,13 +3357,13 @@ public final class module0656 extends SubLTranslatedFile
             final SubLObject var240 = (SubLObject)module0656.ZERO_INTEGER;
             SubLObject var241 = (SubLObject)module0656.NIL;
             SubLObject var242 = (SubLObject)module0656.NIL;
-            if (module0656.NIL != module0128.f8449(var239)) {
+            if (module0656.NIL != constant_handles_oc.f8449(var239)) {
                 var241 = (SubLObject)module0656.NIL;
             }
             else if (module0656.NIL != module0167.f10813(var239)) {
                 var241 = (SubLObject)module0656.T;
             }
-            else if (module0656.NIL != module0174.f11035(var239)) {
+            else if (module0656.NIL != assertion_handles_oc.f11035(var239)) {
                 var241 = (SubLObject)module0656.T;
                 var242 = (SubLObject)module0656.T;
             }
@@ -3514,11 +3514,11 @@ public final class module0656 extends SubLTranslatedFile
                     try {
                         module0015.$g533$.bind((SubLObject)module0656.T, var242);
                         f39804(var244, (SubLObject)module0656.ZERO_INTEGER, (SubLObject)module0656.T);
-                        if (module0656.NIL == module0128.f8449(var245)) {
+                        if (module0656.NIL == constant_handles_oc.f8449(var245)) {
                             module0642.f39026((SubLObject)module0656.UNPROVIDED);
                         }
                         module0642.f39019((SubLObject)module0656.$ic290$);
-                        if (module0656.NIL != module0128.f8449(var245)) {
+                        if (module0656.NIL != constant_handles_oc.f8449(var245)) {
                             f39804(var245, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED);
                         }
                         else {
@@ -3657,7 +3657,7 @@ public final class module0656 extends SubLTranslatedFile
             var247 = (SubLObject)module0656.NIL;
         }
         final SubLThread var248 = SubLProcess.currentSubLThread();
-        assert module0656.NIL != module0174.f11035(var127) : var127;
+        assert module0656.NIL != assertion_handles_oc.f11035(var127) : var127;
         if (module0656.NIL == module0067.f4852(module0655.$g5131$.getDynamicValue(var248))) {
             module0655.$g5131$.setDynamicValue(module0067.f4880((SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED), var248);
         }
@@ -3714,7 +3714,7 @@ public final class module0656 extends SubLTranslatedFile
         if (module0656.NIL == module0656.$g5172$.getDynamicValue(var238) || module0656.NIL != Functions.funcall(module0656.$g5172$.getDynamicValue(var238), var127)) {
             f39837((SubLObject)module0656.$ic156$, var127, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED);
             final SubLObject var239 = module0178.f11335(var127);
-            if (module0656.NIL != module0174.f11035(var239)) {
+            if (module0656.NIL != assertion_handles_oc.f11035(var239)) {
                 module0642.f39020(module0015.$g459$.getGlobalValue());
                 f39924(var239, (SubLObject)module0656.T, (SubLObject)module0656.NIL, (SubLObject)module0656.T);
                 module0642.f39020(module0015.$g460$.getGlobalValue());
@@ -3723,7 +3723,7 @@ public final class module0656 extends SubLTranslatedFile
             else {
                 module0655.$g5129$.setDynamicValue((SubLObject)module0656.NIL, var238);
                 module0655.$g5130$.setDynamicValue((SubLObject)module0656.NIL, var238);
-                if (module0656.NIL != module0128.f8449(var239)) {
+                if (module0656.NIL != constant_handles_oc.f8449(var239)) {
                     f39804(var239, (SubLObject)module0656.ZERO_INTEGER, (SubLObject)module0656.NIL);
                 }
                 else if (module0656.NIL != module0167.f10813(var239)) {
@@ -3760,7 +3760,7 @@ public final class module0656 extends SubLTranslatedFile
     }
     
     public static SubLObject f39930(final SubLObject var163) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0656.NIL != module0173.f10955(var163) || module0656.NIL != module0174.f11035(var163) || module0656.NIL != module0223.f14667(var163));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0656.NIL != module0173.f10955(var163) || module0656.NIL != assertion_handles_oc.f11035(var163) || module0656.NIL != module0223.f14667(var163));
     }
     
     public static SubLObject f39931(final SubLObject var256) {
@@ -3777,8 +3777,8 @@ public final class module0656 extends SubLTranslatedFile
     }
     
     public static SubLObject f39842(final SubLObject var66) {
-        if (module0656.NIL != module0128.f8449(var66)) {
-            return Sequences.cconcatenate(module0006.f203(module0656.$g5173$.getGlobalValue()), module0006.f203((module0656.NIL != module0656.$g5175$.getGlobalValue()) ? module0213.f14071(var66) : module0166.f10749(var66)));
+        if (module0656.NIL != constant_handles_oc.f8449(var66)) {
+            return Sequences.cconcatenate(module0006.f203(module0656.$g5173$.getGlobalValue()), module0006.f203((module0656.NIL != module0656.$g5175$.getGlobalValue()) ? module0213.f14071(var66) : constants_high_oc.f10749(var66)));
         }
         if (module0656.NIL != module0167.f10813(var66)) {
             return Sequences.cconcatenate(module0006.f203(module0656.$g5174$.getGlobalValue()), module0006.f203((module0656.NIL != module0656.$g5175$.getGlobalValue()) ? module0213.f14071(var66) : module0167.f10803(var66)));
@@ -3816,9 +3816,9 @@ public final class module0656 extends SubLTranslatedFile
     
     public static SubLObject f39937(final SubLObject var77) {
         if (var77.isInteger()) {
-            return module0166.f10752(var77);
+            return constants_high_oc.f10752(var77);
         }
-        if (module0656.NIL != module0128.f8449(var77)) {
+        if (module0656.NIL != constant_handles_oc.f8449(var77)) {
             return var77;
         }
         if (module0656.NIL == var77) {
@@ -3840,7 +3840,7 @@ public final class module0656 extends SubLTranslatedFile
         SubLObject var78 = (SubLObject)module0656.NIL;
         if (!var77.equalp((SubLObject)module0656.$ic314$)) {
             var78 = module0553.f34180(var77);
-            if (module0656.NIL == module0128.f8449(var78) && module0656.NIL != module0038.f2684(var77, module0656.$g5173$.getGlobalValue())) {
+            if (module0656.NIL == constant_handles_oc.f8449(var78) && module0656.NIL != module0038.f2684(var77, module0656.$g5173$.getGlobalValue())) {
                 var78 = f39937(reader.read_from_string_ignoring_errors(module0038.f2674(var77, module0656.$g5173$.getGlobalValue(), (SubLObject)module0656.UNPROVIDED), (SubLObject)module0656.NIL, (SubLObject)module0656.NIL, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED));
             }
             if (module0656.NIL == var78 && module0656.NIL != module0038.f2727(var77)) {
@@ -3888,8 +3888,8 @@ public final class module0656 extends SubLTranslatedFile
     
     public static SubLObject f39941(final SubLObject var66) {
         assert module0656.NIL != module0173.f10955(var66) : var66;
-        if (module0656.NIL != module0128.f8449(var66)) {
-            return module0166.f10743(var66);
+        if (module0656.NIL != constant_handles_oc.f8449(var66)) {
+            return constants_high_oc.f10743(var66);
         }
         return module0038.f2698(f39942(var66));
     }
@@ -3897,8 +3897,8 @@ public final class module0656 extends SubLTranslatedFile
     public static SubLObject f39942(final SubLObject var66) {
         assert module0656.NIL != module0173.f10955(var66) : var66;
         final SubLObject var67 = module0173.f10958(var66);
-        if (module0656.NIL != module0128.f8449(var67)) {
-            final SubLObject var68 = module0166.f10743(var67);
+        if (module0656.NIL != constant_handles_oc.f8449(var67)) {
+            final SubLObject var68 = constants_high_oc.f10743(var67);
             if (var68.isString()) {
                 return var68;
             }
@@ -3921,7 +3921,7 @@ public final class module0656 extends SubLTranslatedFile
     
     public static SubLObject f39944(final SubLObject var77) {
         if (var77.isInteger() && !var77.isNegative()) {
-            return module0166.f10752(var77);
+            return constants_high_oc.f10752(var77);
         }
         if (var77.isInteger() && var77.isNegative()) {
             return module0167.f10832(Numbers.minus(var77));
@@ -3948,7 +3948,7 @@ public final class module0656 extends SubLTranslatedFile
     }
     
     public static SubLObject f39945(final SubLObject var77) {
-        if (module0656.NIL != module0128.f8449(var77)) {
+        if (module0656.NIL != constant_handles_oc.f8449(var77)) {
             return var77;
         }
         if (module0656.NIL != module0167.f10813(var77)) {
@@ -4157,9 +4157,9 @@ public final class module0656 extends SubLTranslatedFile
     
     public static SubLObject f39970(final SubLObject var77) {
         if (var77.isInteger()) {
-            return module0174.f11053(var77);
+            return assertion_handles_oc.f11053(var77);
         }
-        if (module0656.NIL != module0174.f11035(var77)) {
+        if (module0656.NIL != assertion_handles_oc.f11035(var77)) {
             return var77;
         }
         if (module0656.NIL == var77) {
@@ -4168,7 +4168,7 @@ public final class module0656 extends SubLTranslatedFile
         if (var77.isString()) {
             final SubLObject var78 = reader.read_from_string_ignoring_errors(var77, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED);
             if (var78.isInteger()) {
-                return module0174.f11053(var78);
+                return assertion_handles_oc.f11053(var78);
             }
             return (SubLObject)module0656.NIL;
         }
@@ -4182,9 +4182,9 @@ public final class module0656 extends SubLTranslatedFile
     
     public static SubLObject f39971(final SubLObject var77) {
         if (var77.isInteger()) {
-            return module0184.f11675(var77);
+            return oc_deduction_handles.f11675(var77);
         }
-        if (module0656.NIL != module0184.f11659(var77)) {
+        if (module0656.NIL != oc_deduction_handles.f11659(var77)) {
             return var77;
         }
         if (module0656.NIL == var77) {
@@ -4193,7 +4193,7 @@ public final class module0656 extends SubLTranslatedFile
         if (var77.isString()) {
             final SubLObject var78 = reader.read_from_string_ignoring_errors(var77, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED, (SubLObject)module0656.UNPROVIDED);
             if (var78.isInteger()) {
-                return module0184.f11675(var78);
+                return oc_deduction_handles.f11675(var78);
             }
             return (SubLObject)module0656.NIL;
         }
@@ -4235,7 +4235,7 @@ public final class module0656 extends SubLTranslatedFile
     }
     
     public static SubLObject f39974(final SubLObject var127) {
-        assert module0656.NIL != module0174.f11035(var127) : var127;
+        assert module0656.NIL != assertion_handles_oc.f11035(var127) : var127;
         return module0220.f14563(var127, module0656.$ic329$, module0656.$ic330$, (SubLObject)module0656.ONE_INTEGER, (SubLObject)module0656.TWO_INTEGER, (SubLObject)module0656.$ic20$);
     }
     
@@ -4889,9 +4889,9 @@ public final class module0656 extends SubLTranslatedFile
         Hashtables.sethash((SubLObject)module0656.$ic210$, module0014.$g128$.getGlobalValue(), (SubLObject)ConsesLow.list((SubLObject)module0656.$ic211$, (SubLObject)module0656.$ic212$));
         Hashtables.sethash((SubLObject)module0656.$ic213$, module0014.$g128$.getGlobalValue(), (SubLObject)ConsesLow.list((SubLObject)module0656.$ic214$, (SubLObject)module0656.$ic215$));
         Structures.register_method(module0656.$g5160$.getGlobalValue(), module0193.$g2259$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0656.$ic218$));
-        Structures.register_method(module0656.$g5160$.getGlobalValue(), module0128.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0656.$ic219$));
+        Structures.register_method(module0656.$g5160$.getGlobalValue(), constant_handles_oc.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0656.$ic219$));
         Structures.register_method(module0656.$g5160$.getGlobalValue(), module0167.$g2182$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0656.$ic220$));
-        Structures.register_method(module0656.$g5160$.getGlobalValue(), module0174.$g2194$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0656.$ic221$));
+        Structures.register_method(module0656.$g5160$.getGlobalValue(), assertion_handles_oc.$g2194$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0656.$ic221$));
         Structures.register_method(module0656.$g5160$.getGlobalValue(), Types.$dtp_string$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0656.$ic224$));
         module0003.f57((SubLObject)module0656.$ic226$);
         module0003.f57((SubLObject)module0656.$ic227$);
@@ -5025,9 +5025,9 @@ public final class module0656 extends SubLTranslatedFile
         $ic54$ = SubLObjectFactory.makeSymbol("FIFTH");
         $ic55$ = SubLObjectFactory.makeKeyword("STANDARD");
         $ic56$ = SubLObjectFactory.makeSymbol("CAR");
-        $ic57$ = ConsesLow.list((SubLObject)ConsesLow.list(new SubLObject[] { module0128.f8479((SubLObject)SubLObjectFactory.makeString("Collection")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("defnIff")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnIff")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("defnSufficient")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnSufficient")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("defnNecessary")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnNecessary")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("comment")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("sharedNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("userDocComment")) }), (SubLObject)ConsesLow.list(new SubLObject[] { module0128.f8479((SubLObject)SubLObjectFactory.makeString("Predicate")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("negationPreds")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("negationInverse")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arity")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arityMin")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argsIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argsQuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestQuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argsGenl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestGenl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argGenl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argQuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg6Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg6QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg6Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg7Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg7QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg7Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg8Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg8QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg8Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg9Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg9QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg9Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg10Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg10QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg10Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg11Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg11QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg11Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg12Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg12QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg12Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("fanOutArg")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("evaluationDefn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("afterAdding")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("afterRemoving")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("comment")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("sharedNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("userDocComment")) }), (SubLObject)ConsesLow.list((SubLObject)module0656.NIL, module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("comment")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("sharedNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("userDocComment"))), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("comment")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("sharedNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("userDocComment"))), (SubLObject)ConsesLow.list(new SubLObject[] { module0128.f8479((SubLObject)SubLObjectFactory.makeString("Function-Denotational")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlFuncs")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlFunctions")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultIsaArg")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultIsaArgIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultGenl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultGenlArg")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arity")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arityMin")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argsIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argsQuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestQuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argsGenl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestGenl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argGenl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("argQuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5QuotedIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("comment")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("sharedNotes")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("userDocComment")) }));
+        $ic57$ = ConsesLow.list((SubLObject)ConsesLow.list(new SubLObject[] { constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Collection")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("disjointWith")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defnIff")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnIff")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defnSufficient")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnSufficient")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defnNecessary")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnNecessary")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comment")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sharedNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("userDocComment")) }), (SubLObject)ConsesLow.list(new SubLObject[] { constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Predicate")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("negationPreds")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("negationInverse")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arity")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arityMin")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argsIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argsQuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestQuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argsGenl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestGenl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argGenl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argQuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg6Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg6QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg6Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg7Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg7QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg7Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg8Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg8QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg8Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg9Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg9QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg9Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg10Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg10QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg10Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg11Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg11QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg11Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg12Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg12QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg12Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("fanOutArg")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("evaluationDefn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("afterAdding")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("afterRemoving")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comment")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sharedNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("userDocComment")) }), (SubLObject)ConsesLow.list((SubLObject)module0656.NIL, constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comment")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sharedNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("userDocComment"))), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comment")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sharedNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("userDocComment"))), (SubLObject)ConsesLow.list(new SubLObject[] { constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Function-Denotational")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlFuncs")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlFunctions")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultIsaArg")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultIsaArgIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultGenl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultGenlArg")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arity")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arityMin")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argsIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argsQuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestQuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argsGenl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argAndRestGenl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argGenl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argQuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5QuotedIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comment")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("sharedNotes")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("userDocComment")) }));
         $ic58$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic59$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic59$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic60$ = SubLObjectFactory.makeSymbol("S#11103", "CYC");
         $ic61$ = SubLObjectFactory.makeSymbol("S#13346", "CYC");
         $ic62$ = SubLObjectFactory.makeSymbol("S#43801", "CYC");
@@ -5193,7 +5193,7 @@ public final class module0656 extends SubLTranslatedFile
         $ic222$ = SubLObjectFactory.makeString("#<INVALID ASSERTION>");
         $ic223$ = SubLObjectFactory.makeInteger(60);
         $ic224$ = SubLObjectFactory.makeSymbol("S#43846", "CYC");
-        $ic225$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("holdsIn")));
+        $ic225$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("holdsIn")));
         $ic226$ = SubLObjectFactory.makeSymbol("S#43965", "CYC");
         $ic227$ = SubLObjectFactory.makeSymbol("S#43966", "CYC");
         $ic228$ = SubLObjectFactory.makeString("#<");
@@ -5254,12 +5254,12 @@ public final class module0656 extends SubLTranslatedFile
         $ic283$ = SubLObjectFactory.makeSymbol("HTML-GENERATE-TEXT");
         $ic284$ = SubLObjectFactory.makeSymbol("S#43989", "CYC");
         $ic285$ = SubLObjectFactory.makeSymbol("CB-CF");
-        $ic286$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Cyc"));
+        $ic286$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Cyc"));
         $ic287$ = SubLObjectFactory.makeKeyword("SILK");
         $ic288$ = SubLObjectFactory.makeKeyword("NL");
         $ic289$ = SubLObjectFactory.makeKeyword("CYCL");
         $ic290$ = SubLObjectFactory.makeString(" in ");
-        $ic291$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12582", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic291$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ASSERTION", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic292$ = SubLObjectFactory.makeSymbol("PWHEN");
         $ic293$ = SubLObjectFactory.makeSymbol("COR");
         $ic294$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NULL"), (SubLObject)SubLObjectFactory.makeSymbol("S#43972", "CYC"));
@@ -5297,8 +5297,8 @@ public final class module0656 extends SubLTranslatedFile
         $ic326$ = SubLObjectFactory.makeString("Month");
         $ic327$ = SubLObjectFactory.makeString("Day");
         $ic328$ = SubLObjectFactory.makeString("Year");
-        $ic329$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("myReviewer"));
-        $ic330$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BookkeepingMt"));
+        $ic329$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myReviewer"));
+        $ic330$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BookkeepingMt"));
         $ic331$ = SubLObjectFactory.makeString("The following parentheses are unmatched:");
         $ic332$ = SubLObjectFactory.makeString("The following constants are invalid:");
         $ic333$ = SubLObjectFactory.makeString("This is unreadable, because more was expected at the end :");

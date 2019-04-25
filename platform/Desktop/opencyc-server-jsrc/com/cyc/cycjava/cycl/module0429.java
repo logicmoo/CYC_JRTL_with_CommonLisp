@@ -806,7 +806,7 @@ public final class module0429 extends SubLTranslatedFile
     }
     
     public static SubLObject f30415(final SubLObject var94, final SubLObject var106, final SubLObject var77, final SubLObject var76) {
-        final SubLObject var107 = Sequences.cconcatenate(module0166.f10743(var106), new SubLObject[] { module0429.$ic100$, module0038.f2638(var76) });
+        final SubLObject var107 = Sequences.cconcatenate(constants_high_oc.f10743(var106), new SubLObject[] { module0429.$ic100$, module0038.f2638(var76) });
         final SubLObject var108 = module0543.f33623(var107, (SubLObject)module0429.UNPROVIDED);
         return (SubLObject)SubLObjectFactory.makeBoolean(module0429.NIL != module0543.f33631((SubLObject)ConsesLow.list(module0429.$ic101$, var108, var106), module0429.$ic102$, (SubLObject)module0429.UNPROVIDED, (SubLObject)module0429.UNPROVIDED) && module0429.NIL != module0543.f33631(module0423.f29546(var94, var108), module0429.$ic103$, (SubLObject)module0429.UNPROVIDED, (SubLObject)module0429.UNPROVIDED) && module0429.NIL != ((module0429.NIL != var77) ? module0543.f33631((SubLObject)ConsesLow.listS(module0429.$ic101$, var108, (SubLObject)module0429.$ic104$), module0429.$ic102$, (SubLObject)module0429.UNPROVIDED, (SubLObject)module0429.UNPROVIDED) : module0543.f33631((SubLObject)ConsesLow.listS(module0429.$ic101$, var108, (SubLObject)module0429.$ic105$), module0429.$ic102$, (SubLObject)module0429.UNPROVIDED, (SubLObject)module0429.UNPROVIDED)));
     }
@@ -827,7 +827,7 @@ public final class module0429 extends SubLTranslatedFile
         if (module0429.NIL == module0173.f10955(var124)) {
             return (SubLObject)module0429.NIL;
         }
-        if (module0429.NIL != module0128.f8449(var124)) {
+        if (module0429.NIL != constant_handles_oc.f8449(var124)) {
             return module0259.f16975(var124, module0429.$ic112$, module0429.$ic113$, (SubLObject)module0429.UNPROVIDED);
         }
         return (SubLObject)SubLObjectFactory.makeBoolean(module0429.NIL == module0035.f2439((SubLObject)module0429.$ic114$, module0172.f10920(var124), (SubLObject)module0429.UNPROVIDED));
@@ -1036,9 +1036,9 @@ public final class module0429 extends SubLTranslatedFile
         module0429.$g3501$ = null;
         module0429.$g3502$ = null;
         module0429.$g3503$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AKBBuilderQuery-InferenceTest"));
-        $ic1$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("AKBBuilderQuery-InferenceTest-Default")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("AKBBuilderQuery-InferenceTest-LeaveOpenArg2")));
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TKBSourceSpindleCollectorMt"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AKBBuilderQuery-InferenceTest"));
+        $ic1$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AKBBuilderQuery-InferenceTest-Default")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AKBBuilderQuery-InferenceTest-LeaveOpenArg2")));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TKBSourceSpindleCollectorMt"));
         $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MAX-NUMBER"), (SubLObject)module0429.ONE_INTEGER, (SubLObject)SubLObjectFactory.makeKeyword("TRANSFORMATION-ALLOWED?"), (SubLObject)module0429.NIL, (SubLObject)SubLObjectFactory.makeKeyword("CONTINUABLE?"), (SubLObject)module0429.NIL, (SubLObject)SubLObjectFactory.makeKeyword("NEW-TERMS-ALLOWED?"), (SubLObject)module0429.NIL);
         $ic4$ = SubLObjectFactory.makeString("/cyc/projects/inference/lilliput/");
         $ic5$ = SubLObjectFactory.makeString("experiments/");
@@ -1068,10 +1068,10 @@ public final class module0429 extends SubLTranslatedFile
         $ic29$ = SubLObjectFactory.makeSymbol("FWHEN");
         $ic30$ = SubLObjectFactory.makeSymbol("S#33607", "CYC");
         $ic31$ = SubLObjectFactory.makeSymbol("S#32922", "CYC");
-        $ic32$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-OpenGood"));
-        $ic33$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-OpenNoGood"));
-        $ic34$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-ClosedGood"));
-        $ic35$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-ClosedNoGood"));
+        $ic32$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-OpenGood"));
+        $ic33$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-OpenNoGood"));
+        $ic34$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-ClosedGood"));
+        $ic35$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-ClosedNoGood"));
         $ic36$ = SubLObjectFactory.makeString("Lilliput Training");
         $ic37$ = SubLObjectFactory.makeString(":0");
         $ic38$ = SubLObjectFactory.makeSymbol("S#8004", "CYC");
@@ -1128,40 +1128,40 @@ public final class module0429 extends SubLTranslatedFile
         $ic89$ = SubLObjectFactory.makeString("got an unsorted query ~s");
         $ic90$ = SubLObjectFactory.makeSymbol("S#15527", "CYC");
         $ic91$ = SubLObjectFactory.makeString("Expected only one arg constraint, got ~s");
-        $ic92$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("correspondingDomainInArg"));
-        $ic93$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CollectionSubsetFn"));
-        $ic94$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf")), (SubLObject)SubLObjectFactory.makeSymbol("?ARGS"), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("?ARGS"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("TKBConstant"))));
+        $ic92$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("correspondingDomainInArg"));
+        $ic93$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CollectionSubsetFn"));
+        $ic94$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf")), (SubLObject)SubLObjectFactory.makeSymbol("?ARGS"), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("?ARGS"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TKBConstant"))));
         $ic95$ = SubLObjectFactory.makeString("unhandled #$CollectionSubsetFn domain specification");
         $ic96$ = SubLObjectFactory.makeString("unexpected domain type ~s");
         $ic97$ = SubLObjectFactory.makeSymbol("<");
         $ic98$ = SubLObjectFactory.makeSymbol("=");
         $ic99$ = SubLObjectFactory.makeSymbol("SECOND");
         $ic100$ = SubLObjectFactory.makeString("-");
-        $ic101$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic102$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
-        $ic103$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
-        $ic104$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-Training")));
-        $ic105$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-Blind")));
+        $ic101$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic102$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
+        $ic103$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
+        $ic104$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-Training")));
+        $ic105$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-Blind")));
         $ic106$ = SubLObjectFactory.makeSymbol("?COL");
-        $ic107$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("and"));
-        $ic108$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("nearestIsa"));
+        $ic107$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and"));
+        $ic108$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nearestIsa"));
         $ic109$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?COL"));
-        $ic110$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
-        $ic111$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("leaveArgPlaceOpenInTestQueries"));
-        $ic112$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TKBConstant"));
-        $ic113$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BookkeepingMt"));
+        $ic110$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic111$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("leaveArgPlaceOpenInTestQueries"));
+        $ic112$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TKBConstant"));
+        $ic113$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BookkeepingMt"));
         $ic114$ = SubLObjectFactory.makeSymbol("S#33646", "CYC");
         $ic115$ = SubLObjectFactory.makeString("g~%");
         $ic116$ = SubLObjectFactory.makeString("n~%");
         $ic117$ = SubLObjectFactory.makeString("c");
         $ic118$ = SubLObjectFactory.makeSymbol("?ASS");
-        $ic119$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("assertionSentence"));
-        $ic120$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueInSpecification"));
-        $ic121$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferenceSentenceParameter"));
+        $ic119$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("assertionSentence"));
+        $ic120$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueInSpecification"));
+        $ic121$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferenceSentenceParameter"));
         $ic122$ = SubLObjectFactory.makeSymbol("?QUERY");
         $ic123$ = SubLObjectFactory.makeSymbol("?TYPE");
         $ic124$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?TYPE"));
-        $ic125$ = ConsesLow.list((SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("different")), (SubLObject)SubLObjectFactory.makeSymbol("?TYPE"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-Training"))));
+        $ic125$ = ConsesLow.list((SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("different")), (SubLObject)SubLObjectFactory.makeSymbol("?TYPE"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LilliputQuery-Training"))));
     }
 }
 

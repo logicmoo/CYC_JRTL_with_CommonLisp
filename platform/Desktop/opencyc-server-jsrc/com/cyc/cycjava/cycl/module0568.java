@@ -43,19 +43,19 @@ public final class module0568 extends SubLTranslatedFile
         if (var3 == module0568.UNPROVIDED) {
             var3 = (SubLObject)module0568.NIL;
         }
-        assert module0568.NIL != module0369.f25275(var1) : var1;
+        assert module0568.NIL != oc_inference_datastructures_inference.f25275(var1) : var1;
         final SubLObject var4 = f34895(var1);
         if (module0568.NIL == var2) {
-            var2 = module0369.f25484(var1);
+            var2 = oc_inference_datastructures_inference.f25484(var1);
         }
         return f34896(var4, var2, var3);
     }
     
     public static SubLObject f34895(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        assert module0568.NIL != module0369.f25275(var1) : var1;
-        final SubLObject var3 = module0369.f25485(var1);
-        final SubLObject var4 = module0369.f25484(var1);
+        assert module0568.NIL != oc_inference_datastructures_inference.f25275(var1) : var1;
+        final SubLObject var3 = oc_inference_datastructures_inference.f25485(var1);
+        final SubLObject var4 = oc_inference_datastructures_inference.f25484(var1);
         var2.resetMultipleValues();
         final SubLObject var5 = f34897(var1);
         final SubLObject var6 = var2.secondMultipleValue();
@@ -72,9 +72,9 @@ public final class module0568 extends SubLTranslatedFile
     }
     
     public static SubLObject f34897(final SubLObject var1) {
-        assert module0568.NIL != module0369.f25275(var1) : var1;
-        final SubLObject var2 = module0369.f25484(var1);
-        final SubLObject var3 = module0369.f25811(var1);
+        assert module0568.NIL != oc_inference_datastructures_inference.f25275(var1) : var1;
+        final SubLObject var2 = oc_inference_datastructures_inference.f25484(var1);
+        final SubLObject var3 = oc_inference_datastructures_inference.f25811(var1);
         return module0333.f22431(var3, var2, (SubLObject)module0568.UNPROVIDED, (SubLObject)module0568.UNPROVIDED);
     }
     
@@ -467,17 +467,17 @@ public final class module0568 extends SubLTranslatedFile
         module0568.$g4140$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("INFERENCE-P");
         $ic1$ = SubLObjectFactory.makeSymbol("FORT-P");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic3$ = SubLObjectFactory.makeKeyword("GAF");
         $ic4$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic6$ = SubLObjectFactory.makeKeyword("IGNORE");
-        $ic7$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")));
-        $ic8$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultGenl")));
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic7$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")));
+        $ic8$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultGenl")));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
         $ic10$ = SubLObjectFactory.makeString("~%~S via ~S");
         $ic11$ = SubLObjectFactory.makeString("~%seeding ~S");
-        $ic12$ = ConsesLow.list(new SubLObject[] { module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4Genl")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5Isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5Genl")) });
+        $ic12$ = ConsesLow.list(new SubLObject[] { constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4Genl")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5Isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5Genl")) });
     }
 }
 

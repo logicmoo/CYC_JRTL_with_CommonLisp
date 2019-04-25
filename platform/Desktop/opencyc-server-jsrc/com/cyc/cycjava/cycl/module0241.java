@@ -253,10 +253,10 @@ public final class module0241 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0241();
         $ic0$ = SubLObjectFactory.makeKeyword("ISA");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic2$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReflexiveBinaryPredicate")));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic2$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReflexiveBinaryPredicate")));
         $ic3$ = SubLObjectFactory.makeKeyword("GAF");
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReflexiveBinaryPredicate"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReflexiveBinaryPredicate"));
     }
 }
 

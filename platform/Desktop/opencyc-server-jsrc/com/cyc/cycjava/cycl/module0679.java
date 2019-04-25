@@ -647,7 +647,7 @@ public final class module0679 extends SubLTranslatedFile
     
     public static SubLObject f41560() {
         final SubLObject var33 = Numbers.add((SubLObject)module0679.ONE_INTEGER, module0164.f10677());
-        SubLObject var34 = module0128.f8425();
+        SubLObject var34 = constant_handles_oc.f8425();
         if (module0679.NIL == module0065.f4772(var34, (SubLObject)module0679.$ic53$)) {
             final SubLObject var35_36 = var34;
             if (module0679.NIL == module0065.f4775(var35_36, (SubLObject)module0679.$ic53$)) {
@@ -724,8 +724,8 @@ public final class module0679 extends SubLTranslatedFile
                 }
             }
         }
-        final SubLObject var49 = Numbers.add((SubLObject)module0679.ONE_INTEGER, module0174.f11032());
-        var34 = module0174.f11010();
+        final SubLObject var49 = Numbers.add((SubLObject)module0679.ONE_INTEGER, assertion_handles_oc.f11032());
+        var34 = assertion_handles_oc.f11010();
         if (module0679.NIL == module0065.f4772(var34, (SubLObject)module0679.$ic53$)) {
             final SubLObject var35_38 = var34;
             if (module0679.NIL == module0065.f4775(var35_38, (SubLObject)module0679.$ic53$)) {
@@ -763,8 +763,8 @@ public final class module0679 extends SubLTranslatedFile
                 }
             }
         }
-        final SubLObject var52 = Numbers.add((SubLObject)module0679.ONE_INTEGER, module0184.f11656());
-        var34 = module0184.f11634();
+        final SubLObject var52 = Numbers.add((SubLObject)module0679.ONE_INTEGER, oc_deduction_handles.f11656());
+        var34 = oc_deduction_handles.f11634();
         if (module0679.NIL == module0065.f4772(var34, (SubLObject)module0679.$ic53$)) {
             final SubLObject var35_39 = var34;
             if (module0679.NIL == module0065.f4775(var35_39, (SubLObject)module0679.$ic53$)) {
@@ -807,7 +807,7 @@ public final class module0679 extends SubLTranslatedFile
     
     public static SubLObject f41561() {
         final SubLThread var60 = SubLProcess.currentSubLThread();
-        final SubLObject var61 = module0174.f11010();
+        final SubLObject var61 = assertion_handles_oc.f11010();
         final SubLObject var62 = (SubLObject)module0679.$ic55$;
         final SubLObject var63 = module0065.f4733(var61);
         SubLObject var64 = (SubLObject)module0679.ZERO_INTEGER;
@@ -878,7 +878,7 @@ public final class module0679 extends SubLTranslatedFile
     }
     
     public static SubLObject f41562(final SubLObject var73) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0679.NIL != module0174.f11035(var73) && module0679.NIL != module0161.f10489(module0178.f11287(var73)));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0679.NIL != assertion_handles_oc.f11035(var73) && module0679.NIL != module0161.f10489(module0178.f11287(var73)));
     }
     
     public static SubLObject f41563() {
@@ -2695,7 +2695,7 @@ public final class module0679 extends SubLTranslatedFile
         $ic108$ = SubLObjectFactory.makeString("Add Ontology :");
         $ic109$ = SubLObjectFactory.makeString("ontology");
         $ic110$ = SubLObjectFactory.makeString("Complete");
-        $ic111$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Collection"));
+        $ic111$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Collection"));
         $ic112$ = SubLObjectFactory.makeString("Quoted Ontologies (quoted instances) : ");
         $ic113$ = SubLObjectFactory.makeString("quoted-ontology-~A");
         $ic114$ = SubLObjectFactory.makeString("Add Quoted Ontology :");

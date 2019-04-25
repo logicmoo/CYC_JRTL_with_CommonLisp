@@ -844,14 +844,14 @@ public final class module0753 extends SubLTranslatedFile
         $ic60$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#51729", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#51730", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#39283", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic61$ = SubLObjectFactory.makeUninternedSymbol("US#4AF219B");
         $ic62$ = SubLObjectFactory.makeKeyword("ANY");
-        $ic63$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Noun"));
-        $ic64$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Adjective"));
+        $ic63$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Noun"));
+        $ic64$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Adjective"));
         $ic65$ = SubLObjectFactory.makeString("(PPH error level ");
         $ic66$ = SubLObjectFactory.makeString(") ");
         $ic67$ = SubLObjectFactory.makeString("Can't add disambiguation string. Null category for ~S");
         $ic68$ = SubLObjectFactory.makeSymbol("S#20380", "CYC");
-        $ic69$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Agent-Generic"));
-        $ic70$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("alias"));
+        $ic69$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Agent-Generic"));
+        $ic70$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("alias"));
         $ic71$ = SubLObjectFactory.makeString(" (aka \"");
         $ic72$ = SubLObjectFactory.makeString("\")");
         $ic73$ = SubLObjectFactory.makeKeyword("WHEN-NECESSARY");
@@ -863,7 +863,7 @@ public final class module0753 extends SubLTranslatedFile
         $ic79$ = SubLObjectFactory.makeKeyword("ALL");
         $ic80$ = SubLObjectFactory.makeSymbol("S#51429", "CYC");
         $ic81$ = SubLObjectFactory.makeSymbol("S#51007", "CYC");
-        $ic82$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("terseDisambiguationString"));
+        $ic82$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("terseDisambiguationString"));
         $ic83$ = SubLObjectFactory.makeSymbol("?STRING");
         $ic84$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?STRING"));
         $ic85$ = SubLObjectFactory.makeString("Can't disambiguate javalist:~% ~S");

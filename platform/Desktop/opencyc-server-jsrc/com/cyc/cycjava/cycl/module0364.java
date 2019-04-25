@@ -402,8 +402,8 @@ public final class module0364 extends SubLTranslatedFile
             final SubLObject var29 = var27;
             if (var29.eql((SubLObject)module0364.$ic43$)) {
                 final SubLObject var30 = f24733(var26);
-                if (module0364.NIL != module0369.f25417(var30)) {
-                    module0369.f25471(var30);
+                if (module0364.NIL != oc_inference_datastructures_inference.f25417(var30)) {
+                    oc_inference_datastructures_inference.f25471(var30);
                 }
             }
             else if (var29.eql((SubLObject)module0364.$ic55$)) {
@@ -580,7 +580,7 @@ public final class module0364 extends SubLTranslatedFile
     
     public static SubLObject f24722(final SubLObject var26) {
         if (module0364.NIL != module0374.f26529(var26)) {
-            return module0369.f25421(f24724(var26));
+            return oc_inference_datastructures_inference.f25421(f24724(var26));
         }
         return module0363.f24507(f24725(var26));
     }

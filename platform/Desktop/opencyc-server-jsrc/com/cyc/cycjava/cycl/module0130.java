@@ -364,7 +364,7 @@ public final class module0130 extends SubLTranslatedFile
         module0130.$g1511$ = null;
         $ic0$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BACKWARD"), (SubLObject)SubLObjectFactory.makeKeyword("FORWARD"), (SubLObject)SubLObjectFactory.makeKeyword("CODE"));
         $ic1$ = SubLObjectFactory.makeSymbol("DIRECTION-P");
-        $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic3$ = SubLObjectFactory.makeString("Return T iff OBJECT is a valid assertion inference direction\n :backward :forward or :code.");
         $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
         $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("GAF"), (SubLObject)SubLObjectFactory.makeKeyword("RULE"));

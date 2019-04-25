@@ -104,7 +104,7 @@ public final class module0658 extends SubLTranslatedFile
     }
     
     public static SubLObject f40054(final SubLObject var8) {
-        assert module0658.NIL != module0128.f8449(var8) : var8;
+        assert module0658.NIL != constant_handles_oc.f8449(var8) : var8;
         if (module0658.NIL != f40051()) {
             module0117.f8161(f40055(var8), f40053());
         }

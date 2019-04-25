@@ -898,7 +898,7 @@ public final class module0715 extends SubLTranslatedFile
         $ic43$ = SubLObjectFactory.makeString("(Optional) Enter an existing Cyc term that represents the ontology:");
         $ic44$ = SubLObjectFactory.makeString("ontology");
         $ic45$ = SubLObjectFactory.makeString("Complete");
-        $ic46$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("owl:Ontology"));
+        $ic46$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("owl:Ontology"));
         $ic47$ = SubLObjectFactory.makeSymbol("CB-OWL-IMPORT-OLD");
         $ic48$ = SubLObjectFactory.makeString("Bad source: ");
         $ic49$ = SubLObjectFactory.makeString("Can only import OWL ontologies from valid files or URLs.");
@@ -920,8 +920,8 @@ public final class module0715 extends SubLTranslatedFile
         $ic65$ = SubLObjectFactory.makeString("Working");
         $ic66$ = SubLObjectFactory.makeString(" Total time: ~A.");
         $ic67$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic68$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic69$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("synonymousExternalConcept"));
+        $ic68$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic69$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("synonymousExternalConcept"));
         $ic70$ = SubLObjectFactory.makeString("Term count: ~D.");
         $ic71$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#5849", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#48170", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#48171", "CYC"));
         $ic72$ = SubLObjectFactory.makeString("~A:");
@@ -929,7 +929,7 @@ public final class module0715 extends SubLTranslatedFile
         $ic74$ = SubLObjectFactory.makeString("Started at ~A. Elapsed time: ~A.");
         $ic75$ = SubLObjectFactory.makeString("Estimated finish time: ~A (after ~A)");
         $ic76$ = SubLObjectFactory.makeString("Error Messages (~D):");
-        $ic77$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#295", "CYC"));
+        $ic77$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#295", "CYC"));
         $ic78$ = SubLObjectFactory.makeString("[Refresh]");
         $ic79$ = SubLObjectFactory.makeString("[Halt Auto Refresh]");
         $ic80$ = SubLObjectFactory.makeString("[Start Auto Refresh]");

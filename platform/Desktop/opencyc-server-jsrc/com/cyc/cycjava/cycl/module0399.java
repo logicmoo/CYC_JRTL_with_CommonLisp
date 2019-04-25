@@ -336,7 +336,7 @@ public final class module0399 extends SubLTranslatedFile
                 return (SubLObject)module0399.T;
             }
         }
-        if (module0399.NIL != module0377.f26746(var13) && module0399.NIL == module0369.f25608(module0367.f25037(var4), module0377.f26749(var13))) {
+        if (module0399.NIL != module0377.f26746(var13) && module0399.NIL == oc_inference_datastructures_inference.f25608(module0367.f25037(var4), module0377.f26749(var13))) {
             if (module0399.NIL != module0384.$g3229$.getDynamicValue(var14)) {
                 module0384.f27262((SubLObject)module0399.$ic18$, (SubLObject)module0399.NIL, (SubLObject)module0399.NIL, var13, (SubLObject)module0399.NIL);
             }
@@ -504,8 +504,8 @@ public final class module0399 extends SubLTranslatedFile
     public static SubLObject f28198(final SubLObject var4, final SubLObject var1) {
         if (module0399.NIL != module0377.f26773(var1)) {
             final SubLObject var5 = module0367.f25037(var4);
-            if (module0399.NIL == module0369.f25607(var5)) {
-                final SubLObject var6 = module0369.f25658(var5);
+            if (module0399.NIL == oc_inference_datastructures_inference.f25607(var5)) {
+                final SubLObject var6 = oc_inference_datastructures_inference.f25658(var5);
                 if (module0399.ZERO_INTEGER.eql(var6)) {
                     return (SubLObject)module0399.T;
                 }
@@ -519,7 +519,7 @@ public final class module0399 extends SubLTranslatedFile
                         var10 = var9.first();
                         if (module0399.NIL != module0363.f24524(var10, (SubLObject)module0399.$ic25$) && module0399.NIL != module0363.f24522(var10, module0365.f24865(var1))) {
                             var11 = module0377.f26753(var10);
-                            if (module0399.NIL != var11 && module0399.NIL != module0369.f25608(var5, var11)) {
+                            if (module0399.NIL != var11 && module0399.NIL != oc_inference_datastructures_inference.f25608(var5, var11)) {
                                 var7 = Numbers.add(var7, (SubLObject)module0399.ONE_INTEGER);
                                 if (var7.numE(var6)) {
                                     var8 = (SubLObject)module0399.T;

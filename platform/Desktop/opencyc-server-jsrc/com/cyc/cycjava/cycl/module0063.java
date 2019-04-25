@@ -3027,7 +3027,7 @@ public final class module0063 extends SubLTranslatedFile
         $ic57$ = SubLObjectFactory.makeInteger(1000);
         $ic58$ = SubLObjectFactory.makeString("~S will result in a search that is larger than the maximum search size of ~S");
         $ic59$ = SubLObjectFactory.makeKeyword("MAPPING-DONE");
-        $ic60$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#6063", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#6216", "CYC"), (SubLObject)module0063.T)), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic60$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#6063", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#6216", "CYC"), (SubLObject)module0063.T)), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic61$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("DONE"), (SubLObject)SubLObjectFactory.makeKeyword("FORWARD"));
         $ic62$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");
         $ic63$ = SubLObjectFactory.makeKeyword("DONE");

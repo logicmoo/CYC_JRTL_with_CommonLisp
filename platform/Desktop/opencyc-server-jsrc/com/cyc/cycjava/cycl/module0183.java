@@ -273,7 +273,7 @@ public final class module0183 extends SubLTranslatedFile
     public static SubLObject f11557(final SubLObject var7) {
         final SubLObject var8 = module0180.f11453(var7);
         SubLObject var9 = (SubLObject)module0183.NIL;
-        if (module0183.NIL != module0184.f11659(var8)) {
+        if (module0183.NIL != oc_deduction_handles.f11659(var8)) {
             var9 = module0188.f11781(var8);
         }
         else if (module0183.NIL != module0191.f11952(var8)) {
@@ -285,7 +285,7 @@ public final class module0183 extends SubLTranslatedFile
     public static SubLObject f11558(final SubLObject var7) {
         final SubLObject var8 = module0180.f11453(var7);
         SubLObject var9 = (SubLObject)module0183.NIL;
-        if (module0183.NIL != module0184.f11659(var8)) {
+        if (module0183.NIL != oc_deduction_handles.f11659(var8)) {
             var9 = module0188.f11770(var8);
         }
         return var9;
@@ -340,7 +340,7 @@ public final class module0183 extends SubLTranslatedFile
     
     public static SubLObject f11569(final SubLObject var7) {
         final SubLObject var8 = module0180.f11453(var7);
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0183.NIL == module0184.f11659(var8));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0183.NIL == oc_deduction_handles.f11659(var8));
     }
     
     public static SubLObject f11570(final SubLObject var7) {
@@ -436,7 +436,7 @@ public final class module0183 extends SubLTranslatedFile
             SubLObject var48 = (SubLObject)module0183.NIL;
             var48 = var47.first();
             while (module0183.NIL != var47) {
-                if (module0183.NIL != module0184.f11671(var48, var43)) {
+                if (module0183.NIL != oc_deduction_handles.f11671(var48, var43)) {
                     final SubLObject var49 = var48;
                     if (module0183.NIL == conses_high.member(var49, var46, Symbols.symbol_function((SubLObject)module0183.EQL), Symbols.symbol_function((SubLObject)module0183.IDENTITY))) {
                         var46 = (SubLObject)ConsesLow.cons(var49, var46);
@@ -533,7 +533,7 @@ public final class module0183 extends SubLTranslatedFile
     }
     
     public static SubLObject f11575(final SubLObject var77) {
-        if (module0183.NIL != module0174.f11035(var77)) {
+        if (module0183.NIL != assertion_handles_oc.f11035(var77)) {
             return var77;
         }
         if (module0183.NIL != module0179.f11424(var77)) {
@@ -670,7 +670,7 @@ public final class module0183 extends SubLTranslatedFile
         SubLObject var48;
         for (var46 = module0032.f1741(var45), var47 = (SubLObject)module0183.NIL, var47 = module0032.f1742(var46, var45); module0183.NIL == var44 && module0183.NIL == module0032.f1744(var46, var47); var47 = module0032.f1743(var47)) {
             var48 = module0032.f1745(var46, var47);
-            if (module0183.NIL != module0032.f1746(var47, var48) && module0183.NIL == module0184.f11671(var48, var43)) {
+            if (module0183.NIL != module0032.f1746(var47, var48) && module0183.NIL == oc_deduction_handles.f11671(var48, var43)) {
                 var44 = (SubLObject)module0183.T;
             }
         }
@@ -686,7 +686,7 @@ public final class module0183 extends SubLTranslatedFile
         SubLObject var46;
         for (var44 = (SubLObject)module0183.NIL, var45 = (SubLObject)module0183.NIL, var45 = module0180.f11454(var7); module0183.NIL == var44 && module0183.NIL != var45; var45 = var45.rest()) {
             var46 = var45.first();
-            if (module0183.NIL == module0184.f11671(var46, var43)) {
+            if (module0183.NIL == oc_deduction_handles.f11671(var46, var43)) {
                 var44 = (SubLObject)module0183.T;
             }
         }
@@ -709,7 +709,7 @@ public final class module0183 extends SubLTranslatedFile
         SubLObject var15;
         for (var10 = module0032.f1741(var9), var11 = (SubLObject)module0183.NIL, var11 = module0032.f1742(var10, var9); module0183.NIL == var8 && module0183.NIL == module0032.f1744(var10, var11); var11 = module0032.f1743(var11)) {
             var12 = module0032.f1745(var10, var11);
-            if (module0183.NIL != module0032.f1746(var11, var12) && module0183.NIL != module0184.f11671(var12, (SubLObject)module0183.UNPROVIDED)) {
+            if (module0183.NIL != module0032.f1746(var11, var12) && module0183.NIL != oc_deduction_handles.f11671(var12, (SubLObject)module0183.UNPROVIDED)) {
                 var13 = (SubLObject)module0183.NIL;
                 if (module0183.NIL == var13) {
                     var14 = module0188.f11770(var12);
@@ -1989,7 +1989,7 @@ public final class module0183 extends SubLTranslatedFile
     
     public static SubLObject f11624(final SubLObject var7) {
         final SubLObject var8 = module0180.f11453(var7);
-        if (module0183.NIL != module0184.f11659(var8)) {
+        if (module0183.NIL != oc_deduction_handles.f11659(var8)) {
             if (module0183.NIL != module0342.f23108(var8)) {
                 f11621(var7);
             }
@@ -2039,7 +2039,7 @@ public final class module0183 extends SubLTranslatedFile
             var156 = (SubLObject)module0183.NIL;
         }
         final SubLThread var157 = SubLProcess.currentSubLThread();
-        final SubLObject var158 = Numbers.ceiling(module0184.f11643(), module0213.f13879());
+        final SubLObject var158 = Numbers.ceiling(oc_deduction_handles.f11643(), module0213.f13879());
         module0213.f13886(var158, (SubLObject)module0183.NIL);
         final SubLObject var159 = module0018.$g694$.currentBinding(var157);
         try {
@@ -2071,7 +2071,7 @@ public final class module0183 extends SubLTranslatedFile
                         module0139.$g1630$.bind((SubLObject)module0183.T, var157);
                         module0012.$g82$.setDynamicValue((SubLObject)module0183.$ic68$, var157);
                         module0012.$g73$.setDynamicValue(Time.get_universal_time(), var157);
-                        module0012.$g83$.setDynamicValue(module0184.f11643(), var157);
+                        module0012.$g83$.setDynamicValue(oc_deduction_handles.f11643(), var157);
                         module0012.$g84$.setDynamicValue((SubLObject)module0183.ZERO_INTEGER, var157);
                         final SubLObject var50_162 = module0012.$g75$.currentBinding(var157);
                         final SubLObject var51_166 = module0012.$g76$.currentBinding(var157);
@@ -2088,8 +2088,8 @@ public final class module0183 extends SubLTranslatedFile
                             for (var168 = (SubLObject)module0183.NIL, var168 = (SubLObject)module0183.ZERO_INTEGER; var168.numL(module0012.$g83$.getDynamicValue(var157)); var168 = Numbers.add(var168, (SubLObject)module0183.ONE_INTEGER)) {
                                 module0012.note_percent_progress(module0012.$g84$.getDynamicValue(var157), module0012.$g83$.getDynamicValue(var157));
                                 module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var157), (SubLObject)module0183.ONE_INTEGER), var157);
-                                var169 = module0184.f11675(var168);
-                                if (module0183.NIL != module0184.f11659(var169) && (module0183.NIL == var156 || module0183.NIL == module0342.f23153(var169))) {
+                                var169 = oc_deduction_handles.f11675(var168);
+                                if (module0183.NIL != oc_deduction_handles.f11659(var169) && (module0183.NIL == var156 || module0183.NIL == module0342.f23153(var169))) {
                                     f11628(var169);
                                 }
                             }

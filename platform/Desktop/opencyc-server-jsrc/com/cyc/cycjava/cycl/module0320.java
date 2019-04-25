@@ -858,7 +858,7 @@ public final class module0320 extends SubLTranslatedFile
         if (module0320.NIL == module0321.f21693()) {
             return var110;
         }
-        final SubLObject var112 = (SubLObject)((module0320.NIL != module0174.f11035(var84)) ? var84 : module0320.NIL);
+        final SubLObject var112 = (SubLObject)((module0320.NIL != assertion_handles_oc.f11035(var84)) ? var84 : module0320.NIL);
         return (SubLObject)ConsesLow.list(var110.first(), (SubLObject)ConsesLow.cons(var112, conses_high.second(var110)));
     }
     
@@ -1815,12 +1815,12 @@ public final class module0320 extends SubLTranslatedFile
         $ic66$ = SubLObjectFactory.makeKeyword("PREDICATE-EXTENT");
         $ic67$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#24185", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic68$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#24168", "CYC")));
-        $ic69$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
-        $ic70$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
+        $ic69$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
+        $ic70$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
         $ic71$ = SubLObjectFactory.makeKeyword("GAF");
         $ic72$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic73$ = SubLObjectFactory.makeKeyword("DO-HASH-TABLE");
-        $ic74$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic74$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic75$ = SubLObjectFactory.makeKeyword("DEPTH");
         $ic76$ = SubLObjectFactory.makeKeyword("STACK");
         $ic77$ = SubLObjectFactory.makeKeyword("QUEUE");

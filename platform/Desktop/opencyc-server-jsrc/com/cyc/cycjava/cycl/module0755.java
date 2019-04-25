@@ -987,7 +987,7 @@ public final class module0755 extends SubLTranslatedFile
         $ic3$ = SubLObjectFactory.makeString("~&Not adding ~S to the discourse context because *pph-discourse-context* is not initialized~%");
         $ic4$ = SubLObjectFactory.makeString("~&Not adding ~S to the discourse context because it is already there~%");
         $ic5$ = SubLObjectFactory.makeString("~&Not adding ~S to the discourse context because it is not valid discourse-referent cycl");
-        $ic6$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("FirstPerson-NLAttr")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SecondPerson-NLAttr")));
+        $ic6$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("FirstPerson-NLAttr")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SecondPerson-NLAttr")));
         $ic7$ = SubLObjectFactory.makeKeyword("UNKNOWN");
         $ic8$ = SubLObjectFactory.makeKeyword("ENSURED");
         $ic9$ = SubLObjectFactory.makeSymbol("S#51828", "CYC");
@@ -1053,9 +1053,9 @@ public final class module0755 extends SubLTranslatedFile
         $ic69$ = SubLObjectFactory.makeString("Setting number of reference marker ~S to ~S");
         $ic70$ = SubLObjectFactory.makeKeyword("INDEX");
         $ic71$ = SubLObjectFactory.makeSymbol("?NUM");
-        $ic72$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("agrPredNumber"));
+        $ic72$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("agrPredNumber"));
         $ic73$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?NUM"));
-        $ic74$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("GeneralLexiconMt"));
+        $ic74$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("GeneralLexiconMt"));
     }
     
     public static final class $sX51826_native extends SubLStructNative

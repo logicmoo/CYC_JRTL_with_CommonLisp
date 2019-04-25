@@ -428,8 +428,8 @@ public final class module0217 extends SubLTranslatedFile
     }
     
     public static SubLObject f14215(final SubLObject var1) {
-        if (module0217.NIL != module0128.f8449(var1)) {
-            final SubLObject var2 = module0128.f8440(var1);
+        if (module0217.NIL != constant_handles_oc.f8449(var1)) {
+            final SubLObject var2 = constant_handles_oc.f8440(var1);
             if (module0217.NIL != var2) {
                 return module0164.f10687(var2);
             }
@@ -3090,7 +3090,7 @@ public final class module0217 extends SubLTranslatedFile
     
     public static SubLObject f14348() {
         final SubLThread var10 = SubLProcess.currentSubLThread();
-        if (module0217.NIL != module0128.f8463(module0217.$ic115$, (SubLObject)module0217.UNPROVIDED)) {
+        if (module0217.NIL != constant_handles_oc.f8463(module0217.$ic115$, (SubLObject)module0217.UNPROVIDED)) {
             SubLObject var11 = (SubLObject)module0217.NIL;
             final SubLObject var12 = module0147.$g2094$.currentBinding(var10);
             final SubLObject var13 = module0147.$g2095$.currentBinding(var10);
@@ -3382,14 +3382,14 @@ public final class module0217 extends SubLTranslatedFile
             var1 = (SubLObject)module0217.NIL;
         }
         final SubLThread var61 = SubLProcess.currentSubLThread();
-        assert module0217.NIL != module0174.f11035(var60) : var60;
+        assert module0217.NIL != assertion_handles_oc.f11035(var60) : var60;
         final SubLObject var62 = module0214.$g2378$.currentBinding(var61);
         final SubLObject var63 = module0214.$g2379$.currentBinding(var61);
         try {
             module0214.$g2378$.bind((SubLObject)module0217.T, var61);
             module0214.$g2379$.bind((SubLObject)module0217.NIL, var61);
-            if (module0217.NIL != module0174.f11045(var60)) {
-                if (module0217.NIL != module0175.f11065(var60)) {
+            if (module0217.NIL != assertion_handles_oc.f11045(var60)) {
+                if (module0217.NIL != oc_assertions_interface.f11065(var60)) {
                     f14365(var60, var1);
                 }
                 else {
@@ -3412,7 +3412,7 @@ public final class module0217 extends SubLTranslatedFile
             var1 = (SubLObject)module0217.NIL;
         }
         final SubLThread var61 = SubLProcess.currentSubLThread();
-        assert module0217.NIL != module0174.f11035(var60) : var60;
+        assert module0217.NIL != assertion_handles_oc.f11035(var60) : var60;
         final SubLObject var62 = module0214.$g2378$.currentBinding(var61);
         final SubLObject var63 = module0214.$g2379$.currentBinding(var61);
         try {
@@ -3906,7 +3906,7 @@ public final class module0217 extends SubLTranslatedFile
             }
             else if (var64 == module0217.$ic126$ && var132.eql(module0217.$ic157$)) {
                 final SubLObject var139 = module0205.f13380(var131, (SubLObject)module0217.UNPROVIDED);
-                if (module0217.NIL != module0174.f11035(var139)) {
+                if (module0217.NIL != assertion_handles_oc.f11035(var139)) {
                     final SubLObject var134 = (SubLObject)ConsesLow.list((SubLObject)module0217.$ic158$, var139);
                     if (module0217.NIL == conses_high.member(var134, var128, Symbols.symbol_function((SubLObject)module0217.EQUAL), Symbols.symbol_function((SubLObject)module0217.IDENTITY))) {
                         var128 = (SubLObject)ConsesLow.cons(var134, var128);
@@ -3921,7 +3921,7 @@ public final class module0217 extends SubLTranslatedFile
             }
             else if (var64 == module0217.$ic126$ && var132.eql(module0217.$ic159$)) {
                 final SubLObject var139 = module0205.f13380(var131, (SubLObject)module0217.UNPROVIDED);
-                if (module0217.NIL != module0174.f11035(var139)) {
+                if (module0217.NIL != assertion_handles_oc.f11035(var139)) {
                     final SubLObject var134 = (SubLObject)ConsesLow.list((SubLObject)module0217.$ic160$, var139);
                     if (module0217.NIL == conses_high.member(var134, var128, Symbols.symbol_function((SubLObject)module0217.EQUAL), Symbols.symbol_function((SubLObject)module0217.IDENTITY))) {
                         var128 = (SubLObject)ConsesLow.cons(var134, var128);
@@ -4939,7 +4939,7 @@ public final class module0217 extends SubLTranslatedFile
     public static SubLObject f14410() {
         final SubLThread var10 = SubLProcess.currentSubLThread();
         final SubLObject var11 = module0035.sublisp_boolean(module0212.f13753());
-        final SubLObject var12 = module0128.f8433();
+        final SubLObject var12 = constant_handles_oc.f8433();
         final SubLObject var13 = (SubLObject)module0217.$ic200$;
         final SubLObject var14 = module0173.f10962();
         SubLObject var15 = (SubLObject)module0217.ZERO_INTEGER;
@@ -5008,7 +5008,7 @@ public final class module0217 extends SubLTranslatedFile
             module0012.$g76$.rebind(var17, var10);
             module0012.$g75$.rebind(var16, var10);
         }
-        final SubLObject var34 = module0174.f11010();
+        final SubLObject var34 = assertion_handles_oc.f11010();
         final SubLObject var35 = (SubLObject)module0217.$ic202$;
         final SubLObject var214_215 = module0065.f4733(var34);
         SubLObject var216_217 = (SubLObject)module0217.ZERO_INTEGER;
@@ -5042,7 +5042,7 @@ public final class module0217 extends SubLTranslatedFile
                             }
                             module0012.note_percent_progress(var216_217, var214_215);
                             var216_217 = Numbers.add(var216_217, (SubLObject)module0217.ONE_INTEGER);
-                            module0177.f11245(var45);
+                            oc_assertions_low.f11245(var45);
                         }
                     }
                 }
@@ -5057,7 +5057,7 @@ public final class module0217 extends SubLTranslatedFile
                         if (module0217.NIL == module0065.f4773((SubLObject)module0217.$ic201$) || module0217.NIL == module0065.f4749(var50)) {
                             module0012.note_percent_progress(var216_217, var214_215);
                             var216_217 = Numbers.add(var216_217, (SubLObject)module0217.ONE_INTEGER);
-                            module0177.f11245(var50);
+                            oc_assertions_low.f11245(var50);
                         }
                         var47 = Numbers.add(var47, (SubLObject)module0217.ONE_INTEGER);
                     }
@@ -5086,7 +5086,7 @@ public final class module0217 extends SubLTranslatedFile
         final SubLObject var53 = Errors.$continue_cerrorP$.currentBinding(var10);
         try {
             Errors.$continue_cerrorP$.bind((SubLObject)module0217.T, var10);
-            final SubLObject var54 = module0174.f11010();
+            final SubLObject var54 = assertion_handles_oc.f11010();
             final SubLObject var55 = (SubLObject)module0217.$ic204$;
             final SubLObject var56 = module0065.f4733(var54);
             SubLObject var57 = (SubLObject)module0217.ZERO_INTEGER;
@@ -5278,7 +5278,7 @@ public final class module0217 extends SubLTranslatedFile
     public static SubLObject f14415(final SubLObject var133, final SubLObject var11) {
         assert module0217.NIL != module0232.f15320(var133) : var133;
         assert module0217.NIL != module0161.f10480(var11) : var11;
-        return module0175.f11064(var133, var11);
+        return oc_assertions_interface.f11064(var133, var11);
     }
     
     public static SubLObject f14416(final SubLObject var133, final SubLObject var11) {
@@ -5343,7 +5343,7 @@ public final class module0217 extends SubLTranslatedFile
         if (module0217.NIL == var134) {
             return (SubLObject)module0217.NIL;
         }
-        final SubLObject var135 = module0177.f11211(var134);
+        final SubLObject var135 = oc_assertions_low.f11211(var134);
         if (module0217.NIL != var135) {
             return conses_high.copy_list(module0192.f12029(var135));
         }
@@ -5410,7 +5410,7 @@ public final class module0217 extends SubLTranslatedFile
         if (module0217.NIL == var238) {
             return (SubLObject)module0217.NIL;
         }
-        final SubLObject var239 = module0177.f11211(var238);
+        final SubLObject var239 = oc_assertions_low.f11211(var238);
         if (module0217.NIL != var239) {
             return conses_high.copy_list(module0192.f12029(var239));
         }
@@ -5447,7 +5447,7 @@ public final class module0217 extends SubLTranslatedFile
     }
     
     public static SubLObject f14429(final SubLObject var60) {
-        final SubLObject var61 = module0177.f11211(var60);
+        final SubLObject var61 = oc_assertions_low.f11211(var60);
         if (module0217.NIL != var61) {
             final SubLObject var62 = module0192.f12029(var61);
             return Sequences.remove(var60, var62, (SubLObject)module0217.UNPROVIDED, (SubLObject)module0217.UNPROVIDED, (SubLObject)module0217.UNPROVIDED, (SubLObject)module0217.UNPROVIDED, (SubLObject)module0217.UNPROVIDED);
@@ -5464,7 +5464,7 @@ public final class module0217 extends SubLTranslatedFile
     }
     
     public static SubLObject f14430(final SubLObject var133) {
-        return f14422(module0177.f11182(var133));
+        return f14422(oc_assertions_low.f11182(var133));
     }
     
     public static SubLObject f14431(final SubLObject var133) {
@@ -6245,7 +6245,7 @@ public final class module0217 extends SubLTranslatedFile
         assert module0217.NIL != module0232.f15320(var133) : var133;
         final SubLObject var134 = f14418(var133);
         if (module0217.NIL != var134) {
-            final SubLObject var135 = module0177.f11211(var134);
+            final SubLObject var135 = oc_assertions_low.f11211(var134);
             if (module0217.NIL != var135) {
                 return var135;
             }
@@ -6315,7 +6315,7 @@ public final class module0217 extends SubLTranslatedFile
     
     public static SubLObject f14445(final SubLObject var60) {
         final SubLThread var61 = SubLProcess.currentSubLThread();
-        assert module0217.NIL != module0174.f11035(var60) : var60;
+        assert module0217.NIL != assertion_handles_oc.f11035(var60) : var60;
         if (module0205.f13132(var60).eql(module0217.$ic247$)) {
             module0217.$g2390$.setDynamicValue((SubLObject)ConsesLow.cons(var60, module0217.$g2390$.getDynamicValue(var61)), var61);
         }
@@ -6854,11 +6854,11 @@ public final class module0217 extends SubLTranslatedFile
         $ic108$ = SubLObjectFactory.makeString("Return the number of assertions at the mt index for TERM.");
         $ic109$ = SubLObjectFactory.makeKeyword("IST");
         $ic110$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic111$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic111$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic112$ = SubLObjectFactory.makeSymbol("NUM-HLMT-INDEX");
         $ic113$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"));
         $ic114$ = SubLObjectFactory.makeString("Return the number of assertions at the hlmt virtual index for TERM.");
-        $ic115$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BroadMicrotheory"));
+        $ic115$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BroadMicrotheory"));
         $ic116$ = SubLObjectFactory.makeSymbol("NUM-OTHER-INDEX");
         $ic117$ = SubLObjectFactory.makeString("Return the number of assertions at the other index for TERM.");
         $ic118$ = SubLObjectFactory.makeKeyword("OTHER");
@@ -6872,9 +6872,9 @@ public final class module0217 extends SubLTranslatedFile
         $ic126$ = SubLObjectFactory.makeKeyword("POS");
         $ic127$ = SubLObjectFactory.makeKeyword("NEG");
         $ic128$ = SubLObjectFactory.makeSymbol(">");
-        $ic129$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic130$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
-        $ic131$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic129$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic130$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic131$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
         $ic132$ = SubLObjectFactory.makeString("indexing problem while removing ~S");
         $ic133$ = SubLObjectFactory.makeSymbol("REMOVE-TERM-INDICES");
         $ic134$ = SubLObjectFactory.makeString("Remove all assertions about TERM from the KB. Return the TERM.");
@@ -6894,17 +6894,17 @@ public final class module0217 extends SubLTranslatedFile
         $ic148$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#17294", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#17295", "CYC"));
         $ic149$ = SubLObjectFactory.makeKeyword("ISA");
         $ic150$ = SubLObjectFactory.makeKeyword("PRED");
-        $ic151$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
+        $ic151$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
         $ic152$ = SubLObjectFactory.makeKeyword("QUOTED-ISA");
         $ic153$ = SubLObjectFactory.makeKeyword("GENLS");
-        $ic154$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic154$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
         $ic155$ = SubLObjectFactory.makeKeyword("GENL-MT");
         $ic156$ = SubLObjectFactory.makeKeyword("FUNC");
-        $ic157$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("abnormal"));
+        $ic157$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("abnormal"));
         $ic158$ = SubLObjectFactory.makeKeyword("EXCEPTION");
-        $ic159$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("meetsPragmaticRequirement"));
+        $ic159$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("meetsPragmaticRequirement"));
         $ic160$ = SubLObjectFactory.makeKeyword("PRAGMA");
-        $ic161$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
+        $ic161$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
         $ic162$ = SubLObjectFactory.makeKeyword("IST-PRED");
         $ic163$ = SubLObjectFactory.makeSymbol("S#13258", "CYC");
         $ic164$ = SubLObjectFactory.makeSymbol("SECOND");
@@ -6990,7 +6990,7 @@ public final class module0217 extends SubLTranslatedFile
         $ic244$ = SubLObjectFactory.makeSymbol("ASSERTION-EL-FORMULA");
         $ic245$ = SubLObjectFactory.makeSymbol("S#17285", "CYC");
         $ic246$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("NEG"), (SubLObject)SubLObjectFactory.makeKeyword("POS"));
-        $ic247$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
+        $ic247$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("implies"));
     }
     
     public static final class $f14225$ZeroArityFunction extends ZeroArityFunction

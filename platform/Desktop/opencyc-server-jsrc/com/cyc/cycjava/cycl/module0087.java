@@ -1334,7 +1334,7 @@ public final class module0087 extends SubLTranslatedFile
         module0087.$g1177$ = null;
         $ic0$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"));
         $ic1$ = SubLObjectFactory.makeSymbol("CONS");
-        $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic3$ = SubLObjectFactory.makeSymbol("CONSP");
         $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#7637", "CYC"));
         $ic5$ = SubLObjectFactory.makeSymbol("CAR");

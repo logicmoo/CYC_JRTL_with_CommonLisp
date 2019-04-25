@@ -1179,12 +1179,12 @@ public final class module0204 extends SubLTranslatedFile
         $ic17$ = SubLObjectFactory.makeSymbol("S#15955", "CYC");
         $ic18$ = SubLObjectFactory.makeSymbol("S#16020", "CYC");
         $ic19$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12398", "CYC"));
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
         $ic21$ = SubLObjectFactory.makeSymbol("S#15990", "CYC");
         $ic22$ = SubLObjectFactory.makeSymbol("NEGATE");
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("and"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and"));
         $ic24$ = SubLObjectFactory.makeSymbol("LISTP");
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("or"));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("or"));
         $ic26$ = SubLObjectFactory.makeSymbol("S#15991", "CYC");
         $ic27$ = SubLObjectFactory.makeSymbol("S#16021", "CYC");
         $ic28$ = SubLObjectFactory.makeSymbol("S#15993", "CYC");

@@ -187,11 +187,11 @@ public final class module0561 extends SubLTranslatedFile
     private static final SubLObject $ic132$;
     
     public static SubLObject f34529(final SubLObject var1) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != module0128.f8449(var1) && (module0561.NIL != module0259.f16891(var1, module0561.$g4073$.getGlobalValue()) || module0561.NIL != module0259.f16976(var1, module0561.$g4073$.getGlobalValue())));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != constant_handles_oc.f8449(var1) && (module0561.NIL != module0259.f16891(var1, module0561.$g4073$.getGlobalValue()) || module0561.NIL != module0259.f16976(var1, module0561.$g4073$.getGlobalValue())));
     }
     
     public static SubLObject f34530(final SubLObject var1) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != module0128.f8449(var1) && module0561.NIL == f34529(var1));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != constant_handles_oc.f8449(var1) && module0561.NIL == f34529(var1));
     }
     
     public static SubLObject f34531(final SubLObject var2) {
@@ -265,11 +265,11 @@ public final class module0561 extends SubLTranslatedFile
     }
     
     public static SubLObject f34540(final SubLObject var10) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != module0128.f8449(var10) && module0561.NIL != module0031.f1688(var10, module0561.$g4077$.getGlobalValue()));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != constant_handles_oc.f8449(var10) && module0561.NIL != module0031.f1688(var10, module0561.$g4077$.getGlobalValue()));
     }
     
     public static SubLObject f34541(final SubLObject var10) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != module0128.f8449(var10) && module0561.NIL == module0031.f1688(var10, module0561.$g4077$.getGlobalValue()));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != constant_handles_oc.f8449(var10) && module0561.NIL == module0031.f1688(var10, module0561.$g4077$.getGlobalValue()));
     }
     
     public static SubLObject f34542() {
@@ -379,7 +379,7 @@ public final class module0561 extends SubLTranslatedFile
     }
     
     public static SubLObject f34552(final SubLObject var27) {
-        if (module0561.NIL != module0174.f11035(var27)) {
+        if (module0561.NIL != assertion_handles_oc.f11035(var27)) {
             final SubLObject var28 = module0178.f11287(var27);
             final SubLObject var29 = module0178.f11282(var27);
             if (module0561.NIL == f34550(module0161.f10557(var28)) && module0561.NIL == module0035.f2439(Symbols.symbol_function((SubLObject)module0561.$ic15$), var29, (SubLObject)module0561.UNPROVIDED) && module0561.NIL == module0035.f2439(Symbols.symbol_function((SubLObject)module0561.$ic16$), var29, (SubLObject)module0561.UNPROVIDED)) {
@@ -390,7 +390,7 @@ public final class module0561 extends SubLTranslatedFile
     }
     
     public static SubLObject f34553(final SubLObject var10) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != module0174.f11035(var10) && module0561.NIL == f34552(var10));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != assertion_handles_oc.f11035(var10) && module0561.NIL == f34552(var10));
     }
     
     public static SubLObject f34554() {
@@ -1532,7 +1532,7 @@ public final class module0561 extends SubLTranslatedFile
     public static SubLObject f34596() {
         module0018.$g574$.setDynamicValue((SubLObject)module0561.NIL);
         module0107.f7576((SubLObject)module0561.UNPROVIDED);
-        module0618.f37979();
+        oc_dumper.f37979();
         module0268.f17651();
         module0222.f14642();
         module0225.f14786();
@@ -1547,10 +1547,10 @@ public final class module0561 extends SubLTranslatedFile
         module0271.f17872();
         module0152.$g2105$.setDynamicValue((SubLObject)module0561.$ic90$);
         module0146.$g2057$.setDynamicValue((SubLObject)module0561.T);
-        module0618.f37978();
-        module0618.f37951();
+        oc_dumper.f37978();
+        oc_dumper.f37951();
         module0213.f13887();
-        module0618.f37984();
+        oc_dumper.f37984();
         module0018.f969((SubLObject)module0561.ONE_INTEGER);
         if (module0561.NIL != module0561.$g4086$.getGlobalValue()) {
             final SubLObject var97 = Time.get_universal_time();
@@ -1562,9 +1562,9 @@ public final class module0561 extends SubLTranslatedFile
     }
     
     public static SubLObject f34575(final SubLObject var1, final SubLObject var99) {
-        assert module0561.NIL != module0128.f8449(var1) : var1;
-        final SubLObject var100 = module0166.f10743(var1);
-        final SubLObject var101 = module0166.f10757(var1);
+        assert module0561.NIL != constant_handles_oc.f8449(var1) : var1;
+        final SubLObject var100 = constants_high_oc.f10743(var1);
+        final SubLObject var101 = constants_high_oc.f10757(var1);
         PrintLow.format(var99, (SubLObject)module0561.$ic92$, var100, var101);
         return var1;
     }
@@ -1779,7 +1779,7 @@ public final class module0561 extends SubLTranslatedFile
         if (var102 == module0561.UNPROVIDED) {
             var102 = (SubLObject)module0561.NIL;
         }
-        assert module0561.NIL != module0128.f8449(var1) : var1;
+        assert module0561.NIL != constant_handles_oc.f8449(var1) : var1;
         PrintLow.format(var99, (SubLObject)module0561.$ic110$, var1);
         return var1;
     }
@@ -1808,7 +1808,7 @@ public final class module0561 extends SubLTranslatedFile
         if (var102 == module0561.UNPROVIDED) {
             var102 = (SubLObject)module0561.NIL;
         }
-        assert module0561.NIL != module0174.f11035(var27) : var27;
+        assert module0561.NIL != assertion_handles_oc.f11035(var27) : var27;
         PrintLow.format(var99, (SubLObject)module0561.$ic113$, module0205.f13144(module0178.f11305(var27)));
         return var27;
     }
@@ -2153,7 +2153,7 @@ public final class module0561 extends SubLTranslatedFile
     }
     
     public static SubLObject f34615(final SubLObject var150) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != module0174.f11035(var150) && module0561.NIL != module0035.f1995(module0178.f11285(var150), (SubLObject)module0561.TWO_INTEGER, (SubLObject)module0561.UNPROVIDED) && module0178.f11332(var150).eql(module0561.$ic125$));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0561.NIL != assertion_handles_oc.f11035(var150) && module0561.NIL != module0035.f1995(module0178.f11285(var150), (SubLObject)module0561.TWO_INTEGER, (SubLObject)module0561.UNPROVIDED) && module0178.f11332(var150).eql(module0561.$ic125$));
     }
     
     public static SubLObject f34558() {
@@ -2248,7 +2248,7 @@ public final class module0561 extends SubLTranslatedFile
     }
     
     public static SubLObject f34616(final SubLObject var1) {
-        assert module0561.NIL != module0128.f8449(var1) : var1;
+        assert module0561.NIL != constant_handles_oc.f8449(var1) : var1;
         if (module0561.NIL == module0561.$g4077$.getGlobalValue()) {
             f34539();
         }
@@ -2505,10 +2505,10 @@ public final class module0561 extends SubLTranslatedFile
         module0561.$g4087$ = null;
         module0561.$g4088$ = null;
         module0561.$g4089$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CoreUnionConstant"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CoreUnionConstant"));
         $ic1$ = SubLObjectFactory.makeSymbol("S#37840", "CYC");
         $ic2$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic4$ = SubLObjectFactory.makeSymbol("CONSTANT-P");
         $ic5$ = SubLObjectFactory.makeSymbol("S#37920", "CYC");
         $ic6$ = SubLObjectFactory.makeKeyword("UNINITIALIZED");
@@ -2527,13 +2527,13 @@ public final class module0561 extends SubLTranslatedFile
         $ic19$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic20$ = SubLObjectFactory.makeSymbol("S#37927", "CYC");
         $ic21$ = SubLObjectFactory.makeString("Computing definitional info");
-        $ic22$ = ConsesLow.list(new SubLObject[] { ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.T), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1Genl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2Genl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3Isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3Genl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4Isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4Genl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5Isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5Genl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("argsIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg1QuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg2QuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg3QuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg4QuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arg5QuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("argsQuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultGenl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), (SubLObject)SubLObjectFactory.makeSymbol("S#19647", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#15517", "CYC"), (SubLObject)module0561.T), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")), (SubLObject)SubLObjectFactory.makeSymbol("S#19647", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#15517", "CYC"), (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt")), (SubLObject)SubLObjectFactory.makeSymbol("S#19859", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("GENL-MT?"), (SubLObject)module0561.T), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arity")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arityMin")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("arityMax")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("defnIff")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("defnNecessary")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("defnSufficient")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnIff")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnNecessary")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnSufficient")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL) });
+        $ic22$ = ConsesLow.list(new SubLObject[] { ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.T), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1Isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1Genl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2Isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2Genl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3Isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3Genl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4Isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4Genl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5Isa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5Genl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argsIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg1QuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg2QuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg3QuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg4QuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arg5QuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argsQuotedIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultGenl")), (SubLObject)SubLObjectFactory.makeSymbol("ALL-GENLS"), (SubLObject)SubLObjectFactory.makeSymbol("GENL?"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), (SubLObject)SubLObjectFactory.makeSymbol("S#19647", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#15517", "CYC"), (SubLObject)module0561.T), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")), (SubLObject)SubLObjectFactory.makeSymbol("S#19647", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#15517", "CYC"), (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt")), (SubLObject)SubLObjectFactory.makeSymbol("S#19859", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("GENL-MT?"), (SubLObject)module0561.T), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arity")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arityMin")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("arityMax")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defnIff")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defnNecessary")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defnSufficient")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnIff")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnNecessary")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedDefnSufficient")), (SubLObject)module0561.NIL, (SubLObject)module0561.NIL, (SubLObject)module0561.NIL) });
         $ic23$ = SubLObjectFactory.makeSymbol("S#37873", "CYC");
         $ic24$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#37936", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#37937", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#37938", "CYC"));
         $ic25$ = SubLObjectFactory.makeKeyword("FALSE");
-        $ic26$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic27$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycLConstant"));
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
+        $ic26$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic27$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycLConstant"));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
         $ic29$ = SubLObjectFactory.makeSymbol("S#37859", "CYC");
         $ic30$ = SubLObjectFactory.makeSymbol("S#37930", "CYC");
         $ic31$ = SubLObjectFactory.makeInteger(300);
@@ -2542,7 +2542,7 @@ public final class module0561 extends SubLTranslatedFile
         $ic34$ = SubLObjectFactory.makeString("~%Given: ~S~%Minimal: ~S");
         $ic35$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic36$ = SubLObjectFactory.makeSymbol("S#37879", "CYC");
-        $ic37$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CoreCycLMt"));
+        $ic37$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CoreCycLMt"));
         $ic38$ = SubLObjectFactory.makeSymbol("GAF-ARG2");
         $ic39$ = SubLObjectFactory.makeSymbol("GAF-ARG1");
         $ic40$ = SubLObjectFactory.makeSymbol("S#37931", "CYC");
@@ -2608,7 +2608,7 @@ public final class module0561 extends SubLTranslatedFile
         $ic100$ = SubLObjectFactory.makeSymbol("FIRST");
         $ic101$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#12576", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VALUES"));
         $ic102$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"));
-        $ic103$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
+        $ic103$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
         $ic104$ = SubLObjectFactory.makeString("~%(low-assert-literal `");
         $ic105$ = SubLObjectFactory.makeString(" `");
         $ic106$ = SubLObjectFactory.makeString(")");
@@ -2620,24 +2620,24 @@ public final class module0561 extends SubLTranslatedFile
         $ic112$ = SubLObjectFactory.makeSymbol("ASSERTION-P");
         $ic113$ = SubLObjectFactory.makeString("~s");
         $ic114$ = SubLObjectFactory.makeSymbol("S#12263", "CYC");
-        $ic115$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BookkeepingMt"));
+        $ic115$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BookkeepingMt"));
         $ic116$ = SubLObjectFactory.makeString(";; asserted by ~S~%");
         $ic117$ = SubLObjectFactory.makeString("(fi-assert-int '");
         $ic118$ = SubLObjectFactory.makeString("~%~S ~S ~S)~%");
         $ic119$ = SubLObjectFactory.makeString("(tms-change-direction (find-assertion-cycl '");
         $ic120$ = SubLObjectFactory.makeString("~%~S) ~S)~%");
-        $ic121$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("decontextualizedPredicate")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("predicateConventionMt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("decontextualizedCollection")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("collectionConventionMt")));
+        $ic121$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("decontextualizedPredicate")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("predicateConventionMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("decontextualizedCollection")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("collectionConventionMt")));
         $ic122$ = SubLObjectFactory.makeKeyword("GAF");
         $ic123$ = SubLObjectFactory.makeKeyword("IGNORE-ERRORS-TARGET");
         $ic124$ = SubLObjectFactory.makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
-        $ic125$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("notAssertibleMt"));
+        $ic125$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("notAssertibleMt"));
         $ic126$ = SubLObjectFactory.makeString("late assertions");
-        $ic127$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
-        $ic128$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes"));
+        $ic127$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic128$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes"));
         $ic129$ = SubLObjectFactory.makeSymbol("S#37850", "CYC");
-        $ic130$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
-        $ic131$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
-        $ic132$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa"));
+        $ic130$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic131$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic132$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa"));
     }
 }
 

@@ -1286,7 +1286,7 @@ public final class module0633 extends SubLTranslatedFile
     }
     
     public static SubLObject f38751(final SubLObject var10) {
-        if (module0633.NIL != module0174.f11035(var10)) {
+        if (module0633.NIL != assertion_handles_oc.f11035(var10)) {
             return module0538.f33367(var10, (SubLObject)module0633.UNPROVIDED);
         }
         return var10;
@@ -1375,36 +1375,36 @@ public final class module0633 extends SubLTranslatedFile
         module0633.$g4944$ = null;
         $ic0$ = SubLObjectFactory.makeString("I");
         $ic1$ = SubLObjectFactory.makeString("C");
-        $ic2$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("testQuerySpecification")));
+        $ic2$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testQuerySpecification")));
         $ic3$ = SubLObjectFactory.makeSymbol("VALID-CONSTANT?");
         $ic4$ = SubLObjectFactory.makeSymbol("FORT-P");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testQuerySpecification"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testQuerySpecification"));
         $ic6$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic7$ = SubLObjectFactory.makeSymbol("S#32663", "CYC");
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentTest-FullySpecified"));
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentTest"));
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentTestSpecificationType"));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentTest-FullySpecified"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentTest"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentTestSpecificationType"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic12$ = SubLObjectFactory.makeSymbol("S#32785", "CYC");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("comment"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comment"));
         $ic14$ = SubLObjectFactory.makeSymbol("COLLECTION-P");
         $ic15$ = SubLObjectFactory.makeKeyword("WHO");
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testResponsibleCyclist"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testResponsibleCyclist"));
         $ic17$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("WHO"));
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testCollectionCyclistResponsible"));
-        $ic19$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testMetricsToGather"));
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-Exact"));
-        $ic21$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-Wanted"));
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-NotWanted"));
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycLUnimportant"));
-        $ic24$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswers-Cardinality-Exact"));
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswers-Cardinality-Min"));
-        $ic26$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswers-Cardinality-Max"));
-        $ic27$ = ConsesLow.list(new SubLObject[] { module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-Exact")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-Wanted")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-NotWanted")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycLUnimportant")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupport-Wanted")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupport-NotWanted")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupportedByHLSupportModule-Wanted")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupportedByHLSupportModule-NotWanted")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("testResponsibleCyclist")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("testQuerySpecification")) });
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testCollectionCyclistResponsible"));
+        $ic19$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testMetricsToGather"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-Exact"));
+        $ic21$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-Wanted"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-NotWanted"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycLUnimportant"));
+        $ic24$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswers-Cardinality-Exact"));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswers-Cardinality-Min"));
+        $ic26$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswers-Cardinality-Max"));
+        $ic27$ = ConsesLow.list(new SubLObject[] { constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-Exact")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-Wanted")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycL-NotWanted")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswersCycLUnimportant")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupport-Wanted")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupport-NotWanted")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupportedByHLSupportModule-Wanted")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupportedByHLSupportModule-NotWanted")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testResponsibleCyclist")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testQuerySpecification")) });
         $ic28$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic29$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic29$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic30$ = SubLObjectFactory.makeKeyword("GAF");
-        $ic31$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
+        $ic31$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
         $ic32$ = SubLObjectFactory.makeKeyword("SEVERE");
         $ic33$ = SubLObjectFactory.makeString("");
         $ic34$ = SubLObjectFactory.makeString("~%~A is not a #$KBContentTest-FullySpecified.");
@@ -1413,10 +1413,10 @@ public final class module0633 extends SubLTranslatedFile
         $ic37$ = SubLObjectFactory.makeKeyword("NO-VALID-QUERY");
         $ic38$ = SubLObjectFactory.makeString(" has no #$testAnswer-MultipleChoice.");
         $ic39$ = SubLObjectFactory.makeKeyword("NO-TEST-EXPECTATION");
-        $ic40$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupport-Wanted"));
-        $ic41$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupport-NotWanted"));
-        $ic42$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupportedByHLSupportModule-Wanted"));
-        $ic43$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupportedByHLSupportModule-NotWanted"));
+        $ic40$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupport-Wanted"));
+        $ic41$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupport-NotWanted"));
+        $ic42$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupportedByHLSupportModule-Wanted"));
+        $ic43$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testAnswerSupportedByHLSupportModule-NotWanted"));
         $ic44$ = SubLObjectFactory.makeString("~%~A has no stated test expectation.");
         $ic45$ = SubLObjectFactory.makeString("~%~A's exact answer should include only #$ELInferenceBindingSets, but these are not: ");
         $ic46$ = SubLObjectFactory.makeKeyword("EXACT-ANSWER-CONTAINS-MALFORMED-INFERENCE-BINDING-SET");
@@ -1439,7 +1439,7 @@ public final class module0633 extends SubLTranslatedFile
         $ic63$ = SubLObjectFactory.makeString("continue anyway");
         $ic64$ = SubLObjectFactory.makeKeyword("WARN");
         $ic65$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic66$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AreteQuery"));
+        $ic66$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AreteQuery"));
         $ic67$ = SubLObjectFactory.makeString("~A is neither SET-P nor LISTP.");
         $ic68$ = SubLObjectFactory.makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
         $ic69$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeUninternedSymbol("US#4D5E436"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#1526883"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#15AA083"));
@@ -1452,17 +1452,17 @@ public final class module0633 extends SubLTranslatedFile
         $ic76$ = SubLObjectFactory.makeString("Simple");
         $ic77$ = SubLObjectFactory.makeString("Test Set");
         $ic78$ = SubLObjectFactory.makeString("Individual Test");
-        $ic79$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycArchitectureMt"));
-        $ic80$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycKBContentTestFramework"));
-        $ic81$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("defaultSoftwareParameterValueInSoftwareObject"));
-        $ic82$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True"));
-        $ic83$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False"));
+        $ic79$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycArchitectureMt"));
+        $ic80$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycKBContentTestFramework"));
+        $ic81$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defaultSoftwareParameterValueInSoftwareObject"));
+        $ic82$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True"));
+        $ic83$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False"));
         $ic84$ = SubLObjectFactory.makeSymbol("S#42463", "CYC");
         $ic85$ = SubLObjectFactory.makeKeyword("UNINITIALIZED");
         $ic86$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
         $ic87$ = SubLObjectFactory.makeSymbol("S#42461", "CYC");
         $ic88$ = SubLObjectFactory.makeSymbol("S#42462", "CYC");
-        $ic89$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("HypotheticalForVariableFn"));
+        $ic89$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HypotheticalForVariableFn"));
         $ic90$ = SubLObjectFactory.makeString("When determining test results, could not find a hypothetical binding for the variable ~a");
         $ic91$ = SubLObjectFactory.makeSymbol("S#42465", "CYC");
         $ic92$ = SubLObjectFactory.makeSymbol("S#3846", "CYC");

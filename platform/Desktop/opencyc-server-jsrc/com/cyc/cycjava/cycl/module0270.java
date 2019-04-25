@@ -238,9 +238,9 @@ public final class module0270 extends SubLTranslatedFile
         $ic1$ = SubLObjectFactory.makeKeyword("REGULARIZE");
         $ic2$ = SubLObjectFactory.makeSymbol("S#17587", "CYC");
         $ic3$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic5$ = SubLObjectFactory.makeSymbol("S#12275", "CYC");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic7$ = SubLObjectFactory.makeSymbol("S#12280", "CYC");
         $ic8$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
         $ic9$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");

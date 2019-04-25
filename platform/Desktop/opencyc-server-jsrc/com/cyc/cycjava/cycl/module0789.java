@@ -153,18 +153,18 @@ public final class module0789 extends SubLTranslatedFile
         me = (SubLFile)new module0789();
         module0789.$g6310$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("FORT-P");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("or"));
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("geographicalSubRegions"));
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("geopoliticalSubdivision"));
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("or"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("geographicalSubRegions"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("geopoliticalSubdivision"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic5$ = SubLObjectFactory.makeKeyword("GENLS");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic7$ = SubLObjectFactory.makeKeyword("ISA");
         $ic8$ = SubLObjectFactory.makeKeyword("OPAQUE");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("mutuallyCoherent"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("mutuallyCoherent"));
         $ic10$ = SubLObjectFactory.makeKeyword("POS");
         $ic11$ = SubLObjectFactory.makeKeyword("REMOVAL-MUTUALLY-COHERENT");
-        $ic12$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("POS"), SubLObjectFactory.makeKeyword("PREDICATE"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("mutuallyCoherent")), SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("mutuallyCoherent")), (SubLObject)SubLObjectFactory.makeKeyword("FORT"), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND")), SubLObjectFactory.makeKeyword("COST-EXPRESSION"), SubLObjectFactory.makeSymbol("S#55063", "CYC"), SubLObjectFactory.makeKeyword("COMPLETENESS"), SubLObjectFactory.makeKeyword("COMPLETE"), SubLObjectFactory.makeKeyword("EXPAND"), SubLObjectFactory.makeSymbol("S#55062", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("(#$mutuallyCoherent <fort> <fully bound>)"), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$mutuallyCoherent #$BillClinton HilaryClinton)") });
+        $ic12$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("POS"), SubLObjectFactory.makeKeyword("PREDICATE"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("mutuallyCoherent")), SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("mutuallyCoherent")), (SubLObject)SubLObjectFactory.makeKeyword("FORT"), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND")), SubLObjectFactory.makeKeyword("COST-EXPRESSION"), SubLObjectFactory.makeSymbol("S#55063", "CYC"), SubLObjectFactory.makeKeyword("COMPLETENESS"), SubLObjectFactory.makeKeyword("COMPLETE"), SubLObjectFactory.makeKeyword("EXPAND"), SubLObjectFactory.makeSymbol("S#55062", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("(#$mutuallyCoherent <fort> <fully bound>)"), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$mutuallyCoherent #$BillClinton HilaryClinton)") });
     }
 }
 

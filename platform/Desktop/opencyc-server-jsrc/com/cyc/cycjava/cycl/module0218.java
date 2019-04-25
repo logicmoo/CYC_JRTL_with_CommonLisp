@@ -350,7 +350,7 @@ public final class module0218 extends SubLTranslatedFile
     public static SubLObject f14462(final SubLObject var15) {
         final SubLThread var16 = SubLProcess.currentSubLThread();
         if (module0218.NIL != module0193.f12067(var15)) {
-            return module0174.f11019();
+            return assertion_handles_oc.f11019();
         }
         SubLObject var17 = (SubLObject)module0218.NIL;
         final SubLObject var18 = module0147.$g2094$.currentBinding(var16);
@@ -671,12 +671,12 @@ public final class module0218 extends SubLTranslatedFile
         $ic8$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION-P")));
         $ic9$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
         $ic10$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic12$ = SubLObjectFactory.makeSymbol("S#13258", "CYC");
         $ic13$ = SubLObjectFactory.makeSymbol("S#11995", "CYC");
         $ic14$ = SubLObjectFactory.makeSymbol("MIN");
         $ic15$ = SubLObjectFactory.makeKeyword("IGNORE");
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
         $ic17$ = SubLObjectFactory.makeInteger(25);
         $ic18$ = SubLObjectFactory.makeString("mapping Cyc NARTs");
         $ic19$ = SubLObjectFactory.makeSymbol("STRINGP");

@@ -355,7 +355,7 @@ public final class module0613 extends SubLTranslatedFile
             module0229.f15259();
         }
         final SubLObject var4 = module0612.f37401(var3);
-        if (module0613.NIL == module0128.f8449(var4)) {
+        if (module0613.NIL == constant_handles_oc.f8449(var4)) {
             module0229.f15259();
         }
         return var4;
@@ -506,7 +506,7 @@ public final class module0613 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0613();
         $ic0$ = SubLObjectFactory.makeSymbol("CYC-DAY-OF-WEEK-DEFN");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CalendarDay"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CalendarDay"));
         $ic2$ = SubLObjectFactory.makeSymbol("CYC-DATE-AFTER");
         $ic3$ = SubLObjectFactory.makeString("A KB-dependent date-specific function was called, but the current Cyc KB does not contain knowledge about dates.");
         $ic4$ = SubLObjectFactory.makeSymbol("CYC-DATE-BEFORE");
@@ -519,13 +519,13 @@ public final class module0613 extends SubLTranslatedFile
         $ic11$ = SubLObjectFactory.makeSymbol("CYC-DAY-OF-DATE");
         $ic12$ = SubLObjectFactory.makeSymbol("CYC-HOUR-OF-DATE");
         $ic13$ = SubLObjectFactory.makeSymbol("CYC-MINUTE-OF-DATE");
-        $ic14$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("HoursDuration")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("MinutesDuration")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SecondsDuration")));
+        $ic14$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HoursDuration")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MinutesDuration")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SecondsDuration")));
         $ic15$ = SubLObjectFactory.makeSymbol("CYC-TIME-ELAPSED-ENCODE-STRING");
         $ic16$ = SubLObjectFactory.makeSymbol("CYC-TIME-ELAPSED-DECODE-STRING");
         $ic17$ = SubLObjectFactory.makeKeyword("FAIL");
         $ic18$ = SubLObjectFactory.makeSymbol("CYC-TIME-INTERVAL-OF-SPEC-STRING");
-        $ic19$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Date"));
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("laterThan"));
+        $ic19$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Date"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("laterThan"));
         $ic21$ = SubLObjectFactory.makeSymbol("CYC-LATER-THAN");
         $ic22$ = SubLObjectFactory.makeSymbol("CYC-DATE-SUBSUMES");
         $ic23$ = SubLObjectFactory.makeSymbol("CYC-TIME-ELAPSED");
@@ -541,7 +541,7 @@ public final class module0613 extends SubLTranslatedFile
         $ic33$ = SubLObjectFactory.makeSymbol("CYC-DAY-NUMBER-OF-DATE");
         $ic34$ = SubLObjectFactory.makeSymbol("S#24728", "CYC");
         $ic35$ = SubLObjectFactory.makeSymbol("S#20158", "CYC");
-        $ic36$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TimeIntervalInclusiveFn"));
+        $ic36$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TimeIntervalInclusiveFn"));
         $ic37$ = SubLObjectFactory.makeSymbol("CYC-MINIMAL-TIME-INTERVAL-COVERING-DATES");
     }
 }

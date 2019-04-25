@@ -38,7 +38,7 @@ public final class module0537 extends SubLTranslatedFile
     }
     
     public static SubLObject f33302(final SubLObject var2, final SubLObject var3) {
-        final SubLObject var4 = module0362.f24465(module0369.f25487(var3));
+        final SubLObject var4 = module0362.f24465(oc_inference_datastructures_inference.f25487(var3));
         SubLObject var5 = (SubLObject)module0537.NIL;
         SubLObject var6 = var2;
         SubLObject var7 = (SubLObject)module0537.NIL;
@@ -145,7 +145,7 @@ public final class module0537 extends SubLTranslatedFile
     }
     
     public static SubLObject f33309(final SubLObject var34) {
-        return f33306(module0369.f25775(var34));
+        return f33306(oc_inference_datastructures_inference.f25775(var34));
     }
     
     public static SubLObject f33310(final SubLObject var34) {
@@ -153,7 +153,7 @@ public final class module0537 extends SubLTranslatedFile
     }
     
     public static SubLObject f33311(final SubLObject var35) {
-        final SubLObject var36 = Mapping.mapcar((SubLObject)module0537.$ic4$, module0369.f25744(var35));
+        final SubLObject var36 = Mapping.mapcar((SubLObject)module0537.$ic4$, oc_inference_datastructures_inference.f25744(var35));
         return module0035.f2378(var36, Symbols.symbol_function((SubLObject)module0537.$ic5$), (SubLObject)module0537.UNPROVIDED);
     }
     
@@ -205,7 +205,7 @@ public final class module0537 extends SubLTranslatedFile
         module0537.$g3919$ = null;
         $ic0$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("ABDUCTION-ALLOWED?"), module0537.T, SubLObjectFactory.makeKeyword("ALLOW-INDETERMINATE-RESULTS?"), module0537.T, SubLObjectFactory.makeKeyword("RESULT-UNIQUENESS"), SubLObjectFactory.makeKeyword("PROOF"), SubLObjectFactory.makeKeyword("RETURN"), SubLObjectFactory.makeKeyword("BINDINGS-AND-SUPPORTS"), SubLObjectFactory.makeKeyword("ALLOW-HL-PREDICATE-TRANSFORMATION?"), module0537.T, SubLObjectFactory.makeKeyword("MAX-TRANSFORMATION-DEPTH"), module0537.ONE_INTEGER, SubLObjectFactory.makeKeyword("MAX-NUMBER"), module0537.TEN_INTEGER, SubLObjectFactory.makeKeyword("MAX-TIME"), SubLObjectFactory.makeInteger(300), SubLObjectFactory.makeKeyword("BROWSABLE?"), module0537.T, SubLObjectFactory.makeKeyword("CONTINUABLE?"), module0537.T });
         $ic1$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#15051", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#14510", "CYC"));
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AbducedTermFn"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AbducedTermFn"));
         $ic3$ = SubLObjectFactory.makeKeyword("ABDUCTION");
         $ic4$ = SubLObjectFactory.makeSymbol("S#36761", "CYC");
         $ic5$ = SubLObjectFactory.makeSymbol("<");

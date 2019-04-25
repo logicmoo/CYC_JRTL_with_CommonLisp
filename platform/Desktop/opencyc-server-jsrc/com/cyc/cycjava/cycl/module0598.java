@@ -311,8 +311,8 @@ public final class module0598 extends SubLTranslatedFile
         me = (SubLFile)new module0598();
         $ic0$ = SubLObjectFactory.makeSymbol("VARIABLE-P");
         $ic1$ = SubLObjectFactory.makeSymbol("EL-VAR?");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True"));
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False"));
         $ic4$ = SubLObjectFactory.makeKeyword("ISOLATED-TERMS");
         $ic5$ = SubLObjectFactory.makeSymbol("S#16098", "CYC");
         $ic6$ = SubLObjectFactory.makeSymbol("CDR");

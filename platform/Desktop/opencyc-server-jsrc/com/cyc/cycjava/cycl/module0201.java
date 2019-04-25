@@ -493,7 +493,7 @@ public final class module0201 extends SubLTranslatedFile
         $ic0$ = SubLObjectFactory.makeString("?");
         $ic1$ = SubLObjectFactory.makeString("([?]|[?][?]) [A-Z] ([A-Z]|[0-9])* ([-] ([A-Z]|[0-9])+)*");
         $ic2$ = SubLObjectFactory.makeSymbol("EL-VAR?");
-        $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic4$ = SubLObjectFactory.makeString("Return T iff OBJECT is a symbol which can be interpreted as an EL variable.");
         $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
         $ic6$ = SubLObjectFactory.makeSymbol("SYMBOLP");

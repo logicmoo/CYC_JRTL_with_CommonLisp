@@ -528,7 +528,7 @@ public final class module0316 extends SubLTranslatedFile
         $ic2$ = SubLObjectFactory.makeString("~s is not a transitive predicate");
         $ic3$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
         $ic4$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic6$ = SubLObjectFactory.makeKeyword("INVALID-MODULE");
         $ic7$ = SubLObjectFactory.makeString("~s is not a valid transitivity module.");
         $ic8$ = SubLObjectFactory.makeKeyword("INVALID-METHOD");

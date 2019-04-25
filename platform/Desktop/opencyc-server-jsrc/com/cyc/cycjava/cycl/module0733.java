@@ -362,7 +362,7 @@ public final class module0733 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0733();
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("partOfSpeech"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("partOfSpeech"));
         $ic1$ = SubLObjectFactory.makeSymbol("ADD-LEXICON-PREDICATE");
         $ic2$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic3$ = SubLObjectFactory.makeSymbol("REMOVE-LEXICON-PREDICATE");

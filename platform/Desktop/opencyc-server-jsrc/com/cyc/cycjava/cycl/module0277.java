@@ -87,7 +87,7 @@ public final class module0277 extends SubLTranslatedFile
     }
     
     public static SubLObject f18370(final SubLObject var7) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0277.NIL != module0128.f8449(var7) && module0277.NIL == module0004.f104(var7, module0277.$g2598$.getGlobalValue(), (SubLObject)module0277.UNPROVIDED, (SubLObject)module0277.UNPROVIDED));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0277.NIL != constant_handles_oc.f8449(var7) && module0277.NIL == module0004.f104(var7, module0277.$g2598$.getGlobalValue(), (SubLObject)module0277.UNPROVIDED, (SubLObject)module0277.UNPROVIDED));
     }
     
     public static SubLObject f18371(final SubLObject var8) {
@@ -499,7 +499,7 @@ public final class module0277 extends SubLTranslatedFile
         module0277.$g2602$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("S#12753", "CYC");
         $ic1$ = SubLObjectFactory.makeSymbol("EL-CONTRACTION");
-        $ic2$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit")));
+        $ic2$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit")));
         $ic3$ = SubLObjectFactory.makeSymbol("S#20992", "CYC");
         $ic4$ = SubLObjectFactory.makeSymbol("S#20993", "CYC");
         $ic5$ = SubLObjectFactory.makeSymbol("S#20994", "CYC");
@@ -513,13 +513,13 @@ public final class module0277 extends SubLTranslatedFile
         $ic13$ = SubLObjectFactory.makeSymbol("S#20978", "CYC");
         $ic14$ = SubLObjectFactory.makeSymbol("DEFAULT-EL-VAR?");
         $ic15$ = SubLObjectFactory.makeSymbol("HL-VAR-FOR-DEFAULT-EL-VAR");
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("expansion"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("expansion"));
         $ic17$ = SubLObjectFactory.makeSymbol("FIRST");
         $ic18$ = SubLObjectFactory.makeSymbol("S#2879", "CYC");
-        $ic19$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True"));
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False"));
+        $ic19$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False"));
         $ic21$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic23$ = SubLObjectFactory.makeSymbol("S#20984", "CYC");
         $ic24$ = SubLObjectFactory.makeSymbol("S#20632", "CYC");
         $ic25$ = SubLObjectFactory.makeSymbol("MAX");

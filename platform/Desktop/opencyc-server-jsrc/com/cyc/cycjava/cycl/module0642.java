@@ -925,8 +925,8 @@ public final class module0642 extends SubLTranslatedFile
             else if (module0642.NIL != module0167.f10813(var14)) {
                 f39019(module0006.f202(var14));
             }
-            else if (module0642.NIL != module0128.f8449(var14)) {
-                f39020(module0166.f10743(var14));
+            else if (module0642.NIL != constant_handles_oc.f8449(var14)) {
+                f39020(constants_high_oc.f10743(var14));
             }
             else if (var14.isChar()) {
                 f39012(var14, (SubLObject)module0642.UNPROVIDED);
@@ -1175,7 +1175,7 @@ public final class module0642 extends SubLTranslatedFile
             else if (var39.eql(var34)) {
                 f39013(var5, var33, var39);
                 final SubLObject var45 = Numbers.add(var39, (SubLObject)module0642.ONE_INTEGER);
-                if (var45.numE(var32) || !Strings.sublisp_char(var5, var45).eql(module0129.f8494())) {
+                if (var45.numE(var32) || !Strings.sublisp_char(var5, var45).eql(constant_reader_oc.f8494())) {
                     f39019((SubLObject)Characters.CHAR_hash);
                     var33 = var45;
                 }
@@ -1443,8 +1443,8 @@ public final class module0642 extends SubLTranslatedFile
         else if (module0642.NIL != module0167.f10813(var14)) {
             PrintLow.format(module0015.$g131$.getDynamicValue(var15), (SubLObject)module0642.$ic34$, var14);
         }
-        else if (module0642.NIL != module0128.f8449(var14)) {
-            f39044(module0166.f10743(var14));
+        else if (module0642.NIL != constant_handles_oc.f8449(var14)) {
+            f39044(constants_high_oc.f10743(var14));
         }
         else if (var14.isChar()) {
             f39045(var14);
@@ -5903,14 +5903,14 @@ public final class module0642 extends SubLTranslatedFile
         $ic176$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
         $ic177$ = SubLObjectFactory.makeSymbol("S#42822", "CYC");
         $ic178$ = SubLObjectFactory.makeString("en");
-        $ic179$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EnglishLanguage"));
+        $ic179$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EnglishLanguage"));
         $ic180$ = SubLObjectFactory.makeString("en-gb");
-        $ic181$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BritishEnglishDialect"));
+        $ic181$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BritishEnglishDialect"));
         $ic182$ = SubLObjectFactory.makeString("fr");
-        $ic183$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("FrenchLanguage"));
+        $ic183$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("FrenchLanguage"));
         $ic184$ = SubLObjectFactory.makeString("de");
-        $ic185$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("GermanLanguage"));
-        $ic186$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("languageCodeDigraph"));
+        $ic185$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("GermanLanguage"));
+        $ic186$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("languageCodeDigraph"));
         $ic187$ = SubLObjectFactory.makeKeyword("HTML-GLYPH");
         $ic188$ = SubLObjectFactory.makeKeyword("LT");
         $ic189$ = SubLObjectFactory.makeString("&lt;");

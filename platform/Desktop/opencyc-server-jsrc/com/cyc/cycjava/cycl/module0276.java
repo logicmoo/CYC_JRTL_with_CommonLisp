@@ -367,7 +367,7 @@ public final class module0276 extends SubLTranslatedFile
                     if (module0276.NIL == module0202.f12639(var11)) {
                         if (module0276.NIL == module0206.f13470(var11)) {
                             if (module0276.NIL == Functions.funcall(var15, var11)) {
-                                if (module0276.NIL == module0174.f11035(var11)) {
+                                if (module0276.NIL == assertion_handles_oc.f11035(var11)) {
                                     if (var11.isAtom()) {
                                         module0202.f12747((SubLObject)module0276.FOUR_INTEGER, (SubLObject)module0276.$ic13$, var11, (SubLObject)module0276.UNPROVIDED, (SubLObject)module0276.UNPROVIDED);
                                         module0274.f18082((SubLObject)ConsesLow.list((SubLObject)module0276.$ic14$, var11, module0147.$g2095$.getDynamicValue(var16)));
@@ -2511,45 +2511,45 @@ public final class module0276 extends SubLTranslatedFile
         $ic6$ = SubLObjectFactory.makeSymbol("S#12629", "CYC");
         $ic7$ = SubLObjectFactory.makeSymbol("EL-WFF?");
         $ic8$ = SubLObjectFactory.makeSymbol("GET-SIMPLIFIED-CYCL-SENTENCE");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic10$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True"));
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False"));
         $ic13$ = SubLObjectFactory.makeString("~S is not well formed.");
         $ic14$ = SubLObjectFactory.makeKeyword("INVALID-SENTENCE");
         $ic15$ = SubLObjectFactory.makeKeyword("IGNORE");
         $ic16$ = SubLObjectFactory.makeKeyword("REGULARIZE");
         $ic17$ = SubLObjectFactory.makeSymbol("S#20872", "CYC");
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("distributesOutOfArg"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("distributesOutOfArg"));
         $ic19$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
         $ic20$ = SubLObjectFactory.makeString("You tried to negate ~S.  That was a bad idea, because it's neither a sentence nor a sentence.");
         $ic21$ = SubLObjectFactory.makeSymbol("S#15477", "CYC");
         $ic22$ = SubLObjectFactory.makeSymbol("EL-VAR?");
         $ic23$ = SubLObjectFactory.makeSymbol(">");
-        $ic24$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("equalSymbols")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent")));
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
+        $ic24$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("equalSymbols")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent")));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("equals"));
         $ic26$ = SubLObjectFactory.makeKeyword("SIMPLIFICATION-TO-TAUTOLOGY-DUE-TO-POS-AND-NEG-LITERAL");
         $ic27$ = SubLObjectFactory.makeSymbol("S#20882", "CYC");
         $ic28$ = SubLObjectFactory.makeSymbol("S#20936", "CYC");
-        $ic29$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CollectionSubsetFn"));
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
-        $ic31$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("trueSentence"));
-        $ic32$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
+        $ic29$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CollectionSubsetFn"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
+        $ic31$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("trueSentence"));
+        $ic32$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
         $ic33$ = SubLObjectFactory.makeSymbol("HL-VARIABLE-P");
-        $ic34$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent"));
-        $ic35$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#9955", "CYC"));
+        $ic34$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("indexicalReferent"));
+        $ic35$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#9955", "CYC"));
         $ic36$ = SubLObjectFactory.makeInteger(32);
         $ic37$ = SubLObjectFactory.makeSymbol("S#15497", "CYC");
         $ic38$ = SubLObjectFactory.makeKeyword("SPLIT");
         $ic39$ = SubLObjectFactory.makeString("Splitting sequence variables into other sequence variables is currently not supported. -ECA");
-        $ic40$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls")));
+        $ic40$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls")));
         $ic41$ = SubLObjectFactory.makeSymbol("S#20970", "CYC");
         $ic42$ = SubLObjectFactory.makeSymbol("S#20887", "CYC");
         $ic43$ = SubLObjectFactory.makeSymbol("EXPLANATION-OF-WHY-NOT-WFF");
         $ic44$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#20971", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#20972", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#15200", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12455", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12453", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#20973", "CYC"));
         $ic45$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MAL-ARG-WRT-IFF-DEFN"), (SubLObject)SubLObjectFactory.makeKeyword("MAL-ARG-WRT-QUOTED-IFF-DEFN"));
-        $ic46$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("RealNumber")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLRealNumber")));
-        $ic47$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("CharacterString")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLString")));
+        $ic46$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("RealNumber")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLRealNumber")));
+        $ic47$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CharacterString")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLString")));
     }
     
     public static final class $f18299$UnaryFunction extends UnaryFunction

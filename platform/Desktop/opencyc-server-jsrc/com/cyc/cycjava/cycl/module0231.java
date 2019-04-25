@@ -218,29 +218,29 @@ public final class module0231 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0231();
-        $ic0$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("QueryFn")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#18057", "CYC")));
+        $ic0$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("QueryFn")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#18057", "CYC")));
         $ic1$ = SubLObjectFactory.makeSymbol("S#18057", "CYC");
         $ic2$ = SubLObjectFactory.makeSymbol("FORT-P");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueInSpecification"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueInSpecification"));
         $ic4$ = ConsesLow.list((SubLObject)module0231.ONE_INTEGER, (SubLObject)module0231.TWO_INTEGER);
         $ic5$ = SubLObjectFactory.makeSymbol("FIRST");
         $ic6$ = SubLObjectFactory.makeSymbol("KEYWORDP");
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False"));
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True"));
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheEmptySet"));
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("PlusInfinity"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheEmptySet"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PlusInfinity"));
         $ic11$ = SubLObjectFactory.makeKeyword("POSITIVE-INFINITY");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterShortDescription"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterShortDescription"));
         $ic13$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterLongDescription"));
-        $ic15$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("defaultSoftwareParameterValueInSoftwareObject"));
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("subLIdentifier"));
-        $ic17$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycAPIMt"));
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLQuoteFn"));
-        $ic19$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("alternateSoftwareParameterValueInSoftwareObject"));
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueDomainInSoftwareObject"));
-        $ic21$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueShortDescription"));
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueLongDescription"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterLongDescription"));
+        $ic15$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("defaultSoftwareParameterValueInSoftwareObject"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("subLIdentifier"));
+        $ic17$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycAPIMt"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLQuoteFn"));
+        $ic19$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("alternateSoftwareParameterValueInSoftwareObject"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueDomainInSoftwareObject"));
+        $ic21$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueShortDescription"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("softwareParameterValueLongDescription"));
     }
 }
 

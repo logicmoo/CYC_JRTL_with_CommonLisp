@@ -216,7 +216,7 @@ public final class module0145 extends SubLTranslatedFile
     
     public static SubLObject f9472() {
         final SubLObject var2 = f9471();
-        if (module0145.NIL != module0174.f11035(var2)) {
+        if (module0145.NIL != assertion_handles_oc.f11035(var2)) {
             return module0178.f11287(var2);
         }
         if (module0145.NIL != module0191.f11952(var2)) {

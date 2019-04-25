@@ -502,11 +502,11 @@ public final class module0283 extends SubLTranslatedFile
         module0283.$g2628$ = null;
         module0283.$g2629$ = null;
         module0283.$g2630$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("and"));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("or"));
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("not"));
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True"));
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("and"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("or"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("not"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False"));
         $ic5$ = SubLObjectFactory.makeSymbol("S#21341", "CYC");
         $ic6$ = SubLObjectFactory.makeSymbol("S#21345", "CYC");
         $ic7$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#202", "CYC"));

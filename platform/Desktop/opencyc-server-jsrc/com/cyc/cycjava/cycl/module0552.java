@@ -373,7 +373,7 @@ public final class module0552 extends SubLTranslatedFile
     }
     
     public static SubLObject f34023(final SubLObject var1) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0552.NIL != module0167.f10813(var1) || module0552.NIL != module0174.f11035(var1));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0552.NIL != module0167.f10813(var1) || module0552.NIL != assertion_handles_oc.f11035(var1));
     }
     
     public static SubLObject f34026(final SubLObject var1) {
@@ -512,7 +512,7 @@ public final class module0552 extends SubLTranslatedFile
     }
     
     public static SubLObject f34013(final SubLObject var1) {
-        return module0174.f11035(var1);
+        return assertion_handles_oc.f11035(var1);
     }
     
     public static SubLObject f34015(final SubLObject var1) {
@@ -524,7 +524,7 @@ public final class module0552 extends SubLTranslatedFile
     }
     
     public static SubLObject f34061(final SubLObject var5) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0552.NIL != module0174.f11035(var5) || module0552.NIL != module0288.f19309(var5, (SubLObject)module0552.UNPROVIDED));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0552.NIL != assertion_handles_oc.f11035(var5) || module0552.NIL != module0288.f19309(var5, (SubLObject)module0552.UNPROVIDED));
     }
     
     public static SubLObject f34062(final SubLObject var5) {
@@ -544,7 +544,7 @@ public final class module0552 extends SubLTranslatedFile
     }
     
     public static SubLObject f34066(final SubLObject var7) {
-        return module0128.f8449(var7);
+        return constant_handles_oc.f8449(var7);
     }
     
     public static SubLObject f34060(final SubLObject var8) {
@@ -1869,14 +1869,14 @@ public final class module0552 extends SubLTranslatedFile
         $ic64$ = SubLObjectFactory.makeSymbol("CYCL-ASSERTED-ASSERTION?");
         $ic65$ = SubLObjectFactory.makeSymbol("CYCL-DEDUCED-ASSERTION?");
         $ic66$ = SubLObjectFactory.makeSymbol("CYCL-NL-SEMANTIC-ASSERTION?");
-        $ic67$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CanonicalizerDirectivePredicate"));
+        $ic67$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CanonicalizerDirectivePredicate"));
         $ic68$ = SubLObjectFactory.makeSymbol("CYCL-CANONICALIZER-DIRECTIVE?");
-        $ic69$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorDirectivePredicate"));
+        $ic69$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorDirectivePredicate"));
         $ic70$ = SubLObjectFactory.makeSymbol("CYCL-REFORMULATOR-DIRECTIVE?");
-        $ic71$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycLReformulationRulePredicate"));
-        $ic72$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
+        $ic71$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycLReformulationRulePredicate"));
+        $ic72$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
         $ic73$ = SubLObjectFactory.makeSymbol("CYCL-REFORMULATOR-RULE?");
-        $ic74$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SimplifierDirectivePredicate"));
+        $ic74$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SimplifierDirectivePredicate"));
         $ic75$ = SubLObjectFactory.makeSymbol("CYCL-SIMPLIFIER-DIRECTIVE?");
         $ic76$ = SubLObjectFactory.makeSymbol("HL-ASSERTION-P");
         $ic77$ = SubLObjectFactory.makeSymbol("EL-ASSERTION?");
@@ -1915,17 +1915,17 @@ public final class module0552 extends SubLTranslatedFile
         $ic110$ = SubLObjectFactory.makeSymbol("CYC-SET-OF-TYPE-SUFFICIENT");
         $ic111$ = SubLObjectFactory.makeSymbol("CYC-LIST-OF-TYPE-NECESSARY");
         $ic112$ = SubLObjectFactory.makeSymbol("CYC-LIST-OF-TYPE-SUFFICIENT");
-        $ic113$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("instanceElementType"));
+        $ic113$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("instanceElementType"));
         $ic114$ = SubLObjectFactory.makeSymbol("S#37396", "CYC");
-        $ic115$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Set-Extensional"));
+        $ic115$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Set-Extensional"));
         $ic116$ = SubLObjectFactory.makeSymbol("S#37409", "CYC");
         $ic117$ = SubLObjectFactory.makeInteger(32);
         $ic118$ = SubLObjectFactory.makeSymbol("S#37377", "CYC");
         $ic119$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-        $ic120$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSet"));
-        $ic121$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("List-Extensional"));
-        $ic122$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("instanceListMemberType"));
-        $ic123$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
+        $ic120$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSet"));
+        $ic121$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("List-Extensional"));
+        $ic122$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("instanceListMemberType"));
+        $ic123$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
         $ic124$ = SubLObjectFactory.makeSymbol("CYC-LIST-WITHOUT-REPETITION");
         $ic125$ = SubLObjectFactory.makeSymbol("CYC-NUMERIC-STRING-NECESSARY");
         $ic126$ = SubLObjectFactory.makeSymbol("CYC-NUMERAL-STRING");
@@ -1955,7 +1955,7 @@ public final class module0552 extends SubLTranslatedFile
         $ic150$ = SubLObjectFactory.makeSymbol("NON-NEGATIVE-SCALAR-INTERVAL?");
         $ic151$ = SubLObjectFactory.makeSymbol("POSITIVE-SCALAR-INTERVAL?");
         $ic152$ = SubLObjectFactory.makeSymbol("NEGATIVE-SCALAR-INTERVAL?");
-        $ic153$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UnitOfMeasure"));
+        $ic153$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UnitOfMeasure"));
         $ic154$ = SubLObjectFactory.makeSymbol("TERM-SET?");
         $ic155$ = SubLObjectFactory.makeSymbol("CYCL-VAR-LIST?");
         $ic156$ = SubLObjectFactory.makeSymbol("CYC-EL-VAR-LIST?");
@@ -1963,11 +1963,11 @@ public final class module0552 extends SubLTranslatedFile
         $ic158$ = SubLObjectFactory.makeKeyword("IGNORE");
         $ic159$ = SubLObjectFactory.makeSymbol("CYC-LIST-OF-LISTS");
         $ic160$ = SubLObjectFactory.makeSymbol("CYC-STRING-IS-LENGTH");
-        $ic161$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("instanceListLength"));
+        $ic161$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("instanceListLength"));
         $ic162$ = SubLObjectFactory.makeSymbol("CYC-STRING-IS-MINIMUM-LENGTH");
-        $ic163$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("instanceListMinLength"));
+        $ic163$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("instanceListMinLength"));
         $ic164$ = SubLObjectFactory.makeSymbol("CYC-STRING-IS-MAXIMUM-LENGTH");
-        $ic165$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("instanceListMaxLength"));
+        $ic165$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("instanceListMaxLength"));
         $ic166$ = SubLObjectFactory.makeSymbol("CYC-LIST-IS-LENGTH");
         $ic167$ = SubLObjectFactory.makeSymbol("RTP-SYNTACTIC-CONSTRAINT");
         $ic168$ = SubLObjectFactory.makeSymbol("CYC-SUBL-QUERY-PROPERTY-P");
@@ -1981,7 +1981,7 @@ public final class module0552 extends SubLTranslatedFile
         $ic176$ = SubLObjectFactory.makeSymbol("CYC-4-BYTE-INTEGER");
         $ic177$ = SubLObjectFactory.makeSymbol("CYC-2-BYTE-INTEGER");
         $ic178$ = SubLObjectFactory.makeSymbol("CYC-1-BYTE-INTEGER");
-        $ic179$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BitData"));
+        $ic179$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BitData"));
         $ic180$ = SubLObjectFactory.makeSymbol("CYC-BIT-DATATYPE");
         $ic181$ = SubLObjectFactory.makeSymbol("CYC-BIT-STRING");
         $ic182$ = ConsesLow.list((SubLObject)Characters.CHAR_period);

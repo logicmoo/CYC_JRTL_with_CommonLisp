@@ -158,12 +158,12 @@ public final class module0300 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0300();
         module0300.$g2696$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DatesReformulatorRLModule"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DatesReformulatorRLModule"));
         $ic1$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("REQUIRED"), SubLObjectFactory.makeSymbol("S#22654", "CYC"), SubLObjectFactory.makeKeyword("COST"), SubLObjectFactory.makeSymbol("S#22652", "CYC"), SubLObjectFactory.makeKeyword("REFORMULATE"), SubLObjectFactory.makeSymbol("S#22656", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("Reformulates numbers into proper date-denoting CycL expressions."), SubLObjectFactory.makeKeyword("EXAMPLE-SOURCE"), SubLObjectFactory.makeString("(#$birthDate #$JohnKennedy 1917)"), SubLObjectFactory.makeKeyword("EXAMPLE-TARGET"), SubLObjectFactory.makeString("(#$birthDate #$JohnKennedy (#$YearFn 1917))") });
         $ic2$ = SubLObjectFactory.makeInteger(1200);
         $ic3$ = SubLObjectFactory.makeKeyword("IGNORE");
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TemporalThing"));
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("YearFn"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TemporalThing"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("YearFn"));
         $ic6$ = SubLObjectFactory.makeString("Dates: Integers to Years");
     }
 }

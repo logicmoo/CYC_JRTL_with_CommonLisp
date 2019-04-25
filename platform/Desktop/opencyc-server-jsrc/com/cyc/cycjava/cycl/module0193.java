@@ -580,7 +580,7 @@ public final class module0193 extends SubLTranslatedFile
         $ic19$ = SubLObjectFactory.makeString("~Cvar~D");
         $ic20$ = SubLObjectFactory.makeInteger(99);
         $ic21$ = SubLObjectFactory.makeSymbol("S#14842", "CYC");
-        $ic22$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic22$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic23$ = SubLObjectFactory.makeString("Return T iff OBJECT is an HL variable.");
         $ic24$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
         $ic25$ = SubLObjectFactory.makeInteger(200);

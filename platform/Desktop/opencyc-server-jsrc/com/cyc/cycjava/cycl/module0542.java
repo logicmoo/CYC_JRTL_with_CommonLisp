@@ -64,7 +64,7 @@ public final class module0542 extends SubLTranslatedFile
         if (var3 == module0542.UNPROVIDED) {
             var3 = (SubLObject)module0542.NIL;
         }
-        assert module0542.NIL != module0369.f25275(var1) : var1;
+        assert module0542.NIL != oc_inference_datastructures_inference.f25275(var1) : var1;
         assert module0542.NIL != module0360.f23804(var2) : var2;
         if (module0542.NIL != var3 && !module0542.areAssertionsDisabledFor(me) && module0542.NIL == Types.function_spec_p(var3)) {
             throw new AssertionError(var3);
@@ -104,7 +104,7 @@ public final class module0542 extends SubLTranslatedFile
         var10 = var11.first();
         final SubLObject var12;
         var11 = (var12 = var11.rest());
-        while (module0542.$ic10$ == var6 && (module0542.NIL == module0055.f4019(var8) || (module0542.NIL != module0369.f25431(var9) && module0542.NIL == module0369.f25434(var9)))) {
+        while (module0542.$ic10$ == var6 && (module0542.NIL == module0055.f4019(var8) || (module0542.NIL != oc_inference_datastructures_inference.f25431(var9) && module0542.NIL == oc_inference_datastructures_inference.f25434(var9)))) {
             if (module0542.NIL == module0055.f4019(var8)) {
                 var6 = module0055.f4023(var8);
             }
@@ -237,10 +237,10 @@ public final class module0542 extends SubLTranslatedFile
             if (module0542.NIL == var42_43) {
                 module0052.f3696(var8);
                 if (module0542.NIL != var10) {
-                    module0369.f25471(var9);
+                    oc_inference_datastructures_inference.f25471(var9);
                 }
                 else {
-                    module0369.f25476(var9);
+                    oc_inference_datastructures_inference.f25476(var9);
                 }
                 final SubLObject var11 = (SubLObject)module0542.$ic9$;
                 ConsesLow.rplaca(var5, var11);

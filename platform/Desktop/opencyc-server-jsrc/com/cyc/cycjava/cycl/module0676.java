@@ -121,7 +121,7 @@ public final class module0676 extends SubLTranslatedFile
         final SubLObject var3 = var1.rest();
         if (module0676.NIL == var3) {
             final SubLObject var4 = module0656.f39970(var2);
-            if (module0676.NIL == module0174.f11035(var4)) {
+            if (module0676.NIL == assertion_handles_oc.f11035(var4)) {
                 return module0656.f39789((SubLObject)module0676.$ic1$, var2, (SubLObject)module0676.UNPROVIDED, (SubLObject)module0676.UNPROVIDED, (SubLObject)module0676.UNPROVIDED, (SubLObject)module0676.UNPROVIDED);
             }
             f41265(var4);
@@ -308,7 +308,7 @@ public final class module0676 extends SubLTranslatedFile
         final SubLThread var6 = SubLProcess.currentSubLThread();
         module0543.f33621();
         module0677.f41336(var5);
-        final SubLObject var7 = module0174.f11025(var5);
+        final SubLObject var7 = assertion_handles_oc.f11025(var5);
         final SubLObject var8 = module0656.f39832((SubLObject)module0676.NIL);
         module0642.f39020(module0015.$g282$.getGlobalValue());
         module0642.f39020(module0015.$g284$.getGlobalValue());
@@ -438,7 +438,7 @@ public final class module0676 extends SubLTranslatedFile
     
     public static SubLObject f41271(final SubLObject var1) {
         final SubLObject var2 = module0642.f39104((SubLObject)module0676.$ic41$, var1);
-        final SubLObject var3 = (SubLObject)((module0676.NIL != var2) ? module0174.f11053(reader.parse_integer(var2, (SubLObject)module0676.UNPROVIDED, (SubLObject)module0676.UNPROVIDED, (SubLObject)module0676.UNPROVIDED, (SubLObject)module0676.UNPROVIDED)) : module0676.NIL);
+        final SubLObject var3 = (SubLObject)((module0676.NIL != var2) ? assertion_handles_oc.f11053(reader.parse_integer(var2, (SubLObject)module0676.UNPROVIDED, (SubLObject)module0676.UNPROVIDED, (SubLObject)module0676.UNPROVIDED, (SubLObject)module0676.UNPROVIDED)) : module0676.NIL);
         final SubLObject var4 = (SubLObject)((module0676.NIL != var3) ? module0289.f19396(var3) : module0676.NIL);
         final SubLObject var5 = module0178.f11287(var3);
         final SubLObject var6 = module0642.f39104((SubLObject)module0676.$ic10$, var1);
@@ -822,11 +822,11 @@ public final class module0676 extends SubLTranslatedFile
         $ic9$ = SubLObjectFactory.makeString("Email-Comments");
         $ic10$ = SubLObjectFactory.makeString("Assert-Comments");
         $ic11$ = SubLObjectFactory.makeString("comment");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("myReviewer"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BookkeepingMt"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myReviewer"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BookkeepingMt"));
         $ic14$ = SubLObjectFactory.makeKeyword("MONOTONIC");
         $ic15$ = SubLObjectFactory.makeKeyword("BACKWARD");
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes"));
         $ic17$ = SubLObjectFactory.makeKeyword("DEFAULT");
         $ic18$ = SubLObjectFactory.makeKeyword("FORWARD");
         $ic19$ = SubLObjectFactory.makeString("Approved Constant");
@@ -853,7 +853,7 @@ public final class module0676 extends SubLTranslatedFile
         $ic40$ = SubLObjectFactory.makeString("Meta Assertions :");
         $ic41$ = SubLObjectFactory.makeString("Approve-Assertion");
         $ic42$ = SubLObjectFactory.makeString("Approve the Assertion for Addition to Cyc");
-        $ic43$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
+        $ic43$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
         $ic44$ = SubLObjectFactory.makeString("");
         $ic45$ = SubLObjectFactory.makeString("Approved Assertion");
         $ic46$ = SubLObjectFactory.makeKeyword("KE-REVIEW");

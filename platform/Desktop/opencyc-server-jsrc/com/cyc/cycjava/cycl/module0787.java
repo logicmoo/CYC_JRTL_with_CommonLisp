@@ -607,17 +607,17 @@ public final class module0787 extends SubLTranslatedFile
         $ic3$ = SubLObjectFactory.makeSymbol("S#55038", "CYC");
         $ic4$ = SubLObjectFactory.makeKeyword("DERIV");
         $ic5$ = SubLObjectFactory.makeKeyword("INFL");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DerivationalSuffix"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DerivationalSuffix"));
         $ic7$ = SubLObjectFactory.makeString("Finding derivational suffix strings...");
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UnproductiveLexicalAffix"));
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("suffixString"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UnproductiveLexicalAffix"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("suffixString"));
         $ic10$ = SubLObjectFactory.makeKeyword("GAF");
         $ic11$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("phoneticVariantOfSuffix"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("regularSuffix"));
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DerivationalPrefix"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("phoneticVariantOfSuffix"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("regularSuffix"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DerivationalPrefix"));
         $ic15$ = SubLObjectFactory.makeString("Finding derivational prefix strings...");
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("prefixString"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("prefixString"));
         $ic17$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39569", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"));
         $ic18$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10299", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"));
     }

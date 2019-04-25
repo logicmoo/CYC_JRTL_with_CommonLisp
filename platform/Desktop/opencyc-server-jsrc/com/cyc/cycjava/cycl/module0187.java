@@ -204,7 +204,7 @@ public final class module0187 extends SubLTranslatedFile
     }
     
     public static SubLObject f11744(final SubLObject var19, final SubLObject var2) {
-        final SubLObject var20 = module0184.f11649(var19);
+        final SubLObject var20 = oc_deduction_handles.f11649(var19);
         final SubLObject var21 = module0021.f1060(var2, (SubLObject)module0187.UNPROVIDED, (SubLObject)module0187.UNPROVIDED);
         final SubLObject var22 = module0021.f1060(var2, (SubLObject)module0187.UNPROVIDED, (SubLObject)module0187.UNPROVIDED);
         final SubLObject var23 = module0021.f1060(var2, (SubLObject)module0187.UNPROVIDED, (SubLObject)module0187.UNPROVIDED);
@@ -226,8 +226,8 @@ public final class module0187 extends SubLTranslatedFile
     }
     
     public static SubLObject f11747(final SubLObject var21, final SubLObject var15, final SubLObject var22, final SubLObject var23) {
-        final SubLObject var24 = module0184.f11653();
-        final SubLObject var25 = module0184.f11672(var24);
+        final SubLObject var24 = oc_deduction_handles.f11653();
+        final SubLObject var25 = oc_deduction_handles.f11672(var24);
         f11748(var25, var24, var21, var15, var22, var23);
         return var24;
     }
@@ -236,36 +236,36 @@ public final class module0187 extends SubLTranslatedFile
         final SubLObject var25 = module0130.f8529(var22, var23);
         f11733(var24, var21, var15);
         f11749(var19, var25);
-        if (module0187.NIL != module0174.f11035(var21)) {
-            module0177.f11259(var21, var19);
+        if (module0187.NIL != assertion_handles_oc.f11035(var21)) {
+            oc_assertions_low.f11259(var21, var19);
         }
         f11750(var19);
         return (SubLObject)module0187.NIL;
     }
     
     public static SubLObject f11751(final SubLObject var24) {
-        return module0184.f11672(var24);
+        return oc_deduction_handles.f11672(var24);
     }
     
     public static SubLObject f11752(final SubLObject var19, final SubLObject var24, final SubLObject var21, final SubLObject var15, final SubLObject var22, final SubLObject var23) {
         final SubLObject var25 = module0130.f8529(var22, var23);
         f11733(var24, var21, var15);
         f11749(var19, var25);
-        if (module0187.NIL != module0174.f11035(var21)) {
-            module0177.f11259(var21, var19);
+        if (module0187.NIL != assertion_handles_oc.f11035(var21)) {
+            oc_assertions_low.f11259(var21, var19);
         }
         f11750(var19);
         return (SubLObject)module0187.NIL;
     }
     
     public static SubLObject f11750(final SubLObject var19) {
-        assert module0187.NIL != module0184.f11659(var19) : var19;
+        assert module0187.NIL != oc_deduction_handles.f11659(var19) : var19;
         SubLObject var20 = f11753(var19);
         SubLObject var21 = (SubLObject)module0187.NIL;
         var21 = var20.first();
         while (module0187.NIL != var20) {
-            if (module0187.NIL != module0174.f11035(var21)) {
-                module0177.f11270(var21, var19);
+            if (module0187.NIL != assertion_handles_oc.f11035(var21)) {
+                oc_assertions_low.f11270(var21, var19);
             }
             else if (module0187.NIL != module0179.f11424(var21)) {
                 module0182.f11517(var21, var19);
@@ -277,21 +277,21 @@ public final class module0187 extends SubLTranslatedFile
     }
     
     public static SubLObject f11754(final SubLObject var19) {
-        final SubLObject var20 = module0184.f11649(var19);
+        final SubLObject var20 = oc_deduction_handles.f11649(var19);
         f11734(var20);
-        module0184.f11652(var20);
-        module0184.f11668(var19);
+        oc_deduction_handles.f11652(var20);
+        oc_deduction_handles.f11668(var19);
         return (SubLObject)module0187.T;
     }
     
     public static SubLObject f11755(final SubLObject var19) {
-        assert module0187.NIL != module0184.f11659(var19) : var19;
+        assert module0187.NIL != oc_deduction_handles.f11659(var19) : var19;
         SubLObject var20 = f11753(var19);
         SubLObject var21 = (SubLObject)module0187.NIL;
         var21 = var20.first();
         while (module0187.NIL != var20) {
-            if (module0187.NIL != module0174.f11041(var21, (SubLObject)module0187.UNPROVIDED)) {
-                module0177.f11271(var21, var19);
+            if (module0187.NIL != assertion_handles_oc.f11041(var21, (SubLObject)module0187.UNPROVIDED)) {
+                oc_assertions_low.f11271(var21, var19);
             }
             else if (module0187.NIL != module0179.f11430(var21, (SubLObject)module0187.UNPROVIDED)) {
                 module0182.f11518(var21, var19);
@@ -303,7 +303,7 @@ public final class module0187 extends SubLTranslatedFile
     }
     
     public static SubLObject f11749(final SubLObject var19, final SubLObject var17) {
-        f11738(module0184.f11649(var19), var17);
+        f11738(oc_deduction_handles.f11649(var19), var17);
         return var19;
     }
     
@@ -314,7 +314,7 @@ public final class module0187 extends SubLTranslatedFile
     }
     
     public static SubLObject f11757(final SubLObject var19, final SubLObject var18) {
-        f11739(module0184.f11649(var19), var18);
+        f11739(oc_deduction_handles.f11649(var19), var18);
         return var19;
     }
     
@@ -326,12 +326,12 @@ public final class module0187 extends SubLTranslatedFile
                 var14 = var24;
             }
         }
-        if (module0187.NIL != module0174.f11035(var14)) {
+        if (module0187.NIL != assertion_handles_oc.f11035(var14)) {
             SubLObject var25;
             SubLObject var26;
             for (var25 = (SubLObject)module0187.NIL, var25 = module0178.f11299(var14); module0187.NIL == var23 && module0187.NIL != var25; var25 = var25.rest()) {
                 var26 = var25.first();
-                if (module0187.NIL != module0184.f11659(var26) && module0187.NIL != f11759(var26, var14, var15, var22)) {
+                if (module0187.NIL != oc_deduction_handles.f11659(var26) && module0187.NIL != f11759(var26, var14, var15, var22)) {
                     var23 = var26;
                 }
             }
@@ -342,7 +342,7 @@ public final class module0187 extends SubLTranslatedFile
             SubLObject var27;
             for (var25 = (SubLObject)module0187.NIL, var25 = module0180.f11454(var14); module0187.NIL == var23 && module0187.NIL != var25; var25 = var25.rest()) {
                 var26 = var25.first();
-                if (module0187.NIL != module0184.f11659(var26)) {
+                if (module0187.NIL != oc_deduction_handles.f11659(var26)) {
                     var27 = module0182.f11516(var14);
                     if (module0187.NIL != f11759(var26, var27, var15, var22)) {
                         var23 = var26;
@@ -361,16 +361,16 @@ public final class module0187 extends SubLTranslatedFile
     }
     
     public static SubLObject f11760(final SubLObject var19) {
-        return f11736(module0184.f11649(var19));
+        return f11736(oc_deduction_handles.f11649(var19));
     }
     
     public static SubLObject f11741(final SubLObject var19) {
-        assert module0187.NIL != module0184.f11659(var19) : var19;
-        return f11735(module0184.f11649(var19));
+        assert module0187.NIL != oc_deduction_handles.f11659(var19) : var19;
+        return f11735(oc_deduction_handles.f11649(var19));
     }
     
     public static SubLObject f11753(final SubLObject var19) {
-        return f11737(module0184.f11649(var19));
+        return f11737(oc_deduction_handles.f11649(var19));
     }
     
     public static SubLObject f11761(final SubLObject var19) {

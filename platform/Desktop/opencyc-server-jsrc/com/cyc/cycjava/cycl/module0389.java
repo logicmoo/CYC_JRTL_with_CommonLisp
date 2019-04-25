@@ -1300,8 +1300,8 @@ public final class module0389 extends SubLTranslatedFile
     }
     
     public static SubLObject f27671(final SubLObject var48, final SubLObject var145, final SubLObject var146) {
-        final SubLObject var147 = module0369.f25608(var48, var145);
-        final SubLObject var148 = module0369.f25608(var48, var146);
+        final SubLObject var147 = oc_inference_datastructures_inference.f25608(var48, var145);
+        final SubLObject var148 = oc_inference_datastructures_inference.f25608(var48, var146);
         if (module0389.NIL != var147) {
             if (module0389.NIL != var148) {
                 return f27672(var145, var146);
@@ -1491,7 +1491,7 @@ public final class module0389 extends SubLTranslatedFile
     
     public static SubLObject f27685(final SubLObject var40, final SubLObject var48) {
         assert module0389.NIL != module0363.f24478(var40) : var40;
-        assert module0389.NIL != module0369.f25275(var48) : var48;
+        assert module0389.NIL != oc_inference_datastructures_inference.f25275(var48) : var48;
         final SubLObject var49 = f27681(var40, var48);
         final SubLObject var50 = Mapping.mapcar(Symbols.symbol_function((SubLObject)module0389.$ic101$), var49);
         return Sequences.delete_duplicates(var50, Symbols.symbol_function((SubLObject)module0389.EQUAL), (SubLObject)module0389.UNPROVIDED, (SubLObject)module0389.UNPROVIDED, (SubLObject)module0389.UNPROVIDED);
@@ -1499,7 +1499,7 @@ public final class module0389 extends SubLTranslatedFile
     
     public static SubLObject f27680(final SubLObject var63, final SubLObject var48) {
         assert module0389.NIL != module0365.f24819(var63) : var63;
-        assert module0389.NIL != module0369.f25275(var48) : var48;
+        assert module0389.NIL != oc_inference_datastructures_inference.f25275(var48) : var48;
         final SubLObject var64 = module0365.f24850(var63);
         final SubLObject var65 = f27685(var64, var48);
         if (module0389.NIL == module0377.f26771(var63)) {
@@ -1858,7 +1858,7 @@ public final class module0389 extends SubLTranslatedFile
         $ic0$ = SubLObjectFactory.makeSymbol("S#30787", "CYC");
         $ic1$ = SubLObjectFactory.makeSymbol("S#30702", "CYC");
         $ic2$ = SubLObjectFactory.makeSymbol("S#30703", "CYC");
-        $ic3$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#30806", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)SubLObjectFactory.makeSymbol("S#30807", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic3$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#30806", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FUNCTION"), (SubLObject)SubLObjectFactory.makeSymbol("S#30807", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("OBJECT"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"));
         $ic5$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");
         $ic6$ = SubLObjectFactory.makeKeyword("OBJECT");

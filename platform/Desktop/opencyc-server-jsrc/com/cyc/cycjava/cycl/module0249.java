@@ -1002,13 +1002,13 @@ public final class module0249 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0249();
         $ic0$ = SubLObjectFactory.makeKeyword("WEAK");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("weak-HL-TimePrecedence"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("weak-HL-TimePrecedence"));
         $ic2$ = SubLObjectFactory.makeKeyword("STRICT");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("strict-HL-TimePrecedence"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("strict-HL-TimePrecedence"));
         $ic4$ = SubLObjectFactory.makeKeyword("WEAK-SUCCESSOR");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("weakSuccessor-HL-TimePrecedence"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("weakSuccessor-HL-TimePrecedence"));
         $ic6$ = SubLObjectFactory.makeKeyword("SUCCESSOR-STRICT");
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("successorStrict-HL-TimePrecedence"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("successorStrict-HL-TimePrecedence"));
         $ic8$ = SubLObjectFactory.makeSymbol("NUMBERP");
         $ic9$ = SubLObjectFactory.makeString("Node ~a has current marking ~a within genl-preds-unmarking");
         $ic10$ = SubLObjectFactory.makeString("Node ~a has current marking ~a within genl-inverse-unmarking");

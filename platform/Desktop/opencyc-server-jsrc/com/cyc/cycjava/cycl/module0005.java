@@ -2481,7 +2481,7 @@ public final class module0005 extends SubLTranslatedFile
         $ic26$ = SubLObjectFactory.makeSymbol("=");
         $ic27$ = SubLObjectFactory.makeSymbol("S#114", "CYC");
         $ic28$ = SubLObjectFactory.makeSymbol("DO-LIST");
-        $ic29$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic29$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic30$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("DONE"), (SubLObject)SubLObjectFactory.makeKeyword("PROGRESS-MESSAGE"));
         $ic31$ = SubLObjectFactory.makeKeyword("PROGRESS-MESSAGE");
         $ic32$ = SubLObjectFactory.makeUninternedSymbol("US#7028EF8");
@@ -2537,9 +2537,9 @@ public final class module0005 extends SubLTranslatedFile
         $ic82$ = SubLObjectFactory.makeSymbol("DO-PLIST-VALUES");
         $ic83$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#138", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic84$ = SubLObjectFactory.makeUninternedSymbol("US#5DE2218");
-        $ic85$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("S#139", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic85$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("S#139", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic86$ = SubLObjectFactory.makeSymbol("CDOCONS");
-        $ic87$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic87$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic88$ = SubLObjectFactory.makeSymbol("ATOM");
         $ic89$ = SubLObjectFactory.makeSymbol("DO-PAIRS");
         $ic90$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#141", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#142", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#140", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
@@ -2567,7 +2567,7 @@ public final class module0005 extends SubLTranslatedFile
         $ic112$ = SubLObjectFactory.makeSymbol("FIF");
         $ic113$ = SubLObjectFactory.makeSymbol("CHAR");
         $ic114$ = SubLObjectFactory.makeSymbol("DO-VECTOR");
-        $ic115$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VECTOR"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#146", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#147", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic115$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VECTOR"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#146", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#147", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic116$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ELEMENT-NUM"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"), (SubLObject)SubLObjectFactory.makeKeyword("BACKWARD?"));
         $ic117$ = SubLObjectFactory.makeKeyword("ELEMENT-NUM");
         $ic118$ = SubLObjectFactory.makeKeyword("BACKWARD?");
@@ -2588,12 +2588,12 @@ public final class module0005 extends SubLTranslatedFile
         $ic133$ = SubLObjectFactory.makeSymbol("AREF");
         $ic134$ = SubLObjectFactory.makeUninternedSymbol("US#2676A7E");
         $ic135$ = SubLObjectFactory.makeSymbol("CDOVECTOR");
-        $ic136$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VECTOR")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic136$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VECTOR")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic137$ = SubLObjectFactory.makeSymbol("CSOME-VECTOR");
-        $ic138$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VECTOR"), (SubLObject)SubLObjectFactory.makeSymbol("S#139", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic138$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VECTOR"), (SubLObject)SubLObjectFactory.makeSymbol("S#139", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic139$ = SubLObjectFactory.makeSymbol("SMART-CSOMEVECTOR");
         $ic140$ = SubLObjectFactory.makeSymbol("DO-SEQUENCE");
-        $ic141$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("SEQUENCE"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#146", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic141$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("SEQUENCE"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#146", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic142$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ELEMENT-NUM"), (SubLObject)SubLObjectFactory.makeKeyword("DONE"));
         $ic143$ = SubLObjectFactory.makeSymbol("DO-SEQUENCE-INDEX");
         $ic144$ = SubLObjectFactory.makeUninternedSymbol("US#13ADC23");
@@ -2639,7 +2639,7 @@ public final class module0005 extends SubLTranslatedFile
         $ic184$ = SubLObjectFactory.makeSymbol("WARN");
         $ic185$ = SubLObjectFactory.makeString("~A");
         $ic186$ = SubLObjectFactory.makeSymbol("POSSIBLY-WARN-ON-ERRORS");
-        $ic187$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic187$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic188$ = SubLObjectFactory.makeSymbol("PIF");
         $ic189$ = SubLObjectFactory.makeSymbol("POSSIBLY-IGNORE-ERRORS");
         $ic190$ = SubLObjectFactory.makeSymbol("IGNORE-ERRORS");
@@ -2655,7 +2655,7 @@ public final class module0005 extends SubLTranslatedFile
         $ic200$ = SubLObjectFactory.makeUninternedSymbol("US#5877CEC");
         $ic201$ = SubLObjectFactory.makeSymbol("*IGNORE-ASSERT-TYPES?*");
         $ic202$ = SubLObjectFactory.makeSymbol("ASSERT-TYPE");
-        $ic203$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"));
+        $ic203$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"));
         $ic204$ = SubLObjectFactory.makeSymbol("CHECK-TYPE");
         $ic205$ = SubLObjectFactory.makeSymbol("ASSERT-TYPE-IF-PRESENT");
         $ic206$ = SubLObjectFactory.makeSymbol("S#156", "CYC");

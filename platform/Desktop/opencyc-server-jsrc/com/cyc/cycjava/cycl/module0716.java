@@ -171,8 +171,8 @@ public final class module0716 extends SubLTranslatedFile
         SubLObject var11 = (SubLObject)module0716.NIL;
         if (var9.isInteger() && var10.isInteger()) {
             final SubLObject var12 = module0361.f24195(var9, var10);
-            if (module0716.NIL != module0369.f25275(var12)) {
-                final SubLObject var13 = module0369.f25492(var12);
+            if (module0716.NIL != oc_inference_datastructures_inference.f25275(var12)) {
+                final SubLObject var13 = oc_inference_datastructures_inference.f25492(var12);
                 if (module0716.NIL == module0065.f4772(var13, (SubLObject)module0716.$ic13$)) {
                     final SubLObject var14_15 = var13;
                     if (module0716.NIL == module0065.f4775(var14_15, (SubLObject)module0716.$ic13$)) {
@@ -201,7 +201,7 @@ public final class module0716 extends SubLTranslatedFile
                                 if (module0716.NIL != module0065.f4749(var19)) {
                                     var19 = (SubLObject)module0716.$ic13$;
                                 }
-                                var20 = module0369.f25687(var19);
+                                var20 = oc_inference_datastructures_inference.f25687(var19);
                                 var21 = (SubLObject)module0716.NIL;
                                 var21 = var20.first();
                                 while (module0716.NIL != var20) {
@@ -216,16 +216,16 @@ public final class module0716 extends SubLTranslatedFile
                                     var21 = var20.first();
                                 }
                                 if (module0716.NIL != module0716.$g5674$.getDynamicValue(var3)) {
-                                    var20 = module0369.f25744(var19);
+                                    var20 = oc_inference_datastructures_inference.f25744(var19);
                                     var24 = (SubLObject)module0716.NIL;
                                     var24 = var20.first();
                                     while (module0716.NIL != var20) {
-                                        var25 = module0369.f25775(var24);
+                                        var25 = oc_inference_datastructures_inference.f25775(var24);
                                         var26 = (var22_29 = module0333.f22430(var25));
                                         var27 = (SubLObject)module0716.NIL;
                                         var27 = var22_29.first();
                                         while (module0716.NIL != var22_29) {
-                                            if (module0716.NIL != module0174.f11035(var27)) {
+                                            if (module0716.NIL != assertion_handles_oc.f11035(var27)) {
                                                 var27 = module0178.f11303(var27);
                                             }
                                             if (var27.isList()) {
@@ -262,7 +262,7 @@ public final class module0716 extends SubLTranslatedFile
                                 final Map.Entry var34 = Hashtables.iteratorNextEntry(var33);
                                 var31 = Hashtables.getEntryKey(var34);
                                 var32 = Hashtables.getEntryValue(var34);
-                                SubLObject var35 = module0369.f25687(var32);
+                                SubLObject var35 = oc_inference_datastructures_inference.f25687(var32);
                                 SubLObject var36 = (SubLObject)module0716.NIL;
                                 var36 = var35.first();
                                 while (module0716.NIL != var35) {
@@ -277,17 +277,17 @@ public final class module0716 extends SubLTranslatedFile
                                     var36 = var35.first();
                                 }
                                 if (module0716.NIL != module0716.$g5674$.getDynamicValue(var3)) {
-                                    var35 = module0369.f25744(var32);
+                                    var35 = oc_inference_datastructures_inference.f25744(var32);
                                     SubLObject var39 = (SubLObject)module0716.NIL;
                                     var39 = var35.first();
                                     while (module0716.NIL != var35) {
-                                        final SubLObject var40 = module0369.f25775(var39);
+                                        final SubLObject var40 = oc_inference_datastructures_inference.f25775(var39);
                                         SubLObject var22_31;
                                         final SubLObject var41 = var22_31 = module0333.f22430(var40);
                                         SubLObject var42 = (SubLObject)module0716.NIL;
                                         var42 = var22_31.first();
                                         while (module0716.NIL != var22_31) {
-                                            if (module0716.NIL != module0174.f11035(var42)) {
+                                            if (module0716.NIL != assertion_handles_oc.f11035(var42)) {
                                                 var42 = module0178.f11303(var42);
                                             }
                                             if (var42.isList()) {
@@ -858,8 +858,8 @@ public final class module0716 extends SubLTranslatedFile
             var59 = (SubLObject)module0716.$ic108$;
             module0642.f39020(module0015.$g460$.getGlobalValue());
         }
-        assert module0716.NIL != module0369.f25275(var12) : var12;
-        final SubLObject var61 = module0665.f40432((SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0716.$ic110$, module0006.f202(module0361.f23996(module0369.f25421(var12)))), (SubLObject)ConsesLow.list((SubLObject)module0716.$ic111$, module0006.f202(module0369.f25422(var12)))));
+        assert module0716.NIL != oc_inference_datastructures_inference.f25275(var12) : var12;
+        final SubLObject var61 = module0665.f40432((SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)module0716.$ic110$, module0006.f202(module0361.f23996(oc_inference_datastructures_inference.f25421(var12)))), (SubLObject)ConsesLow.list((SubLObject)module0716.$ic111$, module0006.f202(oc_inference_datastructures_inference.f25422(var12)))));
         final SubLObject var62 = module0665.f40434(var61, (SubLObject)module0716.$ic31$);
         final SubLObject var63 = module0656.f39832((SubLObject)module0716.$ic32$);
         module0642.f39020(module0015.$g381$.getGlobalValue());
@@ -944,7 +944,7 @@ public final class module0716 extends SubLTranslatedFile
         $ic14$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic15$ = SubLObjectFactory.makeKeyword("TERMS");
         $ic16$ = SubLObjectFactory.makeKeyword("TERMS-COUNT");
-        $ic17$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Ontology"));
+        $ic17$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Ontology"));
         $ic18$ = SubLObjectFactory.makeString("Export an OWL ontology");
         $ic19$ = SubLObjectFactory.makeString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
         $ic20$ = SubLObjectFactory.makeKeyword("CB-CYC");
@@ -971,7 +971,7 @@ public final class module0716 extends SubLTranslatedFile
         $ic41$ = SubLObjectFactory.makeKeyword("ONTOLOGY-MT");
         $ic42$ = SubLObjectFactory.makeString("+2");
         $ic43$ = SubLObjectFactory.makeString("*");
-        $ic44$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory"));
+        $ic44$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Microtheory"));
         $ic45$ = SubLObjectFactory.makeKeyword("OVERRIDE-ONTOLOGY-URI");
         $ic46$ = SubLObjectFactory.makeString("Override the ontology URI");
         $ic47$ = SubLObjectFactory.makeKeyword("ONTOLOGY-URI");
@@ -979,7 +979,7 @@ public final class module0716 extends SubLTranslatedFile
         $ic49$ = SubLObjectFactory.makeInteger(40);
         $ic50$ = SubLObjectFactory.makeKeyword("STRING");
         $ic51$ = SubLObjectFactory.makeString("(Default) Use the ontology Base URI (from the ");
-        $ic52$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("baseNamespaceForSKS"));
+        $ic52$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("baseNamespaceForSKS"));
         $ic53$ = SubLObjectFactory.makeString(" assertion)");
         $ic54$ = SubLObjectFactory.makeKeyword("CUSTOM");
         $ic55$ = SubLObjectFactory.makeString("Override the ontology Base URI");
@@ -987,7 +987,7 @@ public final class module0716 extends SubLTranslatedFile
         $ic57$ = SubLObjectFactory.makeKeyword("OPENCYC");
         $ic58$ = SubLObjectFactory.makeString("Use OpenCyc as the Base URI");
         $ic59$ = SubLObjectFactory.makeString("Add these URIs as ");
-        $ic60$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("owl:sameAs"));
+        $ic60$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("owl:sameAs"));
         $ic61$ = SubLObjectFactory.makeString(" triples:");
         $ic62$ = SubLObjectFactory.makeKeyword("SAME-AS-URIS");
         $ic63$ = SubLObjectFactory.makeString(" Readable OpenCyc URIs (when applicable)");
@@ -997,16 +997,16 @@ public final class module0716 extends SubLTranslatedFile
         $ic67$ = SubLObjectFactory.makeString(" DBpedia URIs (when applicable)");
         $ic68$ = SubLObjectFactory.makeKeyword("ADD-COMMENTS");
         $ic69$ = SubLObjectFactory.makeString("Add ");
-        $ic70$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("comment"));
+        $ic70$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("comment"));
         $ic71$ = SubLObjectFactory.makeString(" triples");
         $ic72$ = SubLObjectFactory.makeKeyword("ADD-PRETTY-STRINGS");
-        $ic73$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("prettyString"));
+        $ic73$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("prettyString"));
         $ic74$ = SubLObjectFactory.makeKeyword("ADD-PRETTY-STRING-CANONICAL");
-        $ic75$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("prettyString-Canonical"));
+        $ic75$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("prettyString-Canonical"));
         $ic76$ = SubLObjectFactory.makeString("(Default) Prefer the ontology URIs ");
         $ic77$ = SubLObjectFactory.makeKeyword("SYNONYMOUS-EXTERNAL-CONCEPT");
         $ic78$ = SubLObjectFactory.makeString("Prefer ");
-        $ic79$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("synonymousExternalConcept"));
+        $ic79$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("synonymousExternalConcept"));
         $ic80$ = SubLObjectFactory.makeString(" URIs over the ontology URIs");
         $ic81$ = SubLObjectFactory.makeString("Prefer OpenCyc URIs over the ontology URIs");
         $ic82$ = SubLObjectFactory.makeKeyword("RESTRICT-CONTEXT?");

@@ -291,18 +291,18 @@ public final class module0433 extends SubLTranslatedFile
     
     static {
         me = (SubLFile)new module0433();
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("QueryRelaxationStrategy-RemoveLiteralViaSpecifiedOrder"));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("QueryRelaxationStrategyChangeValueInArgAccordingToSpec"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("QueryRelaxationStrategy-RemoveLiteralViaSpecifiedOrder"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("QueryRelaxationStrategyChangeValueInArgAccordingToSpec"));
         $ic2$ = SubLObjectFactory.makeString("time to implement support for ~S");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("strategyHasPredicateOrder"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("strategyHasPredicateOrder"));
         $ic4$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#33825", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33826", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33827", "CYC"));
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("valueChangeListForStrategy"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("valueChangeListForStrategy"));
         $ic7$ = ConsesLow.list((SubLObject)module0433.TWO_INTEGER, (SubLObject)module0433.THREE_INTEGER, (SubLObject)module0433.FOUR_INTEGER);
-        $ic8$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("DaysDuration")), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("SomeExampleFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Integer"))));
-        $ic9$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("FormulaArgPositionFn")), (SubLObject)module0433.ONE_INTEGER);
-        $ic10$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheList")), (SubLObject)module0433.FIFTEEN_INTEGER, (SubLObject)module0433.TWENTY_INTEGER, (SubLObject)SubLObjectFactory.makeInteger(25), (SubLObject)SubLObjectFactory.makeInteger(30));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DaysDuration"));
+        $ic8$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DaysDuration")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SomeExampleFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Integer"))));
+        $ic9$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("FormulaArgPositionFn")), (SubLObject)module0433.ONE_INTEGER);
+        $ic10$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheList")), (SubLObject)module0433.FIFTEEN_INTEGER, (SubLObject)module0433.TWENTY_INTEGER, (SubLObject)SubLObjectFactory.makeInteger(25), (SubLObject)SubLObjectFactory.makeInteger(30));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DaysDuration"));
         $ic12$ = SubLObjectFactory.makeSymbol("S#33823", "CYC");
         $ic13$ = SubLObjectFactory.makeSymbol("S#33824", "CYC");
         $ic14$ = SubLObjectFactory.makeSymbol("FORMULA-OPERATOR");

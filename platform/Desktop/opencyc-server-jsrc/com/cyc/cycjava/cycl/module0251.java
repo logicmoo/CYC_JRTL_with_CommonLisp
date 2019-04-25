@@ -2492,7 +2492,7 @@ public final class module0251 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0251();
         $ic0$ = SubLObjectFactory.makeSymbol("S#18847", "CYC");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
         $ic2$ = SubLObjectFactory.makeSymbol("S#18882", "CYC");
         $ic3$ = SubLObjectFactory.makeSymbol("S#15382", "CYC");
         $ic4$ = SubLObjectFactory.makeSymbol("S#18886", "CYC");
@@ -2505,7 +2505,7 @@ public final class module0251 extends SubLTranslatedFile
         $ic11$ = SubLObjectFactory.makeString("continue anyway");
         $ic12$ = SubLObjectFactory.makeKeyword("WARN");
         $ic13$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
         $ic15$ = SubLObjectFactory.makeKeyword("OLD");
         $ic16$ = SubLObjectFactory.makeKeyword("RESOURCE");
         $ic17$ = SubLObjectFactory.makeString("Node ~a does not pass sbhl-type-test ~a~%");

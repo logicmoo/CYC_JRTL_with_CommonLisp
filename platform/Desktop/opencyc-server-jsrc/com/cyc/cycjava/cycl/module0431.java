@@ -133,7 +133,7 @@ public final class module0431 extends SubLTranslatedFile
     }
     
     public static SubLObject f30444(final SubLObject var1) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0431.NIL != f30442(var1) || (module0431.NIL != module0128.f8449(var1) && module0431.NIL != module0269.f17710(var1)));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0431.NIL != f30442(var1) || (module0431.NIL != constant_handles_oc.f8449(var1) && module0431.NIL != module0269.f17710(var1)));
     }
     
     public static SubLObject f30445(final SubLObject var1) {
@@ -271,9 +271,9 @@ public final class module0431 extends SubLTranslatedFile
             var1 = f30443(var1);
         }
         final SubLObject var3 = Time.get_universal_time();
-        final SubLObject var4 = PrintLow.format((SubLObject)module0431.NIL, (SubLObject)module0431.$ic31$, new SubLObject[] { module0431.$g3508$.getDynamicValue(var2), module0166.f10743(var1), var3 });
+        final SubLObject var4 = PrintLow.format((SubLObject)module0431.NIL, (SubLObject)module0431.$ic31$, new SubLObject[] { module0431.$g3508$.getDynamicValue(var2), constants_high_oc.f10743(var1), var3 });
         f30457(var1, var4, var3);
-        module0431.$g3509$.setDynamicValue(PrintLow.format((SubLObject)module0431.NIL, (SubLObject)module0431.$ic32$, module0166.f10743(var1), var3), var2);
+        module0431.$g3509$.setDynamicValue(PrintLow.format((SubLObject)module0431.NIL, (SubLObject)module0431.$ic32$, constants_high_oc.f10743(var1), var3), var2);
         return var4;
     }
     
@@ -895,8 +895,8 @@ public final class module0431 extends SubLTranslatedFile
         SubLObject var66 = (SubLObject)module0431.NIL;
         SubLObject var67 = (SubLObject)module0431.NIL;
         if (var62.numG((SubLObject)module0431.TEN_INTEGER)) {
-            if (module0431.NIL != module0128.f8449(var8)) {
-                var66 = module0166.f10743(var8);
+            if (module0431.NIL != constant_handles_oc.f8449(var8)) {
+                var66 = constants_high_oc.f10743(var8);
             }
             else if (module0431.NIL != module0167.f10813(var8)) {
                 var66 = PrintLow.format((SubLObject)module0431.NIL, (SubLObject)module0431.$ic59$, module0167.f10803(var8));
@@ -1225,7 +1225,7 @@ public final class module0431 extends SubLTranslatedFile
             var104 = (SubLObject)module0431.NIL;
         }
         final SubLThread var109 = SubLProcess.currentSubLThread();
-        assert module0431.NIL != module0128.f8449(var108) : var108;
+        assert module0431.NIL != constant_handles_oc.f8449(var108) : var108;
         SubLObject var110 = (SubLObject)module0431.NIL;
         final SubLObject var111 = module0431.$g3507$.currentBinding(var109);
         final SubLObject var112 = module0431.$g3508$.currentBinding(var109);
@@ -1354,25 +1354,25 @@ public final class module0431 extends SubLTranslatedFile
         module0431.$g3509$ = null;
         module0431.$g3510$ = null;
         module0431.$g3511$ = null;
-        $ic0$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Terrorist")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("TerroristGroup")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("IndependentCountry")));
+        $ic0$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Terrorist")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TerroristGroup")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IndependentCountry")));
         $ic1$ = SubLObjectFactory.makeKeyword("TERM");
         $ic2$ = SubLObjectFactory.makeSymbol("S#33680", "CYC");
         $ic3$ = SubLObjectFactory.makeString("/cyc/projects/Topsail/query-suggestor");
         $ic4$ = SubLObjectFactory.makeSymbol("S#33682", "CYC");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TKBSourceSpindleCollectorMt"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TKBSourceSpindleCollectorMt"));
         $ic6$ = SubLObjectFactory.makeSymbol("S#16406", "CYC");
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("conceptPertinentToDegree"));
-        $ic8$ = ConsesLow.list((SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("HighAmountFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Relevance"))));
-        $ic9$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TaskModelMtFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Allotment-8")));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("conceptPertinentToDegree"));
+        $ic8$ = ConsesLow.list((SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HighAmountFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Relevance"))));
+        $ic9$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TaskModelMtFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Allotment-8")));
         $ic10$ = SubLObjectFactory.makeSymbol("?QUERY");
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("cycLQuerySpecificationPertinentToDegree"));
-        $ic12$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("VeryHighAmountFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Relevance")));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSet"));
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
-        $ic15$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("formulaTemplateGloss"));
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TemplateFromTestQueryFn"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cycLQuerySpecificationPertinentToDegree"));
+        $ic12$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("VeryHighAmountFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Relevance")));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSet"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic15$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("formulaTemplateGloss"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TemplateFromTestQueryFn"));
         $ic17$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?GLOSS"));
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt"));
         $ic19$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("RETURN"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEMPLATE"), (SubLObject)SubLObjectFactory.makeSymbol("?GLOSS")));
         $ic20$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ANSWER-COUNT"), (SubLObject)SubLObjectFactory.makeKeyword("TIME-TO-FIRST-ANSWER"), (SubLObject)SubLObjectFactory.makeKeyword("TOTAL-TIME"), (SubLObject)SubLObjectFactory.makeKeyword("COMPLETE-TOTAL-TIME"));
         $ic21$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("QUIESCENCE"), (SubLObject)SubLObjectFactory.makeKeyword("TOTAL"), (SubLObject)SubLObjectFactory.makeKeyword("ANSWERABLES"), (SubLObject)SubLObjectFactory.makeKeyword("UNANSWERABLES"));

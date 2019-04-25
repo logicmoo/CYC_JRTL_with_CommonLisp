@@ -468,8 +468,8 @@ public final class module0801 extends SubLTranslatedFile
                             module0601.$g4652$.bind(Numbers.add(module0601.$g4653$.getDynamicValue(var2), module0601.$g4652$.getDynamicValue(var2)), var2);
                             module0601.$g4654$.bind(module0601.$g4652$.getDynamicValue(var2), var2);
                             module0601.f36758((SubLObject)module0801.$ic15$, (SubLObject)module0801.NIL, (SubLObject)module0801.NIL, (SubLObject)module0801.NIL);
-                            if (module0801.NIL != module0128.f8449(module0574.f35152())) {
-                                module0601.f36755(module0166.f10743(module0574.f35152()));
+                            if (module0801.NIL != constant_handles_oc.f8449(module0574.f35152())) {
+                                module0601.f36755(constants_high_oc.f10743(module0574.f35152()));
                             }
                             else {
                                 module0601.f36755(module0574.f35152());
@@ -1997,7 +1997,7 @@ public final class module0801 extends SubLTranslatedFile
                                         module0601.$g4652$.bind(Numbers.add(module0601.$g4653$.getDynamicValue(var2), module0601.$g4652$.getDynamicValue(var2)), var2);
                                         module0601.$g4654$.bind(module0601.$g4652$.getDynamicValue(var2), var2);
                                         module0601.f36758((SubLObject)module0801.$ic204$, (SubLObject)module0801.NIL, (SubLObject)module0801.NIL, (SubLObject)module0801.NIL);
-                                        PrintLow.format(module0587.$g4457$.getDynamicValue(var2), (SubLObject)module0801.$ic41$, module0166.f10743(var6));
+                                        PrintLow.format(module0587.$g4457$.getDynamicValue(var2), (SubLObject)module0801.$ic41$, constants_high_oc.f10743(var6));
                                     }
                                     finally {
                                         module0601.$g4654$.rebind(var10_173, var2);

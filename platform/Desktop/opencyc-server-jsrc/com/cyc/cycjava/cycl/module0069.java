@@ -827,7 +827,7 @@ public final class module0069 extends SubLTranslatedFile
         $ic16$ = SubLObjectFactory.makeKeyword("WORKING?");
         $ic17$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeString("abc"), (SubLObject)SubLObjectFactory.makeInteger(123), (SubLObject)ConsesLow.list((SubLObject)module0069.ONE_INTEGER, (SubLObject)module0069.TWO_INTEGER, (SubLObject)module0069.THREE_INTEGER)), (SubLObject)module0069.EQUAL), (SubLObject)SubLObjectFactory.makeKeyword("SUCCESS")));
         $ic18$ = SubLObjectFactory.makeKeyword("POSITION");
-        $ic19$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic19$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("POSITION"), (SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic20$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("POSITION"), (SubLObject)SubLObjectFactory.makeKeyword("OBJECT"));
         $ic21$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");
         $ic22$ = SubLObjectFactory.makeString("Expected ~A, got back ~A.");

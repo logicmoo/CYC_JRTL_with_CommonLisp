@@ -141,7 +141,7 @@ public final class module0672 extends SubLTranslatedFile
                 return module0656.f39789((SubLObject)module0672.$ic1$, var2, (SubLObject)module0672.UNPROVIDED, (SubLObject)module0672.UNPROVIDED, (SubLObject)module0672.UNPROVIDED, (SubLObject)module0672.UNPROVIDED);
             }
             final SubLObject var6 = module0288.f19338(var5, (SubLObject)module0672.UNPROVIDED);
-            if (module0672.NIL != module0174.f11035(var6)) {
+            if (module0672.NIL != assertion_handles_oc.f11035(var6)) {
                 module0677.f41371(var5);
                 module0671.f40976(var6);
             }
@@ -1466,7 +1466,7 @@ public final class module0672 extends SubLTranslatedFile
         $ic0$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#38900", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#10884", "CYC"));
         $ic1$ = SubLObjectFactory.makeString("Could not determine a sentence from ~a");
         $ic2$ = SubLObjectFactory.makeSymbol("CB-SENTENCE");
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ist"));
         $ic4$ = SubLObjectFactory.makeString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
         $ic5$ = SubLObjectFactory.makeString("CycL Sentence");
         $ic6$ = SubLObjectFactory.makeString("Mt : ");

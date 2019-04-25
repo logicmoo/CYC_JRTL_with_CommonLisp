@@ -1247,8 +1247,8 @@ public final class module0812 extends SubLTranslatedFile
                 final SubLObject var26 = f52009(var25);
                 return (SubLObject)ConsesLow.list((SubLObject)module0812.$ic131$, var26);
             }
-            if (module0812.NIL != module0128.f8449(var14)) {
-                final SubLObject var27 = module0166.f10743(var14);
+            if (module0812.NIL != constant_handles_oc.f8449(var14)) {
+                final SubLObject var27 = constants_high_oc.f10743(var14);
                 f52011((SubLObject)module0812.$ic132$);
                 return (SubLObject)ConsesLow.list((SubLObject)module0812.$ic132$, f52009(var27));
             }
@@ -1519,7 +1519,7 @@ public final class module0812 extends SubLTranslatedFile
         $ic87$ = SubLObjectFactory.makeString("~%~%;; Referenced Globals :");
         $ic88$ = SubLObjectFactory.makeString("~%~%;; Referenced Functions :");
         $ic89$ = SubLObjectFactory.makeString("~%~%;; Internal Constants :");
-        $ic90$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#10505", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10595", "CYC"));
+        $ic90$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10595", "CYC"));
         $ic91$ = SubLObjectFactory.makeString("~%~S : ~S");
         $ic92$ = SubLObjectFactory.makeString("~%~%;; Definitions :");
         $ic93$ = SubLObjectFactory.makeSymbol("&OPTIONAL");

@@ -737,7 +737,7 @@ public final class module0195 extends SubLTranslatedFile
                 var49 = var48.first();
             }
         }
-        if (module0195.NIL != var24 && !module0195.areAssertionsDisabledFor(me) && module0195.NIL == module0128.f8449(var24)) {
+        if (module0195.NIL != var24 && !module0195.areAssertionsDisabledFor(me) && module0195.NIL == constant_handles_oc.f8449(var24)) {
             throw new AssertionError(var24);
         }
         if (module0195.NIL != var26) {
@@ -1100,7 +1100,7 @@ public final class module0195 extends SubLTranslatedFile
         try {
             module0131.$g1531$.bind((SubLObject)module0195.NIL, var11);
             var12 = f12214(module0290.f19514(var6), module0290.f19514(var7), module0290.f19514(var8), var9, module0290.f19514(var10));
-            if (module0195.NIL != module0174.f11035(var12)) {}
+            if (module0195.NIL != assertion_handles_oc.f11035(var12)) {}
             module0178.f11358(module0290.f19520(var12), var12);
         }
         finally {
@@ -1555,8 +1555,8 @@ public final class module0195 extends SubLTranslatedFile
         $ic90$ = SubLObjectFactory.makeSymbol("S#15024", "CYC");
         $ic91$ = SubLObjectFactory.makeKeyword("UNSPECIFIED");
         $ic92$ = SubLObjectFactory.makeKeyword("FORWARD");
-        $ic93$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False"));
-        $ic94$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True"));
+        $ic93$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False"));
+        $ic94$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True"));
         $ic95$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#15050", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#15051", "CYC"));
     }
 }

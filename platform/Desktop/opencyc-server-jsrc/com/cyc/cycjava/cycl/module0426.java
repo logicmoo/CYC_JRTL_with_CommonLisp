@@ -230,7 +230,7 @@ public final class module0426 extends SubLTranslatedFile
     
     public static SubLObject f30136(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0426.NIL != module0128.f8449(var1) && module0426.NIL != module0004.f104(var1, module0018.$g730$.getDynamicValue(var2), (SubLObject)module0426.UNPROVIDED, (SubLObject)module0426.UNPROVIDED));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0426.NIL != constant_handles_oc.f8449(var1) && module0426.NIL != module0004.f104(var1, module0018.$g730$.getDynamicValue(var2), (SubLObject)module0426.UNPROVIDED, (SubLObject)module0426.UNPROVIDED));
     }
     
     public static SubLObject f30137(final SubLObject var21) {
@@ -362,7 +362,7 @@ public final class module0426 extends SubLTranslatedFile
     
     public static SubLObject f30150(final SubLObject var39) {
         final SubLThread var40 = SubLProcess.currentSubLThread();
-        if (module0426.NIL != f30142() && module0426.NIL != module0128.f8463(var39, (SubLObject)module0426.UNPROVIDED)) {
+        if (module0426.NIL != f30142() && module0426.NIL != constant_handles_oc.f8463(var39, (SubLObject)module0426.UNPROVIDED)) {
             final SubLObject var41 = (SubLObject)ConsesLow.cons(var39, (SubLObject)module0426.NIL);
             final SubLObject var42 = module0018.$g730$.getDynamicValue(var40);
             if (module0426.NIL != var42) {
@@ -371,8 +371,8 @@ public final class module0426 extends SubLTranslatedFile
             else {
                 module0018.$g730$.setDynamicValue(var41, var40);
             }
-            final SubLObject var43 = module0166.f10743(var39);
-            final SubLObject var44 = module0166.f10757(var39);
+            final SubLObject var43 = constants_high_oc.f10743(var39);
+            final SubLObject var44 = constants_high_oc.f10757(var39);
             module0018.$g732$.setDynamicValue((SubLObject)ConsesLow.cons(f30116(var43, var44, (SubLObject)module0426.UNPROVIDED), module0018.$g732$.getDynamicValue(var40)), var40);
             return (SubLObject)module0426.T;
         }
@@ -580,9 +580,9 @@ public final class module0426 extends SubLTranslatedFile
         while (module0426.NIL != var31) {
             if (module0426.$ic1$ == f30111(var32)) {
                 final SubLObject var33 = f30121(var32);
-                if (module0426.NIL != module0166.f10734(var33)) {
-                    final SubLObject var34 = module0166.f10751(var33);
-                    if (module0426.NIL != module0128.f8449(var34)) {
+                if (module0426.NIL != constants_high_oc.f10734(var33)) {
+                    final SubLObject var34 = constants_high_oc.f10751(var33);
+                    if (module0426.NIL != constant_handles_oc.f8449(var34)) {
                         module0540.f33510(var34);
                         var30 = Numbers.add(var30, (SubLObject)module0426.ONE_INTEGER);
                     }
@@ -674,7 +674,7 @@ public final class module0426 extends SubLTranslatedFile
         var13 = var4.first();
         var4 = var4.rest();
         if (module0426.NIL == var4) {
-            if (module0426.NIL != module0035.f2428(module0166.f10757(module0426.$ic48$), var7, Symbols.symbol_function((SubLObject)module0426.EQUALP), (SubLObject)module0426.UNPROVIDED)) {
+            if (module0426.NIL != module0035.f2428(constants_high_oc.f10757(module0426.$ic48$), var7, Symbols.symbol_function((SubLObject)module0426.EQUALP), (SubLObject)module0426.UNPROVIDED)) {
                 final SubLObject var14 = module0571.f34996(var7);
                 if (module0426.NIL != module0202.f12589(var14, module0426.$ic48$)) {
                     final SubLObject var15 = module0205.f13203(var14, (SubLObject)module0426.UNPROVIDED);
@@ -1107,7 +1107,7 @@ public final class module0426 extends SubLTranslatedFile
         $ic45$ = SubLObjectFactory.makeKeyword("STRENGTH");
         $ic46$ = SubLObjectFactory.makeKeyword("DIRECTION");
         $ic47$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeSymbol("S#32753", "CYC"), SubLObjectFactory.makeSymbol("TYPE"), SubLObjectFactory.makeSymbol("S#14349", "CYC"), SubLObjectFactory.makeSymbol("S#11445", "CYC"), SubLObjectFactory.makeSymbol("S#13918", "CYC"), SubLObjectFactory.makeSymbol("S#5432", "CYC"), SubLObjectFactory.makeSymbol("S#33405", "CYC"), SubLObjectFactory.makeSymbol("S#28783", "CYC"), SubLObjectFactory.makeSymbol("S#150", "CYC") });
-        $ic48$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
+        $ic48$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termOfUnit"));
         $ic49$ = SubLObjectFactory.makeKeyword("NAT");
         $ic50$ = SubLObjectFactory.makeString("Janus operation of unexpected type ~s");
         $ic51$ = SubLObjectFactory.makeSymbol("LISTP");

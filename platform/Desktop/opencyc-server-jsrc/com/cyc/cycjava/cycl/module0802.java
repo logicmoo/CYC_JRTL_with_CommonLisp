@@ -282,8 +282,8 @@ public final class module0802 extends SubLTranslatedFile
         final SubLThread var26 = SubLProcess.currentSubLThread();
         final SubLObject var27 = module0434.f30578((SubLObject)module0802.$ic24$, (SubLObject)ConsesLow.list(module0802.$ic25$, (SubLObject)module0802.$ic24$, var25), var16, (SubLObject)module0802.$ic26$);
         final SubLObject var28 = module0078.f5367(var27, (SubLObject)module0802.EQUAL, (SubLObject)module0802.UNPROVIDED);
-        final SubLObject var29 = module0166.f10737((SubLObject)module0802.$ic27$);
-        if (module0802.NIL != module0128.f8463(var29, (SubLObject)module0802.UNPROVIDED)) {
+        final SubLObject var29 = constants_high_oc.f10737((SubLObject)module0802.$ic27$);
+        if (module0802.NIL != constant_handles_oc.f8463(var29, (SubLObject)module0802.UNPROVIDED)) {
             SubLObject var30 = (SubLObject)module0802.NIL;
             final SubLObject var31 = var29;
             if (module0802.NIL != module0158.f10010(var25, (SubLObject)module0802.TWO_INTEGER, var31)) {
@@ -1057,7 +1057,7 @@ public final class module0802 extends SubLTranslatedFile
         if (module0802.NIL == var116) {
             return (SubLObject)ConsesLow.list(var118, var119, var120, var121, var122);
         }
-        if (module0802.NIL != module0128.f8463(module0802.$ic73$, (SubLObject)module0802.UNPROVIDED)) {
+        if (module0802.NIL != constant_handles_oc.f8463(module0802.$ic73$, (SubLObject)module0802.UNPROVIDED)) {
             return f51197(var116, var117);
         }
         return f51198(var116, var117);
@@ -1200,7 +1200,7 @@ public final class module0802 extends SubLTranslatedFile
             var118 = (SubLObject)module0802.NIL;
         }
         final SubLThread var119 = SubLProcess.currentSubLThread();
-        if (module0802.NIL != module0128.f8463(module0802.$ic73$, (SubLObject)module0802.UNPROVIDED)) {
+        if (module0802.NIL != constant_handles_oc.f8463(module0802.$ic73$, (SubLObject)module0802.UNPROVIDED)) {
             return module0434.f30578((SubLObject)module0802.$ic91$, (SubLObject)ConsesLow.listS(module0802.$ic73$, var116, (SubLObject)module0802.$ic93$), module0802.$ic0$, (SubLObject)ConsesLow.list((SubLObject)module0802.$ic78$, var118)).first();
         }
         return f51198(var116, module0802.$g6380$.getDynamicValue(var119)).first();
@@ -1212,7 +1212,7 @@ public final class module0802 extends SubLTranslatedFile
         }
         assert module0802.NIL != module0206.f13450(var127) : var127;
         assert module0802.NIL != module0161.f10481(var16) : var16;
-        if (module0802.NIL != module0128.f8463(module0802.$ic97$, (SubLObject)module0802.UNPROVIDED)) {
+        if (module0802.NIL != constant_handles_oc.f8463(module0802.$ic97$, (SubLObject)module0802.UNPROVIDED)) {
             return (SubLObject)ConsesLow.listS(module0802.$ic97$, var127, (SubLObject)module0802.$ic98$);
         }
         return (SubLObject)ConsesLow.listS(module0802.$ic7$, var127, (SubLObject)module0802.$ic13$);
@@ -1224,7 +1224,7 @@ public final class module0802 extends SubLTranslatedFile
         }
         assert module0802.NIL != module0269.f17713(var29, (SubLObject)module0802.UNPROVIDED) : var29;
         assert module0802.NIL != module0161.f10481(var16) : var16;
-        if (module0802.NIL != module0128.f8463(module0802.$ic97$, (SubLObject)module0802.UNPROVIDED)) {
+        if (module0802.NIL != constant_handles_oc.f8463(module0802.$ic97$, (SubLObject)module0802.UNPROVIDED)) {
             return (SubLObject)ConsesLow.list(module0802.$ic97$, (SubLObject)ConsesLow.list(module0802.$ic46$, (SubLObject)module0802.$ic101$, (SubLObject)ConsesLow.list(module0802.$ic8$, (SubLObject)module0802.$ic101$, var29)), module0802.$ic102$, module0802.$ic103$, var16);
         }
         return (SubLObject)ConsesLow.listS(module0802.$ic104$, (SubLObject)ConsesLow.list(module0802.$ic46$, (SubLObject)module0802.$ic101$, (SubLObject)ConsesLow.list(module0802.$ic8$, (SubLObject)module0802.$ic101$, var29)), (SubLObject)module0802.$ic13$);
@@ -1236,7 +1236,7 @@ public final class module0802 extends SubLTranslatedFile
         }
         assert module0802.NIL != module0269.f17713(var29, (SubLObject)module0802.UNPROVIDED) : var29;
         assert module0802.NIL != module0161.f10481(var16) : var16;
-        if (module0802.NIL != module0128.f8463(module0802.$ic97$, (SubLObject)module0802.UNPROVIDED)) {
+        if (module0802.NIL != constant_handles_oc.f8463(module0802.$ic97$, (SubLObject)module0802.UNPROVIDED)) {
             return (SubLObject)ConsesLow.listS(module0802.$ic97$, (SubLObject)ConsesLow.list(module0802.$ic46$, (SubLObject)module0802.$ic101$, (SubLObject)ConsesLow.list(module0802.$ic41$, (SubLObject)module0802.$ic101$, var29)), (SubLObject)module0802.$ic98$);
         }
         return (SubLObject)ConsesLow.listS(module0802.$ic7$, (SubLObject)ConsesLow.list(module0802.$ic46$, (SubLObject)module0802.$ic101$, (SubLObject)ConsesLow.list(module0802.$ic41$, (SubLObject)module0802.$ic101$, var29)), (SubLObject)module0802.$ic13$);
@@ -1366,20 +1366,20 @@ public final class module0802 extends SubLTranslatedFile
         module0802.$g6389$ = null;
         module0802.$g6390$ = null;
         module0802.$g6391$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TaxonomyOfEasilyUnderstandableConcepts"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TaxonomyOfEasilyUnderstandableConcepts"));
         $ic2$ = SubLObjectFactory.makeSymbol("CLET");
         $ic3$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#55777", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#3136", "CYC"))));
         $ic4$ = SubLObjectFactory.makeSymbol("S#3165", "CYC");
         $ic5$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#55777", "CYC"));
         $ic6$ = SubLObjectFactory.makeSymbol("S#55731", "CYC");
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ConceptFilterSpecificationFn"));
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic9$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ConceptFilterSpecification")));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ConceptFilterSpecificationFn"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic9$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ConceptFilterSpecification")));
         $ic10$ = SubLObjectFactory.makeSymbol("S#55778", "CYC");
         $ic11$ = SubLObjectFactory.makeInteger(50);
         $ic12$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-        $ic13$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ConceptOnlyFilterParameter")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConcept")));
+        $ic13$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ConceptOnlyFilterParameter")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConcept")));
         $ic14$ = SubLObjectFactory.makeSymbol("NODES-FOR-CONCEPT-FILTER-AFTER-ADDING");
         $ic15$ = SubLObjectFactory.makeSymbol("NODES-FOR-CONCEPT-FILTER-AFTER-REMOVING");
         $ic16$ = SubLObjectFactory.makeSymbol("S#55735", "CYC");
@@ -1391,7 +1391,7 @@ public final class module0802 extends SubLTranslatedFile
         $ic22$ = SubLObjectFactory.makeSymbol("S#55723", "CYC");
         $ic23$ = SubLObjectFactory.makeSymbol("S#55739", "CYC");
         $ic24$ = SubLObjectFactory.makeSymbol("?X");
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("nodeInSystem"));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nodeInSystem"));
         $ic26$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("ANSWER-LANGUAGE"), (SubLObject)SubLObjectFactory.makeKeyword("HL"));
         $ic27$ = SubLObjectFactory.makeString("collectionAndSpecsInConceptFilter");
         $ic28$ = SubLObjectFactory.makeKeyword("GAF");
@@ -1407,70 +1407,70 @@ public final class module0802 extends SubLTranslatedFile
         $ic38$ = SubLObjectFactory.makeString("continue anyway");
         $ic39$ = SubLObjectFactory.makeKeyword("WARN");
         $ic40$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic41$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic41$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic42$ = SubLObjectFactory.makeString("~A is neither SET-P nor LISTP.");
         $ic43$ = SubLObjectFactory.makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
         $ic44$ = SubLObjectFactory.makeString("Node ~a does not pass sbhl-type-test ~a~%");
         $ic45$ = SubLObjectFactory.makeSymbol("S#55780", "CYC");
-        $ic46$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
+        $ic46$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
         $ic47$ = SubLObjectFactory.makeSymbol("S#55746", "CYC");
         $ic48$ = SubLObjectFactory.makeSymbol("?NODE");
-        $ic49$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("suppressIndividualNode"));
+        $ic49$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("suppressIndividualNode"));
         $ic50$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?NODE"));
         $ic51$ = SubLObjectFactory.makeSymbol("S#55781", "CYC");
         $ic52$ = SubLObjectFactory.makeSymbol("S#55724", "CYC");
         $ic53$ = SubLObjectFactory.makeSymbol("S#55750", "CYC");
-        $ic54$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("classifyingNodeInFilter"));
+        $ic54$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("classifyingNodeInFilter"));
         $ic55$ = SubLObjectFactory.makeSymbol("S#55782", "CYC");
-        $ic56$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DecisionTreeConceptFilter"));
+        $ic56$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DecisionTreeConceptFilter"));
         $ic57$ = SubLObjectFactory.makeSymbol("S#55756", "CYC");
         $ic58$ = SubLObjectFactory.makeSymbol("S#55758", "CYC");
-        $ic59$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("PredicateTaxonomy"));
+        $ic59$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PredicateTaxonomy"));
         $ic60$ = SubLObjectFactory.makeSymbol("S#55757", "CYC");
-        $ic61$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheCycOntology"));
+        $ic61$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheCycOntology"));
         $ic62$ = SubLObjectFactory.makeSymbol("IGNORE");
         $ic63$ = SubLObjectFactory.makeSymbol("S#55786", "CYC");
         $ic64$ = SubLObjectFactory.makeSymbol("S#55783", "CYC");
         $ic65$ = SubLObjectFactory.makeSymbol("CONCEPT-TAGGING-IRRELEVANT-TERM?");
         $ic66$ = SubLObjectFactory.makeSymbol("S#55762", "CYC");
-        $ic67$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("InstanceNamedFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("InstanceNamedFn-Ternary")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("ThingDescribableAsFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Kappa")));
+        $ic67$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InstanceNamedFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InstanceNamedFn-Ternary")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ThingDescribableAsFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Kappa")));
         $ic68$ = SubLObjectFactory.makeSymbol("S#55784", "CYC");
         $ic69$ = SubLObjectFactory.makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
         $ic70$ = SubLObjectFactory.makeSymbol("S#55766", "CYC");
         $ic71$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#55787", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#55788", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#55789", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#55790", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"));
         $ic72$ = SubLObjectFactory.makeSymbol("S#55770", "CYC");
-        $ic73$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("conceptFilterSpecificationFilter"));
+        $ic73$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("conceptFilterSpecificationFilter"));
         $ic74$ = SubLObjectFactory.makeSymbol("S#55785", "CYC");
         $ic75$ = SubLObjectFactory.makeSymbol("?MT");
-        $ic76$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("conceptFilterSpecificationDefiningMt"));
+        $ic76$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("conceptFilterSpecificationDefiningMt"));
         $ic77$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?MT"));
         $ic78$ = SubLObjectFactory.makeKeyword("PROBLEM-STORE");
         $ic79$ = SubLObjectFactory.makeSymbol("?TRIGGER");
-        $ic80$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("conceptFilterSpecificationTrigger"));
+        $ic80$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("conceptFilterSpecificationTrigger"));
         $ic81$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?TRIGGER"));
-        $ic82$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConceptOrSpec")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConceptSpecOrInstance")));
-        $ic83$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConceptOrInstance")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConceptSpecOrInstance")));
+        $ic82$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConceptOrSpec")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConceptSpecOrInstance")));
+        $ic83$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConceptOrInstance")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConceptSpecOrInstance")));
         $ic84$ = SubLObjectFactory.makeSymbol("?MODE");
-        $ic85$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("conceptFilterSpecificationMode"));
+        $ic85$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("conceptFilterSpecificationMode"));
         $ic86$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?MODE"));
-        $ic87$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ConceptAndInstancesFilterParameter"));
+        $ic87$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ConceptAndInstancesFilterParameter"));
         $ic88$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#55791", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#4785", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#55792", "CYC"));
         $ic89$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?FILTER"), (SubLObject)SubLObjectFactory.makeSymbol("?MODE"), (SubLObject)SubLObjectFactory.makeSymbol("?TRIGGER"));
-        $ic90$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("specificationForConceptFilter"));
+        $ic90$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("specificationForConceptFilter"));
         $ic91$ = SubLObjectFactory.makeSymbol("?FILTER");
         $ic92$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("INFERENCE-MODE"), (SubLObject)SubLObjectFactory.makeKeyword("SHALLOW"));
         $ic93$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?FILTER"));
         $ic94$ = SubLObjectFactory.makeSymbol("NEW-ADHOC-CONCEPT-FILTER-SPEC");
         $ic95$ = SubLObjectFactory.makeSymbol("CYCL-TERM-P");
         $ic96$ = SubLObjectFactory.makeSymbol("S#12263", "CYC");
-        $ic97$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ConceptFilterSpecificationWithMtFn"));
-        $ic98$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ConceptOnlyFilterParameter")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConcept")), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"));
+        $ic97$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ConceptFilterSpecificationWithMtFn"));
+        $ic98$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ConceptOnlyFilterParameter")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConcept")), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"));
         $ic99$ = SubLObjectFactory.makeSymbol("NEW-ADHOC-ISA-CONCEPT-FILTER-SPEC");
         $ic100$ = SubLObjectFactory.makeSymbol("S#17581", "CYC");
         $ic101$ = SubLObjectFactory.makeSymbol("?TERM");
-        $ic102$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ConceptOnlyFilterParameter"));
-        $ic103$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConcept"));
-        $ic104$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ConceptFilterSpecificatioFn"));
+        $ic102$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ConceptOnlyFilterParameter"));
+        $ic103$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TriggerFromConcept"));
+        $ic104$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ConceptFilterSpecificatioFn"));
         $ic105$ = SubLObjectFactory.makeSymbol("NEW-ADHOC-GENLS-CONCEPT-FILTER-SPEC");
     }
     

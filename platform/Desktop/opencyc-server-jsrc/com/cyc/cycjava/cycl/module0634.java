@@ -769,17 +769,17 @@ public final class module0634 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0634();
         $ic0$ = SubLObjectFactory.makeKeyword("FULL");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Null-TimeParameter"));
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testResponsibleCyclist"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Null-TimeParameter"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testResponsibleCyclist"));
         $ic4$ = SubLObjectFactory.makeSymbol("FORT-P");
-        $ic5$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtSpace")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt")), (SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Now"))));
+        $ic5$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtSpace")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TestVocabularyMt")), (SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now"))));
         $ic6$ = SubLObjectFactory.makeSymbol("S#2628", "CYC");
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("testResponsibleProject"));
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycorpBusinessDatabaseMt"));
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("OngoingStatus"));
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentRegressionTest"));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentPostBuildTest"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("testResponsibleProject"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycorpBusinessDatabaseMt"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("OngoingStatus"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentRegressionTest"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentPostBuildTest"));
         $ic12$ = SubLObjectFactory.makeKeyword("BROWSABLE?");
         $ic13$ = SubLObjectFactory.makeKeyword("BLOCK?");
         $ic14$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TOTAL-TIME"));
@@ -791,10 +791,10 @@ public final class module0634 extends SubLTranslatedFile
         $ic20$ = SubLObjectFactory.makeKeyword("FAILURE");
         $ic21$ = SubLObjectFactory.makeKeyword("REGRESSION-FAILURE");
         $ic22$ = SubLObjectFactory.makeKeyword("NON-REGRESSION-FAILURE");
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBContentTest-FullySpecified"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBContentTest-FullySpecified"));
         $ic24$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic26$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic26$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic27$ = SubLObjectFactory.makeKeyword("BREADTH");
         $ic28$ = SubLObjectFactory.makeKeyword("QUEUE");
         $ic29$ = SubLObjectFactory.makeKeyword("STACK");
@@ -810,7 +810,7 @@ public final class module0634 extends SubLTranslatedFile
         $ic39$ = SubLObjectFactory.makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
         $ic40$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeUninternedSymbol("US#4D5E436"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#1526883"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#15AA083"));
         $ic41$ = SubLObjectFactory.makeString("Node ~a does not pass sbhl-type-test ~a~%");
-        $ic42$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("HLPrototypicalTerm"));
+        $ic42$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HLPrototypicalTerm"));
     }
 }
 

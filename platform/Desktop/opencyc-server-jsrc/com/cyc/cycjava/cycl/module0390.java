@@ -405,7 +405,7 @@ public final class module0390 extends SubLTranslatedFile
             var22 = (SubLObject)module0390.$ic42$;
         }
         else if (module0390.NIL != module0367.f25079(var20)) {
-            final SubLObject var24 = module0369.f25474(module0367.f25037(var20));
+            final SubLObject var24 = oc_inference_datastructures_inference.f25474(module0367.f25037(var20));
             final SubLObject var25 = module0374.f26538(var24);
             final SubLObject var26 = f27715(var20);
             module0387.f27570(var26, var25);

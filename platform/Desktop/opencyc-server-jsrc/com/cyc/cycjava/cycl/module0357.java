@@ -69,25 +69,25 @@ public final class module0357 extends SubLTranslatedFile
     }
     
     public static SubLObject f23641(final SubLObject var6, final SubLObject var7) {
-        assert module0357.NIL != module0369.f25275(var6) : var6;
+        assert module0357.NIL != oc_inference_datastructures_inference.f25275(var6) : var6;
         assert module0357.NIL != Types.function_spec_p(var7) : var7;
-        final SubLObject var8 = module0369.f25421(var6);
+        final SubLObject var8 = oc_inference_datastructures_inference.f25421(var6);
         final SubLObject var9 = module0361.f23996(var8);
-        final SubLObject var10 = module0369.f25422(var6);
+        final SubLObject var10 = oc_inference_datastructures_inference.f25422(var6);
         f23642(module0357.$g3003$.getGlobalValue(), var7, var9, var10);
         return module0356.f23631();
     }
     
     public static SubLObject f23643(final SubLObject var6, final SubLObject var7, final SubLObject var11) {
-        assert module0357.NIL != module0369.f25275(var6) : var6;
+        assert module0357.NIL != oc_inference_datastructures_inference.f25275(var6) : var6;
         assert module0357.NIL != Types.function_spec_p(var7) : var7;
         assert module0357.NIL != Types.keywordp(var11) : var11;
         if (module0357.NIL == module0004.f104(var11, module0357.$g3003$.getGlobalValue(), (SubLObject)module0357.UNPROVIDED, (SubLObject)module0357.UNPROVIDED)) {
             Errors.error((SubLObject)module0357.$ic14$, var11);
         }
-        final SubLObject var12 = module0369.f25421(var6);
+        final SubLObject var12 = oc_inference_datastructures_inference.f25421(var6);
         final SubLObject var13 = module0361.f23996(var12);
-        final SubLObject var14 = module0369.f25422(var6);
+        final SubLObject var14 = oc_inference_datastructures_inference.f25422(var6);
         f23644(var11, var7, var13, var14);
         return module0356.f23631();
     }

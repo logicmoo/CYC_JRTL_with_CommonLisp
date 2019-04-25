@@ -130,7 +130,7 @@ public final class module0628 extends SubLTranslatedFile
         if (var8 == module0628.UNPROVIDED) {
             var8 = (SubLObject)module0628.NIL;
         }
-        assert module0628.NIL != module0369.f25417(var1) : var1;
+        assert module0628.NIL != oc_inference_datastructures_inference.f25417(var1) : var1;
         assert module0628.NIL != module0059.f4273(var2) : var2;
         if (module0628.NIL != var3 && !module0628.areAssertionsDisabledFor(me) && module0628.NIL == Types.function_spec_p(var3)) {
             throw new AssertionError(var3);
@@ -576,7 +576,7 @@ public final class module0628 extends SubLTranslatedFile
         SubLObject var30 = (SubLObject)module0628.NIL;
         if (var28 == module0628.$ic68$) {
             final SubLObject var31 = f38625(var9);
-            final SubLObject var32 = module0369.f25616(var31, f38630(var9));
+            final SubLObject var32 = oc_inference_datastructures_inference.f25616(var31, f38630(var9));
             if (module0628.NIL != var32) {
                 f38631(var9);
                 var30 = (SubLObject)module0628.T;
@@ -616,7 +616,7 @@ public final class module0628 extends SubLTranslatedFile
         final SubLObject var48 = f38625(var9);
         final SubLObject var49 = f38626(var9);
         if (module0628.NIL == var49) {
-            return f38649(module0409.f28534(var46, module0369.f25500(var48)));
+            return f38649(module0409.f28534(var46, oc_inference_datastructures_inference.f25500(var48)));
         }
         final SubLObject var50 = f38627(var9);
         SubLObject var51 = (SubLObject)module0628.NIL;
@@ -632,7 +632,7 @@ public final class module0628 extends SubLTranslatedFile
         final SubLObject var61 = module0579.$g4353$.currentBinding(var47);
         try {
             module0579.$g4296$.bind(var46, var47);
-            module0579.$g4278$.bind(module0369.f25491(module0369.f25732(var46)), var47);
+            module0579.$g4278$.bind(oc_inference_datastructures_inference.f25491(oc_inference_datastructures_inference.f25732(var46)), var47);
             module0579.$g4273$.bind((SubLObject)module0628.T, var47);
             module0579.$g4238$.bind((SubLObject)module0628.T, var47);
             module0579.$g4350$.bind((SubLObject)module0628.NIL, var47);

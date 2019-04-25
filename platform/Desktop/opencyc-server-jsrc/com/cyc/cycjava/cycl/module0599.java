@@ -79,15 +79,15 @@ public final class module0599 extends SubLTranslatedFile
     }
     
     public static SubLObject f36673(final SubLObject var1) {
-        if (module0599.NIL != module0174.f11035(var1)) {
-            return (SubLObject)SubLObjectFactory.makeBoolean(module0599.$ic0$.eql(module0177.f11163(var1)) || module0599.$ic0$.eql(module0178.f11287(var1)));
+        if (module0599.NIL != assertion_handles_oc.f11035(var1)) {
+            return (SubLObject)SubLObjectFactory.makeBoolean(module0599.$ic0$.eql(oc_assertions_low.f11163(var1)) || module0599.$ic0$.eql(module0178.f11287(var1)));
         }
         return (SubLObject)module0599.NIL;
     }
     
     public static SubLObject f36674(final SubLObject var1) {
-        if (module0599.NIL != module0174.f11035(var1)) {
-            return Equality.eql((SubLObject)module0599.$ic1$, module0177.f11163(var1));
+        if (module0599.NIL != assertion_handles_oc.f11035(var1)) {
+            return Equality.eql((SubLObject)module0599.$ic1$, oc_assertions_low.f11163(var1));
         }
         return (SubLObject)module0599.NIL;
     }
@@ -2029,24 +2029,24 @@ public final class module0599 extends SubLTranslatedFile
         $ic10$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12115", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12116", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")));
         $ic11$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")));
         $ic12$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic15$ = SubLObjectFactory.makeSymbol("S#40510", "CYC");
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic17$ = SubLObjectFactory.makeInteger(512);
         $ic18$ = SubLObjectFactory.makeSymbol("S#40488", "CYC");
         $ic19$ = SubLObjectFactory.makeSymbol("S#40489", "CYC");
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("argIsa"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argIsa"));
         $ic21$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic23$ = SubLObjectFactory.makeSymbol("S#40491", "CYC");
         $ic24$ = SubLObjectFactory.makeSymbol("S#40494", "CYC");
         $ic25$ = SubLObjectFactory.makeSymbol("S#40509", "CYC");
         $ic26$ = SubLObjectFactory.makeSymbol("S#40511", "CYC");
         $ic27$ = SubLObjectFactory.makeSymbol("S#18973", "CYC");
         $ic28$ = SubLObjectFactory.makeSymbol("S#40512", "CYC");
-        $ic29$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ArgIsaBinaryPredicate"));
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ArgGenlBinaryPredicate"));
+        $ic29$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ArgIsaBinaryPredicate"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ArgGenlBinaryPredicate"));
         $ic31$ = SubLObjectFactory.makeSymbol("S#40518", "CYC");
         $ic32$ = SubLObjectFactory.makeSymbol("S#40534", "CYC");
         $ic33$ = SubLObjectFactory.makeInteger(4096);
@@ -2055,8 +2055,8 @@ public final class module0599 extends SubLTranslatedFile
         $ic36$ = SubLObjectFactory.makeSymbol("S#40523", "CYC");
         $ic37$ = SubLObjectFactory.makeSymbol("S#40535", "CYC");
         $ic38$ = SubLObjectFactory.makeSymbol("S#40526", "CYC");
-        $ic39$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
-        $ic40$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
+        $ic39$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
+        $ic40$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
     }
 }
 

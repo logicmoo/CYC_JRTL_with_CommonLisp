@@ -520,7 +520,7 @@ public final class module0580 extends SubLTranslatedFile
     }
     
     public static SubLObject f35525(final SubLObject var11) {
-        return module0174.f11035(var11);
+        return assertion_handles_oc.f11035(var11);
     }
     
     public static SubLObject f35526(final SubLObject var3, final SubLObject var4) {
@@ -3001,7 +3001,7 @@ public final class module0580 extends SubLTranslatedFile
         $ic261$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39020", "CYC"));
         $ic262$ = SubLObjectFactory.makeSymbol("COR");
         $ic263$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)SubLObjectFactory.makeSymbol("S#39294", "CYC")));
-        $ic264$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39295", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic264$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39295", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic265$ = SubLObjectFactory.makeUninternedSymbol("US#7C53A59");
         $ic266$ = SubLObjectFactory.makeSymbol("*PPH-USE-BULLETED-LISTS?*");
         $ic267$ = SubLObjectFactory.makeSymbol("S#38908", "CYC");
@@ -3122,14 +3122,14 @@ public final class module0580 extends SubLTranslatedFile
         $ic382$ = SubLObjectFactory.makeString("~% Top-level CycL: ~S");
         $ic383$ = SubLObjectFactory.makeKeyword("FAILED");
         $ic384$ = SubLObjectFactory.makeString("Result of adding Mt scope paraphrases:~% ~S");
-        $ic385$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Now")));
-        $ic386$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TemporalMicrotheory"));
-        $ic387$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("nonPlural-Generic")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("nameString")));
+        $ic385$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now")));
+        $ic386$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TemporalMicrotheory"));
+        $ic387$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nonPlural-Generic")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nameString")));
         $ic388$ = SubLObjectFactory.makeString("according to");
         $ic389$ = SubLObjectFactory.makeKeyword("PHRASE-CYCL");
-        $ic390$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
+        $ic390$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now"));
         $ic391$ = SubLObjectFactory.makeString("Ignoring ~S~% because it subsumes #$Now.");
-        $ic392$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("prepositionStrings")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("adverbStrings")));
+        $ic392$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("prepositionStrings")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("adverbStrings")));
         $ic393$ = SubLObjectFactory.makeUninternedSymbol("US#70C2928");
         $ic394$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39324", "CYC")));
         $ic395$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#39325", "CYC"));

@@ -368,10 +368,10 @@ public final class module0412 extends SubLTranslatedFile
             var46 = var46.rest();
             var47 = var46.first();
         }
-        final SubLObject var49 = module0369.f25421(var38);
+        final SubLObject var49 = oc_inference_datastructures_inference.f25421(var38);
         final SubLObject var50 = module0361.f24229(var49);
-        SubLObject var51 = module0369.f25626(var38);
-        final SubLObject var52 = module0369.f25627(var38);
+        SubLObject var51 = oc_inference_datastructures_inference.f25626(var38);
+        final SubLObject var52 = oc_inference_datastructures_inference.f25627(var38);
         var51 = Numbers.ceiling(var51, (SubLObject)module0412.UNPROVIDED);
         var45 = conses_high.putf(var45, (SubLObject)module0412.$ic19$, var50);
         var45 = conses_high.putf(var45, (SubLObject)module0412.$ic20$, var51);
@@ -431,7 +431,7 @@ public final class module0412 extends SubLTranslatedFile
     
     public static SubLObject f28697(final SubLObject var38, final SubLObject var57) {
         SubLObject var58 = (SubLObject)module0412.NIL;
-        final SubLObject var59 = module0369.f25492(var38);
+        final SubLObject var59 = oc_inference_datastructures_inference.f25492(var38);
         if (module0412.NIL == module0065.f4772(var59, (SubLObject)module0412.$ic24$)) {
             final SubLObject var60_61 = var59;
             if (module0412.NIL == module0065.f4775(var60_61, (SubLObject)module0412.$ic24$)) {
@@ -499,7 +499,7 @@ public final class module0412 extends SubLTranslatedFile
     public static SubLObject f28704(final SubLObject var74, final SubLObject var67) {
         final SubLThread var75 = SubLProcess.currentSubLThread();
         SubLObject var76 = f28706(var74);
-        final SubLObject var77 = module0369.f25748(var67);
+        final SubLObject var77 = oc_inference_datastructures_inference.f25748(var67);
         SubLObject var78 = (SubLObject)module0412.NIL;
         SubLObject var79 = (SubLObject)module0412.NIL;
         if (module0412.NIL != module0361.f24321(var77)) {
@@ -517,16 +517,16 @@ public final class module0412 extends SubLTranslatedFile
             }
             module0066.f4842(var80);
         }
-        var76 = conses_high.putf(var76, (SubLObject)module0412.$ic27$, Numbers.add((SubLObject)module0412.ONE_INTEGER, module0369.f25629(var67)));
-        final SubLObject var83 = Numbers.add((SubLObject)module0412.ONE_INTEGER, Numbers.multiply((SubLObject)module0412.$ic28$, module0369.f25623(var67, (SubLObject)module0412.NIL)));
-        final SubLObject var84 = module0369.f25649(var83);
+        var76 = conses_high.putf(var76, (SubLObject)module0412.$ic27$, Numbers.add((SubLObject)module0412.ONE_INTEGER, oc_inference_datastructures_inference.f25629(var67)));
+        final SubLObject var83 = Numbers.add((SubLObject)module0412.ONE_INTEGER, Numbers.multiply((SubLObject)module0412.$ic28$, oc_inference_datastructures_inference.f25623(var67, (SubLObject)module0412.NIL)));
+        final SubLObject var84 = oc_inference_datastructures_inference.f25649(var83);
         var76 = conses_high.putf(var76, (SubLObject)module0412.$ic20$, var83);
         if (module0412.NIL != var84) {
             var76 = conses_high.putf(var76, (SubLObject)module0412.$ic22$, var84);
         }
-        final SubLObject var85 = module0369.f25625(var67);
+        final SubLObject var85 = oc_inference_datastructures_inference.f25625(var67);
         var76 = conses_high.putf(var76, (SubLObject)module0412.$ic21$, var85);
-        final SubLObject var86 = module0369.f25687(var67);
+        final SubLObject var86 = oc_inference_datastructures_inference.f25687(var67);
         if (module0412.NIL != module0408.f28482(var86)) {
             var76 = conses_high.putf(var76, (SubLObject)module0412.$ic29$, (SubLObject)module0412.T);
         }
@@ -565,11 +565,11 @@ public final class module0412 extends SubLTranslatedFile
     
     public static SubLObject f28703(final SubLObject var67, final SubLObject var38) {
         SubLObject var68 = (SubLObject)module0412.NIL;
-        SubLObject var69 = module0369.f25744(var67);
+        SubLObject var69 = oc_inference_datastructures_inference.f25744(var67);
         SubLObject var70 = (SubLObject)module0412.NIL;
         var70 = var69.first();
         while (module0412.NIL != var69) {
-            SubLObject var5_89 = module0369.f25785(var70);
+            SubLObject var5_89 = oc_inference_datastructures_inference.f25785(var70);
             SubLObject var71 = (SubLObject)module0412.NIL;
             var71 = var5_89.first();
             while (module0412.NIL != var5_89) {
@@ -655,7 +655,7 @@ public final class module0412 extends SubLTranslatedFile
                 var56 = conses_high.putf(var56, (SubLObject)module0412.$ic40$, (SubLObject)module0412.T);
             }
             if (module0412.$ic44$ == var84) {
-                var56 = conses_high.putf(var56, (SubLObject)module0412.$ic45$, module0369.f25513(var38));
+                var56 = conses_high.putf(var56, (SubLObject)module0412.$ic45$, oc_inference_datastructures_inference.f25513(var38));
             }
             if (module0412.NIL != module0435.f30632(var84)) {
                 var56 = conses_high.putf(var56, (SubLObject)module0412.$ic46$, (SubLObject)module0412.T);
@@ -930,7 +930,7 @@ public final class module0412 extends SubLTranslatedFile
         module0412.$g3332$ = null;
         $ic0$ = SubLObjectFactory.makeKeyword("UNSPECIFIED");
         $ic1$ = SubLObjectFactory.makeKeyword("CONDITIONAL-SENTENCE?");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
         $ic3$ = SubLObjectFactory.makeSymbol("S#26487", "CYC");
         $ic4$ = SubLObjectFactory.makeKeyword("INFERENCE-MODE");
         $ic5$ = SubLObjectFactory.makeKeyword("CUSTOM");

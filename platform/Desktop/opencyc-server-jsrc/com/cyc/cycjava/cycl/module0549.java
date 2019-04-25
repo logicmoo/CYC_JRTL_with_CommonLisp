@@ -130,7 +130,7 @@ public final class module0549 extends SubLTranslatedFile
     
     public static SubLObject f33889() {
         final SubLThread var1 = SubLProcess.currentSubLThread();
-        f33890(module0128.f8433());
+        f33890(constant_handles_oc.f8433());
         SubLObject var2 = module0139.f9019((SubLObject)module0549.SIX_INTEGER);
         final SubLObject var3 = module0139.$g1632$.currentBinding(var1);
         final SubLObject var4 = module0139.$g1630$.currentBinding(var1);
@@ -3165,19 +3165,19 @@ public final class module0549 extends SubLTranslatedFile
         $ic34$ = SubLObjectFactory.makeKeyword("MODULE");
         $ic35$ = SubLObjectFactory.makeSymbol("IGNORE");
         $ic36$ = SubLObjectFactory.makeString("Calculating collection local spec cardinalities");
-        $ic37$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic37$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic38$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic39$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic39$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic40$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12141", "CYC"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#102D8BE"));
         $ic41$ = SubLObjectFactory.makeString("~A is neither SET-P nor LISTP.");
         $ic42$ = SubLObjectFactory.makeString("Calculating collection local instance cardinalities");
-        $ic43$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic43$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic44$ = SubLObjectFactory.makeString("Calculating collection local quoted instance cardinalities");
-        $ic45$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
+        $ic45$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
         $ic46$ = SubLObjectFactory.makeString("Calculating predicate local spec cardinalities");
-        $ic47$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic47$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic48$ = SubLObjectFactory.makeString("Calculating microtheory local spec cardinalities");
-        $ic49$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic49$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
         $ic50$ = SubLObjectFactory.makeString("Calculating other local instance cardinalities");
         $ic51$ = SubLObjectFactory.makeKeyword("SKIP");
         $ic52$ = SubLObjectFactory.makeString("Calculating collection total cardinalities");

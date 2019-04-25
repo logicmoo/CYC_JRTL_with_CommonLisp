@@ -895,8 +895,8 @@ public final class module0278 extends SubLTranslatedFile
         $ic9$ = SubLObjectFactory.makeSymbol("S#20996", "CYC");
         $ic10$ = SubLObjectFactory.makeKeyword("IGNORE");
         $ic11$ = SubLObjectFactory.makeKeyword("INVALID-EXPANSION");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("expansion"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("expansionDefn"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("expansion"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("expansionDefn"));
         $ic14$ = SubLObjectFactory.makeString("Trying to expand a recursive EL relation, hit the recursion limit ~D while expanding ~A~%");
         $ic15$ = SubLObjectFactory.makeSymbol("INTEGERP");
         $ic16$ = SubLObjectFactory.makeSymbol("NULL");

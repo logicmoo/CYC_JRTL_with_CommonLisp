@@ -199,7 +199,7 @@ public final class module0785 extends SubLTranslatedFile
     }
     
     public static SubLObject f50392(final SubLObject var3) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0785.NIL == module0128.f8449(var3));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0785.NIL == constant_handles_oc.f8449(var3));
     }
     
     public static SubLObject f50393(final SubLObject var4) {
@@ -1301,7 +1301,7 @@ public final class module0785 extends SubLTranslatedFile
         $ic75$ = SubLObjectFactory.makeKeyword("POS");
         $ic76$ = SubLObjectFactory.makeSymbol("S#54977", "CYC");
         $ic77$ = SubLObjectFactory.makeSymbol("?PRED");
-        $ic78$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("basicSpeechPartPred"));
+        $ic78$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("basicSpeechPartPred"));
         $ic79$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?PRED"));
         $ic80$ = SubLObjectFactory.makeSymbol("S#54981", "CYC");
         $ic81$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#13097", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#54986", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#54807", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#54987", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#39564", "CYC"));

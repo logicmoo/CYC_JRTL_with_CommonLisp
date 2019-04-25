@@ -994,11 +994,11 @@ public final class module0800 extends SubLTranslatedFile
             module0587.$g4457$.bind(module0015.$g131$.getDynamicValue(var2), var2);
             module0601.f36755((SubLObject)module0800.$ic6$);
             module0601.f36746();
-            if (module0800.NIL == module0369.f25275(var9)) {
+            if (module0800.NIL == oc_inference_datastructures_inference.f25275(var9)) {
                 PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic40$, var3, var5);
             }
             if (!var8.isInteger()) {
-                var8 = module0369.f25533(var9);
+                var8 = oc_inference_datastructures_inference.f25533(var9);
             }
             final SubLObject var11 = Hashtables.gethash(var8, module0413.f28826(var9), (SubLObject)module0800.UNPROVIDED);
             PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic41$, ConsesLow.nth((SubLObject)module0800.SIX_INTEGER, var11));
@@ -1006,7 +1006,7 @@ public final class module0800 extends SubLTranslatedFile
             PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic43$, ConsesLow.nth((SubLObject)module0800.ONE_INTEGER, var11));
             PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic44$, ConsesLow.nth((SubLObject)module0800.TWO_INTEGER, var11));
             PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic45$, ConsesLow.nth((SubLObject)module0800.THREE_INTEGER, var11));
-            PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic46$, (SubLObject)((module0800.NIL != module0174.f11035(ConsesLow.nth((SubLObject)module0800.FOUR_INTEGER, var11))) ? module0289.f19402(ConsesLow.nth((SubLObject)module0800.FOUR_INTEGER, var11)) : module0800.$ic47$));
+            PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic46$, (SubLObject)((module0800.NIL != assertion_handles_oc.f11035(ConsesLow.nth((SubLObject)module0800.FOUR_INTEGER, var11))) ? module0289.f19402(ConsesLow.nth((SubLObject)module0800.FOUR_INTEGER, var11)) : module0800.$ic47$));
             PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic48$, module0173.f10958(ConsesLow.nth((SubLObject)module0800.FIVE_INTEGER, var11)));
             module0601.f36746();
         }
@@ -1029,11 +1029,11 @@ public final class module0800 extends SubLTranslatedFile
         module0642.f39029((SubLObject)module0800.UNPROVIDED);
         module0642.f39020(module0015.$g155$.getGlobalValue());
         module0642.f39028((SubLObject)module0800.UNPROVIDED);
-        if (module0800.NIL == module0369.f25275(var9)) {
+        if (module0800.NIL == oc_inference_datastructures_inference.f25275(var9)) {
             PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic40$, var3, var5);
         }
         if (!var8.isInteger()) {
-            var8 = module0369.f25532(var9);
+            var8 = oc_inference_datastructures_inference.f25532(var9);
         }
         final SubLObject var10 = Hashtables.gethash(var8, module0413.f28826(var9), (SubLObject)module0800.UNPROVIDED);
         PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic41$, ConsesLow.nth((SubLObject)module0800.SIX_INTEGER, var10));
@@ -1041,7 +1041,7 @@ public final class module0800 extends SubLTranslatedFile
         PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic43$, ConsesLow.nth((SubLObject)module0800.ONE_INTEGER, var10));
         PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic44$, ConsesLow.nth((SubLObject)module0800.TWO_INTEGER, var10));
         PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic45$, ConsesLow.nth((SubLObject)module0800.THREE_INTEGER, var10));
-        PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic46$, (SubLObject)((module0800.NIL != module0174.f11035(ConsesLow.nth((SubLObject)module0800.FOUR_INTEGER, var10))) ? module0289.f19402(ConsesLow.nth((SubLObject)module0800.FOUR_INTEGER, var10)) : module0800.$ic47$));
+        PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic46$, (SubLObject)((module0800.NIL != assertion_handles_oc.f11035(ConsesLow.nth((SubLObject)module0800.FOUR_INTEGER, var10))) ? module0289.f19402(ConsesLow.nth((SubLObject)module0800.FOUR_INTEGER, var10)) : module0800.$ic47$));
         PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic48$, (SubLObject)((module0800.NIL != module0173.f10955(ConsesLow.nth((SubLObject)module0800.FIVE_INTEGER, var10))) ? module0173.f10958(ConsesLow.nth((SubLObject)module0800.FIVE_INTEGER, var10)) : module0800.$ic47$));
         module0642.f39028((SubLObject)module0800.UNPROVIDED);
         module0642.f39020(module0015.$g156$.getGlobalValue());
@@ -1076,7 +1076,7 @@ public final class module0800 extends SubLTranslatedFile
         module0642.f39029((SubLObject)module0800.UNPROVIDED);
         module0642.f39020(module0015.$g155$.getGlobalValue());
         module0642.f39028((SubLObject)module0800.UNPROVIDED);
-        if (module0800.NIL == module0369.f25275(var11)) {
+        if (module0800.NIL == oc_inference_datastructures_inference.f25275(var11)) {
             PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic40$, var3, var5);
         }
         final SubLObject var12 = module0413.f28831(var11);
@@ -1087,7 +1087,7 @@ public final class module0800 extends SubLTranslatedFile
         final SubLObject var14 = Hashtables.gethash(var8, var12, (SubLObject)module0800.UNPROVIDED);
         PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic58$, conses_high.getf(var14, (SubLObject)module0800.$ic59$, (SubLObject)module0800.UNPROVIDED));
         PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic60$, var13);
-        PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic61$, module0369.f25420(var11));
+        PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic61$, oc_inference_datastructures_inference.f25420(var11));
         PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic41$, conses_high.getf(var14, (SubLObject)module0800.$ic62$, (SubLObject)module0800.UNPROVIDED));
         PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic42$, conses_high.getf(var14, (SubLObject)module0800.$ic63$, (SubLObject)module0800.UNPROVIDED));
         PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic43$, conses_high.getf(var14, (SubLObject)module0800.$ic64$, (SubLObject)module0800.UNPROVIDED));
@@ -1101,12 +1101,12 @@ public final class module0800 extends SubLTranslatedFile
             PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic45$, var16);
         }
         else if (var9.equalp((SubLObject)module0800.$ic68$)) {
-            PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic46$, (SubLObject)((module0800.NIL != module0174.f11035(conses_high.getf(var14, (SubLObject)module0800.$ic69$, (SubLObject)module0800.UNPROVIDED))) ? module0289.f19396(conses_high.getf(var14, (SubLObject)module0800.$ic69$, (SubLObject)module0800.UNPROVIDED)) : module0800.$ic47$));
+            PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic46$, (SubLObject)((module0800.NIL != assertion_handles_oc.f11035(conses_high.getf(var14, (SubLObject)module0800.$ic69$, (SubLObject)module0800.UNPROVIDED))) ? module0289.f19396(conses_high.getf(var14, (SubLObject)module0800.$ic69$, (SubLObject)module0800.UNPROVIDED)) : module0800.$ic47$));
         }
         else if (var9.equalp((SubLObject)module0800.$ic14$)) {
             final SubLObject var17 = conses_high.getf(var14, (SubLObject)module0800.$ic70$, (SubLObject)module0800.UNPROVIDED);
             if (module0800.NIL != f51099(var17)) {
-                PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic48$, (SubLObject)((module0800.NIL != module0167.f10813(var17)) ? module0172.f10920(var17) : ((module0800.NIL != module0128.f8449(var17)) ? var17 : module0800.$ic47$)));
+                PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic48$, (SubLObject)((module0800.NIL != module0167.f10813(var17)) ? module0172.f10920(var17) : ((module0800.NIL != constant_handles_oc.f8449(var17)) ? var17 : module0800.$ic47$)));
             }
         }
         SubLObject var18 = f51100(var12, var8);
@@ -1186,7 +1186,7 @@ public final class module0800 extends SubLTranslatedFile
     
     public static SubLObject f51099(final SubLObject var21) {
         final SubLThread var22 = SubLProcess.currentSubLThread();
-        return (SubLObject)SubLObjectFactory.makeBoolean(var21.isNumber() || (module0800.NIL != module0128.f8449(var21) && (module0800.NIL == module0800.$g6376$.getDynamicValue(var22) || module0800.NIL != module0794.f50804(var21, (SubLObject)module0800.UNPROVIDED))));
+        return (SubLObject)SubLObjectFactory.makeBoolean(var21.isNumber() || (module0800.NIL != constant_handles_oc.f8449(var21) && (module0800.NIL == module0800.$g6376$.getDynamicValue(var22) || module0800.NIL != module0794.f50804(var21, (SubLObject)module0800.UNPROVIDED))));
     }
     
     public static SubLObject f51101(final SubLObject var20, final SubLObject var106) {
@@ -1295,7 +1295,7 @@ public final class module0800 extends SubLTranslatedFile
             module0587.$g4457$.bind(module0015.$g131$.getDynamicValue(var2), var2);
             module0601.f36755((SubLObject)module0800.$ic6$);
             module0601.f36746();
-            if (module0800.NIL == module0369.f25275(var7)) {
+            if (module0800.NIL == oc_inference_datastructures_inference.f25275(var7)) {
                 try {
                     final SubLObject var3_129 = module0601.$g4652$.currentBinding(var2);
                     final SubLObject var9 = module0601.$g4654$.currentBinding(var2);
@@ -1352,7 +1352,7 @@ public final class module0800 extends SubLTranslatedFile
                 }
                 return (SubLObject)module0800.NIL;
             }
-            SubLObject var12 = module0369.f25706(var7, (SubLObject)module0800.NIL);
+            SubLObject var12 = oc_inference_datastructures_inference.f25706(var7, (SubLObject)module0800.NIL);
             SubLObject var13 = (SubLObject)module0800.NIL;
             SubLObject var14 = (SubLObject)module0800.NIL;
             SubLObject var15 = (SubLObject)module0800.NIL;
@@ -1722,7 +1722,7 @@ public final class module0800 extends SubLTranslatedFile
         module0642.f39029((SubLObject)module0800.UNPROVIDED);
         module0642.f39020(module0015.$g155$.getGlobalValue());
         module0642.f39028((SubLObject)module0800.UNPROVIDED);
-        if (module0800.NIL != module0369.f25275(var8)) {
+        if (module0800.NIL != oc_inference_datastructures_inference.f25275(var8)) {
             PrintLow.format(module0015.$g131$.getDynamicValue(var2), (SubLObject)module0800.$ic116$, f51111(var5, var8, var10, var12));
         }
         else {
@@ -2375,7 +2375,7 @@ public final class module0800 extends SubLTranslatedFile
         $ic0$ = SubLObjectFactory.makeSymbol("XML-QUERY-VARIABLE");
         $ic1$ = SubLObjectFactory.makeString("text/xml");
         $ic2$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("INPUT-NAME"), (SubLObject)SubLObjectFactory.makeString("query"));
-        $ic3$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic3$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("INPUT-NAME"), (SubLObject)SubLObjectFactory.makeString("mt"));
         $ic5$ = SubLObjectFactory.makeString("var");
         $ic6$ = SubLObjectFactory.makeString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -2449,7 +2449,7 @@ public final class module0800 extends SubLTranslatedFile
         $ic74$ = SubLObjectFactory.makeSymbol("S#55687", "CYC");
         $ic75$ = SubLObjectFactory.makeSymbol("S#13483", "CYC");
         $ic76$ = SubLObjectFactory.makeSymbol("S#15505", "CYC");
-        $ic77$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
+        $ic77$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
         $ic78$ = SubLObjectFactory.makeString("english");
         $ic79$ = SubLObjectFactory.makeSymbol("S#55692", "CYC");
         $ic80$ = SubLObjectFactory.makeInteger(50);

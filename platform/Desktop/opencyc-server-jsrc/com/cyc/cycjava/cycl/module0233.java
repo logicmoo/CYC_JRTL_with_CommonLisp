@@ -965,7 +965,7 @@ public final class module0233 extends SubLTranslatedFile
         $ic9$ = SubLObjectFactory.makeSymbol("S#18086", "CYC");
         $ic10$ = SubLObjectFactory.makeSymbol("S#18074", "CYC");
         $ic11$ = SubLObjectFactory.makeSymbol("S#18092", "CYC");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ELInferenceBindingFn"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ELInferenceBindingFn"));
         $ic13$ = SubLObjectFactory.makeSymbol("S#18094", "CYC");
         $ic14$ = SubLObjectFactory.makeSymbol("S#18095", "CYC");
         $ic15$ = SubLObjectFactory.makeSymbol("S#18098", "CYC");
@@ -978,19 +978,19 @@ public final class module0233 extends SubLTranslatedFile
         $ic22$ = SubLObjectFactory.makeString("Incomplete variable map ~a applied to ~a");
         $ic23$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#18169", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18168", "CYC"));
         $ic24$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#18170", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18171", "CYC"));
-        $ic25$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18172", "CYC"));
+        $ic25$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#18172", "CYC"));
         $ic26$ = SubLObjectFactory.makeSymbol("FULLY-BOUND-P");
         $ic27$ = SubLObjectFactory.makeSymbol("S#18165", "CYC");
         $ic28$ = SubLObjectFactory.makeSymbol("LISTP");
         $ic29$ = SubLObjectFactory.makeSymbol("S#18096", "CYC");
         $ic30$ = SubLObjectFactory.makeSymbol("S#18093", "CYC");
-        $ic31$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"));
+        $ic31$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"));
         $ic32$ = SubLObjectFactory.makeSymbol("S#18149", "CYC");
         $ic33$ = SubLObjectFactory.makeSymbol("S#18150", "CYC");
         $ic34$ = SubLObjectFactory.makeSymbol("EL-VAR?");
         $ic35$ = SubLObjectFactory.makeSymbol("S#18152", "CYC");
         $ic36$ = SubLObjectFactory.makeString("Some element of ~A is not a KB-BINDING-P");
-        $ic37$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSet"));
+        $ic37$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSet"));
         $ic38$ = SubLObjectFactory.makeString("Some element of ~A is not a KB-BINDING-SET-P");
     }
     

@@ -102,7 +102,7 @@ public final class module0681 extends SubLTranslatedFile
         module0642.f39020(module0015.$g383$.getGlobalValue());
         module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0681.UNPROVIDED);
         module0655.f39768();
-        PrintLow.format(module0015.$g131$.getDynamicValue(var4), (SubLObject)module0681.$ic5$, module0174.f11025(var1), module0655.f39759(var2));
+        PrintLow.format(module0015.$g131$.getDynamicValue(var4), (SubLObject)module0681.$ic5$, assertion_handles_oc.f11025(var1), module0655.f39759(var2));
         module0642.f39012((SubLObject)Characters.CHAR_quotation, (SubLObject)module0681.UNPROVIDED);
         if (module0681.NIL != var5) {
             module0642.f39020(module0015.$g387$.getGlobalValue());
@@ -361,7 +361,7 @@ public final class module0681 extends SubLTranslatedFile
             }
         }
         else if (var27.eql((SubLObject)module0681.$ic36$) && module0681.NIL != module0158.f10286(var24, (SubLObject)module0681.NIL)) {
-            final SubLObject var35 = module0174.f11010();
+            final SubLObject var35 = assertion_handles_oc.f11010();
             final SubLObject var36 = (SubLObject)module0681.$ic37$;
             final SubLObject var37 = module0065.f4733(var35);
             SubLObject var38 = (SubLObject)module0681.ZERO_INTEGER;
@@ -612,7 +612,7 @@ public final class module0681 extends SubLTranslatedFile
         module0681.$g5347$ = null;
         module0681.$g5348$ = null;
         module0681.$g5349$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BiologyMt"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BiologyMt"));
         $ic1$ = SubLObjectFactory.makeInteger(30);
         $ic2$ = SubLObjectFactory.makeKeyword("ALL");
         $ic3$ = SubLObjectFactory.makeString("[Show Consequences]");
@@ -636,7 +636,7 @@ public final class module0681 extends SubLTranslatedFile
         $ic21$ = SubLObjectFactory.makeString("Generating consequences of ");
         $ic22$ = SubLObjectFactory.makeString(", considering ~a rules...");
         $ic23$ = SubLObjectFactory.makeString("all");
-        $ic24$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic24$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic25$ = SubLObjectFactory.makeKeyword("MAX-TIME");
         $ic26$ = SubLObjectFactory.makeString("Timed out after ~a second~P.");
         $ic27$ = SubLObjectFactory.makeSymbol("CB-SHOW-CONSEQUENCES");
@@ -656,10 +656,10 @@ public final class module0681 extends SubLTranslatedFile
         $ic41$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
         $ic42$ = SubLObjectFactory.makeSymbol("S#45605", "CYC");
         $ic43$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic44$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic45$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("queryPracticeRules"));
+        $ic44$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic45$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("queryPracticeRules"));
         $ic46$ = SubLObjectFactory.makeKeyword("GAF");
-        $ic47$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CytologicalProcessProjectKBContentTestQuery"));
+        $ic47$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CytologicalProcessProjectKBContentTestQuery"));
         $ic48$ = SubLObjectFactory.makeSymbol("S#45610", "CYC");
     }
 }

@@ -2987,8 +2987,8 @@ public final class module0701 extends SubLTranslatedFile
     }
     
     public static SubLObject f42810(final SubLObject var4) {
-        if (module0701.NIL != module0128.f8449(var4) && (module0701.NIL != module0038.f2684(module0166.f10743(var4), (SubLObject)module0701.$ic169$) || module0701.NIL != module0038.f2684(module0166.f10743(var4), (SubLObject)module0701.$ic170$) || module0701.NIL != module0038.f2684(module0166.f10743(var4), (SubLObject)module0701.$ic171$) || module0701.NIL != module0038.f2684(module0166.f10743(var4), (SubLObject)module0701.$ic172$))) {
-            return f42807(module0166.f10743(var4));
+        if (module0701.NIL != constant_handles_oc.f8449(var4) && (module0701.NIL != module0038.f2684(constants_high_oc.f10743(var4), (SubLObject)module0701.$ic169$) || module0701.NIL != module0038.f2684(constants_high_oc.f10743(var4), (SubLObject)module0701.$ic170$) || module0701.NIL != module0038.f2684(constants_high_oc.f10743(var4), (SubLObject)module0701.$ic171$) || module0701.NIL != module0038.f2684(constants_high_oc.f10743(var4), (SubLObject)module0701.$ic172$))) {
+            return f42807(constants_high_oc.f10743(var4));
         }
         if (module0701.NIL != module0173.f10955(var4)) {
             final SubLObject var5 = module0220.f14554(var4, module0701.$ic173$, module0701.$ic174$, (SubLObject)module0701.UNPROVIDED, (SubLObject)module0701.UNPROVIDED, (SubLObject)module0701.UNPROVIDED);
@@ -2999,13 +2999,13 @@ public final class module0701 extends SubLTranslatedFile
             return (SubLObject)module0701.NIL;
         }
         else {
-            if (var4.isString() && module0701.NIL != module0038.f2684(var4, (SubLObject)module0701.$ic169$) && module0701.NIL != module0166.f10737(var4)) {
+            if (var4.isString() && module0701.NIL != module0038.f2684(var4, (SubLObject)module0701.$ic169$) && module0701.NIL != constants_high_oc.f10737(var4)) {
                 return module0702.f42814(module0708.f43016(module0038.f2674(var4, (SubLObject)module0701.$ic169$, (SubLObject)module0701.UNPROVIDED)), (SubLObject)module0701.UNPROVIDED, (SubLObject)module0701.UNPROVIDED);
             }
-            if (var4.isString() && module0701.NIL != module0038.f2684(var4, (SubLObject)module0701.$ic170$) && module0701.NIL != module0166.f10737(var4)) {
+            if (var4.isString() && module0701.NIL != module0038.f2684(var4, (SubLObject)module0701.$ic170$) && module0701.NIL != constants_high_oc.f10737(var4)) {
                 return module0702.f42814(module0699.f42531(module0038.f2674(var4, (SubLObject)module0701.$ic170$, (SubLObject)module0701.UNPROVIDED)), (SubLObject)module0701.UNPROVIDED, (SubLObject)module0701.UNPROVIDED);
             }
-            if (var4.isString() && module0701.NIL != module0038.f2684(var4, (SubLObject)module0701.$ic171$) && module0701.NIL != module0166.f10737(var4)) {
+            if (var4.isString() && module0701.NIL != module0038.f2684(var4, (SubLObject)module0701.$ic171$) && module0701.NIL != constants_high_oc.f10737(var4)) {
                 return module0702.f42814(module0699.f42551(module0038.f2674(var4, (SubLObject)module0701.$ic171$, (SubLObject)module0701.UNPROVIDED)), (SubLObject)module0701.UNPROVIDED, (SubLObject)module0701.UNPROVIDED);
             }
             if (module0701.NIL != module0708.f43032(var4)) {
@@ -3527,8 +3527,8 @@ public final class module0701 extends SubLTranslatedFile
         $ic170$ = SubLObjectFactory.makeString("rdf:");
         $ic171$ = SubLObjectFactory.makeString("rdfs:");
         $ic172$ = SubLObjectFactory.makeString("xsd:");
-        $ic173$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("rdfURI"));
-        $ic174$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic173$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("rdfURI"));
+        $ic174$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
         $ic175$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeString(":"));
         $ic176$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("owl"), (SubLObject)SubLObjectFactory.makeString("rdf"), (SubLObject)SubLObjectFactory.makeString("rdfs"), (SubLObject)SubLObjectFactory.makeString("xsd"));
         $ic177$ = SubLObjectFactory.makeSymbol("STRING=");

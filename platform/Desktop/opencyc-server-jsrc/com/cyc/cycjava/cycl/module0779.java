@@ -977,7 +977,7 @@ public final class module0779 extends SubLTranslatedFile
     
     public static SubLObject f50249(final SubLObject var11, final SubLObject var16, final SubLObject var15, final SubLObject var76) {
         final SubLThread var77 = SubLProcess.currentSubLThread();
-        if (module0779.NIL != module0128.f8449(var11)) {
+        if (module0779.NIL != constant_handles_oc.f8449(var11)) {
             module0677.f41359(var11);
         }
         else if (module0779.NIL != module0167.f10813(var11)) {
@@ -1432,9 +1432,9 @@ public final class module0779 extends SubLTranslatedFile
         $ic92$ = SubLObjectFactory.makeString("Mapping Mt: ");
         $ic93$ = SubLObjectFactory.makeString(":syntactic-mt");
         $ic94$ = SubLObjectFactory.makeSymbol("S#54830", "CYC");
-        $ic95$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes"));
-        $ic96$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("needsHandLexification"));
-        $ic97$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("termStrings"));
+        $ic95$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cyclistNotes"));
+        $ic96$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("needsHandLexification"));
+        $ic97$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termStrings"));
         $ic98$ = SubLObjectFactory.makeString("Invalid Cyc term");
         $ic99$ = SubLObjectFactory.makeString("Invalid Cyc MT");
         $ic100$ = SubLObjectFactory.makeString("setting change: ~s~%");
@@ -1450,17 +1450,17 @@ public final class module0779 extends SubLTranslatedFile
         $ic110$ = SubLObjectFactory.makeString("Invalid argument specification (check parentheses and keyword syntax)");
         $ic111$ = SubLObjectFactory.makeString("1");
         $ic112$ = SubLObjectFactory.makeSymbol("?TERM");
-        $ic113$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("myCreationPurpose"));
-        $ic114$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BookkeepingMt"));
+        $ic113$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("myCreationPurpose"));
+        $ic114$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BookkeepingMt"));
         $ic115$ = SubLObjectFactory.makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
         $ic116$ = SubLObjectFactory.makeSymbol("S#5859", "CYC");
         $ic117$ = SubLObjectFactory.makeSymbol(">");
         $ic118$ = SubLObjectFactory.makeSymbol("S#54832", "CYC");
-        $ic119$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic119$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic120$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#37358", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("STRING"));
         $ic121$ = SubLObjectFactory.makeSymbol("S#54831", "CYC");
-        $ic122$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("synonymousExternalConcept"));
-        $ic123$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ContextOfPCWFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CCF-SemanticDBOntology")));
+        $ic122$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("synonymousExternalConcept"));
+        $ic123$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ContextOfPCWFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CCF-SemanticDBOntology")));
         $ic124$ = SubLObjectFactory.makeString("Mt: ");
     }
 }

@@ -2086,7 +2086,7 @@ public final class module0254 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0254();
         $ic0$ = SubLObjectFactory.makeSymbol("S#11099", "CYC");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic2$ = SubLObjectFactory.makeSymbol("S#19240", "CYC");
         $ic3$ = SubLObjectFactory.makeSymbol("S#19241", "CYC");
         $ic4$ = SubLObjectFactory.makeSymbol("SDC?");
@@ -2094,7 +2094,7 @@ public final class module0254 extends SubLTranslatedFile
         $ic6$ = SubLObjectFactory.makeSymbol("S#19242", "CYC");
         $ic7$ = SubLObjectFactory.makeSymbol("S#19243", "CYC");
         $ic8$ = SubLObjectFactory.makeSymbol("S#19214", "CYC");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
         $ic10$ = SubLObjectFactory.makeKeyword("OLD");
         $ic11$ = SubLObjectFactory.makeKeyword("RESOURCE");
         $ic12$ = SubLObjectFactory.makeSymbol("S#11450", "CYC");
@@ -2110,7 +2110,7 @@ public final class module0254 extends SubLTranslatedFile
         $ic22$ = SubLObjectFactory.makeString("Method only valid for simple and transfer-through modules, not ~a");
         $ic23$ = SubLObjectFactory.makeKeyword("BOOLEAN");
         $ic24$ = SubLObjectFactory.makeSymbol("S#15382", "CYC");
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("negationInverse"));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("negationInverse"));
         $ic26$ = SubLObjectFactory.makeSymbol("S#15385", "CYC");
         $ic27$ = SubLObjectFactory.makeSymbol("S#19074", "CYC");
         $ic28$ = SubLObjectFactory.makeString("Method only valid for disjoins modules, not ~a");

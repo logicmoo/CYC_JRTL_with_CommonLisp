@@ -662,7 +662,7 @@ public final class module0762 extends SubLTranslatedFile
     }
     
     public static SubLObject f48189(final SubLObject var1) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0762.NIL != module0128.f8463(module0762.$ic48$, (SubLObject)module0762.UNPROVIDED) && module0762.NIL != module0202.f12589(var1, module0762.$ic48$));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0762.NIL != constant_handles_oc.f8463(module0762.$ic48$, (SubLObject)module0762.UNPROVIDED) && module0762.NIL != module0202.f12589(var1, module0762.$ic48$));
     }
     
     public static SubLObject f48190(final SubLObject var1) {
@@ -670,7 +670,7 @@ public final class module0762 extends SubLTranslatedFile
     }
     
     public static SubLObject f48191(final SubLObject var1) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0762.NIL != module0128.f8463(module0762.$ic50$, (SubLObject)module0762.UNPROVIDED) && module0762.NIL != module0202.f12589(var1, module0762.$ic47$) && module0762.NIL != module0751.f46684(module0205.f13203(var1, (SubLObject)module0762.UNPROVIDED), module0762.$ic50$, (SubLObject)module0762.UNPROVIDED));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0762.NIL != constant_handles_oc.f8463(module0762.$ic50$, (SubLObject)module0762.UNPROVIDED) && module0762.NIL != module0202.f12589(var1, module0762.$ic47$) && module0762.NIL != module0751.f46684(module0205.f13203(var1, (SubLObject)module0762.UNPROVIDED), module0762.$ic50$, (SubLObject)module0762.UNPROVIDED));
     }
     
     public static SubLObject f48192(final SubLObject var1) {
@@ -2033,38 +2033,38 @@ public final class module0762 extends SubLTranslatedFile
         $ic32$ = SubLObjectFactory.makeString("~&~S~% failed test ~S for final type ~S.~%");
         $ic33$ = SubLObjectFactory.makeString("~&~S~% judged to be non-terminal type ~S.~%");
         $ic34$ = SubLObjectFactory.makeString("~&~S~% does not pass top-level test ~S.~%");
-        $ic35$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CollectionDenotingFunction"));
-        $ic36$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
-        $ic37$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ExponentFn")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"));
-        $ic38$ = ConsesLow.list(new SubLObject[] { module0128.f8479((SubLObject)SubLObjectFactory.makeString("CenturyFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("DecadeFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("YearFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("QuarterFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("MonthFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("DayFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("HourFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("MinuteFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SecondFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("MilliSecondFn")) });
-        $ic39$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("YearFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P")));
-        $ic40$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("MonthFn")), (SubLObject)SubLObjectFactory.makeKeyword("FORT"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#52649", "CYC")));
-        $ic41$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("DayFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#52650", "CYC")));
-        $ic42$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Function-Denotational"));
-        $ic43$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("SchemaObjectFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("CCF-SDB-Bnode-CMLS")), (SubLObject)SubLObjectFactory.makeKeyword("STRING"));
-        $ic44$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TruthFunction"));
-        $ic45$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True"));
-        $ic46$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("False"));
-        $ic47$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("expansion"));
-        $ic48$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("cfImplies"));
-        $ic49$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("compositeFieldFormat"));
-        $ic50$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ScriptPredicate"));
-        $ic51$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("nthLargestElement")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("nthSmallestElement")));
-        $ic52$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Collection"));
-        $ic53$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("GeopoliticalEntity"));
-        $ic54$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
-        $ic55$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("City"));
-        $ic56$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("USCity"));
-        $ic57$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("hypotheticalTerm"));
+        $ic35$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CollectionDenotingFunction"));
+        $ic36$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
+        $ic37$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ExponentFn")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"));
+        $ic38$ = ConsesLow.list(new SubLObject[] { constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CenturyFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DecadeFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("YearFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("QuarterFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MonthFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DayFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("HourFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MinuteFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SecondFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MilliSecondFn")) });
+        $ic39$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("YearFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P")));
+        $ic40$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MonthFn")), (SubLObject)SubLObjectFactory.makeKeyword("FORT"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#52649", "CYC")));
+        $ic41$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DayFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#52650", "CYC")));
+        $ic42$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Function-Denotational"));
+        $ic43$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SchemaObjectFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CCF-SDB-Bnode-CMLS")), (SubLObject)SubLObjectFactory.makeKeyword("STRING"));
+        $ic44$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TruthFunction"));
+        $ic45$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True"));
+        $ic46$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("False"));
+        $ic47$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("expansion"));
+        $ic48$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cfImplies"));
+        $ic49$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("compositeFieldFormat"));
+        $ic50$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScriptPredicate"));
+        $ic51$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nthLargestElement")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nthSmallestElement")));
+        $ic52$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Collection"));
+        $ic53$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("GeopoliticalEntity"));
+        $ic54$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic55$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("City"));
+        $ic56$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("USCity"));
+        $ic57$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("hypotheticalTerm"));
         $ic58$ = SubLObjectFactory.makeKeyword("UNIVERSAL-DATE");
         $ic59$ = SubLObjectFactory.makeKeyword("UNIVERSAL-SECOND");
         $ic60$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic61$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic62$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TruthValue"));
-        $ic63$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheResultOfParsing"));
-        $ic64$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheCollectionOf"));
-        $ic65$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionRelationFunction"));
-        $ic66$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic61$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic62$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TruthValue"));
+        $ic63$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheResultOfParsing"));
+        $ic64$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheCollectionOf"));
+        $ic65$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionRelationFunction"));
+        $ic66$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic67$ = SubLObjectFactory.makeKeyword("BREADTH");
         $ic68$ = SubLObjectFactory.makeKeyword("QUEUE");
         $ic69$ = SubLObjectFactory.makeKeyword("STACK");
@@ -2080,9 +2080,9 @@ public final class module0762 extends SubLTranslatedFile
         $ic79$ = SubLObjectFactory.makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
         $ic80$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeUninternedSymbol("US#4D5E436"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#1526883"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#15AA083"));
         $ic81$ = SubLObjectFactory.makeString("Node ~a does not pass sbhl-type-test ~a~%");
-        $ic82$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CollectionSubsetFn"));
+        $ic82$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CollectionSubsetFn"));
         $ic83$ = SubLObjectFactory.makeKeyword("INITIALIZED");
-        $ic84$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("OR"), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationFromTypeFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationToTypeFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationFromFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationToFn"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#12112", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#24413", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC")));
+        $ic84$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("OR"), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationFromTypeFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationToTypeFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationFromFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationToFn"))), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#12112", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#24413", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC")));
         $ic85$ = SubLObjectFactory.makeSymbol("S#132", "CYC");
         $ic86$ = SubLObjectFactory.makeSymbol("S#24413", "CYC");
         $ic87$ = SubLObjectFactory.makeSymbol("S#12112", "CYC");
@@ -2091,31 +2091,31 @@ public final class module0762 extends SubLTranslatedFile
         $ic90$ = SubLObjectFactory.makeSymbol("S#52685", "CYC");
         $ic91$ = SubLObjectFactory.makeKeyword("ANY");
         $ic92$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-        $ic93$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BestNLPhraseOfStringFn"));
-        $ic94$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SententialConstituent"));
-        $ic95$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic93$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BestNLPhraseOfStringFn"));
+        $ic94$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SententialConstituent"));
+        $ic95$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic96$ = SubLObjectFactory.makeSymbol("S#12344", "CYC");
-        $ic97$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa"));
+        $ic97$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultIsa"));
         $ic98$ = SubLObjectFactory.makeKeyword("GAF");
         $ic99$ = SubLObjectFactory.makeSymbol("S#39294", "CYC");
         $ic100$ = SubLObjectFactory.makeSymbol("S#52688", "CYC");
         $ic101$ = SubLObjectFactory.makeKeyword("IGNORE");
-        $ic102$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#750", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#751", "CYC")));
+        $ic102$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#750", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#751", "CYC")));
         $ic103$ = SubLObjectFactory.makeSymbol("S#751", "CYC");
         $ic104$ = SubLObjectFactory.makeSymbol("S#750", "CYC");
         $ic105$ = SubLObjectFactory.makeString("Found head-binding conjunct:~% ~S");
-        $ic106$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("verbSemTrans-Canonical"));
+        $ic106$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("verbSemTrans-Canonical"));
         $ic107$ = SubLObjectFactory.makeString("Found matching vST-Canonical:~% ~S");
         $ic108$ = SubLObjectFactory.makeSymbol("S#52690", "CYC");
         $ic109$ = SubLObjectFactory.makeSymbol("GAF-ARG3");
         $ic110$ = SubLObjectFactory.makeInteger(24);
-        $ic111$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("FunctionToArg"));
-        $ic112$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Kappa"));
+        $ic111$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("FunctionToArg"));
+        $ic112$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Kappa"));
         $ic113$ = SubLObjectFactory.makeSymbol("EL-VAR?");
-        $ic114$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("fieldCodes"));
-        $ic115$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("SchemaLF")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("SchemaPF")));
-        $ic116$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("DBEntryFn"));
-        $ic117$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ImageURLFn")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"));
+        $ic114$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("fieldCodes"));
+        $ic115$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SchemaLF")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SchemaPF")));
+        $ic116$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DBEntryFn"));
+        $ic117$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ImageURLFn")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"));
     }
     
     public static final class $f48175$UnaryFunction extends UnaryFunction

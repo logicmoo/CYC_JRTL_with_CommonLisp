@@ -1233,9 +1233,9 @@ public final class module0745 extends SubLTranslatedFile
         //   717: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //   720: aload           var12
         //   722: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //   727: invokestatic    com/cyc/cycjava/cycl/module0176.f11128:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //   727: invokestatic    com/cyc/cycjava/cycl/oc_assertion_manager.f11128:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   730: pop            
-        //   731: invokestatic    com/cyc/cycjava/cycl/module0176.f11126:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //   731: invokestatic    com/cyc/cycjava/cycl/oc_assertion_manager.f11126:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //   734: pop            
         //   735: getstatic       com/cyc/cycjava/cycl/module0012.$g75$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //   738: aload           var12
@@ -2745,9 +2745,9 @@ public final class module0745 extends SubLTranslatedFile
         //  4665: getstatic       com/cyc/cycjava/cycl/module0745.T:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLT;
         //  4668: aload           var12
         //  4670: invokeinterface com/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol.bind:(Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;Lcom/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLThread;)V
-        //  4675: invokestatic    com/cyc/cycjava/cycl/module0176.f11128:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  4675: invokestatic    com/cyc/cycjava/cycl/oc_assertion_manager.f11128:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4678: pop            
-        //  4679: invokestatic    com/cyc/cycjava/cycl/module0176.f11126:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
+        //  4679: invokestatic    com/cyc/cycjava/cycl/oc_assertion_manager.f11126:()Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;
         //  4682: pop            
         //  4683: getstatic       com/cyc/cycjava/cycl/module0012.$g75$:Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;
         //  4686: aload           var12
@@ -4854,7 +4854,7 @@ public final class module0745 extends SubLTranslatedFile
             for (var219 = (SubLObject)module0745.NIL, var219 = (SubLObject)module0745.ZERO_INTEGER; var219.numL(module0012.$g83$.getDynamicValue(var212)); var219 = Numbers.add(var219, (SubLObject)module0745.ONE_INTEGER)) {
                 module0012.note_percent_progress(module0012.$g84$.getDynamicValue(var212), module0012.$g83$.getDynamicValue(var212));
                 module0012.$g84$.setDynamicValue(Numbers.add(module0012.$g84$.getDynamicValue(var212), (SubLObject)module0745.ONE_INTEGER), var212);
-                var220 = module0166.f10773((SubLObject)module0745.UNPROVIDED);
+                var220 = constants_high_oc.f10773((SubLObject)module0745.UNPROVIDED);
                 if (module0745.NIL != f46258(var220)) {
                     var213 = Numbers.add(var213, (SubLObject)module0745.ONE_INTEGER);
                 }
@@ -4999,10 +4999,10 @@ public final class module0745 extends SubLTranslatedFile
                 var102 = module0048.f_1X(var102);
             }
         }
-        final SubLObject var104 = module0176.f11129();
+        final SubLObject var104 = oc_assertion_manager.f11129();
         PrintLow.format(var52, (SubLObject)module0745.$ic119$, module0051.f3574(var104, (SubLObject)module0745.UNPROVIDED));
         module0745.$g5948$.setDynamicValue(module0035.f2083((SubLObject)ConsesLow.list(var97, var104), module0745.$g5948$.getDynamicValue(var96)), var96);
-        module0176.f11128();
+        oc_assertion_manager.f11128();
         if (module0745.NIL != module0745.$g5944$.getDynamicValue(var96)) {
             f46260(var91, var34);
         }
@@ -5823,7 +5823,7 @@ public final class module0745 extends SubLTranslatedFile
         $ic21$ = SubLObjectFactory.makeInteger(100);
         $ic22$ = SubLObjectFactory.makeKeyword("HL-EXTERNALIZED-KEYS");
         $ic23$ = SubLObjectFactory.makeKeyword("NL-PREDS");
-        $ic24$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("nonPlural-Generic")));
+        $ic24$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("nonPlural-Generic")));
         $ic25$ = SubLObjectFactory.makeKeyword("LANGUAGE-MT");
         $ic26$ = SubLObjectFactory.makeKeyword("UNINITIALIZED");
         $ic27$ = SubLObjectFactory.makeInteger(60);
@@ -5933,7 +5933,7 @@ public final class module0745 extends SubLTranslatedFile
         $ic131$ = SubLObjectFactory.makeSymbol("FIRST");
         $ic132$ = SubLObjectFactory.makeInteger(1000000000);
         $ic133$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#50606", "CYC"));
-        $ic134$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic134$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic135$ = SubLObjectFactory.makeKeyword("TEXT");
         $ic136$ = SubLObjectFactory.makeString("Cached paraphrase for ~S~% is ~S.~% Should be ~S.");
         $ic137$ = (SubLFloat)SubLObjectFactory.makeDouble(0.001);
@@ -5946,12 +5946,12 @@ public final class module0745 extends SubLTranslatedFile
         $ic144$ = SubLObjectFactory.makeSymbol("S#18284", "CYC");
         $ic145$ = SubLObjectFactory.makeString("Looking up nl generation for all forts ....");
         $ic146$ = SubLObjectFactory.makeKeyword("NOT-FOUND");
-        $ic147$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EnglishParaphraseMt"));
+        $ic147$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EnglishParaphraseMt"));
         $ic148$ = SubLObjectFactory.makeString("cdolist");
         $ic149$ = SubLObjectFactory.makeString("Timed out after ~S seconds generating paraphrase of ~S");
-        $ic150$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("LogicalFieldAttribute"));
+        $ic150$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("LogicalFieldAttribute"));
         $ic151$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic152$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic152$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic153$ = SubLObjectFactory.makeSymbol("S#38", "CYC");
         $ic154$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic155$ = SubLObjectFactory.makeSymbol("S#3935", "CYC");

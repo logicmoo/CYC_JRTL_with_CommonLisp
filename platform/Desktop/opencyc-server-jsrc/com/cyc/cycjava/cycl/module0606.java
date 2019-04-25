@@ -308,7 +308,7 @@ public final class module0606 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0606();
         $ic0$ = SubLObjectFactory.makeSymbol("CYC-SCIENTIFIC-NUMBER-P");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ScientificNumberFn"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScientificNumberFn"));
         $ic2$ = SubLObjectFactory.makeSymbol("INTEGERP");
         $ic3$ = SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P");
         $ic4$ = SubLObjectFactory.makeSymbol("S#4666", "CYC");

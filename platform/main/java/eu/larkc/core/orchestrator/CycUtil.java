@@ -15,8 +15,8 @@ import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.turtle.TurtleParserFactory;
 
-import com.cyc.cycjava.cycl.$constant_native;
 import com.cyc.cycjava.cycl.constant_handles;
+import com.cyc.cycjava.cycl.constant_handles.*;
 import com.cyc.cycjava.cycl.ke;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -33,11 +33,11 @@ import eu.larkc.core.metadata.PluginRegistry;
 public class CycUtil {
 	//private static Logger log = LoggerFactory.getLogger(CycUtil.class);
 	private static Logger logger = Logger.getLogger(PluginRegistry.class.getCanonicalName());
-	
+
 	private static final OwlToCycMapping owlToCycMapping = new OwlToCycMapping();
 	private static String mtStr = "BaseKB";
-	//private static String uriFnStr = "LarkcURIFn";	
-	
+	//private static String uriFnStr = "LarkcURIFn";
+
 	public static final void loadRdfTurtle(InputStream inputStream) throws RDFParseException, RDFHandlerException, IOException {
 		// prepare infrastructure for storing URIs
 		/*addConst(uriFnStr);
@@ -45,7 +45,7 @@ public class CycUtil {
 		addAssertion(CycUtil.toAssertion("isa", uriFnStr, "ReifiableFunction"), mtStr);
 		addAssertion(CycUtil.toAssertion("isa", uriFnStr, "IndividualDenotingFunction"), mtStr);
 		addAssertion(CycUtil.toAssertion("arg1Isa", uriFnStr, "CharacterString"), mtStr);*/
-		
+
 		/*
 		addConst("wsl-NonFunctionalParameter");
 		addAssertion(CycUtil.toAssertion("isa", "wsl-NonFunctionalParameter", "Collection"), "UniversalVocabularyMt");
@@ -55,11 +55,11 @@ public class CycUtil {
 		addConst("wsl-NonFunctionalProperty");
 		addAssertion(CycUtil.toAssertion("genls", "larkc-Scalability", "wsl-NonFunctionalProperty"), "UniversalVocabularyMt");
 		*/
-		
+
 		// prepare turtle RDF format parser
 		RDFParser parser =  new TurtleParserFactory().getParser();
 		RDFHandlerIterator iter = new RDFHandlerIterator(new URIImpl("http://larkc.cyc/")) {
-			
+
 			@Override
 			public void handleStatement(Statement st) throws RDFHandlerException {
 				// make it into cyc assertion
@@ -67,10 +67,10 @@ public class CycUtil {
 					throw new RDFHandlerException("Error adding this statement to Plug-in registry KB: " + st);
 				}
 			}
-			
-		};			
+
+		};
 		parser.setRDFHandler(iter);
-		
+
 		// start the parser
 		parser.parse(inputStream, "http://larkc.cyc/");
 	}
@@ -84,8 +84,8 @@ public class CycUtil {
 		SubLObject cycAssertion = list(predicateCycL, subjectCycL, objectCycL);
 		return addAssertion(cycAssertion, mtStr);
 	}
-	
-	public static final SubLObject addRdfTerm(String rdfTerm) {	
+
+	public static final SubLObject addRdfTerm(String rdfTerm) {
 		if (owlToCycMapping.isCycEquivalent(rdfTerm)) {
 			// there is corresponding cyc term, we replace it
 			return toConst(owlToCycMapping.getCycEquivalent(rdfTerm));
@@ -93,25 +93,25 @@ public class CycUtil {
 			// no corresponding cyc term, we add it to the KB using uriFn function
 			//SubLObject nart = list(toConst(uriFnStr), makeString(rdfTerm));
 			//System.out.println(nart);
-			//addAssertion(nart, mtStr);								
+			//addAssertion(nart, mtStr);
 			//return nart;
-			
-		String cycConst = owlToCycMapping.toCycConst(rdfTerm); 
+
+		String cycConst = owlToCycMapping.toCycConst(rdfTerm);
 		addConst(cycConst);
 		return toConst(cycConst);
 		//}
 	}
-	
-	
+
+
 	/**
 	 * Adds the new constant to the kb. The constant name have to be the correct Cycl string
 	 * TODO: Change to proper call, which checks if constant already there.
 	 * @param constStr
 	 */
 	public static final void addConst(String constStr) {
-		// TODO: ask Tony if this is a good and/or faster way to add 
+		// TODO: ask Tony if this is a good and/or faster way to add
 		// constants when you're not sure it exists
-		
+
 		SubLObject constSubL = toConst(constStr);
 		if (constSubL instanceof $constant_native) {
 			$constant_native constant = ($constant_native)constSubL;
@@ -121,42 +121,42 @@ public class CycUtil {
 			}
 		}
 	}
-	
+
 	public static final boolean addAssertion(String assertionStr, String _mtStr) {
 		SubLObject mt = CycUtil.toConst(_mtStr);
-		return addAssertion(CycUtil.toAssertion(assertionStr), mt);	
+		return addAssertion(CycUtil.toAssertion(assertionStr), mt);
 	}
-	
+
 	public static final boolean addAssertion(String assertionStr, SubLObject mt) {
-		return addAssertion(CycUtil.toAssertion(assertionStr), mt);	
+		return addAssertion(CycUtil.toAssertion(assertionStr), mt);
 	}
-	
+
 	public static final boolean addAssertion(SubLObject assertion, String _mtStr) {
 		SubLObject mt = CycUtil.toConst(_mtStr);
-		return addAssertion(assertion, mt);	
+		return addAssertion(assertion, mt);
 	}
-		
+
 	public static final boolean addAssertion(SubLObject assertion, SubLObject mt) {
 		logger.info("adding assertion: "+ assertion + " MT: " +mt);
-		SubLObject res = ke.ke_assert_now(assertion, mt, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);	
+		SubLObject res = ke.ke_assert_now(assertion, mt, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
 		if (res.isNil()){
 			logger.warning("The assertion was not asserted. It violates the KB consistency!");
 			return false;
 		}
 		return true;
 	}
-	
+
 	public static final void addForwardRule(String forwardRuleStr, String _mtStr) {
 		SubLObject mt = CycUtil.toConst(_mtStr);
 		addForwardRule(forwardRuleStr, mt);
-	}	
-	
+	}
+
 	public static final void addForwardRule(String forwardRuleStr, SubLObject mt) {
 		// TODO: this rule only works if added after plug-ins' info already in the KB!
 		ke.ke_assert_now(CycUtil.toAssertion(forwardRuleStr), mt,
 				CommonSymbols.UNPROVIDED, makeKeyword("FORWARD"));
-	}		
-	
+	}
+
 	public static final SubLObject askQuery(String queryStr) {
 		return askQuery(queryStr, false);
 	}
@@ -182,7 +182,7 @@ public class CycUtil {
 	public static final SubLObject toConst(String s) {
 		return constant_handles.reader_make_constant_shell(makeString(s));
 	}
-	
+
 	// Platform code beautifier
 	public static final SubLObject toAssertion(String s1, String s2, String s3) {
 		return list(toConst(s1), toConst(s2), toConst(s3));
@@ -190,7 +190,7 @@ public class CycUtil {
 
 	// platform code beautifier
 	public static final SubLObject toAssertion(String s1, String s2, int i3, String s4) {
-		return list(toConst(s1), toConst(s2), 
+		return list(toConst(s1), toConst(s2),
 				SubLNumberFactory.makeInteger(i3), toConst(s4));
 	}
 

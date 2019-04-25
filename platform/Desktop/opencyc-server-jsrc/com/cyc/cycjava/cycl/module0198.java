@@ -38,7 +38,7 @@ public final class module0198 extends SubLTranslatedFile
     private static final SubLSymbol $ic14$;
     
     public static SubLObject f12342(final SubLObject var1) {
-        return module0022.f1215(module0166.f10757(var1));
+        return module0022.f1215(constants_high_oc.f10757(var1));
     }
     
     public static SubLObject f12343() {
@@ -146,15 +146,15 @@ public final class module0198 extends SubLTranslatedFile
     public static SubLObject f12360() {
         SubLSpecialOperatorDeclarations.proclaim((SubLObject)module0198.$ic0$);
         module0034.f1909((SubLObject)module0198.$ic1$);
-        Structures.register_method(module0022.$g804$.getGlobalValue(), module0128.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0198.$ic4$));
+        Structures.register_method(module0022.$g804$.getGlobalValue(), constant_handles_oc.$g1501$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0198.$ic4$));
         SubLSpecialOperatorDeclarations.proclaim((SubLObject)module0198.$ic5$);
         Structures.register_method(module0022.$g804$.getGlobalValue(), module0167.$g2182$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0198.$ic6$));
         SubLSpecialOperatorDeclarations.proclaim((SubLObject)module0198.$ic7$);
         Structures.register_method(module0022.$g804$.getGlobalValue(), module0193.$g2259$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0198.$ic8$));
         SubLSpecialOperatorDeclarations.proclaim((SubLObject)module0198.$ic9$);
-        Structures.register_method(module0022.$g804$.getGlobalValue(), module0174.$g2194$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0198.$ic10$));
+        Structures.register_method(module0022.$g804$.getGlobalValue(), assertion_handles_oc.$g2194$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0198.$ic10$));
         SubLSpecialOperatorDeclarations.proclaim((SubLObject)module0198.$ic11$);
-        Structures.register_method(module0022.$g804$.getGlobalValue(), module0184.$g2229$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0198.$ic12$));
+        Structures.register_method(module0022.$g804$.getGlobalValue(), oc_deduction_handles.$g2229$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0198.$ic12$));
         SubLSpecialOperatorDeclarations.proclaim((SubLObject)module0198.$ic13$);
         Structures.register_method(module0022.$g804$.getGlobalValue(), module0192.$g2252$.getGlobalValue(), Symbols.symbol_function((SubLObject)module0198.$ic14$));
         return (SubLObject)module0198.NIL;

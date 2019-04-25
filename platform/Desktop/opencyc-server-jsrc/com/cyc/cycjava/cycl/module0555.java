@@ -1465,7 +1465,7 @@ public final class module0555 extends SubLTranslatedFile
         $ic9$ = SubLObjectFactory.makeSymbol("S#12703", "CYC");
         $ic10$ = SubLObjectFactory.makeKeyword("INDEX");
         $ic11$ = SubLObjectFactory.makeKeyword("PREDICATE");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic13$ = SubLObjectFactory.makeKeyword("TRUTH");
         $ic14$ = SubLObjectFactory.makeKeyword("TRUE");
         $ic15$ = SubLObjectFactory.makeSymbol("S#37469", "CYC");
@@ -1475,13 +1475,13 @@ public final class module0555 extends SubLTranslatedFile
         $ic19$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#15400", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12141", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic20$ = SubLObjectFactory.makeSymbol("S#37465", "CYC");
         $ic21$ = SubLObjectFactory.makeUninternedSymbol("US#5232609");
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
         $ic23$ = SubLObjectFactory.makeSymbol("S#37466", "CYC");
         $ic24$ = SubLObjectFactory.makeUninternedSymbol("US#36E739C");
         $ic25$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#15406", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12455", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic26$ = SubLObjectFactory.makeSymbol("S#37467", "CYC");
         $ic27$ = SubLObjectFactory.makeUninternedSymbol("US#36E739C");
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic29$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#15408", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12455", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic30$ = SubLObjectFactory.makeSymbol("S#37468", "CYC");
         $ic31$ = SubLObjectFactory.makeUninternedSymbol("US#36E739C");

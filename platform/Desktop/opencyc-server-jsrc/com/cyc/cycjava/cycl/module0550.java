@@ -257,13 +257,13 @@ public final class module0550 extends SubLTranslatedFile
         me = (SubLFile)new module0550();
         module0550.$g3990$ = null;
         module0550.$g3991$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("argIsa"));
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("argGenl"));
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argIsa"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("argGenl"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing"));
         $ic3$ = SubLObjectFactory.makeSymbol("S#37349", "CYC");
         $ic4$ = (SubLFloat)SubLObjectFactory.makeDouble(1.0);
         $ic5$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic7$ = SubLObjectFactory.makeInteger(1000);
         $ic8$ = SubLObjectFactory.makeSymbol("S#37356", "CYC");
         $ic9$ = SubLObjectFactory.makeInteger(100);

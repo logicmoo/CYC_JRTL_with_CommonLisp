@@ -85,9 +85,9 @@ public final class module0602 extends SubLTranslatedFile
         SubLObject var13 = (SubLObject)module0602.NIL;
         var13 = var12.first();
         while (module0602.NIL != var12) {
-            final SubLObject var14 = module0166.f10743(var13);
-            final SubLObject var15 = module0166.f10757(var13);
-            final SubLObject var16 = module0166.f10749(var13);
+            final SubLObject var14 = constants_high_oc.f10743(var13);
+            final SubLObject var15 = constants_high_oc.f10757(var13);
+            final SubLObject var16 = constants_high_oc.f10749(var13);
             final SubLObject var17 = module0540.f33502(module0126.f8395(var14, (SubLObject)module0602.UNPROVIDED));
             Hashtables.sethash(var15, var10, var17);
             Hashtables.sethash(var16, var10, var17);
@@ -123,7 +123,7 @@ public final class module0602 extends SubLTranslatedFile
         SubLObject var24 = (SubLObject)module0602.NIL;
         var24 = var23.first();
         while (module0602.NIL != var23) {
-            if (module0602.NIL == Hashtables.gethash_without_values(module0166.f10757(var24), var20, (SubLObject)module0602.UNPROVIDED)) {
+            if (module0602.NIL == Hashtables.gethash_without_values(constants_high_oc.f10757(var24), var20, (SubLObject)module0602.UNPROVIDED)) {
                 Errors.error((SubLObject)module0602.$ic2$, var24);
             }
             var23 = var23.rest();
@@ -160,8 +160,8 @@ public final class module0602 extends SubLTranslatedFile
             var30 = var28.first();
             var28 = var28.rest();
             if (module0602.NIL == var28) {
-                Hashtables.sethash(module0166.f10757(var29), var24, var30);
-                Hashtables.sethash(module0166.f10749(var29), var24, var30);
+                Hashtables.sethash(constants_high_oc.f10757(var29), var24, var30);
+                Hashtables.sethash(constants_high_oc.f10749(var29), var24, var30);
             }
             else {
                 cdestructuring_bind.cdestructuring_bind_error(var27, (SubLObject)module0602.$ic3$);
@@ -207,7 +207,7 @@ public final class module0602 extends SubLTranslatedFile
         SubLObject var37 = (SubLObject)module0602.NIL;
         var37 = var36.first();
         while (module0602.NIL != var36) {
-            assert module0602.NIL != module0174.f11035(var37) : var37;
+            assert module0602.NIL != assertion_handles_oc.f11035(var37) : var37;
             var36 = var36.rest();
             var37 = var36.first();
         }
@@ -239,7 +239,7 @@ public final class module0602 extends SubLTranslatedFile
     
     public static SubLObject f36826(final SubLObject var40, final SubLObject var33) {
         final SubLThread var41 = SubLProcess.currentSubLThread();
-        assert module0602.NIL != module0596.f36434(var40) : var40;
+        assert module0602.NIL != oc_kb_compare.f36434(var40) : var40;
         final SubLObject var42 = module0602.$g4664$.currentBinding(var41);
         try {
             module0602.$g4664$.bind(var40, var41);
@@ -253,7 +253,7 @@ public final class module0602 extends SubLTranslatedFile
     public static SubLObject f36827() {
         final SubLThread var5 = SubLProcess.currentSubLThread();
         SubLObject var6 = (SubLObject)module0602.ZERO_INTEGER;
-        final SubLObject var7 = module0077.f5333(module0596.f36454(module0602.$g4663$.getDynamicValue(var5)));
+        final SubLObject var7 = module0077.f5333(oc_kb_compare.f36454(module0602.$g4663$.getDynamicValue(var5)));
         SubLObject var8;
         SubLObject var9;
         SubLObject var10;
@@ -270,7 +270,7 @@ public final class module0602 extends SubLTranslatedFile
     public static SubLObject f36828() {
         final SubLThread var5 = SubLProcess.currentSubLThread();
         SubLObject var6 = (SubLObject)module0602.ZERO_INTEGER;
-        final SubLObject var7 = module0077.f5333(module0596.f36455(module0602.$g4663$.getDynamicValue(var5)));
+        final SubLObject var7 = module0077.f5333(oc_kb_compare.f36455(module0602.$g4663$.getDynamicValue(var5)));
         SubLObject var8;
         SubLObject var9;
         SubLObject var10;
@@ -287,7 +287,7 @@ public final class module0602 extends SubLTranslatedFile
     public static SubLObject f36829() {
         final SubLThread var5 = SubLProcess.currentSubLThread();
         SubLObject var6 = (SubLObject)module0602.ZERO_INTEGER;
-        final SubLObject var7 = module0077.f5333(module0596.f36456(module0602.$g4663$.getDynamicValue(var5)));
+        final SubLObject var7 = module0077.f5333(oc_kb_compare.f36456(module0602.$g4663$.getDynamicValue(var5)));
         SubLObject var8;
         SubLObject var9;
         SubLObject var10;
@@ -304,7 +304,7 @@ public final class module0602 extends SubLTranslatedFile
     public static SubLObject f36830() {
         final SubLThread var5 = SubLProcess.currentSubLThread();
         SubLObject var6 = (SubLObject)module0602.ZERO_INTEGER;
-        final SubLObject var7 = module0077.f5333(module0596.f36457(module0602.$g4663$.getDynamicValue(var5)));
+        final SubLObject var7 = module0077.f5333(oc_kb_compare.f36457(module0602.$g4663$.getDynamicValue(var5)));
         SubLObject var8;
         SubLObject var9;
         SubLObject var10;
@@ -362,7 +362,7 @@ public final class module0602 extends SubLTranslatedFile
     }
     
     public static SubLObject f36832(final SubLObject var54, final SubLObject var31) {
-        if (module0602.NIL != module0174.f11035(var54)) {
+        if (module0602.NIL != assertion_handles_oc.f11035(var54)) {
             return module0161.f10514(var31, module0178.f11287(var54));
         }
         SubLObject var55 = module0172.f10943(var54);
@@ -522,7 +522,7 @@ public final class module0602 extends SubLTranslatedFile
         $ic17$ = SubLObjectFactory.makeSymbol("S#40627", "CYC");
         $ic18$ = SubLObjectFactory.makeSymbol("S#40628", "CYC");
         $ic19$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic21$ = SubLObjectFactory.makeSymbol("S#40613", "CYC");
         $ic22$ = SubLObjectFactory.makeKeyword("GAF");
         $ic23$ = SubLObjectFactory.makeSymbol("NART-P");

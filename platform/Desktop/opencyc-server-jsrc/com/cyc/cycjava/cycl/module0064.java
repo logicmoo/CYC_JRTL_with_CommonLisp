@@ -1179,7 +1179,7 @@ public final class module0064 extends SubLTranslatedFile
         $ic59$ = SubLObjectFactory.makeSymbol("NULL");
         $ic60$ = SubLObjectFactory.makeString("Finalize it.");
         $ic61$ = SubLObjectFactory.makeString("~S has not been finalized.");
-        $ic62$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#6221", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#295", "CYC"), (SubLObject)SubLObjectFactory.makeString("do-shelf"))), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic62$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#6221", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#295", "CYC"), (SubLObject)SubLObjectFactory.makeString("do-shelf"))), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic63$ = SubLObjectFactory.makeString("do-shelf");
         $ic64$ = SubLObjectFactory.makeUninternedSymbol("US#1E1F90E");
         $ic65$ = SubLObjectFactory.makeUninternedSymbol("US#396E758");
@@ -1207,7 +1207,7 @@ public final class module0064 extends SubLTranslatedFile
         $ic87$ = SubLObjectFactory.makeSymbol("CDAR");
         $ic88$ = SubLObjectFactory.makeSymbol("CDR");
         $ic89$ = SubLObjectFactory.makeSymbol("CAR");
-        $ic90$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#6221", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#143", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#6281", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic90$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#6221", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#143", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#6281", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic91$ = SubLObjectFactory.makeUninternedSymbol("US#1E1F90E");
         $ic92$ = SubLObjectFactory.makeUninternedSymbol("US#7021747");
         $ic93$ = SubLObjectFactory.makeUninternedSymbol("US#73E6096");

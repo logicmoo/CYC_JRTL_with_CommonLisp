@@ -626,7 +626,7 @@ public final class module0611 extends SubLTranslatedFile
         module0611.$g4710$ = null;
         $ic0$ = SubLObjectFactory.makeString("A KB-dependent numerical quantification function was called, but the current Cyc KB does not contain knowledge about numerical quantification.");
         $ic1$ = SubLObjectFactory.makeKeyword("HL");
-        $ic2$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IdentityFn"));
+        $ic2$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IdentityFn"));
         $ic3$ = SubLObjectFactory.makeSymbol("S#41070", "CYC");
         $ic4$ = SubLObjectFactory.makeSymbol("?NQVAL");
         $ic5$ = SubLObjectFactory.makeKeyword("ARG1");
@@ -643,7 +643,7 @@ public final class module0611 extends SubLTranslatedFile
         $ic16$ = SubLObjectFactory.makeSymbol("CYC-MEDIAN");
         $ic17$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#41085", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#41086", "CYC"));
         $ic18$ = SubLObjectFactory.makeSymbol("CYC-EXTREME-MEMBER");
-        $ic19$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("greaterThan")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("lessThan")));
+        $ic19$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("greaterThan")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("lessThan")));
         $ic20$ = SubLObjectFactory.makeSymbol("S#41077", "CYC");
         $ic21$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#41087", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#41088", "CYC"));
         $ic22$ = SubLObjectFactory.makeSymbol("FIRST");
@@ -652,8 +652,8 @@ public final class module0611 extends SubLTranslatedFile
         $ic25$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CYC-SORT"));
         $ic26$ = SubLObjectFactory.makeSymbol("S#41080", "CYC");
         $ic27$ = SubLObjectFactory.makeSymbol("SECOND");
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("greaterThan"));
-        $ic29$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("lessThan"));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("greaterThan"));
+        $ic29$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("lessThan"));
         $ic30$ = SubLObjectFactory.makeSymbol("CYC-SORT-SET-VIA-BIN-PRED-FN");
     }
 }

@@ -1536,7 +1536,7 @@ public final class module0315 extends SubLTranslatedFile
     }
     
     public static SubLObject f21303(final SubLObject var77) {
-        if (module0315.NIL != module0174.f11035(var77)) {
+        if (module0315.NIL != assertion_handles_oc.f11035(var77)) {
             return module0178.f11303(var77);
         }
         if (module0315.NIL != module0191.f11952(var77)) {
@@ -3297,8 +3297,8 @@ public final class module0315 extends SubLTranslatedFile
         $ic86$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION-P")));
         $ic87$ = SubLObjectFactory.makeKeyword("REFLEXIVE");
         $ic88$ = SubLObjectFactory.makeKeyword("GENLPREDS");
-        $ic89$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
-        $ic90$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic89$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
+        $ic90$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic91$ = SubLObjectFactory.makeKeyword("INFERIOR?");
         $ic92$ = SubLObjectFactory.makeKeyword("HAS-SUPERIOR?");
         $ic93$ = SubLObjectFactory.makeSymbol("GT-HAS-SUPERIOR?");
@@ -3357,17 +3357,17 @@ public final class module0315 extends SubLTranslatedFile
         $ic146$ = SubLObjectFactory.makeKeyword("HIERARCHICALLY-DIRECT");
         $ic147$ = SubLObjectFactory.makeString("illegal value for method of which-mts: ~s");
         $ic148$ = SubLObjectFactory.makeSymbol("S#12275", "CYC");
-        $ic149$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic149$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic150$ = SubLObjectFactory.makeKeyword("INFERIORS-WITH-MTS");
         $ic151$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic152$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic153$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic152$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic153$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic154$ = SubLObjectFactory.makeString("before gathering instances");
         $ic155$ = SubLObjectFactory.makeSymbol("S#23886", "CYC");
-        $ic156$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic156$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic157$ = SubLObjectFactory.makeString("after instances, before maximin");
         $ic158$ = SubLObjectFactory.makeString("after maximin");
-        $ic159$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic159$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
         $ic160$ = SubLObjectFactory.makeKeyword("ANY-SUPERIOR-PATH");
         $ic161$ = SubLObjectFactory.makeSymbol("GT-ANY-SUPERIOR-PATH");
         $ic162$ = SubLObjectFactory.makeString("Returns list of nodes connecting INFERIOR with SUPERIOR");

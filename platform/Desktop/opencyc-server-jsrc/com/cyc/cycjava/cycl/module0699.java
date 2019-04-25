@@ -951,7 +951,7 @@ public final class module0699 extends SubLTranslatedFile
     public static SubLObject f42603(final SubLObject var78) {
         assert module0699.NIL != module0702.f42828(var78) : var78;
         final SubLObject var79 = f42606(module0702.f42840(var78));
-        SubLObject var80 = module0166.f10737(var79);
+        SubLObject var80 = constants_high_oc.f10737(var79);
         if (module0699.NIL == var80) {
             var80 = module0213.f13917(var79);
         }
@@ -1219,30 +1219,30 @@ public final class module0699 extends SubLTranslatedFile
         $ic32$ = SubLObjectFactory.makeString("prefLabel");
         $ic33$ = SubLObjectFactory.makeString("label");
         $ic34$ = SubLObjectFactory.makeString("altLabel");
-        $ic35$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("prettyString"));
+        $ic35$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("prettyString"));
         $ic36$ = SubLObjectFactory.makeSymbol("S#46591", "CYC");
         $ic37$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic38$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic39$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("uriString"));
+        $ic38$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic39$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("uriString"));
         $ic40$ = SubLObjectFactory.makeKeyword("GAF");
         $ic41$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic42$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("standardPrefixForURI"));
+        $ic42$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("standardPrefixForURI"));
         $ic43$ = SubLObjectFactory.makeSymbol("S#46631", "CYC");
         $ic44$ = SubLObjectFactory.makeString("xmlns:");
         $ic45$ = SubLObjectFactory.makeString("xmlns");
         $ic46$ = SubLObjectFactory.makeSymbol("STRING=");
         $ic47$ = SubLObjectFactory.makeString("Can't find or create term for ~S");
-        $ic48$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ResourceWithURIFn"));
+        $ic48$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ResourceWithURIFn"));
         $ic49$ = SubLObjectFactory.makeString("type");
-        $ic50$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic50$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic51$ = SubLObjectFactory.makeSymbol("?TERM");
-        $ic52$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("rdfURI"));
-        $ic53$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic52$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("rdfURI"));
+        $ic53$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic54$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MAX-NUMBER"), (SubLObject)module0699.ONE_INTEGER, (SubLObject)SubLObjectFactory.makeKeyword("ANSWER-LANGUAGE"), (SubLObject)SubLObjectFactory.makeKeyword("HL"), (SubLObject)SubLObjectFactory.makeKeyword("INFERENCE-MODE"), (SubLObject)SubLObjectFactory.makeKeyword("MINIMAL"));
         $ic55$ = SubLObjectFactory.makeString("~S is not a list node.");
         $ic56$ = SubLObjectFactory.makeString("nil");
-        $ic57$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheEmptyList"));
-        $ic58$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
+        $ic57$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheEmptyList"));
+        $ic58$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
         $ic59$ = SubLObjectFactory.makeString("first");
         $ic60$ = SubLObjectFactory.makeSymbol("S#46526", "CYC");
         $ic61$ = SubLObjectFactory.makeString("rest");
@@ -1262,15 +1262,15 @@ public final class module0699 extends SubLTranslatedFile
         $ic75$ = SubLObjectFactory.makeSymbol("S#46508", "CYC");
         $ic76$ = SubLObjectFactory.makeSymbol("S#46611", "CYC");
         $ic77$ = SubLObjectFactory.makeString("/");
-        $ic78$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("rdf-type"));
+        $ic78$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("rdf-type"));
         $ic79$ = SubLObjectFactory.makeSymbol("S#46615", "CYC");
         $ic80$ = SubLObjectFactory.makeSymbol("STARTS-WITH");
-        $ic81$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("SchemaObjectFn")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"), (SubLObject)SubLObjectFactory.makeKeyword("STRING"));
+        $ic81$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SchemaObjectFn")), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"), (SubLObject)SubLObjectFactory.makeKeyword("STRING"));
         $ic82$ = SubLObjectFactory.makeString("<");
         $ic83$ = SubLObjectFactory.makeString(">");
-        $ic84$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ResourceWithURIFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#39641", "CYC")));
+        $ic84$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ResourceWithURIFn")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#39641", "CYC")));
         $ic85$ = SubLObjectFactory.makeString("opencyc");
-        $ic86$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("URLFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("URIFn")));
+        $ic86$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("URLFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("URIFn")));
     }
 }
 

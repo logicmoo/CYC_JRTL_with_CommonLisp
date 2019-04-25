@@ -356,7 +356,7 @@ public final class module0292 extends SubLTranslatedFile
     }
     
     public static SubLObject f19695(final SubLObject var25) {
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0292.NIL != f19665(var25) && module0292.NIL != module0128.f8449(f19685(var25)) && f19686(var25).isFunctionSpec() && f19687(var25).isFunctionSpec() && f19688(var25).isFunctionSpec());
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0292.NIL != f19665(var25) && module0292.NIL != constant_handles_oc.f8449(f19685(var25)) && f19686(var25).isFunctionSpec() && f19687(var25).isFunctionSpec() && f19688(var25).isFunctionSpec());
     }
     
     public static SubLObject f19696(final SubLObject var26, final SubLObject var27) {

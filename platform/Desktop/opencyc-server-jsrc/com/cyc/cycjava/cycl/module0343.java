@@ -95,7 +95,7 @@ public final class module0343 extends SubLTranslatedFile
     
     public static SubLObject f23187(final SubLObject var6, final SubLObject var7) {
         f23188(var6, var7);
-        if (module0343.NIL != module0174.f11041(var7, (SubLObject)module0343.UNPROVIDED)) {
+        if (module0343.NIL != assertion_handles_oc.f11041(var7, (SubLObject)module0343.UNPROVIDED)) {
             module0344.f23209(var6, var7);
         }
         return (SubLObject)module0343.NIL;
@@ -104,7 +104,7 @@ public final class module0343 extends SubLTranslatedFile
     public static SubLObject f23188(final SubLObject var6, final SubLObject var7) {
         final SubLThread var8 = SubLProcess.currentSubLThread();
         assert module0343.NIL != module0191.f11910(var6) : var6;
-        assert module0343.NIL != module0174.f11035(var7) : var7;
+        assert module0343.NIL != assertion_handles_oc.f11035(var7) : var7;
         if (module0343.NIL == module0343.$g2954$.getDynamicValue(var8) && module0343.NIL != module0178.f11284(var7)) {
             final SubLObject var9 = module0178.f11331(var7, (SubLObject)module0343.ZERO_INTEGER);
             final SubLObject var10 = module0178.f11287(var7);
@@ -174,7 +174,7 @@ public final class module0343 extends SubLTranslatedFile
     
     public static SubLObject f23191(final SubLObject var6, final SubLObject var7) {
         f23192(var6, var7);
-        if (module0343.NIL != module0174.f11041(var7, (SubLObject)module0343.UNPROVIDED)) {
+        if (module0343.NIL != assertion_handles_oc.f11041(var7, (SubLObject)module0343.UNPROVIDED)) {
             module0344.f23213(var6, var7);
         }
         return (SubLObject)module0343.NIL;
@@ -183,7 +183,7 @@ public final class module0343 extends SubLTranslatedFile
     public static SubLObject f23192(final SubLObject var6, final SubLObject var7) {
         final SubLThread var8 = SubLProcess.currentSubLThread();
         assert module0343.NIL != module0191.f11910(var6) : var6;
-        assert module0343.NIL != module0174.f11035(var7) : var7;
+        assert module0343.NIL != assertion_handles_oc.f11035(var7) : var7;
         if (module0343.NIL != module0178.f11284(var7)) {
             final SubLObject var9 = module0178.f11331(var7, (SubLObject)module0343.ZERO_INTEGER);
             final SubLObject var10 = module0178.f11287(var7);
@@ -836,7 +836,7 @@ public final class module0343 extends SubLTranslatedFile
         module0343.$g2952$ = null;
         module0343.$g2953$ = null;
         module0343.$g2954$ = null;
-        $ic0$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("afterAdding")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("afterRemoving")));
+        $ic0$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("afterAdding")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("afterRemoving")));
         $ic1$ = SubLObjectFactory.makeSymbol("S#25926", "CYC");
         $ic2$ = SubLObjectFactory.makeSymbol("S#25927", "CYC");
         $ic3$ = SubLObjectFactory.makeSymbol("CLET");
@@ -848,11 +848,11 @@ public final class module0343 extends SubLTranslatedFile
         $ic9$ = SubLObjectFactory.makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
         $ic10$ = SubLObjectFactory.makeInteger(100);
         $ic11$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("afterAdding"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("afterAdding"));
         $ic14$ = SubLObjectFactory.makeKeyword("GAF");
         $ic15$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#25930", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#25931", "CYC"));
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("afterRemoving"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("afterRemoving"));
         $ic17$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#25932", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#25933", "CYC"));
         $ic18$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic19$ = SubLObjectFactory.makeKeyword("TRUE");

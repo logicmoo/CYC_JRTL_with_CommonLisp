@@ -487,12 +487,12 @@ public final class module0722 extends SubLTranslatedFile
         $ic0$ = SubLObjectFactory.makeSymbol("S#13286", "CYC");
         $ic1$ = SubLObjectFactory.makeSymbol("FILTER-TERMS-FOR-ARG-CONSTRAINTS-AT-ARGPOS");
         $ic2$ = SubLObjectFactory.makeSymbol("FILTER-TERMS-FOR-ARG-CONSTRAINTS");
-        $ic3$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC")));
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Individual"));
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Date"));
+        $ic3$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC")));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Individual"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Date"));
         $ic7$ = SubLObjectFactory.makeSymbol("S#48412", "CYC");
-        $ic8$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Number-General"));
+        $ic8$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Number-General"));
         $ic9$ = SubLObjectFactory.makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
         $ic10$ = SubLObjectFactory.makeSymbol("S#48414", "CYC");
         $ic11$ = SubLObjectFactory.makeSymbol("S#48416", "CYC");

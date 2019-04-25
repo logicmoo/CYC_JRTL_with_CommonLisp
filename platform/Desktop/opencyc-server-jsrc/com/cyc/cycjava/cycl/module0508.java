@@ -95,7 +95,7 @@ public final class module0508 extends SubLTranslatedFile
         }
         final SubLThread var3 = SubLProcess.currentSubLThread();
         f32430(var1);
-        if (module0508.NIL != module0174.f11041(var1, (SubLObject)module0508.UNPROVIDED)) {
+        if (module0508.NIL != assertion_handles_oc.f11041(var1, (SubLObject)module0508.UNPROVIDED)) {
             var3.resetMultipleValues();
             final SubLObject var4 = f32427(var1);
             final SubLObject var5 = var3.secondMultipleValue();
@@ -195,12 +195,12 @@ public final class module0508 extends SubLTranslatedFile
                     final SubLObject var30 = f32434(var1);
                     final SubLObject var31 = f32436(var23, var1, var28, (SubLObject)ConsesLow.list((SubLObject)module0508.$ic19$, var30));
                     final SubLObject var32 = module0411.f28599(var23, var29, var1, var28, var31);
-                    final SubLObject var33 = module0369.f25597(var32);
-                    if (module0508.NIL != var33 && module0508.NIL != module0369.f25605(var32)) {
-                        final SubLObject var34 = module0369.f25606(var32);
+                    final SubLObject var33 = oc_inference_datastructures_inference.f25597(var32);
+                    if (module0508.NIL != var33 && module0508.NIL != oc_inference_datastructures_inference.f25605(var32)) {
+                        final SubLObject var34 = oc_inference_datastructures_inference.f25606(var32);
                         var25 = module0360.f23936(module0385.f27404(var33, var34));
                     }
-                    module0369.f25471(var32);
+                    oc_inference_datastructures_inference.f25471(var32);
                 }
             }
             finally {

@@ -1202,7 +1202,7 @@ public final class module0139 extends SubLTranslatedFile
         $ic53$ = SubLObjectFactory.makeKeyword("OLD");
         $ic54$ = SubLObjectFactory.makeKeyword("RESOURCE");
         $ic55$ = SubLObjectFactory.makeKeyword("NEW");
-        $ic56$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic56$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic57$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11364", "CYC"));
         $ic58$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11365", "CYC"));
         $ic59$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11392", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11393", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11394", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#8587", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
@@ -1232,10 +1232,10 @@ public final class module0139 extends SubLTranslatedFile
         $ic83$ = SubLObjectFactory.makeSymbol("S#11377", "CYC");
         $ic84$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11364", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11377", "CYC")));
         $ic85$ = SubLObjectFactory.makeSymbol("S#11378", "CYC");
-        $ic86$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")));
-        $ic87$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")));
-        $ic88$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")));
-        $ic89$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")));
+        $ic86$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")));
+        $ic87$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")));
+        $ic88$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")));
+        $ic89$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds")));
         $ic90$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#11383", "CYC"), (SubLObject)module0139.ZERO_INTEGER));
         $ic91$ = SubLObjectFactory.makeSymbol("S#11385", "CYC");
         $ic92$ = SubLObjectFactory.makeSymbol("S#11386", "CYC");

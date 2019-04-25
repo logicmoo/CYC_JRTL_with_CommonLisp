@@ -144,19 +144,19 @@ public final class module0297 extends SubLTranslatedFile
     static {
         me = (SubLFile)new module0297();
         module0297.$g2693$ = null;
-        $ic0$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionSimplifierRLModule"));
+        $ic0$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionSimplifierRLModule"));
         $ic1$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("REQUIRED"), SubLObjectFactory.makeSymbol("S#22623", "CYC"), SubLObjectFactory.makeKeyword("COST"), SubLObjectFactory.makeSymbol("S#22622", "CYC"), SubLObjectFactory.makeKeyword("REFORMULATE"), SubLObjectFactory.makeSymbol("S#22624", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("Simplifies a #$SubcollectionFunction NAUT by removing redundancies."), SubLObjectFactory.makeKeyword("EXAMPLE-SOURCE"), SubLObjectFactory.makeString("(#$CollectionSubsetFn #$Sheep (#$TheSetOf ?X (#$and (#$isa ?X #$Sheep) (#$hates ?X #$Bertolo))))"), SubLObjectFactory.makeKeyword("EXAMPLE-TARGET"), SubLObjectFactory.makeString("(#$CollectionSubsetFn #$Sheep (#$TheSetOf ?X (#$hates ?X #$Bertolo))") });
         $ic2$ = SubLObjectFactory.makeInteger(212);
         $ic3$ = SubLObjectFactory.makeSymbol("S#22622", "CYC");
-        $ic4$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CollectionSubsetFn"));
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorMode-Simplify"));
+        $ic4$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CollectionSubsetFn"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheSetOf"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ReformulatorMode-Simplify"));
         $ic7$ = SubLObjectFactory.makeSymbol("S#22623", "CYC");
         $ic8$ = SubLObjectFactory.makeSymbol("S#22624", "CYC");
         $ic9$ = SubLObjectFactory.makeSymbol("S#15753", "CYC");
-        $ic10$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CollectionIntersection2Fn"));
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CollectionIntersectionFn"));
+        $ic10$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CollectionIntersection2Fn"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CollectionIntersectionFn"));
     }
 }
 

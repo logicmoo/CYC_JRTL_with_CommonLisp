@@ -946,7 +946,7 @@ public final class module0149 extends SubLTranslatedFile
         $ic134$ = SubLObjectFactory.makeSymbol("CSOME");
         $ic135$ = SubLObjectFactory.makeSymbol("S#12445", "CYC");
         $ic136$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic137$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic137$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic138$ = SubLObjectFactory.makeUninternedSymbol("US#6C305C9");
         $ic139$ = SubLObjectFactory.makeSymbol("S#12448", "CYC");
         $ic140$ = SubLObjectFactory.makeSymbol("S#12447", "CYC");

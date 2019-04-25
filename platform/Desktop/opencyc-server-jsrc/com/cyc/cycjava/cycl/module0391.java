@@ -943,8 +943,8 @@ public final class module0391 extends SubLTranslatedFile
     }
     
     public static SubLObject f27812(final SubLObject var20, final SubLObject var72, final SubLObject var68) {
-        final SubLObject var73 = module0369.f25533(var68);
-        final SubLObject var74 = module0369.f25706(var68, (SubLObject)module0391.NIL);
+        final SubLObject var73 = oc_inference_datastructures_inference.f25533(var68);
+        final SubLObject var74 = oc_inference_datastructures_inference.f25706(var68, (SubLObject)module0391.NIL);
         final SubLObject var75 = f27822(var20);
         final SubLObject var76 = f27851((SubLObject)module0391.UNPROVIDED);
         f27843(var76, var73);
@@ -1044,7 +1044,7 @@ public final class module0391 extends SubLTranslatedFile
     public static SubLObject f27870(final SubLObject var72) {
         SubLObject var73 = (SubLObject)module0391.NIL;
         final SubLObject var74 = module0367.f25037(var72);
-        var73 = module0369.f25628(var74);
+        var73 = oc_inference_datastructures_inference.f25628(var74);
         return var73;
     }
     
@@ -1065,23 +1065,23 @@ public final class module0391 extends SubLTranslatedFile
     
     public static SubLObject f27874(final SubLObject var72, SubLObject var100) {
         final SubLObject var101 = module0367.f25037(var72);
-        final SubLObject var102 = module0369.f25628(var101);
+        final SubLObject var102 = oc_inference_datastructures_inference.f25628(var101);
         if (module0391.NIL == var100) {
             var100 = (SubLObject)module0391.MINUS_ONE_INTEGER;
         }
         if (module0391.NIL != var102 && var102.numG(var100)) {
             final SubLObject var103 = module0048.f_1X(var100);
             if (module0391.NIL == f27857(var72)) {
-                final SubLObject var104 = module0369.f25619(var101, var103);
+                final SubLObject var104 = oc_inference_datastructures_inference.f25619(var101, var103);
                 final SubLObject var105 = module0367.f25065(var72);
-                final SubLObject var106 = module0369.f25623(var104, (SubLObject)module0391.NIL);
+                final SubLObject var106 = oc_inference_datastructures_inference.f25623(var104, (SubLObject)module0391.NIL);
                 final SubLObject var107 = Numbers.subtract(var106, f27856(var72));
                 f27862(var72, var107);
                 f27863(var72, var105);
             }
-            final SubLObject var108 = module0369.f25620(var101);
+            final SubLObject var108 = oc_inference_datastructures_inference.f25620(var101);
             final SubLObject var105 = module0367.f25065(var72);
-            final SubLObject var106 = module0369.f25623(var108, (SubLObject)module0391.NIL);
+            final SubLObject var106 = oc_inference_datastructures_inference.f25623(var108, (SubLObject)module0391.NIL);
             final SubLObject var107 = Numbers.subtract(var106, f27856(var72));
             f27864(var72, var107);
             f27865(var72, var105);
@@ -1092,8 +1092,8 @@ public final class module0391 extends SubLTranslatedFile
             SubLObject var112;
             SubLObject var113;
             SubLObject var114;
-            for (var112 = module0369.f25621(var101), var113 = (SubLObject)module0391.NIL, var113 = var111_112; !var113.numGE(var112); var113 = module0048.f_1X(var113)) {
-                var114 = module0369.f25616(var111, var113);
+            for (var112 = oc_inference_datastructures_inference.f25621(var101), var113 = (SubLObject)module0391.NIL, var113 = var111_112; !var113.numGE(var112); var113 = module0048.f_1X(var113)) {
+                var114 = oc_inference_datastructures_inference.f25616(var111, var113);
                 var110 = Numbers.add(var110, (SubLObject)module0391.ONE_INTEGER);
             }
             var109 = var112;
@@ -1135,7 +1135,7 @@ public final class module0391 extends SubLTranslatedFile
             var22 = (SubLObject)module0391.$ic106$;
         }
         else if (module0391.NIL != module0367.f25079(var20)) {
-            final SubLObject var24 = module0369.f25474(module0367.f25037(var20));
+            final SubLObject var24 = oc_inference_datastructures_inference.f25474(module0367.f25037(var20));
             final SubLObject var25 = module0374.f26538(var24);
             final SubLObject var26 = f27804(var20);
             module0387.f27570(var26, var25);

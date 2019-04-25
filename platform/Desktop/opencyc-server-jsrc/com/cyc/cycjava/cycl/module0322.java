@@ -314,11 +314,11 @@ public final class module0322 extends SubLTranslatedFile
         if (module0322.NIL != var24) {
             module0067.f4881(f21734());
         }
-        final SubLObject var26 = module0176.f11118();
+        final SubLObject var26 = oc_assertion_manager.f11118();
         try {
-            module0176.f11116();
+            oc_assertion_manager.f11116();
             final SubLObject var27 = module0322.$ic11$;
-            if (module0322.NIL != module0128.f8463(var27, (SubLObject)module0322.UNPROVIDED)) {
+            if (module0322.NIL != constant_handles_oc.f8463(var27, (SubLObject)module0322.UNPROVIDED)) {
                 final SubLObject var28 = module0147.$g2094$.currentBinding(var25);
                 final SubLObject var29 = module0147.$g2095$.currentBinding(var25);
                 try {
@@ -449,7 +449,7 @@ public final class module0322 extends SubLTranslatedFile
             try {
                 Threads.$is_thread_performing_cleanupP$.bind((SubLObject)module0322.T, var25);
                 if (module0322.NIL != var26) {
-                    module0176.f11117();
+                    oc_assertion_manager.f11117();
                 }
             }
             finally {
@@ -981,7 +981,7 @@ public final class module0322 extends SubLTranslatedFile
                         SubLObject var154 = (SubLObject)module0322.NIL;
                         var154 = var153.first();
                         while (module0322.NIL == var152 && module0322.NIL != var153) {
-                            if (module0322.NIL != module0174.f11041(var154, (SubLObject)module0322.UNPROVIDED)) {
+                            if (module0322.NIL != assertion_handles_oc.f11041(var154, (SubLObject)module0322.UNPROVIDED)) {
                                 final SubLObject var155 = f21762(var154);
                                 final SubLObject var156 = module0178.f11336(var154);
                                 if (var156.eql(f21742(var151))) {
@@ -1005,7 +1005,7 @@ public final class module0322 extends SubLTranslatedFile
                         SubLObject var154 = (SubLObject)module0322.NIL;
                         var154 = var153.first();
                         while (module0322.NIL == var152 && module0322.NIL != var153) {
-                            if (module0322.NIL != module0174.f11041(var154, (SubLObject)module0322.UNPROVIDED)) {
+                            if (module0322.NIL != assertion_handles_oc.f11041(var154, (SubLObject)module0322.UNPROVIDED)) {
                                 final SubLObject var155 = f21762(var154);
                                 final SubLObject var156 = module0178.f11336(var154);
                                 if (var156.eql(f21742(var151))) {
@@ -2998,8 +2998,8 @@ public final class module0322 extends SubLTranslatedFile
         if (module0322.NIL != module0322.$g2825$.getDynamicValue(var324)) {
             return (SubLObject)module0322.T;
         }
-        if (module0322.NIL != module0174.f11035(var323)) {
-            return (SubLObject)SubLObjectFactory.makeBoolean(module0322.NIL != module0174.f11041(var323, (SubLObject)module0322.UNPROVIDED) && module0322.NIL != module0147.f9507(module0191.f11976(var323)));
+        if (module0322.NIL != assertion_handles_oc.f11035(var323)) {
+            return (SubLObject)SubLObjectFactory.makeBoolean(module0322.NIL != assertion_handles_oc.f11041(var323, (SubLObject)module0322.UNPROVIDED) && module0322.NIL != module0147.f9507(module0191.f11976(var323)));
         }
         if (module0322.NIL != module0191.f11952(var323)) {
             final SubLObject var325 = module0191.f11990(module0191.f11966(var323), module0191.f11961(var323), (SubLObject)module0322.UNPROVIDED, (SubLObject)module0322.UNPROVIDED);
@@ -3030,7 +3030,7 @@ public final class module0322 extends SubLTranslatedFile
     }
     
     public static SubLObject f21787(final SubLObject var323) {
-        return (module0322.NIL != module0174.f11035(var323)) ? var323 : conses_high.second(var323);
+        return (module0322.NIL != assertion_handles_oc.f11035(var323)) ? var323 : conses_high.second(var323);
     }
     
     public static SubLObject f21788(final SubLObject var365, final SubLObject var366) {
@@ -6876,7 +6876,7 @@ public final class module0322 extends SubLTranslatedFile
         }
         final SubLThread var349 = SubLProcess.currentSubLThread();
         if (module0322.NIL == var144) {
-            if (module0322.NIL != module0174.f11035(var348)) {
+            if (module0322.NIL != assertion_handles_oc.f11035(var348)) {
                 var144 = module0178.f11333(var348);
             }
             else if (module0322.NIL != f21789(var348)) {
@@ -6978,7 +6978,7 @@ public final class module0322 extends SubLTranslatedFile
                 SubLObject var327 = (SubLObject)module0322.NIL;
                 var327 = var326.first();
                 while (module0322.NIL != var326) {
-                    if (module0322.NIL != module0174.f11041(var327, (SubLObject)module0322.UNPROVIDED) && module0322.TWO_INTEGER.eql(module0178.f11336(var327))) {
+                    if (module0322.NIL != assertion_handles_oc.f11041(var327, (SubLObject)module0322.UNPROVIDED) && module0322.TWO_INTEGER.eql(module0178.f11336(var327))) {
                         final SubLObject var328 = module0079.f5424(f21831(var320, var327, (SubLObject)module0322.ONE_INTEGER, (SubLObject)module0322.TWO_INTEGER));
                         SubLObject var331;
                         for (SubLObject var329 = (SubLObject)module0322.NIL; module0322.NIL == var329; var329 = (SubLObject)SubLObjectFactory.makeBoolean(module0322.NIL == var331)) {
@@ -7015,7 +7015,7 @@ public final class module0322 extends SubLTranslatedFile
                 SubLObject var336 = (SubLObject)module0322.NIL;
                 var336 = var326.first();
                 while (module0322.NIL != var326) {
-                    if (module0322.NIL != module0174.f11041(var336, (SubLObject)module0322.UNPROVIDED) && module0322.ONE_INTEGER.eql(module0178.f11336(var336))) {
+                    if (module0322.NIL != assertion_handles_oc.f11041(var336, (SubLObject)module0322.UNPROVIDED) && module0322.ONE_INTEGER.eql(module0178.f11336(var336))) {
                         final SubLObject var328 = module0079.f5424(f21831(var320, var336, (SubLObject)module0322.TWO_INTEGER, (SubLObject)module0322.ONE_INTEGER));
                         SubLObject var331;
                         for (SubLObject var329 = (SubLObject)module0322.NIL; module0322.NIL == var329; var329 = (SubLObject)SubLObjectFactory.makeBoolean(module0322.NIL == var331)) {
@@ -7176,14 +7176,14 @@ public final class module0322 extends SubLTranslatedFile
         if (var675 == module0322.UNPROVIDED) {
             var675 = (SubLObject)module0322.NIL;
         }
-        return module0618.f37916((SubLObject)module0322.$ic162$, var675, (SubLObject)module0322.UNPROVIDED);
+        return oc_dumper.f37916((SubLObject)module0322.$ic162$, var675, (SubLObject)module0322.UNPROVIDED);
     }
     
     public static SubLObject f21841(SubLObject var675) {
         if (var675 == module0322.UNPROVIDED) {
             var675 = (SubLObject)module0322.NIL;
         }
-        return module0618.f37916((SubLObject)module0322.$ic163$, var675, (SubLObject)module0322.UNPROVIDED);
+        return oc_dumper.f37916((SubLObject)module0322.$ic163$, var675, (SubLObject)module0322.UNPROVIDED);
     }
     
     public static SubLObject f21842(final SubLObject var676, final SubLObject var95) {
@@ -7498,9 +7498,9 @@ public final class module0322 extends SubLTranslatedFile
         $ic8$ = SubLObjectFactory.makeSymbol("S#24303", "CYC");
         $ic9$ = SubLObjectFactory.makeSymbol("CDESTRUCTURING-BIND");
         $ic10$ = SubLObjectFactory.makeSymbol("POSITIVE-INTEGER-P");
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("cacheTransitiveClosureForArgs"));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cacheTransitiveClosureForArgs"));
         $ic12$ = SubLObjectFactory.makeSymbol("S#12275", "CYC");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic14$ = SubLObjectFactory.makeString("Initialize TVA Caches ... ");
         $ic15$ = SubLObjectFactory.makeKeyword("GAF");
         $ic16$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#24416", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#24417", "CYC"));
@@ -7544,12 +7544,12 @@ public final class module0322 extends SubLTranslatedFile
         $ic54$ = SubLObjectFactory.makeString("Swappable TVA Cache");
         $ic55$ = SubLObjectFactory.makeString("Cannot reconnect ~A, which is not a swappable TVA cache.");
         $ic56$ = SubLObjectFactory.makeSymbol("S#24407", "CYC");
-        $ic57$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic57$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic58$ = SubLObjectFactory.makeKeyword("BREADTH");
         $ic59$ = SubLObjectFactory.makeKeyword("DEPTH");
         $ic60$ = SubLObjectFactory.makeKeyword("STACK");
         $ic61$ = SubLObjectFactory.makeKeyword("QUEUE");
-        $ic62$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
+        $ic62$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
         $ic63$ = SubLObjectFactory.makeSymbol("S#11450", "CYC");
         $ic64$ = SubLObjectFactory.makeKeyword("ERROR");
         $ic65$ = SubLObjectFactory.makeString("~A is not a ~A");
@@ -7586,7 +7586,7 @@ public final class module0322 extends SubLTranslatedFile
         $ic96$ = ConsesLow.list((SubLObject)module0322.NIL);
         $ic97$ = ConsesLow.list((SubLObject)module0322.T);
         $ic98$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic99$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic99$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic100$ = SubLObjectFactory.makeSymbol("S#12280", "CYC");
         $ic101$ = SubLObjectFactory.makeSymbol("S#12278", "CYC");
         $ic102$ = SubLObjectFactory.makeInteger(5000);
@@ -7617,20 +7617,20 @@ public final class module0322 extends SubLTranslatedFile
         $ic127$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#24413", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#751", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#24417", "CYC"));
         $ic128$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#132", "CYC"));
         $ic129$ = SubLObjectFactory.makeSymbol("BINARY-PREDICATE?");
-        $ic130$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
+        $ic130$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
         $ic131$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic132$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
+        $ic132$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
         $ic133$ = SubLObjectFactory.makeString("Error initializing ~S:~% ~S~% Deregistering cache.");
         $ic134$ = SubLObjectFactory.makeString("TVA Caching ");
         $ic135$ = SubLObjectFactory.makeString(" ");
         $ic136$ = SubLObjectFactory.makeString(" assertions...");
-        $ic137$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationAllInstance"));
+        $ic137$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationAllInstance"));
         $ic138$ = SubLObjectFactory.makeSymbol("S#24361", "CYC");
         $ic139$ = SubLObjectFactory.makeInteger(25);
         $ic140$ = SubLObjectFactory.makeSymbol("S#24411", "CYC");
-        $ic141$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic141$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic142$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeUninternedSymbol("US#4D5E436"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#1526883"), (SubLObject)SubLObjectFactory.makeUninternedSymbol("US#15AA083"));
-        $ic143$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("relationInstanceAll"));
+        $ic143$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("relationInstanceAll"));
         $ic144$ = SubLObjectFactory.makeKeyword("COMPLEX");
         $ic145$ = SubLObjectFactory.makeString("Complex TVA cache support in ~S");
         $ic146$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("COMPLEX"), (SubLObject)SubLObjectFactory.makeKeyword("ANYTHING"));
@@ -7638,14 +7638,14 @@ public final class module0322 extends SubLTranslatedFile
         $ic148$ = SubLObjectFactory.makeSymbol("INDEXED-TERM-P");
         $ic149$ = SubLObjectFactory.makeKeyword("TOP");
         $ic150$ = SubLObjectFactory.makeKeyword("TRUE-DEF");
-        $ic151$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("TransitiveBinaryPredicate")));
+        $ic151$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TransitiveBinaryPredicate")));
         $ic152$ = SubLObjectFactory.makeSymbol("S#155", "CYC");
         $ic153$ = SubLObjectFactory.makeString("Don't know how to find the transitive predicate from~% ~S");
         $ic154$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("SPEC-PRED"), (SubLObject)SubLObjectFactory.makeKeyword("INVERSE"));
         $ic155$ = SubLObjectFactory.makeString("Can't get transitivity support from ~S");
         $ic156$ = SubLObjectFactory.makeSymbol("S#24345", "CYC");
         $ic157$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#131", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#14510", "CYC"));
-        $ic158$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TransitiveBinaryPredicate"));
+        $ic158$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TransitiveBinaryPredicate"));
         $ic159$ = SubLObjectFactory.makeInteger(96);
         $ic160$ = SubLObjectFactory.makeSymbol("S#24397", "CYC");
         $ic161$ = SubLObjectFactory.makeSymbol("S#24395", "CYC");

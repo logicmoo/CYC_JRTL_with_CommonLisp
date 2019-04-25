@@ -180,7 +180,7 @@ public final class module0695 extends SubLTranslatedFile
                         SubLObject var14 = (SubLObject)module0695.NIL;
                         var14 = var13.first();
                         while (module0695.NIL == var12 && module0695.NIL != var13) {
-                            if (module0695.NIL != module0174.f11035(var14) && module0695.NIL != module0178.f11375(var14)) {
+                            if (module0695.NIL != assertion_handles_oc.f11035(var14) && module0695.NIL != module0178.f11375(var14)) {
                                 var11 = var14;
                                 var12 = (SubLObject)module0695.T;
                             }

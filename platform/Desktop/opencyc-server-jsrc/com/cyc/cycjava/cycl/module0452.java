@@ -107,8 +107,8 @@ public final class module0452 extends SubLTranslatedFile
         $ic2$ = SubLObjectFactory.makeKeyword("REMOVAL-NON-WFF-CHECK-NEG");
         $ic3$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("UNIVERSAL"), module0452.T, SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("NEG"), SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), SubLObjectFactory.makeKeyword("FULLY-BOUND"), SubLObjectFactory.makeKeyword("COST-EXPRESSION"), SubLObjectFactory.makeSymbol("S#34318", "CYC"), SubLObjectFactory.makeKeyword("COMPLETENESS"), SubLObjectFactory.makeKeyword("INCOMPLETE"), SubLObjectFactory.makeKeyword("EXPAND"), SubLObjectFactory.makeSymbol("S#34315", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("Prove (#$not <fully-bound asent>)\nwhere the fully-bound asent is not well formed"), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$not (#$biologicalFather #$Cyc #$Lenat))\nas (#$biologicalFather #$Cyc #$Lenat) is not well formed ") });
         $ic4$ = SubLObjectFactory.makeKeyword("ADMIT");
-        $ic5$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("not"));
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("admittedSentence"));
+        $ic5$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("not"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("admittedSentence"));
     }
 }
 

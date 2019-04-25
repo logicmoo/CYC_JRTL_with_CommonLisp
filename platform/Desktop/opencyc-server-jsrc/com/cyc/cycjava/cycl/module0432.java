@@ -1381,10 +1381,10 @@ public final class module0432 extends SubLTranslatedFile
     }
     
     public static SubLObject f30521(final SubLObject var54) {
-        SubLObject var55 = (SubLObject)ConsesLow.list((SubLObject)module0432.$ic114$, module0369.f25422(var54));
-        var55 = conses_high.putf(var55, (SubLObject)module0432.$ic115$, module0369.f25702(var54, (SubLObject)module0432.UNPROVIDED));
-        var55 = conses_high.putf(var55, (SubLObject)module0432.$ic50$, module0369.f25653(var54));
-        var55 = conses_high.putf(var55, (SubLObject)module0432.$ic116$, module0369.f25420(var54));
+        SubLObject var55 = (SubLObject)ConsesLow.list((SubLObject)module0432.$ic114$, oc_inference_datastructures_inference.f25422(var54));
+        var55 = conses_high.putf(var55, (SubLObject)module0432.$ic115$, oc_inference_datastructures_inference.f25702(var54, (SubLObject)module0432.UNPROVIDED));
+        var55 = conses_high.putf(var55, (SubLObject)module0432.$ic50$, oc_inference_datastructures_inference.f25653(var54));
+        var55 = conses_high.putf(var55, (SubLObject)module0432.$ic116$, oc_inference_datastructures_inference.f25420(var54));
         return var55;
     }
     
@@ -1784,7 +1784,7 @@ public final class module0432 extends SubLTranslatedFile
     }
     
     public static SubLObject f30484() {
-        return module0166.f10747((SubLObject)module0432.$ic129$);
+        return constants_high_oc.f10747((SubLObject)module0432.$ic129$);
     }
     
     public static SubLObject f30537(final SubLObject var82) {
@@ -1799,7 +1799,7 @@ public final class module0432 extends SubLTranslatedFile
         final SubLObject var83 = module0595.f36374(module0432.$ic131$, var82, (SubLObject)module0432.UNPROVIDED).first();
         final SubLObject var84 = module0595.f36374(module0432.$ic132$, var82, (SubLObject)module0432.UNPROVIDED).first();
         final SubLObject var85 = module0770.f49067(module0202.f12644(var84), (SubLObject)module0432.$ic133$, (SubLObject)module0432.UNPROVIDED, (SubLObject)module0432.UNPROVIDED, (SubLObject)module0432.UNPROVIDED, (SubLObject)module0432.UNPROVIDED, (SubLObject)module0432.UNPROVIDED);
-        final SubLObject var86 = module0369.f25653(var54);
+        final SubLObject var86 = oc_inference_datastructures_inference.f25653(var54);
         SubLObject var87 = (SubLObject)module0432.NIL;
         SubLObject var88 = (SubLObject)module0432.NIL;
         try {
@@ -1824,7 +1824,7 @@ public final class module0432 extends SubLTranslatedFile
     
     public static SubLObject f30541(final SubLObject var82, final SubLObject var54) {
         final SubLObject var83 = module0595.f36374(module0432.$ic131$, var82, (SubLObject)module0432.UNPROVIDED).first();
-        final SubLObject var84 = module0369.f25653(var54);
+        final SubLObject var84 = oc_inference_datastructures_inference.f25653(var54);
         return Sequences.cconcatenate((SubLObject)module0432.$ic134$, new SubLObject[] { module0006.f207(var84), module0432.$ic135$, module0006.f205(var83) });
     }
     
@@ -2679,66 +2679,66 @@ public final class module0432 extends SubLTranslatedFile
         $ic3$ = SubLObjectFactory.makeSymbol("S#747", "CYC");
         $ic4$ = SubLObjectFactory.makeSymbol("STRINGP");
         $ic5$ = SubLObjectFactory.makeString("ScheduledQuerySeries");
-        $ic6$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
-        $ic7$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
-        $ic8$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("PeriodicEventSeries")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("PurposefulAction")));
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultsShouldBeEmailedToAddress-CC"));
-        $ic10$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("InformationGathering")));
-        $ic11$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("definingMt"));
-        $ic12$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("intervalTypeOfPeriodicSeries"));
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledQueryDaemon"));
-        $ic14$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("querySchedulingComplete"));
+        $ic6$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic7$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("UniversalVocabularyMt"));
+        $ic8$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PeriodicEventSeries")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("PurposefulAction")));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultsShouldBeEmailedToAddress-CC"));
+        $ic10$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InformationGathering")));
+        $ic11$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("definingMt"));
+        $ic12$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("intervalTypeOfPeriodicSeries"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledQueryDaemon"));
+        $ic14$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("querySchedulingComplete"));
         $ic15$ = SubLObjectFactory.makeSymbol("ADD-SINGLE-QUERY-SCHEDULE");
         $ic16$ = SubLObjectFactory.makeString("ScheduledQuery");
-        $ic17$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycQueryRunning")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledAction")));
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledFn"));
-        $ic19$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycQueryRunningFromFn"));
-        $ic20$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("scheduledStartingDate"));
-        $ic21$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("directingAgent"));
-        $ic22$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledQueryDaemon")));
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("scheduledBy"));
+        $ic17$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycQueryRunning")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledAction")));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledFn"));
+        $ic19$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycQueryRunningFromFn"));
+        $ic20$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("scheduledStartingDate"));
+        $ic21$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("directingAgent"));
+        $ic22$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledQueryDaemon")));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("scheduledBy"));
         $ic24$ = SubLObjectFactory.makeSymbol("REMOVE-RECURRING-QUERY-SCHEDULE");
         $ic25$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#33804", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33805", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33806", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33807", "CYC"));
-        $ic26$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindScheduledQuerySeries"));
+        $ic26$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindScheduledQuerySeries"));
         $ic27$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("RETURN"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEMPLATE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?CYCLIST"), (SubLObject)SubLObjectFactory.makeSymbol("?SERIES"), (SubLObject)SubLObjectFactory.makeSymbol("?INTERVAL-TYPE"), (SubLObject)SubLObjectFactory.makeSymbol("?TASK"))));
         $ic28$ = SubLObjectFactory.makeSymbol("REMOVE-SINGLE-QUERY-SCHEDULE");
         $ic29$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#33804", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33808", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33809", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33807", "CYC"));
-        $ic30$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindScheduledQueries"));
+        $ic30$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindScheduledQueries"));
         $ic31$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("RETURN"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEMPLATE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?CYCLIST"), (SubLObject)SubLObjectFactory.makeSymbol("?QUERY-EVENT"), (SubLObject)SubLObjectFactory.makeSymbol("?DATE"), (SubLObject)SubLObjectFactory.makeSymbol("?TASK"))));
-        $ic32$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SeriesOfTypeFn"));
-        $ic33$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationToFn"));
-        $ic34$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("directingAgent")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledQueryDaemon")));
+        $ic32$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SeriesOfTypeFn"));
+        $ic33$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubcollectionOfWithRelationToFn"));
+        $ic34$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("directingAgent")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledQueryDaemon")));
         $ic35$ = SubLObjectFactory.makeKeyword("ANYTHING");
         $ic36$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#33810", "CYC"));
         $ic37$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic38$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic38$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic39$ = SubLObjectFactory.makeKeyword("GAF");
         $ic40$ = SubLObjectFactory.makeSymbol("S#33810", "CYC");
-        $ic41$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ModelMtByUserAndTaskFn"));
-        $ic42$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
+        $ic41$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ModelMtByUserAndTaskFn"));
+        $ic42$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BaseKB"));
         $ic43$ = SubLObjectFactory.makeSymbol("GET-CACHED-RESULTS-FOR-CYCL-QUERY");
-        $ic44$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("queryInferences"));
-        $ic45$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("inferenceStartTime"));
-        $ic46$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("cycProblemStoreInferences"));
-        $ic47$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("problemStoreSnapshotPathnames"));
+        $ic44$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("queryInferences"));
+        $ic45$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("inferenceStartTime"));
+        $ic46$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("cycProblemStoreInferences"));
+        $ic47$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("problemStoreSnapshotPathnames"));
         $ic48$ = SubLObjectFactory.makeString(" ");
         $ic49$ = SubLObjectFactory.makeKeyword("DATE");
         $ic50$ = SubLObjectFactory.makeKeyword("ANSWER-COUNT");
         $ic51$ = SubLObjectFactory.makeKeyword("PROBLEM-STORE-FILE");
         $ic52$ = SubLObjectFactory.makeSymbol("?COUNT");
-        $ic53$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("inferenceAnswerCount"));
+        $ic53$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("inferenceAnswerCount"));
         $ic54$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?COUNT"));
-        $ic55$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic55$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic56$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("MAX-TRANSFORMATION-DEPTH"), (SubLObject)module0432.ZERO_INTEGER, (SubLObject)SubLObjectFactory.makeKeyword("ALLOW-INDETERMINATE-RESULTS?"), (SubLObject)module0432.NIL);
         $ic57$ = SubLObjectFactory.makeSymbol("?BINDINGS");
-        $ic58$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("inferenceBindings"));
+        $ic58$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("inferenceBindings"));
         $ic59$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("?BINDINGS"));
         $ic60$ = SubLObjectFactory.makeSymbol("GET-SCHEDULES-FOR-CYCL-QUERY");
-        $ic61$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("scheduledQuerySpecification"));
+        $ic61$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("scheduledQuerySpecification"));
         $ic62$ = SubLObjectFactory.makeKeyword("NEXT-RUN-DATE");
-        $ic63$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Series"));
+        $ic63$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Series"));
         $ic64$ = SubLObjectFactory.makeKeyword("RECURRENCE-INTERVAL");
-        $ic65$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("resultsShouldBeEmailedToAddress-CC")));
+        $ic65$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("resultsShouldBeEmailedToAddress-CC")));
         $ic66$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("EMAIL-RECIPIENTS"), (SubLObject)SubLObjectFactory.makeKeyword("EMAIL-CC"));
         $ic67$ = SubLObjectFactory.makeSymbol("S#33734", "CYC");
         $ic68$ = SubLObjectFactory.makeString("Scheduled Query Queue Lock");
@@ -2761,8 +2761,8 @@ public final class module0432 extends SubLTranslatedFile
         $ic85$ = SubLObjectFactory.makeKeyword("SERIES");
         $ic86$ = SubLObjectFactory.makeKeyword("INTERVAL-TYPE");
         $ic87$ = SubLObjectFactory.makeKeyword("EVENT");
-        $ic88$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("scheduledReportSpecification"));
-        $ic89$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("reportSpecificationTemplate"));
+        $ic88$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("scheduledReportSpecification"));
+        $ic89$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("reportSpecificationTemplate"));
         $ic90$ = SubLObjectFactory.makeKeyword("REPORT");
         $ic91$ = SubLObjectFactory.makeKeyword("REPORT-TEMPLATE");
         $ic92$ = SubLObjectFactory.makeKeyword("REPORT-TEMPLATE-GLOSS");
@@ -2771,15 +2771,15 @@ public final class module0432 extends SubLTranslatedFile
         $ic95$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic96$ = SubLObjectFactory.makeSymbol("S#4951", "CYC");
         $ic97$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#33811", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33812", "CYC"));
-        $ic98$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindOneTimeScheduledQueries"));
+        $ic98$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindOneTimeScheduledQueries"));
         $ic99$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#33813", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#33812", "CYC"));
-        $ic100$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindRepeatingScheduledQueries"));
+        $ic100$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindRepeatingScheduledQueries"));
         $ic101$ = SubLObjectFactory.makeSymbol("ADD-SCHEDULED-QUERY");
-        $ic102$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("DaysDuration")), (SubLObject)module0432.SEVEN_INTEGER);
-        $ic103$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindNextFutureStartDateForQueryInSeries"));
-        $ic104$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindNextStartDateForQueryInSeries"));
-        $ic105$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindStartDateForScheduledQuery"));
-        $ic106$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindScheduledKBQ"));
+        $ic102$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("DaysDuration")), (SubLObject)module0432.SEVEN_INTEGER);
+        $ic103$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindNextFutureStartDateForQueryInSeries"));
+        $ic104$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindNextStartDateForQueryInSeries"));
+        $ic105$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindStartDateForScheduledQuery"));
+        $ic106$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindScheduledKBQ"));
         $ic107$ = SubLObjectFactory.makeSymbol("S#33794", "CYC");
         $ic108$ = SubLObjectFactory.makeSymbol("S#33795", "CYC");
         $ic109$ = SubLObjectFactory.makeSymbol("GET-CURRENTLY-RUNNING-SCHEDULED-QUERIES");
@@ -2796,16 +2796,16 @@ public final class module0432 extends SubLTranslatedFile
         $ic120$ = SubLObjectFactory.makeSymbol("CDR");
         $ic121$ = SubLObjectFactory.makeSymbol("PROBLEM-STORE-PROPERTY-P");
         $ic122$ = SubLObjectFactory.makeString("Scheduled Query Cleanup Lock");
-        $ic123$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("inferenceDatastructure"));
+        $ic123$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("inferenceDatastructure"));
         $ic124$ = SubLObjectFactory.makeString("text/csv");
         $ic125$ = SubLObjectFactory.makeString("text/tsv");
         $ic126$ = SubLObjectFactory.makeString("text/plain");
         $ic127$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic128$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("stringVersionOfCharacter")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("termStrings")));
+        $ic128$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("stringVersionOfCharacter")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("termStrings")));
         $ic129$ = SubLObjectFactory.makeString("6cb141db-9948-4a5b-b7ae-a86899c41036");
         $ic130$ = SubLObjectFactory.makeString("The following query has been run:\n\nName: ~S\nParaphrase: ~S\nResults: ~D~%");
-        $ic131$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindGlossForScheduledQuery"));
-        $ic132$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindFormulaForScheduledQuery"));
+        $ic131$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindGlossForScheduledQuery"));
+        $ic132$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindFormulaForScheduledQuery"));
         $ic133$ = SubLObjectFactory.makeKeyword("INTERROGATIVE");
         $ic134$ = SubLObjectFactory.makeString("Scheduled Query Results: ");
         $ic135$ = SubLObjectFactory.makeString(" answers for ");
@@ -2824,14 +2824,14 @@ public final class module0432 extends SubLTranslatedFile
         $ic148$ = SubLObjectFactory.makeUninternedSymbol("US#53A48DD");
         $ic149$ = SubLObjectFactory.makeSymbol("CSOME");
         $ic150$ = SubLObjectFactory.makeSymbol("S#33714", "CYC");
-        $ic151$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindSMTPAccountsForCyclist"));
+        $ic151$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindSMTPAccountsForCyclist"));
         $ic152$ = SubLObjectFactory.makeSymbol("S#15664", "CYC");
-        $ic153$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindSMTPInfoForAccount"));
+        $ic153$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("KBQ-FindSMTPInfoForAccount"));
         $ic154$ = SubLObjectFactory.makeSymbol("CDESTRUCTURING-BIND");
         $ic155$ = (SubLList)ConsesLow.cons((SubLObject)SubLObjectFactory.makeSymbol("S#58", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#57", "CYC"));
         $ic156$ = SubLObjectFactory.makeString("scheduled-query-daemon@cyc.com");
-        $ic157$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("seriesMembers"));
-        $ic158$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycQueryRunning"));
+        $ic157$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("seriesMembers"));
+        $ic158$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycQueryRunning"));
         $ic159$ = SubLObjectFactory.makeKeyword("DEPTH");
         $ic160$ = SubLObjectFactory.makeKeyword("STACK");
         $ic161$ = SubLObjectFactory.makeKeyword("QUEUE");
@@ -2845,7 +2845,7 @@ public final class module0432 extends SubLTranslatedFile
         $ic169$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
         $ic170$ = SubLObjectFactory.makeString("~A is neither SET-P nor LISTP.");
         $ic171$ = SubLObjectFactory.makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
-        $ic172$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("seriesOfType"));
+        $ic172$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("seriesOfType"));
         $ic173$ = SubLObjectFactory.makeString("Node ~a does not pass sbhl-type-test ~a~%");
         $ic174$ = SubLObjectFactory.makeKeyword("PROBLEM-STORE");
         $ic175$ = SubLObjectFactory.makeKeyword("CONTINUABLE?");
@@ -2855,13 +2855,13 @@ public final class module0432 extends SubLTranslatedFile
         $ic179$ = SubLObjectFactory.makeString("store-");
         $ic180$ = SubLObjectFactory.makeString(".cfasl");
         $ic181$ = SubLObjectFactory.makeSymbol("S#33799", "CYC");
-        $ic182$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("QuerySchedulerDaemonComputersMt"));
+        $ic182$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("QuerySchedulerDaemonComputersMt"));
         $ic183$ = SubLObjectFactory.makeSymbol("S#33801", "CYC");
-        $ic184$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("programOnPort"));
-        $ic185$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledQueryDaemon-CW"));
-        $ic186$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CFASLProtocol"));
+        $ic184$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("programOnPort"));
+        $ic185$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScheduledQueryDaemon-CW"));
+        $ic186$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CFASLProtocol"));
         $ic187$ = SubLObjectFactory.makeSymbol("FIND-POSSIBLE-SCHEDULED-QUERY-DAEMON-IMAGES");
-        $ic188$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("FindRunningScheduledQueryDaemons"));
+        $ic188$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("FindRunningScheduledQueryDaemons"));
         $ic189$ = SubLObjectFactory.makeString("Scheduled Query Runner ");
         $ic190$ = SubLObjectFactory.makeSymbol("S#33757", "CYC");
         $ic191$ = SubLObjectFactory.makeString("Scheduled Query Daemon");

@@ -4441,7 +4441,7 @@ public final class module0816 extends SubLTranslatedFile
     $ic42$ = SubLObjectFactory.makeString( "~%~%" );
     $ic43$ = SubLObjectFactory.makeString( "  " );
     $ic44$ = SubLObjectFactory.makeString( "Unexpected C backend atom : ~S" );
-    $ic45$ = ConsesLow.list( (SubLObject) SubLObjectFactory.makeSymbol( "S#166", "CYC" ), (SubLObject) SubLObjectFactory.makeSymbol( "S#10505", "CYC" ) );
+    $ic45$ = ConsesLow.list( (SubLObject) SubLObjectFactory.makeSymbol( "S#166", "CYC" ), (SubLObject) SubLObjectFactory.makeSymbol( "CONSTANT", "CYC" ) );
     $ic46$ = SubLObjectFactory.makeSymbol( "S#56848", "CYC" );
     $ic47$ = SubLObjectFactory.makeString( "Time to implement a C backend translation for predefined constant ~S" );
     $ic48$ = SubLObjectFactory.makeKeyword( "DYNAMIC" );
@@ -4476,7 +4476,7 @@ public final class module0816 extends SubLTranslatedFile
     $ic74$ = SubLObjectFactory.makeString( "f_" );
     $ic75$ = SubLObjectFactory.makeKeyword( "UNSPECIFIED" );
     $ic76$ = SubLObjectFactory.makeString( "_CSETF-" );
-    $ic77$ = ConsesLow.list( (SubLObject) SubLObjectFactory.makeSymbol( "S#154", "CYC" ), (SubLObject) SubLObjectFactory.makeSymbol( "S#132", "CYC" ) );
+    $ic77$ = ConsesLow.list( (SubLObject) SubLObjectFactory.makeSymbol( "OBJECT", "CYC" ), (SubLObject) SubLObjectFactory.makeSymbol( "S#132", "CYC" ) );
     $ic78$ = SubLObjectFactory.makeKeyword( "IGNORE-ERRORS-TARGET" );
     $ic79$ = SubLObjectFactory.makeSymbol( "IGNORE-ERRORS-HANDLER", "SUBLISP" );
     $ic80$ = SubLObjectFactory.makeString( "unable to introspect on ~S" );
@@ -4536,7 +4536,7 @@ public final class module0816 extends SubLTranslatedFile
       ConsesLow.cons( (SubLObject) SubLObjectFactory.makeSymbol( "JAVA-CALL" ), (SubLObject) SubLObjectFactory.makeSymbol( "S#57443", "CYC" ) )
     } );
     $ic86$ = SubLObjectFactory.makeString( "Time to implement the writer for ~S" );
-    $ic87$ = ConsesLow.list( (SubLObject) SubLObjectFactory.makeSymbol( "S#166", "CYC" ), (SubLObject) SubLObjectFactory.makeSymbol( "S#154", "CYC" ), (SubLObject) SubLObjectFactory.makeSymbol( "S#155", "CYC" ) );
+    $ic87$ = ConsesLow.list( (SubLObject) SubLObjectFactory.makeSymbol( "S#166", "CYC" ), (SubLObject) SubLObjectFactory.makeSymbol( "OBJECT", "CYC" ), (SubLObject) SubLObjectFactory.makeSymbol( "S#155", "CYC" ) );
     $ic88$ = SubLObjectFactory.makeSymbol( "S#57153", "CYC" );
     $ic89$ = SubLObjectFactory.makeSymbol( "S#56696", "CYC" );
     $ic90$ = SubLObjectFactory.makeSymbol( "S#56713", "CYC" );
@@ -4660,7 +4660,7 @@ public final class module0816 extends SubLTranslatedFile
         (SubLObject) SubLObjectFactory.makeSymbol( "S#57465", "CYC" ) );
     $ic220$ = SubLObjectFactory.makeSymbol( "S#56851", "CYC" );
     $ic221$ = SubLObjectFactory.makeString( "INITIALIZE_CONSTANT(" );
-    $ic222$ = ConsesLow.list( (SubLObject) SubLObjectFactory.makeSymbol( "S#166", "CYC" ), (SubLObject) SubLObjectFactory.makeSymbol( "S#154", "CYC" ) );
+    $ic222$ = ConsesLow.list( (SubLObject) SubLObjectFactory.makeSymbol( "S#166", "CYC" ), (SubLObject) SubLObjectFactory.makeSymbol( "OBJECT", "CYC" ) );
     $ic223$ = SubLObjectFactory.makeSymbol( "S#57169", "CYC" );
     $ic224$ = SubLObjectFactory.makeSymbol( "S#57162", "CYC" );
     $ic225$ = SubLObjectFactory.makeSymbol( "S#57160", "CYC" );

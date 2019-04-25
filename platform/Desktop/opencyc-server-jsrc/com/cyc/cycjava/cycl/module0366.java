@@ -441,7 +441,7 @@ public final class module0366 extends SubLTranslatedFile
             f24953(var14);
             if (module0366.NIL != f24932(var14)) {
                 f24954(var14);
-                module0369.f25799(var14);
+                oc_inference_datastructures_inference.f25799(var14);
                 SubLObject var18 = f24938(var14);
                 SubLObject var19 = (SubLObject)module0366.NIL;
                 var19 = var18.first();

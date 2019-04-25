@@ -133,17 +133,17 @@ public final class module0540 extends SubLTranslatedFile
     
     public static SubLObject f33502(final SubLObject var1) {
         assert module0540.NIL != f33503(var1) : var1;
-        return module0572.f35011((SubLObject)ConsesLow.list((SubLObject)module0540.$ic1$, var1, module0166.f10735()), (SubLObject)module0540.UNPROVIDED);
+        return module0572.f35011((SubLObject)ConsesLow.list((SubLObject)module0540.$ic1$, var1, constants_high_oc.f10735()), (SubLObject)module0540.UNPROVIDED);
     }
     
     public static SubLObject f33504(final SubLObject var1) {
         assert module0540.NIL != f33503(var1) : var1;
-        return f33505(var1, module0166.f10735());
+        return f33505(var1, constants_high_oc.f10735());
     }
     
     public static SubLObject f33505(final SubLObject var1, final SubLObject var2) {
         assert module0540.NIL != f33503(var1) : var1;
-        if (module0540.NIL != var2 && !module0540.areAssertionsDisabledFor(me) && module0540.NIL == module0166.f10734(var2)) {
+        if (module0540.NIL != var2 && !module0540.areAssertionsDisabledFor(me) && module0540.NIL == constants_high_oc.f10734(var2)) {
             throw new AssertionError(var2);
         }
         SubLObject var3 = (SubLObject)module0540.NIL;
@@ -154,7 +154,7 @@ public final class module0540 extends SubLTranslatedFile
     
     public static SubLObject f33506(final SubLObject var1, final SubLObject var2) {
         assert module0540.NIL != module0126.f8389(var1) : var1;
-        if (module0540.NIL != var2 && !module0540.areAssertionsDisabledFor(me) && module0540.NIL == module0166.f10734(var2)) {
+        if (module0540.NIL != var2 && !module0540.areAssertionsDisabledFor(me) && module0540.NIL == constants_high_oc.f10734(var2)) {
             throw new AssertionError(var2);
         }
         SubLObject var3 = (SubLObject)module0540.NIL;
@@ -176,14 +176,14 @@ public final class module0540 extends SubLTranslatedFile
     }
     
     public static SubLObject f33508(final SubLObject var4, final SubLObject var1) {
-        assert module0540.NIL != module0128.f8449(var4) : var4;
+        assert module0540.NIL != constant_handles_oc.f8449(var4) : var4;
         assert module0540.NIL != module0126.f8389(var1) : var1;
         return module0538.f33377(var4, var1);
     }
     
     public static SubLObject f33509(final SubLObject var4) {
-        assert module0540.NIL != module0128.f8449(var4) : var4;
-        module0166.f10742(var4);
+        assert module0540.NIL != constant_handles_oc.f8449(var4) : var4;
+        constants_high_oc.f10742(var4);
         return var4;
     }
     
@@ -645,14 +645,14 @@ public final class module0540 extends SubLTranslatedFile
         $ic16$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#29", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VALID-CONSTANT-NAME-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10596", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#664", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#13484", "CYC"))));
         $ic17$ = SubLObjectFactory.makeSymbol("CONSTANT-P");
         $ic18$ = SubLObjectFactory.makeSymbol("CYC-RENAME");
-        $ic19$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10505", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#29", "CYC"));
+        $ic19$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#29", "CYC"));
         $ic20$ = SubLObjectFactory.makeString("Change name of CONSTANT to NAME. Return the constant if no error, otherwise return NIL.");
-        $ic21$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10505", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#29", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VALID-CONSTANT-NAME-P")));
+        $ic21$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#29", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("VALID-CONSTANT-NAME-P")));
         $ic22$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#664", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")));
         $ic23$ = SubLObjectFactory.makeSymbol("CYC-RECREATE");
-        $ic24$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10505", "CYC"));
+        $ic24$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT", "CYC"));
         $ic25$ = SubLObjectFactory.makeString("Doesn't unassert the bookkeeping info,\n   but it might actually move it, or change\n   its format somehow.");
-        $ic26$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#10505", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")));
+        $ic26$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CONSTANT", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("CONSTANT-P")));
         $ic27$ = SubLObjectFactory.makeKeyword("UNNAMED");
         $ic28$ = SubLObjectFactory.makeSymbol("FORT-P");
         $ic29$ = SubLObjectFactory.makeSymbol("CYC-KILL");

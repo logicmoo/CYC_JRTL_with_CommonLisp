@@ -202,7 +202,7 @@ public final class module0626 extends SubLTranslatedFile
     }
     
     public static SubLObject f38534(final SubLObject var15) {
-        return (SubLObject)((module0626.NIL != module0369.f25430(var15)) ? module0369.f25433(var15) : module0626.NIL);
+        return (SubLObject)((module0626.NIL != oc_inference_datastructures_inference.f25430(var15)) ? oc_inference_datastructures_inference.f25433(var15) : module0626.NIL);
     }
     
     public static SubLObject f38536(final SubLObject var17, final SubLObject var18, SubLObject var19, SubLObject var20, SubLObject var21, SubLObject var22, SubLObject var23) {
@@ -289,14 +289,14 @@ public final class module0626 extends SubLTranslatedFile
     public static SubLObject f38539(final SubLObject var12, final SubLObject var13, SubLObject var19, final SubLObject var20, final SubLObject var21, final SubLObject var22) {
         var19 = conses_high.putf(var19, (SubLObject)module0626.$ic32$, (SubLObject)module0626.$ic33$);
         final SubLObject var23 = module0361.f24195(var12, var13);
-        if (module0626.NIL != module0369.f25429(var23)) {
+        if (module0626.NIL != oc_inference_datastructures_inference.f25429(var23)) {
             Errors.error((SubLObject)module0626.$ic49$, var23);
         }
         else {
-            if (module0626.NIL != module0369.f25431(var23)) {
+            if (module0626.NIL != oc_inference_datastructures_inference.f25431(var23)) {
                 return f38542(var23, var19, var20, var21, var22);
             }
-            Errors.error((SubLObject)module0626.$ic50$, module0369.f25420(var23));
+            Errors.error((SubLObject)module0626.$ic50$, oc_inference_datastructures_inference.f25420(var23));
         }
         return (SubLObject)module0626.NIL;
     }
@@ -329,8 +329,8 @@ public final class module0626 extends SubLTranslatedFile
     
     public static SubLObject f38538(final SubLObject var17, final SubLObject var18, final SubLObject var26) {
         final SubLObject var27 = module0409.f28515(var17, var18, var26);
-        final SubLObject var28 = module0361.f23996(module0369.f25421(var27));
-        final SubLObject var29 = module0369.f25422(var27);
+        final SubLObject var28 = module0361.f23996(oc_inference_datastructures_inference.f25421(var27));
+        final SubLObject var29 = oc_inference_datastructures_inference.f25422(var27);
         final SubLObject var30 = module0623.f38415();
         if (module0626.NIL != var30) {
             f38530(var30, var28);
@@ -397,7 +397,7 @@ public final class module0626 extends SubLTranslatedFile
                                                     final SubLObject var32 = module0360.f23805(var19);
                                                     SubLObject var33 = (SubLObject)module0626.NIL;
                                                     var33 = module0059.f4332(Sequences.cconcatenate((SubLObject)module0626.$ic58$, module0006.f203(var15)), (SubLObject)module0626.$ic59$, (SubLObject)ConsesLow.list(var15, var32));
-                                                    final SubLObject var34 = module0369.f25621(var15);
+                                                    final SubLObject var34 = oc_inference_datastructures_inference.f25621(var15);
                                                     final SubLObject var35 = module0084.f5831(module0626.$g4822$.getGlobalValue(), var15, (SubLObject)module0626.UNPROVIDED);
                                                     final SubLObject var36 = module0628.f38585(var15, var35, var21, var20, module0626.$g4820$.getDynamicValue(var23), var22, var34, var33);
                                                     while (module0626.NIL == module0628.f38623(var36)) {
@@ -931,7 +931,7 @@ public final class module0626 extends SubLTranslatedFile
         $ic48$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#42210", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("INTEGERP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#35841", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("INTEGERP")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#5852", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#26487", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#42205", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#42147", "CYC")));
         $ic49$ = SubLObjectFactory.makeString("Inference ~A is already running!~%");
         $ic50$ = SubLObjectFactory.makeString("Cannot ask query. Invalid inference-status: ~A~%");
-        $ic51$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycAPIMt"));
+        $ic51$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycAPIMt"));
         $ic52$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BOOLEAN-INFERENCE-PARAMETERS"), (SubLObject)SubLObjectFactory.makeKeyword("INTEGER-INFERENCE-PARAMETERS"), (SubLObject)SubLObjectFactory.makeKeyword("REAL-NUMBER-INFERENCE-PARAMETERS"), (SubLObject)SubLObjectFactory.makeKeyword("ENUMERATION-INFERENCE-PARAMETERS"), (SubLObject)SubLObjectFactory.makeKeyword("OTHER-INFERENCE-PARAMETERS"));
         $ic53$ = SubLObjectFactory.makeSymbol("GET-INFERENCE-PARAMETER-INFORMATION");
         $ic54$ = SubLObjectFactory.makeString("Returns a property list of inference parameters\n   where keys are the value domain types (e.g. :boolean-inference-parameters,\n   :integer-inference-parameters, etc.) and values\n   are lists of inference parameters that take values\n   of that type. Each such value is a property list itself \n   where keys are inference parameters and values are\n   property lists that contain property/value pairs\n   appropriate for the parameter at hand according to\n   its value domain type.");
@@ -947,27 +947,27 @@ public final class module0626 extends SubLTranslatedFile
         $ic64$ = SubLObjectFactory.makeKeyword("VALUE");
         $ic65$ = SubLObjectFactory.makeKeyword("SHORT-DESC");
         $ic66$ = SubLObjectFactory.makeKeyword("LONG-DESC");
-        $ic67$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("BooleanInferenceParameter"));
-        $ic68$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntegerInferenceParameter"));
+        $ic67$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("BooleanInferenceParameter"));
+        $ic68$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntegerInferenceParameter"));
         $ic69$ = SubLObjectFactory.makeKeyword("MIN-VALUE");
         $ic70$ = SubLObjectFactory.makeKeyword("MAX-VALUE");
-        $ic71$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("RealNumberInferenceParameter"));
-        $ic72$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EnumerationInferenceParameter"));
+        $ic71$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("RealNumberInferenceParameter"));
+        $ic72$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EnumerationInferenceParameter"));
         $ic73$ = SubLObjectFactory.makeKeyword("POTENTIAL-VALUES");
-        $ic74$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferenceParameter"));
-        $ic75$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
-        $ic76$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferenceSupportedTerm"));
+        $ic74$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferenceParameter"));
+        $ic75$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("quotedIsa"));
+        $ic76$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferenceSupportedTerm"));
         $ic77$ = SubLObjectFactory.makeKeyword("FALSE");
         $ic78$ = SubLObjectFactory.makeKeyword("BASIC?");
-        $ic79$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("AdvancedInferenceParameter"));
-        $ic80$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("subLIdentifier"));
+        $ic79$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("AdvancedInferenceParameter"));
+        $ic80$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("subLIdentifier"));
         $ic81$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic82$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("SubLQuoteFn"));
-        $ic83$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("CycInferenceEngine"));
-        $ic84$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("NonNegativeInteger"));
-        $ic85$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("IntegerFromToFn"));
+        $ic82$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("SubLQuoteFn"));
+        $ic83$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("CycInferenceEngine"));
+        $ic84$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("NonNegativeInteger"));
+        $ic85$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("IntegerFromToFn"));
         $ic86$ = SubLObjectFactory.makeKeyword("INTEGER-PLUS-INFINITY");
-        $ic87$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("Real0-1"));
+        $ic87$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Real0-1"));
         $ic88$ = (SubLFloat)SubLObjectFactory.makeDouble(0.0);
         $ic89$ = (SubLFloat)SubLObjectFactory.makeDouble(1.0);
         $ic90$ = SubLObjectFactory.makeKeyword("NAME");

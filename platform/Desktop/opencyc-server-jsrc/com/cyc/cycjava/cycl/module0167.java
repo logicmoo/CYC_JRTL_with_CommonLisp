@@ -415,7 +415,7 @@ public final class module0167 extends SubLTranslatedFile
     
     public static SubLObject f10810() {
         if (module0167.NIL != Filesys.directory_p(module0107.f7598())) {
-            return module0618.f38042(module0107.f7598());
+            return oc_dumper.f38042(module0107.f7598());
         }
         return (SubLObject)module0167.ZERO_INTEGER;
     }
@@ -746,7 +746,7 @@ public final class module0167 extends SubLTranslatedFile
         module0167.$g2182$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("S#13647", "CYC");
         $ic1$ = SubLObjectFactory.makeSymbol("SECOND");
-        $ic2$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#54", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC"), (SubLObject)SubLObjectFactory.makeString("mapping Cyc NARTs")), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
+        $ic2$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("VAR", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#130", "CYC"), (SubLObject)SubLObjectFactory.makeString("mapping Cyc NARTs")), (SubLObject)SubLObjectFactory.makeSymbol("&KEY"), (SubLObject)SubLObjectFactory.makeSymbol("S#127", "CYC")), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("S#5", "CYC"));
         $ic3$ = SubLObjectFactory.makeString("mapping Cyc NARTs");
         $ic4$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("DONE"));
         $ic5$ = SubLObjectFactory.makeKeyword("ALLOW-OTHER-KEYS");
@@ -798,7 +798,7 @@ public final class module0167 extends SubLTranslatedFile
         $ic51$ = SubLObjectFactory.makeString("#<The CFASL invalid NART>");
         $ic52$ = SubLObjectFactory.makeString("#<NART ~S>");
         $ic53$ = SubLObjectFactory.makeSymbol("S#13603", "CYC");
-        $ic54$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#154", "CYC"));
+        $ic54$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("OBJECT", "CYC"));
         $ic55$ = SubLObjectFactory.makeString("Return T iff OBJECT is a datastructure implementing a non-atomic reified term (NART).");
         $ic56$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
         $ic57$ = SubLObjectFactory.makeSymbol("FIXNUMP");

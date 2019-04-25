@@ -443,8 +443,8 @@ public final class module0579 extends SubLTranslatedFile
             SubLObject var33 = (SubLObject)module0579.NIL;
             var33 = var32.first();
             while (module0579.NIL == var31 && module0579.NIL != var32) {
-                final SubLObject var34 = module0166.f10737(var33);
-                if (module0579.NIL != module0128.f8463(var34, (SubLObject)module0579.UNPROVIDED)) {
+                final SubLObject var34 = constants_high_oc.f10737(var33);
+                if (module0579.NIL != constant_handles_oc.f8463(var34, (SubLObject)module0579.UNPROVIDED)) {
                     var31 = var34;
                 }
                 var32 = var32.rest();
@@ -783,7 +783,7 @@ public final class module0579 extends SubLTranslatedFile
         $ic6$ = SubLObjectFactory.makeKeyword("ALL");
         $ic7$ = SubLObjectFactory.makeSymbol("*PPH-TERSE-MODE?*");
         $ic8$ = SubLObjectFactory.makeKeyword("HTML");
-        $ic9$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("Agent-Generic")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Thing")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Place")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("TimeInterval")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Time-Quantity")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Event")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("ScalarInterval")));
+        $ic9$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Agent-Generic")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Thing")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Place")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TimeInterval")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Time-Quantity")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Event")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("ScalarInterval")));
         $ic10$ = SubLObjectFactory.makeKeyword("UNKNOWN");
         $ic11$ = SubLObjectFactory.makeKeyword("ARBITRARY");
         $ic12$ = SubLObjectFactory.makeString("Too many demerits: ~S");
@@ -828,9 +828,9 @@ public final class module0579 extends SubLTranslatedFile
         $ic51$ = SubLObjectFactory.makeString("No KB loaded. Couldn't initialize paraphrase vars.");
         $ic52$ = SubLObjectFactory.makeKeyword("NO-KB-LOADED");
         $ic53$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeString("CyclishParaphraseMt"), (SubLObject)SubLObjectFactory.makeString("EnglishParaphraseMt"), (SubLObject)SubLObjectFactory.makeString("BaseKB"));
-        $ic54$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtUnionFn"));
-        $ic55$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtSpace"));
-        $ic56$ = ConsesLow.list((SubLObject)ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("Now"))));
+        $ic54$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtUnionFn"));
+        $ic55$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtSpace"));
+        $ic56$ = ConsesLow.list((SubLObject)ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("MtTimeDimFn")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("Now"))));
     }
 }
 

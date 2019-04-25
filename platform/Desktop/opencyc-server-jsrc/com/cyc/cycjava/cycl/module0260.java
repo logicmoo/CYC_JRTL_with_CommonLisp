@@ -4270,7 +4270,7 @@ public final class module0260 extends SubLTranslatedFile
         module0260.$g2507$ = null;
         module0260.$g2508$ = null;
         $ic0$ = SubLObjectFactory.makeSymbol("FORT-P");
-        $ic1$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic1$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
         $ic2$ = SubLObjectFactory.makeSymbol("GENL-PREDICATES");
         $ic3$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"));
         $ic4$ = SubLObjectFactory.makeString("Returns the local genlPreds of PRED");
@@ -4278,7 +4278,7 @@ public final class module0260 extends SubLTranslatedFile
         $ic6$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("LIST"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")));
         $ic7$ = SubLObjectFactory.makeSymbol("MIN-GENL-PREDICATES");
         $ic8$ = SubLObjectFactory.makeString("Returns the most-specific local genlPreds of PRED");
-        $ic9$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
+        $ic9$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlInverse"));
         $ic10$ = SubLObjectFactory.makeSymbol("GENL-INVERSES");
         $ic11$ = SubLObjectFactory.makeString("Returns the local genlInverses of PRED");
         $ic12$ = SubLObjectFactory.makeSymbol("MIN-GENL-INVERSES");
@@ -4371,13 +4371,13 @@ public final class module0260 extends SubLTranslatedFile
         $ic99$ = SubLObjectFactory.makeSymbol("MAP-ALL-SPEC-PREDS");
         $ic100$ = SubLObjectFactory.makeSymbol("SOME-ALL-SPEC-PREDS");
         $ic101$ = SubLObjectFactory.makeSymbol("INTEGERP");
-        $ic102$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
+        $ic102$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genls"));
         $ic103$ = SubLObjectFactory.makeSymbol("S#19667", "CYC");
         $ic104$ = SubLObjectFactory.makeSymbol("ALL-SPEC-PREDS-WRT-TYPE");
         $ic105$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12455", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#202", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"));
         $ic106$ = SubLObjectFactory.makeString("Returns those all-spec-preds of PRED for which instances \nof COL are legal in arguments in position ARG");
         $ic107$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12455", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#202", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("INTEGERP")));
-        $ic108$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
+        $ic108$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("isa"));
         $ic109$ = SubLObjectFactory.makeSymbol("ALL-SPEC-PREDS-WRT-ARG");
         $ic110$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10466", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#202", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"));
         $ic111$ = SubLObjectFactory.makeString("Returns those all-spec-preds of PRED for which FORT\nis legal as arguments in position ARG");
@@ -4388,11 +4388,11 @@ public final class module0260 extends SubLTranslatedFile
         $ic116$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#19774", "CYC"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NEW-DICTIONARY"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("QUOTE"), (SubLObject)module0260.EQUAL))));
         $ic117$ = SubLObjectFactory.makeSymbol("S#19672", "CYC");
         $ic118$ = SubLObjectFactory.makeSymbol("S#19673", "CYC");
-        $ic119$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("typedGenlPreds"));
+        $ic119$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("typedGenlPreds"));
         $ic120$ = SubLObjectFactory.makeKeyword("GAF");
         $ic121$ = SubLObjectFactory.makeKeyword("TRUE");
-        $ic122$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("typedGenlInverse"));
-        $ic123$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
+        $ic122$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("typedGenlInverse"));
+        $ic123$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("True-JustificationTruth"));
         $ic124$ = SubLObjectFactory.makeKeyword("OLD");
         $ic125$ = SubLObjectFactory.makeKeyword("RESOURCE");
         $ic126$ = SubLObjectFactory.makeSymbol("MIN-PREDICATES");
@@ -4411,7 +4411,7 @@ public final class module0260 extends SubLTranslatedFile
         $ic139$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12109", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12112", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")));
         $ic140$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("BOOLEANP"));
         $ic141$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic142$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic142$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic143$ = SubLObjectFactory.makeSymbol("SPEC-PREDICATE?");
         $ic144$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12112", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#12109", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"));
         $ic145$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12112", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#12109", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")));
@@ -4448,7 +4448,7 @@ public final class module0260 extends SubLTranslatedFile
         $ic176$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#19780", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11669", "CYC"));
         $ic177$ = SubLObjectFactory.makeString("A justification of (genlInverse PRED GENL-INVERSE)");
         $ic178$ = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#155", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#19780", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("FORT-P")));
-        $ic179$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
+        $ic179$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlMt"));
         $ic180$ = SubLObjectFactory.makeSymbol("WHY-NOT-GENL-INVERSE?");
         $ic181$ = SubLObjectFactory.makeString("A justification of (not (genlInverse SPEC GENL)");
         $ic182$ = SubLObjectFactory.makeKeyword("ASSERTION");

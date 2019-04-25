@@ -115,10 +115,10 @@ public final class module0499 extends SubLTranslatedFile
         final SubLThread var4 = SubLProcess.currentSubLThread();
         final SubLObject var5 = module0367.f25076(var3);
         final SubLObject var6 = Types.sublisp_null(var5);
-        final SubLObject var7 = (SubLObject)SubLObjectFactory.makeBoolean(module0499.NIL != var6 || module0499.NIL != module0369.f25613(var5, module0340.f22786((SubLObject)module0499.$ic3$)));
-        final SubLObject var8 = (SubLObject)SubLObjectFactory.makeBoolean(module0499.NIL != var6 || module0499.NIL != module0369.f25613(var5, module0340.f22786((SubLObject)module0499.$ic4$)));
-        SubLObject var9 = (SubLObject)SubLObjectFactory.makeBoolean(module0499.NIL != var6 || module0499.NIL != module0369.f25613(var5, module0340.f22786((SubLObject)module0499.$ic5$)));
-        if (module0499.NIL != var5 && module0499.$ic6$ == module0369.f25513(var5)) {
+        final SubLObject var7 = (SubLObject)SubLObjectFactory.makeBoolean(module0499.NIL != var6 || module0499.NIL != oc_inference_datastructures_inference.f25613(var5, module0340.f22786((SubLObject)module0499.$ic3$)));
+        final SubLObject var8 = (SubLObject)SubLObjectFactory.makeBoolean(module0499.NIL != var6 || module0499.NIL != oc_inference_datastructures_inference.f25613(var5, module0340.f22786((SubLObject)module0499.$ic4$)));
+        SubLObject var9 = (SubLObject)SubLObjectFactory.makeBoolean(module0499.NIL != var6 || module0499.NIL != oc_inference_datastructures_inference.f25613(var5, module0340.f22786((SubLObject)module0499.$ic5$)));
+        if (module0499.NIL != var5 && module0499.$ic6$ == oc_inference_datastructures_inference.f25513(var5)) {
             var9 = (SubLObject)module0499.NIL;
         }
         if (module0499.NIL == var7) {
@@ -146,7 +146,7 @@ public final class module0499 extends SubLTranslatedFile
             if (module0499.$ic11$ == var3) {
                 return (SubLObject)module0499.$ic0$;
             }
-            if (module0499.NIL != var9 && module0499.$ic12$ == module0369.f25513(var5)) {
+            if (module0499.NIL != var9 && module0499.$ic12$ == oc_inference_datastructures_inference.f25513(var5)) {
                 return (SubLObject)module0499.$ic7$;
             }
             if (module0499.NIL == var8 && module0499.NIL == var9) {
@@ -1202,7 +1202,7 @@ public final class module0499 extends SubLTranslatedFile
         SubLObject var137 = (SubLObject)module0499.NIL;
         var137 = var136.first();
         while (module0499.NIL != var136) {
-            if (module0499.NIL != module0174.f11035(var137)) {
+            if (module0499.NIL != assertion_handles_oc.f11035(var137)) {
                 var135 = (SubLObject)ConsesLow.cons((SubLObject)ConsesLow.list(module0178.f11287(var137)), var135);
             }
             else if (module0499.NIL != module0191.f11952(var137)) {
@@ -2296,7 +2296,7 @@ public final class module0499 extends SubLTranslatedFile
             var18 = (SubLObject)module0499.NIL;
         }
         final SubLObject var19 = module0339.f22757();
-        return (SubLObject)SubLObjectFactory.makeBoolean(module0499.NIL != module0369.f25275(var19) && module0499.$ic6$ != module0369.f25513(var19) && module0499.NIL != f32214(var1, (SubLObject)module0499.UNPROVIDED));
+        return (SubLObject)SubLObjectFactory.makeBoolean(module0499.NIL != oc_inference_datastructures_inference.f25275(var19) && module0499.$ic6$ != oc_inference_datastructures_inference.f25513(var19) && module0499.NIL != f32214(var1, (SubLObject)module0499.UNPROVIDED));
     }
     
     public static SubLObject f32222(final SubLObject var1, SubLObject var18) {
@@ -2429,7 +2429,7 @@ public final class module0499 extends SubLTranslatedFile
     
     public static SubLObject f32223(final SubLObject var1) {
         if (module0499.NIL == module0205.f13145((SubLObject)module0499.$ic38$, var1, (SubLObject)module0499.UNPROVIDED, (SubLObject)module0499.UNPROVIDED)) {
-            return module0321.f21708(var1, (SubLObject)module0499.NIL, (SubLObject)((module0499.NIL != module0339.f22757()) ? module0369.f25513(module0339.f22757()) : module0499.$ic12$));
+            return module0321.f21708(var1, (SubLObject)module0499.NIL, (SubLObject)((module0499.NIL != module0339.f22757()) ? oc_inference_datastructures_inference.f25513(module0339.f22757()) : module0499.$ic12$));
         }
         return (SubLObject)module0499.NIL;
     }
@@ -2851,11 +2851,11 @@ public final class module0499 extends SubLTranslatedFile
         $ic29$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#14781", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#13100", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#11445", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#10995", "CYC"));
         $ic30$ = SubLObjectFactory.makeSymbol("FIRST");
         $ic31$ = SubLObjectFactory.makeSymbol("S#12275", "CYC");
-        $ic32$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
+        $ic32$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("InferencePSC"));
         $ic33$ = SubLObjectFactory.makeSymbol("SECOND");
         $ic34$ = SubLObjectFactory.makeSymbol("S#35598", "CYC");
         $ic35$ = SubLObjectFactory.makeKeyword("TVA");
-        $ic36$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("not"));
+        $ic36$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("not"));
         $ic37$ = SubLObjectFactory.makeSymbol("S#17599", "CYC");
         $ic38$ = SubLObjectFactory.makeSymbol("S#17915", "CYC");
         $ic39$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("POS"), SubLObjectFactory.makeKeyword("ARITY"), module0499.NIL, SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("FORT"), (SubLObject)SubLObjectFactory.makeKeyword("FULLY-BOUND")), SubLObjectFactory.makeKeyword("REQUIRED"), SubLObjectFactory.makeSymbol("S#29814", "CYC"), SubLObjectFactory.makeKeyword("COST-EXPRESSION"), SubLObjectFactory.makeSymbol("S#35622", "CYC"), SubLObjectFactory.makeKeyword("EXPAND"), SubLObjectFactory.makeSymbol("S#29826", "CYC"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("(<fort> . <fully-bound>)\nusing true assertions and GAF indexing in the KB\nvia #$transitiveViaArg or #$transitiveViaArgInverse\nand transitivity reasoning"), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$relationAllExists #$physicalParts #$Dog #$Head)\nvia \n (#$relationAllExists #$anatomicalParts #$Vertebrate #$Head-Vertebrate)\nand\n (#$transitiveViaArg #$relationAllExists #$genlPreds 1)\n (#$transitiveViaArgInverse #$relationAllExists #$genls 2)\n (#$transitiveViaArg #$relationAllExists #$genls 3)\n (#$genlPreds #$anatomicalParts #$physicalParts)\n (#$genls #$Dog #$Vertebrate)\n (#$genls #$Head-Vertebrate #$Head)\n") });
@@ -2874,16 +2874,16 @@ public final class module0499 extends SubLTranslatedFile
         $ic52$ = SubLObjectFactory.makeString("continue anyway");
         $ic53$ = SubLObjectFactory.makeKeyword("WARN");
         $ic54$ = SubLObjectFactory.makeString("~A is not a valid *sbhl-type-error-action* value");
-        $ic55$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
-        $ic56$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
-        $ic57$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("conservativeViaArg"));
-        $ic58$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
-        $ic59$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("conservativeViaArgInverse"));
+        $ic55$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("genlPreds"));
+        $ic56$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArg"));
+        $ic57$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("conservativeViaArg"));
+        $ic58$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse"));
+        $ic59$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("conservativeViaArgInverse"));
         $ic60$ = SubLObjectFactory.makeString("~A is neither SET-P nor LISTP.");
         $ic61$ = SubLObjectFactory.makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
         $ic62$ = SubLObjectFactory.makeString("Node ~a does not pass sbhl-type-test ~a~%");
         $ic63$ = SubLObjectFactory.makeSymbol("HL-VARIABLE-P");
-        $ic64$ = ConsesLow.list(module0128.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse")), module0128.f8479((SubLObject)SubLObjectFactory.makeString("conservativeViaArgInverse")));
+        $ic64$ = ConsesLow.list(constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("transitiveViaArgInverse")), constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("conservativeViaArgInverse")));
         $ic65$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("POS"), SubLObjectFactory.makeKeyword("ARITY"), module0499.NIL, SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("FORT"), (SubLObject)SubLObjectFactory.makeKeyword("NOT-FULLY-BOUND")), SubLObjectFactory.makeKeyword("REQUIRED"), SubLObjectFactory.makeSymbol("S#29815", "CYC"), SubLObjectFactory.makeKeyword("COST"), SubLObjectFactory.makeSymbol("S#34172", "CYC"), SubLObjectFactory.makeKeyword("INPUT-EXTRACT-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEMPLATE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#13100", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)SubLObjectFactory.makeSymbol("S#13100", "CYC"))), SubLObjectFactory.makeKeyword("OUTPUT-GENERATE-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#35608", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("INPUT")), SubLObjectFactory.makeKeyword("OUTPUT-DECODE-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#18075", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("INPUT"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)SubLObjectFactory.makeSymbol("S#13100", "CYC"))), SubLObjectFactory.makeKeyword("OUTPUT-VERIFY-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("AND"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#35593", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("NOT"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEST"), (SubLObject)SubLObjectFactory.makeSymbol("S#35587", "CYC")))), SubLObjectFactory.makeKeyword("SUPPORT-MODULE"), SubLObjectFactory.makeKeyword("TVA"), SubLObjectFactory.makeKeyword("SUPPORT-STRENGTH"), SubLObjectFactory.makeKeyword("DEFAULT"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("(<fort> . <not-fully-bound>)\nusing true assertions and GAF indexing in the KB\nvia #$transitiveViaArg or #$transitiveViaArgInverse\nand transitivity reasoning"), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$relationAllExists #$physicalParts #$Dog ?COL)\nvia \n (#$relationAllExists #$anatomicalParts #$Vertebrate #$Head-Vertebrate)\nand\n (#$transitiveViaArg #$relationAllExists #$genlPreds 1)\n (#$transitiveViaArgInverse #$relationAllExists #$genls 2)\n (#$genlPreds #$anatomicalParts #$physicalParts)\n (#$genls #$Dog #$Vertebrate)\n") });
         $ic66$ = ConsesLow.list(new SubLObject[] { SubLObjectFactory.makeKeyword("SENSE"), SubLObjectFactory.makeKeyword("POS"), SubLObjectFactory.makeKeyword("ARITY"), module0499.NIL, SubLObjectFactory.makeKeyword("REQUIRED-PATTERN"), ConsesLow.cons((SubLObject)SubLObjectFactory.makeKeyword("FORT"), (SubLObject)SubLObjectFactory.makeKeyword("NOT-FULLY-BOUND")), SubLObjectFactory.makeKeyword("REQUIRED"), SubLObjectFactory.makeSymbol("S#35583", "CYC"), SubLObjectFactory.makeKeyword("COST"), SubLObjectFactory.makeSymbol("S#35609", "CYC"), SubLObjectFactory.makeKeyword("INPUT-EXTRACT-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("TEMPLATE"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("BIND"), (SubLObject)SubLObjectFactory.makeSymbol("S#13100", "CYC")), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)SubLObjectFactory.makeSymbol("S#13100", "CYC"))), SubLObjectFactory.makeKeyword("OUTPUT-GENERATE-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#35610", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("INPUT")), SubLObjectFactory.makeKeyword("OUTPUT-DECODE-PATTERN"), ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("CALL"), (SubLObject)SubLObjectFactory.makeSymbol("S#18075", "CYC"), (SubLObject)SubLObjectFactory.makeKeyword("INPUT"), (SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeKeyword("VALUE"), (SubLObject)SubLObjectFactory.makeSymbol("S#13100", "CYC"))), SubLObjectFactory.makeKeyword("SUPPORT-MODULE"), SubLObjectFactory.makeKeyword("TVA"), SubLObjectFactory.makeKeyword("SUPPORT-STRENGTH"), SubLObjectFactory.makeKeyword("DEFAULT"), SubLObjectFactory.makeKeyword("DOCUMENTATION"), SubLObjectFactory.makeString("(<fort> . <not-fully-bound>)\nusing true assertions and GAF indexing in the KB\nvia #$transitiveViaArg or #$transitiveViaArgInverse\nand transitivity reasoning"), SubLObjectFactory.makeKeyword("EXAMPLE"), SubLObjectFactory.makeString("(#$relationAllExists #$physicalParts #$Dog ?COL)\nvia \n (#$relationAllExists #$anatomicalParts #$Vertebrate #$Head-Vertebrate)\nand\n (#$transitiveViaArg #$relationAllExists #$genlPreds 1)\n (#$transitiveViaArgInverse #$relationAllExists #$genls 2)\n (#$genlPreds #$anatomicalParts #$physicalParts)\n (#$genls #$Dog #$Vertebrate)\n") });
         $ic67$ = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("S#35623", "CYC"), (SubLObject)SubLObjectFactory.makeSymbol("S#35624", "CYC"));

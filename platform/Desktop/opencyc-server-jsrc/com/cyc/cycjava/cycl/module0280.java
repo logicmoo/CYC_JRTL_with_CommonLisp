@@ -615,22 +615,22 @@ public final class module0280 extends SubLTranslatedFile
         $ic10$ = SubLObjectFactory.makeKeyword("EL-UNEVALUATABLE-EXPRESSION");
         $ic11$ = SubLObjectFactory.makeSymbol("S#16052", "CYC");
         $ic12$ = SubLObjectFactory.makeSymbol("S#21220", "CYC");
-        $ic13$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("evaluateAtEL"));
+        $ic13$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("evaluateAtEL"));
         $ic14$ = SubLObjectFactory.makeSymbol("S#21224", "CYC");
         $ic15$ = SubLObjectFactory.makeSymbol("S#21211", "CYC");
-        $ic16$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("evaluateImmediately"));
+        $ic16$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("evaluateImmediately"));
         $ic17$ = SubLObjectFactory.makeSymbol("S#12274", "CYC");
-        $ic18$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
+        $ic18$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("EverythingPSC"));
         $ic19$ = SubLObjectFactory.makeSymbol("S#21230", "CYC");
         $ic20$ = SubLObjectFactory.makeSymbol("S#21232", "CYC");
         $ic21$ = SubLObjectFactory.makeString("~s is not a well-formed sentence");
-        $ic22$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("exceptWhen"));
-        $ic23$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("abnormal"));
-        $ic24$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
-        $ic25$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("exceptFor"));
-        $ic26$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("pragmaticRequirement"));
-        $ic27$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("querySentence"));
-        $ic28$ = module0128.f8479((SubLObject)SubLObjectFactory.makeString("meetsPragmaticRequirement"));
+        $ic22$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("exceptWhen"));
+        $ic23$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("abnormal"));
+        $ic24$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("TheList"));
+        $ic25$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("exceptFor"));
+        $ic26$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("pragmaticRequirement"));
+        $ic27$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("querySentence"));
+        $ic28$ = constant_handles_oc.f8479((SubLObject)SubLObjectFactory.makeString("meetsPragmaticRequirement"));
         $ic29$ = SubLObjectFactory.makeString("no assertion for meta-arg: ~s");
     }
     
