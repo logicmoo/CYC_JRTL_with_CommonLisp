@@ -136,7 +136,7 @@ public class SubLMain {
     }
 
     /**
-     * 
+     *
      */
     static void doInitialEmbeddedMain(String[] args) {
         Main.setSubLisp(true);
@@ -625,7 +625,7 @@ public class SubLMain {
         ZeroArityFunction.initialize(); // this must come after ConsesLow -APB
         UnaryFunction.initialize(); // this must come after ConsesLow -APB
 
-        addFeature("MAIN-LARKC");
+        addFeature("CYC-LARKC");
 
         if (OPENCYC) {
             addFeature("MAIN-OPENCYC");

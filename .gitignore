@@ -115,4 +115,9 @@ uabcl/
 /platform/webapps/*/
 /platform/StartMUD.sh
 /platform/units/*/
+/platform/transcripts/*/
+/astyleclipse-code-r42-branches/
+/pack/
+/swipl-pack/
+
 
