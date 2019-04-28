@@ -2,13 +2,13 @@
 
 /** <module> The web server that serves the
  * larkc_client (which runs remotely)
- * The welcome handler 
+ * The welcome handler
  *
  *      *:9880/
  *
  * is just to give a 200 OK
  *
- * actual work happens at 
+ * actual work happens at
  *
  *    *:9880/pengines
  */
@@ -90,7 +90,9 @@ larkc_query -->
 		   \html_requires(jquery),
 		   \html_requires(pengines_script),
 		   \html_requires(script),
-		   code(b('***************  LarKC_CL Pengines Server  ******************'))
+		   code(b('***************  LarKC_CL Pengines Server  ******************')),
+		   pre(a(href('http://logicmoo.org:3602/cgi-bin/cg?cb-start'),'Click here if human'))
+
 		  ])
 	     ]).
 
