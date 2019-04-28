@@ -3,7 +3,13 @@
 :- load_files(library(prolog_stack)).
 prolog_stack:stack_guard(none).
 
-:- consult('pengines_server/larkc_pengines_server').
+:- dynamic user:library_directory/1.
+:- multifile user:library_directory/1.
+
+:- absolute_file_name('./pengines_server',Dir), asserta(user:library_directory(Dir)).
+
+:- use_module(library(larkc_pengines_server)).
+:- use_module(library(larkc_client)).
 
 dmiles_machine:- fail, once((gethostname('gitlab.logicmoo.org'); gethostname('gitlab') ; gethostname('i74930k'))).
 
