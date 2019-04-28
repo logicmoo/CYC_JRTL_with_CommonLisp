@@ -1,3 +1,9 @@
+:- module(larkc_pengines_server, [go/0]).
+
+/** <module> The web server that serves the larkc the user sees.
+ * This is our middleware layer
+ */
+
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_session)).
@@ -48,11 +54,11 @@ user:file_search_path(icons, './icons').
 :- html_resource(jquery, [virtual(true), requires([js('jquery.js')]), mime_type(text/javascript)]).
 :- html_resource(pengines_script, [virtual(true), requires([root('pengine/pengines.js')]), mime_type(text/javascript)]).
 
-go :-
-	http_set_session_options([timeout(60)]),
+start_larkc_pengine_server :-
+	http_set_session_options([timeout(1800), create(auto), enabled(true)]),
 	http_server(http_dispatch, [port(9880), timeout(180)]).
 
-:- http_handler(/, larkc_pengines_handler, []).
+:- http_handler(/, larkc_pengines_welcome_handler, []).
 
 :- http_handler(js(.), http_reply_from_files('js/', []),
 		[priority(1000), prefix]).
@@ -61,7 +67,7 @@ go :-
 :- http_handler(img(.), http_reply_from_files('icons/', []),
                 [priority(1000), prefix]).
 
-larkc_pengines_handler(_Request) :-
+larkc_pengines_welcome_handler(_Request) :-
 	reply_html_page(
 			[title('LarKC_CL Pengines Server'),
 			 link([href('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|VT323'), rel(stylesheet)], [])
@@ -79,4 +85,4 @@ larkc_query -->
 		  ])
 	     ]).
 
-:- go.
+:- start_larkc_pengine_server.
