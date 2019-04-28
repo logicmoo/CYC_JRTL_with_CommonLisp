@@ -1,0 +1,72 @@
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  20% {
+  	 opacity: 1;
+  }
+  21% {
+  	 opacity: 0.3;
+   }
+ 25% {
+    opacity: 0.9; 
+ }
+  50% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.8;  
+  }
+  100% {
+  	 opacity: 1;
+  }
+}
+
+@keyframes blinker {
+  0% { opacity:1}
+  50% { opacity: 0;}
+  100% { opacity: 1;}
+}
+
+blink {
+  animation: blinker 600ms infinite;
+  color: #00FF00;
+  margin-right: 6px;
+}
+
+
+code {
+	display: block;
+	font-family: 'VT323', monospace;	
+	white-space: pre-line;
+	}
+	
+#codeliketext {
+      max-width: 600px;
+}
+
+body {
+	animation: flicker 6000ms infinite;
+    background-color: #000000;
+    color: #00aa00;
+   font-family: 'VT323', monospace;
+/* font-family: 'IBM Plex Mono', monospace; */
+}
+
+#inputbox {
+    background-color: #008800;
+    color: #000000;
+    border: none;
+    caret-color: #00FF00;
+    font-family: 'VT323', monospace;
+    font-size: 120%;	
+}
+
+input:focus {
+    outline: none;
+    background-color: #00aa00;
+}
+
+b {
+ color: #00FF00;
+ }

@@ -6,7 +6,7 @@
 
 ;; (let ((*print-readably* t)) (prin1-to-string (find-class 'symbol)))
 (defmethod print-object ((obj class) stream)
-  (print1 "#." stream) 
+  (print1 "#." stream)
     (write `(find-class ',(class-name obj)) :stream stream :readably t))
 
 
@@ -100,7 +100,6 @@
 #+USE-CYC
 (let ((*PACKAGE* *PACKAGE*))
    (cyc:init-cyc-server))
-
 
 
 ;; ABCL JSS:     (#"setText" my-label "The Larch")

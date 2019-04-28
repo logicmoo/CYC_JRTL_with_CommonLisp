@@ -606,6 +606,8 @@ public class BeanShellCntrl
   @LispMethod
   static public void cl_imports_cyc()
   {
+    if( SubLMain.Never_REDEFINE )
+      return;
     synchronized( StartupLock )
     {
       if( inited_cl_sees_cyc )
@@ -634,6 +636,8 @@ public class BeanShellCntrl
   @LispMethod
   static public void cyc_imports_cl()
   {
+    if( SubLMain.Never_REDEFINE )
+      return;
     synchronized( StartupLock )
     {
       if( inited_cyc_sees_cl )
@@ -965,16 +969,14 @@ public class BeanShellCntrl
     return Lisp.EOF;
   }
 
-  @LispMethod(
-    prologName = "fg_repl")
+  @LispMethod(prologName = "fg_repl")
   static public LispObject fg_repl()
   {
     repl_in_bg = false;
     return Lisp.EOF;
   }
 
-  @LispMethod(
-    prologName = "cyc_repl")
+  @LispMethod(prologName = "cyc_repl")
   static public LispObject cyc_repl() throws InterruptedException
   {
     return BeanShellCntrl.with_sublisp( true, new BeanShellCntrl.SCallable<LispObject>()
@@ -1440,8 +1442,8 @@ public class BeanShellCntrl
           Eval.eval( "(sl:load \"init/services-init.lisp\")" );
           SubLFiles.initialize( "eu.larkc.core.orchestrator.LarkcInit" );
           SubLFiles.initialize( "eu.larkc.core.orchestrator.servers.LarKCHttpServer" );
-          if( !SubLMain.OPENCYC )
-            LarkcInit.initializeLarkc();
+          // if( !SubLMain.OPENCYC )
+          // LarkcInit.initializeLarkc();
           LarKCHttpServer.start_sparql_server();
           inited_cyc_server = true;
           PrologSync.setPrologReady( true );
@@ -2432,9 +2434,7 @@ public class BeanShellCntrl
     return form;
   }
 
-  @SubLTranslatedFile.SubL(
-    source = "cycl/constant-reader.lisp",
-    position = 3066L)
+  @SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 3066L)
   public static SubLObject find_constant_by_name(final SubLObject name)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2877,7 +2877,9 @@ public class BeanShellCntrl
     }
   }
 
-  static public class PrimitiveEverywhere extends org.armedbear.lisp.Primitive
+  static public class PrimitiveEverywhere
+      extends
+        org.armedbear.lisp.Primitive
   {
     public PrimitiveEverywhere( String string )
     {
@@ -2886,7 +2888,9 @@ public class BeanShellCntrl
     }
   }
 
-  static public class StartupError extends Error
+  static public class StartupError
+      extends
+        Error
   {
     public StartupError( String string )
     {
@@ -2906,7 +2910,9 @@ public class BeanShellCntrl
     // TODO Auto-generated method stub
   }
 
-  static public class SpecialMethod extends SpecialOperator
+  static public class SpecialMethod
+      extends
+        SpecialOperator
   {
     boolean evalArgs = true;
     // LispMethod lispMethod;
@@ -3273,7 +3279,7 @@ public class BeanShellCntrl
   }
 
   /**
-   * 
+   *
    */
   public static void registerSelf()
   {

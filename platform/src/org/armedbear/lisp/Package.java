@@ -506,7 +506,7 @@ public class Package extends SubLPackage implements java.io.Serializable {
      */
     private Symbol newSymbol(String symbolName) {
         Symbol symbol = checkUsedByFor(symbolName);
-        if (symbol == null) {
+        if (symbol == null || oldStyleOverload) {
             symbol = new Symbol(symbolName, this);
             return symbol;
         }
@@ -552,20 +552,20 @@ public class Package extends SubLPackage implements java.io.Serializable {
     }
 
     /**
-    
-    
-    
-    
-    
+
+
+
+
+
     (intern "FOO" (or (find-package "TEST1")  (make-package "TEST1" ))) (let ((sym  (find-symbol "FOO" :test1))) (unintern sym :test1) (symbol-package  sym ) )
-    
-    
-    
+
+
+
     (find-symbol "FOO")
     (find-symbol "FOO" :test1)
-    
-    
-    
+
+
+
      */
     public synchronized LispObject unintern(final Symbol symbol)
 

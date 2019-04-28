@@ -3,6 +3,8 @@
 :- load_files(library(prolog_stack)).
 prolog_stack:stack_guard(none).
 
+:- consult('pengines_server/larkc_pengines_server').
+
 dmiles_machine:- fail, once((gethostname('gitlab.logicmoo.org'); gethostname('gitlab') ; gethostname('i74930k'))).
 
 ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(false)]).
