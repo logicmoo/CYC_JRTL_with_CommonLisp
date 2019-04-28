@@ -18,6 +18,7 @@ import org.h2.command.ddl.CreateFunctionAlias;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.ResumeException;
@@ -123,6 +124,11 @@ public class SubLFiles
         SubLCompiledFunction func = SubLObjectFactory.makeCompiledFunction( className, methodName, parameterArray, SubLObject.class, functionSymbol, requiredArgCount, optionalArgCount, allowsRest );
         if( prev != null && !func.equalp( prev ) )
         {
+          if( SubLMain.Never_REDEFINE)
+          {
+            Errors.warn( "NEVER Redefining: " + functionSymbol );
+            return;
+          }
           Errors.warn( "Attempt to redefine: " + functionSymbol );
           return;
         }
@@ -146,6 +152,7 @@ public class SubLFiles
    */
   public static void declareFunction(SubLFile file, String methodName, String functionName, int requiredArgCount, int optionalArgCount, boolean allowsRest)
   {
+    final boolean neverRedefine = SubLMain.Never_REDEFINE;
     try
     {
       List<Class> parameterTypes = new ArrayList<Class>();
@@ -165,6 +172,11 @@ public class SubLFiles
         if( parameterArray.length <= previous.applyArity() + ( previous.allowsRest() ? 1 : 0 ) )
         {
           Errors.warn( "Attempt to redefine: " + functionSymbol );
+          return;
+        }
+        if( neverRedefine )
+        {
+          Errors.warn( "NEVER Redefining " + functionSymbol );
           return;
         }
         Errors.warn( "Redefining " + functionSymbol );

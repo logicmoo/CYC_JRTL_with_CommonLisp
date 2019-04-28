@@ -64,7 +64,7 @@ public class Hashtables implements SubLFile {
 		return result == null ? SubLNil.NIL : result;
 	}
 
-	public static SubLObject gethash_without_values(SubLObject key, SubLObject table, SubLObject defaultValue) {
+	public static SubLObject gethash_without_values(SubLObject key, SubLObject table, SubLObject defaultValue) {	  
 		SubLObject result = table.get(key);
 		return result != null ? result : defaultValue == CommonSymbols.UNPROVIDED ? SubLNil.NIL : defaultValue;
 	}

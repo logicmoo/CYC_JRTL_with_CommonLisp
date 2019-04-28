@@ -7,7 +7,7 @@
 (in-package :CYC)
 
 ;;; Added by dmiles
-#+CYC-HTML
+;; #+CYC-HTML
 (sl:csetq cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
 
 
@@ -25,7 +25,7 @@
 ;;; Possible Values: T or NIL
 ;;; Type checking occurs in SBHL modules iff this is NIL, which
 ;;; is slower but correcter.
-;; OpenCYC 
+;; OpenCYC
 (csetq *SUSPEND-SBHL-TYPE-CHECKING?* NIL)
 ;; LarKC
 (csetq *SUSPEND-SBHL-TYPE-CHECKING?* T)
@@ -153,7 +153,7 @@
 ;;; If NIL, require authentication before allowing modifications
 ;;; to the knowledge base.  If T, any user is allowed to modify
 ;;; the knowledge base.
-;;; OpenCYC 
+;;; OpenCYC
 (csetq *ALLOW-GUEST-TO-EDIT?* NIL)
 ;;; LarKC
 (csetq *ALLOW-GUEST-TO-EDIT?* T)
@@ -161,7 +161,7 @@
 ;;; Possible Values: a string
 ;;; Specifies the name of the default Cyclist constant under which
 ;;; users browse the system before they log in.
-;;; OpenCYC 
+;;; OpenCYC
 (csetq *DEFAULT-CYCLIST-NAME* "Guest")
 ;;; LarKC
 (csetq *DEFAULT-CYCLIST-NAME* "CycAdministrator")
@@ -238,7 +238,7 @@
 ;;; ability of Administrator users to switch among user levels, via a link on
 ;;; the Preferences page.  If NIL, these testing features are not
 ;;; available.
-;;; OpenCYC 
+;;; OpenCYC
 (csetq *TM-TESTING* NIL)
 ;;; LarKC
 (csetq *TM-TESTING* T)
@@ -330,7 +330,7 @@
 ;;; Possible Values: a string
 ;;; The instructions to the user on the login page.
 ;;; If *USE-HTTP-AUTHENTICATION* is T, this message will not appear.
-(csetq *CLIENT-SPECIAL-LOGIN-INSTRUCTIONS* "Please enter your Thesaurus Cyclist ID in the box below, 
+(csetq *CLIENT-SPECIAL-LOGIN-INSTRUCTIONS* "Please enter your Thesaurus Cyclist ID in the box below,
      and hit ENTER or click the LOGIN button.")
 
 ;;; Possible Values: an integer

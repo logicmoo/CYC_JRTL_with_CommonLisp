@@ -1812,11 +1812,11 @@ public final class module0677 extends SubLTranslatedFile
                     module0642.f39021((SubLObject)$ic175$);
                     module0642.f39021((SubLObject)$ic156$);
                     module0642.f39026((SubLObject)UNPROVIDED);
-                    module0642.f39072((SubLObject)$ic176$, (SubLObject)$ic177$, Equality.eq(module0660.$g5208$.getDynamicValue(var2), (SubLObject)$ic178$), (SubLObject)UNPROVIDED);
+                    module0642.f39072((SubLObject)$ic176$, (SubLObject)$ic177$, Equality.eq(module0660.$cb_default_index_view$.getDynamicValue(var2), (SubLObject)$ic178$), (SubLObject)UNPROVIDED);
                     module0642.f39032((SubLObject)UNPROVIDED);
                     module0642.f39019((SubLObject)$ic179$);
                     module0642.f39032((SubLObject)FOUR_INTEGER);
-                    module0642.f39072((SubLObject)$ic176$, (SubLObject)$ic180$, Equality.eq(module0660.$g5208$.getDynamicValue(var2), (SubLObject)$ic181$), (SubLObject)UNPROVIDED);
+                    module0642.f39072((SubLObject)$ic176$, (SubLObject)$ic180$, Equality.eq(module0660.$cb_default_index_view$.getDynamicValue(var2), (SubLObject)$ic181$), (SubLObject)UNPROVIDED);
                     module0642.f39019((SubLObject)$ic182$);
                     module0642.f39026((SubLObject)TWO_INTEGER);
                     module0642.f39021((SubLObject)$ic183$);
@@ -2523,7 +2523,7 @@ public final class module0677 extends SubLTranslatedFile
     
     public static SubLObject f41319(final SubLObject var1) {
         final SubLObject var2 = module0642.f39104((SubLObject)$ic176$, var1);
-        module0660.$g5208$.setDynamicValue(reader.read_from_string_ignoring_errors(var2, (SubLObject)NIL, (SubLObject)NIL, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED));
+        module0660.$cb_default_index_view$.setDynamicValue(reader.read_from_string_ignoring_errors(var2, (SubLObject)NIL, (SubLObject)NIL, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED));
         SubLObject var3 = module0642.f39104((SubLObject)$ic184$, var1);
         if (NIL != var3) {
             var3 = reader.read_from_string_ignoring_errors(var3, (SubLObject)NIL, (SubLObject)NIL, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);

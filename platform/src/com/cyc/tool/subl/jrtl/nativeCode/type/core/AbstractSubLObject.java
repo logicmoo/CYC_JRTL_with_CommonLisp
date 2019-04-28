@@ -212,7 +212,7 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
 
     @Override
     public SubLObject get(SubLObject obj) {
-        type_error_str(this, "HASHTABLE");
+       // type_error_str(this, "HASHTABLE");
         return SubLNil.NIL;
     }
 

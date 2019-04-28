@@ -13,7 +13,7 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--opencyc -f &quot;(progn (load \&quot;init/jrtl-release-init.lisp\&quot;) (load \&quot;init/port-init.lisp\&quot;))&quot;"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--rcyc -f &quot;(progn (load \&quot;init/jrtl-release-init.lisp\&quot;) (load \&quot;init/port-init.lisp\&quot;))&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-server -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m -XX:MaxPermSize=256m -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseParallelGC"/>
 </launchConfiguration>

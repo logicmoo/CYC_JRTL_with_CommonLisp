@@ -585,7 +585,7 @@ public final class module0669 extends SubLTranslatedFile
     private static final SubLSymbol $ic521$;
     private static final SubLString $ic522$;
     private static final SubLSymbol $ic523$;
-    
+
     public static SubLObject f40606(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         module0642.f39020((SubLObject)$ic0$);
@@ -651,14 +651,14 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39029((SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40608(final SubLObject var1) {
         if (NIL != var1) {
             return f40607(var1);
         }
         return module0660.f40183();
     }
-    
+
     public static SubLObject f40607(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         if (NIL != module0223.f14667(var1)) {
@@ -741,7 +741,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39051((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40609(final SubLObject var8, SubLObject var9) {
         if (var9 == UNPROVIDED) {
             var9 = (SubLObject)NIL;
@@ -1003,19 +1003,19 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g347$.getGlobalValue());
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40612(final SubLObject var1, SubLObject var28) {
         if (var28 == UNPROVIDED) {
             var28 = (SubLObject)$ic38$;
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40613(final SubLObject var1) {
         f40615(var1);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40615(final SubLObject var1) {
         final SubLObject var2 = module0617.f37889(var1);
         if (var2.isPositive()) {
@@ -1027,7 +1027,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40614(final SubLObject var1) {
         module0656.f39837((SubLObject)$ic40$, var1, f40610(var1), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (NIL != module0223.f14667(var1)) {
@@ -1041,7 +1041,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40616(final SubLObject var1) {
         if (var1.eql(module0223.f14674())) {
             f40618();
@@ -1051,13 +1051,13 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40617(final SubLObject var6) {
         f40619(var6);
         f40620(var6);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40620(final SubLObject var8) {
         f40621(var8);
         if (NIL != module0269.f17715(var8)) {
@@ -1083,7 +1083,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40619(final SubLObject var1) {
         final SubLObject var2 = f40633(var1, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var2.numG((SubLObject)ZERO_INTEGER)) {
@@ -1105,7 +1105,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40635(final SubLObject var1, final SubLObject var32) {
         final SubLThread var33 = SubLProcess.currentSubLThread();
         final SubLObject var34 = f40633(var1, var32, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -1147,7 +1147,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40637(final SubLObject var1, final SubLObject var32, final SubLObject var35) {
         final SubLThread var36 = SubLProcess.currentSubLThread();
         final SubLObject var37 = f40633(var1, var32, var35, (SubLObject)UNPROVIDED);
@@ -1198,7 +1198,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40636(final SubLObject var32, SubLObject var35) {
         if (var35 == UNPROVIDED) {
             var35 = (SubLObject)NIL;
@@ -1208,7 +1208,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return PrintLow.format((SubLObject)NIL, (SubLObject)$ic51$, var32);
     }
-    
+
     public static SubLObject f40638(final SubLObject var1, final SubLObject var32, final SubLObject var35, final SubLObject var37) {
         final SubLObject var38 = f40633(var1, var32, var35, var37);
         if (var38.numG((SubLObject)ZERO_INTEGER)) {
@@ -1224,7 +1224,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40621(final SubLObject var1) {
         final SubLObject var2 = f40639(var1, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var2.numG((SubLObject)ZERO_INTEGER)) {
@@ -1246,7 +1246,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40641(final SubLObject var1, final SubLObject var32) {
         final SubLThread var33 = SubLProcess.currentSubLThread();
         final SubLObject var34 = f40639(var1, var32, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -1288,11 +1288,11 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40642(final SubLObject var32) {
         return PrintLow.format((SubLObject)NIL, (SubLObject)$ic53$, var32);
     }
-    
+
     public static SubLObject f40643(final SubLObject var1, final SubLObject var32, final SubLObject var40) {
         final SubLObject var41 = f40639(var1, var32, var40, (SubLObject)UNPROVIDED);
         if (var41.numG((SubLObject)ZERO_INTEGER)) {
@@ -1306,7 +1306,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40622(final SubLObject var41) {
         final SubLThread var42 = SubLProcess.currentSubLThread();
         final SubLObject var43 = f40644(var41, (SubLObject)UNPROVIDED);
@@ -1351,7 +1351,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40646(final SubLObject var41, final SubLObject var37) {
         final SubLObject var42 = module0217.f14247(var41, var37);
         if (var42.numG((SubLObject)ZERO_INTEGER)) {
@@ -1363,7 +1363,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40625(final SubLObject var42) {
         final SubLObject var43 = f40647(var42, (SubLObject)UNPROVIDED);
         if (var43.numG((SubLObject)ZERO_INTEGER)) {
@@ -1375,7 +1375,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40623(final SubLObject var41) {
         final SubLObject var42 = f40648(var41, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var42.numG((SubLObject)ZERO_INTEGER)) {
@@ -1390,7 +1390,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40649(final SubLObject var41, final SubLObject var44) {
         final SubLThread var45 = SubLProcess.currentSubLThread();
         final SubLObject var46 = f40648(var41, var44, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -1432,7 +1432,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40651(final SubLObject var41, final SubLObject var44, final SubLObject var37) {
         final SubLThread var45 = SubLProcess.currentSubLThread();
         final SubLObject var46 = f40648(var41, var44, var37, (SubLObject)UNPROVIDED);
@@ -1481,11 +1481,11 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40652(final SubLObject var41, final SubLObject var44, final SubLObject var37) {
         return PrintLow.format((SubLObject)NIL, (SubLObject)$ic63$, new SubLObject[] { module0656.f39842(var41), var44, module0656.f39842(var37) });
     }
-    
+
     public static SubLObject f40653(final SubLObject var41, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLObject var47 = f40648(var41, var44, var37, var46);
         if (var47.numG((SubLObject)ZERO_INTEGER)) {
@@ -1499,7 +1499,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40624(final SubLObject var41) {
         final SubLObject var42 = f40654(var41, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var42.numG((SubLObject)ZERO_INTEGER)) {
@@ -1514,7 +1514,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40655(final SubLObject var41, final SubLObject var44) {
         final SubLThread var45 = SubLProcess.currentSubLThread();
         final SubLObject var46 = f40654(var41, var44, (SubLObject)UNPROVIDED);
@@ -1556,7 +1556,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40657(final SubLObject var41, final SubLObject var44, final SubLObject var46) {
         final SubLObject var47 = f40654(var41, var44, var46);
         if (var47.numG((SubLObject)ZERO_INTEGER)) {
@@ -1570,7 +1570,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40627(final SubLObject var47) {
         final SubLObject var48 = f40658(var47, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var48.numG((SubLObject)ZERO_INTEGER)) {
@@ -1585,7 +1585,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40659(final SubLObject var47, final SubLObject var44) {
         final SubLThread var48 = SubLProcess.currentSubLThread();
         final SubLObject var49 = f40658(var47, var44, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -1627,7 +1627,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40661(final SubLObject var47, final SubLObject var44, final SubLObject var37) {
         final SubLObject var48 = f40658(var47, var44, var37, (SubLObject)UNPROVIDED);
         if (var48.numG((SubLObject)ZERO_INTEGER)) {
@@ -1650,7 +1650,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40662(final SubLObject var47, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLObject var48 = f40658(var47, var44, var37, var46);
         if (var48.numG((SubLObject)ZERO_INTEGER)) {
@@ -1664,7 +1664,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40628(final SubLObject var47) {
         final SubLObject var48 = f40663(var47, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var48.numG((SubLObject)ZERO_INTEGER)) {
@@ -1679,7 +1679,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40664(final SubLObject var47, final SubLObject var44) {
         final SubLThread var48 = SubLProcess.currentSubLThread();
         final SubLObject var49 = f40663(var47, var44, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -1721,7 +1721,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40666(final SubLObject var47, final SubLObject var44, final SubLObject var37) {
         final SubLObject var48 = f40663(var47, var44, var37, (SubLObject)UNPROVIDED);
         if (var48.numG((SubLObject)ZERO_INTEGER)) {
@@ -1744,7 +1744,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40667(final SubLObject var47, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLObject var48 = f40663(var47, var44, var37, var46);
         if (var48.numG((SubLObject)ZERO_INTEGER)) {
@@ -1758,7 +1758,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40629(final SubLObject var47) {
         final SubLObject var48 = f40668(var47, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var48.numG((SubLObject)ZERO_INTEGER)) {
@@ -1773,7 +1773,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40669(final SubLObject var47, final SubLObject var44) {
         final SubLThread var48 = SubLProcess.currentSubLThread();
         final SubLObject var49 = f40668(var47, var44, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -1815,7 +1815,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40671(final SubLObject var47, final SubLObject var44, final SubLObject var37) {
         final SubLObject var48 = f40668(var47, var44, var37, (SubLObject)UNPROVIDED);
         if (var48.numG((SubLObject)ZERO_INTEGER)) {
@@ -1838,7 +1838,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40672(final SubLObject var47, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLObject var48 = f40668(var47, var44, var37, var46);
         if (var48.numG((SubLObject)ZERO_INTEGER)) {
@@ -1852,7 +1852,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40630(final SubLObject var48) {
         final SubLObject var49 = f40673(var48, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var49.numG((SubLObject)ZERO_INTEGER)) {
@@ -1867,7 +1867,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40674(final SubLObject var48, final SubLObject var44) {
         final SubLThread var49 = SubLProcess.currentSubLThread();
         final SubLObject var50 = f40673(var48, var44, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -1909,7 +1909,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40676(final SubLObject var48, final SubLObject var44, final SubLObject var49) {
         final SubLObject var50 = f40673(var48, var44, var49, (SubLObject)UNPROVIDED);
         if (var50.numG((SubLObject)ZERO_INTEGER)) {
@@ -1932,7 +1932,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40677(final SubLObject var48, final SubLObject var44, final SubLObject var49, final SubLObject var46) {
         final SubLObject var50 = f40673(var48, var44, var49, var46);
         if (var50.numG((SubLObject)ZERO_INTEGER)) {
@@ -1946,7 +1946,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40626(final SubLObject var42) {
         final SubLObject var43 = f40678(var42, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var43.numG((SubLObject)ZERO_INTEGER)) {
@@ -1967,7 +1967,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40680(final SubLObject var42, final SubLObject var37) {
         final SubLObject var43 = f40678(var42, var37, (SubLObject)UNPROVIDED);
         if (var43.numG((SubLObject)ZERO_INTEGER)) {
@@ -1990,7 +1990,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40681(final SubLObject var42, final SubLObject var37, final SubLObject var46) {
         final SubLObject var47 = f40678(var42, var37, var46);
         if (var47.numG((SubLObject)ZERO_INTEGER)) {
@@ -2004,7 +2004,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40618() {
         final SubLObject var43 = f40682((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var43.numG((SubLObject)ZERO_INTEGER)) {
@@ -2018,7 +2018,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40683(final SubLObject var44) {
         final SubLObject var45 = f40682(var44, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         if (var45.numG((SubLObject)ZERO_INTEGER)) {
@@ -2039,7 +2039,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40685(final SubLObject var44, final SubLObject var37) {
         final SubLObject var45 = f40682(var44, var37, (SubLObject)UNPROVIDED);
         if (var45.numG((SubLObject)ZERO_INTEGER)) {
@@ -2062,7 +2062,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40686(final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLObject var47 = f40682(var44, var37, var46);
         if (var47.numG((SubLObject)ZERO_INTEGER)) {
@@ -2076,7 +2076,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40631(final SubLObject var1) {
         final SubLObject var2 = f40687(var1);
         if (var2.numG((SubLObject)ZERO_INTEGER)) {
@@ -2088,7 +2088,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40632(final SubLObject var1) {
         if (NIL != module0173.f10955(var1) && NIL != module0217.f14342(var1)) {
             module0642.f39051((SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -2119,7 +2119,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40611(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         if (!module0655.$g5128$.getDynamicValue(var2).eql(var1)) {
@@ -2136,7 +2136,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g460$.getGlobalValue());
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40690(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         if (NIL != assertion_handles_oc.f11035(var1)) {
@@ -2154,12 +2154,12 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40691(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         return Equality.eql(module0655.$g5128$.getDynamicValue(var2), var1);
     }
-    
+
     public static SubLObject f40692(final SubLObject var51) {
         final SubLThread var52 = SubLProcess.currentSubLThread();
         if (NIL != module0656.f39930(var51)) {
@@ -2173,7 +2173,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40693(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -2213,7 +2213,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40695(final SubLObject var1, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -2249,7 +2249,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return var1;
     }
-    
+
     public static SubLObject f40696(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -2289,7 +2289,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40697(final SubLObject var1, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -2325,7 +2325,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return var1;
     }
-    
+
     public static SubLObject f40698(final SubLObject var52) {
         if (NIL != module0173.f10955(var52)) {
             SubLObject var53 = (SubLObject)NIL;
@@ -2348,7 +2348,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40700(final SubLObject var8, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -2382,7 +2382,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return var8;
     }
-    
+
     public static SubLObject f40701() {
         final SubLObject var63 = $g5279$.getGlobalValue();
         if (NIL != var63) {
@@ -2390,15 +2390,15 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40702(final SubLObject var64) {
         return module0034.f1829($g5279$.getGlobalValue(), (SubLObject)ConsesLow.list(var64), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
     }
-    
+
     public static SubLObject f40703(final SubLObject var64) {
         return module0226.f14802(var64);
     }
-    
+
     public static SubLObject f40704(final SubLObject var64) {
         SubLObject var65 = $g5279$.getGlobalValue();
         if (NIL == var65) {
@@ -2411,7 +2411,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return module0034.f1959(var66);
     }
-    
+
     public static SubLObject f40705(final SubLObject var6, SubLObject var67) {
         if (var67 == UNPROVIDED) {
             var67 = (SubLObject)NIL;
@@ -2470,7 +2470,7 @@ public final class module0669 extends SubLTranslatedFile
         f40710(var6);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40707(final SubLObject var6) {
         final SubLThread var7 = SubLProcess.currentSubLThread();
         final SubLObject var8 = (SubLObject)$ic113$;
@@ -2596,7 +2596,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39029((SubLObject)UNPROVIDED);
         return var6;
     }
-    
+
     public static SubLObject f40708(final SubLObject var6) {
         final SubLThread var7 = SubLProcess.currentSubLThread();
         final SubLObject var8 = module0067.f4880(Symbols.symbol_function((SubLObject)EQUAL), (SubLObject)UNPROVIDED);
@@ -2765,7 +2765,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var6;
     }
-    
+
     public static SubLObject f40709(final SubLObject var6) {
         final SubLThread var7 = SubLProcess.currentSubLThread();
         SubLObject var8 = f40711(var6);
@@ -2818,7 +2818,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var6;
     }
-    
+
     public static SubLObject f40711(final SubLObject var6) {
         final SubLThread var7 = SubLProcess.currentSubLThread();
         SubLObject var8 = (SubLObject)NIL;
@@ -2836,7 +2836,7 @@ public final class module0669 extends SubLTranslatedFile
         var8 = Sort.sort(var8, Symbols.symbol_function((SubLObject)$ic137$), (SubLObject)UNPROVIDED);
         return var8;
     }
-    
+
     public static SubLObject f40706(final SubLObject var6) {
         if (NIL != module0173.f10955(var6)) {
             final SubLObject var7 = module0617.f37871(var6, (SubLObject)UNPROVIDED);
@@ -2866,7 +2866,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40712(final SubLObject var6) {
         if (NIL != module0173.f10955(var6)) {
             final SubLObject var7 = module0617.f37871(var6, (SubLObject)UNPROVIDED);
@@ -2896,13 +2896,13 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40714(final SubLObject var35, final SubLObject var115, final SubLObject var116) {
         final SubLObject var117 = module0202.f12768(var35, var115, var116);
         module0672.f41050(var117, $ic147$, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40713() {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         module0642.f39020(module0015.$g234$.getGlobalValue());
@@ -2913,7 +2913,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39026((SubLObject)TWO_INTEGER);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40699(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
         final SubLObject var11;
@@ -3139,7 +3139,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40710(final SubLObject var6) {
         final SubLThread var7 = SubLProcess.currentSubLThread();
         final SubLObject var8 = module0655.$g5125$.currentBinding(var7);
@@ -3238,7 +3238,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40715(final SubLObject var108, SubLObject var137, SubLObject var150) {
         if (var137 == UNPROVIDED) {
             var137 = (SubLObject)NIL;
@@ -3272,12 +3272,12 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39026((SubLObject)UNPROVIDED);
         return var152;
     }
-    
+
     public static SubLObject f40716(final SubLObject var152) {
         module0656.f39915(var152, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40717(final SubLObject var52) {
         SubLObject var53 = (SubLObject)NIL;
         cdestructuring_bind.destructuring_bind_must_consp(var52, var52, (SubLObject)$ic165$);
@@ -3300,7 +3300,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40719(final SubLObject var8, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -3334,10 +3334,10 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return var8;
     }
-    
+
     public static SubLObject f40718(final SubLObject var6) {
         final SubLThread var7 = SubLProcess.currentSubLThread();
-        if ($ic170$ == module0660.$g5208$.getDynamicValue(var7)) {
+        if ($ic170$ == module0660.$cb_default_index_view$.getDynamicValue(var7)) {
             return module0670.f40959(var6);
         }
         f40720(var6);
@@ -3451,18 +3451,18 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40720(final SubLObject var6) {
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40721(final SubLObject var6) {
         f40722(var6);
         module0642.f39026((SubLObject)TWO_INTEGER);
         f40723(var6);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40723(final SubLObject var6) {
         final SubLThread var7 = SubLProcess.currentSubLThread();
         module0642.f39020(module0015.$g144$.getGlobalValue());
@@ -3520,7 +3520,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40726(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         if (NIL != module0543.f33698()) {
@@ -3913,7 +3913,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40728(final SubLObject var160) {
         final SubLThread var161 = SubLProcess.currentSubLThread();
         final SubLObject var162 = module0656.f39832((SubLObject)$ic48$);
@@ -3941,7 +3941,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return var160;
     }
-    
+
     public static SubLObject f40729(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         if (NIL != module0543.f33698()) {
@@ -4213,7 +4213,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40730(final SubLObject var181) {
         final SubLThread var182 = SubLProcess.currentSubLThread();
         final SubLObject var183 = module0656.f39832((SubLObject)$ic48$);
@@ -4241,7 +4241,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return var181;
     }
-    
+
     public static SubLObject f40731(final SubLObject var193) {
         if (NIL == module0212.f13773(var193)) {
             return module0656.f39804(var193, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -4259,7 +4259,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40727(final SubLObject var6) {
         final SubLObject var7 = module0340.f22929(var6);
         final SubLObject var8 = module0195.f12142(var6);
@@ -4283,7 +4283,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40732(final SubLObject var52) {
         SubLObject var53 = (SubLObject)NIL;
         cdestructuring_bind.destructuring_bind_must_consp(var52, var52, (SubLObject)$ic87$);
@@ -4299,10 +4299,10 @@ public final class module0669 extends SubLTranslatedFile
         }
         return f40733(var55);
     }
-    
+
     public static SubLObject f40733(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        if (NIL != module0173.f10955(var1) && $ic170$ == module0660.$g5208$.getDynamicValue(var2)) {
+        if (NIL != module0173.f10955(var1) && $ic170$ == module0660.$cb_default_index_view$.getDynamicValue(var2)) {
             return module0670.f40951(var1, var1, (SubLObject)NIL, (SubLObject)NIL);
         }
         final SubLObject var4;
@@ -4421,7 +4421,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40735(final SubLObject var1, final SubLObject var29, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -4460,7 +4460,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40736(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -4588,7 +4588,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40737(final SubLObject var1, final SubLObject var29, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -4627,7 +4627,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40738(final SubLObject var52) {
         SubLObject var53 = (SubLObject)NIL;
         cdestructuring_bind.destructuring_bind_must_consp(var52, var52, (SubLObject)$ic87$);
@@ -4646,10 +4646,10 @@ public final class module0669 extends SubLTranslatedFile
         }
         return f40739(var55);
     }
-    
+
     public static SubLObject f40739(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
-        if (NIL != module0173.f10955(var1) && $ic170$ == module0660.$g5208$.getDynamicValue(var2)) {
+        if (NIL != module0173.f10955(var1) && $ic170$ == module0660.$cb_default_index_view$.getDynamicValue(var2)) {
             return module0670.f40951(var1, var1, (SubLObject)NIL, (SubLObject)NIL);
         }
         final SubLObject var4;
@@ -4771,7 +4771,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40740(final SubLObject var1, final SubLObject var29, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -4810,7 +4810,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40734(final SubLObject var1) {
         if (module0217.f14221(var1, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED).numG((SubLObject)ZERO_INTEGER)) {
             f40741(var1, (SubLObject)NIL, (SubLObject)NIL, (SubLObject)NIL);
@@ -4861,7 +4861,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40753(final SubLObject var1, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -4897,7 +4897,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return var1;
     }
-    
+
     public static SubLObject f40754(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         final SubLObject var54 = module0656.f39943(var52, (SubLObject)UNPROVIDED);
@@ -5012,7 +5012,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40755(final SubLObject var6) {
         final SubLThread var7 = SubLProcess.currentSubLThread();
         final SubLObject var8 = f40756(var6);
@@ -5154,7 +5154,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g347$.getGlobalValue());
         return var6;
     }
-    
+
     public static SubLObject f40756(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
         SubLObject var10 = (SubLObject)NIL;
@@ -5213,7 +5213,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var10;
     }
-    
+
     public static SubLObject f40757(final SubLObject var52) {
         SubLObject var53 = (SubLObject)NIL;
         cdestructuring_bind.destructuring_bind_must_consp(var52, var52, (SubLObject)$ic238$);
@@ -5261,10 +5261,10 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40758(final SubLObject var1, final SubLObject var32, final SubLObject var41, final SubLObject var37) {
         final SubLThread var42 = SubLProcess.currentSubLThread();
-        if (NIL == var37 && NIL != module0173.f10955(var1) && $ic170$ == module0660.$g5208$.getDynamicValue(var42)) {
+        if (NIL == var37 && NIL != module0173.f10955(var1) && $ic170$ == module0660.$cb_default_index_view$.getDynamicValue(var42)) {
             return module0670.f40951(var1, var1, var32, var41);
         }
         final SubLObject var44;
@@ -5380,7 +5380,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40759(final SubLObject var1, final SubLObject var29, SubLObject var32, SubLObject var41, SubLObject var37) {
         if (var32 == UNPROVIDED) {
             var32 = (SubLObject)NIL;
@@ -5440,7 +5440,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40741(final SubLObject var1, final SubLObject var32, final SubLObject var41, SubLObject var37) {
         final SubLThread var42 = SubLProcess.currentSubLThread();
         final SubLObject var43 = module0655.$g5125$.currentBinding(var42);
@@ -5587,7 +5587,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40760(final SubLObject var1) {
         SubLObject var2 = (SubLObject)NIL;
         SubLObject var4;
@@ -5605,7 +5605,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40761(final SubLObject var1, final SubLObject var32) {
         f40724(var32);
         final SubLObject var33 = f40634(var1, var32, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -5620,7 +5620,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40725(final SubLObject var1, final SubLObject var32, final SubLObject var41) {
         final SubLThread var42 = SubLProcess.currentSubLThread();
         final SubLObject var43 = module0655.$g5126$.currentBinding(var42);
@@ -5654,7 +5654,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40762(final SubLObject var1, final SubLObject var32, final SubLObject var41, final SubLObject var37) {
         final SubLThread var42 = SubLProcess.currentSubLThread();
         f40763(var37, module0655.$g5125$.getDynamicValue(var42), (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -5667,18 +5667,18 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40767(final SubLObject var108) {
         final SubLThread var109 = SubLProcess.currentSubLThread();
         $g5281$.setDynamicValue((SubLObject)ConsesLow.cons(var108, $g5281$.getDynamicValue(var109)), var109);
         return var108;
     }
-    
+
     public static SubLObject f40764() {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         return (SubLObject)makeBoolean(NIL != module0655.$g5126$.getDynamicValue(var2) && NIL != f40768((SubLObject)UNPROVIDED));
     }
-    
+
     public static SubLObject f40768(SubLObject var263) {
         if (var263 == UNPROVIDED) {
             var263 = module0018.$g707$.getDynamicValue();
@@ -5692,7 +5692,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40769(final SubLObject var108, SubLObject var264) {
         if (var264 == UNPROVIDED) {
             var264 = (SubLObject)NIL;
@@ -5706,7 +5706,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40770(final SubLObject var108, SubLObject var264) {
         if (var264 == UNPROVIDED) {
             var264 = (SubLObject)NIL;
@@ -5731,7 +5731,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40765(final SubLObject var1, final SubLObject var32, final SubLObject var41, final SubLObject var37) {
         final SubLThread var42 = SubLProcess.currentSubLThread();
         final SubLObject var43 = $g5281$.currentBinding(var42);
@@ -5959,7 +5959,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40766(final SubLObject var1, final SubLObject var32, final SubLObject var41, final SubLObject var37) {
         final SubLThread var42 = SubLProcess.currentSubLThread();
         final SubLObject var43 = (NIL != f40692(var1)) ? Symbols.symbol_function((SubLObject)$ic258$) : Symbols.symbol_function((SubLObject)$ic260$);
@@ -5981,7 +5981,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40772(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -6129,7 +6129,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40773(final SubLObject var1, final SubLObject var29, SubLObject var32, SubLObject var42) {
         if (var32 == UNPROVIDED) {
             var32 = (SubLObject)NIL;
@@ -6180,7 +6180,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40742(final SubLObject var1, final SubLObject var32, final SubLObject var42) {
         final SubLThread var43 = SubLProcess.currentSubLThread();
         final SubLObject var44 = module0656.$g5172$.currentBinding(var43);
@@ -6313,7 +6313,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40774(final SubLObject var1) {
         SubLObject var2 = (SubLObject)NIL;
         SubLObject var4;
@@ -6331,7 +6331,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40775(final SubLObject var1, final SubLObject var32) {
         f40776(var32);
         SubLObject var34;
@@ -6345,7 +6345,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40777(final SubLObject var1, final SubLObject var32, final SubLObject var42) {
         if (NIL != f40778()) {
             f40779(var1, var32, var42);
@@ -6355,12 +6355,12 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40778() {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         return (SubLObject)makeBoolean(NIL != module0655.$g5127$.getDynamicValue(var2) && $ic9$ == module0018.$g707$.getDynamicValue(var2));
     }
-    
+
     public static SubLObject f40781(final SubLObject var108) {
         final SubLThread var109 = SubLProcess.currentSubLThread();
         if (NIL == module0656.$g5172$.getDynamicValue(var109) || NIL != Functions.funcall(module0656.$g5172$.getDynamicValue(var109), var108)) {
@@ -6368,7 +6368,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40782(final SubLObject var108) {
         final SubLThread var109 = SubLProcess.currentSubLThread();
         if (NIL == module0656.$g5172$.getDynamicValue(var109) || NIL != Functions.funcall(module0656.$g5172$.getDynamicValue(var109), var108)) {
@@ -6387,7 +6387,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40779(final SubLObject var1, final SubLObject var32, final SubLObject var42) {
         final SubLThread var43 = SubLProcess.currentSubLThread();
         final SubLObject var44 = $g5284$.currentBinding(var43);
@@ -6469,7 +6469,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40780(final SubLObject var1, final SubLObject var32, final SubLObject var42) {
         final SubLThread var43 = SubLProcess.currentSubLThread();
         final SubLObject var44 = (NIL != f40692(var1)) ? Symbols.symbol_function((SubLObject)$ic258$) : Symbols.symbol_function((SubLObject)$ic260$);
@@ -6486,7 +6486,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40783(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         if (NIL != module0173.f10955(var1)) {
@@ -6517,14 +6517,14 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40784(final SubLObject var309) {
         if (var309.eql($ic273$)) {
             return (SubLObject)$ic274$;
         }
         return module0597.f36628(var309);
     }
-    
+
     public static SubLObject f40785(final SubLObject var6) {
         final SubLThread var7 = SubLProcess.currentSubLThread();
         if (NIL != module0259.f16976(var6, $ic277$)) {
@@ -6588,7 +6588,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40722(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         module0642.f39020(module0015.$g234$.getGlobalValue());
@@ -6684,7 +6684,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40724(final SubLObject var32) {
         final SubLThread var33 = SubLProcess.currentSubLThread();
         if (NIL != $g5286$.getDynamicValue(var33)) {
@@ -6697,7 +6697,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40776(final SubLObject var32) {
         final SubLThread var33 = SubLProcess.currentSubLThread();
         module0642.f39020(module0015.$g234$.getGlobalValue());
@@ -6708,7 +6708,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39026((SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40763(final SubLObject var37, SubLObject var315, SubLObject var316, SubLObject var317) {
         if (var315 == UNPROVIDED) {
             var315 = (SubLObject)NIL;
@@ -6736,7 +6736,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40786(final SubLObject var37, final SubLObject var315) {
         final SubLThread var316 = SubLProcess.currentSubLThread();
         if (NIL != module0655.$g5112$.getDynamicValue(var316)) {
@@ -6774,7 +6774,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40787(final SubLObject var35) {
         module0642.f39026((SubLObject)UNPROVIDED);
         module0642.f39020(module0015.$g234$.getGlobalValue());
@@ -6784,7 +6784,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39026((SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40771(final SubLObject var41, SubLObject var325) {
         if (var325 == UNPROVIDED) {
             var325 = (SubLObject)NIL;
@@ -6818,7 +6818,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g235$.getGlobalValue());
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40788(final SubLObject var52) {
         SubLObject var53 = (SubLObject)NIL;
         cdestructuring_bind.destructuring_bind_must_consp(var52, var52, (SubLObject)$ic238$);
@@ -6864,10 +6864,10 @@ public final class module0669 extends SubLTranslatedFile
         }
         return f40789(var58, var59, var60, var61);
     }
-    
+
     public static SubLObject f40789(final SubLObject var1, final SubLObject var32, final SubLObject var41, final SubLObject var37) {
         final SubLThread var42 = SubLProcess.currentSubLThread();
-        if (NIL != module0173.f10955(var1) && NIL == var37 && $ic170$ == module0660.$g5208$.getDynamicValue(var42)) {
+        if (NIL != module0173.f10955(var1) && NIL == var37 && $ic170$ == module0660.$cb_default_index_view$.getDynamicValue(var42)) {
             return module0670.f40951(var1, var1, var32, var41);
         }
         final SubLObject var44;
@@ -6990,7 +6990,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40790(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -7128,7 +7128,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40791(final SubLObject var1, final SubLObject var29, SubLObject var37) {
         if (var37 == UNPROVIDED) {
             var37 = (SubLObject)NIL;
@@ -7170,7 +7170,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40743(final SubLObject var1, final SubLObject var37) {
         final SubLThread var38 = SubLProcess.currentSubLThread();
         final SubLObject var39 = module0656.$g5172$.currentBinding(var38);
@@ -7289,7 +7289,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40793(final SubLObject var1) {
         SubLObject var3;
         final SubLObject var2 = var3 = f40645(var1);
@@ -7302,7 +7302,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40792(final SubLObject var1, final SubLObject var37) {
         final SubLThread var38 = SubLProcess.currentSubLThread();
         f40763(var37, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -7320,7 +7320,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40794(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -7448,7 +7448,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40795(final SubLObject var1, final SubLObject var29) {
         final SubLThread var30 = SubLProcess.currentSubLThread();
         final SubLObject var31 = module0656.f39832((SubLObject)$ic48$);
@@ -7479,7 +7479,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40744(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         final SubLObject var3 = module0656.$g5172$.currentBinding(var2);
@@ -7593,12 +7593,12 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40796(final SubLObject var1) {
         module0219.f14480(Symbols.symbol_function((SubLObject)$ic269$), var1);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40797(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -7756,7 +7756,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40798(final SubLObject var1, final SubLObject var29, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -7825,7 +7825,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40745(final SubLObject var1, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         final SubLObject var48 = module0580.$g4361$.currentBinding(var47);
@@ -7946,7 +7946,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40799(final SubLObject var1) {
         SubLObject var2 = (SubLObject)NIL;
         SubLObject var3 = (SubLObject)$ic313$;
@@ -7965,7 +7965,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40800(final SubLObject var1, final SubLObject var44) {
         f40801(var44, (SubLObject)UNPROVIDED);
         SubLObject var46;
@@ -7979,7 +7979,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40802(final SubLObject var1, final SubLObject var44, final SubLObject var37) {
         f40763(var37, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         SubLObject var46;
@@ -7993,7 +7993,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40803(final SubLObject var1, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         f40804(var46);
@@ -8011,7 +8011,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40805(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -8159,7 +8159,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40806(final SubLObject var1, final SubLObject var29, SubLObject var44, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -8219,7 +8219,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40746(final SubLObject var1, final SubLObject var44, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         final SubLObject var48 = module0580.$g4361$.currentBinding(var47);
@@ -8333,7 +8333,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40807(final SubLObject var1) {
         SubLObject var2 = (SubLObject)NIL;
         SubLObject var3 = (SubLObject)$ic313$;
@@ -8352,7 +8352,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40808(final SubLObject var1, final SubLObject var44) {
         f40801(var44, (SubLObject)UNPROVIDED);
         SubLObject var46;
@@ -8366,7 +8366,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40809(final SubLObject var1, final SubLObject var44, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         f40804(var46);
@@ -8390,7 +8390,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40810(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -8548,7 +8548,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40811(final SubLObject var1, final SubLObject var29, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -8617,7 +8617,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40747(final SubLObject var1, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         final SubLObject var48 = module0580.$g4361$.currentBinding(var47);
@@ -8735,7 +8735,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40812(final SubLObject var1) {
         SubLObject var2 = (SubLObject)NIL;
         SubLObject var3 = (SubLObject)$ic313$;
@@ -8754,7 +8754,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40813(final SubLObject var1, final SubLObject var44) {
         f40801(var44, (SubLObject)$ic325$);
         SubLObject var46;
@@ -8768,7 +8768,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40814(final SubLObject var1, final SubLObject var44, final SubLObject var37) {
         f40763(var37, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         SubLObject var46;
@@ -8782,7 +8782,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40815(final SubLObject var1, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         f40804(var46);
@@ -8800,7 +8800,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40816(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -8958,7 +8958,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40818(final SubLObject var1, final SubLObject var29, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -9027,7 +9027,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40817(final SubLObject var1, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         final SubLObject var48 = module0580.$g4361$.currentBinding(var47);
@@ -9145,7 +9145,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40819(final SubLObject var1) {
         SubLObject var2 = (SubLObject)NIL;
         SubLObject var3 = (SubLObject)$ic313$;
@@ -9164,7 +9164,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40820(final SubLObject var1, final SubLObject var44) {
         f40801(var44, (SubLObject)$ic331$);
         SubLObject var46;
@@ -9178,7 +9178,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40821(final SubLObject var1, final SubLObject var44, final SubLObject var37) {
         f40763(var37, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         SubLObject var46;
@@ -9192,7 +9192,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40822(final SubLObject var1, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         f40804(var46);
@@ -9210,7 +9210,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40823(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -9368,7 +9368,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40824(final SubLObject var1, final SubLObject var29, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -9437,7 +9437,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40748(final SubLObject var1, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         final SubLObject var48 = module0580.$g4361$.currentBinding(var47);
@@ -9555,7 +9555,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40825(final SubLObject var1) {
         SubLObject var2 = (SubLObject)NIL;
         SubLObject var3 = (SubLObject)$ic313$;
@@ -9574,7 +9574,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40826(final SubLObject var1, final SubLObject var44) {
         f40801(var44, (SubLObject)$ic337$);
         SubLObject var46;
@@ -9588,7 +9588,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40827(final SubLObject var1, final SubLObject var44, final SubLObject var37) {
         f40763(var37, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         SubLObject var46;
@@ -9602,7 +9602,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40828(final SubLObject var1, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         f40804(var46);
@@ -9620,7 +9620,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40829(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -9778,7 +9778,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40830(final SubLObject var1, final SubLObject var29, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -9847,7 +9847,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40749(final SubLObject var1, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         final SubLObject var48 = module0580.$g4361$.currentBinding(var47);
@@ -9965,7 +9965,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40831(final SubLObject var1) {
         SubLObject var2 = (SubLObject)NIL;
         SubLObject var3 = (SubLObject)$ic313$;
@@ -9984,7 +9984,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40832(final SubLObject var1, final SubLObject var44) {
         f40801(var44, (SubLObject)$ic343$);
         SubLObject var46;
@@ -9998,7 +9998,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40833(final SubLObject var1, final SubLObject var44, final SubLObject var37) {
         f40763(var37, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         SubLObject var46;
@@ -10012,7 +10012,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40834(final SubLObject var1, final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         f40804(var46);
@@ -10030,7 +10030,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40835(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -10178,7 +10178,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40836(final SubLObject var1, final SubLObject var29, SubLObject var37, SubLObject var46) {
         if (var37 == UNPROVIDED) {
             var37 = (SubLObject)NIL;
@@ -10229,7 +10229,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40750(final SubLObject var1, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         module0642.f39020(module0015.$g234$.getGlobalValue());
@@ -10348,7 +10348,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40837(final SubLObject var1) {
         SubLObject var3;
         final SubLObject var2 = var3 = f40679(var1, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
@@ -10361,7 +10361,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40838(final SubLObject var1, final SubLObject var37) {
         f40763(var37, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         SubLObject var39;
@@ -10375,7 +10375,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40839(final SubLObject var1, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         f40804(var46);
@@ -10393,7 +10393,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40840(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         final SubLObject var54 = (SubLObject)(var52.isCons() ? var52.first() : NIL);
@@ -10547,7 +10547,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40842(final SubLObject var29, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -10616,7 +10616,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return module0223.f14674();
     }
-    
+
     public static SubLObject f40841(final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         final SubLObject var48 = module0580.$g4361$.currentBinding(var47);
@@ -10734,7 +10734,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40843() {
         SubLObject var373 = (SubLObject)NIL;
         SubLObject var374 = (SubLObject)$ic313$;
@@ -10753,7 +10753,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40844(final SubLObject var44) {
         f40801(var44, (SubLObject)UNPROVIDED);
         SubLObject var46;
@@ -10767,7 +10767,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40845(final SubLObject var44, final SubLObject var37) {
         f40763(var37, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         SubLObject var46;
@@ -10781,7 +10781,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40846(final SubLObject var44, final SubLObject var37, final SubLObject var46) {
         final SubLThread var47 = SubLProcess.currentSubLThread();
         f40804(var46);
@@ -10799,7 +10799,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40801(final SubLObject var44, SubLObject var458) {
         if (var458 == UNPROVIDED) {
             var458 = (SubLObject)NIL;
@@ -10824,7 +10824,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39026((SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40804(final SubLObject var46) {
         module0642.f39020(module0015.$g234$.getGlobalValue());
         module0642.f39019((SubLObject)$ic360$);
@@ -10833,7 +10833,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39026((SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40847(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -10961,7 +10961,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40848(final SubLObject var1, final SubLObject var29) {
         final SubLThread var30 = SubLProcess.currentSubLThread();
         final SubLObject var31 = module0656.f39832((SubLObject)$ic48$);
@@ -10992,7 +10992,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40849(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         final SubLObject var3 = module0656.f39832((SubLObject)$ic48$);
@@ -11021,7 +11021,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39019((SubLObject)$ic366$);
         return var1;
     }
-    
+
     public static SubLObject f40752(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         module0642.f39020(module0015.$g234$.getGlobalValue());
@@ -11055,7 +11055,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40850(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -11183,7 +11183,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40852(final SubLObject var37) {
         final SubLThread var38 = SubLProcess.currentSubLThread();
         final SubLObject var39 = module0656.f39832((SubLObject)$ic48$);
@@ -11212,7 +11212,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39019((SubLObject)$ic373$);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40851(final SubLObject var37) {
         final SubLThread var38 = SubLProcess.currentSubLThread();
         module0642.f39020(module0015.$g234$.getGlobalValue());
@@ -11249,7 +11249,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40854(final SubLObject var37) {
         final SubLThread var38 = SubLProcess.currentSubLThread();
         SubLObject var39 = (SubLObject)NIL;
@@ -11356,7 +11356,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return module0211.f13709(var39, (SubLObject)$ic382$, (SubLObject)$ic383$);
     }
-    
+
     public static SubLObject f40853(final SubLObject var37) {
         final SubLThread var38 = SubLProcess.currentSubLThread();
         SubLObject var39 = (SubLObject)NIL;
@@ -11382,15 +11382,15 @@ public final class module0669 extends SubLTranslatedFile
         }
         return module0211.f13709(var39, (SubLObject)$ic382$, (SubLObject)$ic383$);
     }
-    
+
     public static SubLObject f40855(final SubLObject var493, final SubLObject var494) {
         return module0213.f13927(var493, var494, (SubLObject)T, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
     }
-    
+
     public static SubLObject f40856(final SubLObject var495, final SubLObject var146) {
         return module0213.f13938(var495, var146, (SubLObject)T);
     }
-    
+
     public static SubLObject f40857(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -11518,7 +11518,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40859(final SubLObject var37) {
         final SubLThread var38 = SubLProcess.currentSubLThread();
         final SubLObject var39 = module0656.f39832((SubLObject)$ic48$);
@@ -11547,7 +11547,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39019((SubLObject)$ic373$);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40858(final SubLObject var37) {
         final SubLThread var38 = SubLProcess.currentSubLThread();
         module0642.f39020(module0015.$g234$.getGlobalValue());
@@ -11578,7 +11578,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40860(final SubLObject var37) {
         final SubLThread var38 = SubLProcess.currentSubLThread();
         SubLObject var39 = (SubLObject)NIL;
@@ -11685,7 +11685,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return Sort.sort(var39, Symbols.symbol_function((SubLObject)$ic129$), (SubLObject)$ic236$);
     }
-    
+
     public static SubLObject f40861(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         SubLObject var54 = (SubLObject)NIL;
@@ -11813,7 +11813,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40862(final SubLObject var1, final SubLObject var29) {
         final SubLThread var30 = SubLProcess.currentSubLThread();
         final SubLObject var31 = module0656.f39832((SubLObject)$ic48$);
@@ -11844,7 +11844,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var1;
     }
-    
+
     public static SubLObject f40751(final SubLObject var1) {
         final SubLThread var2 = SubLProcess.currentSubLThread();
         final SubLObject var3 = module0656.$g5172$.currentBinding(var2);
@@ -11884,7 +11884,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40863(final SubLObject var42, final SubLObject var8, final SubLObject var513, final SubLObject var473) {
         final SubLThread var514 = SubLProcess.currentSubLThread();
         SubLObject var515 = (SubLObject)NIL;
@@ -12018,7 +12018,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var515;
     }
-    
+
     public static SubLObject f40864(SubLObject var52) {
         if (var52 == UNPROVIDED) {
             var52 = (SubLObject)NIL;
@@ -12198,7 +12198,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40865(SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -12232,7 +12232,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40694(SubLObject var52) {
         if (var52 == UNPROVIDED) {
             var52 = (SubLObject)NIL;
@@ -12299,7 +12299,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40866(final SubLObject var534, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -12336,7 +12336,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40867(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         final SubLObject var54 = var52.first();
@@ -12356,11 +12356,11 @@ public final class module0669 extends SubLTranslatedFile
         f40869(var58, var57, (SubLObject)NIL, var60, var59, var61);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40870(final SubLObject var52) {
         return f40867(var52);
     }
-    
+
     public static SubLObject f40871(final SubLObject var540, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -12450,7 +12450,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return var540;
     }
-    
+
     public static SubLObject f40872(SubLObject var52) {
         if (var52 == UNPROVIDED) {
             var52 = (SubLObject)NIL;
@@ -12465,7 +12465,7 @@ public final class module0669 extends SubLTranslatedFile
         f40869((SubLObject)$ic35$, var54, (SubLObject)NIL, var56, var55, var57);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40873(SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -12499,7 +12499,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40874(SubLObject var52) {
         if (var52 == UNPROVIDED) {
             var52 = (SubLObject)NIL;
@@ -12514,7 +12514,7 @@ public final class module0669 extends SubLTranslatedFile
         f40869((SubLObject)$ic442$, var54, (SubLObject)NIL, var56, var55, var57);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40875(SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -12548,12 +12548,12 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40876(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         return f40877((SubLObject)$ic448$, Numbers.subtract($g5290$.getDynamicValue(var53), (SubLObject)ONE_INTEGER), (SubLObject)ONE_INTEGER, var52);
     }
-    
+
     public static SubLObject f40878(final SubLObject var152, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -12587,12 +12587,12 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return var152;
     }
-    
+
     public static SubLObject f40879(final SubLObject var52) {
         final SubLThread var53 = SubLProcess.currentSubLThread();
         return f40877((SubLObject)$ic454$, (SubLObject)ZERO_INTEGER, $g5290$.getDynamicValue(var53), var52);
     }
-    
+
     public static SubLObject f40880(final SubLObject var152, SubLObject var56) {
         if (var56 == UNPROVIDED) {
             var56 = (SubLObject)NIL;
@@ -12626,7 +12626,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g382$.getGlobalValue());
         return var152;
     }
-    
+
     public static SubLObject f40877(final SubLObject var536, final SubLObject var546, final SubLObject var547, final SubLObject var52) {
         final SubLThread var548 = SubLProcess.currentSubLThread();
         final SubLObject var549 = var52.first();
@@ -12643,7 +12643,7 @@ public final class module0669 extends SubLTranslatedFile
         f40869(var536, var550, (SubLObject)NIL, var552, (SubLObject)NIL, var553);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40869(final SubLObject var536, final SubLObject var118, final SubLObject var533, final SubLObject var538, final SubLObject var548, final SubLObject var539) {
         final SubLThread var549 = SubLProcess.currentSubLThread();
         final SubLObject var550 = module0015.$g538$.currentBinding(var549);
@@ -12860,7 +12860,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40881(final SubLObject var536, final SubLObject var538, final SubLObject var539) {
         final SubLThread var540 = SubLProcess.currentSubLThread();
         SubLObject var541 = (SubLObject)NIL;
@@ -13145,7 +13145,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g347$.getGlobalValue());
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40883(final SubLObject var536, final SubLObject var548) {
         final SubLThread var549 = SubLProcess.currentSubLThread();
         if (var548.isString()) {
@@ -13259,7 +13259,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40882(final SubLObject var160, SubLObject var587) {
         if (var587 == UNPROVIDED) {
             var587 = (SubLObject)NIL;
@@ -13333,7 +13333,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39029((SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40868(final SubLObject var152, final SubLObject var591, final SubLObject var592) {
         final SubLThread var593 = SubLProcess.currentSubLThread();
         var593.resetMultipleValues();
@@ -13345,7 +13345,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return Values.values((SubLObject)NIL, var594, var595);
     }
-    
+
     public static SubLObject f40884(final SubLObject var152, final SubLObject var591, final SubLObject var592) {
         assert NIL != Types.stringp(var152) : var152;
         assert NIL != Types.fixnump(var591) : var591;
@@ -13354,7 +13354,7 @@ public final class module0669 extends SubLTranslatedFile
         final SubLObject var594 = module0126.f8403(var592, var152, (SubLObject)T, (SubLObject)ZERO_INTEGER, (SubLObject)NIL, (SubLObject)NIL);
         return Values.values(Sequences.nreverse(var593), var594);
     }
-    
+
     public static SubLObject f40885(final SubLObject var160) {
         final SubLThread var161 = SubLProcess.currentSubLThread();
         if (NIL != constant_handles_oc.f8463(var160, (SubLObject)UNPROVIDED)) {
@@ -13366,7 +13366,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40610(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
         SubLObject var10 = (SubLObject)NIL;
@@ -13385,7 +13385,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var10;
     }
-    
+
     public static SubLObject f40633(final SubLObject var8, SubLObject var596, SubLObject var35, SubLObject var37) {
         if (var596 == UNPROVIDED) {
             var596 = (SubLObject)NIL;
@@ -13438,7 +13438,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var598;
     }
-    
+
     public static SubLObject f40639(final SubLObject var8, SubLObject var596, SubLObject var40, SubLObject var37) {
         if (var596 == UNPROVIDED) {
             var596 = (SubLObject)NIL;
@@ -13491,7 +13491,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var598;
     }
-    
+
     public static SubLObject f40644(final SubLObject var35, SubLObject var37) {
         if (var37 == UNPROVIDED) {
             var37 = (SubLObject)NIL;
@@ -13538,7 +13538,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var39;
     }
-    
+
     public static SubLObject f40647(final SubLObject var40, SubLObject var37) {
         if (var37 == UNPROVIDED) {
             var37 = (SubLObject)NIL;
@@ -13585,7 +13585,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var42;
     }
-    
+
     public static SubLObject f40648(final SubLObject var35, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -13638,7 +13638,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var48;
     }
-    
+
     public static SubLObject f40654(final SubLObject var35, SubLObject var44, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -13688,7 +13688,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var48;
     }
-    
+
     public static SubLObject f40658(final SubLObject var609, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -13741,7 +13741,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var611;
     }
-    
+
     public static SubLObject f40663(final SubLObject var609, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -13794,7 +13794,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var611;
     }
-    
+
     public static SubLObject f40668(final SubLObject var609, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -13847,7 +13847,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var611;
     }
-    
+
     public static SubLObject f40673(final SubLObject var48, SubLObject var44, SubLObject var49, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -13900,7 +13900,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var51;
     }
-    
+
     public static SubLObject f40678(final SubLObject var40, SubLObject var37, SubLObject var46) {
         if (var37 == UNPROVIDED) {
             var37 = (SubLObject)NIL;
@@ -13950,7 +13950,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var48;
     }
-    
+
     public static SubLObject f40886(final SubLObject var502, SubLObject var37, SubLObject var46) {
         if (var37 == UNPROVIDED) {
             var37 = (SubLObject)NIL;
@@ -14000,7 +14000,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var504;
     }
-    
+
     public static SubLObject f40887(final SubLObject var502, SubLObject var37, SubLObject var46) {
         if (var37 == UNPROVIDED) {
             var37 = (SubLObject)NIL;
@@ -14050,7 +14050,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var504;
     }
-    
+
     public static SubLObject f40682(SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -14103,7 +14103,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var48;
     }
-    
+
     public static SubLObject f40687(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
         SubLObject var10 = (SubLObject)ZERO_INTEGER;
@@ -14147,7 +14147,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var10;
     }
-    
+
     public static SubLObject f40688(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
         SubLObject var10 = (SubLObject)ZERO_INTEGER;
@@ -14191,7 +14191,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var10;
     }
-    
+
     public static SubLObject f40689(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
         SubLObject var10 = (SubLObject)ZERO_INTEGER;
@@ -14235,7 +14235,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var10;
     }
-    
+
     public static SubLObject f40634(final SubLObject var8, SubLObject var32, SubLObject var35, SubLObject var37) {
         if (var32 == UNPROVIDED) {
             var32 = (SubLObject)NIL;
@@ -14300,7 +14300,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var40;
     }
-    
+
     public static SubLObject f40640(final SubLObject var8, SubLObject var32, SubLObject var40, SubLObject var37) {
         if (var32 == UNPROVIDED) {
             var32 = (SubLObject)NIL;
@@ -14365,7 +14365,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var43;
     }
-    
+
     public static SubLObject f40645(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
         SubLObject var10 = (SubLObject)NIL;
@@ -14411,7 +14411,7 @@ public final class module0669 extends SubLTranslatedFile
         var11 = module0656.f39827(var10);
         return var11;
     }
-    
+
     public static SubLObject f40650(final SubLObject var8, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -14471,7 +14471,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var49;
     }
-    
+
     public static SubLObject f40656(final SubLObject var8, SubLObject var44, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -14521,7 +14521,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var48;
     }
-    
+
     public static SubLObject f40660(final SubLObject var8, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -14581,7 +14581,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var49;
     }
-    
+
     public static SubLObject f40665(final SubLObject var8, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -14641,7 +14641,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var49;
     }
-    
+
     public static SubLObject f40670(final SubLObject var8, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -14701,7 +14701,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var49;
     }
-    
+
     public static SubLObject f40675(final SubLObject var8, SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -14761,7 +14761,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var49;
     }
-    
+
     public static SubLObject f40679(final SubLObject var8, SubLObject var37, SubLObject var46) {
         if (var37 == UNPROVIDED) {
             var37 = (SubLObject)NIL;
@@ -14818,7 +14818,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var49;
     }
-    
+
     public static SubLObject f40684(SubLObject var44, SubLObject var37, SubLObject var46) {
         if (var44 == UNPROVIDED) {
             var44 = (SubLObject)NIL;
@@ -14878,23 +14878,23 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var49;
     }
-    
+
     public static SubLObject f40888(final SubLObject var6) {
         return module0617.f37871(var6, (SubLObject)UNPROVIDED);
     }
-    
+
     public static SubLObject f40889(final SubLObject var6) {
         return module0617.f37872(var6, (SubLObject)UNPROVIDED);
     }
-    
+
     public static SubLObject f40890(final SubLObject var6) {
         return module0617.f37874(var6, (SubLObject)UNPROVIDED);
     }
-    
+
     public static SubLObject f40891(final SubLObject var6) {
         return module0617.f37875(var6, (SubLObject)UNPROVIDED);
     }
-    
+
     public static SubLObject f40892(final SubLObject var8, SubLObject var655) {
         if (var655 == UNPROVIDED) {
             var655 = (SubLObject)NIL;
@@ -14930,7 +14930,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return var8;
     }
-    
+
     public static SubLObject f40895(final SubLObject var52) {
         SubLObject var53 = (SubLObject)NIL;
         cdestructuring_bind.destructuring_bind_must_consp(var52, var52, (SubLObject)$ic165$);
@@ -14945,7 +14945,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40896(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
         final SubLObject var10 = PrintLow.format((SubLObject)NIL, (SubLObject)$ic474$, var8);
@@ -15021,29 +15021,29 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39029((SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40894(final SubLObject var8) {
         if (NIL != f40898(var8)) {
             return (SubLObject)$ic476$;
         }
         return (SubLObject)$ic477$;
     }
-    
+
     public static SubLObject f40897(final SubLObject var8) {
         if (NIL != f40898(var8)) {
             f40899(var8);
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40893(final SubLObject var8) {
         return f40898(var8);
     }
-    
+
     public static SubLObject f40898(final SubLObject var8) {
         return (SubLObject)makeBoolean(NIL != module0173.f10955(var8) && NIL != module0256.f16598(var8, $ic478$));
     }
-    
+
     public static SubLObject f40899(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
         module0642.f39026((SubLObject)TWO_INTEGER);
@@ -15139,12 +15139,12 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39029((SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40900(final SubLObject var52) {
         final SubLObject var53 = module0656.f39957(module0642.f39104((SubLObject)$ic20$, var52), (SubLObject)UNPROVIDED);
         return f40901(var53);
     }
-    
+
     public static SubLObject f40901(final SubLObject var8) {
         final SubLThread var9 = SubLProcess.currentSubLThread();
         final SubLObject var10 = f40902(var8);
@@ -15188,17 +15188,17 @@ public final class module0669 extends SubLTranslatedFile
         }
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40902(final SubLObject var8) {
         return module0434.f30578((SubLObject)$ic515$, (SubLObject)ConsesLow.list($ic516$, (SubLObject)$ic515$, var8), $ic517$, (SubLObject)$ic518$);
     }
-    
+
     public static SubLObject f40903(final SubLObject var8, final SubLObject var665) {
         module0656.f39837((SubLObject)$ic519$, var8, var665, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED, (SubLObject)UNPROVIDED);
         module0642.f39026((SubLObject)UNPROVIDED);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40904(final SubLObject var8, final SubLObject var665) {
         final SubLThread var666 = SubLProcess.currentSubLThread();
         module0642.f39020(module0015.$g459$.getGlobalValue());
@@ -15229,7 +15229,7 @@ public final class module0669 extends SubLTranslatedFile
         module0642.f39020(module0015.$g460$.getGlobalValue());
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40905(final SubLObject var52) {
         final SubLObject var53 = module0656.f39957(module0642.f39104((SubLObject)$ic20$, var52), (SubLObject)UNPROVIDED);
         final SubLObject var54 = module0656.f39957(module0642.f39104((SubLObject)$ic522$, var52), (SubLObject)UNPROVIDED);
@@ -15244,7 +15244,7 @@ public final class module0669 extends SubLTranslatedFile
         }
         return module0683.f41815(var56, var58, var60, var54, (SubLObject)UNPROVIDED);
     }
-    
+
     public static SubLObject f40906() {
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0669", "f40606", "S#44190", 1, 0, false);
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0669", "f40608", "S#44727", 1, 0, false);
@@ -15548,7 +15548,7 @@ public final class module0669 extends SubLTranslatedFile
         SubLFiles.declareFunction("com.cyc.cycjava.cycl.module0669", "f40905", "CB-C-PERTINENT-QUERY", 1, 0, false);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40907() {
         $g5278$ = SubLFiles.deflexical("S#44976", (SubLObject)ConsesLow.list((SubLObject)$ic8$, (SubLObject)$ic31$, (SubLObject)$ic32$, (SubLObject)NIL, (SubLObject)$ic33$));
         $g5279$ = SubLFiles.deflexical("S#44977", (SubLObject)NIL);
@@ -15572,7 +15572,7 @@ public final class module0669 extends SubLTranslatedFile
         $g5297$ = SubLFiles.defparameter("S#44995", (SubLObject)NIL);
         return (SubLObject)NIL;
     }
-    
+
     public static SubLObject f40908() {
         Hashtables.sethash((SubLObject)$ic4$, module0014.$g125$.getGlobalValue(), (SubLObject)ConsesLow.list((SubLObject)$ic5$, (SubLObject)NIL));
         module0015.f873((SubLObject)$ic90$);
@@ -15658,19 +15658,22 @@ public final class module0669 extends SubLTranslatedFile
         module0015.f873((SubLObject)$ic523$);
         return (SubLObject)NIL;
     }
-    
+
+    @Override
     public void declareFunctions() {
         f40906();
     }
-    
+
+    @Override
     public void initializeVariables() {
         f40907();
     }
-    
+
+    @Override
     public void runTopLevelForms() {
         f40908();
     }
-    
+
     static {
         me = (SubLFile)new module0669();
         $g5278$ = null;
@@ -16225,6 +16228,6 @@ public final class module0669 extends SubLTranslatedFile
 
 	Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\cyc-oc4.0-unzipped/com/cyc/cycjava/cycl/class
 	Total time: 7488 ms
-	
+
 	Decompiled with Procyon 0.5.32.
 */

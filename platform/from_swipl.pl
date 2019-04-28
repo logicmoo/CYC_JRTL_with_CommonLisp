@@ -10,8 +10,8 @@ ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(fal
 :- use_module(library(apply)).
 
 % :- use_module(library(yall)).
-:- maplist(([P] >> pack_install(P,[upgrade(true),git(true),interactive(false)])), [ 
-   predicate_streams,multimodal_dcg,eggdrop,gvar_syntax,dictoo,logicmoo_utils, 
+:- maplist(([P] >> pack_install(P,[upgrade(true),git(true),interactive(false)])), [
+   predicate_streams,multimodal_dcg,eggdrop,gvar_syntax,dictoo,logicmoo_utils,
    instant_prolog_docs,pfc,logicmoo_base,prologmud,s_expression, wam_common_lisp,prologmud_samples]).
 
 
@@ -30,12 +30,12 @@ ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(fal
 to_string(O,S):- jpl_object(O),jpl_call(O,toString,[],S),!.
 to_string(O,O):-!.
 
-jpl_getval(O,call(P),R):- !, call(P,O,R), !. 
+jpl_getval(O,call(P),R):- !, call(P,O,R), !.
 jpl_getval(O,[],R):-!, O = R.
 jpl_getval(O,[H|T],R):- !, jpl_getval(O,H,M),jpl_getval(M,T,R).
 jpl_getval(O,f(F),R):- !, jpl_get(O, F, R).
-jpl_getval(O,P,R):- compound(P), !, compound_name_arguments(P,F,Args), jpl_call(O, F, Args, R). 
-jpl_getval(O,P,R):- jpl_call(O, P, [], R). 
+jpl_getval(O,P,R):- compound(P), !, compound_name_arguments(P,F,Args), jpl_call(O, F, Args, R).
+jpl_getval(O,P,R):- jpl_call(O, P, [], R).
 
 class_simple_name(O,SN):- jpl_getval(O,[getClass,getSimpleName],SN).
 
@@ -54,7 +54,7 @@ dwq_call(Q):- Q *-> dwq(success:Q); (dwq(failed:Q),!,fail).
 sys :- set_prolog_flag(access_level,system).
 usys :- set_prolog_flag(access_level,user).
 
-mp_test:- sys, meta_predicate(system: write(7)), meta_predicate(system: writeq(7)), 
+mp_test:- sys, meta_predicate(system: write(7)), meta_predicate(system: writeq(7)),
   meta_predicate(system:is(7,7)),
   meta_predicate(system: =:=(7,7)),usys.
 
@@ -74,7 +74,7 @@ mp_test:- sys, meta_predicate(system: write(7)), meta_predicate(system: writeq(7
 
 cl_eval(L):- cl_eval(L, O),po(O).
 cyc_eval(L):- cl_cyc_eval(L, O),po(O).
-cl_read_lisp(L):- cl_read_lisp(L, O),po(O).                                
+cl_read_lisp(L):- cl_read_lisp(L, O),po(O).
 cl_eval_string(L):- cl_eval_string(L, O),po(O).
 % cl_eval(L,O):-cl_lisp_eval(L,O).
 
@@ -119,10 +119,10 @@ invoke_ctrl(Name,Args,O):-jpl_call('org.logicmoo.system.BeanShellCntrl',Name,Arg
 :-endif.
 
 
-ensure_prolog_server :- 
+ensure_prolog_server :-
  ((current_thread(prolog_server,X),X=running) -> true ;
   ((use_module(library('prolog_server')), prolog_server(4023, [allow(_)])))).
-:- ensure_prolog_server.	
+:- ensure_prolog_server.
 
 
 %lmv:-lm,call(call,use_listing_vars).
@@ -249,7 +249,7 @@ check:predicate_name(A, D):- prolog_clause:predicate_name(A, D).
         *******************************/
 
 % :- exists_source(runtime('jpl.jar'))-> true ; shell('touch jpl.jar').
- 
+
 clean_bad_chars(PATH,Path10):-name(PATH,Chars),delete(Chars,0,Chars0),delete(Chars0,1,Chars1),delete(Chars1,10,Chars10),name(Path10,Chars10).
 
 clean_path:-
@@ -282,17 +282,17 @@ append_to_classpath(WildCard):-
 
 % :- call(call,swi_cli:jpl_start_dbg(5005)).
 
-cmd_option_value(Name,Value):- current_prolog_flag(os_argv, L), member(E,L), 
+cmd_option_value(Name,Value):- current_prolog_flag(os_argv, L), member(E,L),
   cmd_option_value(E,Name,Value).
 cmd_option_value(E,Name,Value):- atom_concat('--no',Name,E),!, opt_value(no,Value).
 cmd_option_value(E,Name,Value):- atom_concat('--',NameValue,E),!,cmd_option_value(NameValue,Name,Value).
 cmd_option_value(E,Name,Value):- atomic_list_concat([Name,Val],'=',E),!,opt_value(Val,Value).
 cmd_option_value(E,Name,Value):- atom(E),Name=E,opt_value(yes,Value).
 
-opt_value(Val,HP):- compound(HP),H:PN=HP,atom(Val),atomic_list_concat([H,P],':',Val),!,atom_number(P,PN).  
+opt_value(Val,HP):- compound(HP),H:PN=HP,atom(Val),atomic_list_concat([H,P],':',Val),!,atom_number(P,PN).
 opt_value(y,true). opt_value(yes,true). opt_value(true,true). opt_value(t,true). opt_value(1,true).
 opt_value(n,false). opt_value(no,false). opt_value(false,false). opt_value(f,false). opt_value(0,false).
-  
+
 
 :- dynamic(jdwp_available/0).
 % '--jdwp=10.0.0.122:5005'
@@ -301,7 +301,7 @@ jdwp_remote(Port):- cmd_option_value(jdwp,WPort),!,WPort=Port.
 jdwp_remote('10.0.0.122':5005):- dmiles_machine, jdwp_available, !.
 jdwp_remote(5005).
 
-:-ignore((jdwp_remote(Host:Port), 
+:-ignore((jdwp_remote(Host:Port),
   catch((  tcp_connect(Host:Port, StreamPair, []),close(StreamPair),asserta(jdwp_available)),_,true))).
 
 jdwp_suspend(y):- dmiles_machine, !.
@@ -309,7 +309,7 @@ jdwp_suspend(n).
 
 
 
-% jdwp_available. 
+% jdwp_available.
 jdwp_opts(JDWPOpt):- jdwp_remote(Host:Port), jdwp_suspend(YN),
    format(atom(JDWPOpt),'-agentlib:jdwp=transport=dt_socket,suspend=~w,address=~w:~w,server=n',[YN, Host,Port]),!.
 jdwp_opts(JDWPOpt):- jdwp_remote(Port), jdwp_suspend(YN),
@@ -319,7 +319,7 @@ jdwp_opts('').
 :- current_prolog_flag(os_argv, Y), dwq(Y).
 
 
-% 
+%
 %,'-Xbootclasspath:C:\\pf\\java\\jdk\\jre\\lib\\resources.jar;C:\\pf\\java\\jdk\\jre\\lib\\rt.jar;C:\\pf\\java\\jdk\\jre\\lib\\jsse.jar;C:\\pf\\java\\jdk\\jre\\lib\\jce.jar;C:\\pf\\java\\jdk\\jre\\lib\\charsets.jar;C:\\pf\\java\\jdk\\jre\\lib\\jfr.jar;C:\\pf\\java\\jdk\\lib\\tools.jar;C:\\pf\\java\\jdk\\lib\\sa-jdi.jar'
 jvm_opts(
     [%'-XX:PermSize=512m','-XX:MaxPermSize=4g','-Xmx26g',
@@ -333,7 +333,7 @@ jvm_opts(
     JDWPOpt ]):- dwq_call(jdwp_opts(JDWPOpt)).
 
 
-       %  /var/lib/myfrdcsa/codebases/minor/3t-frdcsa/planner/ 
+       %  /var/lib/myfrdcsa/codebases/minor/3t-frdcsa/planner/
 
 path_sep(';'):- current_prolog_flag(_,dll),!.
 path_sep(':').
@@ -366,9 +366,9 @@ jpl:-
   guess_claspath(CP),setenv('CLASSPATH',CP),
   %getenv('PATH',PATH),getenv('JAVA_HOME',JH),current_prolog_flag(home,HOME),atomic_list_concat([JH,HOME],';',NEWPATH),
   %setenv('PATH',NEWPATH),setenv('PATH',PATH),
-  ensure_loaded(library(jpl)),  
+  ensure_loaded(library(jpl)),
   jvm_opts(Opts),
-  use_module(library(jpl)),  
+  use_module(library(jpl)),
   jpl_set_default_jvm_opts(Opts),
   % getenv('CLASSPATH',WAS), format('CLASSPATH=~q~n',[WAS]),
   listing(jdwp_available),
@@ -388,14 +388,14 @@ jpl:-
      *******************************/
 
 swicli:- oo_started,!.
-swicli:- 
+swicli:-
   must_det_l((lmp,ensure_loaded(library(swicli)),
    cli_type_to_classname('java.lang.Class', _CC),
    cli_ensure_classpath)).
 
 
 
-main_args_to_jref(Args, JRef):- 
+main_args_to_jref(Args, JRef):-
   maplist(atom_string,ArgList,Args),
   jpl_new(array(class([java,lang],['String'])), ArgList, JRef).
 
@@ -404,7 +404,8 @@ call_jmain(Class,Args):- jpl,
   main_args_to_jref(Args, JRef),
   jpl_call(Class,main,[JRef],_Out).
 
-call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--opencyc', '--eval','(init-cyc)','--load','cyc'| Args]).
+call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--rcyc', '--eval','(init-cyc)','--load','cyc'| Args]).
+% call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--opencyc', '--eval','(init-cyc)','--load','cyc'| Args]).
 call_main(Args):- call_jmain('org.armedbear.lisp.Main',['--load','abclc-rc.lisp'| Args]).
 call_main(Args):- call_jmain('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',['--load','abclc-rc.lisp'| Args]).
 
@@ -412,7 +413,7 @@ call_main(Args):- call_jmain('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain
 
 /*
 */
-bshwc:-  
+bshwc:-
   must_det_l(( cli_type_to_classname('org.slf4j.LoggerFactory',Found1),
    writeln([found,Found1]),
    cli_type_to_classname('org.logicmoo.system.BeanShellCntrl',Found),
@@ -425,7 +426,7 @@ jabcl:- call_main(['--nocyc','--noprolog','--noprologsync','--nogui','--nobsh'])
 % Used for emulating AlegroCL while porting code code into CYC
 uabcl:- call_main(['--prologsync','--eval','(init-cyc-server)']).
 
-% used for emulating LarKC or RCYC 
+% used for emulating LarKC or RCYC
 labcl:- call_main(['--prologsync','--eval','(init-cyc-server)','--eval','(cyc-repl)']).
 
 bg_abcl:- call_main(['--prologsync','--eval','(init-cyc-server)','--eval','(bg-repl)']).
@@ -437,12 +438,12 @@ start_bsh:- dwq_call(jpl_call('org.logicmoo.system.BeanShellCntrl',start_from_pr
 startBG:- start_in_bg(bg_abcl).
 
 
-start_in_bg(Goal):-  
-  format(atom(Alias),'~w',[Goal]),   
-  ((thread_property(Some,alias(Alias)),thread_property(Some,status(running))) -> true; 
+start_in_bg(Goal):-
+  format(atom(Alias),'~w',[Goal]),
+  ((thread_property(Some,alias(Alias)),thread_property(Some,status(running))) -> true;
     thread_create(Goal,_,[detached(true),debug(false),alias(Alias)])),
   threads.
-%:- set_prolog_flag(access_level,system).                         
+%:- set_prolog_flag(access_level,system).
 %:- debug.
 
 do_rn:- ensure_loaded(rs), forall(rn(B,A),do_rn(B,A)).
@@ -483,13 +484,13 @@ lmmud :-
   % cd('/home/prologmud_server/'),
   ensure_loaded(library('prologmud_sample_games/run_mud_server')),
   working_directory(_,W)).
-  
+
 on_bg_repl:- thread_signal(main, call(call,lmmud)).
 
 :- jpl.
 %program_init :-startBG.
 
-program_init :- 
+program_init :-
   % catch(lmmud,E,dmsg(lmmud=E)),
   threads,
   catch(fg_abcl,E2,dmsg(fg_abcl=E2)),

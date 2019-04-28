@@ -26,6 +26,13 @@ public class rcycl
     try
     {
       SubLFiles.initialize( "eu.cyc.sparql.server.Sparql" );
+    }
+    catch( final Exception ex )
+    {
+      ex.printStackTrace();
+    }
+    try
+    {
       SubLFiles.initialize( "com.cyc.tool.subl.webserver.ServletContainer" );
     }
     catch( final Exception ex )
