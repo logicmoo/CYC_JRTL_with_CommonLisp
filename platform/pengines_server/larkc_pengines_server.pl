@@ -1,6 +1,9 @@
-:- module(larkc_pengines_server, [go/0]).
+:- module(larkc_pengines_server, [start_larkc_pengine_server/0]).
 
-/** <module> The web server that serves the larkc the user sees.
+/** <module> The web server that serves the larkc the 
+ * larkc_client talks to remotely 
+ * The welcome handler at 9880:/ is just to give a 200 OK
+ * actual work happens at 9880:/pengines
  * This is our middleware layer
  */
 
