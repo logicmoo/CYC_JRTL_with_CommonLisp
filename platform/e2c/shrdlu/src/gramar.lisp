@@ -33,13 +33,13 @@ FDEC    (FQ DECLAR)
     THER2(AND (NQ PREP)
 	      (PARSE PREPG INIT)
 	      (OR (CALLSM (SMRELATE H))				       ;MORE INITIAL (BEFORE THE SUBJECT) MODIFIERS
-		  (POP)))
+		  (SHRDLU-POP)))
 	 (AND (NQ ADV)
 	      (PARSE ADV TIMW)
-	      (OR (CALLSM (SMADVERB)) (POP)))
+	      (OR (CALLSM (SMADVERB)) (SHRDLU-POP)))
 	 (AND (NQ ADV)
 	      (PARSE ADJG ADV VBAD)
-	      (OR (CALLSM (SMRELATE H)) (POP)))
+	      (OR (CALLSM (SMRELATE H)) (SHRDLU-POP)))
 	 (PARSE NG TIME)
 
 	 ;;;
@@ -121,7 +121,7 @@ FDEC    (FQ DECLAR)
 		(REMOVE-F-PT 'REL-NOT-FOUND PT)			       ;VERSION IS FINALIZED
 		(GO VB))
 	       ((AND (CQ COMPONENT) NN) (FQ SUBJFORK) (GO VB))	       ;"SARAH ATE DINNER AND WENT TO THE MOVIES."
-	       (H (POP) (GO SUBJ))				       ;POP OFF THE CLOSEST INITIAL MODIFIER AND TRY TO
+	       (H (SHRDLU-POP) (GO SUBJ))			       ;POP OFF THE CLOSEST INITIAL MODIFIER AND TRY TO
 	       ((GO FAIL)))					       ;PARSE A SUBJ AGAIN
 
 	 ;;;
@@ -129,7 +129,7 @@ FDEC    (FQ DECLAR)
     HEAD (: (OR (MOVE-PTW N PW (NOUN)) (MOVE-PTW N PW (PRON)))	       ;COME HERE (ONLY?) TO TRY TIME PHRASE AS SUBJECT
 	    NIL
 	    (HEAD))						       ;MOVE PTW TO THE CLOSEST NOUN THEN SET THE CUT
-    SUB2 (: (POP) NIL FAIL)					       ;POINT TO IT AND ATTEMPT A NEW PARSING IF
+    SUB2 (: (SHRDLU-POP) NIL FAIL)				       ;POINT TO IT AND ATTEMPT A NEW PARSING IF
 	 (: (CUT PTW) INIT SUB2)				       ;NOTHING MORE TO POP, LOSE
 
 	 ;;;
@@ -185,7 +185,7 @@ FDEC    (FQ DECLAR)
 	       ((NOT (ISQ H SUBJ)) (GO FAIL))
 	       ((ISQ H CLAUSE)
 		(SETQ SUBJ-VB-BACKUP-TYPE1 T)
-		(POP)
+		(SHRDLU-POP)
 		(GO SUBJ4))					       ;THIS IS EXACTLY WHAT IS LOOKS LIKE. IE. AN
 								       ;ARBITRARY, NOT TOO WELL THOUGHTOUT BACKUP
 								       ;MECHANISM. (NEEDLESS TO SAY IT WILL GO AWAY
@@ -194,7 +194,7 @@ FDEC    (FQ DECLAR)
 								       ;SORT AS THE SUBJECT. HYPOTHESIS: WE
 								       ;MISSINTERPRETED SOMETHING WHILE PARSEING THAT
 								       ;CLAUSE AND MANAGED TO SWALLOW UP THE VERB OF
-	       ((ISQ H SUBJ) (POP) (FQ SUBJFORK) (GO VBL)))	       ;THE HIGHER CLAUSE WITH IT. SOLUTION: POP OFF
+	       ((ISQ H SUBJ) (SHRDLU-POP) (FQ SUBJFORK) (GO VBL)))     ;THE HIGHER CLAUSE WITH IT. SOLUTION: POP OFF
     VB2	 (CUT-BACK-ONE)						       ;THE CLAUSE AND TRY TO  REPARSE THE SEGMENT IN
 	 (GO SUBJ3)						       ;ANOTHER FASHION. "SUBJ4" IS PLACED THE THE
 								       ;SUBJECT CODE AFTER LOOKING FOR CLAUSES AND
@@ -223,7 +223,7 @@ FDEC    (FQ DECLAR)
 ;;; Jeff Hill in the spring of 1972.
 
 	 ;;;
-	 ;;;--------------------------------------------------   VERB-PARTICLE COMBINATIONS
+	 ;;;--------------------------------------------------   VERB-PARTICLE COMBINATIONS 
 	 ;;;
 	 ;;;     - SUCH AS "PUT ON", "SET DOWN", ETC. -   THEIR ESSENTIAL PROPERTY IS THAT VERB AND PARTICLE
 	 ;;;     CAN BE DISPLACED BY THE OBJECT.
@@ -403,7 +403,7 @@ FDEC    (FQ DECLAR)
 	 ;;;
     PREPSHORT
 	 (: (AND (NQ PREP) (PARSE PREPG)) NIL (ONT-SHORT-PREP))
-	 (: (CALLSM (SMRELATE H)) NIL (ONT: SMRELATE PREPQ))
+	 (: (CALLSM (SMRELATE H)) NIL (ONT\: SMRELATE PREPQ))
 	 (: (CQ REL-NOT-FOUND) PREPSHORT TONT (ONT-NOT-FOUND))	       ; WE HAVE A PREP TO TAKE THE UNATTACHED RELATIVE
 								       ;AS ITS OBJECT. THE FEATURE REL-NOT-FOUND WILL
 								       ;BE REMOVED IF THE PREPG DISCOVERS IT CAN'T FIND
@@ -476,10 +476,10 @@ FDEC    (FQ DECLAR)
 	 ;;;
 	 (: (EQ N POSITION-OF-PTW) NIL TONT RETSM)		       ;LOOP UNTILL NOTHING ELSE CAN BE PARSED
 	 (: (OR (NOT (CQ TOPLEVEL)) (NQ SPECIAL)) RETSM NIL)	       ;SPECIAL WORD (E.G. COMMA AND) COULD INDICATE A
-	 (ERT CLAUSE: SOMETHING LEFT OVER AT TOP LEVEL)		       ;CONJUNCTION OR A BINDER
+	 (ERT CLAUSE\: SOMETHING LEFT OVER AT TOP LEVEL)	       ;CONJUNCTION OR A BINDER
 	 (GO FAIL)
 
-	 ;;;****************************************************************************************
+	 ;;;**************************************************************************************** 
 	 ;;;                                   THERE
 	 ;;;
 	 ;;;             AS IN:  "THERE IS A BIRD SITTING ON YOUR SHOULDER"
@@ -516,7 +516,7 @@ FDEC    (FQ DECLAR)
 	 (REMOVE-F-PT 'REL-NOT-FOUND PT)
 	 (GO ONT)
     NOTHE(RQ THERE)
-	 (POP THERE)
+	 (SHRDLU-POP THERE)
 	 (AND (NQ ADV) (PARSE ADV PLACE))
 	 (GO THER2)
 
@@ -536,7 +536,7 @@ FDEC    (FQ DECLAR)
 	 (GO VG1)
 
 	 ;;;
-    IMPOP(: (POP NIL) IMPE (IMPOP))
+    IMPOP(: (SHRDLU-POP NIL) IMPE (IMPOP))
 
 	 ;;;***************************************************************************************
 	 ;;;
@@ -600,14 +600,14 @@ FDEC    (FQ DECLAR)
 	 ;;ARRANGEMENTS TO CHANGE THINGS LATER IF WE FIND WE WERE
 	 ;;WRONG.  ONCE WE HAVE PARSED THE NEXT NOUN GROUP WE CAN
 	 ;;MAKE THE FINAL DECISION.  OUR TENTATIVE CHOICE IS TO CALL
-	 ;;THE VERB WE JUST PARSED THE MAIN VERB OF THE SENTENCE.
+	 ;;THE VERB WE JUST PARSED THE MAIN VERB OF THE SENTENCE. 
 	 ;;THEN WE KNOW THAT IF ANOTHER VERB FOLLOWS THE NEXT NG WHEN
 	 ;;WE SHOULDN'T EXPECT ONE THAT WE HAVE MADE THE WRONG CHOICE
 	 ;;AND SHOULD REARRANGE OUR ANALYSIS
 	 (COND ((PARSE VG NAUX) (FQ SUBJQ) (GO VG1))
 	       ((NQ VB) (FQ REL-NOT-FOUND) (GO POLAR))
 	       (T (MOVE-PTW N PW)
-		  (POP NG QUEST)
+		  (SHRDLU-POP NG QUEST)
 		  (CUT PTW)
 		  (GO NGQUES)))					       ;POP BACK AND START FIGURING OUT THE QUESTION
     QUEST2							       ;ALL OVER AGAIN
@@ -639,7 +639,7 @@ FDEC    (FQ DECLAR)
 	 (GO QUEST2)
 
 	 ;;;
-    QCHOP(ERT CLAUSE: QCHOP)
+    QCHOP(ERT CLAUSE\: QCHOP)
 	 (: (POPTO CLAUSE BOUND) BICUT (QCHOP))
 
 	 ;;;********************************************************************************************
@@ -648,7 +648,7 @@ FDEC    (FQ DECLAR)
 	 ;;;
 	 ;;;********************************************************************************************
 	 ;;;
-	 ;; SECONDARY CLAUSES ARE PRINCABLY THOSE THAT ARE NOT MAJOR.
+	 ;; SECONDARY CLAUSES ARE PRINCABLY THOSE THAT ARE NOT MAJOR. 
 	 ;;THIS INCLUDES ADJUNCTS, RANK-SHIFTED-NOUN-GROUP'S,
 	 ;;RANK-SHIFTED-QUALIFIERS, FOR-TO CLAUSES AND OTHERS.;;; IF
 	 ;;THE CLAUSE IS MARKED "RSQ", THEN IT AUTOMATICALLY WILL
@@ -758,13 +758,15 @@ FDEC    (FQ DECLAR)
     RETSM(OR (CALLSM (SMCL2)) (GO FAIL))
 	 (GO RETURN))
 
-(PDEFINE NG
+(PDEFINE NG 
 	 NIL
     ENTERING-NG
 
 	 ;;;
 	 ;;;
 	 ;;;
+	 (SETQ T2 0)
+
     NGSTART							       ;EXAMINE INITIAL FEATURES AND JUMP TO
 	 (COND ((CQ RELWD) (GO RELWD))				       ;CORRESPONDING SPECIAL BLOCKS OF CODE
 	       ((CQ QUEST) (GO QUEST))
@@ -955,7 +957,7 @@ FDEC    (FQ DECLAR)
 	 ;;;--------------- PREPG WITH "OF" ---------------
     OF	 (: (AND (NQ OF) (PARSE PREPG OF)) SMOF NONE)		       ;"FIVE OF THE BLOCKS"
     SMOF (FQ OF)
-	 (: (OR (CALLSM (SMNGOF)) (NOT (POP))) RETSM INCOM)
+	 (: (OR (CALLSM (SMNGOF)) (NOT (SHRDLU-POP))) RETSM INCOM)
 
 	 ;;;
 	 ;;;
@@ -990,6 +992,12 @@ FDEC    (FQ DECLAR)
 	    CLASF
 	    NIL
 	    REDUC)
+
+	 ;;;
+	 ;;; ---- AVOID INFINITE LOOPS HERE (KELDON)
+	 ;;;
+	 (SETQ T2 (+ T2 1))
+	 (AND (> T2 100) (GO FAIL))
 
 	 ;;;
 	 ;;;
@@ -1104,7 +1112,7 @@ FDEC    (FQ DECLAR)
     DISGRSQ
 
 	 ;; CHECK FOR DISGUISED RSQ CLAUSES BY READING THE FAILURE
-	 ;;MESSAGES SENT UP FROM PREPG.
+	 ;;MESSAGES SENT UP FROM PREPG. 
 	 (: (EQ (CAR MES) 'PREP-WHICH) NIL RSQ)
 	 (SETQ MES (CDR MES))
 	 (: (PARSE CLAUSE RSQ PREPREL) PREPNG (RSQ-PREPREL) RETSM)
@@ -1135,29 +1143,29 @@ FDEC    (FQ DECLAR)
 	 ;;;
 	 ;;;
 	 ;;;--------------------------------------------------
-	 ;; IF AT FIRST YOU DON'T SUCEED.......
+	 ;; IF AT FIRST YOU DON'T SUCCEED.......
 	 ;;;--------------------------------------------------
     RED0 (SETQ FE T1)
-    RED1 (POP)
+    RED1 (SHRDLU-POP)
     RED2 (COND ((NULL H) (MQ NO) (GO FAIL))
 	       ((ISQ H NUMBER) (GO INCOM))
 	       ((AND (ISQ H POSS)
 		     (OR (ISQ H PRON)
 			 (AND (MOVE-PT H DLC) (ISQ PT PRON))))
-		(POP)
+		(SHRDLU-POP)
 		(GO PRON2))
 	       ((AND (NULL (CDR H)) (CQ DEFPOSS)) (GO POSSDEF))
 	       ((AND (CQ QUEST) (NULL (CDR H))) (GO QDETCHECK))	       ;(CDR H) = T IF THERE IS ONLY ONE DAUGHTER TO
 	       ((ISQ H ADJ) (GO EPR))				       ;THE CURRENT NODE
 	       ((NOT (ISQ H CLASF)) (GO INCOM)))
-    REDUC(POP)
+    REDUC(SHRLUD-POP)
 	 (: (AND (NULL H) (NQ PROPN)) PROPN NOUN)
 
 	 ;;;
 	 ;;;
 	 ;;;
     POPCOM
-	 (POP)
+	 (SHRDLU-POP)
 
 	 ;;;
 	 ;;;--------------- INCOMPLETE PHRASES ---------------
@@ -1168,10 +1176,10 @@ FDEC    (FQ DECLAR)
 	 (: (AND (NULL CUT) (CQ NUM)) SMNG NIL)
     QDETCHECK
 	 (COND ((AND (ISQ H QDET) (ISQ (NB H) QPRON))
-		(POP)
+		(SHRDLU-POP)
 		(GO QPRON))
 	       ((AND (ISQ H QDET) (ISQ (NB H) EVERPRON))
-		(POP)
+		(SHRDLU-POP)
 		(GO EVERPRON)))
 	 (GO FAIL)
 
@@ -1202,7 +1210,7 @@ FDEC    (FQ DECLAR)
 	 (: (OR (NOT NN) (ISQ H DEFPOSS)) NIL ORD)
 possdef							;the placement of this tag is a
 							;guess. The original is lost,
-							;assuming that it ever existed
+							;assuming that it ever existed 
 	 (RQ POSES DET DEF)
 	 (FQ POSSDEF NS NPL)
 
@@ -1242,7 +1250,7 @@ possdef							;the placement of this tag is a
 	 ;;;
 	 ;;;-
     POPRET
-	 (POP)
+	 (SHRDLU-POP)
 
 	 ;;;
 	 ;;;--------------------------------------------------
@@ -1257,14 +1265,14 @@ possdef							;the placement of this tag is a
 	 ;;;
 	 ;;;--------------- YOU PROBABLY GOOFED, CUT AND TRY AGAIN. --------------
     TRYA (: (ISQ H NOUN) NIL (TRYA))
-	 (POP)
+	 (SHRDLU-POP)
 	 (CUT N)
-    UP	 (: (POP) UP NIL)					       ;POP EVERYTHING OFF
+    UP	 (: (SHRDLU-POP) UP NIL)				       ;POP EVERYTHING OFF
 	 (SETQ FE (REVERSE REST))
 	 (SMSET NIL)
 	 (GO NGSTART))
 
-(PDEFINE VG
+(PDEFINE VG 
 	 (TENSE)
 
 	 ;;;
@@ -1369,7 +1377,7 @@ possdef							;the placement of this tag is a
 	 ;;;--------------- POLR2 ---------------
     POLR2							       ;THE CLAUSE COULD ONLY BE MARKED AS "POLR2"
 	 (OR (SETQ PT (GETR 'QAUX (MOVE-PT C U)))		       ;("DID THE...?") IF AN AUX OF SOME VERIETY HAD
-	     (AND (BUG VG:POLR2) (GO FAIL)))			       ;ALREADY BEEN PARSED, IF THAT IS NOT THE CASE,
+	     (AND (BUG VG\:POLR2) (GO FAIL)))			       ;ALREADY BEEN PARSED, IF THAT IS NOT THE CASE,
 	 (SETQ H (LIST (CAR PT)))				       ;THEN WE HAVE A BUG IN THE PROGRAM SOMEWHERE SET
 	 (TRNSF NEG)						       ;THE INITIAL DAUGHTER OF THE VG TO BE THE
 	 (COND ((ISQ H DO) (GO DO))				       ;PREVIOUSLY PARSED AUX MARK THE VG AS NEG IF
@@ -1377,7 +1385,7 @@ possdef							;the placement of this tag is a
 	       ((ISQ H WILL) (GO WILL))				       ;OF THIS FUNCTION) DISPATCH TABLE , CHECKING THE
 	       ((ISQ H BE) (GO BE))				       ;AUX
 	       ((ISQ H HAVE) (GO HAVE)))
-	 (ERT BUG VG:POLR2VB)					       ;NOTHING BUT UNGRAMATICAL NONSENSE SHOULD REACH
+	 (ERT BUG VG\:POLR2VB)					       ;NOTHING BUT UNGRAMATICAL NONSENSE SHOULD REACH
 	 (GO FAIL)						       ;THIS POINT
 
 	 ;;;
@@ -1424,8 +1432,12 @@ possdef							;the placement of this tag is a
     ADV3 (: (OR (PARSE ADV TIMW) (PARSE ADV VBAD)) ADV3 NIL (ADV))
 
 	 ;;;
-	 (COND ((PARSE VB BE INF) (GOCOND BE2 MVB))		       ;DISPATCH TABLE FOR THE NEXT VERB
-	       ((PARSE VB HAVE INF) (GOCOND HAV2 MVB))
+	 (COND ((PARSE VB BE INF)
+	    	  (COND (NN (GO BE2))
+		        (T (GO MVB))))				       ;DISPATCH TABLE FOR THE NEXT VERB
+	       ((PARSE VB HAVE INF)
+	          (COND (NN (GO HAV2))
+		        (T (GO MVB))))
 	       ((PARSE VB INF (MVB)) (GO REV))
 	       (T (GO INCOMP)))
 
@@ -1490,7 +1502,7 @@ possdef							;the placement of this tag is a
 	 ;;;--------------- GOING ---------------
     GOING(: (PARSE NIL TO) NIL GOI)
 	 (: (NQ INF) GOING2 NIL NIL)
-	 (POP)
+	 (SHRDLU-POP)
     GOI	 (SETQ TENSE (CONS 'PRESENT TENSE))			       ;WE HAVE DETERMINED THAT "GOING" IS THE ACTUAL
 	 (GO MVB)						       ;MAIN VERB AND SHOULD BE PARSED AS SUCH
     GOING2
@@ -1550,7 +1562,7 @@ possdef							;the placement of this tag is a
 	 ;;;
 	 ;;;--------------- MVB ---------------
     MVB	 (: (EQ (FE MVB) (FE H)) MVB2 NIL)
-	 (POP VB)						       ;POP OFF EVERY THING UNTILL YOU REACH A VERB
+	 (SHRDLU-POP VB)					       ;POP OFF EVERY THING UNTILL YOU REACH A VERB
 	 (: (PARSE VB (MVB)) NIL (MVB))
     MVB2 (GO REV)
 
@@ -1639,7 +1651,7 @@ possdef							;the placement of this tag is a
 	 ;;;--------------------------------------------------
     RETSM(: (CALLSM (SMVG)) RETURN FAIL))
 
-(PDEFINE PREPG
+(PDEFINE PREPG 
 	 NIL
     ENTERING-PREPG
 
@@ -1684,7 +1696,7 @@ possdef							;the placement of this tag is a
 
 	      ;;;
 	      (SETQ T1 (BUILDNODE (FE T1) NB N 'WORD (SM T1)))	       ;CREATE NODE FOR THE COMPOUND WORD
-	      (SETR 'PARENT C T1))				       ;
+	      (SETR 'PARENT C T1))				       ; 
 	 (: (ISQ H NEED2) (NEED2) NIL)				       ;FAIL IF LAST PARSED NEEDS ANOTHER WORD
 
 	 ;;;							       ;GIVE IT A PARENT
@@ -1773,9 +1785,9 @@ possdef							;the placement of this tag is a
 	 ;;CHECK IF THIS PREPG SHOULD BE MARKED AS CONTAINING A
 	 ;;QUESTION ELEMENT.  IE.  "FOR WHAT", "BETWEEN THE RED BLOCK
 	 ;;AND WHICH?" (ECHO)
-	 (AND (OR (ISQ H QUEST)					       ;H IS THE NG FOUND FOR AN OBJECT
-		  (AND (ISQ H COMPOUND)				       ;IF THE NOUN GROUP IS COUMPOUND, CHECK EACH
-		       (MOVE-PT H H PV (QUEST))))		       ;COMPONENT FOR THE FEATURE "QUEST"
+	 (AND (OR (ISQ H QUEST)				  	     ;H IS THE NG FOUND FOR AN OBJECT
+		  (AND (ISQ H COMPOUND)				     ;IF THE NOUN GROUP IS COUMPOUND, CHECK EACH
+		       (MOVE-PT H H PV (QUEST))))		     ;COMPONENT FOR THE FEATURE "QUEST"
 	      (FQ QUEST))
 
 	 ;;;
@@ -1783,7 +1795,7 @@ possdef							;the placement of this tag is a
 	 ;;;
 	 (: (CALLSM (SMADJG-PREPG)) RETURN FAIL))
 
-(PDEFINE ADJG
+(PDEFINE ADJG 
 	 NIL
     ENTERING-ADJG						       ;THIS LABEL IS MARKED BY DEBUGGING ROUTINES  AND
     COMPCHECK							       ;IS USEFUL FOR FOLLOWING THE FLOW OF CONTROL
@@ -1842,7 +1854,7 @@ possdef							;the placement of this tag is a
     THAN (COND ((NOT NN) (GO RETSM)))
 	 (: (PARSE NIL THAN) NIL RETSM (THAN))
 	 (RQ THANNEED)						       ;THE FEATURE "THANNEEED" MARKS THAT THE WORD
-	 (FQ THAN)						       ;"THAN" IS EXPLICITLY  REQUIRED IN THE PHRASE.
+	 (FQ THAN)						       ;"THAN" IS EXPLICITLY  REQUIRED IN THE PHRASE. 
 	 (GO SUBJ)
 
 	 ;;;-------------------- AS -------
@@ -1851,7 +1863,7 @@ possdef							;the placement of this tag is a
 	 (: (AND (PARSE ADJ) (SETR 'HEAD H C)) NIL (ADJ) RETSM)
 	 (: (PARSE NIL AS) SUBJ RETSM (AS))
 
-	 ;;;--------------- FIND A SUBJECT FOR THE COMPARATIVE
+	 ;;;--------------- FIND A SUBJECT FOR THE COMPARATIVE 
 	 ;; IE.  "AS BIG AS ..." , "BIGGER THAN ..."
     SUBJ (: (PARSE NG SUBJ COMPAR) NIL (THAN))
 	 (: (SETR 'OBJ1 H C) NIL NIL RETSM)
@@ -1859,7 +1871,7 @@ possdef							;the placement of this tag is a
 	 (: (CHECK-AGREEMENT H (CDR H))				       ;CHECKS FOR AGREEMENT IN NUMBER AND PERSON
 	    RETSM						       ;BETWEEN THE NG PARSED AS SUBJ AND THE
 	    NIL)						       ;JUST-PARSED VERB
-	 (POP)
+	 (SHRDLU-POP)
 	 (GO RETSM)
 
 	 ;; AT PRESENT, THIS ENTIRE ROUTINE IS INADIQUATE IN SEVERAL
@@ -1876,7 +1888,7 @@ possdef							;the placement of this tag is a
 	 ;;;
 	 ;;;
 	 ;;;
-    POPAD(POP)							       ;IF THE CUT POINT WAS HIT HAVING ONLY PARSED
+    POPAD(SHRDLU-POP)						       ;IF THE CUT POINT WAS HIT HAVING ONLY PARSED
 	 (GO ADJ)						       ;ADVERBS, POP OFF THE FINAL ADV AND TRY TO
 								       ;REPARSE IT AS AN ADJECTIVE
 
@@ -1884,22 +1896,23 @@ possdef							;the placement of this tag is a
     RETSM(: (CQ THANNEED) (THANNEED) NIL)			       ;IF ONE OF THE WORDS PARSED REQUIRED A "THAN",
 	 (: (CALLSM (SMADJG-PREPG)) RETURN (SMADJ)))		       ;FAIL IF ONE WAS NOT FOUND.
 
-(DEFUN CONJ NIL
-       (PROG (END GOODIE)
+(DEFUN CONJ NIL 
+       (PROG (END GOODIE) 
+             (DECLARE (SPECIAL END))
 	     (SETQ END CUT)
 	     (COND ((SETQ GOODIE (APPLY-GRAMMAR 'CONJOIN))
 		    (RETURN (SETQ RE GOODIE)))
 		   (T (RETURN NIL)))))
 
-(DEFUN COMMA NIL
-       (COND ((SECONDWORD? '") (FLUSHME) T)			       ;IF " FOLLOWS, FLUSH COMMA AND CONTINUE
+(DEFUN COMMA NIL 
+       (COND ((SECONDWORD? '\") (FLUSHME) T)			       ;IF " FOLLOWS, FLUSH COMMA AND CONTINUE
 	     ((CONJ))						       ; IF COMMA IS PART OF CONJOINED STRUCTURE, GREAT
 	     ((ISQ RE INIT) (FLUSHME) T)			       ;IF COMMA FOLLOWS INITIAL-TYPE PHRASE, FLUSH IT
 								       ;AND CONTINUE
 
 	     ;; DIRECT ADDRESS JAZZ
 ))
-(PDEFINE CONJOIN
+(PDEFINE CONJOIN 
 	 (PREV)
 
 	 ;; THIS PROGRAM IS CALLED TO PARSE A CONJOINED STRUCTURE THE
@@ -1910,10 +1923,10 @@ possdef							;the placement of this tag is a
     ENTERING-CONJOIN						       ;  HACK LABEL FOR LABELTRACER
     UP	 (SETQ PREV (NEXTWORD))
 	 (FLUSHME)
-	 (COND ((AND (EQ PREV '/,)				       ;IF WE HAVE A COMMA AND
+	 (COND ((AND (EQ PREV '\,)				       ;IF WE HAVE A COMMA AND
 		     (OR (CDR H)				       ;IF MORE THAN 1 COMPONENT HAS BEEN PARSED
-			 (GREATERP (DIFFERENCE (LENGTH (NB H))	       ;OR IF THAT ONE COMPONENT
-					       (LENGTH (N H)))	       ;IS MORE THAN 4 WORDS LONG
+			 (> (- (LENGTH (NB H))			       ;OR IF THAT ONE COMPONENT
+			       (LENGTH (N H)))		 	       ;IS MORE THAN 4 WORDS LONG
 				   4.))
 		     (MEMQ (NEXTWORD) '(OR AND NOR BUT))
 		     (F (NEXTWORD)))				       ;THEN CHECK FOR COMMA COMBINATION
@@ -1922,7 +1935,7 @@ possdef							;the placement of this tag is a
 	 (AND (ATOM PREV)
 	      (MOVE-PTW N NW (EQ (WORD PTW) PREV))
 	      (CUT PTW))
-	 (AND (OR (EQ PREV 'BUT) (EQ (CADR PREV) 'BUT))
+	 (AND (OR (EQ PREV 'BUT) (AND (LISTP PREV) (EQ (CADR PREV) 'BUT)))
 	      (NEXTWORD? 'NOT)					       ;CHECK FOR BUT-NOT COMBINATION
 	      (OR (FLUSHME) (GO LOSE2))
 	      (FQ NEGBUT))
@@ -1934,7 +1947,7 @@ possdef							;the placement of this tag is a
 			(PARSE2 (APPEND REST '(COMPONENT))
 				NIL)))
 		  ((EQ (CAR REST) 'CLAUSE)
-		   ((LAMBDA (LASTSENT AUXFE)
+		   ((LAMBDA (LASTSENT AUXFE) 
 			    (AND (PARSE2 (APPEND REST
 						 AUXFE
 						 '(COMPONENT))
@@ -1953,7 +1966,7 @@ possdef							;the placement of this tag is a
 		;;IF WE HAD COMMA FOLLOWED BY (AND OR BUT NOR) RETURN
 		;;THE LIST OF GOODIES WE'VE FOUND
 		(GO RETSM))
-	       ((EQ PREV '/,)
+	       ((EQ PREV '\,)
 		(COND ((NEXTWORD? COMMA) (FQ LIST) (GO UP))
 		      (T (GO LIST))))
 	       ((MEMQ PREV '(AND OR NOR BUT))
@@ -1967,33 +1980,30 @@ possdef							;the placement of this tag is a
 		       (GO UP))
 		      (T (GO LISTA)))))
     LOSE2(: (CQ LISTA) LISTA NIL)
-    LIST (: (AND (EQ PREV '/,)					       ;COME HERE FOR ABORTED LIST AND CHECK FOR
+    LIST (: (AND (EQ PREV '\,)					       ;COME HERE FOR ABORTED LIST AND CHECK FOR
 		 (EQUAL (LENGTH H) 2.)				       ;APPOSITIVE
 		 (ISQ H NG)
 		 (NOT (OR (ISQ H PRONG) (ISQ (CDR H) PRONG)))
 		 (OR (NEXTWORD? COMMA) (NULL N)))
 	    NIL
-	    (CONJOIN: HOPELESS LIST))
+	    (CONJOIN\: HOPELESS LIST))
 	 (FLUSHME)						       ;GET RID OF TRAILING COMMA
 	 (FQ APPOSITIVE)
 	 (GO RETSM)
     LISTA(F PREV)
     RETSM(FQ COMPOUND)						       ;CALL SEMANTICS AND RETURN EVERY PARSED BY THIS
-	 (AND (GREATERP (LENGTH H) 2.) (FQ LIST))		       ;GOODIE IS COMPOUND IF MORE THAN 2 COMPONENTS
+	 (AND (> (LENGTH H) 2.) (FQ LIST))			       ;GOODIE IS COMPOUND IF MORE THAN 2 COMPONENTS
 	 (COND ((OR (CQ NG) (CQ NOUN))
 		(COND ((CQ AND) (FQ NPL))
 		      (T (MOVE-PT H) (TRNSF NPL NS MASS NFS))))
 	       ((CQ VB)
-		(PROG (COMMON)
+		(PROG (COMMON) 
 		      (SETQ COMMON (GET 'VB 'ELIM))
-		      (MAP '(LAMBDA (X)
+		      (MAPL #'(LAMBDA (X) 
 				    (SETQ COMMON (MEET COMMON (FE X))))
 			   H))
-		(FESET (UNION COMMON (FE C)) C)))
-	 (: (CALLSM (SMCONJ)) RETURN (CONJOIN: SMCONJ)))	       ;THEN MARK AS A LIST
-
-
-
+		(FESET (SHRDLU-UNION COMMON (FE C)) C)))
+	 (: (CALLSM (SMCONJ)) RETURN (CONJOIN\: SMCONJ)))	       ;THEN MARK AS A LIST
 
 #|
 (DEFUN BOTH
@@ -2030,12 +2040,12 @@ possdef							;the placement of this tag is a
 
 
 
-(DEFUN CANTAKE (NUM TYPE FEATURE)
-       (PROG (VBFEAT)
+(DEFUN CANTAKE (NUM TYPE FEATURE) 
+       (PROG (VBFEAT) 
 	     (SETQ VBFEAT (FE MVB))
 	     (RETURN
 	      (COND ((MEMQ 'RSNG TYPE)
-		     (MEMQ
+		     (MEMQ 
 		      (READLIST (APPEND (COND ((MEMQ 'TO TYPE)
 					       '(T O))
 					      ((MEMQ 'ING TYPE)
@@ -2045,8 +2055,8 @@ possdef							;the placement of this tag is a
 					       '(R E P)))
 					'(O B)
 					(LIST (COND ((EQ NUM 1.)
-						     '/1)
-						    (T '/2)))))
+						     '\1)
+						    (T '\2)))))
 		      VBFEAT))
 		    ((MEMQ 'COMP TYPE)
 		     (MEMQ 'INT VBFEAT))
@@ -2059,15 +2069,14 @@ possdef							;the placement of this tag is a
 			   (T (MEMQ 'TRANS2 VBFEAT))))
 		    (T (MEMQ FEATURE VBFEAT))))))
 
-(DEFUN CANPARSE (NUM TYPE FEATURE)
-       (PROG (REG)
+(DEFUN CANPARSE (NUM TYPE FEATURE) 
+       (PROG (REG) 
 	     (AND
 	      (CANTAKE NUM TYPE FEATURE)
 	      (OR
 	       (NULL TYPE)
 	       (AND
-		(APPLY
-		 'PARSE
+		(APPLY-PARSE
 		 (APPEND TYPE
 			 (COND ((MEMQ 'COMP TYPE)
 				(SETQ REG 'COMP)
@@ -2082,4 +2091,3 @@ possdef							;the placement of this tag is a
 		(SETR REG H C)))
 	      (OR (NULL FEATURE) (F FEATURE))
 	      (RETURN T))))
-
