@@ -223,7 +223,7 @@ FDEC    (FQ DECLAR)
 ;;; Jeff Hill in the spring of 1972.
 
 	 ;;;
-	 ;;;--------------------------------------------------   VERB-PARTICLE COMBINATIONS 
+	 ;;;--------------------------------------------------   VERB-PARTICLE COMBINATIONS
 	 ;;;
 	 ;;;     - SUCH AS "PUT ON", "SET DOWN", ETC. -   THEIR ESSENTIAL PROPERTY IS THAT VERB AND PARTICLE
 	 ;;;     CAN BE DISPLACED BY THE OBJECT.
@@ -479,7 +479,7 @@ FDEC    (FQ DECLAR)
 	 (ERT CLAUSE: SOMETHING LEFT OVER AT TOP LEVEL)		       ;CONJUNCTION OR A BINDER
 	 (GO FAIL)
 
-	 ;;;**************************************************************************************** 
+	 ;;;****************************************************************************************
 	 ;;;                                   THERE
 	 ;;;
 	 ;;;             AS IN:  "THERE IS A BIRD SITTING ON YOUR SHOULDER"
@@ -600,7 +600,7 @@ FDEC    (FQ DECLAR)
 	 ;;ARRANGEMENTS TO CHANGE THINGS LATER IF WE FIND WE WERE
 	 ;;WRONG.  ONCE WE HAVE PARSED THE NEXT NOUN GROUP WE CAN
 	 ;;MAKE THE FINAL DECISION.  OUR TENTATIVE CHOICE IS TO CALL
-	 ;;THE VERB WE JUST PARSED THE MAIN VERB OF THE SENTENCE. 
+	 ;;THE VERB WE JUST PARSED THE MAIN VERB OF THE SENTENCE.
 	 ;;THEN WE KNOW THAT IF ANOTHER VERB FOLLOWS THE NEXT NG WHEN
 	 ;;WE SHOULDN'T EXPECT ONE THAT WE HAVE MADE THE WRONG CHOICE
 	 ;;AND SHOULD REARRANGE OUR ANALYSIS
@@ -648,7 +648,7 @@ FDEC    (FQ DECLAR)
 	 ;;;
 	 ;;;********************************************************************************************
 	 ;;;
-	 ;; SECONDARY CLAUSES ARE PRINCABLY THOSE THAT ARE NOT MAJOR. 
+	 ;; SECONDARY CLAUSES ARE PRINCABLY THOSE THAT ARE NOT MAJOR.
 	 ;;THIS INCLUDES ADJUNCTS, RANK-SHIFTED-NOUN-GROUP'S,
 	 ;;RANK-SHIFTED-QUALIFIERS, FOR-TO CLAUSES AND OTHERS.;;; IF
 	 ;;THE CLAUSE IS MARKED "RSQ", THEN IT AUTOMATICALLY WILL
@@ -758,7 +758,7 @@ FDEC    (FQ DECLAR)
     RETSM(OR (CALLSM (SMCL2)) (GO FAIL))
 	 (GO RETURN))
 
-(PDEFINE NG 
+(PDEFINE NG
 	 NIL
     ENTERING-NG
 
@@ -1104,7 +1104,7 @@ FDEC    (FQ DECLAR)
     DISGRSQ
 
 	 ;; CHECK FOR DISGUISED RSQ CLAUSES BY READING THE FAILURE
-	 ;;MESSAGES SENT UP FROM PREPG. 
+	 ;;MESSAGES SENT UP FROM PREPG.
 	 (: (EQ (CAR MES) 'PREP-WHICH) NIL RSQ)
 	 (SETQ MES (CDR MES))
 	 (: (PARSE CLAUSE RSQ PREPREL) PREPNG (RSQ-PREPREL) RETSM)
@@ -1202,7 +1202,7 @@ FDEC    (FQ DECLAR)
 	 (: (OR (NOT NN) (ISQ H DEFPOSS)) NIL ORD)
 possdef							;the placement of this tag is a
 							;guess. The original is lost,
-							;assuming that it ever existed 
+							;assuming that it ever existed
 	 (RQ POSES DET DEF)
 	 (FQ POSSDEF NS NPL)
 
@@ -1264,7 +1264,7 @@ possdef							;the placement of this tag is a
 	 (SMSET NIL)
 	 (GO NGSTART))
 
-(PDEFINE VG 
+(PDEFINE VG
 	 (TENSE)
 
 	 ;;;
@@ -1639,7 +1639,7 @@ possdef							;the placement of this tag is a
 	 ;;;--------------------------------------------------
     RETSM(: (CALLSM (SMVG)) RETURN FAIL))
 
-(PDEFINE PREPG 
+(PDEFINE PREPG
 	 NIL
     ENTERING-PREPG
 
@@ -1684,7 +1684,7 @@ possdef							;the placement of this tag is a
 
 	      ;;;
 	      (SETQ T1 (BUILDNODE (FE T1) NB N 'WORD (SM T1)))	       ;CREATE NODE FOR THE COMPOUND WORD
-	      (SETR 'PARENT C T1))				       ; 
+	      (SETR 'PARENT C T1))				       ;
 	 (: (ISQ H NEED2) (NEED2) NIL)				       ;FAIL IF LAST PARSED NEEDS ANOTHER WORD
 
 	 ;;;							       ;GIVE IT A PARENT
@@ -1783,7 +1783,7 @@ possdef							;the placement of this tag is a
 	 ;;;
 	 (: (CALLSM (SMADJG-PREPG)) RETURN FAIL))
 
-(PDEFINE ADJG 
+(PDEFINE ADJG
 	 NIL
     ENTERING-ADJG						       ;THIS LABEL IS MARKED BY DEBUGGING ROUTINES  AND
     COMPCHECK							       ;IS USEFUL FOR FOLLOWING THE FLOW OF CONTROL
@@ -1842,7 +1842,7 @@ possdef							;the placement of this tag is a
     THAN (COND ((NOT NN) (GO RETSM)))
 	 (: (PARSE NIL THAN) NIL RETSM (THAN))
 	 (RQ THANNEED)						       ;THE FEATURE "THANNEEED" MARKS THAT THE WORD
-	 (FQ THAN)						       ;"THAN" IS EXPLICITLY  REQUIRED IN THE PHRASE. 
+	 (FQ THAN)						       ;"THAN" IS EXPLICITLY  REQUIRED IN THE PHRASE.
 	 (GO SUBJ)
 
 	 ;;;-------------------- AS -------
@@ -1851,7 +1851,7 @@ possdef							;the placement of this tag is a
 	 (: (AND (PARSE ADJ) (SETR 'HEAD H C)) NIL (ADJ) RETSM)
 	 (: (PARSE NIL AS) SUBJ RETSM (AS))
 
-	 ;;;--------------- FIND A SUBJECT FOR THE COMPARATIVE 
+	 ;;;--------------- FIND A SUBJECT FOR THE COMPARATIVE
 	 ;; IE.  "AS BIG AS ..." , "BIGGER THAN ..."
     SUBJ (: (PARSE NG SUBJ COMPAR) NIL (THAN))
 	 (: (SETR 'OBJ1 H C) NIL NIL RETSM)
@@ -1884,14 +1884,14 @@ possdef							;the placement of this tag is a
     RETSM(: (CQ THANNEED) (THANNEED) NIL)			       ;IF ONE OF THE WORDS PARSED REQUIRED A "THAN",
 	 (: (CALLSM (SMADJG-PREPG)) RETURN (SMADJ)))		       ;FAIL IF ONE WAS NOT FOUND.
 
-(DEFUN CONJ NIL 
-       (PROG (END GOODIE) 
+(DEFUN CONJ NIL
+       (PROG (END GOODIE)
 	     (SETQ END CUT)
 	     (COND ((SETQ GOODIE (APPLY-GRAMMAR 'CONJOIN))
 		    (RETURN (SETQ RE GOODIE)))
 		   (T (RETURN NIL)))))
 
-(DEFUN COMMA NIL 
+(DEFUN COMMA NIL
        (COND ((SECONDWORD? '") (FLUSHME) T)			       ;IF " FOLLOWS, FLUSH COMMA AND CONTINUE
 	     ((CONJ))						       ; IF COMMA IS PART OF CONJOINED STRUCTURE, GREAT
 	     ((ISQ RE INIT) (FLUSHME) T)			       ;IF COMMA FOLLOWS INITIAL-TYPE PHRASE, FLUSH IT
@@ -1899,7 +1899,7 @@ possdef							;the placement of this tag is a
 
 	     ;; DIRECT ADDRESS JAZZ
 ))
-(PDEFINE CONJOIN 
+(PDEFINE CONJOIN
 	 (PREV)
 
 	 ;; THIS PROGRAM IS CALLED TO PARSE A CONJOINED STRUCTURE THE
@@ -1934,7 +1934,7 @@ possdef							;the placement of this tag is a
 			(PARSE2 (APPEND REST '(COMPONENT))
 				NIL)))
 		  ((EQ (CAR REST) 'CLAUSE)
-		   ((LAMBDA (LASTSENT AUXFE) 
+		   ((LAMBDA (LASTSENT AUXFE)
 			    (AND (PARSE2 (APPEND REST
 						 AUXFE
 						 '(COMPONENT))
@@ -1984,22 +1984,22 @@ possdef							;the placement of this tag is a
 		(COND ((CQ AND) (FQ NPL))
 		      (T (MOVE-PT H) (TRNSF NPL NS MASS NFS))))
 	       ((CQ VB)
-		(PROG (COMMON) 
+		(PROG (COMMON)
 		      (SETQ COMMON (GET 'VB 'ELIM))
-		      (MAP '(LAMBDA (X) 
+		      (MAP '(LAMBDA (X)
 				    (SETQ COMMON (MEET COMMON (FE X))))
 			   H))
 		(FESET (UNION COMMON (FE C)) C)))
 	 (: (CALLSM (SMCONJ)) RETURN (CONJOIN: SMCONJ)))	       ;THEN MARK AS A LIST
 
-(DEFUN BOTH 
+(DEFUN BOTH
 
  ;;HANDLES (BOTH AND) (EITHER OR) (NEITHER NOR) COMBINATIONS THE
  ;;CONJOIN PROGRAM DOES SPECIAL THINGS WHEN BOTH IS SET
- FEXPR (A) 
-       (PROG (END) 
+ FEXPR (A)
+       (PROG (END)
 	     (SETQ END CUT)					       ;MAKE END OUT OF PREVIOUS CUT POINT
-	     (RETURN (PROG (CUT NBB BOTH) 
+	     (RETURN (PROG (CUT NBB BOTH)
 			   (SETQ NBB N)
 			   (AND (FLUSHME)
 				(MOVE-PTW N
@@ -2025,12 +2025,12 @@ possdef							;the placement of this tag is a
 
 
 
-(DEFUN CANTAKE (NUM TYPE FEATURE) 
-       (PROG (VBFEAT) 
+(DEFUN CANTAKE (NUM TYPE FEATURE)
+       (PROG (VBFEAT)
 	     (SETQ VBFEAT (FE MVB))
 	     (RETURN
 	      (COND ((MEMQ 'RSNG TYPE)
-		     (MEMQ 
+		     (MEMQ
 		      (READLIST (APPEND (COND ((MEMQ 'TO TYPE)
 					       '(T O))
 					      ((MEMQ 'ING TYPE)
@@ -2054,8 +2054,8 @@ possdef							;the placement of this tag is a
 			   (T (MEMQ 'TRANS2 VBFEAT))))
 		    (T (MEMQ FEATURE VBFEAT))))))
 
-(DEFUN CANPARSE (NUM TYPE FEATURE) 
-       (PROG (REG) 
+(DEFUN CANPARSE (NUM TYPE FEATURE)
+       (PROG (REG)
 	     (AND
 	      (CANTAKE NUM TYPE FEATURE)
 	      (OR
@@ -2077,3 +2077,4 @@ possdef							;the placement of this tag is a
 		(SETR REG H C)))
 	      (OR (NULL FEATURE) (F FEATURE))
 	      (RETURN T))))
+

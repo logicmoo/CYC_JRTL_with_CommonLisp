@@ -1,20 +1,20 @@
 
-################################################################
+#|################################################################
 
 		.MACR 21
 
    a precompiler for programmer code
-################################################################
+################################################################|#
 
 
-(DEFUN LIST-NO-NILS FEXPR (ELEMENTS) 
+(DEFUN LIST-NO-NILS FEXPR (ELEMENTS)
        (DO ((TAKEUP-REEL)
 	    (TEMP NIL (EVAL (CAR ELEMENTS)))
 	    (ELEMENTS ELEMENTS (CDR ELEMENTS)))
 	   ((NULL ELEMENTS) (REVERSE TAKEUP-REEL))
-	   (AND TEMP (SETQ TAKEUP-REEL (CONS TEMP TAKEUP-REEL))))) 
+	   (AND TEMP (SETQ TAKEUP-REEL (CONS TEMP TAKEUP-REEL)))))
 
-(DEFUN TOPLEVEL-LIST FEXPR (ELEMENTS) 
+(DEFUN TOPLEVEL-LIST FEXPR (ELEMENTS)
        ;;ACTS LIKE LIST EXCEPT THAT IF ANY ELEMEMNT EVALUATES IN TO
        ;;MORE THAN A SINGLE ELEMENT ( - RETURNS A LIST WHOSE CAR IS
        ;;ALSO A LIST - ) THEN THE ELEMENTS OF THAT ELEMENT ARE ADDED
@@ -23,10 +23,10 @@
 				  (COND ((ATOM (CAR ELEMENT))
 					 (LIST ELEMENT))
 					(T ELEMENT)))
-	       ELEMENTS)) 
+	       ELEMENTS))
 
-(DEFUN GRAM-COMP (FILE) 
-       (PROG (^Q UNIQUE ^R ^D) 
+(DEFUN GRAM-COMP (FILE)
+       (PROG (^Q UNIQUE ^R ^D)
 	     (OR (APPLY 'UREAD FILE)
 		 (RETURN 'BAD-FILE-SPECS))
 	     (IOC Q)
@@ -37,9 +37,9 @@
 		 (COND ((MEMQ (CAR R) '(DEFUN SETQ DEFPROP)))
 		       (T (SETQ R (EVAL R))))
 		 ((LAMBDA (^R) (SPRINTER R)) T)))
-       'REMEMBER/ TO/ UFILE) 
+       'REMEMBER/ TO/ UFILE)
 
-(DEFUN PDEFINE FEXPR (MOBY) 
+(DEFUN PDEFINE FEXPR (MOBY)
        (LIST 'DEFUN
 	     (CAR MOBY)
 	     'NIL
@@ -77,12 +77,12 @@
 					     N
 					     H
 					     SM
-					     C)))))) 
+					     C))))))
 
-(DEFUN :-SPREAD FEXPR (LIST) 
-       (MAPCAN 
-	'(LAMBDA (EXP) 
-	  (PROG (PREDICATE T1 T2 T3) 
+(DEFUN :-SPREAD FEXPR (LIST)
+       (MAPCAN
+	'(LAMBDA (EXP)
+	  (PROG (PREDICATE T1 T2 T3)
 		(COND
 		 ((ATOM EXP)
 		  (RETURN (LIST EXP
@@ -164,10 +164,10 @@
 		     ((AND (NULL T1) (NULL T2) (NULL T3))
 		      (LIST 'I-AM-A-TAG))))))
 		 (T (RETURN (LIST EXP))))))
-	LIST)) 
+	LIST))
 
-(DEFUN TAG-CHECK (TAG-EXP) 
+(DEFUN TAG-CHECK (TAG-EXP)
        (COND ((ATOM TAG-EXP) (LIST (LIST 'GO TAG-EXP)))
 	     (T (LIST (LIST 'M (CAR TAG-EXP))
-		      (LIST 'GO 'FAIL))))) 
-
+		      (LIST 'GO 'FAIL)))))
+
