@@ -14,5 +14,7 @@
 	<natures>
 		<nature>org.eclipse.cdt.core.cnature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>de.defmacro.dandelion.natures.lispNature</nature>
+
 	</natures>
 </projectDescription>

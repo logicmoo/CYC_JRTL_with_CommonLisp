@@ -1992,6 +1992,10 @@ possdef							;the placement of this tag is a
 		(FESET (UNION COMMON (FE C)) C)))
 	 (: (CALLSM (SMCONJ)) RETURN (CONJOIN: SMCONJ)))	       ;THEN MARK AS A LIST
 
+
+
+
+#|
 (DEFUN BOTH
 
  ;;HANDLES (BOTH AND) (EITHER OR) (NEITHER NOR) COMBINATIONS THE
@@ -2020,6 +2024,7 @@ possdef							;the placement of this tag is a
 			   (SETQ RE NIL)
 			   (SETQ N NBB)
 			   (RETURN NIL)))))
+|#
 
 (DEFUN DOUBLEQUOTER NIL (APPLY-GRAMMAR 'PARSEQUOTED))
 
