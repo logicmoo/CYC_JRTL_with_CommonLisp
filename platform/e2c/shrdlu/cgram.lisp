@@ -1,17 +1,17 @@
 (declare (genprefix cgram))
 
-################################################################
+#|################################################################
 
 		CGRAM >
 
     the regular grammar after going through the precompiler
-################################################################
+################################################################|#
 
 
 
-(DEFUN CLAUSE NIL 
+(DEFUN CLAUSE NIL
        (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT POSITION-OF-PRTMVB LOCATIONMARKER
-	      SUBJ-VB-BACKUP-TYPE1 POSITION-OF-PTW) 
+	      SUBJ-VB-BACKUP-TYPE1 POSITION-OF-PTW)
 	     (SETQ NN T)
 	     (SETQ CUT END)
 	     (SETQ C (BUILDNODE (SETQ FE (REVERSE REST))
@@ -543,8 +543,8 @@
 	     (RETURN (REBUILD (REVERSE FE) NB N H SM C))))
 
 
-(DEFUN NG NIL 
-       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT) 
+(DEFUN NG NIL
+       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT)
 	     (SETQ NN T)
 	     (SETQ CUT END)
 	     (SETQ C (BUILDNODE (SETQ FE (REVERSE REST))
@@ -902,8 +902,8 @@
 	     (RETURN (REBUILD (REVERSE FE) NB N H SM C))))
 
 
-(DEFUN VG NIL 
-       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT TENSE) 
+(DEFUN VG NIL
+       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT TENSE)
 	     (SETQ NN T)
 	     (SETQ CUT END)
 	     (SETQ C (BUILDNODE (SETQ FE (REVERSE REST))
@@ -1130,8 +1130,8 @@
 	     (RETURN (REBUILD (REVERSE FE) NB N H SM C))))
 
 
-(DEFUN PREPG NIL 
-       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT) 
+(DEFUN PREPG NIL
+       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT)
 	     (SETQ NN T)
 	     (SETQ CUT END)
 	     (SETQ C (BUILDNODE (SETQ FE (REVERSE REST))
@@ -1223,8 +1223,8 @@
 	     (RETURN (REBUILD (REVERSE FE) NB N H SM C))))
 
 
-(DEFUN ADJG NIL 
-       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT) 
+(DEFUN ADJG NIL
+       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT)
 	     (SETQ NN T)
 	     (SETQ CUT END)
 	     (SETQ C (BUILDNODE (SETQ FE (REVERSE REST))
@@ -1314,19 +1314,19 @@
 	     (RETURN (REBUILD (REVERSE FE) NB N H SM C))))
 
 
-(DEFUN CONJ NIL 
-       (PROG (END GOODIE) 
+(DEFUN CONJ NIL
+       (PROG (END GOODIE)
 	     (SETQ END CUT)
 	     (COND ((SETQ GOODIE (APPLY-GRAMMAR 'CONJOIN)) (RETURN (SETQ RE GOODIE)))
 		   (T (RETURN NIL)))))
 
 
-(DEFUN COMMA NIL 
+(DEFUN COMMA NIL
        (COND ((SECONDWORD? '") (FLUSHME) T) ((CONJ)) ((ISQ RE INIT) (FLUSHME) T)))
 
 
-(DEFUN CONJOIN NIL 
-       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT PREV) 
+(DEFUN CONJOIN NIL
+       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 :RESULT PREV)
 	     (SETQ NN T)
 	     (SETQ CUT END)
 	     (SETQ C (BUILDNODE (SETQ FE (REVERSE REST))
@@ -1358,7 +1358,7 @@
 			  (AND (NOT (CQ OFOBJ))
 			       (PARSE2 (APPEND REST '(COMPONENT)) NIL)))
 			 ((EQ (CAR REST) 'CLAUSE)
-			  ((LAMBDA (LASTSENT AUXFE) 
+			  ((LAMBDA (LASTSENT AUXFE)
 				   (AND (PARSE2 (APPEND REST AUXFE '(COMPONENT)) NIL)
 					(OR (NOT AUXFE) (F (CAR AUXFE)))
 					(SETR 'TIME (GETR 'TIME H) C)))
@@ -1399,7 +1399,7 @@
 	     (COND ((OR (CQ NG) (CQ NOUN))
 		    (COND ((CQ AND) (FQ NPL)) (T (MOVE-PT H) (TRNSF NPL NS MASS NFS))))
 		   ((CQ VB)
-		    (PROG (COMMON) 
+		    (PROG (COMMON)
 			  (SETQ COMMON (GET 'VB 'ELIM))
 			  (MAP '(LAMBDA (X) (SETQ COMMON (MEET COMMON (FE X)))) H))
 		    (FESET (UNION COMMON (FE C)) C)))
@@ -1413,10 +1413,10 @@
 	     (RETURN (REBUILD (REVERSE FE) NB N H SM C))))
 
 
-(DEFUN BOTH FEXPR (A) 
-       (PROG (END) 
+(DEFUN BOTH FEXPR (A)
+       (PROG (END)
 	     (SETQ END CUT)
-	     (RETURN (PROG (CUT NBB BOTH) 
+	     (RETURN (PROG (CUT NBB BOTH)
 			   (SETQ NBB N)
 			   (AND (FLUSHME)
 				(MOVE-PTW N NW (EQ (WORD PTW) (CAR A)) NW)
@@ -1437,11 +1437,11 @@
 (DEFUN DOUBLEQUOTER NIL (APPLY-GRAMMAR 'PARSEQUOTED))
 
 
-(DEFUN CANTAKE (NUM TYPE FEATURE) 
-       (PROG (VBFEAT) 
+(DEFUN CANTAKE (NUM TYPE FEATURE)
+       (PROG (VBFEAT)
 	     (SETQ VBFEAT (FE MVB))
 	     (RETURN (COND ((MEMQ 'RSNG TYPE)
-			    (MEMQ 
+			    (MEMQ
 			     (READLIST (APPEND (COND ((MEMQ 'TO TYPE) '(T O))
 						     ((MEMQ 'ING TYPE) '(I N G))
 						     ((MEMQ 'REPORT TYPE)
@@ -1459,8 +1459,8 @@
 			   (T (MEMQ FEATURE VBFEAT))))))
 
 
-(DEFUN CANPARSE (NUM TYPE FEATURE) 
-       (PROG (REG) 
+(DEFUN CANPARSE (NUM TYPE FEATURE)
+       (PROG (REG)
 	     (AND (CANTAKE NUM TYPE FEATURE)
 		  (OR (NULL TYPE)
 		      (AND (APPLY 'PARSE
@@ -1482,5 +1482,5 @@
 		  (OR (NULL FEATURE) (F FEATURE))
 		  (RETURN T))))
 
-REMEMBER/ TO/ UFILE 
-
+#|REMEMBER/ TO/ UFILE
+|#

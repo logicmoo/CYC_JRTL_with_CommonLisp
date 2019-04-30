@@ -1,11 +1,11 @@
 
-################################################################
+#|################################################################
 
 		BLOCKP >
 
 
-    MICRO-PLANNER CODE FOR THE "BLOCKS" MICRO-WORLD 
-################################################################
+    MICRO-PLANNER CODE FOR THE "BLOCKS" MICRO-WORLD
+################################################################|#
 
 
 (DEFPROP TA-AT
@@ -858,4 +858,4 @@ NIL
 		 #UNGRASP))
 
 (QUOTE (PREDICATES ARE: #LOC #SUPPORT #ON #PHYSOB))
-
+
