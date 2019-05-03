@@ -35,6 +35,7 @@
 (load "data.lisp")
 (load "newans.lisp")
 (load "mover.lisp")
+(load "remote.lisp")
 
 )
 
