@@ -1,5 +1,17 @@
-(in-package :shrdlu)
+
 ; (DECLARE (GENPREFIX SYSCOM)) 
+
+#+USE-DEFUN-FEXPR
+(DEFUN-FEXPR CLEANOUT (LIST) 					       ;REMOB'S ALL GENSYMS OF THE MEMBERS OF LIST
+       (MAPC #'(LAMBDA (A)
+		       (CLEANX A 0. (GET A 'MAKESYM))
+		       (SETF (GET A 'MAKESYM) 0.))
+	     LIST))
+
+#-USE-DEFUN-FEXPR
+(PROGN (DEFMACRO CLEANOUT (&rest LIST) (LIST 'APPLY-CLEANOUT (LIST 'QUOTE LIST)))
+ (DEFUN APPLY-CLEANOUT (LIST) (MAPC #'(LAMBDA (A)
+  (CLEANX A 0 (GET A 'MAKESYM)) (SETF (GET A 'MAKESYM) 0)) LIST)) 'CLEANOUT)
 
 ;;;*********************************************************************
 ;;;
@@ -67,6 +79,7 @@
 			     (OR GLOBAL-MESSAGE
 				 '(I DON\'T UNDERSTAND\.)))))
 		    (SHRDLU-TIMER)
+		    #+USE-MOBYTEST (AND MOBYTEST-IN-PROGRESS (AFTER-EACH-SENTENCE))
 		    (AND SH-STANDARD-PRINTOUT (SHSTPO))
 		    (AND SH-AFTERANSWER-PAUSE (ERT))
 		    (GO LOOP)))
@@ -127,10 +140,11 @@
        (AND ^R (UFILE SHTRCE >))
        (AND GO-AWAY (VALRET 'U))) 
 
+#+USE-MOBYTEST 
+(SETQ MOBYTEST-IN-PROGRESS NIL)
 (SETQ GO-AWAY NIL) 
 
 ;;*page
-
 ;;;********************************************************************************
 ;;;                        Fancy timing package
 ;;;********************************************************************************
@@ -316,7 +330,8 @@
 ;;;    (MAPC 'PLNRCLEAN EVENTLIST)
 ;;;
 
-(DEFUN-FEXPR CLEANOUT (LIST) 					       ;REMOB'S ALL GENSYMS OF THE MEMBERS OF LIST
+
+(DEFUN-FEXPR CLEANOUT (LIST) 					       ;REMOVE'S ALL GENSYMS OF THE MEMBERS OF LIST
        (MAPC #'(LAMBDA (A) 
 		       (CLEANX A 0. (GET A 'MAKESYM))
 		       (SETF (GET A 'MAKESYM) 0.))
@@ -334,7 +349,7 @@
 		      (SETF (GET SYMBOL 'NEW)
 			       (GET SYMBOL 'MAKESYM)))
 	     SYMBOL-LIST)) 
-
+
 (DEFUN CLEANX (A B C) 
        ;; CLEANX REMOB'S GENSYMS OF THE SYMBOL "A" FROM B+1 UP TO AND
        ;;INCLUDING C
@@ -373,6 +388,8 @@
        (PROG (ERT-TIME GLOP EXP ST-BUFFER BUILDING-ST-FORM
 	      FIRSTWORD) 
 	     (AND NEVERSTOP (RETURN NIL))
+	     #+USE-MOBYTEST 
+         (AND MOBYTEST-IN-PROGRESS (IOC W))
 	     (AND NOSTOP
 		  (NOT IGNORE-NOSTOP-SWITCH?)
 		  (AND CAUSE-ABORTION
@@ -381,6 +398,9 @@
 	     (SETQ ERT-TIME (GET-INTERNAL-RUN-TIME))
 	     (TERPRI)
 	     (MAPC #'PRINT4 MESSAGE) ;; was print3
+	     #+USE-MOBYTEST
+         (AND MOBYTEST-IN-PROGRESS
+		  (THROW 'MOBYTEST ABORTPARSER))
 	PRINT(SETQ FIRSTWORD T ST-BUFFER NIL BUILDING-ST-FORM NIL)     ;"ST" REFERS TO SHOW, TELL.
 	     (COND (ZOG-USER (PRINT 'LISTENING--->))
 		   (T (PRINT '>>>)))
@@ -526,7 +546,15 @@
 				   ALIST)))))
     A)))
 
+(DEFUN PRINT2 (X)
+       (COND ((> CHRCT (FLATSIZE X)) (PRINC '\ ))
+	     (T (TERPRI)))
+       (PRINC X))
 
+(DEFUN PRINT3 (X)
+       (PROG2 (OR (> CHRCT (FLATSIZE X)) (TERPRI))
+	      (PRINC X)
+	      (PRINC '\ )))
 
 (DEFUN PRINTEXT (TEXT) 
        (COND (TEXT (TERPRI)

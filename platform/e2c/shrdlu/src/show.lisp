@@ -479,12 +479,15 @@
       TELL
       #'(LAMBDA (X) (COND ((NULL (CDR X)) (TELLCHOICE X))
 			((EQ (CADR X) 'ON)
+			 (IOC W)
 			 (SETQ PARSENODE-SEE T LABELTRACE T)
 			 (TRACE CALLSM PARSE))
 			((EQ (CADR X) 'OFF)
+			 (IOC W)
 			 (SETQ PARSENODE-SEE NIL LABELTRACE NIL)
 			 (UNTRACE CALLSM PARSE))
-			(T (TELLCHOICE X)))))
+			(T (TELLCHOICE X)))
+		  (IOC V)))
 
 (DEFS DEFINITIONS
       SHOWTREE
@@ -1039,3 +1042,9 @@
        '*)
 
 ; removed lis2fy, also in syscom.lisp -ts.
+#|
+(DEFUN LIS2FY (X) 
+       (COND ((ATOM X) (LIST (LIST X)))
+	     ((ATOM (CAR X)) (LIST X))
+	     (X)))
+|#
