@@ -1905,7 +1905,7 @@ possdef							;the placement of this tag is a
 		   (T (RETURN NIL)))))
 
 (DEFUN COMMA NIL
-       (COND ((SECONDWORD? ' \") (FLUSHME) T)			       ;IF " FOLLOWS, FLUSH COMMA AND CONTINUE
+       (COND ((SECONDWORD? '\") (FLUSHME) T)			       ;IF " FOLLOWS, FLUSH COMMA AND CONTINUE
 	     ((CONJ))						       ; IF COMMA IS PART OF CONJOINED STRUCTURE, GREAT
 	     ((ISQ RE INIT) (FLUSHME) T)			       ;IF COMMA FOLLOWS INITIAL-TYPE PHRASE, FLUSH IT
 								       ;AND CONTINUE

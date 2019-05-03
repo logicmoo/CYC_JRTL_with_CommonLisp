@@ -2990,6 +2990,7 @@ public final class Primitives {
 
         {
             final LispThread thread = LispThread.currentThread();
+
             final int length = args.length();
             switch (length) {
                 case 0:
@@ -4286,14 +4287,14 @@ public final class Primitives {
             LispObject result = T;
             while (args != NIL) {
                 result = eval(args.car(), env, thread);
+                args = args.cdr();
                 if (result == NIL) {
-                    if (((Cons) args).cdr != NIL) {
+                    if (args != NIL) {
                         // Not the last form.
                         thread._values = null;
                     }
                     break;
                 }
-                args = ((Cons) args).cdr;
             }
             return result;
         }

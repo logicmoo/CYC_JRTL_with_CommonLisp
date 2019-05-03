@@ -18,6 +18,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifdef NEVER_DEFINED
 
 #include "native.h"
 #include <signal.h>
@@ -88,3 +89,6 @@ Java_org_armedbear_lisp_Native_getCurrentThreadSystemTime(JNIEnv *env, jclass cl
     times(&buf);
     return buf.tms_stime;
 }
+
+#endif
+

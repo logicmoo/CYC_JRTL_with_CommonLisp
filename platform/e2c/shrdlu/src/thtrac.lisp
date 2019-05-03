@@ -194,3 +194,4 @@
 
 
 ; removed thprintc - also defined in plnr.lisp -ts.
+;; (DEFUN THPRINTC (X) (TERPRI) (PRINC X) (PRINC '\ ))

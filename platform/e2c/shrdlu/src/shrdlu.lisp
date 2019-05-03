@@ -19,7 +19,7 @@
 ;; Parse and distribute the next two input arguments, if present.
 ;; These identify the server and port to which the move commands are
 ;; to be delivered.
-(if (caddr EXT:*ARGS*) 
+(if (caddr EXT:*ARGS*)
     (progn
       (setq remote-cmds-p t)
       (setq remote-actions-p t)
@@ -51,7 +51,7 @@
 
 ; Set either (DEBUGMODE) or (USERMODE) here.
 (USERMODE)
-;(DEBUGMODE)
+(DEBUGMODE)
 
 ; Start the program
 (INITIALSTUFF 'UMR-1.0 NIL)

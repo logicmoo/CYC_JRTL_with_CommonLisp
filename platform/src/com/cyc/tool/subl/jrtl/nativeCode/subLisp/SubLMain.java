@@ -71,6 +71,8 @@ public class SubLMain
 {
   public static boolean OPENCYC = false;
   public static boolean Never_REDEFINE = true;
+  public static boolean BOOTY_HACKZ = true;
+
   static
   {
     SystemCurrent.setupIO();

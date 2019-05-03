@@ -52,6 +52,7 @@ public final class Main
 {
   public static final long startTimeMillis = System.currentTimeMillis();
   public static boolean isSublispDefault = false;
+
   public static InheritableThreadLocal<Boolean> isSubLisp = new InheritableThreadLocal<Boolean>()
   {
     @Override
@@ -209,17 +210,19 @@ public final class Main
   public static String[] extractOptions(String[] args)
   {
     List<String> argsList = new ArrayList<String>( Arrays.asList( args ) );
-    if( argsList.remove( "--prolog" ) )
+    if( argsList.remove( "--lisp" ) )
     {
-      noPrologJNI = false;
+      argsList.add( "--nocyc" );
+      argsList.add( "--noprolog" );
     }
-    if( argsList.remove( "--noprolog" ) )
+    if( argsList.remove( "--noprolog" ) || argsList.remove( "--noswi" ) )
     {
       noPrologJNI = true;
     }
     if( argsList.remove( "--opencyc" ) )
     {
       SubLMain.OPENCYC = true;
+      isSublispDefault = true;
       try
       {
         UpdateZip.updateUnits( "5022" );
@@ -233,6 +236,7 @@ public final class Main
     if( argsList.remove( "--rcyc" ) )
     {
       SubLMain.OPENCYC = false;
+      isSublispDefault = true;
       try
       {
         UpdateZip.updateUnits( "7166" );
@@ -249,6 +253,7 @@ public final class Main
       Main.noBSHGUI = false;
       needSubLMAIN = true;
       Main.needABCL = false;
+      isSublispDefault = true;
       SubLMain.noInitCyc = false;
     }
     if( argsList.remove( "--nocyc" ) )
@@ -268,6 +273,10 @@ public final class Main
     {
       noGUI = true;
       noBSHGUI = true;
+    }
+    if( argsList.remove( "--prolog" ) )
+    {
+      noPrologJNI = false;
     }
     if( argsList.remove( "--beandesk" ) )
     {

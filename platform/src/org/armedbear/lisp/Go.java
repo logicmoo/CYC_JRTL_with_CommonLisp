@@ -74,10 +74,8 @@ public final class Go extends CatchableThrow
 		return null;
 	}
 
-	@Override
-	public SubLObject getTarget() {
-		// TODO Auto-generated method stub
-		if(true) Errors.unimplementedMethod("Auto-generated method stub:  CatchableThrow.getTarget");
-		return null;
-	}
+  @Override
+  public SubLObject getTarget() {
+    return tag;
+  }
 }

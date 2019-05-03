@@ -2165,7 +2165,8 @@ public class Pathname extends LispObject {
     public static final LispObject truename(Pathname pathname,
                                             boolean errorIfDoesNotExist)
     {
-        if (pathname == null || pathname.equals(NIL)) {
+        final boolean unlikelyEquals = pathname != null && pathname.equals(NIL);
+        if (pathname == null || unlikelyEquals) {
            return doTruenameExit(pathname, errorIfDoesNotExist);
         }
         if (pathname instanceof LogicalPathname) {
@@ -2632,7 +2633,7 @@ public class Pathname extends LispObject {
 
     static {
         LispObject obj = Symbol.DEFAULT_PATHNAME_DEFAULTS.getSymbolValue();
-        
+
         Pathname coerceToPathname = coerceToPathname(obj);
 		Symbol.DEFAULT_PATHNAME_DEFAULTS.setSymbolValue(coerceToPathname);
     }

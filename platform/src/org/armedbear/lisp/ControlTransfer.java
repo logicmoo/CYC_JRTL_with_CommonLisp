@@ -30,44 +30,45 @@
  * obligated to do so.  If you do not wish to do so, delete this
  * exception statement from your version.
  */
-
 package org.armedbear.lisp;
 
-/** This class is the parent class of all non-local transfer of
- * control events in ABCL. The classes inheriting from this class each
- * represent a transfer of control event as it is available in the
- * standard: GO (represented by Go), RETURN (by Return) and THROW (by Throw).
+/**
+ * This class is the parent class of all non-local transfer of control events in
+ * ABCL. The classes inheriting from this class each represent a transfer of
+ * control event as it is available in the standard: GO (represented by Go),
+ * RETURN (by Return) and THROW (by Throw).
  *
- * Please note that you should <b>only</b> be using these classes in case
- * you've establisched a corresponding TAGBODY, BLOCK or CATCH-like
- * construct in your code.
+ * Please note that you should <b>only</b> be using these classes in case you've
+ * establisched a corresponding TAGBODY, BLOCK or CATCH-like construct in your
+ * code.
  *
- * Otherwise, be aware that if you are mixing Lisp and Java code,
- * Lisp code being called into might throw one of the three exception types
- * and cause execution to be transferred to the nearest handler - presumably
- * outside your Java code.
+ * Otherwise, be aware that if you are mixing Lisp and Java code, Lisp code
+ * being called into might throw one of the three exception types and cause
+ * execution to be transferred to the nearest handler - presumably outside your
+ * Java code.
  *
  */
-abstract public class ControlTransfer extends Error
+abstract public class ControlTransfer
+    extends
+      Error
 {
-    public ControlTransfer()
-    {
-    }
+  public ControlTransfer()
+  {}
 
-    /**
-     * Overridden in order to make ControlTransfer construct
-     * faster. This avoids gathering stack trace information.
-     */
-    @Override
-	public Throwable fillInStackTrace()
-    {
-        return this;
-    }
+  /**
+   * Overridden in order to make ControlTransfer construct faster. This avoids
+   * gathering stack trace information.
+   */
+  @Override
+  public Throwable fillInStackTrace()
+  {
+    return this;
+  }
 
-    public ControlTransfer(String message)
-    {
-        super(message);
-    }
+  public ControlTransfer( String message )
+  {
+    super( message );
+  }
 
-    public abstract LispObject getCondition();
+  public abstract LispObject getCondition();
 }

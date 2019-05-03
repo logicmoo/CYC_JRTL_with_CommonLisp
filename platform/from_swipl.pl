@@ -35,7 +35,7 @@ ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(fal
 % in case it creates too many problems
 % :- use_module(library(dictoo)).
 
-to_string(O,S):- jpl_object(O),jpl_call(O,toString,[],S),!.
+to_string(O,S):- jpl_is_object(O),jpl_call(O,toString,[],S),!.
 to_string(O,O):-!.
 
 jpl_getval(O,call(P),R):- !, call(P,O,R), !.
@@ -81,10 +81,17 @@ mp_test:- sys, meta_predicate(system: write(7)), meta_predicate(system: writeq(7
 
 
 cl_eval(L):- cl_eval(L, O),po(O).
-cyc_eval(L):- cl_cyc_eval(L, O),po(O).
+cyc_eval(L):- cyc_eval(L, O),po(O).
+cyc_eval(L, O):- cl_cyc_eval(L, O).
 cl_read_lisp(L):- cl_read_lisp(L, O),po(O).
 cl_eval_string(L):- cl_eval_string(L, O),po(O).
 % cl_eval(L,O):-cl_lisp_eval(L,O).
+
+
+cyc_repl:- cl_eval('(cyc-repl)',_).
+lisp_repl:- cl_eval('(lisp-repl)',_).
+
+
 
 call_ctrl(Head):- call_ctrl(Head,@(null)).
 call_ctrl(Head,Result):- strip_module(Head,M,H),oo_deref(M,H,HeadE),
