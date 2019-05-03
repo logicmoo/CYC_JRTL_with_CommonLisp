@@ -35,7 +35,7 @@
 (load "data.lisp")
 (load "newans.lisp")
 (load "mover.lisp")
-#+SOCKET 
+#+SOCKET
   (load "remote.lisp")
 #-SOCKET
   (load "local.lisp")
@@ -44,7 +44,7 @@
 )
 
 ; Set either (DEBUGMODE) or (USERMODE) here.
-(USERMODE)
+(DEBUGMODE)
 
 #+ABCL
 (when ext:*COMMAND-LINE-ARGUMENT-LIST* (DEBUGMODE))
