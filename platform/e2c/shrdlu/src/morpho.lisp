@@ -304,11 +304,11 @@
 
 (SETQ CONSO '(B C D F G H J K L M N P Q R S T V W X Z)) 
 
-0. 
+;; 0.
 
 (SETQ LIQUID '(L R S Z V)) 
 
-(SETQ PUNCL '(\. ? : \; !)) 
+(SETQ PUNCL '(\. ? \: \; !))
 
 (SETQ RUBOUT #\RUBOUT)
 
@@ -316,7 +316,12 @@
 
 (DEFUN UPPERCASE-IFY-CHAR (CHAR) (COND ((CHAR>= #\Z CHAR #\A) (CHAR- CHAR (CODE-CHAR 32))) (T CHAR)))
 
+(print "Done 0")
 
 (SETQ VOWEL '(NIL A E I O U Y)) 
 
-(SETQ SPACE #\SPACE) 
+(SETQ SPACE-CHAR #\Space  )
+
+(print "Done")
+
+

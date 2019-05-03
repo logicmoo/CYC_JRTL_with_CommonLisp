@@ -1,4 +1,3 @@
-(in-package :shrdlu)
 ; The fix for MACLISP's DEFPROP, written by Kent Pitman
 ; first form, for new lambda's defined
  (DEFMACRO DEFPROPFN ((SYM PROP) BVL &BODY FORMS)

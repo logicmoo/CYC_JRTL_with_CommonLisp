@@ -1,17 +1,6 @@
 
-; (DECLARE (GENPREFIX SYSCOM)) 
+; (DECLARE (GENPREFIX SYSCOM))
 
-#+USE-DEFUN-FEXPR
-(DEFUN-FEXPR CLEANOUT (LIST) 					       ;REMOB'S ALL GENSYMS OF THE MEMBERS OF LIST
-       (MAPC #'(LAMBDA (A)
-		       (CLEANX A 0. (GET A 'MAKESYM))
-		       (SETF (GET A 'MAKESYM) 0.))
-	     LIST))
-
-#-USE-DEFUN-FEXPR
-(PROGN (DEFMACRO CLEANOUT (&rest LIST) (LIST 'APPLY-CLEANOUT (LIST 'QUOTE LIST)))
- (DEFUN APPLY-CLEANOUT (LIST) (MAPC #'(LAMBDA (A)
-  (CLEANX A 0 (GET A 'MAKESYM)) (SETF (GET A 'MAKESYM) 0)) LIST)) 'CLEANOUT)
 
 ;;;*********************************************************************
 ;;;
@@ -19,12 +8,12 @@
 ;;;
 ;;;**********************************************************************
 
-(DEFUN SHRDLU NIL 
+(DEFUN SHRDLU NIL
        (PROG (ERT-TIME END AMB TIMAMB BOTH BACKREF BACKREF2 ANSNAME
 	      LASTREL WHO PT PTW SENT PUNCT IGNORE H N NB FE SM RE
 	      MES MESP C CUT CURTIME STATE GLOBAL-MESSAGE LEVEL
 	      P-TIME SMN-TIME PLNR-TIME ANS-TIME ANS-PLNR-TIME
-	      SH-GCTIME) 
+	      SH-GCTIME)
 	     (DECLARE (SPECIAL LEVEL N CUT C END PLNR-TIME PT PTW NB
 	                       BOTH GLOBAL-MESSAGE MES BACKREF WHO
 			       LASTREL ANSNAME BACKREF2 FE
@@ -32,20 +21,20 @@
 	     (CLEANOUT TSS EVX NODE ANS OSS RSS X)		       ;FLUSH OLD GENSYMS
 	CATCH-LOOP
 	     (CATCH 'ABORT-PARSER
-	      (PROG NIL 
-	       LOOP (SETQ SENTNO (+ 1 SENTNO) 
-			  PARSINGS 0. 
-			  LEVEL 0. 
-			  LASTSENTNO (+ 1 LASTSENTNO) 
-			  LASTSENT C 
-			  GLOBAL-MESSAGE NIL 
+	      (PROG NIL
+	       LOOP (SETQ SENTNO (+ 1 SENTNO)
+			  PARSINGS 0.
+			  LEVEL 0.
+			  LASTSENTNO (+ 1 LASTSENTNO)
+			  LASTSENT C
+			  GLOBAL-MESSAGE NIL
 			  MES '(NOPE)
 			  BACKREF NIL 				       ;???????????????????
-			  RUNTIME (GET-INTERNAL-RUN-TIME) 
+			  RUNTIME (GET-INTERNAL-RUN-TIME)
 			  SH-GCTIME 0.
-			  PLNR-TIME 0. 
-			  ANS-PLNR-TIME 0. 
-			  SMN-TIME 0. 
+			  PLNR-TIME 0.
+			  ANS-PLNR-TIME 0.
+			  SMN-TIME 0.
 			  ERT-TIME 0.
 			  WHO NIL)
 	       UP   (SETQ N (SETQ SENT (ETAOIN)))
@@ -83,16 +72,16 @@
 		    (AND SH-STANDARD-PRINTOUT (SHSTPO))
 		    (AND SH-AFTERANSWER-PAUSE (ERT))
 		    (GO LOOP)))
-	     (GO CATCH-LOOP))) 
+	     (GO CATCH-LOOP)))
 
-(DEFUN TIMER (T0 T1) (/ (- T1 T0) 1000000.0)) 
+(DEFUN TIMER (T0 T1) (/ (- T1 T0) 1000000.0))
 
-(DEFUN PARSEVAL (A) 
-       (PROG (P-TTIME P-GC SM-TIME MP-TIME RETURN-NODE) 
+(DEFUN PARSEVAL (A)
+       (PROG (P-TTIME P-GC SM-TIME MP-TIME RETURN-NODE)
              (DECLARE (SPECIAL SM-TIME MP-TIME))
 	     (SETQ P-GC 0.
-		   SM-TIME 0. 
-		   MP-TIME 0. 
+		   SM-TIME 0.
+		   MP-TIME 0.
 		   P-TTIME (GET-INTERNAL-RUN-TIME))
 	     (SETQ RETURN-NODE (EVAL (CONS 'PARSE A)))
 	     (SETQ P-TIME (- (TIMER P-TTIME (GET-INTERNAL-RUN-TIME))
@@ -103,12 +92,12 @@
 		       (- P-TIME
 				   (TIMER P-GC 0))))
 	     (SETQ SMN-TIME SM-TIME PLNR-TIME MP-TIME)
-	     (RETURN RETURN-NODE))) 
+	     (RETURN RETURN-NODE)))
 
-(SETQ PARSEARGS '(CLAUSE MAJOR TOPLEVEL)) 
+(SETQ PARSEARGS '(CLAUSE MAJOR TOPLEVEL))
 
 ;;*page
-
+
 ;;;********************************************
 ;;;
 ;;;   test package !!  -experimental version
@@ -121,7 +110,7 @@
 ;;;   open a file to write onto and do a (IOC r) whenever thing are set
 ;;;   up (remember that all prints will copy to the file after the ioc
 ;;;   is executed so a sneaky way to comment the output file is to say
-;;;   "(say ...)" or some such.) 
+;;;   "(say ...)" or some such.)
 ;;;     Next set the (global) variable "mobytest-in-progress" to non-nil.
 ;;;   This will evade every break that the system does via ERTEX - that
 ;;;   should be all of them but at the moment (8/6/74) that can't be
@@ -129,28 +118,28 @@
 ;;;     Functions below trap at the obvious places and could be tailored
 ;;;   to desired stuff.
 ;;;     At this point, the preliminaries are over; proceed the  break
-;;;   and type a "m" and the next READY. - it should take off. 
+;;;   and type a "m" and the next READY. - it should take off.
 ;;;
 
-(DEFUN AFTER-EACH-SENTENCE NIL 
+(DEFUN AFTER-EACH-SENTENCE NIL
        (COND (C (WALLP C) (DP (CAR (SM C)))))
        (TYO 12.)) 						       ;form feed
 
-(DEFUN END-OF-FILE-CONDITION NIL 
+(DEFUN END-OF-FILE-CONDITION NIL
        (AND ^R (UFILE SHTRCE >))
-       (AND GO-AWAY (VALRET 'U))) 
+       (AND GO-AWAY (VALRET 'U)))
 
-#+USE-MOBYTEST 
+#+USE-MOBYTEST
 (SETQ MOBYTEST-IN-PROGRESS NIL)
-(SETQ GO-AWAY NIL) 
+(SETQ GO-AWAY NIL)
 
 ;;*page
 ;;;********************************************************************************
 ;;;                        Fancy timing package
 ;;;********************************************************************************
 
-(DEFUN SHRDLU-TIMER NIL 
-       (PROG (BASE) 
+(DEFUN SHRDLU-TIMER NIL
+       (PROG (BASE)
 	     (OR SH-PRINT-TIME (RETURN T))
 	     (SETQ BASE 10.)
 	     (TERPRI)
@@ -172,14 +161,14 @@
 	     (PRINC ANS-PLNR-TIME)
 	     (PRINTC '\ \ \ ANSWERING)
 	     (PRINC ANS-TIME)
-	     (TERPRI))) 
+	     (TERPRI)))
 
-(DEFUN TIME-ANSWER (REAL-CALL) 
-       (PROG (MP-TIME SM-TIME PLNR-TIME ANS-TTIME GC RESULT) 
-	     (SETQ MP-TIME 0. 
-		   SM-TIME 0. 
+(DEFUN TIME-ANSWER (REAL-CALL)
+       (PROG (MP-TIME SM-TIME PLNR-TIME ANS-TTIME GC RESULT)
+	     (SETQ MP-TIME 0.
+		   SM-TIME 0.
 		   GC 0.
-		   ANS-TTIME (GET-INTERNAL-RUN-TIME) 
+		   ANS-TTIME (GET-INTERNAL-RUN-TIME)
 		   PLNR-TIME 0.)
 	     (SETQ RESULT (EVAL REAL-CALL))
 	     (SETQ ANS-TIME
@@ -188,25 +177,25 @@
 		 (SETQ ANS-TIME
 		       (- ANS-TIME
 				   (TIMER GC 0.))))
-	     (SETQ ANS-PLNR-TIME 0 ;MPLNR-TIME 
+	     (SETQ ANS-PLNR-TIME 0 ;MPLNR-TIME
 		   SMN-TIME (+ SMN-TIME SM-TIME))
-	     (RETURN RESULT))) 
+	     (RETURN RESULT)))
 
-(DEFUN PARSE-STATISTICS NIL 
+(DEFUN PARSE-STATISTICS NIL
        (COND ((= PARSINGS 0.)					       ;initialization
 	      (SETF (GET 'PARSINGS 'WINS) 0.)))
        (AND RE
 	    (SETF (GET 'PARSINGS 'WINS)
 		     (+ 1 (GET 'PARSINGS 'WINS))))
-       (SETQ PARSINGS (+ 1 PARSINGS))) 
+       (SETQ PARSINGS (+ 1 PARSINGS)))
 
 ;;; these next two are left over from previous incarnations
-;;;(DEFUN TIMER NIL 
+;;;(DEFUN TIMER NIL
 ;;;       (AND SH-PRINT-TIME
 ;;;	    (PRINT 'TIME-USED)
-;;;	    (PRINC (- (TIME-SINCE RUNTIME) ERT-TIME)))) 
+;;;	    (PRINC (- (TIME-SINCE RUNTIME) ERT-TIME))))
 
-(DEFUN TIME-SINCE (X) (/ (- (GET-INTERNAL-RUN-TIME) X) 1000000.0)) 
+(DEFUN TIME-SINCE (X) (/ (- (GET-INTERNAL-RUN-TIME) X) 1000000.0))
 
 ;;*page
 
@@ -214,8 +203,8 @@
 ;;;        Functions that extract input from the user
 ;;;****************************************************************
 
-(DEFUN-FEXPR INTEROGATE (MESSAGE) 
-       (PROG (CH) 
+(DEFUN-FEXPR INTEROGATE (MESSAGE)
+       (PROG (CH)
 	MES  (MAPC #'PRINT3 MESSAGE)
 	     (TERPRI)
 	     (COND ((MEMQ (SETQ CH (READ-CHAR)) '(Y \y))
@@ -223,10 +212,10 @@
 		   ;;;  ((EQ CH '?)
 		   ;;;   (EVAL (GET 'FLUSH 'EXPLANATION))
 		   ;;;   (GO MES))
-		   (T (RETURN NIL))))) 
+		   (T (RETURN NIL)))))
 
 (DEFUN-FEXPR DEFLIST
-	 (LIST) (MAPC #'(LAMBDA (A) 
+	 (LIST) (MAPC #'(LAMBDA (A)
 				(SETF (GET (CAR A) (CAR LIST))
 					 (CADR A)))
 			      (CDR LIST))
@@ -236,14 +225,14 @@
 
 ;;;****************************************************************
 ;;;           specialized and not so, output routines
-;;;**************************************************************** 
+;;;****************************************************************
 
 (DEFUN % NIL 							       ;THIS FUNCTION PRINTS THE CURRENT SENTENCE
        (TERPRI)
        (MAPC 'PRINT3 SENT)
-       (PRINC PUNCT)) 
+       (PRINC PUNCT))
 
-(DEFUN DA (X) 
+(DEFUN DA (X)
        (AND
 	(GET X 'THASSERTION)
 	(DISP
@@ -252,10 +241,10 @@
 			(APPLY 'APPEND
 			       (MAPCAR 'CDR
 				       (CDR (GET X
-						 'THASSERTION))))))))) 
+						 'THASSERTION)))))))))
 
 (DEFUN DISP
-	 (&REST 0A) 
+	 (&REST 0A)
 	 	(TERPRI)
 	 	(AND (CONSP 0A)
 		   (PRINC (CAR 0A))
@@ -264,18 +253,18 @@
 		   (TERPRI))
 		(PRINT (CDDR 0A)))
 
-(DEFUN DTABLE (L) 
+(DEFUN DTABLE (L)
        (PRINT =LINE)
-       (MAPC '(LAMBDA (X) 
+       (MAPC '(LAMBDA (X)
 		      (PRINTC (TAB 5.) X (TAB 22.) '= (EVAL X))
 		      (COND ((GET X 'TURNED)
 			     (TAB 30.)
 			     (PRINC (LIST (GET X 'TURNED))))))
 	     L)
-       (PRINTC =LINE)) 
+       (PRINTC =LINE))
 
-(DEFUN DP (X) 
-       (PROG (PLIST) 
+(DEFUN DP (X)
+       (PROG (PLIST)
 	     (TERPRI)
 	     (TERPRI)
 	     (PRINC '[)
@@ -291,9 +280,9 @@
 	B    (COND ((SETQ PLIST (CDDR PLIST)) (GO A)))
 	     (TERPRI)
 	     (AND DPSTOP (ERT))
-	     (RETURN '*))) 
+	     (RETURN '*)))
 
-(DEFUN-FEXPR DSAY (L) (APPLY-SAY L)) 
+(DEFUN-FEXPR DSAY (L) (APPLY-SAY L))
 
 ;;*page
 
@@ -301,18 +290,18 @@
 ;;;        functions for hand-tailored garbage collection
 ;;;****************************************************************
 
-(DEFUN FORGET NIL 
-       (SETQ LASTSENT NIL 
-	     LASTREL NIL 
-	     BACKREF NIL 
-	     BACKREF2 NIL 
-	     LASTTIME NIL 
+(DEFUN FORGET NIL
+       (SETQ LASTSENT NIL
+	     LASTREL NIL
+	     BACKREF NIL
+	     BACKREF2 NIL
+	     LASTTIME NIL
 	     LASTPLACE NIL)
        (SETQ LASTSENTNO 0.)
        (MAPC '(LAMBDA (PN) (MAPC '(LAMBDA (PROP) (REMPROP PN PROP))
 				 '(BIND LASTBIND)))
 	     '(IT THEY ONE))
-       (AND EVENTLIST (PROGN (THFLUSH HISTORY) (STARTHISTORY)))) 
+       (AND EVENTLIST (PROGN (THFLUSH HISTORY) (STARTHISTORY))))
 
 ;;; THIS FUNCTION HAS ALSO INCLUDED A CALL TO "PLNRCLEAN"
 ;;; TO SCRUB AWAY THE EVENTLIST - BUT THE DETAILS OF ITS
@@ -331,36 +320,42 @@
 ;;;
 
 
+#+USE-DEFUN-FEXPR
 (DEFUN-FEXPR CLEANOUT (LIST) 					       ;REMOVE'S ALL GENSYMS OF THE MEMBERS OF LIST
-       (MAPC #'(LAMBDA (A) 
+       (MAPC #'(LAMBDA (A)
 		       (CLEANX A 0. (GET A 'MAKESYM))
 		       (SETF (GET A 'MAKESYM) 0.))
-	     LIST)) 
+	     LIST))
 
-(DEFUN-FEXPR CLEANUP (SYMBOL-LIST) 
+#-USE-DEFUN-FEXPR
+(PROGN (DEFMACRO CLEANOUT (&rest LIST) (LIST 'APPLY-CLEANOUT (LIST 'QUOTE LIST)))
+ (DEFUN APPLY-CLEANOUT (LIST) (MAPC #'(LAMBDA (A)
+  (CLEANX A 0 (GET A 'MAKESYM)) (SETF (GET A 'MAKESYM) 0)) LIST)) 'CLEANOUT)
+
+(DEFUN-FEXPR CLEANUP (SYMBOL-LIST)
        ;;CLEANUP IS USED TO GET RID OF GENSYMS NO LONGER NEEDED ALL
        ;;GENSYMS FROM THE NUMBER "OLD" TO THE NUMBER "NEW" ARE
        ;;REMOB'ED THE "OLD" AND "NEW" PROPERTIES ARE UPDATED
-       (MAPC '(LAMBDA (SYMBOL) 
+       (MAPC '(LAMBDA (SYMBOL)
 		      (CLEANX SYMBOL
 			      (GET SYMBOL 'OLD)
 			      (SETF (GET SYMBOL 'OLD)
 				       (GET SYMBOL 'NEW)))
 		      (SETF (GET SYMBOL 'NEW)
 			       (GET SYMBOL 'MAKESYM)))
-	     SYMBOL-LIST)) 
+	     SYMBOL-LIST))
 
-(DEFUN CLEANX (A B C) 
+(DEFUN CLEANX (A B C)
        ;; CLEANX REMOB'S GENSYMS OF THE SYMBOL "A" FROM B+1 UP TO AND
        ;;INCLUDING C
-       (PROG (SAVE I) 
+       (PROG (SAVE I)
 	     (SETQ B (OR B 0.))
 	     (SETQ SAVE (GET A 'MAKESYM))
 	     (AND C
 		  (> C B)
 		  (SETF (GET A 'MAKESYM) B)
 		  (DO ((I B (+ 1 I))) ((= I C)) (UNINTERN (MAKESYM A))))
-	     (RETURN (SETF (GET A 'MAKESYM) SAVE)))) 
+	     (RETURN (SETF (GET A 'MAKESYM) SAVE))))
 
 ;;*PAGE
 
@@ -368,7 +363,7 @@
 ;;;        a most complete and sophisticated break package
 ;;;****************************************************************
 
-(DEFUN-FEXPR THERT (MESSAGE) (ERTEX MESSAGE NIL T)) 
+(DEFUN-FEXPR THERT (MESSAGE) (ERTEX MESSAGE NIL T))
 
 (DEFUN-FEXPR ERT (MESSAGE) (ERTEX MESSAGE NIL T)) 		       ;ALWAYS STOPS, NEVER CAUSES ABORTION. USED FOR
 								       ;GUARENTEED STOPS AS IN DEBUGGING OR ETAOIN
@@ -376,19 +371,19 @@
 (DEFUN-FEXPR ERTERR (MESSAGE) (ERTEX MESSAGE T NIL)) 		       ;USED FOR KNOWN WIERD STATES SUCH AS CHOP. USES
 								       ;"NOSTOP" SWITCH, CAUSES ABORTION
 
-(DEFUN-FEXPR BUG (MESSAGE) 
+(DEFUN-FEXPR BUG (MESSAGE)
        (ERTEX (CONS 'BUG!!!!!!!!!! MESSAGE) T NIL)) 		       ; MARKES UNANTICIPATED WIERD STATES WHICH
 								       ;INDICATE MISTAKES IN THE CODE.
 
-(DEFUN-FEXPR GLOBAL-ERR (MESSAGE) 
+(DEFUN-FEXPR GLOBAL-ERR (MESSAGE)
        (ERTEX (SETQ GLOBAL-MESSAGE MESSAGE) T NIL)) 		       ; MARKES KNOWN INADEQUACIES OF THE SYSTEM.
 								       ;SWITCHABLE STOP, CAUSES ABORTION
 
-(DEFUN ERTEX (MESSAGE CAUSE-ABORTION IGNORE-NOSTOP-SWITCH?) 
+(DEFUN ERTEX (MESSAGE CAUSE-ABORTION IGNORE-NOSTOP-SWITCH?)
        (PROG (ERT-TIME GLOP EXP ST-BUFFER BUILDING-ST-FORM
-	      FIRSTWORD) 
+	      FIRSTWORD)
 	     (AND NEVERSTOP (RETURN NIL))
-	     #+USE-MOBYTEST 
+	     #+USE-MOBYTEST
          (AND MOBYTEST-IN-PROGRESS (IOC W))
 	     (AND NOSTOP
 		  (NOT IGNORE-NOSTOP-SWITCH?)
@@ -435,8 +430,8 @@
 					    (GO LISTEN))
 			  ((AND FIRSTWORD
 				(MEMQ GLOP '(SHOW TELL)))
-			   (SETQ BUILDING-ST-FORM T 
-				 ST-BUFFER (CONS GLOP ST-BUFFER) 
+			   (SETQ BUILDING-ST-FORM T
+				 ST-BUFFER (CONS GLOP ST-BUFFER)
 				 FIRSTWORD NIL)
 			   (GO LISTEN))
 			  (ZOGUSER (PRINC GLOP)
@@ -450,31 +445,31 @@
 	     ;;;
 	EVAL-EXP
 	     (IGNORE-ERRORS (LIST (PRINT (EVAL EXP))))
-	     (GO PRINT))) 
+	     (GO PRINT)))
 
 ;;*PAGE
 
 
-(DEFUN-FEXPR COMBINATION? (WORDS) 
+(DEFUN-FEXPR COMBINATION? (WORDS)
        ;;THIS FUNCTION CHECKS TO SEE IF THE WORDS PASSED AS ARGS FORM
        ;;A COMBINATION SUCH AS "STACK-UP" OR "ON-TOP-OF" COMBINATIONS
        ;;ARE IN THE DICTIONARY AS A SINGLE ATOM COMPOSED OF THE WORDS
        ;;IN THE COMBINATION SEPARATED BY DASHES ALL COMBINATIONS HAVE
        ;;THE FEATURE "COMBINATION" AND HAVE A ROOT WHICH IS A LIST OF
        ;;THE WORDS IN THE COMBINATION
-       (PROG (COMBINE) 
+       (PROG (COMBINE)
              (DECLARE (SPECIAL COMBINE))
-	     (MAPC 
-	      #'(LAMBDA (X) 
+	     (MAPC
+	      #'(LAMBDA (X)
 		(SETQ COMBINE (NCONC COMBINE
 				     (CONS '-
 					   (EXPLODE (EVAL X))))))
 	      WORDS)
 	     (SETQ COMBINE (LIST (INTERN (STRING (MAKNAM (CDR COMBINE))))))
 	     (AND (ISQ COMBINE COMBINATION) (RETURN COMBINE))
-	     (RETURN NIL))) 
+	     (RETURN NIL)))
 
-(SETQ CONSO '(B C D F G H J K L M N P Q R S T V W X Z)) 
+(SETQ CONSO '(B C D F G H J K L M N P Q R S T V W X Z))
 
 (DEFUN FINDB
 	 (X Y) (COND ((NULL X) NIL)
@@ -485,7 +480,7 @@
 	 (A B) (COND ((OR (NOT A) (EQ A B)) NIL)
 			     (T (CONS (WORD A) (FROM (CDR A) B)))))
 
-(DEFUN MAKESYM (A) 
+(DEFUN MAKESYM (A)
        ;; FUNCTION MAKESYM MAKES UP A GENSYM OF ITS ARG
        (SETF (GET A 'MAKESYM)
 		(+ 1 (OR (GET A 'MAKESYM) 0.)))
@@ -493,35 +488,35 @@
 				   (SETF (GET A 'EXPLO)
 					    (EXPLODE A)))
 			       (EXPLODE (GET A 'MAKESYM)))))
-       (COND (MAKEINTERN (INTERN A)) (A))) 
+       (COND (MAKEINTERN (INTERN A)) (A)))
 
-(DEFUN LIS2FY (X) 
+(DEFUN LIS2FY (X)
        (COND ((ATOM X) (LIST (LIST X)))
 	     ((ATOM (CAR X)) (LIST X))
-	     (X))) 
+	     (X)))
 
-(DEFUN MEET (A MEET) 
+(DEFUN MEET (A MEET)
        ;; MEET RETURNS THE INTERSECTION OF 2 LISTS TREATED AS SETS
-       (PROG (SET) 
+       (PROG (SET)
 	GO   (COND ((NULL A) (RETURN (REVERSE SET)))
 		   ((MEMQ (CAR A) MEET)
 		    (SETQ SET (CONS (CAR A) SET))))
 	     (SETQ A (CDR A))
-	     (GO GO))) 
+	     (GO GO)))
 
 (DEFUN SHRDLU-MOD (A B) (SHRDLU-UNION (SETDIF A (CADR B)) (CAR B)))
 
-(DEFUN SHRDLU-NTH (NUM LIST) 
+(DEFUN SHRDLU-NTH (NUM LIST)
        (COND ((ATOM LIST) (ERT SHRDLU-NTH - ILLEGAL LIST))
 	     ((< NUM 1.) (ERT SHRDLU-NTH - ILLEGAL NUMBER)))
-       (PROG NIL 
+       (PROG NIL
 	UP   (COND ((EQUAL NUM 1.) (RETURN (CAR LIST)))
 		   ((SETQ LIST (CDR LIST))
 		    (SETQ NUM (- NUM 1))
 		    (GO UP))
-		   (T (ERT SHRDLU-NTH - LIST TOO SHORT))))) 
+		   (T (ERT SHRDLU-NTH - LIST TOO SHORT)))))
 
-(DEFUN PR1 (A) 
+(DEFUN PR1 (A)
 		 (COND ((ATOM (H A)) (LIST (WORD (NB A)) (FE A)))
 		       ((PR2 (SM A))
 			(LIST (FROM (NB A) (N A))
@@ -531,11 +526,11 @@
 				    ((MAPLIST #'PR1
 					      (REVERSE (H A)))))))))
 
-(DEFUN PR2 (A) 
+(DEFUN PR2 (A)
   (OR
    (ATOM A)
-   (MAPC 
-    #'(LAMBDA (B) 
+   (MAPC
+    #'(LAMBDA (B)
 	      (AND (GET B 'SM)
 		   (OR (MEMQ B ALIST)
 		       (SETQ ALIST
@@ -556,12 +551,12 @@
 	      (PRINC X)
 	      (PRINC '\ )))
 
-(DEFUN PRINTEXT (TEXT) 
+(DEFUN PRINTEXT (TEXT)
        (COND (TEXT (TERPRI)
-		   (EVAL (CONS 'SAY (LISTIFY TEXT)))))) 
+		   (EVAL (CONS 'SAY (LISTIFY TEXT))))))
 
 (DEFUN-FEXPR PRINTC
-	 (L) (PROG (TEST) 
+	 (L) (PROG (TEST)
 			   (TERPRI)
 		      =>   (COND ((NULL L) (RETURN NIL)))
 			   (SETQ TEST (EVAL (CAR L)))
@@ -570,20 +565,20 @@
 			   (SETQ L (CDR L))
 			   (GO =>)))
 
-(DEFUN QUOTIFY (X) (LIST 'QUOTE X)) 
+(DEFUN QUOTIFY (X) (LIST 'QUOTE X))
 
 (DEFUN-FEXPR SAY (A) (MAPC #'PRINT3 A))
 
-(DEFUN SETDIF (A SETDIF) 
-       (PROG (SET) 
+(DEFUN SETDIF (A SETDIF)
+       (PROG (SET)
 	GO   (COND ((NULL A) (RETURN (REVERSE SET)))
 		   ((MEMQ (CAR A) SETDIF))
 		   ((SETQ SET (CONS (CAR A) SET))))
 	     (SETQ A (CDR A))
-	     (GO GO))) 
+	     (GO GO)))
 
 (DEFUN STA
-	 (A B) (PROG NIL 
+	 (A B) (PROG NIL
 			GO   (COND ((NULL B) (RETURN T))
 				   ((NULL A))
 				   ((EQ (CAR A) (CAR B))
@@ -591,17 +586,17 @@
 				    (SETQ B (CDR B))
 				    (GO GO)))))
 
-(DEFUN SHRDLU-UNION (A B) 
-       (PROG (SET) 
+(DEFUN SHRDLU-UNION (A B)
+       (PROG (SET)
 	     (SETQ SET (REVERSE A))
 	GO   (COND ((NULL B) (RETURN (REVERSE SET)))
 		   ((MEMQ (CAR B) SET))
 		   ((SETQ SET (CONS (CAR B) SET))))
 	     (SETQ B (CDR B))
-	     (GO GO))) 
+	     (GO GO)))
 
 (DEFUN WALLP
-	 (A) (PROG (ALIST LINEL) 
+	 (A) (PROG (ALIST LINEL)
 			   (SETQ LINEL WPLINEL)
 			   (AND (STATUS TTY) (TYO 12.))
 			   (TERPRI)
@@ -609,31 +604,31 @@
 				   LINEL
 				   0.)))
 
-(SETQ WPLINEL 72.) 
+(SETQ WPLINEL 72.)
 
-(DEFUN-FEXPR DEFS (L) 
-       (PROG (A) 
+(DEFUN-FEXPR DEFS (L)
+       (PROG (A)
 	     (AND (NULL (CDR L)) (RETURN L))
 	     (SETQ A (CAR L))
 	     (SETQ L (CDR L))
-	LOOP 
+	LOOP
 	   (COND ((EQ (CAR L) 'EXPR)
 	             (EVAL (APPEND (LIST 'DEFUN A (CADADR L)) (CDDADR L))))
 		 ((EQ (CAR L) 'FEXPR)
 		     (EVAL (APPEND (LIST 'DEFUN-FEXPR A (CADADR L)) (CDDADR L))))
 	         (T (SETF (GET A (CAR L)) (CADR L))))
 	   (COND ((SETQ L (CDDR L)) (GO LOOP)))
-	   (RETURN A))) 
+	   (RETURN A)))
 
 (DEFUN TAB
 	 (N) (PROG NIL (RETURN '<TAB>)))
 
-(DEFUN SHRDLU-SPACE (N) 
-       (PROG (NN) 
+(DEFUN SHRDLU-SPACE (N)
+       (PROG (NN)
 	A    (COND ((> N 0.)
 		    (PRINC '\ )
 		    (SETQ N (- N 1))
-		    (GO A))))) 
+		    (GO A)))))
 
 (DEFUN BE-SILENT NIL
 	(SETQ LABELTRACE NIL)

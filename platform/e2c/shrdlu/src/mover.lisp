@@ -7,7 +7,7 @@
 	(PRINC (LIST X Y Z))
 	(PRINC "~")
 	(TERPRI)
-	(if remote-actions-p
+	#+USE-REMOTES (if remote-actions-p
 	    (remote-action (format nil "MOVE/~D/~D/~D" X Y Z))))
 
 (DEFUN GRASP (X)
@@ -16,13 +16,13 @@
 	(PRINC "~")
 	(TERPRI)
 	;; Note that the ~A strips off the leading ':'
-	(if remote-actions-p
+	#+USE-REMOTES (if remote-actions-p
 	    (remote-action (format nil "GRASP/~A" X))))
 
 (DEFUN UNGRASP NIL
 	(PRINC "~LETTING GO~")
 	(TERPRI)
-	(if remote-actions-p
+	#+USE-REMOTES (if remote-actions-p
 	    (remote-action "RELEASE")))
 
 (DEFUN BLINK (X)
@@ -30,7 +30,7 @@
 	(PRINC X)
 	(PRINC "~")
 	(TERPRI)
-	(if remote-actions-p
+	#+USE-REMOTES (if remote-actions-p
 	    (remote-action (format nil "BLINK/~A" X))))
 
 (defun CREATE (name type color dimx dimy dimz posx posy posz)

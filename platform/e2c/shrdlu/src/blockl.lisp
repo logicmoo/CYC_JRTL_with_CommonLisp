@@ -246,12 +246,12 @@
 			 ((CONS X Y))))
 
 (DEFUN PACKO
-       (OBJ TYPE)
-       (DECLARE (SPECIAL TYPE))
+       (OBJ TYPE-PACKO)
+       (DECLARE (SPECIAL TYPE-PACKO))
        (PROG (XX)
 	     (MAPC #'(LAMBDA (X)
 			     (AND (THVAL '(THGOAL (\#IS (THV X)
-							     (THEV TYPE)))
+							     (THEV TYPE-PACKO)))
 					 (LIST (LIST 'X X)))
 				  (SETQ XX (PACKORD X (SIZE X) XX))))
 		   OBJ)
