@@ -61,7 +61,7 @@
 			   '(SETQ NN T)
 			   '(SETQ CUT END)
 			   '(SETQ C
-				  (BUILDNODE (SETQ FE (REVERSE REST))
+				  (BUILDNODE (SETQ FE (REVERSE R3ST))
 					     (SETQ NB (OR (NB RE) N))
 					     N
 					     (SETQ H RE)

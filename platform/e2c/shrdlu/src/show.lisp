@@ -220,7 +220,7 @@
 	    WORD
 	    MARKER
 	    ALL
-	    REST
+	    R3ST
 	    CURRENT
 	    STOP
 	    DO)
@@ -506,7 +506,7 @@
       SHOW
       #'SHOWCHOICE
       SHOWTREE
-      (ALL REST CURRENT))
+      (ALL R3ST CURRENT))
 
 (DEFS SEMANTICS
       TELL
@@ -882,12 +882,12 @@
 
 (DEFS CURRENT SHOW #'(LAMBDA (X) (PRINTEXT (FROM NB N))))
 
-(DEFS REST SHOW #'(LAMBDA (X) (PRINTEXT N)))
+(DEFS R3ST SHOW #'(LAMBDA (X) (PRINTEXT N)))
 
 (DEFS SCENE SHOW #'SHOWSCENE)
 
 (DEFUN-FEXPR DEFINE (A) 
-       (PROG (FE TYPE MARK REST TR) 
+       (PROG (FE TYPE MARK R3ST TR) 
 	     (SETQ A  (COND  (A (CAR A))
                       (T  (REQUEST 'WORD\: '( ENGLISH WORD TO
                                             BE DEFINED)))))
@@ -964,7 +964,7 @@
 	       (SETF (GET A 'FEATURES) '(VB TRANS INF)))
 	      (T (SETF (GET A 'FEATURES) '(VB ITRNS INF))))
 	     (SETQ 
-	      REST
+	      R3ST
 	      (LIST (LIST (LISTIFY (REQUEST '(RESTRICTIONS ON
 							   SUBJECT\:)
 					    '(LIST OF
@@ -974,7 +974,7 @@
 	       TR
 	       (SETQ 
 		REST
-		(NCONC REST
+		(NCONC R3ST
 		       (LIST (LISTIFY (REQUEST '(RESTRICTIONS ON
 							      OBJECT\:)
 					       '(LIST OF

@@ -42,6 +42,7 @@
 (defvar response-buffer "" 
   "Buffer used to reply to the user in dialog.")
 
+#+SOCKET
 (defun socket-cmd (host page &optional (port 1337))
   "Sends a GET HTTP request to some HOST on some PORT.  Return value
   is the last line of the response we get.  This is meant to work with
@@ -206,6 +207,7 @@
 	  (princ resp))))
   (setq response-buffer ""))
 
+#-SHRDLU-CONSOLE
 (DEFUN PRINT2 (X) 
   "A replacement for SHDRLU's original PRINT2, meant to play nicely
   with the remote response mechanism, if necessary."
@@ -218,6 +220,7 @@
 			 (format nil " ~A" (string-downcase X))
 			 (format nil " ~S" X)))))
 
+#-SHRDLU-CONSOLE
 (DEFUN PRINT3 (X) 
   "A replacement for SHDRLU's original PRINT3, meant to play nicely
   with the remote response mechanism, if necessary.  So far as I can

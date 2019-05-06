@@ -1,6 +1,9 @@
-(make-package "SHRDLU" :use '("CL"))
+(defpackage "SHRDLU" (:use "COMMON-LISP") ( :shadow ;; "REST" ;; "AND" "SPECIAL" "OR"
+                                              ))
 
 (in-package :SHRDLU)
+
+(defvar R3ST ())
 ;
 ; This file loads in all the needed files for SHRDLU.
 ;
@@ -35,19 +38,15 @@
 (load "data.lisp")
 (load "newans.lisp")
 (load "mover.lisp")
-#+SOCKET
-  (load "remote.lisp")
-#-SOCKET
-  (load "local.lisp")
-
+(load "remote.lisp")
 
 )
 
 ; Set either (DEBUGMODE) or (USERMODE) here.
-(DEBUGMODE)
+(USERMODE)
 
 #+ABCL
-(when ext:*COMMAND-LINE-ARGUMENT-LIST* (DEBUGMODE))
+(when ext::*COMMAND-LINE-ARGUMENT-LIST* (DEBUGMODE))
 
 #+ABCL
 (print ext:*COMMAND-LINE-ARGUMENT-LIST*)

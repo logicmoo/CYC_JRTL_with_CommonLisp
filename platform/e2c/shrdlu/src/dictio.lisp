@@ -184,14 +184,14 @@
 				    (CUT END)
 				    (SETQ BOTH PTW)
 				    (SETQ RE
-					  (COND ((MEMQ (CAR REST)
+					  (COND ((MEMQ (CAR R3ST)
 						       '(PREP ADV))
-						 (PARSE3 REST T))
-						((MEMQ (CAR REST)
+						 (PARSE3 R3ST T))
+						((MEMQ (CAR R3ST)
 						       '(NG PREPG
 							 ADJG
 							 CLAUSE))
-						 (PARSE2 REST T))))
+						 (PARSE2 R3ST T))))
 				    (< (LENGTH N) (LENGTH BOTH))
 				    (RETURN (SETQ SPECIAL 'SKIP)))
 			       (SETQ RE NIL)

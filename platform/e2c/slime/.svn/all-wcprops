@@ -1,0 +1,203 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime
+END
+swank-source-file-cache.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-source-file-cache.lisp
+END
+swank-corman.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-corman.lisp
+END
+swank-scl.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-scl.lisp
+END
+slime.el
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/slime.el
+END
+swank-source-path-parser.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-source-path-parser.lisp
+END
+NEWS
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/NEWS
+END
+.cvsignore
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/.cvsignore
+END
+metering.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/metering.lisp
+END
+PROBLEMS
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/PROBLEMS
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/ChangeLog
+END
+swank-abcl.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-abcl.lisp
+END
+swank-gray.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-gray.lisp
+END
+swank-loader.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-loader.lisp
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/README
+END
+nregex.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/nregex.lisp
+END
+sbcl-pprint-patch.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/sbcl-pprint-patch.lisp
+END
+slime-autoloads.el
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/slime-autoloads.el
+END
+mkdist.sh
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/mkdist.sh
+END
+HACKING
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/HACKING
+END
+swank-sbcl.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-sbcl.lisp
+END
+xref.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/xref.lisp
+END
+swank-allegro.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-allegro.lisp
+END
+swank-backend.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-backend.lisp
+END
+swank-lispworks.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-lispworks.lisp
+END
+swank-openmcl.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-openmcl.lisp
+END
+test.sh
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/test.sh
+END
+swank.asd
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank.asd
+END
+swank.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank.lisp
+END
+swank-cmucl.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-cmucl.lisp
+END
+swank-ecl.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-ecl.lisp
+END
+test-all.sh
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/test-all.sh
+END
+swank-clisp.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/swank-clisp.lisp
+END
+hyperspec.el
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/hyperspec.el
+END

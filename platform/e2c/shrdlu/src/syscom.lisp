@@ -541,6 +541,9 @@
 				   ALIST)))))
     A)))
 
+#-SHRDLU-CONSOLE
+(pushnew :SHRDLU-CONSOLE *FEATURES*)
+
 (DEFUN PRINT2 (X)
        (COND ((> CHRCT (FLATSIZE X)) (PRINC '\ ))
 	     (T (TERPRI)))

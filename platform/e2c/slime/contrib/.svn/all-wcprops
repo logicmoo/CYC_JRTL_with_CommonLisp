@@ -1,0 +1,263 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib
+END
+swank-indentation.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-indentation.lisp
+END
+swank-asdf.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-asdf.lisp
+END
+slime-autodoc.el
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-autodoc.el
+END
+slime-fancy.el
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-fancy.el
+END
+slime-typeout-frame.el
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-typeout-frame.el
+END
+slime-package-fu.el
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-package-fu.el
+END
+swank-presentation-streams.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-presentation-streams.lisp
+END
+slime-parse.el
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-parse.el
+END
+slime-mdot-fu.el
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-mdot-fu.el
+END
+slime-indentation.el
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-indentation.el
+END
+inferior-slime.el
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/inferior-slime.el
+END
+slime-asdf.el
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-asdf.el
+END
+swank-presentations.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-presentations.lisp
+END
+swank-c-p-c.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-c-p-c.lisp
+END
+swank-clipboard.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-clipboard.lisp
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/ChangeLog
+END
+slime-references.el
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-references.el
+END
+slime-tramp.el
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-tramp.el
+END
+swank-motd.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-motd.lisp
+END
+slime-fontifying-fu.el
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-fontifying-fu.el
+END
+bridge.el
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/bridge.el
+END
+swank-fancy-inspector.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-fancy-inspector.lisp
+END
+swank-mit-scheme.scm
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-mit-scheme.scm
+END
+slime-scratch.el
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-scratch.el
+END
+slime-presentation-streams.el
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-presentation-streams.el
+END
+swank-listener-hooks.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-listener-hooks.lisp
+END
+slime-presentations.el
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-presentations.el
+END
+slime-c-p-c.el
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-c-p-c.el
+END
+slime-clipboard.el
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-clipboard.el
+END
+slime-motd.el
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-motd.el
+END
+slime-fancy-inspector.el
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-fancy-inspector.el
+END
+slime-scheme.el
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-scheme.el
+END
+slime-banner.el
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-banner.el
+END
+swank-fuzzy.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-fuzzy.lisp
+END
+swank-arglists.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-arglists.lisp
+END
+slime-highlight-edits.el
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-highlight-edits.el
+END
+swank-kawa.scm
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-kawa.scm
+END
+slime-editing-commands.el
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-editing-commands.el
+END
+swank-goo.goo
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-goo.goo
+END
+swank-package-fu.lisp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/swank-package-fu.lisp
+END
+slime-xref-browser.el
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-xref-browser.el
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/README
+END
+slime-fuzzy.el
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/408/releases/1.0/jasko.tim.lisp/slime/contrib/slime-fuzzy.el
+END

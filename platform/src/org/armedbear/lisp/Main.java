@@ -52,7 +52,6 @@ public final class Main
 {
   public static final long startTimeMillis = System.currentTimeMillis();
   public static boolean isSublispDefault = false;
-
   public static InheritableThreadLocal<Boolean> isSubLisp = new InheritableThreadLocal<Boolean>()
   {
     @Override
@@ -281,6 +280,47 @@ public final class Main
     if( argsList.remove( "--beandesk" ) )
     {
       noBSHGUI = false;
+    }
+    String[] argsNew = jiggleEvalArgs( argsList.toArray( new String[ argsList.size() ] ) );
+    return argsNew;
+  }
+
+  public static String[] copyParams(String[] args)
+  {
+    List<String> argsList = new ArrayList<String>( Arrays.asList( args ) );
+    String[] argsNew = argsList.toArray( new String[ argsList.size() ] );
+    return argsNew;
+  }
+
+  /**
+   * @param array
+   * @return
+   */
+  private static String[] jiggleEvalArgs(String[] args0)
+  {
+    String[] args = copyParams( args0 );
+    String lastArg = null;
+    for( int i = 0; i < args.length; i++ )
+    {
+      String thisArg = args[ i ];
+      if( lastArg != null && !lastArg.startsWith( "--" ) )
+      {
+        if( thisArg.startsWith( "\"" ) || thisArg.startsWith( " " ) )
+        {
+          args[ i - 1 ] += " " + thisArg;
+          args[ i ] = null;
+        }
+      }
+      lastArg = args[ i ];
+    }
+    List<String> argsList = new ArrayList<String>();
+    for( int i = 0; i < args.length; i++ )
+    {
+      String thisArg = args[ i ];
+      if( thisArg != null )
+      {
+        argsList.add( thisArg );
+      }
     }
     String[] argsNew = argsList.toArray( new String[ argsList.size() ] );
     return argsNew;

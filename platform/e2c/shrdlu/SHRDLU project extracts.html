@@ -1,0 +1,2270 @@
+
+<!-- saved from url=(0082)https://web.archive.org/web/20180325185015/http://maf.directory/misc/extracts.html -->
+<html class="gr__web_archive_org"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="./SHRDLU project extracts_files/analytics.js.download" type="text/javascript"></script>
+<script type="text/javascript">window.addEventListener('DOMContentLoaded',function(){var v=archive_analytics.values;v.service='wb';v.server_name='wwwb-app105.us.archive.org';v.server_ms=260;archive_analytics.send_pageview({});});</script><script type="text/javascript" src="./SHRDLU project extracts_files/ait-client-rewrite.js.download" charset="utf-8"></script>
+<script type="text/javascript">
+WB_wombat_Init("https://web.archive.org/web", "20180325185015", "maf.directory:80");
+</script>
+<script type="text/javascript" src="./SHRDLU project extracts_files/wbhack.js.download" charset="utf-8"></script>
+<script type="text/javascript">
+__wbhack.init('https://web.archive.org/web');
+</script>
+<link rel="stylesheet" type="text/css" href="./SHRDLU project extracts_files/banner-styles.css">
+<link rel="stylesheet" type="text/css" href="./SHRDLU project extracts_files/iconochive.css">
+<!-- End Wayback Rewrite JS Include -->
+<title>SHRDLU project extracts</title>
+<!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<script type="text/javascript" src="./SHRDLU project extracts_files/timestamp.js.download" charset="utf-8"></script>
+<script type="text/javascript" src="./SHRDLU project extracts_files/graph-calc.js.download" charset="utf-8"></script>
+<script type="text/javascript" src="./SHRDLU project extracts_files/auto-complete.js.download" charset="utf-8"></script>
+<script type="text/javascript" src="./SHRDLU project extracts_files/toolbar.js.download" charset="utf-8"></script>
+<style type="text/css">
+body {
+  margin-top:0 !important;
+  padding-top:0 !important;
+  /*min-width:800px !important;*/
+}
+.wb-autocomplete-suggestions {
+    text-align: left; cursor: default; border: 1px solid #ccc; border-top: 0; background: #fff; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
+    position: absolute; display: none; z-index: 2147483647; max-height: 254px; overflow: hidden; overflow-y: auto; box-sizing: border-box;
+}
+.wb-autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 23px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.02em; color: #333; }
+.wb-autocomplete-suggestion b { font-weight: bold; }
+.wb-autocomplete-suggestion.selected { background: #f0f0f0; }
+</style>
+</head><body data-gr-c-s-loaded="true" about="https://web.archive.org/web/20180325185015/http://maf.directory/misc/extracts.html" showlongdescborders="" class=" hasGoogleVoiceExt" style=""><div id="wm-ipp-base" lang="en" style="display: block; direction: ltr;">
+</div><script type="text/javascript">
+__wm.bt(600,27,25,2,"web","http://maf.directory/misc/extracts.html","2018-03-25",1996,"/_static/",['css/banner-styles.css','css/iconochive.css']);
+</script><div class="wb-autocomplete-suggestions "></div>
+<!-- END WAYBACK TOOLBAR INSERT --><h1>SHRDLU project extracts</h1>
+<pre>Subject: [Shrdlu] pdp10 &amp; newsgroup info 
+From: Joshua Sutterfield <joshu@umr.edu> 
+Date: Wed, 20 Jan 1999 23:16:37 -0600 
+
+I found the pdp10 emulator at: ftp://bony.umtec.com/pub/ka10/
+
+==
+
+Subject: Re: [Shrdlu] ^L^C 
+From: Miles Davis <miles@umr.edu> 
+Date: Thu, 28 Jan 1999 13:28:51 -0600 
+
+&gt; 	Does anyone know what ^L means?  It seems to be at the end
+&gt; of everyfile, along with ^C, and sometimes just sitting in the middle
+&gt; of one.  It seems to clear the screen on my terminal, but I doubt that
+&gt; is its original intention..  Perhaps an EOF signal on some ancient
+&gt; hardware?
+
+Only as ancient as ASCII. ^L is form feed, ^C is end of text.
+
+For future reference, see http://www.umr.edu/~miles/iso8859.html
+
+==
+
+Subject: [Shrdlu] directories 
+From: "Matthew Fischer" <mfischer@umr.edu> 
+Date: Mon, 1 Feb 1999 15:49:10 -0600 (CST) 
+
+when you are trying to port, and you see a line that references a function
+from another module (ie, plnr), please add a comment.
+
+;(THFLUSH THASSERTION)                  ;REQUIRES PLNR
+
+	That way we can possibly work around the function until the required
+file is ported.
+
+==
+
+Subject: [Shrdlu] fwd&gt; Returned mail: User unknown 
+From: Miles Davis <miles@umr.edu> 
+Date: Sat, 6 Feb 1999 16:15:34 -0600 
+
+There is now an HTML table for system calls (Maclisp) made by the 
+user-defined functions in SHRDLU, which should aid a great deal in 
+porting. I do not have all of the file locations put in yet, but I will 
+by our next meeting. Anyways, as you all know, just grep for "DEFUN F" to 
+find where function F is defined.
+
+The list is at "http://acm.cs.umr.edu/shrdlu/dep/function_calls.html" 
+and is essentially the file "lisp" in src/ with hyperlinks.
+
+==
+
+Subject: [Shrdlu] answers 
+From: "Matthew Fischer" <mfischer@umr.edu> 
+Date: Thu, 11 Feb 1999 15:44:09 -0600 (CST) 
+
+	Here are some answers to questions brought up last night.
+
+	-Grinding a file refers to pretty printing the file.
+
+	(GRIND filelist)
+
+	-Defprop...  and Defun
+
+	In 1969, DEFUN was added to MacLISP, prior to that, DEFPROP
+	was used.   (so they do the same thing...)
+
+	(DEFUN ONECONS (X) (CONS 1 X))
+	is equal to
+	(DEFPROP ONECONS (LAMBDA (X) (CONS 1 X)) EXPR)
+	
+	and
+
+	(DEFUN SMASH FEXPR (L) (RPLACD L NIL))
+	is equal to
+	(DEFPROP SMASH (LAMBDA (L) (RPLACD L NILL)) FEXPR)
+	
+	The 1st form looks like what CL will expect...
+
+	GCL will let me do this...
+
+	(DEFUN SMASH (L) (RPLACD L NIL) EXPR)
+
+	Which I think probably does the same as the FEXPR, just tells
+LISP that the function will return an expression, or another function.
+
+==
+
+Subject: Re: [Shrdlu] answers 
+From: "Matthew Fischer" <mfischer@umr.edu> 
+Date: Thu, 11 Feb 1999 15:55:34 -0600 (CST) 
+
+	I forgot to mention that this also works.
+
+	(DEFUN SMASH (L) (RPLACD L NIL) FEXPR)
+
+==
+
+Subject: [Shrdlu] not cl or pitman 
+From: Joshua Sutterfield <joshu@umr.edu> 
+Date: Thu, 11 Feb 1999 22:10:02 -0600 
+
+okay.. my previous list in hints.jrs, of functions not in CL was a little bit
+off... cause I was doing it func by func, but I made a new list using grep &amp;
+stuff.  Then I marked which ones appear to be covered somewhat by pitman. 
+So.. this should give us a good idea of things we'll need to find in the
+manual.  By the way.. I saw something in matt's questions.mlf about GCL not
+being able to do something (ignore-errors was it?).  I think there's a
+multitude of such things GCL doesn't do, that are in the CL documentation. 
+should we be loading up certain librariers or something, before we can do
+certain funcs?  Anyways here's the list of stuff I mentioned:
+
+*DIF 
+ADD1 
+ASCII <pitman>
+ASSQ <pitman>
+CURSORPOS <pitman>
+DEFPROP
+DELQ <pitman>
+ERRSET <pitman>
+EXPLODE <pitman>
+FLATSIZE 
+GREATERP
+LESSP
+LIST2
+LISTIFY
+MAKNAM <pitman>
+MINUS
+MEMQ <pitman>
+PLUS
+PUTPROP <pitman>
+QUOTIENT
+READCH
+READL
+REMAINDER
+REMOB
+RUNTIME
+SASSOC <pitman>
+SASSQ <pitman>
+SSTATUS <pitman>
+STATUS <pitman>
+SUB1
+TYI <pitman>
+TYIPEEK <pitman>
+TYO <pitman>
+UREAD
+
+==
+
+Subject: [Shrdlu] grpr.pl 
+From: "Matthew Fischer" <mfischer@umr.edu> 
+Date: Fri, 12 Feb 1999 00:09:06 -0600 (CST) 
+
+	I was getting sick of searching my code
+for stuff, and I wrote something that may make lief
+easier (along the lines of what Miles is doing).
+
+Except this also tracks pitman changes, thanks
+to josh.
+
+	It is called grpr.pl, here is a sample run...
+
+It reads <keyword>_________________
+	 Line number found on.   - Line of code.
+
+If the word PITMAN is there, it means that its a Pitman change!
+
+ultra2 &lt;12:06am&gt; ~/shrdlu/src&gt;../help/grpr.pl smutil | more
+*DIF  _____________________________________________
+ADD1  _____________________________________________
+722:          (LIST (CADR X) (ADD1 (CADR X)) NIL))
+723:         ((EQ (CAR X) '&gt;) (ADD1 (CADR X)))
+ASCII _____________________________________________
+ASSQ _____________________________________________
+[PITMAN]  854:                          (CADR (OR (ASSQ (LENGTH %PLNRPHRASE)
+;[PITMAN]  861:                ;THE NUMBER OF ARGUMENTS + 1 AND THE (ASSQ ...)
+;CURSORPOS _____________________________________________
+DEFPROP _____________________________________________
+FLATSIZE  _____________________________________________
+GREATERP _____________________________________________
+523:                   (GREATERP X (CADR WHO))))))) 
+LESSP _____________________________________________
+522:          (NOT (OR (LESSP X (CAR WHO))
+
+Note that it works out of the file functions.list in the /help
+directory, so keep that current, and track any pitman changes
+in there (if you find functions that are pitman changes,
+add a <pitman> after the name..)
+
+==
+
+Subject: Re: [Shrdlu] concerns &amp; question 
+From: Joshua Sutterfield <joshu@umr.edu> 
+Date: Tue, 16 Feb 1999 22:13:47 -0600 
+
+&gt; 	Josh, can you look up GET UNIT for me in the manual?  I dont
+&gt; know what it does, it is used in GINTER and PROGMR.
+
+I'm not sure why UNIT would be distinct, but GET seems to do the same thing 
+as it does in CL which is, as I understand, given: (GET <symbol> 
+<indicator>) ... it gets the property named by indicator of <symbol>.  So it 
+seems to me its like a way to access members of a data structure.  Or change 
+them using (setf (get blah blah) blip) in CL.  
+
+I'll type what the manual says: (GET sym indicator)
+The sym argument is expected to be a symbol or a disembodied property list.  
+The indicator is the name of the property to be looked up.  This is usually 
+a symbol, but is not restricted to be -- an EQ test is done to find the 
+indicator.  The value returned is the filler of the slot named indicator.  
+NIL is returned if there was no such slot or the filler of the slot was NIL.
+
+&gt; 	Also, what form is everyone using for FEXPR, ie. which form is
+&gt; the correct one?  Removing it, or putting it at the end of an expression???
+
+I can't find in the book where it ever says you should put the FEXPR at the
+end... at least for defun - it says you put it after the symbol you're
+defun-ing.  The book has a good amount to say about FEXPR... I'll bring the
+book tomorrow.  But I say chuck it.  In looking at the CL documentation it
+doesnt seem like any such qualifiers are needed. 
+
+==
+
+Subject: [Shrdlu] STATUS rewrite 
+From: erin@umr.edu 
+Date: Thu, 18 Feb 1999 07:41:56 -0600 (CST) 
+
+Pitman's notes say that there is no rewrite for the STATUS function, 
+except for a few special examples which did not apply.  In progmr there 
+are several instances of
+(STATUS GCTIME)
+Miles said GCTIME was shrdlu-defined so I'll check that.
+
+==
+
+Subject: [Shrdlu] crikeys 
+From: Joshua Sutterfield <joshu@umr.edu> 
+Date: Thu, 18 Feb 1999 15:21:35 -0600 
+
+i tried the rewrites for READLIST, ASCII, and EXPLODE.  The last 2 worked,
+I think like they were supposed to even.  But READLIST.. actually the
+read-from-string thing was a mistake.. it likes read-from-string, .. what
+it complaiend about was string-append.  And now, checking the lisp
+documentation -- it's NOT a legit func anyways.  So perhaps clisp does
+take all the stuff its supposed to.  One way to make sure would be to take
+the full list of funcs (I'm going by the lisp hyperspec linked from our
+page), and read em all in -- and see which are unbound... But I'm just
+gonna assume clisp does them all until I find otherwise. 
+
+Anyways in trying to load in plnr, STATUS, SSTATUS and UREAD and all that
+junk seem to be trouble.. seem like the things that have changed the most
+from ML to CL.  also..  DECLARE doesnt seem to like as many things as it
+did in maclisp... that's first half of the problem with the whole (DECLARE
+(GENPREFIX... ) thing (the other half being it doesnt know genprefix at
+all.  I will try to fiddle with those things and figure out how they 
+oughta be ported.. but maybe we should ask pitman about those.. especially 
+genprefix since it doesnt exist in either language.  
+
+And.. does anyone know how to escape out of the break&gt; crap in clisp or 
+get some basic help like in gcl with :q and (help) ?
+
+==
+
+Subject: Re: [Shrdlu] crikeys 
+From: "Matthew Fischer" <mfischer@umr.edu> 
+Date: Thu, 18 Feb 1999 15:39:33 -0600 (CST) 
+
+&gt; And.. does anyone know how to escape out of the break&gt; crap in clisp or 
+&gt; get some basic help like in gcl with :q and (help) ?
+
+I think Ctrl-D will break out of that, but I am not for sure. 
+==
+
+Subject: Re: [Shrdlu] crikeys 
+From: Miles Davis <miles@umr.edu> 
+Date: Thu, 18 Feb 1999 15:59:23 -0600 
+
+&gt; And.. does anyone know how to escape out of the break&gt; crap in clisp or 
+&gt; get some basic help like in gcl with :q and (help) ?
+
+I think ^d quits the whole program, and (quit) exits just the debug break.
+
+==
+
+Subject: [Shrdlu] Re: Shrdlu porting... 
+From: Kent M Pitman <pitman@world.std.com> 
+(by way of Matt Fischer <mfischer@umr.edu>) 
+Date: Mon, 22 Feb 1999 00:44:37 -0600 
+
+   Date: Sun, 21 Feb 1999 20:39:36 -0600
+   From: Matt Fischer <mfischer@umr.edu>
+
+	   We have been working through your MacLISP-&gt;Common LISP changes and
+   we have come across some questions..
+
+   Are your changes built to run on any specific implementation of LISP?
+   
+Well, they were for Common Lisp circa 1984.  I had ported Macsyma to
+two very different implementations by time I wrote these notes:
+Symbolics Common Lisp and VAXLISP.  My notes were intended to achieve
+portability.
+
+   ------problems-------
+
+   STATUS, SSTATUS and UREAD
+
+   Can you suggest how to handle a STATUS request, your manual (the Revised 
+   MacLISP Manual) says that STATUS, "returns useful information about
+things",
+   which is kind of obscure.  Here are the specific ones that would be
+helpful.
+
+	   STATUS TTY - returns list of info on the default terminal
+	   STATUS UREAD - returns 4-list of the current input source (?)
+	   STATUS CRUNIT - returns 2-list of current unit (device &amp; directory)
+	   STATUS GCTIME - number of microseconds spent garbage-collecting
+
+Sorry they're so obscure.  They were probably intended to explain data
+you'd see coming back in an actual implementation.
+
+If I recall, (STATUS TTY) might have returned information saying
+whether there was a console (or whether you were running in background).
+Send me a specific fragment of code, and I'll suggest how to rewrite
+it.
+
+(STATUS UREAD) is related to *standard-input* in some ways.  It is
+part of something called "Old I/O" that I never used much becuase "New
+I/O" was so superior.  Under Old I/O, I think one would do
+ (sstatus uread filename)
+and then (setq ^r t) [yes, that's uparrow r, two chars].  You could
+also type the interrupt character control-R to get it to set the ^r
+variable.  At that point, it would read from the uread filename
+instead of from the terminal.  Filenames in Old I/O were reprsented
+as lists of symbols.  ( name type device dir ), if i remember right.
+That's what the 4-list is.  You could also write
+((device dir) name type), or just ((dir) name type).  so
+((kmp) foo lisp) or (foo lisp dsk kmp) were typical values for
+a file whose name was "KMP;FOO LISP" (ITS) or "<kmp>FOO.LISP" (tops-20)
+or "&gt;kmp&gt;foo.lisp" (Multics).  It was an early pathname system. :-)
+I also might be slightly misremembering,but I think this is close to right.
+
+(status CRUNIT) was just for the default directory, I think so that
+filenames like (FOO LISP) would open in the right place.  But I might
+be misremembering.
+
+(status gctime) presumably incremented as the gc ran, so you could
+subtract two values to find out how much gc had happened lately.
+Probably used only for timing tests.
+
+   DECLARE
+
+   DECLARE doesnt seem to like as many things as it did in maclisp,
+   specifically, the following declaration identifiers don't occur in CL but 
+   apparently occur in ML:
+
+	   fexpr  print  genprefix  unspecial  macros
+
+Heh.  FEXPRS.  They don't have an equivalent in modern code, but see
+my paper http://world.std.com/~pitman/Papers/Special-Forms.html
+which was written about them at the time just before they went away.
+
+I'm not sure what declare print did.  Send an example. I bet it can
+be ignored, though.
+
+I don't remember genprefix either but the name sounds like maybe
+it was like *gensym-prefix* is now.  I'd be surprised if it 
+affects working code.  It was probably cosmetic.
+
+I'm not sure about macros either.  Send me a sample.
+
+   FEXPR
+
+   Is FEXPR needed in Common LISP or can we just discard it???  If needed, it
+   will 
+   not let us place FEXPR like MacLISP does..
+
+   (MacLISP)  (DEFUN BOB FEXPR (X))
+
+See my paper above.  FEXPRs are functions that don't evaluate
+their args.  A call like (BOB X Y) gives the body of BOB an argument
+of (X Y), unevaluated as a list. You MUST re-write this or change all
+the callers of BOB to pass a  quoted list of the args.  The simplest 
+rewrite is:
+
+ (defmacro bob (&amp;rest; x)
+   `(*bob ',x))
+
+ (defun *bob (x)
+   ...body of the bob fexpr...)
+
+You also have to rewrite
+
+ (apply 'bob something)
+
+to
+
+ (*bob something)
+
+Or you can do a macro that does this like:
+
+ (defmacro defun-fexpr (fexpr-name (fexpr-arg) &amp;body; fexpr-body)
+   (let ((apply-name (intern (format nil "APPLY-~A" fexpr-name))))
+     `(progn (defmacro ,fexpr-name (&amp;rest; ,fexpr-arg)
+               `(,',subr-name ',,fexpr-arg))
+	     (defun ,subr-name (,fexpr-arg) ,@fexpr-body)
+             (defun ,apply-name (,fexpr-arg) (,subr-name ,fexpr-arg))
+	     ',fexpr-name)))
+
+and then rewrite
+
+ (defun bob fexpr (x) ...) as (defun-fexpr bob (x) ...)
+ (apply 'bob stuff)        as (apply-bob stuff)
+
+==
+
+Subject: Re: [Shrdlu] FEXPR's 
+From: Joshua Sutterfield <joshu@umr.edu> 
+Date: Wed, 24 Feb 1999 17:32:04 -0600 
+
+&gt; Why does CLISP complain about this:
+&gt; (DEFUN F MACRO (FORM) ....)
+
+Unless I'm mistaken you can't put anything after the defun really... if 
+you want to define a macro you do defmacro...
+if you want to defun, you can only defun.. no extra specifications... er 
+maybe there are but.. nothing like what was possible in maclisp.
+
+==
+
+Subject: [Shrdlu] grpr.pl 
+From: "Matthew Fischer" <mfischer@umr.edu> 
+Date: Wed, 24 Feb 1999 19:49:58 -0600 (CST) 
+
+	I fixed some nagging bugs in the grpr.pl script, and I even committed
+them this time.
+
+	Fixes:
+
+	-some lines had a ; at the beginning for some reason
+	- the '-c' will now work, whicch should make this actually useful
+
+==
+
+Subject: [Shrdlu] MACRO 
+From: Joshua Sutterfield <joshu@umr.edu> 
+Date: Wed, 24 Feb 1999 20:45:29 -0600 
+
+Hmm.. i struggled with DEFMACRO last night... It looked really weird what 
+PLNR did with a macro func called THPUSH.
+
+That appears to be the only place where DEFUN blah MACRO is used in any of
+the source though -- isn't it?  So, I believe I've already fixed it.  I could
+explain the difference between DEFMACRO and DEFUN blah MACRO, but I won't
+unless we actually need it.  But the old way was REALLY STUPID.  Plus the way
+THPUSH does what it does is really stupid.. it basically did what there are
+already LISP functions made for. 
+
+Also, an important thing I think I figured out -- DECLARE becomes DECLAIM if
+it's in the global area.. but DECLAIM *FEXPR wont work any better than
+DECLARE, of course.  I'm going to try pitman's macro for defun-fexpr, but I
+guess there will still be a problem because they've got to be DECLAIMED as
+something (other than *fexpr) too.  I'm not sure why but I'm guessing its so
+certain things can refer to a given fexpr function before it's properly
+defined? 
+
+==
+
+Subject: [Shrdlu] Meeting results 02-24-1999 
+From: "Matthew Fischer" <mfischer@umr.edu> 
+Date: Wed, 24 Feb 1999 23:58:03 -0600 (CST) 
+
+	-We figured out how to handle FEXPRs.  The code will be in the CVS
+tree later tonight.  The file will be called fexprfix, and it will need to be 
+"included" in all the files.  To do so, use the following sytnax.
+
+	(load "fexprfix")       &lt;--  be sure to place at the top of the file
+
+	The actual changes will be as follows.
+
+ (defun bob fexpr (x) ...) as (defun-fexpr bob (x) ...)
+ (apply 'bob stuff)        as (apply-bob stuff)
+
+	Josh wrote the fix, and I am pretty sure that even he does not
+understand it fully, some of his comments will be in the file, update
+cvs and enjoy!
+
+==
+
+Subject: [Shrdlu] fwd&gt; Re: Shrdlu porting... 
+From: Joshua Sutterfield <joshu@umr.edu> 
+Date: Thu, 25 Feb 1999 11:05:47 -0600 
+
+----- Forwarded message from Kent M Pitman <pitman@world.std.com> -----
+
+Date: Thu, 25 Feb 1999 10:12:09 -0500
+From: Kent M Pitman <pitman@world.std.com>
+To: joshu@umr.edu
+Cc: mfischer@umr.edu, pitman@world.std.com
+Subject: Re: Shrdlu porting...
+
+   Date: Thu, 25 Feb 1999 00:43:39 -0600
+   From: Joshua Sutterfield <joshu@umr.edu>
+
+   Hello... I've been looking at your suggestions about working around 
+   FEXPR's:
+
+   &gt; of (X Y), unevaluated as a list. You MUST re-write this or change all
+   &gt; the callers of BOB to pass a  quoted list of the args.  The simplest 
+   &gt; rewrite is:
+   &gt; 
+   &gt;  (defmacro bob (&amp;rest; x)
+   &gt;    `(*bob ',x))
+   &gt; 
+   &gt;  (defun *bob (x)
+   &gt;    ...body of the bob fexpr...)
+
+   where this was originally:
+   (defun bob fexpr (x) ...body of the bob fexpr...)
+
+Right.  I wondered when I wrote this if I should have been being
+completely clear by adding this text myself.  But yes.
+
+   &gt; 
+   &gt; You also have to rewrite
+   &gt; 
+   &gt;  (apply 'bob something)
+   &gt; 
+   &gt; to
+   &gt; 
+   &gt;  (*bob something)
+
+   So... I get what's going on... A fexpr just has a single arg, which is 
+   the CDR of the call... it contains each of the args passed.
+
+That's correct.
+
+   So, the defmacro basically defines a bob which takes the &amp;rest;,
+   and it builds a call to *bob so that if you say "(bob 1 2 3)"
+   it translates that into "(*bob '(1 2 3))".  I believe that's all 
+   correct?
+
+Yep.
+
+   Well my question is, why not just say, to begin with:
+
+   (defun bob (&amp;rest; x) 
+	...body of the bob fexpr...)
+
+   Why do we need to introduce a separate macro at all?  
+
+Because you'd have to call BOB as
+
+ (bob 'a 'b 'c)
+
+not
+
+ (bob a b c)
+
+The whole thing originated as a way of defining things like TRACE
+(because there was no command or graphical UI and people hated
+quoting) and QUOTE (because it was primitive).  In the latter case,
+think about how you'd write COND or LET using &amp;REST; and you'll see
+the problem.  In fact, my paper points out that QUOTE and CAR use
+the same lambda expression, but one is a FEXPR and one is an EXPR
+(normal function).  QUOTE, COND, etc. *did* use FEXPRs (Ok, well,
+FSUBRS, which were what you got from compiling FEXPRs) in the
+Maclisp interpreter.  These things lived on the plist, and the
+interpreter did something awful like the following, which I've
+tried to write in the style of the time, if memory serves me:
+
+ (DEFUN EVAL (X)
+   (COND ((SYMBOLP X) (SYMEVAL X))
+         ((ATOM X) X)
+         ((NOT (ATOM (CAR X))) ...hair for LAMBDA [and maybe others?] ...)
+         (T (DO ((OP (CAR X))
+                 (PL (PLIST (CAR X)) (CDDR PL)))
+                ((NULL PL) (ERROR '|UNDEFINED FUNCTION| OP 'UNDF-FNCTN))
+               (COND ((EQ OP 'FSUBR) 
+                      (RETURN (SUBRCALL T (CADR PL) (CDR X))))
+                     ((EQ OP 'LSUBR) 
+                      (RETURN (LSUBRCALL T (CADR PL) (MAPCAR 'EVAL (CDR X)))))
+                     ((EQ OP 'SUBR) 
+                      (COND ((= (LENGTH OP) 0)
+                             (RETURN (SUBRCALL T (CADR PL))))
+                            ((= (LENGTH OP) 1)
+                             (RETURN (SUBRCALL T (CADR PL)
+                                         (EVAL (CADR X)))))
+                            ... likewise for up to 5 args, I think..))
+                     ((EQ OP 'FEXPR)
+                      (RETURN (FUNCALL (CADR PL) (CDR X))))
+                     ((EQ OP 'EXPR) 
+                      (RETURN (APPLY (CADR PL) (MAPCAR 'EVAL (CDR X)))))
+                     ((EQ OP 'MACRO) 
+                      (RETURN (EVAL (FUNCALL (CADR PL) X))))
+                     ((EQ OP 'AUTOLOAD)
+                      ... load (CADR PL), can't remember details ...
+                      (RETURN (EVAL X))))))))
+
+I may have screwed up the syntax for the SUBRCALL and especially
+the LSUBRCALL stuff.
+
+It was really written in assembly code, not in Lisp, of course.
+I'm just using Lisp to express it in a way we'd both understand.
+Also, I'm sure the subr dispatch didn't call LENGTH but actually
+looped on the args, pushing them onto the stack, but I didn't want
+to bother with that hair here.  EVAL was finely tuned in many ways.
+
+But the things I wanted you to see are:
+
+There was no LEXPR property.
+LEXPRs were stored as (LAMBDA lexpr-arg ...body...) in the EXPR property,
+while EXPRs were stored as (LAMBDA (..args...) ...body...) in the same
+property. Only when compiled (because the code had separate calling
+sequences) did you have to distinguish them.
+
+The plist was searched in left-to-right order for the first of
+possibly several definitions.  It wasn't unusual for a thing like LET
+(which was a latter-day invention that autoloaded) to have BOTH
+an FSUBR and a MACRO property, with the FSUBR first so that if the
+interpreter saw it, it would get used, but the compiler would see the
+macro and would expand it to more primitive code.  Because of this,
+the clauses of the COND were ordered by "most likely" since the order
+of definitions in the plist is accomodated by traversing the plist
+in the DO and considering all possible definitions in parallel.
+
+It was possible to have conflicting definitions, called shadowed definitions.
+
+Compare the 1-arg SUBR case with the FSUBR case.    Two differences:
+the call to EVAL in the subr case and the use of CADR instead of CDR.
+
+Implicit in the above is that a macro property could only contain
+an interpreted definition (because APPLY couldn't handle objects of
+typep RANDOM, something that made all of the above hard).  To compile
+a macro, one would generate a new symbol |FOO MACRO| or some such thing
+and then compile that, then put the symbol  |FOO MACRO| in FOO's 
+MACRO property. A kludge, but it worked, since APPLY did understand symbols.
+
+All in all, Common Lisp was a substantial improvement on this tower
+of cards.  Lisp really does evolve...
+
+I hope you'll read the paper--you'll find it
+pretty fun, I think.  It was written in 1980 and I added modern
+annotation to it within the last year, so it's exactly the kind of 
+perspective piece that might help you both for this and other
+related issues.
+
+http://world.std.com/~pitman/Papers/Special-Forms.html
+
+This paper has been suggested by some as part of the
+reason that FEXPRs went away.  Although some have said it
+was more like Gorbechev and communism where if it hadn't
+been him it would have someone else because "the time had
+come" for FEXPRs to die. 
+
+==
+
+Subject: [Shrdlu] tools for debugging 
+From: "Matthew Fischer" <mfischer@umr.edu> 
+Date: Thu, 25 Feb 1999 14:58:36 -0600 (CST) 
+
+	I said I would write a short page on debugging tools, well
+go into clisp and type help  not (help), that should be sufficient.
+
+==
+
+Subject: [Shrdlu] Re: IOC ? 
+From: Kent M Pitman <pitman@world.std.com <mailto:pitman@world.std.com="">&gt; 
+(by way of Matt Fischer <mfischer@umr.edu <mailto:mfischer@umr.edu="">&gt;) 
+Date: Sun, 28 Feb 1999 19:30:19 -0600 
+
+This is information on how to port IOC functions, its rather long and
+involved, but I included every type of IOC found in our code and he has
+suggestions for each.  IOC changes affect almost everyone's code, so good
+luck!
+
+   Date: Sun, 28 Feb 1999 16:07:39 -0600 (CST)
+   From: "Matthew Fischer" <mfischer@umr.edu>
+   Cc: mfischer@umr.edu (Matthew Fischer)
+
+   &gt;    Form			Rewrite
+   &gt; 
+   &gt;    (IOC C)		(SETQ ^D NIL)
+   &gt;    (IOC D)		(SETQ ^D T)
+   &gt;    (IOC G)		(SETQ ^G)
+   &gt;    (IOC Q)		(SETQ ^Q T)
+   &gt;    (IOC R)		(SETQ ^R T)
+   &gt;    (IOC S)		(SETQ ^Q NIL)
+   &gt;    (IOC T)		(SETQ ^R NIL)
+   &gt;    (IOC V)		(SETQ ^W NIL)
+   &gt;    (IOC W)		(PROGN (SETQ ^W T) (CLEAR-OUTPUT T))
+   &gt;    (IOC Z)		(VALRET ":VK ")
+
+	   This section was just copied from your Manual...  I will get some 
+   code samples..
+
+	   It looks like the following are used..
+
+	   IOC - G, Q, S, R, C, D, W, V
+
+   &gt; ^D only controls gc messages and can surely be safely ignored.
+
+	   Okay, we will ignore ^D.
+
+   &gt; Incidentally, if you don't know what (VALRET ":VK ") was about, 
+
+	   Thats okay because (IOC Z) is not used in Shrdlu.
+
+	   Samples--(note that they may all contain unported stuff)--
+
+	   (IOC V)  is just found by itself, after a DEFUN
+
+This is because the code was loaded by someone interactively setting
+the input stream and typing ^W to turn off console echoing while the code
+loaded. The (IOC V) made typeout start happening again.  It probably
+happens after the last defun.
+
+	   (IOC G)  
+
+		   (DEFUN THANK NIL
+		       (COND ((EQ (CADR N) 'YOU)
+		       (SAY YOU'RE WELCOME)
+		       (FLUSHME)
+		       (FLUSHME)
+		     (OR NN (IOC G))
+		    (SETQ SPECIAL 'DONE))))
+
+Ah, this probably calls the ^g function, and should probably
+be rewritten as (ABORT).
+
+	   (IOC Q)
+
+		   (DEFUN GRAM-COMP (FILE)
+		   (PROG (^Q UNIQUE ^R ^D)
+			(OR (APPLY 'UREAD FILE)
+			    (RETURN 'BAD-FILE-SPECS))
+			(IOC Q)
+			(SETQ UNIQUE (GENSYM))
+
+The UNIQUE as an end of file should be fine in new code.
+The rest I'd rewrite:
+
+ (DEFUN GRAM-COMP (FILE)
+   (WITH-OPEN-FILE (*STANDARD-INPUT* FILE :DIRECTION :INPUT)
+     (PROG ((UNIQUE (GENSYM)))
+       ...)))
+
+unless the GRAM-COMP function doesn't end by closing the file.  If
+you have to leave the file open at the end, then I need more context
+to know how to rewrite it.  In a sense, the right rewrite would be
+to change something looking like
+
+ (DEFUN BLAH1 (FILE) (APPLY 'UREAD FILE) (SETQ ^Q T) )
+ (DEFUN BLAH2 () ... code that calls (TYI) etc. with no stream arg ...)
+ (DEFUN BLAH3 () ... test for close ...)
+ (DEFUN BLAH () (BLAH1 FILE) ... (BLAH2))
+
+to be instead:
+
+ (DEFUN BLAH ()
+   (WITH-OPEN-FILE (*STANDARD-INPUT* FILE)
+     (BLAH2)))
+ (DEFUN BLAH2 () ... code that calls (TYI) etc. with no stream arg ...)
+
+eliminating BLAH1 and BLAH3.  Or else, since I don't like the binding
+of *standard-input* here, do:
+
+ (DEFUN BLAH ()
+  (WITH-OPEN-FILE (STREAM FILE :DIRECTION :INPUT)
+    (BLAH2 STREAM)))
+ (DEFUN BLAH2 (STREAM) ... code that calls (TYI STREAM), etc....)
+
+If you can't figure out what the overarching function is that should
+contain the WITH-OPEN-FILE, tell me and I'll suggest something more
+elaborate.
+
+	   (IOC R)
+
+		   (DEFUN THDUMP
+		  FEXPR
+		  (THFILE)
+		  (APPLY 'UWRITE (COND (THFILE (CDDR THFILE))))
+		  (IOC R)
+		  (THSTATE)
+		  (APPLY 'UFILE THFILE))
+
+Similar deal but with :DIRECTION :OUTPUT instead of :DIRECTION :INPUT.
+And *standard-output* instead of *standard-input*.
+
+	   (IOC C)
+
+		   (DEFUN USERMODE NIL
+		  (QUIETMODE)
+		  (NORMALFEATUREMODE)
+		  (NOPAUSES)
+		  (SETQ NOSTOP
+			T
+			ANSWER?
+			T
+			SMN
+			NIL
+			TOPLEVEL-ERRSET?
+			T
+			ERT-ERRSET
+			T)
+		  (SETQ *RSET NIL)
+		  (IOC C)
+		  (SETQ SH-PRINT-TIME T))
+
+If what you quoted from my manual is right, 
+this is just turning off GC messages, ignore it too.
+It is the complement of ^D.  I tried never to use ^C and ^D
+so my memory is fuzzy.  GC stats don't buy you much.
+
+	   (IOC D) - will ignore...
+
+This is turning on GC messages.
+
+	   (IOC W) &amp; (IOC V)
+
+		   (DEFS PLANNER
+		 SHOWTREE
+		 (ASSERTIONS THEOREM SCENE EVENT)
+		 SHOW
+		 SHOWCHOICE
+		 TELLTREE
+		 (INPUT ACTION THEOREM ASSERTIONS TELLABLE )
+		 TELL
+		 (LAMBDA (X)
+			 (COND ((NULL (CDR X)) (TELLCHOICE X))
+			       ((EQ (CADR X) 'ON)
+				(IOC W)
+				(THTRACE THEOREM THASSERT THERASE (THGOAL T T))
+				(SETQ PLANNERSEE T))
+			       ((EQ (CADR X) 'OFF)
+				(IOC W)
+				(SETQ PLANNERSEE NIL)
+				(THUNTRACE))
+			       (T (TELLCHOICE X)))
+			 (IOC V)))
+
+The sense of ^V and ^W was replaced by echo streams.  In a sense,
+(SETQ ^V T) in CL terms is accmplished by making a stream that is an
+echo stream to the console.  The whole point of all of this ^V and ^W
+stuff is to gate what gets printed on the console while it's
+operating. 
+
+If I were doing the porting, I would probably just ditch the ^V and ^W
+stuff entirely and just add back in appropriate mechanism later to
+suit whatever my needs were, but if you're doing exploratory work
+trying to figure out what it's supposed to do, that may e hard because
+it's information-losing.
+
+The safer but more complex thing to do would be to implement a stream
+using "Gray streams" (most vendors support this--I don't recall which
+vendor you said you were using).  This is an extensible way to define
+new stream types.  And it's possible to make a stream which behaves
+exactly like Maclisp including respecting ^W and ^Q and ^R so that the
+code wouldn't have to change until you knew what was going on.
+"Gray streams" is something proposed by David Gray a while back that
+was informally accepted an implemented as a stream extension protocol.
+If you want a spec for it, I can send you one.  But only your vendor
+could say if they have it.  I bet Franz and harlequin both have it.
+Probably digitool, too.  Freeware versions may or may not.  The total
+code you'd have to write to do this is quite small, but on the
+downside your code wouldn't look very CL-ish.  On the other hand, you
+could convert to CL native look as a separate pass.
+
+A lot of this depends on whether there are 5 or 500 functions that
+deal with I/O.
+
+==
+
+Subject: Re: [Shrdlu] ... 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Mon, 1 Mar 1999 17:50:16 -0600 
+
+&gt; I am working on the th* set ... right now, fixing all the FEXPRs first.
+
+Hmm... th* is what i've been dealing with too.. I just stripped away all the 
+DECLARE fexpr stuff, hoping the functions would still do whatever they're 
+supposed to do.  Miles:  are you working on the th stuff in plnr or just in 
+thtrac?  Also (probably for miles), plnr apparently depends on the stuff in 
+thtrace -- should I avoid testing plnr funcs that need thtrace stuff for 
+now, or should I try to load it at the top of plnr?
+
+Currently, in addition to removing the declare fexprs, i changed all the
+(declare (special var1 var2 ... )) to use declaim instead of declare.  This
+way it compiles, and the LISP docs suggest this is how you'd do it, but I
+realized it accepts (declaim ([anything] blah blah)) as well as special -- so
+that confuses me.  But plnr does with with many of the funcs. 
+
+==
+
+Subject: Re: [Shrdlu] Problem? 
+From: Matt Fischer <mfischer@umr.edu <mailto:mfischer@umr.edu="">&gt; 
+Date: Wed, 03 Mar 1999 19:28:08 -0600 
+
+pg. 25 - The PitManual
+
+The symbol NIL denotes FALSE in LISP, anything else other than NIL is
+evaluated as true by conditional expressions such as COND, AND, OR, etc.
+
+Now... from pg. 125
+
+...Both NIL and () are fully interchangable input representations for the
+same object.  
+
+object			evaluates as.
+NIL			NIL
+(ATOM 'NIL)		T
+(SYMBOLP 'NIL) 	T
+(LISTP 'NIL)		T
+(EQ 'NIL '())		T
+(CAR 'NIL)		NIL
+(CDR 'NIL)		NIL
+(NULL 'NIL)		T
+(NOT 'NIL)		T
+
+So maybe you can replace it with (), I think that should work!
+
+==
+
+Subject: [Shrdlu] updating 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Thu, 4 Mar 1999 00:50:51 -0600 
+
+I'm going to keep the existing plnr privately, so that we can still have
+that DECLARE FEXPR* whenever we figure out why we need it... also it has
+some other DECLARE (PRINT ..) stuff... Anyways, I just deleted a lot of
+stuff like that at the top that wasn't essential (rather than comment it
+out line by line), and I'm going to update plnr that way, but I will still
+keep the code I removed (or if advised, I could add it as plnr.old or 
+something).  
+
+==
+
+Subject: [Shrdlu] Re: defprop, etc (shrdlu) 
+From: Matt Fischer <mfischer@umr.edu <mailto:mfischer@umr.edu="">&gt; 
+Date: Thu, 04 Mar 1999 10:47:27 -0600 
+Cc: pitman@world.std.com <mailto:pitman@world.std.com> 
+
+   Date: Thu, 4 Mar 1999 00:11:44 -0600 (CST)
+   From: "Matthew Fischer" <mfischer@umr.edu>
+
+	   We came across some code that does this...
+
+	   (DEFPROP THTRACES
+	    (LAMBDA NIL
+		    (PRINT (CADAR THTREE))
+		    (PRINC 'FAILED/ )
+		    (EVLIS (CDDAR THTREE))
+		    (THPOPT)
+		    NIL)
+	    THFAIL)
+
+	   This leads to 2 questions..
+
+	   1.  Why is it written (LAMBDA NIL, what is the point of that???  
+
+It's how it prints.  NIL and () are the same, and it was extremely
+common for people to write stuff how it was printed.  It may have even
+been printed out by the Lisp printer.
+
+	   2.  Is it safe to re-write DEFPROP as DEFUN?  (as accoring to the
+	   PitManual).
+
+Well, (DEFPROP foo (LAMBDA ...) EXPR) can be rewritten as 
+(DEFUN foo ...).  This is not that case here becuase it's the THFAIL
+property.  In Maclisp, the above corresponded to:
+ (DEFUN (THTRACES THFAIL) () (PRINT ...) ...)
+and in modern code you'd write
+ (SETF (GET 'THTRACES 'THFAIL) #'(LAMBDA () (PRINT ...) ...))
+though I'd encourage you to write
+ (DEFMACRO DEF-THFAIL (NAME BVL &amp;BODY; FORMS)
+   `(SETF (GET ',NAME 'THFAIL) #'(LAMBDA ,BVL ,@FORMS)))
+and then rewrite to 
+ (DEF-THFAIL THTRACES () (PRINT ...) ...)
+
+           If so, we have found code that has multiple DEFPROPs
+	   of the same item.
+
+Hopefully with a different property.  If there are lot of different
+properties and you don't want to make one macro (like DEF-THFAIL
+above) per property, you can either define a macro-writing macro,
+like:
+ (DEFUN DEFINE-DEFPROP (DEFINER PROPNAME)
+   `(DEFMACRO ,DEFINER (NAME BVL &amp;BODY; FORMS)
+      `(SETF (GET ',NAME ',',PROPNAME) #'(LAMBDA ,BVL ,@FORMS))))
+and then do
+ (DEFINE-DEFPROP THFAIL DEF-THFAIL)
+ (DEFINE-DEFPROP THFOO  DEF-THFOO)
+ (DEFINE-DEFPROP THBAR  DEF-THBAR)
+ ...etc.
+so you can still use DEF-THFAIL, DEF-THFOO, etc. or else you can make
+one general definer, like:
+ (DEFMACRO DEFPROPFN ((SYM PROP) BVL &amp;BODY; FORMS)
+   `(SETF (GET ',SYM ',PROP) #'(LAMBDA ,BVL ,@FORMS)))
+and then do (sort of) like in Maclisp
+ (DEFPROPFN (THTRACES THFAIL) () (PRINT ...) ...)
+
+           The above is an example...  The next item in the
+	   file is another (DEFPROP THTRACES ..)
+
+It's not another--it's a different one.  I bet the property name is different.
+
+           How would we handle that?
+
+I hope the above is enough to figure it out.
+Basically by varying the property.
+
+	   Lastly...  Do you have *any* idea about this....???
+
+	   (DECLARE (*FEXPR THAPPLY
+		    THGENAME
+		    THSTATE
+		    THANTE
+		    THERASING
+		    THCONSE
+		    ...  [about 20-30 more follow]
+		    THV))	
+
+FEXPRs look like EXPRs if you don't realize it.  Since they are probably
+defined later, any forward reference will be compiled wrong.  It isn't
+necessary to know the definition of the FEXPR at point of call, only
+that it's going to be a fexpr so you can compile (FOO A B C)
+as an FSUBRCALL using the single data arg '(A B C) rather than as a 
+SUBRCALL using data args coming from having evaluated A, B, and C.
+By declaring them *FEXPR, you are alerting the compiler to a later
+FEXPR definition, pretty much like a forward reference declaration
+for arg types in conventional languages to avoid linking of more
+standard kinds going wrong.  There are two ways to fix this in modern
+code: (1)rewrite these as subrs so that you say (THAPPLY '(...)) but you
+probably would find the result very ugly or (2) move the fexpr
+definitions (to be rewritten as macros)  to an earlier point in the
+loading so its definition precedes its use.  I strongly recommend 
+approach #2.  Macros cannot be simply declared by forward reference
+like fexprs could since their action is not opaque--the compiler needs
+to expand them at compile time or would be unable to compile them correctly
+(or even at all). Since you'll likely be rewriting fexprs as macros,
+reordering the code will be needed.
+
+==
+
+Subject: [Shrdlu] cool junk 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Sat, 6 Mar 1999 19:36:01 -0600 
+
+Okay.. I finally got around to reading pitman's stuff about defprop &amp;
+declares... It all makes good sense now to me -- declare was doing about what
+I expected... and i should've guessed that defprop meant create &amp; define a 
+property of an existing function.. (defprop = define property)
+
+==
+
+Subject: [Shrdlu] added "fixes" 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Sat, 6 Mar 1999 20:10:59 -0600 
+
+If you're using the fexprfix, change (load "fexprfix") to (load "fixes"), 
+because I moved it to this, and also put the fix for DEFPROP in there.  The 
+defprop fix apparently is fine like Pitman gave it.
+
+==
+
+Subject: [Shrdlu] Things i've done 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Thu, 11 Mar 1999 14:46:27 -0600 
+
+Okay.. I added another func to "fixes"
+It's a definition for DEFPROPFNIL... please let me know if you can think 
+of a nicer name.. but anyways, It takes a defprop like:
+   (DEFPROP THPROG THPROGT THFAIL)
+And all you have to do is change DEFPROP to DEFPROPNIL
+What it does is set the THFAIL property of THPROG to THPROGT, which is 
+another function, which takes no args.  
+Anyways... be sure which kind of defprop you need.. should probably be 
+pretty clear which is right.  
+
+Other things I did.. went thru plnr and moved everythign around so things 
+didnt call other things before those other thigns were defined (Thus 
+avoiding DECLARE's for FEXPRS, which dont work).  By the way.. everyone 
+who has FEXPR's declared needs to do the same.. make sure a defun-fexpr 
+bob precedes all references to bob.  HOWEVER... keep in mind if there's 
+something like (COND (EQ (QUOTE BOB) ... blah blah), you proably dont 
+need the defun-fexpr to precede that.  Just actual calls to bob.  Another 
+tip... If you have something like (DECLARE (SPECIAL a b c)) preceding a 
+function, and then (DECLARE (UNSPECIAL a b c)) or something like that.. 
+they go WITH the function... and should be moved if you move the 
+function.  I'm not sure if that's done anywhere else but plnr does it.  
+
+Something that concerns me... in some places i have (DECLARE (SPECIAL 
+BOB)) where BOB is a FEXPR.. I probably cant do this since bob is just a 
+macro... probably have to change that to APPLY-BOB, cause that's what the 
+actual function defined by the macro is called.  
+
+And as far as making a complete progress report.. I did also replace 
+occurrences of PUTPROP which i guess were skipped over the first time 
+thru the conversion notes.  
+
+==
+
+Subject: [Shrdlu] interesting thing about init-loader 
+From: "Matthew Fischer" <mfischer@umr.edu <mailto:mfischer@umr.edu="">&gt; 
+Date: Wed, 17 Mar 1999 23:12:26 -0600 (CST) 
+
+	Init appears to be an incomplete copy of loader...
+
+	They are essentially the same file, but loader has *more* than
+init, and has a few different numbers.  Maybe we can trash init!
+
+==
+
+Subject: [Shrdlu] uparrow 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Wed, 31 Mar 1999 23:12:15 -0600 
+
+Miles was right.. ^ is the same as uparrow.. ^W and ^A and ^Q I believe 
+are all global variables baasically.. each one of these it looks like 
+will have to be replaced with a function call of some sort so I guess 
+that's something else I'll try to find rewrites for.. they should be 
+simple functions, but I think a lot of them relate to the input-stuff &amp; 
+to UREAD.  The lisp hyperdocs that I have.. are really hard to understand 
+as far as file/stream input but.. assuming that is ever figured out, I 
+think most of those uparrow funcs will probably be all replaced by 
+single-term calls &amp; simple crap like that.  
+
+==
+
+Subject: [Shrdlu] pitman q's 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Sun, 4 Apr 1999 23:29:09 -0500 
+
+There's something called a LEXPR, which fixing should be easy.. let me 
+know ifyou've spotted it.  It's of this form:
+(defun foo nargs (function body...))
+Or something like that.. the idea is that.. that second thing, nargs, is 
+USED in the body of the func like it were PASSED to the funciton, but 
+it's not.. when you call the function, it counts how many arguments you 
+passed it, and stores that in nargs.  I belive the only way to access the 
+items passed to it are by saying (ARG 1) or (ARG 2).  My impressions are 
+that this is an easy fix (judging from plnr's one lexpr), but show me any 
+occurrences you find cause maybe there's more to it.  
+
+These seem to be the two main uses of UREAD:
+
+	(UREAD /.FILENAME/. / (INIT/) dev dir)
+where dev and dir are the returns of (CRUNIT)
+This usage occurred within the init portion of a 
+certain file, and it used its OWN filename here.
+It occurs in PLNR, which implements the microplanner language.
+I just can't figure out why it'd be reading itself.  
+
+	(UREAD <filename> &gt; DSK SHRDLU)
+This is called with several different filenames (each component of 
+the system), from the init routine.  It seems to me that this kind
+of thing might now be unnecessary... like its doing part of the work
+that any compiler/interpreter would do itself using:
+	(LOAD <filename>)
+But I'm sure there's more to it than that.  I'm not sure exactly what the 
+MACLISP compiler did &amp; didn't do, so I don't know how much of the init 
+routine is actually necessary anymore.  
+
+==
+
+Subject: [Shrdlu] Re: 397 problems 
+From: Miles Davis <miles@umr.edu <mailto:miles@umr.edu="">&gt; 
+Date: Mon, 5 Apr 1999 15:00:11 -0500 
+
+Some things are named #SOMETHING, like #LOC for example. I think this is 
+just part of the name, and not a special meaning like I thought before. 
+The only problem is that some of these little bastards (and there are 
+a lot of them) are all over the place...when I begin changing them I will 
+make a list of oldname-&gt;newname so that people editing other files 
+(blockp and blockl come to mind) will know what they are now called.
+
+The real problem I have is things like 
+Given tags like
+
+    ONT   (: (CQ PA4SV) PONT NIL)
+
+the following code 
+
+    (: (CALLSM (SMRELATE H)) NIL (ONT: SMRELATE PREPQ))
+
+barfs with
+
+ *** - READ from #<character-file-stream #p"gramar"="" @409="">: there is no 
+package with name "ONT"
+
+Well, of course not, it's a jump tag (jesus! so many gotos). But why in 
+two files is there a reference to ONT: (with colon). ALso seen in cgram:
+
+       (COND ((NULL :RESULT) (M ONT:) (GO FAIL)))
+
+I don't know what to do here.
+
+==
+
+Subject: Re: [Shrdlu] pitman q's 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Mon, 5 Apr 1999 15:03:47 -0500 
+
+&gt; &gt; (defun foo nargs (function body...))
+&gt; Is it actually called nargs?
+
+it can be anything.. its just a symbol which is assigned the value of the 
+number of args passed.. here's the LEXPR in plnr:
+
+(DEFUN THMATCH THX ((LAMBDA (THOLIST THALIST)
+                            (THMATCH1 (ARG 1.) (ARG 2.)))
+                    (COND ((&gt; THX 2.) (ARG 3.)) (T THALIST))
+                    (COND ((&gt; THX 3.) (ARG 4.)) (T THALIST))))
+
+So as you see here.. it is accessing differeng arg's based on how many 
+args were passed.  What will probably be sufficient is defining it using
+the arglist (&amp;REST; X) and then using (CAR X) instead of (ARG 1.), CADR for 
+ARG 2.. etc and (LENGTH X) instead of THX:
+
+(DEFUN THMATCH (&amp;REST; X) ((LAMBDA (THOLIST THALIST)
+                            (THMATCH1 (CAR X) (CADR X)))
+                    (COND ((&gt; (LENGTH X) 2.) (CADDR X)) (T THALIST))
+                    (COND ((&gt; (LENGTH X) 3.) (CADDDR X)) (T THALIST))))
+
+so.. i guess we might as well change those to that.. they're certainly 
+not going to work how they are.  (that is, if there are even any other 
+LEXPR's in the whole source besides THMATCH).  
+
+==
+
+Subject: [Shrdlu] uparrow func explanations 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Mon, 5 Apr 1999 22:25:16 -0500 
+
+As I mentioned before.. ^ is the same as uparrow.. when you see ^W or ^Q 
+it's a variable not a function.  IOC does the job of setting these 
+variables.  IOC is a pointless function I think -- it just does SETQ (some 
+uparrow variable) to false or true... Anyways.. hopefully we'll have more of 
+an idea what we need to do with all these occurrences of these... I'm 
+thinking maybe a lot of them are just taken care of by the operating system 
+these days?  Here's a summary:
+
+^Q If true, INFILE is the default input source (default is true)
+(IOC Q) sets it true, (IOC S) sets it false
+
+^A Terminal is.. paused?  (IOC A) sets ^A true.
+
+^R If true, default output destinations are those listed in OUTFILES
+If false, default output is current value of TYO
+(IOC R) sets it true
+
+(IOC G) stops the excecution
+
+^W If true, Default output includes the terminal (^W sets it true)
+^V sets it false
+
+^D  If true, the garbage collector prints an informative message after each 
+garbage collection.. ^D sets it true, 
+^C sets it false
+
+==
+
+Subject: Re: [Shrdlu] (M ONT:) 
+From: Miles Davis <miles@umr.edu <mailto:miles@umr.edu="">&gt; 
+Date: Tue, 6 Apr 1999 12:20:28 -0500 
+
+&gt; what is M?
+
+M is (right now) a DEFPROP in progmr.
+
+(DEFPROP M (LAMBDA (A) (SETQ ME (CONS A ME))) EXPR)
+
+&gt;        (COND ((NULL :RESULT) (M ONT:) (GO FAIL)))
+&gt; or maybe this is pitman fodder?
+
+Nope, this is original.
+
+WHat I don't get, it WTF does ONT: (with colon) mean? I don't find that 
+defined anywhere...
+
+==
+
+Subject: [Shrdlu] questions 
+From: "Matthew Fischer" <mfischer@umr.edu <mailto:mfischer@umr.edu="">&gt; 
+Date: Sun, 11 Apr 1999 11:09:33 -0500 (CDT) 
+
+	I updated the functions.list and my grpr program to include the
+locations of more fixes.  Ie.  it now reports on whether or not the fix
+comes from Pitman's notes, the Not.Pitman file, or is loaded from the fixes
+file (which usually means no changes).  But As I went through the file and was
+working on show (which I hope nobody else is), there are some functions that
+either we dont know how to fix, or the fix location was not documented.  Here
+is the list.  If you know where the fixes or info on it is, let me know.
+
+	DECLARE
+	FLATSIZE (info in not.pitman about what it does, but not a fix)
+	IOC
+	REMOB
+	UREAD
+
+	Also, if there are more standard MacLisp functions not listed in
+functions.list that need to be fixed, feel free to add them.
+
+==
+
+Subject: [Shrdlu] Fexpr &amp; Apply 
+From: "Matthew Fischer" <mfischer@umr.edu <mailto:mfischer@umr.edu="">&gt; 
+Date: Sun, 11 Apr 1999 12:22:56 -0500 (CDT) 
+
+	I just added APPLY to the list of functions.  And, I also just
+remembered that whenever you call APPLY on an FEXPR function, you need to
+rewrite the APPLY (see the fixes file). 
+
+==
+
+Subject: [Shrdlu] (TYIPEEK #.) 
+From: "Matthew Fischer" <mfischer@umr.edu <mailto:mfischer@umr.edu="">&gt; 
+Date: Sun, 11 Apr 1999 12:57:26 -0500 (CDT) 
+
+	According to the Pitman notes, the TYIPEEK rewrite does not support
+(TYIPEEK #.)  Where # is a number...  This affects morpho, parser, show, and
+syscom.  I guess I will ask Pitman if Josh cant come up with something. I am 
+not even sure what TYIPEEK NUM would do.  Possibly peek # chars ahead??
+
+	Another thing I came across is that the function ETAOIN is defined
+in both files....  Any ideas on which is newer?
+
+==
+
+Subject: Re: [Shrdlu] questions 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Sun, 11 Apr 1999 17:16:24 -0500 
+
+ETAOIN:  i cut out the two definitions and.. the one in parser has a 
+comment at the top explaining the difference between the two.. it has a 
+bugfix of some sort.. so the one in parser has stuff added to it which 
+probably wont hurt.. if it freaks out, we can always use the older 
+version.  
+
+&gt; 	DECLARE
+
+Well.. I mentioned that the one thing that should surely work is 
+rearranging definitions so nothing references anything BEFORE it's 
+defined.  It's really really hard to say what's correct, but in plnr, 
+what I've done is change all global declares to declaims.  Common lisp 
+doesnt like declares out in the open, but it *seems* to indicate that 
+declaim is like the equivalent of a global declare.  But there's no way 
+to be certain until we're testing it and it either works or freaks.  
+Maybe someone should find a big bunch of LISP code and see if there's any 
+declares or declaims or anything.. 
+
+I mean like.. in plnr, before every function, tons of things are declared 
+SPECIAL, and then right after the func, they're declared UNSPECIAL.  That 
+seems to me to mean.. they're trying to use these variables without 
+affecting previous usages of them.  I'm not sure you even have to do 
+anything in lisp to make that happen.  
+
+&gt; 	IOC
+
+Hmmm.. check the mail i sent out about the uparrow funcs.. that's all I 
+know right now.. a lot of it hinges on pitman's response to our last 
+bunch of questions -- has he not replied to those?
+
+&gt; 	REMOB
+
+I thought we had something on this.. i'll look for stuff
+
+&gt; 	UREAD
+
+waiting for pitman... maybe its just wishful thinking but it seems like 
+in maclisp you just have to do a lot of stuff handled automatically by 
+the OS and by the interpreter... maybe we can just about chuck uread and 
+not even need to replace it with anything.  I'm probably nuts.  
+
+==
+
+Subject: [Shrdlu] old defprop fix 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Sun, 11 Apr 1999 17:47:39 -0500 
+
+Something I noticed... If anyone is trying to fix DEFPROPS.. if the PROP 
+being DEF'd is EXPR or FEXPR, you cant use DEFPROPFN (in "fixes").  In 
+this case you'll have to refer to what's in hints.mlf:
+
+        (DEFUN ONECONS (X) (CONS 1 X))
+        is equal to
+        (DEFPROP ONECONS (LAMBDA (X) (CONS 1 X)) EXPR)
+
+        and
+
+        (DEFUN SMASH FEXPR (L) (RPLACD L NIL))
+        is equal to
+        (DEFPROP SMASH (LAMBDA (L) (RPLACD L NILL)) FEXPR)
+
+(except DEFUN SMASH FEXPR becomes DEFUN-FEXPR)
+
+I know that there's plenty of functions defined in this way... sooner or 
+later they'll all have to be rewritten this way.  There's some in newans, 
+progmr, show, smutil, and syscom.  I don't know if anyone cares about 
+that, but I thought I'd correct myself because I do remember saying that 
+all occurrences of DEFPROP could be fixed by the macros in "fixes,"  but 
+that's not true for FEXPR and EXPR properties.  
+
+==
+
+Subject: [Shrdlu] more maclisp notes 
+From: Kent M Pitman <pitman@world.std.com <mailto:pitman@world.std.com="">&gt;
+(by way of Matt Fischer <mfischer@umr.edu <mailto:mfischer@umr.edu="">&gt;) 
+Date: Mon, 12 Apr 1999 09:05:17 -0500 
+
+   Date: Mon, 05 Apr 1999 16:37:24 -0500
+   From: Matt Fischer <mfischer@umr.edu>
+
+   Some things are named #SOMETHING, like #LOC for example. I think this is 
+   just part of the name, and not a special meaning like I thought before. 
+
+That's right.  # used to be normal character.  (I think it was chosen
+as a readmacro character partly because arrays had useless print
+syntax that started with # and it seemed useful to protect # against
+random uses.)
+
+You should probably just do a huge Query Replace of # with \#
+or pick another character to be either your dispatch character
+(replacing Common Lisp's #) or your special character in SHRDLU
+(replacing # at start of words).  For example, % might work ok if
+it's not used for other things...
+   (DEFS ABOVE SEMANTICS ((PREP (%LOC %ABOVE T))) FEATURES (PREP PLACE))
+The main disadvantage of changing the SHRDLU notation is that it would
+void any published remarks about the syntax of SHRDLU, but that's not
+a major price to pay for CL compatibility.
+
+   the following code 
+
+       (: (CALLSM (SMRELATE H)) NIL (ONT: SMRELATE PREPQ))
+
+   ALso seen in cgram:
+
+	  (COND ((NULL :RESULT) (M ONT:) (GO FAIL)))
+
+   I don't know what to do here.
+
+This is relatively easily dealt with, I think.
+Just change the syntax of ":" in your readtable to be alphabetic.
+Make sure to do this in a private readtable and it won't hurt the
+loading of other files.  It will mean you can't do out-of-package
+references to symbols in your file, so what you want to do is
+to make sure all of your out-of-package references are already made
+by the time you change the syntax.
+
+Put this text somewhere in your system setup.  This will define the
+readtable but will not enable it.  Feel free to use ":"  for package
+prefixes even after this is done.
+
+ ========================================
+ (defvar *shrdlu-readtable* (copy-readtable nil))
+ ; I picked "$" as the character to pattern it off of rather than "A"
+ ; since "A" is case-translating and I'm superstitious that copying
+ ; "A" will mean it will try to find uppercase and lowercase ":" in
+ ; some implementation. -kmp 12-Apr-1999
+ (set-syntax-from-char #\: #\$ *shrdlu-readtable*)
+ ; Optionally you could put 
+ ; (set-syntax-from-char #\# #\$ *shrdlu-readtable*)
+ ; here to make # an ordinary character in this context. -kmp 12-Apr-1999
+ (defmacro in-shrdlu-syntax ()
+   `(eval-when (:execute :compile-toplevel :load-toplevel)
+      (setq *readtable* *shrdlu-readtable*)))
+ ========================================
+
+Then protect yourself against the need to do out-of-package references
+by making local functions to wrap up nedes for external calls. e.g.,
+if you need to do (system:foo-bar x y z) somewhere, you should instead
+do
+
+ (defun system-foo-bar (x y z) (system:foo-bar x y z))
+
+so you can make a call (system-foo-bar x y z) without a ":" in it
+later in the code.  Put all of these definitions in one file.
+Note, in the case where the args align exactly, you can also do this
+by just importing SYSTEM:FOO-BAR into the package and using (foo-bar x
+y z) but you may find reasons there is a need to rename the symbol or
+reasons you have to change the arg order or supply default args.  In
+those cases, you will not be able to use simple importing.  
+
+Finally, at the top of the files that you want to use the shrdlu
+syntax for, just put (in-shrdlu-syntax) at the top, right after
+the in-package form, as in:
+
+ (in-package "SHRDLU")
+ (in-shrdlu-syntax)
+
+The reason this will work with just a simple SETQ is that the
+functions LOAD and COMPILE both bind *READTABLE* (to itself) for every
+file they compile or load just so that code can re-assign it locally
+to that one file with just a SETQ. Your code will compile/load without
+affecting the global readtable you have to type in.
+
+If you want to make a SHRDLU "listener", where you can type with this
+same old-style syntax, you should make a
+
+ (defun shrdlu-read (&amp;optional; (stream *standard-input*) eof-error eof-val)
+   (let ((*package* (find-package "SHRDLU"))
+         (*readtable* *shrdlu-readtable*))
+     (read stream eof-error eof-val)))
+
+   I just can't figure out why it'd be reading itself.  
+
+I remember there was a reason for this but I can't think of what.
+Incidentaly, ".application. (init)" was the conventional name of the
+program init file on that operating system.  Sort of like
+"application.ini" would be in modern terms.  It's possible that it's
+related to this and that the UREAD caused the input to also be echoed
+as if typed on the terminal. (Just a guess; as I probably mentioned, I
+never used Old I/O very much--it was impossible to understand and New
+I/O had come along just as I arrived on the scene, so most of my "use"
+of it was rewriting it--just as yours is.  Though there were more
+old-timers to ask back then.) I would just not worry about this.  I
+doubt it affects anything.  You'll probably have to arrange for a
+special loader for that file anyway since a modern lisp won't be
+automatically loading that file anyway, and you can easily arrange for
+that file to do any relevant echoing if that seems appropriate.
+
+It is also true that some users had their own directories and some
+did not.  So, for example, if FRED had a directory, then (crunit)
+was going to return (FRED) but if he didn't then he would be in
+(USERS).  People in USERS were scrunched in since there were a maximum
+of 512 directories (fixed operating system limit) and there were many
+1000's of users.  The USERS people were only allowed to make filenames
+with their own name as a first filename, so you could only make names
+like "USERS;JOE BLAH" but not "USERS;BLAH SOMETHING" becuase the latter
+would belong to someone named BLAH.  A consequence is that in the
+USERS dir, people didn't get the "luxury" of init files named
+".PLNR. (INIT)" because that was something shared by everyone in the
+same dir.  Instead, they had to call their init "JOE (PLNR)" and
+mostly they did not bother because most such users (the ones who
+did not have directories) were guests and didn't use PLNR.  Or used
+it only very occasionally to try it out as a guest.  As such, it could
+be--and this is starting to sound familiar--that all of this UREAD stuff
+was accomplishing some kind of trick wherein they FIRST redirected 
+input to ".PLNR. (INIT)" in the user's directory IF the file existed
+and IF the directory existed.  That would cause all the forms in that
+file to get loaded, and THEN when that was done it's possible that it
+came back here to read the rest or else that it only came back here
+if the UREAD failed.  (I can't remember; maybe the manual says
+enough). Anyway, thinking about this I'm nearly 100% certain that this
+was just a way of basically saying "if the user has a personal init,
+load it here" [and you're just being confused by the same filename
+because it was ".PLNR. (INIT)" both in his dir and in yours] and the
+only part I'm even a little uncertain about is whether it was supposed
+to come back and do this other stuff after.
+
+   (original code...)
+   (COND ((ERRSET (APPLY 'UREAD
+			    (APPEND '(/.PLNR/.
+				     /(INIT/))
+				     (CRUNIT)))
+
+   (current translation...)
+   (COND ((IGNORE-ERRORS (LIST (APPLY 'UREAD
+				 (APPEND '(/.PLNR/.
+					   /(INIT/))
+					  (CRUNIT))))
+
+Yeah, I might just hcange this to
+ (IGNORE-ERRORS (LOAD (MAKE-PATHNAME :NAME "PLNR"
+			             :TYPE "INI"
+		                     :CASE :COMMON
+                                     :DEFAULTS (USER-HOMEDIR-PATHNAME))))
+or some such thing.
+
+	   (UREAD <filename> &gt; DSK SHRDLU)
+
+Just fyi, ITS file names were funny in that they had two parts which
+were symmetric.  "FOO BAR".  The "first filename" is now what we
+call the "name" but the "second filename" (BAR) was variously the
+type or the version.  So "FOO 47" was the 47th version of FOO but
+"FOO LISP" was the only version of "FOO.LISP".  When you named 
+"FOO &gt;" you got "the largest extant version" on read and you got
+"the next highest version" on write (i.e., "FOO 48").  The convention
+was to find the "type" info in the file attribute list with the
+"-*-LISP-*-" or just to somehow magically know it since there were
+not simultaneous type and version.  Normally you'd have the numbered
+versions be your source and compiled versions be compiled versions
+of latest (something you could check by file date).  It was normal
+to have "FOO 47" "FOO 48" and "FOO FASL" in your directory as a
+cluster meaning "the last two source files and one compiled versoin".
+All references to "<filename> &gt;" just mean "most recent source of
+"FILENAME".
+
+	   (LOAD <filename>)
+   But I'm sure there's more to it than that.
+
+No, this is essentially right.
+
+   I'm not sure exactly what the 
+   MACLISP compiler did &amp; didn't do, so I don't know how much of the init 
+   routine is actually necessary anymore.  
+
+I wouldn't worry too much about this unless you seem to be getting a
+wrong effect.  The maclisp compiler was a separate application.
+If you were using UREAD you were not using the compiler but an
+interpreter, and all of this was executing as it read.  The scary
+part is that it MIGHT be the case that the system, or parts of it,
+can't BE compiled.  But we'll cross that bridge when we come to it.
+You should just keep it in mind.  It is possible to construct code 
+sufficiently opaque to the compiler that you can't compile it.
+
+==
+
+Subject: [Shrdlu] changes to grpr.pl + etc 
+From: "Matthew Fischer" <mfischer@umr.edu <mailto:mfischer@umr.edu="">&gt; 
+Date: Tue, 13 Apr 1999 13:44:02 -0500 (CDT) 
+
+	I have made some changes to grpr.pl to eliminate confusion.  
+Some things in fixes, like DEFUN and some special APPLYs require you to
+actually change code.  Others like EXPLODE and ASCII have been *re-implemented*
+so that you dont have to make changes.  grpr.pl will now report this,
+things you need to fix show as [FIXES], things that are okay appear as
+[...].
+
+	Also, I am mostly done with data, however there are problems because
+whats in the file really doesnt make any sense.
+
+There is line after line just like this:
+((\#IS :B6 \#BLOCK))
+
+Now, IS is not defined anywhere that I can see, and neither is AT, which 
+appears later.  Perhaps this is meant to be read from somewhere like
+a datafile... 
+
+==
+
+Subject: Re: [Shrdlu] changes to grpr.pl + etc 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Tue, 13 Apr 1999 21:43:53 -0500 
+
+&gt; Now, IS is not defined anywhere that I can see, and neither is AT, which 
+
+I think this would be it... I'm assuming there's something similar for 
+AT, but I didn't check for it...
+
+in dictio:
+
+(DEFS #IS PRIORITY 64.) 
+
+preceding that in dictio:
+
+(DEFUN-FEXPR DEFS (L)
+             (PROG (A)
+             (AND (NULL (CDR L)) (RETURN L))
+             (SETQ A (CAR L))
+             (SETQ L (CDR L))
+             LOOP
+;(PUTPROP A (CADR L) (CAR L))
+                        (SETF (GET A (CAR L)) (CADR L))
+             (COND ((SETQ L (CDDR L)) (GO LOOP)))
+             (RETURN A)))
+
+So.. it occurs to me if we can't find something defined.. just grep the 
+term and then grep DEF, so we find defprop, defun, defun-fexpr, and 
+probably anything else if there is anything else
+
+==
+
+Subject: [Shrdlu] ont ont ont 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Thu, 22 Apr 1999 00:04:36 -0500 
+
+well.  So I realize that the only place ONT: is used is (like several 
+other weird colon-things including DIRECTION: and DIMENSION:) within 
+FEXPR's.  In fexpr's.. the things passed aren't evaluated.  So in other 
+words.. when we look at (ONT: blah blah) inside a call to a FEXPR.. it's 
+just a list.. it's not evaluated, so it's like just a list of items.. 
+And I followed through what the fexpr does, and all it ever does is send 
+that list, still unevaluated, to M, which conses it onto ME.  I don't 
+think this "ME" really exists.  There is a "ME" which is DEFS'd in dictio 
+but it makes no sense whatsoever to cons things onto this.. it's a 
+dictionary entry for the word "me".  
+
+Furthermore, just below the part where something is CONS'd onto ME, there 
+is something else which does a SETQ on MESP.  Here's a grep of the entire 
+source for occurrences of MESP:
+
+parser:       MES MESP C CUT CURTIME STATE GLOBAL-MESSAGE LEVEL
+progmr:(DEFPROP MP (LAMBDA (A) (SETQ MESP A)) FEXPR) 
+syscom:       MES MESP C CUT CURTIME STATE GLOBAL-MESSAGE LEVEL
+                                                                                    
+Those things from parser and syscom are definitely not related, and are 
+definitely not defining any global variable MESP.
+So there's a function that SETQ's something that is never used anywhere 
+else.  Fascinating.  I figure that this is actually also the case with 
+ME.  Which means things are missing from this source, or else they just 
+wont matter.  
+
+i think ont: is probably just supposed to be a regular symbol like any 
+other.. so.. pitman's readtable fix stuff I guess would work, but perhaps 
+so would just renaming ont: to something else.. it's not even touched 
+anyways, it's just tossed onto ME, and ME is never touched.  
+
+==
+
+Subject: [Shrdlu] my friend plnr. 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Thu, 29 Apr 1999 01:58:29 -0500 
+
+Buh.  All of this works.. but we still have nothing to show:
+
+(load 'plnr.bad)
+
+       (THINIT)
+       (SETQ THINF NIL THTREE NIL THLEVEL NIL ERRLIST NIL)
+
+(SETQ HUMAN '(THV NIL))
+(SETQ TURING '(THV NIL))
+(THBIND '((HUMAN NIL) (TURING NIL)))
+
+(THASSERT ((HUMAN TURING)))
+(THCONSE (X) (FALLIBLE $?X)
+	     (THGOAL (HUMAN $?X)))
+
+(THGOAL (FALLIBLE TURING))
+
+Sorta.  Some things in the code are blatantly wrong.  I removed a (LIST ) from around 
+something, and suddenly THASSERT worked just like it was supposed to, instead of causing an 
+infinite loop.  
+
+And my format for THASSERT is different than the manual suggests.  But it places it in the 
+knowledge base.. along with the fallible-theorem.  
+
+THGOAL... I've carefully looked this over and i dont know HOW this was supposed to 
+determine if TURING is FALLIBLE.  Let alone HUMAN.  THGOAL always returns NIL.  I don't 
+think it EVER searches the database... it might have somethign else search it, but it 
+IGNORES whatever that something-else finds.   Lots of nutty crap going on in plnr.  I now 
+flee in terror. 
+
+==
+
+Subject: Re: [Shrdlu] just curious 
+From: roy slater <xal34@dial.pipex.com <mailto:xal34@dial.pipex.com="">&gt; 
+Date: Wed, 08 Sep 1999 14:08:03 -0700 
+
+I subscribed (it seems) months ago - I too am not part of the school,
+or the project, but have been trying to get SHRDLU working under
+FRANZ LISP (FreeBSD 2.2.7)
+
+I have a fair bit of code sorted out, but have almost stopped.
+I am now re-writing large portions of the code in REXX, which seems
+to me to be somewhat less fragile, and more transparent.
+I have Winograd's book, but it refers to code which is far older than
+the source I pulled from MIT (which was corrupted in some places anyway)
+
+==
+
+Subject: Re: [Shrdlu] What I'm doing.... 
+From: Keldon Jones <keldon@umr.edu <mailto:keldon@umr.edu="">&gt; 
+Date: Mon, 27 Sep 1999 10:33:13 -0500 
+
+On Mon, Sep 27, 1999 at 06:52:00AM -0500, Andrew Adrian wrote:
+&gt; Basically, I was trying to go through some of the files everyone forgot
+&gt; about and see where some of the dependencies lied in those.  Then I looked
+&gt; at cgram.... For anyone that hasn't looked at it, it's a complete mess.  I'm
+&gt; in the process of reformatting it so I can read it and understand what is
+&gt; going on.  It would appear that it's heavily tied in with the semantics
+&gt; process ( and may be the reason the semantics stuff doesn't work ).  I've
+&gt; gotten about 3/4 through the file, and only found 2 function definitions.
+&gt; One is CLAUSE, and the other is NG.  I've got a copy local that I've been
+&gt; dealing with, it's not checked out of CVS.... I suppose I should do that.
+
+	The "cgram" file is a preprocessed version of the "gramar" file.
+The preprocessor is in the "macros" file.  Basically, you must always
+regenerate cgram whenever you change "gramar".  Read the comments at the
+top of the "macros" file for instructions on how to do that.  I should
+have made the preprocessor output some comment to the top of "cgram"
+saying that it was a machine-generated file and that it shouldn't be
+edited, sorry.
+
+&gt; BTW... Does anyone know what (:|| var1 var2 var3 [var4]) is supposed to do?
+&gt; I can't find a def for the :|| anywhere.  Thanks!
+
+	I couple of days ago I fixed the preprocessor to expand those
+macros before writing the cgram file.  Basically, the ":" function is
+an if..then..else function.  The optional third branch is taken when
+there is no more sentence left to parse.
+
+==
+
+Subject: Re: [Shrdlu] project sponsor meeting 
+From: Keldon Jones <keldon@umr.edu <mailto:keldon@umr.edu="">&gt; 
+Date: Tue, 28 Sep 1999 17:38:58 -0500 
+
+	We can "doctor" an output from Programmer a bit by grepping
+the output for "SUCEEDED".  If we take the sentence "Had you touched
+any pyramid before you put the green one on the little cube?", you
+get this:
+
+&gt;2 PARSE SUCEEDED: NG  (YOU)
+&gt;2 PARSE SUCEEDED: VG  (TOUCHED)
+&gt;2 PARSE SUCEEDED: NG  (ANY PYRAMID)
+&gt;3 PARSE SUCEEDED: NG  (YOU)
+&gt;3 PARSE SUCEEDED: VG  (PUT)
+&gt;3 PARSE SUCEEDED: NG  (THE GREEN ONE)
+&gt;4 PARSE SUCEEDED: NG  (THE LITTLE CUBE)
+&gt;3 PARSE SUCEEDED: PREPG  (ON THE LITTLE CUBE)
+&gt;2 PARSE SUCEEDED: CLAUSE  (BEFORE YOU PUT THE GREEN ONE ON THE LITTLE CUBE)
+&gt;1 PARSE SUCEEDED: CLAUSE  (HAD YOU TOUCHED ANY PYRAMID BEFORE YOU PUT THE
+                            GREEN ONE ON THE LITTLE CUBE)
+
+	It's not too messy, and illustrates the fact that the
+parser is actually putting together groups of words correctly.
+
+==
+
+Subject: [Shrdlu] graphics &amp; answering 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Mon, 4 Oct 1999 13:49:17 -0500 
+
+Keldon showed us (or maybe just in a mail to me), that you can FEED the correct stuff to the answer part
+of shrdlu.  In other words we could potentially start getting SHRDLU to generate the correct output, regardless of
+whether it can actually acquire the info yet.  The fact that it doesn't UNDERSTAND input sentences isn't necessarily a
+roadblock to testing the answer system.
+
+==
+
+Subject: Re: [Shrdlu] graphics &amp; answering 
+From: Keldon Jones <keldon@umr.edu <mailto:keldon@umr.edu="">&gt; 
+Date: Mon, 4 Oct 1999 14:27:30 -0500 
+
+	The original display code was written in assembly for the DEC
+740 graphics terminal (or something to that effect).  That code is
+not included in what we have, and may be lost.
+
+==
+
+Subject: [Shrdlu] Bypassing planner 
+From: Keldon Jones <keldon@umr.edu <mailto:keldon@umr.edu="">&gt; 
+Date: Mon, 4 Oct 1999 14:36:37 -0500 
+
+	Here's my message to Josh about the answering code.  Note that
+the "quick hack" mentioned has not been checked into CVS.  I'll include
+it here:
+
+                  PLNRSEE-PAUSE
+                  (ERT FOR PLANNER))
+             (SETQ MPLNR-TTIME (GET-INTERNAL-RUN-TIME) M-GC 0.)
+-            (SETQ RESULT (THVAL AA '((EV COMMAND)) ))
++            ;(SETQ RESULT (THVAL AA '((EV COMMAND)) ))
++            (SETQ RESULT (ERT ENTER PLANNER RESULT))
+             (SETQ MPLNR-TIME (TIMER MPLNR-TTIME (GET-INTERNAL-RUN-TIME)))
+             (OR (= M-GC 0.)
+                 (SETQ MPLNR-TIME (- MPLNR-TIME (TIMER M-GC 0.))
+
+--
+	A quick hack lets me bypass planner code and return whatever value
+I want to the calling code.  In this way I can fool the rest of the
+program into thinking that planner is working.  After fixing a few bugs in
+the answering code, I got this:
+
+READY
+how many blocks are in the box?
+
+(THFIND ALL (THV #:X2) (#:X2) (THGOAL (|#IS| (THV #:X2) |#BOX|)
+                                      (THDBF MUMBLE)))
+
+ENTER PLANNER RESULT
+&gt;&gt;&gt; (return '(:box))
+
+(THAND
+  (THFIND ALL (THV #:X1) (#:X1) (THGOAL (|#IS| (THV #:X1) |#BLOCK|)
+                                        (THDBF MUMBLE))
+    (THGOAL (|#CONTAIN| :BOX (THV #:X1) #:TSS1) (THDBF MUMBLE))
+  )
+  (THPUTPROP '#:X1 THVALUE 'BIND)
+)
+
+ENTER PLANNER RESULT
+&gt;&gt;&gt; (return '(:b2 :b3 :b4))
+
+THREE OF THEM .
+
+==
+
+Subject: [Shrdlu] thfind sorta works 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Thu, 21 Oct 1999 20:12:08 -0500 
+
+definite progress with thfind:
+For 
+(thval '(thfind all (thv x) (x) (thgoal (\#color (thv x) \#red))) '((x thunassigned)))
+it'll return ((:b1) (:b5) (:b6))
+(which are the red ones...)
+likewise with a pyramid or whatever.
+It doesn't filter through for 2 goals so far though
+it just finds all thigns fitting the first goal.
+
+Some function was returning NIL on success.  I have no idea why.  I changed it and suddenly it returns 
+all things that satisfy the goal.  Hmm.  
+
+==
+
+Subject: [Shrdlu] Notes on special variables 
+From: Keldon Jones <keldon@umr.edu <mailto:keldon@umr.edu="">&gt; 
+Date: Fri, 22 Oct 1999 22:32:55 -0500 
+
+	I wanted to say a few things about special variables and what
+problems they're causing for us, and how you can find and fix those
+problems in the code.
+	Special variables are variables that are declared in one place
+and then referenced in another.  Usually a special variable is declared
+in one function and then used or changed in a called function of the
+first one.  Note that this isn't really a global variable, since when
+the function that declared the variable exits, the variable is
+destroyed.  Here's how one declares a special variable:
+
+(defun foo (x y)
+	(declare (special x))
+	(bar 'something))
+
+or when the variable is declared in a "prog":
+
+(defun foo (x y)
+	(prog (a b)
+		(declare (special b))
+		(something)))
+
+	Now, these variables where used rather recklessly in SHRDLU.
+Apparently, in those days, they did not have to be declared as such.
+They cause two different sets of problems: when their value is read,
+and when it is changed.
+	When a special variable's value is read, and the variable is
+not declared as special in any of the calling functions, the result
+is made very clear: the LISP interpreter halts with an error.  The
+fix here is to find the calling function that declared the variable
+and declare it special.
+	The more difficult case is when an undeclared variable is
+written to, usually with "setq".  When this happens, a new local
+variable is created, which is completely different than the one
+declared in the calling function.  Then, later, when the calling
+function checks to see what the called function set the variable
+to, it finds that nothing has changed, and behaves incorrectly.
+This is extremely bad, since it fails silently (without an error
+from the LISP interpreter).
+	I have noticed that if you try to compile the source, the
+compiler spits out tons of warnings about undeclared variables that
+are assumed to be declared as special.  Apparently you have to
+declare variables as special in functions where they are *used*, as
+well as where they are declared.  Perhaps this feature could be
+used to help find any remaining problems related to these variables.
+
+==
+
+Subject: [Shrdlu] thfind working in a major way 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Thu, 28 Oct 1999 16:53:34 -0500 
+
+thfind details:
+i'm without my plnr book or I'd test some more complicated cases, like those 
+involving 2 variables, but for 1 variable, all cases seem to work.
+
+Here's something it'll do:
+
+ (thval '(thfind ALL (THV x) (x) (thgoal (\#is (thv x) \#block)) (thgoal 
+(\#color (thv x) \#green)) (THOR (THGOAL (\#SUPPORT :B6 (thv x))) (thgoal 
+(\#support :TABLE (thv x))))) '((x thunassigned)))
+
+that finds every green block that is supported by b6 or the table.. and of 
+course it'll find any subset of this.. (i threw in the b6 part later).  I'm 
+not sure off the top of my head how you'd find all green blocks supported by 
+another block, and actually say what that block was.
+
+anyways you get back ((:B3) (:B7)) for the above thing.
+
+Again it was another very blatant error it seems.. when we have that 
+sequence of goals, it evaluated the first one, and after that it called a 
+function which FOUND the next one, and stored it in a global variable.  But 
+the FIRST thing done after this functionw as called was to set that variable 
+to NIL, regardless of anything, so it could NEVER find a second expression 
+and in fact just succeeded as though there were no more goals.  All I did 
+was have it check if the global variable was CHANGED after calling this 
+function, by comparing it to its former value... and bam it works.. nuts.
+
+==
+
+Subject: Re: [Shrdlu] thfind working in a major way 
+From: Keldon Jones <keldon@umr.edu <mailto:keldon@umr.edu="">&gt; 
+Date: Thu, 28 Oct 1999 17:01:19 -0500 
+
+On Thu, Oct 28, 1999 at 04:53:34PM -0500, Joshua Sutterfield wrote:
+
+&gt;  (thval '(thfind ALL (THV x) (x) (thgoal (\#is (thv x) \#block)) (thgoal 
+&gt; (\#color (thv x) \#green)) (THOR (THGOAL (\#SUPPORT :B6 (thv x))) (thgoal 
+&gt; (\#support :TABLE (thv x))))) '((x thunassigned)))
+
+	Hmm, it is important to note that when the rest of the code calls
+planner functions, the second parameter to thval will not be:
+
+'((x thunassigned))
+
+but will instead be:
+
+'((ev command))
+
+	That is, x will not be set at all.  I think that one of the first
+things that thfind does is to call thbind on the variables it'll use.
+Does thfind still work with a different variable list passed?
+
+==
+
+Subject: [Shrdlu] fwd&gt; Re: java frontend for lisp? 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Fri, 29 Oct 1999 06:26:36 -0500 
+
+Got this response about a lisp interpreter in java... 
+
+Date: Thu, 28 Oct 1999 17:17:08 -0700
+To: "Joshua Sutterfield" <joshu@umr.edu>
+From: "Justin Voskuhl" <jvoskuhl@uswest.net>
+Reply-To: "Justin Voskuhl" <justinv@kanjisearch.com>
+Subject: Re: java frontend for lisp?
+
+I have implemented such a thing if you're interested.  The LISP variant it
+implements is called Dylan, and is fairly close to Scheme.  The URL you want
+is <http: www.cs.dartmouth.edu="" ~cs18="" fall98="">
+
+It implements a primitive debugger, primitive graphics etc.  All written in
+Java, and runnable as an applet and as an application.  Students in the
+class used it under MacOS, Solaris, and Windows succesfully.
+
+I wrote the original, Cornell and Dartmouth have both patched and fixed it
+in places, and the sources are there if you want them, or I can point you at
+them on a share I maintain.
+
+==
+
+Subject: Re: [Shrdlu] Corman Lisp 
+From: "Andrew Adrian" <aadrian@umr.edu <mailto:aadrian@umr.edu="">&gt; 
+Date: Fri, 5 Nov 1999 07:00:25 -0600 
+
+Stuff we'll need to send the interface:
+    we can reroute stdout to be the socket pipe, so SAY won't need to be
+changed much; just the addition of delimiters so the interface knows what to
+do with what it's getting and when it ends
+    MOVETO will pretty much be all sending stuff through the socket
+    GRASP and UNGRASP can just be single characters sent through
+and that's about it.  There won't need to be any kind of semi-permanent
+storage of what's been moved or where because that's all already done in the
+LISP (in theory anyway).
+
+==
+
+Subject: Re: [Shrdlu] Bug list 
+From: roy slater <xal34@dial.pipex.com <mailto:xal34@dial.pipex.com="">&gt; 
+Date: Wed, 10 Nov 1999 09:22:23 -0800 
+
+&gt; -- Pick up a red block.
+&gt; 
+&gt; *** I DON'T UNDERSTAND.
+&gt; 
+&gt; This appears to be a problem in the function SMCL1.
+
+I had the same problem with my version, much less advanced than yours.
+My test sentence CHOOSE A BLOCK failed just like this, until I
+dummied out a call to SMCL-MODIFIERS right at the end of SMCL1. You
+may want to look in that area.  I recollect the main thing was a bad 
+call to ISQ.
+
+==
+
+Subject: Re: [Shrdlu] Moving blocks 
+From: Keldon Jones <keldon@umr.edu <mailto:keldon@umr.edu="">&gt; 
+Date: Fri, 12 Nov 1999 17:48:31 -0600 
+
+On Fri, Nov 12, 1999 at 05:42:01PM -0600, Joshua Sutterfield wrote:
+&gt; &gt; MOVING HAND TO (100 340 500)
+&gt; &gt; GRASPING BLOCK B7
+&gt; &gt; MOVING HAND TO (900 285 200)
+&gt; &gt; LETTING GO
+&gt; &gt; MOVING HAND TO (100 450 300)
+&gt; &gt; GRASPING BLOCK B6
+&gt; &gt; MOVING HAND TO (100 450 1000)
+&gt; 
+&gt; So.. it changes the assertions &amp; all that or.. what exactly is it
+&gt; changing..  is it hitting those non-existent graphics functions yet? 
+
+	It apparently changes the assertions correctly.  At least,
+I haven't found any problems with that yet.  I've written some
+replacements for those non-existant graphics functions.  They print
+out the messages you have above.  There are four of them (Andy will
+need to change what they do, probably).  I've put them in the file
+"mover".
+
+==
+
+Subject: [Shrdlu] meeting thurs 6pm 213 yada. 
+From: Joshua Sutterfield <joshu@umr.edu <mailto:joshu@umr.edu="">&gt; 
+Date: Thu, 18 Nov 1999 00:59:19 -0600 
+
+shrdlu is now changing its world and answering lots of junk right...
+and it executes all the functions that should eventually send all their 
+stuff to Java.  Anyways pretty dern quick we'll have to figure out how to 
+do sockets in Corman.. there's examples &amp; stuff.  And then I guess we'll 
+take every print statement the user's supposed to see and run it to some 
+function we'd make called (sendsock '|the blue one|)
+and for the move &amp; other commands we'd just use the normal command name 
+but put a pound in front of it or something.. (sendsock '|#MOVEHAND 100 
+340 500|)
+and likewise we'd need (getsock)
+which would take the place of every (read) I assume,
+and at the end or upon close, Java would send "~" (shrdlu's exit signal).
+
+One thing is, to get things to work in corman lisp, i'm pretty sure we 
+*have* to get rid of all escaped colons.  I believe the actual colon 
+function defined doesn't cause a problem.. but I just replaced all the 
+\:'s with -'s and it didn't seem to behave differently in CLISP.  Not 
+that I was able to test it in corman.. there were still a few other 
+problems.. taking cars of lists &amp; stuff
+
+==
+
+From: "Joshua Sutterfield" <joshu@umr.edu>
+Subject: [Shrdlu] meet after presentations today?
+Date: Thursday, December 02, 1999 8:55 AM
+
+It looks like everything that happens in CLISP happens with Corman now..
+corman had some really ridiculous shortcomings to work around..
+particularly one with the way it handled calls to EVAL.. and several
+stupid problems with characters &amp; symbols (you cant use colons, even with
+an escape; it doesn't allow numbers as symbols; it cant coerce a
+single-character symbol into just the character).  So next would be to
+figure out how to do the sockets.
+
+I noticed that at least in clisp, everywhere there's a read-char, you can
+just change it to (read-char stream) to read from a socket stream.
+anyways.. i have plenty of questions about the frontend, but don't really
+need any info to continue working with Corman stuff.  I have gone through
+all of the shrdlu transcript so I know which parts do and dont work
+there, and a few ideas as to why (i've had to go thru a LOT of it to find
+the problems with Corman).
+
+==
+
+From: "Andrew Adrian" <aadrian@umr.edu>
+Subject: [Shrdlu] class files uploaded to cvs
+Date: Friday, December 03, 1999 12:44 PM
+
+You can use the arrow keys, 
+PageUp, and PageDn to change the viewpoint/zoom.  Below is a chart of what the keys do.  
+Holding the Alt key while pressing one of the other keys changes the function slightly.  
+The keys are bound such that it will move the camera, not the scene itself. 
+
+Key              Movement          Alt+key Movement
+-------------------------------------------------------------------------
+left-arrow       rotate left           translate left
+right-arrow     rotate right         translate right
+up-arrow        zoom in
+down-arrow    zoom out
+PageUp         rotate up            translate up
+PageDn         rotate down        translate down
+
+Also, the Java3D API 
+leans heavily on OpenGL, so if you don't have that, it won't work.
+
+==
+
+From: "Joshua Sutterfield" <joshu@umr.edu>
+Subject: Re: [Shrdlu] not meeting?
+Date: Friday, December 03, 1999 7:03 PM
+
+&gt; Just sending a Byte instead of a ByteStream....
+
+Well from what I understand it doesn't matter how it's sent..
+you can send a stream and shrdlu just reads it character by character
+until there's nothing left out there, and then it blocks...
+so I wasn't really concerned about how the frontend sends things
+
+&gt; when you send shrdlu bad commands now, it just spits out a bunch of
+&gt; debugging code, right?  Or does it completely barf-out?
+
+Well, some things just drop it out of ready mode.  It drops you to a prompt
+which I THINK is purely shrdlu's, and where you'd have to type GO (again)
+to get back into ready mode.  The thing is, I believe sometimes it
+actually breaks back to CLISP, which in a compiled version would mean the
+program totally dying.  So if shrdlu still exists, a GO should be
+sufficient (and it will respond READY) to bring it back.  Perhaps the
+actual function which I compile can be a error-catching thing that will
+call (shrdlu) again if it fails.. thus we'd hang onto all the changes in
+the world.
+
+==
+
+From: "Andrew Adrian" <aadrian@umr.edu>
+Subject: [Shrdlu] CLISP info...
+Date: Wednesday, January 26, 2000 12:04 PM
+
+CLISP is on the CVS tree, in the tester directory.  To start it up, you type 
+clisp -M lispinit.mem . I've got an alias set up in my .usercshrc file to do 
+that for me, but you can do it however you want.  You could also add that 
+directory to your PATH variable.  Whatever.  If you specify a filename after 
+the lispinit.mem, it will automatically load that file into the interpreter.  
+That's the cleanest way of doing it, but you don't get all the other neat 
+features of CLISP that way.  There was a lot of debugging code added/found 
+in the shrdlu implementation we have, and most of it is quite useful, but 
+can only be turned on before the shrdlu loop is started.
+
+==
+
+From: "Dan Knapp" <dankna@brain.mics.net>
+Subject: Re: [Shrdlu] Ert
+Date: Friday, April 07, 2000 7:45 PM
+
+&gt; 	Trying to find out exactly what the ert function does in the syscom file.  
+
+  It's a debugging function.  When it's called, execution is suspended while
+the user inspects variables and things...  You should probably ignore it.<!--
+     FILE ARCHIVED ON 18:50:15 Mar 25, 2018 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 05:48:34 May 03, 2019.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+<!--
+playback timings (ms):
+  LoadShardBlock: 42.157 (3)
+  esindex: 0.006
+  captures_list: 120.736
+  CDXLines.iter: 12.413 (3)
+  PetaboxLoader3.datanode: 75.452 (4)
+  exclusion.robots: 0.338
+  exclusion.robots.policy: 0.324
+  RedisCDXSource: 46.688
+  PetaboxLoader3.resolve: 51.843
+  load_resource: 111.432
+--></dankna@brain.mics.net></aadrian@umr.edu></joshu@umr.edu></aadrian@umr.edu></joshu@umr.edu></joshu@umr.edu></keldon@umr.edu></xal34@dial.pipex.com></aadrian@umr.edu></http:></justinv@kanjisearch.com></jvoskuhl@uswest.net></joshu@umr.edu></joshu@umr.edu></keldon@umr.edu></joshu@umr.edu></keldon@umr.edu></joshu@umr.edu></keldon@umr.edu></keldon@umr.edu></joshu@umr.edu></keldon@umr.edu></keldon@umr.edu></xal34@dial.pipex.com></joshu@umr.edu></joshu@umr.edu></joshu@umr.edu></mfischer@umr.edu></filename></filename></filename></mfischer@umr.edu></mfischer@umr.edu></pitman@world.std.com></joshu@umr.edu></joshu@umr.edu></mfischer@umr.edu></mfischer@umr.edu></mfischer@umr.edu></miles@umr.edu></joshu@umr.edu></joshu@umr.edu></character-file-stream></miles@umr.edu></filename></filename></joshu@umr.edu></joshu@umr.edu></mfischer@umr.edu></joshu@umr.edu></joshu@umr.edu></joshu@umr.edu></mfischer@umr.edu></mailto:pitman@world.std.com></mfischer@umr.edu></joshu@umr.edu></mfischer@umr.edu></joshu@umr.edu></mfischer@umr.edu></mfischer@umr.edu></pitman@world.std.com></mfischer@umr.edu></joshu@umr.edu></pitman@world.std.com></pitman@world.std.com></joshu@umr.edu></mfischer@umr.edu></joshu@umr.edu></mfischer@umr.edu></joshu@umr.edu></kmp></mfischer@umr.edu></mfischer@umr.edu></pitman@world.std.com></miles@umr.edu></mfischer@umr.edu></joshu@umr.edu></symbol></indicator></symbol></joshu@umr.edu></pitman></keyword></mfischer@umr.edu></pitman></pitman></pitman></pitman></pitman></pitman></pitman></pitman></pitman></pitman></pitman></pitman></pitman></pitman></pitman></pitman></joshu@umr.edu></mfischer@umr.edu></mfischer@umr.edu></miles@umr.edu></mfischer@umr.edu></miles@umr.edu></joshu@umr.edu></pre><iframe frameborder="0" scrolling="no" style="background-color: transparent; border: 0px; display: none;" src="./SHRDLU project extracts_files/saved_resource.html"></iframe><div id="GOOGLE_INPUT_CHEXT_FLAG" input="" input_stat="{&quot;tlang&quot;:true,&quot;tsbc&quot;:true,&quot;pun&quot;:true,&quot;mk&quot;:true,&quot;ss&quot;:true}" style="display: none;"></div><script src="chrome-extension://hhojmcideegachlhfgfdhailpfhgknjm/web_accessible_resources/index.js"></script></body></html>

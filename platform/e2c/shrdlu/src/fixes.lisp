@@ -36,7 +36,6 @@
 ; (apply 'bob stuff)        as (apply-bob stuff);
 
 
-
 ;**mlf**
 ; this is a fix for ASCII from Pitman's notes...
 ; ASCII is only used in show, setup, and morpho...
