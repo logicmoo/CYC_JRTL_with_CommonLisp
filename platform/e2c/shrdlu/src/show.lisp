@@ -1,6 +1,6 @@
 ; (declare (genprefix show))
 
-;;;  quickies 
+;;;  quickies
 
 (defun shstpo nil ;"sh-standard-printout"
 (parsings))
@@ -27,7 +27,7 @@
       (t (setq sh-print-time 'fancy)) ))
 
 (defun totaltime (off?)
-(cond ((= (arg nil) 1) 
+(cond ((= (arg nil) 1)
        (setq sh-print-time nil))
       (t (setq sh-print-time t)) ))
 
@@ -50,10 +50,10 @@
 
 
 (DEFUN-FEXPR LBK (LABELS) (SETQ LABELBREAK LABELS))
-(DEFUN-FEXPR LABELTRACE (A) 
-       (MAPC 
-	#'(LAMBDA (X) 
-	  (PROG (BODY) 
+(DEFUN-FEXPR LABELTRACE (A)
+       (MAPC
+	#'(LAMBDA (X)
+	  (PROG (BODY)
 		(PRINT X)
 		(COND ((THGET X 'LABELTRACED)
 		       (PRINC 'ALLREADY-)
@@ -63,7 +63,7 @@
 		      ((THGET X 'EXPR)
 		       (SETQ BODY (CDDR (CADDR (THGET X 'EXPR)))))
 		      (T (PRINC 'CAN\'T\ BE-) (GO TRACED)))
-		(MAPL #'(LAMBDA (Y) 
+		(MAPL #'(LAMBDA (Y)
 			      (AND (ATOM (CAR Y))
 				   (RPLACD Y
 					   (CONS (LIST 'PASSING
@@ -77,7 +77,7 @@
 	A))
 
 
-(DEFUN PASSING (A) 
+(DEFUN PASSING (A)
        (SETQ LASTLABEL A)
        (AND (COND ((ATOM LABELTRACE)
 		   (AND LABELTRACE (PRINT 'PASSING) (PRINC A)))
@@ -93,10 +93,10 @@
 
 (SETQ LABELBREAK NIL)
 
-(DEFUN-FEXPR UNLABELTRACE (A) 
-       (MAPC 
-	'(LAMBDA (X) 
-		 (PROG (BODY) 
+(DEFUN-FEXPR UNLABELTRACE (A)
+       (MAPC
+	'(LAMBDA (X)
+		 (PROG (BODY)
 		       (PRINT X)
 		       (COND ((NOT (THGET X 'LABELTRACED))
 			      (PRINC 'ISN\'T\ ALLREADY-)
@@ -149,7 +149,7 @@
 					    LOCATION\,
 					    ETC\.))))))
 
-(DEFUN PEV (EV COL TOP) 
+(DEFUN PEV (EV COL TOP)
        (TERPRI)
        (TAB COL)
        (PRINC EV)
@@ -168,7 +168,7 @@
 
 (DEFS EVENT
       SHOW
-      #'(LAMBDA (X) 
+      #'(LAMBDA (X)
 	      (SETQ X (CHARG X
 			     'EVENT\:
 			     '(EVENT TO
@@ -180,14 +180,14 @@
 				     EVENT
 				     LIST)))
 	      (COND (X (PEV X 0. T))
-		    (T (MAPC '(LAMBDA (Y) 
+		    (T (MAPC '(LAMBDA (Y)
 				      (AND (EQ 'COMMAND
 					       (THGET Y 'WHY))
 					   (PEV Y 0. T)))
 			     (REVERSE EVENTLIST))))))
 
-(DEFUN-FEXPR ABBREVIATE (A) 
-       (MAPCAR #'(LAMBDA (X) 
+(DEFUN-FEXPR ABBREVIATE (A)
+       (MAPCAR #'(LAMBDA (X)
 			(THSETF (G3T (READLIST (MAPCAR #'(LAMBDA (X Y) X)
 						   (EXPLODE X)
 						   '(T T))) 'ABBREV)
@@ -225,15 +225,15 @@
 	    STOP
 	    DO)
 
-(DEFUN SHOWSCENE (X) 
-       (PROG (PLANNERSEE) 
+(DEFUN SHOWSCENE (X)
+       (PROG (PLANNERSEE)
 	     (TERPRI)
 	     (TAB 16.)
 	     (PRINC 'CURRENT\ SCENE)
 	     (TERPRI)
 	     (TERPRI)
-	     (MAPC 
-	      #'(LAMBDA (OBJ) 
+	     (MAPC
+	      #'(LAMBDA (OBJ)
 		(PRINT OBJ)
 		(PRINC '-->\ \ )
 		(EVLIS (CAR (NAMEOBJ OBJ 'DESCRIBE)))
@@ -267,7 +267,7 @@
 	(DECLARE (SPECIAL NODE))
 	(SETQ NODE (CAR NODE)) (SHOWTELLCHOICE))
 
-(DEFUN SHOWTELL (A NODE SYSTEMS INFO ACTION) 
+(DEFUN SHOWTELL (A NODE SYSTEMS INFO ACTION)
        (DECLARE (SPECIAL SYSTEMS INFO ACTION))
        (COND ((NULL A) (SHOWTELLCHOICE))
 	     ((THGET (CAR A) ACTION)
@@ -277,22 +277,22 @@
 	      (PRINT2 (CAR A))))
        '*)
 
-(DEFUN SHOWTELLCHOICE NIL 
+(DEFUN SHOWTELLCHOICE NIL
        (APPLY (EVAL (THGET (SETQ NODE (QUERY '(WHICH OPTION?)
 				     (PRINT (THGET NODE SYSTEMS))
 				     (THGET NODE INFO)))
 		   ACTION))
 	      (LIST (LIST NODE))))
 
-(DEFUN SUBLEAF (KID DAD) 
+(DEFUN SUBLEAF (KID DAD)
        (CATCH (AND (MAPC 'SUBL2 (THGET DAD SYSTEMS)) NIL)))
 
-(DEFUN SUBL2 (X) 
+(DEFUN SUBL2 (X)
        (COND ((EQ X KID) (THROW T))
 	     (T (MAPC 'SUBL2 (THGET X SYSTEMS)))))
 
-(DEFUN QUERY (TEXT CHOICES HELP) 
-       (PROG (EXPL CH2 EX2 CH3 EX3 CHAR NOTINIT) 
+(DEFUN QUERY (TEXT CHOICES HELP)
+       (PROG (EXPL CH2 EX2 CH3 EX3 CHAR NOTINIT)
 	     (SETQ EXPL (MAPCAR 'EXPLODE
 				(CONS 'QUIT CHOICES)))
 	TOP  (SETQ CH2 (CONS 'QUIT CHOICES) EX2 EXPL)
@@ -322,8 +322,8 @@
 	     (PRINT CHOICES)
 	     (GO TOP)))
 
-(DEFUN REQUEST (TEXT HELP) 
-       (PROG (X) 
+(DEFUN REQUEST (TEXT HELP)
+       (PROG (X)
 	TOP  (PRINTEXT TEXT)
 	READ (COND ((MEMBER (ASCII (PEEK-CHAR)) BREAKCHARS)
 		    (READ-CHAR)
@@ -337,7 +337,7 @@
 		   ((EQ (SETQ X (READ)) 'QUIT) (ERR NIL))
 		   (T (RETURN X)))))
 
-(DEFUN SHOWPROP (X) 
+(DEFUN SHOWPROP (X)
        (COND ((NULL X)
 	      (SHOWPROP (CONS (REQUEST 'ATOM\:
 				       '(THE NAME
@@ -370,14 +370,14 @@
 	     ((CDR X) (APPLY 'DISP X))
 	     (T (PROG (DPSTOP) (DP (CAR X))))))
 
-(DEFUN-FEXPR TELL (A) 
+(DEFUN-FEXPR TELL (A)
        (SHOWTELL A
 		 'CANTELL
 		 'TELLTREE
 		 'TELLINFO
 		 'TELL))
 
-(DEFUN TREEPRINT (ROOT TR COL) 
+(DEFUN TREEPRINT (ROOT TR COL)
        (TERPRI)
        (TAB COL)
        (PRINC ROOT)
@@ -385,10 +385,10 @@
 	     (THGET ROOT TR))
        '*)
 
-(DEFUN CHARG (X TEXT HELP) 
+(DEFUN CHARG (X TEXT HELP)
        (COND ((CDR X) (CADR X)) (T (REQUEST TEXT HELP))))
 
-(DEFUN-FEXPR SHOW (A) 
+(DEFUN-FEXPR SHOW (A)
        (SHOWTELL A
 		 'CANSHOW
 		 'SHOWTREE
@@ -459,7 +459,7 @@
       TELLTREE
       (INPUT ACTION THEOREM ASSERTIONS TELLABLE )
       TELL
-      #'(LAMBDA (X) 
+      #'(LAMBDA (X)
 	      (COND ((NULL (CDR X)) (TELLCHOICE X))
 		    ((EQ (CADR X) 'ON)
 		     (THTRACE THEOREM THASSERT THERASE (THGOAL T T))
@@ -678,7 +678,7 @@
 			     'NO)
 			 (SETQ NODE-STOP NIL))))
       SHOW
-      #'(LAMBDA (X) 
+      #'(LAMBDA (X)
 	      (COND ((THGET (CADR X) 'FEATURES) (DP (CADR X)))
 		    ((SHOWMOVE (CDR X))
 		     (PROG (DPSTOP) (DP (CAR PT)))
@@ -734,7 +734,7 @@
 
 (DEFS ACTION
       TELL
-      #'(LAMBDA (X) 
+      #'(LAMBDA (X)
 	      (COND ((CDR X)
 		     (COND ((EQ (CADR X) 'ON) (SETQ X NIL))
 			   ((EQ X 'OFF)
@@ -784,7 +784,7 @@
 			 (TRACE CALLSM))
 			(T (UNTRACE PARSE)))))
 
-(DEFUN SHOWMOVE (X) 
+(DEFUN SHOWMOVE (X)
        (SETQ SAVEPT PT)
        (APPLY-MOVE-PT
 	      (LISTIFY (OR X
@@ -808,7 +808,7 @@
 					POINTER-MOVING
 					COMMANDS))))))
 
-(DEFUN ONOFF (ARG HELP) 
+(DEFUN ONOFF (ARG HELP)
        (COND ((EQ (CADR ARG) 'ON) T)
 	     ((EQ (CADR ARG) 'OFF) NIL)
 	     ((EQ 'ON
@@ -816,7 +816,7 @@
 			 '(ON OFF)
 			 HELP)))))
 
-(DEFUN DEFINETHEOREM (X) 
+(DEFUN DEFINETHEOREM (X)
        (THSETF (G3T (COND ((CDR X) (SETQ X (CADR X)))
 		      (T (SETQ X (MAKESYM 'THEOREM)))) 'THEOREM)
 		(NCONC (LIST (QUERY '(WHICH THEOREM TYPE?)
@@ -843,8 +843,8 @@
 
 (DEFS MARKER
       TELL
-      #'(LAMBDA (X) 
-	      (PROG (Y) 
+      #'(LAMBDA (X)
+	      (PROG (Y)
 		    (THSETF (G3T (SETQ X (CHARG X
 					    'MARKER\:
 					    '(MARKER TO BE ADDED))) 'SYS)
@@ -886,8 +886,8 @@
 
 (DEFS SCENE SHOW #'SHOWSCENE)
 
-(DEFUN-FEXPR DEFINE (A) 
-       (PROG (FE TYPE MARK R3ST TR) 
+(DEFUN-FEXPR DEFINE (A)
+       (PROG (FE TYPE MARK R3ST TR)
 	     (SETQ A  (COND  (A (CAR A))
                       (T  (REQUEST 'WORD\: '( ENGLISH WORD TO
                                             BE DEFINED)))))
@@ -963,7 +963,7 @@
 			    'TRANSITIVE))
 	       (THSETF (G3T A 'FEATURES) '(VB TRANS INF)))
 	      (T (THSETF (G3T A 'FEATURES) '(VB ITRNS INF))))
-	     (SETQ 
+	     (SETQ
 	      R3ST
 	      (LIST (LIST (LISTIFY (REQUEST '(RESTRICTIONS ON
 							   SUBJECT\:)
@@ -972,7 +972,7 @@
 						   MARKERS))))))
 	      (AND
 	       TR
-	       (SETQ 
+	       (SETQ
 		REST
 		(NCONC R3ST
 		       (LIST (LISTIFY (REQUEST '(RESTRICTIONS ON
@@ -1019,7 +1019,7 @@
 						 (\#SMILING \#1))))))))))
 	      (RETURN T)))
 
-(DEFUN HELP NIL 
+(DEFUN HELP NIL
        (COND ((EQ 'S
 		  (QUERY '(TYPE L
 				FOR
@@ -1032,8 +1032,8 @@
 				(16. LINES))
 			 '(S L)
 			 NIL))
-	      (SETQ FNAME "minih"))
-	     (T (SETQ FNAME "help")))
+	      (SETQ FNAME "MINIH_DOC"))
+	     (T (SETQ FNAME "HELP_DOC")))
        (SETQ FFF (OPEN FNAME))
        (DO ((LINE (READ-LINE FFF NIL 'EOF-VALUE)
        		  (READ-LINE FFF NIL 'EOF-VALUE)))
@@ -1043,7 +1043,7 @@
 
 ; removed lis2fy, also in syscom.lisp -ts.
 #|
-(DEFUN LIS2FY (X) 
+(DEFUN LIS2FY (X)
        (COND ((ATOM X) (LIST (LIST X)))
 	     ((ATOM (CAR X)) (LIST X))
 	     (X)))

@@ -10,7 +10,7 @@
 ;; The code expects a ordered list in the prop (val1 val2 ...)
 (setq *SHRDLU-DATA-ORDERED-LIST* `(MARKERS= SYSTEMS= HISTORY REFER))
 ;; The code expects a structured list in the prop (val1 val2 ...)
-(setq *SHRDLU-DATA-STRUCTURE* `(SHOW TELL THEOREM  ROOT TELLINFO MEASFN))
+(setq *SHRDLU-DATA-STRUCTURE* `(THASSERTION THCONSE SHOW TELL THEOREM TELLINFO MEASFN))
 ;; The code expects a Atom
 (setq *SHRDLU-DATA-ATOM* `(NOGOAL))
 ;; The code expects Text
