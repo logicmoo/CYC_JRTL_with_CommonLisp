@@ -1322,11 +1322,11 @@
 (DEFS \#HEIGHT MEASFN (LAMBDA (X) (CADDR (SIZE X))))
 
 (DEFS \#IN
-    EXPR (LAMBDA NIL
-		 (COND ((CQ LOBJ)
-			(RELATION
+    EXPR (LAMBDA ()
+     (COND ((CQ LOBJ)
+		     (RELATION
 			    (RESTRICTIONS\: (((\#THING)) ((\#BOX)))
-MARKERS\: (\#PLACE)
+                  MARKERS\: (\#PLACE)
 			     PROCEDURE\: ((\#IN \#2)))))
 		       ((RELATION
 			    (RESTRICTIONS\: (((\#MANIP)) ((\#BOX)))
@@ -1398,7 +1398,7 @@ MARKERS\: (\#PLACE)
 		 (COND ((CQ LOBJ)
 			(RELATION
 			    (RESTRICTIONS\: (((\#THING)) ((\#PHYSOB)))
-MARKERS\: (\#PLACE)
+         MARKERS\: (\#PLACE)
 			     PROCEDURE\: ((\#ON \#2)))))
 		       ((RELATION
 			    (RESTRICTIONS\: (((\#PHYSOB))

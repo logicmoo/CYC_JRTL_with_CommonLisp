@@ -10,7 +10,7 @@
 ;; my experimental version...
 (defun etao nil
   (prog (WORD NEWWORD CHAR ALTN ALREADY-BLGING-NEWWRD WRD LAST
-	 NEXT Y WORD1 X RD POSS) 
+	 NEXT Y WORD1 X RD POSS)
    THRU  (SETQ SENT (SETQ WORD (SETQ PUNCT (SETQ POSS NIL))))
          (PRINT 'READY)
 	 (TERPRI)
@@ -28,11 +28,11 @@
 	       ((MEMQ CHAR PUNCL)
 		(SETQ PUNCT CHAR)	       ;DELIMITER
 		(AND WORD (setq WORD (cons WORD CHAR))))
-	       (t 
+	       (t
 		(setq WORD (cons WORD CHAR))
 		(print WORD)
 		(go CHAR)))
-		
+
 	 (print WORD)
 	 (AND WORD (go THRU))))
 
@@ -40,15 +40,15 @@
 ;	 (go THRU)))
 
 
-(DEFUN ETAOIN NIL 
+(DEFUN ETAOIN NIL
        (PROG (WORD NEWWORD CHAR ALTN ALREADY-BLGING-NEWWRD WRD LAST
-	      NEXT Y WORD1 X RD POSS) 
-	  ;; WORD is accumulating letters in a word, and SENT accumulates 
+	      NEXT Y WORD1 X RD POSS)
+	  ;; WORD is accumulating letters in a word, and SENT accumulates
 	  ;; words in a sentence.  Both have to be reversed to make sense.
 	THRU (SETQ SENT (SETQ WORD (SETQ PUNCT (SETQ POSS NIL))))
 	     (show-response)
-	     (PRINT 'READY1)
-	     (TERPRI)
+	     (PRINTC "Human:")
+	     (NOP (TERPRI)) (FORCE-OUTPUT)
 	CHAR (COND ((EQUAL (PEEK-CHAR-REMOTE) #\~)
 	                  (READ-CHAR-REMOTE) (ERT) (GO THRU))) ; BREAK
 	     (COND ((EQUAL (PEEK-CHAR-REMOTE) #\@) (read-char-remote) (go OUT)))
@@ -67,11 +67,11 @@
 		    (AND WORD (GO WORD))
 		    (GO PUNC)))
 	     (AND
-	      (OR (AND (EQ CHAR '\")
+	      (OR (AND (EQ CHAR '\")  ;; "
 		       (NOT ALREADY-BLGING-NEWWRD)
 		       (SETQ NEWWORD (SETQ ALREADY-BLGING-NEWWRD T))
 		       (GO CHAR))
-		  (AND (EQ CHAR '\")
+		  (AND (EQ CHAR '\")   ;; "
 		       ALREADY-BLGING-NEWWRD
 		       (NOT (SETQ ALREADY-BLGING-NEWWRD NIL))
 		       (GO WORD))
@@ -104,7 +104,7 @@
 								       ;NO ROOT FOR NUMBERS
 		   ((NULL WRD) (SETQ WRD (REVERSE WORD)) (GO NO))
 		   ((THGET WRD 'FEATURES))
-								       ;IF A WORD HAS FEATURES, IT'S PROPERTIES 
+								       ;IF A WORD HAS FEATURES, IT'S PROPERTIES
 		   ((SETQ X (THGET WRD 'IRREGULAR))
 								       ;ARE ALL SET UP IN THE DICTIONARY
 		    (BUILDWORD WRD
@@ -114,7 +114,7 @@
 			       (CAR X)))
 		   ((EQ (CAR (LAST WORD)) '=)
 		    (BUILDWORD WRD
-			       (COND ((MEMQ '\" WORD)
+			       (COND ((MEMQ '\" WORD)    ;; "
 				      '(PROPN NS POSS))
 				     ('(PROPN NS)))
 			       '((PROPN T))
@@ -125,15 +125,15 @@
 	     ;;;---------------------------------------------
 	     ;;;              MORPHOLOGY CODE
 	     ;;;--------------------------------------------
-	CUT  (COND ((STA WORD '(T \" N))
+	CUT  (COND ((STA WORD '(T \" N))    ;; "
 		    (SETQ RD (CDDDR WORD))
 		    (SETQ WORD (CONS '* WORD))
 		    (GO TRY))
-		   ((STA WORD '(S \"))
+		   ((STA WORD '(S \"))   ;; "
 		    (SETQ WORD (CDDR WORD))
 		    (SETQ POSS WRD)
 		    (GO WORD))
-		   ((STA WORD '(\"))
+		   ((STA WORD '(\"))    ;; "
 		    (SETQ WORD (CDR WORD))
 		    (SETQ POSS WRD)
 		    (GO WORD))
@@ -218,7 +218,7 @@
 	     ;;;----------------------------------------------------
 	     ;;;  BUILD UP THE PROCESSED LIST OF WORDS TO BE RETURNED
 	     ;;;----------------------------------------------------
-	WRD  (SETQ 
+	WRD  (SETQ
 	      SENT
 	      (COND (POSS (COND ((OR (MEMQ 'NOUN
 					   (SETQ FEATURES
@@ -229,7 +229,7 @@
 								       ;OR A PROPER NOUN
 				 (BUILDWORD POSS
 					    (APPEND (MEET FEATURES
-								       ;MARK IT AS POSSESSIVE 
+								       ;MARK IT AS POSSESSIVE
 							  (THGET 'POSS
 							       'ELIM))
 						    '(POSS))
@@ -237,13 +237,13 @@
 						 'SEMANTICS)
 					    ROOT)
 				 (CONS POSS SENT))
-				((BUILDWORD '\"S
+				((BUILDWORD '\"S               ;; "
 								       ; CAN WE GENERALIZE IT???
 					    '(VB BE V3PS PRES)
 					    (THGET 'BE
 						 'SEMANTICS)
 					    'BE)
-				 (CONS '\"S (CONS WRD SENT)))))
+				 (CONS '\"S (CONS WRD SENT)))))    ;; "
 		    ((CONS WRD SENT))))
 	PUNC (COND
 	      (PUNCT (COND ((AND (EQ PUNCT '?) (NULL SENT))
@@ -266,47 +266,47 @@
 			    (OR ALTN (SETQ NEWWORD NIL))
 			    (GO WRD)))
 	     (TERPRI)
-	     (SAY *SORRY I DON\'T KNOW THE WORD \")
+	     (SAY *SORRY I DON\'T KNOW THE WORD \")     ;; "
 	     (PRINT3 WRD)
-	     (PRINT3 '\"\.)
+	     (PRINT3 '\"\.)                 ;; "
 	     (TERPRI)
-	     ;; replaced to make more sense with modern keyboards 
+	     ;; replaced to make more sense with modern keyboards
 	     ;; and remote usage.  -ts.
 	     (say please continue the sentence\:)
 	     (apply-say (reverse (cons " ..." sent)))
-	     (purge-cmd-buffer) 
+	     (purge-cmd-buffer)
 ;	     (SAY PLEASE TYPE <Enter> AND CONTINUE THE SENTENCE.)
 ;	NOGO (OR (CHAR= (READ-CHAR-REMOTE) (CODE-CHAR 10.)) (GO NOGO))))
 	     (SETQ PUNCT NIL WORD NIL)
 	     (GO DO)
-        OUT  (print (format nil "~A:~A" SENT WORD)))) 
+        OUT  (print (format nil "~A:~A" SENT WORD))))
 
-(DEFUN PROPNAME (X) (EQ (CAR (EXPLODE X)) '=)) 
+(DEFUN PROPNAME (X) (EQ (CAR (EXPLODE X)) '=))
 
-(DEFUN BUILDWORD (WORD FEATURES SEMANTICS ROOT) 
+(DEFUN BUILDWORD (WORD FEATURES SEMANTICS ROOT)
        (THSETF (G3T WORD 'FEATURES) FEATURES)
        (THSETF (G3T WORD 'SEMANTICS) (OR SMN SEMANTICS))
        (AND ROOT (THSETF (G3T WORD 'ROOT) ROOT))
-       WORD) 
+       WORD)
 
-(SETQ CARRET #\NEWLINE) 
+(SETQ CARRET #\NEWLINE)
 
-(DEFUN ETNEW NIL 
+(DEFUN ETNEW NIL
        (AND (EQ (CAR WORD) '\")
-	    (EQ (CAR (LAST WORD)) '\")
+	    (EQ (CAR (LAST WORD)) '\")   ;; "
 	    (SETQ WRD (READLIST (CDR (REVERSE (CDR WORD)))))
 	    (BUILDWORD WRD
 		       '(NOUN NS)
 		       '((NOUN (NEWWORD)))
-		       NIL))) 
+		       NIL)))
 
-(SETQ FINAL '(\. ? !)) 
+(SETQ FINAL '(\. ? !))
 
-(SETQ CONSO '(B C D F G H J K L M N P Q R S T V W X Z)) 
+(SETQ CONSO '(B C D F G H J K L M N P Q R S T V W X Z))
 
-;; 0.
+0.
 
-(SETQ LIQUID '(L R S Z V)) 
+(SETQ LIQUID '(L R S Z V))
 
 (SETQ PUNCL '(\. ? \: \; !))
 
@@ -316,12 +316,9 @@
 
 (DEFUN UPPERCASE-IFY-CHAR (CHAR) (COND ((CHAR>= #\Z CHAR #\A) (CHAR- CHAR (CODE-CHAR 32))) (T CHAR)))
 
-(print "Done 0")
-
-(SETQ VOWEL '(NIL A E I O U Y)) 
+(SETQ VOWEL '(NIL A E I O U Y))
 
 (SETQ SPACE-CHAR #\Space  )
 
-(print "Done")
 
 
