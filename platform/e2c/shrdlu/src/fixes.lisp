@@ -1,3 +1,4 @@
+
 ; The fix for MACLISP's DEFPROP, written by Kent Pitman
 ; first form, for new lambda's defined
  (DEFMACRO DEFPROPFN ((SYM PROP) BVL &BODY FORMS)
@@ -9,7 +10,7 @@
 ; (DEFPROP BOB (LAMBDA () (PRINT 'bobsleg)) LEG)
 
 ; The second fix for DEFPROP, based on the first,
-; for the form where a property is defined as some other 
+; for the form where a property is defined as some other
 ; previously-defined function which takes no args.
  (DEFMACRO DEFPROPNIL (SYM NILFUN PROP)
    `(SETF (GET ',SYM ',PROP) #'(LAMBDA NIL (,NILFUN))))
@@ -48,14 +49,14 @@
   (READ-FROM-STRING (APPLY #'CONCATENATE (CONS 'STRING (MAPCAR #'STRING X)))))
 ; direct inverse of explode
 ; adjusted for ANSI Common Lisp by jrs
- 
+
 (DEFUN EXPLODE (OBJ)
   (MAP 'LIST #'(LAMBDA (X) (INTERN (STRING X))) (FORMAT NIL "~S" OBJ)))
 ; direct inverse of readlist
 
 (DEFUN FLATSIZE (X)
   (LENGTH (EXPLODE X)))
-;this will return the number of characters in the argument if it 
+;this will return the number of characters in the argument if it
 ;was printed out with special characters slashified
 
 
@@ -65,3 +66,4 @@
 
 (DEFUN MAKNAM (CH-LIST)
    (MAKE-SYMBOL (FORMAT NIL "~{~A~}" CH-LIST)))
+

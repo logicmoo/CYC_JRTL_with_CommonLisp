@@ -20,7 +20,7 @@
 
 (let ((*DEFAULT-PATHNAME-DEFAULTS* (make-pathname :directory (pathname-directory *load-pathname* ))))
 
-
+(load "asktell.lisp")
 (load "fixes.lisp")
 (load "progmr.lisp")
 (load "cgram.lisp")

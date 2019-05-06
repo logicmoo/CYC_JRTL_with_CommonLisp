@@ -1998,7 +1998,7 @@ possdef							;the placement of this tag is a
 		      (T (MOVE-PT H) (TRNSF NPL NS MASS NFS))))
 	       ((CQ VB)
 		(PROG (COMMON)
-		      (SETQ COMMON (GET 'VB 'ELIM))
+		      (SETQ COMMON (THGET 'VB 'ELIM))
 		      (MAPL #'(LAMBDA (X)
 				    (SETQ COMMON (MEET COMMON (FE X))))
 			   H))

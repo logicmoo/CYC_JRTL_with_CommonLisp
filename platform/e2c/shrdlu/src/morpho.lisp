@@ -103,12 +103,12 @@
 			       NIL))
 								       ;NO ROOT FOR NUMBERS
 		   ((NULL WRD) (SETQ WRD (REVERSE WORD)) (GO NO))
-		   ((GET WRD 'FEATURES))
+		   ((THGET WRD 'FEATURES))
 								       ;IF A WORD HAS FEATURES, IT'S PROPERTIES 
-		   ((SETQ X (GET WRD 'IRREGULAR))
+		   ((SETQ X (THGET WRD 'IRREGULAR))
 								       ;ARE ALL SET UP IN THE DICTIONARY
 		    (BUILDWORD WRD
-			       (SHRDLU-MOD (GET (CAR X) 'FEATURES)
+			       (SHRDLU-MOD (THGET (CAR X) 'FEATURES)
 				    (CDR X))
 			       (SM X)
 			       (CAR X)))
@@ -176,7 +176,7 @@
 			 (MEMQ (CADR RD) CONSO))
 		    (SETQ RD (CONS 'E RD))))
 	     (COND ((MEMQ 'ADJ
-			  (GET (SETQ ROOT (READLIST (REVERSE RD)))
+			  (THGET (SETQ ROOT (READLIST (REVERSE RD)))
 			       'FEATURES))
 		    (BUILDWORD WRD
 			       '(ADV VBAD)
@@ -201,16 +201,16 @@
 	TRY  (COND
 	      ((OR
 		(SETQ FEATURES
-		      (GET (SETQ ROOT (READLIST (REVERSE RD)))
+		      (THGET (SETQ ROOT (READLIST (REVERSE RD)))
 			   'FEATURES))
-		(AND (SETQ X (GET ROOT 'IRREGULAR))
+		(AND (SETQ X (THGET ROOT 'IRREGULAR))
 		     (SETQ FEATURES
-			   (SHRDLU-MOD (GET (SETQ ROOT (CAR X))
+			   (SHRDLU-MOD (THGET (SETQ ROOT (CAR X))
 				     'FEATURES)
 				(CDR X)))))
 	       (BUILDWORD WRD
-			  (SHRDLU-MOD FEATURES (GET (CAR WORD) 'MOD))
-			  (GET ROOT 'SEMANTICS)
+			  (SHRDLU-MOD FEATURES (THGET (CAR WORD) 'MOD))
+			  (THGET ROOT 'SEMANTICS)
 			  ROOT))
 	      ((EQ (CAR RD) 'E) (SETQ RD (CDR RD)) (GO TRY))
 	      ((GO NO)))
@@ -222,7 +222,7 @@
 	      SENT
 	      (COND (POSS (COND ((OR (MEMQ 'NOUN
 					   (SETQ FEATURES
-						 (GET WRD
+						 (THGET WRD
 						      'FEATURES)))
 								       ;IF IT'S A NOUN
 				     (MEMQ 'PROPN FEATURES))
@@ -230,17 +230,17 @@
 				 (BUILDWORD POSS
 					    (APPEND (MEET FEATURES
 								       ;MARK IT AS POSSESSIVE 
-							  (GET 'POSS
+							  (THGET 'POSS
 							       'ELIM))
 						    '(POSS))
-					    (GET WRD
+					    (THGET WRD
 						 'SEMANTICS)
 					    ROOT)
 				 (CONS POSS SENT))
 				((BUILDWORD '\"S
 								       ; CAN WE GENERALIZE IT???
 					    '(VB BE V3PS PRES)
-					    (GET 'BE
+					    (THGET 'BE
 						 'SEMANTICS)
 					    'BE)
 				 (CONS '\"S (CONS WRD SENT)))))
@@ -284,9 +284,9 @@
 (DEFUN PROPNAME (X) (EQ (CAR (EXPLODE X)) '=)) 
 
 (DEFUN BUILDWORD (WORD FEATURES SEMANTICS ROOT) 
-       (SETF (GET WORD 'FEATURES) FEATURES)
-       (SETF (GET WORD 'SEMANTICS) (OR SMN SEMANTICS))
-       (AND ROOT (SETF (GET WORD 'ROOT) ROOT))
+       (THSETF (G3T WORD 'FEATURES) FEATURES)
+       (THSETF (G3T WORD 'SEMANTICS) (OR SMN SEMANTICS))
+       (AND ROOT (THSETF (G3T WORD 'ROOT) ROOT))
        WORD) 
 
 (SETQ CARRET #\NEWLINE) 

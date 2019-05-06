@@ -183,10 +183,10 @@
 
 (DEFUN PARSE-STATISTICS NIL
        (COND ((= PARSINGS 0.)					       ;initialization
-	      (SETF (GET 'PARSINGS 'WINS) 0.)))
+	      (THSETF (G3T 'PARSINGS 'WINS) 0.)))
        (AND RE
-	    (SETF (GET 'PARSINGS 'WINS)
-		     (+ 1 (GET 'PARSINGS 'WINS))))
+	    (THSETF (G3T 'PARSINGS 'WINS)
+		     (+ 1 (THGET 'PARSINGS 'WINS))))
        (SETQ PARSINGS (+ 1 PARSINGS)))
 
 ;;; these next two are left over from previous incarnations
@@ -210,13 +210,13 @@
 	     (COND ((MEMQ (SETQ CH (READ-CHAR)) '(Y \y))
 		    (RETURN T))
 		   ;;;  ((EQ CH '?)
-		   ;;;   (EVAL (GET 'FLUSH 'EXPLANATION))
+		   ;;;   (EVAL (THGET 'FLUSH 'EXPLANATION))
 		   ;;;   (GO MES))
 		   (T (RETURN NIL)))))
 
 (DEFUN-FEXPR DEFLIST
 	 (LIST) (MAPC #'(LAMBDA (A)
-				(SETF (GET (CAR A) (CAR LIST))
+				(THSETF (G3T (CAR A) (CAR LIST))
 					 (CADR A)))
 			      (CDR LIST))
 			(CAR LIST))
@@ -234,13 +234,13 @@
 
 (DEFUN DA (X)
        (AND
-	(GET X 'THASSERTION)
+	(THGET X 'THASSERTION)
 	(DISP
 	 (APPLY 'APPEND
 		(MAPCAR 'CDDR
 			(APPLY 'APPEND
 			       (MAPCAR 'CDR
-				       (CDR (GET X
+				       (CDR (THGET X
 						 'THASSERTION)))))))))
 
 (DEFUN DISP
@@ -257,9 +257,9 @@
        (PRINT =LINE)
        (MAPC '(LAMBDA (X)
 		      (PRINTC (TAB 5.) X (TAB 22.) '= (EVAL X))
-		      (COND ((GET X 'TURNED)
+		      (COND ((THGET X 'TURNED)
 			     (TAB 30.)
-			     (PRINC (LIST (GET X 'TURNED))))))
+			     (PRINC (LIST (THGET X 'TURNED))))))
 	     L)
        (PRINTC =LINE))
 
@@ -313,7 +313,7 @@
 ;;;               (MAPC '(LAMBDA (Z)
 ;;;                         (THREMOVE (CAR Z)) )
 ;;;                     (CDDR Y)))
-;;;           (GET X 'THASSERTION)) )
+;;;           (THGET X 'THASSERTION)) )
 ;;;
 ;;; AND THE CALL WAS:
 ;;;    (MAPC 'PLNRCLEAN EVENTLIST)
@@ -323,14 +323,14 @@
 #+USE-DEFUN-FEXPR
 (DEFUN-FEXPR CLEANOUT (LIST) 					       ;REMOVE'S ALL GENSYMS OF THE MEMBERS OF LIST
        (MAPC #'(LAMBDA (A)
-		       (CLEANX A 0. (GET A 'MAKESYM))
-		       (SETF (GET A 'MAKESYM) 0.))
+		       (CLEANX A 0. (THGET A 'MAKESYM))
+		       (THSETF (G3T A 'MAKESYM) 0.))
 	     LIST))
 
 #-USE-DEFUN-FEXPR
 (PROGN (DEFMACRO CLEANOUT (&rest LIST) (LIST 'APPLY-CLEANOUT (LIST 'QUOTE LIST)))
  (DEFUN APPLY-CLEANOUT (LIST) (MAPC #'(LAMBDA (A)
-  (CLEANX A 0 (GET A 'MAKESYM)) (SETF (GET A 'MAKESYM) 0)) LIST)) 'CLEANOUT)
+  (CLEANX A 0 (THGET A 'MAKESYM)) (THSETF (G3T A 'MAKESYM) 0)) LIST)) 'CLEANOUT)
 
 (DEFUN-FEXPR CLEANUP (SYMBOL-LIST)
        ;;CLEANUP IS USED TO GET RID OF GENSYMS NO LONGER NEEDED ALL
@@ -338,11 +338,11 @@
        ;;REMOB'ED THE "OLD" AND "NEW" PROPERTIES ARE UPDATED
        (MAPC '(LAMBDA (SYMBOL)
 		      (CLEANX SYMBOL
-			      (GET SYMBOL 'OLD)
-			      (SETF (GET SYMBOL 'OLD)
-				       (GET SYMBOL 'NEW)))
-		      (SETF (GET SYMBOL 'NEW)
-			       (GET SYMBOL 'MAKESYM)))
+			      (THGET SYMBOL 'OLD)
+			      (THSETF (G3T SYMBOL 'OLD)
+				       (THGET SYMBOL 'NEW)))
+		      (THSETF (G3T SYMBOL 'NEW)
+			       (THGET SYMBOL 'MAKESYM)))
 	     SYMBOL-LIST))
 
 (DEFUN CLEANX (A B C)
@@ -350,12 +350,12 @@
        ;;INCLUDING C
        (PROG (SAVE I)
 	     (SETQ B (OR B 0.))
-	     (SETQ SAVE (GET A 'MAKESYM))
+	     (SETQ SAVE (THGET A 'MAKESYM))
 	     (AND C
 		  (> C B)
-		  (SETF (GET A 'MAKESYM) B)
+		  (THSETF (G3T A 'MAKESYM) B)
 		  (DO ((I B (+ 1 I))) ((= I C)) (UNINTERN (MAKESYM A))))
-	     (RETURN (SETF (GET A 'MAKESYM) SAVE))))
+	     (RETURN (THSETF (G3T A 'MAKESYM) SAVE))))
 
 ;;*PAGE
 
@@ -416,7 +416,7 @@
 	     (OR (SETQ GLOP (READ)) (GO PRINT))
 	     ;;;
 	     (COND ((ATOM GLOP)
-		    (SETQ GLOP (OR (GET GLOP 'ABBREV) GLOP))
+		    (SETQ GLOP (OR (THGET GLOP 'ABBREV) GLOP))
 		    (COND ((MEMQ GLOP '(T P NIL))		       ;LEAVE-LOOP CHARS
 			   (SETQ ERT-TIME
 				 (+ (TIME-SINCE ERT-TIME)
@@ -482,12 +482,12 @@
 
 (DEFUN MAKESYM (A)
        ;; FUNCTION MAKESYM MAKES UP A GENSYM OF ITS ARG
-       (SETF (GET A 'MAKESYM)
-		(+ 1 (OR (GET A 'MAKESYM) 0.)))
-       (SETQ A (MAKNAM (APPEND (OR (GET A 'EXPLO)
-				   (SETF (GET A 'EXPLO)
+       (THSETF (G3T A 'MAKESYM)
+		(+ 1 (OR (THGET A 'MAKESYM) 0.)))
+       (SETQ A (MAKNAM (APPEND (OR (THGET A 'EXPLO)
+				   (THSETF (G3T A 'EXPLO)
 					    (EXPLODE A)))
-			       (EXPLODE (GET A 'MAKESYM)))))
+			       (EXPLODE (THGET A 'MAKESYM)))))
        (COND (MAKEINTERN (INTERN A)) (A)))
 
 (DEFUN LIS2FY (X)
@@ -531,12 +531,12 @@
    (ATOM A)
    (MAPC
     #'(LAMBDA (B)
-	      (AND (GET B 'SM)
+	      (AND (THGET B 'SM)
 		   (OR (MEMQ B ALIST)
 		       (SETQ ALIST
 			     (CONS (LIST B
-					 (GET B 'SM)
-					 (GET B
+					 (THGET B 'SM)
+					 (THGET B
 					      'REFER))
 				   ALIST)))))
     A)))
@@ -609,6 +609,7 @@
 
 (SETQ WPLINEL 72.)
 
+
 (DEFUN-FEXPR DEFS (L)
        (PROG (A)
 	     (AND (NULL (CDR L)) (RETURN L))
@@ -619,7 +620,7 @@
 	             (EVAL (APPEND (LIST 'DEFUN A (CADADR L)) (CDDADR L))))
 		 ((EQ (CAR L) 'FEXPR)
 		     (EVAL (APPEND (LIST 'DEFUN-FEXPR A (CADADR L)) (CDDADR L))))
-	         (T (SETF (GET A (CAR L)) (CADR L))))
+	         (T (THSETF (G3T A (CAR L)) (CADR L))))
 	   (COND ((SETQ L (CDDR L)) (GO LOOP)))
 	   (RETURN A)))
 

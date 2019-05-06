@@ -54,7 +54,7 @@
       =LINE
       '========================================================) 
 
-;(OR (GET 'CLAUSE 'SUBR)
+;(OR (THGET 'CLAUSE 'SUBR)
 ;    (LABELTRACE CLAUSE NG VG ADJG PREPG CONJOIN)) 
 
 ;;*PAGE
