@@ -1,3 +1,4 @@
+~~~text
 ********************************************************************************
 *       
 *       This describes the files maintained on the directory SHRDLU which
@@ -148,10 +149,91 @@
     when trying to see if alternate formulations of some algorithm were ever
     considered.
 
+~~~
 
-             
-             
-~~~~             
+~~~text
+root@gitlab:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform/e2c/shrdlu/src# ../../../abclc --lisp --load loader.lisp
+
+
+BASEDIR=/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform
+LCD=/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform/e2c/shrdlu/src
+JARPREFIX=/tmp/lib-larkc-root
+ln: failed to create symbolic link '/tmp/lib-larkc-root/lib': Operation not supported
+LD_LIBRARY_PATH=/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server:/usr/lib/jvm/java-8-openjdk-amd64/lib:/usr/lib/swi-prolog/lib/x86_64-linux:/usr/lib/guile/2.2/extensions:.
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+LD_PRELOAD=/usr/lib/swi-prolog/lib/x86_64-linux/libswipl.so
+LARKC_HOME=/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform
+SWI_HOME=/usr/lib/swi-prolog
+while sleep 1; do ./run-cyc-java.sh; done
+true ; while [ 0 -ne 4 ]; do sleep 1 ; ./From_Prolog.sh ; done
+JAVA_OPTS=
+;
+;;; toplevel:  /mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform/set_classpath.sh --lisp --load loader.lisp
+;
+;;; Running: java -cp $CLASSPATH -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC  -Dfile.lcd="/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform/e2c/shrdlu/src" -Dplatform.dir="/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform" -Dlisp.jargv="--lisp--loadloader.lisp" -Dswi.home="/usr/lib/swi-prolog" -Djava.library.path=/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server:/usr/lib/jvm/java-8-openjdk-amd64/lib:/usr/lib/swi-prolog/lib/x86_64-linux:/usr/lib/guile/2.2/extensions:.:.  -XshowSettings:vm  org.armedbear.lisp.Main --lisp --load loader.lisp
+
+VM settings:
+    Min. Heap Size: 4.88G
+    Max. Heap Size: 7.81G
+    Ergonomics Machine Class: server
+    Using VM: OpenJDK 64-Bit Server VM
+
+DEBUG: First SUBLFILE
+Armed Bear Common Lisp 1.5.0-uabcl-dev (built Thu Apr 25 2019 10:17:52 PDT)
+Java 1.8.0_191 Oracle Corporation
+OpenJDK 64-Bit Server VM
+Low-level initialization completed in 4.003 seconds.
+Startup completed in 15.057 seconds.
+
+"Done 0"
+"Done"
+NIL
+
+SHRDLU version UMR-1.0
+Loaded 5/6/2019 in Armed Bear Common Lisp 1.5.0-uabcl-dev
+
+
+
+READY1
+Pick up a big red block.
+~MOVING HAND TO (100 340 500)~
+~GRASPING BLOCK B7~
+~MOVING HAND TO (150 900 200)~
+~LETTING GO~
+~MOVING HAND TO (100 450 300)~
+~GRASPING BLOCK B6~
+~MOVING HAND TO (100 450 1000)~
+OK .
+
+
+READY1
+Grasp the pyramid.
+I DON'T KNOW WHICH PYRAMID YOU MEAN.
+
+READY1
+Find a block which is taller than the one you are holding and put it into the box.
+~CHOOSING BLOCK B10~
+OK .
+
+
+READY1
+What does the box contain?
+THE BLUE PYRAMID .
+
+
+READY1
+What is the pyramid supported by?
+THE BOX .
+
+
+READY1
+How many blocks are not in the box?
+FIVE OF THEM .
+~~~             
+
+
+ -- Wikipedia sez:             
+~~~text
 Person: Pick up a big red block.
 Computer: OK.
 Person: Grasp the pyramid.
@@ -244,5 +326,4 @@ Person: Is there anything to the right of the red pyramid?
 Computer: YES, FOUR THINGS: THE BOX , THE RED CUBE, THE BLUE PYRAMID AND THE BLOCK NAMED SUPERBLOCK
 Person: Thank you.
 Computer: YOU'RE WELCOME!
-~~~~             
-
+~~~
