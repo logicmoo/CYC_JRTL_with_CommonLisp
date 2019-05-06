@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import org.armedbear.lisp.util.Finalizer;
 import org.logicmoo.system.BeanShellCntrl.SpecialMethod;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.util.SubLFiles.VariableAccessMode;
 
 public final class Primitives {
@@ -2991,6 +2992,11 @@ public final class Primitives {
         {
             final LispThread thread = LispThread.currentThread();
 
+            if(SubLMain.BOOTY_HACKZ) {
+              if (args!=NIL && !args.isList()) {
+                args = list(args);
+              }
+            }
             final int length = args.length();
             switch (length) {
                 case 0:

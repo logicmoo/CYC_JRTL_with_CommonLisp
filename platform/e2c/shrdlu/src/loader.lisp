@@ -1,5 +1,6 @@
 (defpackage "SHRDLU" (:use "COMMON-LISP") ( :shadow ;; "REST" ;; "AND" "SPECIAL" "OR"
                                               ))
+(setq *print-length* nil  *print-level* nil)
 
 (in-package :SHRDLU)
 
