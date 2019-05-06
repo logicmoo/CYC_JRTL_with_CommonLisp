@@ -1,3 +1,5 @@
+## Original README
+
 ~~~text
 ********************************************************************************
 *       
@@ -151,6 +153,8 @@
 
 ~~~
 
+
+## RAN IN LARKC_CL 
 ~~~text
 root@gitlab:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform/e2c/shrdlu/src# ../../../abclc --lisp --load loader.lisp
 
@@ -232,7 +236,9 @@ FIVE OF THEM .
 ~~~             
 
 
- -- Wikipedia sez:             
+
+## Wikipedia sez
+             
 ~~~text
 Person: Pick up a big red block.
 Computer: OK.
