@@ -80,7 +80,7 @@
 				      (COND
 				       ((SETQ
 					 PROPERTY
-					 (MEET (THQUERY '\#PROPERTY
+					 (MEET (THGET '\#PROPERTY
 						    'SYSTEM)
 					       (MARKERS? SMCOMP)))
 					(RETURN
@@ -305,7 +305,7 @@
 		      (RESTRICTIONS\: RESTRICTIONS\:
 		       PROCEDURE\: ((((\#ANIMATE)) ((\#EVENT))))
 		       MARKERS\: PROCEDURE\:
-		       PLAUSIBILITY\: (\#EVAL (OR (THQUERY MAP2 'REFER)
+		       PLAUSIBILITY\: (\#EVAL (OR (THGET MAP2 'REFER)
 						(ERT DO
 						     DEFINITION)))))))
 ))  FEATURES (TRANS VFS PRESENT VPL VB AUX DO INF))
@@ -1168,7 +1168,7 @@
 (DEFS \#BLUEPRINT
     EXPR (LAMBDA (X)
 		 (PROG (PARTS)
-		       (COND ((THQUERY X 'REFER) (RETURN '\#2))
+		       (COND ((THGET X 'REFER) (RETURN '\#2))
 			     ((NULL (SETQ X (CDDAAR (INTERP X))))
 			      (GO DONE)))
 		  LOOP (COND ((NOT (EQ (CAAR X) 'THGOAL))
@@ -1180,14 +1180,14 @@
 			     ((ERT \#BLUEPRINT)))
 		       (AND (SETQ X (CDR X)) (GO LOOP))
 		  DONE (AND PARTS
-			    (THQUERY (CAR PARTS) 'REFER)
-			    (RETURN (THQUERY (CAR PARTS) 'REFER)))
+			    (THGET (CAR PARTS) 'REFER)
+			    (RETURN (THGET (CAR PARTS) 'REFER)))
 		       (THSETF (G3T 'BLUEPRINT 'SM)
-				(COND ((NULL PARTS) (THQUERY 'STACKPARTS
+				(COND ((NULL PARTS) (THGET 'STACKPARTS
 							 'SM))
 				      ((CDR PARTS)
 				       (ERT \#BLUEPRINT PARTS))
-				      ((THQUERY (CAR PARTS) 'SM))))
+				      ((THGET (CAR PARTS) 'SM))))
 		       (RETURN 'BLUEPRINT))))
 
 (DEFS \#BOX SYS (\#PHYSOB))
@@ -1244,8 +1244,8 @@
 	   (THSETF (G3T (CADAR A) 'WORD) '(NOUN NS))
 	   (THSETF (G3T (CADAR A) 'SMNTC)
 	    (SUBST (SUBST '***
-			  (CADDR (THQUERY (CADR A) 'NEWWORD))
-			  (CAR (THQUERY (CADR A) 'NEWWORD)))
+			  (CADDR (THGET (CADR A) 'NEWWORD))
+			  (CAR (THGET (CADR A) 'NEWWORD)))
 		   'NG
 		   '((NOUN (SETQ LIST2
 				 (LIST (SUBST (SUBST (CADDAR LIST1)
