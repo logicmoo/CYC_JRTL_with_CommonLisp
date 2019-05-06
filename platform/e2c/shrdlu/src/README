@@ -150,4 +150,99 @@
 
 
              
+             
+~~~~             
+Person: Pick up a big red block.
+Computer: OK.
+Person: Grasp the pyramid.
+Computer: I DON'T UNDERSTAND WHICH PYRAMID YOU MEAN.
+Person (changing their mind): Find a block which is taller than the one you are holding and put it into the box.
+Computer: BY "IT", I ASSUME YOU MEAN THE BLOCK WHICH IS TALLER THAN THE ONE I AM HOLDING.
+Computer: OK.
+Person: What does the box contain?
+Computer: THE BLUE PYRAMID AND THE BLUE BLOCK.
+Person: What is the pyramid supported by?
+Computer: THE BOX.
+Person: How many blocks are not in the box?
+Computer: FOUR OF THEM.
+Person: Is at least one of them narrower than the one which i told you to pick up?
+Computer: YES, THE RED CUBE.
+Person: Is it supported?
+Computer: YES, BY THE TABLE.
+Person: Can the table pick up blocks?
+Computer: NO.
+Person: Can a pyramid be supported by a block?
+Computer: YES.
+Person: Can a pyramid support a pyramid?
+Computer: I DON'T KNOW.
+Person: Stack up two pyramids.
+Computer: I CAN'T.
+Person: Will you please stack up both of the red blocks and either a green cube or a pyramid?
+Computer: OK.
+Person: Which cube is sitting on the table?
+Computer: THE LARGE GREEN ONE WHICH SUPPORTS THE RED PYRAMID.
+Person: Is there a large block behind a pyramid?
+Computer: YES, THREE OF THEM: A LARGE RED ONE, A LARGE GREEN CUBE, AND THE BLUE ONE.
+Person: Put a small one onto the green cube which supports a pyramid.
+Computer: OK.
+Person: Put the littlest pyramid on top of it.
+Computer: OK.
+Person: Does the shortest thing the tallest pyramid's support supports support anything green?
+Computer: YES, THE GREEN PYRAMID.
+Person: What color is it?
+Computer: BY "IT", I ASSUME YOU MEAN THE SHORTEST THING THE TALLEST PYRAMID'S SUPPORT SUPPORTS.
+Computer: RED
+Person: How many things are on top of green cubes?
+Computer: I'M NOT SURE WHAT YOU MEAN BY "ON TOP OF "IN THE PHRASE "ON TOP OF GREEN CUBES " .
+DO YOU MEAN:
+1 - DIRECTLY ON THE SURFACE
+2 - ANWHERE ON TOP OF ?
+Person: 2
+Computer: THREE OF THEM.
+Person: Had you touched any pyramid before you put the green one on the little cube?
+Computer: YES, THE GREEN ONE.
+Person: When did you pick it up?
+Computer: WHILE I WAS STACKING UP THE RED CUBE, A LARGE RED BLOCK AND A LARGE GREEN CUBE.
+Person: Why?
+Computer: TO GET RID OF IT.
+Person: Why did you do that?
+Computer: TO CLEAN OFF THE RED CUBE.
+Person: Why did you clear off that cube?
+Computer: TO PUT IT ON A LARGE GREEN CUBE.
+Person: Why did you do that?
+Computer: TO STACK UP THE RED CUBE , A LARGE RED BLOCK AND A LARGE GREEN CUBE.
+Person: Why did you do that?
+Computer: BECAUSE YOU ASKED ME TO.
+Person: How did you do it?
+Computer: BY PUTTING A LARGE RED BLOCK ON THE TABLE ; THEN LETTING GO OF IT ; THEN PUTTING A LARGE GREEN CUBE ON IT ; THEN LETTING GO OF THAT CUBE ; THEN PUTTING THE RED CUBE ON THAT CUBE; THEN LETTING GO OF THAT CUBE.
+Person: How many objects did you touch while you were doing it?
+Computer: FOUR OF THEM.
+Person: What did the red cube support before you started to clean it off?
+Computer: THE GREEN PYRAMID.
+Person: There were five blocks to the left of the box then.
+Computer: NO, ONLY FOUR OF THEM: THE RED CUBE, TWO LARGE GREEN CUBES AND A LARGE RED BLOCK.
+Person: Put the blue pyramid on the block in the box.
+Computer: OK.
+Person: Is there anything which is bigger than every pyramid but is not as wide as the thing that supports it?
+Computer: YES, THE BLUE BLOCK.
+Person: Does a steeple
+Computer (interrupting): SORRY, I DON'T KNOW THE WORD "STEEPLE".
+Person: A "steeple" is a stack which contains two green cubes and a pyramid.
+Computer: I UNDERSTAND.
+Person: Are there any steeples now?
+Computer: NO.
+Person: Build one.
+Computer: OK.
+Person: Call the biggest block "superblock".
+Computer: OK.
+Person: Have you picked superblock up since we began?
+Computer: YES.
+Person: Why did you drop it?
+Computer: BY "IT", I ASSUME YOU MEAN THE SUPERBLOCK.
+I CAN'T EXPLAIN A NON-EXISTENT EVENT.
+Person: Is there anything to the right of the red pyramid?
+Computer: YES, FOUR THINGS: THE BOX , THE RED CUBE, THE BLUE PYRAMID AND THE BLOCK NAMED SUPERBLOCK
+Person: Thank you.
+Computer: YOU'RE WELCOME!
+~~~~             
 
