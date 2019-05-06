@@ -4,7 +4,7 @@
 
 (in-package :SHRDLU)
 
-(defvar R3ST ())
+; (defvar R3ST ())
 ;
 ; This file loads in all the needed files for SHRDLU.
 ;
@@ -40,6 +40,8 @@
 (load "newans.lisp")
 (load "mover.lisp")
 (load "remote.lisp")
+
+(setq *SHRDLU-PATHNAME* *DEFAULT-PATHNAME-DEFAULTS*)
 
 )
 

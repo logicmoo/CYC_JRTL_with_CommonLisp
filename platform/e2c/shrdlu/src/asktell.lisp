@@ -10,11 +10,11 @@
 ;; The code expects a ordered list in the prop (val1 val2 ...)
 (setq *SHRDLU-DATA-ORDERED-LIST* `(MARKERS= SYSTEMS= HISTORY REFER))
 ;; The code expects a structured list in the prop (val1 val2 ...)
-(setq *SHRDLU-DATA-STRUCTURE* `(THASSERTION THCONSE SHOW TELL THEOREM TELLINFO MEASFN))
+(setq *SHRDLU-DATA-STRUCTURE* `(IRREGULAR THASSERTION THCONSE SHOW TELL THEOREM TELLINFO MEASFN))
 ;; The code expects a Atom
 (setq *SHRDLU-DATA-ATOM* `(NOGOAL))
 ;; The code expects Text
-(setq *SHRDLU-DATA-STRING* `(FIRSTWORD ROOT))
+(setq *SHRDLU-DATA-STRING* `(FIRSTWORD ROOT WORDAFTER))
 
 ;; Queries
 (DEFMACRO THGET (SYM PRED) `(GET ,SYM ,PRED))
