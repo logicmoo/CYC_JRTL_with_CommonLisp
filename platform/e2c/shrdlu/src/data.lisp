@@ -186,6 +186,6 @@
       '(:B1 :B2 :B3 :B4 :B5 :B6 :B7 :B10)
       '(CB1 CB2 CB3 CB4 CB5 CB6 CB7 CB10))
 
-;|«Visual LISP© Format Options»
-(200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+#|«Visual LISP© Format Options»
+;(200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
+;*** DO NOT add text below the comment! ***|#

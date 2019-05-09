@@ -55,7 +55,7 @@
 		 '========================================================)
 
  ;(OR (THGET 'CLAUSE 'SUBR)
- ;    (LABELTRACE CLAUSE NG VG ADJG PREPG CONJOIN)) 
+ ;    (LABELTRACE CLAUSE NG VG ADJG PREPG CONJOIN))
 
 ;;*PAGE
 
@@ -230,10 +230,10 @@
       (PRINC (NTH-VALUE 3 (GET-DECODED-TIME)))
       (PRINC '/)
       (PRINC (NTH-VALUE 5 (GET-DECODED-TIME)))
-      (PRINC '\)
+      (PRINC '\ )
       (PRINC "in ")
       (PRINC (LISP-IMPLEMENTATION-TYPE))
-      (PRINC '\)
+      (PRINC '\ )
       (PRINC (LISP-IMPLEMENTATION-VERSION))
       (TERPRI)
       (TERPRI)
@@ -258,6 +258,6 @@
       annoyance	nil)
 
 (setq errlist nil)
-;|«Visual LISP© Format Options»
+#|«Visual LISP© Format Options»
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+;*** DO NOT add text below the comment! ***|#

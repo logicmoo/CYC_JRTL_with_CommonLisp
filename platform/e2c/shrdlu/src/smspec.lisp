@@ -1067,6 +1067,6 @@
 						(THSETF (G3T TSS 'START=) START-EV)
 						(THSETF (G3T TSS 'END=) END-EV))
 					  )))))))
- ;|«Visual LISP© Format Options»
+ #|«Visual LISP© Format Options»
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+;*** DO NOT add text below the comment! ***|#

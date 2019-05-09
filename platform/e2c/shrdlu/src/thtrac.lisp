@@ -94,7 +94,7 @@
       THFAIL
       #'(LAMBDA NIL
 	     (PRINT (CADAR THTREE))
-	     (PRINC 'FAILED\)
+	     (PRINC 'FAILED\ )
 	     (EVLIS (CDDAR THTREE))
 	     (THPOPT)
 	     NIL))
@@ -103,7 +103,7 @@
       THSUCCEED
       #'(LAMBDA NIL
 	     (PRINT (CADAR THTREE))
-	     (PRINC 'SUCCEEDED\)
+	     (PRINC 'SUCCEEDED\ )
 	     (EVLIS (CDDAR THTREE))
 	     (THPOPT)
 	     THVALUE))
@@ -122,7 +122,7 @@
 			   (AND B '(THERT))))
 	     (THPRINTC 'PASSING\ BKPT)
 	     (PRIN1 (CADAR THTREE))
-	     (PRINC '\)
+	     (PRINC '\ )
  ;BY SETTING THBRANCH AND THABRANCH, A TRIPLE IS CREATED
  ;BY THVAL FOR BACKTRACKING.  THEN, THE TREE IS POPPED
  ;TO PREVENT THTRACES FROM TYPING OUT THE MEANINGLESS
@@ -142,7 +142,7 @@
 			   (AND B '(THERT))))
 	     (THPRINTC 'TRYING\ GOAL)
 	     (PRIN1 (CADAR THTREE))
-	     (PRINC '\)
+	     (PRINC '\ )
 	     (PRIN1 X)))
 
 (DEFS THEOREM
@@ -165,7 +165,7 @@
 			   (AND B '(THERT))))
 	     (PRINT 'ASSERTING)
 	     (PRIN1 (CADAR THTREE))
-	     (PRINC '\)
+	     (PRINC '\ )
 	     (PRIN1 X)))
 
 (DEFS THERASE
@@ -177,7 +177,7 @@
 			   (AND B '(THERT))))
 	     (PRINT 'ERASING)
 	     (PRIN1 (CADAR THTREE))
-	     (PRINC '\)
+	     (PRINC '\ )
 	     (PRIN1 X)))
 
  ;UTILITY FNS
@@ -213,6 +213,6 @@
 
  ; removed thprintc - also defined in plnr.lisp -ts.
 ;; (DEFUN THPRINTC (X) (TERPRI) (PRINC X) (PRINC '\ ))
-;|«Visual LISP© Format Options»
+#|«Visual LISP© Format Options»
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+;*** DO NOT add text below the comment! ***|#

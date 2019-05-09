@@ -927,7 +927,7 @@
 		   (COND ((NULL NN) (GO RETSM))
 			 (T (GO PREPNG))))
 		  (T (M 'RSQ-PREPREL) (GO FAIL)))
-	   RSQ
+	  RSQ
 	    (AND LABELTRACE (PASSING 'RSQ))
 	    (SETQ RESULT (AND (ISQ (MOVE-PT C U) POLR2) (CQ SUBJ) (NQ VB) (NOT (CQ SUBJT)) (NOT (ISQ PT QADJ))))
 	    (COND (RESULT (GO RETSM)))
@@ -1706,6 +1706,6 @@
 		 (OR (NULL FEATURE) (F FEATURE))
 		 (RETURN T)
 		 )))
-;|«Visual LISP© Format Options»
+#|«Visual LISP© Format Options»
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+;*** DO NOT add text below the comment! ***|#

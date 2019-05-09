@@ -20,7 +20,7 @@
 		   (ERT)
 		   (GO THRU))) ; BREAK
 	    (SETQ CHAR (ASCII (CHAR-UPCASE (READ-CHAR))))
-	    (COND ((EQ CHAR '\) (setq WORD (cons WORD CHAR))) ;DELIMITER
+	    (COND ((EQ CHAR '\ ) (setq WORD (cons WORD CHAR))) ;DELIMITER
 		  ((EQ CHAR RUBOUT)
 		   (COND (WORD
 			  (PRINC (CAR WORD))
@@ -62,7 +62,7 @@
 		   (GO THRU))) ; BREAK
 	    (COND ((EQUAL (PEEK-CHAR-REMOTE) #\@) (read-char-remote) (go OUT)))
 	    (SETQ CHAR (ASCII (CHAR-UPCASE (READ-CHAR-REMOTE))))
-	    (COND ((EQ CHAR '\) (GO WORD)) ;DELIMITER
+	    (COND ((EQ CHAR '\ ) (GO WORD)) ;DELIMITER
 		  ((EQ CHAR RUBOUT)
 		   (COND (WORD
 			  (PRINC (CAR WORD))
@@ -77,15 +77,11 @@
 		   (AND WORD (GO WORD))
 		   (GO PUNC)))
 	    (AND
-		  (OR (AND (EQ CHAR
-			       '\
-			       ")  ;; "
+	      (OR (AND (EQ CHAR '\")  ;; "
 			       (NOT ALREADY-BLGING-NEWWRD)
 			       (SETQ NEWWORD (SETQ ALREADY-BLGING-NEWWRD T))
 			       (GO CHAR))
-			   (AND	(EQ CHAR
-				    '\
-				    ")   ;; "
+		  (AND (EQ CHAR '\")   ;; "
 				    ALREADY-BLGING-NEWWRD
 				    (NOT (SETQ ALREADY-BLGING-NEWWRD NIL))
 				    (GO WORD))
@@ -97,18 +93,14 @@
 				(MEMQ CHAR CONSO))
 			   (SETQ WORD (CONS CHAR WORD)))
 		      (GO CHAR)
-		      DO
-		      (show-response)
+	DO   (show-response)
 		      (PRINT 'READY2)
 		      (TERPRI)
 		      (MAPC #'(LAMBDA (X) (PRINT2 X)) (REVERSE SENT))
-		      (PRINT2 '\)
-		      ;; was princ
-		      (MAPC #'PRINT2 (REVERSE WORD))
-		      ;; was princ
+	     (PRINT2 '\ ) ;; was princ
+	     (MAPC #'PRINT2 (REVERSE WORD)) ;; was princ
 		      (GO CHAR)
-		      WORD
-		      (COND ((NULL WORD) (GO CHAR))
+	WORD (COND ((NULL WORD) (GO CHAR))
 			    ((EQUAL WORD '(P L E H)) (HELP) (GO THRU))
 			    ((AND (SETQ WRD (LIST (READLIST (REVERSE WORD))))
 				  (NUMBERP (SETQ WRD (CAR WRD))))
@@ -132,8 +124,7 @@
 					(CAR X)))
 			    ((EQ (CAR (LAST WORD)) '=)
 			     (BUILDWORD	WRD
-					(COND ((MEMQ '\
-						     " WORD)    ;; "
+			       (COND ((MEMQ '\" WORD)    ;; "
 						     '(PROPN NS POSS))
 					       ('(PROPN NS)))
 					      '((PROPN T))
@@ -141,28 +132,18 @@
 			     ((GO CUT)))
 			    (GO WRD)
 
-;;;---------------------------------------------
-;;;              MORPHOLOGY CODE
-;;;--------------------------------------------
-			    CUT
-			    (COND
-			     ((STA WORD
-				   '(T
-				     \
-				     " N))    ;; "
+	     ;;;---------------------------------------------
+	     ;;;              MORPHOLOGY CODE
+	     ;;;--------------------------------------------
+	CUT  (COND ((STA WORD '(T \" N))    ;; "
 				     (SETQ RD (CDDDR WORD))
 				     (SETQ WORD (CONS '* WORD))
 				     (GO TRY))
-				   ((STA WORD
-					 '(S
-					   \
-					   "))   ;; "
+		   ((STA WORD '(S \"))   ;; "
 					   (SETQ WORD (CDDR WORD))
 					   (SETQ POSS WRD)
 					   (GO WORD))
-					 ((STA WORD
-					       '(\
-						 "))    ;; "
+		   ((STA WORD '(\"))    ;; "
 						 (SETQ WORD (CDR WORD))
 						 (SETQ POSS WRD)
 						 (GO WORD))
@@ -271,18 +252,15 @@
 											  'SEMANTICS)
 										   ROOT)
 									(CONS POSS SENT))
-								       ((BUILDWORD '\
-										   "S               ;; "
+				((BUILDWORD '\"S               ;; "
  ; CAN WE GENERALIZE IT???
 										   '(VB BE V3PS PRES)
 										   (THGET 'BE
 											  'SEMANTICS)
 										   'BE)
-									(CONS '\
-									      "S (CONS WRD SENT)))))    ;; "
+				 (CONS '\"S (CONS WRD SENT)))))    ;; "
 									      ((CONS WRD SENT))))
-								       PUNC
-								       (COND
+	PUNC (COND
 									(PUNCT (COND ((AND (EQ PUNCT '?) (NULL SENT))
 										      (HELP)
 										      (GO THRU))
@@ -305,51 +283,33 @@
 										 (OR ALTN (SETQ NEWWORD NIL))
 										 (GO WRD)))
 								       (TERPRI)
-								       (SAY
-									*SORRY
-									I
-									DON\
-									'T
-									KNOW
-									THE
-									WORD
-									\
-									")     ;; "
+	     (SAY *SORRY I DON\'T KNOW THE WORD \")     ;; "
 									(PRINT3 WRD)
-									(PRINT3	'\
-										"\.)                 ;; "
+	     (PRINT3 '\"\.)                 ;; "
 										(TERPRI)
 										;; replaced to make more sense with modern keyboards
 										;; and remote usage.  -ts.
 										(say please continue the sentence\:)
 										(apply-say (reverse (cons " ..." sent)))
 										(purge-cmd-buffer)
- ;	     (SAY PLEASE TYPE <Enter> AND CONTINUE THE SENTENCE.)
- ;	NOGO (OR (CHAR= (READ-CHAR-REMOTE) (CODE-CHAR 10.)) (GO NOGO))))
-										(SETQ PUNCT NIL
-										      WORD  NIL)
+;	     (SAY PLEASE TYPE <Enter> AND CONTINUE THE SENTENCE.)
+;	NOGO (OR (CHAR= (READ-CHAR-REMOTE) (CODE-CHAR 10.)) (GO NOGO))))
+	     (SETQ PUNCT NIL WORD NIL)
 										(GO DO)
-										OUT
-										(print (format nil "~A:~A" SENT WORD))))
+        OUT  (print (format nil "~A:~A" SENT WORD))))
 
-								       (DEFUN PROPNAME (X) (EQ (CAR (EXPLODE X)) '=))
+(DEFUN PROPNAME (X) (EQ (CAR (EXPLODE X)) '=))
 
-								       (DEFUN
-									BUILDWORD
-									(WORD FEATURES SEMANTICS ROOT)
+(DEFUN BUILDWORD (WORD FEATURES SEMANTICS ROOT)
 									(THSETF (G3T WORD 'FEATURES) FEATURES)
 									(THSETF (G3T WORD 'SEMANTICS) (OR SMN SEMANTICS))
 									(AND ROOT (THSETF (G3T WORD 'ROOT) ROOT))
 									WORD)
 
-								       (SETQ CARRET #\NEWLINE)
+(SETQ CARRET #\NEWLINE)
 
-								       (DEFUN
-									ETNEW
-									NIL
-									(AND (EQ (CAR WORD)
-										 '\
-										 ")
+(DEFUN ETNEW NIL
+       (AND (EQ (CAR WORD) '\")
 	    (EQ (CAR (LAST WORD)) '\")   ;; "
 										 (SETQ WRD (READLIST (CDR (REVERSE (CDR WORD)))))
 										 (BUILDWORD WRD
@@ -357,35 +317,24 @@
 											    '((NOUN (NEWWORD)))
 											    NIL)))
 
-									(SETQ FINAL '(\. ? !))
+(SETQ FINAL '(\. ? !))
 
-									(SETQ CONSO '(B C D F G H J K L M N P Q R S T V W X Z))
+(SETQ CONSO '(B C D F G H J K L M N P Q R S T V W X Z))
 
-									0.
+0.
 
-									(SETQ LIQUID '(L R S Z V))
+(SETQ LIQUID '(L R S Z V))
 
-									(SETQ PUNCL '(\.
-										      ?
-										      \:
-										      \ ; !))
+(SETQ PUNCL '(\. ? \: \; !))
 
-										      (SETQ RUBOUT #\RUBOUT)
+(SETQ RUBOUT #\RUBOUT)
 
-										      (DEFUN UNDEFINED NIL (PROGN (PRINC (WORD N)) (ERT UNDEFINED)))
+(DEFUN UNDEFINED NIL (PROGN (PRINC (WORD N)) (ERT UNDEFINED)))
 
-										      (DEFUN
-										       UPPERCASE-IFY-CHAR
-										       (CHAR)
-										       (COND
-											((CHAR>= #\Z CHAR #\A) (CHAR- CHAR (CODE-CHAR 32)))
-											(T CHAR)))
+(DEFUN UPPERCASE-IFY-CHAR (CHAR) (COND ((CHAR>= #\Z CHAR #\A) (CHAR- CHAR (CODE-CHAR 32))) (T CHAR)))
 
-										      (SETQ VOWEL '(NIL A E I O U Y))
+(SETQ VOWEL '(NIL A E I O U Y))
 
-										      (SETQ SPACE-CHAR #\Space)
+(SETQ SPACE-CHAR #\Space  )
 
-										      ;|«Visual LISP© Format Options»
-(200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
-										      ))))))))))))))))))
+

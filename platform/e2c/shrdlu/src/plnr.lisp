@@ -14,9 +14,9 @@
 (DEFUN EVLIS  (X) ;EVLIS EVALS ELEMENTS OF ARG THEN RETURNS ARG
       (MAPC #'EVAL X))
 
-(DEFUN THPRINT2 (X) (PRINC '\) (PRINC X))
+(DEFUN THPRINT2 (X) (PRINC '\ ) (PRINC X))
 
-(DEFUN THPRINTC (X) (TERPRI) (PRINC X) (PRINC '\))
+(DEFUN THPRINTC (X) (TERPRI) (PRINC X) (PRINC '\ ))
 
 (DEFUN THADD ;THADD ADDS THEOREMS OR ASSERTION TO THE
 
@@ -2196,6 +2196,7 @@
 (SETQ THINF NIL)
 (SETQ THTREE NIL)
 (SETQ THLEVEL NIL)
-;|«Visual LISP© Format Options»
+
+#|  Visual LISP© Format Options»
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+;*** DO NOT add text below the comment! ***|#

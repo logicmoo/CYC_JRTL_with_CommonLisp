@@ -142,7 +142,7 @@
 	    (OR SH-PRINT-TIME (RETURN T))
 	    (SETQ BASE 10.)
 	    (TERPRI)
-	    (PRINC 'TOTAL\ TIME\ USED\:\)
+	    (PRINC 'TOTAL\ TIME\ USED\:\ )
 	    (PRINC (TIMER RUNTIME (GET-INTERNAL-RUN-TIME)))
 	    (PRINTC '\ \ AMOUNT\ SPENT\ IN\ GARBAGE\ COLLECTION)
 	    (PRINC (TIMER SH-GCTIME 0))
@@ -250,7 +250,7 @@
       (TERPRI)
       (AND (CONSP 0A)
 	   (PRINC (CAR 0A))
-	   (PRINC '\ >>\)
+	   (PRINC '\ >>\ )
 	   (PRINC (CADR 0A))
 	   (TERPRI))
       (PRINT (CDDR 0A)))
@@ -550,7 +550,7 @@
 	     (LIST (FROM (NB A) (N A))
 		   (FE A)
 		   (SM A)
-		   (COND ((ATOM (H A)) '\)
+		   (COND ((ATOM (H A)) '\ )
 			 ((MAPLIST #'PR1
 				   (REVERSE (H A)))))))))
 
@@ -573,14 +573,14 @@
 (pushnew :SHRDLU-CONSOLE *FEATURES*)
 
 (DEFUN PRINT2  (X)
-      (COND ((> CHRCT (FLATSIZE X)) (PRINC '\))
+      (COND ((> CHRCT (FLATSIZE X)) (PRINC '\ ))
 	    (T (TERPRI)))
       (PRINC X))
 
 (DEFUN PRINT3  (X)
       (PROG2 (OR (> CHRCT (FLATSIZE X)) (TERPRI))
 	     (PRINC X)
-	     (PRINC '\)))
+	     (PRINC '\ )))
 
 (DEFUN PRINTEXT	 (TEXT)
       (COND (TEXT
@@ -595,7 +595,7 @@
 		   (COND ((NULL L) (RETURN NIL)))
 		   (SETQ TEST (EVAL (CAR L)))
 		   (COND ((EQ TEST '<TAB>))
-			 (T (PRINC TEST) (PRINC '\)))
+			 (T (PRINC TEST) (PRINC '\ )))
 		   (SETQ L (CDR L))
 		   (GO =>)))
 
@@ -669,7 +669,7 @@
       (PROG (NN)
 	    A
 	    (COND ((> N 0.)
-		   (PRINC '\)
+		   (PRINC '\ )
 		   (SETQ N (- N 1))
 		   (GO A)))))
 
@@ -679,6 +679,6 @@
       (SETQ PLANNERSEE NIL)
       (SETQ SH-STANDARD-PRINTOUT NIL)
       (SETQ ANNOYANCE T))
-;|«Visual LISP© Format Options»
+#|«Visual LISP© Format Options»
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+;*** DO NOT add text below the comment! ***|#

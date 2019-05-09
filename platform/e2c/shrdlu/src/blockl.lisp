@@ -42,7 +42,7 @@
 	    (SETQ W (CDR W))
 	    (GO GO)))
 
-(DEFUN DIFF (X Y) (MAPCAR # '- X Y))
+(DEFUN DIFF (X Y) (MAPCAR #'- X Y))
 
 (DEFUN DIV2 (X) (FLOOR (/ X 2)))
 
@@ -289,9 +289,7 @@
       (DECLARE (SPECIAL TYPE-PACKO))
       (PROG (XX)
 	    (MAPC #'(LAMBDA (X)
-			 (AND (THVAL '(THGOAL
-				       (\#IS
-					(THV X)
+			     (AND (THVAL '(THGOAL (\#IS (THV X)
 					(THEV TYPE-PACKO)))
 				     (LIST (LIST 'X X)))
 			      (SETQ XX (PACKORD X (SIZE X) XX))))
@@ -390,6 +388,6 @@
 		      (< (OR (END? TIME) 777777)
 			 (THGET EV 'END)))))))
 
-;|«Visual LISP© Format Options»
+#|«Visual LISP© Format Options»
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+;*** DO NOT add text below the comment! ***|#

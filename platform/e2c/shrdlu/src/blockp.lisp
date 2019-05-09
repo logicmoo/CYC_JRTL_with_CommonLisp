@@ -535,8 +535,7 @@
       (THCONSE
 	    (X Y BLOCKS PYR (WHY (EV)) EV)
 	    (\#STACKUP (THV X))
-	    (OR	(< (APPLY #
-			  '+
+	    (OR	(< (APPLY #'+
 			  (MAPCAR #'(LAMBDA (X) (CADDR (SIZE X))) (THV X)))
 		   1201)
 		(NOT (DPRINT2 'TOO\ HIGH\,)))
@@ -911,6 +910,6 @@
 '(COMMANDS ARE\: \#CLEARTOP \#GET-RID-OF \#GRASP \#PACK	\#PICKUP \#PUTIN \#PUTON \#RAISEHAND \#STACKUP \#UNGRASP)
 
 '(PREDICATES ARE\: \#LOC \#SUPPORT \#ON \#PHYSOB)
-;|«Visual LISP© Format Options»
+#|«Visual LISP© Format Options»
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+;*** DO NOT add text below the comment! ***|#

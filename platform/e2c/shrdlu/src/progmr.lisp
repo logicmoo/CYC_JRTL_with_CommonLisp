@@ -49,7 +49,7 @@
 			       (RETURN (ERT)))
 			      (T (RETURN T))))
 		   (AND	SMNTRACE
-			(PROGN (PRINTC '\ \ CALLSM\:\)
+			(PROGN (PRINTC '\ \ CALLSM\:\ )
 			       (PRINC (CAR SEMANTIC-EXPRESSION))))
 		   (SETQ MPLNR-TIME 0.)
 		   (SETQ GC	  0
@@ -66,7 +66,7 @@
 				     0))
 		   (SETQ MP-TIME (+ MP-TIME MPLNR-TIME))
 		   (AND	SMNTRACE
-			(PROGN (PRINTC 'CALLSM\ RETURNING\:\)
+			(PROGN (PRINTC 'CALLSM\ RETURNING\:\ )
 			       (PRINC RESULT)))
 		   (COND ((OR (EQ SMNBREAKS 'ALL)
 			      (MEMQ SMNFN SMNBREAKS))
@@ -316,7 +316,7 @@
 		 (PROGN	(TERPRI)
 			(PRINC '\>)
 			(PRINC LEVEL)
-			(PRINC '\ ####\ PARSING\:\)
+			(PRINC '\ ####\ PARSING\:\ )
 			(PRINC R3ST)))
 	    (COND ((NULL (SETQ RE (APPLY-GRAMMAR UNIT))) ;THIS IS WHERE ALL THE WORK HAPPENS. IF THE
 		   (SETQ RE NIL) ;PARSE SUCEEDS, IT WILL RETURN THE NODE THAT HAS
@@ -344,9 +344,9 @@
 		   (TERPRI)
 		   (PRINC '>)
 		   (PRINC LEVEL)
-		   (PRINC '\ PARSE\ SUCEEDED\:\)
+		   (PRINC '\ PARSE\ SUCEEDED\:\ )
 		   (PRINC UNIT)
-		   (PRINC '\ \)
+		   (PRINC '\ \ )
 		   (PRINC (FROM (NB RE) N))
 		   (AND PARSENODE-SEE (DP (CAR RE)))
 		   (AND	(OR (EQ PARSEBREAK 'ALL)
@@ -541,6 +541,6 @@
       (AND (MOVE-PT C U (REL-NOT-FOUND))
 	   (NOT	(MEET (FE PT)
 		      '(OBJ1Q OBJ1REL OBJ2Q OBJ2REL LOBREL LOBQ)))))
-;|«Visual LISP© Format Options»
-(200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+#|«Visual LISP© Format Options»
+;; (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
+;*** DO NOT add text below the comment! ***|#

@@ -185,14 +185,14 @@
 		  ((SETQ AMB (CDR AMB)) (GO UP))
 		  (T (BUG ANSELIMINATE -- NO CONFLICT)))
 	    (TERPRI)
-	    (SAY I\ 'M NOT SURE WHAT YOU MEAN BY \ ')
+	    (SAY I\'M NOT SURE WHAT YOU MEAN BY \' )
 	    (MAPC 'PRINT2
 		  (FROM (NB (CADDAR AMB)) (N (CADDAR AMB))))
-	    (SAY \ 'IN THE PHRASE \ ')
+	    (SAY \ 'IN THE PHRASE \')
 	    (MAPC 'PRINT2
 		  (FROM	(NB (SETQ XX (PARENT? (CADDAR AMB))))
 			(N XX)))
-	    (PRINT3 '\ '\.)
+	    (PRINT3 '\ '\. )
 	    (TERPRI)
 	    (SAY DO YOU MEAN\:)
 	    (SETQ XX 0.)
@@ -350,7 +350,7 @@
 			 (ANSBUILD (+ (CAR ANS) (PLAUSIBILITY? RSS))
 				   (COND ((CADR ANS) '((SAY YES)))
 					 ((ISTENSE NODE 'MODAL)
-					  '((SAY I DON\ 'T KNOW)))
+				 '((SAY I DON\'T KNOW)))
 					 (T '((SAY NO))))
 				   T))
 			((SETQ ANS (THVAL-MULT (PLNR-FINDIFY 'ALL
@@ -362,7 +362,7 @@
 				      (+ (PLAUSIBILITY? RSS) (CAR ANS))) ;AN ANSWER IS VERY IMPLAUSIBILE IF IT MENTIONS
 				     (T (- (PLAUSIBILITY? RSS) 512.))) ;AN EVENT THE SYSTEM CAN'T FIND.
 			       (COND ((NULL (CADR ANS))
-				      '((SAY I CAN\ 'T DISCUSS A NON-EXISTENT EVENT)))
+			'((SAY I CAN\'T DISCUSS A NON-EXISTENT EVENT)))
 				     ((APPEND (AND (EQ TYPE 'POLAR)
 						   '((SAY YES)))
 					      (LIST (LIST 'EVLIS
@@ -411,7 +411,7 @@
 				      (MAPCAR 'PLAUSIBILITY? ANS))
 			       (APPEND
 				     (AND (NOT (ISQ (PARSENODE? RSS) COMPONENT))
-					  '((SAY YOU\ 'RE TRYING TO CONFUSE ME\.)))
+		               '((SAY YOU\'RE TRYING TO CONFUSE ME\.)))
 				     (MAPCAN
 					   '(LAMBDA (QUEST)
 						  (APPEND
@@ -488,7 +488,7 @@
 				      (COND
 					    ((NULL ANS)
 					     (COND ((ISTENSE (PARSENODE? RSS) 'MODAL)
-						    '((SAY I DON\ 'T KNOW)))
+			                '((SAY I DON\'T KNOW)))
 						   (T '((SAY NO)))))
 					    (T
 					     (APPEND
@@ -654,12 +654,11 @@
 	    (RETURN
 		  (COND
 			((EQ TYPE 'WHERE)
-			 (GLOBAL-ERR I CAN\ 'T ANSWER \ 'WHERE\ 'QUESTIONS YET))
+		(GLOBAL-ERR I CAN\'T ANSWER \"WHERE\" QUESTIONS YET))
 			((EQ TYPE 'WHY)
 			 (COND ((EQ (THGET EVENT 'WHY) 'COMMAND)
 				'((SAY BECAUSE YOU TOLD ME TO)))
-			       (T
-				(CONS '(SAY TO)
+		      (T (CONS '(SAY TO)
 				      (NAMEACTION 'INFINITIVE
 						  (THGET EVENT
 							 'WHY))))))
@@ -670,17 +669,15 @@
 				 EVENTLIST)
 			 (COND
 			       ((NULL ANS)
-				'((SAY I CAN\ 'T ANALYZE HOW I DID IT)))
+		  '((SAY I CAN\'T ANALYZE HOW I DID IT)))
 			       (T
 				(APPEND
 				      '((SAY BY))
 				      (NAMEACTION 'ING (CAR ANS))
 				      (MAPCAN
 					    '(LAMBDA (X)
-						   (CONS '(PRINT3
-							   '\ ;)
-							   (CONS
-							    '(SAY THEN)
+			     (CONS '(PRINT3 '\;)
+				   (CONS '(SAY THEN)
 							    (NAMEACTION 'ING X))))
 						   (CDR ANS))))))
 			 ((OR (EQ TYPE 'POLAR) (EQ TYPE 'WHEN))
@@ -695,8 +692,7 @@
 						   (NAMEACTION
 							 'PAST
 							 (TOPLEVEL (CAR (FINDB EVENT EVENTLIST))))))))
-				     (T
-				      (CONS '(SAY WHILE)
+		 (T (CONS '(SAY WHILE)
 					    (NAMEACTION	'PRES-PAST
 							(TOPLEVEL EVENT))))))
 			 ((BUG DESCRIBEVENT -- FUNNY TYPE))))))
@@ -714,7 +710,7 @@
 
 ;;;############################################################
 
-      (DEFUN ELIZA  (NODE)
+(DEFUN ELIZA (NODE)
 
 	    ;;DOES THE OBVIOUS THING
 	    (PROG (XX NUM)
@@ -726,10 +722,8 @@
 				    '(LAMBDA (WORD)
 					   (COND ((NOT (LESSP NUM (LENGTH WORD))) NIL) ;THIS KLUDGE STOPS IT AT THE END OF THE NODE
 						 ((SETQ	XX (ASSQ (CAR WORD)
-								 '((I YOU)
-								   (ME YOU)
-								   (AM ARE)
-								   (ARE AM))))
+					       '((I YOU) (ME YOU)
+						 (AM ARE) (ARE AM))))
 						  (CDR XX)) ;WE RETURN LIST OF THE THING REALLY WANTED, SO
 						 ((EQ (CAR WORD) 'YOU) ;THE APPLY APPEND CAN GET RID OF THE EMPTY ONES.
 						  (SETQ XX (FINDMOTHER WORD NODE)) ;UNFORTUNATELY, FOR "YOU" IT IS NECESSARY TO
@@ -931,12 +925,21 @@
 
 ;;;############################################################
 
-      (DEFUN NAMENUM  (X)
+(DEFUN NAMENUM (X)
 
 	    ;;GENERATES NUMBER NAMES
 	    (OR	(SHRDLU-NTH (+ 1 X)
-			    '(NONE ONE TWO THREE FOUR FIVE SIX SEVEN EIGHT NINE TEN))
-		(GLOBAL-ERR I CAN\ 'T COUNT THAT HIGH)))
+		'(NONE ONE
+		       TWO
+		       THREE
+		       FOUR
+		       FIVE
+		       SIX
+		       SEVEN
+		       EIGHT
+		       NINE
+		       TEN))
+	   (GLOBAL-ERR I CAN\'T COUNT THAT HIGH)))
 
 ;;;############################################################
 
@@ -945,8 +948,10 @@
 
 	    ;;NAMES THE OBJECT IN ENGLISH -- GENERATES LIST OF THINGS TO
 	    ;;BE EVALUATED.  SPEC IS EITHER 'INDEF OR 'DEF
-	    (PROG (TYPE\: TYPELIST TYPE NAME\: COLOR\: COLORLIST SIZE\: SIZELIST CUBE NAME X)
-		  (DECLARE (SPECIAL TYPE\: TYPELIST TYPE NAME\: COLOR\: COLORLIST SIZE\: SIZELIST CUBE NAME))
+       (PROG (TYPE\: TYPELIST TYPE NAME\: COLOR\: COLORLIST SIZE\:
+	      SIZELIST CUBE NAME X)
+	     (DECLARE (SPECIAL TYPE\: TYPELIST TYPE NAME\: COLOR\:
+	                       COLORLIST SIZE\: SIZELIST CUBE NAME))
 		  (AND (SETQ X (ASSOC ITEM
 				      '((:SHRDLU I) (:FRIEND YOU))))
 		       (RETURN (LIST (ANSAY (CDR X)) (LIST ITEM)))) ;  SPECIAL CASE CHECK
@@ -1001,13 +1006,11 @@
 						 (COND ((SETQ
 							      X
 								   (THVAL2 NIL
-									   '(THFIND
-									     ALL
+				                      '(THFIND ALL
 									     (THV X)
 									     (X (Y ITEM))
 									     (THGOAL (\#AT (THV X) ?)) ;MAKE SURE IT IS AN ITEM WITH A LOCATION.
-									     (THGOAL
-									      (\#LOC \#RIGHT (THV Y) (THV X))
+					    (THGOAL (\#LOC \#RIGHT (THV Y) (THV X))
 									      (THUSE TC-LOC)))))
 							(LISTNAMES NIL 'INDEF X))
 						       ('((SAY NOTHING))))))))
@@ -1403,31 +1406,28 @@
 
 ;;;############################################################
 
-      (DEFUN IASS  (X)
+(DEFUN IASS (X)
 	    (PROG (XX)
 		  (OR (SETQ XX
 				 (CADR (SASSQ X
 					      (CADR (CADDDR ANS))
 					      #'SASS)))
 		      (RETURN T))
-		  (SAY \
-		       (BY)
-		       (PRINT3 (COND ((EQ X 'IT) '\ 'IT\ ')
+	       (SAY \(BY)
+	       (PRINT3 (COND ((EQ X 'IT) '\"IT\")
 				     ((MEMQ 'THEY (FROM SENT NIL))
-				      '\
-				      'THEY\
-				      ')
-				     ('\ 'THEM\ ')))
+		       '\"THEY\")
+		       ('\"THEM\")))
 		       (SAY \, I ASSUME YOU)
 		       (PRINT3 'MEAN)
 		       (MAPC #'PRINT2 (PARAP XX))
-		       (RETURN (PRINT3 '\.\)))))
+	       (RETURN (PRINT3 '\.\) ))))
 
 
 
 ;;;############################################################
 
-      (DEFUN MUNG  (LIST MUNG)
+(DEFUN MUNG (LIST MUNG)
 	    (SETQ MUNG (LIST 'QUOTE MUNG))
 	    (AND DISCOURSE (SETQ LIST (CADDR LIST)))
 	    (COND ((EQ (CAAR (CDDDR LIST)) 'THAMONG)
@@ -1443,7 +1443,7 @@
 
 ;;;############################################################
 
-      (DEFUN NAMEVENT  (EVENT TYPE)
+(DEFUN NAMEVENT (EVENT TYPE)
 	    (PROG (THALIST EV SUBJ OBJ1 OBJ2)
 		  (OR (SETQ EV (THGET (THGET EVENT 'TYPE)
 				      'NAMEVENT))
@@ -1485,10 +1485,7 @@
 			#'(LAMBDA (X)
 			       (AND (CADR X)
 				    (SET (CAR X)
-					 (ert undef-fn\:
-					      names
-					      NAMES
-					      (LISTIFY (CADR X))
+				  (ert undef-fn\: names NAMES (LISTIFY (CADR X))
 					      'EV))))
 			(CDR THALIST))
 		  (SETQ ANSBACK2 (OR ANSBACK T))
@@ -1502,7 +1499,7 @@
 
 ;;;############################################################
 
-      (DEFUN PARAP () (ERT YOU LOSE\, PARAP IS FLUSHED UNTILL IT CAN BE FIGURED OUT))
+(DEFUN PARAP () (ERT YOU LOSE\, PARAP IS FLUSHED UNTILL IT CAN BE FIGURED OUT))
 
 ;;;(DEFPROP
 ;;; PARAP
@@ -1555,7 +1552,7 @@
 
 ;;;############################################################
 
-      (DEFUN PRTPUT  (X Y)
+(DEFUN PRTPUT  (X Y)
 	    (COND ((CDR Y) (CONS X Y))
 		  ((APPEND Y (LIST X)))))
 
@@ -1563,7 +1560,7 @@
 
 ;;;############################################################
 
-      (DEFUN VBFIX  (X PP)
+(DEFUN VBFIX (X PP)
 	    (DECLARE (SPECIAL PP))
 	    (COND ((EQ TENSE 'PRES-PAST)
 		   (SETQ X (REVERSE (EXPLODE X)))
@@ -1583,12 +1580,8 @@
 
 ;;;############################################################
 
-      (DEFUN VBFIX2  (X)
+(DEFUN VBFIX2 (X)
 	    (AND PP
 		 (MEMQ (CAR X) CONSO)
 		 (MEMQ (CADR X) VOWEL)
 		 (LIST (CAR X))))
-      ;|«Visual LISP© Format Options»
-(200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
-      )

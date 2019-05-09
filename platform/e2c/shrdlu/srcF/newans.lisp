@@ -1560,7 +1560,9 @@ TEST-LOOP
 
 ;;;############################################################
 
-(DEFUN PRTPUT (X Y) (COND ((CDR Y) (CONS X Y)) ((APPEND Y (LIST X)))))
+(DEFUN PRTPUT  (X Y)
+ (COND ((CDR Y) (CONS X Y))
+  ((APPEND Y (LIST X)))))
 
 
 

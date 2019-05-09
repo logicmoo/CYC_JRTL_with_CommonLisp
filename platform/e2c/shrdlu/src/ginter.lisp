@@ -77,6 +77,6 @@
 	     ;;REMAINS ANY MORE OF THE SENTENCE YET TO BE PARSED
 	     (COND (NN (GO (CAR A)))
 		   (T (GO (CADR A)))))
-;|«Visual LISP© Format Options»
-(200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
+#|«Visual LISP© Format Options»
+; (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
+;*** DO NOT add text below the comment! ***|#
