@@ -1,10 +1,10 @@
- ;################################################################
- ;
- ;		DATA >
- ;
- ;   initial microplanner data base for the blocks world
- ;
- ;################################################################
+;################################################################
+;
+;		DATA >
+;
+;   initial microplanner data base for the blocks world
+;
+;################################################################
 
 (THFLUSH THASSERTION)
 
@@ -23,17 +23,17 @@
 	       (:BOX (600 600 0) (400 400 1))))
 
 (SETQ DISPLAY-AS
-	   '((:B1 \#DISPLAY \#BLOCK (110 100 0) (100 100 100) RED)
-	     (:B2 \#DISPLAY \#PYRAMID (110 100 100) (100 100 100) GREEN)
-	     (:B3 \#DISPLAY \#BLOCK (400 0 0) (200 200 200) GREEN)
-	     (:B4 \#DISPLAY \#PYRAMID (640 640 1) (200 200 200) BLUE)
-	     (:B5 \#DISPLAY \#PYRAMID (500 100 200) (100 100 300) RED)
-	     (:B6 \#DISPLAY \#BLOCK (0 300 0) (200 300 300) RED)
-	     (:B7 \#DISPLAY \#BLOCK (0 240 300) (200 250 200) GREEN)
-	     (:B10 \#DISPLAY \#BLOCK (300 640 0) (200 100 400) BLUE)
-	     (:HAND \#DISPLAY \#HAND (40 0 0) (0 0 0) WHITE)
-	     (:TABLE \#DISPLAY \#TABLE (0 0 0) (1000 1000 0) BLACK)
-	     (:BOX \#DISPLAY \#BOX (600 600 0) (376 376 300) WHITE)))
+'((:B1 \#DISPLAY \#BLOCK (110 100 0) (100 100 100) RED)
+(:B2 \#DISPLAY \#PYRAMID (110 100 100 ) (100 100 100) GREEN)
+(:B3 \#DISPLAY \#BLOCK (400 0 0) (200 200 200) GREEN)
+(:B4 \#DISPLAY \#PYRAMID (640 640 1) (200 200 200) BLUE)
+(:B5 \#DISPLAY \#PYRAMID (500 100 200) (100 100 300) RED)
+(:B6 \#DISPLAY \#BLOCK (0 300 0) (200 300 300) RED)
+(:B7 \#DISPLAY \#BLOCK (0 240 300) (200 250 200) GREEN)
+(:B10 \#DISPLAY \#BLOCK (300 640 0) (200 100 400) BLUE)
+(:HAND \#DISPLAY \#HAND (40 0 0) (0 0 0) WHITE)
+(:TABLE \#DISPLAY \#TABLE (0 0 0) (1000 1000 0) BLACK)
+(:BOX \#DISPLAY \#BOX (600 600 0) (376 376 300) WHITE)) )
 
 (THADD '(\#IS :B1 \#BLOCK) NIL)
 
@@ -186,6 +186,3 @@
       '(:B1 :B2 :B3 :B4 :B5 :B6 :B7 :B10)
       '(CB1 CB2 CB3 CB4 CB5 CB6 CB7 CB10))
 
-;|«Visual LISP© Format Options»
-(200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|;
