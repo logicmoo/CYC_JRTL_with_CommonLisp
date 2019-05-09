@@ -398,8 +398,10 @@ TEST-LOOP
 
        ;;ORDERS A LIST BY PLAUSIBILITY HIGHEST FIRST.
        (PROG (X Y)
-	GO   (SETQ X LIST)
-	UP   (COND ((NULL (CDR X)) (RETURN LIST))
+	    GO
+	    (SETQ X LIST)
+	    UP
+	    (COND ((NULL (CDR X)) (RETURN LIST))
 		   ((< (PLAUSIBILITY? (CAR X))
 		       (PLAUSIBILITY? (CADR X)))
 		    (SETQ Y (CAR X))
