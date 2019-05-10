@@ -1,15 +1,15 @@
-;;; slime-scratch.el --- imitate Emacs' *scratch* buffer
-;;
-;; Author: Helmut Eller  <heller@common-lisp.net>
-;; License: GNU GPL (same license as Emacs)
-;;
-;;; Installation:
-;;
-;; Add something like this to your .emacs: 
-;;
-;;   (add-to-list 'load-path ".../slime/contrib")
-;;   (add-hook 'slime-load-hook (lambda () (require 'slime-scratch)))
-;;
+;;; slime-scratch.el
+
+(require 'slime)
+(require 'cl-lib)
+
+(define-slime-contrib slime-scratch
+  "Imitate Emacs' *scratch* buffer"
+  (:authors "Helmut Eller  <heller@common-lisp.net>")
+  (:license "GPL")
+  (:on-load
+   (def-slime-selector-method ?s "*slime-scratch* buffer."
+     (slime-scratch-buffer))))
 
 
 ;;; Code
@@ -28,10 +28,15 @@
   (unless (eq (current-buffer) (window-buffer))
     (pop-to-buffer (current-buffer) t)))
 
+(defvar slime-scratch-file nil)
+
 (defun slime-scratch-buffer ()
   "Return the scratch buffer, create it if necessary."
-  (or (get-buffer "*slime-scratch*")
-      (with-current-buffer (get-buffer-create "*slime-scratch*")
+  (or (get-buffer (slime-buffer-name :scratch))
+      (with-current-buffer (if slime-scratch-file
+                               (find-file slime-scratch-file)
+                             (get-buffer-create (slime-buffer-name :scratch)))
+        (rename-buffer (slime-buffer-name :scratch))
 	(lisp-mode)
 	(use-local-map slime-scratch-mode-map)
 	(slime-mode t)
@@ -39,10 +44,5 @@
 
 (slime-define-keys slime-scratch-mode-map
   ("\C-j" 'slime-eval-print-last-expression))
-
-(defun slime-scratch-init ()
-  (def-slime-selector-method ?s
-    "*slime-scratch* buffer."
-    (slime-scratch-buffer)))
 
 (provide 'slime-scratch)

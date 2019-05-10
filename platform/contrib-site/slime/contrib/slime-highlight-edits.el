@@ -1,15 +1,15 @@
-;;; slime-higlight-edits --- highlight edited, i.e. not yet compiled, code 
-;;
-;; Author: William Bland <doctorbill.news@gmail.com> and others
-;; License: GNU GPL (same license as Emacs)
-;;
-;;; Installation: 
-;; 
-;; Add something like this your .emacs: 
-;;
-;;   (add-to-list 'load-path "<contrib-dir>")
-;;   (autoload 'slime-highlight-edits-mode "slime-highlight-edits")
-;;   (add-hook 'slime-mode-hook (lambda () (slime-highlight-edits-mode 1)))
+(require 'slime)
+(require 'slime-parse)
+
+(define-slime-contrib slime-highlight-edits
+  "Highlight edited, i.e. not yet compiled, code."
+  (:authors "William Bland <doctorbill.news@gmail.com>")
+  (:license "GPL")
+  (:on-load   (add-hook 'slime-mode-hook 'slime-activate-highlight-edits))
+  (:on-unload (remove-hook 'slime-mode-hook 'slime-activate-highlight-edits)))
+
+(defun slime-activate-highlight-edits ()
+ (slime-highlight-edits-mode 1))
 
 (defface slime-highlight-edits-face
     `((((class color) (background light))
@@ -45,7 +45,7 @@
 (defun slime-highlight-edits (beg end &optional len) 
   (save-match-data
     (when (and (slime-connected-p)
-               (not (slime-inside-comment-p beg end))
+               (not (slime-inside-comment-p))
                (not (slime-only-whitespace-p beg end)))
       (let ((overlay (make-overlay beg end)))
         (overlay-put overlay 'face 'slime-highlight-edits-face)
@@ -71,29 +71,11 @@
 			       (point))))
       (slime-remove-edits start end))))
 
-(defun slime-inside-comment-p (beg end)
-  "Is the region from BEG to END in a comment?"
-  (save-excursion
-    (goto-char beg)
-    (let* ((hs-c-start-regexp ";\\|#|")
-           (comment (hs-inside-comment-p)))
-      (and comment
-           (destructuring-bind (cbeg cend) comment
-             (<= end cend))))))
-
 (defun slime-only-whitespace-p (beg end)
   "Contains the region from BEG to END only whitespace?"
   (save-excursion
     (goto-char beg)
     (skip-chars-forward " \n\t\r" end)
     (<= end (point))))
-
-(defun slime-highlight-edits-mode-on () (slime-highlight-edits-mode 1))
-
-(defun slime-highlight-edits-init ()
-  (add-hook 'slime-mode-hook 'slime-highlight-edits-mode-on))
-
-(defun slime-highlight-edits-unload ()
-  (remove-hook 'slime-mode-hook 'slime-highlight-edits-mode-on))
 
 (provide 'slime-highlight-edits)

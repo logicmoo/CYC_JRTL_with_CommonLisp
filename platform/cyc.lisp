@@ -11,7 +11,7 @@
     (write `(find-class ',(class-name obj)) :stream stream :readably t))
 
 
-;; (load "contrib-site/slime/start-swank.lisp")
+ ;; (load "contrib-site/slime/start-swank.lisp")
  ;; Load swank.
  (load "contrib-site/slime/swank-loader.lisp")
  (swank-loader:init)
@@ -84,7 +84,7 @@
 
 ;; Loads Daydreamer
 #+USE-DD
-(cl:load "e2c/d")
+(cl:load "contrib-site/d")
 
 
 ;; Starts Daydreamer

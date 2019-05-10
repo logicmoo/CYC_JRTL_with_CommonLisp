@@ -1,15 +1,13 @@
-;;; slime-banner.el -- Persistent header line and startup animation
-;;
-;; Authors: Helmut Eller  <heller@common-lisp.net>
-;;          Luke Gorrie  <luke@synap.se>
-;; License: GNU GPL (same license as Emacs)
-;;
-;;; Installation:
-;;
-;; Add something like this to your .emacs: 
-;;
-;;   (add-to-list 'load-path ".../slime/contrib")
-;;   (add-hook 'slime-load-hook (lambda () (require 'slime-banner)))
+(require 'slime)
+(require 'slime-repl)
+
+(define-slime-contrib slime-banner
+  "Persistent header line and startup animation."
+  (:authors "Helmut Eller <heller@common-lisp.net>"
+            "Luke Gorrie  <luke@synap.se>")
+  (:license "GPL")
+  (:on-load   (setq slime-repl-banner-function 'slime-startup-message))
+  (:on-unload (setq slime-repl-banner-function 'slime-repl-insert-banner)))
 
 (defcustom slime-startup-animation (fboundp 'animate-string)
    "Enable the startup animation."
@@ -29,16 +27,9 @@
                   (slime-connection-port (slime-connection))
                   (slime-pid))))
   (when (zerop (buffer-size))
-    (let ((welcome (concat "; SLIME " (or (slime-changelog-date) 
-                                          "- ChangeLog file not found"))))
+    (let ((welcome (concat "; SLIME " slime-version)))
       (if slime-startup-animation
           (animate-string welcome 0 0) 
         (insert welcome)))))
-
-(defun slime-banner-init ()
-  (setq slime-repl-banner-function 'slime-startup-message))
-
-(defun slime-banner-unload ()
-  (setq slime-repl-banner-function 'slime-repl-insert-banner))
 
 (provide 'slime-banner)

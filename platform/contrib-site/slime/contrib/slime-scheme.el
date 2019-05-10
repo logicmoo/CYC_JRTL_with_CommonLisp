@@ -11,11 +11,13 @@
 ;;   (add-to-list 'load-path "<directory-of-this-file>")
 ;;   (add-hook 'slime-load-hook (lambda () (require 'slime-scheme)))
 ;;
+(eval-and-compile
+  (require 'slime))
 
 (defun slime-scheme-mode-hook ()
   (slime-mode 1))
 
-(defun slime-scheme-indentation-update (symbol indent)
+(defun slime-scheme-indentation-update (symbol indent packages)
   ;; Does the symbol have an indentation value that we set?
   (when (equal (get symbol 'scheme-indent-function)
 	       (get symbol 'slime-scheme-indent))

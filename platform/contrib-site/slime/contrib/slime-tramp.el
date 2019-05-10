@@ -1,17 +1,14 @@
-;;; slime-tramp.el ---  Filename translations for tramp
-;;
-;; Authors: Marco Baringer <mb@bese.it>
-;; License: GNU GPL (same license as Emacs)
-;;
-;;; Installation:
-;;
-;; Add something like this to your .emacs: 
-;;
-;;   (add-to-list 'load-path ".../slime/contrib")
-;;   (add-hook 'slime-load-hook (lambda () (require 'slime-tramp)))
-;;
-
+(require 'slime)
 (require 'tramp)
+(eval-when-compile (require 'cl)) ; lexical-let
+
+(define-slime-contrib slime-tramp
+  "Filename translations for tramp"
+  (:authors "Marco Baringer <mb@bese.it>")
+  (:license "GPL")
+  (:on-load 
+   (setq slime-to-lisp-filename-function #'slime-tramp-to-lisp-filename)
+   (setq slime-from-lisp-filename-function #'slime-tramp-from-lisp-filename)))
 
 (defcustom slime-filename-translations nil
   "Assoc list of hostnames and filename translation functions.  
@@ -53,27 +50,39 @@ See also `slime-create-filename-translator'."
   :group 'slime-lisp)
 
 (defun slime-find-filename-translators (hostname)
-  (cond ((and hostname slime-filename-translations)
-         (or (cdr (assoc-if (lambda (regexp) (string-match regexp hostname))
-                            slime-filename-translations))
-             (error "No filename-translations for hostname: %s" hostname)))
+  (cond ((cdr (cl-assoc-if (lambda (regexp) (string-match regexp hostname))
+                           slime-filename-translations)))
         (t (list #'identity #'identity))))
 
 (defun slime-make-tramp-file-name (username remote-host lisp-filename)
-  "Old (with multi-hops) tramp compatability function"
-  (if (boundp 'tramp-multi-methods)
-      (tramp-make-tramp-file-name nil nil
-                                  username
-                                  remote-host
-                                  lisp-filename)
-      (tramp-make-tramp-file-name nil
-                                  username
-                                  remote-host
-                                  lisp-filename)))
+  "Tramp compatability function.
 
-(defun* slime-create-filename-translator (&key machine-instance
-                                         remote-host
-                                         username)
+Handles the signature of `tramp-make-tramp-file-name' changing
+over time."
+  (cond
+   ((>= emacs-major-version 26)
+    ;; Emacs 26 requires the method to be provided and the signature of
+    ;; `tramp-make-tramp-file-name' has changed.
+    (tramp-make-tramp-file-name (tramp-find-method nil username remote-host)
+                                username
+                                nil
+                                remote-host
+                                nil
+                                lisp-filename))
+   ((boundp 'tramp-multi-methods)
+    (tramp-make-tramp-file-name nil nil
+                                username
+                                remote-host
+                                lisp-filename))
+   (t
+    (tramp-make-tramp-file-name nil
+                                username
+                                remote-host
+                                lisp-filename))))
+
+(cl-defun slime-create-filename-translator (&key machine-instance
+                                                 remote-host
+                                                 username)
   "Creates a three element list suitable for push'ing onto
 slime-filename-translations which uses Tramp to load files on
 hostname using username. MACHINE-INSTANCE is a required
@@ -94,20 +103,19 @@ The functions created here expect your tramp-default-method or
             (tramp-file-name-localname
              (tramp-dissect-file-name emacs-filename)))
           `(lambda (lisp-filename)
-            (slime-make-tramp-file-name
-             ,username
-             ,remote-host
-             lisp-filename)))))
+             (slime-make-tramp-file-name
+              ,username
+              ,remote-host
+              lisp-filename)))))
 
 (defun slime-tramp-to-lisp-filename (filename)
-  (funcall (first (slime-find-filename-translators (slime-machine-instance)))
+  (funcall (if (slime-connected-p)
+               (first (slime-find-filename-translators (slime-machine-instance)))
+               'identity)
            (expand-file-name filename)))
 
 (defun slime-tramp-from-lisp-filename (filename)
   (funcall (second (slime-find-filename-translators (slime-machine-instance)))
            filename))
-
-(setq slime-to-lisp-filename-function #'slime-tramp-to-lisp-filename)
-(setq slime-from-lisp-filename-function #'slime-tramp-from-lisp-filename)
 
 (provide 'slime-tramp)

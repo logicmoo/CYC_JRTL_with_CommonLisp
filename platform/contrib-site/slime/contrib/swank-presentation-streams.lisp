@@ -10,7 +10,8 @@
 
 (in-package :swank)
 
-(swank-require :swank-presentations)
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (swank-require :swank-presentations))
 
 ;; This file contains a mechanism for printing to the slime repl so
 ;; that the printed result remembers what object it is associated
@@ -64,19 +65,20 @@ be sensitive and remember what object it is in the repl if predicate is true"
 	(funcall ,continue)))))
 
 ;;; Get pretty printer patches for SBCL at load (not compile) time.
-#+sbcl
+#+#:disable-dangerous-patching ; #+sbcl
 (eval-when (:load-toplevel)
-  (handler-bind ((simple-error 
-		  (lambda (c) 
+  (handler-bind ((simple-error
+		  (lambda (c)
 		    (declare (ignore c))
 		    (let ((clobber-it (find-restart 'sb-kernel::clobber-it)))
 		      (when clobber-it (invoke-restart clobber-it))))))
     (sb-ext:without-package-locks
-      (swank-backend::with-debootstrapping
-	(load (make-pathname 
+      (swank/sbcl::with-debootstrapping
+	(load (make-pathname
 	       :name "sbcl-pprint-patch"
 	       :type "lisp"
-	       :directory (pathname-directory swank-loader:*source-directory*)))))))
+	       :directory (pathname-directory
+			   swank-loader:*source-directory*)))))))
 
 (let ((last-stream nil)
       (last-answer nil))
@@ -121,12 +123,10 @@ Two special return values:
 		    #+sbcl
 		    (let ()
 		      (declare (notinline sb-pretty::pretty-stream-target))
-		      (or (and (typep stream 'sb-impl::indenting-stream)
-			       (slime-stream-p (sb-impl::indenting-stream-stream stream)))
-			  (and (typep stream (find-symbol "PRETTY-STREAM" 'sb-pretty))
-			       (find-symbol "ENQUEUE-ANNOTATION" 'sb-pretty)
-			       (not *use-dedicated-output-stream*)
-			       (slime-stream-p (sb-pretty::pretty-stream-target stream)))))
+		      (and (typep stream (find-symbol "PRETTY-STREAM" 'sb-pretty))
+                           (find-symbol "ENQUEUE-ANNOTATION" 'sb-pretty)
+                           (not *use-dedicated-output-stream*)
+                           (slime-stream-p (sb-pretty::pretty-stream-target stream))))
 		    #+allegro
 		    (and (typep stream 'excl:xp-simple-stream)
 			 (slime-stream-p (excl::stream-output-handle stream)))
@@ -244,34 +244,33 @@ says that I am starting to print an object with this id. The second says I am fi
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Example: Tell openmcl and cmucl to always present unreadable objects. try (describe 'class) 
 #+openmcl
 (in-package :ccl)
-#+openmcl
-(let ((*warn-if-redefine-kernel* nil)
-      (*warn-if-redefine* nil))
-  (defun %print-unreadable-object (object stream type id thunk)
-    (cond ((null stream) (setq stream *standard-output*))
-	  ((eq stream t) (setq stream *terminal-io*)))
-    (swank::presenting-object object stream
-      (write-unreadable-start object stream)
-      (when type
-	(princ (type-of object) stream)
-	(stream-write-char stream #\space))
-      (when thunk 
-	(funcall thunk))
-      (if id
-	  (%write-address object stream #\>)
-	  (pp-end-block stream ">"))
-      nil))
-  (defmethod print-object :around ((pathname pathname) stream)
-    (swank::presenting-object-if
-	(swank::can-present-readable-objects stream)
-	pathname stream (call-next-method))))
 
 #+openmcl
-(ccl::def-load-pointers clear-presentations ()
-  (swank::clear-presentation-tables))
+(defun monkey-patch-stream-printing ()
+  (let ((*warn-if-redefine-kernel* nil)
+	(*warn-if-redefine* nil))
+    (defun %print-unreadable-object (object stream type id thunk)
+      (cond ((null stream) (setq stream *standard-output*))
+	    ((eq stream t) (setq stream *terminal-io*)))
+      (swank::presenting-object object stream
+	(write-unreadable-start object stream)
+	(when type
+	  (princ (type-of object) stream)
+	  (stream-write-char stream #\space))
+	(when thunk
+	  (funcall thunk))
+	(if id
+	    (%write-address object stream #\>)
+	    (pp-end-block stream ">"))
+	nil))
+    (defmethod print-object :around ((pathname pathname) stream)
+      (swank::presenting-object-if
+	  (swank::can-present-readable-objects stream)
+	  pathname stream (call-next-method))))
+  (ccl::def-load-pointers clear-presentations ()
+    (swank::clear-presentation-tables)))
 
 (in-package :swank)
 
@@ -285,38 +284,51 @@ says that I am starting to print an object with this id. The second says I am fi
     (presenting-object-if (can-present-readable-objects stream) pathname stream
       (fwrappers:call-next-function)))
 
-  (fwrappers::fwrap 'lisp::%print-pathname  #'presenting-pathname-wrapper)
-  (fwrappers::fwrap 'lisp::%print-unreadable-object  #'presenting-unreadable-wrapper)
-  )
+  (defun monkey-patch-stream-printing ()
+    (fwrappers::fwrap 'lisp::%print-pathname  #'presenting-pathname-wrapper)
+    (fwrappers::fwrap 'lisp::%print-unreadable-object  #'presenting-unreadable-wrapper)))
 
 #+sbcl
-(progn 
+(progn
   (defvar *saved-%print-unreadable-object*
     (fdefinition 'sb-impl::%print-unreadable-object))
-  (sb-ext:without-package-locks 
-    (setf (fdefinition 'sb-impl::%print-unreadable-object)
-	  (lambda (object stream type identity body)
-	    (presenting-object object stream
-	      (funcall *saved-%print-unreadable-object* 
-		       object stream type identity body))))
-    (defmethod print-object :around ((object pathname) stream)
-      (presenting-object object stream
-	(call-next-method)))))
+
+  (defun monkey-patch-stream-printing ()
+    (sb-ext:without-package-locks
+      (when (eq (fdefinition 'sb-impl::%print-unreadable-object)
+		*saved-%print-unreadable-object*)
+	(setf (fdefinition 'sb-impl::%print-unreadable-object)
+	      (lambda (object stream &rest args)
+		(presenting-object object stream
+                  (apply *saved-%print-unreadable-object*
+                         object stream args)))))
+      (defmethod print-object :around ((object pathname) stream)
+	(presenting-object object stream
+	  (call-next-method))))))
 
 #+allegro
 (progn
-  (excl:def-fwrapper presenting-unreadable-wrapper (object stream type identity continuation) 
+  (excl:def-fwrapper presenting-unreadable-wrapper (object stream type identity continuation)
     (swank::presenting-object object stream (excl:call-next-fwrapper)))
   (excl:def-fwrapper presenting-pathname-wrapper (pathname stream depth)
     (presenting-object-if (can-present-readable-objects stream) pathname stream
       (excl:call-next-fwrapper)))
-  (excl:fwrap 'excl::print-unreadable-object-1 
-	      'print-unreadable-present 'presenting-unreadable-wrapper)
-  (excl:fwrap 'excl::pathname-printer 
-	      'print-pathname-present 'presenting-pathname-wrapper))
+  (defun monkey-patch-stream-printing ()
+    (excl:fwrap 'excl::print-unreadable-object-1
+		'print-unreadable-present 'presenting-unreadable-wrapper)
+    (excl:fwrap 'excl::pathname-printer
+		'print-pathname-present 'presenting-pathname-wrapper)))
+
+#-(or allegro sbcl cmu openmcl)
+(defun monkey-patch-stream-printing ()
+  (values))
 
 ;; Hook into SWANK.
 
-(setq *send-repl-results-function* 'present-repl-results-via-presentation-streams)
+(defslimefun init-presentation-streams ()
+  (monkey-patch-stream-printing)
+  ;; FIXME: import/use swank-repl to avoid package qualifier.
+  (setq swank-repl:*send-repl-results-function*
+	'present-repl-results-via-presentation-streams))
 
 (provide :swank-presentation-streams)

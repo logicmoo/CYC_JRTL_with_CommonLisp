@@ -228,14 +228,14 @@
                                     start
                                     (if (isa? end <int>) end #f))))
 
-(defslimefun frame-locals-for-emacs (frame-idx)
+(defslimefun frame-locals-and-catch-tags (frame-idx)
   (def frame (nth-frame frame-idx))
-  (map-keyed (fun (i name) 
-               (lst ':name (sym-name name) ':id 0 
-                    ':value (safe-write-to-string (frame-var-value frame i))))
-             (frame-var-names frame)))
-
-(defslimefun frame-catch-tags-for-emacs (frame-idx) '())
+  (list
+   (map-keyed (fun (i name) 
+                (lst ':name (sym-name name) ':id 0 
+                     ':value (safe-write-to-string (frame-var-value frame i))))
+              (frame-var-names frame))
+   '()))
 
 (defslimefun inspect-frame-var (frame-idx var-idx)
   (reset-inspector)
@@ -245,7 +245,7 @@
   (reset-inspector)
   (inspect-object (@condition sldb-context)))
 
-(defslimefun frame-source-location-for-emacs (frame-idx)
+(defslimefun frame-source-location (frame-idx)
   (match (nth-frame frame-idx)
     ((,f ,@_)
      (or (emacs-src-loc f)
@@ -498,6 +498,10 @@
 ;;;; eval
 
 (defslimefun ping () "PONG")
+
+(defslimefun create-repl (_)
+  (let ((name (sym-name (module-name (buffer-module)))))
+    `(,name ,name)))
 
 (defslimefun listener-eval (string)
   (clear-input in)

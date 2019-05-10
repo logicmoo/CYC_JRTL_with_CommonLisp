@@ -1,32 +1,31 @@
-;;; slime-editing-commands.el -- editing commands whithout server interaction
-;;
-;; Authors: Thomas F. Burdick  <tfb@OCF.Berkeley.EDU>
-;;          Luke Gorrie  <luke@synap.se>
-;;          Bill Clementson <billclem@gmail.com>
-;;          Tobias C. Rittweiler <tcr@freebits.de>
-;;          and others
-;; 
-;; License: GNU GPL (same license as Emacs)
-;;
-;;; Installation
-;;
-;; Add something like this to your .emacs: 
-;;
-;;   (add-to-list 'load-path "<directory-of-this-file>")
-;;   (add-hook 'slime-load-hook (lambda () (require 'slime-editing-commands)))
-;;
+(require 'slime)
+(require 'slime-repl)
+(require 'cl-lib)
+
+(define-slime-contrib slime-editing-commands
+  "Editing commands without server interaction."
+  (:authors "Thomas F. Burdick  <tfb@OCF.Berkeley.EDU>"
+            "Luke Gorrie  <luke@synap.se>"
+            "Bill Clementson <billclem@gmail.com>"
+            "Tobias C. Rittweiler <tcr@freebits.de>")
+  (:license "GPL")
+  (:on-load
+   (define-key slime-mode-map "\M-\C-a"  'slime-beginning-of-defun)
+   (define-key slime-mode-map "\M-\C-e"  'slime-end-of-defun)
+   (define-key slime-mode-map "\C-c\M-q" 'slime-reindent-defun)
+   (define-key slime-mode-map "\C-c\C-]" 'slime-close-all-parens-in-sexp)))
 
 (defun slime-beginning-of-defun ()
   (interactive)
   (if (and (boundp 'slime-repl-input-start-mark)
            slime-repl-input-start-mark)
       (slime-repl-beginning-of-defun)
-      (beginning-of-defun)))
+    (let ((this-command 'beginning-of-defun)) ; needed for push-mark
+      (call-interactively 'beginning-of-defun))))
 
 (defun slime-end-of-defun ()
   (interactive)
-  (if (and (boundp 'slime-repl-input-end-mark)
-           slime-repl-input-end-mark)
+  (if (eq major-mode 'slime-repl-mode)
       (slime-repl-end-of-defun)
       (end-of-defun)))
 
@@ -44,6 +43,11 @@ Otherwise leave point unchanged and return NIL."
            (point))
           (t (goto-char boundary) 
              nil))))
+
+(defvar slime-close-parens-limit nil
+  "Maxmimum parens for `slime-close-all-sexp' to insert. NIL
+means to insert as many parentheses as necessary to correctly
+close the form.")
 
 (defun slime-close-all-parens-in-sexp (&optional region)
   "Balance parentheses of open s-expressions at point.
@@ -79,9 +83,9 @@ the top-level sexp before point."
       (setq point (point))
       (skip-chars-forward " \t\n)")
       (skip-chars-backward " \t\n")
-      (let* ((deleted-region     (slime-delete-and-extract-region point (point)))
+      (let* ((deleted-region     (delete-and-extract-region point (point)))
              (deleted-text       (substring-no-properties deleted-region))
-             (prior-parens-count (count ?\) deleted-text)))
+             (prior-parens-count (cl-count ?\) deleted-text)))
         ;; Remember: we always insert as many parentheses as necessary
         ;; and only afterwards delete the superfluously-added parens.
         (when slime-close-parens-limit
@@ -89,11 +93,6 @@ the top-level sexp before point."
                                    slime-close-parens-limit)))
             (dotimes (i (max 0 missing-parens))
               (delete-char -1))))))))
-
-(defvar slime-close-parens-limit nil
-  "Maxmimum parens for `slime-close-all-sexp' to insert. NIL
-means to insert as many parentheses as necessary to correctly
-close the form.")
 
 (defun slime-insert-balanced-comments (arg)
   "Insert a set of balanced comments around the s-expression
@@ -180,10 +179,5 @@ be treated as a paragraph.  This is useful for filling docstrings."
           (slime-end-of-defun)
           (setf end (point)))
         (indent-region start end nil)))))
-
-(defun slime-editing-commands-init ()
-  (define-key slime-mode-map "\M-\C-a"  'slime-beginning-of-defun)
-  (define-key slime-mode-map "\M-\C-e"  'slime-end-of-defun)
-  (define-key slime-mode-map "\C-c\M-q" 'slime-reindent-defun))
 
 (provide 'slime-editing-commands)
