@@ -1,5 +1,5 @@
 /*
-   This file is part of the LarKC platform 
+   This file is part of the LarKC platform
    http://www.larkc.eu/
 
    Copyright 2010 LarKC project consortium
@@ -41,16 +41,16 @@ import eu.larkc.plugin.select.Selecter;
 
 /**
  * LocalSelectFromDataSetManager is a LocalPluginManager for Selecter plugins
- * 
+ *
  * It will generate a SetOfStatements on the output queue for each
  * Collection<InformationSet> that comes in on the input stream. Please note
  * that any non RDF InformationSet in the Collection<InformationSet> will be
  * discarded
- * 
+ *
  * @author Mick Kerrigan, Barry Bishop
  */
 public class LocalSelectFromCollectionInformationSetManager extends
-		LocalPluginManager<Collection<InformationSet>, SetOfStatements> {
+		LocalPluginManager_1_1<Collection<InformationSet>, SetOfStatements> {
 
 	/** The Selecter plugin to be managed. */
 	private final Selecter mSelecter;
@@ -58,7 +58,7 @@ public class LocalSelectFromCollectionInformationSetManager extends
 	/**
 	 * Constructor thats takes the plugin to be manages, the input, and the
 	 * output queues as input.
-	 * 
+	 *
 	 * @param selecter
 	 *            The Selecter plugin to be managed
 	 * @param outputQueue
@@ -77,7 +77,7 @@ public class LocalSelectFromCollectionInformationSetManager extends
 
 	/**
 	 * The Thread within which the Selecter Management occurs.
-	 * 
+	 *
 	 * @author Mick Kerrigan, Barry Bishop
 	 */
 	class SelecterThread extends Thread {
@@ -91,7 +91,7 @@ public class LocalSelectFromCollectionInformationSetManager extends
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see java.lang.Thread#run()
 		 */
 		@Override
@@ -117,7 +117,7 @@ public class LocalSelectFromCollectionInformationSetManager extends
 						putNextOutput(null);
 						break;
 					}
-					
+
 					SetOfStatements selectedStatements = mSelecter.select(
 							statements, new SimpleContract(), context);
 
@@ -134,9 +134,9 @@ public class LocalSelectFromCollectionInformationSetManager extends
 	}
 
 	/**
-	 * 
+	 *
 	 * Utility method to merge multiple informationSets into one SetOfStatements
-	 * 
+	 *
 	 * @param informationSets
 	 *            a collection of <code>InformationSet</code>s
 	 * @return a single SetOfStatements object containing all statements

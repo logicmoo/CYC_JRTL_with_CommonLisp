@@ -803,4 +803,14 @@ public class Errors
   @Override
   public void runTopLevelForms()
   {}
+
+  /**
+   * @param string
+   */
+  public static SubLObject handleMissingMethodError(String string)
+  {
+    // TODO Auto-generated method stub
+    return Errors.unimplementedMethod("Auto-generated method stub:  Errors.handleMissingMethodError " + string);
+
+  }
 }

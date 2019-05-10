@@ -63,35 +63,35 @@ import eu.larkc.plugin.decide.Decider;
 
 /**
  * The LarKC platform plug-in registry.
- * This class stores all the plug-in meta data and is able to instantiate 
+ * This class stores all the plug-in meta data and is able to instantiate
  * plug-ins
- * 
+ *
  * @author Blaz Fortuna, Luka Bradesko
  *
  */
-public class PluginRegistry {
-   final public boolean Plugin1_1 = true;
+public class PluginRegistry_1_1 {
+  static public boolean LARKC_1_1 = true;
 	private static Logger logger = Logger.getLogger(PluginRegistry.class.getCanonicalName());
-	
+
 	//count for registered plug-ins. Used also to generate unique id in the internal kb.
    static int iPluginCount=0;
-   private final HashMap<String, Class<?>> pluginClassH;
+   final private HashMap<String, Class<?>> pluginClassH;
    private Class<Decider> decider=null;
-	
-   public PluginRegistry() {
+
+   public PluginRegistry_1_1() {
+     pluginClassH = new HashMap<String, Class<?>>();
       initializeLarkcKb();
-      pluginClassH = new HashMap<String, Class<?>>();
    }
-	
-   
+
+
    /**
     * Generates and returns a new instance of plug-in
-    * 
+    *
     * @param pluginIdentifier
     *            unique identifier
     * @return new instance of the plug-in
     */
-   public Plugin getNewPluginInstance(String pluginId) 
+   public Plugin getNewPluginInstance(String pluginId)
    							throws InstantiationException, IllegalAccessException {
 	  if (pluginClassH.containsKey(pluginId)) {
 	     Plugin plugin = (Plugin)pluginClassH.get(pluginId).newInstance();
@@ -99,45 +99,45 @@ public class PluginRegistry {
 	  }
      return null;
    }
-	
-   
+
+
 	/**
 	 * Generates and returns a new instance of plug-in
 	 * @param pluginIdentifier unique identifier
 	 * @return new instance of the plug-in
 	 */
-	public Plugin getNewPluginInstance(URI pluginId) 
+	public Plugin getNewPluginInstance(URI pluginId)
 								throws InstantiationException, IllegalAccessException {
 		String sPluginId = pluginId.getLocalName();
 		return this.getNewPluginInstance(javaTypeToCycConstant(sPluginId));
 	}
-	
-	
+
+
 	/**
 	 * Initialize the core concepts of the Larkc upper-level ontology.
 	 */
-	private void initializeLarkcKb() {		
+	private void initializeLarkcKb() {
 		// read larkc ontology
 		String LARKC_RDF = "larkc.rdf";
-		
+
 		InputStream fstream = ClassLoader.getSystemClassLoader().getResourceAsStream(LARKC_RDF);
 		try {
 			if (fstream==null) {
 				logger.severe("Cannot find the "+ LARKC_RDF+ " file. PLUGIN REGISTRY MIGHT NOT WORK!!");
 				return;
 			}
-				
+
 			CycUtil.loadRdfTurtle(fstream);
 		} catch (Exception e) {
 			logger.severe("Error parsing the "+ LARKC_RDF+ ". PLUGIN REGISTRY MIGHT NOT WORK!! "+e.getMessage());
-		} 
-			
+		}
+
 		// add a rule used for inferring connections between plug-ins
 		String mtStr = "BaseKB";
 		// CycUtil.addConst("pluginByDataConnectsTo");
 		// CycUtil.addAssertion(CycUtil.toAssertion("isa", "pluginByDataConnectsTo", "TransitiveBinaryPredicate"), mtStr);
-		String forwardRuleStr = 
-			  "(#$implies " 
+		String forwardRuleStr =
+			  "(#$implies "
 			+ "  (#$and "
 			+ "    (#$genls ?X #$larkc-Plugin) "
 			+ "    (#$genls ?Y #$larkc-Plugin) "
@@ -149,7 +149,7 @@ public class PluginRegistry {
 			+ "  (#$larkc-pluginByDataConnectsTo ?X ?Y))";
 		CycUtil.addForwardRule(forwardRuleStr, mtStr);
 	}
-	
+
 	private InputStream asInputStream(String LARKC_RDF)  {
 		InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(LARKC_RDF);
 		if(is!=null) return is;
@@ -165,16 +165,16 @@ public class PluginRegistry {
 			return null;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Load plug-ins from the ini file and from PLATFORM/plugins.
 	 */
 	public void loadPlugins() {
 		String PLUGINS_INI = "plugins.ini";
-		
+
 		//checks files and directories in PLATFORM/plugins
-		File pluginsDir = new File ("." +File.separatorChar+ "plugins");	
+		File pluginsDir = new File ("." +File.separatorChar+ "plugins");
 		File[] pluginFiles = pluginsDir.listFiles();
 		if (pluginFiles!=null && pluginFiles.length!=0){
 			for (File file : pluginFiles) {
@@ -184,7 +184,7 @@ public class PluginRegistry {
 		else
 			logger.warning("No plug-ins in the plugins directory in the " +
 								"platform's home directory. Using only plugins.ini");
-		
+
 		try {
 			// Open the file where the additional plug-in list is written
 			InputStream fstream = ClassLoader.getSystemClassLoader().getResourceAsStream(PLUGINS_INI);
@@ -214,17 +214,17 @@ public class PluginRegistry {
 			Errors.handleError(e);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Registers the plug-in or more plug-ins in the directory, but only one level deep
-	 * 
+	 *
 	 * @param fileOrDir directory or a file location of the plug-in
 	 */
 	private void findAndRegisterPlugins(File fileOrDir){
 		InputStream wsdlFile = null;
 		File fileSource = null;
-		
+
 		if (fileOrDir.isDirectory()){
 			for (File file : fileOrDir.listFiles()) {
 				if (!file.isDirectory())//only check directories one level deep
@@ -251,7 +251,7 @@ public class PluginRegistry {
 				unzip(fileOrDir,fileDir);
 				findAndRegisterPlugins(where);
 				return;
-				
+
 			} catch (ZipException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -260,12 +260,12 @@ public class PluginRegistry {
 				e.printStackTrace();
 			}
 		}
-		else 
+		else
 			return;
-		
+
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     	DocumentBuilder documentBuilder;
-		
+
     	Document document;
 		try {
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -274,14 +274,14 @@ public class PluginRegistry {
 			logger.warning("Error parsing the wsdl file in:"+fileOrDir.getAbsolutePath());
 			return;
 		}
-		
+
 		NodeList plugins = document.getElementsByTagName("wsdl:service");
 		for (int iPluginNum = 0; iPluginNum < plugins.getLength(); iPluginNum++) {
 			Element plugin = (Element) plugins.item(iPluginNum);
 			String sPluginId = plugin.getAttribute("name");
 			String sRdfReferece = plugin.getAttribute("sawsdl:modelReference");
 			String sRdfFile = sRdfReferece.split("#")[0];
-			
+
 			InputStream  fstream = findFileInJarOrDir(fileSource, ".rdf");
 			if (fstream== null){
 				logger.warning("Error finding the rdf file in " + fileSource.getAbsolutePath() + ". Checking if old (obsolete) plug-in model is used... ");
@@ -296,17 +296,17 @@ public class PluginRegistry {
 
 			NodeList endpoints = plugin.getElementsByTagName("wsdl:endpoint");
 			String sLocation = ((Element)endpoints.item(0)).getAttribute("location");
-			
+
 			try{
 				CycUtil.loadRdfTurtle(fstream);
-			
-           if(Plugin1_1) {	
+
+           if(PluginRegistry_1_1.LARKC_1_1) {
 				SubLObject sblPlugin = CycUtil.addRdfTerm(sRdfReferece);
 				SubLObject hasUri =  CycUtil.addRdfTerm("http://larkc.eu/plugin#hasUri");
 				SubLString uri = SubLObjectFactory.makeString(sPluginId);
 				SubLObject cycAssertion = list( hasUri,sblPlugin, uri);
 				CycUtil.addAssertion(cycAssertion, CycUtil.mtStr);
-				
+
 				SubLObject hasEndpoint =  CycUtil.addRdfTerm("http://larkc.eu/plugin#hasEndpoint");
 				SubLString endpoint = SubLObjectFactory.makeString(sLocation);
 				cycAssertion = list( hasEndpoint,sblPlugin, endpoint);
@@ -317,9 +317,9 @@ public class PluginRegistry {
 			{
 				logger.warning("Error parsing the "+ sRdfFile + "("+e.getMessage()+")");
 			}
-				
-			
-			
+
+
+
 			if (sLocation.startsWith("java:")){
 				//registerJavaPlugin(new URIImpl(sPluginId), sLocation, sRdfClass);
 				registerPlugin(new URIImpl(sPluginId), sLocation.substring(5),fileSource);
@@ -329,8 +329,8 @@ public class PluginRegistry {
 				logger.warning("Other endpoints than java: are currently not supported ("+sLocation+")");
 			}
 		}//for all services in wsdl
-	}	
-	
+	}
+
 	/**
 	 * Lists the files from given jar file or directory and returns the first occurrence of .wsdl file
 	 * @param _theJar
@@ -350,52 +350,52 @@ public class PluginRegistry {
 			{
 				JarFile jarFile;
 				jarFile = new JarFile(_theJar);
-			
+
 				Enumeration<JarEntry> enumr = jarFile.entries();
 				while (enumr.hasMoreElements()) {
 					JarEntry entry = (JarEntry)enumr.nextElement();
 			    	if (entry.getName().endsWith(_suffix)){
 			    		URLClassLoader cl = URLClassLoader.newInstance(new URL[]{_theJar.toURI().toURL()});
-						InputStream is = cl.getResourceAsStream(entry.getName()); 
+						InputStream is = cl.getResourceAsStream(entry.getName());
 			    		return is;
 			    	}
 			    }
 			}
-			
+
 		} catch (IOException e) {
 			logger.warning("Error reading from the "+_theJar.getAbsolutePath());
-		} 
+		}
 		return null;
 	}//findWsdlInJar
-	
-		
-	
+
+
+
 	/**
 	 * Register the plug-in and it's endpoint into the internalKb
 	 * @param plugin's URI
 	 * @param plugin's endpoint
 	 * @param class of this plug-in instance
 	 */
-	private void registerJavaPlugin(URI _pluginName, String _endpoint, String _class) {		
+	private void registerJavaPlugin(URI _pluginName, String _endpoint, String _class) {
 	   try {
 	      String sPluginId = "larkc-pluginInstance-" + iPluginCount;
 	      CycUtil.addConst(sPluginId);
 	      CycUtil.toConst("http://larkc.eu/plugin#hasUri");
-	      
+
 	      /*CycUtil.addRdfTriple(st)
-	   	 
-	   	 
+
+
 			// Create a File object on the root of the directory containing the class file
 	    	File file = new File(pluginPath);
 	        // Convert File to a URL
 	        URL url = file.toURI().toURL();
-	        URL[] urls = new URL[] { url };    
+	        URL[] urls = new URL[] { url };
 	        // Create a new class loader with the directory
-	        ClassLoader classLoader = new URLClassLoader(urls);	        
+	        ClassLoader classLoader = new URLClassLoader(urls);
 	        // Load in the class; MyClass.class should be located in
 	        // the directory file:/c:/myplugins/com/myplugin/reasoner
 	        Class<? extends Plugin> pluginClass = classLoader.loadClass(pluginName).asSubclass(Plugin.class);
-	        
+
 	        //check whether it is a Decider
 	        for (Class<?> iface : pluginClass.getInterfaces()) {
 				if (iface.getName().equals(Decider.class.getName()))
@@ -404,9 +404,9 @@ public class PluginRegistry {
 					return;//if decider, then no need to register it and its metadata.
 				}
 			}
-	      
+
 	        // register the meta-data
-	        String pluginIdentifier = registerPluginMetadata(pluginClass);   
+	        String pluginIdentifier = registerPluginMetadata(pluginClass);
 	        // register the plug-in class
 	        pluginClassH.put(pluginIdentifier, pluginClass);*/
 	   // } catch (MalformedURLException e) {
@@ -418,9 +418,9 @@ public class PluginRegistry {
 	    }catch (Exception e){
 	    //	Errors.handleError("Plugin \""+pluginName +"\" Error",e);
 	    }
-	    
+
 	}
-	
+
 
 	/**
 	 * Finds the class file and loads it with ClassLoader
@@ -428,7 +428,7 @@ public class PluginRegistry {
 	 * @param pluginPath path to the root of where the class is
 	 */
 	@SuppressWarnings("unchecked")
-	private void registerPlugin(URI _pluginName, String _class, File file) {		
+	private void registerPlugin(URI _pluginName, String _class, File file) {
 		try {
 			//find external plug-in libraries
 			ArrayList<URL> vUrl = new ArrayList<URL>();
@@ -446,7 +446,7 @@ public class PluginRegistry {
 	    		logger.warning("Can not find the "+ libDir.getCanonicalPath() +
 	    						  ". Assuming this plug-in doesn't have any libraries");
 			}
-	    	
+
 	      URL url = file.toURI().toURL();
 	      vUrl.add(url);
 	      URL[] urls = new URL[vUrl.size()];
@@ -454,11 +454,11 @@ public class PluginRegistry {
 	      	urls[i]=vUrl.get(i);
 	      }
 	      // Create a new class loader with the directory
-	      ClassLoader classLoader = new URLClassLoader(urls);	        
+	      ClassLoader classLoader = new URLClassLoader(urls);
 	      //load the class
-	      Class<? extends Plugin> pluginClass = 
+	      Class<? extends Plugin> pluginClass =
 	      				classLoader.loadClass(_class).asSubclass(Plugin.class);
-	        
+
 	      //check whether it is a Decider
 	      for (Class<?> iface : pluginClass.getInterfaces()) {
 	      	if (iface.getName().equals(Decider.class.getName()))
@@ -471,22 +471,22 @@ public class PluginRegistry {
 					return;//if decider, then no need to register it and its metadata.
 				}
 			}
-	      
+
 	      // register the meta-data
-	      String pluginIdentifier = registerPluginMetadata(pluginClass);   
+	      String pluginIdentifier = registerPluginMetadata(pluginClass);
 	      // register the plug-in class
 	      pluginClassH.put(pluginIdentifier, pluginClass);
 		} catch (MalformedURLException e) {
 	    	Errors.handleError(e);
 	   } catch (ClassNotFoundException e) {
-	    	logger.warning("Classloader cannot find class: "+ e.getMessage() + 
+	    	logger.warning("Classloader cannot find class: "+ e.getMessage() +
 	    																 "! Plug-in not loaded!");
 	   } catch (ClassCastException e){
-	    	Errors.handleError("Plugin \""+_class +"\" must implement" + 
+	    	Errors.handleError("Plugin \""+_class +"\" must implement" +
 	    											 Plugin.class.getName()+ " interface",e);
 	   }catch (Exception e){
 	    	Errors.handleError("Plugin \""+_class +"\" Error",e);
-	   }  
+	   }
 	}
 
 	/**
@@ -511,18 +511,18 @@ public class PluginRegistry {
 		}
 
 		/*get unique identifier for the plug-in using it's package and class name
-		 OLD:pluginClass.getCanonicalName().replace('.', '-');	
+		 OLD:pluginClass.getCanonicalName().replace('.', '-');
 		 TODO: until we add PluginFN which will resolve URI to the plugin, we suppose that URI is
 		 like urn:javaPackage.javaClas		*/
-		String pluginIdentifier =  pluginID.getLocalName().replace('.', '-');		
-		
+		String pluginIdentifier =  pluginID.getLocalName().replace('.', '-');
+
 		/*
 		// add plug-in proxy to the KB
 		CycUtil.addConst(pluginIdentifier);
-		
+
 		// prepare the micro-theory in which the meta-data is stored
 		String mtStr = "UniversalVocabularyMt";
-		
+
 		// get the plug-in type
 		String pluginType = javaTypeToCycConstant(pluginMetadata.getPluginType());
 		// add plug-in type to the KB
@@ -533,11 +533,11 @@ public class PluginRegistry {
 		CycUtil.addAssertion(CycUtil.toAssertion("genls", pluginType, "LarkcPlugin"), mtStr);
 		// assert connection between the plug-in to its type
 		CycUtil.addAssertion(CycUtil.toAssertion("isa", pluginIdentifier, pluginType), mtStr);
-		
+
 		// load the methods plug-in exposes to the KB
 		// TODO: for now we just add the first method
 		MethodMetaData methodMetaData = pluginMetadata.getMethods()[0];
-		// assert all the input types the plug-in can handle	
+		// assert all the input types the plug-in can handle
 		int inputTypes = methodMetaData.getInputs();
 		for (int inputTypeN = 0; inputTypeN < inputTypes; inputTypeN++) {
 			for (String dirtyParameterType : methodMetaData.getInputTypes(inputTypeN)) {
@@ -551,7 +551,7 @@ public class PluginRegistry {
 						inputTypeN + 1, parameterType), mtStr);
 			}
 		}
-		
+
 		// assert output types of the plug-ins
 		for (String dirtyParameterType : methodMetaData.getOutputTypes()) {
 			// clean the name of the data type so it is in Cyc-friendly form
@@ -563,11 +563,11 @@ public class PluginRegistry {
 					pluginIdentifier, parameterType), mtStr);
 		}
 		*/
-		
+
 		// return the identifier string
 		return pluginIdentifier;
-	}	
-		
+	}
+
 	public Decider startDecider() {
 		try {
 			if (decider != null)
@@ -576,10 +576,10 @@ public class PluginRegistry {
 			Errors.handleError(e);
 		} catch (IllegalAccessException e) {
 			Errors.handleError(e);
-		}		
+		}
 		return null;
 	}
-	
+
 	private String javaTypeToCycConstant(String inLarkcConstant) {
 		// clean the name of the data type so it is in Cyc-friendly form
 		String outCycConstant = inLarkcConstant.replace('.', '-');
@@ -587,8 +587,8 @@ public class PluginRegistry {
 		outCycConstant = outCycConstant.replace('>', '_');
 		return outCycConstant;
 	}
-	
-	
+
+
 	private void setDecider(Class<Decider> theDecider) {
 		this.decider = theDecider;
 	}
@@ -596,23 +596,23 @@ public class PluginRegistry {
 	/**
 	 * Unzips the .larkc or other file into unzipSubDir directory
 	 */
-	private void unzip(File file, String unzipSubDir) throws ZipException, 
+	private void unzip(File file, String unzipSubDir) throws ZipException,
 																				IOException{
 		int BUFFER = 2048;
 		BufferedOutputStream dest = null;
 		BufferedInputStream is = null;
       ZipEntry entry;
       ZipFile zipfile = new ZipFile(file);
-      
+
       Enumeration<? extends ZipEntry> e = zipfile.entries();
       while(e.hasMoreElements()) {
       	entry = (ZipEntry) e.nextElement();
          is = new BufferedInputStream(zipfile.getInputStream(entry));
          int count;
          byte data[] = new byte[BUFFER];
-            
-         File where = new File(file.getParentFile().getAbsolutePath()+ 
-         		                File.separator + unzipSubDir + 
+
+         File where = new File(file.getParentFile().getAbsolutePath()+
+         		                File.separator + unzipSubDir +
          		                File.separator + entry.getName());
          if (entry.isDirectory()) {
          	where.mkdirs();
@@ -621,7 +621,7 @@ public class PluginRegistry {
          	where.getParentFile().mkdirs();
             where.createNewFile();
          }
-         
+
          FileOutputStream fos = new FileOutputStream(where.getCanonicalFile());
          dest = new BufferedOutputStream(fos, BUFFER);
          while ((count = is.read(data, 0, BUFFER)) != -1) {

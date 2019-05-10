@@ -3,7 +3,9 @@
 //
 package com.cyc.tool.subl.util;
 
-public interface SubLFile extends Singleton {
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
+
+public interface SubLFile extends Singleton, CommonSymbols {
 	void declareFunctions();
 
 	void initializeVariables();

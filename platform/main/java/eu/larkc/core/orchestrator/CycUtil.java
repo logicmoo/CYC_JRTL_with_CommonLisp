@@ -1,5 +1,5 @@
 /*
-   This file is part of the LarKC platform 
+   This file is part of the LarKC platform
    http://www.larkc.eu/
 
    Copyright 2010 LarKC project consortium
@@ -135,7 +135,7 @@ public class CycUtil {
 			constant_handles.$constant_native constant = (constant_handles.$constant_native)constSubL;
 			if (constant.$suid == SubLNil.NIL) {
 				logger.fine("adding constant: "+ constStr);
-				ke.ke_create_now(makeString(constStr), SubLFile.UNPROVIDED);
+				ke.ke_create_now(makeString(constStr), CommonSymbols.UNPROVIDED);
 			}
 		}
 	}
@@ -156,7 +156,7 @@ public class CycUtil {
 
 	public static final boolean addAssertion(SubLObject assertion, SubLObject mt) {
 		logger.fine("adding assertion: "+ assertion + " MT: " +mt);
-		SubLObject res = ke.ke_assert_now(assertion, mt, SubLFile.UNPROVIDED, SubLFile.UNPROVIDED);	
+		SubLObject res = ke.ke_assert_now(assertion, mt, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
 		if (res.isNil()){
 			logger.warning("The assertion was not asserted. It violates the KB consistency!");
 			return false;
@@ -172,7 +172,7 @@ public class CycUtil {
 	public static final void addForwardRule(String forwardRuleStr, SubLObject mt) {
 		// TODO: this rule only works if added after plug-ins' info already in the KB!
 		ke.ke_assert_now(CycUtil.toAssertion(forwardRuleStr), mt,
-				SubLFile.UNPROVIDED, makeKeyword("FORWARD"));
+		    CommonSymbols.UNPROVIDED, makeKeyword("FORWARD"));
 	}
 
 	public static final SubLObject askQuery(String queryStr) {

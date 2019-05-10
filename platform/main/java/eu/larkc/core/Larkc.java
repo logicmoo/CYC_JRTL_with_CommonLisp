@@ -75,7 +75,7 @@ public final class Larkc {
 		ensureDecider();
 		return decider.sparqlConstruct(theQuery, theQoSParameters);
 	}
-
+	
 
 	private static void ensureDecider()
 	{

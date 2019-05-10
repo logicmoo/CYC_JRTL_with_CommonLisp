@@ -157,7 +157,7 @@ class Pair<Left, Right> {
         return new Pair<A, B>(left, right); }
  
     @Override
-	public final boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (!(o instanceof Pair)) return false;
         final Pair<?, ?> other = (Pair) o;
         return equal(getLeft(), other.getLeft()) && equal(getRight(), other.getRight());
@@ -168,7 +168,7 @@ class Pair<Left, Right> {
         else return o1.equals(o2); }
  
     @Override
-	public int hashCode() {
+    public int hashCode() {
         int a = getLeft() == null ? 0 : getLeft().hashCode();
         int b = getRight() == null ? 0 : getRight().hashCode();
  
@@ -756,9 +756,9 @@ class SparqlTest
 		}
 		
 		 @Override
-		public List<String> getVariables() { return variables; }
+		 public List<String> getVariables() { return variables; }
 		 @Override
-		public CloseableIterator<Binding> iterator() { return new SimpleCloseableIterator<Binding>( bindings.iterator()); }
+		 public CloseableIterator<Binding> iterator() { return new SimpleCloseableIterator<Binding>( bindings.iterator()); }
 		
 		static class MyTestBinding implements VariableBinding.Binding 
 		{

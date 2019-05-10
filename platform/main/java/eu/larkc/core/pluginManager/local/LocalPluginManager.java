@@ -44,31 +44,32 @@ public abstract class LocalPluginManager<E, F> implements PluginManager {
 
 	/**
 	 * The queue for storing and accessing control methods sent by other PluginManagers
-	 * 
+	 *
 	 * @see PluginManager.Message
 	 */
 	private Queue<PluginManager.Message> mControlQueue = new Queue<PluginManager.Message>();
-	
+
 	/**
 	 * The PluginManager managing the previous plugin in the pipeline
 	 */
 	private PluginManager mPreviousPlugin;
-	
+
 	/**
 	 * The thread that the plugin management goes on within
 	 */
 	private Thread thread;
-	
+
 	/**
-	 * The queue from which input messages will come from the previous plugin in the pipeline 
+	 * The queue from which input messages will come from the previous plugin in the pipeline
 	 */
 	private Queue<E> inputQueue;
 
 	/**
-	 * The queue onto which output messages should be put to send them to the next plugin in the pipeline 
+	 * The queue onto which output messages should be put to send them to the
+	 * next plugin in the pipeline.
 	 */
 	private Queue<F> outputQueue;
-	
+
 	/** The logger. */
 	protected final Logger logger = LoggerFactory
 			.getLogger(LocalPluginManager.class);
@@ -83,13 +84,13 @@ public abstract class LocalPluginManager<E, F> implements PluginManager {
 	 *            The queue onto which output messages should be put to send
 	 *            them to the next plugin in the pipeline
 	 */
-	public LocalPluginManager(Queue<E> theInputQueue, Queue<F> theOutputQueue){
+	public LocalPluginManager(Queue<E> theInputQueue, Queue<F> theOutputQueue) {
 		this.inputQueue = theInputQueue;
 		this.outputQueue = theOutputQueue;
 
 		logger.debug("Initialized " + this.getClass());
 	}
-	
+
 	/**
 	 * Accept.
 	 * 
@@ -102,7 +103,7 @@ public abstract class LocalPluginManager<E, F> implements PluginManager {
 	public void accept(Message message) {
 		mControlQueue.put(message);
 	}
-	
+
 	/**
 	 * This method enables the next control message that was sent to this
 	 * PluginManager to be retrieved.
@@ -125,7 +126,7 @@ public abstract class LocalPluginManager<E, F> implements PluginManager {
 	public void setPrevious(PluginManager provider) {
 		this.mPreviousPlugin = provider;
 	}
-	
+
 	/**
 	 * This method should be called in order to tell the previous plugin in the
 	 * pipeline to stop sending input on the input queue.
@@ -135,7 +136,7 @@ public abstract class LocalPluginManager<E, F> implements PluginManager {
 			mPreviousPlugin.accept(PluginManager.Message.STOP);
 		}
 	}
-	
+
 	/**
 	 * This method should be called in order to tell the previous plugin in the
 	 * pipeline to send the next piece of input on the input queue.
@@ -157,7 +158,7 @@ public abstract class LocalPluginManager<E, F> implements PluginManager {
 			thread.start();
 		}
 	}
-	
+
 	/**
 	 * This method is used to specify the thread in which the plugin management
 	 * occurs.
@@ -168,7 +169,7 @@ public abstract class LocalPluginManager<E, F> implements PluginManager {
 	protected void setThread(Thread theThread) {
 		this.thread = theThread;
 	}
-	
+
 	/**
 	 * This method should be called to get the next input from the input queue
 	 * 
@@ -177,7 +178,7 @@ public abstract class LocalPluginManager<E, F> implements PluginManager {
 	protected E getNextInput(){
 		return inputQueue.take();
 	}
-	
+
 	/**
 	 * This method should be called to put an output on the output queue.
 	 * 

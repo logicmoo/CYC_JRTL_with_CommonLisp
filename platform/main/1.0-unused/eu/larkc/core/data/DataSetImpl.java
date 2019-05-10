@@ -1,5 +1,5 @@
 /*
-   This file is part of the LarKC platform 
+   This file is part of the LarKC platform
    http://www.larkc.eu/
 
    Copyright 2010 LarKC project consortium
@@ -18,6 +18,7 @@
  */
 package eu.larkc.core.data;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,15 +27,20 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.query.impl.DatasetImpl;
 
+import eu.larkc.core.data.CloseableIterator;
+import eu.larkc.core.data.DataSet;
+import eu.larkc.core.data.RdfGraph;
+import eu.larkc.core.data.SPARQLEndpoint;
+import eu.larkc.core.metadata.PluginRegistry_1_1;
 import eu.larkc.core.query.SPARQLQuery;
 import eu.larkc.core.query.SPARQLQueryImpl;
 
 /**
  * Default implementation of a data set.
- * 
+ *
  * @author vassil
  */
-public class DataSetImpl implements DataSet {
+public class DataSetImpl implements DataSet , Serializable {
 
 	/** Generated Serial Version UID. */
 	private static final long serialVersionUID = -2488891715384699605L;
@@ -50,7 +56,7 @@ public class DataSetImpl implements DataSet {
 
 	/**
 	 * Instantiates a new data set impl.
-	 * 
+	 *
 	 * @param endpoint
 	 *            the endpoint
 	 * @param defaultGraphs
@@ -64,7 +70,10 @@ public class DataSetImpl implements DataSet {
 			throw new IllegalArgumentException("SPARQL endpoint must not be null");
 		}
 		this.endpoint = endpoint;
+        if(PluginRegistry_1_1.LARKC_1_1)
 		this.dataset = new DatasetImplSerializationProxy();
+        else
+		this.dataset = new DatasetImpl();
 		if (defaultGraphs != null) {
 			for (URI u : defaultGraphs) {
 				dataset.addDefaultGraph(u);
@@ -79,9 +88,10 @@ public class DataSetImpl implements DataSet {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see eu.larkc.core.data.DataSet#addAll(eu.larkc.core.data.DataSet)
 	 */
+	@Override
 	public void addAll(DataSet ds) {
 		if (ds.getSPARQLEndpoint().equals(endpoint) == false) {
 			throw new IllegalArgumentException(
@@ -92,9 +102,10 @@ public class DataSetImpl implements DataSet {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see eu.larkc.core.data.DataSet#getDefaultGraphs()
 	 */
+	@Override
 	public Set<RdfGraph> getDefaultGraphs() {
 		Set<RdfGraph> result = new HashSet<RdfGraph>();
 		for (URI u : dataset.getDefaultGraphs()) {
@@ -105,9 +116,10 @@ public class DataSetImpl implements DataSet {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see eu.larkc.core.data.DataSet#getNamedGraphs()
 	 */
+	@Override
 	public Set<RdfGraph> getNamedGraphs() {
 		Set<RdfGraph> result = new HashSet<RdfGraph>();
 		for (URI u : dataset.getNamedGraphs()) {
@@ -118,18 +130,20 @@ public class DataSetImpl implements DataSet {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see eu.larkc.core.data.DataSet#getSPARQLEndpoint()
 	 */
+	@Override
 	public SPARQLEndpoint getSPARQLEndpoint() {
 		return endpoint;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see eu.larkc.core.data.SetOfStatements#getStatements()
 	 */
+	@Override
 	public CloseableIterator<Statement> getStatements() {
 		String q = "construct {?s ?p ?o} WHERE {?s ?p ?o}";
 		SPARQLQuery query = new SPARQLQueryImpl(q);
@@ -139,17 +153,19 @@ public class DataSetImpl implements DataSet {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public boolean equals(Object o) {
+	@Override
+  public boolean equals(Object o) {
 		if (o instanceof DataSetImpl == false) {
 			return false;
 		}
 		if (dataset.toString().equals(((DataSetImpl) o).dataset.toString()) == false) {
 			return false;
 		}
-		if (Math.abs(timeStamp - (((DataSetImpl) o).timeStamp)) > DataFactoryImpl.REFERENCE_TYPES_CACHE_TIME) {
+		if (Math.abs(timeStamp - (((DataSetImpl) o).timeStamp)) >
+				DataFactoryImpl.REFERENCE_TYPES_CACHE_TIME) {
 			return false;
 		}
 		return true;
@@ -157,9 +173,10 @@ public class DataSetImpl implements DataSet {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		// the mutable hashcodes are risky (timeStamp)
 		return dataset.toString().hashCode();
@@ -167,9 +184,10 @@ public class DataSetImpl implements DataSet {
 
 	/**
 	 * Read resolve method for DataSetImplSerializationProxy
-	 * 
+	 *
 	 * @return the object
 	 */
+   // @Override
 	private Object readResolve() {
 		return new DataSetImpl(endpoint, dataset.getDefaultGraphs(), dataset
 				.getNamedGraphs()); // Uses public constructor
@@ -177,7 +195,7 @@ public class DataSetImpl implements DataSet {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
