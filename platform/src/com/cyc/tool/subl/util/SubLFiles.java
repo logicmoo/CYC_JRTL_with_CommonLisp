@@ -580,4 +580,11 @@ public class SubLFiles
   {
     symbolInitializationOrder = new LinkedHashSet<SubLSymbol>();
   }
+  /**
+   * @param string
+   */
+  public static void declareOverridable(String string)
+  {
+
+  }
 }

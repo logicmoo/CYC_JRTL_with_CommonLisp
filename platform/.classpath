@@ -10,6 +10,7 @@
 	<classpathentry kind="src" path="main/java"/>
 	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
 	<classpathentry kind="src" path="main/server-4q"/>
+	<classpathentry kind="src" path="main/platform-1.1"/>
 	<classpathentry kind="lib" path="lib/jetty-continuation-8.0.4.v20111024.jar"/>
 	<classpathentry kind="lib" path="lib/jsp-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry kind="lib" path="lib/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
