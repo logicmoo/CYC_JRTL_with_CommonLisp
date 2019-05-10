@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,47 +67,47 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.cfasl_kb_methods;
-import com.cyc.cycjava_1.cycl.cfasl_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_grammar;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.file_utilities;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.misc_utilities;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.operation_queues;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.set_utilities;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.transcript_utilities;
-import com.cyc.cycjava_1.cycl.uncanonicalizer;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.cfasl_kb_methods;
+//dm import com.cyc.cycjava_1.cycl.cfasl_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_grammar;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.file_utilities;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.misc_utilities;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.operation_queues;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.set_utilities;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.transcript_utilities;
+//dm import com.cyc.cycjava_1.cycl.uncanonicalizer;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class inference_analysis extends SubLTranslatedFile {
 
@@ -100,24 +119,24 @@ public  final class inference_analysis extends SubLTranslatedFile {
 
   //// Definitions
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 1622) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 1622)
   private static SubLSymbol $transformation_rule_statistics_table$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 1822) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 1822)
   private static SubLSymbol $transformation_rule_statistics_lock$ = null;
 
   /** A list of experience filenames which have been loaded into this image to add to the
 transformation rule statistics. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 1939) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 1939)
   private static SubLSymbol $transformation_rule_statistics_filename_load_history$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 2146) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 2146)
   public static final SubLObject clear_transformation_rule_statistics_filename_load_history() {
     $transformation_rule_statistics_filename_load_history$.setGlobalValue(NIL);
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 2307) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 2307)
   public static final SubLObject add_to_transformation_rule_statistics_filename_load_history(SubLObject filename) {
     {
       SubLObject new_cons = cons(filename, NIL);
@@ -132,27 +151,27 @@ transformation rule statistics. */
   }
 
   /** When non-nil, the transformation rule statistics are updated during inference. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 2657) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 2657)
   public static SubLSymbol $transformation_rule_statistics_update_enabledP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 4045) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 4045)
   public static final SubLObject transformation_rule_statistics_table() {
     return $transformation_rule_statistics_table$.getGlobalValue();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 4498) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 4498)
   public static final SubLObject transformation_rules_with_statistics_condition_passesP(SubLObject rule, SubLObject recentP) {
     return makeBoolean(((NIL != assertion_handles.valid_assertionP(rule, UNPROVIDED))
            && ((NIL == recentP)
             || (NIL != transformation_rule_has_recent_statisticsP(rule)))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 4756) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 4756)
   public static final SubLObject new_transformation_rule_statistics() {
     return Vectors.make_vector(FOUR_INTEGER, ZERO_INTEGER);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 5242) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 5242)
   public static final SubLObject clear_all_transformation_rule_statistics() {
     {
       SubLObject lock = $transformation_rule_statistics_lock$.getGlobalValue();
@@ -170,7 +189,7 @@ transformation rule statistics. */
     return T;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 5505) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 5505)
   public static final SubLObject clear_transformation_rule_statistics(SubLObject rule) {
     {
       SubLObject result = NIL;
@@ -188,12 +207,12 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 5882) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 5882)
   public static final SubLObject get_transformation_rule_statistics(SubLObject rule) {
     return Hashtables.gethash_without_values(rule, $transformation_rule_statistics_table$.getGlobalValue(), $kw22$UNINITIALIZED);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 6034) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 6034)
   public static final SubLObject ensure_transformation_rule_statistics(SubLObject rule) {
     {
       SubLObject statistics = get_transformation_rule_statistics(rule);
@@ -216,7 +235,7 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 7940) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 7940)
   public static final SubLObject any_recent_experienceP() {
     {
       SubLObject cdohash_table = transformation_rule_statistics_table();
@@ -241,7 +260,7 @@ transformation rule statistics. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 8526) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 8526)
   public static final SubLObject transformation_rule_considered_count(SubLObject rule) {
     {
       SubLObject statistics = get_transformation_rule_statistics(rule);
@@ -249,7 +268,7 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 8739) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 8739)
   public static final SubLObject transformation_rule_recent_considered_count(SubLObject rule) {
     {
       SubLObject statistics = get_transformation_rule_statistics(rule);
@@ -257,12 +276,12 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 8959) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 8959)
   public static final SubLObject transformation_rule_has_recent_statisticsP(SubLObject rule) {
     return Numbers.plusp(transformation_rule_recent_considered_count(rule));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 9540) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 9540)
   public static final SubLObject transformation_rule_success_count(SubLObject rule) {
     {
       SubLObject statistics = get_transformation_rule_statistics(rule);
@@ -272,7 +291,7 @@ transformation rule statistics. */
 
   /** Note that RULE has been considered COUNT more times.
    If RECENT?, also queue this information for logging in the experience transcript. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 10443) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 10443)
   public static final SubLObject increment_transformation_rule_considered_count(SubLObject rule, SubLObject recentP, SubLObject count) {
     if ((count == UNPROVIDED)) {
       count = ONE_INTEGER;
@@ -299,7 +318,7 @@ transformation rule statistics. */
 
   /** Note that RULE has been successfully used COUNT more times.
    If RECENT?, also queue this information for logging in the experience transcript. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 11161) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 11161)
   public static final SubLObject increment_transformation_rule_success_count(SubLObject rule, SubLObject recentP, SubLObject count) {
     if ((count == UNPROVIDED)) {
       count = ONE_INTEGER;
@@ -322,14 +341,14 @@ transformation rule statistics. */
   }
 
   /** Absolute historical success limit, below which rules are never even tried. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 13014) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 13014)
   public static SubLSymbol $transformation_rule_historical_success_pruning_threshold$ = null;
 
   /** Absolute historical utility limit, below which rules are never even tried. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 13188) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 13188)
   public static SubLSymbol $transformation_rule_historical_utility_pruning_threshold$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 13351) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 13351)
   public static final SubLObject transformation_rule_has_insufficient_historical_utilityP(SubLObject rule) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -342,7 +361,7 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 23646) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 23646)
   public static final SubLObject load_transformation_rule_statistics(SubLObject filename, SubLObject mergeP) {
     if ((mergeP == UNPROVIDED)) {
       mergeP = T;
@@ -350,7 +369,7 @@ transformation rule statistics. */
     return load_transformation_rule_statistics_int(filename, mergeP, NIL);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 24191) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 24191)
   public static final SubLObject load_transformation_rule_statistics_int(SubLObject filename, SubLObject mergeP, SubLObject exclude_rules) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -399,7 +418,7 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 24653) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 24653)
   public static final SubLObject load_transformation_rule_statistics_bookkeeping(SubLObject filename, SubLObject mergeP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -417,7 +436,7 @@ transformation rule statistics. */
   }
 
   /** @param EXCLUDE-RULE-SET don't load in statistics for any rule in EXCLUDE-RULE-SET. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 26172) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 26172)
   public static final SubLObject load_transformation_rule_statistics_for_rule(SubLObject stream, SubLObject exclude_rule_set) {
     {
       SubLObject rule = cfasl.cfasl_input(stream, UNPROVIDED, UNPROVIDED);
@@ -435,14 +454,14 @@ transformation rule statistics. */
     }
   }
 
-  /** This lock controls who actually gets to write to the experience transcript file, 
+  /** This lock controls who actually gets to write to the experience transcript file,
    since multiple threads could otherwise open the same file for appending
    and stomp all over each other. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 27857) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 27857)
   private static SubLSymbol $save_recent_experience_lock$ = null;
 
   /** Save recent experience, if it appears sensible to do so. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 28183) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 28183)
   public static final SubLObject possibly_save_recent_experience() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -453,7 +472,7 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 28385) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 28385)
   public static final SubLObject save_recent_experience() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -479,19 +498,19 @@ transformation rule statistics. */
 
   /** Return number between -100 and 100 indicating the historical utility of RULE.
    100 is most useful, 0 is of average utility, and -100 is most useless. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 30513) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 30513)
   public static final SubLObject transformation_rule_historical_utility(SubLObject rule) {
     checkType(rule, $sym40$RULE_ASSERTION_);
     return rule_historical_utility_from_observations(transformation_rule_success_count(rule), transformation_rule_considered_count(rule));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 31827) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 31827)
   private static SubLSymbol $average_rule_historical_success_probability$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 32031) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 32031)
   private static SubLSymbol $rule_historical_success_happiness_scaling_factor$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 32152) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 32152)
   public static final SubLObject rule_historical_utility_from_observations(SubLObject success, SubLObject considered) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -499,7 +518,7 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 32399) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 32399)
   public static final SubLObject historical_utility_from_observations(SubLObject success, SubLObject considered, SubLObject average_historical_probability, SubLObject utility_scaling_factor) {
     if ((!(considered.isPositive()))) {
       return ZERO_INTEGER;
@@ -527,14 +546,14 @@ transformation rule statistics. */
   /** A hashtable of RULE -> a set-contents of rules that have been used in a successful
    proof together with RULE sometime in the past.  This is an implementation of a graph;
    rules are nodes and edges are indicated by being present in the set-contents. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 35373) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 35373)
   private static SubLSymbol $transformation_rule_historical_connectivity_graph$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 35857) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 35857)
   private static SubLSymbol $transformation_rule_historical_connectivity_graph_lock$ = null;
 
   /** Notes that the rules in RULE-SET-CONTENTS have been successfully used together in an inference answer proof. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 38338) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 38338)
   public static final SubLObject note_inference_answer_proof_rules(SubLObject rules) {
     if ((NIL != list_utilities.lengthGE(rules, TWO_INTEGER, UNPROVIDED))) {
       {
@@ -558,13 +577,13 @@ transformation rule statistics. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 39973) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 39973)
   private static SubLSymbol $hl_module_expand_counts_enabledP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 40218) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 40218)
   public static SubLSymbol $hl_module_expand_counts$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 40881) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 40881)
   public static final SubLObject cinc_hl_module_expand_count(SubLObject hl_module) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -579,7 +598,7 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 41479) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 41479)
   public static final SubLObject cinc_module_expand_count(SubLObject name) {
     {
       SubLObject hl_module = inference_modules.find_hl_module_by_name(name);
@@ -588,24 +607,24 @@ transformation rule statistics. */
   }
 
   /** The queue of asked queries to be written out. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 41649) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 41649)
   private static SubLSymbol $asked_queries_queue$ = null;
 
   /** The lock for the asked queries queue. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 41809) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 41809)
   private static SubLSymbol $save_recent_asked_queries_lock$ = null;
 
   /** The limit to the number of queries we will store before writing them out. */
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 41940) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 41940)
   private static SubLSymbol $asked_queries_queue_limit$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 42071) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 42071)
   public static final SubLObject clear_asked_query_queue() {
     queues.clear_queue($asked_queries_queue$.getGlobalValue());
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 42165) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 42165)
   public static final SubLObject possibly_enqueue_asked_query(SubLObject query_sentence, SubLObject query_mt, SubLObject query_properties) {
     {
       SubLObject result = NIL;
@@ -620,7 +639,7 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 42904) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 42904)
   public static final SubLObject possibly_enqueue_asked_query_from_inference(SubLObject inference) {
     {
       SubLObject result = NIL;
@@ -635,7 +654,7 @@ transformation rule statistics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 47247) 
+  @SubL(source = "cycl/inference/harness/inference-analysis.lisp", position = 47247)
   private static SubLSymbol $asked_query_common_symbols$ = null;
 
   public static final SubLObject declare_inference_analysis_file() {
@@ -767,23 +786,24 @@ transformation rule statistics. */
   }
 
   public static final SubLObject init_inference_analysis_file() {
-    $transformation_rule_statistics_table$ = deflexical("*TRANSFORMATION-RULE-STATISTICS-TABLE*", ((NIL != Symbols.boundp($sym0$_TRANSFORMATION_RULE_STATISTICS_TABLE_)) ? ((SubLObject) $transformation_rule_statistics_table$.getGlobalValue()) : Hashtables.make_hash_table($int1$64, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $transformation_rule_statistics_lock$ = deflexical("*TRANSFORMATION-RULE-STATISTICS-LOCK*", ((NIL != Symbols.boundp($sym2$_TRANSFORMATION_RULE_STATISTICS_LOCK_)) ? ((SubLObject) $transformation_rule_statistics_lock$.getGlobalValue()) : Locks.make_lock($str3$Transformation_Rule_Statistics_Lo)));
-    $transformation_rule_statistics_filename_load_history$ = deflexical("*TRANSFORMATION-RULE-STATISTICS-FILENAME-LOAD-HISTORY*", ((NIL != Symbols.boundp($sym4$_TRANSFORMATION_RULE_STATISTICS_FILENAME_LOAD_HISTORY_)) ? ((SubLObject) $transformation_rule_statistics_filename_load_history$.getGlobalValue()) : NIL));
+    $transformation_rule_statistics_table$ = deflexical("*TRANSFORMATION-RULE-STATISTICS-TABLE*", maybeDefault( $sym0$_TRANSFORMATION_RULE_STATISTICS_TABLE_, $transformation_rule_statistics_table$, ()-> (Hashtables.make_hash_table($int1$64, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $transformation_rule_statistics_lock$ = deflexical("*TRANSFORMATION-RULE-STATISTICS-LOCK*", maybeDefault( $sym2$_TRANSFORMATION_RULE_STATISTICS_LOCK_, $transformation_rule_statistics_lock$, ()-> (Locks.make_lock($str3$Transformation_Rule_Statistics_Lo))));
+    $transformation_rule_statistics_filename_load_history$ = deflexical("*TRANSFORMATION-RULE-STATISTICS-FILENAME-LOAD-HISTORY*", maybeDefault( $sym4$_TRANSFORMATION_RULE_STATISTICS_FILENAME_LOAD_HISTORY_, $transformation_rule_statistics_filename_load_history$, NIL));
     $transformation_rule_statistics_update_enabledP$ = defvar("*TRANSFORMATION-RULE-STATISTICS-UPDATE-ENABLED?*", T);
     $transformation_rule_historical_success_pruning_threshold$ = defvar("*TRANSFORMATION-RULE-HISTORICAL-SUCCESS-PRUNING-THRESHOLD*", ZERO_INTEGER);
     $transformation_rule_historical_utility_pruning_threshold$ = defvar("*TRANSFORMATION-RULE-HISTORICAL-UTILITY-PRUNING-THRESHOLD*", $int37$_100);
     $save_recent_experience_lock$ = defparameter("*SAVE-RECENT-EXPERIENCE-LOCK*", Locks.make_lock($str48$Save_recent_experience_lock));
     $average_rule_historical_success_probability$ = defparameter("*AVERAGE-RULE-HISTORICAL-SUCCESS-PROBABILITY*", $float59$0_02939361143247565);
     $rule_historical_success_happiness_scaling_factor$ = defparameter("*RULE-HISTORICAL-SUCCESS-HAPPINESS-SCALING-FACTOR*", TEN_INTEGER);
-    $transformation_rule_historical_connectivity_graph$ = deflexical("*TRANSFORMATION-RULE-HISTORICAL-CONNECTIVITY-GRAPH*", ((NIL != Symbols.boundp($sym65$_TRANSFORMATION_RULE_HISTORICAL_CONNECTIVITY_GRAPH_)) ? ((SubLObject) $transformation_rule_historical_connectivity_graph$.getGlobalValue()) : Hashtables.make_hash_table($int66$256, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $transformation_rule_historical_connectivity_graph_lock$ = deflexical("*TRANSFORMATION-RULE-HISTORICAL-CONNECTIVITY-GRAPH-LOCK*", ((NIL != Symbols.boundp($sym67$_TRANSFORMATION_RULE_HISTORICAL_CONNECTIVITY_GRAPH_LOCK_)) ? ((SubLObject) $transformation_rule_historical_connectivity_graph_lock$.getGlobalValue()) : Locks.make_lock($str68$Rule_Historical_Connectivity_Grap)));
+    $transformation_rule_historical_connectivity_graph$ = deflexical("*TRANSFORMATION-RULE-HISTORICAL-CONNECTIVITY-GRAPH*", maybeDefault( $sym65$_TRANSFORMATION_RULE_HISTORICAL_CONNECTIVITY_GRAPH_, $transformation_rule_historical_connectivity_graph$, ()-> (Hashtables.make_hash_table($int66$256, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $transformation_rule_historical_connectivity_graph_lock$ = deflexical("*TRANSFORMATION-RULE-HISTORICAL-CONNECTIVITY-GRAPH-LOCK*", maybeDefault( $sym67$_TRANSFORMATION_RULE_HISTORICAL_CONNECTIVITY_GRAPH_LOCK_, $transformation_rule_historical_connectivity_graph_lock$, ()-> (Locks.make_lock($str68$Rule_Historical_Connectivity_Grap))));
     $hl_module_expand_counts_enabledP$ = defvar("*HL-MODULE-EXPAND-COUNTS-ENABLED?*", NIL);
     $hl_module_expand_counts$ = defvar("*HL-MODULE-EXPAND-COUNTS*", dictionary.new_dictionary(UNPROVIDED, UNPROVIDED));
-    $asked_queries_queue$ = deflexical("*ASKED-QUERIES-QUEUE*", ((NIL != Symbols.boundp($sym78$_ASKED_QUERIES_QUEUE_)) ? ((SubLObject) $asked_queries_queue$.getGlobalValue()) : queues.create_queue()));
+    $asked_queries_queue$ = deflexical("*ASKED-QUERIES-QUEUE*", maybeDefault( $sym78$_ASKED_QUERIES_QUEUE_,
+        $asked_queries_queue$, ()->(queues.create_queue( NIL  ))));
     $save_recent_asked_queries_lock$ = defparameter("*SAVE-RECENT-ASKED-QUERIES-LOCK*", Locks.make_lock($str79$Query_logging_lock));
     $asked_queries_queue_limit$ = deflexical("*ASKED-QUERIES-QUEUE-LIMIT*", $int80$300);
-    $asked_query_common_symbols$ = deflexical("*ASKED-QUERY-COMMON-SYMBOLS*", ((NIL != Symbols.boundp($sym88$_ASKED_QUERY_COMMON_SYMBOLS_)) ? ((SubLObject) $asked_query_common_symbols$.getGlobalValue()) : NIL));
+    $asked_query_common_symbols$ = deflexical("*ASKED-QUERY-COMMON-SYMBOLS*", maybeDefault( $sym88$_ASKED_QUERY_COMMON_SYMBOLS_, $asked_query_common_symbols$, NIL));
     return NIL;
   }
 
@@ -918,14 +938,17 @@ transformation rule statistics. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_analysis_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_analysis_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_analysis_file();
   }

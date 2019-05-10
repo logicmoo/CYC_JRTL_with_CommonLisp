@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,12 +80,12 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class modules extends SubLTranslatedFile {
 
@@ -526,9 +558,9 @@ public  final class modules extends SubLTranslatedFile {
     $module_lock$ = deflexical("*MODULE-LOCK*", Locks.make_lock($str0$Module_Lock));
     $system_lock$ = deflexical("*SYSTEM-LOCK*", Locks.make_lock($str3$System_Lock));
     $dtp_module$ = defconstant("*DTP-MODULE*", $sym5$MODULE);
-    $module_index$ = deflexical("*MODULE-INDEX*", ((NIL != Symbols.boundp($sym40$_MODULE_INDEX_)) ? ((SubLObject) $module_index$.getGlobalValue()) : Hashtables.make_hash_table($int41$1024, Symbols.symbol_function(EQUALP), UNPROVIDED)));
+    $module_index$ = deflexical("*MODULE-INDEX*", maybeDefault( $sym40$_MODULE_INDEX_, $module_index$, ()-> (Hashtables.make_hash_table($int41$1024, Symbols.symbol_function(EQUALP), UNPROVIDED))));
     $dtp_system$ = defconstant("*DTP-SYSTEM*", $sym69$SYSTEM);
-    $system_index$ = deflexical("*SYSTEM-INDEX*", ((NIL != Symbols.boundp($sym90$_SYSTEM_INDEX_)) ? ((SubLObject) $system_index$.getGlobalValue()) : NIL));
+    $system_index$ = deflexical("*SYSTEM-INDEX*", maybeDefault( $sym90$_SYSTEM_INDEX_, $system_index$, NIL));
     return NIL;
   }
 

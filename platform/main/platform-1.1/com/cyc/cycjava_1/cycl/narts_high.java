@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,35 +80,35 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertions_low;
-import com.cyc.cycjava_1.cycl.canon_tl;
-import com.cyc.cycjava_1.cycl.cardinality_estimates;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cyc_kernel;
-import com.cyc.cycjava_1.cycl.cycl_grammar;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.czer_main;
-import com.cyc.cycjava_1.cycl.czer_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.function_terms;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_control_vars;
-import com.cyc.cycjava_1.cycl.kb_hl_supports;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.kb_mapping;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.nart_handles;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.transform_list_utilities;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertions_low;
+//dm import com.cyc.cycjava_1.cycl.canon_tl;
+//dm import com.cyc.cycjava_1.cycl.cardinality_estimates;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cyc_kernel;
+//dm import com.cyc.cycjava_1.cycl.cycl_grammar;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.czer_main;
+//dm import com.cyc.cycjava_1.cycl.czer_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.function_terms;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.id_index;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_control_vars;
+//dm import com.cyc.cycjava_1.cycl.kb_hl_supports;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.nart_handles;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.transform_list_utilities;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.variables;
 
 public  final class narts_high extends SubLTranslatedFile {
 

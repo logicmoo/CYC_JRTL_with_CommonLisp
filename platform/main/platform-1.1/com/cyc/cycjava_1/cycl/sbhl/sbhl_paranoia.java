@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.sbhl;
+package com.cyc.cycjava_1.cycl.sbhl;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,12 +67,13 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm
 import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_cache;
-import com.cyc.cycjava_1.cycl.system_parameters;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_cache;
+//dm import com.cyc.cycjava_1.cycl.system_parameters;
 
 public  final class sbhl_paranoia extends SubLTranslatedFile {
 
@@ -66,11 +86,11 @@ public  final class sbhl_paranoia extends SubLTranslatedFile {
   //// Definitions
 
   /** Parameter that governs whether we perform work within @see sbhl-check-type */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 777) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 777)
   public static SubLSymbol $sbhl_object_type_checking_p$ = null;
 
   /** Accessor. @return booleanp; the value of @see *sbhl-object-type-checking-p */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 1003) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 1003)
   public static final SubLObject sbhl_object_type_checking_p() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -80,15 +100,15 @@ public  final class sbhl_paranoia extends SubLTranslatedFile {
   }
 
   /** Parameter that guides error behavior. */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 1469) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 1469)
   public static SubLSymbol $sbhl_type_error_action$ = null;
 
   /** controls extent of tracing, warnings, etc., for the sbhl modules [0 .. 5] */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 2465) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 2465)
   public static SubLSymbol $sbhl_trace_level$ = null;
 
   /** If *sbhl-trace-level* is greater than or equal to LEVEL, signal a cerror with FORMAT-STR. If *sbhl-trace-level* is within 2 of LEVEL, warn with FORMAT-STR. @see cerror. @see warn. */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 3076) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 3076)
   public static final SubLObject sbhl_error(SubLObject level, SubLObject format_str, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
     if ((arg1 == UNPROVIDED)) {
       arg1 = NIL;
@@ -120,7 +140,7 @@ public  final class sbhl_paranoia extends SubLTranslatedFile {
 
 
   /** If *sbhl-trace-level* is greater than or equal to LEVEL, signal a cerror with CONTINUE-STR and FORMAT-STR. If *sbhl-trace-level* is within 2 of LEVEL, warn with FORMAT-STR. @see cerror. @see warn. */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 3615) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 3615)
   public static final SubLObject sbhl_cerror(SubLObject level, SubLObject continue_str, SubLObject format_str, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
     if ((arg1 == UNPROVIDED)) {
       arg1 = NIL;
@@ -151,9 +171,9 @@ public  final class sbhl_paranoia extends SubLTranslatedFile {
     }
   }
 
-  
+
   /** If *sbhl-trace-level* is greater than or equal to LEVEL, warn with FORMAT-STR. @see warn. */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 4216) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 4216)
   public static final SubLObject sbhl_warn(SubLObject level, SubLObject format_str, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
     if ((arg1 == UNPROVIDED)) {
       arg1 = NIL;
@@ -183,7 +203,7 @@ public  final class sbhl_paranoia extends SubLTranslatedFile {
   }
 
   /** @return whether to suspend type checking at the moment */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 4566) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 4566)
   public static final SubLObject suspend_sbhl_type_checkingP() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -195,29 +215,29 @@ public  final class sbhl_paranoia extends SubLTranslatedFile {
   }
 
   /** controls extent of integrity testing for the sbhl modules [0 .. 5] */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 5122) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 5122)
   public static SubLSymbol $sbhl_test_level$ = null;
 
   /** controls very expensive sbhl testing */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 5420) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 5420)
   public static SubLSymbol $sbhl_test_maxP$ = null;
 
   /** controls very expensive sbhl tracing */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 5646) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 5646)
   public static SubLSymbol $sbhl_trace_maxP$ = null;
 
   /** suppress retyping of forts iff this is non-nil */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 5876) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 5876)
   public static SubLSymbol $suppress_sbhl_recachingP$ = null;
 
   /** suppress use of fort types, and call the SBHL instead.
    This should be set to NIL during fort types initialization. */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 6101) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 6101)
   public static SubLSymbol $suspend_sbhl_cache_useP$ = null;
 
   /** Accessor. @return booleanp; whether we are using sbhl caches.
    If this is NIL, we are just using sbhl-predicate-relation-p */
-  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 6359) 
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 6359)
   public static final SubLObject check_sbhl_cachesP() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -299,14 +319,17 @@ public  final class sbhl_paranoia extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_sbhl_paranoia_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_sbhl_paranoia_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_sbhl_paranoia_file();
   }

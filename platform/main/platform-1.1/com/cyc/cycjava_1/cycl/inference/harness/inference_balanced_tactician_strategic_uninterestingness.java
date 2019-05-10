@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -47,40 +66,41 @@ import static com.cyc.tool.subl.util.SubLFiles.defvar;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
-
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_abduction_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_execution;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_motivation;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
 import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_restriction;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_abduction_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_execution;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_motivation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_restriction;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class inference_balanced_tactician_strategic_uninterestingness extends SubLTranslatedFile {
 
@@ -93,13 +113,13 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
   //// Definitions
 
   /** Dynamic variable for remembering the most recent explanation of strategic uninterestingness */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 1130) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 1130)
   private static SubLSymbol $balanced_strategy_uninterestingness_explanation$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 1382) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 1382)
   private static SubLSymbol $the_unknown_balanced_strategy_uninterestingness_explanation$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 1501) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 1501)
   public static final SubLObject balanced_strategy_last_uninterestingness_explanation() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -108,19 +128,19 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
   }
 
   /** Whether we are gathering explanations of strategic uninterestingness */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 1891) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 1891)
   public static SubLSymbol $balanced_strategy_gathering_uninterestingness_explanationsP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 3058) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 3058)
   private static SubLSymbol $balanced_strategy_uninterestingness_explanation_table$ = null;
 
   /** Bound to NIL when trying to rederive the reason that something was put in the cache. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 11043) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 11043)
   private static SubLSymbol $balanced_strategy_uses_already_thrown_away_cacheP$ = null;
 
   /** Whether :set-aside plus non-continuable should be strengthened to :throw-away for TACTIC.
    This is usually T except for special circumstances, e.g. split tactic removal lookahead when transformation is allowed. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 11295) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 11295)
   public static final SubLObject balanced_strategy_set_aside_non_continuable_implies_throw_away_tacticP(SubLObject tactic, SubLObject motivation) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -135,7 +155,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
 
   /** Whether :set-aside plus non-continuable should be strengthened to :throw-away for PROBLEM.
    This is usually T except for special circumstances, e.g. if PROBLEM is a split problem and transformation is allowed. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 11835) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 11835)
   public static final SubLObject balanced_strategy_set_aside_non_continuable_implies_throw_away_problemP(SubLObject problem, SubLObject motivation) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -143,11 +163,11 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 14495) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 14495)
   private static SubLSymbol $balanced_strategy_throw_away_problem_with_abduced_term_wrt_transformationP$ = null;
 
   /** @return booleanp; whether STRATEGY, after careful deliberation, chooses to throw away PROBLEM wrt MOTIVATION. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 14592) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 14592)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_problemP(SubLObject strategy, SubLObject problem, SubLObject motivation, SubLObject consider_all_tacticsP) {
     if ((consider_all_tacticsP == UNPROVIDED)) {
       consider_all_tacticsP = T;
@@ -185,7 +205,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
   /** The parts of throw-away reasoning that must always be recomputed and cannot be cached
    because it's too hard to figure out when the cache needs to be cleared.
    Or perhaps because they're really cheap to recompute. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 15805) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 15805)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_problem_uncacheableP(SubLObject strategy, SubLObject problem, SubLObject motivation, SubLObject consider_all_tacticsP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -229,7 +249,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
 
   /** The parts of throw-away reasoning that can be cached.
    The comments before each clause in the pcond indicate the conditions when the cache for TACTIC should be cleared. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 17436) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 17436)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_problem_cacheableP(SubLObject strategy, SubLObject problem, SubLObject motivation, SubLObject consider_all_tacticsP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -264,7 +284,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
 
   /** @param PROBLEM-ALREADY-CONSIDERED?; whether the caller has already considered that the problem of STRATEGEM
    might be thrown away wrt MOTIVATION.  If T, the analysis will not be redone. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 18872) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 18872)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_strategemP(SubLObject strategy, SubLObject strategem, SubLObject motivation, SubLObject problem_already_consideredP) {
     if ((problem_already_consideredP == UNPROVIDED)) {
       problem_already_consideredP = NIL;
@@ -284,7 +304,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
 
   /** @param PROBLEM-ALREADY-CONSIDERED?; whether the caller has already considered that the problem of TACTIC
    might be thrown away wrt MOTIVATION.  If T, the analysis will not be redone. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 19542) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 19542)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_tacticP(SubLObject strategy, SubLObject tactic, SubLObject motivation, SubLObject problem_already_consideredP, SubLObject siblings_already_consideredP) {
     if ((problem_already_consideredP == UNPROVIDED)) {
       problem_already_consideredP = NIL;
@@ -328,7 +348,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
   /** The parts of throw-away reasoning that must always be recomputed and cannot be cached
    because it's too hard to figure out when the cache needs to be cleared.
    Or perhaps because they're really cheap to recompute. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 20994) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 20994)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_tactic_uncacheableP(SubLObject strategy, SubLObject tactic, SubLObject motivation, SubLObject problem_already_consideredP, SubLObject siblings_already_consideredP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -426,7 +446,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
 
   /** The parts of throw-away reasoning that can be cached.
    The comments before each clause in the pcond indicate the conditions when the cache for TACTIC should be cleared. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 25178) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 25178)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_tactic_cacheableP(SubLObject strategy, SubLObject tactic, SubLObject motivation, SubLObject problem_already_consideredP, SubLObject siblings_already_consideredP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -495,7 +515,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 28289) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 28289)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_tactic_with_sibling_simplification_tacticP(SubLObject tactic) {
     {
       SubLObject result = NIL;
@@ -518,7 +538,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
 
   /** @param PROBLEM-ALREADY-CONSIDERED?; whether the caller has already considered that the supported problem of LINK
    might be thrown away wrt MOTIVATION.  If T, the analysis will not be redone. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 28576) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 28576)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_linkP(SubLObject strategy, SubLObject link, SubLObject motivation, SubLObject problem_already_consideredP) {
     if ((problem_already_consideredP == UNPROVIDED)) {
       problem_already_consideredP = NIL;
@@ -566,7 +586,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 30145) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 30145)
   public static final SubLObject why_balanced_strategy_chooses_to_ignore_new_root(SubLObject strategy, SubLObject problem) {
     if ((NIL != inference_datastructures_problem.problem_invalid_p(problem))) {
       return $kw50$INVALID;
@@ -577,12 +597,12 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 30417) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 30417)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_new_rootP(SubLObject strategy, SubLObject problem) {
     return inference_datastructures_strategy.strategy_dispatch(strategy, $kw52$THROW_AWAY_NEW_ROOT, problem, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 30572) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 30572)
   public static final SubLObject balanced_strategy_default_chooses_to_throw_away_new_rootP(SubLObject strategy, SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -599,7 +619,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
   }
 
   /** @return booleanp; whether STRATEGY, after careful deliberation, chooses to set aside PROBLEM wrt MOTIVATION. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 30907) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 30907)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_problemP(SubLObject strategy, SubLObject problem, SubLObject motivation, SubLObject consider_all_tacticsP, SubLObject thrown_away_already_consideredP) {
     if ((consider_all_tacticsP == UNPROVIDED)) {
       consider_all_tacticsP = T;
@@ -641,7 +661,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
   /** The parts of set-aside reasoning that must always be recomputed and cannot be cached
    because it's too hard to figure out when the cache needs to be cleared.
    Or perhaps because they're really cheap to recompute. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 32134) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 32134)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_problem_uncacheableP(SubLObject strategy, SubLObject problem, SubLObject motivation, SubLObject consider_all_tacticsP, SubLObject thrown_away_already_consideredP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -674,7 +694,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
 
   /** The parts of set-aside reasoning that can be cached.
    The comments before each clause in the pcond indicate the conditions when the cache for TACTIC should be cleared. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 33312) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 33312)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_problem_cacheableP(SubLObject strategy, SubLObject problem, SubLObject motivation, SubLObject consider_all_tacticsP, SubLObject thrown_away_already_consideredP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -691,7 +711,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 34071) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 34071)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_strategemP(SubLObject strategy, SubLObject strategem, SubLObject motivation, SubLObject problem_already_consideredP, SubLObject thrown_away_already_consideredP) {
     if ((problem_already_consideredP == UNPROVIDED)) {
       problem_already_consideredP = NIL;
@@ -715,7 +735,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
   /** @param PROBLEM-ALREADY-CONSIDERED?; whether the caller has already considered that the problem of TACTIC
     might be set aside wrt MOTIVATION.  If T, the analysis will not be redone.
    @param THROWN-AWAY-ALREADY-CONSIDERED?; don't redo work if this is being called from balanced-strategy-chooses-to-throw-away-tactic? */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 34646) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 34646)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_tacticP(SubLObject strategy, SubLObject tactic, SubLObject motivation, SubLObject problem_already_consideredP, SubLObject siblings_already_consideredP, SubLObject thrown_away_already_consideredP) {
     if ((problem_already_consideredP == UNPROVIDED)) {
       problem_already_consideredP = NIL;
@@ -762,7 +782,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
   /** The parts of set-aside reasoning that must always be recomputed and cannot be cached
    because it's too hard to figure out when the cache needs to be cleared.
    Or perhaps because they're really cheap to recompute. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 36241) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 36241)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_tactic_uncacheableP(SubLObject strategy, SubLObject tactic, SubLObject motivation, SubLObject problem_already_consideredP, SubLObject siblings_already_consideredP, SubLObject thrown_away_already_consideredP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -828,7 +848,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
 
   /** The parts of set-aside reasoning that can be cached.
    The comments before each clause in the pcond indicate the conditions when the cache for TACTIC should be cleared. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 38796) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 38796)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_tactic_cacheableP(SubLObject strategy, SubLObject tactic, SubLObject motivation, SubLObject problem_already_consideredP, SubLObject siblings_already_consideredP, SubLObject thrown_away_already_consideredP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -862,7 +882,7 @@ public  final class inference_balanced_tactician_strategic_uninterestingness ext
 
   /** @return booleanp; whether STRATEGY deems that TACTIC has already generated enough transformation
 tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PREDICATE-POS. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 40322) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 40322)
   public static final SubLObject balanced_strategy_transformation_tactic_generated_enoughP(SubLObject strategy, SubLObject tactic) {
     if ((NIL != inference_worker_transformation.transformation_generator_tactic_p(tactic))) {
       {
@@ -911,7 +931,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
 
   /** @param PROBLEM-ALREADY-CONSIDERED?; whether the caller has already considered that the supported problem of LINK
    might be set aside wrt MOTIVATION.  If T, the analysis will not be redone. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 41990) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 41990)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_linkP(SubLObject strategy, SubLObject link, SubLObject motivation, SubLObject problem_already_consideredP, SubLObject thrown_away_already_consideredP) {
     if ((problem_already_consideredP == UNPROVIDED)) {
       problem_already_consideredP = NIL;
@@ -942,7 +962,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
   }
 
   /** @return strategic-uninterestingness-reason-p */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 43754) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 43754)
   public static final SubLObject why_balanced_strategy_chooses_to_ignore_strategem(SubLObject strategy, SubLObject strategem, SubLObject motivation) {
     if ((NIL != inference_tactician.strategem_invalid_p(strategem))) {
       return $kw50$INVALID;
@@ -960,7 +980,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 45031) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 45031)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_all_tacticsP(SubLObject strategy, SubLObject problem, SubLObject motivation, SubLObject problem_already_consideredP) {
     if ((problem_already_consideredP == UNPROVIDED)) {
       problem_already_consideredP = NIL;
@@ -982,7 +1002,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     return T;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 45476) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 45476)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_all_tacticsP(SubLObject strategy, SubLObject problem, SubLObject motivation, SubLObject problem_already_consideredP) {
     if ((problem_already_consideredP == UNPROVIDED)) {
       problem_already_consideredP = NIL;
@@ -1004,7 +1024,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     return T;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 46418) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 46418)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_join_ordered_tactic_due_to_conjunctive_removalP(SubLObject strategy, SubLObject jo_tactic, SubLObject problem_already_consideredP) {
     if ((problem_already_consideredP == UNPROVIDED)) {
       problem_already_consideredP = NIL;
@@ -1018,7 +1038,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 47463) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 47463)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_connected_conjunction_link_wrt_removalP(SubLObject strategy, SubLObject link) {
     {
       SubLObject tactic = inference_worker.connected_conjunction_link_tactic(link);
@@ -1029,7 +1049,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 47741) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 47741)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_connected_conjunction_link_wrt_removalP(SubLObject strategy, SubLObject link) {
     {
       SubLObject tactic = inference_worker.connected_conjunction_link_tactic(link);
@@ -1041,7 +1061,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
   }
 
   /** Return T iff STRATEGY throws away all tactics involving the HL module of TACTIC wrt MOTIVATION. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 49200) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 49200)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_tactic_hl_module_wrt_motivationP(SubLObject strategy, SubLObject tactic, SubLObject motivation) {
     if (((motivation == $kw24$TRANSFORMATION)
          && (NIL != inference_worker_join.join_tactic_p(tactic)))) {
@@ -1056,7 +1076,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
 
   /** @return booleanp; whether PROBLEM has MOTIVATION according to STRATEGY,
    but is no longer active or set-aside. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 51212) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 51212)
   public static final SubLObject balanced_strategy_problem_thrown_awayP(SubLObject strategy, SubLObject problem, SubLObject motivation) {
     checkType(strategy, $sym72$BALANCED_STRATEGY_P);
     checkType(problem, $sym18$PROBLEM_P);
@@ -1065,19 +1085,19 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
            && (NIL == inference_balanced_tactician_datastructures.balanced_strategy_problem_set_asideP(strategy, problem, motivation))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 51760) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 51760)
   public static final SubLObject balanced_strategy_tactic_thrown_awayP(SubLObject strategy, SubLObject tactic, SubLObject motivation) {
     return inference_balanced_tactician_datastructures.balanced_strategy_strategem_thrown_awayP(strategy, tactic, motivation);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 51923) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 51923)
   public static final SubLObject balanced_strategy_tactic_set_asideP(SubLObject strategy, SubLObject tactic, SubLObject motivation) {
     return inference_balanced_tactician_datastructures.balanced_strategy_strategem_set_asideP(strategy, tactic, motivation);
   }
 
   /** Temporary control variable; should eventually stay T
    Disable the code that gives tactics removal motivation when they possibly otherwise would not. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 52082) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 52082)
   private static SubLSymbol $suppress_balanced_strategy_can_deem_tactics_harmless_wrt_removal_motivationP$ = null;
 
   /** @return booleanp; whether STRATEGY deems it harmless to propagate removal motivation to TACTIC,
@@ -1086,7 +1106,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
    then it can't hurt to give R to TACTIC.  This is occasionally necessary, in cases of massive
    problem reuse, to trigger the propagation of R to some argument* link via transformation
    and/or residual transformation. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 52367) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 52367)
   public static final SubLObject balanced_strategy_deems_tactic_harmless_wrt_removal_motivationP(SubLObject strategy, SubLObject tactic) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1102,7 +1122,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 54317) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 54317)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_tactic_lookahead_problemP(SubLObject strategy, SubLObject logical_tactic, SubLObject motivation) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1149,7 +1169,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 56322) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 56322)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_lookahead_problemP(SubLObject strategy, SubLObject lookahead_problem, SubLObject motivation) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1171,7 +1191,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 59267) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 59267)
   public static final SubLObject balanced_strategy_link_has_sibling_early_removal_linkP(SubLObject strategy, SubLObject link) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1204,7 +1224,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 60378) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 60378)
   public static final SubLObject balanced_strategy_chooses_to_set_aside_tactic_lookahead_problemP(SubLObject strategy, SubLObject logical_tactic, SubLObject motivation) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1241,14 +1261,14 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     }
   }
 
-  /** Temporary control parameter;  
+  /** Temporary control parameter;
    When non-nil, the set-aside policy for split tactics is weakened to be more conservative. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 61767) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 61767)
   public static SubLSymbol $balanced_strategy_weaken_split_tactic_set_aside_policyP$ = null;
 
   /** STRATEGY should throw away META-REMOVAL-TACTIC if it has a sibling tactic that is tactically possible but disallowed by STRATEGY,
    because then the intended completeness of META-REMOVAL-TACTIC is inapplicable. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 64654) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 64654)
   public static final SubLObject balanced_strategy_chooses_to_throw_away_meta_removal_tactic_wrt_removalP(SubLObject strategy, SubLObject meta_removal_tactic) {
     if ((NIL != inference_worker_removal.meta_removal_tactic_p(meta_removal_tactic))) {
       {
@@ -1274,7 +1294,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 65570) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 65570)
   public static final SubLObject balanced_strategy_throw_away_uninteresting_set_asides(SubLObject strategy) {
     {
       SubLObject total_thrown_away_count = ZERO_INTEGER;
@@ -1288,7 +1308,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 66261) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 66261)
   public static final SubLObject balanced_strategy_throw_away_uninteresting_set_asides_int(SubLObject strategy) {
     {
       SubLObject set_aside_problems = balanced_strategy_set_aside_problems_to_reconsider(strategy);
@@ -1311,7 +1331,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 67122) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 67122)
   public static final SubLObject balanced_strategy_reconsider_set_asides(SubLObject strategy) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1347,7 +1367,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 68024) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-strategic-uninterestingness.lisp", position = 68024)
   public static final SubLObject balanced_strategy_set_aside_problems_to_reconsider(SubLObject strategy) {
     return inference_datastructures_strategy.strategy_all_valid_set_aside_problems(strategy);
   }
@@ -1539,14 +1559,17 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_balanced_tactician_strategic_uninterestingness_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_balanced_tactician_strategic_uninterestingness_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_balanced_tactician_strategic_uninterestingness_file();
   }

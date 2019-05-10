@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,21 +80,21 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_grammar;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.integer_sequence_generator;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.nart_handles;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_grammar;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+//dm import com.cyc.cycjava_1.cycl.integer_sequence_generator;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.nart_handles;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class cfasl_compression extends SubLTranslatedFile {
 
@@ -165,8 +197,8 @@ public  final class cfasl_compression extends SubLTranslatedFile {
     $cfasl_opcode_compression_pair$ = defconstant("*CFASL-OPCODE-COMPRESSION-PAIR*", $int2$55);
     $cfasl_opcode_compression_key$ = defconstant("*CFASL-OPCODE-COMPRESSION-KEY*", $int4$56);
     $cfasl_opcode_close_compressed_block$ = defconstant("*CFASL-OPCODE-CLOSE-COMPRESSED-BLOCK*", $int6$57);
-    $cfasl_decompression_index$ = deflexical("*CFASL-DECOMPRESSION-INDEX*", ((NIL != Symbols.boundp($sym8$_CFASL_DECOMPRESSION_INDEX_)) ? ((SubLObject) $cfasl_decompression_index$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $cfasl_compression_not_found$ = deflexical("*CFASL-COMPRESSION-NOT-FOUND*", ((NIL != Symbols.boundp($sym9$_CFASL_COMPRESSION_NOT_FOUND_)) ? ((SubLObject) $cfasl_compression_not_found$.getGlobalValue()) : Symbols.make_symbol($str10$NOT_FOUND)));
+    $cfasl_decompression_index$ = deflexical("*CFASL-DECOMPRESSION-INDEX*", maybeDefault( $sym8$_CFASL_DECOMPRESSION_INDEX_, $cfasl_decompression_index$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $cfasl_compression_not_found$ = deflexical("*CFASL-COMPRESSION-NOT-FOUND*", maybeDefault( $sym9$_CFASL_COMPRESSION_NOT_FOUND_, $cfasl_compression_not_found$, ()-> (Symbols.make_symbol($str10$NOT_FOUND))));
     $cfasl_output_compression_options$ = defparameter("*CFASL-OUTPUT-COMPRESSION-OPTIONS*", NIL);
     $cfasl_output_compression_table$ = defparameter("*CFASL-OUTPUT-COMPRESSION-TABLE*", NIL);
     $cfasl_output_compression_code_isg$ = defparameter("*CFASL-OUTPUT-COMPRESSION-CODE-ISG*", NIL);

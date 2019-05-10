@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,40 +67,40 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.graph_utilities;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.graph_utilities;
 import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_proof;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_lookahead_productivity;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_proof;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_lookahead_productivity;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
 
 public  final class inference_worker_split extends SubLTranslatedFile {
 
@@ -93,14 +112,14 @@ public  final class inference_worker_split extends SubLTranslatedFile {
 
   //// Definitions
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 862) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 862)
   public static final SubLObject split_link_p(SubLObject object) {
     return makeBoolean(((NIL != inference_datastructures_problem_link.problem_link_p(object))
            && ($kw0$SPLIT == inference_datastructures_problem_link.problem_link_type(object))));
   }
 
   /** @return split-link-p, either the already existing one or a new one. */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 1214) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 1214)
   public static final SubLObject maybe_new_split_link(SubLObject supported_problem, SubLObject dnf_clause) {
     {
       SubLObject split_link = problem_first_split_argument_link(supported_problem);
@@ -115,7 +134,7 @@ public  final class inference_worker_split extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 1737) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 1737)
   public static final SubLObject new_split_link(SubLObject supported_problem, SubLObject supporting_mapped_problems) {
     {
       SubLObject split_link = inference_datastructures_problem_link.new_problem_link($kw0$SPLIT, supported_problem);
@@ -130,7 +149,7 @@ public  final class inference_worker_split extends SubLTranslatedFile {
   }
 
   /** Closes all open supporting mapped problems of SPLIT-LINK and considers that they could be irrelevant. */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 4018) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 4018)
   public static final SubLObject close_split_link(SubLObject split_link) {
     {
       SubLObject split_link_var = split_link;
@@ -151,7 +170,7 @@ public  final class inference_worker_split extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 4449) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 4449)
   public static final SubLObject find_or_create_split_link_supporting_problems(SubLObject store, SubLObject dnf_clause) {
     {
       SubLObject split_clauses = determine_shared_variable_islands(dnf_clause);
@@ -168,10 +187,10 @@ public  final class inference_worker_split extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 4886) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 4886)
   private static SubLSymbol $split_module$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 5011) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 5011)
   public static final SubLObject split_tactic_p(SubLObject object) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -180,7 +199,7 @@ public  final class inference_worker_split extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 5151) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 5151)
   public static final SubLObject new_split_tactic(SubLObject supported_problem, SubLObject index) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -273,12 +292,12 @@ public  final class inference_worker_split extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 5432) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 5432)
   public static final SubLObject split_tactic_supporting_mapped_problem_index(SubLObject tactic) {
     return inference_datastructures_tactic.tactic_data(tactic);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 5545) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 5545)
   public static final SubLObject split_tactic_link(SubLObject split_tactic) {
     {
       SubLObject problem = inference_datastructures_tactic.tactic_problem(split_tactic);
@@ -291,7 +310,7 @@ public  final class inference_worker_split extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 5826) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 5826)
   public static final SubLObject find_split_tactic_supporting_mapped_problem(SubLObject tactic) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -310,12 +329,12 @@ public  final class inference_worker_split extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 6297) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 6297)
   public static final SubLObject find_split_tactic_supporting_problem(SubLObject tactic) {
     return inference_datastructures_problem_link.mapped_problem_problem(find_split_tactic_supporting_mapped_problem(tactic));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 7502) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 7502)
   public static final SubLObject compute_strategic_properties_of_split_tactic(SubLObject tactic, SubLObject supporting_problem, SubLObject strategy) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -346,7 +365,7 @@ public  final class inference_worker_split extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 8427) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 8427)
   public static final SubLObject compute_split_tactic_productivity(SubLObject supported_problem, SubLObject supporting_problem, SubLObject strategy) {
     return inference_lookahead_productivity.memoized_problem_max_removal_productivity(supporting_problem, strategy);
   }
@@ -356,13 +375,13 @@ Splits are independent of each other, so no bindings from one half
 could possibly make the other half any more solvable.
 Hence, all splits should be preferred by default.
 However, if any split is disallowed, the entire problem should be deemed no-good. */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 8636) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 8636)
   public static SubLSymbol $split_tactic_default_preference_level$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 9018) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 9018)
   public static SubLSymbol $split_tactic_default_preference_level_justification$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 9125) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 9125)
   public static final SubLObject compute_split_tactic_preference_level(SubLObject supported_problem, SubLObject supporting_problem, SubLObject strategic_context) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -380,7 +399,7 @@ However, if any split is disallowed, the entire problem should be deemed no-good
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 9904) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 9904)
   public static final SubLObject execute_split_tactic(SubLObject tactic) {
     {
       SubLObject split_link = split_tactic_link(tactic);
@@ -392,18 +411,18 @@ However, if any split is disallowed, the entire problem should be deemed no-good
 
   /** PROBLEM should have exactly one argument link which is a split link.
 Signals an error if this is not the case. */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 10243) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 10243)
   public static final SubLObject problem_sole_split_argument_link(SubLObject problem) {
     return inference_datastructures_problem.problem_sole_argument_link_of_type(problem, $kw0$SPLIT);
   }
 
   /** @return nil or split-link-p */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 10495) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 10495)
   public static final SubLObject problem_first_split_argument_link(SubLObject problem) {
     return inference_datastructures_problem.problem_first_argument_link_of_type(problem, $kw0$SPLIT);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 10775) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 10775)
   public static final SubLObject split_tactic_lookahead_problem(SubLObject split_tactic) {
     {
       SubLObject supporting_mapped_problem = find_split_tactic_supporting_mapped_problem(split_tactic);
@@ -413,12 +432,12 @@ Signals an error if this is not the case. */
 
   /** @return 0 proof-p
 @return 1 whether the returned proof was newly created */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 11395) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 11395)
   public static final SubLObject new_split_proof(SubLObject link, SubLObject subproofs_with_sub_bindings) {
     return inference_worker_join_ordered.new_conjunctive_proof(link, subproofs_with_sub_bindings);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 11668) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 11668)
   public static final SubLObject split_proof_p(SubLObject object) {
     return makeBoolean(((NIL != inference_datastructures_proof.proof_p(object))
            && ($kw0$SPLIT == inference_datastructures_proof.proof_type(object))));
@@ -426,7 +445,7 @@ Signals an error if this is not the case. */
 
   /** First we translate the subproofs' bindings into terms of SPLIT-LINK's
 supported problem, then we cartesian-product them and make new proofs. */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 11795) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 11795)
   public static final SubLObject bubble_up_proof_to_split_link(SubLObject supporting_proof, SubLObject my_variable_map, SubLObject split_link) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -516,7 +535,7 @@ supported problem, then we cartesian-product them and make new proofs. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 14169) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 14169)
   public static final SubLObject all_literals_connected_by_shared_varsP(SubLObject dnf_clause) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -550,7 +569,7 @@ supported problem, then we cartesian-product them and make new proofs. */
   }
 
   /** @return list of problem-query-p */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 15022) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 15022)
   public static final SubLObject determine_shared_variable_islands(SubLObject dnf_clause) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -619,7 +638,7 @@ supported problem, then we cartesian-product them and make new proofs. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 16196) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 16196)
   public static final SubLObject categorize_clause_variables_via_literals(SubLObject clause) {
     {
       SubLObject all_hl_vars = list_utilities.tree_gather(clause, $sym21$HL_VARIABLE_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -628,7 +647,7 @@ supported problem, then we cartesian-product them and make new proofs. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 16477) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 16477)
   public static final SubLObject categorize_sensified_clause_variables_via_literals(SubLObject sensified_clause) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -660,7 +679,7 @@ supported problem, then we cartesian-product them and make new proofs. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 17181) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 17181)
   public static final SubLObject sensify_contextualized_clause(SubLObject clause) {
     {
       SubLObject literals = NIL;
@@ -686,7 +705,7 @@ supported problem, then we cartesian-product them and make new proofs. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 17776) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 17776)
   public static final SubLObject ground_sensified_literal_to_categorized_group(SubLObject sensified_literal) {
     return list(NIL, list(sensified_literal));
   }
@@ -694,7 +713,7 @@ supported problem, then we cartesian-product them and make new proofs. */
   /** Takes the return value of @xref categorize-variables-via-literals and turns it
 into a problem query.
 @return problem-query-p */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 17904) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 17904)
   public static final SubLObject categorized_group_to_problem_query(SubLObject group) {
     {
       SubLObject neg_lits = NIL;
@@ -716,10 +735,10 @@ into a problem query.
   }
 
   /** Temporary control variable, @todo hard-code to T */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 18494) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 18494)
   public static SubLSymbol $meta_split_tactics_enabledP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 18648) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 18648)
   public static final SubLObject meta_split_tactics_enabledP() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -727,32 +746,32 @@ into a problem query.
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 18737) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 18737)
   private static SubLSymbol $determine_new_split_tactics_module$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 18863) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 18863)
   public static SubLSymbol $meta_split_tactic_default_preference_level$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 18940) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 18940)
   public static SubLSymbol $meta_split_tactic_default_preference_level_justification$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 19056) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 19056)
   public static final SubLObject meta_split_tactic_p(SubLObject object) {
     return makeBoolean(((NIL != inference_datastructures_tactic.tactic_p(object))
            && ($determine_new_split_tactics_module$.getGlobalValue() == inference_datastructures_tactic.tactic_hl_module(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 19334) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 19334)
   public static final SubLObject meta_split_tactic_link(SubLObject meta_split_tactic) {
     return split_tactic_link(meta_split_tactic);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 19441) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 19441)
   public static final SubLObject meta_split_tactic_todo_indices(SubLObject meta_split_tactic) {
     return inference_datastructures_tactic.tactic_data(meta_split_tactic);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 19550) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 19550)
   public static final SubLObject meta_split_tactic_index_doneP(SubLObject meta_split_tactic, SubLObject index) {
     {
       SubLObject todo_indices = meta_split_tactic_todo_indices(meta_split_tactic);
@@ -760,7 +779,7 @@ into a problem query.
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 20039) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 20039)
   public static final SubLObject determine_new_meta_split_tactics(SubLObject supported_problem, SubLObject dnf_clause) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -782,7 +801,7 @@ into a problem query.
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 20669) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 20669)
   public static final SubLObject new_meta_split_tactic(SubLObject problem) {
     {
       SubLObject split_link = problem_sole_split_argument_link(problem);
@@ -878,7 +897,7 @@ into a problem query.
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 21227) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 21227)
   public static final SubLObject compute_strategic_properties_of_meta_split_tactic(SubLObject tactic, SubLObject strategy) {
     if ((NIL == preference_modules.preference_level_p(inference_datastructures_tactic.tactic_preference_level(tactic)))) {
       inference_datastructures_tactic.set_tactic_preference_level(tactic, $meta_split_tactic_default_preference_level$.getGlobalValue(), $meta_split_tactic_default_preference_level_justification$.getGlobalValue());
@@ -888,12 +907,12 @@ into a problem query.
     return tactic;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 21812) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 21812)
   public static final SubLObject new_meta_split_progress_iterator(SubLObject tactic) {
     return inference_datastructures_tactic.new_tactic_progress_iterator($kw25$META_STRUCTURAL, tactic, NIL);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 21961) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 21961)
   public static final SubLObject meta_structural_progress_iterator_doneP(SubLObject tactic) {
     if ((NIL != meta_split_tactic_p(tactic))) {
       return meta_split_progress_iterator_doneP(tactic);
@@ -902,7 +921,7 @@ into a problem query.
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 22193) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 22193)
   public static final SubLObject meta_split_progress_iterator_doneP(SubLObject tactic) {
     {
       SubLObject supported_problem = inference_datastructures_tactic.tactic_problem(tactic);
@@ -913,16 +932,16 @@ into a problem query.
   }
 
   /** If you set this to non-nil, it will trump the following variables. */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 22463) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 22463)
   private static SubLSymbol $meta_split_criteria$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 22613) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 22613)
   private static SubLSymbol $meta_split_tactics_do_single_literals_firstP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 22685) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 22685)
   private static SubLSymbol $meta_split_favors_problem_reuseP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 22745) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 22745)
   public static final SubLObject meta_split_criteria() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -938,7 +957,7 @@ into a problem query.
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 23168) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 23168)
   public static final SubLObject execute_meta_split_tactic(SubLObject tactic) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1004,7 +1023,7 @@ into a problem query.
    @return 1 booleanp; If NIL, all tactics leading to conjunct problems that pass the applicability
    test will be activated as a group.  If T, the first problem passing the applicability test
    will be activated by itself. */
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 24279) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 24279)
   public static final SubLObject meta_split_criterion_applicableP(SubLObject meta_split_criterion, SubLObject conjunct_problem) {
     {
       SubLObject pcase_var = meta_split_criterion;
@@ -1033,7 +1052,7 @@ into a problem query.
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 25706) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 25706)
   public static final SubLObject meta_split_tactic_create_and_activate_split_tactics(SubLObject meta_split_tactic, SubLObject supported_problem, SubLObject problem_index_pairs) {
     {
       SubLObject split_tactics = NIL;
@@ -1066,13 +1085,13 @@ into a problem query.
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 26229) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 26229)
   public static final SubLObject meta_split_tactic_create_one_split_tactic(SubLObject meta_split_tactic, SubLObject supported_problem, SubLObject index) {
     meta_split_tactic_note_split_tactic_done(meta_split_tactic, index);
     return new_split_tactic(supported_problem, index);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 26453) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 26453)
   public static final SubLObject meta_split_tactic_note_split_tactic_done(SubLObject tactic, SubLObject index) {
     {
       SubLObject todo_indices = meta_split_tactic_todo_indices(tactic);
@@ -1082,7 +1101,7 @@ into a problem query.
     return tactic;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 26714) 
+  @SubL(source = "cycl/inference/harness/inference-worker-split.lisp", position = 26714)
   public static final SubLObject note_split_tactics_strategically_possible(SubLObject split_tactics) {
     if ((NIL != split_tactics)) {
       {
@@ -1240,7 +1259,7 @@ into a problem query.
     $split_tactic_default_preference_level$ = deflexical("*SPLIT-TACTIC-DEFAULT-PREFERENCE-LEVEL*", $kw15$PREFERRED);
     $split_tactic_default_preference_level_justification$ = deflexical("*SPLIT-TACTIC-DEFAULT-PREFERENCE-LEVEL-JUSTIFICATION*", $str16$the_default_for_split_tactics);
     $meta_split_tactics_enabledP$ = defparameter("*META-SPLIT-TACTICS-ENABLED?*", T);
-    $determine_new_split_tactics_module$ = deflexical("*DETERMINE-NEW-SPLIT-TACTICS-MODULE*", ((NIL != Symbols.boundp($sym22$_DETERMINE_NEW_SPLIT_TACTICS_MODULE_)) ? ((SubLObject) $determine_new_split_tactics_module$.getGlobalValue()) : inference_modules.inference_meta_structural_module($kw23$DETERMINE_NEW_SPLIT_TACTICS, UNPROVIDED)));
+    $determine_new_split_tactics_module$ = deflexical("*DETERMINE-NEW-SPLIT-TACTICS-MODULE*", maybeDefault( $sym22$_DETERMINE_NEW_SPLIT_TACTICS_MODULE_, $determine_new_split_tactics_module$, ()-> (inference_modules.inference_meta_structural_module($kw23$DETERMINE_NEW_SPLIT_TACTICS, UNPROVIDED))));
     $meta_split_tactic_default_preference_level$ = deflexical("*META-SPLIT-TACTIC-DEFAULT-PREFERENCE-LEVEL*", $kw15$PREFERRED);
     $meta_split_tactic_default_preference_level_justification$ = deflexical("*META-SPLIT-TACTIC-DEFAULT-PREFERENCE-LEVEL-JUSTIFICATION*", $str24$the_default_for_meta_split_tactic);
     $meta_split_criteria$ = defparameter("*META-SPLIT-CRITERIA*", NIL);
@@ -1299,14 +1318,17 @@ into a problem query.
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_worker_split_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_worker_split_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_worker_split_file();
   }

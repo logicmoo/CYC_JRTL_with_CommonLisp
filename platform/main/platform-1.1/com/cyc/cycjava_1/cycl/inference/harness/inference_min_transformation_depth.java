@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,32 +67,32 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
 import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_czer;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_residual_transformation;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_restriction;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_union;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_czer;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_residual_transformation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_restriction;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_union;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
 
 public  final class inference_min_transformation_depth extends SubLTranslatedFile {
 
@@ -85,7 +104,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
 
   //// Definitions
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 1047) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 1047)
   public static final SubLObject problem_min_transformation_depth_from_signature(SubLObject problem, SubLObject inference) {
     {
       SubLObject signature = inference_datastructures_problem.problem_min_transformation_depth_signature(problem, inference);
@@ -93,7 +112,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 1532) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 1532)
   public static final SubLObject min_transformation_depth_from_signature(SubLObject signature) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -108,7 +127,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
   }
 
   /** Propagates transformation depth down via LINK. */
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 2607) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 2607)
   public static final SubLObject propagate_min_transformation_depth_signature_via_link(SubLObject link) {
     {
       SubLObject idx = inference_datastructures_problem_store.problem_store_inference_id_index(inference_datastructures_problem_link.problem_link_store(link));
@@ -165,7 +184,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 3120) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 3120)
   public static final SubLObject propagate_min_transformation_depth_signature(SubLObject problem, SubLObject mtds, SubLObject inference) {
     {
       SubLObject updatedP = inference_datastructures_problem.note_problem_min_transformation_depth_signature(problem, inference, mtds);
@@ -189,7 +208,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
   }
 
   /** Propagates transformation depth wrt INFERENCE down via LINK. */
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 3460)
   public static final SubLObject propagate_min_transformation_depth_signature_via_link_wrt_inference(SubLObject link, SubLObject inference) {
     {
       SubLObject supported_problem = inference_datastructures_problem_link.problem_link_supported_problem(link);
@@ -215,7 +234,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 4553) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 4553)
   public static final SubLObject propagate_mtds_via_transformation_link(SubLObject parent_mtds, SubLObject t_link, SubLObject inference) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -237,7 +256,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 6546) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 6546)
   public static final SubLObject propagate_mtds_via_join_ordered_link(SubLObject parent_mtds, SubLObject jo_link, SubLObject inference) {
     {
       SubLObject focal_problem = inference_worker_join_ordered.join_ordered_link_focal_problem(jo_link);
@@ -258,7 +277,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 7261) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 7261)
   public static final SubLObject join_ordered_link_focal_mtds(SubLObject jo_link, SubLObject parent_mtds) {
     {
       SubLObject focal_spec = inference_worker_join_ordered.join_ordered_link_focal_supporting_problem_spec(jo_link);
@@ -269,7 +288,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 7491) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 7491)
   public static final SubLObject join_ordered_link_non_focal_mtds(SubLObject jo_link, SubLObject parent_mtds) {
     {
       SubLObject non_focal_spec = inference_worker_join_ordered.join_ordered_link_non_focal_supporting_problem_spec(jo_link);
@@ -280,7 +299,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 8010) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 8010)
   public static final SubLObject propagate_mtds_via_split_link(SubLObject parent_mtds, SubLObject split_link, SubLObject inference) {
     {
       SubLObject split_problem = inference_datastructures_problem_link.problem_link_supported_problem(split_link);
@@ -301,7 +320,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 9026) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 9026)
   public static final SubLObject split_problem_conjunct_mtds(SubLObject split_problem, SubLObject conjunct_mapped_problem, SubLObject parent_mtds) {
     {
       SubLObject conjunct_problem = inference_datastructures_problem_link.mapped_problem_problem(conjunct_mapped_problem);
@@ -312,7 +331,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 9501) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 9501)
   public static final SubLObject split_problem_conjunct_literal_map(SubLObject split_problem, SubLObject conjunct_mapped_problem) {
     {
       SubLObject split_problem_query = inference_datastructures_problem.problem_query(split_problem);
@@ -326,7 +345,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 10389) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 10389)
   public static final SubLObject propagate_mtds_via_restriction_link(SubLObject parent_mtds, SubLObject restriction_link, SubLObject inference) {
     {
       SubLObject restricted_problem = inference_datastructures_problem_link.problem_link_sole_supporting_problem(restriction_link);
@@ -335,7 +354,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 10777) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 10777)
   public static final SubLObject restriction_link_restricted_mtds(SubLObject restriction_link, SubLObject parent_mtds) {
     if ((NIL != inference_datastructures_problem.single_literal_problem_p(inference_datastructures_problem_link.problem_link_supported_problem(restriction_link)))) {
       return parent_mtds;
@@ -349,7 +368,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 11369) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 11369)
   public static final SubLObject restriction_link_literal_map(SubLObject restriction_link) {
     {
       SubLObject unrestricted_clause = inference_datastructures_problem.problem_query(inference_datastructures_problem_link.problem_link_supported_problem(restriction_link)).first();
@@ -364,7 +383,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 12684) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 12684)
   public static final SubLObject compute_restricted_clause_literal_map(SubLObject unrestricted_clause, SubLObject restricted_clause) {
     {
       SubLObject literal_map = compute_clause_literal_map(unrestricted_clause, restricted_clause);
@@ -378,7 +397,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
   }
 
   /** Compute a mapping between the literals in the PARENT-CLAUSE to CHILD-CLAUSE. */
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 13488) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 13488)
   public static final SubLObject compute_clause_literal_map(SubLObject parent_clause, SubLObject child_clause) {
     {
       SubLObject datum = parent_clause;
@@ -444,21 +463,21 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 15527) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 15527)
   public static final SubLObject single_literal_problem_query_depth_signature_p(SubLObject object) {
     return subl_promotions.non_negative_integer_p(object);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 16219) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 16219)
   private static SubLSymbol $intern_problem_query_depth_signature_caching_state$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 16219) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 16219)
   public static final SubLObject intern_problem_query_depth_signature_internal(SubLObject pqds) {
     checkType(pqds, $sym14$PROBLEM_QUERY_DEPTH_SIGNATURE_P);
     return conses_high.copy_tree(pqds);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 16219) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 16219)
   public static final SubLObject intern_problem_query_depth_signature(SubLObject pqds) {
     {
       SubLObject caching_state = $intern_problem_query_depth_signature_caching_state$.getGlobalValue();
@@ -476,7 +495,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 16412) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 16412)
   public static final SubLObject new_initial_pqds(SubLObject problem_query, SubLObject depth) {
     if ((depth == UNPROVIDED)) {
       depth = ZERO_INTEGER;
@@ -502,7 +521,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 17037) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 17037)
   public static final SubLObject new_initial_clause_pqds(SubLObject contextualized_clause, SubLObject depth) {
     if ((depth == UNPROVIDED)) {
       depth = ZERO_INTEGER;
@@ -516,7 +535,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 17382) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 17382)
   public static final SubLObject new_subclause_pqds(SubLObject parent_pqds, SubLObject subclause_spec) {
     checkType(parent_pqds, $sym12$MULTI_LITERAL_PROBLEM_QUERY_DEPTH_SIGNATURE_P);
     {
@@ -583,10 +602,10 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 18428) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 18428)
   private static SubLSymbol $pqds_depth_caching_state$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 18689) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 18689)
   public static final SubLObject pqds_merge(SubLObject pqds1, SubLObject pqds2) {
     if (pqds1.equal(pqds2)) {
       return pqds1;
@@ -603,7 +622,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 20168) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 20168)
   public static final SubLObject new_subclause_literal_map(SubLObject clause, SubLObject subclause, SubLObject missing) {
     if ((missing == UNPROVIDED)) {
       missing = NIL;
@@ -685,7 +704,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 21378) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 21378)
   public static final SubLObject napply_literal_map(SubLObject source_mtds, SubLObject literal_map, SubLObject target_mtds) {
     {
       SubLObject datum = source_mtds;
@@ -757,12 +776,12 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
   }
 
   /** Return the sum of all numbers in TREE. */
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 22288) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 22288)
   public static final SubLObject tree_sum(SubLObject tree) {
     return tree_sum_recursive(tree, ZERO_INTEGER);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 22641) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 22641)
   public static final SubLObject tree_sum_recursive(SubLObject tree, SubLObject accumulator) {
     if (tree.isNumber()) {
       accumulator = Numbers.add(accumulator, tree);
@@ -782,12 +801,12 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
   }
 
   /** Return the lowest number TREE. */
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 23128) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 23128)
   public static final SubLObject tree_min_number(SubLObject tree) {
     return tree_min_number_recursive(tree, $kw30$POSITIVE_INFINITY);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 23300) 
+  @SubL(source = "cycl/inference/harness/inference-min-transformation-depth.lisp", position = 23300)
   public static final SubLObject tree_min_number_recursive(SubLObject tree, SubLObject lowest) {
     if ((NIL != number_utilities.potentially_infinite_number_p(tree))) {
       lowest = number_utilities.potentially_infinite_number_min(lowest, tree);
@@ -915,14 +934,17 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_min_transformation_depth_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_min_transformation_depth_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_min_transformation_depth_file();
   }

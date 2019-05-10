@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,12 +80,12 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.file_backed_cache;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.file_backed_cache;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class file_backed_cache_setup extends SubLTranslatedFile {
 
@@ -197,7 +229,7 @@ public  final class file_backed_cache_setup extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_file_backed_cache_setup_file() {
-    $registered_file_backed_caches$ = deflexical("*REGISTERED-FILE-BACKED-CACHES*", ((NIL != Symbols.boundp($sym0$_REGISTERED_FILE_BACKED_CACHES_)) ? ((SubLObject) $registered_file_backed_caches$.getGlobalValue()) : NIL));
+    $registered_file_backed_caches$ = deflexical("*REGISTERED-FILE-BACKED-CACHES*", maybeDefault( $sym0$_REGISTERED_FILE_BACKED_CACHES_, $registered_file_backed_caches$, NIL));
     $file_backed_cache_default_temp_dir$ = defparameter("*FILE-BACKED-CACHE-DEFAULT-TEMP-DIR*", $str1$tmp_);
     $fbc_registration_lock$ = deflexical("*FBC-REGISTRATION-LOCK*", Locks.make_lock($str2$fbc_registration_lock));
     $dtp_file_backed_cache_registration$ = defconstant("*DTP-FILE-BACKED-CACHE-REGISTRATION*", $sym3$FILE_BACKED_CACHE_REGISTRATION);

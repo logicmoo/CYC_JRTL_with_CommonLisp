@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,20 +80,20 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.api_control_vars;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.remote_image;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.api_control_vars;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.remote_image;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
 
 public  final class hl_interface_infrastructure extends SubLTranslatedFile {
 
@@ -447,15 +479,15 @@ public  final class hl_interface_infrastructure extends SubLTranslatedFile {
   public static final SubLObject init_hl_interface_infrastructure_file() {
     $hl_store_modification_and_access$ = defvar("*HL-STORE-MODIFICATION-AND-ACCESS*", $kw0$LOCAL_LOCAL);
     $override_hl_store_remote_accessP$ = defvar("*OVERRIDE-HL-STORE-REMOTE-ACCESS?*", NIL);
-    $remote_hl_store_image$ = deflexical("*REMOTE-HL-STORE-IMAGE*", ((NIL != Symbols.boundp($sym8$_REMOTE_HL_STORE_IMAGE_)) ? ((SubLObject) $remote_hl_store_image$.getGlobalValue()) : NIL));
-    $remote_hl_store_connection_pool$ = deflexical("*REMOTE-HL-STORE-CONNECTION-POOL*", ((NIL != Symbols.boundp($sym9$_REMOTE_HL_STORE_CONNECTION_POOL_)) ? ((SubLObject) $remote_hl_store_connection_pool$.getGlobalValue()) : queues.create_queue()));
+    $remote_hl_store_image$ = deflexical("*REMOTE-HL-STORE-IMAGE*", maybeDefault( $sym8$_REMOTE_HL_STORE_IMAGE_, $remote_hl_store_image$, NIL));
+    $remote_hl_store_connection_pool$ = deflexical("*REMOTE-HL-STORE-CONNECTION-POOL*", maybeDefault( $sym9$_REMOTE_HL_STORE_CONNECTION_POOL_, $remote_hl_store_connection_pool$, ()-> (queues.create_queue())));
     $remote_hl_store_connection_pool_lock$ = deflexical("*REMOTE-HL-STORE-CONNECTION-POOL-LOCK*", Locks.make_lock($str10$Remote_HL_Store_Connection_Pool_L));
     $remote_hl_store_connection_pool_max_size$ = deflexical("*REMOTE-HL-STORE-CONNECTION-POOL-MAX-SIZE*", NINE_INTEGER);
     $hl_store_error_handling_mode$ = defparameter("*HL-STORE-ERROR-HANDLING-MODE*", NIL);
-    $hl_store_iterators$ = deflexical("*HL-STORE-ITERATORS*", ((NIL != Symbols.boundp($sym49$_HL_STORE_ITERATORS_)) ? ((SubLObject) $hl_store_iterators$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQL), UNPROVIDED)));
-    $next_hl_store_iterator_id$ = deflexical("*NEXT-HL-STORE-ITERATOR-ID*", ((NIL != Symbols.boundp($sym50$_NEXT_HL_STORE_ITERATOR_ID_)) ? ((SubLObject) $next_hl_store_iterator_id$.getGlobalValue()) : ZERO_INTEGER));
+    $hl_store_iterators$ = deflexical("*HL-STORE-ITERATORS*", maybeDefault( $sym49$_HL_STORE_ITERATORS_, $hl_store_iterators$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQL), UNPROVIDED))));
+    $next_hl_store_iterator_id$ = deflexical("*NEXT-HL-STORE-ITERATOR-ID*", maybeDefault( $sym50$_NEXT_HL_STORE_ITERATOR_ID_, $next_hl_store_iterator_id$, ()-> (ZERO_INTEGER)));
     $hl_store_iterator_lock$ = deflexical("*HL-STORE-ITERATOR-LOCK*", Locks.make_lock($str51$HL_Store_Iterator_Lock));
-    $hl_transcript_stream$ = deflexical("*HL-TRANSCRIPT-STREAM*", ((NIL != Symbols.boundp($sym67$_HL_TRANSCRIPT_STREAM_)) ? ((SubLObject) $hl_transcript_stream$.getGlobalValue()) : NIL));
+    $hl_transcript_stream$ = deflexical("*HL-TRANSCRIPT-STREAM*", maybeDefault( $sym67$_HL_TRANSCRIPT_STREAM_, $hl_transcript_stream$, NIL));
     return NIL;
   }
 

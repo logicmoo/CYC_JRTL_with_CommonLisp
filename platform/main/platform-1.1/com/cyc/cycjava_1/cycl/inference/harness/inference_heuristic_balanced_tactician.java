@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,25 +67,25 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_strategic_uninterestingness;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_strategic_heuristics;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_utilities;
-import com.cyc.cycjava_1.cycl.stacks;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_strategic_uninterestingness;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_strategic_heuristics;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_utilities;
+//dm import com.cyc.cycjava_1.cycl.stacks;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class inference_heuristic_balanced_tactician extends SubLTranslatedFile {
 

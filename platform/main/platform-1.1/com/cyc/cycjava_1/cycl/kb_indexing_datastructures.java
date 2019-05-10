@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,30 +80,30 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.assertions_low;
-import com.cyc.cycjava_1.cycl.auxiliary_indexing;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constants_low;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_grammar;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.kb_indexing_declarations;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.nart_handles;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.unrepresented_terms;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.assertions_low;
+//dm import com.cyc.cycjava_1.cycl.auxiliary_indexing;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constants_low;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_grammar;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing_declarations;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.nart_handles;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.unrepresented_terms;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class kb_indexing_datastructures extends SubLTranslatedFile {
 
@@ -794,7 +826,7 @@ If not found, create a new intermediate index for KEY, with an equality test det
   }
 
   public static final SubLObject init_kb_indexing_datastructures_file() {
-    $assertion_indexing_store$ = deflexical("*ASSERTION-INDEXING-STORE*", ((NIL != Symbols.boundp($sym0$_ASSERTION_INDEXING_STORE_)) ? ((SubLObject) $assertion_indexing_store$.getGlobalValue()) : NIL));
+    $assertion_indexing_store$ = deflexical("*ASSERTION-INDEXING-STORE*", maybeDefault( $sym0$_ASSERTION_INDEXING_STORE_, $assertion_indexing_store$, NIL));
     $meta_assertion_frequency$ = deflexical("*META-ASSERTION-FREQUENCY*", $float1$0_015);
     $unindexed_syntax_constants$ = deflexical("*UNINDEXED-SYNTAX-CONSTANTS*", $list3);
     return NIL;

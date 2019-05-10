@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,20 +80,20 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.cycl_variables;
-import com.cyc.cycjava_1.cycl.czer_main;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.keyhash_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.cycl_variables;
+//dm import com.cyc.cycjava_1.cycl.czer_main;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.keyhash_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.variables;
 
 public  final class bindings extends SubLTranslatedFile {
 
@@ -673,7 +705,7 @@ members of VARIABLE-KEEP-LIST. */
   public static final SubLObject init_bindings_file() {
     $hl_identity_binding_caching_state$ = deflexical("*HL-IDENTITY-BINDING-CACHING-STATE*", NIL);
     $hl_identity_bindings_caching_state$ = deflexical("*HL-IDENTITY-BINDINGS-CACHING-STATE*", NIL);
-    $dummy_binding$ = deflexical("*DUMMY-BINDING*", ((NIL != Symbols.boundp($sym25$_DUMMY_BINDING_)) ? ((SubLObject) $dummy_binding$.getGlobalValue()) : make_variable_binding(T, T)));
+    $dummy_binding$ = deflexical("*DUMMY-BINDING*", maybeDefault( $sym25$_DUMMY_BINDING_, $dummy_binding$, ()-> (make_variable_binding(T, T))));
     $unification_success_token$ = deflexical("*UNIFICATION-SUCCESS-TOKEN*", list($dummy_binding$.getGlobalValue()));
     return NIL;
   }

@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,15 +80,15 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.agenda;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constants_high;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.nart_handles;
-import com.cyc.cycjava_1.cycl.narts_high;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.agenda;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constants_high;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.nart_handles;
+//dm import com.cyc.cycjava_1.cycl.narts_high;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
 
 public  final class encapsulation extends SubLTranslatedFile {
 
@@ -186,7 +218,7 @@ public  final class encapsulation extends SubLTranslatedFile {
     $unencapsulate_believe_names$ = defparameter("*UNENCAPSULATE-BELIEVE-NAMES*", NIL);
     $unencapsulated_common_symbols$ = deflexical("*UNENCAPSULATED-COMMON-SYMBOLS*", $list11);
     $unencapsulate_constant_via_name_optimizationP$ = defparameter("*UNENCAPSULATE-CONSTANT-VIA-NAME-OPTIMIZATION?*", NIL);
-    $unencapsulate_find_constant_lookaside_table$ = deflexical("*UNENCAPSULATE-FIND-CONSTANT-LOOKASIDE-TABLE*", ((NIL != Symbols.boundp($sym13$_UNENCAPSULATE_FIND_CONSTANT_LOOKASIDE_TABLE_)) ? ((SubLObject) $unencapsulate_find_constant_lookaside_table$.getGlobalValue()) : NIL));
+    $unencapsulate_find_constant_lookaside_table$ = deflexical("*UNENCAPSULATE-FIND-CONSTANT-LOOKASIDE-TABLE*", maybeDefault( $sym13$_UNENCAPSULATE_FIND_CONSTANT_LOOKASIDE_TABLE_, $unencapsulate_find_constant_lookaside_table$, NIL));
     $unencapsulate_find_constant_capacity$ = deflexical("*UNENCAPSULATE-FIND-CONSTANT-CAPACITY*", TWENTY_INTEGER);
     return NIL;
   }

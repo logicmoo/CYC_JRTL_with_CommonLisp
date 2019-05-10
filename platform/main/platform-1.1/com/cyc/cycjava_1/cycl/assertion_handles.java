@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,19 +80,19 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertion_manager;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.cfasl_kb_methods;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.czer_utilities;
-import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertion_manager;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.cfasl_kb_methods;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.czer_utilities;
+//dm import com.cyc.cycjava_1.cycl.id_index;
+//dm import com.cyc.cycjava_1.cycl.kb_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class assertion_handles extends SubLTranslatedFile {
 
@@ -548,7 +580,7 @@ public  final class assertion_handles extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_assertion_handles_file() {
-    $assertion_from_id$ = deflexical("*ASSERTION-FROM-ID*", ((NIL != Symbols.boundp($sym0$_ASSERTION_FROM_ID_)) ? ((SubLObject) $assertion_from_id$.getGlobalValue()) : NIL));
+    $assertion_from_id$ = deflexical("*ASSERTION-FROM-ID*", maybeDefault( $sym0$_ASSERTION_FROM_ID_, $assertion_from_id$, NIL));
     $dtp_assertion$ = defconstant("*DTP-ASSERTION*", $sym25$ASSERTION);
     $print_assertions_in_cnf$ = defparameter("*PRINT-ASSERTIONS-IN-CNF*", NIL);
     return NIL;

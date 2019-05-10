@@ -18,6 +18,94 @@
 */
 package com.cyc.cycjava_1.cycl;
 
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+import com.cyc.cycjava.cycl.inference.harness.*;
+import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
+import com.cyc.tool.subl.util.SubLFiles;
+import com.cyc.cycjava.cycl.inference.harness.forward;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.kct_utils;
+import com.cyc.cycjava.cycl.rtp.rtp_initialize;
+import com.cyc.cycjava.cycl.wordnet_import.wordnet_import;
+import com.cyc.cycjava.cycl.inference.open_cyc_inference_api;
+import java.util.Map;
+import java.util.Iterator;
+import com.cyc.cycjava.cycl.rtp.rtp_datastructures;
+import com.cyc.cycjava.cycl.sbhl.sbhl_time_dates;
+import com.cyc.cycjava.cycl.sbhl.sbhl_time_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_cache;
+import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
+import com.cyc.cycjava.cycl.sbhl.sbhl_time_modules;
+import com.cyc.cycjava.cycl.sbhl.sbhl_module_declarations;
+import com.cyc.cycjava.cycl.sbhl.sbhl_time_utilities;
+import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
+import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_infrastructure_utilities;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_link_methods;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
+import com.cyc.cycjava.cycl.sbhl.sbhl_caching_policies;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapper;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.cycjava.cycl.inference.harness.inference_analysis;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Storage;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.ArrayList;
@@ -46,100 +134,101 @@ import static com.cyc.tool.subl.util.SubLFiles.defvar;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.api_control_vars;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.arity;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertion_manager;
-import com.cyc.cycjava_1.cycl.assertion_utilities;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.assertions_low;
-import com.cyc.cycjava_1.cycl.at_cache;
-import com.cyc.cycjava_1.cycl.auxiliary_indexing;
-import com.cyc.cycjava_1.cycl.bookkeeping_store;
-import com.cyc.cycjava_1.cycl.cardinality_estimates;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.clause_strucs;
-import com.cyc.cycjava_1.cycl.constant_completion;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constant_index_manager;
-import com.cyc.cycjava_1.cycl.constants_high;
-import com.cyc.cycjava_1.cycl.constants_low;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.czer_vars;
-import com.cyc.cycjava_1.cycl.deduction_handles;
-import com.cyc.cycjava_1.cycl.deduction_manager;
-import com.cyc.cycjava_1.cycl.deductions_high;
-import com.cyc.cycjava_1.cycl.deductions_low;
-import com.cyc.cycjava_1.cycl.defns;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.file_utilities;
-import com.cyc.cycjava_1.cycl.file_vector;
-import com.cyc.cycjava_1.cycl.file_vector_utilities;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.hl_supports;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.kct_utils;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.api_control_vars;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.arity;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertion_manager;
+//dm import com.cyc.cycjava_1.cycl.assertion_utilities;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.assertions_low;
+//dm import com.cyc.cycjava_1.cycl.at_cache;
+//dm import com.cyc.cycjava_1.cycl.auxiliary_indexing;
+//dm import com.cyc.cycjava_1.cycl.bookkeeping_store;
+//dm import com.cyc.cycjava_1.cycl.cardinality_estimates;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.clause_strucs;
+//dm import com.cyc.cycjava_1.cycl.constant_completion;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constant_index_manager;
+//dm import com.cyc.cycjava_1.cycl.constants_high;
+//dm import com.cyc.cycjava_1.cycl.constants_low;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.czer_vars;
+//dm import com.cyc.cycjava_1.cycl.deduction_handles;
+//dm import com.cyc.cycjava_1.cycl.deduction_manager;
+//dm import com.cyc.cycjava_1.cycl.deductions_high;
+//dm import com.cyc.cycjava_1.cycl.deductions_low;
+//dm import com.cyc.cycjava_1.cycl.defns;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.file_utilities;
+//dm import com.cyc.cycjava_1.cycl.file_vector;
+//dm import com.cyc.cycjava_1.cycl.file_vector_utilities;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.hl_supports;
 import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_analysis;
-import com.cyc.cycjava_1.cycl.kb_control_vars;
-import com.cyc.cycjava_1.cycl.kb_hl_support_manager;
-import com.cyc.cycjava_1.cycl.kb_hl_supports;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
-import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.kb_utilities;
-import com.cyc.cycjava_1.cycl.cyc_testing.kb_content_test.kct_utils;
-import com.cyc.cycjava_1.cycl.ke;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.misc_utilities;
-import com.cyc.cycjava_1.cycl.nart_handles;
-import com.cyc.cycjava_1.cycl.nart_hl_formula_manager;
-import com.cyc.cycjava_1.cycl.nart_index_manager;
-import com.cyc.cycjava_1.cycl.narts_high;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.operation_communication;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_cache;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_caching_policies;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_methods;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_declarations;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava_1.cycl.skolems;
-import com.cyc.cycjava_1.cycl.somewhere_cache;
-import com.cyc.cycjava_1.cycl.subl_identifier;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.system_parameters;
-import com.cyc.cycjava_1.cycl.transcript_utilities;
-import com.cyc.cycjava_1.cycl.tva_cache;
-import com.cyc.cycjava_1.cycl.unrepresented_term_index_manager;
-import com.cyc.cycjava_1.cycl.unrepresented_terms;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.wff;
-import com.cyc.cycjava_1.cycl.wff_macros;
-import com.cyc.cycjava_1.cycl.wff_vars;
+//import com.cyc.cycjava_1.cycl.inference.harness.inference_analysis;
+//dm import com.cyc.cycjava_1.cycl.kb_control_vars;
+//dm import com.cyc.cycjava_1.cycl.kb_hl_support_manager;
+//dm import com.cyc.cycjava_1.cycl.kb_hl_supports;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
+//dm import com.cyc.cycjava_1.cycl.kb_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_utilities;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.kb_content_test.kct_utils;
+//dm import com.cyc.cycjava_1.cycl.ke;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.misc_utilities;
+//dm import com.cyc.cycjava_1.cycl.nart_handles;
+//dm import com.cyc.cycjava_1.cycl.nart_hl_formula_manager;
+//dm import com.cyc.cycjava_1.cycl.nart_index_manager;
+//dm import com.cyc.cycjava_1.cycl.narts_high;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.operation_communication;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_cache;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_caching_policies;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_methods;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_declarations;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
+//dm import com.cyc.cycjava_1.cycl.skolems;
+//dm import com.cyc.cycjava_1.cycl.somewhere_cache;
+//dm import com.cyc.cycjava_1.cycl.subl_identifier;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.system_parameters;
+//dm import com.cyc.cycjava_1.cycl.transcript_utilities;
+//dm import com.cyc.cycjava_1.cycl.tva_cache;
+//dm import com.cyc.cycjava_1.cycl.unrepresented_term_index_manager;
+//dm import com.cyc.cycjava_1.cycl.unrepresented_terms;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.wff;
+//dm import com.cyc.cycjava_1.cycl.wff_macros;
+//dm import com.cyc.cycjava_1.cycl.wff_vars;
 
-public final class dumper
-    extends
-      SubLTranslatedFile
+public final class dumper_larkc
+    extends dumper
+
 {
   //// Constructor
-  private dumper()
+  private dumper_larkc()
   {}
-  public static final SubLFile me = new dumper();
+  public static final SubLFile me = new dumper_larkc();
   public static final String myName = "com.cyc.cycjava_1.cycl.dumper";
   //// Definitions
   /**
    * Force the KB to be completely stored in memory and therefore able written
    * out as a single image file with no other dependencies.
    */
-  @SubL(source = "cycl/dumper.lisp", position = 1024)
-  private static SubLSymbol $force_monolithic_kb_assumption$ = null;
+  //@SubL(source = "cycl/dumper.lisp", position = 1024)
+  // public static SubLSymbol $force_monolithic_kb_assumption$ = null;
 
   @SubL(source = "cycl/dumper.lisp", position = 1696)
   public static final SubLObject force_monolithic_kb_assumptionP()
@@ -154,14 +243,14 @@ public final class dumper
     return Sequences.fill( filename, Characters.CHAR_space, UNPROVIDED, UNPROVIDED );
   }
   /** The default directory chain for KB dumps under the Cyc Home directory. */
-  @SubL(source = "cycl/dumper.lisp", position = 4190)
-  private static SubLSymbol $default_dump_path$ = null;
+  //@SubL(source = "cycl/dumper.lisp", position = 4190)
+  // public static SubLSymbol $default_dump_path$ = null;
   /** The default extension for all KB dump files. */
-  @SubL(source = "cycl/dumper.lisp", position = 4630)
-  private static SubLSymbol $default_dump_extension$ = null;
+  //@SubL(source = "cycl/dumper.lisp", position = 4630)
+  // public static SubLSymbol $default_dump_extension$ = null;
   /** The default extension for all KB dump product files. */
-  @SubL(source = "cycl/dumper.lisp", position = 4744)
-  private static SubLSymbol $default_dump_product_extension$ = null;
+  //@SubL(source = "cycl/dumper.lisp", position = 4744)
+  // public static SubLSymbol $default_dump_product_extension$ = null;
 
   /**
    * Return the KB dump file NAME.EXTENSION in the dump directory DIRECTORY-PATH
@@ -176,11 +265,11 @@ public final class dumper
     return file_utilities.relative_filename( directory_path, name, extension );
   }
   /** Dump size scaling factor in number of bytes per assertion. */
-  @SubL(source = "cycl/dumper.lisp", position = 5794)
-  private static SubLSymbol $dump_bytes_per_assertion$ = null;
+  //@SubL(source = "cycl/dumper.lisp", position = 5794)
+  // public static SubLSymbol $dump_bytes_per_assertion$ = null;
   /** Verify the existence of dump files when non-nil. */
-  @SubL(source = "cycl/dumper.lisp", position = 6513)
-  public static SubLSymbol $dump_verify$ = null;
+ // @SubL(source = "cycl/dumper.lisp", position = 6513)
+  // public static SubLSymbol $dump_verify$ = null;
 
   /**
    * Generate an error if FILENAME does not exist.
@@ -221,8 +310,8 @@ public final class dumper
    * been recently allocated after each key point where a major chunk of KB
    * content has been loaded.
    */
-  @SubL(source = "cycl/dumper.lisp", position = 7613)
-  private static SubLSymbol $kb_load_gc_checkpoints_enabledP$ = null;
+  //@SubL(source = "cycl/dumper.lisp", position = 7613)
+  // public static SubLSymbol $kb_load_gc_checkpoints_enabledP$ = null;
 
   @SubL(source = "cycl/dumper.lisp", position = 7918)
   public static final SubLObject kb_load_gc_checkpoint()
@@ -235,8 +324,8 @@ public final class dumper
       return NIL;
     }
   }
-  @SubL(source = "cycl/dumper.lisp", position = 13241)
-  public static SubLSymbol $dump_verbose$ = null;
+  //@SubL(source = "cycl/dumper.lisp", position = 13241)
+  // public static SubLSymbol $dump_verbose$ = null;
 
   /** Load the KB from the dump directory in DIRECTORY-PATH. */
   @SubL(source = "cycl/dumper.lisp", position = 14801)
@@ -805,8 +894,8 @@ public final class dumper
       }
     }
   }
-  @SubL(source = "cycl/dumper.lisp", position = 31364)
-  private static SubLSymbol $kb_dump_common_symbols$ = null;
+  //@SubL(source = "cycl/dumper.lisp", position = 31364)
+  // public static SubLSymbol $kb_dump_common_symbols$ = null;
 
   @SubL(source = "cycl/dumper.lisp", position = 32660)
   public static final SubLObject load_special_objects(SubLObject directory_path)
@@ -2207,7 +2296,7 @@ public final class dumper
       SubLObject experience_file = kb_dump_file( $str30$rule_utility_experience, directory_path, UNPROVIDED );
       if( ( NIL != verify_file_existence( experience_file, T ) ) )
       {
-        inference_analysis.load_transformation_rule_statistics( experience_file, NIL );
+       // inference_analysis.load_transformation_rule_statistics( experience_file, NIL );
       }
     }
     return NIL;
@@ -3295,8 +3384,8 @@ public final class dumper
   {
     return load_unit_file( directory_path, $str180$cardinality_estimates, $sym182$LOAD_CARDINALITY_ESTIMATES_FROM_STREAM, $str183$Loading_cardinality_estimates___ );
   }
-  @SubL(source = "cycl/dumper.lisp", position = 91433)
-  public static SubLSymbol $compute_arg_type_cache_on_dumpP$ = null;
+  //@SubL(source = "cycl/dumper.lisp", position = 91433)
+  // public static SubLSymbol $compute_arg_type_cache_on_dumpP$ = null;
 
   @SubL(source = "cycl/dumper.lisp", position = 92271)
   public static final SubLObject load_arg_type_cache(SubLObject directory_path)
@@ -4002,19 +4091,18 @@ public final class dumper
 
   public static final SubLObject init_dumper_file()
   {
-    $force_monolithic_kb_assumption$ = deflexical( "*FORCE-MONOLITHIC-KB-ASSUMPTION*", ( ( NIL != Symbols.boundp( $sym0$_FORCE_MONOLITHIC_KB_ASSUMPTION_ ) ) ? ( (SubLObject) $force_monolithic_kb_assumption$
-        .getGlobalValue() ) : NIL ) );
-    $default_dump_path$ = defparameter( "*DEFAULT-DUMP-PATH*", $list21 );
-    $default_dump_extension$ = defparameter( "*DEFAULT-DUMP-EXTENSION*", $str22$cfasl );
-    $default_dump_product_extension$ = defparameter( "*DEFAULT-DUMP-PRODUCT-EXTENSION*", $str23$fht );
-    $dump_bytes_per_assertion$ = deflexical( "*DUMP-BYTES-PER-ASSERTION*", $int25$192 );
-    $dump_verify$ = defparameter( "*DUMP-VERIFY*", T );
-    $kb_load_gc_checkpoints_enabledP$ = defparameter( "*KB-LOAD-GC-CHECKPOINTS-ENABLED?*", NIL );
-    $dump_verbose$ = defparameter( "*DUMP-VERBOSE*", T );
-    $kb_dump_common_symbols$ = defparameter( "*KB-DUMP-COMMON-SYMBOLS*", ConsesLow.append( new SubLObject[] { enumeration_types.valid_hl_truth_values(), enumeration_types.valid_directions(), arguments
-        .asserted_argument_tokens(), hl_supports.hl_support_modules(), hash_table_utilities.valid_hash_test_symbols(), $list64
-    } ) );
-    $compute_arg_type_cache_on_dumpP$ = defparameter( "*COMPUTE-ARG-TYPE-CACHE-ON-DUMP?*", T );
+//    $force_monolithic_kb_assumption$ = deflexical( "*FORCE-MONOLITHIC-KB-ASSUMPTION*", maybeDefault( $sym0$_FORCE_MONOLITHIC_KB_ASSUMPTION_, $force_monolithic_kb_assumption$, NIL ) );
+//    $default_dump_path$ = defparameter( "*DEFAULT-DUMP-PATH*", $list21 );
+//    $default_dump_extension$ = defparameter( "*DEFAULT-DUMP-EXTENSION*", $str22$cfasl );
+//    $default_dump_product_extension$ = defparameter( "*DEFAULT-DUMP-PRODUCT-EXTENSION*", $str23$fht );
+//    $dump_bytes_per_assertion$ = deflexical( "*DUMP-BYTES-PER-ASSERTION*", $int25$192 );
+//    $dump_verify$ = defparameter( "*DUMP-VERIFY*", T );
+//    $kb_load_gc_checkpoints_enabledP$ = defparameter( "*KB-LOAD-GC-CHECKPOINTS-ENABLED?*", NIL );
+//    $dump_verbose$ = defparameter( "*DUMP-VERBOSE*", T );
+//    $kb_dump_common_symbols$ = defparameter( "*KB-DUMP-COMMON-SYMBOLS*", ConsesLow.append( new SubLObject[] { enumeration_types.valid_hl_truth_values(), enumeration_types.valid_directions(), arguments
+//        .asserted_argument_tokens(), hl_supports.hl_support_modules(), hash_table_utilities.valid_hash_test_symbols(), $list64
+//    } ) );
+//    $compute_arg_type_cache_on_dumpP$ = defparameter( "*COMPUTE-ARG-TYPE-CACHE-ON-DUMP?*", T );
     return NIL;
   }
 
@@ -4022,12 +4110,12 @@ public final class dumper
   {
     // CVS_ID("Id: dumper.lisp 128918 2009-10-07 03:04:59Z rck ");
     subl_macro_promotions.declare_defglobal( $sym0$_FORCE_MONOLITHIC_KB_ASSUMPTION_ );
-    utilities_macros.note_funcall_helper_function( $sym98$LOAD_DEDUCTION_DEF_FROM_CACHE );
-    utilities_macros.note_funcall_helper_function( $sym104$LOAD_ASSERTION_DEF_FROM_CACHE );
-    utilities_macros.note_funcall_helper_function( $sym110$LOAD_KB_HL_SUPPORT_DEF_FROM_CACHE );
-    utilities_macros.note_funcall_helper_function( $sym125$LOAD_CONSTANT_INDEX_FROM_CACHE );
-    utilities_macros.note_funcall_helper_function( $sym131$LOAD_NART_INDEX_FROM_CACHE );
-    utilities_macros.note_funcall_helper_function( $sym137$LOAD_UNREPRESENTED_TERM_INDEX_FROM_CACHE );
+//    utilities_macros.note_funcall_helper_function( $sym98$LOAD_DEDUCTION_DEF_FROM_CACHE );
+//    utilities_macros.note_funcall_helper_function( $sym104$LOAD_ASSERTION_DEF_FROM_CACHE );
+//    utilities_macros.note_funcall_helper_function( $sym110$LOAD_KB_HL_SUPPORT_DEF_FROM_CACHE );
+//    utilities_macros.note_funcall_helper_function( $sym125$LOAD_CONSTANT_INDEX_FROM_CACHE );
+//    utilities_macros.note_funcall_helper_function( $sym131$LOAD_NART_INDEX_FROM_CACHE );
+//    utilities_macros.note_funcall_helper_function( $sym137$LOAD_UNREPRESENTED_TERM_INDEX_FROM_CACHE );
     return NIL;
   }
   //// Internal Constants

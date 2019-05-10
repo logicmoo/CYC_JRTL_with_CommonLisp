@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,14 +80,14 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cache;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.kb_object_manager;
-import com.cyc.cycjava_1.cycl.misc_utilities;
-import com.cyc.cycjava_1.cycl.nart_handles;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cache;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.id_index;
+//dm import com.cyc.cycjava_1.cycl.kb_object_manager;
+//dm import com.cyc.cycjava_1.cycl.misc_utilities;
+//dm import com.cyc.cycjava_1.cycl.nart_handles;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
 
 public  final class nart_hl_formula_manager extends SubLTranslatedFile {
 
@@ -140,9 +172,9 @@ public  final class nart_hl_formula_manager extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_nart_hl_formula_manager_file() {
-    $nart_hl_formula_manager$ = deflexical("*NART-HL-FORMULA-MANAGER*", ((NIL != Symbols.boundp($sym0$_NART_HL_FORMULA_MANAGER_)) ? ((SubLObject) $nart_hl_formula_manager$.getGlobalValue()) : $kw1$UNINITIALIZED));
+    $nart_hl_formula_manager$ = deflexical("*NART-HL-FORMULA-MANAGER*", maybeDefault( $sym0$_NART_HL_FORMULA_MANAGER_, $nart_hl_formula_manager$, ()-> ($kw1$UNINITIALIZED)));
     $nart_hl_formula_lru_size_percentage$ = deflexical("*NART-HL-FORMULA-LRU-SIZE-PERCENTAGE*", FIVE_INTEGER);
-    $nart_hl_formula_table$ = deflexical("*NART-HL-FORMULA-TABLE*", ((NIL != Symbols.boundp($sym5$_NART_HL_FORMULA_TABLE_)) ? ((SubLObject) $nart_hl_formula_table$.getGlobalValue()) : NIL));
+    $nart_hl_formula_table$ = deflexical("*NART-HL-FORMULA-TABLE*", maybeDefault( $sym5$_NART_HL_FORMULA_TABLE_, $nart_hl_formula_table$, NIL));
     return NIL;
   }
 

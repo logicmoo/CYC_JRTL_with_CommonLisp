@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,13 +80,13 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.genl_mts;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.removal_module_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.genl_mts;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.removal_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
 
 public  final class mt_vars extends SubLTranslatedFile {
 
@@ -365,37 +397,37 @@ and the code assumes that these mts are the same. */
 
   public static final SubLObject init_mt_vars_file() {
     $mt_var_basis_table$ = deflexical("*MT-VAR-BASIS-TABLE*", dictionary.new_dictionary(Symbols.symbol_function(EQL), UNPROVIDED));
-    $mt_root$ = deflexical("*MT-ROOT*", ((NIL != Symbols.boundp($sym6$_MT_ROOT_)) ? ((SubLObject) $mt_root$.getGlobalValue()) : $const7$BaseKB));
-    $theory_mt_root$ = deflexical("*THEORY-MT-ROOT*", ((NIL != Symbols.boundp($sym8$_THEORY_MT_ROOT_)) ? ((SubLObject) $theory_mt_root$.getGlobalValue()) : $const7$BaseKB));
-    $assertible_mt_root$ = deflexical("*ASSERTIBLE-MT-ROOT*", ((NIL != Symbols.boundp($sym9$_ASSERTIBLE_MT_ROOT_)) ? ((SubLObject) $assertible_mt_root$.getGlobalValue()) : $const7$BaseKB));
-    $assertible_theory_mt_root$ = deflexical("*ASSERTIBLE-THEORY-MT-ROOT*", ((NIL != Symbols.boundp($sym10$_ASSERTIBLE_THEORY_MT_ROOT_)) ? ((SubLObject) $assertible_theory_mt_root$.getGlobalValue()) : $const7$BaseKB));
-    $core_mt_floor$ = deflexical("*CORE-MT-FLOOR*", ((NIL != Symbols.boundp($sym11$_CORE_MT_FLOOR_)) ? ((SubLObject) $core_mt_floor$.getGlobalValue()) : $const7$BaseKB));
-    $mt_mt$ = deflexical("*MT-MT*", ((NIL != Symbols.boundp($sym12$_MT_MT_)) ? ((SubLObject) $mt_mt$.getGlobalValue()) : $const13$UniversalVocabularyMt));
-    $defining_mt_mt$ = deflexical("*DEFINING-MT-MT*", ((NIL != Symbols.boundp($sym15$_DEFINING_MT_MT_)) ? ((SubLObject) $defining_mt_mt$.getGlobalValue()) : $const7$BaseKB));
-    $decontextualized_predicate_mt$ = deflexical("*DECONTEXTUALIZED-PREDICATE-MT*", ((NIL != Symbols.boundp($sym17$_DECONTEXTUALIZED_PREDICATE_MT_)) ? ((SubLObject) $decontextualized_predicate_mt$.getGlobalValue()) : $const7$BaseKB));
-    $decontextualized_collection_mt$ = deflexical("*DECONTEXTUALIZED-COLLECTION-MT*", ((NIL != Symbols.boundp($sym19$_DECONTEXTUALIZED_COLLECTION_MT_)) ? ((SubLObject) $decontextualized_collection_mt$.getGlobalValue()) : $const7$BaseKB));
-    $ephemeral_term_mt$ = deflexical("*EPHEMERAL-TERM-MT*", ((NIL != Symbols.boundp($sym21$_EPHEMERAL_TERM_MT_)) ? ((SubLObject) $ephemeral_term_mt$.getGlobalValue()) : $const7$BaseKB));
-    $ist_mt$ = deflexical("*IST-MT*", ((NIL != Symbols.boundp($sym23$_IST_MT_)) ? ((SubLObject) $ist_mt$.getGlobalValue()) : $const7$BaseKB));
-    $inference_related_bookkeeping_predicate_mt$ = deflexical("*INFERENCE-RELATED-BOOKKEEPING-PREDICATE-MT*", ((NIL != Symbols.boundp($sym25$_INFERENCE_RELATED_BOOKKEEPING_PREDICATE_MT_)) ? ((SubLObject) $inference_related_bookkeeping_predicate_mt$.getGlobalValue()) : $const7$BaseKB));
-    $anect_mt$ = deflexical("*ANECT-MT*", ((NIL != Symbols.boundp($sym27$_ANECT_MT_)) ? ((SubLObject) $anect_mt$.getGlobalValue()) : $const13$UniversalVocabularyMt));
-    $broad_mt_mt$ = deflexical("*BROAD-MT-MT*", ((NIL != Symbols.boundp($sym29$_BROAD_MT_MT_)) ? ((SubLObject) $broad_mt_mt$.getGlobalValue()) : $const7$BaseKB));
-    $psc_mt$ = deflexical("*PSC-MT*", ((NIL != Symbols.boundp($sym31$_PSC_MT_)) ? ((SubLObject) $psc_mt$.getGlobalValue()) : $const7$BaseKB));
-    $tou_mt$ = deflexical("*TOU-MT*", ((NIL != Symbols.boundp($sym33$_TOU_MT_)) ? ((SubLObject) $tou_mt$.getGlobalValue()) : $const7$BaseKB));
-    $skolem_mt$ = deflexical("*SKOLEM-MT*", ((NIL != Symbols.boundp($sym35$_SKOLEM_MT_)) ? ((SubLObject) $skolem_mt$.getGlobalValue()) : $const7$BaseKB));
-    $thing_defining_mt$ = deflexical("*THING-DEFINING-MT*", ((NIL != Symbols.boundp($sym37$_THING_DEFINING_MT_)) ? ((SubLObject) $thing_defining_mt$.getGlobalValue()) : $const7$BaseKB));
-    $relation_defining_mt$ = deflexical("*RELATION-DEFINING-MT*", ((NIL != Symbols.boundp($sym39$_RELATION_DEFINING_MT_)) ? ((SubLObject) $relation_defining_mt$.getGlobalValue()) : $const7$BaseKB));
-    $equals_defining_mt$ = deflexical("*EQUALS-DEFINING-MT*", ((NIL != Symbols.boundp($sym41$_EQUALS_DEFINING_MT_)) ? ((SubLObject) $equals_defining_mt$.getGlobalValue()) : $const7$BaseKB));
-    $element_of_defining_mt$ = deflexical("*ELEMENT-OF-DEFINING-MT*", ((NIL != Symbols.boundp($sym43$_ELEMENT_OF_DEFINING_MT_)) ? ((SubLObject) $element_of_defining_mt$.getGlobalValue()) : $const7$BaseKB));
-    $subset_of_defining_mt$ = deflexical("*SUBSET-OF-DEFINING-MT*", ((NIL != Symbols.boundp($sym45$_SUBSET_OF_DEFINING_MT_)) ? ((SubLObject) $subset_of_defining_mt$.getGlobalValue()) : $const7$BaseKB));
-    $arity_mt$ = deflexical("*ARITY-MT*", ((NIL != Symbols.boundp($sym47$_ARITY_MT_)) ? ((SubLObject) $arity_mt$.getGlobalValue()) : $const13$UniversalVocabularyMt));
-    $sublid_mt$ = deflexical("*SUBLID-MT*", ((NIL != Symbols.boundp($sym49$_SUBLID_MT_)) ? ((SubLObject) $sublid_mt$.getGlobalValue()) : $const50$CycAPIMt));
-    $not_assertible_mt_convention_mt$ = deflexical("*NOT-ASSERTIBLE-MT-CONVENTION-MT*", ((NIL != Symbols.boundp($sym52$_NOT_ASSERTIBLE_MT_CONVENTION_MT_)) ? ((SubLObject) $not_assertible_mt_convention_mt$.getGlobalValue()) : $const13$UniversalVocabularyMt));
-    $default_ask_mt$ = deflexical("*DEFAULT-ASK-MT*", ((NIL != Symbols.boundp($sym54$_DEFAULT_ASK_MT_)) ? ((SubLObject) $default_ask_mt$.getGlobalValue()) : $const7$BaseKB));
-    $default_assert_mt$ = deflexical("*DEFAULT-ASSERT-MT*", ((NIL != Symbols.boundp($sym55$_DEFAULT_ASSERT_MT_)) ? ((SubLObject) $default_assert_mt$.getGlobalValue()) : $const7$BaseKB));
-    $default_clone_mt$ = deflexical("*DEFAULT-CLONE-MT*", ((NIL != Symbols.boundp($sym56$_DEFAULT_CLONE_MT_)) ? ((SubLObject) $default_clone_mt$.getGlobalValue()) : $const7$BaseKB));
-    $default_support_mt$ = deflexical("*DEFAULT-SUPPORT-MT*", ((NIL != Symbols.boundp($sym57$_DEFAULT_SUPPORT_MT_)) ? ((SubLObject) $default_support_mt$.getGlobalValue()) : $const7$BaseKB));
-    $default_comment_mt$ = deflexical("*DEFAULT-COMMENT-MT*", ((NIL != Symbols.boundp($sym58$_DEFAULT_COMMENT_MT_)) ? ((SubLObject) $default_comment_mt$.getGlobalValue()) : $const7$BaseKB));
-    $default_convention_mt$ = deflexical("*DEFAULT-CONVENTION-MT*", ((NIL != Symbols.boundp($sym59$_DEFAULT_CONVENTION_MT_)) ? ((SubLObject) $default_convention_mt$.getGlobalValue()) : $const13$UniversalVocabularyMt));
+    $mt_root$ = deflexical("*MT-ROOT*", maybeDefault( $sym6$_MT_ROOT_, $mt_root$, ()-> ($const7$BaseKB)));
+    $theory_mt_root$ = deflexical("*THEORY-MT-ROOT*", maybeDefault( $sym8$_THEORY_MT_ROOT_, $theory_mt_root$, ()-> ($const7$BaseKB)));
+    $assertible_mt_root$ = deflexical("*ASSERTIBLE-MT-ROOT*", maybeDefault( $sym9$_ASSERTIBLE_MT_ROOT_, $assertible_mt_root$, ()-> ($const7$BaseKB)));
+    $assertible_theory_mt_root$ = deflexical("*ASSERTIBLE-THEORY-MT-ROOT*", maybeDefault( $sym10$_ASSERTIBLE_THEORY_MT_ROOT_, $assertible_theory_mt_root$, ()-> ($const7$BaseKB)));
+    $core_mt_floor$ = deflexical("*CORE-MT-FLOOR*", maybeDefault( $sym11$_CORE_MT_FLOOR_, $core_mt_floor$, ()-> ($const7$BaseKB)));
+    $mt_mt$ = deflexical("*MT-MT*", maybeDefault( $sym12$_MT_MT_, $mt_mt$, ()-> ($const13$UniversalVocabularyMt)));
+    $defining_mt_mt$ = deflexical("*DEFINING-MT-MT*", maybeDefault( $sym15$_DEFINING_MT_MT_, $defining_mt_mt$, ()-> ($const7$BaseKB)));
+    $decontextualized_predicate_mt$ = deflexical("*DECONTEXTUALIZED-PREDICATE-MT*", maybeDefault( $sym17$_DECONTEXTUALIZED_PREDICATE_MT_, $decontextualized_predicate_mt$, ()-> ($const7$BaseKB)));
+    $decontextualized_collection_mt$ = deflexical("*DECONTEXTUALIZED-COLLECTION-MT*", maybeDefault( $sym19$_DECONTEXTUALIZED_COLLECTION_MT_, $decontextualized_collection_mt$, ()-> ($const7$BaseKB)));
+    $ephemeral_term_mt$ = deflexical("*EPHEMERAL-TERM-MT*", maybeDefault( $sym21$_EPHEMERAL_TERM_MT_, $ephemeral_term_mt$, ()-> ($const7$BaseKB)));
+    $ist_mt$ = deflexical("*IST-MT*", maybeDefault( $sym23$_IST_MT_, $ist_mt$, ()-> ($const7$BaseKB)));
+    $inference_related_bookkeeping_predicate_mt$ = deflexical("*INFERENCE-RELATED-BOOKKEEPING-PREDICATE-MT*", maybeDefault( $sym25$_INFERENCE_RELATED_BOOKKEEPING_PREDICATE_MT_, $inference_related_bookkeeping_predicate_mt$, ()-> ($const7$BaseKB)));
+    $anect_mt$ = deflexical("*ANECT-MT*", maybeDefault( $sym27$_ANECT_MT_, $anect_mt$, ()-> ($const13$UniversalVocabularyMt)));
+    $broad_mt_mt$ = deflexical("*BROAD-MT-MT*", maybeDefault( $sym29$_BROAD_MT_MT_, $broad_mt_mt$, ()-> ($const7$BaseKB)));
+    $psc_mt$ = deflexical("*PSC-MT*", maybeDefault( $sym31$_PSC_MT_, $psc_mt$, ()-> ($const7$BaseKB)));
+    $tou_mt$ = deflexical("*TOU-MT*", maybeDefault( $sym33$_TOU_MT_, $tou_mt$, ()-> ($const7$BaseKB)));
+    $skolem_mt$ = deflexical("*SKOLEM-MT*", maybeDefault( $sym35$_SKOLEM_MT_, $skolem_mt$, ()-> ($const7$BaseKB)));
+    $thing_defining_mt$ = deflexical("*THING-DEFINING-MT*", maybeDefault( $sym37$_THING_DEFINING_MT_, $thing_defining_mt$, ()-> ($const7$BaseKB)));
+    $relation_defining_mt$ = deflexical("*RELATION-DEFINING-MT*", maybeDefault( $sym39$_RELATION_DEFINING_MT_, $relation_defining_mt$, ()-> ($const7$BaseKB)));
+    $equals_defining_mt$ = deflexical("*EQUALS-DEFINING-MT*", maybeDefault( $sym41$_EQUALS_DEFINING_MT_, $equals_defining_mt$, ()-> ($const7$BaseKB)));
+    $element_of_defining_mt$ = deflexical("*ELEMENT-OF-DEFINING-MT*", maybeDefault( $sym43$_ELEMENT_OF_DEFINING_MT_, $element_of_defining_mt$, ()-> ($const7$BaseKB)));
+    $subset_of_defining_mt$ = deflexical("*SUBSET-OF-DEFINING-MT*", maybeDefault( $sym45$_SUBSET_OF_DEFINING_MT_, $subset_of_defining_mt$, ()-> ($const7$BaseKB)));
+    $arity_mt$ = deflexical("*ARITY-MT*", maybeDefault( $sym47$_ARITY_MT_, $arity_mt$, ()-> ($const13$UniversalVocabularyMt)));
+    $sublid_mt$ = deflexical("*SUBLID-MT*", maybeDefault( $sym49$_SUBLID_MT_, $sublid_mt$, ()-> ($const50$CycAPIMt)));
+    $not_assertible_mt_convention_mt$ = deflexical("*NOT-ASSERTIBLE-MT-CONVENTION-MT*", maybeDefault( $sym52$_NOT_ASSERTIBLE_MT_CONVENTION_MT_, $not_assertible_mt_convention_mt$, ()-> ($const13$UniversalVocabularyMt)));
+    $default_ask_mt$ = deflexical("*DEFAULT-ASK-MT*", maybeDefault( $sym54$_DEFAULT_ASK_MT_, $default_ask_mt$, ()-> ($const7$BaseKB)));
+    $default_assert_mt$ = deflexical("*DEFAULT-ASSERT-MT*", maybeDefault( $sym55$_DEFAULT_ASSERT_MT_, $default_assert_mt$, ()-> ($const7$BaseKB)));
+    $default_clone_mt$ = deflexical("*DEFAULT-CLONE-MT*", maybeDefault( $sym56$_DEFAULT_CLONE_MT_, $default_clone_mt$, ()-> ($const7$BaseKB)));
+    $default_support_mt$ = deflexical("*DEFAULT-SUPPORT-MT*", maybeDefault( $sym57$_DEFAULT_SUPPORT_MT_, $default_support_mt$, ()-> ($const7$BaseKB)));
+    $default_comment_mt$ = deflexical("*DEFAULT-COMMENT-MT*", maybeDefault( $sym58$_DEFAULT_COMMENT_MT_, $default_comment_mt$, ()-> ($const7$BaseKB)));
+    $default_convention_mt$ = deflexical("*DEFAULT-CONVENTION-MT*", maybeDefault( $sym59$_DEFAULT_CONVENTION_MT_, $default_convention_mt$, ()-> ($const13$UniversalVocabularyMt)));
     $core_mt_optimization_enabledP$ = defparameter("*CORE-MT-OPTIMIZATION-ENABLED?*", T);
     $core_mts$ = deflexical("*CORE-MTS*", $list60);
     $ordered_core_mts$ = deflexical("*ORDERED-CORE-MTS*", $list61);

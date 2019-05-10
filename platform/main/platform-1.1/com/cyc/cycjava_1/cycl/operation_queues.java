@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,19 +80,19 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.api_control_vars;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cyc_bookkeeping;
-import com.cyc.cycjava_1.cycl.encapsulation;
-import com.cyc.cycjava_1.cycl.eval_in_api;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.operation_communication;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.api_control_vars;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cyc_bookkeeping;
+//dm import com.cyc.cycjava_1.cycl.encapsulation;
+//dm import com.cyc.cycjava_1.cycl.eval_in_api;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.operation_communication;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
 
 public  final class operation_queues extends SubLTranslatedFile {
 
@@ -363,19 +395,19 @@ and so should not be straightforwardly written to the HL transcript */
   }
 
   public static final SubLObject init_operation_queues_file() {
-    $local_queue$ = deflexical("*LOCAL-QUEUE*", ((NIL != Symbols.boundp($sym0$_LOCAL_QUEUE_)) ? ((SubLObject) $local_queue$.getGlobalValue()) : queues.create_queue()));
+    $local_queue$ = deflexical("*LOCAL-QUEUE*", maybeDefault( $sym0$_LOCAL_QUEUE_, $local_queue$, ()-> (queues.create_queue())));
     $local_queue_lock$ = defparameter("*LOCAL-QUEUE-LOCK*", Locks.make_lock($str1$Local_Queue_Lock));
-    $remote_queue$ = deflexical("*REMOTE-QUEUE*", ((NIL != Symbols.boundp($sym3$_REMOTE_QUEUE_)) ? ((SubLObject) $remote_queue$.getGlobalValue()) : queues.create_queue()));
+    $remote_queue$ = deflexical("*REMOTE-QUEUE*", maybeDefault( $sym3$_REMOTE_QUEUE_, $remote_queue$, ()-> (queues.create_queue())));
     $remote_queue_lock$ = defparameter("*REMOTE-QUEUE-LOCK*", Locks.make_lock($str4$Remote_Queue_Lock));
-    $transcript_queue$ = deflexical("*TRANSCRIPT-QUEUE*", ((NIL != Symbols.boundp($sym5$_TRANSCRIPT_QUEUE_)) ? ((SubLObject) $transcript_queue$.getGlobalValue()) : queues.create_queue()));
+    $transcript_queue$ = deflexical("*TRANSCRIPT-QUEUE*", maybeDefault( $sym5$_TRANSCRIPT_QUEUE_, $transcript_queue$, ()-> (queues.create_queue())));
     $transcript_queue_lock$ = defparameter("*TRANSCRIPT-QUEUE-LOCK*", Locks.make_lock($str6$Transcript_Queue_Lock));
-    $hl_transcript_queue$ = deflexical("*HL-TRANSCRIPT-QUEUE*", ((NIL != Symbols.boundp($sym7$_HL_TRANSCRIPT_QUEUE_)) ? ((SubLObject) $hl_transcript_queue$.getGlobalValue()) : queues.create_queue()));
+    $hl_transcript_queue$ = deflexical("*HL-TRANSCRIPT-QUEUE*", maybeDefault( $sym7$_HL_TRANSCRIPT_QUEUE_, $hl_transcript_queue$, ()-> (queues.create_queue())));
     $hl_transcript_queue_lock$ = defparameter("*HL-TRANSCRIPT-QUEUE-LOCK*", Locks.make_lock($str8$HL_Transcript_Queue_Lock));
-    $auxiliary_queue$ = deflexical("*AUXILIARY-QUEUE*", ((NIL != Symbols.boundp($sym9$_AUXILIARY_QUEUE_)) ? ((SubLObject) $auxiliary_queue$.getGlobalValue()) : queues.create_queue()));
+    $auxiliary_queue$ = deflexical("*AUXILIARY-QUEUE*", maybeDefault( $sym9$_AUXILIARY_QUEUE_, $auxiliary_queue$, ()-> (queues.create_queue())));
     $auxiliary_queue_lock$ = defparameter("*AUXILIARY-QUEUE-LOCK*", Locks.make_lock($str10$Auxiliary_Queue_Lock));
-    $transmit_queue$ = deflexical("*TRANSMIT-QUEUE*", ((NIL != Symbols.boundp($sym11$_TRANSMIT_QUEUE_)) ? ((SubLObject) $transmit_queue$.getGlobalValue()) : queues.create_queue()));
+    $transmit_queue$ = deflexical("*TRANSMIT-QUEUE*", maybeDefault( $sym11$_TRANSMIT_QUEUE_, $transmit_queue$, ()-> (queues.create_queue())));
     $transmit_queue_lock$ = defparameter("*TRANSMIT-QUEUE-LOCK*", Locks.make_lock($str12$Transmit_Queue_Lock));
-    $local_operation_storage_queue$ = deflexical("*LOCAL-OPERATION-STORAGE-QUEUE*", ((NIL != Symbols.boundp($sym13$_LOCAL_OPERATION_STORAGE_QUEUE_)) ? ((SubLObject) $local_operation_storage_queue$.getGlobalValue()) : queues.create_queue()));
+    $local_operation_storage_queue$ = deflexical("*LOCAL-OPERATION-STORAGE-QUEUE*", maybeDefault( $sym13$_LOCAL_OPERATION_STORAGE_QUEUE_, $local_operation_storage_queue$, ()-> (queues.create_queue())));
     $local_operation_storage_queue_lock$ = defparameter("*LOCAL-OPERATION-STORAGE-QUEUE-LOCK*", Locks.make_lock($str14$Local_Operation_Queue_Lock));
     $within_a_remote_opP$ = defparameter("*WITHIN-A-REMOTE-OP?*", NIL);
     $hl_transcripts_enabledP$ = defparameter("*HL-TRANSCRIPTS-ENABLED?*", NIL);

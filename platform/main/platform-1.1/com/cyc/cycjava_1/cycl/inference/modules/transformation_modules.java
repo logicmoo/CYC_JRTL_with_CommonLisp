@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.modules;
+package com.cyc.cycjava_1.cycl.inference.modules;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,50 +67,50 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.auxiliary_indexing;
-import com.cyc.cycjava_1.cycl.backward;
-import com.cyc.cycjava_1.cycl.backward_utilities;
-import com.cyc.cycjava_1.cycl.cardinality_estimates;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.fi;
-import com.cyc.cycjava_1.cycl.fort_types_interface;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.genl_mts;
-import com.cyc.cycjava_1.cycl.genl_predicates;
-import com.cyc.cycjava_1.cycl.genls;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_abduction_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_strategic_heuristics;
-import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.mt_vars;
-import com.cyc.cycjava_1.cycl.negation_predicate;
-import com.cyc.cycjava_1.cycl.inference.harness.removal_module_utilities;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_symmetry;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.unification;
-import com.cyc.cycjava_1.cycl.unification_utilities;
-import com.cyc.cycjava_1.cycl.variables;
-import com.cyc.cycjava_1.cycl.virtual_indexing;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.auxiliary_indexing;
+//dm import com.cyc.cycjava_1.cycl.backward;
+//dm import com.cyc.cycjava_1.cycl.backward_utilities;
+//dm import com.cyc.cycjava_1.cycl.cardinality_estimates;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.fi;
+//dm import com.cyc.cycjava_1.cycl.fort_types_interface;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.genl_mts;
+//dm import com.cyc.cycjava_1.cycl.genl_predicates;
+//dm import com.cyc.cycjava_1.cycl.genls;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_abduction_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_strategic_heuristics;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_vars;
+//dm import com.cyc.cycjava_1.cycl.negation_predicate;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.removal_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_symmetry;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.unification;
+//dm import com.cyc.cycjava_1.cycl.unification_utilities;
+//dm import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.virtual_indexing;
 
 public  final class transformation_modules extends SubLTranslatedFile {
 

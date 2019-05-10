@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,39 +80,39 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.cfasl_kb_methods;
-import com.cyc.cycjava_1.cycl.cfasl_utilities;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.deduction_handles;
-import com.cyc.cycjava_1.cycl.deductions_high;
-import com.cyc.cycjava_1.cycl.deductions_low;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.hl_supports;
-import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.kb_hl_support_manager;
-import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
-import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.kb_utilities;
-import com.cyc.cycjava_1.cycl.keyhash_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.set_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.tms;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.cfasl_kb_methods;
+//dm import com.cyc.cycjava_1.cycl.cfasl_utilities;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.deduction_handles;
+//dm import com.cyc.cycjava_1.cycl.deductions_high;
+//dm import com.cyc.cycjava_1.cycl.deductions_low;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.hl_supports;
+//dm import com.cyc.cycjava_1.cycl.id_index;
+//dm import com.cyc.cycjava_1.cycl.kb_hl_support_manager;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
+//dm import com.cyc.cycjava_1.cycl.kb_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_utilities;
+//dm import com.cyc.cycjava_1.cycl.keyhash_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.set_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.tms;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class kb_hl_supports extends SubLTranslatedFile {
 
@@ -1590,11 +1622,11 @@ public  final class kb_hl_supports extends SubLTranslatedFile {
     $dtp_kb_hl_support$ = defconstant("*DTP-KB-HL-SUPPORT*", $sym12$KB_HL_SUPPORT);
     $print_kb_hl_support_hl_supportP$ = defparameter("*PRINT-KB-HL-SUPPORT-HL-SUPPORT?*", T);
     $dtp_kb_hl_support_content$ = defconstant("*DTP-KB-HL-SUPPORT-CONTENT*", $sym29$KB_HL_SUPPORT_CONTENT);
-    $kb_hl_supports_from_ids$ = deflexical("*KB-HL-SUPPORTS-FROM-IDS*", ((NIL != Symbols.boundp($sym43$_KB_HL_SUPPORTS_FROM_IDS_)) ? ((SubLObject) $kb_hl_supports_from_ids$.getGlobalValue()) : NIL));
-    $kb_hl_support_index$ = deflexical("*KB-HL-SUPPORT-INDEX*", ((NIL != Symbols.boundp($sym58$_KB_HL_SUPPORT_INDEX_)) ? ((SubLObject) $kb_hl_support_index$.getGlobalValue()) : NIL));
+    $kb_hl_supports_from_ids$ = deflexical("*KB-HL-SUPPORTS-FROM-IDS*", maybeDefault( $sym43$_KB_HL_SUPPORTS_FROM_IDS_, $kb_hl_supports_from_ids$, NIL));
+    $kb_hl_support_index$ = deflexical("*KB-HL-SUPPORT-INDEX*", maybeDefault( $sym58$_KB_HL_SUPPORT_INDEX_, $kb_hl_support_index$, NIL));
     $kb_hl_support_index_lock$ = deflexical("*KB-HL-SUPPORT-INDEX-LOCK*", Locks.make_lock($str59$KB_HL_support_indexing_lock));
     $kb_hl_support_index_unindexed_terms$ = deflexical("*KB-HL-SUPPORT-INDEX-UNINDEXED-TERMS*", $list60);
-    $kb_hl_supports_being_created$ = deflexical("*KB-HL-SUPPORTS-BEING-CREATED*", ((NIL != Symbols.boundp($sym65$_KB_HL_SUPPORTS_BEING_CREATED_)) ? ((SubLObject) $kb_hl_supports_being_created$.getGlobalValue()) : NIL));
+    $kb_hl_supports_being_created$ = deflexical("*KB-HL-SUPPORTS-BEING-CREATED*", maybeDefault( $sym65$_KB_HL_SUPPORTS_BEING_CREATED_, $kb_hl_supports_being_created$, NIL));
     $unreify_kb_hl_supportsP$ = defparameter("*UNREIFY-KB-HL-SUPPORTS?*", NIL);
     $tms_kb_hl_support_queue$ = defparameter("*TMS-KB-HL-SUPPORT-QUEUE*", NIL);
     $kb_hl_support_dump_id_table$ = defparameter("*KB-HL-SUPPORT-DUMP-ID-TABLE*", NIL);

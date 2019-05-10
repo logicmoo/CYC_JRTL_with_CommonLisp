@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.cyc_testing;
+package com.cyc.cycjava_1.cycl.cyc_testing;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,17 +67,17 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constants_high;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.isa;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_identifier;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constants_high;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.isa;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_identifier;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
 
 public  final class ctest_utils extends SubLTranslatedFile {
 
@@ -440,24 +459,24 @@ public  final class ctest_utils extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_ctest_utils_file() {
-    $default_email_notify_style_id$ = deflexical("*DEFAULT-EMAIL-NOTIFY-STYLE-ID*", ((NIL != Symbols.boundp($sym0$_DEFAULT_EMAIL_NOTIFY_STYLE_ID_)) ? ((SubLObject) $default_email_notify_style_id$.getGlobalValue()) : NIL));
-    $default_test_id$ = deflexical("*DEFAULT-TEST-ID*", ((NIL != Symbols.boundp($sym1$_DEFAULT_TEST_ID_)) ? ((SubLObject) $default_test_id$.getGlobalValue()) : NIL));
-    $default_string_binding_set$ = deflexical("*DEFAULT-STRING-BINDING-SET*", ((NIL != Symbols.boundp($sym2$_DEFAULT_STRING_BINDING_SET_)) ? ((SubLObject) $default_string_binding_set$.getGlobalValue()) : NIL));
-    $default_binding_set$ = deflexical("*DEFAULT-BINDING-SET*", ((NIL != Symbols.boundp($sym3$_DEFAULT_BINDING_SET_)) ? ((SubLObject) $default_binding_set$.getGlobalValue()) : NIL));
-    $default_binding_set2$ = deflexical("*DEFAULT-BINDING-SET2*", ((NIL != Symbols.boundp($sym4$_DEFAULT_BINDING_SET2_)) ? ((SubLObject) $default_binding_set2$.getGlobalValue()) : NIL));
-    $default_set_of_binding_sets$ = deflexical("*DEFAULT-SET-OF-BINDING-SETS*", ((NIL != Symbols.boundp($sym5$_DEFAULT_SET_OF_BINDING_SETS_)) ? ((SubLObject) $default_set_of_binding_sets$.getGlobalValue()) : NIL));
-    $default_set_of_binding_sets2$ = deflexical("*DEFAULT-SET-OF-BINDING-SETS2*", ((NIL != Symbols.boundp($sym6$_DEFAULT_SET_OF_BINDING_SETS2_)) ? ((SubLObject) $default_set_of_binding_sets2$.getGlobalValue()) : NIL));
-    $default_set_of_binding_sets3$ = deflexical("*DEFAULT-SET-OF-BINDING-SETS3*", ((NIL != Symbols.boundp($sym7$_DEFAULT_SET_OF_BINDING_SETS3_)) ? ((SubLObject) $default_set_of_binding_sets3$.getGlobalValue()) : NIL));
-    $default_module_sentence$ = deflexical("*DEFAULT-MODULE-SENTENCE*", ((NIL != Symbols.boundp($sym8$_DEFAULT_MODULE_SENTENCE_)) ? ((SubLObject) $default_module_sentence$.getGlobalValue()) : NIL));
-    $default_module_mt$ = deflexical("*DEFAULT-MODULE-MT*", ((NIL != Symbols.boundp($sym9$_DEFAULT_MODULE_MT_)) ? ((SubLObject) $default_module_mt$.getGlobalValue()) : NIL));
-    $default_module_mt2$ = deflexical("*DEFAULT-MODULE-MT2*", ((NIL != Symbols.boundp($sym10$_DEFAULT_MODULE_MT2_)) ? ((SubLObject) $default_module_mt2$.getGlobalValue()) : NIL));
-    $default_dependency_test_id$ = deflexical("*DEFAULT-DEPENDENCY-TEST-ID*", ((NIL != Symbols.boundp($sym11$_DEFAULT_DEPENDENCY_TEST_ID_)) ? ((SubLObject) $default_dependency_test_id$.getGlobalValue()) : NIL));
-    $default_dependency_test_id2$ = deflexical("*DEFAULT-DEPENDENCY-TEST-ID2*", ((NIL != Symbols.boundp($sym12$_DEFAULT_DEPENDENCY_TEST_ID2_)) ? ((SubLObject) $default_dependency_test_id2$.getGlobalValue()) : NIL));
-    $default_isa_id$ = deflexical("*DEFAULT-ISA-ID*", ((NIL != Symbols.boundp($sym13$_DEFAULT_ISA_ID_)) ? ((SubLObject) $default_isa_id$.getGlobalValue()) : NIL));
-    $default_isa_id2$ = deflexical("*DEFAULT-ISA-ID2*", ((NIL != Symbols.boundp($sym14$_DEFAULT_ISA_ID2_)) ? ((SubLObject) $default_isa_id2$.getGlobalValue()) : NIL));
-    $default_test_query$ = deflexical("*DEFAULT-TEST-QUERY*", ((NIL != Symbols.boundp($sym15$_DEFAULT_TEST_QUERY_)) ? ((SubLObject) $default_test_query$.getGlobalValue()) : NIL));
-    $default_test_mt$ = deflexical("*DEFAULT-TEST-MT*", ((NIL != Symbols.boundp($sym16$_DEFAULT_TEST_MT_)) ? ((SubLObject) $default_test_mt$.getGlobalValue()) : NIL));
-    $default_collection_id$ = deflexical("*DEFAULT-COLLECTION-ID*", ((NIL != Symbols.boundp($sym17$_DEFAULT_COLLECTION_ID_)) ? ((SubLObject) $default_collection_id$.getGlobalValue()) : NIL));
+    $default_email_notify_style_id$ = deflexical("*DEFAULT-EMAIL-NOTIFY-STYLE-ID*", maybeDefault( $sym0$_DEFAULT_EMAIL_NOTIFY_STYLE_ID_, $default_email_notify_style_id$, NIL));
+    $default_test_id$ = deflexical("*DEFAULT-TEST-ID*", maybeDefault( $sym1$_DEFAULT_TEST_ID_, $default_test_id$, NIL));
+    $default_string_binding_set$ = deflexical("*DEFAULT-STRING-BINDING-SET*", maybeDefault( $sym2$_DEFAULT_STRING_BINDING_SET_, $default_string_binding_set$, NIL));
+    $default_binding_set$ = deflexical("*DEFAULT-BINDING-SET*", maybeDefault( $sym3$_DEFAULT_BINDING_SET_, $default_binding_set$, NIL));
+    $default_binding_set2$ = deflexical("*DEFAULT-BINDING-SET2*", maybeDefault( $sym4$_DEFAULT_BINDING_SET2_, $default_binding_set2$, NIL));
+    $default_set_of_binding_sets$ = deflexical("*DEFAULT-SET-OF-BINDING-SETS*", maybeDefault( $sym5$_DEFAULT_SET_OF_BINDING_SETS_, $default_set_of_binding_sets$, NIL));
+    $default_set_of_binding_sets2$ = deflexical("*DEFAULT-SET-OF-BINDING-SETS2*", maybeDefault( $sym6$_DEFAULT_SET_OF_BINDING_SETS2_, $default_set_of_binding_sets2$, NIL));
+    $default_set_of_binding_sets3$ = deflexical("*DEFAULT-SET-OF-BINDING-SETS3*", maybeDefault( $sym7$_DEFAULT_SET_OF_BINDING_SETS3_, $default_set_of_binding_sets3$, NIL));
+    $default_module_sentence$ = deflexical("*DEFAULT-MODULE-SENTENCE*", maybeDefault( $sym8$_DEFAULT_MODULE_SENTENCE_, $default_module_sentence$, NIL));
+    $default_module_mt$ = deflexical("*DEFAULT-MODULE-MT*", maybeDefault( $sym9$_DEFAULT_MODULE_MT_, $default_module_mt$, NIL));
+    $default_module_mt2$ = deflexical("*DEFAULT-MODULE-MT2*", maybeDefault( $sym10$_DEFAULT_MODULE_MT2_, $default_module_mt2$, NIL));
+    $default_dependency_test_id$ = deflexical("*DEFAULT-DEPENDENCY-TEST-ID*", maybeDefault( $sym11$_DEFAULT_DEPENDENCY_TEST_ID_, $default_dependency_test_id$, NIL));
+    $default_dependency_test_id2$ = deflexical("*DEFAULT-DEPENDENCY-TEST-ID2*", maybeDefault( $sym12$_DEFAULT_DEPENDENCY_TEST_ID2_, $default_dependency_test_id2$, NIL));
+    $default_isa_id$ = deflexical("*DEFAULT-ISA-ID*", maybeDefault( $sym13$_DEFAULT_ISA_ID_, $default_isa_id$, NIL));
+    $default_isa_id2$ = deflexical("*DEFAULT-ISA-ID2*", maybeDefault( $sym14$_DEFAULT_ISA_ID2_, $default_isa_id2$, NIL));
+    $default_test_query$ = deflexical("*DEFAULT-TEST-QUERY*", maybeDefault( $sym15$_DEFAULT_TEST_QUERY_, $default_test_query$, NIL));
+    $default_test_mt$ = deflexical("*DEFAULT-TEST-MT*", maybeDefault( $sym16$_DEFAULT_TEST_MT_, $default_test_mt$, NIL));
+    $default_collection_id$ = deflexical("*DEFAULT-COLLECTION-ID*", maybeDefault( $sym17$_DEFAULT_COLLECTION_ID_, $default_collection_id$, NIL));
     $ctest_output_formats$ = defconstant("*CTEST-OUTPUT-FORMATS*", list($kw35$TEXT, $kw36$HTML));
     $ctest_output_styles$ = defconstant("*CTEST-OUTPUT-STYLES*", list($kw37$BRIEF, $kw38$VERBOSE, $kw39$POST_BUILD));
     $max_test_retry_time$ = defconstant("*MAX-TEST-RETRY-TIME*", $int40$60);

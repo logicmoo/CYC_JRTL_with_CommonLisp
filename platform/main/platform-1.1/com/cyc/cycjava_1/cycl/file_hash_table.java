@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,26 +80,26 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cache;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.file_utilities;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.cyc_testing.generic_testing;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.map_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cache;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.file_utilities;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.generic_testing;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.map_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class file_hash_table extends SubLTranslatedFile {
 
@@ -1033,9 +1065,9 @@ public  final class file_hash_table extends SubLTranslatedFile {
     $fht_tombstone_key_entry$ = deflexical("*FHT-TOMBSTONE-KEY-ENTRY*", construct_tombstone_key_entry());
     $fht_empty_key_entry$ = deflexical("*FHT-EMPTY-KEY-ENTRY*", construct_empty_key_entry());
     $dtp_fht_serialization_entry$ = defconstant("*DTP-FHT-SERIALIZATION-ENTRY*", $sym155$FHT_SERIALIZATION_ENTRY);
-    $fht_serialization_table$ = deflexical("*FHT-SERIALIZATION-TABLE*", ((NIL != Symbols.boundp($sym182$_FHT_SERIALIZATION_TABLE_)) ? ((SubLObject) $fht_serialization_table$.getGlobalValue()) : dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-    $fht_not_found$ = deflexical("*FHT-NOT-FOUND*", ((NIL != Symbols.boundp($sym202$_FHT_NOT_FOUND_)) ? ((SubLObject) $fht_not_found$.getGlobalValue()) : Symbols.make_symbol($str203$FileHashTable_Not_Found)));
-    $not_in_fht$ = deflexical("*NOT-IN-FHT*", ((NIL != Symbols.boundp($sym204$_NOT_IN_FHT_)) ? ((SubLObject) $not_in_fht$.getGlobalValue()) : Symbols.make_symbol($str205$Not_In_FHT)));
+    $fht_serialization_table$ = deflexical("*FHT-SERIALIZATION-TABLE*", maybeDefault( $sym182$_FHT_SERIALIZATION_TABLE_, $fht_serialization_table$, ()-> (dictionary.new_dictionary(UNPROVIDED, UNPROVIDED))));
+    $fht_not_found$ = deflexical("*FHT-NOT-FOUND*", maybeDefault( $sym202$_FHT_NOT_FOUND_, $fht_not_found$, ()-> (Symbols.make_symbol($str203$FileHashTable_Not_Found))));
+    $not_in_fht$ = deflexical("*NOT-IN-FHT*", maybeDefault( $sym204$_NOT_IN_FHT_, $not_in_fht$, ()-> (Symbols.make_symbol($str205$Not_In_FHT))));
     $fast_put_skip_output_forcing$ = defparameter("*FAST-PUT-SKIP-OUTPUT-FORCING*", NIL);
     $htfile_minimal_file_block_size$ = defconstant("*HTFILE-MINIMAL-FILE-BLOCK-SIZE*", TWELVE_INTEGER);
     $dtp_htfile_file_block_entry$ = defconstant("*DTP-HTFILE-FILE-BLOCK-ENTRY*", $sym285$HTFILE_FILE_BLOCK_ENTRY);
@@ -1048,7 +1080,7 @@ public  final class file_hash_table extends SubLTranslatedFile {
     $keyspace_rehash_cache_size$ = deflexical("*KEYSPACE-REHASH-CACHE-SIZE*", Numbers.integerDivide($keyspace_move_size$.getGlobalValue(), $htfile_key_entry_size$.getGlobalValue()));
     $htfile_object_entry_size$ = defconstant("*HTFILE-OBJECT-ENTRY-SIZE*", TWELVE_INTEGER);
     $file_hash_table_header_position$ = defconstant("*FILE-HASH-TABLE-HEADER-POSITION*", ZERO_INTEGER);
-    $file_hash_table_headers$ = deflexical("*FILE-HASH-TABLE-HEADERS*", ((NIL != Symbols.boundp($sym314$_FILE_HASH_TABLE_HEADERS_)) ? ((SubLObject) $file_hash_table_headers$.getGlobalValue()) : Hashtables.make_hash_table(TEN_INTEGER, Symbols.symbol_function(EQUAL), UNPROVIDED)));
+    $file_hash_table_headers$ = deflexical("*FILE-HASH-TABLE-HEADERS*", maybeDefault( $sym314$_FILE_HASH_TABLE_HEADERS_, $file_hash_table_headers$, ()-> (Hashtables.make_hash_table(TEN_INTEGER, Symbols.symbol_function(EQUAL), UNPROVIDED))));
     $fast_file_hash_table_optimization_mode$ = defparameter("*FAST-FILE-HASH-TABLE-OPTIMIZATION-MODE*", $kw331$AGGRESSIVE);
     $dtp_fast_create_fht$ = defconstant("*DTP-FAST-CREATE-FHT*", $sym335$FAST_CREATE_FHT);
     $fast_fht_keyspace_alignment$ = defparameter("*FAST-FHT-KEYSPACE-ALIGNMENT*", SIXTEEN_INTEGER);

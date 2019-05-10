@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,38 +67,38 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.inference.harness.balancing_tactician;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.balancing_tactician;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
 import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_analysis;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_proof;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.unification_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_analysis;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_proof;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.unification_utilities;
 
 public  final class inference_datastructures_problem_store extends SubLTranslatedFile {
 
@@ -95,24 +114,24 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
    This is set to T in the main entry point to inference but NIL in the inference browser.
    Currently this only controls modifications that could conceivably happen via the browser, like lazy
    manifestation of non-focals. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 931) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 931)
   public static SubLSymbol $problem_store_modification_permittedP$ = null;
 
   /** The global index of all problem stores : id -> problem-store */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 1401) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 1401)
   private static SubLSymbol $problem_store_id_index$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 1597) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 1597)
   public static final SubLObject new_problem_store_id() {
     return id_index.id_index_reserve($problem_store_id_index$.getGlobalValue());
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 1691) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 1691)
   public static final SubLObject index_problem_store_by_id(SubLObject store, SubLObject suid) {
     return id_index.id_index_enter($problem_store_id_index$.getGlobalValue(), suid, store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 1809) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 1809)
   public static final SubLObject unindex_problem_store_by_id(SubLObject store) {
     {
       SubLObject suid = problem_store_suid(store);
@@ -121,13 +140,13 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
   }
 
   /** Return a list of all problem stores. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 2843) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 2843)
   public static final SubLObject all_problem_stores() {
     return id_index.id_index_values($problem_store_id_index$.getGlobalValue());
   }
 
   /** Destroy all current problem stores; @return integer, the number of stores successfully destroyed. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 2977) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 2977)
   public static final SubLObject destroy_all_problem_stores() {
     {
       SubLObject count = ZERO_INTEGER;
@@ -161,25 +180,45 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
   }
 
   public static final class $problem_store_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $guid; }
+    @Override
     public SubLObject getField3() { return $suid; }
+    @Override
     public SubLObject getField4() { return $lock; }
+    @Override
     public SubLObject getField5() { return $creation_time; }
+    @Override
     public SubLObject getField6() { return $inference_id_index; }
+    @Override
     public SubLObject getField7() { return $strategy_id_index; }
+    @Override
     public SubLObject getField8() { return $problem_id_index; }
+    @Override
     public SubLObject getField9() { return $link_id_index; }
+    @Override
     public SubLObject getField10() { return $proof_id_index; }
+    @Override
     public SubLObject getField11() { return $problem_by_query_index; }
+    @Override
     public SubLObject getField12() { return $rejected_proofs; }
+    @Override
     public SubLObject getField13() { return $processed_proofs; }
+    @Override
     public SubLObject getField14() { return $non_explanatory_subproofs_possibleP; }
+    @Override
     public SubLObject getField15() { return $non_explanatory_subproofs_index; }
+    @Override
     public SubLObject getField16() { return $most_recent_tactic_executed; }
+    @Override
     public SubLObject getField17() { return $min_proof_depth_index; }
+    @Override
     public SubLObject getField18() { return $min_transformation_depth_index; }
+    @Override
     public SubLObject getField19() { return $min_transformation_depth_signature_index; }
+    @Override
     public SubLObject getField20() { return $min_depth_index; }
     public SubLObject getField21() { return $equality_reasoning_method; }
     public SubLObject getField22() { return $equality_reasoning_domain; }
@@ -208,24 +247,43 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     public SubLObject getField45() { return $complex_problem_query_czer_index; }
     public SubLObject getField46() { return $complex_problem_query_signatures; }
     public SubLObject getField47() { return $proof_keeping_index; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $guid = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $suid = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $lock = value; }
+    @Override
     public SubLObject setField5(SubLObject value) { return $creation_time = value; }
+    @Override
     public SubLObject setField6(SubLObject value) { return $inference_id_index = value; }
+    @Override
     public SubLObject setField7(SubLObject value) { return $strategy_id_index = value; }
+    @Override
     public SubLObject setField8(SubLObject value) { return $problem_id_index = value; }
+    @Override
     public SubLObject setField9(SubLObject value) { return $link_id_index = value; }
+    @Override
     public SubLObject setField10(SubLObject value) { return $proof_id_index = value; }
+    @Override
     public SubLObject setField11(SubLObject value) { return $problem_by_query_index = value; }
+    @Override
     public SubLObject setField12(SubLObject value) { return $rejected_proofs = value; }
+    @Override
     public SubLObject setField13(SubLObject value) { return $processed_proofs = value; }
+    @Override
     public SubLObject setField14(SubLObject value) { return $non_explanatory_subproofs_possibleP = value; }
+    @Override
     public SubLObject setField15(SubLObject value) { return $non_explanatory_subproofs_index = value; }
+    @Override
     public SubLObject setField16(SubLObject value) { return $most_recent_tactic_executed = value; }
+    @Override
     public SubLObject setField17(SubLObject value) { return $min_proof_depth_index = value; }
+    @Override
     public SubLObject setField18(SubLObject value) { return $min_transformation_depth_index = value; }
+    @Override
     public SubLObject setField19(SubLObject value) { return $min_transformation_depth_signature_index = value; }
+    @Override
     public SubLObject setField20(SubLObject value) { return $min_depth_index = value; }
     public SubLObject setField21(SubLObject value) { return $equality_reasoning_method = value; }
     public SubLObject setField22(SubLObject value) { return $equality_reasoning_domain = value; }
@@ -304,531 +362,532 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     Structures.makeStructDeclNative($problem_store_native.class, $sym13$PROBLEM_STORE, $sym14$PROBLEM_STORE_P, $list15, $list16, new String[] {"$guid", "$suid", "$lock", "$creation_time", "$inference_id_index", "$strategy_id_index", "$problem_id_index", "$link_id_index", "$proof_id_index", "$problem_by_query_index", "$rejected_proofs", "$processed_proofs", "$non_explanatory_subproofs_possibleP", "$non_explanatory_subproofs_index", "$most_recent_tactic_executed", "$min_proof_depth_index", "$min_transformation_depth_index", "$min_transformation_depth_signature_index", "$min_depth_index", "$equality_reasoning_method", "$equality_reasoning_domain", "$intermediate_step_validation_level", "$max_problem_count", "$crazy_max_problem_count", "$removal_allowedP", "$transformation_allowedP", "$add_restriction_layer_of_indirectionP", "$negation_by_failureP", "$completeness_minimization_allowedP", "$direction", "$evaluate_subl_allowedP", "$rewrite_allowedP", "$abduction_allowedP", "$new_terms_allowedP", "$compute_answer_justificationsP", "$memoization_state", "$sbhl_resource_space", "$preparedP", "$destruction_imminentP", "$meta_problem_store", "$static_properties", "$janitor", "$historical_root_problems", "$complex_problem_query_czer_index", "$complex_problem_query_signatures", "$proof_keeping_index"}, $list17, $list18, $sym19$PRINT_PROBLEM_STORE);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static SubLSymbol $dtp_problem_store$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject problem_store_print_function_trampoline(SubLObject object, SubLObject stream) {
     Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 33122");
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject problem_store_p(SubLObject object) {
     return ((object.getClass() == $problem_store_native.class) ? ((SubLObject) T) : NIL);
   }
 
   public static final class $problem_store_p$UnaryFunction extends UnaryFunction {
     public $problem_store_p$UnaryFunction() { super(extractFunctionNamed("PROBLEM-STORE-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return problem_store_p(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_suid(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField3();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_lock(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField4();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_inference_id_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField6();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_strategy_id_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField7();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_problem_id_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField8();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_link_id_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField9();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_proof_id_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField10();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_problem_by_query_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField11();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_rejected_proofs(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField12();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_processed_proofs(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField13();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_non_explanatory_subproofs_possibleP(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField14();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_non_explanatory_subproofs_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField15();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_min_proof_depth_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField17();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_min_transformation_depth_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField18();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_min_transformation_depth_signature_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField19();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_min_depth_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.getField20();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_equality_reasoning_method(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$equality_reasoning_method;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_equality_reasoning_domain(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$equality_reasoning_domain;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_intermediate_step_validation_level(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$intermediate_step_validation_level;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_max_problem_count(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$max_problem_count;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_removal_allowedP(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$removal_allowedP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_transformation_allowedP(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$transformation_allowedP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_add_restriction_layer_of_indirectionP(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$add_restriction_layer_of_indirectionP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_negation_by_failureP(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$negation_by_failureP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_direction(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$direction;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_rewrite_allowedP(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$rewrite_allowedP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_abduction_allowedP(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$abduction_allowedP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_new_terms_allowedP(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$new_terms_allowedP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_compute_answer_justificationsP(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$compute_answer_justificationsP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_memoization_state(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$memoization_state;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_sbhl_resource_space(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$sbhl_resource_space;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_preparedP(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$preparedP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_meta_problem_store(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$meta_problem_store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_janitor(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$janitor;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_historical_root_problems(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$historical_root_problems;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_complex_problem_query_czer_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$complex_problem_query_czer_index;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_complex_problem_query_signatures(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$complex_problem_query_signatures;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject prob_store_proof_keeping_index(SubLObject object) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$proof_keeping_index;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_guid(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField2(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_suid(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField3(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_lock(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField4(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_creation_time(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField5(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_inference_id_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField6(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_strategy_id_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField7(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_problem_id_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField8(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_link_id_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField9(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_proof_id_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField10(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_problem_by_query_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField11(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_rejected_proofs(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField12(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_processed_proofs(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField13(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_non_explanatory_subproofs_possibleP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField14(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_non_explanatory_subproofs_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField15(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_most_recent_tactic_executed(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField16(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_min_proof_depth_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField17(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_min_transformation_depth_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField18(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_min_transformation_depth_signature_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField19(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_min_depth_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return object.setField20(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_equality_reasoning_method(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$equality_reasoning_method = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_equality_reasoning_domain(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$equality_reasoning_domain = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_intermediate_step_validation_level(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$intermediate_step_validation_level = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_max_problem_count(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$max_problem_count = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_crazy_max_problem_count(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$crazy_max_problem_count = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_removal_allowedP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$removal_allowedP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_transformation_allowedP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$transformation_allowedP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_add_restriction_layer_of_indirectionP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$add_restriction_layer_of_indirectionP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_negation_by_failureP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$negation_by_failureP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_completeness_minimization_allowedP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$completeness_minimization_allowedP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_direction(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$direction = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_evaluate_subl_allowedP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$evaluate_subl_allowedP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_rewrite_allowedP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$rewrite_allowedP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_abduction_allowedP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$abduction_allowedP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_new_terms_allowedP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$new_terms_allowedP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_compute_answer_justificationsP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$compute_answer_justificationsP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_memoization_state(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$memoization_state = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_sbhl_resource_space(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$sbhl_resource_space = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_preparedP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$preparedP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_destruction_imminentP(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$destruction_imminentP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_meta_problem_store(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$meta_problem_store = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_static_properties(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$static_properties = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_janitor(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$janitor = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_historical_root_problems(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$historical_root_problems = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_complex_problem_query_czer_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$complex_problem_query_czer_index = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_complex_problem_query_signatures(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$complex_problem_query_signatures = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject _csetf_prob_store_proof_keeping_index(SubLObject object, SubLObject value) {
     checkType(object, $sym14$PROBLEM_STORE_P);
     return (($problem_store_native) object).$proof_keeping_index = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 5056)
   public static final SubLObject make_problem_store(SubLObject arglist) {
     if ((arglist == UNPROVIDED)) {
       arglist = NIL;
@@ -942,93 +1001,93 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 14279) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 14279)
   public static final SubLObject valid_problem_store_p(SubLObject object) {
     return makeBoolean(((NIL != problem_store_p(object))
            && (NIL == problem_store_invalid_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 14536) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 14536)
   public static final SubLObject problem_store_invalid_p(SubLObject store) {
     return Equality.eq($kw187$FREE, prob_store_equality_reasoning_domain(store));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 15029) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 15029)
   public static final SubLObject sxhash_problem_store_method(SubLObject object) {
     return prob_store_suid(object);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 15304) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 15304)
   public static final SubLObject problem_store_lock(SubLObject store) {
     return prob_store_lock(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 15675) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 15675)
   public static final SubLObject problem_store_memoization_state(SubLObject store) {
     return prob_store_memoization_state(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 16230) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 16230)
   public static final SubLObject problem_store_sbhl_resource_space(SubLObject store) {
     return prob_store_sbhl_resource_space(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 16430) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 16430)
   public static final SubLObject set_problem_store_sbhl_resource_space(SubLObject store, SubLObject space) {
     _csetf_prob_store_sbhl_resource_space(store, space);
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 17255) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 17255)
   public static final SubLObject problem_store_inference_id_index(SubLObject store) {
     return prob_store_inference_id_index(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 17689) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 17689)
   public static final SubLObject problem_store_strategy_id_index(SubLObject store) {
     return prob_store_strategy_id_index(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 18427) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 18427)
   public static final SubLObject problem_store_problem_id_index(SubLObject store) {
     return prob_store_problem_id_index(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 19032) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 19032)
   public static final SubLObject problem_store_link_id_index(SubLObject store) {
     return prob_store_link_id_index(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 19654) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 19654)
   public static final SubLObject problem_store_proof_id_index(SubLObject store) {
     return prob_store_proof_id_index(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20039) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20039)
   public static final SubLObject problem_store_historical_root_problems(SubLObject store) {
     return prob_store_historical_root_problems(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20556) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20556)
   private static SubLSymbol $default_problem_store_problem_size$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20642) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20642)
   private static SubLSymbol $default_problem_store_link_size$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20709) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20709)
   private static SubLSymbol $default_problem_store_inference_size$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20780) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20780)
   private static SubLSymbol $default_problem_store_strategy_size$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20890) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20890)
   private static SubLSymbol $default_problem_store_proof_size$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20957) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 20957)
   private static SubLSymbol $problem_store_sbhl_resource_space_number$ = null;
 
   /** Allocates a new problem-store object and sets up its internal datastructures. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 21085) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 21085)
   public static final SubLObject new_problem_store(SubLObject problem_store_properties) {
     if ((problem_store_properties == UNPROVIDED)) {
       problem_store_properties = NIL;
@@ -1174,7 +1233,7 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 28802) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 28802)
   public static final SubLObject destroy_problem_store(SubLObject store) {
     if ((NIL != valid_problem_store_p(store))) {
       try {
@@ -1195,7 +1254,7 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 29107) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 29107)
   public static final SubLObject destroy_problem_store_int(SubLObject store) {
     inference_metrics.update_maximum_problem_store_historical_problem_count(store);
     note_problem_store_invalid(store);
@@ -1531,120 +1590,120 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 34314) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 34314)
   public static final SubLObject note_problem_store_invalid(SubLObject store) {
     _csetf_prob_store_equality_reasoning_domain(store, $kw187$FREE);
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 34760) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 34760)
   public static final SubLObject problem_store_suid(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_suid(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 35010) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 35010)
   public static final SubLObject problem_store_rejected_proofs(SubLObject store) {
     return prob_store_rejected_proofs(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 35214) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 35214)
   public static final SubLObject problem_store_non_explanatory_subproofs_possibleP(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_non_explanatory_subproofs_possibleP(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 35687) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 35687)
   public static final SubLObject problem_store_min_proof_depth_index(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_min_proof_depth_index(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 35837) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 35837)
   public static final SubLObject problem_store_min_transformation_depth_index(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_min_transformation_depth_index(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 36005) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 36005)
   public static final SubLObject problem_store_min_transformation_depth_signature_index(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_min_transformation_depth_signature_index(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 36331) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 36331)
   public static final SubLObject problem_store_equality_reasoning_method(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_equality_reasoning_method(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 36489) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 36489)
   public static final SubLObject problem_store_equality_reasoning_domain(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_equality_reasoning_domain(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 36647) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 36647)
   public static final SubLObject problem_store_intermediate_step_validation_level(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_intermediate_step_validation_level(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 36823) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 36823)
   public static final SubLObject problem_store_max_problem_count(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_max_problem_count(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 37119) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 37119)
   public static final SubLObject problem_store_removal_allowedP(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_removal_allowedP(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 37259) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 37259)
   public static final SubLObject problem_store_transformation_allowedP(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_transformation_allowedP(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 37413) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 37413)
   public static final SubLObject problem_store_add_restriction_layer_of_indirectionP(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_add_restriction_layer_of_indirectionP(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 37595) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 37595)
   public static final SubLObject problem_store_negation_by_failureP(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_negation_by_failureP(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 37919) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 37919)
   public static final SubLObject problem_store_direction(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_direction(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 38197) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 38197)
   public static final SubLObject problem_store_rewrite_allowedP(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_rewrite_allowedP(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 38337) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 38337)
   public static final SubLObject problem_store_abduction_allowedP(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_abduction_allowedP(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 38478) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 38478)
   public static final SubLObject problem_store_new_terms_allowedP(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_new_terms_allowedP(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 38619) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 38619)
   public static final SubLObject problem_store_compute_answer_justificationsP(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     if ((NIL != cyc_testing.testing_real_time_pruningP())) {
@@ -1654,13 +1713,13 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 38843) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 38843)
   public static final SubLObject problem_store_preparedP(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     return prob_store_preparedP(store);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 39729) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 39729)
   public static final SubLObject note_problem_store_most_recent_tactic_executed(SubLObject store, SubLObject tactic) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     checkType(tactic, $sym262$TACTIC_P);
@@ -1668,7 +1727,7 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 40669) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 40669)
   public static final SubLObject set_problem_store_add_restriction_layer_of_indirectionP(SubLObject store, SubLObject value) {
     checkType(store, $sym263$NEW_PROBLEM_STORE_P);
     checkType(value, $sym257$BOOLEANP);
@@ -1676,7 +1735,7 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 40917) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 40917)
   public static final SubLObject set_problem_store_transformation_allowedP(SubLObject store, SubLObject value) {
     checkType(store, $sym263$NEW_PROBLEM_STORE_P);
     checkType(value, $sym257$BOOLEANP);
@@ -1684,7 +1743,7 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 41553) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 41553)
   public static final SubLObject note_problem_store_prepared(SubLObject store) {
     checkType(store, $sym263$NEW_PROBLEM_STORE_P);
     _csetf_prob_store_preparedP(store, T);
@@ -1692,7 +1751,7 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
   }
 
   /** @note the actual destruction must still be done by the caller. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 41705) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 41705)
   public static final SubLObject note_problem_store_destruction_imminent(SubLObject store) {
     checkType(store, $sym263$NEW_PROBLEM_STORE_P);
     _csetf_prob_store_destruction_imminentP(store, T);
@@ -1700,30 +1759,30 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
   }
 
   /** Return T iff STORE has a direction of :FORWARD. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 42184) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 42184)
   public static final SubLObject problem_store_forwardP(SubLObject store) {
     return Equality.eq($kw264$FORWARD, problem_store_direction(store));
   }
 
   /** @return booleanp; whether STORE is newly created and not yet finalized.
    @see finalize-problem-store-properties */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 42355) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 42355)
   public static final SubLObject problem_store_newP(SubLObject store) {
     return makeBoolean((NIL == problem_store_preparedP(store)));
   }
 
   /** Return the number of inferences that are currently in STORE. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 42687) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 42687)
   public static final SubLObject problem_store_inference_count(SubLObject store) {
     return id_index.id_index_count(prob_store_inference_id_index(store));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 42873) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 42873)
   public static final SubLObject problem_store_has_only_one_inferenceP(SubLObject store) {
     return Numbers.numE(ONE_INTEGER, problem_store_inference_count(store));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 43605) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 43605)
   public static final SubLObject first_problem_store_inference(SubLObject store) {
     {
       SubLObject idx = problem_store_inference_id_index(store);
@@ -1780,7 +1839,7 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 44476) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 44476)
   public static final SubLObject problem_store_privateP(SubLObject store) {
     {
       SubLObject inference = first_problem_store_inference(store);
@@ -1792,13 +1851,13 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
   }
 
   /** Return the number of problems that are currently in STORE. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 49478) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 49478)
   public static final SubLObject problem_store_problem_count(SubLObject store) {
     return id_index.id_index_count(prob_store_problem_id_index(store));
   }
 
   /** Return the number of problems that have ever existed in STORE. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 49658) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 49658)
   public static final SubLObject problem_store_historical_problem_count(SubLObject store) {
     return id_index.id_index_next_id(prob_store_problem_id_index(store));
   }
@@ -1807,12 +1866,12 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
 the problem store will attempt to prune, returns the CRAZY-MAX-PROBLEM-COUNT
 which is the amount of problems above which the problem store will error
 without even trying to prune. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 49992) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 49992)
   public static final SubLObject compute_crazy_max_problem_count(SubLObject max_problem_count) {
     return number_utilities.potentially_infinite_number_max(number_utilities.potentially_infinite_number_plus(max_problem_count, $int279$212), number_utilities.potentially_infinite_number_times(max_problem_count, TWO_INTEGER));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 50584) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 50584)
   public static final SubLObject problem_store_max_problem_count_reachedP(SubLObject store) {
     {
       SubLObject max_problem_count = problem_store_max_problem_count(store);
@@ -1823,10 +1882,10 @@ without even trying to prune. */
 
   /** If the problem store fills up with this many times more than the max problem count,
    halt with a :max-proof-count halt reason. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 50860) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 50860)
   private static SubLSymbol $max_proof_count_multiplier$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 51046) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 51046)
   public static final SubLObject problem_store_max_proof_count_reachedP(SubLObject store) {
     {
       SubLObject max_problem_count = problem_store_max_problem_count(store);
@@ -1836,13 +1895,13 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 52037) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 52037)
   public static final SubLObject problem_store_allows_proof_processingP(SubLObject store) {
     return makeBoolean(((NIL != problem_store_privateP(store))
            && (NIL == problem_store_compute_answer_justificationsP(store))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 52589) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 52589)
   public static final SubLObject find_problem_by_query(SubLObject store, SubLObject query) {
     {
       SubLObject domain = problem_store_equality_reasoning_domain(store);
@@ -1854,25 +1913,25 @@ without even trying to prune. */
   }
 
   /** Return the number of proofs that are currently in STORE. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 72959) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 72959)
   public static final SubLObject problem_store_proof_count(SubLObject store) {
     return id_index.id_index_count(prob_store_proof_id_index(store));
   }
 
   /** @return non-negative-integer-p; the number of currently existing problems in STORE
    that have ever been the root problem of some inference. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 79014) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 79014)
   public static final SubLObject problem_store_historical_root_problem_count(SubLObject store) {
     return set.set_size(prob_store_historical_root_problems(store));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 80533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 80533)
   public static final SubLObject clear_problem_store_proof_keeping_problems(SubLObject store) {
     Hashtables.clrhash(prob_store_proof_keeping_index(store));
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 83103) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 83103)
   public static final SubLObject problem_store_new_inference_id(SubLObject store) {
     {
       SubLObject v_id_index = problem_store_inference_id_index(store);
@@ -1891,7 +1950,7 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 83385) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 83385)
   public static final SubLObject problem_store_new_strategy_id(SubLObject store) {
     {
       SubLObject v_id_index = problem_store_strategy_id_index(store);
@@ -1910,7 +1969,7 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 83615) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 83615)
   public static final SubLObject problem_store_new_problem_id(SubLObject store) {
     {
       SubLObject v_id_index = problem_store_problem_id_index(store);
@@ -1929,7 +1988,7 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 83843) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 83843)
   public static final SubLObject problem_store_new_link_id(SubLObject store) {
     {
       SubLObject v_id_index = problem_store_link_id_index(store);
@@ -1948,7 +2007,7 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 84065) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 84065)
   public static final SubLObject problem_store_new_proof_id(SubLObject store) {
     {
       SubLObject v_id_index = problem_store_proof_id_index(store);
@@ -1967,7 +2026,7 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 84289) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 84289)
   public static final SubLObject add_problem_store_inference(SubLObject store, SubLObject inference) {
     {
       SubLObject id = inference_datastructures_inference.inference_suid(inference);
@@ -1985,7 +2044,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 84548) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 84548)
   public static final SubLObject remove_problem_store_inference(SubLObject store, SubLObject inference) {
     {
       SubLObject id = inference_datastructures_inference.inference_suid(inference);
@@ -2006,7 +2065,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 85039) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 85039)
   public static final SubLObject add_problem_store_strategy(SubLObject store, SubLObject strategy) {
     {
       SubLObject id = inference_datastructures_strategy.strategy_suid(strategy);
@@ -2024,7 +2083,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 85292) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 85292)
   public static final SubLObject remove_problem_store_strategy(SubLObject store, SubLObject strategy) {
     {
       SubLObject id = inference_datastructures_strategy.strategy_suid(strategy);
@@ -2042,7 +2101,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 85519) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 85519)
   public static final SubLObject add_problem_store_problem_by_id(SubLObject store, SubLObject problem) {
     {
       SubLObject id = inference_datastructures_problem.problem_suid(problem);
@@ -2060,7 +2119,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 85996) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 85996)
   public static final SubLObject add_problem_store_problem_by_query(SubLObject store, SubLObject problem) {
     if ((NIL != inference_datastructures_problem.problem_in_equality_reasoning_domainP(problem))) {
       {
@@ -2080,7 +2139,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 86583) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 86583)
   public static final SubLObject add_problem_store_link(SubLObject store, SubLObject link) {
     {
       SubLObject id = inference_datastructures_problem_link.problem_link_suid(link);
@@ -2098,7 +2157,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 86820) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 86820)
   public static final SubLObject remove_problem_store_link(SubLObject store, SubLObject link) {
     {
       SubLObject id = inference_datastructures_problem_link.problem_link_suid(link);
@@ -2116,7 +2175,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 87035) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 87035)
   public static final SubLObject add_problem_store_proof(SubLObject store, SubLObject proof) {
     {
       SubLObject id = inference_datastructures_proof.proof_suid(proof);
@@ -2134,7 +2193,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 89296) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 89296)
   public static final SubLObject problem_store_min_proof_depth_index_remove_inference(SubLObject store, SubLObject inference) {
     {
       SubLObject index = problem_store_min_proof_depth_index(store);
@@ -2143,7 +2202,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 89504) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 89504)
   public static final SubLObject problem_store_min_transformation_depth_index_remove_inference(SubLObject store, SubLObject inference) {
     {
       SubLObject index = problem_store_min_transformation_depth_index(store);
@@ -2152,7 +2211,7 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 89728) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 89728)
   public static final SubLObject problem_store_min_transformation_depth_signature_index_remove_inference(SubLObject store, SubLObject inference) {
     {
       SubLObject index = problem_store_min_transformation_depth_signature_index(store);
@@ -2161,14 +2220,14 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 89974) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 89974)
   public static final SubLObject add_problem_store_historical_root_problem(SubLObject store, SubLObject problem) {
     return set.set_add(problem, prob_store_historical_root_problems(store));
   }
 
   /** Call this after STORE is done being constructed.
    Sets all STORE's static properties to be no longer modifiable. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 90306) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 90306)
   public static final SubLObject finalize_problem_store_properties(SubLObject store) {
     if ((NIL == problem_store_preparedP(store))) {
       note_problem_store_prepared(store);
@@ -2176,14 +2235,14 @@ without even trying to prune. */
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 91522) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 91522)
   public static final SubLObject add_problem_store_problem(SubLObject store, SubLObject problem) {
     add_problem_store_problem_by_id(store, problem);
     add_problem_store_problem_by_query(store, problem);
     return store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 92193) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 92193)
   public static final SubLObject problem_store_note_transformation_rule_considered(SubLObject store, SubLObject rule) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2235,7 +2294,7 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 92473) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 92473)
   public static final SubLObject problem_store_note_transformation_rule_success(SubLObject store, SubLObject rule) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2287,7 +2346,7 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 92822) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 92822)
   public static final SubLObject ensure_transformation_rule_considered_noted_internal(SubLObject rule) {
     if ((NIL != assertions_high.rule_assertionP(rule))) {
       inference_analysis.increment_transformation_rule_considered_count(rule, T, UNPROVIDED);
@@ -2296,7 +2355,7 @@ without even trying to prune. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 92822) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 92822)
   public static final SubLObject ensure_transformation_rule_considered_noted(SubLObject rule) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2323,7 +2382,7 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93173) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93173)
   public static final SubLObject ensure_transformation_rule_success_noted_internal(SubLObject rule) {
     if ((NIL != assertions_high.rule_assertionP(rule))) {
       inference_analysis.increment_transformation_rule_success_count(rule, T, UNPROVIDED);
@@ -2332,7 +2391,7 @@ without even trying to prune. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93173) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93173)
   public static final SubLObject ensure_transformation_rule_success_noted(SubLObject rule) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2360,12 +2419,19 @@ without even trying to prune. */
   }
 
   public static final class $problem_store_janitor_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $store; }
+    @Override
     public SubLObject getField3() { return $indestructible_problems; }
+    @Override
     public SubLObject getField4() { return $staleP; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $store = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $indestructible_problems = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $staleP = value; }
     public SubLObject $store = NIL;
     public SubLObject $indestructible_problems = NIL;
@@ -2374,40 +2440,41 @@ without even trying to prune. */
     Structures.makeStructDeclNative($problem_store_janitor_native.class, $sym299$PROBLEM_STORE_JANITOR, $sym300$PROBLEM_STORE_JANITOR_P, $list301, $list302, new String[] {"$store", "$indestructible_problems", "$staleP"}, $list303, $list304, $sym305$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759)
   public static SubLSymbol $dtp_problem_store_janitor$ = null;
 
   public static final class $problem_store_janitor_p$UnaryFunction extends UnaryFunction {
     public $problem_store_janitor_p$UnaryFunction() { super(extractFunctionNamed("PROBLEM-STORE-JANITOR-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 34995"); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759)
   public static final SubLObject prob_store_janitor_indestructible_problems(SubLObject object) {
     checkType(object, $sym300$PROBLEM_STORE_JANITOR_P);
     return object.getField3();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759)
   public static final SubLObject _csetf_prob_store_janitor_store(SubLObject object, SubLObject value) {
     checkType(object, $sym300$PROBLEM_STORE_JANITOR_P);
     return object.setField2(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759)
   public static final SubLObject _csetf_prob_store_janitor_indestructible_problems(SubLObject object, SubLObject value) {
     checkType(object, $sym300$PROBLEM_STORE_JANITOR_P);
     return object.setField3(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759)
   public static final SubLObject _csetf_prob_store_janitor_staleP(SubLObject object, SubLObject value) {
     checkType(object, $sym300$PROBLEM_STORE_JANITOR_P);
     return object.setField4(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 93759)
   public static final SubLObject make_problem_store_janitor(SubLObject arglist) {
     if ((arglist == UNPROVIDED)) {
       arglist = NIL;
@@ -2435,7 +2502,7 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 94639) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 94639)
   public static final SubLObject new_problem_store_janitor(SubLObject store) {
     checkType(store, $sym14$PROBLEM_STORE_P);
     {
@@ -2447,7 +2514,7 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 94995) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 94995)
   public static final SubLObject destroy_problem_store_janitor(SubLObject janitor) {
     set.clear_set(prob_store_janitor_indestructible_problems(janitor));
     _csetf_prob_store_janitor_indestructible_problems(janitor, $kw187$FREE);
@@ -2456,18 +2523,18 @@ without even trying to prune. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 96737) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 96737)
   public static final SubLObject problem_store_janitor_note_stale(SubLObject janitor) {
     _csetf_prob_store_janitor_staleP(janitor, T);
     return janitor;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 97665) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 97665)
   private static SubLSymbol $problem_store_id_to_name_table$ = null;
 
   /** Returns an object which is the unique name of PROBLEM-STORE.
    This object can be of any type, but names are assumed unique wrt the #'equal test. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 97812) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 97812)
   public static final SubLObject problem_store_name(SubLObject problem_store) {
     checkType(problem_store, $sym14$PROBLEM_STORE_P);
     {
@@ -2476,11 +2543,11 @@ without even trying to prune. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 98182) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 98182)
   private static SubLSymbol $problem_store_name_to_id_table$ = null;
 
   /** @return nil or problem-store-p */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 98264) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 98264)
   public static final SubLObject find_problem_store_by_name(SubLObject name) {
     checkType(name, $sym248$PROBLEM_STORE_NAME_P);
     if ((NIL != name)) {
@@ -2495,7 +2562,7 @@ without even trying to prune. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 100047) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 100047)
   public static final SubLObject set_problem_store_name(SubLObject problem_store, SubLObject name) {
     if ((NIL != name)) {
       {
@@ -2507,7 +2574,7 @@ without even trying to prune. */
     return problem_store;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 100344) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-problem-store.lisp", position = 100344)
   public static final SubLObject free_problem_store_name(SubLObject problem_store) {
     {
       SubLObject id = problem_store_suid(problem_store);
@@ -2942,7 +3009,7 @@ without even trying to prune. */
 
   public static final SubLObject init_inference_datastructures_problem_store_file() {
     $problem_store_modification_permittedP$ = defparameter("*PROBLEM-STORE-MODIFICATION-PERMITTED?*", NIL);
-    $problem_store_id_index$ = deflexical("*PROBLEM-STORE-ID-INDEX*", ((NIL != Symbols.boundp($sym0$_PROBLEM_STORE_ID_INDEX_)) ? ((SubLObject) $problem_store_id_index$.getGlobalValue()) : id_index.new_id_index(UNPROVIDED, UNPROVIDED)));
+    $problem_store_id_index$ = deflexical("*PROBLEM-STORE-ID-INDEX*", maybeDefault( $sym0$_PROBLEM_STORE_ID_INDEX_, $problem_store_id_index$, ()-> (id_index.new_id_index(UNPROVIDED, UNPROVIDED))));
     $dtp_problem_store$ = defconstant("*DTP-PROBLEM-STORE*", $sym13$PROBLEM_STORE);
     $default_problem_store_problem_size$ = deflexical("*DEFAULT-PROBLEM-STORE-PROBLEM-SIZE*", $int245$80);
     $default_problem_store_link_size$ = deflexical("*DEFAULT-PROBLEM-STORE-LINK-SIZE*", $int246$120);
@@ -2952,8 +3019,8 @@ without even trying to prune. */
     $problem_store_sbhl_resource_space_number$ = deflexical("*PROBLEM-STORE-SBHL-RESOURCE-SPACE-NUMBER*", TEN_INTEGER);
     $max_proof_count_multiplier$ = deflexical("*MAX-PROOF-COUNT-MULTIPLIER*", FIVE_INTEGER);
     $dtp_problem_store_janitor$ = defconstant("*DTP-PROBLEM-STORE-JANITOR*", $sym299$PROBLEM_STORE_JANITOR);
-    $problem_store_id_to_name_table$ = deflexical("*PROBLEM-STORE-ID-TO-NAME-TABLE*", ((NIL != Symbols.boundp($sym322$_PROBLEM_STORE_ID_TO_NAME_TABLE_)) ? ((SubLObject) $problem_store_id_to_name_table$.getGlobalValue()) : Hashtables.make_hash_table(ONE_INTEGER, Symbols.symbol_function(EQL), UNPROVIDED)));
-    $problem_store_name_to_id_table$ = deflexical("*PROBLEM-STORE-NAME-TO-ID-TABLE*", ((NIL != Symbols.boundp($sym323$_PROBLEM_STORE_NAME_TO_ID_TABLE_)) ? ((SubLObject) $problem_store_name_to_id_table$.getGlobalValue()) : Hashtables.make_hash_table(ONE_INTEGER, Symbols.symbol_function(EQUAL), UNPROVIDED)));
+    $problem_store_id_to_name_table$ = deflexical("*PROBLEM-STORE-ID-TO-NAME-TABLE*", maybeDefault( $sym322$_PROBLEM_STORE_ID_TO_NAME_TABLE_, $problem_store_id_to_name_table$, ()-> (Hashtables.make_hash_table(ONE_INTEGER, Symbols.symbol_function(EQL), UNPROVIDED))));
+    $problem_store_name_to_id_table$ = deflexical("*PROBLEM-STORE-NAME-TO-ID-TABLE*", maybeDefault( $sym323$_PROBLEM_STORE_NAME_TO_ID_TABLE_, $problem_store_name_to_id_table$, ()-> (Hashtables.make_hash_table(ONE_INTEGER, Symbols.symbol_function(EQUAL), UNPROVIDED))));
     return NIL;
   }
 
@@ -3371,14 +3438,17 @@ without even trying to prune. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_datastructures_problem_store_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_datastructures_problem_store_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_datastructures_problem_store_file();
   }

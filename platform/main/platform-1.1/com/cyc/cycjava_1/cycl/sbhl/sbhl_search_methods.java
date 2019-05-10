@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.sbhl;
+package com.cyc.cycjava_1.cycl.sbhl;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,28 +67,28 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cardinality_estimates;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
-import com.cyc.cycjava_1.cycl.keyhash_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_cache;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_methods;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_methods;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cardinality_estimates;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
+//dm import com.cyc.cycjava_1.cycl.keyhash_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_cache;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_methods;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_methods;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
 
 public  final class sbhl_search_methods extends SubLTranslatedFile {
 

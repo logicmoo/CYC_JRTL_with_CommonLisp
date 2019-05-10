@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,36 +67,36 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertion_utilities;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cyc_kernel;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.forward;
-import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.kb_control_vars;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
-import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.kb_mapping;
-import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
-import com.cyc.cycjava_1.cycl.kb_paths;
-import com.cyc.cycjava_1.cycl.ke;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.mt_vars;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.inference.harness.removal_module_utilities;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertion_utilities;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cyc_kernel;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.forward;
+//dm import com.cyc.cycjava_1.cycl.id_index;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_control_vars;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
+//dm import com.cyc.cycjava_1.cycl.kb_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
+//dm import com.cyc.cycjava_1.cycl.kb_paths;
+//dm import com.cyc.cycjava_1.cycl.ke;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_vars;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.removal_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.variables;
 
 public  final class hl_prototypes extends SubLTranslatedFile {
 
@@ -328,9 +347,9 @@ public  final class hl_prototypes extends SubLTranslatedFile {
   public static final SubLObject init_hl_prototypes_file() {
     $hl_prototypes_enabledP$ = defparameter("*HL-PROTOTYPES-ENABLED?*", T);
     $gather_hl_prototype_statisticsP$ = defparameter("*GATHER-HL-PROTOTYPE-STATISTICS?*", T);
-    $hl_prototype_hits$ = deflexical("*HL-PROTOTYPE-HITS*", ((NIL != Symbols.boundp($sym0$_HL_PROTOTYPE_HITS_)) ? ((SubLObject) $hl_prototype_hits$.getGlobalValue()) : ZERO_INTEGER));
-    $hl_prototype_hit_table$ = deflexical("*HL-PROTOTYPE-HIT-TABLE*", ((NIL != Symbols.boundp($sym1$_HL_PROTOTYPE_HIT_TABLE_)) ? ((SubLObject) $hl_prototype_hit_table$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $hl_prototype_misses$ = deflexical("*HL-PROTOTYPE-MISSES*", ((NIL != Symbols.boundp($sym2$_HL_PROTOTYPE_MISSES_)) ? ((SubLObject) $hl_prototype_misses$.getGlobalValue()) : ZERO_INTEGER));
+    $hl_prototype_hits$ = deflexical("*HL-PROTOTYPE-HITS*", maybeDefault( $sym0$_HL_PROTOTYPE_HITS_, $hl_prototype_hits$, ()-> (ZERO_INTEGER)));
+    $hl_prototype_hit_table$ = deflexical("*HL-PROTOTYPE-HIT-TABLE*", maybeDefault( $sym1$_HL_PROTOTYPE_HIT_TABLE_, $hl_prototype_hit_table$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $hl_prototype_misses$ = deflexical("*HL-PROTOTYPE-MISSES*", maybeDefault( $sym2$_HL_PROTOTYPE_MISSES_, $hl_prototype_misses$, ()-> (ZERO_INTEGER)));
     $the_hl_prototype_ke_irrelevant_rule_caching_state$ = deflexical("*THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE-CACHING-STATE*", NIL);
     return NIL;
   }

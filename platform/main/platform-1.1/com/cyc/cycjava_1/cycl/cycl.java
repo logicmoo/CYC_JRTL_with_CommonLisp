@@ -18,6 +18,19 @@
 */
 package com.cyc.cycjava_1.cycl;
 
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 
@@ -114,8 +127,8 @@ public class cycl implements SubLFile
     // SubLFiles.initialize("com.cyc.cycjava_1.cycl.red_implementation");
     SubLFiles.initialize( "com.cyc.cycjava_1.cycl.red_api" );
     SubLFiles.initialize( "com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing_initialization" );
-    SubLFiles.initialize( "com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing" );
-    SubLFiles.initialize( "com.cyc.cycjava_1.cycl.cyc_testing.generic_testing" );
+//dm    SubLFiles.initialize( "com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing" );
+//dm    SubLFiles.initialize( "com.cyc.cycjava_1.cycl.cyc_testing.generic_testing" );
     SubLFiles.initialize( "com.cyc.cycjava_1.cycl.hash_table_utilities" );
     SubLFiles.initialize( "com.cyc.cycjava_1.cycl.keyhash" );
     SubLFiles.initialize( "com.cyc.cycjava_1.cycl.set_contents" );

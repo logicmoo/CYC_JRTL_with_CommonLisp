@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -46,29 +65,31 @@ import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 import static com.cyc.tool.subl.util.SubLFiles.defvar;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
+import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_abduction_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_motivation;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_lookahead_productivity;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_union;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_abduction_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_motivation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_lookahead_productivity;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_union;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm
 import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class inference_tactician_utilities extends SubLTranslatedFile {
 
@@ -80,12 +101,12 @@ public  final class inference_tactician_utilities extends SubLTranslatedFile {
 
   //// Definitions
 
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 876) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 876)
   public static final SubLObject memoized_problem_global_preference_level_internal(SubLObject problem, SubLObject strategic_context, SubLObject shared_variables) {
     return problem_global_preference_level(problem, strategic_context, shared_variables);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 876) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 876)
   public static final SubLObject memoized_problem_global_preference_level(SubLObject problem, SubLObject strategic_context, SubLObject shared_variables) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -136,7 +157,7 @@ public  final class inference_tactician_utilities extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 1157) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 1157)
   public static final SubLObject problem_global_preference_level(SubLObject problem, SubLObject strategic_context, SubLObject shared_variables) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -194,13 +215,13 @@ public  final class inference_tactician_utilities extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 3436) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 3436)
   public static final SubLObject single_negative_literal_problem_p(SubLObject problem) {
     return makeBoolean(((NIL != inference_datastructures_problem.single_literal_problem_p(problem))
            && ($kw14$NEG == inference_datastructures_problem.single_literal_problem_sense(problem))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 3603) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 3603)
   public static final SubLObject multi_literal_problem_global_preference_level(SubLObject problem, SubLObject strategic_context) {
     {
       SubLObject max_preference_level = $kw8$DISALLOWED;
@@ -223,7 +244,7 @@ public  final class inference_tactician_utilities extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 4386) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 4386)
   public static final SubLObject multi_literal_problem_tactics_to_activate(SubLObject problem, SubLObject strategic_context) {
     if (($kw13$TACTICAL == strategic_context)) {
       return Sequences.remove_if(Symbols.symbol_function($sym16$TRANSFORMATION_TACTIC_P), inference_datastructures_problem.problem_tactics(problem), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -235,7 +256,7 @@ public  final class inference_tactician_utilities extends SubLTranslatedFile {
   }
 
   /** Return T iff PROBLEM has some :complete non-thrown-away removal tactic. */
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 4868) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 4868)
   public static final SubLObject problem_has_some_complete_non_thrown_away_removal_tacticP(SubLObject problem, SubLObject strategic_context) {
     {
       SubLObject cdolist_list_var = inference_datastructures_problem.problem_tactics(problem);
@@ -256,7 +277,7 @@ public  final class inference_tactician_utilities extends SubLTranslatedFile {
 
   /** Return T iff PROBLEM has no removal-relevant tactic with a completeness of anything other than :impossible
 or a preference of anything other than :disallowed. */
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 5363) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 5363)
   public static final SubLObject problem_has_no_allowed_or_executed_tactics_wrt_removalP(SubLObject problem, SubLObject strategic_context) {
     {
       SubLObject cdolist_list_var = inference_datastructures_problem.problem_tactics(problem);
@@ -284,11 +305,11 @@ or a preference of anything other than :disallowed. */
   }
 
   /**                            m      b */
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 6185) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 6185)
   private static SubLSymbol $preference_scaling_values$ = null;
 
   /** Assumes zero b-values */
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 6726) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 6726)
   public static final SubLObject removal_unhappiness(SubLObject productivity, SubLObject module_spec, SubLObject preference_level, SubLObject literal_count) {
     {
       SubLObject unhappiness = productivity;
@@ -299,13 +320,13 @@ or a preference of anything other than :disallowed. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 7241) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 7241)
   public static final SubLObject scale_unhappiness(SubLObject unhappiness, SubLObject scaling_factor) {
     return number_utilities.potentially_infinite_integer_times_number_rounded(unhappiness, scaling_factor);
   }
 
   /** Assumes zero b-values */
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 7393) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 7393)
   public static final SubLObject module_scaling_factor(SubLObject module_spec) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -336,7 +357,7 @@ or a preference of anything other than :disallowed. */
   }
 
   /** Assumes zero b-values */
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 7686) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 7686)
   public static final SubLObject preference_scaling_factor(SubLObject preference_level) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -369,11 +390,11 @@ or a preference of anything other than :disallowed. */
   /** Temporary control variable; when non-NIL we factor the number of focal literals
    in a connected conjunction tactic into account when computed the committed tactic.
    Should eventually stay T. */
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 7993) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 7993)
   private static SubLSymbol $literal_count_scaling_enabledP$ = null;
 
   /** Assumes zero b-values */
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 8259) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 8259)
   public static final SubLObject literal_count_scaling_factor(SubLObject literal_count) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -389,7 +410,7 @@ or a preference of anything other than :disallowed. */
   /** @return booleanp; whether it prefers a CANDIDATE-TACTIC's
    PRODUCTIVITY, PREFERENCE, MODULE-SPEC and LITERAL-COUNT values over
    those of a COMMITTED-TACTIC. */
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 8493) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 8493)
   public static final SubLObject strategy_deems_conjunctive_tactic_spec_betterP(SubLObject candidate_tactic_productivity, SubLObject candidate_tactic_preference, SubLObject candidate_tactic_module_spec, SubLObject candidate_tactic_literal_count, SubLObject committed_tactic_productivity, SubLObject committed_tactic_preference, SubLObject committed_tactic_module_spec, SubLObject committed_tactic_literal_count) {
     if (($kw8$DISALLOWED == candidate_tactic_preference)) {
       return NIL;
@@ -404,7 +425,7 @@ or a preference of anything other than :disallowed. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 9604) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 9604)
   public static final SubLObject magic_wand_tacticP(SubLObject tactic, SubLObject strategic_context) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -455,10 +476,10 @@ or a preference of anything other than :disallowed. */
   }
 
   /** Tactics with a preference level strictly higher than this will not be deemed magic wand tactics. */
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 11657) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 11657)
   private static SubLSymbol $magic_wand_max_preference_level$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 11830) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 11830)
   public static final SubLObject under_magic_wand_max_preference_levelP(SubLObject preference_level) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -466,7 +487,7 @@ or a preference of anything other than :disallowed. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 11989) 
+  @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 11989)
   public static final SubLObject tactic_strictly_less_preferred_than_some_siblingP(SubLObject tactic, SubLObject strategic_context) {
     {
       SubLObject tactic_preference_level = inference_datastructures_strategy.tactic_strategic_preference_level(tactic, strategic_context);
@@ -554,14 +575,17 @@ or a preference of anything other than :disallowed. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_tactician_utilities_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_tactician_utilities_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_tactician_utilities_file();
   }

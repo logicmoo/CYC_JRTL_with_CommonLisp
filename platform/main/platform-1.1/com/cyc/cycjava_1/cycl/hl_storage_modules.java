@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,41 +80,41 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.canon_tl;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.czer_main;
-import com.cyc.cycjava_1.cycl.deductions_high;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.formula_pattern_match;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.hlmt_czer;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.inference.janus;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_control_vars;
-import com.cyc.cycjava_1.cycl.keyhash_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.tms;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.canon_tl;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.czer_main;
+//dm import com.cyc.cycjava_1.cycl.deductions_high;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.formula_pattern_match;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.hlmt_czer;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.janus;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_control_vars;
+//dm import com.cyc.cycjava_1.cycl.keyhash_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.tms;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class hl_storage_modules extends SubLTranslatedFile {
 
@@ -1087,16 +1119,16 @@ some assertions have already been made with it in other mts. */
   }
 
   public static final SubLObject init_hl_storage_modules_file() {
-    $hl_storage_modules$ = deflexical("*HL-STORAGE-MODULES*", ((NIL != Symbols.boundp($sym0$_HL_STORAGE_MODULES_)) ? ((SubLObject) $hl_storage_modules$.getGlobalValue()) : set.new_set(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $predicate_generic_hl_storage_modules$ = deflexical("*PREDICATE-GENERIC-HL-STORAGE-MODULES*", ((NIL != Symbols.boundp($sym1$_PREDICATE_GENERIC_HL_STORAGE_MODULES_)) ? ((SubLObject) $predicate_generic_hl_storage_modules$.getGlobalValue()) : set.new_set(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $predicate_specific_hl_storage_modules_table$ = deflexical("*PREDICATE-SPECIFIC-HL-STORAGE-MODULES-TABLE*", ((NIL != Symbols.boundp($sym2$_PREDICATE_SPECIFIC_HL_STORAGE_MODULES_TABLE_)) ? ((SubLObject) $predicate_specific_hl_storage_modules_table$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $argument_type_specific_hl_storage_modules_table$ = deflexical("*ARGUMENT-TYPE-SPECIFIC-HL-STORAGE-MODULES-TABLE*", ((NIL != Symbols.boundp($sym3$_ARGUMENT_TYPE_SPECIFIC_HL_STORAGE_MODULES_TABLE_)) ? ((SubLObject) $argument_type_specific_hl_storage_modules_table$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
+    $hl_storage_modules$ = deflexical("*HL-STORAGE-MODULES*", maybeDefault( $sym0$_HL_STORAGE_MODULES_, $hl_storage_modules$, ()-> (set.new_set(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $predicate_generic_hl_storage_modules$ = deflexical("*PREDICATE-GENERIC-HL-STORAGE-MODULES*", maybeDefault( $sym1$_PREDICATE_GENERIC_HL_STORAGE_MODULES_, $predicate_generic_hl_storage_modules$, ()-> (set.new_set(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $predicate_specific_hl_storage_modules_table$ = deflexical("*PREDICATE-SPECIFIC-HL-STORAGE-MODULES-TABLE*", maybeDefault( $sym2$_PREDICATE_SPECIFIC_HL_STORAGE_MODULES_TABLE_, $predicate_specific_hl_storage_modules_table$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $argument_type_specific_hl_storage_modules_table$ = deflexical("*ARGUMENT-TYPE-SPECIFIC-HL-STORAGE-MODULES-TABLE*", maybeDefault( $sym3$_ARGUMENT_TYPE_SPECIFIC_HL_STORAGE_MODULES_TABLE_, $argument_type_specific_hl_storage_modules_table$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
     $currently_executing_hl_storage_module$ = defparameter("*CURRENTLY-EXECUTING-HL-STORAGE-MODULE*", NIL);
     $hl_storage_module_properties$ = deflexical("*HL-STORAGE-MODULE-PROPERTIES*", $list28);
-    $solely_specific_hl_storage_module_predicate_store$ = deflexical("*SOLELY-SPECIFIC-HL-STORAGE-MODULE-PREDICATE-STORE*", ((NIL != Symbols.boundp($sym51$_SOLELY_SPECIFIC_HL_STORAGE_MODULE_PREDICATE_STORE_)) ? ((SubLObject) $solely_specific_hl_storage_module_predicate_store$.getGlobalValue()) : set.new_set(EQ, $int52$50)));
+    $solely_specific_hl_storage_module_predicate_store$ = deflexical("*SOLELY-SPECIFIC-HL-STORAGE-MODULE-PREDICATE-STORE*", maybeDefault( $sym51$_SOLELY_SPECIFIC_HL_STORAGE_MODULE_PREDICATE_STORE_, $solely_specific_hl_storage_module_predicate_store$, ()-> (set.new_set(EQ, $int52$50))));
     $successful_hl_storage_modules$ = defparameter("*SUCCESSFUL-HL-STORAGE-MODULES*", NIL);
     $robustly_remove_uncanonical_decontextualized_assertiblesP$ = deflexical("*ROBUSTLY-REMOVE-UNCANONICAL-DECONTEXTUALIZED-ASSERTIBLES?*", T);
-    $dummy_asserted_argument_spec$ = deflexical("*DUMMY-ASSERTED-ARGUMENT-SPEC*", ((NIL != Symbols.boundp($sym91$_DUMMY_ASSERTED_ARGUMENT_SPEC_)) ? ((SubLObject) $dummy_asserted_argument_spec$.getGlobalValue()) : arguments.create_asserted_argument_spec($kw92$UNSPECIFIED)));
+    $dummy_asserted_argument_spec$ = deflexical("*DUMMY-ASSERTED-ARGUMENT-SPEC*", maybeDefault( $sym91$_DUMMY_ASSERTED_ARGUMENT_SPEC_, $dummy_asserted_argument_spec$, ()-> (arguments.create_asserted_argument_spec($kw92$UNSPECIFIED))));
     return NIL;
   }
 

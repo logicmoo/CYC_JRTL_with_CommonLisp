@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,18 +80,18 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cfasl_compression;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.sdbc;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.vector_utilities;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cfasl_compression;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.sdbc;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.vector_utilities;
 
 public  final class cfasl extends SubLTranslatedFile {
 
@@ -1554,10 +1586,10 @@ to output in a terser representation. */
     $cfasl_output_object_method_table$ = deflexical("*CFASL-OUTPUT-OBJECT-METHOD-TABLE*", Vectors.make_vector($int58$256, NIL));
     $cfasl_input_to_static_area$ = defparameter("*CFASL-INPUT-TO-STATIC-AREA*", NIL);
     $cfasl_max_opcode$ = defconstant("*CFASL-MAX-OPCODE*", $int66$128);
-    $cfasl_input_method_table$ = deflexical("*CFASL-INPUT-METHOD-TABLE*", ((NIL != Symbols.boundp($sym67$_CFASL_INPUT_METHOD_TABLE_)) ? ((SubLObject) $cfasl_input_method_table$.getGlobalValue()) : Vectors.make_vector($cfasl_max_opcode$.getGlobalValue(), $sym64$CFASL_INPUT_ERROR)));
+    $cfasl_input_method_table$ = deflexical("*CFASL-INPUT-METHOD-TABLE*", maybeDefault( $sym67$_CFASL_INPUT_METHOD_TABLE_, $cfasl_input_method_table$, ()-> (Vectors.make_vector($cfasl_max_opcode$.getGlobalValue(), $sym64$CFASL_INPUT_ERROR))));
     $within_cfasl_externalization$ = defparameter("*WITHIN-CFASL-EXTERNALIZATION*", NIL);
     $cfasl_channel_externalizedP$ = defparameter("*CFASL-CHANNEL-EXTERNALIZED?*", T);
-    $cfasl_extensions$ = deflexical("*CFASL-EXTENSIONS*", ((NIL != Symbols.boundp($sym81$_CFASL_EXTENSIONS_)) ? ((SubLObject) $cfasl_extensions$.getGlobalValue()) : NIL));
+    $cfasl_extensions$ = deflexical("*CFASL-EXTENSIONS*", maybeDefault( $sym81$_CFASL_EXTENSIONS_, $cfasl_extensions$, NIL));
     $cfasl_opcode_externalization$ = defconstant("*CFASL-OPCODE-EXTERNALIZATION*", $int85$51);
     $current_cfasl_defstruct_output_stream$ = defparameter("*CURRENT-CFASL-DEFSTRUCT-OUTPUT-STREAM*", NIL);
     $cfasl_opcode_defstruct_recipe$ = defconstant("*CFASL-OPCODE-DEFSTRUCT-RECIPE*", $int87$44);
@@ -1580,7 +1612,7 @@ to output in a terser representation. */
     $cfasl_opcode_nil$ = defconstant("*CFASL-OPCODE-NIL*", TWELVE_INTEGER);
     $cfasl_opcode_common_symbol$ = defconstant("*CFASL-OPCODE-COMMON-SYMBOL*", $int121$50);
     $cfasl_common_symbols$ = defparameter("*CFASL-COMMON-SYMBOLS*", NIL);
-    $cfasl_list_methods$ = deflexical("*CFASL-LIST-METHODS*", ((NIL != Symbols.boundp($sym132$_CFASL_LIST_METHODS_)) ? ((SubLObject) $cfasl_list_methods$.getGlobalValue()) : NIL));
+    $cfasl_list_methods$ = deflexical("*CFASL-LIST-METHODS*", maybeDefault( $sym132$_CFASL_LIST_METHODS_, $cfasl_list_methods$, NIL));
     $cfasl_opcode_list$ = defconstant("*CFASL-OPCODE-LIST*", THIRTEEN_INTEGER);
     $cfasl_opcode_dotted_list$ = defconstant("*CFASL-OPCODE-DOTTED-LIST*", SEVENTEEN_INTEGER);
     $cfasl_opcode_general_vector$ = defconstant("*CFASL-OPCODE-GENERAL-VECTOR*", FOURTEEN_INTEGER);
@@ -1596,10 +1628,10 @@ to output in a terser representation. */
     $cfasl_opcode_package$ = defconstant("*CFASL-OPCODE-PACKAGE*", $int156$28);
     $cfasl_opcode_wide_cfasl_opcode$ = defconstant("*CFASL-OPCODE-WIDE-CFASL-OPCODE*", $int159$29);
     $cfasl_min_wide_opcode$ = defconstant("*CFASL-MIN-WIDE-OPCODE*", $cfasl_max_opcode$.getGlobalValue());
-    $cfasl_wide_opcode_input_method_table$ = deflexical("*CFASL-WIDE-OPCODE-INPUT-METHOD-TABLE*", ((NIL != Symbols.boundp($sym161$_CFASL_WIDE_OPCODE_INPUT_METHOD_TABLE_)) ? ((SubLObject) $cfasl_wide_opcode_input_method_table$.getGlobalValue()) : Hashtables.make_hash_table($int112$32, Symbols.symbol_function(EQL), UNPROVIDED)));
+    $cfasl_wide_opcode_input_method_table$ = deflexical("*CFASL-WIDE-OPCODE-INPUT-METHOD-TABLE*", maybeDefault( $sym161$_CFASL_WIDE_OPCODE_INPUT_METHOD_TABLE_, $cfasl_wide_opcode_input_method_table$, ()-> (Hashtables.make_hash_table($int112$32, Symbols.symbol_function(EQL), UNPROVIDED))));
     $cfasl_opcode_instance$ = defconstant("*CFASL-OPCODE-INSTANCE*", $int167$124);
     $cfasl_opcode_guid_denoted_type$ = defconstant("*CFASL-OPCODE-GUID-DENOTED-TYPE*", $int170$126);
-    $cfasl_guid_denoted_type_input_method_table$ = deflexical("*CFASL-GUID-DENOTED-TYPE-INPUT-METHOD-TABLE*", ((NIL != Symbols.boundp($sym172$_CFASL_GUID_DENOTED_TYPE_INPUT_METHOD_TABLE_)) ? ((SubLObject) $cfasl_guid_denoted_type_input_method_table$.getGlobalValue()) : Hashtables.make_hash_table($int173$100, Symbols.symbol_function(EQUALP), UNPROVIDED)));
+    $cfasl_guid_denoted_type_input_method_table$ = deflexical("*CFASL-GUID-DENOTED-TYPE-INPUT-METHOD-TABLE*", maybeDefault( $sym172$_CFASL_GUID_DENOTED_TYPE_INPUT_METHOD_TABLE_, $cfasl_guid_denoted_type_input_method_table$, ()-> (Hashtables.make_hash_table($int173$100, Symbols.symbol_function(EQUALP), UNPROVIDED))));
     return NIL;
   }
 

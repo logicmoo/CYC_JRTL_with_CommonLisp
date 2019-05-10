@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,23 +67,23 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertion_utilities;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cyc_kernel;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.forward;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertion_utilities;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cyc_kernel;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.forward;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class inference_metrics extends SubLTranslatedFile {
 
@@ -658,45 +677,45 @@ public  final class inference_metrics extends SubLTranslatedFile {
 
   public static final SubLObject init_inference_metrics_file() {
     $dtp_inference_metric$ = defconstant("*DTP-INFERENCE-METRIC*", $sym1$INFERENCE_METRIC);
-    $inference_metrics_store$ = deflexical("*INFERENCE-METRICS-STORE*", ((NIL != Symbols.boundp($sym32$_INFERENCE_METRICS_STORE_)) ? ((SubLObject) $inference_metrics_store$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
+    $inference_metrics_store$ = deflexical("*INFERENCE-METRICS-STORE*", maybeDefault( $sym32$_INFERENCE_METRICS_STORE_, $inference_metrics_store$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
     $inference_metric_properties$ = deflexical("*INFERENCE-METRIC-PROPERTIES*", $list33);
-    $problem_store_historical_count$ = deflexical("*PROBLEM-STORE-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym268$_PROBLEM_STORE_HISTORICAL_COUNT_)) ? ((SubLObject) $problem_store_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $forward_problem_store_historical_count$ = deflexical("*FORWARD-PROBLEM-STORE-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym269$_FORWARD_PROBLEM_STORE_HISTORICAL_COUNT_)) ? ((SubLObject) $forward_problem_store_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $maximum_problem_store_historical_problem_count$ = deflexical("*MAXIMUM-PROBLEM-STORE-HISTORICAL-PROBLEM-COUNT*", ((NIL != Symbols.boundp($sym270$_MAXIMUM_PROBLEM_STORE_HISTORICAL_PROBLEM_COUNT_)) ? ((SubLObject) $maximum_problem_store_historical_problem_count$.getGlobalValue()) : ZERO_INTEGER));
-    $maximum_forward_problem_store_historical_problem_count$ = deflexical("*MAXIMUM-FORWARD-PROBLEM-STORE-HISTORICAL-PROBLEM-COUNT*", ((NIL != Symbols.boundp($sym271$_MAXIMUM_FORWARD_PROBLEM_STORE_HISTORICAL_PROBLEM_COUNT_)) ? ((SubLObject) $maximum_forward_problem_store_historical_problem_count$.getGlobalValue()) : ZERO_INTEGER));
+    $problem_store_historical_count$ = deflexical("*PROBLEM-STORE-HISTORICAL-COUNT*", maybeDefault( $sym268$_PROBLEM_STORE_HISTORICAL_COUNT_, $problem_store_historical_count$, ()-> (ZERO_INTEGER)));
+    $forward_problem_store_historical_count$ = deflexical("*FORWARD-PROBLEM-STORE-HISTORICAL-COUNT*", maybeDefault( $sym269$_FORWARD_PROBLEM_STORE_HISTORICAL_COUNT_, $forward_problem_store_historical_count$, ()-> (ZERO_INTEGER)));
+    $maximum_problem_store_historical_problem_count$ = deflexical("*MAXIMUM-PROBLEM-STORE-HISTORICAL-PROBLEM-COUNT*", maybeDefault( $sym270$_MAXIMUM_PROBLEM_STORE_HISTORICAL_PROBLEM_COUNT_, $maximum_problem_store_historical_problem_count$, ()-> (ZERO_INTEGER)));
+    $maximum_forward_problem_store_historical_problem_count$ = deflexical("*MAXIMUM-FORWARD-PROBLEM-STORE-HISTORICAL-PROBLEM-COUNT*", maybeDefault( $sym271$_MAXIMUM_FORWARD_PROBLEM_STORE_HISTORICAL_PROBLEM_COUNT_, $maximum_forward_problem_store_historical_problem_count$, ()-> (ZERO_INTEGER)));
     $expensive_forward_problem_store_threshold$ = defvar("*EXPENSIVE-FORWARD-PROBLEM-STORE-THRESHOLD*", $int272$1000);
-    $problem_historical_count$ = deflexical("*PROBLEM-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym274$_PROBLEM_HISTORICAL_COUNT_)) ? ((SubLObject) $problem_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $good_problem_historical_count$ = deflexical("*GOOD-PROBLEM-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym275$_GOOD_PROBLEM_HISTORICAL_COUNT_)) ? ((SubLObject) $good_problem_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $no_good_problem_historical_count$ = deflexical("*NO-GOOD-PROBLEM-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym276$_NO_GOOD_PROBLEM_HISTORICAL_COUNT_)) ? ((SubLObject) $no_good_problem_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $forward_problem_historical_count$ = deflexical("*FORWARD-PROBLEM-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym277$_FORWARD_PROBLEM_HISTORICAL_COUNT_)) ? ((SubLObject) $forward_problem_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $single_literal_problem_historical_count$ = deflexical("*SINGLE-LITERAL-PROBLEM-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym278$_SINGLE_LITERAL_PROBLEM_HISTORICAL_COUNT_)) ? ((SubLObject) $single_literal_problem_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $problem_link_historical_count$ = deflexical("*PROBLEM-LINK-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym279$_PROBLEM_LINK_HISTORICAL_COUNT_)) ? ((SubLObject) $problem_link_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $structural_link_historical_count$ = deflexical("*STRUCTURAL-LINK-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym280$_STRUCTURAL_LINK_HISTORICAL_COUNT_)) ? ((SubLObject) $structural_link_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $content_link_historical_count$ = deflexical("*CONTENT-LINK-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym281$_CONTENT_LINK_HISTORICAL_COUNT_)) ? ((SubLObject) $content_link_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $removal_link_historical_count$ = deflexical("*REMOVAL-LINK-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym282$_REMOVAL_LINK_HISTORICAL_COUNT_)) ? ((SubLObject) $removal_link_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $transformation_link_historical_count$ = deflexical("*TRANSFORMATION-LINK-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym283$_TRANSFORMATION_LINK_HISTORICAL_COUNT_)) ? ((SubLObject) $transformation_link_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $dependent_link_historical_count$ = deflexical("*DEPENDENT-LINK-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym287$_DEPENDENT_LINK_HISTORICAL_COUNT_)) ? ((SubLObject) $dependent_link_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $single_literal_problem_dependent_link_historical_count$ = deflexical("*SINGLE-LITERAL-PROBLEM-DEPENDENT-LINK-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym288$_SINGLE_LITERAL_PROBLEM_DEPENDENT_LINK_HISTORICAL_COUNT_)) ? ((SubLObject) $single_literal_problem_dependent_link_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $tactic_historical_count$ = deflexical("*TACTIC-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym289$_TACTIC_HISTORICAL_COUNT_)) ? ((SubLObject) $tactic_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $executed_tactic_historical_count$ = deflexical("*EXECUTED-TACTIC-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym290$_EXECUTED_TACTIC_HISTORICAL_COUNT_)) ? ((SubLObject) $executed_tactic_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $discarded_tactic_historical_count$ = deflexical("*DISCARDED-TACTIC-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym291$_DISCARDED_TACTIC_HISTORICAL_COUNT_)) ? ((SubLObject) $discarded_tactic_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $unification_attempt_historical_count$ = deflexical("*UNIFICATION-ATTEMPT-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym292$_UNIFICATION_ATTEMPT_HISTORICAL_COUNT_)) ? ((SubLObject) $unification_attempt_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $unification_success_historical_count$ = deflexical("*UNIFICATION-SUCCESS-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym293$_UNIFICATION_SUCCESS_HISTORICAL_COUNT_)) ? ((SubLObject) $unification_success_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $sbhl_cache_attempt_historical_count$ = deflexical("*SBHL-CACHE-ATTEMPT-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym294$_SBHL_CACHE_ATTEMPT_HISTORICAL_COUNT_)) ? ((SubLObject) $sbhl_cache_attempt_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $sbhl_cache_success_historical_count$ = deflexical("*SBHL-CACHE-SUCCESS-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym295$_SBHL_CACHE_SUCCESS_HISTORICAL_COUNT_)) ? ((SubLObject) $sbhl_cache_success_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $sbhl_graph_attempt_historical_count$ = deflexical("*SBHL-GRAPH-ATTEMPT-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym296$_SBHL_GRAPH_ATTEMPT_HISTORICAL_COUNT_)) ? ((SubLObject) $sbhl_graph_attempt_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $sbhl_graph_success_historical_count$ = deflexical("*SBHL-GRAPH-SUCCESS-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym297$_SBHL_GRAPH_SUCCESS_HISTORICAL_COUNT_)) ? ((SubLObject) $sbhl_graph_success_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $sbhl_link_historical_count$ = deflexical("*SBHL-LINK-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym298$_SBHL_LINK_HISTORICAL_COUNT_)) ? ((SubLObject) $sbhl_link_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $proof_historical_count$ = deflexical("*PROOF-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym299$_PROOF_HISTORICAL_COUNT_)) ? ((SubLObject) $proof_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $inference_historical_count$ = deflexical("*INFERENCE-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym300$_INFERENCE_HISTORICAL_COUNT_)) ? ((SubLObject) $inference_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $successful_inference_historical_count$ = deflexical("*SUCCESSFUL-INFERENCE-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym301$_SUCCESSFUL_INFERENCE_HISTORICAL_COUNT_)) ? ((SubLObject) $successful_inference_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $forward_inference_historical_count$ = deflexical("*FORWARD-INFERENCE-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym302$_FORWARD_INFERENCE_HISTORICAL_COUNT_)) ? ((SubLObject) $forward_inference_historical_count$.getGlobalValue()) : ZERO_INTEGER));
-    $successful_forward_inference_historical_count$ = deflexical("*SUCCESSFUL-FORWARD-INFERENCE-HISTORICAL-COUNT*", ((NIL != Symbols.boundp($sym303$_SUCCESSFUL_FORWARD_INFERENCE_HISTORICAL_COUNT_)) ? ((SubLObject) $successful_forward_inference_historical_count$.getGlobalValue()) : ZERO_INTEGER));
+    $problem_historical_count$ = deflexical("*PROBLEM-HISTORICAL-COUNT*", maybeDefault( $sym274$_PROBLEM_HISTORICAL_COUNT_, $problem_historical_count$, ()-> (ZERO_INTEGER)));
+    $good_problem_historical_count$ = deflexical("*GOOD-PROBLEM-HISTORICAL-COUNT*", maybeDefault( $sym275$_GOOD_PROBLEM_HISTORICAL_COUNT_, $good_problem_historical_count$, ()-> (ZERO_INTEGER)));
+    $no_good_problem_historical_count$ = deflexical("*NO-GOOD-PROBLEM-HISTORICAL-COUNT*", maybeDefault( $sym276$_NO_GOOD_PROBLEM_HISTORICAL_COUNT_, $no_good_problem_historical_count$, ()-> (ZERO_INTEGER)));
+    $forward_problem_historical_count$ = deflexical("*FORWARD-PROBLEM-HISTORICAL-COUNT*", maybeDefault( $sym277$_FORWARD_PROBLEM_HISTORICAL_COUNT_, $forward_problem_historical_count$, ()-> (ZERO_INTEGER)));
+    $single_literal_problem_historical_count$ = deflexical("*SINGLE-LITERAL-PROBLEM-HISTORICAL-COUNT*", maybeDefault( $sym278$_SINGLE_LITERAL_PROBLEM_HISTORICAL_COUNT_, $single_literal_problem_historical_count$, ()-> (ZERO_INTEGER)));
+    $problem_link_historical_count$ = deflexical("*PROBLEM-LINK-HISTORICAL-COUNT*", maybeDefault( $sym279$_PROBLEM_LINK_HISTORICAL_COUNT_, $problem_link_historical_count$, ()-> (ZERO_INTEGER)));
+    $structural_link_historical_count$ = deflexical("*STRUCTURAL-LINK-HISTORICAL-COUNT*", maybeDefault( $sym280$_STRUCTURAL_LINK_HISTORICAL_COUNT_, $structural_link_historical_count$, ()-> (ZERO_INTEGER)));
+    $content_link_historical_count$ = deflexical("*CONTENT-LINK-HISTORICAL-COUNT*", maybeDefault( $sym281$_CONTENT_LINK_HISTORICAL_COUNT_, $content_link_historical_count$, ()-> (ZERO_INTEGER)));
+    $removal_link_historical_count$ = deflexical("*REMOVAL-LINK-HISTORICAL-COUNT*", maybeDefault( $sym282$_REMOVAL_LINK_HISTORICAL_COUNT_, $removal_link_historical_count$, ()-> (ZERO_INTEGER)));
+    $transformation_link_historical_count$ = deflexical("*TRANSFORMATION-LINK-HISTORICAL-COUNT*", maybeDefault( $sym283$_TRANSFORMATION_LINK_HISTORICAL_COUNT_, $transformation_link_historical_count$, ()-> (ZERO_INTEGER)));
+    $dependent_link_historical_count$ = deflexical("*DEPENDENT-LINK-HISTORICAL-COUNT*", maybeDefault( $sym287$_DEPENDENT_LINK_HISTORICAL_COUNT_, $dependent_link_historical_count$, ()-> (ZERO_INTEGER)));
+    $single_literal_problem_dependent_link_historical_count$ = deflexical("*SINGLE-LITERAL-PROBLEM-DEPENDENT-LINK-HISTORICAL-COUNT*", maybeDefault( $sym288$_SINGLE_LITERAL_PROBLEM_DEPENDENT_LINK_HISTORICAL_COUNT_, $single_literal_problem_dependent_link_historical_count$, ()-> (ZERO_INTEGER)));
+    $tactic_historical_count$ = deflexical("*TACTIC-HISTORICAL-COUNT*", maybeDefault( $sym289$_TACTIC_HISTORICAL_COUNT_, $tactic_historical_count$, ()-> (ZERO_INTEGER)));
+    $executed_tactic_historical_count$ = deflexical("*EXECUTED-TACTIC-HISTORICAL-COUNT*", maybeDefault( $sym290$_EXECUTED_TACTIC_HISTORICAL_COUNT_, $executed_tactic_historical_count$, ()-> (ZERO_INTEGER)));
+    $discarded_tactic_historical_count$ = deflexical("*DISCARDED-TACTIC-HISTORICAL-COUNT*", maybeDefault( $sym291$_DISCARDED_TACTIC_HISTORICAL_COUNT_, $discarded_tactic_historical_count$, ()-> (ZERO_INTEGER)));
+    $unification_attempt_historical_count$ = deflexical("*UNIFICATION-ATTEMPT-HISTORICAL-COUNT*", maybeDefault( $sym292$_UNIFICATION_ATTEMPT_HISTORICAL_COUNT_, $unification_attempt_historical_count$, ()-> (ZERO_INTEGER)));
+    $unification_success_historical_count$ = deflexical("*UNIFICATION-SUCCESS-HISTORICAL-COUNT*", maybeDefault( $sym293$_UNIFICATION_SUCCESS_HISTORICAL_COUNT_, $unification_success_historical_count$, ()-> (ZERO_INTEGER)));
+    $sbhl_cache_attempt_historical_count$ = deflexical("*SBHL-CACHE-ATTEMPT-HISTORICAL-COUNT*", maybeDefault( $sym294$_SBHL_CACHE_ATTEMPT_HISTORICAL_COUNT_, $sbhl_cache_attempt_historical_count$, ()-> (ZERO_INTEGER)));
+    $sbhl_cache_success_historical_count$ = deflexical("*SBHL-CACHE-SUCCESS-HISTORICAL-COUNT*", maybeDefault( $sym295$_SBHL_CACHE_SUCCESS_HISTORICAL_COUNT_, $sbhl_cache_success_historical_count$, ()-> (ZERO_INTEGER)));
+    $sbhl_graph_attempt_historical_count$ = deflexical("*SBHL-GRAPH-ATTEMPT-HISTORICAL-COUNT*", maybeDefault( $sym296$_SBHL_GRAPH_ATTEMPT_HISTORICAL_COUNT_, $sbhl_graph_attempt_historical_count$, ()-> (ZERO_INTEGER)));
+    $sbhl_graph_success_historical_count$ = deflexical("*SBHL-GRAPH-SUCCESS-HISTORICAL-COUNT*", maybeDefault( $sym297$_SBHL_GRAPH_SUCCESS_HISTORICAL_COUNT_, $sbhl_graph_success_historical_count$, ()-> (ZERO_INTEGER)));
+    $sbhl_link_historical_count$ = deflexical("*SBHL-LINK-HISTORICAL-COUNT*", maybeDefault( $sym298$_SBHL_LINK_HISTORICAL_COUNT_, $sbhl_link_historical_count$, ()-> (ZERO_INTEGER)));
+    $proof_historical_count$ = deflexical("*PROOF-HISTORICAL-COUNT*", maybeDefault( $sym299$_PROOF_HISTORICAL_COUNT_, $proof_historical_count$, ()-> (ZERO_INTEGER)));
+    $inference_historical_count$ = deflexical("*INFERENCE-HISTORICAL-COUNT*", maybeDefault( $sym300$_INFERENCE_HISTORICAL_COUNT_, $inference_historical_count$, ()-> (ZERO_INTEGER)));
+    $successful_inference_historical_count$ = deflexical("*SUCCESSFUL-INFERENCE-HISTORICAL-COUNT*", maybeDefault( $sym301$_SUCCESSFUL_INFERENCE_HISTORICAL_COUNT_, $successful_inference_historical_count$, ()-> (ZERO_INTEGER)));
+    $forward_inference_historical_count$ = deflexical("*FORWARD-INFERENCE-HISTORICAL-COUNT*", maybeDefault( $sym302$_FORWARD_INFERENCE_HISTORICAL_COUNT_, $forward_inference_historical_count$, ()-> (ZERO_INTEGER)));
+    $successful_forward_inference_historical_count$ = deflexical("*SUCCESSFUL-FORWARD-INFERENCE-HISTORICAL-COUNT*", maybeDefault( $sym303$_SUCCESSFUL_FORWARD_INFERENCE_HISTORICAL_COUNT_, $successful_forward_inference_historical_count$, ()-> (ZERO_INTEGER)));
     $gathering_forward_inference_metricsP$ = defvar("*GATHERING-FORWARD-INFERENCE-METRICS?*", NIL);
-    $forward_inference_metrics_time_index$ = deflexical("*FORWARD-INFERENCE-METRICS-TIME-INDEX*", ((NIL != Symbols.boundp($sym323$_FORWARD_INFERENCE_METRICS_TIME_INDEX_)) ? ((SubLObject) $forward_inference_metrics_time_index$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $forward_inference_metrics_count_index$ = deflexical("*FORWARD-INFERENCE-METRICS-COUNT-INDEX*", ((NIL != Symbols.boundp($sym324$_FORWARD_INFERENCE_METRICS_COUNT_INDEX_)) ? ((SubLObject) $forward_inference_metrics_count_index$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $forward_inference_metrics_inference_index$ = deflexical("*FORWARD-INFERENCE-METRICS-INFERENCE-INDEX*", ((NIL != Symbols.boundp($sym325$_FORWARD_INFERENCE_METRICS_INFERENCE_INDEX_)) ? ((SubLObject) $forward_inference_metrics_inference_index$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $forward_inference_metrics_gaf_index$ = deflexical("*FORWARD-INFERENCE-METRICS-GAF-INDEX*", ((NIL != Symbols.boundp($sym327$_FORWARD_INFERENCE_METRICS_GAF_INDEX_)) ? ((SubLObject) $forward_inference_metrics_gaf_index$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
+    $forward_inference_metrics_time_index$ = deflexical("*FORWARD-INFERENCE-METRICS-TIME-INDEX*", maybeDefault( $sym323$_FORWARD_INFERENCE_METRICS_TIME_INDEX_, $forward_inference_metrics_time_index$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $forward_inference_metrics_count_index$ = deflexical("*FORWARD-INFERENCE-METRICS-COUNT-INDEX*", maybeDefault( $sym324$_FORWARD_INFERENCE_METRICS_COUNT_INDEX_, $forward_inference_metrics_count_index$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $forward_inference_metrics_inference_index$ = deflexical("*FORWARD-INFERENCE-METRICS-INFERENCE-INDEX*", maybeDefault( $sym325$_FORWARD_INFERENCE_METRICS_INFERENCE_INDEX_, $forward_inference_metrics_inference_index$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $forward_inference_metrics_gaf_index$ = deflexical("*FORWARD-INFERENCE-METRICS-GAF-INDEX*", maybeDefault( $sym327$_FORWARD_INFERENCE_METRICS_GAF_INDEX_, $forward_inference_metrics_gaf_index$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
     return NIL;
   }
 

@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,45 +80,46 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.inference.harness.abnormal;
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.at_defns;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_grammar;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.formula_pattern_match;
-import com.cyc.cycjava_1.cycl.fort_types_interface;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.inference.harness.forward;
-import com.cyc.cycjava_1.cycl.genls;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.abnormal;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.at_defns;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_grammar;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.formula_pattern_match;
+//dm import com.cyc.cycjava_1.cycl.fort_types_interface;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.forward;
+//dm import com.cyc.cycjava_1.cycl.genls;
 import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_strategist;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_strategist;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
+//dm
 import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.mt_vars;
-import com.cyc.cycjava_1.cycl.narts_high;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.somewhere_cache;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_vars;
+//dm import com.cyc.cycjava_1.cycl.narts_high;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.somewhere_cache;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.variables;
 
 public  final class backward extends SubLTranslatedFile {
 
@@ -99,11 +132,11 @@ public  final class backward extends SubLTranslatedFile {
   //// Definitions
 
   /** When non-nil, the implementation to funcall inside REMOVAL-ADD-NODE. */
-  @SubL(source = "cycl/backward.lisp", position = 710) 
+  @SubL(source = "cycl/backward.lisp", position = 710)
   public static SubLSymbol $removal_add_node_method$ = null;
 
   /** When non-nil, the implementation to funcall inside TRANSFORMATION-ADD-NODE. */
-  @SubL(source = "cycl/backward.lisp", position = 911) 
+  @SubL(source = "cycl/backward.lisp", position = 911)
   public static SubLSymbol $transformation_add_node_method$ = null;
 
   /** If any non-backchain literals exist in the transformation layer,
@@ -113,18 +146,18 @@ Since the productivity of join-ordered links is doubled, this is equal to DOUBLE
 the number of children that the focal problem can have and still be considered for early removal.
 NIL means never perform early removals.
 T means always perform early removals first. */
-  @SubL(source = "cycl/backward.lisp", position = 1062) 
+  @SubL(source = "cycl/backward.lisp", position = 1062)
   public static SubLSymbol $transformation_early_removal_threshold$ = null;
 
   /** Bound by INFERENCE-EXPAND-INTERNAL */
-  @SubL(source = "cycl/backward.lisp", position = 1556) 
+  @SubL(source = "cycl/backward.lisp", position = 1556)
   private static SubLSymbol $inference_expand_new_children$ = null;
 
   /** Bound by INFERENCE-EXPAND-INTERNAL */
-  @SubL(source = "cycl/backward.lisp", position = 1903) 
+  @SubL(source = "cycl/backward.lisp", position = 1903)
   public static SubLSymbol $inference_expand_hl_module$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 2047) 
+  @SubL(source = "cycl/backward.lisp", position = 2047)
   public static final SubLObject inference_expand_hl_module() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -133,10 +166,10 @@ T means always perform early removals first. */
   }
 
   /** Bound by INFERENCE-EXPAND-INTERNAL */
-  @SubL(source = "cycl/backward.lisp", position = 2248) 
+  @SubL(source = "cycl/backward.lisp", position = 2248)
   public static SubLSymbol $inference_expand_sense$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 2388) 
+  @SubL(source = "cycl/backward.lisp", position = 2388)
   public static final SubLObject inference_expand_sense() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -153,7 +186,7 @@ the bindings will be (((x . a))), the new-pos-lits will be ((p a) (q a)), the ne
 will be ((s a)), more-supports will be, like, an additional genlPreds support if it used one,
 no-trans-pos-lits and no-trans-neg-lits will both always be NIL.  Currently no transformation
 modules pass these in. */
-  @SubL(source = "cycl/backward.lisp", position = 2467) 
+  @SubL(source = "cycl/backward.lisp", position = 2467)
   public static final SubLObject transformation_add_node(SubLObject rule_assertion, SubLObject rule_pivot_asent, SubLObject rule_pivot_sense, SubLObject v_bindings, SubLObject more_supports) {
     if ((more_supports == UNPROVIDED)) {
       more_supports = NIL;
@@ -185,7 +218,7 @@ modules pass these in. */
 
   /** @return 0 new-pos-lits
 @return 1 new-neg-lits */
-  @SubL(source = "cycl/backward.lisp", position = 4073) 
+  @SubL(source = "cycl/backward.lisp", position = 4073)
   public static final SubLObject transformation_rule_dependent_lits(SubLObject rule, SubLObject asent_from_rule, SubLObject asent_sense) {
     {
       SubLObject cnf = assertions_high.assertion_cnf(rule);
@@ -197,7 +230,7 @@ modules pass these in. */
     }
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 4425) 
+  @SubL(source = "cycl/backward.lisp", position = 4425)
   public static final SubLObject removal_add_node(SubLObject support, SubLObject v_bindings, SubLObject more_supports) {
     if ((v_bindings == UNPROVIDED)) {
       v_bindings = NIL;
@@ -217,7 +250,7 @@ modules pass these in. */
     }
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 4887) 
+  @SubL(source = "cycl/backward.lisp", position = 4887)
   public static final SubLObject removal_add_node_funcall(SubLObject function, SubLObject v_bindings, SubLObject supports) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -236,10 +269,10 @@ modules pass these in. */
     }
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 5386) 
+  @SubL(source = "cycl/backward.lisp", position = 5386)
   private static SubLSymbol $removal_ask_query_properties$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 5620) 
+  @SubL(source = "cycl/backward.lisp", position = 5620)
   public static final SubLObject removal_ask_query_property_p(SubLObject object) {
     return list_utilities.member_eqP(object, $removal_ask_query_properties$.getGlobalValue());
   }
@@ -250,7 +283,7 @@ modules pass these in. */
    @return 0 ; a list of tuples of the form : (bindings hl-supports)
    @return 1 ; query-halt-reason-p
    @return 2 ; metrics values, if :metrics specified in QUERY-PROPERTIES */
-  @SubL(source = "cycl/backward.lisp", position = 5795) 
+  @SubL(source = "cycl/backward.lisp", position = 5795)
   public static final SubLObject removal_ask(SubLObject asent, SubLObject mt, SubLObject truth, SubLObject query_properties) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -332,25 +365,25 @@ modules pass these in. */
   }
 
   /** An #'equal dictionary-contents mapping bindings to a list of justifications of those bindings. */
-  @SubL(source = "cycl/backward.lisp", position = 11941) 
+  @SubL(source = "cycl/backward.lisp", position = 11941)
   private static SubLSymbol $removal_ask_answers$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 12112) 
+  @SubL(source = "cycl/backward.lisp", position = 12112)
   private static SubLSymbol $removal_ask_max_number$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 12173) 
+  @SubL(source = "cycl/backward.lisp", position = 12173)
   private static SubLSymbol $removal_ask_disallows_indeterminate_termsP$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 12255) 
+  @SubL(source = "cycl/backward.lisp", position = 12255)
   private static SubLSymbol $removal_ask_first_answer_elapsed_internal_real_time$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 12345) 
+  @SubL(source = "cycl/backward.lisp", position = 12345)
   private static SubLSymbol $removal_ask_last_answer_elapsed_internal_real_time$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 12434) 
+  @SubL(source = "cycl/backward.lisp", position = 12434)
   private static SubLSymbol $removal_ask_start_internal_real_time$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 12612) 
+  @SubL(source = "cycl/backward.lisp", position = 12612)
   public static final SubLObject removal_ask_add_node(SubLObject v_bindings, SubLObject supports) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -378,7 +411,7 @@ modules pass these in. */
     }
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 13650) 
+  @SubL(source = "cycl/backward.lisp", position = 13650)
   public static final SubLObject removal_ask_int(SubLObject asent, SubLObject truth, SubLObject query_properties) {
     if ((query_properties == UNPROVIDED)) {
       query_properties = NIL;
@@ -409,12 +442,12 @@ modules pass these in. */
     }
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 14154) 
+  @SubL(source = "cycl/backward.lisp", position = 14154)
   public static final SubLObject removal_ask_tactic_specs(SubLObject asent, SubLObject sense, SubLObject allowed_modules_spec) {
     return inference_worker_removal.literal_removal_options(asent, sense, allowed_modules_spec);
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 14299) 
+  @SubL(source = "cycl/backward.lisp", position = 14299)
   public static final SubLObject removal_ask_expand(SubLObject asent, SubLObject sense, SubLObject tactic_specs, SubLObject query_properties) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -549,7 +582,7 @@ modules pass these in. */
     }
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 18899) 
+  @SubL(source = "cycl/backward.lisp", position = 18899)
   public static final SubLObject inference_hl_module_cost_too_expensive(SubLObject hl_module, SubLObject cost) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -566,10 +599,10 @@ modules pass these in. */
   }
 
   /** Do we enable the transformation-layer semantic pruning heuristics? */
-  @SubL(source = "cycl/backward.lisp", position = 21150) 
+  @SubL(source = "cycl/backward.lisp", position = 21150)
   public static SubLSymbol $transformation_semantic_pruning_enabled$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 21799) 
+  @SubL(source = "cycl/backward.lisp", position = 21799)
   public static final SubLObject inference_semantically_valid_dnf(SubLObject dnf, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -578,10 +611,10 @@ modules pass these in. */
            && (NIL != semantically_valid_closed_asentsP(dnf, mt))));
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 23505) 
+  @SubL(source = "cycl/backward.lisp", position = 23505)
   private static SubLSymbol $forward_inference_pruning_mode$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 23564) 
+  @SubL(source = "cycl/backward.lisp", position = 23564)
   public static final SubLObject semantically_valid_closed_asentsP(SubLObject dnf, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -611,10 +644,10 @@ modules pass these in. */
   }
 
   /** temporary control parameter; @todo eliminate */
-  @SubL(source = "cycl/backward.lisp", position = 24944) 
+  @SubL(source = "cycl/backward.lisp", position = 24944)
   private static SubLSymbol $forward_asserted_sentence_pruning_enabledP$ = null;
 
-  @SubL(source = "cycl/backward.lisp", position = 25060) 
+  @SubL(source = "cycl/backward.lisp", position = 25060)
   public static final SubLObject semantically_valid_asserted_sentence_asents(SubLObject dnf, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -666,12 +699,12 @@ modules pass these in. */
     }
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 25849) 
+  @SubL(source = "cycl/backward.lisp", position = 25849)
   public static final SubLObject forward_complete_extent_asserted_pruning_enabledP() {
     return inference_datastructures_enumerated_types.balancing_tactician_enabledP();
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 25959) 
+  @SubL(source = "cycl/backward.lisp", position = 25959)
   public static final SubLObject semantically_valid_complete_extent_asserted_asents(SubLObject dnf, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -724,7 +757,7 @@ modules pass these in. */
     }
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 26619) 
+  @SubL(source = "cycl/backward.lisp", position = 26619)
   public static final SubLObject semantically_invalid_asserted_sentence_asent(SubLObject asent) {
     {
       SubLObject sentence = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
@@ -732,7 +765,7 @@ modules pass these in. */
     }
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 26782) 
+  @SubL(source = "cycl/backward.lisp", position = 26782)
   public static final SubLObject non_asserted_asentP(SubLObject sentence) {
     if ((NIL != el_utilities.el_formula_p(sentence))) {
       if ((NIL != forward_complete_extent_asserted_pruning_enabledP())) {
@@ -748,7 +781,7 @@ modules pass these in. */
     return NIL;
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 27748) 
+  @SubL(source = "cycl/backward.lisp", position = 27748)
   public static final SubLObject non_asserted_asent_via_gaf_lookupP(SubLObject sentence) {
     if ((NIL != forward_complete_extent_asserted_pruning_enabledP())) {
       return Types.sublisp_null(Errors
@@ -761,7 +794,7 @@ modules pass these in. */
     return NIL;
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 28044) 
+  @SubL(source = "cycl/backward.lisp", position = 28044)
   public static final SubLObject semantically_valid_isa_asents(SubLObject dnf, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -792,7 +825,7 @@ modules pass these in. */
     return T;
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 28756) 
+  @SubL(source = "cycl/backward.lisp", position = 28756)
   public static final SubLObject semantically_valid_genls_asents(SubLObject dnf, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -823,7 +856,7 @@ modules pass these in. */
     return T;
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 29497) 
+  @SubL(source = "cycl/backward.lisp", position = 29497)
   public static final SubLObject semantically_valid_term_of_unit_asents(SubLObject dnf, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -831,7 +864,7 @@ modules pass these in. */
     return syntactically_valid_term_of_unit_asents(dnf);
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 29744) 
+  @SubL(source = "cycl/backward.lisp", position = 29744)
   public static final SubLObject syntactically_valid_term_of_unit_asents(SubLObject dnf) {
     {
       SubLObject cdolist_list_var = clauses.pos_lits(dnf);
@@ -848,7 +881,7 @@ modules pass these in. */
     return T;
   }
 
-  @SubL(source = "cycl/backward.lisp", position = 31251) 
+  @SubL(source = "cycl/backward.lisp", position = 31251)
   private static SubLSymbol $literal_set_sense_table$ = null;
 
   public static final SubLObject declare_backward_file() {
@@ -995,14 +1028,17 @@ modules pass these in. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_backward_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_backward_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_backward_file();
   }

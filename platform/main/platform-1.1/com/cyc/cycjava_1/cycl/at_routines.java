@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,52 +80,52 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arg_type;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.at_cache;
-import com.cyc.cycjava_1.cycl.at_defns;
-import com.cyc.cycjava_1.cycl.at_macros;
-import com.cyc.cycjava_1.cycl.at_utilities;
-import com.cyc.cycjava_1.cycl.at_vars;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_grammar;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.deck;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.disjoint_with;
-import com.cyc.cycjava_1.cycl.equals;
-import com.cyc.cycjava_1.cycl.fort_types_interface;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.function_terms;
-import com.cyc.cycjava_1.cycl.genl_predicates;
-import com.cyc.cycjava_1.cycl.genls;
-import com.cyc.cycjava_1.cycl.isa;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.narts_high;
-import com.cyc.cycjava_1.cycl.obsolete;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
-import com.cyc.cycjava_1.cycl.sdc;
-import com.cyc.cycjava_1.cycl.somewhere_cache;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.wff;
-import com.cyc.cycjava_1.cycl.wff_vars;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arg_type;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.at_cache;
+//dm import com.cyc.cycjava_1.cycl.at_defns;
+//dm import com.cyc.cycjava_1.cycl.at_macros;
+//dm import com.cyc.cycjava_1.cycl.at_utilities;
+//dm import com.cyc.cycjava_1.cycl.at_vars;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_grammar;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.deck;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.disjoint_with;
+//dm import com.cyc.cycjava_1.cycl.equals;
+//dm import com.cyc.cycjava_1.cycl.fort_types_interface;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.function_terms;
+//dm import com.cyc.cycjava_1.cycl.genl_predicates;
+//dm import com.cyc.cycjava_1.cycl.genls;
+//dm import com.cyc.cycjava_1.cycl.isa;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.narts_high;
+//dm import com.cyc.cycjava_1.cycl.obsolete;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
+//dm import com.cyc.cycjava_1.cycl.sdc;
+//dm import com.cyc.cycjava_1.cycl.somewhere_cache;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.wff;
+//dm import com.cyc.cycjava_1.cycl.wff_vars;
 
 public  final class at_routines extends SubLTranslatedFile {
 

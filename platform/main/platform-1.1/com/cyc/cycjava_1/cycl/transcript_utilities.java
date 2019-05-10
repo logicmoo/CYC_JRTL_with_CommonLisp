@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,28 +80,28 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constants_high;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cyc_bookkeeping;
-import com.cyc.cycjava_1.cycl.cycl_variables;
-import com.cyc.cycjava_1.cycl.encapsulation;
-import com.cyc.cycjava_1.cycl.eval_in_api;
-import com.cyc.cycjava_1.cycl.file_utilities;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.isa;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_vars;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.operation_communication;
-import com.cyc.cycjava_1.cycl.operation_queues;
-import com.cyc.cycjava_1.cycl.precanonicalizer;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.transcript_server;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constants_high;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cyc_bookkeeping;
+//dm import com.cyc.cycjava_1.cycl.cycl_variables;
+//dm import com.cyc.cycjava_1.cycl.encapsulation;
+//dm import com.cyc.cycjava_1.cycl.eval_in_api;
+//dm import com.cyc.cycjava_1.cycl.file_utilities;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.isa;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_vars;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.operation_communication;
+//dm import com.cyc.cycjava_1.cycl.operation_queues;
+//dm import com.cyc.cycjava_1.cycl.precanonicalizer;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.transcript_server;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class transcript_utilities extends SubLTranslatedFile {
 
@@ -343,19 +375,19 @@ probed, touched, written to, or read from -- yet? */
   public static final SubLObject init_transcript_utilities_file() {
     $transcript_suffix$ = defparameter("*TRANSCRIPT-SUFFIX*", $str2$ts);
     $master_transcript_already_exists$ = defparameter("*MASTER-TRANSCRIPT-ALREADY-EXISTS*", NIL);
-    $local_transcript_version$ = deflexical("*LOCAL-TRANSCRIPT-VERSION*", ((NIL != Symbols.boundp($sym3$_LOCAL_TRANSCRIPT_VERSION_)) ? ((SubLObject) $local_transcript_version$.getGlobalValue()) : ZERO_INTEGER));
-    $local_transcript_history$ = deflexical("*LOCAL-TRANSCRIPT-HISTORY*", ((NIL != Symbols.boundp($sym4$_LOCAL_TRANSCRIPT_HISTORY_)) ? ((SubLObject) $local_transcript_history$.getGlobalValue()) : NIL));
-    $local_hl_transcript_version$ = deflexical("*LOCAL-HL-TRANSCRIPT-VERSION*", ((NIL != Symbols.boundp($sym5$_LOCAL_HL_TRANSCRIPT_VERSION_)) ? ((SubLObject) $local_hl_transcript_version$.getGlobalValue()) : ZERO_INTEGER));
-    $local_hl_transcript_history$ = deflexical("*LOCAL-HL-TRANSCRIPT-HISTORY*", ((NIL != Symbols.boundp($sym6$_LOCAL_HL_TRANSCRIPT_HISTORY_)) ? ((SubLObject) $local_hl_transcript_history$.getGlobalValue()) : NIL));
-    $read_transcript_position$ = deflexical("*READ-TRANSCRIPT-POSITION*", ((NIL != Symbols.boundp($sym7$_READ_TRANSCRIPT_POSITION_)) ? ((SubLObject) $read_transcript_position$.getGlobalValue()) : ZERO_INTEGER));
+    $local_transcript_version$ = deflexical("*LOCAL-TRANSCRIPT-VERSION*", maybeDefault( $sym3$_LOCAL_TRANSCRIPT_VERSION_, $local_transcript_version$, ()-> (ZERO_INTEGER)));
+    $local_transcript_history$ = deflexical("*LOCAL-TRANSCRIPT-HISTORY*", maybeDefault( $sym4$_LOCAL_TRANSCRIPT_HISTORY_, $local_transcript_history$, NIL));
+    $local_hl_transcript_version$ = deflexical("*LOCAL-HL-TRANSCRIPT-VERSION*", maybeDefault( $sym5$_LOCAL_HL_TRANSCRIPT_VERSION_, $local_hl_transcript_version$, ()-> (ZERO_INTEGER)));
+    $local_hl_transcript_history$ = deflexical("*LOCAL-HL-TRANSCRIPT-HISTORY*", maybeDefault( $sym6$_LOCAL_HL_TRANSCRIPT_HISTORY_, $local_hl_transcript_history$, NIL));
+    $read_transcript_position$ = deflexical("*READ-TRANSCRIPT-POSITION*", maybeDefault( $sym7$_READ_TRANSCRIPT_POSITION_, $read_transcript_position$, ()-> (ZERO_INTEGER)));
     $approx_chars_per_op$ = defparameter("*APPROX-CHARS-PER-OP*", $int8$206);
-    $local_transcript$ = deflexical("*LOCAL-TRANSCRIPT*", ((NIL != Symbols.boundp($sym9$_LOCAL_TRANSCRIPT_)) ? ((SubLObject) $local_transcript$.getGlobalValue()) : NIL));
-    $read_transcript$ = deflexical("*READ-TRANSCRIPT*", ((NIL != Symbols.boundp($sym15$_READ_TRANSCRIPT_)) ? ((SubLObject) $read_transcript$.getGlobalValue()) : NIL));
-    $master_transcript$ = deflexical("*MASTER-TRANSCRIPT*", ((NIL != Symbols.boundp($sym16$_MASTER_TRANSCRIPT_)) ? ((SubLObject) $master_transcript$.getGlobalValue()) : NIL));
-    $local_hl_transcript$ = deflexical("*LOCAL-HL-TRANSCRIPT*", ((NIL != Symbols.boundp($sym17$_LOCAL_HL_TRANSCRIPT_)) ? ((SubLObject) $local_hl_transcript$.getGlobalValue()) : NIL));
-    $count_ops_table$ = deflexical("*COUNT-OPS-TABLE*", ((NIL != Symbols.boundp($sym28$_COUNT_OPS_TABLE_)) ? ((SubLObject) $count_ops_table$.getGlobalValue()) : NIL));
-    $transcript_rename_hash$ = deflexical("*TRANSCRIPT-RENAME-HASH*", ((NIL != Symbols.boundp($sym59$_TRANSCRIPT_RENAME_HASH_)) ? ((SubLObject) $transcript_rename_hash$.getGlobalValue()) : NIL));
-    $transcript_create_hash$ = deflexical("*TRANSCRIPT-CREATE-HASH*", ((NIL != Symbols.boundp($sym63$_TRANSCRIPT_CREATE_HASH_)) ? ((SubLObject) $transcript_create_hash$.getGlobalValue()) : NIL));
+    $local_transcript$ = deflexical("*LOCAL-TRANSCRIPT*", maybeDefault( $sym9$_LOCAL_TRANSCRIPT_, $local_transcript$, NIL));
+    $read_transcript$ = deflexical("*READ-TRANSCRIPT*", maybeDefault( $sym15$_READ_TRANSCRIPT_, $read_transcript$, NIL));
+    $master_transcript$ = deflexical("*MASTER-TRANSCRIPT*", maybeDefault( $sym16$_MASTER_TRANSCRIPT_, $master_transcript$, NIL));
+    $local_hl_transcript$ = deflexical("*LOCAL-HL-TRANSCRIPT*", maybeDefault( $sym17$_LOCAL_HL_TRANSCRIPT_, $local_hl_transcript$, NIL));
+    $count_ops_table$ = deflexical("*COUNT-OPS-TABLE*", maybeDefault( $sym28$_COUNT_OPS_TABLE_, $count_ops_table$, NIL));
+    $transcript_rename_hash$ = deflexical("*TRANSCRIPT-RENAME-HASH*", maybeDefault( $sym59$_TRANSCRIPT_RENAME_HASH_, $transcript_rename_hash$, NIL));
+    $transcript_create_hash$ = deflexical("*TRANSCRIPT-CREATE-HASH*", maybeDefault( $sym63$_TRANSCRIPT_CREATE_HASH_, $transcript_create_hash$, NIL));
     return NIL;
   }
 

@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,24 +80,24 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cfasl_kb_methods;
-import com.cyc.cycjava_1.cycl.constant_completion;
-import com.cyc.cycjava_1.cycl.constant_completion_high;
-import com.cyc.cycjava_1.cycl.constant_completion_low;
-import com.cyc.cycjava_1.cycl.constant_index_manager;
-import com.cyc.cycjava_1.cycl.constants_high;
-import com.cyc.cycjava_1.cycl.constants_interface;
-import com.cyc.cycjava_1.cycl.constants_low;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.hl_interface_infrastructure;
-import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
-import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cfasl_kb_methods;
+//dm import com.cyc.cycjava_1.cycl.constant_completion;
+//dm import com.cyc.cycjava_1.cycl.constant_completion_high;
+//dm import com.cyc.cycjava_1.cycl.constant_completion_low;
+//dm import com.cyc.cycjava_1.cycl.constant_index_manager;
+//dm import com.cyc.cycjava_1.cycl.constants_high;
+//dm import com.cyc.cycjava_1.cycl.constants_interface;
+//dm import com.cyc.cycjava_1.cycl.constants_low;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.hl_interface_infrastructure;
+//dm import com.cyc.cycjava_1.cycl.id_index;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
+//dm import com.cyc.cycjava_1.cycl.kb_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class constant_handles extends SubLTranslatedFile {
 
@@ -763,9 +795,9 @@ public  final class constant_handles extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_constant_handles_file() {
-    $constant_from_suid$ = deflexical("*CONSTANT-FROM-SUID*", ((NIL != Symbols.boundp($sym0$_CONSTANT_FROM_SUID_)) ? ((SubLObject) $constant_from_suid$.getGlobalValue()) : NIL));
+    $constant_from_suid$ = deflexical("*CONSTANT-FROM-SUID*", maybeDefault( $sym0$_CONSTANT_FROM_SUID_, $constant_from_suid$, NIL));
     $dtp_constant$ = defconstant("*DTP-CONSTANT*", $sym26$CONSTANT);
-    $invalid_constants$ = deflexical("*INVALID-CONSTANTS*", ((NIL != Symbols.boundp($sym56$_INVALID_CONSTANTS_)) ? ((SubLObject) $invalid_constants$.getGlobalValue()) : Hashtables.make_hash_table($int57$4000, Symbols.symbol_function(EQUAL), UNPROVIDED)));
+    $invalid_constants$ = deflexical("*INVALID-CONSTANTS*", maybeDefault( $sym56$_INVALID_CONSTANTS_, $invalid_constants$, ()-> (Hashtables.make_hash_table($int57$4000, Symbols.symbol_function(EQUAL), UNPROVIDED))));
     return NIL;
   }
 

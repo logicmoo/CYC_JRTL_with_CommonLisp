@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,23 +67,23 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.after_adding;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.arity;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.after_adding;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.arity;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class rule_after_adding extends SubLTranslatedFile {
 
@@ -550,8 +569,8 @@ public  final class rule_after_adding extends SubLTranslatedFile {
 
   public static final SubLObject init_rule_after_adding_file() {
     $rule_after_adding_predicates$ = deflexical("*RULE-AFTER-ADDING-PREDICATES*", NIL);
-    $rule_after_addings_hash$ = deflexical("*RULE-AFTER-ADDINGS-HASH*", ((NIL != Symbols.boundp($sym0$_RULE_AFTER_ADDINGS_HASH_)) ? ((SubLObject) $rule_after_addings_hash$.getGlobalValue()) : NIL));
-    $rule_after_removings_hash$ = deflexical("*RULE-AFTER-REMOVINGS-HASH*", ((NIL != Symbols.boundp($sym1$_RULE_AFTER_REMOVINGS_HASH_)) ? ((SubLObject) $rule_after_removings_hash$.getGlobalValue()) : NIL));
+    $rule_after_addings_hash$ = deflexical("*RULE-AFTER-ADDINGS-HASH*", maybeDefault( $sym0$_RULE_AFTER_ADDINGS_HASH_, $rule_after_addings_hash$, NIL));
+    $rule_after_removings_hash$ = deflexical("*RULE-AFTER-REMOVINGS-HASH*", maybeDefault( $sym1$_RULE_AFTER_REMOVINGS_HASH_, $rule_after_removings_hash$, NIL));
     return NIL;
   }
 

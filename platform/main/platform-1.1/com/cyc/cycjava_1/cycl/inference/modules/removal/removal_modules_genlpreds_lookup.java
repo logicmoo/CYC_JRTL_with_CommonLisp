@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.modules.removal;
+package com.cyc.cycjava_1.cycl.inference.modules.removal;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,47 +67,47 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.backward_utilities;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.deck;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.function_terms;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.obsolete;
-import com.cyc.cycjava_1.cycl.pred_relevance_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.removal_module_utilities;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_symmetry;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.tva_inference;
-import com.cyc.cycjava_1.cycl.unification_utilities;
-import com.cyc.cycjava_1.cycl.variables;
-import com.cyc.cycjava_1.cycl.virtual_indexing;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.backward_utilities;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.deck;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.function_terms;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.obsolete;
+//dm import com.cyc.cycjava_1.cycl.pred_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.removal_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_symmetry;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.tva_inference;
+//dm import com.cyc.cycjava_1.cycl.unification_utilities;
+//dm import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.virtual_indexing;
 
 public  final class removal_modules_genlpreds_lookup extends SubLTranslatedFile {
 
@@ -875,7 +894,7 @@ public  final class removal_modules_genlpreds_lookup extends SubLTranslatedFile 
   }
 
   public static final SubLObject init_removal_modules_genlpreds_lookup_file() {
-    $unknown_el_variable$ = deflexical("*UNKNOWN-EL-VARIABLE*", ((NIL != Symbols.boundp($sym11$_UNKNOWN_EL_VARIABLE_)) ? ((SubLObject) $unknown_el_variable$.getGlobalValue()) : $sym12$_UNKNOWN));
+    $unknown_el_variable$ = deflexical("*UNKNOWN-EL-VARIABLE*", maybeDefault( $sym11$_UNKNOWN_EL_VARIABLE_, $unknown_el_variable$, ()-> ($sym12$_UNKNOWN)));
     return NIL;
   }
 

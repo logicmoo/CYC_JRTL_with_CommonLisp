@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,16 +80,16 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
 import com.cyc.cycjava_1.cycl.inference.arete;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.kb_access_metering;
-import com.cyc.cycjava_1.cycl.kb_object_manager;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.kb_access_metering;
+//dm import com.cyc.cycjava_1.cycl.kb_object_manager;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class assertion_manager extends SubLTranslatedFile {
 
@@ -69,10 +101,10 @@ public  final class assertion_manager extends SubLTranslatedFile {
 
   //// Definitions
 
-  @SubL(source = "cycl/assertion-manager.lisp", position = 1357) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 1357)
   public static SubLSymbol $arete_assertions_touched$ = null;
 
-  @SubL(source = "cycl/assertion-manager.lisp", position = 1429) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 1429)
   public static final SubLObject arete_note_assertion_touched(SubLObject assertion) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -85,59 +117,59 @@ public  final class assertion_manager extends SubLTranslatedFile {
   }
 
   /** The KB object manager for assertions */
-  @SubL(source = "cycl/assertion-manager.lisp", position = 1646) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 1646)
   private static SubLSymbol $assertion_content_manager$ = null;
 
   /** based on arete experiments, only 16% of all assertions are need for normal inference */
-  @SubL(source = "cycl/assertion-manager.lisp", position = 1833) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 1833)
   private static SubLSymbol $assertion_lru_size_percentage$ = null;
 
-  @SubL(source = "cycl/assertion-manager.lisp", position = 2153) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 2153)
   public static final SubLObject setup_assertion_content_table(SubLObject size, SubLObject exactP) {
     $assertion_content_manager$.setGlobalValue(kb_object_manager.new_kb_object_manager($str3$assertion, size, $assertion_lru_size_percentage$.getGlobalValue(), $sym4$LOAD_ASSERTION_DEF_FROM_CACHE, exactP));
     return T;
   }
 
-  @SubL(source = "cycl/assertion-manager.lisp", position = 2573) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 2573)
   public static final SubLObject clear_assertion_content_table() {
     return kb_object_manager.clear_kb_object_content_table($assertion_content_manager$.getGlobalValue());
   }
 
   /** Return the number of assertions whose content is cached in memory. */
-  @SubL(source = "cycl/assertion-manager.lisp", position = 3252) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 3252)
   public static final SubLObject cached_assertion_count() {
     return kb_object_manager.cached_kb_object_count($assertion_content_manager$.getGlobalValue());
   }
 
-  @SubL(source = "cycl/assertion-manager.lisp", position = 3697) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 3697)
   public static final SubLObject lookup_assertion_content(SubLObject id) {
     arete_note_assertion_touched(assertion_handles.find_assertion_by_id(id));
     return kb_object_manager.lookup_kb_object_content($assertion_content_manager$.getGlobalValue(), id);
   }
 
   /** Note that ID will be used as the id for ASSERTION-CONTENT. */
-  @SubL(source = "cycl/assertion-manager.lisp", position = 4011) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 4011)
   public static final SubLObject register_assertion_content(SubLObject id, SubLObject assertion_content) {
     return kb_object_manager.register_kb_object_content($assertion_content_manager$.getGlobalValue(), id, assertion_content);
   }
 
   /** Note that ID is not in use as an ASSERTION-CONTENT id */
-  @SubL(source = "cycl/assertion-manager.lisp", position = 4254) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 4254)
   public static final SubLObject deregister_assertion_content(SubLObject id) {
     return kb_object_manager.deregister_kb_object_content($assertion_content_manager$.getGlobalValue(), id);
   }
 
-  @SubL(source = "cycl/assertion-manager.lisp", position = 4436) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 4436)
   public static final SubLObject mark_assertion_content_as_muted(SubLObject id) {
     return kb_object_manager.mark_kb_object_content_as_muted($assertion_content_manager$.getGlobalValue(), id);
   }
 
-  @SubL(source = "cycl/assertion-manager.lisp", position = 5406) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 5406)
   public static final SubLObject swap_out_all_pristine_assertions() {
     return kb_object_manager.swap_out_all_pristine_kb_objects_int($assertion_content_manager$.getGlobalValue());
   }
 
-  @SubL(source = "cycl/assertion-manager.lisp", position = 5537) 
+  @SubL(source = "cycl/assertion-manager.lisp", position = 5537)
   public static final SubLObject initialize_assertion_hl_store_cache() {
     return kb_object_manager.initialize_kb_object_hl_store_cache($assertion_content_manager$.getGlobalValue(), $str3$assertion, $str5$assertion_index);
   }
@@ -169,8 +201,8 @@ public  final class assertion_manager extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_assertion_manager_file() {
-    $arete_assertions_touched$ = deflexical("*ARETE-ASSERTIONS-TOUCHED*", ((NIL != Symbols.boundp($sym0$_ARETE_ASSERTIONS_TOUCHED_)) ? ((SubLObject) $arete_assertions_touched$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $assertion_content_manager$ = deflexical("*ASSERTION-CONTENT-MANAGER*", ((NIL != Symbols.boundp($sym1$_ASSERTION_CONTENT_MANAGER_)) ? ((SubLObject) $assertion_content_manager$.getGlobalValue()) : $kw2$UNINITIALIZED));
+    $arete_assertions_touched$ = deflexical("*ARETE-ASSERTIONS-TOUCHED*", maybeDefault( $sym0$_ARETE_ASSERTIONS_TOUCHED_, $arete_assertions_touched$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $assertion_content_manager$ = deflexical("*ASSERTION-CONTENT-MANAGER*", maybeDefault( $sym1$_ASSERTION_CONTENT_MANAGER_, $assertion_content_manager$, ()-> ($kw2$UNINITIALIZED)));
     $assertion_lru_size_percentage$ = deflexical("*ASSERTION-LRU-SIZE-PERCENTAGE*", SIXTEEN_INTEGER);
     return NIL;
   }
@@ -193,14 +225,17 @@ public  final class assertion_manager extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_assertion_manager_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_assertion_manager_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_assertion_manager_file();
   }

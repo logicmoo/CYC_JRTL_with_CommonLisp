@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,11 +80,11 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class kb_control_vars extends SubLTranslatedFile {
 
@@ -241,24 +273,24 @@ NIL means unlimited time. */
   }
 
   public static final SubLObject init_kb_control_vars_file() {
-    $backchain_forbidden_unless_arg_chosen$ = deflexical("*BACKCHAIN-FORBIDDEN-UNLESS-ARG-CHOSEN*", ((NIL != Symbols.boundp($sym0$_BACKCHAIN_FORBIDDEN_UNLESS_ARG_CHOSEN_)) ? ((SubLObject) $backchain_forbidden_unless_arg_chosen$.getGlobalValue()) : $const1$backchainForbiddenWhenUnboundInAr));
+    $backchain_forbidden_unless_arg_chosen$ = deflexical("*BACKCHAIN-FORBIDDEN-UNLESS-ARG-CHOSEN*", maybeDefault( $sym0$_BACKCHAIN_FORBIDDEN_UNLESS_ARG_CHOSEN_, $backchain_forbidden_unless_arg_chosen$, ()-> ($const1$backchainForbiddenWhenUnboundInAr)));
     $kb_features$ = deflexical("*KB-FEATURES*", NIL);
-    $reformulator_kb_loadedP$ = deflexical("*REFORMULATOR-KB-LOADED?*", ((NIL != Symbols.boundp($sym3$_REFORMULATOR_KB_LOADED__)) ? ((SubLObject) $reformulator_kb_loadedP$.getGlobalValue()) : NIL));
-    $sksi_kb_loadedP$ = deflexical("*SKSI-KB-LOADED?*", ((NIL != Symbols.boundp($sym4$_SKSI_KB_LOADED__)) ? ((SubLObject) $sksi_kb_loadedP$.getGlobalValue()) : NIL));
-    $paraphrase_kb_loadedP$ = deflexical("*PARAPHRASE-KB-LOADED?*", ((NIL != Symbols.boundp($sym5$_PARAPHRASE_KB_LOADED__)) ? ((SubLObject) $paraphrase_kb_loadedP$.getGlobalValue()) : NIL));
-    $nl_kb_loadedP$ = deflexical("*NL-KB-LOADED?*", ((NIL != Symbols.boundp($sym6$_NL_KB_LOADED__)) ? ((SubLObject) $nl_kb_loadedP$.getGlobalValue()) : NIL));
-    $lexicon_kb_loadedP$ = deflexical("*LEXICON-KB-LOADED?*", ((NIL != Symbols.boundp($sym7$_LEXICON_KB_LOADED__)) ? ((SubLObject) $lexicon_kb_loadedP$.getGlobalValue()) : NIL));
-    $rtp_kb_loadedP$ = deflexical("*RTP-KB-LOADED?*", ((NIL != Symbols.boundp($sym8$_RTP_KB_LOADED__)) ? ((SubLObject) $rtp_kb_loadedP$.getGlobalValue()) : NIL));
-    $rkf_kb_loadedP$ = deflexical("*RKF-KB-LOADED?*", ((NIL != Symbols.boundp($sym9$_RKF_KB_LOADED__)) ? ((SubLObject) $rkf_kb_loadedP$.getGlobalValue()) : NIL));
-    $thesaurus_kb_loadedP$ = deflexical("*THESAURUS-KB-LOADED?*", ((NIL != Symbols.boundp($sym10$_THESAURUS_KB_LOADED__)) ? ((SubLObject) $thesaurus_kb_loadedP$.getGlobalValue()) : NIL));
-    $quant_kb_loadedP$ = deflexical("*QUANT-KB-LOADED?*", ((NIL != Symbols.boundp($sym11$_QUANT_KB_LOADED__)) ? ((SubLObject) $quant_kb_loadedP$.getGlobalValue()) : NIL));
-    $time_kb_loadedP$ = deflexical("*TIME-KB-LOADED?*", ((NIL != Symbols.boundp($sym12$_TIME_KB_LOADED__)) ? ((SubLObject) $time_kb_loadedP$.getGlobalValue()) : NIL));
-    $date_kb_loadedP$ = deflexical("*DATE-KB-LOADED?*", ((NIL != Symbols.boundp($sym13$_DATE_KB_LOADED__)) ? ((SubLObject) $date_kb_loadedP$.getGlobalValue()) : NIL));
-    $cyc_task_scheduler_kb_loadedP$ = deflexical("*CYC-TASK-SCHEDULER-KB-LOADED?*", ((NIL != Symbols.boundp($sym14$_CYC_TASK_SCHEDULER_KB_LOADED__)) ? ((SubLObject) $cyc_task_scheduler_kb_loadedP$.getGlobalValue()) : NIL));
-    $wordnet_kb_loadedP$ = deflexical("*WORDNET-KB-LOADED?*", ((NIL != Symbols.boundp($sym15$_WORDNET_KB_LOADED__)) ? ((SubLObject) $wordnet_kb_loadedP$.getGlobalValue()) : NIL));
-    $cyc_secure_kb_loadedP$ = deflexical("*CYC-SECURE-KB-LOADED?*", ((NIL != Symbols.boundp($sym16$_CYC_SECURE_KB_LOADED__)) ? ((SubLObject) $cyc_secure_kb_loadedP$.getGlobalValue()) : NIL));
-    $planner_kb_loadedP$ = deflexical("*PLANNER-KB-LOADED?*", ((NIL != Symbols.boundp($sym17$_PLANNER_KB_LOADED__)) ? ((SubLObject) $planner_kb_loadedP$.getGlobalValue()) : NIL));
-    $kct_kb_loadedP$ = deflexical("*KCT-KB-LOADED?*", ((NIL != Symbols.boundp($sym18$_KCT_KB_LOADED__)) ? ((SubLObject) $kct_kb_loadedP$.getGlobalValue()) : NIL));
+    $reformulator_kb_loadedP$ = deflexical("*REFORMULATOR-KB-LOADED?*", maybeDefault( $sym3$_REFORMULATOR_KB_LOADED__, $reformulator_kb_loadedP$, NIL));
+    $sksi_kb_loadedP$ = deflexical("*SKSI-KB-LOADED?*", maybeDefault( $sym4$_SKSI_KB_LOADED__, $sksi_kb_loadedP$, NIL));
+    $paraphrase_kb_loadedP$ = deflexical("*PARAPHRASE-KB-LOADED?*", maybeDefault( $sym5$_PARAPHRASE_KB_LOADED__, $paraphrase_kb_loadedP$, NIL));
+    $nl_kb_loadedP$ = deflexical("*NL-KB-LOADED?*", maybeDefault( $sym6$_NL_KB_LOADED__, $nl_kb_loadedP$, NIL));
+    $lexicon_kb_loadedP$ = deflexical("*LEXICON-KB-LOADED?*", maybeDefault( $sym7$_LEXICON_KB_LOADED__, $lexicon_kb_loadedP$, NIL));
+    $rtp_kb_loadedP$ = deflexical("*RTP-KB-LOADED?*", maybeDefault( $sym8$_RTP_KB_LOADED__, $rtp_kb_loadedP$, NIL));
+    $rkf_kb_loadedP$ = deflexical("*RKF-KB-LOADED?*", maybeDefault( $sym9$_RKF_KB_LOADED__, $rkf_kb_loadedP$, NIL));
+    $thesaurus_kb_loadedP$ = deflexical("*THESAURUS-KB-LOADED?*", maybeDefault( $sym10$_THESAURUS_KB_LOADED__, $thesaurus_kb_loadedP$, NIL));
+    $quant_kb_loadedP$ = deflexical("*QUANT-KB-LOADED?*", maybeDefault( $sym11$_QUANT_KB_LOADED__, $quant_kb_loadedP$, NIL));
+    $time_kb_loadedP$ = deflexical("*TIME-KB-LOADED?*", maybeDefault( $sym12$_TIME_KB_LOADED__, $time_kb_loadedP$, NIL));
+    $date_kb_loadedP$ = deflexical("*DATE-KB-LOADED?*", maybeDefault( $sym13$_DATE_KB_LOADED__, $date_kb_loadedP$, NIL));
+    $cyc_task_scheduler_kb_loadedP$ = deflexical("*CYC-TASK-SCHEDULER-KB-LOADED?*", maybeDefault( $sym14$_CYC_TASK_SCHEDULER_KB_LOADED__, $cyc_task_scheduler_kb_loadedP$, NIL));
+    $wordnet_kb_loadedP$ = deflexical("*WORDNET-KB-LOADED?*", maybeDefault( $sym15$_WORDNET_KB_LOADED__, $wordnet_kb_loadedP$, NIL));
+    $cyc_secure_kb_loadedP$ = deflexical("*CYC-SECURE-KB-LOADED?*", maybeDefault( $sym16$_CYC_SECURE_KB_LOADED__, $cyc_secure_kb_loadedP$, NIL));
+    $planner_kb_loadedP$ = deflexical("*PLANNER-KB-LOADED?*", maybeDefault( $sym17$_PLANNER_KB_LOADED__, $planner_kb_loadedP$, NIL));
+    $kct_kb_loadedP$ = deflexical("*KCT-KB-LOADED?*", maybeDefault( $sym18$_KCT_KB_LOADED__, $kct_kb_loadedP$, NIL));
     $forward_inference_enabledP$ = defparameter("*FORWARD-INFERENCE-ENABLED?*", T);
     $forward_propagate_from_negations$ = defparameter("*FORWARD-PROPAGATE-FROM-NEGATIONS*", NIL);
     $forward_propagate_to_negations$ = defparameter("*FORWARD-PROPAGATE-TO-NEGATIONS*", NIL);

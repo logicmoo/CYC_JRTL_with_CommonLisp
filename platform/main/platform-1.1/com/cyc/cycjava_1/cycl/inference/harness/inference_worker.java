@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,66 +67,66 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.inference.harness.abnormal;
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arg_type;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.inference.harness.balancing_tactician;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.hl_supports;
-import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.abnormal;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arg_type;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.balancing_tactician;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+//dm import com.cyc.cycjava_1.cycl.hl_supports;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
 import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_abduction_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_czer;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_proof;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_min_transformation_depth;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_strategist;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_answer;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_residual_transformation;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_restriction;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_rewrite;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_union;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.inference.harness.removal_tactician;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.set_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.inference.modules.transformation_modules;
-import com.cyc.cycjava_1.cycl.unification;
-import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_abduction_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_czer;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_proof;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_min_transformation_depth;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_strategist;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_answer;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_residual_transformation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_restriction;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_rewrite;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_union;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.removal_tactician;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.set_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.transformation_modules;
+//dm import com.cyc.cycjava_1.cycl.unification;
+//dm import com.cyc.cycjava_1.cycl.variables;
 
 public  final class inference_worker extends SubLTranslatedFile {
 
@@ -119,11 +138,11 @@ public  final class inference_worker extends SubLTranslatedFile {
 
   //// Definitions
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 1783) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 1783)
   public static SubLSymbol $currently_executing_tactic$ = null;
 
   /** Return nil or tactic-p; the current tactic under execution, or NIL if none. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 1926) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 1926)
   public static final SubLObject currently_executing_tactic() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -131,12 +150,12 @@ public  final class inference_worker extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 2519) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 2519)
   public static SubLSymbol $currently_active_problem$ = null;
 
   /** @return nil or problem-p; the problem of the current tactic under execution,
 or the problem whose tactics are being determined, or NIL if none. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 2578) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 2578)
   public static final SubLObject currently_active_problem() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -151,9 +170,9 @@ or the problem whose tactics are being determined, or NIL if none. */
     }
   }
 
-  /** @return nil or problem-store-p; the problem-store of the 
+  /** @return nil or problem-store-p; the problem-store of the
    currently active problem, or NIL if none. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 3815) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 3815)
   public static final SubLObject currently_active_problem_store() {
     {
       SubLObject problem = currently_active_problem();
@@ -166,7 +185,7 @@ or the problem whose tactics are being determined, or NIL if none. */
 
   /** Determines the tactics for PROBLEM, adds them to
 PROBLEM, and sets the status of PROBLEM to :possible. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 4401) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 4401)
   public static final SubLObject determine_new_tactics(SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -295,7 +314,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 5815) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 5815)
   public static final SubLObject determine_new_tactics_for_dnf_clause(SubLObject problem, SubLObject dnf_clause) {
     if ((NIL != clause_utilities.pos_atomic_clause_p(dnf_clause))) {
       return determine_new_tactics_for_literal(problem, clause_utilities.atomic_clause_asent(dnf_clause), $kw14$POS);
@@ -306,7 +325,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 6399) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 6399)
   public static final SubLObject determine_new_tactics_for_multiple_literals(SubLObject problem, SubLObject dnf_clause) {
     inference_worker_removal.determine_new_conjunctive_removal_tactics(problem, dnf_clause);
     if ((NIL != inference_worker_split.all_literals_connected_by_shared_varsP(dnf_clause))) {
@@ -321,14 +340,14 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 6893) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 6893)
   public static final SubLObject determine_new_connected_conjunction_tactics(SubLObject problem, SubLObject dnf_clause) {
     inference_worker_join_ordered.determine_new_join_ordered_tactics(problem, dnf_clause);
     inference_worker_join.determine_new_join_tactics(problem, dnf_clause);
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 7149) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 7149)
   public static final SubLObject determine_new_tactics_for_literal(SubLObject problem, SubLObject contextualized_asent, SubLObject sense) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -379,7 +398,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 7859) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 7859)
   public static final SubLObject possibly_compute_strategic_properties_of_problem_tactics(SubLObject problem, SubLObject strategy) {
     checkType(strategy, $sym17$STRATEGY_P);
     if ((NIL != inference_datastructures_strategy.strategically_unexamined_problem_p(problem, strategy))) {
@@ -388,12 +407,12 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 8337) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 8337)
   public static final SubLObject strategy_compute_strategic_properties_of_problem_tactics(SubLObject strategy, SubLObject problem) {
     return compute_strategic_properties_of_problem_tactics(problem, strategy, $kw18$NON_DISCARDED);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 8602) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 8602)
   public static final SubLObject compute_strategic_properties_of_problem_tactics(SubLObject problem, SubLObject strategy, SubLObject status) {
     if ((status == UNPROVIDED)) {
       status = NIL;
@@ -410,7 +429,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 8843) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 8843)
   public static final SubLObject possibly_compute_strategic_properties_of_tactic(SubLObject tactic, SubLObject strategy) {
     if ((NIL == strategy_chooses_not_to_examine_tacticP(strategy, tactic))) {
       inference_tactician.strategy_note_new_tactic(strategy, tactic);
@@ -419,7 +438,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 9056) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 9056)
   public static final SubLObject strategy_chooses_not_to_examine_tacticP(SubLObject strategy, SubLObject tactic) {
     return makeBoolean(((NIL == inference_tactician_strategic_uninterestingness.strategy_admits_tactic_wrt_proof_specP(strategy, tactic))
           || (NIL == inference_tactician_strategic_uninterestingness.strategy_allows_use_of_tactic_hl_moduleP(strategy, tactic))));
@@ -428,7 +447,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
   /** Depending on what type of tactic TACTIC is,
   compute its strategic properties wrt STRATEGY.
   @return booleanp; whether to note that the tactic is strategically possible */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 9402) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 9402)
   public static final SubLObject default_compute_strategic_properties_of_tactic(SubLObject strategy, SubLObject tactic) {
     if ((NIL != inference_worker_split.split_tactic_p(tactic))) {
       {
@@ -469,7 +488,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     return tactic;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 11165) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 11165)
   public static final SubLObject execute_tactic(SubLObject tactic) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -507,7 +526,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 12103) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 12103)
   public static final SubLObject possibly_note_tactic_finished(SubLObject tactic) {
     if ((NIL != inference_datastructures_tactic.tactic_in_progressP(tactic))) {
       return NIL;
@@ -519,13 +538,13 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 12429) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 12429)
   public static SubLSymbol $asent_of_currently_executing_tactic$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 12524) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 12524)
   public static SubLSymbol $mt_of_currently_executing_tactic$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 13137) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 13137)
   public static final SubLObject single_literal_tactic_p(SubLObject tactic) {
     return makeBoolean(((NIL != inference_worker_removal.literal_level_removal_tactic_p(tactic))
           || (NIL != inference_worker_removal.literal_level_meta_removal_tactic_p(tactic))
@@ -533,7 +552,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
           || (NIL != inference_worker_rewrite.literal_level_rewrite_tactic_p(tactic))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 13391) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 13391)
   public static final SubLObject execute_literal_level_tactic(SubLObject tactic) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -576,13 +595,13 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 14291) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 14291)
   public static final SubLObject literal_level_tactic_p(SubLObject tactic) {
     return makeBoolean(((NIL == conjunctive_tactic_p(tactic))
            && (NIL == disjunctive_tactic_p(tactic))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 14692) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 14692)
   public static final SubLObject execute_multiple_literal_tactic(SubLObject tactic) {
     if ((NIL != structural_tactic_p(tactic))) {
       return execute_structural_multiple_literal_tactic(tactic);
@@ -597,7 +616,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 15192) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 15192)
   public static final SubLObject execute_structural_multiple_literal_tactic(SubLObject tactic) {
     if ((NIL != inference_worker_split.split_tactic_p(tactic))) {
       return inference_worker_split.execute_split_tactic(tactic);
@@ -611,7 +630,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 15614) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 15614)
   public static final SubLObject execute_meta_structural_multiple_literal_tactic(SubLObject tactic) {
     if ((NIL != inference_worker_split.meta_split_tactic_p(tactic))) {
       return inference_datastructures_tactic.tactic_in_progress_next(tactic);
@@ -621,20 +640,20 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 15942) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 15942)
   public static final SubLObject connected_conjunction_link_p(SubLObject object) {
     return makeBoolean(((NIL != inference_worker_join_ordered.join_ordered_link_p(object))
           || (NIL != inference_worker_join.join_link_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 16085) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 16085)
   public static final SubLObject connected_conjunction_tactic_p(SubLObject object) {
     return makeBoolean(((NIL != inference_worker_join_ordered.join_ordered_tactic_p(object))
           || (NIL != inference_worker_join.join_tactic_p(object))));
   }
 
   /** @return connected-conjunction-tactic-p */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 16218) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 16218)
   public static final SubLObject connected_conjunction_link_tactic(SubLObject link) {
     if ((NIL != inference_worker_join_ordered.join_ordered_link_p(link))) {
       return inference_worker_join_ordered.join_ordered_link_tactic(link);
@@ -646,7 +665,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
   }
 
   /** @return connected-conjunction-tactic-p */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 16529) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 16529)
   public static final SubLObject connected_conjunction_tactic_link(SubLObject tactic) {
     if ((NIL != inference_worker_join_ordered.join_ordered_tactic_p(tactic))) {
       return inference_worker_join_ordered.join_ordered_tactic_link(tactic);
@@ -657,36 +676,36 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 16858) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 16858)
   public static final SubLObject conjunctive_link_p(SubLObject object) {
     return makeBoolean(((NIL != inference_worker_split.split_link_p(object))
           || (NIL != connected_conjunction_link_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 16986) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 16986)
   public static final SubLObject logical_conjunctive_tactic_p(SubLObject object) {
     return makeBoolean(((NIL != inference_worker_split.split_tactic_p(object))
           || (NIL != connected_conjunction_tactic_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 17127) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 17127)
   public static final SubLObject conjunctive_tactic_p(SubLObject object) {
     return makeBoolean(((NIL != logical_conjunctive_tactic_p(object))
           || (NIL != inference_worker_removal.conjunctive_removal_tactic_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 17272) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 17272)
   public static final SubLObject meta_conjunctive_tactic_p(SubLObject object) {
     return inference_worker_split.meta_split_tactic_p(object);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 17376) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 17376)
   public static final SubLObject generalized_conjunctive_tactic_p(SubLObject object) {
     return makeBoolean(((NIL != conjunctive_tactic_p(object))
           || (NIL != meta_conjunctive_tactic_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 17522) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 17522)
   public static final SubLObject connected_conjunction_tactic_literal_count(SubLObject conjunctive_tactic) {
     if ((NIL != inference_worker_join_ordered.join_ordered_tactic_p(conjunctive_tactic))) {
       return clause_utilities.clause_literal_count(inference_worker_join_ordered.join_ordered_tactic_focal_supporting_problem_spec(conjunctive_tactic));
@@ -695,42 +714,42 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 17877) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 17877)
   public static final SubLObject disjunctive_link_p(SubLObject object) {
     return makeBoolean(((NIL != inference_worker_union.union_link_p(object))
           || (NIL != inference_worker_union.disjunctive_assumption_link_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 18021) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 18021)
   public static final SubLObject logical_disjunctive_tactic_p(SubLObject object) {
     return makeBoolean(((NIL != inference_worker_union.union_tactic_p(object))
           || (NIL != inference_worker_union.disjunctive_assumption_tactic_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 18163) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 18163)
   public static final SubLObject disjunctive_tactic_p(SubLObject object) {
     return logical_disjunctive_tactic_p(object);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 18530) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 18530)
   public static final SubLObject logical_link_p(SubLObject object) {
     return makeBoolean(((NIL != conjunctive_link_p(object))
           || (NIL != disjunctive_link_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 18661) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 18661)
   public static final SubLObject logical_tactic_p(SubLObject object) {
     return makeBoolean(((NIL != logical_conjunctive_tactic_p(object))
           || (NIL != logical_disjunctive_tactic_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 18938) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 18938)
   public static final SubLObject logical_tactic_with_unique_lookahead_problem_p(SubLObject tactic) {
     return makeBoolean(((NIL != logical_tactic_p(tactic))
            && (NIL == inference_worker_join.join_tactic_p(tactic))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 19091) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 19091)
   public static final SubLObject logical_link_unique_tactic(SubLObject link) {
     if ((NIL != inference_worker_join_ordered.join_ordered_link_p(link))) {
       return inference_worker_join_ordered.join_ordered_link_tactic(link);
@@ -744,7 +763,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 19416) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 19416)
   public static final SubLObject logical_tactic_link(SubLObject logical_tactic) {
     {
       SubLObject pcase_var = inference_datastructures_tactic.tactic_hl_module_name(logical_tactic);
@@ -763,7 +782,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 19949) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 19949)
   public static final SubLObject logical_tactic_lookahead_problem(SubLObject logical_tactic) {
     {
       SubLObject pcase_var = inference_datastructures_tactic.tactic_hl_module_name(logical_tactic);
@@ -782,29 +801,29 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 20892) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 20892)
   public static final SubLObject structural_tactic_p(SubLObject tactic) {
     return logical_tactic_p(tactic);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 21094) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 21094)
   public static final SubLObject meta_structural_tactic_p(SubLObject tactic) {
     return meta_conjunctive_tactic_p(tactic);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 21203) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 21203)
   public static final SubLObject generalized_structural_tactic_p(SubLObject tactic) {
     return makeBoolean(((NIL != structural_tactic_p(tactic))
           || (NIL != meta_structural_tactic_p(tactic))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 21610) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 21610)
   public static final SubLObject structural_proof_type(SubLObject structural_proof) {
     checkType(structural_proof, $sym41$STRUCTURAL_PROOF_P);
     return inference_datastructures_problem_link.problem_link_type(inference_datastructures_proof.proof_link(structural_proof));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 21780) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 21780)
   public static final SubLObject content_link_p(SubLObject object) {
     return makeBoolean(((NIL != inference_worker_removal.removal_link_p(object))
           || (NIL != inference_worker_transformation.transformation_link_p(object))
@@ -812,20 +831,20 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
           || (NIL != inference_worker_rewrite.rewrite_link_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 21984) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 21984)
   public static final SubLObject content_tactic_p(SubLObject object) {
     return makeBoolean(((NIL != inference_worker_removal.generalized_removal_tactic_p(object))
           || (NIL != inference_worker_transformation.transformation_tactic_p(object))
           || (NIL != inference_worker_rewrite.rewrite_tactic_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 22196) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 22196)
   public static final SubLObject content_proof_p(SubLObject proof) {
     return makeBoolean(((NIL != inference_datastructures_proof.proof_p(proof))
            && (NIL != content_link_p(inference_datastructures_proof.proof_link(proof)))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 22313) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 22313)
   public static final SubLObject content_link_supports(SubLObject content_link) {
     if ((NIL != inference_worker_removal.removal_link_p(content_link))) {
       return inference_worker_removal.removal_link_supports(content_link);
@@ -843,7 +862,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 23486) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 23486)
   public static final SubLObject content_link_hl_module(SubLObject content_link) {
     if ((NIL != inference_worker_removal.removal_link_p(content_link))) {
       return inference_worker_removal.removal_link_hl_module(content_link);
@@ -861,7 +880,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 24085) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 24085)
   public static final SubLObject content_proof_hl_module(SubLObject proof) {
     {
       SubLObject link = inference_datastructures_proof.proof_link(proof);
@@ -870,7 +889,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 39406) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 39406)
   public static final SubLObject logical_tactic_generalized_removal_completeness(SubLObject logical_tactic, SubLObject strategic_context) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -895,7 +914,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
 
   /** Returns the maximal completeness of PROBLEM's generalized removal tactics (wrt STRATEGIC-CONTEXT if provided),
    even the discarded ones. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 40058) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 40058)
   public static final SubLObject problem_generalized_removal_completeness(SubLObject problem, SubLObject strategic_context) {
     checkType(strategic_context, $sym55$STRATEGIC_CONTEXT_P);
     determine_strategic_status_wrt(problem, strategic_context);
@@ -935,7 +954,7 @@ PROBLEM, and sets the status of PROBLEM to :possible. */
   /** Discards all conjunctive tactics on TACTIC's problem, other than TACTIC.  This is used when
 the conjunctive tactic TACTIC is known to be complete and has been selected by
 the strategy, so we can discard all others because they will be subsumed by TACTIC. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 42929) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 42929)
   public static final SubLObject discard_all_other_possible_structural_conjunctive_tactics(SubLObject tactic) {
     if ((NIL == inference_datastructures_problem_store.problem_store_transformation_allowedP(inference_datastructures_tactic.tactic_store(tactic)))) {
       {
@@ -949,7 +968,7 @@ the strategy, so we can discard all others because they will be subsumed by TACT
   /** Whether the Worker tests all newly proofs for well-formedness as soon as they are created.
 This could be turned back to t or investigated further if we find that we end up taking
 large cartesian products of ill-formed proofs. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 48699) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 48699)
   public static SubLSymbol $eager_proof_validationP$ = null;
 
   /** @return 0 nil or proof-p
@@ -957,7 +976,7 @@ returns NIL iff the proposed proof was semantically invalid wrt the intermediate
 @return 1 boolean; t if the returned proof was newly created, nil if it already existed
  (or was not proven due to invalidity)
 @param PROOF-BINDINGS; LINK's supported problem vars -> content */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 48985) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 48985)
   public static final SubLObject propose_new_proof_with_bindings(SubLObject link, SubLObject proof_bindings, SubLObject subproofs) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1013,7 +1032,7 @@ returns NIL iff the proposed proof was semantically invalid wrt the intermediate
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 51176) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 51176)
   public static final SubLObject proof_propagate_non_explananatory_subproofs(SubLObject proof) {
     checkType(proof, $sym79$PROOF_P);
     {
@@ -1056,7 +1075,7 @@ returns NIL iff the proposed proof was semantically invalid wrt the intermediate
   }
 
   /** The proof depth beyond which we give up trying to check for proof circularity. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 52068) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 52068)
   private static SubLSymbol $circular_proof_max_depth_cutoff$ = null;
 
   /** PROOF is circular when it contains a very similar proof to itself
@@ -1064,7 +1083,7 @@ as one of its subproofs.  'Very similar' means that it has the same
 problem and the same proof-bindings.  Eventually we should extend
 this to be having the same proven query, but currently we don't
 have an efficient way to do that. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 52211) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 52211)
   public static final SubLObject proof_circularP(SubLObject proof) {
     {
       SubLObject cdolist_list_var = inference_datastructures_proof.proof_direct_subproofs(proof);
@@ -1078,7 +1097,7 @@ have an efficient way to do that. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 52681) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 52681)
   public static final SubLObject proof_circular_wrtP(SubLObject proof, SubLObject candidate_circular_proof, SubLObject depth) {
     if (depth.numG($circular_proof_max_depth_cutoff$.getGlobalValue())) {
       return NIL;
@@ -1099,13 +1118,13 @@ have an efficient way to do that. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 53168) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 53168)
   public static final SubLObject proofs_share_problem_and_bindingsP(SubLObject proof1, SubLObject proof2) {
     return makeBoolean(((inference_datastructures_proof.proof_supported_problem(proof1) == inference_datastructures_proof.proof_supported_problem(proof2))
            && (NIL != proof_bindings_equalP(inference_datastructures_proof.proof_bindings(proof1), inference_datastructures_proof.proof_bindings(proof2)))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 55840) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 55840)
   public static final SubLObject possibly_note_proof_processed(SubLObject proof) {
     checkType(proof, $sym79$PROOF_P);
     {
@@ -1119,10 +1138,10 @@ have an efficient way to do that. */
   }
 
   /** if an RT-link's proof is processed, note its motivating T-link's proofs as processed too, they're kind of like siblings */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 56088) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 56088)
   private static SubLSymbol $process_motivated_transformation_link_proofsP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 57127) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 57127)
   public static final SubLObject consider_that_subproofs_may_be_unprocessed(SubLObject new_proof) {
     {
       SubLObject store = inference_datastructures_proof.proof_store(new_proof);
@@ -1145,12 +1164,12 @@ have an efficient way to do that. */
   }
 
   /** Temporary control variable; should eventually stay T */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 57878) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 57878)
   private static SubLSymbol $find_proof_bindings_optimization_enabledP$ = null;
 
   /** @return nil or proof-p
 @param PROOF-BINDINGS; SUPPORTED-PROBLEM's vars -> content */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 58005) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 58005)
   public static final SubLObject find_proof(SubLObject link, SubLObject proof_bindings, SubLObject subproofs) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1201,27 +1220,27 @@ have an efficient way to do that. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 60046) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 60046)
   public static final SubLObject conjunctive_proof_subsumes_conjunctive_proof_specP(SubLObject proof, SubLObject link, SubLObject proof_bindings, SubLObject subproofs) {
     return makeBoolean(((NIL != connected_conjunction_proof_subsumes_connected_conjunction_proof_specP(proof, link, proof_bindings, subproofs))
           || (NIL != split_proof_subsumes_split_proof_specP(proof, link, proof_bindings, subproofs))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 60358) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 60358)
   public static final SubLObject connected_conjunction_proof_subsumes_connected_conjunction_proof_specP(SubLObject proof, SubLObject link, SubLObject proof_bindings, SubLObject subproofs) {
     return makeBoolean(((NIL != inference_worker_join_ordered.connected_conjunction_proof_p(proof))
            && (NIL != connected_conjunction_link_p(link))
            && (NIL != list_utilities.sets_equalP(inference_datastructures_proof.proof_direct_subproofs(proof), subproofs, Symbols.symbol_function(EQ)))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 60736) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 60736)
   public static final SubLObject split_proof_subsumes_split_proof_specP(SubLObject proof, SubLObject link, SubLObject proof_bindings, SubLObject subproofs) {
     return makeBoolean(((NIL != inference_worker_split.split_proof_p(proof))
            && (NIL != inference_worker_split.split_link_p(link))
            && (NIL != list_utilities.sets_equalP(inference_datastructures_proof.proof_direct_subproofs(proof), subproofs, Symbols.symbol_function(EQ)))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 61050) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 61050)
   public static final SubLObject residual_transformation_proof_subsumes_conjunctive_proof_specP(SubLObject proof, SubLObject link, SubLObject proof_bindings, SubLObject subproofs) {
     return makeBoolean(((NIL != inference_worker_residual_transformation.residual_transformation_proof_p(proof))
            && (NIL != conjunctive_link_p(link))
@@ -1231,7 +1250,7 @@ have an efficient way to do that. */
 
   /** @return 0 proof-p
 @return 1 whether the returned proof was newly created */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 63478) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 63478)
   public static final SubLObject new_goal_proof(SubLObject goal_link) {
     checkType(goal_link, $sym88$PROBLEM_LINK_TO_GOAL_P);
     if ((NIL != inference_worker_removal.removal_link_p(goal_link))) {
@@ -1248,7 +1267,7 @@ i.e. the bindings established in this exact proof that is being constructed.
 i.e. the bindings established by the subproof (recursively).
 @param VARIABLE-MAP; subproof-vars -> local-vars,
 i.e. the mapping between the variables in the subproof and the local variables. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 64253) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 64253)
   public static final SubLObject proof_bindings_from_constituents(SubLObject local_bindings, SubLObject sub_bindings, SubLObject variable_map) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1270,7 +1289,7 @@ i.e. the mapping between the variables in the subproof and the local variables. 
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 65481) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 65481)
   public static final SubLObject ncanonicalize_proof_bindings_int(SubLObject proof_bindings) {
     {
       SubLObject sorted_bindings = Sort.sort(proof_bindings, $sym90$VARIABLE__, $sym91$VARIABLE_BINDING_VARIABLE);
@@ -1278,7 +1297,7 @@ i.e. the mapping between the variables in the subproof and the local variables. 
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 65764) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 65764)
   public static final SubLObject ncanonicalize_proof_bindings(SubLObject proof_bindings) {
     if ((NIL != list_utilities.singletonP(proof_bindings))) {
       return proof_bindings;
@@ -1287,7 +1306,7 @@ i.e. the mapping between the variables in the subproof and the local variables. 
   }
 
   /** @note result is not destructible */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 65971) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 65971)
   public static final SubLObject canonicalize_proof_bindings(SubLObject proof_bindings) {
     if ((NIL != proof_bindings_canonicalP(proof_bindings))) {
       return proof_bindings;
@@ -1295,12 +1314,12 @@ i.e. the mapping between the variables in the subproof and the local variables. 
     return ncanonicalize_proof_bindings(conses_high.copy_list(proof_bindings));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 66358) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 66358)
   public static final SubLObject proof_bindings_canonicalP(SubLObject proof_bindings) {
     return proof_bindings_canonicalP_recursive(proof_bindings, MINUS_ONE_INTEGER);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 66485) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 66485)
   public static final SubLObject proof_bindings_canonicalP_recursive(SubLObject proof_bindings, SubLObject last_id) {
     if ((NIL == proof_bindings)) {
       return T;
@@ -1315,14 +1334,14 @@ i.e. the mapping between the variables in the subproof and the local variables. 
   }
 
   /** @note these are assumed to be canonical */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 66817) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 66817)
   public static final SubLObject proof_bindings_equalP(SubLObject proof_bindings1, SubLObject proof_bindings2) {
     return Equality.equal(proof_bindings1, proof_bindings2);
   }
 
   /** For each variable in BINDINGS which occurs twice, unify its first and second value
 and append them to the result, unless they are ((T . T)) */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 66986) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 66986)
   public static final SubLObject unify_all_equal_bindings(SubLObject v_bindings) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1356,7 +1375,7 @@ and append them to the result, unless they are ((T . T)) */
   }
 
   /** @return boolean; t iff all values in BINDINGS are fully bound */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 68968) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 68968)
   public static final SubLObject all_bindings_ground_outP(SubLObject v_bindings) {
     checkType(v_bindings, $sym95$BINDINGS_P);
     {
@@ -1371,7 +1390,7 @@ and append them to the result, unless they are ((T . T)) */
     return T;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 69226) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 69226)
   public static final SubLObject binding_ground_outP(SubLObject binding) {
     {
       SubLObject value = bindings.variable_binding_value(binding);
@@ -1380,14 +1399,14 @@ and append them to the result, unless they are ((T . T)) */
   }
 
   /** used as a failsafe to avoid infinite proof bubbling */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 69360) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 69360)
   public static SubLSymbol $proof_bubbling_depth$ = null;
 
   /** the depth above which we forcibly halt recursive proof bubbling */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 69489) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 69489)
   public static SubLSymbol $max_proof_bubbling_depth$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 69610) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 69610)
   public static final SubLObject bubble_up_proof(SubLObject proof) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1412,7 +1431,7 @@ and append them to the result, unless they are ((T . T)) */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 70088) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 70088)
   public static final SubLObject bubble_up_proof_from_problem(SubLObject proof, SubLObject problem) {
     {
       SubLObject set_contents_var = inference_datastructures_problem.problem_dependent_links(problem);
@@ -1430,7 +1449,7 @@ and append them to the result, unless they are ((T . T)) */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 70272) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 70272)
   public static final SubLObject bubble_up_proof_to_link(SubLObject proof, SubLObject dependent_link) {
     if ((NIL != inference_datastructures_proof.proof_provenP(proof))) {
       {
@@ -1460,7 +1479,7 @@ and append them to the result, unless they are ((T . T)) */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 71453) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 71453)
   public static final SubLObject bubble_up_proof_to_link_via_mapped_problem(SubLObject proof, SubLObject dependent_link, SubLObject mapped_problem) {
     if ((NIL != link_permits_proof_propagationP(dependent_link, mapped_problem))) {
       {
@@ -1474,7 +1493,7 @@ and append them to the result, unless they are ((T . T)) */
   /** Just having PROOF and DEPENDENT-LINK is not enough, because if DEPENDENT-LINK has two or more
 supporting problems which are both equal to the supported problem of PROOF, then we couldn't
 distinguish them without VARIABLE-MAP. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 72097) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 72097)
   public static final SubLObject bubble_up_proof_to_link_via_variable_map(SubLObject proof, SubLObject variable_map, SubLObject dependent_link) {
     checkType(proof, $sym79$PROOF_P);
     checkType(variable_map, $sym99$VARIABLE_MAP_P);
@@ -1511,7 +1530,7 @@ distinguish them without VARIABLE-MAP. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 73974) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 73974)
   public static final SubLObject perform_lazy_proof_rejection(SubLObject proof, SubLObject inference) {
     if ((NIL != inference_datastructures_inference.inference_allow_abnormality_checkingP(inference))) {
       reject_abnormal_subproofs(proof);
@@ -1519,10 +1538,10 @@ distinguish them without VARIABLE-MAP. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 74981) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 74981)
   private static SubLSymbol $within_abnormality_checkingP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 75161) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 75161)
   public static final SubLObject reject_abnormal_subproofs(SubLObject proof) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1560,7 +1579,7 @@ distinguish them without VARIABLE-MAP. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 76347) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 76347)
   public static final SubLObject inference_proof_non_explanatory_subproofs(SubLObject inference, SubLObject proof) {
     {
       SubLObject answer_link = inference_datastructures_inference.inference_root_link(inference);
@@ -1573,7 +1592,7 @@ distinguish them without VARIABLE-MAP. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 78172) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 78172)
   public static final SubLObject proof_non_explanatory_subproofs(SubLObject proof) {
     {
       SubLObject subproofs = NIL;
@@ -1590,7 +1609,7 @@ distinguish them without VARIABLE-MAP. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 83634) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 83634)
   public static final SubLObject note_tactic_finished(SubLObject tactic) {
     {
       SubLObject problem = inference_datastructures_tactic.tactic_problem(tactic);
@@ -1693,7 +1712,7 @@ distinguish them without VARIABLE-MAP. */
     return tactic;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 84783) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 84783)
   public static final SubLObject consider_strategic_ramifications_of_possibly_executed_tactic(SubLObject strategy, SubLObject tactic) {
     if ((NIL != inference_datastructures_tactic.tactic_executedP(tactic))) {
       consider_strategic_ramifications_of_executed_tactic(strategy, tactic);
@@ -1702,7 +1721,7 @@ distinguish them without VARIABLE-MAP. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 85075) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 85075)
   public static final SubLObject consider_strategic_ramifications_of_executed_tactic(SubLObject strategy, SubLObject tactic) {
     {
       SubLObject problem = inference_datastructures_tactic.tactic_problem(tactic);
@@ -1718,13 +1737,13 @@ distinguish them without VARIABLE-MAP. */
   }
 
   /** Changes PROBLEM's status to :unexamined. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 85565) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 85565)
   public static final SubLObject note_problem_created(SubLObject problem) {
     change_and_propagate_problem_status(problem, $kw109$UNEXAMINED, NIL, $kw12$TACTICAL);
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 86092) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 86092)
   public static final SubLObject possibly_activate_problem(SubLObject strategy, SubLObject problem) {
     {
       SubLObject really_relevantP = inference_tactician.strategy_possibly_activate_problem(strategy, problem);
@@ -1756,7 +1775,7 @@ distinguish them without VARIABLE-MAP. */
   }
 
   /** Push PROBLEM as far as it can go wrt STRATEGIC-CONTEXT trough the progression of strategic statuses. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 87358) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 87358)
   public static final SubLObject determine_strategic_status_wrt(SubLObject problem, SubLObject strategic_context) {
     if ((NIL == inference_datastructures_problem.tactically_no_good_problem_p(problem))) {
       if ((NIL != inference_datastructures_problem.tactically_unexamined_problem_p(problem))) {
@@ -1773,7 +1792,7 @@ distinguish them without VARIABLE-MAP. */
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 88341) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 88341)
   public static final SubLObject note_problem_examined(SubLObject problem) {
     {
       SubLObject old_status = inference_datastructures_problem.problem_status(problem);
@@ -1871,7 +1890,7 @@ distinguish them without VARIABLE-MAP. */
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 88890) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 88890)
   public static final SubLObject possibly_note_problem_strategically_examined(SubLObject problem, SubLObject strategy) {
     if (((NIL == inference_datastructures_problem.tactically_unexamined_problem_p(problem))
          && (NIL != inference_datastructures_strategy.strategically_unexamined_problem_p(problem, strategy)))) {
@@ -1884,7 +1903,7 @@ distinguish them without VARIABLE-MAP. */
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 89373) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 89373)
   public static final SubLObject note_problem_possible(SubLObject problem) {
     {
       SubLObject old_status = inference_datastructures_problem.problem_status(problem);
@@ -1978,7 +1997,7 @@ distinguish them without VARIABLE-MAP. */
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 89754) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 89754)
   public static final SubLObject possibly_note_problem_strategically_possible(SubLObject problem, SubLObject strategy) {
     if (((NIL != inference_datastructures_strategy.strategically_examined_problem_p(problem, strategy))
          && (NIL == inference_datastructures_strategy.strategically_no_good_problem_p(problem, strategy))
@@ -1988,7 +2007,7 @@ distinguish them without VARIABLE-MAP. */
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 90471) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 90471)
   public static final SubLObject note_problem_strategically_possible(SubLObject problem, SubLObject strategy) {
     {
       SubLObject old_strategic_status = inference_datastructures_strategy.problem_raw_strategic_status(problem, strategy);
@@ -2000,7 +2019,7 @@ distinguish them without VARIABLE-MAP. */
 
   /** Notes that PROBLEM is pending (wrt STRATEGIC-CONTEXT) unless it is already
 known to be pending (wrt STRATEGIC-CONTEXT). */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 90811) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 90811)
   public static final SubLObject possibly_note_problem_pending(SubLObject problem, SubLObject strategic_context) {
     checkType(strategic_context, $sym55$STRATEGIC_CONTEXT_P);
     if ((NIL != possible_problem_p(problem, strategic_context))) {
@@ -2011,7 +2030,7 @@ known to be pending (wrt STRATEGIC-CONTEXT). */
 
   /** Assumes that strategy activity is propagated first, since it uses
 that as a criterion for considering no-goodness. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 91182) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 91182)
   public static final SubLObject note_problem_pending(SubLObject problem, SubLObject strategic_context) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2122,7 +2141,7 @@ that as a criterion for considering no-goodness. */
 
   /** Notes that PROBLEM is finished (wrt STRATEGIC-CONTEXT) unless it is already
 known to be finished (wrt STRATEGIC-CONTEXT). */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 92173) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 92173)
   public static final SubLObject possibly_note_problem_finished(SubLObject problem, SubLObject strategic_context) {
     checkType(strategic_context, $sym55$STRATEGIC_CONTEXT_P);
     if ((NIL != pending_problem_p(problem, strategic_context))) {
@@ -2133,7 +2152,7 @@ known to be finished (wrt STRATEGIC-CONTEXT). */
 
   /** Assumes that strategy activity is propagated first, since it uses
 that as a criterion for considering no-goodness. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 92547) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 92547)
   public static final SubLObject note_problem_finished(SubLObject problem, SubLObject strategic_context) {
     {
       SubLObject old_status = problem_raw_tactical_or_strategic_status(problem, strategic_context);
@@ -2144,7 +2163,7 @@ that as a criterion for considering no-goodness. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 93144) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 93144)
   public static final SubLObject consider_ramifications_of_problem_finished(SubLObject problem, SubLObject strategic_context) {
     consider_that_problem_could_be_no_good(problem, NIL, strategic_context, T);
     possibly_propagate_problem_finished(problem, strategic_context);
@@ -2277,7 +2296,7 @@ that as a criterion for considering no-goodness. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 94298) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 94298)
   public static final SubLObject possibly_propagate_problem_finished(SubLObject problem, SubLObject strategic_context) {
     {
       SubLObject problem_var = problem;
@@ -2337,12 +2356,12 @@ that as a criterion for considering no-goodness. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 95508) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 95508)
   public static final SubLObject strategy_note_problem_finished(SubLObject strategic_context, SubLObject problem) {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 95679) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 95679)
   public static final SubLObject note_argument_link_added(SubLObject link) {
     {
       SubLObject supported_problem = inference_datastructures_problem_link.problem_link_supported_problem(link);
@@ -2432,7 +2451,7 @@ that as a criterion for considering no-goodness. */
     return link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 95961) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 95961)
   public static final SubLObject note_goal_link_added(SubLObject link) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2449,7 +2468,7 @@ that as a criterion for considering no-goodness. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 96895) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 96895)
   public static final SubLObject no_good_problem_p(SubLObject problem, SubLObject strategic_context) {
     if ((NIL != inference_datastructures_strategy.strategy_p(strategic_context))) {
       return inference_datastructures_strategy.strategically_no_good_problem_p(problem, strategic_context);
@@ -2458,7 +2477,7 @@ that as a criterion for considering no-goodness. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 97125) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 97125)
   public static final SubLObject neutral_problem_p(SubLObject problem, SubLObject strategic_context) {
     if ((NIL != inference_datastructures_strategy.strategy_p(strategic_context))) {
       return inference_datastructures_strategy.strategically_neutral_problem_p(problem, strategic_context);
@@ -2468,7 +2487,7 @@ that as a criterion for considering no-goodness. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 97355) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 97355)
   public static final SubLObject good_problem_p(SubLObject problem, SubLObject strategic_context) {
     if ((NIL != inference_datastructures_strategy.strategy_p(strategic_context))) {
       return inference_datastructures_strategy.strategically_good_problem_p(problem, strategic_context);
@@ -2477,7 +2496,7 @@ that as a criterion for considering no-goodness. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 97809) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 97809)
   public static final SubLObject possible_problem_p(SubLObject problem, SubLObject strategic_context) {
     if ((NIL != inference_datastructures_strategy.strategy_p(strategic_context))) {
       return inference_datastructures_strategy.strategically_possible_problem_p(problem, strategic_context);
@@ -2486,7 +2505,7 @@ that as a criterion for considering no-goodness. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 98042) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 98042)
   public static final SubLObject pending_problem_p(SubLObject problem, SubLObject strategic_context) {
     if ((NIL != inference_datastructures_strategy.strategy_p(strategic_context))) {
       return inference_datastructures_strategy.strategically_pending_problem_p(problem, strategic_context);
@@ -2495,7 +2514,7 @@ that as a criterion for considering no-goodness. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 98272) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 98272)
   public static final SubLObject finished_problem_p(SubLObject problem, SubLObject strategic_context) {
     if ((NIL != inference_datastructures_strategy.strategy_p(strategic_context))) {
       return inference_datastructures_strategy.strategically_finished_problem_p(problem, strategic_context);
@@ -2504,18 +2523,18 @@ that as a criterion for considering no-goodness. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 99055) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 99055)
   public static final SubLObject totally_finished_problem_p(SubLObject problem, SubLObject strategic_context) {
     return finished_problem_p(problem, inference_tactician.controlling_strategic_context(strategic_context));
   }
 
   /** When non-NIL link propagation is disabled.  This is only useful when serializing in problem stores. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 99217) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 99217)
   public static SubLSymbol $disable_link_propagationP$ = null;
 
   /** Does all propagation necessary to handle the addition of the newly created link LINK.
 Adding a link can never cause a problem to become no-good, but removing a link could. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 100187) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 100187)
   public static final SubLObject propagate_problem_link(SubLObject link) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2534,7 +2553,7 @@ Adding a link can never cause a problem to become no-good, but removing a link c
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 100985) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 100985)
   public static final SubLObject propagate_proofs(SubLObject link) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2580,7 +2599,7 @@ Adding a link can never cause a problem to become no-good, but removing a link c
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 101560) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 101560)
   public static final SubLObject repropagate_newly_opened_link(SubLObject link, SubLObject mapped_supporting_problem) {
     propagate_strategy_activity(link);
     propagate_inference_relevance(link);
@@ -2589,7 +2608,7 @@ Adding a link can never cause a problem to become no-good, but removing a link c
     return link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 102079) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 102079)
   public static final SubLObject problem_link_open_and_repropagate_index(SubLObject link, SubLObject index) {
     inference_datastructures_problem_link.problem_link_open_index(link, index);
     {
@@ -2599,7 +2618,7 @@ Adding a link can never cause a problem to become no-good, but removing a link c
     return link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 102376) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 102376)
   public static final SubLObject problem_link_open_and_repropagate_supporting_mapped_problem(SubLObject link, SubLObject supporting_mapped_problem) {
     inference_datastructures_problem_link.problem_link_open_supporting_mapped_problem(link, supporting_mapped_problem);
     repropagate_newly_opened_link(link, supporting_mapped_problem);
@@ -2608,7 +2627,7 @@ Adding a link can never cause a problem to become no-good, but removing a link c
 
   /** Does all propagation necessary to handle the addition of the newly created answer link LINK.
 i.e. bubbles up proofs (if any) from the supported problems of LINK to LINK's strategy. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 102902) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 102902)
   public static final SubLObject propagate_answer_link(SubLObject link) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2672,7 +2691,7 @@ i.e. bubbles up proofs (if any) from the supported problems of LINK to LINK's st
   }
 
   /** @return booleanp; whether you just propagated LINK */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 104103) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 104103)
   public static final SubLObject possibly_propagate_answer_link(SubLObject link) {
     if ((NIL == inference_worker_answer.answer_link_propagatedP(link))) {
       propagate_answer_link(link);
@@ -2681,7 +2700,7 @@ i.e. bubbles up proofs (if any) from the supported problems of LINK to LINK's st
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 104316) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 104316)
   public static final SubLObject propagate_proof_to_inference(SubLObject proof, SubLObject inference) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2696,7 +2715,7 @@ i.e. bubbles up proofs (if any) from the supported problems of LINK to LINK's st
   }
 
   /** @return booleanp; whether ANSWER-LINK became closed due to this call. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 104763) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 104763)
   public static final SubLObject consider_closing_answer_link(SubLObject answer_link) {
     {
       SubLObject inference = inference_worker_answer.answer_link_supported_inference(answer_link);
@@ -2711,7 +2730,7 @@ i.e. bubbles up proofs (if any) from the supported problems of LINK to LINK's st
   }
 
   /** @return booleanp; whether INFERENCE deems that ANSWER-LINK ought to be closed. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 105149) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 105149)
   public static final SubLObject inference_deems_answer_link_should_be_closedP(SubLObject inference, SubLObject answer_link) {
     {
       SubLObject root_mapped_problem = inference_datastructures_problem_link.problem_link_sole_supporting_mapped_problem(answer_link);
@@ -2735,7 +2754,7 @@ i.e. bubbles up proofs (if any) from the supported problems of LINK to LINK's st
   }
 
   /** @return boolean; t iff PROOF and all its subproofs are well-formed. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 105925) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 105925)
   public static final SubLObject proof_tree_validP(SubLObject proof) {
     if (($kw71$NONE == inference_datastructures_problem_store.problem_store_intermediate_step_validation_level(inference_datastructures_proof.proof_store(proof)))) {
       return T;
@@ -2746,7 +2765,7 @@ i.e. bubbles up proofs (if any) from the supported problems of LINK to LINK's st
 
   /** @return boolean; t iff DEPTH1 is less than DEPTH2.
 Any integer is deemed less than :undetermined. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 106608) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 106608)
   public static final SubLObject depth_L(SubLObject depth1, SubLObject depth2) {
     if ((NIL != subl_promotions.non_negative_integer_p(depth1))) {
       if ((NIL != subl_promotions.non_negative_integer_p(depth2))) {
@@ -2760,7 +2779,7 @@ Any integer is deemed less than :undetermined. */
   }
 
   /** Propagates proof depth down via LINK. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 107400) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 107400)
   public static final SubLObject propagate_min_proof_depth_via_link(SubLObject link) {
     {
       SubLObject idx = inference_datastructures_problem_store.problem_store_inference_id_index(inference_datastructures_problem_link.problem_link_store(link));
@@ -2818,7 +2837,7 @@ Any integer is deemed less than :undetermined. */
   }
 
   /** Propagates proof depth wrt INFERENCE down via LINK. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 107656) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 107656)
   public static final SubLObject propagate_min_proof_depth_via_link_wrt_inference(SubLObject link, SubLObject inference) {
     {
       SubLObject supported_problem = inference_datastructures_problem_link.problem_link_supported_problem(link);
@@ -2958,13 +2977,13 @@ Any integer is deemed less than :undetermined. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 109578) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 109578)
   public static final SubLObject proof_depth_L(SubLObject depth1, SubLObject depth2) {
     return depth_L(depth1, depth2);
   }
 
   /** Return T iff PROBLEM is strictly within (not at) the stated max proof depth of INFERENCE. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 109660) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 109660)
   public static final SubLObject problem_strictly_within_max_proof_depthP(SubLObject inference, SubLObject problem) {
     {
       SubLObject max_proof_depth = inference_datastructures_inference.inference_max_proof_depth(inference);
@@ -2982,7 +3001,7 @@ Any integer is deemed less than :undetermined. */
   }
 
   /** Propagates transformation depth down via LINK. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 110140) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 110140)
   public static final SubLObject propagate_min_transformation_depth_via_link(SubLObject link) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -3046,7 +3065,7 @@ Any integer is deemed less than :undetermined. */
   }
 
   /** Propagates transformation depth wrt INFERENCE down via LINK. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 110503) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 110503)
   public static final SubLObject propagate_min_transformation_depth_via_link_wrt_inference(SubLObject link, SubLObject inference) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -3144,13 +3163,13 @@ Any integer is deemed less than :undetermined. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 113301) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 113301)
   public static final SubLObject transformation_depth_L(SubLObject depth1, SubLObject depth2) {
     return depth_L(depth1, depth2);
   }
 
   /** Return T iff PROBLEM is strictly within (not at) the stated max transformation depth of INFERENCE. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 113485) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 113485)
   public static final SubLObject problem_strictly_within_max_transformation_depthP(SubLObject inference, SubLObject problem) {
     {
       SubLObject max_transformation_depth = inference_datastructures_inference.inference_max_transformation_depth(inference);
@@ -3168,13 +3187,13 @@ Any integer is deemed less than :undetermined. */
   }
 
   /** Return T iff transformation on PROBLEM is allowed based on the max transformation depth of INFERENCE. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 114063) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 114063)
   public static final SubLObject problem_transformation_allowed_wrt_max_transformation_depthP(SubLObject inference, SubLObject problem) {
     return problem_strictly_within_max_transformation_depthP(inference, problem);
   }
 
   /** Return T iff transformation motivation on LOGICAL-TACTIC is allowed based on the max transformation depth of INFERENCE. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 114348) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 114348)
   public static final SubLObject logical_tactic_transformation_allowed_wrt_max_transformation_depthP(SubLObject inference, SubLObject logical_tactic) {
     {
       SubLObject problem = inference_datastructures_tactic.tactic_problem(logical_tactic);
@@ -3204,7 +3223,7 @@ Any integer is deemed less than :undetermined. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 116598) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 116598)
   public static final SubLObject problem_has_been_transformedP(SubLObject problem, SubLObject inference) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -3224,7 +3243,7 @@ Any integer is deemed less than :undetermined. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 116859) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 116859)
   public static final SubLObject propagate_strategy_activity(SubLObject link) {
     {
       SubLObject supported_problem = inference_datastructures_problem_link.problem_link_supported_problem(link);
@@ -3344,7 +3363,7 @@ Any integer is deemed less than :undetermined. */
 
   /** Unless PROBLEM is already active in STRATEGY, notifies STRATEGY that PROBLEM
 might be newly active in it.  If STRATEGY agrees, propagates the activity. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 117395) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 117395)
   public static final SubLObject maybe_possibly_activate_problem(SubLObject strategy, SubLObject problem) {
     if ((NIL == inference_datastructures_strategy.problem_active_in_strategyP(problem, strategy))) {
       if ((NIL != possibly_activate_problem(strategy, problem))) {
@@ -3367,12 +3386,12 @@ might be newly active in it.  If STRATEGY agrees, propagates the activity. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 117893) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 117893)
   public static final SubLObject link_permits_activity_propagationP(SubLObject link, SubLObject supporting_mapped_problem) {
     return inference_datastructures_problem_link.problem_link_supporting_mapped_problem_openP(link, supporting_mapped_problem);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 118067) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 118067)
   public static final SubLObject propagate_inference_relevance(SubLObject link) {
     {
       SubLObject supported_problem = inference_datastructures_problem_link.problem_link_supported_problem(link);
@@ -3394,7 +3413,7 @@ might be newly active in it.  If STRATEGY agrees, propagates the activity. */
   }
 
   /** Propagates inferential relevance from PROBLEM to SUPPORTING-PROBLEM */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 118560) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 118560)
   public static final SubLObject propagate_relevance_to_supporting_problem(SubLObject problem, SubLObject supporting_problem) {
     {
       SubLObject prob = problem;
@@ -3457,7 +3476,7 @@ might be newly active in it.  If STRATEGY agrees, propagates the activity. */
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 118860) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 118860)
   public static final SubLObject possibly_note_problem_relevant(SubLObject inference, SubLObject problem) {
     if ((NIL == inference_datastructures_problem.problem_relevant_to_inferenceP(problem, inference))) {
       inference_datastructures_inference.add_inference_relevant_problem(inference, problem);
@@ -3482,15 +3501,15 @@ might be newly active in it.  If STRATEGY agrees, propagates the activity. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 119403) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 119403)
   public static final SubLObject link_permits_relevance_propagationP(SubLObject link, SubLObject supporting_mapped_problem) {
     return T;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 119544) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 119544)
   private static SubLSymbol $bubble_up_proofs_through_closed_split_linksP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 119639) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 119639)
   public static final SubLObject link_permits_proof_propagationP(SubLObject link, SubLObject supporting_mapped_problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -3503,7 +3522,7 @@ might be newly active in it.  If STRATEGY agrees, propagates the activity. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 120233) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 120233)
   public static final SubLObject consider_that_mapped_problem_could_be_irrelevant(SubLObject mapped_problem, SubLObject dependent_link) {
     if ((NIL != link_permits_relevance_propagationP(dependent_link, mapped_problem))) {
       {
@@ -3569,7 +3588,7 @@ might be newly active in it.  If STRATEGY agrees, propagates the activity. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 120785) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 120785)
   public static final SubLObject consider_that_problem_could_be_irrelevant_to_inference(SubLObject problem, SubLObject inference) {
     if ((NIL != problem_irrelevant_to_inferenceP(problem, inference))) {
       maybe_make_problem_irrelevant_to_inference(inference, problem);
@@ -3581,7 +3600,7 @@ might be newly active in it.  If STRATEGY agrees, propagates the activity. */
   /** @return boolean; whether PROBLEM is deemed irrelevant to INFERENCE.
 It is deemed irrelevant if it cannot establish a way to rederive its relevance
 via a dependent link to something that is relevant to INFERENCE, or INFERENCE itself. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 121034) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 121034)
   public static final SubLObject problem_irrelevant_to_inferenceP(SubLObject problem, SubLObject inference) {
     if ((NIL != inference_datastructures_problem_link.problem_link_closedP(inference_datastructures_inference.inference_root_link(inference)))) {
       return T;
@@ -3629,7 +3648,7 @@ via a dependent link to something that is relevant to INFERENCE, or INFERENCE it
 
   /** Unless PROBLEM is already irrelevant to INFERENCE, notes that PROBLEM
 is now irrelevant to INFERENCE.  Then propagates the irrelevance. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 122146) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 122146)
   public static final SubLObject maybe_make_problem_irrelevant_to_inference(SubLObject inference, SubLObject problem) {
     if ((NIL != inference_datastructures_problem.problem_relevant_to_inferenceP(problem, inference))) {
       make_problem_irrelevant_to_inference(inference, problem);
@@ -3651,7 +3670,7 @@ is now irrelevant to INFERENCE.  Then propagates the irrelevance. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 122635) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 122635)
   public static final SubLObject make_problem_irrelevant_to_inference(SubLObject inference, SubLObject problem) {
     inference_datastructures_inference.remove_inference_relevant_problem(inference, problem);
     {
@@ -3674,7 +3693,7 @@ is now irrelevant to INFERENCE.  Then propagates the irrelevance. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 123002) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 123002)
   public static final SubLObject propagate_inference_irrelevance(SubLObject inference, SubLObject link) {
     {
       SubLObject link_var = link;
@@ -3693,7 +3712,7 @@ is now irrelevant to INFERENCE.  Then propagates the irrelevance. */
 
   /** If STRATEGIC-CONTEXT is :tactical, returns PROBLEM's status.
 If STRATEGIC-CONTEXT is STRATEGY, returns PROBLEM's strategic status wrt STRATEGY. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 123368) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 123368)
   public static final SubLObject problem_raw_tactical_or_strategic_status(SubLObject problem, SubLObject strategic_context) {
     checkType(strategic_context, $sym55$STRATEGIC_CONTEXT_P);
     return ((NIL != inference_datastructures_strategy.strategy_p(strategic_context)) ? ((SubLObject) inference_datastructures_strategy.problem_raw_strategic_status(problem, strategic_context)) : inference_datastructures_problem.problem_status(problem));
@@ -3701,7 +3720,7 @@ If STRATEGIC-CONTEXT is STRATEGY, returns PROBLEM's strategic status wrt STRATEG
 
   /** If STRATEGIC-CONTEXT is :tactical, sets PROBLEM's status to STATUS.
 If STRATEGIC-CONTEXT is STRATEGY, sets PROBLEM's raw strategic status wrt STRATEGY to STATUS. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 123818) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 123818)
   public static final SubLObject set_problem_raw_tactical_or_strategic_status(SubLObject problem, SubLObject strategic_context, SubLObject status) {
     checkType(strategic_context, $sym55$STRATEGIC_CONTEXT_P);
     if ((NIL != inference_datastructures_strategy.strategy_p(strategic_context))) {
@@ -3714,10 +3733,10 @@ If STRATEGIC-CONTEXT is STRATEGY, sets PROBLEM's raw strategic status wrt STRATE
 
   /** Whether we are currently reconsidering set-asides for some strategy.
 This is used to allow or preclude certain strategic status changes. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 124310) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 124310)
   public static SubLSymbol $reconsidering_set_asidesP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 124509) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 124509)
   public static final SubLObject change_and_propagate_problem_status(SubLObject problem, SubLObject new_status, SubLObject consider_deepP, SubLObject strategic_context) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -4056,7 +4075,7 @@ This is used to allow or preclude certain strategic status changes. */
   /** Changes PROBLEM's status to a good version of its current status if it
 has at least one argument link which is good.  Propagates the change if there is
 actually a change. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 136972) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 136972)
   public static final SubLObject consider_that_problem_could_be_good(SubLObject problem) {
     if ((NIL == inference_datastructures_problem.tactically_good_problem_p(problem))) {
       if ((NIL != problem_goodP(problem))) {
@@ -4152,12 +4171,12 @@ actually a change. */
   }
 
   /** PROBLEM is deemed good iff it has at least one proof. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 138552) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 138552)
   public static final SubLObject problem_goodP(SubLObject problem) {
     return inference_datastructures_problem.problem_has_some_proven_proofP(problem);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 138703) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 138703)
   public static final SubLObject good_version_of_problem_status(SubLObject status) {
     {
       SubLObject pcase_var = status;
@@ -4191,7 +4210,7 @@ actually a change. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 139736) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 139736)
   public static final SubLObject examined_version_of_problem_status(SubLObject status) {
     {
       SubLObject pcase_var = status;
@@ -4212,7 +4231,7 @@ actually a change. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 140105) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 140105)
   public static final SubLObject possible_version_of_problem_status(SubLObject status) {
     {
       SubLObject pcase_var = status;
@@ -4231,7 +4250,7 @@ actually a change. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 140422) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 140422)
   public static final SubLObject pending_version_of_problem_status(SubLObject status) {
     {
       SubLObject pcase_var = status;
@@ -4250,7 +4269,7 @@ actually a change. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 140725) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 140725)
   public static final SubLObject finished_version_of_problem_status(SubLObject status) {
     {
       SubLObject pcase_var = status;
@@ -4271,7 +4290,7 @@ actually a change. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 141917) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 141917)
   public static final SubLObject consider_that_problem_could_be_finished(SubLObject problem, SubLObject consider_deepP, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     checkType(strategic_context, $sym55$STRATEGIC_CONTEXT_P);
     if ((NIL != problem_could_be_finishedP(problem, consider_deepP, strategic_context, consider_transformation_tacticsP))) {
@@ -4280,7 +4299,7 @@ actually a change. */
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 142321) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 142321)
   public static final SubLObject problem_could_be_finishedP(SubLObject problem, SubLObject consider_deepP, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     if ((NIL == pending_problem_p(problem, strategic_context))) {
       return NIL;
@@ -4306,7 +4325,7 @@ actually a change. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 142914) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 142914)
   public static final SubLObject problem_link_could_be_finishedP(SubLObject link, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     if ((NIL != inference_worker_restriction.simplification_link_p(link))) {
       return finished_problem_p(inference_datastructures_problem_link.problem_link_sole_supporting_problem(link), strategic_context);
@@ -4336,7 +4355,7 @@ actually a change. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 143986) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 143986)
   public static final SubLObject split_link_could_be_finishedP(SubLObject split_link, SubLObject strategic_context) {
     {
       SubLObject link_var = split_link;
@@ -4375,7 +4394,7 @@ actually a change. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 144688) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 144688)
   public static final SubLObject join_link_could_be_finishedP(SubLObject j_link, SubLObject strategic_context) {
     {
       SubLObject first_problem = inference_worker_join.join_link_first_problem(j_link);
@@ -4392,7 +4411,7 @@ actually a change. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 145682) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 145682)
   public static final SubLObject consider_that_problem_could_be_no_good(SubLObject problem, SubLObject consider_deepP, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     if (($kw12$TACTICAL == strategic_context)) {
       return default_consider_that_problem_could_be_no_good(strategic_context, problem, consider_deepP, consider_transformation_tacticsP);
@@ -4404,7 +4423,7 @@ actually a change. */
   /** Changes PROBLEM's status to no-good if it will never have any goal descendants.
 Propagates the change if there is actually a change.
 @see problem-link-no-good? */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 146156) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 146156)
   public static final SubLObject default_consider_that_problem_could_be_no_good(SubLObject strategic_context, SubLObject problem, SubLObject consider_deepP, SubLObject consider_transformation_tacticsP) {
     checkType(strategic_context, $sym55$STRATEGIC_CONTEXT_P);
     if ((!(((NIL != inference_datastructures_problem.tactically_good_problem_p(problem))
@@ -4417,7 +4436,7 @@ Propagates the change if there is actually a change.
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 147082) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 147082)
   public static final SubLObject make_problem_no_good(SubLObject problem, SubLObject consider_deepP, SubLObject strategic_context) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -4541,12 +4560,12 @@ Propagates the change if there is actually a change.
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 148330) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 148330)
   public static final SubLObject discard_all_possible_tactics(SubLObject problem) {
     return discard_possible_tactics_int(problem, NIL, NIL, NIL, NIL, NIL);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 148456) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 148456)
   public static final SubLObject discard_all_impossible_possible_tactics(SubLObject problem) {
     discard_possible_tactics_int(problem, $kw67$IMPOSSIBLE, NIL, $kw142$CONTENT, NIL, NIL);
     if ((NIL == inference_datastructures_problem_store.problem_store_transformation_allowedP(inference_datastructures_problem.problem_store(problem)))) {
@@ -4555,7 +4574,7 @@ Propagates the change if there is actually a change.
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 148943) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 148943)
   public static final SubLObject discard_possible_tactics_int(SubLObject problem, SubLObject completeness, SubLObject preference_level, SubLObject type, SubLObject tactic_to_not_discard, SubLObject productivity) {
     {
       SubLObject cdolist_list_var = inference_datastructures_problem.problem_tactics(problem);
@@ -4664,7 +4683,7 @@ Propagates the change if there is actually a change.
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 149661) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 149661)
   public static final SubLObject consider_that_problem_could_be_strategically_pending(SubLObject problem) {
     if ((problem == currently_active_problem())) {
       return NIL;
@@ -4756,7 +4775,7 @@ Propagates the change if there is actually a change.
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 150002) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 150002)
   public static final SubLObject consider_that_problem_could_be_strategically_pending_wrt(SubLObject problem, SubLObject strategy) {
     inference_tactician.strategy_consider_that_problem_could_be_strategically_pending(strategy, problem);
     if (((NIL != inference_datastructures_strategy.strategically_possible_problem_p(problem, strategy))
@@ -4766,7 +4785,7 @@ Propagates the change if there is actually a change.
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 150391) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 150391)
   public static final SubLObject consider_that_supported_problems_could_be_no_good(SubLObject supporting_problem, SubLObject consider_deepP, SubLObject strategic_context) {
     {
       SubLObject set_contents_var = inference_datastructures_problem.problem_dependent_links(supporting_problem);
@@ -4818,7 +4837,7 @@ Propagates the change if there is actually a change.
     return supporting_problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 151835) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 151835)
   public static final SubLObject no_good_version_of_problem_status(SubLObject status) {
     {
       SubLObject pcase_var = status;
@@ -4840,13 +4859,13 @@ Propagates the change if there is actually a change.
   /** A problem is considered no-good if all of its argument links are no good,
 and it will never have any more.
 Note that this is NOT the same thing as all of its supporting problems being no good. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 152156) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 152156)
   public static final SubLObject problem_no_goodP(SubLObject problem, SubLObject consider_deepP, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     checkType(strategic_context, $sym55$STRATEGIC_CONTEXT_P);
     return unsatisfiable_problemP(problem, consider_deepP, strategic_context, consider_transformation_tacticsP);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 152673) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 152673)
   public static final SubLObject unsatisfiable_problemP(SubLObject problem, SubLObject consider_deepP, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     if ((NIL != good_problem_p(problem, strategic_context))) {
       return NIL;
@@ -4891,7 +4910,7 @@ Note that this is NOT the same thing as all of its supporting problems being no 
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 158103) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 158103)
   public static final SubLObject problem_has_some_open_obviously_neutral_argument_linkP(SubLObject problem, SubLObject consider_deepP, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     {
       SubLObject set_contents_var = inference_datastructures_problem.problem_argument_links(problem);
@@ -4917,7 +4936,7 @@ Note that this is NOT the same thing as all of its supporting problems being no 
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 158672) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 158672)
   public static final SubLObject some_no_good_split_argument_linkP(SubLObject problem, SubLObject consider_deepP, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     {
       SubLObject set_contents_var = inference_datastructures_problem.problem_argument_links(problem);
@@ -4939,7 +4958,7 @@ Note that this is NOT the same thing as all of its supporting problems being no 
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 159005) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 159005)
   public static final SubLObject some_no_good_join_ordered_argument_linkP(SubLObject problem, SubLObject consider_deepP, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     {
       SubLObject set_contents_var = inference_datastructures_problem.problem_argument_links(problem);
@@ -4961,7 +4980,7 @@ Note that this is NOT the same thing as all of its supporting problems being no 
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 159366) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 159366)
   public static final SubLObject some_no_good_join_argument_linkP(SubLObject problem, SubLObject consider_deepP, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     {
       SubLObject set_contents_var = inference_datastructures_problem.problem_argument_links(problem);
@@ -4986,7 +5005,7 @@ Note that this is NOT the same thing as all of its supporting problems being no 
   /** A link is considered no-good if at least one of its supporting problems is no good.
 If transformation tactics are not being considered, a problem can sometimes be deemed no-good
 if it is removally and structurally no-good. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 160036) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 160036)
   public static final SubLObject problem_link_no_goodP(SubLObject link, SubLObject consider_deepP, SubLObject strategic_context, SubLObject consider_transformation_tacticsP) {
     checkType(strategic_context, $sym55$STRATEGIC_CONTEXT_P);
     if (((NIL != consider_transformation_tacticsP)
@@ -5023,12 +5042,12 @@ if it is removally and structurally no-good. */
   }
 
   /** @return boolean; t iff PROBLEM is no good if you ignore its transformation tactics (if any). */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 161438) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 161438)
   public static final SubLObject problem_no_good_ignoring_transformation_tacticsP(SubLObject problem, SubLObject strategic_context) {
     return problem_no_goodP(problem, NIL, strategic_context, NIL);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 161693) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 161693)
   public static final SubLObject problem_link_has_some_open_obviously_neutral_supporting_mapped_problemP(SubLObject link, SubLObject strategic_context) {
     checkType(strategic_context, $sym55$STRATEGIC_CONTEXT_P);
     {
@@ -5051,7 +5070,7 @@ if it is removally and structurally no-good. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 163905) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 163905)
   public static final SubLObject link_permits_no_good_propagation_to_supported_problemsP(SubLObject link) {
     {
       SubLObject pcase_var = inference_datastructures_problem_link.problem_link_type(link);
@@ -5064,7 +5083,7 @@ if it is removally and structurally no-good. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 164094) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 164094)
   public static final SubLObject propagate_proof_spec_via_answer_link(SubLObject answer_link) {
     {
       SubLObject inference = inference_worker_answer.answer_link_supported_inference(answer_link);
@@ -5091,7 +5110,7 @@ if it is removally and structurally no-good. */
     return answer_link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 164621) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 164621)
   public static final SubLObject propagate_proof_spec(SubLObject link) {
     if ((NIL != inference_worker_answer.answer_link_p(link))) {
       return propagate_proof_spec_via_answer_link(link);
@@ -5121,7 +5140,7 @@ if it is removally and structurally no-good. */
     return link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 165258) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 165258)
   public static final SubLObject problem_has_some_proof_spec_to_propagateP(SubLObject problem) {
     {
       SubLObject prob = problem;
@@ -5227,7 +5246,7 @@ If one already exists, it will be returned, otherwise a new one will be created.
 i.e. a binding list of HL variables, indicating which HL variables
 in the query of the returned problem (the first elements) were bound to which HL variables
 in QUERY (the second elements) to establish the isomorphism. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 177590) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 177590)
   public static final SubLObject find_or_create_problem(SubLObject store, SubLObject query, SubLObject complexP) {
     if ((complexP == UNPROVIDED)) {
       complexP = NIL;
@@ -5252,7 +5271,7 @@ in QUERY (the second elements) to establish the isomorphism. */
 returns an additional value:
 @return 2 the canonical query extracted from QUERY
 @param COMPLEX? booleanp; whether to use the complex problem index as well */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 178508) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 178508)
   public static final SubLObject find_problem_int(SubLObject store, SubLObject query, SubLObject complexP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -5301,7 +5320,7 @@ returns an additional value:
   }
 
   /** Return a problem in STORE whose query is the literals from CONTEXTUALIZED-CLAUSE specified by SUBCLAUSE-SPEC. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 180696) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 180696)
   public static final SubLObject find_or_create_problem_from_subclause_spec(SubLObject store, SubLObject contextualized_clause, SubLObject subclause_spec) {
     {
       SubLObject query = inference_datastructures_problem_query.new_problem_query_from_subclause_spec(contextualized_clause, subclause_spec);
@@ -5310,7 +5329,7 @@ returns an additional value:
   }
 
   /** Return a problem in STORE whose query is CONTEXTUALIZED-CLAUSE without the literals specified by SUBCLAUSE-SPEC. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 181061) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 181061)
   public static final SubLObject find_or_create_problem_without_subclause_spec(SubLObject store, SubLObject contextualized_clause, SubLObject subclause_spec) {
     {
       SubLObject query_without = inference_datastructures_problem_query.new_problem_query_without_subclause_spec(contextualized_clause, subclause_spec);
@@ -5318,7 +5337,7 @@ returns an additional value:
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 181451) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 181451)
   public static final SubLObject find_or_create_root_problem_and_link(SubLObject inference) {
     {
       SubLObject store = inference_datastructures_inference.inference_problem_store(inference);
@@ -5331,7 +5350,7 @@ returns an additional value:
 
   /** Hooks up the answer link between the root subproblem and the strategy, but intentionally
 doesn't propagate it yet -- this is part of A-Brain behaviour, not initialization. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 181897) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 181897)
   public static final SubLObject new_root_answer_link(SubLObject inference, SubLObject mapped_root_problem) {
     {
       SubLObject link = inference_worker_answer.new_answer_link(inference);
@@ -5344,26 +5363,26 @@ doesn't propagate it yet -- this is part of A-Brain behaviour, not initializatio
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 182457) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 182457)
   public static final SubLObject find_or_create_root_problem(SubLObject store, SubLObject query) {
     return find_or_create_problem(store, query, UNPROVIDED);
   }
 
   /** Whether the problem store prune should be verbose.
 Currently only NIL and T are supported. */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 182564) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 182564)
   public static SubLSymbol $problem_store_prune_reports$ = null;
 
   /** to avoid infinite recursion */
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 186812) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 186812)
   private static SubLSymbol $possibly_propagate_problem_indestructible_stack$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 199276) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 199276)
   public static final SubLObject possibly_note_eager_pruning_problem(SubLObject problem) {
     return ZERO_INTEGER;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 202123) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 202123)
   public static final SubLObject consider_pruning_ramifications_of_ignored_strategem(SubLObject strategy, SubLObject strategem) {
     if (((NIL != inference_worker_removal.conjunctive_removal_tactic_p(strategem))
          && (NIL != inference_datastructures_tactic.tactic_executedP(strategem))
@@ -5384,7 +5403,7 @@ Currently only NIL and T are supported. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 202785) 
+  @SubL(source = "cycl/inference/harness/inference-worker.lisp", position = 202785)
   private static SubLSymbol $processed_proofs_retain_one_proofP$ = null;
 
   public static final SubLObject declare_inference_worker_file() {
@@ -5809,7 +5828,7 @@ Currently only NIL and T are supported. */
     $disable_link_propagationP$ = defparameter("*DISABLE-LINK-PROPAGATION?*", NIL);
     $bubble_up_proofs_through_closed_split_linksP$ = defparameter("*BUBBLE-UP-PROOFS-THROUGH-CLOSED-SPLIT-LINKS?*", T);
     $reconsidering_set_asidesP$ = defparameter("*RECONSIDERING-SET-ASIDES?*", NIL);
-    $problem_store_prune_reports$ = deflexical("*PROBLEM-STORE-PRUNE-REPORTS*", ((NIL != Symbols.boundp($sym162$_PROBLEM_STORE_PRUNE_REPORTS_)) ? ((SubLObject) $problem_store_prune_reports$.getGlobalValue()) : NIL));
+    $problem_store_prune_reports$ = deflexical("*PROBLEM-STORE-PRUNE-REPORTS*", maybeDefault( $sym162$_PROBLEM_STORE_PRUNE_REPORTS_, $problem_store_prune_reports$, NIL));
     $possibly_propagate_problem_indestructible_stack$ = defparameter("*POSSIBLY-PROPAGATE-PROBLEM-INDESTRUCTIBLE-STACK*", $kw166$UNINITIALIZED);
     $processed_proofs_retain_one_proofP$ = defparameter("*PROCESSED-PROOFS-RETAIN-ONE-PROOF?*", T);
     return NIL;
@@ -6015,14 +6034,17 @@ Currently only NIL and T are supported. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_worker_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_worker_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_worker_file();
   }

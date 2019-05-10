@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,46 +80,46 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.czer_meta;
-import com.cyc.cycjava_1.cycl.deduction_handles;
-import com.cyc.cycjava_1.cycl.deductions_high;
-import com.cyc.cycjava_1.cycl.deductions_interface;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.fi;
-import com.cyc.cycjava_1.cycl.hl_interface_infrastructure;
-import com.cyc.cycjava_1.cycl.hl_modifiers;
-import com.cyc.cycjava_1.cycl.hl_supports;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.kb_hl_supports;
-import com.cyc.cycjava_1.cycl.kb_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.uncanonicalizer;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.wff;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.czer_meta;
+//dm import com.cyc.cycjava_1.cycl.deduction_handles;
+//dm import com.cyc.cycjava_1.cycl.deductions_high;
+//dm import com.cyc.cycjava_1.cycl.deductions_interface;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.fi;
+//dm import com.cyc.cycjava_1.cycl.hl_interface_infrastructure;
+//dm import com.cyc.cycjava_1.cycl.hl_modifiers;
+//dm import com.cyc.cycjava_1.cycl.hl_supports;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.kb_hl_supports;
+//dm import com.cyc.cycjava_1.cycl.kb_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.uncanonicalizer;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.wff;
 
-public  final class arguments extends SubLTranslatedFile {
+  final class arguments_hide extends SubLTranslatedFile {
 
   //// Constructor
 
-  private arguments() {}
-  public static final SubLFile me = new arguments();
-  public static final String myName = "com.cyc.cycjava_1.cycl.arguments";
+  private arguments_hide() {}
+  public static final SubLFile me = new arguments_hide();
+  public static final String myName = "com.cyc.cycjava_1.cycl.arguments_hide";
 
   //// Definitions
 
   /** Return T if ARGUMENT is a valid argument.
 ROBUST requests more thorough checking. */
-  @SubL(source = "cycl/arguments.lisp", position = 2462) 
+  @SubL(source = "cycl/arguments.lisp", position = 2462)
   public static final SubLObject valid_argument(SubLObject argument, SubLObject robust) {
     if ((robust == UNPROVIDED)) {
       robust = NIL;
@@ -102,33 +134,33 @@ ROBUST requests more thorough checking. */
   }
 
   /** Returns the type of the argument specified by ARGUMENT-SPEC */
-  @SubL(source = "cycl/arguments.lisp", position = 3194) 
+  @SubL(source = "cycl/arguments.lisp", position = 3194)
   public static final SubLObject argument_spec_type(SubLObject argument_spec) {
     return argument_spec.first();
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 3340) 
+  @SubL(source = "cycl/arguments.lisp", position = 3340)
   private static SubLSymbol $argument_types$ = null;
 
   /** A list of pairs of the form (ARGUMENT-TYPE list-of-proper-genls).
   hard-codes the type hierarchy:
                         ARGUMENT
-                       /        
+                       /
                    BELIEF      DEDUCTION
                     /
           ASSERTED-ARGUMENT
  */
-  @SubL(source = "cycl/arguments.lisp", position = 3666) 
+  @SubL(source = "cycl/arguments.lisp", position = 3666)
   private static SubLSymbol $argument_type_hierarchy$ = null;
 
   /** A list of pairs of the form (ARGUMENT-TYPE list-of-proper-genls) */
-  @SubL(source = "cycl/arguments.lisp", position = 4095) 
+  @SubL(source = "cycl/arguments.lisp", position = 4095)
   public static final SubLObject argument_type_hierarchy() {
     return $argument_type_hierarchy$.getGlobalValue();
   }
 
   /** Returns the proper genls of ARGUMENT-TYPE in the hard-coded hierarchy */
-  @SubL(source = "cycl/arguments.lisp", position = 4382) 
+  @SubL(source = "cycl/arguments.lisp", position = 4382)
   public static final SubLObject argument_type_proper_genls(SubLObject argument_type) {
     {
       SubLObject pair = conses_high.assoc(argument_type, argument_type_hierarchy(), UNPROVIDED, UNPROVIDED);
@@ -146,17 +178,18 @@ ROBUST requests more thorough checking. */
 
   public static final class $argument_type_proper_genls$UnaryFunction extends UnaryFunction {
     public $argument_type_proper_genls$UnaryFunction() { super(extractFunctionNamed("ARGUMENT-TYPE-PROPER-GENLS")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return argument_type_proper_genls(arg1); }
   }
 
   /** Returns the genls of ARGUMENT-TYPE in the hard-coded hierarchy */
-  @SubL(source = "cycl/arguments.lisp", position = 4868) 
+  @SubL(source = "cycl/arguments.lisp", position = 4868)
   public static final SubLObject argument_type_genls(SubLObject argument_type) {
     return cons(argument_type, argument_type_proper_genls(argument_type));
   }
 
   /** Return the truth of ARGUMENT. */
-  @SubL(source = "cycl/arguments.lisp", position = 5533) 
+  @SubL(source = "cycl/arguments.lisp", position = 5533)
   public static final SubLObject argument_truth(SubLObject argument) {
     checkType(argument, $sym13$ARGUMENT_P);
     if ((NIL != belief_p(argument))) {
@@ -167,7 +200,7 @@ ROBUST requests more thorough checking. */
   }
 
   /** Return the HL tv of ARGUMENT. */
-  @SubL(source = "cycl/arguments.lisp", position = 5790) 
+  @SubL(source = "cycl/arguments.lisp", position = 5790)
   public static final SubLObject argument_tv(SubLObject argument) {
     checkType(argument, $sym13$ARGUMENT_P);
     if ((NIL != belief_p(argument))) {
@@ -182,7 +215,7 @@ ROBUST requests more thorough checking. */
   }
 
   /** Return the strength of ARGUMENT. */
-  @SubL(source = "cycl/arguments.lisp", position = 6117) 
+  @SubL(source = "cycl/arguments.lisp", position = 6117)
   public static final SubLObject argument_strength(SubLObject argument) {
     checkType(argument, $sym13$ARGUMENT_P);
     if ((NIL != belief_p(argument))) {
@@ -194,7 +227,7 @@ ROBUST requests more thorough checking. */
   }
 
   /** Remove ARGUMENT from the KB, and unhook it from ASSERTION. */
-  @SubL(source = "cycl/arguments.lisp", position = 6392) 
+  @SubL(source = "cycl/arguments.lisp", position = 6392)
   public static final SubLObject remove_argument(SubLObject argument, SubLObject assertion) {
     if ((NIL != belief_p(argument))) {
       return remove_belief(argument, assertion);
@@ -204,89 +237,90 @@ ROBUST requests more thorough checking. */
   }
 
   /** Return T iff OBJECT is an HL belief structure. */
-  @SubL(source = "cycl/arguments.lisp", position = 6636) 
+  @SubL(source = "cycl/arguments.lisp", position = 6636)
   public static final SubLObject belief_p(SubLObject object) {
     return asserted_argument_p(object);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 7281) 
+  @SubL(source = "cycl/arguments.lisp", position = 7281)
   public static final SubLObject remove_belief(SubLObject belief, SubLObject assertion) {
     return hl_modifiers.kb_remove_asserted_argument(assertion, belief);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 7500) 
+  @SubL(source = "cycl/arguments.lisp", position = 7500)
   public static final SubLObject belief_truth(SubLObject belief) {
     return asserted_argument_truth(belief);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 7668) 
+  @SubL(source = "cycl/arguments.lisp", position = 7668)
   public static final SubLObject belief_tv(SubLObject belief) {
     return asserted_argument_tv(belief);
   }
 
   /** Return T iff OBJECT is an HL asserted argument structure. */
-  @SubL(source = "cycl/arguments.lisp", position = 7743) 
+  @SubL(source = "cycl/arguments.lisp", position = 7743)
   public static final SubLObject asserted_argument_p(SubLObject object) {
     return asserted_argument_token_p(object);
   }
 
   public static final class $asserted_argument_p$UnaryFunction extends UnaryFunction {
     public $asserted_argument_p$UnaryFunction() { super(extractFunctionNamed("ASSERTED-ARGUMENT-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return asserted_argument_p(arg1); }
   }
 
   /** Create an asserted argument for ASSERTION with TV. */
-  @SubL(source = "cycl/arguments.lisp", position = 8450) 
+  @SubL(source = "cycl/arguments.lisp", position = 8450)
   public static final SubLObject create_asserted_argument(SubLObject assertion, SubLObject tv) {
     return asserted_argument_token_from_tv(tv);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 8621) 
+  @SubL(source = "cycl/arguments.lisp", position = 8621)
   public static final SubLObject create_asserted_argument_spec(SubLObject strength_spec) {
     checkType(strength_spec, $sym35$EL_STRENGTH_SPEC_P);
     return list($kw34$ASSERTED_ARGUMENT, strength_spec);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 8780) 
+  @SubL(source = "cycl/arguments.lisp", position = 8780)
   public static final SubLObject asserted_argument_spec_strength_spec(SubLObject asserted_argument_spec) {
     return conses_high.second(asserted_argument_spec);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 8899) 
+  @SubL(source = "cycl/arguments.lisp", position = 8899)
   public static final SubLObject kb_remove_asserted_argument_internal(SubLObject asserted_argument) {
     return NIL;
   }
 
   /** Asserted argument -> HL TV mapping */
-  @SubL(source = "cycl/arguments.lisp", position = 9098) 
+  @SubL(source = "cycl/arguments.lisp", position = 9098)
   private static SubLSymbol $asserted_argument_tv_table$ = null;
 
   /** Tokens representing the possible asserted arguments */
-  @SubL(source = "cycl/arguments.lisp", position = 9412) 
+  @SubL(source = "cycl/arguments.lisp", position = 9412)
   private static SubLSymbol $asserted_arguments$ = null;
 
-  @SubL(source = "cycl/arguments.lisp", position = 9565) 
+  @SubL(source = "cycl/arguments.lisp", position = 9565)
   public static final SubLObject asserted_argument_tokens() {
     return $asserted_arguments$.getGlobalValue();
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 9632) 
+  @SubL(source = "cycl/arguments.lisp", position = 9632)
   public static final SubLObject asserted_argument_token_p(SubLObject object) {
     return subl_promotions.memberP(object, $asserted_arguments$.getGlobalValue(), Symbols.symbol_function(EQ), UNPROVIDED);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 9738) 
+  @SubL(source = "cycl/arguments.lisp", position = 9738)
   public static final SubLObject asserted_argument_token_from_tv(SubLObject tv) {
     checkType(tv, $sym38$TV_P);
     return Sequences.find(tv, $asserted_argument_tv_table$.getGlobalValue(), Symbols.symbol_function(EQ), Symbols.symbol_function($sym39$SECOND), UNPROVIDED, UNPROVIDED).first();
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 9885) 
+  @SubL(source = "cycl/arguments.lisp", position = 9885)
   public static final SubLObject tv_from_asserted_argument_token(SubLObject asserted_argument) {
     return conses_high.second(Sequences.find(asserted_argument, $asserted_argument_tv_table$.getGlobalValue(), Symbols.symbol_function(EQ), Symbols.symbol_function($sym37$FIRST), UNPROVIDED, UNPROVIDED));
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 10248) 
+  @SubL(source = "cycl/arguments.lisp", position = 10248)
   public static final SubLObject asserted_argument_tv(SubLObject asserted_argument) {
     if ((NIL != asserted_argument_token_p(asserted_argument))) {
       return tv_from_asserted_argument_token(asserted_argument);
@@ -294,13 +328,13 @@ ROBUST requests more thorough checking. */
     return NIL;
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 10553) 
+  @SubL(source = "cycl/arguments.lisp", position = 10553)
   public static final SubLObject asserted_argument_truth(SubLObject asserted_argument) {
     return enumeration_types.tv_truth(asserted_argument_tv(asserted_argument));
   }
 
   /** Return T iff OBJECT can be a support in an argument. */
-  @SubL(source = "cycl/arguments.lisp", position = 12015) 
+  @SubL(source = "cycl/arguments.lisp", position = 12015)
   public static final SubLObject support_p(SubLObject object) {
     return makeBoolean(((NIL != assertion_handles.assertion_p(object))
           || (NIL != kb_hl_supports.kb_hl_support_p(object))
@@ -309,12 +343,13 @@ ROBUST requests more thorough checking. */
 
   public static final class $support_p$UnaryFunction extends UnaryFunction {
     public $support_p$UnaryFunction() { super(extractFunctionNamed("SUPPORT-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return support_p(arg1); }
   }
 
-  /** Return T if SUPPORT is a valid kb deduction support.  
+  /** Return T if SUPPORT is a valid kb deduction support.
 ROBUST requests more thorough checking. */
-  @SubL(source = "cycl/arguments.lisp", position = 12466) 
+  @SubL(source = "cycl/arguments.lisp", position = 12466)
   public static final SubLObject valid_supportP(SubLObject support, SubLObject robust) {
     if ((robust == UNPROVIDED)) {
       robust = NIL;
@@ -331,7 +366,7 @@ ROBUST requests more thorough checking. */
     }
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 14530) 
+  @SubL(source = "cycl/arguments.lisp", position = 14530)
   public static final SubLObject support_equal(SubLObject support1, SubLObject support2) {
     if (((NIL != assertion_handles.assertion_p(support1))
         || (NIL != assertion_handles.assertion_p(support2)))) {
@@ -346,11 +381,12 @@ ROBUST requests more thorough checking. */
 
   public static final class $support_equal$BinaryFunction extends BinaryFunction {
     public $support_equal$BinaryFunction() { super(extractFunctionNamed("SUPPORT-EQUAL")); }
+    @Override
     public SubLObject processItem(SubLObject arg1, SubLObject arg2) { return support_equal(arg1, arg2); }
   }
 
   /** Imposes an arbitrary but consistent total order between supports. */
-  @SubL(source = "cycl/arguments.lisp", position = 14831) 
+  @SubL(source = "cycl/arguments.lisp", position = 14831)
   public static final SubLObject support_L(SubLObject support1, SubLObject support2) {
     if ((NIL != assertion_handles.assertion_p(support1))) {
       if ((NIL != assertion_handles.assertion_p(support2))) {
@@ -391,15 +427,16 @@ ROBUST requests more thorough checking. */
 
   public static final class $support_L$BinaryFunction extends BinaryFunction {
     public $support_L$BinaryFunction() { super(extractFunctionNamed("SUPPORT-<")); }
+    @Override
     public SubLObject processItem(SubLObject arg1, SubLObject arg2) { return support_L(arg1, arg2); }
   }
 
   /** The module which denotes that an assertion is the support. */
-  @SubL(source = "cycl/arguments.lisp", position = 16119) 
+  @SubL(source = "cycl/arguments.lisp", position = 16119)
   public static SubLSymbol $assertion_support_module$ = null;
 
   /** Return the module of SUPPORT. */
-  @SubL(source = "cycl/arguments.lisp", position = 16252) 
+  @SubL(source = "cycl/arguments.lisp", position = 16252)
   public static final SubLObject support_module(SubLObject support) {
     checkType(support, $sym50$SUPPORT_P);
     if ((NIL != assertion_handles.assertion_p(support))) {
@@ -413,7 +450,7 @@ ROBUST requests more thorough checking. */
   }
 
   /** Return the sentence of SUPPORT. */
-  @SubL(source = "cycl/arguments.lisp", position = 16591) 
+  @SubL(source = "cycl/arguments.lisp", position = 16591)
   public static final SubLObject support_sentence(SubLObject support) {
     checkType(support, $sym50$SUPPORT_P);
     if ((NIL != assertion_handles.assertion_p(support))) {
@@ -425,13 +462,13 @@ ROBUST requests more thorough checking. */
     }
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 17098) 
+  @SubL(source = "cycl/arguments.lisp", position = 17098)
   public static final SubLObject support_formula(SubLObject support) {
     return support_sentence(support);
   }
 
   /** Return the microtheory of SUPPORT. */
-  @SubL(source = "cycl/arguments.lisp", position = 18775) 
+  @SubL(source = "cycl/arguments.lisp", position = 18775)
   public static final SubLObject support_mt(SubLObject support) {
     checkType(support, $sym50$SUPPORT_P);
     if ((NIL != assertion_handles.assertion_p(support))) {
@@ -446,11 +483,12 @@ ROBUST requests more thorough checking. */
 
   public static final class $support_mt$UnaryFunction extends UnaryFunction {
     public $support_mt$UnaryFunction() { super(extractFunctionNamed("SUPPORT-MT")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return support_mt(arg1); }
   }
 
   /** Return a justification for SUPPORT. */
-  @SubL(source = "cycl/arguments.lisp", position = 19404) 
+  @SubL(source = "cycl/arguments.lisp", position = 19404)
   public static final SubLObject support_justification(SubLObject support) {
     if ((NIL != assertion_handles.assertion_p(support))) {
       return list(support);
@@ -463,13 +501,13 @@ ROBUST requests more thorough checking. */
   }
 
   /** Return the strength of SUPPORT. */
-  @SubL(source = "cycl/arguments.lisp", position = 19973) 
+  @SubL(source = "cycl/arguments.lisp", position = 19973)
   public static final SubLObject support_strength(SubLObject support) {
     checkType(support, $sym50$SUPPORT_P);
     return enumeration_types.tv_strength(support_tv(support));
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 20170) 
+  @SubL(source = "cycl/arguments.lisp", position = 20170)
   public static final SubLObject support_tv(SubLObject support) {
     if ((NIL != assertion_handles.assertion_p(support))) {
       return assertions_high.cyc_assertion_tv(support);
@@ -481,7 +519,7 @@ ROBUST requests more thorough checking. */
   }
 
   /** Return a sorted list of canonicalized supports.  This is not destructive. */
-  @SubL(source = "cycl/arguments.lisp", position = 20420) 
+  @SubL(source = "cycl/arguments.lisp", position = 20420)
   public static final SubLObject canonicalize_supports(SubLObject supports, SubLObject possibly_create_new_kb_hl_supportsP) {
     if ((possibly_create_new_kb_hl_supportsP == UNPROVIDED)) {
       possibly_create_new_kb_hl_supportsP = T;
@@ -500,7 +538,7 @@ ROBUST requests more thorough checking. */
   /** Canonicalize SUPPORT.  If SUPPORT is an assertion or KB HL support, this simply returns SUPPORT.
    Otherwise, the function attempts to find a KB HL support for SUPPORT or, if POSSIBLY-CREATE-NEW-KB-HL-SUPPORT?
    is non-NIL, it may create a new one. */
-  @SubL(source = "cycl/arguments.lisp", position = 20791) 
+  @SubL(source = "cycl/arguments.lisp", position = 20791)
   public static final SubLObject canonicalize_support(SubLObject support, SubLObject possibly_create_new_kb_hl_supportP) {
     if ((possibly_create_new_kb_hl_supportP == UNPROVIDED)) {
       possibly_create_new_kb_hl_supportP = T;
@@ -514,7 +552,7 @@ ROBUST requests more thorough checking. */
     }
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 21325) 
+  @SubL(source = "cycl/arguments.lisp", position = 21325)
   public static final SubLObject canonicalize_hl_support(SubLObject hl_support, SubLObject possibly_create_new_kb_hl_supportP) {
     if ((possibly_create_new_kb_hl_supportP == UNPROVIDED)) {
       possibly_create_new_kb_hl_supportP = T;
@@ -533,7 +571,7 @@ ROBUST requests more thorough checking. */
   }
 
   /** Does OBJECT represent an HL support? */
-  @SubL(source = "cycl/arguments.lisp", position = 21751) 
+  @SubL(source = "cycl/arguments.lisp", position = 21751)
   public static final SubLObject hl_support_p(SubLObject object) {
     return makeBoolean((object.isList()
            && (NIL != list_utilities.proper_list_p(object))
@@ -542,7 +580,7 @@ ROBUST requests more thorough checking. */
   }
 
   /** Construct a new HL support. */
-  @SubL(source = "cycl/arguments.lisp", position = 22030) 
+  @SubL(source = "cycl/arguments.lisp", position = 22030)
   public static final SubLObject make_hl_support(SubLObject hl_module, SubLObject sentence, SubLObject mt, SubLObject tv) {
     if ((mt == UNPROVIDED)) {
       mt = mt_relevance_macros.$mt$.getDynamicValue();
@@ -557,7 +595,7 @@ ROBUST requests more thorough checking. */
     return list(hl_module, sentence, mt, tv);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 22837) 
+  @SubL(source = "cycl/arguments.lisp", position = 22837)
   public static final SubLObject assertion_from_hl_support(SubLObject hl_support) {
     {
       SubLObject assertion = NIL;
@@ -568,47 +606,48 @@ ROBUST requests more thorough checking. */
     }
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 23727) 
+  @SubL(source = "cycl/arguments.lisp", position = 23727)
   public static final SubLObject hl_support_module(SubLObject hl_support) {
     checkType(hl_support, $sym73$HL_SUPPORT_P);
     return hl_support.first();
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 23858) 
+  @SubL(source = "cycl/arguments.lisp", position = 23858)
   public static final SubLObject hl_support_sentence(SubLObject hl_support) {
     checkType(hl_support, $sym73$HL_SUPPORT_P);
     return conses_high.second(hl_support);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 23978) 
+  @SubL(source = "cycl/arguments.lisp", position = 23978)
   public static final SubLObject hl_support_mt(SubLObject hl_support) {
     checkType(hl_support, $sym73$HL_SUPPORT_P);
     return conses_high.third(hl_support);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 24091) 
+  @SubL(source = "cycl/arguments.lisp", position = 24091)
   public static final SubLObject hl_support_tv(SubLObject hl_support) {
     checkType(hl_support, $sym73$HL_SUPPORT_P);
     return conses_high.fourth(hl_support);
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 24616) 
+  @SubL(source = "cycl/arguments.lisp", position = 24616)
   public static final SubLObject non_empty_hl_justification_p(SubLObject object) {
     return makeBoolean(((NIL != list_utilities.proper_list_p(object))
            && (NIL != list_utilities.every_in_list(Symbols.symbol_function($sym50$SUPPORT_P), object, UNPROVIDED))));
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 24823) 
+  @SubL(source = "cycl/arguments.lisp", position = 24823)
   public static final SubLObject justification_equal(SubLObject justification1, SubLObject justification2) {
     return list_utilities.multisets_equalP(justification1, justification2, $sym87$SUPPORT_EQUAL);
   }
 
   public static final class $justification_equal$BinaryFunction extends BinaryFunction {
     public $justification_equal$BinaryFunction() { super(extractFunctionNamed("JUSTIFICATION-EQUAL")); }
+    @Override
     public SubLObject processItem(SubLObject arg1, SubLObject arg2) { return justification_equal(arg1, arg2); }
   }
 
-  @SubL(source = "cycl/arguments.lisp", position = 24964) 
+  @SubL(source = "cycl/arguments.lisp", position = 24964)
   public static final SubLObject canonicalize_hl_justification(SubLObject hl_justification) {
     checkType(hl_justification, $sym86$HL_JUSTIFICATION_P);
     return Sort.sort(conses_high.copy_list(hl_justification), Symbols.symbol_function($sym54$SUPPORT__), UNPROVIDED);
@@ -832,14 +871,17 @@ ROBUST requests more thorough checking. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_arguments_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_arguments_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_arguments_file();
   }

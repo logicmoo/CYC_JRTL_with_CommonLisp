@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,30 +80,30 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.api_control_vars;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.clause_strucs;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constants_high;
-import com.cyc.cycjava_1.cycl.deduction_handles;
-import com.cyc.cycjava_1.cycl.deductions_high;
-import com.cyc.cycjava_1.cycl.cyc_testing.generic_testing;
-import com.cyc.cycjava_1.cycl.kb_hl_supports;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.nart_handles;
-import com.cyc.cycjava_1.cycl.narts_high;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.api_control_vars;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.clause_strucs;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constants_high;
+//dm import com.cyc.cycjava_1.cycl.deduction_handles;
+//dm import com.cyc.cycjava_1.cycl.deductions_high;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.generic_testing;
+//dm import com.cyc.cycjava_1.cycl.kb_hl_supports;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.nart_handles;
+//dm import com.cyc.cycjava_1.cycl.narts_high;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.variables;
 
 public  final class cfasl_kb_methods extends SubLTranslatedFile {
 
@@ -748,17 +780,17 @@ public  final class cfasl_kb_methods extends SubLTranslatedFile {
     $cfasl_externalized_constant_exceptions$ = defparameter("*CFASL-EXTERNALIZED-CONSTANT-EXCEPTIONS*", NIL);
     $cfasl_opcode_constant$ = defconstant("*CFASL-OPCODE-CONSTANT*", $int3$30);
     $cfasl_opcode_complete_constant$ = defconstant("*CFASL-OPCODE-COMPLETE-CONSTANT*", $int5$32);
-    $sample_invalid_constant$ = deflexical("*SAMPLE-INVALID-CONSTANT*", ((NIL != Symbols.boundp($sym8$_SAMPLE_INVALID_CONSTANT_)) ? ((SubLObject) $sample_invalid_constant$.getGlobalValue()) : constant_handles.create_sample_invalid_constant()));
+    $sample_invalid_constant$ = deflexical("*SAMPLE-INVALID-CONSTANT*", maybeDefault( $sym8$_SAMPLE_INVALID_CONSTANT_, $sample_invalid_constant$, ()-> (constant_handles.create_sample_invalid_constant())));
     $cfasl_opcode_nart$ = defconstant("*CFASL-OPCODE-NART*", $int13$31);
-    $sample_invalid_nart$ = deflexical("*SAMPLE-INVALID-NART*", ((NIL != Symbols.boundp($sym16$_SAMPLE_INVALID_NART_)) ? ((SubLObject) $sample_invalid_nart$.getGlobalValue()) : nart_handles.create_sample_invalid_nart()));
+    $sample_invalid_nart$ = deflexical("*SAMPLE-INVALID-NART*", maybeDefault( $sym16$_SAMPLE_INVALID_NART_, $sample_invalid_nart$, ()-> (nart_handles.create_sample_invalid_nart())));
     $cfasl_opcode_assertion$ = defconstant("*CFASL-OPCODE-ASSERTION*", $int21$33);
-    $sample_invalid_assertion$ = deflexical("*SAMPLE-INVALID-ASSERTION*", ((NIL != Symbols.boundp($sym24$_SAMPLE_INVALID_ASSERTION_)) ? ((SubLObject) $sample_invalid_assertion$.getGlobalValue()) : assertion_handles.create_sample_invalid_assertion()));
+    $sample_invalid_assertion$ = deflexical("*SAMPLE-INVALID-ASSERTION*", maybeDefault( $sym24$_SAMPLE_INVALID_ASSERTION_, $sample_invalid_assertion$, ()-> (assertion_handles.create_sample_invalid_assertion())));
     $cfasl_opcode_deduction$ = defconstant("*CFASL-OPCODE-DEDUCTION*", $int29$36);
-    $sample_invalid_deduction$ = deflexical("*SAMPLE-INVALID-DEDUCTION*", ((NIL != Symbols.boundp($sym32$_SAMPLE_INVALID_DEDUCTION_)) ? ((SubLObject) $sample_invalid_deduction$.getGlobalValue()) : deduction_handles.create_sample_invalid_deduction()));
+    $sample_invalid_deduction$ = deflexical("*SAMPLE-INVALID-DEDUCTION*", maybeDefault( $sym32$_SAMPLE_INVALID_DEDUCTION_, $sample_invalid_deduction$, ()-> (deduction_handles.create_sample_invalid_deduction())));
     $cfasl_opcode_kb_hl_support$ = defconstant("*CFASL-OPCODE-KB-HL-SUPPORT*", $int37$37);
-    $sample_invalid_kb_hl_support$ = deflexical("*SAMPLE-INVALID-KB-HL-SUPPORT*", ((NIL != Symbols.boundp($sym40$_SAMPLE_INVALID_KB_HL_SUPPORT_)) ? ((SubLObject) $sample_invalid_kb_hl_support$.getGlobalValue()) : kb_hl_supports.create_sample_invalid_kb_hl_support()));
+    $sample_invalid_kb_hl_support$ = deflexical("*SAMPLE-INVALID-KB-HL-SUPPORT*", maybeDefault( $sym40$_SAMPLE_INVALID_KB_HL_SUPPORT_, $sample_invalid_kb_hl_support$, ()-> (kb_hl_supports.create_sample_invalid_kb_hl_support())));
     $cfasl_opcode_clause_struc$ = defconstant("*CFASL-OPCODE-CLAUSE-STRUC*", $int45$38);
-    $sample_invalid_clause_struc$ = deflexical("*SAMPLE-INVALID-CLAUSE-STRUC*", ((NIL != Symbols.boundp($sym48$_SAMPLE_INVALID_CLAUSE_STRUC_)) ? ((SubLObject) $sample_invalid_clause_struc$.getGlobalValue()) : clause_strucs.create_sample_invalid_clause_struc()));
+    $sample_invalid_clause_struc$ = deflexical("*SAMPLE-INVALID-CLAUSE-STRUC*", maybeDefault( $sym48$_SAMPLE_INVALID_CLAUSE_STRUC_, $sample_invalid_clause_struc$, ()-> (clause_strucs.create_sample_invalid_clause_struc())));
     $cfasl_opcode_variable$ = defconstant("*CFASL-OPCODE-VARIABLE*", $int53$40);
     $cfasl_opcode_complete_variable$ = defconstant("*CFASL-OPCODE-COMPLETE-VARIABLE*", $int55$42);
     $cfasl_opcode_sbhl_directed_link$ = defconstant("*CFASL-OPCODE-SBHL-DIRECTED-LINK*", $int59$90);

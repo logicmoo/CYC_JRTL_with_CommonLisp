@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference;
+package com.cyc.cycjava_1.cycl.inference;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,9 +67,9 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
 
 public  final class inference_pad_data extends SubLTranslatedFile {
 
@@ -75,8 +94,8 @@ public  final class inference_pad_data extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_inference_pad_data_file() {
-    $non_tkb_final_bogomips$ = deflexical("*NON-TKB-FINAL-BOGOMIPS*", ((NIL != Symbols.boundp($sym0$_NON_TKB_FINAL_BOGOMIPS_)) ? ((SubLObject) $non_tkb_final_bogomips$.getGlobalValue()) : $float1$4154_98));
-    $non_tkb_final_times_to_first_answer$ = deflexical("*NON-TKB-FINAL-TIMES-TO-FIRST-ANSWER*", ((NIL != Symbols.boundp($sym2$_NON_TKB_FINAL_TIMES_TO_FIRST_ANSWER_)) ? ((SubLObject) $non_tkb_final_times_to_first_answer$.getGlobalValue()) : $list3));
+    $non_tkb_final_bogomips$ = deflexical("*NON-TKB-FINAL-BOGOMIPS*", maybeDefault( $sym0$_NON_TKB_FINAL_BOGOMIPS_, $non_tkb_final_bogomips$, ()-> ($float1$4154_98)));
+    $non_tkb_final_times_to_first_answer$ = deflexical("*NON-TKB-FINAL-TIMES-TO-FIRST-ANSWER*", maybeDefault( $sym2$_NON_TKB_FINAL_TIMES_TO_FIRST_ANSWER_, $non_tkb_final_times_to_first_answer$, ()-> ($list3)));
     return NIL;
   }
 

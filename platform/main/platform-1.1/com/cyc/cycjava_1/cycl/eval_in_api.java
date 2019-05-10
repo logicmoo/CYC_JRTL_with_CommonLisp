@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,17 +80,17 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.cyc_testing.generic_testing;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.generic_testing;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class eval_in_api extends SubLTranslatedFile {
 
@@ -496,13 +528,13 @@ public  final class eval_in_api extends SubLTranslatedFile {
 
   public static final SubLObject init_eval_in_api_file() {
     $eval_in_apiP$ = defvar("*EVAL-IN-API?*", NIL);
-    $eval_in_api_mutable_globals$ = deflexical("*EVAL-IN-API-MUTABLE-GLOBALS*", ((NIL != Symbols.boundp($sym1$_EVAL_IN_API_MUTABLE_GLOBALS_)) ? ((SubLObject) $eval_in_api_mutable_globals$.getGlobalValue()) : NIL));
-    $eval_in_api_immutable_globals$ = deflexical("*EVAL-IN-API-IMMUTABLE-GLOBALS*", ((NIL != Symbols.boundp($sym2$_EVAL_IN_API_IMMUTABLE_GLOBALS_)) ? ((SubLObject) $eval_in_api_immutable_globals$.getGlobalValue()) : NIL));
+    $eval_in_api_mutable_globals$ = deflexical("*EVAL-IN-API-MUTABLE-GLOBALS*", maybeDefault( $sym1$_EVAL_IN_API_MUTABLE_GLOBALS_, $eval_in_api_mutable_globals$, NIL));
+    $eval_in_api_immutable_globals$ = deflexical("*EVAL-IN-API-IMMUTABLE-GLOBALS*", maybeDefault( $sym2$_EVAL_IN_API_IMMUTABLE_GLOBALS_, $eval_in_api_immutable_globals$, NIL));
     $eval_in_api_env$ = defparameter("*EVAL-IN-API-ENV*", NIL);
-    $api_special_verify_table$ = deflexical("*API-SPECIAL-VERIFY-TABLE*", ((NIL != Symbols.boundp($sym3$_API_SPECIAL_VERIFY_TABLE_)) ? ((SubLObject) $api_special_verify_table$.getGlobalValue()) : Hashtables.make_hash_table(TEN_INTEGER, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $api_function_table$ = deflexical("*API-FUNCTION-TABLE*", ((NIL != Symbols.boundp($sym4$_API_FUNCTION_TABLE_)) ? ((SubLObject) $api_function_table$.getGlobalValue()) : Hashtables.make_hash_table($int5$100, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $api_macro_table$ = deflexical("*API-MACRO-TABLE*", ((NIL != Symbols.boundp($sym6$_API_MACRO_TABLE_)) ? ((SubLObject) $api_macro_table$.getGlobalValue()) : Hashtables.make_hash_table(TEN_INTEGER, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $subl_eval_method$ = deflexical("*SUBL-EVAL-METHOD*", ((NIL != Symbols.boundp($sym19$_SUBL_EVAL_METHOD_)) ? ((SubLObject) $subl_eval_method$.getGlobalValue()) : $sym20$EVAL));
+    $api_special_verify_table$ = deflexical("*API-SPECIAL-VERIFY-TABLE*", maybeDefault( $sym3$_API_SPECIAL_VERIFY_TABLE_, $api_special_verify_table$, ()-> (Hashtables.make_hash_table(TEN_INTEGER, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $api_function_table$ = deflexical("*API-FUNCTION-TABLE*", maybeDefault( $sym4$_API_FUNCTION_TABLE_, $api_function_table$, ()-> (Hashtables.make_hash_table($int5$100, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $api_macro_table$ = deflexical("*API-MACRO-TABLE*", maybeDefault( $sym6$_API_MACRO_TABLE_, $api_macro_table$, ()-> (Hashtables.make_hash_table(TEN_INTEGER, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $subl_eval_method$ = deflexical("*SUBL-EVAL-METHOD*", maybeDefault( $sym19$_SUBL_EVAL_METHOD_, $subl_eval_method$, ()-> ($sym20$EVAL)));
     $eval_in_api_traced_fns$ = defparameter("*EVAL-IN-API-TRACED-FNS*", NIL);
     $eval_in_api_trace_log$ = defparameter("*EVAL-IN-API-TRACE-LOG*", NIL);
     $eval_in_api_level$ = defparameter("*EVAL-IN-API-LEVEL*", MINUS_ONE_INTEGER);

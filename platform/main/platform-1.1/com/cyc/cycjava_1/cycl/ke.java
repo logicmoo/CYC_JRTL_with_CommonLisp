@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,47 +80,47 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.api_control_vars;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertion_utilities;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.bookkeeping_store;
-import com.cyc.cycjava_1.cycl.canon_tl;
-import com.cyc.cycjava_1.cycl.constant_completion;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constants_high;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cyc_bookkeeping;
-import com.cyc.cycjava_1.cycl.cyc_kernel;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.czer_utilities;
-import com.cyc.cycjava_1.cycl.deduction_handles;
-import com.cyc.cycjava_1.cycl.deductions_high;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.fi;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.hlmt_czer;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.nart_handles;
-import com.cyc.cycjava_1.cycl.narts_high;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.operation_communication;
-import com.cyc.cycjava_1.cycl.operation_queues;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.system_parameters;
-import com.cyc.cycjava_1.cycl.uncanonicalizer;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.wff;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.api_control_vars;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertion_utilities;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.bookkeeping_store;
+//dm import com.cyc.cycjava_1.cycl.canon_tl;
+//dm import com.cyc.cycjava_1.cycl.constant_completion;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constants_high;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cyc_bookkeeping;
+//dm import com.cyc.cycjava_1.cycl.cyc_kernel;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.czer_utilities;
+//dm import com.cyc.cycjava_1.cycl.deduction_handles;
+//dm import com.cyc.cycjava_1.cycl.deductions_high;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.fi;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.hlmt_czer;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.nart_handles;
+//dm import com.cyc.cycjava_1.cycl.narts_high;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.operation_communication;
+//dm import com.cyc.cycjava_1.cycl.operation_queues;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.system_parameters;
+//dm import com.cyc.cycjava_1.cycl.uncanonicalizer;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.wff;
 
 public  final class ke extends SubLTranslatedFile {
 
@@ -894,8 +926,8 @@ those strings by #$oldConstantName. */
     $note_merged_constant_name$ = defparameter("*NOTE-MERGED-CONSTANT-NAME*", T);
     $note_old_constant_name$ = defparameter("*NOTE-OLD-CONSTANT-NAME*", T);
     $check_if_already_ke_unassertedP$ = defparameter("*CHECK-IF-ALREADY-KE-UNASSERTED?*", NIL);
-    $ke_edit_use_fi_edit$ = deflexical("*KE-EDIT-USE-FI-EDIT*", ((NIL != Symbols.boundp($sym62$_KE_EDIT_USE_FI_EDIT_)) ? ((SubLObject) $ke_edit_use_fi_edit$.getGlobalValue()) : NIL));
-    $old_constant_names_table$ = deflexical("*OLD-CONSTANT-NAMES-TABLE*", ((NIL != Symbols.boundp($sym82$_OLD_CONSTANT_NAMES_TABLE_)) ? ((SubLObject) $old_constant_names_table$.getGlobalValue()) : NIL));
+    $ke_edit_use_fi_edit$ = deflexical("*KE-EDIT-USE-FI-EDIT*", maybeDefault( $sym62$_KE_EDIT_USE_FI_EDIT_, $ke_edit_use_fi_edit$, NIL));
+    $old_constant_names_table$ = deflexical("*OLD-CONSTANT-NAMES-TABLE*", maybeDefault( $sym82$_OLD_CONSTANT_NAMES_TABLE_, $old_constant_names_table$, NIL));
     $ke_assertion_edit_formula_find_func$ = defparameter("*KE-ASSERTION-EDIT-FORMULA-FIND-FUNC*", $sym85$ASSERTION_TL_IST_FORMULA);
     $ke_assertion_edit_formula_display_func$ = defparameter("*KE-ASSERTION-EDIT-FORMULA-DISPLAY-FUNC*", $sym86$ASSERTION_EL_FORMULA);
     return NIL;

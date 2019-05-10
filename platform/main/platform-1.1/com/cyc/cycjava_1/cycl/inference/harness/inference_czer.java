@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,38 +67,38 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.clausifier;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_grammar;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.cycl_variables;
-import com.cyc.cycjava_1.cycl.czer_main;
-import com.cyc.cycjava_1.cycl.czer_utilities;
-import com.cyc.cycjava_1.cycl.czer_vars;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.clausifier;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_grammar;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.cycl_variables;
+//dm import com.cyc.cycjava_1.cycl.czer_main;
+//dm import com.cyc.cycjava_1.cycl.czer_utilities;
+//dm import com.cyc.cycjava_1.cycl.czer_vars;
 import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.fi;
-import com.cyc.cycjava_1.cycl.formula_pattern_match;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.misc_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.mt_vars;
-import com.cyc.cycjava_1.cycl.nart_handles;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_cache;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.transform_list_utilities;
-import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.fi;
+//dm import com.cyc.cycjava_1.cycl.formula_pattern_match;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.misc_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_vars;
+//dm import com.cyc.cycjava_1.cycl.nart_handles;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_cache;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.transform_list_utilities;
+//dm import com.cyc.cycjava_1.cycl.variables;
 
 public  final class inference_czer extends SubLTranslatedFile {
 
@@ -93,11 +112,11 @@ public  final class inference_czer extends SubLTranslatedFile {
 
   /** Whether the inference czer sorts in a principled way.  This entails treating
    variables as opaque tokens. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 1315) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 1315)
   private static SubLSymbol $inference_sort_principledP$ = null;
 
   /** Used every time a new problem is about to be created. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 1482) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 1482)
   public static final SubLObject canonicalize_problem_query(SubLObject query) {
     query = conses_high.copy_tree(query);
     {
@@ -109,7 +128,7 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 2265) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 2265)
   public static final SubLObject inference_delete_duplicate_literals(SubLObject contextualized_dnf_clauses) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -160,7 +179,7 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 3387) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 3387)
   public static final SubLObject inference_delete_duplicate_clauses(SubLObject contextualized_dnf_clauses) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -181,7 +200,7 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 3918) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 3918)
   public static final SubLObject delete_duplicate_sorted_literals(SubLObject literals) {
     {
       SubLObject literal_count = Sequences.length(literals);
@@ -193,7 +212,7 @@ public  final class inference_czer extends SubLTranslatedFile {
   }
 
   /** Destructive. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 4561) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 4561)
   public static final SubLObject inference_simplify_problem_query(SubLObject contextualized_dnf_clauses) {
     {
       SubLObject cdolist_list_var = contextualized_dnf_clauses;
@@ -206,7 +225,7 @@ public  final class inference_czer extends SubLTranslatedFile {
   }
 
   /** Destructive. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 5728) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 5728)
   public static final SubLObject inference_simplify_contextualized_dnf_clause(SubLObject contextualized_clause) {
     {
       SubLObject neglits_to_become_poslits = NIL;
@@ -250,7 +269,7 @@ public  final class inference_czer extends SubLTranslatedFile {
     return contextualized_clause;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 8027) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 8027)
   public static final SubLObject inference_simplify_contextualized_asent(SubLObject contextualized_asent) {
     {
       SubLObject datum = contextualized_asent;
@@ -305,7 +324,7 @@ public  final class inference_czer extends SubLTranslatedFile {
   }
 
   /** Treats variables as opaque.  Destructive. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 9540) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 9540)
   public static final SubLObject inference_sort_clauses_and_literals(SubLObject contextualized_dnf_clauses) {
     if ((NIL != list_utilities.singletonP(contextualized_dnf_clauses))) {
       {
@@ -327,7 +346,7 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 10324) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 10324)
   public static final SubLObject inference_sort_contextualized_clause_literals(SubLObject contextualized_clause) {
     {
       SubLObject neg_lits = contextualized_neg_lits(contextualized_clause);
@@ -346,32 +365,33 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 11042) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 11042)
   public static final SubLObject inference_sort_contextualized_literals(SubLObject literals) {
     return inference_awesome_sort_contextualized_literals(literals);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 11178) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 11178)
   public static final SubLObject inference_simple_sort_contextualized_literals(SubLObject literals) {
     return Sort.sort(literals, $sym10$INFERENCE_CONTEXTUALIZED_ASENT__, UNPROVIDED);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 11427) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 11427)
   public static final SubLObject inference_contextualized_asent_L(SubLObject asent1, SubLObject asent2) {
     return inference_list_L(asent1, asent2);
   }
 
   public static final class $inference_contextualized_asent_L$BinaryFunction extends BinaryFunction {
     public $inference_contextualized_asent_L$BinaryFunction() { super(extractFunctionNamed("INFERENCE-CONTEXTUALIZED-ASENT-<")); }
+    @Override
     public SubLObject processItem(SubLObject arg1, SubLObject arg2) { return inference_contextualized_asent_L(arg1, arg2); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 11535) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 11535)
   public static final SubLObject inference_list_L(SubLObject list1, SubLObject list2) {
     return inference_formula_L(list1, list2);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 11626) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 11626)
   public static final SubLObject inference_formula_L(SubLObject formula1, SubLObject formula2) {
     if ((NIL != el_utilities.formula_arityL(formula1, formula2, UNPROVIDED))) {
       return T;
@@ -408,7 +428,7 @@ public  final class inference_czer extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 12288) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 12288)
   public static final SubLObject inference_term_L(SubLObject term1, SubLObject term2) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -460,12 +480,12 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 13639) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 13639)
   public static final SubLObject inference_term_G(SubLObject term1, SubLObject term2) {
     return inference_term_L(term2, term1);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 13727) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 13727)
   public static final SubLObject inference_term_type_code(SubLObject v_term) {
     if ((NIL != constant_handles.constant_p(v_term))) {
       return ZERO_INTEGER;
@@ -497,7 +517,7 @@ public  final class inference_czer extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 14376) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 14376)
   public static final SubLObject inference_constant_L(SubLObject constant1, SubLObject constant2) {
     {
       SubLObject suid1 = constant_handles.constant_suid(constant1);
@@ -506,14 +526,14 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 14680) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 14680)
   private static SubLSymbol $inference_czer_fixed_vars_table$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 14824) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 14824)
   private static SubLSymbol $inference_czer_next_fixed_var_id$ = null;
 
   /** An HL variable that is not a member of *inference-czer-fixed-vars-table* */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 14898) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 14898)
   public static final SubLObject non_fixed_variable_p(SubLObject object) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -525,11 +545,12 @@ public  final class inference_czer extends SubLTranslatedFile {
 
   public static final class $non_fixed_variable_p$UnaryFunction extends UnaryFunction {
     public $non_fixed_variable_p$UnaryFunction() { super(extractFunctionNamed("NON-FIXED-VARIABLE-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return non_fixed_variable_p(arg1); }
   }
 
   /** An HL variable that is a member of *inference-czer-fixed-vars-table* */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 15187) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 15187)
   public static final SubLObject fixed_variable_p(SubLObject object) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -539,12 +560,12 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 15461) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 15461)
   public static final SubLObject fully_fixed_p(SubLObject tree) {
     return makeBoolean((NIL == list_utilities.tree_find_if($sym13$NON_FIXED_VARIABLE_P, tree, UNPROVIDED)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 15557) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 15557)
   public static final SubLObject fixed_variable_id(SubLObject fixed_var) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -552,10 +573,10 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 16071) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 16071)
   private static SubLSymbol $inference_czer_at_least_partially_commutative_relations_alist$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 16212) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 16212)
   public static final SubLObject inference_czer_at_least_partially_commutative_relation_p(SubLObject pred) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -575,12 +596,12 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 16995) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 16995)
   public static final SubLObject inference_czer_not_at_all_commutative_relation_p(SubLObject pred) {
     return makeBoolean((NIL == inference_czer_at_least_partially_commutative_relation_p(pred)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 17148) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 17148)
   public static final SubLObject not_at_all_commutative_contextualized_asent_p(SubLObject contextualized_asent) {
     {
       SubLObject asent = inference_datastructures_problem_query.contextualized_asent_asent(contextualized_asent);
@@ -589,7 +610,7 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 17414) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 17414)
   public static final SubLObject at_least_partially_commutative_contextualized_asent_p(SubLObject contextualized_asent) {
     {
       SubLObject asent = inference_datastructures_problem_query.contextualized_asent_asent(contextualized_asent);
@@ -598,7 +619,7 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 17696) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 17696)
   public static final SubLObject inference_awesome_sort_contextualized_literals(SubLObject literals) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -624,7 +645,7 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 18089) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 18089)
   public static final SubLObject inference_awesome_sort_contextualized_literals_iterative(SubLObject already_sorted_literals, SubLObject not_yet_sorted_literals) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -656,7 +677,7 @@ public  final class inference_czer extends SubLTranslatedFile {
 
   /** Result is top-level destructible.  Result is sorted and awesome.
    @param SKIP-FULLY-FIXED? booleanp; if we just got some fully fixed literals last time, we won't get any this time. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 18951) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 18951)
   public static final SubLObject pick_some_awesome_lits(SubLObject not_yet_sorted_literals, SubLObject skip_fully_fixedP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -698,7 +719,7 @@ public  final class inference_czer extends SubLTranslatedFile {
 
   /** Return any literals that are fully fixed.  Fully fixed means fully bound or a fixed variable.
    Assumes *inference-czer-fixed-vars-table* is bound. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 20927) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 20927)
   public static final SubLObject inference_fully_fixed_literals(SubLObject not_yet_sorted_literals) {
     {
       SubLObject fully_fixed_literals = NIL;
@@ -714,10 +735,10 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 21503) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 21503)
   private static SubLSymbol $variable_token$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 21561) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 21561)
   public static final SubLObject variable_token(SubLObject dummy) {
     if ((dummy == UNPROVIDED)) {
       dummy = NIL;
@@ -727,15 +748,17 @@ public  final class inference_czer extends SubLTranslatedFile {
 
   public static final class $variable_token$ZeroArityFunction extends ZeroArityFunction {
     public $variable_token$ZeroArityFunction() { super(extractFunctionNamed("VARIABLE-TOKEN")); }
+    @Override
     public SubLObject processItem() { return variable_token(UNPROVIDED); }
   }
 
   public static final class $variable_token$UnaryFunction extends UnaryFunction {
     public $variable_token$UnaryFunction() { super(extractFunctionNamed("VARIABLE-TOKEN")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return variable_token(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 21654) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 21654)
   public static final SubLObject var_tokenized_contextualized_asent_predicate(SubLObject contextualized_asent) {
     {
       SubLObject pred = inference_datastructures_problem_query.contextualized_asent_predicate(contextualized_asent);
@@ -749,7 +772,7 @@ public  final class inference_czer extends SubLTranslatedFile {
 
   /** Sort commutative literals by their predicates and fort bags.  This is pretty conservative, especially wrt
    partial commutativity, but much better than nothing. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 21878) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 21878)
   public static final SubLObject inference_unique_commutative_literals(SubLObject not_yet_sorted_literals) {
     {
       SubLObject commutative_literals_alist = NIL;
@@ -842,7 +865,7 @@ public  final class inference_czer extends SubLTranslatedFile {
   /** Returns literals with not-at-all-commutative predicates that appear uniquely in NOT-YET-SORTED-LITERALS
    assuming that all non-fixed variables are considered to be equal.
    Assumes *inference-czer-fixed-vars-table* is bound. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 23361) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 23361)
   public static final SubLObject inference_uniquely_constrained_literals(SubLObject not_yet_sorted_literals) {
     {
       SubLObject uniquely_constrained_literals = NIL;
@@ -891,7 +914,7 @@ public  final class inference_czer extends SubLTranslatedFile {
   }
 
   /** Assumes *inference-czer-fixed-vars-table* is bound */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 24344) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 24344)
   public static final SubLObject inference_update_fixed_vars_table(SubLObject new_uniquely_constrained_literals) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -910,7 +933,7 @@ public  final class inference_czer extends SubLTranslatedFile {
   }
 
   /** Destructive */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 24809) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 24809)
   public static final SubLObject contiguize_hl_vars_in_clauses(SubLObject contextualized_dnf_clauses) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -933,16 +956,16 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 25587) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 25587)
   public static final SubLObject identity_variable_map(SubLObject largest_var_num) {
     return bindings.hl_identity_bindings(number_utilities.f_1X(largest_var_num));
   }
 
   /** lambda used in @xref non-contiguous-hl-var? and possibly-note-hl-var-contiguity-pair */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 25699) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 25699)
   private static SubLSymbol $largest_hl_var_num_so_far$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 25848) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 25848)
   public static final SubLObject non_contiguous_hl_varP(SubLObject object) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -965,10 +988,11 @@ public  final class inference_czer extends SubLTranslatedFile {
 
   public static final class $non_contiguous_hl_varP$UnaryFunction extends UnaryFunction {
     public $non_contiguous_hl_varP$UnaryFunction() { super(extractFunctionNamed("NON-CONTIGUOUS-HL-VAR?")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return non_contiguous_hl_varP(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 26195) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 26195)
   public static final SubLObject all_hl_vars_contiguous_and_in_orderP(SubLObject contextualized_dnf_clauses) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -991,10 +1015,10 @@ public  final class inference_czer extends SubLTranslatedFile {
   }
 
   /** lambda used in @xref possibly-note-hl-var-contiguity-pair */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 26543) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 26543)
   private static SubLSymbol $hl_var_contiguity_alist$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 26663) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 26663)
   public static final SubLObject possibly_note_hl_var_contiguity_pair(SubLObject object) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1017,11 +1041,12 @@ public  final class inference_czer extends SubLTranslatedFile {
 
   public static final class $possibly_note_hl_var_contiguity_pair$UnaryFunction extends UnaryFunction {
     public $possibly_note_hl_var_contiguity_pair$UnaryFunction() { super(extractFunctionNamed("POSSIBLY-NOTE-HL-VAR-CONTIGUITY-PAIR")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return possibly_note_hl_var_contiguity_pair(arg1); }
   }
 
   /** A mapping from old to new.  Will be flipped later. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 27091) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 27091)
   public static final SubLObject hl_var_contiguity_alist(SubLObject contextualized_dnf_clauses) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1045,12 +1070,12 @@ public  final class inference_czer extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 28140) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 28140)
   public static final SubLObject inference_canonicalize_ask_memoized_internal(SubLObject cycl_query, SubLObject mt, SubLObject disjunction_free_el_vars_policy) {
     return inference_canonicalize_ask_int(cycl_query, mt, disjunction_free_el_vars_policy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 28140) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 28140)
   public static final SubLObject inference_canonicalize_ask_memoized(SubLObject cycl_query, SubLObject mt, SubLObject disjunction_free_el_vars_policy) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1106,7 +1131,7 @@ This is only used for the initial input to the inference
 @return 0 :ill-formed, problem-query-p, or cycl-truth-value-p
 @return 1 binding-list-p; EL vars -> HL vars
 @return 2 listp; a list of free EL vars */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 28385) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 28385)
   public static final SubLObject inference_canonicalize_ask_int(SubLObject cycl_query, SubLObject mt, SubLObject disjunction_free_el_vars_policy) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1169,7 +1194,7 @@ This is only used for the initial input to the inference
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 29813) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 29813)
   public static final SubLObject inference_standardize_canonicalize_ask_result(SubLObject czer_result, SubLObject disjunction_free_el_vars_policy, SubLObject cycl_query) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1267,7 +1292,7 @@ This is only used for the initial input to the inference
   }
 
   /** Sort FREE-EL-VARS based on the apperance order of EL variables in CYCL-QUERY. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 33053) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 33053)
   public static final SubLObject canonicalize_free_el_var_ordering(SubLObject free_el_vars, SubLObject cycl_query) {
     {
       SubLObject all_el_vars_in_appearance_order = list_utilities.tree_gather(cycl_query, $sym43$EL_VARIABLE_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -1277,12 +1302,12 @@ This is only used for the initial input to the inference
   }
 
   /** @return problem-query-p */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 34924) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 34924)
   public static final SubLObject dnf_and_mt_to_hl_query(SubLObject dnf_clause, SubLObject mt) {
     return list(contextualize_clause(dnf_clause, mt, UNPROVIDED));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 35063) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 35063)
   public static final SubLObject contextualize_clause(SubLObject clause, SubLObject mt, SubLObject disjunction_free_el_vars_policy) {
     if ((disjunction_free_el_vars_policy == UNPROVIDED)) {
       disjunction_free_el_vars_policy = inference_datastructures_enumerated_types.$default_inference_disjunction_free_el_vars_policy$.getGlobalValue();
@@ -1295,7 +1320,7 @@ This is only used for the initial input to the inference
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 35601) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 35601)
   public static final SubLObject canonicalize_contextualized_clause(SubLObject contextualized_clause, SubLObject disjunction_free_el_vars_policy) {
     if ((disjunction_free_el_vars_policy == UNPROVIDED)) {
       disjunction_free_el_vars_policy = inference_datastructures_enumerated_types.$default_inference_disjunction_free_el_vars_policy$.getGlobalValue();
@@ -1322,7 +1347,7 @@ This is only used for the initial input to the inference
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 36735) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 36735)
   public static final SubLObject convert_to_hl_contextualized_asents(SubLObject asents, SubLObject mt) {
     {
       SubLObject contextualized_asents = NIL;
@@ -1340,7 +1365,7 @@ This is only used for the initial input to the inference
   }
 
   /** @return hl-contextualized-asent-p */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 37100) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 37100)
   public static final SubLObject convert_to_hl_contextualized_asent(SubLObject asent, SubLObject mt) {
     if ((NIL != cycl_variables.cyc_varP(asent))) {
       asent = el_utilities.make_unary_formula($const4$trueSentence, asent);
@@ -1353,7 +1378,7 @@ This is only used for the initial input to the inference
 
   /** Uncanonicalize CONTEXTUALIZED-DNF-CLAUSE into an equivalent CycL sentence.
    @return el-sentence-p */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 39403) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 39403)
   public static final SubLObject contextualized_dnf_clause_formula(SubLObject contextualized_dnf_clause, SubLObject clause_level_mt) {
     if ((clause_level_mt == UNPROVIDED)) {
       clause_level_mt = $kw45$UNSPECIFIED;
@@ -1362,7 +1387,7 @@ This is only used for the initial input to the inference
   }
 
   /** Return the shared MT for CONTEXTUALIZED-DNF-CLAUSE if there is one, otherwise #$BaseKB.  Be conservative. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 40487) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 40487)
   public static final SubLObject contextualized_dnf_clause_common_mt(SubLObject contextualized_dnf_clause) {
     {
       SubLObject formula = contextualized_dnf_clause_formula(contextualized_dnf_clause, UNPROVIDED);
@@ -1378,7 +1403,7 @@ This is only used for the initial input to the inference
   /** Uncanonicalize CONTEXTUALIZED-CLAUSE into an equivalent CycL sentence.
 @param TYPE keywordp; either :DNF or :CNF.
    @return el-sentence-p */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 40944) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 40944)
   public static final SubLObject contextualized_clause_formula(SubLObject contextualized_clause, SubLObject clause_level_mt, SubLObject type) {
     {
       SubLObject contextualized_neg_lits = contextualized_neg_lits(contextualized_clause);
@@ -1403,19 +1428,19 @@ This is only used for the initial input to the inference
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 42311) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 42311)
   public static final SubLObject contextualized_neg_lits(SubLObject contextualized_clause) {
     return clauses.neg_lits(contextualized_clause);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 42429) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 42429)
   public static final SubLObject contextualized_pos_lits(SubLObject contextualized_clause) {
     return clauses.pos_lits(contextualized_clause);
   }
 
   /** @return EL-FORMULA-P; A decontextualized version of CONTEXTUALIZED-ASENT, assuming CLAUSE-LEVEL-MT
 if specified. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 42548) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 42548)
   public static final SubLObject contextualized_asent_formula(SubLObject contextualized_asent, SubLObject clause_level_mt) {
     if ((clause_level_mt == UNPROVIDED)) {
       clause_level_mt = $kw45$UNSPECIFIED;
@@ -1446,7 +1471,7 @@ if specified. */
 
   /** @param CONTEXTUALIZED-CLAUSE clause-p; a logical conjunction.
 @return EL-SENTENCE-P representation of CONTEXTUALIZED-CLAUSE assuming CLAUSE-LEVEL-MT. */
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 44579) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 44579)
   public static final SubLObject contextualized_clause_conjunction_formula(SubLObject contextualized_clause, SubLObject clause_level_mt) {
     if ((clause_level_mt == UNPROVIDED)) {
       clause_level_mt = $kw45$UNSPECIFIED;
@@ -1454,7 +1479,7 @@ if specified. */
     return contextualized_clause_juncts_formula(contextualized_clause, clause_level_mt, $kw50$CONJUNCTION);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 45353) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 45353)
   public static final SubLObject contextualized_clause_juncts_formula(SubLObject contextualized_clause, SubLObject clause_level_mt, SubLObject type) {
     {
       SubLObject neg_lit_formulas = NIL;
@@ -1507,12 +1532,12 @@ if specified. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 46426) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 46426)
   public static final SubLObject determine_best_clause_level_mt(SubLObject contextualized_clause) {
     return determine_best_clauses_level_mt(list(contextualized_clause));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 46570) 
+  @SubL(source = "cycl/inference/harness/inference-czer.lisp", position = 46570)
   public static final SubLObject determine_best_clauses_level_mt(SubLObject contextualized_clauses) {
     {
       SubLObject frequency_map = NIL;
@@ -1693,7 +1718,7 @@ if specified. */
     $inference_czer_fixed_vars_table$ = defparameter("*INFERENCE-CZER-FIXED-VARS-TABLE*", misc_utilities.uninitialized());
     $inference_czer_next_fixed_var_id$ = defparameter("*INFERENCE-CZER-NEXT-FIXED-VAR-ID*", misc_utilities.uninitialized());
     $inference_czer_at_least_partially_commutative_relations_alist$ = defparameter("*INFERENCE-CZER-AT-LEAST-PARTIALLY-COMMUTATIVE-RELATIONS-ALIST*", misc_utilities.uninitialized());
-    $variable_token$ = deflexical("*VARIABLE-TOKEN*", ((NIL != Symbols.boundp($sym18$_VARIABLE_TOKEN_)) ? ((SubLObject) $variable_token$.getGlobalValue()) : Symbols.make_symbol($str19$var)));
+    $variable_token$ = deflexical("*VARIABLE-TOKEN*", maybeDefault( $sym18$_VARIABLE_TOKEN_, $variable_token$, ()-> (Symbols.make_symbol($str19$var))));
     $largest_hl_var_num_so_far$ = defparameter("*LARGEST-HL-VAR-NUM-SO-FAR*", $kw25$LAMBDA);
     $hl_var_contiguity_alist$ = defparameter("*HL-VAR-CONTIGUITY-ALIST*", $kw25$LAMBDA);
     return NIL;
@@ -1779,14 +1804,17 @@ if specified. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_czer_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_czer_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_czer_file();
   }

@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.modules;
+package com.cyc.cycjava_1.cycl.inference.modules;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,58 +67,58 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.after_adding;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.arity;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertion_utilities;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.at_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.clausifier;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constants_low;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cyc_kernel;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.cycl_variables;
-import com.cyc.cycjava_1.cycl.czer_utilities;
-import com.cyc.cycjava_1.cycl.deduction_handles;
-import com.cyc.cycjava_1.cycl.deductions_high;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.fi;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.inference.harness.forward;
-import com.cyc.cycjava_1.cycl.genl_mts;
-import com.cyc.cycjava_1.cycl.genl_predicates;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_control_vars;
-import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
-import com.cyc.cycjava_1.cycl.ke;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.mt_relevance_cache;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.mt_vars;
-import com.cyc.cycjava_1.cycl.predicate_relevance_cache;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.inference.harness.rule_after_adding;
-import com.cyc.cycjava_1.cycl.sdc;
-import com.cyc.cycjava_1.cycl.simplifier;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.tms;
-import com.cyc.cycjava_1.cycl.tva_cache;
-import com.cyc.cycjava_1.cycl.tva_utilities;
-import com.cyc.cycjava_1.cycl.uncanonicalizer;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.wff;
-import com.cyc.cycjava_1.cycl.wff_vars;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.after_adding;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.arity;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertion_utilities;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.at_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.clausifier;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constants_low;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cyc_kernel;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.cycl_variables;
+//dm import com.cyc.cycjava_1.cycl.czer_utilities;
+//dm import com.cyc.cycjava_1.cycl.deduction_handles;
+//dm import com.cyc.cycjava_1.cycl.deductions_high;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.fi;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.forward;
+//dm import com.cyc.cycjava_1.cycl.genl_mts;
+//dm import com.cyc.cycjava_1.cycl.genl_predicates;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_control_vars;
+//dm import com.cyc.cycjava_1.cycl.kb_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
+//dm import com.cyc.cycjava_1.cycl.ke;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_cache;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_vars;
+//dm import com.cyc.cycjava_1.cycl.predicate_relevance_cache;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.rule_after_adding;
+//dm import com.cyc.cycjava_1.cycl.sdc;
+//dm import com.cyc.cycjava_1.cycl.simplifier;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.tms;
+//dm import com.cyc.cycjava_1.cycl.tva_cache;
+//dm import com.cyc.cycjava_1.cycl.tva_utilities;
+//dm import com.cyc.cycjava_1.cycl.uncanonicalizer;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.wff;
+//dm import com.cyc.cycjava_1.cycl.wff_vars;
 
 public  final class after_adding_modules extends SubLTranslatedFile {
 
@@ -430,7 +449,7 @@ public  final class after_adding_modules extends SubLTranslatedFile {
     $inside_clear_isa_dependent_cachesP$ = defparameter("*INSIDE-CLEAR-ISA-DEPENDENT-CACHES?*", NIL);
     $inside_clear_quoted_isa_dependent_cachesP$ = defparameter("*INSIDE-CLEAR-QUOTED-ISA-DEPENDENT-CACHES?*", NIL);
     $true_rule_template$ = defparameter("*TRUE-RULE-TEMPLATE*", $list55);
-    $true_rule_defining_mt$ = deflexical("*TRUE-RULE-DEFINING-MT*", ((NIL != Symbols.boundp($sym56$_TRUE_RULE_DEFINING_MT_)) ? ((SubLObject) $true_rule_defining_mt$.getGlobalValue()) : $const57$CoreCycLMt));
+    $true_rule_defining_mt$ = deflexical("*TRUE-RULE-DEFINING-MT*", maybeDefault( $sym56$_TRUE_RULE_DEFINING_MT_, $true_rule_defining_mt$, ()-> ($const57$CoreCycLMt)));
     return NIL;
   }
 

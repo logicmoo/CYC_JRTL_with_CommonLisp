@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,11 +80,11 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
 
 public  final class tcp_server_utilities extends SubLTranslatedFile {
 
@@ -401,8 +433,8 @@ Otherwise, disable all servers with DESIGNATOR as their type. */
     Tcp.$remote_address$ = defparameter("*REMOTE-ADDRESS*", NIL);
     Tcp.$remote_hostname$ = defparameter("*REMOTE-HOSTNAME*", NIL);
     $dtp_tcp_server$ = defconstant("*DTP-TCP-SERVER*", $sym16$TCP_SERVER);
-    $all_tcp_servers$ = deflexical("*ALL-TCP-SERVERS*", ((NIL != Symbols.boundp($sym37$_ALL_TCP_SERVERS_)) ? ((SubLObject) $all_tcp_servers$.getGlobalValue()) : NIL));
-    $tcp_server_type_table$ = deflexical("*TCP-SERVER-TYPE-TABLE*", ((NIL != Symbols.boundp($sym39$_TCP_SERVER_TYPE_TABLE_)) ? ((SubLObject) $tcp_server_type_table$.getGlobalValue()) : NIL));
+    $all_tcp_servers$ = deflexical("*ALL-TCP-SERVERS*", maybeDefault( $sym37$_ALL_TCP_SERVERS_, $all_tcp_servers$, NIL));
+    $tcp_server_type_table$ = deflexical("*TCP-SERVER-TYPE-TABLE*", maybeDefault( $sym39$_TCP_SERVER_TYPE_TABLE_, $tcp_server_type_table$, NIL));
     return NIL;
   }
 

@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.cyc_testing;
+package com.cyc.cycjava_1.cycl.cyc_testing;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,31 +67,31 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.api_control_vars;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.cfasl_utilities;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing;
-import com.cyc.cycjava_1.cycl.el_grammar;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.misc_utilities;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.api_control_vars;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.cfasl_utilities;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing;
+//dm import com.cyc.cycjava_1.cycl.el_grammar;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.id_index;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.misc_utilities;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class inference_unit_tests extends SubLTranslatedFile {
 
@@ -263,8 +282,8 @@ of an inference unit test, so they can be optionally cleaned up later. */
     $inference_unit_test_assertions_created$ = defparameter("*INFERENCE-UNIT-TEST-ASSERTIONS-CREATED*", $kw0$UNINITIALIZED);
     $dtp_inference_unit_test$ = defconstant("*DTP-INFERENCE-UNIT-TEST*", $sym1$INFERENCE_UNIT_TEST);
     $cfasl_wide_opcode_inference_unit_test$ = defconstant("*CFASL-WIDE-OPCODE-INFERENCE-UNIT-TEST*", $int58$513);
-    $inference_unit_test_names_in_order$ = deflexical("*INFERENCE-UNIT-TEST-NAMES-IN-ORDER*", ((NIL != Symbols.boundp($sym62$_INFERENCE_UNIT_TEST_NAMES_IN_ORDER_)) ? ((SubLObject) $inference_unit_test_names_in_order$.getGlobalValue()) : NIL));
-    $inference_unit_tests_by_name$ = deflexical("*INFERENCE-UNIT-TESTS-BY-NAME*", ((NIL != Symbols.boundp($sym63$_INFERENCE_UNIT_TESTS_BY_NAME_)) ? ((SubLObject) $inference_unit_tests_by_name$.getGlobalValue()) : Hashtables.make_hash_table($int64$212, Symbols.symbol_function(EQ), UNPROVIDED)));
+    $inference_unit_test_names_in_order$ = deflexical("*INFERENCE-UNIT-TEST-NAMES-IN-ORDER*", maybeDefault( $sym62$_INFERENCE_UNIT_TEST_NAMES_IN_ORDER_, $inference_unit_test_names_in_order$, NIL));
+    $inference_unit_tests_by_name$ = deflexical("*INFERENCE-UNIT-TESTS-BY-NAME*", maybeDefault( $sym63$_INFERENCE_UNIT_TESTS_BY_NAME_, $inference_unit_tests_by_name$, ()-> (Hashtables.make_hash_table($int64$212, Symbols.symbol_function(EQ), UNPROVIDED))));
     return NIL;
   }
 

@@ -2868,9 +2868,17 @@ public final class queues
       return locked_p_queue_p( arg1 );
     }
   }
+
+  /**
+   * @return
+   */
+  public static SubLObject create_queue()
+  {
+    return create_queue( NIL );
+  }
 }
 /*
- * 
+ *
  * Total time: 508 ms
- * 
+ *
  */

@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,74 +80,74 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
-public  final class enumeration_types extends SubLTranslatedFile {
+ final class enumeration_types_hide extends SubLTranslatedFile {
 
   //// Constructor
 
-  private enumeration_types() {}
-  public static final SubLFile me = new enumeration_types();
+  private enumeration_types_hide() {}
+  public static final SubLFile me = new enumeration_types_hide();
   public static final String myName = "com.cyc.cycjava_1.cycl.enumeration_types";
 
   //// Definitions
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 935) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 935)
   private static SubLSymbol $valid_directions$ = null;
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 1059) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 1059)
   public static final SubLObject valid_directions() {
     return $valid_directions$.getGlobalValue();
   }
 
   /** Return T iff OBJECT is a valid assertion inference direction
  :backward :forward or :code. */
-  @SubL(source = "cycl/enumeration-types.lisp", position = 1116) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 1116)
   public static final SubLObject direction_p(SubLObject object) {
     return list_utilities.member_eqP(object, $valid_directions$.getGlobalValue());
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 1322) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 1322)
   public static final SubLObject encode_direction(SubLObject direction) {
     return Sequences.position(direction, valid_directions(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 1407) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 1407)
   public static final SubLObject decode_direction(SubLObject fixnum) {
     return ConsesLow.nth(fixnum, valid_directions());
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 1480) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 1480)
   private static SubLSymbol $valid_assertion_types$ = null;
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 1776) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 1776)
   public static SubLSymbol $valid_el_strengths$ = null;
 
-  /** Return T iff OBJECT is a valid CycL assertion strength 
+  /** Return T iff OBJECT is a valid CycL assertion strength
  :default or :monotonic. */
-  @SubL(source = "cycl/enumeration-types.lisp", position = 1895) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 1895)
   public static final SubLObject el_strength_p(SubLObject object) {
     return list_utilities.member_eqP(object, $valid_el_strengths$.getGlobalValue());
   }
 
   /** Return T iff STRENGTH2 is subsumed by STRENGTH1 */
-  @SubL(source = "cycl/enumeration-types.lisp", position = 2207) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 2207)
   public static final SubLObject el_strength_implies(SubLObject strength1, SubLObject strength2) {
     return makeBoolean((NIL == list_utilities.position_L(strength1, strength2, $valid_el_strengths$.getGlobalValue(), UNPROVIDED, UNPROVIDED)));
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 2388) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 2388)
   private static SubLSymbol $valid_truths$ = null;
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 2496) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 2496)
   public static final SubLObject valid_truths() {
     return $valid_truths$.getGlobalValue();
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 3015) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 3015)
   public static final SubLObject truth_sense(SubLObject truth) {
     {
       SubLObject pcase_var = truth;
@@ -131,17 +163,17 @@ public  final class enumeration_types extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 3632) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 3632)
   public static SubLSymbol $valid_senses$ = null;
 
   /** Return T iff OBJECT is a valid CycL literal sense
  :neg or :pos. */
-  @SubL(source = "cycl/enumeration-types.lisp", position = 3717) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 3717)
   public static final SubLObject sense_p(SubLObject object) {
     return list_utilities.member_eqP(object, $valid_senses$.getGlobalValue());
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 3889) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 3889)
   public static final SubLObject inverse_sense(SubLObject sense) {
     {
       SubLObject pcase_var = sense;
@@ -155,7 +187,7 @@ public  final class enumeration_types extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 4044) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 4044)
   public static final SubLObject sense_truth(SubLObject sense) {
     {
       SubLObject pcase_var = sense;
@@ -169,25 +201,25 @@ public  final class enumeration_types extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 4200) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 4200)
   private static SubLSymbol $valid_hl_truth_values$ = null;
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 4334) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 4334)
   public static final SubLObject valid_hl_truth_values() {
     return $valid_hl_truth_values$.getGlobalValue();
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 4534) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 4534)
   public static final SubLObject encode_tv(SubLObject tv) {
     return Sequences.position(tv, valid_hl_truth_values(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 4603) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 4603)
   public static final SubLObject decode_tv(SubLObject fixnum) {
     return ConsesLow.nth(fixnum, valid_hl_truth_values());
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 4674) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 4674)
   public static final SubLObject tv_strength(SubLObject tv) {
     {
       SubLObject pcase_var = tv;
@@ -207,7 +239,7 @@ public  final class enumeration_types extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 5007) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 5007)
   public static final SubLObject tv_truth(SubLObject tv) {
     {
       SubLObject pcase_var = tv;
@@ -227,7 +259,7 @@ public  final class enumeration_types extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 5750) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 5750)
   public static final SubLObject tv_from_truth_strength(SubLObject truth, SubLObject strength) {
     {
       SubLObject pcase_var = truth;
@@ -261,7 +293,7 @@ public  final class enumeration_types extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/enumeration-types.lisp", position = 6393) 
+  @SubL(source = "cycl/enumeration-types.lisp", position = 6393)
   public static SubLSymbol $term_args$ = null;
 
   public static final SubLObject declare_enumeration_types_file() {
@@ -357,14 +389,17 @@ public  final class enumeration_types extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_enumeration_types_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_enumeration_types_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_enumeration_types_file();
   }

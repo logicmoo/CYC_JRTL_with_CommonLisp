@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,18 +80,18 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cache;
-import com.cyc.cycjava_1.cycl.cache_utilities;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cache;
+//dm import com.cyc.cycjava_1.cycl.cache_utilities;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class memoization_state extends SubLTranslatedFile {
 
@@ -1264,26 +1296,26 @@ These are intended to clear mt-dependent caches. */
 
   public static final SubLObject init_memoization_state_file() {
     $global_caching_lock$ = defconstant("*GLOBAL-CACHING-LOCK*", ReadWriteLocks.new_rw_lock($str0$global_caching_lock));
-    $caching_mode_should_monitor$ = deflexical("*CACHING-MODE-SHOULD-MONITOR*", ((NIL != Symbols.boundp($sym1$_CACHING_MODE_SHOULD_MONITOR_)) ? ((SubLObject) $caching_mode_should_monitor$.getGlobalValue()) : NIL));
-    $cache_monitor_hash$ = deflexical("*CACHE-MONITOR-HASH*", ((NIL != Symbols.boundp($sym2$_CACHE_MONITOR_HASH_)) ? ((SubLObject) $cache_monitor_hash$.getGlobalValue()) : Hashtables.make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
-    $cache_monitor_failure_hash$ = deflexical("*CACHE-MONITOR-FAILURE-HASH*", ((NIL != Symbols.boundp($sym3$_CACHE_MONITOR_FAILURE_HASH_)) ? ((SubLObject) $cache_monitor_failure_hash$.getGlobalValue()) : Hashtables.make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
-    $allow_function_caching_to_be_disabled$ = deflexical("*ALLOW-FUNCTION-CACHING-TO-BE-DISABLED*", ((NIL != Symbols.boundp($sym8$_ALLOW_FUNCTION_CACHING_TO_BE_DISABLED_)) ? ((SubLObject) $allow_function_caching_to_be_disabled$.getGlobalValue()) : NIL));
+    $caching_mode_should_monitor$ = deflexical("*CACHING-MODE-SHOULD-MONITOR*", maybeDefault( $sym1$_CACHING_MODE_SHOULD_MONITOR_, $caching_mode_should_monitor$, NIL));
+    $cache_monitor_hash$ = deflexical("*CACHE-MONITOR-HASH*", maybeDefault( $sym2$_CACHE_MONITOR_HASH_, $cache_monitor_hash$, ()-> (Hashtables.make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED))));
+    $cache_monitor_failure_hash$ = deflexical("*CACHE-MONITOR-FAILURE-HASH*", maybeDefault( $sym3$_CACHE_MONITOR_FAILURE_HASH_, $cache_monitor_failure_hash$, ()-> (Hashtables.make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED))));
+    $allow_function_caching_to_be_disabled$ = deflexical("*ALLOW-FUNCTION-CACHING-TO-BE-DISABLED*", maybeDefault( $sym8$_ALLOW_FUNCTION_CACHING_TO_BE_DISABLED_, $allow_function_caching_to_be_disabled$, NIL));
     $caching_mode_enabled$ = defvar("*CACHING-MODE-ENABLED*", $kw9$ALL);
     $caching_mode_disabled$ = defvar("*CACHING-MODE-DISABLED*", NIL);
     $function_caching_enabledP$ = defparameter("*FUNCTION-CACHING-ENABLED?*", T);
     $dtp_caching_state$ = defconstant("*DTP-CACHING-STATE*", $sym35$CACHING_STATE);
     $dtp_memoization_state$ = defconstant("*DTP-MEMOIZATION-STATE*", $sym77$MEMOIZATION_STATE);
     $memoization_state$ = defparameter("*MEMOIZATION-STATE*", NIL);
-    $memoized_functions$ = deflexical("*MEMOIZED-FUNCTIONS*", ((NIL != Symbols.boundp($sym126$_MEMOIZED_FUNCTIONS_)) ? ((SubLObject) $memoized_functions$.getGlobalValue()) : NIL));
-    $globally_cached_functions$ = deflexical("*GLOBALLY-CACHED-FUNCTIONS*", ((NIL != Symbols.boundp($sym188$_GLOBALLY_CACHED_FUNCTIONS_)) ? ((SubLObject) $globally_cached_functions$.getGlobalValue()) : NIL));
+    $memoized_functions$ = deflexical("*MEMOIZED-FUNCTIONS*", maybeDefault( $sym126$_MEMOIZED_FUNCTIONS_, $memoized_functions$, NIL));
+    $globally_cached_functions$ = deflexical("*GLOBALLY-CACHED-FUNCTIONS*", maybeDefault( $sym188$_GLOBALLY_CACHED_FUNCTIONS_, $globally_cached_functions$, NIL));
     $cache_clear_triggers$ = deflexical("*CACHE-CLEAR-TRIGGERS*", $list201);
-    $hl_store_cache_clear_callbacks$ = deflexical("*HL-STORE-CACHE-CLEAR-CALLBACKS*", ((NIL != Symbols.boundp($sym234$_HL_STORE_CACHE_CLEAR_CALLBACKS_)) ? ((SubLObject) $hl_store_cache_clear_callbacks$.getGlobalValue()) : NIL));
-    $mt_dependent_cache_clear_callbacks$ = deflexical("*MT-DEPENDENT-CACHE-CLEAR-CALLBACKS*", ((NIL != Symbols.boundp($sym235$_MT_DEPENDENT_CACHE_CLEAR_CALLBACKS_)) ? ((SubLObject) $mt_dependent_cache_clear_callbacks$.getGlobalValue()) : NIL));
+    $hl_store_cache_clear_callbacks$ = deflexical("*HL-STORE-CACHE-CLEAR-CALLBACKS*", maybeDefault( $sym234$_HL_STORE_CACHE_CLEAR_CALLBACKS_, $hl_store_cache_clear_callbacks$, NIL));
+    $mt_dependent_cache_clear_callbacks$ = deflexical("*MT-DEPENDENT-CACHE-CLEAR-CALLBACKS*", maybeDefault( $sym235$_MT_DEPENDENT_CACHE_CLEAR_CALLBACKS_, $mt_dependent_cache_clear_callbacks$, NIL));
     $suspend_clearing_mt_dependent_cachesP$ = defparameter("*SUSPEND-CLEARING-MT-DEPENDENT-CACHES?*", NIL);
-    $genl_preds_dependent_cache_clear_callbacks$ = deflexical("*GENL-PREDS-DEPENDENT-CACHE-CLEAR-CALLBACKS*", ((NIL != Symbols.boundp($sym237$_GENL_PREDS_DEPENDENT_CACHE_CLEAR_CALLBACKS_)) ? ((SubLObject) $genl_preds_dependent_cache_clear_callbacks$.getGlobalValue()) : NIL));
-    $genls_dependent_cache_clear_callbacks$ = deflexical("*GENLS-DEPENDENT-CACHE-CLEAR-CALLBACKS*", ((NIL != Symbols.boundp($sym238$_GENLS_DEPENDENT_CACHE_CLEAR_CALLBACKS_)) ? ((SubLObject) $genls_dependent_cache_clear_callbacks$.getGlobalValue()) : NIL));
-    $isa_dependent_cache_clear_callbacks$ = deflexical("*ISA-DEPENDENT-CACHE-CLEAR-CALLBACKS*", ((NIL != Symbols.boundp($sym239$_ISA_DEPENDENT_CACHE_CLEAR_CALLBACKS_)) ? ((SubLObject) $isa_dependent_cache_clear_callbacks$.getGlobalValue()) : NIL));
-    $quoted_isa_dependent_cache_clear_callbacks$ = deflexical("*QUOTED-ISA-DEPENDENT-CACHE-CLEAR-CALLBACKS*", ((NIL != Symbols.boundp($sym240$_QUOTED_ISA_DEPENDENT_CACHE_CLEAR_CALLBACKS_)) ? ((SubLObject) $quoted_isa_dependent_cache_clear_callbacks$.getGlobalValue()) : NIL));
+    $genl_preds_dependent_cache_clear_callbacks$ = deflexical("*GENL-PREDS-DEPENDENT-CACHE-CLEAR-CALLBACKS*", maybeDefault( $sym237$_GENL_PREDS_DEPENDENT_CACHE_CLEAR_CALLBACKS_, $genl_preds_dependent_cache_clear_callbacks$, NIL));
+    $genls_dependent_cache_clear_callbacks$ = deflexical("*GENLS-DEPENDENT-CACHE-CLEAR-CALLBACKS*", maybeDefault( $sym238$_GENLS_DEPENDENT_CACHE_CLEAR_CALLBACKS_, $genls_dependent_cache_clear_callbacks$, NIL));
+    $isa_dependent_cache_clear_callbacks$ = deflexical("*ISA-DEPENDENT-CACHE-CLEAR-CALLBACKS*", maybeDefault( $sym239$_ISA_DEPENDENT_CACHE_CLEAR_CALLBACKS_, $isa_dependent_cache_clear_callbacks$, NIL));
+    $quoted_isa_dependent_cache_clear_callbacks$ = deflexical("*QUOTED-ISA-DEPENDENT-CACHE-CLEAR-CALLBACKS*", maybeDefault( $sym240$_QUOTED_ISA_DEPENDENT_CACHE_CLEAR_CALLBACKS_, $quoted_isa_dependent_cache_clear_callbacks$, NIL));
     $caching_n_sxhash_composite_value$ = defconstant("*CACHING-N-SXHASH-COMPOSITE-VALUE*", $int21$167);
     return NIL;
   }

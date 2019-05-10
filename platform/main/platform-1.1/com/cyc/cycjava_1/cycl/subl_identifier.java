@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,24 +80,24 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.equals;
-import com.cyc.cycjava_1.cycl.fort_types_interface;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.keyhash_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.mt_vars;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.equals;
+//dm import com.cyc.cycjava_1.cycl.fort_types_interface;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.keyhash_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_vars;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class subl_identifier extends SubLTranslatedFile {
 
@@ -266,9 +298,9 @@ public  final class subl_identifier extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_subl_identifier_file() {
-    $sublid_domain_to_forts_table$ = deflexical("*SUBLID-DOMAIN-TO-FORTS-TABLE*", ((NIL != Symbols.boundp($sym0$_SUBLID_DOMAIN_TO_FORTS_TABLE_)) ? ((SubLObject) $sublid_domain_to_forts_table$.getGlobalValue()) : dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-    $sublid_id_to_forts_table$ = deflexical("*SUBLID-ID-TO-FORTS-TABLE*", ((NIL != Symbols.boundp($sym1$_SUBLID_ID_TO_FORTS_TABLE_)) ? ((SubLObject) $sublid_id_to_forts_table$.getGlobalValue()) : dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-    $sublid_fort_to_id_table$ = deflexical("*SUBLID-FORT-TO-ID-TABLE*", ((NIL != Symbols.boundp($sym2$_SUBLID_FORT_TO_ID_TABLE_)) ? ((SubLObject) $sublid_fort_to_id_table$.getGlobalValue()) : dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+    $sublid_domain_to_forts_table$ = deflexical("*SUBLID-DOMAIN-TO-FORTS-TABLE*", maybeDefault( $sym0$_SUBLID_DOMAIN_TO_FORTS_TABLE_, $sublid_domain_to_forts_table$, ()-> (dictionary.new_dictionary(UNPROVIDED, UNPROVIDED))));
+    $sublid_id_to_forts_table$ = deflexical("*SUBLID-ID-TO-FORTS-TABLE*", maybeDefault( $sym1$_SUBLID_ID_TO_FORTS_TABLE_, $sublid_id_to_forts_table$, ()-> (dictionary.new_dictionary(UNPROVIDED, UNPROVIDED))));
+    $sublid_fort_to_id_table$ = deflexical("*SUBLID-FORT-TO-ID-TABLE*", maybeDefault( $sym2$_SUBLID_FORT_TO_ID_TABLE_, $sublid_fort_to_id_table$, ()-> (dictionary.new_dictionary(UNPROVIDED, UNPROVIDED))));
     $sublid_pred$ = defconstant("*SUBLID-PRED*", $const3$subLIdentifier);
     $sublid_uiit_pred$ = defconstant("*SUBLID-UIIT-PRED*", $const4$uniquelyIdentifiedInType);
     return NIL;

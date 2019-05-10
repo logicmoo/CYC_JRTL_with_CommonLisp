@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,13 +80,13 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.os_process_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.tcp_server_utilities;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.os_process_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.tcp_server_utilities;
 
 public  final class subl_promotions extends SubLTranslatedFile {
 
@@ -311,9 +343,9 @@ public  final class subl_promotions extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_subl_promotions_file() {
-    $make_process_with_args_table$ = deflexical("*MAKE-PROCESS-WITH-ARGS-TABLE*", ((NIL != Symbols.boundp($sym0$_MAKE_PROCESS_WITH_ARGS_TABLE_)) ? ((SubLObject) $make_process_with_args_table$.getGlobalValue()) : NIL));
+    $make_process_with_args_table$ = deflexical("*MAKE-PROCESS-WITH-ARGS-TABLE*", maybeDefault( $sym0$_MAKE_PROCESS_WITH_ARGS_TABLE_, $make_process_with_args_table$, NIL));
     $make_process_with_args_table_lock$ = deflexical("*MAKE-PROCESS-WITH-ARGS-TABLE-LOCK*", Locks.make_lock($str1$MAKE_PROCESS_WITH_ARGS_TABLE));
-    $interrupt_process_with_args_table$ = deflexical("*INTERRUPT-PROCESS-WITH-ARGS-TABLE*", ((NIL != Symbols.boundp($sym8$_INTERRUPT_PROCESS_WITH_ARGS_TABLE_)) ? ((SubLObject) $interrupt_process_with_args_table$.getGlobalValue()) : NIL));
+    $interrupt_process_with_args_table$ = deflexical("*INTERRUPT-PROCESS-WITH-ARGS-TABLE*", maybeDefault( $sym8$_INTERRUPT_PROCESS_WITH_ARGS_TABLE_, $interrupt_process_with_args_table$, NIL));
     $interrupt_process_with_args_table_lock$ = deflexical("*INTERRUPT-PROCESS-WITH-ARGS-TABLE-LOCK*", Locks.make_lock($str9$INTERRUPT_PROCESS_WITH_ARGS_TABLE));
     return NIL;
   }

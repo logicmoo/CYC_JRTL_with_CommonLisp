@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,16 +80,16 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cache;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.genl_predicates;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.set_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cache;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.genl_predicates;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.set_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class predicate_relevance_cache extends SubLTranslatedFile {
 
@@ -249,14 +281,14 @@ public  final class predicate_relevance_cache extends SubLTranslatedFile {
 
   public static final SubLObject init_predicate_relevance_cache_file() {
     $pred_relevance_cache_size$ = deflexical("*PRED-RELEVANCE-CACHE-SIZE*", $int0$128);
-    $spec_pred_fort_cache$ = deflexical("*SPEC-PRED-FORT-CACHE*", ((NIL != Symbols.boundp($sym1$_SPEC_PRED_FORT_CACHE_)) ? ((SubLObject) $spec_pred_fort_cache$.getGlobalValue()) : cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL))));
-    $spec_inverse_fort_cache$ = deflexical("*SPEC-INVERSE-FORT-CACHE*", ((NIL != Symbols.boundp($sym2$_SPEC_INVERSE_FORT_CACHE_)) ? ((SubLObject) $spec_inverse_fort_cache$.getGlobalValue()) : cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL))));
-    $genl_pred_fort_cache$ = deflexical("*GENL-PRED-FORT-CACHE*", ((NIL != Symbols.boundp($sym3$_GENL_PRED_FORT_CACHE_)) ? ((SubLObject) $genl_pred_fort_cache$.getGlobalValue()) : cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL))));
-    $genl_inverse_fort_cache$ = deflexical("*GENL-INVERSE-FORT-CACHE*", ((NIL != Symbols.boundp($sym4$_GENL_INVERSE_FORT_CACHE_)) ? ((SubLObject) $genl_inverse_fort_cache$.getGlobalValue()) : cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL))));
-    $spec_pred_naut_cache$ = deflexical("*SPEC-PRED-NAUT-CACHE*", ((NIL != Symbols.boundp($sym5$_SPEC_PRED_NAUT_CACHE_)) ? ((SubLObject) $spec_pred_naut_cache$.getGlobalValue()) : cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL))));
-    $spec_inverse_naut_cache$ = deflexical("*SPEC-INVERSE-NAUT-CACHE*", ((NIL != Symbols.boundp($sym6$_SPEC_INVERSE_NAUT_CACHE_)) ? ((SubLObject) $spec_inverse_naut_cache$.getGlobalValue()) : cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL))));
-    $genl_pred_naut_cache$ = deflexical("*GENL-PRED-NAUT-CACHE*", ((NIL != Symbols.boundp($sym7$_GENL_PRED_NAUT_CACHE_)) ? ((SubLObject) $genl_pred_naut_cache$.getGlobalValue()) : cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL))));
-    $genl_inverse_naut_cache$ = deflexical("*GENL-INVERSE-NAUT-CACHE*", ((NIL != Symbols.boundp($sym8$_GENL_INVERSE_NAUT_CACHE_)) ? ((SubLObject) $genl_inverse_naut_cache$.getGlobalValue()) : cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL))));
+    $spec_pred_fort_cache$ = deflexical("*SPEC-PRED-FORT-CACHE*", maybeDefault( $sym1$_SPEC_PRED_FORT_CACHE_, $spec_pred_fort_cache$, ()-> (cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL)))));
+    $spec_inverse_fort_cache$ = deflexical("*SPEC-INVERSE-FORT-CACHE*", maybeDefault( $sym2$_SPEC_INVERSE_FORT_CACHE_, $spec_inverse_fort_cache$, ()-> (cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL)))));
+    $genl_pred_fort_cache$ = deflexical("*GENL-PRED-FORT-CACHE*", maybeDefault( $sym3$_GENL_PRED_FORT_CACHE_, $genl_pred_fort_cache$, ()-> (cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL)))));
+    $genl_inverse_fort_cache$ = deflexical("*GENL-INVERSE-FORT-CACHE*", maybeDefault( $sym4$_GENL_INVERSE_FORT_CACHE_, $genl_inverse_fort_cache$, ()-> (cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL)))));
+    $spec_pred_naut_cache$ = deflexical("*SPEC-PRED-NAUT-CACHE*", maybeDefault( $sym5$_SPEC_PRED_NAUT_CACHE_, $spec_pred_naut_cache$, ()-> (cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL)))));
+    $spec_inverse_naut_cache$ = deflexical("*SPEC-INVERSE-NAUT-CACHE*", maybeDefault( $sym6$_SPEC_INVERSE_NAUT_CACHE_, $spec_inverse_naut_cache$, ()-> (cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL)))));
+    $genl_pred_naut_cache$ = deflexical("*GENL-PRED-NAUT-CACHE*", maybeDefault( $sym7$_GENL_PRED_NAUT_CACHE_, $genl_pred_naut_cache$, ()-> (cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL)))));
+    $genl_inverse_naut_cache$ = deflexical("*GENL-INVERSE-NAUT-CACHE*", maybeDefault( $sym8$_GENL_INVERSE_NAUT_CACHE_, $genl_inverse_naut_cache$, ()-> (cache.new_cache($pred_relevance_cache_size$.getGlobalValue(), Symbols.symbol_function(EQUAL)))));
     return NIL;
   }
 

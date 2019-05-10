@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,31 +67,31 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.eval_in_api;
-import com.cyc.cycjava_1.cycl.formula_pattern_match;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_analysis;
-import com.cyc.cycjava_1.cycl.kb_control_vars;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.eval_in_api;
+//dm import com.cyc.cycjava_1.cycl.formula_pattern_match;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_analysis;
+//dm import com.cyc.cycjava_1.cycl.kb_control_vars;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
 
 public  final class inference_modules extends SubLTranslatedFile {
 
@@ -1819,28 +1838,28 @@ but their execution is handled specially by the harness. */
   }
 
   public static final SubLObject init_inference_modules_file() {
-    $meta_removal_modules$ = deflexical("*META-REMOVAL-MODULES*", ((NIL != Symbols.boundp($sym0$_META_REMOVAL_MODULES_)) ? ((SubLObject) $meta_removal_modules$.getGlobalValue()) : NIL));
+    $meta_removal_modules$ = deflexical("*META-REMOVAL-MODULES*", maybeDefault( $sym0$_META_REMOVAL_MODULES_, $meta_removal_modules$, NIL));
     $hl_module_properties$ = deflexical("*HL-MODULE-PROPERTIES*", $list1);
     $valid_hl_module_subtypes$ = deflexical("*VALID-HL-MODULE-SUBTYPES*", $list10);
     $default_hl_module_subtype$ = deflexical("*DEFAULT-HL-MODULE-SUBTYPE*", $kw11$KB);
     $hl_module_property_defaults$ = deflexical("*HL-MODULE-PROPERTY-DEFAULTS*", dictionary_utilities.new_dictionary_from_alist(Sequences.reverse(listS($list12, list($kw13$MODULE_SUBTYPE, $default_hl_module_subtype$.getGlobalValue()), $list14)), Symbols.symbol_function(EQ)));
     $dtp_hl_module$ = defconstant("*DTP-HL-MODULE*", $sym22$HL_MODULE);
-    $hl_module_store$ = deflexical("*HL-MODULE-STORE*", ((NIL != Symbols.boundp($sym75$_HL_MODULE_STORE_)) ? ((SubLObject) $hl_module_store$.getGlobalValue()) : Hashtables.make_hash_table($int76$212, Symbols.symbol_function(EQUAL), UNPROVIDED)));
-    $removal_modules$ = deflexical("*REMOVAL-MODULES*", ((NIL != Symbols.boundp($sym133$_REMOVAL_MODULES_)) ? ((SubLObject) $removal_modules$.getGlobalValue()) : set.new_set(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $removal_modules_external$ = deflexical("*REMOVAL-MODULES-EXTERNAL*", ((NIL != Symbols.boundp($sym139$_REMOVAL_MODULES_EXTERNAL_)) ? ((SubLObject) $removal_modules_external$.getGlobalValue()) : NIL));
-    $removal_modules_generic$ = deflexical("*REMOVAL-MODULES-GENERIC*", ((NIL != Symbols.boundp($sym140$_REMOVAL_MODULES_GENERIC_)) ? ((SubLObject) $removal_modules_generic$.getGlobalValue()) : NIL));
-    $removal_modules_universal$ = deflexical("*REMOVAL-MODULES-UNIVERSAL*", ((NIL != Symbols.boundp($sym142$_REMOVAL_MODULES_UNIVERSAL_)) ? ((SubLObject) $removal_modules_universal$.getGlobalValue()) : NIL));
-    $removal_modules_specific$ = deflexical("*REMOVAL-MODULES-SPECIFIC*", ((NIL != Symbols.boundp($sym143$_REMOVAL_MODULES_SPECIFIC_)) ? ((SubLObject) $removal_modules_specific$.getGlobalValue()) : Hashtables.make_hash_table($int144$32, UNPROVIDED, UNPROVIDED)));
-    $removal_modules_specific_use_generic$ = deflexical("*REMOVAL-MODULES-SPECIFIC-USE-GENERIC*", ((NIL != Symbols.boundp($sym146$_REMOVAL_MODULES_SPECIFIC_USE_GENERIC_)) ? ((SubLObject) $removal_modules_specific_use_generic$.getGlobalValue()) : NIL));
-    $removal_modules_specific_use_meta_removal$ = deflexical("*REMOVAL-MODULES-SPECIFIC-USE-META-REMOVAL*", ((NIL != Symbols.boundp($sym147$_REMOVAL_MODULES_SPECIFIC_USE_META_REMOVAL_)) ? ((SubLObject) $removal_modules_specific_use_meta_removal$.getGlobalValue()) : NIL));
-    $removal_modules_specific_dont_use_universal$ = deflexical("*REMOVAL-MODULES-SPECIFIC-DONT-USE-UNIVERSAL*", ((NIL != Symbols.boundp($sym148$_REMOVAL_MODULES_SPECIFIC_DONT_USE_UNIVERSAL_)) ? ((SubLObject) $removal_modules_specific_dont_use_universal$.getGlobalValue()) : NIL));
-    $solely_specific_removal_module_predicate_store$ = deflexical("*SOLELY-SPECIFIC-REMOVAL-MODULE-PREDICATE-STORE*", ((NIL != Symbols.boundp($sym149$_SOLELY_SPECIFIC_REMOVAL_MODULE_PREDICATE_STORE_)) ? ((SubLObject) $solely_specific_removal_module_predicate_store$.getGlobalValue()) : set.new_set(EQ, $int150$50)));
-    $conjunctive_removal_modules$ = deflexical("*CONJUNCTIVE-REMOVAL-MODULES*", ((NIL != Symbols.boundp($sym156$_CONJUNCTIVE_REMOVAL_MODULES_)) ? ((SubLObject) $conjunctive_removal_modules$.getGlobalValue()) : set.new_set(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $transformation_modules$ = deflexical("*TRANSFORMATION-MODULES*", ((NIL != Symbols.boundp($sym166$_TRANSFORMATION_MODULES_)) ? ((SubLObject) $transformation_modules$.getGlobalValue()) : NIL));
-    $meta_transformation_modules$ = deflexical("*META-TRANSFORMATION-MODULES*", ((NIL != Symbols.boundp($sym171$_META_TRANSFORMATION_MODULES_)) ? ((SubLObject) $meta_transformation_modules$.getGlobalValue()) : NIL));
-    $rewrite_modules$ = deflexical("*REWRITE-MODULES*", ((NIL != Symbols.boundp($sym176$_REWRITE_MODULES_)) ? ((SubLObject) $rewrite_modules$.getGlobalValue()) : NIL));
-    $structural_modules$ = deflexical("*STRUCTURAL-MODULES*", ((NIL != Symbols.boundp($sym182$_STRUCTURAL_MODULES_)) ? ((SubLObject) $structural_modules$.getGlobalValue()) : NIL));
-    $meta_structural_modules$ = deflexical("*META-STRUCTURAL-MODULES*", ((NIL != Symbols.boundp($sym184$_META_STRUCTURAL_MODULES_)) ? ((SubLObject) $meta_structural_modules$.getGlobalValue()) : NIL));
+    $hl_module_store$ = deflexical("*HL-MODULE-STORE*", maybeDefault( $sym75$_HL_MODULE_STORE_, $hl_module_store$, ()-> (Hashtables.make_hash_table($int76$212, Symbols.symbol_function(EQUAL), UNPROVIDED))));
+    $removal_modules$ = deflexical("*REMOVAL-MODULES*", maybeDefault( $sym133$_REMOVAL_MODULES_, $removal_modules$, ()-> (set.new_set(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $removal_modules_external$ = deflexical("*REMOVAL-MODULES-EXTERNAL*", maybeDefault( $sym139$_REMOVAL_MODULES_EXTERNAL_, $removal_modules_external$, NIL));
+    $removal_modules_generic$ = deflexical("*REMOVAL-MODULES-GENERIC*", maybeDefault( $sym140$_REMOVAL_MODULES_GENERIC_, $removal_modules_generic$, NIL));
+    $removal_modules_universal$ = deflexical("*REMOVAL-MODULES-UNIVERSAL*", maybeDefault( $sym142$_REMOVAL_MODULES_UNIVERSAL_, $removal_modules_universal$, NIL));
+    $removal_modules_specific$ = deflexical("*REMOVAL-MODULES-SPECIFIC*", maybeDefault( $sym143$_REMOVAL_MODULES_SPECIFIC_, $removal_modules_specific$, ()-> (Hashtables.make_hash_table($int144$32, UNPROVIDED, UNPROVIDED))));
+    $removal_modules_specific_use_generic$ = deflexical("*REMOVAL-MODULES-SPECIFIC-USE-GENERIC*", maybeDefault( $sym146$_REMOVAL_MODULES_SPECIFIC_USE_GENERIC_, $removal_modules_specific_use_generic$, NIL));
+    $removal_modules_specific_use_meta_removal$ = deflexical("*REMOVAL-MODULES-SPECIFIC-USE-META-REMOVAL*", maybeDefault( $sym147$_REMOVAL_MODULES_SPECIFIC_USE_META_REMOVAL_, $removal_modules_specific_use_meta_removal$, NIL));
+    $removal_modules_specific_dont_use_universal$ = deflexical("*REMOVAL-MODULES-SPECIFIC-DONT-USE-UNIVERSAL*", maybeDefault( $sym148$_REMOVAL_MODULES_SPECIFIC_DONT_USE_UNIVERSAL_, $removal_modules_specific_dont_use_universal$, NIL));
+    $solely_specific_removal_module_predicate_store$ = deflexical("*SOLELY-SPECIFIC-REMOVAL-MODULE-PREDICATE-STORE*", maybeDefault( $sym149$_SOLELY_SPECIFIC_REMOVAL_MODULE_PREDICATE_STORE_, $solely_specific_removal_module_predicate_store$, ()-> (set.new_set(EQ, $int150$50))));
+    $conjunctive_removal_modules$ = deflexical("*CONJUNCTIVE-REMOVAL-MODULES*", maybeDefault( $sym156$_CONJUNCTIVE_REMOVAL_MODULES_, $conjunctive_removal_modules$, ()-> (set.new_set(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $transformation_modules$ = deflexical("*TRANSFORMATION-MODULES*", maybeDefault( $sym166$_TRANSFORMATION_MODULES_, $transformation_modules$, NIL));
+    $meta_transformation_modules$ = deflexical("*META-TRANSFORMATION-MODULES*", maybeDefault( $sym171$_META_TRANSFORMATION_MODULES_, $meta_transformation_modules$, NIL));
+    $rewrite_modules$ = deflexical("*REWRITE-MODULES*", maybeDefault( $sym176$_REWRITE_MODULES_, $rewrite_modules$, NIL));
+    $structural_modules$ = deflexical("*STRUCTURAL-MODULES*", maybeDefault( $sym182$_STRUCTURAL_MODULES_, $structural_modules$, NIL));
+    $meta_structural_modules$ = deflexical("*META-STRUCTURAL-MODULES*", maybeDefault( $sym184$_META_STRUCTURAL_MODULES_, $meta_structural_modules$, NIL));
     $cfasl_wide_opcode_hl_module$ = defconstant("*CFASL-WIDE-OPCODE-HL-MODULE*", $int189$256);
     return NIL;
   }

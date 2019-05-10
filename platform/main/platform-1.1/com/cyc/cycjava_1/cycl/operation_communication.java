@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,35 +80,35 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.agenda;
-import com.cyc.cycjava_1.cycl.api_control_vars;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.encapsulation;
-import com.cyc.cycjava_1.cycl.fi;
-import com.cyc.cycjava_1.cycl.file_utilities;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_analysis;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
-import com.cyc.cycjava_1.cycl.ke;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.narts_high;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.operation_queues;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.system_info;
-import com.cyc.cycjava_1.cycl.system_parameters;
-import com.cyc.cycjava_1.cycl.transcript_server;
-import com.cyc.cycjava_1.cycl.transcript_utilities;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.agenda;
+//dm import com.cyc.cycjava_1.cycl.api_control_vars;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.encapsulation;
+//dm import com.cyc.cycjava_1.cycl.fi;
+//dm import com.cyc.cycjava_1.cycl.file_utilities;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_analysis;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
+//dm import com.cyc.cycjava_1.cycl.ke;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.narts_high;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.operation_queues;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.system_info;
+//dm import com.cyc.cycjava_1.cycl.system_parameters;
+//dm import com.cyc.cycjava_1.cycl.transcript_server;
+//dm import com.cyc.cycjava_1.cycl.transcript_utilities;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class operation_communication extends SubLTranslatedFile {
 
@@ -698,20 +730,20 @@ i.e. it is not reset when a new local transcript is started. */
 
   public static final SubLObject init_operation_communication_file() {
     $all_communication_modes$ = defparameter("*ALL-COMMUNICATION-MODES*", $list0);
-    $allow_transmitting$ = deflexical("*ALLOW-TRANSMITTING*", ((NIL != Symbols.boundp($sym1$_ALLOW_TRANSMITTING_)) ? ((SubLObject) $allow_transmitting$.getGlobalValue()) : T));
-    $kb_full_transcript_loaded$ = deflexical("*KB-FULL-TRANSCRIPT-LOADED*", ((NIL != Symbols.boundp($sym2$_KB_FULL_TRANSCRIPT_LOADED_)) ? ((SubLObject) $kb_full_transcript_loaded$.getGlobalValue()) : NIL));
+    $allow_transmitting$ = deflexical("*ALLOW-TRANSMITTING*", maybeDefault( $sym1$_ALLOW_TRANSMITTING_, $allow_transmitting$, T));
+    $kb_full_transcript_loaded$ = deflexical("*KB-FULL-TRANSCRIPT-LOADED*", maybeDefault( $sym2$_KB_FULL_TRANSCRIPT_LOADED_, $kb_full_transcript_loaded$, NIL));
     $experimental_image$ = defparameter("*EXPERIMENTAL-IMAGE*", NIL);
     $read_transcript_op_limit$ = defparameter("*READ-TRANSCRIPT-OP-LIMIT*", $int7$200);
-    $receiving_remote_operationsP$ = deflexical("*RECEIVING-REMOTE-OPERATIONS?*", ((NIL != Symbols.boundp($sym8$_RECEIVING_REMOTE_OPERATIONS__)) ? ((SubLObject) $receiving_remote_operationsP$.getGlobalValue()) : T));
-    $process_local_operationsP$ = deflexical("*PROCESS-LOCAL-OPERATIONS?*", ((NIL != Symbols.boundp($sym9$_PROCESS_LOCAL_OPERATIONS__)) ? ((SubLObject) $process_local_operationsP$.getGlobalValue()) : T));
-    $process_auxiliary_operationsP$ = deflexical("*PROCESS-AUXILIARY-OPERATIONS?*", ((NIL != Symbols.boundp($sym10$_PROCESS_AUXILIARY_OPERATIONS__)) ? ((SubLObject) $process_auxiliary_operationsP$.getGlobalValue()) : T));
-    $saving_operationsP$ = deflexical("*SAVING-OPERATIONS?*", ((NIL != Symbols.boundp($sym11$_SAVING_OPERATIONS__)) ? ((SubLObject) $saving_operationsP$.getGlobalValue()) : NIL));
-    $total_remote_operations_run$ = deflexical("*TOTAL-REMOTE-OPERATIONS-RUN*", ((NIL != Symbols.boundp($sym12$_TOTAL_REMOTE_OPERATIONS_RUN_)) ? ((SubLObject) $total_remote_operations_run$.getGlobalValue()) : ZERO_INTEGER));
-    $total_auxiliary_operations_run$ = deflexical("*TOTAL-AUXILIARY-OPERATIONS-RUN*", ((NIL != Symbols.boundp($sym13$_TOTAL_AUXILIARY_OPERATIONS_RUN_)) ? ((SubLObject) $total_auxiliary_operations_run$.getGlobalValue()) : ZERO_INTEGER));
-    $total_local_operations_recorded$ = deflexical("*TOTAL-LOCAL-OPERATIONS-RECORDED*", ((NIL != Symbols.boundp($sym14$_TOTAL_LOCAL_OPERATIONS_RECORDED_)) ? ((SubLObject) $total_local_operations_recorded$.getGlobalValue()) : ZERO_INTEGER));
-    $total_local_operations_transmitted$ = deflexical("*TOTAL-LOCAL-OPERATIONS-TRANSMITTED*", ((NIL != Symbols.boundp($sym15$_TOTAL_LOCAL_OPERATIONS_TRANSMITTED_)) ? ((SubLObject) $total_local_operations_transmitted$.getGlobalValue()) : ZERO_INTEGER));
-    $read_master_transcript_op_number$ = deflexical("*READ-MASTER-TRANSCRIPT-OP-NUMBER*", ((NIL != Symbols.boundp($sym16$_READ_MASTER_TRANSCRIPT_OP_NUMBER_)) ? ((SubLObject) $read_master_transcript_op_number$.getGlobalValue()) : ZERO_INTEGER));
-    $total_master_transcript_operations_processed$ = deflexical("*TOTAL-MASTER-TRANSCRIPT-OPERATIONS-PROCESSED*", ((NIL != Symbols.boundp($sym17$_TOTAL_MASTER_TRANSCRIPT_OPERATIONS_PROCESSED_)) ? ((SubLObject) $total_master_transcript_operations_processed$.getGlobalValue()) : ZERO_INTEGER));
+    $receiving_remote_operationsP$ = deflexical("*RECEIVING-REMOTE-OPERATIONS?*", maybeDefault( $sym8$_RECEIVING_REMOTE_OPERATIONS__, $receiving_remote_operationsP$, T));
+    $process_local_operationsP$ = deflexical("*PROCESS-LOCAL-OPERATIONS?*", maybeDefault( $sym9$_PROCESS_LOCAL_OPERATIONS__, $process_local_operationsP$, T));
+    $process_auxiliary_operationsP$ = deflexical("*PROCESS-AUXILIARY-OPERATIONS?*", maybeDefault( $sym10$_PROCESS_AUXILIARY_OPERATIONS__, $process_auxiliary_operationsP$, T));
+    $saving_operationsP$ = deflexical("*SAVING-OPERATIONS?*", maybeDefault( $sym11$_SAVING_OPERATIONS__, $saving_operationsP$, NIL));
+    $total_remote_operations_run$ = deflexical("*TOTAL-REMOTE-OPERATIONS-RUN*", maybeDefault( $sym12$_TOTAL_REMOTE_OPERATIONS_RUN_, $total_remote_operations_run$, ()-> (ZERO_INTEGER)));
+    $total_auxiliary_operations_run$ = deflexical("*TOTAL-AUXILIARY-OPERATIONS-RUN*", maybeDefault( $sym13$_TOTAL_AUXILIARY_OPERATIONS_RUN_, $total_auxiliary_operations_run$, ()-> (ZERO_INTEGER)));
+    $total_local_operations_recorded$ = deflexical("*TOTAL-LOCAL-OPERATIONS-RECORDED*", maybeDefault( $sym14$_TOTAL_LOCAL_OPERATIONS_RECORDED_, $total_local_operations_recorded$, ()-> (ZERO_INTEGER)));
+    $total_local_operations_transmitted$ = deflexical("*TOTAL-LOCAL-OPERATIONS-TRANSMITTED*", maybeDefault( $sym15$_TOTAL_LOCAL_OPERATIONS_TRANSMITTED_, $total_local_operations_transmitted$, ()-> (ZERO_INTEGER)));
+    $read_master_transcript_op_number$ = deflexical("*READ-MASTER-TRANSCRIPT-OP-NUMBER*", maybeDefault( $sym16$_READ_MASTER_TRANSCRIPT_OP_NUMBER_, $read_master_transcript_op_number$, ()-> (ZERO_INTEGER)));
+    $total_master_transcript_operations_processed$ = deflexical("*TOTAL-MASTER-TRANSCRIPT-OPERATIONS-PROCESSED*", maybeDefault( $sym17$_TOTAL_MASTER_TRANSCRIPT_OPERATIONS_PROCESSED_, $total_master_transcript_operations_processed$, ()-> (ZERO_INTEGER)));
     $image_requires_authenticationP$ = deflexical("*IMAGE-REQUIRES-AUTHENTICATION?*", NIL);
     $cyclist_authenticating_app$ = defparameter("*CYCLIST-AUTHENTICATING-APP*", $const26$CycBrowser);
     $default_cyclist_authentication_mt$ = defparameter("*DEFAULT-CYCLIST-AUTHENTICATION-MT*", $const34$CyclistsMt);
@@ -721,9 +753,9 @@ i.e. it is not reset when a new local transcript is started. */
     $save_transcript_ops_lock$ = defparameter("*SAVE-TRANSCRIPT-OPS-LOCK*", Locks.make_lock($str77$Save_Transcript_OPS_lock));
     $save_hl_transcript_ops_lock$ = defparameter("*SAVE-HL-TRANSCRIPT-OPS-LOCK*", Locks.make_lock($str78$Save_Hl_Transcript_OPS_lock));
     $transcript_load_succeeded$ = defvar("*TRANSCRIPT-LOAD-SUCCEEDED*", NIL);
-    $transcript_read_attempted$ = deflexical("*TRANSCRIPT-READ-ATTEMPTED*", ((NIL != Symbols.boundp($sym85$_TRANSCRIPT_READ_ATTEMPTED_)) ? ((SubLObject) $transcript_read_attempted$.getGlobalValue()) : NIL));
-    $initial_read_transcript_size$ = deflexical("*INITIAL-READ-TRANSCRIPT-SIZE*", ((NIL != Symbols.boundp($sym86$_INITIAL_READ_TRANSCRIPT_SIZE_)) ? ((SubLObject) $initial_read_transcript_size$.getGlobalValue()) : ZERO_INTEGER));
-    $remote_operations_kb_check_point$ = deflexical("*REMOTE-OPERATIONS-KB-CHECK-POINT*", ((NIL != Symbols.boundp($sym130$_REMOTE_OPERATIONS_KB_CHECK_POINT_)) ? ((SubLObject) $remote_operations_kb_check_point$.getGlobalValue()) : NIL));
+    $transcript_read_attempted$ = deflexical("*TRANSCRIPT-READ-ATTEMPTED*", maybeDefault( $sym85$_TRANSCRIPT_READ_ATTEMPTED_, $transcript_read_attempted$, NIL));
+    $initial_read_transcript_size$ = deflexical("*INITIAL-READ-TRANSCRIPT-SIZE*", maybeDefault( $sym86$_INITIAL_READ_TRANSCRIPT_SIZE_, $initial_read_transcript_size$, ()-> (ZERO_INTEGER)));
+    $remote_operations_kb_check_point$ = deflexical("*REMOTE-OPERATIONS-KB-CHECK-POINT*", maybeDefault( $sym130$_REMOTE_OPERATIONS_KB_CHECK_POINT_, $remote_operations_kb_check_point$, NIL));
     return NIL;
   }
 

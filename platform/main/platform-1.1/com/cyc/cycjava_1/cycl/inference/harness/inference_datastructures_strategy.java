@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,35 +67,35 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.balancing_tactician;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.balancing_tactician;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
 import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_execution;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_motivation;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_answer;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.vector_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_execution;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_motivation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_answer;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.vector_utilities;
 
 public  final class inference_datastructures_strategy extends SubLTranslatedFile {
 
@@ -89,36 +108,67 @@ public  final class inference_datastructures_strategy extends SubLTranslatedFile
   //// Definitions
 
   public static final class $strategy_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $suid; }
+    @Override
     public SubLObject getField3() { return $inference; }
+    @Override
     public SubLObject getField4() { return $result_uniqueness_criterion; }
+    @Override
     public SubLObject getField5() { return $active_problems; }
+    @Override
     public SubLObject getField6() { return $motivated_problems; }
+    @Override
     public SubLObject getField7() { return $set_aside_problems; }
+    @Override
     public SubLObject getField8() { return $should_reconsider_set_asidesP; }
+    @Override
     public SubLObject getField9() { return $productivity_limit; }
+    @Override
     public SubLObject getField10() { return $removal_backtracking_productivity_limit; }
+    @Override
     public SubLObject getField11() { return $proof_spec; }
+    @Override
     public SubLObject getField12() { return $problem_proof_spec_index; }
+    @Override
     public SubLObject getField13() { return $problem_strategic_index; }
+    @Override
     public SubLObject getField14() { return $memoization_state; }
+    @Override
     public SubLObject getField15() { return $type; }
+    @Override
     public SubLObject getField16() { return $data; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $suid = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $inference = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $result_uniqueness_criterion = value; }
+    @Override
     public SubLObject setField5(SubLObject value) { return $active_problems = value; }
+    @Override
     public SubLObject setField6(SubLObject value) { return $motivated_problems = value; }
+    @Override
     public SubLObject setField7(SubLObject value) { return $set_aside_problems = value; }
+    @Override
     public SubLObject setField8(SubLObject value) { return $should_reconsider_set_asidesP = value; }
+    @Override
     public SubLObject setField9(SubLObject value) { return $productivity_limit = value; }
+    @Override
     public SubLObject setField10(SubLObject value) { return $removal_backtracking_productivity_limit = value; }
+    @Override
     public SubLObject setField11(SubLObject value) { return $proof_spec = value; }
+    @Override
     public SubLObject setField12(SubLObject value) { return $problem_proof_spec_index = value; }
+    @Override
     public SubLObject setField13(SubLObject value) { return $problem_strategic_index = value; }
+    @Override
     public SubLObject setField14(SubLObject value) { return $memoization_state = value; }
+    @Override
     public SubLObject setField15(SubLObject value) { return $type = value; }
+    @Override
     public SubLObject setField16(SubLObject value) { return $data = value; }
     public SubLObject $suid = NIL;
     public SubLObject $inference = NIL;
@@ -139,46 +189,47 @@ public  final class inference_datastructures_strategy extends SubLTranslatedFile
     Structures.makeStructDeclNative($strategy_native.class, $sym0$STRATEGY, $sym1$STRATEGY_P, $list2, $list3, new String[] {"$suid", "$inference", "$result_uniqueness_criterion", "$active_problems", "$motivated_problems", "$set_aside_problems", "$should_reconsider_set_asidesP", "$productivity_limit", "$removal_backtracking_productivity_limit", "$proof_spec", "$problem_proof_spec_index", "$problem_strategic_index", "$memoization_state", "$type", "$data"}, $list4, $list5, $sym6$PRINT_STRATEGY);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static SubLSymbol $dtp_strategy$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strategy_print_function_trampoline(SubLObject object, SubLObject stream) {
     Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 36447");
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strategy_p(SubLObject object) {
     return ((object.getClass() == $strategy_native.class) ? ((SubLObject) T) : NIL);
   }
 
   public static final class $strategy_p$UnaryFunction extends UnaryFunction {
     public $strategy_p$UnaryFunction() { super(extractFunctionNamed("STRATEGY-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return strategy_p(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_suid(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField2();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_inference(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField3();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_result_uniqueness_criterion(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField4();
   }
 
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 6867) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 6867)
   public static final SubLObject destroy_problem_store_strategy(SubLObject strategy) {
     if ((NIL != valid_strategy_p(strategy))) {
       note_strategy_invalid(strategy);
@@ -187,170 +238,170 @@ public  final class inference_datastructures_strategy extends SubLTranslatedFile
     return NIL;
   }
 
-  
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_active_problems(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField5();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_motivated_problems(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField6();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_set_aside_problems(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField7();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_should_reconsider_set_asidesP(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField8();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_productivity_limit(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField9();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_removal_backtracking_productivity_limit(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField10();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_proof_spec(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField11();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_problem_proof_spec_index(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField12();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_problem_strategic_index(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField13();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_memoization_state(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField14();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_type(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField15();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject strat_data(SubLObject object) {
     checkType(object, $sym1$STRATEGY_P);
     return object.getField16();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_suid(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField2(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_inference(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField3(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_result_uniqueness_criterion(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField4(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_active_problems(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField5(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_motivated_problems(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField6(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_set_aside_problems(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField7(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_should_reconsider_set_asidesP(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField8(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_productivity_limit(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField9(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_removal_backtracking_productivity_limit(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField10(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_proof_spec(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField11(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_problem_proof_spec_index(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField12(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_problem_strategic_index(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField13(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_memoization_state(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField14(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_type(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField15(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject _csetf_strat_data(SubLObject object, SubLObject value) {
     checkType(object, $sym1$STRATEGY_P);
     return object.setField16(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 1838)
   public static final SubLObject make_strategy(SubLObject arglist) {
     if ((arglist == UNPROVIDED)) {
       arglist = NIL;
@@ -402,28 +453,29 @@ public  final class inference_datastructures_strategy extends SubLTranslatedFile
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 3923) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 3923)
   public static final SubLObject valid_strategy_p(SubLObject object) {
     return makeBoolean(((NIL != strategy_p(object))
            && (NIL == strategy_invalid_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 4045) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 4045)
   public static final SubLObject strategy_invalid_p(SubLObject strategy) {
     return Equality.eq($kw54$FREE, strategy_type(strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 4863) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 4863)
   public static final SubLObject sxhash_strategy_method(SubLObject object) {
     return strat_suid(object);
   }
 
   public static final class $sxhash_strategy_method$UnaryFunction extends UnaryFunction {
     public $sxhash_strategy_method$UnaryFunction() { super(extractFunctionNamed("SXHASH-STRATEGY-METHOD")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return sxhash_strategy_method(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 4935) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 4935)
   public static final SubLObject new_strategy(SubLObject type, SubLObject inference) {
     checkType(type, $sym58$STRATEGY_TYPE_P);
     checkType(inference, $sym59$INFERENCE_P);
@@ -456,7 +508,7 @@ public  final class inference_datastructures_strategy extends SubLTranslatedFile
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 7132) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 7132)
   public static final SubLObject destroy_inference_strategy(SubLObject strategy) {
     if ((NIL != valid_strategy_p(strategy))) {
       note_strategy_invalid(strategy);
@@ -466,7 +518,7 @@ public  final class inference_datastructures_strategy extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 7457) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 7457)
   public static final SubLObject destroy_strategy_int(SubLObject strategy) {
     _csetf_strat_data(strategy, $kw54$FREE);
     _csetf_strat_proof_spec(strategy, $kw54$FREE);
@@ -490,65 +542,65 @@ public  final class inference_datastructures_strategy extends SubLTranslatedFile
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 8676) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 8676)
   public static final SubLObject note_strategy_invalid(SubLObject strategy) {
     _csetf_strat_type(strategy, $kw54$FREE);
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9075) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9075)
   public static final SubLObject strategy_suid(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_suid(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9197) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9197)
   public static final SubLObject strategy_inference(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_inference(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9317) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9317)
   public static final SubLObject strategy_local_result_uniqueness_criterion(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_result_uniqueness_criterion(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9477) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9477)
   public static final SubLObject strategy_problem_strategic_index(SubLObject strategy) {
     return strat_problem_strategic_index(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9588) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9588)
   public static final SubLObject strategy_type(SubLObject strategy) {
     return strat_type(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9699) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9699)
   public static final SubLObject strategy_data(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_data(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9809) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9809)
   public static final SubLObject strategy_active_problems(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_active_problems(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9983) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 9983)
   public static final SubLObject strategy_motivated_problems(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_motivated_problems(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 10166) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 10166)
   public static final SubLObject strategy_set_aside_problems(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_set_aside_problems(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 10349) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 10349)
   public static final SubLObject strategy_should_reconsider_set_asidesP(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_should_reconsider_set_asidesP(strategy);
@@ -557,7 +609,7 @@ public  final class inference_datastructures_strategy extends SubLTranslatedFile
   /** @return productivity-p
 If a tactic's productivity meets or exceeds this limit, it will be
 ignored instead of executed. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 10509) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 10509)
   public static final SubLObject strategy_productivity_limit(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_productivity_limit(strategy);
@@ -566,7 +618,7 @@ ignored instead of executed. */
   /** @return productivity-p
 If a tactic's productivity meets or exceeds this limit, it will not be
 considered for removal backtracking. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 10770) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 10770)
   public static final SubLObject strategy_removal_backtracking_productivity_limit(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_removal_backtracking_productivity_limit(strategy);
@@ -574,13 +626,13 @@ considered for removal backtracking. */
 
   /** @return proof-spec-p
 The proof spec that this strategy is allowed to apply. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 11085) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 11085)
   public static final SubLObject strategy_proof_spec(SubLObject strategy) {
     checkType(strategy, $sym1$STRATEGY_P);
     return strat_proof_spec(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 11812) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 11812)
   public static final SubLObject set_strategy_productivity_limit(SubLObject strategy, SubLObject productivity_limit) {
     checkType(strategy, $sym1$STRATEGY_P);
     checkType(productivity_limit, $sym68$PRODUCTIVITY_P);
@@ -588,7 +640,7 @@ The proof spec that this strategy is allowed to apply. */
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 12556) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 12556)
   public static final SubLObject set_strategy_data(SubLObject strategy, SubLObject data) {
     checkType(strategy, $sym1$STRATEGY_P);
     _csetf_strat_data(strategy, data);
@@ -596,34 +648,34 @@ The proof spec that this strategy is allowed to apply. */
   }
 
   /** The strategy of the currently active strategy memoization state, if any. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 13298) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 13298)
   public static SubLSymbol $current_strategy_wrt_memoization$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 13824) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 13824)
   public static final SubLObject strategy_memoization_state(SubLObject strategy) {
     return strat_memoization_state(strategy);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 14152) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 14152)
   public static final SubLObject strategic_context_inference(SubLObject strategic_context) {
     return ((NIL != strategy_p(strategic_context)) ? ((SubLObject) strategy_inference(strategic_context)) : NIL);
   }
 
   /** @return answer-link-p; The answer-link of the inference of STRATEGY. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 14320) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 14320)
   public static final SubLObject strategy_answer_link(SubLObject strategy) {
     return inference_datastructures_inference.inference_root_link(strategy_inference(strategy));
   }
 
   /** Return T iff the answer-link of the inference of STRATEGY has been propagated
    and has not been closed thereafter. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 14541) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 14541)
   public static final SubLObject strategy_answer_link_propagatedP(SubLObject strategy) {
     return inference_worker_answer.answer_link_propagatedP(strategy_answer_link(strategy));
   }
 
   /** Return T iff the answer-link of the inference of STRATEGY ought to be propagated. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 14828) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 14828)
   public static final SubLObject strategy_should_propagate_answer_linkP(SubLObject strategy) {
     if ((NIL != strategy_answer_link_propagatedP(strategy))) {
       return NIL;
@@ -637,49 +689,49 @@ The proof spec that this strategy is allowed to apply. */
   }
 
   /** @return problem-p; The root problem of the inference of STRATEGY. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 15610) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 15610)
   public static final SubLObject strategy_root_problem(SubLObject strategy) {
     return inference_datastructures_inference.inference_root_problem(strategy_inference(strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 15832) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 15832)
   public static final SubLObject strategy_continuableP(SubLObject strategy) {
     return inference_datastructures_inference.inference_continuableP(strategy_inference(strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 15948) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 15948)
   public static final SubLObject problem_active_in_strategyP(SubLObject problem, SubLObject strategy) {
     return set.set_memberP(problem, strategy_active_problems(strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16081) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16081)
   public static final SubLObject problem_motivatedP(SubLObject problem, SubLObject strategy) {
     return set_contents.set_contents_memberP(problem, strategy_motivated_problems(strategy), Symbols.symbol_function(EQ));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16222) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16222)
   public static final SubLObject problem_set_aside_in_strategyP(SubLObject problem, SubLObject strategy) {
     return set.set_memberP(problem, strategy_set_aside_problems(strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16362) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16362)
   public static final SubLObject strategy_has_some_set_aside_problemsP(SubLObject strategy) {
     return makeBoolean((NIL == set.set_emptyP(strategy_set_aside_problems(strategy))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16498) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16498)
   public static final SubLObject strategy_all_valid_set_aside_problems(SubLObject strategy) {
     return list_utilities.delete_if_not($sym85$VALID_PROBLEM_P, set.set_element_list(strategy_set_aside_problems(strategy)), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16666) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16666)
   public static final SubLObject strategy_problem_store(SubLObject strategy) {
     return inference_datastructures_inference.inference_problem_store(strategy_inference(strategy));
   }
 
   /** Locally specified result uniqueness criteria on the strategy (if any)
 override the one from the inference. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16785) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 16785)
   public static final SubLObject strategy_result_uniqueness_criterion(SubLObject strategy) {
     {
       SubLObject local_criterion = strategy_local_result_uniqueness_criterion(strategy);
@@ -694,17 +746,17 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 17335) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 17335)
   public static final SubLObject strategy_unique_wrt_bindingsP(SubLObject strategy) {
     return Equality.eq($kw87$BINDINGS, strategy_result_uniqueness_criterion(strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 17467) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 17467)
   public static final SubLObject strategy_wants_one_answerP(SubLObject strategy) {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 18273) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 18273)
   public static final SubLObject set_strategy_property(SubLObject strategy, SubLObject property, SubLObject value) {
     checkType(strategy, $sym1$STRATEGY_P);
     checkType(property, $sym90$STRATEGY_PROPERTY_P);
@@ -725,7 +777,7 @@ override the one from the inference. */
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 18836) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 18836)
   public static final SubLObject set_strategy_properties(SubLObject strategy, SubLObject strategy_properties) {
     checkType(strategy_properties, $sym92$STRATEGY_PROPERTIES_P);
     {
@@ -741,19 +793,19 @@ override the one from the inference. */
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 19087) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 19087)
   public static final SubLObject strategy_note_problem_active(SubLObject strategy, SubLObject problem) {
     set.set_add(problem, strategy_active_problems(strategy));
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 19260) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 19260)
   public static final SubLObject strategy_note_problem_inactive(SubLObject strategy, SubLObject problem) {
     set.set_remove(problem, strategy_active_problems(strategy));
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 19406) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 19406)
   public static final SubLObject strategy_note_problem_motivated(SubLObject strategy, SubLObject problem) {
     {
       SubLObject motivated_problems = strategy_motivated_problems(strategy);
@@ -763,31 +815,31 @@ override the one from the inference. */
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 19914) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 19914)
   public static final SubLObject strategy_note_problem_set_aside(SubLObject strategy, SubLObject problem) {
     set.set_add(problem, strategy_set_aside_problems(strategy));
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 20213) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 20213)
   public static final SubLObject strategy_clear_set_asides(SubLObject strategy) {
     set.clear_set(strategy_set_aside_problems(strategy));
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 20340) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 20340)
   public static final SubLObject note_strategy_should_reconsider_set_asides(SubLObject strategy) {
     _csetf_strat_should_reconsider_set_asidesP(strategy, T);
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 20491) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 20491)
   public static final SubLObject clear_strategy_should_reconsider_set_asides(SubLObject strategy) {
     _csetf_strat_should_reconsider_set_asidesP(strategy, NIL);
     return strategy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 22027) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 22027)
   public static final SubLObject strategy_dispatch(SubLObject strategy, SubLObject method_type, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
     SubLObject arg1_providedP = makeBoolean((arg1 != UNPROVIDED));
     SubLObject arg2_providedP = makeBoolean((arg2 != UNPROVIDED));
@@ -838,7 +890,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 23203) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 23203)
   public static final SubLObject strategy_dispatch_handler(SubLObject strategy, SubLObject method_type) {
     {
       SubLObject strategy_type = strategy_type(strategy);
@@ -846,7 +898,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 23391) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 23391)
   public static final SubLObject strategy_dispatch_funcall_0(SubLObject func, SubLObject strategy) {
     {
       SubLObject pcase_var = func;
@@ -862,7 +914,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 25154) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 25154)
   public static final SubLObject strategy_dispatch_funcall_1(SubLObject func, SubLObject strategy, SubLObject arg1) {
     {
       SubLObject pcase_var = func;
@@ -874,7 +926,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 27027) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 27027)
   public static final SubLObject controlling_strategy_callback(SubLObject substrategy, SubLObject method_type, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
     SubLObject arg1_providedP = makeBoolean((arg1 != UNPROVIDED));
     SubLObject arg2_providedP = makeBoolean((arg2 != UNPROVIDED));
@@ -911,10 +963,10 @@ override the one from the inference. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 27946) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 27946)
   private static SubLSymbol $strategy_type_store$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 28385) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 28385)
   public static final SubLObject new_strategy_type(SubLObject type, SubLObject plist) {
     checkType(plist, $sym108$PROPERTY_LIST_P);
     deregister_strategy_type(type);
@@ -931,134 +983,134 @@ override the one from the inference. */
     return type;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 28633) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 28633)
   public static final SubLObject deregister_strategy_type(SubLObject type) {
     return dictionary.dictionary_remove($strategy_type_store$.getGlobalValue(), type);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 28856) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 28856)
   public static final SubLObject strategy_type_property(SubLObject type, SubLObject property) {
     return dictionary_utilities.dictionary_getf($strategy_type_store$.getGlobalValue(), type, property, UNPROVIDED);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29078) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29078)
   public static final SubLObject set_strategy_type_property(SubLObject type, SubLObject property, SubLObject value) {
     checkType(property, $sym109$STRATEGY_TYPE_PROPERTY_P);
     return dictionary_utilities.dictionary_putf($strategy_type_store$.getGlobalValue(), type, property, value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29288) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29288)
   private static SubLSymbol $uninterestingness_cache_lookup_enabledP$ = null;
 
   /** all :recompute */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29390) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29390)
   private static SubLSymbol $default_uninterestingness_flags$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29479) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29479)
   private static SubLSymbol $uninterestingness_cache_thrown_away_wrt_removal_byte$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29567) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29567)
   private static SubLSymbol $uninterestingness_cache_thrown_away_wrt_transformation_byte$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29662) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29662)
   private static SubLSymbol $uninterestingness_cache_thrown_away_wrt_new_root_byte$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29751) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29751)
   private static SubLSymbol $uninterestingness_cache_set_aside_wrt_removal_byte$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29837) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29837)
   private static SubLSymbol $uninterestingness_cache_set_aside_wrt_transformation_byte$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29930) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 29930)
   private static SubLSymbol $uninterestingness_cache_set_aside_wrt_new_root_byte$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30018) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30018)
   private static SubLSymbol $uninterestingness_cache_thrown_away_byte$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30095) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30095)
   private static SubLSymbol $uninterestingness_cache_set_aside_byte$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30170) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30170)
   public static final SubLObject uninterestingness_cache_thrown_away_wrt_removal_code(SubLObject flags) {
     return bytes.ldb($uninterestingness_cache_thrown_away_wrt_removal_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30344) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30344)
   public static final SubLObject uninterestingness_cache_thrown_away_wrt_transformation_code(SubLObject flags) {
     return bytes.ldb($uninterestingness_cache_thrown_away_wrt_transformation_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30511) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30511)
   public static final SubLObject uninterestingness_cache_thrown_away_wrt_new_root_code(SubLObject flags) {
     return bytes.ldb($uninterestingness_cache_thrown_away_wrt_new_root_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30666) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30666)
   public static final SubLObject uninterestingness_cache_set_aside_wrt_removal_code(SubLObject flags) {
     return bytes.ldb($uninterestingness_cache_set_aside_wrt_removal_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30815) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30815)
   public static final SubLObject uninterestingness_cache_set_aside_wrt_transformation_code(SubLObject flags) {
     return bytes.ldb($uninterestingness_cache_set_aside_wrt_transformation_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30978) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 30978)
   public static final SubLObject uninterestingness_cache_set_aside_wrt_new_root_code(SubLObject flags) {
     return bytes.ldb($uninterestingness_cache_set_aside_wrt_new_root_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31129) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31129)
   public static final SubLObject uninterestingness_cache_thrown_away_code(SubLObject flags) {
     return bytes.ldb($uninterestingness_cache_thrown_away_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31258) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31258)
   public static final SubLObject uninterestingness_cache_set_aside_code(SubLObject flags) {
     return bytes.ldb($uninterestingness_cache_set_aside_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31383) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31383)
   public static final SubLObject set_uninterestingness_cache_thrown_away_wrt_removal_code(SubLObject flags, SubLObject code) {
     return bytes.dpb(code, $uninterestingness_cache_thrown_away_wrt_removal_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31571) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31571)
   public static final SubLObject set_uninterestingness_cache_thrown_away_wrt_transformation_code(SubLObject flags, SubLObject code) {
     return bytes.dpb(code, $uninterestingness_cache_thrown_away_wrt_transformation_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31752) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31752)
   public static final SubLObject set_uninterestingness_cache_thrown_away_wrt_new_root_code(SubLObject flags, SubLObject code) {
     return bytes.dpb(code, $uninterestingness_cache_thrown_away_wrt_new_root_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31921) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 31921)
   public static final SubLObject set_uninterestingness_cache_set_aside_wrt_removal_code(SubLObject flags, SubLObject code) {
     return bytes.dpb(code, $uninterestingness_cache_set_aside_wrt_removal_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32084) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32084)
   public static final SubLObject set_uninterestingness_cache_set_aside_wrt_transformation_code(SubLObject flags, SubLObject code) {
     return bytes.dpb(code, $uninterestingness_cache_set_aside_wrt_transformation_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32261) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32261)
   public static final SubLObject set_uninterestingness_cache_set_aside_wrt_new_root_code(SubLObject flags, SubLObject code) {
     return bytes.dpb(code, $uninterestingness_cache_set_aside_wrt_new_root_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32426) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32426)
   public static final SubLObject set_uninterestingness_cache_thrown_away_code(SubLObject flags, SubLObject code) {
     return bytes.dpb(code, $uninterestingness_cache_thrown_away_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32569) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32569)
   public static final SubLObject set_uninterestingness_cache_set_aside_code(SubLObject flags, SubLObject code) {
     return bytes.dpb(code, $uninterestingness_cache_set_aside_byte$.getGlobalValue(), flags);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32708) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32708)
   public static final SubLObject decode_uninterestingness_cache_code(SubLObject code) {
     {
       SubLObject pcase_var = code;
@@ -1074,7 +1126,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32953) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 32953)
   public static final SubLObject encode_uninterestingness_cache_status(SubLObject status) {
     if (($kw110$RECOMPUTE == status)) {
       return ZERO_INTEGER;
@@ -1088,14 +1140,23 @@ override the one from the inference. */
   }
 
   public static final class $problem_strategic_properties_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $status; }
+    @Override
     public SubLObject getField3() { return $tactic_strategic_property_index; }
+    @Override
     public SubLObject getField4() { return $possible_tactic_count; }
+    @Override
     public SubLObject getField5() { return $flags; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $status = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $tactic_strategic_property_index = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $possible_tactic_count = value; }
+    @Override
     public SubLObject setField5(SubLObject value) { return $flags = value; }
     public SubLObject $status = NIL;
     public SubLObject $tactic_strategic_property_index = NIL;
@@ -1105,68 +1166,69 @@ override the one from the inference. */
     Structures.makeStructDeclNative($problem_strategic_properties_native.class, $sym113$PROBLEM_STRATEGIC_PROPERTIES, $sym114$PROBLEM_STRATEGIC_PROPERTIES_P, $list115, $list116, new String[] {"$status", "$tactic_strategic_property_index", "$possible_tactic_count", "$flags"}, $list117, $list118, $sym119$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static SubLSymbol $dtp_problem_strategic_properties$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static final SubLObject problem_strategic_properties_p(SubLObject object) {
     return ((object.getClass() == $problem_strategic_properties_native.class) ? ((SubLObject) T) : NIL);
   }
 
   public static final class $problem_strategic_properties_p$UnaryFunction extends UnaryFunction {
     public $problem_strategic_properties_p$UnaryFunction() { super(extractFunctionNamed("PROBLEM-STRATEGIC-PROPERTIES-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return problem_strategic_properties_p(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static final SubLObject prob_strategic_properties_status(SubLObject object) {
     checkType(object, $sym114$PROBLEM_STRATEGIC_PROPERTIES_P);
     return object.getField2();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static final SubLObject prob_strategic_properties_tactic_strategic_property_index(SubLObject object) {
     checkType(object, $sym114$PROBLEM_STRATEGIC_PROPERTIES_P);
     return object.getField3();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static final SubLObject prob_strategic_properties_possible_tactic_count(SubLObject object) {
     checkType(object, $sym114$PROBLEM_STRATEGIC_PROPERTIES_P);
     return object.getField4();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static final SubLObject prob_strategic_properties_flags(SubLObject object) {
     checkType(object, $sym114$PROBLEM_STRATEGIC_PROPERTIES_P);
     return object.getField5();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static final SubLObject _csetf_prob_strategic_properties_status(SubLObject object, SubLObject value) {
     checkType(object, $sym114$PROBLEM_STRATEGIC_PROPERTIES_P);
     return object.setField2(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static final SubLObject _csetf_prob_strategic_properties_tactic_strategic_property_index(SubLObject object, SubLObject value) {
     checkType(object, $sym114$PROBLEM_STRATEGIC_PROPERTIES_P);
     return object.setField3(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static final SubLObject _csetf_prob_strategic_properties_possible_tactic_count(SubLObject object, SubLObject value) {
     checkType(object, $sym114$PROBLEM_STRATEGIC_PROPERTIES_P);
     return object.setField4(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static final SubLObject _csetf_prob_strategic_properties_flags(SubLObject object, SubLObject value) {
     checkType(object, $sym114$PROBLEM_STRATEGIC_PROPERTIES_P);
     return object.setField5(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 33533)
   public static final SubLObject make_problem_strategic_properties(SubLObject arglist) {
     if ((arglist == UNPROVIDED)) {
       arglist = NIL;
@@ -1196,7 +1258,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 34084) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 34084)
   public static final SubLObject new_problem_strategic_properties() {
     {
       SubLObject problem_strategic_properties = make_problem_strategic_properties(UNPROVIDED);
@@ -1209,7 +1271,7 @@ override the one from the inference. */
   }
 
   /** @return problem-strategic-properties-p or NIL if uninitialized */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 34727) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 34727)
   public static final SubLObject problem_strategic_properties_int(SubLObject problem, SubLObject strategy) {
     checkType(problem, $sym88$PROBLEM_P);
     checkType(strategy, $sym1$STRATEGY_P);
@@ -1219,7 +1281,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 35105) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 35105)
   public static final SubLObject set_problem_strategic_properties(SubLObject problem, SubLObject strategy, SubLObject v_properties) {
     checkType(problem, $sym88$PROBLEM_P);
     checkType(strategy, $sym1$STRATEGY_P);
@@ -1232,7 +1294,7 @@ override the one from the inference. */
   }
 
   /** Initializes the problem-strategic-properties if they do not exist yet. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 35617) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 35617)
   public static final SubLObject problem_strategic_properties(SubLObject problem, SubLObject strategy) {
     {
       SubLObject problem_strategic_properties = problem_strategic_properties_int(problem, strategy);
@@ -1245,7 +1307,7 @@ override the one from the inference. */
   }
 
   /** Initializes the tactic-properties-vector if it does not exist yet. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 36173) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 36173)
   public static final SubLObject problem_strategic_properties_tactic_strategic_property_index(SubLObject problem, SubLObject problem_strategic_properties) {
     {
       SubLObject tactic_properties_vector = prob_strategic_properties_tactic_strategic_property_index(problem_strategic_properties);
@@ -1261,7 +1323,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 37595) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 37595)
   public static final SubLObject problem_raw_strategic_status(SubLObject problem, SubLObject strategy) {
     {
       SubLObject problem_strategic_properties = problem_strategic_properties(problem, strategy);
@@ -1275,7 +1337,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 38058) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 38058)
   public static final SubLObject problem_strategic_status(SubLObject problem, SubLObject strategy) {
     {
       SubLObject status = problem_raw_strategic_status(problem, strategy);
@@ -1288,7 +1350,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 38437) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 38437)
   public static final SubLObject problem_strategic_provability_status(SubLObject problem, SubLObject strategy) {
     {
       SubLObject status = problem_raw_strategic_status(problem, strategy);
@@ -1305,7 +1367,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40004) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40004)
   public static final SubLObject set_problem_raw_strategic_status(SubLObject problem, SubLObject strategy, SubLObject status) {
     {
       SubLObject problem_strategic_properties = problem_strategic_properties(problem, strategy);
@@ -1314,52 +1376,52 @@ override the one from the inference. */
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40296) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40296)
   public static final SubLObject strategically_unexamined_problem_p(SubLObject problem, SubLObject strategy) {
     return Equality.eq($kw134$UNEXAMINED, problem_strategic_status(problem, strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40453) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40453)
   public static final SubLObject strategically_examined_problem_p(SubLObject problem, SubLObject strategy) {
     return Equality.eq($kw140$EXAMINED, problem_strategic_status(problem, strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40592) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40592)
   public static final SubLObject strategically_possible_problem_p(SubLObject problem, SubLObject strategy) {
     return Equality.eq($kw141$POSSIBLE, problem_strategic_status(problem, strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40731) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40731)
   public static final SubLObject strategically_pending_problem_p(SubLObject problem, SubLObject strategy) {
     return Equality.eq($kw142$PENDING, problem_strategic_status(problem, strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40868) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 40868)
   public static final SubLObject strategically_finished_problem_p(SubLObject problem, SubLObject strategy) {
     return Equality.eq($kw135$FINISHED, problem_strategic_status(problem, strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 41007) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 41007)
   public static final SubLObject strategically_no_good_problem_p(SubLObject problem, SubLObject strategy) {
     return Equality.eq($kw138$NO_GOOD, problem_strategic_provability_status(problem, strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 41156) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 41156)
   public static final SubLObject strategically_neutral_problem_p(SubLObject problem, SubLObject strategy) {
     return Equality.eq($kw136$NEUTRAL, problem_strategic_provability_status(problem, strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 41305) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 41305)
   public static final SubLObject strategically_good_problem_p(SubLObject problem, SubLObject strategy) {
     return Equality.eq($kw137$GOOD, problem_strategic_provability_status(problem, strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 41913) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 41913)
   public static final SubLObject strategically_totally_no_good_problem_p(SubLObject problem, SubLObject strategy) {
     return strategically_no_good_problem_p(problem, inference_tactician.controlling_strategy(strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 42074) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 42074)
   public static final SubLObject problem_strategic_flags(SubLObject problem, SubLObject strategy) {
     {
       SubLObject problem_strategic_properties = problem_strategic_properties(problem, strategy);
@@ -1367,7 +1429,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 42334) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 42334)
   public static final SubLObject set_problem_strategic_flags(SubLObject problem, SubLObject strategy, SubLObject flags) {
     checkType(flags, $sym143$FIXNUMP);
     {
@@ -1377,42 +1439,42 @@ override the one from the inference. */
     return flags;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 42619) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 42619)
   public static final SubLObject problem_thrown_away_cache_status(SubLObject problem, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_thrown_away_code(problem_strategic_flags(problem, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 42826) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 42826)
   public static final SubLObject problem_thrown_away_cache_removal_status(SubLObject problem, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_thrown_away_wrt_removal_code(problem_strategic_flags(problem, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 43051) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 43051)
   public static final SubLObject problem_thrown_away_cache_transformation_status(SubLObject problem, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_thrown_away_wrt_transformation_code(problem_strategic_flags(problem, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 43290) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 43290)
   public static final SubLObject problem_thrown_away_cache_new_root_status(SubLObject problem, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_thrown_away_wrt_new_root_code(problem_strategic_flags(problem, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 43517) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 43517)
   public static final SubLObject problem_set_aside_cache_removal_status(SubLObject problem, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_set_aside_wrt_removal_code(problem_strategic_flags(problem, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 43738) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 43738)
   public static final SubLObject problem_set_aside_cache_status(SubLObject problem, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_set_aside_code(problem_strategic_flags(problem, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 43941) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 43941)
   public static final SubLObject problem_set_aside_cache_transformation_status(SubLObject problem, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_set_aside_wrt_transformation_code(problem_strategic_flags(problem, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 44399) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 44399)
   public static final SubLObject set_problem_thrown_away(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1421,7 +1483,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 44707) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 44707)
   public static final SubLObject set_problem_not_thrown_away(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1430,7 +1492,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 46018) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 46018)
   public static final SubLObject set_problem_not_thrown_away_wrt_removal(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1439,7 +1501,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 46354) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 46354)
   public static final SubLObject set_problem_recompute_thrown_away_wrt_removal(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1448,7 +1510,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 47055) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 47055)
   public static final SubLObject set_problem_thrown_away_wrt_transformation(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1457,7 +1519,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 47399) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 47399)
   public static final SubLObject set_problem_not_thrown_away_wrt_transformation(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1466,7 +1528,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 47749) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 47749)
   public static final SubLObject set_problem_recompute_thrown_away_wrt_transformation(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1475,7 +1537,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 48628) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 48628)
   public static final SubLObject set_problem_not_thrown_away_wrt_new_root(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1484,7 +1546,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 48966) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 48966)
   public static final SubLObject set_problem_recompute_thrown_away_wrt_new_root(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1493,7 +1555,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 49495) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 49495)
   public static final SubLObject set_problem_set_aside(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1502,7 +1564,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 49799) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 49799)
   public static final SubLObject set_problem_not_set_aside(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1511,7 +1573,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 50758) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 50758)
   public static final SubLObject set_problem_not_set_aside_wrt_removal(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1520,7 +1582,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 51090) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 51090)
   public static final SubLObject set_problem_recompute_set_aside_wrt_removal(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1529,7 +1591,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 51775) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 51775)
   public static final SubLObject set_problem_not_set_aside_wrt_transformation(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1538,7 +1600,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 52121) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 52121)
   public static final SubLObject set_problem_recompute_set_aside_wrt_transformation(SubLObject problem, SubLObject strategy) {
     {
       SubLObject flags = problem_strategic_flags(problem, strategy);
@@ -1547,12 +1609,12 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 53328) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 53328)
   public static final SubLObject set_problem_recompute_set_aside_wrt_new_root(SubLObject problem, SubLObject strategy) {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 53768) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 53768)
   public static final SubLObject set_problem_thrown_away_wrt(SubLObject problem, SubLObject strategy, SubLObject motivation) {
     {
       SubLObject pcase_var = motivation;
@@ -1570,7 +1632,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 54223) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 54223)
   public static final SubLObject set_problem_not_thrown_away_wrt(SubLObject problem, SubLObject strategy, SubLObject motivation) {
     {
       SubLObject pcase_var = motivation;
@@ -1586,7 +1648,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 55564) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 55564)
   public static final SubLObject set_problem_not_set_aside_wrt(SubLObject problem, SubLObject strategy, SubLObject motivation) {
     {
       SubLObject pcase_var = motivation;
@@ -1603,7 +1665,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 56466) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 56466)
   public static final SubLObject problem_thrown_away_cache_status_wrt_motivation(SubLObject problem, SubLObject strategy, SubLObject motivation) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1625,7 +1687,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 57007) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 57007)
   public static final SubLObject set_problem_recompute_thrown_away_wrt_all_motivations(SubLObject problem, SubLObject strategy) {
     if ((NIL != balancing_tactician.balancing_tactician_substrategy_p(strategy))) {
       Errors
@@ -1638,7 +1700,7 @@ override the one from the inference. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 57449) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 57449)
   public static final SubLObject set_problem_recompute_thrown_away_wrt_all_relevant_strategies_and_all_motivations(SubLObject problem) {
     {
       SubLObject prob = problem;
@@ -1727,7 +1789,7 @@ override the one from the inference. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 57836) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 57836)
   public static final SubLObject problem_set_aside_cache_status_wrt_motivation(SubLObject problem, SubLObject strategy, SubLObject motivation) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1749,7 +1811,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 58361) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 58361)
   public static final SubLObject set_problem_recompute_set_aside_wrt_all_motivations(SubLObject problem, SubLObject strategy) {
     if ((NIL != balancing_tactician.balancing_tactician_substrategy_p(strategy))) {
       Errors
@@ -1763,14 +1825,23 @@ override the one from the inference. */
   }
 
   public static final class $tactic_strategic_properties_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $preference_level; }
+    @Override
     public SubLObject getField3() { return $preference_level_justification; }
+    @Override
     public SubLObject getField4() { return $productivity; }
+    @Override
     public SubLObject getField5() { return $flags; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $preference_level = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $preference_level_justification = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $productivity = value; }
+    @Override
     public SubLObject setField5(SubLObject value) { return $flags = value; }
     public SubLObject $preference_level = NIL;
     public SubLObject $preference_level_justification = NIL;
@@ -1780,62 +1851,63 @@ override the one from the inference. */
     Structures.makeStructDeclNative($tactic_strategic_properties_native.class, $sym149$TACTIC_STRATEGIC_PROPERTIES, $sym150$TACTIC_STRATEGIC_PROPERTIES_P, $list151, $list152, new String[] {"$preference_level", "$preference_level_justification", "$productivity", "$flags"}, $list153, $list154, $sym119$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393)
   public static SubLSymbol $dtp_tactic_strategic_properties$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393)
   public static final SubLObject tactic_strategic_properties_p(SubLObject object) {
     return ((object.getClass() == $tactic_strategic_properties_native.class) ? ((SubLObject) T) : NIL);
   }
 
   public static final class $tactic_strategic_properties_p$UnaryFunction extends UnaryFunction {
     public $tactic_strategic_properties_p$UnaryFunction() { super(extractFunctionNamed("TACTIC-STRATEGIC-PROPERTIES-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return tactic_strategic_properties_p(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393)
   public static final SubLObject tact_strategic_properties_preference_level(SubLObject object) {
     checkType(object, $sym150$TACTIC_STRATEGIC_PROPERTIES_P);
     return object.getField2();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393)
   public static final SubLObject tact_strategic_properties_productivity(SubLObject object) {
     checkType(object, $sym150$TACTIC_STRATEGIC_PROPERTIES_P);
     return object.getField4();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393)
   public static final SubLObject tact_strategic_properties_flags(SubLObject object) {
     checkType(object, $sym150$TACTIC_STRATEGIC_PROPERTIES_P);
     return object.getField5();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393)
   public static final SubLObject _csetf_tact_strategic_properties_preference_level(SubLObject object, SubLObject value) {
     checkType(object, $sym150$TACTIC_STRATEGIC_PROPERTIES_P);
     return object.setField2(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393)
   public static final SubLObject _csetf_tact_strategic_properties_preference_level_justification(SubLObject object, SubLObject value) {
     checkType(object, $sym150$TACTIC_STRATEGIC_PROPERTIES_P);
     return object.setField3(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393)
   public static final SubLObject _csetf_tact_strategic_properties_productivity(SubLObject object, SubLObject value) {
     checkType(object, $sym150$TACTIC_STRATEGIC_PROPERTIES_P);
     return object.setField4(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393)
   public static final SubLObject _csetf_tact_strategic_properties_flags(SubLObject object, SubLObject value) {
     checkType(object, $sym150$TACTIC_STRATEGIC_PROPERTIES_P);
     return object.setField5(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59393)
   public static final SubLObject make_tactic_strategic_properties(SubLObject arglist) {
     if ((arglist == UNPROVIDED)) {
       arglist = NIL;
@@ -1865,7 +1937,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59961) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 59961)
   public static final SubLObject new_tactic_strategic_properties() {
     {
       SubLObject tactic_strategic_properties = make_tactic_strategic_properties(UNPROVIDED);
@@ -1878,7 +1950,7 @@ override the one from the inference. */
   }
 
   /** @return tactic-strategic-properties-p or NIL if uninitialized */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 60610) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 60610)
   public static final SubLObject tactic_strategic_properties_int(SubLObject tactic, SubLObject strategy) {
     checkType(tactic, $sym169$TACTIC_P);
     checkType(strategy, $sym1$STRATEGY_P);
@@ -1900,7 +1972,7 @@ override the one from the inference. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 61322) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 61322)
   public static final SubLObject set_tactic_strategic_properties(SubLObject tactic, SubLObject strategy, SubLObject v_properties) {
     checkType(tactic, $sym169$TACTIC_P);
     checkType(strategy, $sym1$STRATEGY_P);
@@ -1916,7 +1988,7 @@ override the one from the inference. */
   }
 
   /** Initializes the tactic-strategic-properties if they do not exist yet. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 61924) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 61924)
   public static final SubLObject tactic_strategic_properties(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject tactic_strategic_properties = tactic_strategic_properties_int(tactic, strategy);
@@ -1928,7 +2000,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 62466) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 62466)
   public static final SubLObject tactic_strategic_completeness(SubLObject tactic, SubLObject strategic_context) {
     checkType(strategic_context, $sym139$STRATEGIC_CONTEXT_P);
     if (($kw170$TACTICAL == strategic_context)) {
@@ -1940,7 +2012,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 62985) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 62985)
   public static final SubLObject tactic_strategic_preference_level(SubLObject tactic, SubLObject strategic_context) {
     checkType(strategic_context, $sym139$STRATEGIC_CONTEXT_P);
     if (($kw170$TACTICAL == strategic_context)) {
@@ -1955,7 +2027,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 63593) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 63593)
   public static final SubLObject tactic_strategic_preference_level_justification(SubLObject tactic, SubLObject strategic_context) {
     checkType(strategic_context, $sym139$STRATEGIC_CONTEXT_P);
     if (($kw170$TACTICAL == strategic_context)) {
@@ -1971,7 +2043,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 64565) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 64565)
   public static final SubLObject conjunctive_tactic_strategic_preference_level(SubLObject tactic, SubLObject strategic_context) {
     checkType(tactic, $sym174$GENERALIZED_CONJUNCTIVE_TACTIC_P);
     if ((NIL != inference_worker_removal.conjunctive_removal_tactic_p(tactic))) {
@@ -1981,7 +2053,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 64938) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 64938)
   public static final SubLObject conjunctive_tactic_strategic_preference_level_justification(SubLObject tactic, SubLObject strategic_context) {
     checkType(tactic, $sym174$GENERALIZED_CONJUNCTIVE_TACTIC_P);
     if ((NIL != inference_worker_removal.conjunctive_removal_tactic_p(tactic))) {
@@ -1991,7 +2063,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 65310) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 65310)
   public static final SubLObject tactic_strategic_productivity(SubLObject tactic, SubLObject strategic_context) {
     if (($kw170$TACTICAL == strategic_context)) {
       return inference_datastructures_tactic.tactic_productivity(tactic);
@@ -2005,12 +2077,12 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 65880) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 65880)
   public static final SubLObject tactic_strategically_preferredP(SubLObject tactic, SubLObject strategy) {
     return Equality.eq($kw175$PREFERRED, tactic_strategic_preference_level(tactic, strategy));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 66026) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 66026)
   public static final SubLObject set_tactic_strategic_preference_level(SubLObject tactic, SubLObject strategy, SubLObject preference_level, SubLObject justification) {
     checkType(preference_level, $sym176$PREFERENCE_LEVEL_P);
     {
@@ -2021,7 +2093,7 @@ override the one from the inference. */
     return tactic;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 66955) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 66955)
   public static final SubLObject set_tactic_strategic_productivity(SubLObject tactic, SubLObject strategy, SubLObject productivity) {
     {
       SubLObject tactic_strategic_properties = tactic_strategic_properties(tactic, strategy);
@@ -2030,7 +2102,7 @@ override the one from the inference. */
     return tactic;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 67674) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 67674)
   public static final SubLObject tactic_strategic_flags(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject tactic_strategic_properties = tactic_strategic_properties(tactic, strategy);
@@ -2038,7 +2110,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 67927) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 67927)
   public static final SubLObject set_tactic_strategic_flags(SubLObject tactic, SubLObject strategy, SubLObject flags) {
     checkType(flags, $sym143$FIXNUMP);
     {
@@ -2048,47 +2120,47 @@ override the one from the inference. */
     return flags;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 68206) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 68206)
   public static final SubLObject tactic_thrown_away_cache_status(SubLObject tactic, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_thrown_away_code(tactic_strategic_flags(tactic, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 68409) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 68409)
   public static final SubLObject tactic_thrown_away_cache_removal_status(SubLObject tactic, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_thrown_away_wrt_removal_code(tactic_strategic_flags(tactic, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 68630) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 68630)
   public static final SubLObject tactic_thrown_away_cache_transformation_status(SubLObject tactic, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_thrown_away_wrt_transformation_code(tactic_strategic_flags(tactic, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 68865) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 68865)
   public static final SubLObject tactic_thrown_away_cache_new_root_status(SubLObject tactic, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_thrown_away_wrt_new_root_code(tactic_strategic_flags(tactic, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 69088) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 69088)
   public static final SubLObject tactic_set_aside_cache_status(SubLObject tactic, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_set_aside_code(tactic_strategic_flags(tactic, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 69287) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 69287)
   public static final SubLObject tactic_set_aside_cache_removal_status(SubLObject tactic, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_set_aside_wrt_removal_code(tactic_strategic_flags(tactic, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 69504) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 69504)
   public static final SubLObject tactic_set_aside_cache_transformation_status(SubLObject tactic, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_set_aside_wrt_transformation_code(tactic_strategic_flags(tactic, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 69735) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 69735)
   public static final SubLObject tactic_set_aside_cache_new_root_status(SubLObject tactic, SubLObject strategy) {
     return decode_uninterestingness_cache_code(uninterestingness_cache_set_aside_wrt_new_root_code(tactic_strategic_flags(tactic, strategy)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 69954) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 69954)
   public static final SubLObject set_tactic_thrown_away(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2097,7 +2169,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 70256) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 70256)
   public static final SubLObject set_tactic_not_thrown_away(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2106,7 +2178,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 71050) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 71050)
   public static final SubLObject set_tactic_thrown_away_wrt_removal(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2115,7 +2187,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 71374) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 71374)
   public static final SubLObject set_tactic_not_thrown_away_wrt_removal(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2124,7 +2196,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 71704) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 71704)
   public static final SubLObject set_tactic_recompute_thrown_away_wrt_removal(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2133,7 +2205,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 72224) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 72224)
   public static final SubLObject set_tactic_thrown_away_wrt_transformation(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2142,7 +2214,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 72562) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 72562)
   public static final SubLObject set_tactic_not_thrown_away_wrt_transformation(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2151,7 +2223,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 72906) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 72906)
   public static final SubLObject set_tactic_recompute_thrown_away_wrt_transformation(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2160,7 +2232,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 73447) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 73447)
   public static final SubLObject set_tactic_thrown_away_wrt_new_root(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2169,7 +2241,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 73773) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 73773)
   public static final SubLObject set_tactic_not_thrown_away_wrt_new_root(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2178,7 +2250,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 74105) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 74105)
   public static final SubLObject set_tactic_recompute_thrown_away_wrt_new_root(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2187,7 +2259,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 74926) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 74926)
   public static final SubLObject set_tactic_not_set_aside(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2196,7 +2268,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 75867) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 75867)
   public static final SubLObject set_tactic_not_set_aside_wrt_removal(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2205,7 +2277,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 76193) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 76193)
   public static final SubLObject set_tactic_recompute_set_aside_wrt_removal(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2214,7 +2286,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 76532) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 76532)
   public static final SubLObject set_tactic_set_aside_wrt_transformation(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2223,7 +2295,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 76866) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 76866)
   public static final SubLObject set_tactic_not_set_aside_wrt_transformation(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2232,7 +2304,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 77206) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 77206)
   public static final SubLObject set_tactic_recompute_set_aside_wrt_transformation(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2241,7 +2313,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 77881) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 77881)
   public static final SubLObject set_tactic_not_set_aside_wrt_new_root(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2250,7 +2322,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 78209) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 78209)
   public static final SubLObject set_tactic_recompute_set_aside_wrt_new_root(SubLObject tactic, SubLObject strategy) {
     {
       SubLObject flags = tactic_strategic_flags(tactic, strategy);
@@ -2259,7 +2331,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 78550) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 78550)
   public static final SubLObject set_tactic_thrown_away_wrt(SubLObject tactic, SubLObject strategy, SubLObject motivation) {
     {
       SubLObject pcase_var = motivation;
@@ -2275,7 +2347,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 78997) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 78997)
   public static final SubLObject set_tactic_not_thrown_away_wrt(SubLObject tactic, SubLObject strategy, SubLObject motivation) {
     {
       SubLObject pcase_var = motivation;
@@ -2291,7 +2363,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 79899) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 79899)
   public static final SubLObject set_tactic_set_aside_wrt(SubLObject tactic, SubLObject strategy, SubLObject motivation) {
     {
       SubLObject pcase_var = motivation;
@@ -2309,7 +2381,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 80314) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 80314)
   public static final SubLObject set_tactic_not_set_aside_wrt(SubLObject tactic, SubLObject strategy, SubLObject motivation) {
     {
       SubLObject pcase_var = motivation;
@@ -2325,7 +2397,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 81200) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 81200)
   public static final SubLObject tactic_thrown_away_cache_status_wrt_motivation(SubLObject tactic, SubLObject strategy, SubLObject motivation) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2347,7 +2419,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 81733) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 81733)
   public static final SubLObject set_tactic_recompute_thrown_away_wrt_all_motivations(SubLObject tactic, SubLObject strategy) {
     if ((NIL != balancing_tactician.balancing_tactician_substrategy_p(strategy))) {
       Errors
@@ -2360,7 +2432,7 @@ override the one from the inference. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 82165) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 82165)
   public static final SubLObject set_problem_tactics_recompute_thrown_away_wrt_all_motivations(SubLObject problem, SubLObject strategy) {
     {
       SubLObject cdolist_list_var = inference_datastructures_problem.problem_tactics(problem);
@@ -2372,7 +2444,7 @@ override the one from the inference. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 82393) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 82393)
   public static final SubLObject set_problem_tactics_recompute_thrown_away_wrt_all_relevant_strategies_and_all_motivations(SubLObject problem) {
     {
       SubLObject prob = problem;
@@ -2461,7 +2533,7 @@ override the one from the inference. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 82664) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 82664)
   public static final SubLObject tactic_set_aside_cache_status_wrt_motivation(SubLObject tactic, SubLObject strategy, SubLObject motivation) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2483,7 +2555,7 @@ override the one from the inference. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 83194) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 83194)
   public static final SubLObject set_tactic_recompute_set_aside_wrt_all_motivations(SubLObject tactic, SubLObject strategy) {
     if ((NIL != balancing_tactician.balancing_tactician_substrategy_p(strategy))) {
       Errors
@@ -2496,7 +2568,7 @@ override the one from the inference. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 83616) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 83616)
   public static final SubLObject set_tactic_recompute_set_aside_wrt_all_relevant_strategies_and_all_motivations(SubLObject tactic) {
     {
       SubLObject prob = inference_datastructures_tactic.tactic_problem(tactic);
@@ -2585,7 +2657,7 @@ override the one from the inference. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 84743) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 84743)
   public static final SubLObject problem_note_tactic_strategically_possible(SubLObject problem, SubLObject tactic, SubLObject strategy) {
     checkType(problem, $sym88$PROBLEM_P);
     checkType(tactic, $sym169$TACTIC_P);
@@ -2597,7 +2669,7 @@ override the one from the inference. */
     return problem;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 85154) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-strategy.lisp", position = 85154)
   public static final SubLObject problem_note_tactic_not_strategically_possible(SubLObject problem, SubLObject tactic, SubLObject strategy) {
     checkType(problem, $sym88$PROBLEM_P);
     checkType(tactic, $sym169$TACTIC_P);
@@ -2910,7 +2982,7 @@ override the one from the inference. */
   public static final SubLObject init_inference_datastructures_strategy_file() {
     $dtp_strategy$ = defconstant("*DTP-STRATEGY*", $sym0$STRATEGY);
     $current_strategy_wrt_memoization$ = defparameter("*CURRENT-STRATEGY-WRT-MEMOIZATION*", NIL);
-    $strategy_type_store$ = deflexical("*STRATEGY-TYPE-STORE*", ((NIL != Symbols.boundp($sym107$_STRATEGY_TYPE_STORE_)) ? ((SubLObject) $strategy_type_store$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), FIVE_INTEGER)));
+    $strategy_type_store$ = deflexical("*STRATEGY-TYPE-STORE*", maybeDefault( $sym107$_STRATEGY_TYPE_STORE_, $strategy_type_store$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), FIVE_INTEGER))));
     $uninterestingness_cache_lookup_enabledP$ = defparameter("*UNINTERESTINGNESS-CACHE-LOOKUP-ENABLED?*", T);
     $default_uninterestingness_flags$ = defconstant("*DEFAULT-UNINTERESTINGNESS-FLAGS*", ZERO_INTEGER);
     $uninterestingness_cache_thrown_away_wrt_removal_byte$ = defconstant("*UNINTERESTINGNESS-CACHE-THROWN-AWAY-WRT-REMOVAL-BYTE*", bytes.sublisp_byte(TWO_INTEGER, ZERO_INTEGER));
@@ -3149,14 +3221,17 @@ override the one from the inference. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_datastructures_strategy_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_datastructures_strategy_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_datastructures_strategy_file();
   }

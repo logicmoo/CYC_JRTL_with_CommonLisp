@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.modules;
+package com.cyc.cycjava_1.cycl.inference.modules;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,34 +67,35 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.genls;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_answer;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_residual_transformation;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
-import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
-import com.cyc.cycjava_1.cycl.kb_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.genls;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_answer;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_residual_transformation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
+//dm import com.cyc.cycjava_1.cycl.kb_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm
 import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_conjunctive_pruning;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class simplification_modules extends SubLTranslatedFile {
 
@@ -87,10 +107,10 @@ public  final class simplification_modules extends SubLTranslatedFile {
 
   //// Definitions
 
-  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 973) 
+  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 973)
   private static SubLSymbol $simplification_module_names$ = null;
 
-  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 1299) 
+  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 1299)
   public static final SubLObject simplification_module_p(SubLObject hl_module) {
     return makeBoolean(((NIL != inference_modules.hl_module_p(hl_module))
            && (NIL != list_utilities.member_eqP(inference_modules.hl_module_name(hl_module), $simplification_module_names$.getGlobalValue()))));
@@ -98,10 +118,10 @@ public  final class simplification_modules extends SubLTranslatedFile {
 
   /** Temporary control variable, should eventually stay T.
    When non-nil, we allow for simplification modules to apply. */
-  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 1467) 
+  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 1467)
   private static SubLSymbol $simplification_modules_enabledP$ = null;
 
-  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 2490) 
+  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 2490)
   public static final SubLObject simplification_duplicate_literals_via_functionality_pos_lits_applicability(SubLObject contextualized_dnf_clause) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -127,10 +147,11 @@ public  final class simplification_modules extends SubLTranslatedFile {
 
   public static final class $simplification_duplicate_literals_via_functionality_pos_lits_applicability$UnaryFunction extends UnaryFunction {
     public $simplification_duplicate_literals_via_functionality_pos_lits_applicability$UnaryFunction() { super(extractFunctionNamed("SIMPLIFICATION-DUPLICATE-LITERALS-VIA-FUNCTIONALITY-POS-LITS-APPLICABILITY")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return simplification_duplicate_literals_via_functionality_pos_lits_applicability(arg1); }
   }
 
-  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 3223) 
+  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 3223)
   public static final SubLObject problem_is_a_topological_rootP(SubLObject problem) {
     {
       SubLObject set_contents_var = inference_datastructures_problem.problem_dependent_links(problem);
@@ -153,7 +174,7 @@ public  final class simplification_modules extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 5508) 
+  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 5508)
   public static final SubLObject asent_pred_inter_arg_dependent_cardinalities_internal(SubLObject pred) {
     {
       SubLObject result = NIL;
@@ -166,7 +187,7 @@ public  final class simplification_modules extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 5508) 
+  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 5508)
   public static final SubLObject asent_pred_inter_arg_dependent_cardinalities(SubLObject pred) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -193,7 +214,7 @@ public  final class simplification_modules extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 5982) 
+  @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 5982)
   public static final SubLObject simplification_duplicate_literals_via_functionality_pos_lits_equivalence_classes(SubLObject contextualized_dnf_clause) {
     {
       SubLObject possible_match_asents = NIL;
@@ -452,14 +473,17 @@ public  final class simplification_modules extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_simplification_modules_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_simplification_modules_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_simplification_modules_file();
   }

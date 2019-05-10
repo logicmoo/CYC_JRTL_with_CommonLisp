@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.cyc_testing;
+package com.cyc.cycjava_1.cycl.cyc_testing;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,21 +67,21 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.czer_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_strategist;
-import com.cyc.cycjava_1.cycl.kb_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.czer_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_strategist;
+//dm import com.cyc.cycjava_1.cycl.kb_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
 
 public  final class evaluatable_relation_tests extends SubLTranslatedFile {
 
@@ -173,7 +192,7 @@ public  final class evaluatable_relation_tests extends SubLTranslatedFile {
 
   public static final SubLObject init_evaluatable_relation_tests_file() {
     $dtp_evaluatable_relation_test$ = defconstant("*DTP-EVALUATABLE-RELATION-TEST*", $sym0$EVALUATABLE_RELATION_TEST);
-    $evaluatable_relation_tests$ = deflexical("*EVALUATABLE-RELATION-TESTS*", ((NIL != Symbols.boundp($sym24$_EVALUATABLE_RELATION_TESTS_)) ? ((SubLObject) $evaluatable_relation_tests$.getGlobalValue()) : Hashtables.make_hash_table($int25$100, UNPROVIDED, UNPROVIDED)));
+    $evaluatable_relation_tests$ = deflexical("*EVALUATABLE-RELATION-TESTS*", maybeDefault( $sym24$_EVALUATABLE_RELATION_TESTS_, $evaluatable_relation_tests$, ()-> (Hashtables.make_hash_table($int25$100, UNPROVIDED, UNPROVIDED))));
     return NIL;
   }
 

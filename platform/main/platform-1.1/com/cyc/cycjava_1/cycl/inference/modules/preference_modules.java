@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.modules;
+package com.cyc.cycjava_1.cycl.inference.modules;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,30 +67,30 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.czer_main;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.formula_pattern_match;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_tva_lookup;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.czer_main;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.formula_pattern_match;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_tva_lookup;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class preference_modules extends SubLTranslatedFile {
 
@@ -873,10 +892,10 @@ public  final class preference_modules extends SubLTranslatedFile {
   public static final SubLObject init_preference_modules_file() {
     $ordered_preference_levels$ = deflexical("*ORDERED-PREFERENCE-LEVELS*", $list29);
     $preference_module_properties$ = deflexical("*PREFERENCE-MODULE-PROPERTIES*", $list47);
-    $preference_modules_by_name$ = deflexical("*PREFERENCE-MODULES-BY-NAME*", ((NIL != Symbols.boundp($sym18$_PREFERENCE_MODULES_BY_NAME_)) ? ((SubLObject) $preference_modules_by_name$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $generic_preference_modules$ = deflexical("*GENERIC-PREFERENCE-MODULES*", ((NIL != Symbols.boundp($sym5$_GENERIC_PREFERENCE_MODULES_)) ? ((SubLObject) $generic_preference_modules$.getGlobalValue()) : set.new_set(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $specific_preference_modules$ = deflexical("*SPECIFIC-PREFERENCE-MODULES*", ((NIL != Symbols.boundp($sym69$_SPECIFIC_PREFERENCE_MODULES_)) ? ((SubLObject) $specific_preference_modules$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $preference_module_supplants$ = deflexical("*PREFERENCE-MODULE-SUPPLANTS*", ((NIL != Symbols.boundp($sym70$_PREFERENCE_MODULE_SUPPLANTS_)) ? ((SubLObject) $preference_module_supplants$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
+    $preference_modules_by_name$ = deflexical("*PREFERENCE-MODULES-BY-NAME*", maybeDefault( $sym18$_PREFERENCE_MODULES_BY_NAME_, $preference_modules_by_name$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $generic_preference_modules$ = deflexical("*GENERIC-PREFERENCE-MODULES*", maybeDefault( $sym5$_GENERIC_PREFERENCE_MODULES_, $generic_preference_modules$, ()-> (set.new_set(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $specific_preference_modules$ = deflexical("*SPECIFIC-PREFERENCE-MODULES*", maybeDefault( $sym69$_SPECIFIC_PREFERENCE_MODULES_, $specific_preference_modules$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $preference_module_supplants$ = deflexical("*PREFERENCE-MODULE-SUPPLANTS*", maybeDefault( $sym70$_PREFERENCE_MODULE_SUPPLANTS_, $preference_module_supplants$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
     $dtp_preference_module$ = defconstant("*DTP-PREFERENCE-MODULE*", $sym71$PREFERENCE_MODULE);
     return NIL;
   }

@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,18 +80,18 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.cyc_testing.generic_testing;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm //dm import com.cyc.cycjava_1.cycl.cyc_testing.generic_testing;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
 
 public  final class bag extends SubLTranslatedFile {
 
@@ -72,14 +104,23 @@ public  final class bag extends SubLTranslatedFile {
   //// Definitions
 
   public static final class $bag_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $unique_contents; }
+    @Override
     public SubLObject getField3() { return $repeat_contents; }
+    @Override
     public SubLObject getField4() { return $repeat_size; }
+    @Override
     public SubLObject getField5() { return $test; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $unique_contents = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $repeat_contents = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $repeat_size = value; }
+    @Override
     public SubLObject setField5(SubLObject value) { return $test = value; }
     public SubLObject $unique_contents = NIL;
     public SubLObject $repeat_contents = NIL;
@@ -89,10 +130,10 @@ public  final class bag extends SubLTranslatedFile {
     Structures.makeStructDeclNative($bag_native.class, $sym0$BAG, $sym1$BAG_P, $list3, $list4, new String[] {"$unique_contents", "$repeat_contents", "$repeat_size", "$test"}, $list5, $list6, $sym7$PRINT_BAG);
   }
 
-  @SubL(source = "cycl/bag.lisp", position = 1941) 
+  @SubL(source = "cycl/bag.lisp", position = 1941)
   public static SubLSymbol $dtp_bag$ = null;
 
-  @SubL(source = "cycl/bag.lisp", position = 1941) 
+  @SubL(source = "cycl/bag.lisp", position = 1941)
   public static final SubLObject bag_print_function_trampoline(SubLObject object, SubLObject stream) {
     Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 6700");
@@ -101,22 +142,23 @@ public  final class bag extends SubLTranslatedFile {
 
   public static final class $bag_p$UnaryFunction extends UnaryFunction {
     public $bag_p$UnaryFunction() { super(extractFunctionNamed("BAG-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 6646"); }
   }
 
   /** @note there is no empirical evidence for this number yet,
    this is based on back of the envelope math */
-  @SubL(source = "cycl/bag.lisp", position = 8179) 
+  @SubL(source = "cycl/bag.lisp", position = 8179)
   private static SubLSymbol $bag_repeat_contents_iterator_watermark$ = null;
 
-  @SubL(source = "cycl/bag.lisp", position = 12329) 
+  @SubL(source = "cycl/bag.lisp", position = 12329)
   public static SubLSymbol $new_bag_default_test_function$ = null;
 
-  @SubL(source = "cycl/bag.lisp", position = 24896) 
+  @SubL(source = "cycl/bag.lisp", position = 24896)
   private static SubLSymbol $cfasl_opcode_bag$ = null;
 
-  @SubL(source = "cycl/bag.lisp", position = 25010) 
+  @SubL(source = "cycl/bag.lisp", position = 25010)
   public static final SubLObject cfasl_output_object_bag_method(SubLObject object, SubLObject stream) {
     return Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 6694");
@@ -335,14 +377,17 @@ public  final class bag extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_bag_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_bag_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_bag_file();
   }

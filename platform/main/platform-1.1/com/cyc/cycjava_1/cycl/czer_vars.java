@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,11 +80,11 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
 
 public  final class czer_vars extends SubLTranslatedFile {
 
@@ -707,7 +739,7 @@ of all instances of #$CanonicalizerDirectivePredicate, which is much broader. */
     $sequence_variable_split_limit$ = defparameter("*SEQUENCE-VARIABLE-SPLIT-LIMIT*", FIVE_INTEGER);
     $simplify_equal_symbols_literalP$ = defparameter("*SIMPLIFY-EQUAL-SYMBOLS-LITERAL?*", NIL);
     $simplify_true_sentence_awayP$ = defparameter("*SIMPLIFY-TRUE-SENTENCE-AWAY?*", NIL);
-    $skolem_axiom_table$ = deflexical("*SKOLEM-AXIOM-TABLE*", ((NIL != Symbols.boundp($sym24$_SKOLEM_AXIOM_TABLE_)) ? ((SubLObject) $skolem_axiom_table$.getGlobalValue()) : Hashtables.make_hash_table($int25$2048, Symbols.symbol_function(EQUAL), UNPROVIDED)));
+    $skolem_axiom_table$ = deflexical("*SKOLEM-AXIOM-TABLE*", maybeDefault( $sym24$_SKOLEM_AXIOM_TABLE_, $skolem_axiom_table$, ()-> (Hashtables.make_hash_table($int25$2048, Symbols.symbol_function(EQUAL), UNPROVIDED))));
     $infer_skolem_result_isa_via_arg_constraintsP$ = defparameter("*INFER-SKOLEM-RESULT-ISA-VIA-ARG-CONSTRAINTS?*", T);
     $interpolate_singleton_arg_isaP$ = defparameter("*INTERPOLATE-SINGLETON-ARG-ISA?*", NIL);
     $clothe_naked_skolemsP$ = defparameter("*CLOTHE-NAKED-SKOLEMS?*", NIL);

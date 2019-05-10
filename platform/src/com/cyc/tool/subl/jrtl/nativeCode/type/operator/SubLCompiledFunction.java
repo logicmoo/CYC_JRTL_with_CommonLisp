@@ -20,6 +20,7 @@ import org.armedbear.lisp.Symbol;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -90,7 +91,8 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 		Class methodClassPrev = methodClass;
 		if (methodClass == null || method == null)
 		{
-			method = getMethod();
+		  method = getMethod();
+		  if(method!=null)
 			methodClass = method.getDeclaringClass();
 		}
 		if (methodClass != null)
@@ -172,14 +174,14 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 				throw (Error) e;
 			}
 			e.printStackTrace();
-			
+
 			try {
 				result = (SubLObject) m.invoke(null, args);
 			} catch (Throwable e1) {
 				// TODO Auto-generated catch block
 			}
 			Errors.error("Error calling " + methodName + ".", e);
-			
+
 		} catch (final Throwable e2) {
 			if (e2 instanceof Unhandleable) {
 				throw (Unhandleable) e2;
@@ -234,7 +236,7 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 		this.argList = arglist;
 		return arglist;
 	}
-	
+
 	@Override
 	public boolean equal(SubLObject obj) {
 		if (this == obj) return true;
@@ -259,6 +261,8 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 				final Class theClass = PatchFileLoader.PATCH_FILE_LOADER.loadClass(methodClassStr);
 				method = theClass.getMethod(methodName, methodParameters);
 			} catch (final Exception e) {
+			  if(SubLMain.TINY_KB) return null;
+			  e.printStackTrace();
 				Errors.error("Problem initializing function: " + methodClassStr + "." + methodName);
 			}
 		}
@@ -268,7 +272,8 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 	@Override
 	public int hashCode(int currentDepth) {
 		if (currentDepth < 8) {
-			return getMethod().hashCode();
+			final Method method2 = getMethod();
+      if(method2!=null)return method2.hashCode();
 		}
 		return 0;
 	}

@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.modules.removal;
+package com.cyc.cycjava_1.cycl.inference.modules.removal;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,47 +67,47 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.backward;
-import com.cyc.cycjava_1.cycl.backward_utilities;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.formula_pattern_match;
-import com.cyc.cycjava_1.cycl.function_terms;
-import com.cyc.cycjava_1.cycl.genl_predicates;
-import com.cyc.cycjava_1.cycl.hl_supports;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.mt_vars;
-import com.cyc.cycjava_1.cycl.pattern_match;
-import com.cyc.cycjava_1.cycl.inference.harness.removal_module_utilities;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_termofunit;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_tva_lookup;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.tva_inference;
-import com.cyc.cycjava_1.cycl.unification;
-import com.cyc.cycjava_1.cycl.unification_utilities;
-import com.cyc.cycjava_1.cycl.variables;
-import com.cyc.cycjava_1.cycl.virtual_indexing;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.backward;
+//dm import com.cyc.cycjava_1.cycl.backward_utilities;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.formula_pattern_match;
+//dm import com.cyc.cycjava_1.cycl.function_terms;
+//dm import com.cyc.cycjava_1.cycl.genl_predicates;
+//dm import com.cyc.cycjava_1.cycl.hl_supports;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_vars;
+//dm import com.cyc.cycjava_1.cycl.pattern_match;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.removal_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_termofunit;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_tva_lookup;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.tva_inference;
+//dm import com.cyc.cycjava_1.cycl.unification;
+//dm import com.cyc.cycjava_1.cycl.unification_utilities;
+//dm import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.virtual_indexing;
 
 public  final class removal_modules_relation_instance_exists extends SubLTranslatedFile {
 
@@ -666,11 +685,11 @@ public  final class removal_modules_relation_instance_exists extends SubLTransla
 
   public static final SubLObject init_removal_modules_relation_instance_exists_file() {
     $relation_instance_exists_rule$ = deflexical("*RELATION-INSTANCE-EXISTS-RULE*", el_utilities.list_to_elf($list5));
-    $relation_instance_exists_defining_mt$ = deflexical("*RELATION-INSTANCE-EXISTS-DEFINING-MT*", ((NIL != Symbols.boundp($sym6$_RELATION_INSTANCE_EXISTS_DEFINING_MT_)) ? ((SubLObject) $relation_instance_exists_defining_mt$.getGlobalValue()) : $const7$BaseKB));
+    $relation_instance_exists_defining_mt$ = deflexical("*RELATION-INSTANCE-EXISTS-DEFINING-MT*", maybeDefault( $sym6$_RELATION_INSTANCE_EXISTS_DEFINING_MT_, $relation_instance_exists_defining_mt$, ()-> ($const7$BaseKB)));
     $default_relation_instance_exists_check_cost$ = deflexical("*DEFAULT-RELATION-INSTANCE-EXISTS-CHECK-COST*", control_vars.$expensive_hl_module_check_cost$.getGlobalValue());
     $minimum_relation_instance_exists_unify_cost$ = deflexical("*MINIMUM-RELATION-INSTANCE-EXISTS-UNIFY-COST*", control_vars.$expensive_hl_module_check_cost$.getGlobalValue());
     $relation_exists_instance_rule$ = deflexical("*RELATION-EXISTS-INSTANCE-RULE*", el_utilities.list_to_elf($list39));
-    $relation_exists_instance_defining_mt$ = deflexical("*RELATION-EXISTS-INSTANCE-DEFINING-MT*", ((NIL != Symbols.boundp($sym40$_RELATION_EXISTS_INSTANCE_DEFINING_MT_)) ? ((SubLObject) $relation_exists_instance_defining_mt$.getGlobalValue()) : $const7$BaseKB));
+    $relation_exists_instance_defining_mt$ = deflexical("*RELATION-EXISTS-INSTANCE-DEFINING-MT*", maybeDefault( $sym40$_RELATION_EXISTS_INSTANCE_DEFINING_MT_, $relation_exists_instance_defining_mt$, ()-> ($const7$BaseKB)));
     $default_relation_exists_instance_check_cost$ = deflexical("*DEFAULT-RELATION-EXISTS-INSTANCE-CHECK-COST*", control_vars.$expensive_hl_module_check_cost$.getGlobalValue());
     $minimum_relation_exists_instance_unify_cost$ = deflexical("*MINIMUM-RELATION-EXISTS-INSTANCE-UNIFY-COST*", control_vars.$expensive_hl_module_check_cost$.getGlobalValue());
     return NIL;

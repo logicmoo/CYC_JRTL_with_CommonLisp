@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,19 +80,19 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.inference.arete;
-import com.cyc.cycjava_1.cycl.constant_completion_low;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constant_index_manager;
-import com.cyc.cycjava_1.cycl.constants_high;
-import com.cyc.cycjava_1.cycl.constants_interface;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.arete;
+//dm import com.cyc.cycjava_1.cycl.constant_completion_low;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constant_index_manager;
+//dm import com.cyc.cycjava_1.cycl.constants_high;
+//dm import com.cyc.cycjava_1.cycl.constants_interface;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.id_index;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class constants_low extends SubLTranslatedFile {
 
@@ -380,10 +412,10 @@ public  final class constants_low extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_constants_low_file() {
-    $arete_constants_touched$ = deflexical("*ARETE-CONSTANTS-TOUCHED*", ((NIL != Symbols.boundp($sym0$_ARETE_CONSTANTS_TOUCHED_)) ? ((SubLObject) $arete_constants_touched$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
-    $constant_guid_table$ = deflexical("*CONSTANT-GUID-TABLE*", ((NIL != Symbols.boundp($sym1$_CONSTANT_GUID_TABLE_)) ? ((SubLObject) $constant_guid_table$.getGlobalValue()) : $kw2$UNINITIALIZED));
-    $constant_merged_guid_table$ = deflexical("*CONSTANT-MERGED-GUID-TABLE*", ((NIL != Symbols.boundp($sym3$_CONSTANT_MERGED_GUID_TABLE_)) ? ((SubLObject) $constant_merged_guid_table$.getGlobalValue()) : $kw2$UNINITIALIZED));
-    $constant_from_guid$ = deflexical("*CONSTANT-FROM-GUID*", ((NIL != Symbols.boundp($sym4$_CONSTANT_FROM_GUID_)) ? ((SubLObject) $constant_from_guid$.getGlobalValue()) : NIL));
+    $arete_constants_touched$ = deflexical("*ARETE-CONSTANTS-TOUCHED*", maybeDefault( $sym0$_ARETE_CONSTANTS_TOUCHED_, $arete_constants_touched$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
+    $constant_guid_table$ = deflexical("*CONSTANT-GUID-TABLE*", maybeDefault( $sym1$_CONSTANT_GUID_TABLE_, $constant_guid_table$, ()-> ($kw2$UNINITIALIZED)));
+    $constant_merged_guid_table$ = deflexical("*CONSTANT-MERGED-GUID-TABLE*", maybeDefault( $sym3$_CONSTANT_MERGED_GUID_TABLE_, $constant_merged_guid_table$, ()-> ($kw2$UNINITIALIZED)));
+    $constant_from_guid$ = deflexical("*CONSTANT-FROM-GUID*", maybeDefault( $sym4$_CONSTANT_FROM_GUID_, $constant_from_guid$, NIL));
     return NIL;
   }
 

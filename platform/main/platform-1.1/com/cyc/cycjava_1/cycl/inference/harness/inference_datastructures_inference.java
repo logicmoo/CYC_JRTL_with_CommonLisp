@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,57 +67,57 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.accumulation;
-import com.cyc.cycjava_1.cycl.inference.harness.argumentation;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.accumulation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.argumentation;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
 import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_czer;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_forward_propagate;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_proof;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.inference.inference_pad_data;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_parameters;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_strategist;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_answer;
-import com.cyc.cycjava_1.cycl.kb_utilities;
-import com.cyc.cycjava_1.cycl.keyhash_utilities;
-import com.cyc.cycjava_1.cycl.inference.leviathan;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.misc_utilities;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.set_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_czer;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_forward_propagate;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_proof;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_pad_data;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_parameters;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_strategist;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_answer;
+//dm import com.cyc.cycjava_1.cycl.kb_utilities;
+//dm import com.cyc.cycjava_1.cycl.keyhash_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.leviathan;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.misc_utilities;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.queues;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.set_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class inference_datastructures_inference extends SubLTranslatedFile {
 
@@ -110,29 +129,49 @@ public  final class inference_datastructures_inference extends SubLTranslatedFil
 
   //// Definitions
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 1234) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 1234)
   private static SubLSymbol $inference_types$ = null;
 
   public static final class $inference_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $suid; }
+    @Override
     public SubLObject getField3() { return $problem_store; }
+    @Override
     public SubLObject getField4() { return $forward_propagate; }
+    @Override
     public SubLObject getField5() { return $input_mt; }
+    @Override
     public SubLObject getField6() { return $input_el_query; }
+    @Override
     public SubLObject getField7() { return $input_non_explanatory_el_query; }
+    @Override
     public SubLObject getField8() { return $input_query_properties; }
+    @Override
     public SubLObject getField9() { return $mt; }
+    @Override
     public SubLObject getField10() { return $el_query; }
+    @Override
     public SubLObject getField11() { return $el_bindings; }
+    @Override
     public SubLObject getField12() { return $hl_query; }
+    @Override
     public SubLObject getField13() { return $explanatory_subquery; }
+    @Override
     public SubLObject getField14() { return $non_explanatory_subquery; }
+    @Override
     public SubLObject getField15() { return $free_hl_vars; }
+    @Override
     public SubLObject getField16() { return $hypothetical_bindings; }
+    @Override
     public SubLObject getField17() { return $answer_id_index; }
+    @Override
     public SubLObject getField18() { return $answer_bindings_index; }
+    @Override
     public SubLObject getField19() { return $new_answer_id_start; }
+    @Override
     public SubLObject getField20() { return $new_answer_justifications; }
     public SubLObject getField21() { return $status; }
     public SubLObject getField22() { return $suspend_status; }
@@ -183,24 +222,43 @@ public  final class inference_datastructures_inference extends SubLTranslatedFil
     public SubLObject getField67() { return $problem_working_time_data; }
     public SubLObject getField68() { return $type; }
     public SubLObject getField69() { return $data; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $suid = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $problem_store = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $forward_propagate = value; }
+    @Override
     public SubLObject setField5(SubLObject value) { return $input_mt = value; }
+    @Override
     public SubLObject setField6(SubLObject value) { return $input_el_query = value; }
+    @Override
     public SubLObject setField7(SubLObject value) { return $input_non_explanatory_el_query = value; }
+    @Override
     public SubLObject setField8(SubLObject value) { return $input_query_properties = value; }
+    @Override
     public SubLObject setField9(SubLObject value) { return $mt = value; }
+    @Override
     public SubLObject setField10(SubLObject value) { return $el_query = value; }
+    @Override
     public SubLObject setField11(SubLObject value) { return $el_bindings = value; }
+    @Override
     public SubLObject setField12(SubLObject value) { return $hl_query = value; }
+    @Override
     public SubLObject setField13(SubLObject value) { return $explanatory_subquery = value; }
+    @Override
     public SubLObject setField14(SubLObject value) { return $non_explanatory_subquery = value; }
+    @Override
     public SubLObject setField15(SubLObject value) { return $free_hl_vars = value; }
+    @Override
     public SubLObject setField16(SubLObject value) { return $hypothetical_bindings = value; }
+    @Override
     public SubLObject setField17(SubLObject value) { return $answer_id_index = value; }
+    @Override
     public SubLObject setField18(SubLObject value) { return $answer_bindings_index = value; }
+    @Override
     public SubLObject setField19(SubLObject value) { return $new_answer_id_start = value; }
+    @Override
     public SubLObject setField20(SubLObject value) { return $new_answer_justifications = value; }
     public SubLObject setField21(SubLObject value) { return $status = value; }
     public SubLObject setField22(SubLObject value) { return $suspend_status = value; }
@@ -323,789 +381,790 @@ public  final class inference_datastructures_inference extends SubLTranslatedFil
     Structures.makeStructDeclNative($inference_native.class, $sym1$INFERENCE, $sym2$INFERENCE_P, $list3, $list4, new String[] {"$suid", "$problem_store", "$forward_propagate", "$input_mt", "$input_el_query", "$input_non_explanatory_el_query", "$input_query_properties", "$mt", "$el_query", "$el_bindings", "$hl_query", "$explanatory_subquery", "$non_explanatory_subquery", "$free_hl_vars", "$hypothetical_bindings", "$answer_id_index", "$answer_bindings_index", "$new_answer_id_start", "$new_answer_justifications", "$status", "$suspend_status", "$root_link", "$relevant_problems", "$strategy_set", "$control_process", "$interrupting_processes", "$max_transformation_depth_reached", "$disjunction_free_el_vars_policy", "$result_uniqueness_criterion", "$allow_hl_predicate_transformationP", "$allow_unbound_predicate_transformationP", "$allow_evaluatable_predicate_transformationP", "$allow_indeterminate_resultsP", "$allowed_rules", "$forbidden_rules", "$allowed_modules", "$allow_abnormality_checkingP", "$transitive_closure_mode", "$problem_store_privateP", "$continuableP", "$browsableP", "$return_type", "$answer_language", "$cache_resultsP", "$blockingP", "$max_number", "$max_time", "$max_step", "$mode", "$forward_max_time", "$max_proof_depth", "$max_transformation_depth", "$probably_approximately_done", "$metrics_template", "$start_universal_time", "$start_internal_real_time", "$end_internal_real_time", "$pad_internal_real_time", "$cumulative_time", "$step_count", "$cumulative_step_count", "$events", "$halt_conditions", "$accumulators", "$proof_watermark", "$problem_working_time_data", "$type", "$data"}, $list5, $list6, $sym7$PRINT_INFERENCE);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static SubLSymbol $dtp_inference$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject inference_print_function_trampoline(SubLObject object, SubLObject stream) {
     Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 35787");
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject inference_p(SubLObject object) {
     return ((object.getClass() == $inference_native.class) ? ((SubLObject) T) : NIL);
   }
 
   public static final class $inference_p$UnaryFunction extends UnaryFunction {
     public $inference_p$UnaryFunction() { super(extractFunctionNamed("INFERENCE-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return inference_p(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_suid(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField2();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_problem_store(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField3();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_forward_propagate(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField4();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_input_mt(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField5();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_input_el_query(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField6();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_input_non_explanatory_el_query(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField7();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_input_query_properties(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField8();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_mt(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField9();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_el_bindings(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField11();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_hl_query(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField12();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_explanatory_subquery(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField13();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_free_hl_vars(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField15();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_answer_id_index(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField17();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_answer_bindings_index(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField18();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_new_answer_id_start(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField19();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_new_answer_justifications(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return object.getField20();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_status(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$status;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_suspend_status(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$suspend_status;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_root_link(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$root_link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_relevant_problems(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$relevant_problems;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_strategy_set(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$strategy_set;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_interrupting_processes(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$interrupting_processes;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_max_transformation_depth_reached(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_transformation_depth_reached;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_disjunction_free_el_vars_policy(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$disjunction_free_el_vars_policy;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_result_uniqueness_criterion(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$result_uniqueness_criterion;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_allow_hl_predicate_transformationP(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allow_hl_predicate_transformationP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_allow_unbound_predicate_transformationP(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allow_unbound_predicate_transformationP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_allow_evaluatable_predicate_transformationP(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allow_evaluatable_predicate_transformationP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_allow_indeterminate_resultsP(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allow_indeterminate_resultsP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_allowed_rules(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allowed_rules;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_forbidden_rules(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$forbidden_rules;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_allowed_modules(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allowed_modules;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_allow_abnormality_checkingP(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allow_abnormality_checkingP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_transitive_closure_mode(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$transitive_closure_mode;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_problem_store_privateP(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$problem_store_privateP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_continuableP(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$continuableP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_browsableP(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$browsableP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_return_type(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$return_type;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_answer_language(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$answer_language;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_cache_resultsP(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$cache_resultsP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_blockingP(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$blockingP;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_max_number(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_number;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_max_time(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_time;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_max_step(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_step;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_forward_max_time(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$forward_max_time;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_max_proof_depth(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_proof_depth;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_max_transformation_depth(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_transformation_depth;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_probably_approximately_done(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$probably_approximately_done;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_metrics_template(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$metrics_template;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_start_internal_real_time(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$start_internal_real_time;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_end_internal_real_time(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$end_internal_real_time;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_pad_internal_real_time(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$pad_internal_real_time;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_cumulative_time(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$cumulative_time;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_step_count(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$step_count;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_cumulative_step_count(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$cumulative_step_count;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_halt_conditions(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$halt_conditions;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_problem_working_time_data(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$problem_working_time_data;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_type(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$type;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject infrnc_data(SubLObject object) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$data;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_suid(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField2(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_problem_store(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField3(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_forward_propagate(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField4(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_input_mt(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField5(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_input_el_query(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField6(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_input_non_explanatory_el_query(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField7(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_input_query_properties(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField8(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_mt(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField9(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_el_query(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField10(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_el_bindings(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField11(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_hl_query(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField12(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_explanatory_subquery(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField13(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_non_explanatory_subquery(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField14(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_free_hl_vars(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField15(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_hypothetical_bindings(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField16(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_answer_id_index(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField17(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_answer_bindings_index(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField18(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_new_answer_id_start(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField19(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_new_answer_justifications(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return object.setField20(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_status(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$status = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_suspend_status(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$suspend_status = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_root_link(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$root_link = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_relevant_problems(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$relevant_problems = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_strategy_set(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$strategy_set = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_control_process(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$control_process = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_interrupting_processes(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$interrupting_processes = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_max_transformation_depth_reached(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_transformation_depth_reached = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_disjunction_free_el_vars_policy(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$disjunction_free_el_vars_policy = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_result_uniqueness_criterion(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$result_uniqueness_criterion = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_allow_hl_predicate_transformationP(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allow_hl_predicate_transformationP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_allow_unbound_predicate_transformationP(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allow_unbound_predicate_transformationP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_allow_evaluatable_predicate_transformationP(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allow_evaluatable_predicate_transformationP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_allow_indeterminate_resultsP(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allow_indeterminate_resultsP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_allowed_rules(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allowed_rules = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_forbidden_rules(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$forbidden_rules = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_allowed_modules(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allowed_modules = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_allow_abnormality_checkingP(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$allow_abnormality_checkingP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_transitive_closure_mode(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$transitive_closure_mode = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_problem_store_privateP(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$problem_store_privateP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_continuableP(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$continuableP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_browsableP(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$browsableP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_return_type(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$return_type = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_answer_language(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$answer_language = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_cache_resultsP(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$cache_resultsP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_blockingP(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$blockingP = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_max_number(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_number = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_max_time(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_time = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_max_step(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_step = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_mode(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$mode = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_forward_max_time(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$forward_max_time = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_max_proof_depth(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_proof_depth = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_max_transformation_depth(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$max_transformation_depth = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_probably_approximately_done(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$probably_approximately_done = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_metrics_template(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$metrics_template = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_start_universal_time(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$start_universal_time = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_start_internal_real_time(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$start_internal_real_time = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_end_internal_real_time(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$end_internal_real_time = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_pad_internal_real_time(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$pad_internal_real_time = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_cumulative_time(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$cumulative_time = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_step_count(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$step_count = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_cumulative_step_count(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$cumulative_step_count = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_events(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$events = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_halt_conditions(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$halt_conditions = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_accumulators(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$accumulators = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_proof_watermark(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$proof_watermark = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_problem_working_time_data(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$problem_working_time_data = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_type(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$type = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject _csetf_infrnc_data(SubLObject object, SubLObject value) {
     checkType(object, $sym2$INFERENCE_P);
     return (($inference_native) object).$data = value;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 3460)
   public static final SubLObject make_inference(SubLObject arglist) {
     if ((arglist == UNPROVIDED)) {
       arglist = NIL;
@@ -1263,46 +1322,47 @@ public  final class inference_datastructures_inference extends SubLTranslatedFil
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 14623) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 14623)
   public static final SubLObject valid_inference_p(SubLObject object) {
     return makeBoolean(((NIL != inference_p(object))
            && (NIL == inference_invalid_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 14868) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 14868)
   public static final SubLObject inference_invalid_p(SubLObject inference) {
     return Equality.eq($kw263$DEAD, inference_status(inference));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 15466) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 15466)
   public static final SubLObject sxhash_inference_method(SubLObject object) {
     return infrnc_suid(object);
   }
 
   public static final class $sxhash_inference_method$UnaryFunction extends UnaryFunction {
     public $sxhash_inference_method$UnaryFunction() { super(extractFunctionNamed("SXHASH-INFERENCE-METHOD")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return sxhash_inference_method(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 15540) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 15540)
   public static final SubLObject new_inference_p(SubLObject object) {
     return makeBoolean(((NIL != inference_p(object))
            && ($kw267$NEW == inference_status(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 15684) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 15684)
   public static final SubLObject prepared_inference_p(SubLObject object) {
     return makeBoolean(((NIL != inference_p(object))
            && ($kw268$PREPARED == inference_status(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 15944) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 15944)
   public static final SubLObject running_inference_p(SubLObject object) {
     return makeBoolean(((NIL != inference_p(object))
            && ($kw270$RUNNING == inference_status(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 16210) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 16210)
   public static final SubLObject continuable_inference_p(SubLObject object) {
     if ((NIL != inference_p(object))) {
       {
@@ -1326,7 +1386,7 @@ public  final class inference_datastructures_inference extends SubLTranslatedFil
   }
 
   /** Allocates a new inference object and sets up its internal datastructures. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 19695) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 19695)
   public static final SubLObject new_inference(SubLObject store) {
     checkType(store, $sym324$PROBLEM_STORE_P);
     {
@@ -1375,7 +1435,7 @@ public  final class inference_datastructures_inference extends SubLTranslatedFil
   /** Disposes of the INFERENCE datastructure.  This gets
 rid of all pointers to its referenced substructures so
 that the GC can collect them all. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 23337) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 23337)
   public static final SubLObject destroy_inference(SubLObject inference) {
     if ((NIL != valid_inference_p(inference))) {
       try {
@@ -1418,7 +1478,7 @@ that the GC can collect them all. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 24608) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 24608)
   public static final SubLObject destroy_problem_store_inference(SubLObject inference) {
     if ((NIL != valid_inference_p(inference))) {
       inference_strategist.inference_abort_if_running(inference);
@@ -1428,7 +1488,7 @@ that the GC can collect them all. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 24871) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 24871)
   public static final SubLObject destroy_inference_int(SubLObject inf) {
     inference_datastructures_forward_propagate.destroy_forward_propagate(infrnc_forward_propagate(inf));
     _csetf_infrnc_problem_store(inf, $kw328$FREE);
@@ -1529,50 +1589,50 @@ that the GC can collect them all. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 29509) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 29509)
   public static final SubLObject note_inference_invalid(SubLObject inference) {
     set_inference_status(inference, $kw263$DEAD);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 29621) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 29621)
   public static final SubLObject inference_suid(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_suid(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 29749) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 29749)
   public static final SubLObject inference_problem_store(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_problem_store(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30025) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30025)
   public static final SubLObject inference_input_mt(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_input_mt(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30149) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30149)
   public static final SubLObject inference_input_el_query(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_input_el_query(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30285) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30285)
   public static final SubLObject inference_input_non_explanatory_el_query(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_input_non_explanatory_el_query(inference);
   }
 
   /** Return query-properties-p; the input query properties for INFERENCE. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30453) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30453)
   public static final SubLObject inference_input_query_properties(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_input_query_properties(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30678) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30678)
   public static final SubLObject inference_mt(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_mt(inference);
@@ -1580,202 +1640,202 @@ that the GC can collect them all. */
 
   /** Returns bindings which map HL proven query wrt INFERENCE ->
 EL proven query wrt INFERENCE */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30914) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 30914)
   public static final SubLObject inference_el_bindings(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_el_bindings(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 31138) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 31138)
   public static final SubLObject inference_hl_query(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_hl_query(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 31263) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 31263)
   public static final SubLObject inference_explanatory_subquery(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_explanatory_subquery(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 31567) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 31567)
   public static final SubLObject inference_free_hl_vars(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_free_hl_vars(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 31850) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 31850)
   public static final SubLObject inference_answer_id_index(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_answer_id_index(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32023) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32023)
   public static final SubLObject inference_answer_bindings_index(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_answer_bindings_index(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32171) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32171)
   public static final SubLObject inference_new_answer_id_start(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_new_answer_id_start(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32356) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32356)
   public static final SubLObject inference_new_answer_justifications(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_new_answer_justifications(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32567) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32567)
   public static final SubLObject inference_status(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_status(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32688) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32688)
   public static final SubLObject inference_suspend_status(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_suspend_status(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32848) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 32848)
   public static final SubLObject inference_root_link(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_root_link(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33024) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33024)
   public static final SubLObject inference_relevant_problems(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_relevant_problems(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33166) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33166)
   public static final SubLObject inference_strategy_set(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_strategy_set(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33436) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33436)
   public static final SubLObject inference_interrupting_processes(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_interrupting_processes(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33586) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33586)
   public static final SubLObject inference_max_transformation_depth_reached(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_max_transformation_depth_reached(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33756) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33756)
   public static final SubLObject inference_answer_language(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_answer_language(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33894) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 33894)
   public static final SubLObject inference_cache_resultsP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_cache_resultsP(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34030) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34030)
   public static final SubLObject inference_blockingP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_blockingP(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34156) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34156)
   public static final SubLObject inference_disjunction_free_el_vars_policy(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_disjunction_free_el_vars_policy(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34326) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34326)
   public static final SubLObject inference_result_uniqueness_criterion(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_result_uniqueness_criterion(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34488) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34488)
   public static final SubLObject inference_allow_hl_predicate_transformationP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_allow_hl_predicate_transformationP(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34664) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34664)
   public static final SubLObject inference_allow_unbound_predicate_transformationP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_allow_unbound_predicate_transformationP(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34850) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 34850)
   public static final SubLObject inference_allow_evaluatable_predicate_transformationP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_allow_evaluatable_predicate_transformationP(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35044) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35044)
   public static final SubLObject inference_allow_indeterminate_resultsP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_allow_indeterminate_resultsP(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35208) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35208)
   public static final SubLObject inference_allowed_rules(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_allowed_rules(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35342) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35342)
   public static final SubLObject inference_forbidden_rules(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_forbidden_rules(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35480) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35480)
   public static final SubLObject inference_allowed_modules(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_allowed_modules(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35618) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35618)
   public static final SubLObject inference_allow_abnormality_checkingP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_allow_abnormality_checkingP(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35780) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35780)
   public static final SubLObject inference_transitive_closure_mode(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_transitive_closure_mode(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35934) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 35934)
   public static final SubLObject inference_problem_store_privateP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_problem_store_privateP(inference);
   }
 
   /** @return booleanp, whether INFERENCE was specified to be continuable. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 36086) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 36086)
   public static final SubLObject inference_continuableP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_continuableP(inference);
   }
 
   /** @return booleanp, whether INFERENCE was specified to be browsable. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 36291) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 36291)
   public static final SubLObject inference_browsableP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_browsableP(inference);
   }
 
   /** @return inference-return-type-p, the return type of inference stored in :return. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 36490) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 36490)
   public static final SubLObject inference_return_type(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_return_type(inference);
@@ -1783,7 +1843,7 @@ EL proven query wrt INFERENCE */
 
   /** @return nil or universal-time-p
    NIL indicates there is no time cutoff */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 36705) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 36705)
   public static final SubLObject inference_max_time(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_max_time(inference);
@@ -1791,7 +1851,7 @@ EL proven query wrt INFERENCE */
 
   /** @return nil or non-negative-integer-p
    NIL indicates there is no step cutoff */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 36906) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 36906)
   public static final SubLObject inference_max_step(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_max_step(inference);
@@ -1799,7 +1859,7 @@ EL proven query wrt INFERENCE */
 
   /** @return nil or universal-time-p
    NIL indicates there is no time cutoff */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 37258) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 37258)
   public static final SubLObject inference_forward_max_time(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_forward_max_time(inference);
@@ -1807,7 +1867,7 @@ EL proven query wrt INFERENCE */
 
   /** @return nil or non-negative-integer-p
    NIL indicates there is no number limit */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 37475) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 37475)
   public static final SubLObject inference_max_number(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_max_number(inference);
@@ -1815,13 +1875,13 @@ EL proven query wrt INFERENCE */
 
   /** @return nil or non-negative-integer-p
    NIL indicates there is no limit on proof depth */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 37687) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 37687)
   public static final SubLObject inference_max_proof_depth(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_max_proof_depth(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 37917) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 37917)
   public static final SubLObject inference_max_transformation_depth(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_max_transformation_depth(inference);
@@ -1829,31 +1889,31 @@ EL proven query wrt INFERENCE */
 
   /** @return probability-p
    1 means we must be 100% sure we are done before halting */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 38073) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 38073)
   public static final SubLObject inference_probably_approximately_done(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_probably_approximately_done(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 38320) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 38320)
   public static final SubLObject inference_metrics_template(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_metrics_template(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 38608) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 38608)
   public static final SubLObject inference_start_internal_real_time(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_start_internal_real_time(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 38762) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 38762)
   public static final SubLObject inference_end_internal_real_time(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_end_internal_real_time(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 38914) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 38914)
   public static final SubLObject inference_pad_internal_real_time(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_pad_internal_real_time(inference);
@@ -1861,38 +1921,38 @@ EL proven query wrt INFERENCE */
 
   /** This is the total time spent in all of INFERENCE's previous continuations.  Use @xref inference-cumulative-time-so-far
 if you want to include the time spent so far in the current continuation. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 39066) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 39066)
   public static final SubLObject inference_cumulative_time(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_cumulative_time(inference);
   }
 
   /** The number of inference steps performed so far for this inference, summed over all continuations */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 39619) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 39619)
   public static final SubLObject inference_cumulative_step_count(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_cumulative_step_count(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 39870) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 39870)
   public static final SubLObject inference_problem_working_time_data(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_problem_working_time_data(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 40414) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 40414)
   public static final SubLObject inference_type(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_type(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 40530) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 40530)
   public static final SubLObject inference_data(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return infrnc_data(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 40922) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 40922)
   public static final SubLObject set_inference_input_mt(SubLObject inference, SubLObject mt) {
     checkType(inference, $sym2$INFERENCE_P);
     if ((NIL != mt)) {
@@ -1902,7 +1962,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 41119) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 41119)
   public static final SubLObject set_inference_input_el_query(SubLObject inference, SubLObject el_query) {
     checkType(inference, $sym2$INFERENCE_P);
     if ((NIL != el_query)) {
@@ -1912,7 +1972,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 41362) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 41362)
   public static final SubLObject set_inference_input_non_explanatory_el_query(SubLObject inference, SubLObject el_query) {
     checkType(inference, $sym2$INFERENCE_P);
     if ((NIL != el_query)) {
@@ -1922,7 +1982,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 41637) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 41637)
   public static final SubLObject set_inference_input_query_properties(SubLObject inference, SubLObject query_properties) {
     checkType(inference, $sym2$INFERENCE_P);
     if ((NIL != query_properties)) {
@@ -1932,7 +1992,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 41909) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 41909)
   public static final SubLObject set_inference_mt(SubLObject inference, SubLObject mt) {
     checkType(inference, $sym2$INFERENCE_P);
     if ((NIL != mt)) {
@@ -1942,7 +2002,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 42087) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 42087)
   public static final SubLObject set_inference_el_query(SubLObject inference, SubLObject el_query) {
     checkType(inference, $sym2$INFERENCE_P);
     if ((NIL != el_query)) {
@@ -1952,7 +2012,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 42318) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 42318)
   public static final SubLObject set_inference_el_bindings(SubLObject inference, SubLObject el_bindings) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(el_bindings, $sym336$BINDING_LIST_P);
@@ -1960,7 +2020,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 42538) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 42538)
   public static final SubLObject set_inference_hl_query(SubLObject inference, SubLObject hl_query) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(hl_query, $sym337$PROBLEM_QUERY_P);
@@ -1968,7 +2028,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 42745) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 42745)
   public static final SubLObject set_inference_explanatory_subquery(SubLObject inference, SubLObject explanatory_subquery) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(explanatory_subquery, $sym338$EXPLANATORY_SUBQUERY_SPEC_P);
@@ -1976,7 +2036,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 43023) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 43023)
   public static final SubLObject set_inference_non_explanatory_subquery(SubLObject inference, SubLObject non_explanatory_subquery) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(non_explanatory_subquery, $sym339$NON_EXPLANATORY_SUBQUERY_SPEC_P);
@@ -1984,7 +2044,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 43325) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 43325)
   public static final SubLObject set_inference_free_hl_vars(SubLObject inference, SubLObject free_hl_vars) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(free_hl_vars, $sym340$LISTP);
@@ -1992,7 +2052,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 43541) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 43541)
   public static final SubLObject set_inference_hypothetical_bindings(SubLObject inference, SubLObject hypothetical_bindings) {
     checkType(inference, $sym2$INFERENCE_P);
     if ((NIL != hypothetical_bindings)) {
@@ -2002,7 +2062,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 43823) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 43823)
   public static final SubLObject set_inference_status(SubLObject inference, SubLObject status) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(status, $sym341$INFERENCE_STATUS_P);
@@ -2014,7 +2074,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 44269) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 44269)
   public static final SubLObject set_inference_suspend_status(SubLObject inference, SubLObject suspend_status) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(suspend_status, $sym342$INFERENCE_SUSPEND_STATUS_P);
@@ -2022,7 +2082,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 44516) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 44516)
   public static final SubLObject set_inference_root_link(SubLObject inference, SubLObject root_link) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(root_link, $sym343$ANSWER_LINK_P);
@@ -2030,7 +2090,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 44725) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 44725)
   public static final SubLObject set_inference_control_process(SubLObject inference, SubLObject process) {
     checkType(inference, $sym2$INFERENCE_P);
     if ((NIL != process)) {
@@ -2040,7 +2100,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 44944) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 44944)
   public static final SubLObject set_inference_max_transformation_depth_reached(SubLObject inference, SubLObject depth) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(depth, $sym345$NON_NEGATIVE_INTEGER_P);
@@ -2048,7 +2108,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 45194) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 45194)
   public static final SubLObject set_inference_disjunction_free_el_vars_policy(SubLObject inference, SubLObject disjunction_free_el_vars_policy) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(disjunction_free_el_vars_policy, $sym346$INFERENCE_DISJUNCTION_FREE_EL_VARS_POLICY_P);
@@ -2056,7 +2116,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 45541) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 45541)
   public static final SubLObject set_inference_result_uniqueness_criterion(SubLObject inference, SubLObject criterion) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(criterion, $sym347$RESULT_UNIQUENESS_CRITERION_P);
@@ -2064,7 +2124,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 45802) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 45802)
   public static final SubLObject set_inference_allow_hl_predicate_transformation(SubLObject inference, SubLObject allowP) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(allowP, $sym348$BOOLEANP);
@@ -2072,7 +2132,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 46044) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 46044)
   public static final SubLObject set_inference_allow_unbound_predicate_transformation(SubLObject inference, SubLObject allowP) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(allowP, $sym348$BOOLEANP);
@@ -2080,7 +2140,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 46296) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 46296)
   public static final SubLObject set_inference_allow_evaluatable_predicate_transformation(SubLObject inference, SubLObject allowP) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(allowP, $sym348$BOOLEANP);
@@ -2088,7 +2148,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 46556) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 46556)
   public static final SubLObject set_inference_allow_indeterminate_results(SubLObject inference, SubLObject allowP) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(allowP, $sym348$BOOLEANP);
@@ -2096,21 +2156,21 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 46786) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 46786)
   public static final SubLObject set_inference_allowed_rules(SubLObject inference, SubLObject allowed_rules) {
     checkType(inference, $sym2$INFERENCE_P);
     _csetf_infrnc_allowed_rules(inference, allowed_rules);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 47097) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 47097)
   public static final SubLObject set_inference_forbidden_rules(SubLObject inference, SubLObject forbidden_rules) {
     checkType(inference, $sym2$INFERENCE_P);
     _csetf_infrnc_forbidden_rules(inference, forbidden_rules);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 47425) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 47425)
   public static final SubLObject set_inference_allowed_modules(SubLObject inference, SubLObject allowed_modules) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(allowed_modules, $sym349$ALLOWED_MODULES_SPEC_P);
@@ -2118,7 +2178,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 47671) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 47671)
   public static final SubLObject set_inference_allow_abnormality_checking(SubLObject inference, SubLObject allowP) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(allowP, $sym348$BOOLEANP);
@@ -2126,7 +2186,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 47899) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 47899)
   public static final SubLObject set_inference_transitive_closure_mode(SubLObject inference, SubLObject transitive_closure_mode) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(transitive_closure_mode, $sym350$INFERENCE_TRANSITIVE_CLOSURE_MODE_P);
@@ -2134,7 +2194,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 48198) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 48198)
   public static final SubLObject set_inference_problem_store_private(SubLObject inference, SubLObject privateP) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(privateP, $sym348$BOOLEANP);
@@ -2142,28 +2202,28 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 48424) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 48424)
   public static final SubLObject set_inference_continuable(SubLObject inference, SubLObject continuableP) {
     checkType(continuableP, $sym348$BOOLEANP);
     _csetf_infrnc_continuableP(inference, continuableP);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 48643) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 48643)
   public static final SubLObject set_inference_browsable(SubLObject inference, SubLObject browsableP) {
     checkType(browsableP, $sym348$BOOLEANP);
     _csetf_infrnc_browsableP(inference, browsableP);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 48852) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 48852)
   public static final SubLObject set_inference_return_type(SubLObject inference, SubLObject return_type) {
     checkType(return_type, $sym351$INFERENCE_RETURN_TYPE_P);
     _csetf_infrnc_return_type(inference, return_type);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 49082) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 49082)
   public static final SubLObject set_inference_answer_language(SubLObject inference, SubLObject answer_language) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(answer_language, $sym352$INFERENCE_ANSWER_LANGUAGE_P);
@@ -2171,7 +2231,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 49335) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 49335)
   public static final SubLObject set_inference_cache_results(SubLObject inference, SubLObject cache_resultsP) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(cache_resultsP, $sym348$BOOLEANP);
@@ -2179,14 +2239,14 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 49715) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 49715)
   public static final SubLObject clear_inference_blocking(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     _csetf_infrnc_blockingP(inference, NIL);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 49870) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 49870)
   public static final SubLObject set_inference_max_number(SubLObject inference, SubLObject max_number) {
     if ((NIL != max_number)) {
       checkType(max_number, $sym345$NON_NEGATIVE_INTEGER_P);
@@ -2195,7 +2255,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 50105) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 50105)
   public static final SubLObject set_inference_max_time(SubLObject inference, SubLObject max_time) {
     if ((NIL != max_time)) {
       checkType(max_time, $sym353$NON_NEGATIVE_NUMBER_P);
@@ -2204,7 +2264,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 50329) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 50329)
   public static final SubLObject set_inference_max_step(SubLObject inference, SubLObject max_step) {
     if ((NIL != max_step)) {
       checkType(max_step, $sym345$NON_NEGATIVE_INTEGER_P);
@@ -2213,14 +2273,14 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 50554) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 50554)
   public static final SubLObject set_inference_mode(SubLObject inference, SubLObject mode) {
     checkType(mode, $sym354$INFERENCE_MODE_P);
     _csetf_infrnc_mode(inference, mode);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 50742) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 50742)
   public static final SubLObject set_inference_forward_max_time(SubLObject inference, SubLObject forward_max_time) {
     if ((NIL != forward_max_time)) {
       checkType(forward_max_time, $sym353$NON_NEGATIVE_NUMBER_P);
@@ -2237,7 +2297,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 51254) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 51254)
   public static final SubLObject set_inference_max_proof_depth(SubLObject inference, SubLObject max_proof_depth) {
     if ((NIL != max_proof_depth)) {
       checkType(max_proof_depth, $sym345$NON_NEGATIVE_INTEGER_P);
@@ -2246,7 +2306,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 51514) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 51514)
   public static final SubLObject set_inference_max_transformation_depth(SubLObject inference, SubLObject max_transformation_depth) {
     if ((NIL != max_transformation_depth)) {
       checkType(max_transformation_depth, $sym345$NON_NEGATIVE_INTEGER_P);
@@ -2255,14 +2315,14 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 51819) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 51819)
   public static final SubLObject set_inference_probably_approximately_done(SubLObject inference, SubLObject probability) {
     checkType(probability, $sym356$PROBABILITY_P);
     _csetf_infrnc_probably_approximately_done(inference, probability);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 52071) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 52071)
   public static final SubLObject set_inference_metrics_template(SubLObject inference, SubLObject metrics_template) {
     {
       SubLObject list_var = metrics_template;
@@ -2279,7 +2339,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 52322) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 52322)
   public static final SubLObject set_inference_start_universal_time(SubLObject inference, SubLObject universal_time) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(universal_time, $sym359$UNIVERSAL_TIME_P);
@@ -2287,7 +2347,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 52569) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 52569)
   public static final SubLObject set_inference_start_internal_real_time(SubLObject inference, SubLObject internal_real_time) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(internal_real_time, $sym345$NON_NEGATIVE_INTEGER_P);
@@ -2295,7 +2355,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 52842) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 52842)
   public static final SubLObject set_inference_end_internal_real_time(SubLObject inference, SubLObject end_internal_real_time) {
     checkType(inference, $sym2$INFERENCE_P);
     if ((NIL != end_internal_real_time)) {
@@ -2305,7 +2365,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 53135) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 53135)
   public static final SubLObject set_inference_pad_internal_real_time(SubLObject inference, SubLObject pad_internal_real_time) {
     checkType(inference, $sym2$INFERENCE_P);
     if ((NIL != pad_internal_real_time)) {
@@ -2315,7 +2375,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 53435) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 53435)
   public static final SubLObject set_inference_cumulative_time(SubLObject inference, SubLObject cumulative_time) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(cumulative_time, $sym361$NUMBERP);
@@ -2323,33 +2383,33 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 53666) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 53666)
   public static final SubLObject set_inference_step_count(SubLObject inference, SubLObject step_count) {
     checkType(step_count, $sym345$NON_NEGATIVE_INTEGER_P);
     _csetf_infrnc_step_count(inference, step_count);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 53888) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 53888)
   public static final SubLObject increment_inference_step_count(SubLObject inference) {
     _csetf_infrnc_step_count(inference, Numbers.add(infrnc_step_count(inference), ONE_INTEGER));
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 54046) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 54046)
   public static final SubLObject set_inference_cumulative_step_count(SubLObject inference, SubLObject cumulative_step_count) {
     checkType(cumulative_step_count, $sym345$NON_NEGATIVE_INTEGER_P);
     _csetf_infrnc_cumulative_step_count(inference, cumulative_step_count);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 54323) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 54323)
   public static final SubLObject increment_inference_cumulative_step_count(SubLObject inference) {
     _csetf_infrnc_cumulative_step_count(inference, Numbers.add(infrnc_cumulative_step_count(inference), ONE_INTEGER));
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 54719) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 54719)
   public static final SubLObject set_inference_events(SubLObject inference, SubLObject event_types) {
     checkType(inference, $sym2$INFERENCE_P);
     {
@@ -2367,7 +2427,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 54940) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 54940)
   public static final SubLObject set_inference_halt_conditions(SubLObject inference, SubLObject halt_conditions) {
     checkType(inference, $sym2$INFERENCE_P);
     {
@@ -2385,7 +2445,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 55195) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 55195)
   public static final SubLObject set_inference_type(SubLObject inference, SubLObject type) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(type, $sym364$INFERENCE_TYPE_P);
@@ -2393,19 +2453,19 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 55528) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 55528)
   public static final SubLObject inference_ids(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return list(Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 35773"), inference_suid(inference));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 57477) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 57477)
   public static final SubLObject inference_no_free_hl_varsP(SubLObject inference) {
     return Types.sublisp_null(inference_free_hl_vars(inference));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 57587) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 57587)
   public static final SubLObject inference_free_el_vars(SubLObject inference) {
     {
       SubLObject el_bindings = inference_el_bindings(inference);
@@ -2414,7 +2474,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 60966) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 60966)
   public static final SubLObject inference_root_mapped_problem(SubLObject inference) {
     {
       SubLObject root_link = inference_root_link(inference);
@@ -2425,7 +2485,7 @@ if you want to include the time spent so far in the current continuation. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 61167) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 61167)
   public static final SubLObject inference_root_problem(SubLObject inference) {
     {
       SubLObject root_mapped_problem = inference_root_mapped_problem(inference);
@@ -2436,31 +2496,31 @@ if you want to include the time spent so far in the current continuation. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 61517) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 61517)
   public static final SubLObject inference_unique_wrt_bindingsP(SubLObject inference) {
     return Equality.eq($kw390$BINDINGS, inference_result_uniqueness_criterion(inference));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 61653) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 61653)
   public static final SubLObject inference_compute_answer_justificationsP(SubLObject inference) {
     return inference_datastructures_problem_store.problem_store_compute_answer_justificationsP(inference_problem_store(inference));
   }
 
   /** Return T iff INFERENCE not only has a private problem store, but the current set
    of dynamic properties will never be extended. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 62065) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 62065)
   public static final SubLObject inference_problem_store_private_wrt_dynamic_propertiesP(SubLObject inference) {
     return makeBoolean(((NIL != inference_problem_store_privateP(inference))
            && (NIL == inference_continuableP(inference))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 62970) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 62970)
   public static final SubLObject inference_allows_use_of_all_rulesP(SubLObject inference) {
     return makeBoolean((($kw383$ALL == inference_allowed_rules(inference))
            && ($kw391$NONE == inference_forbidden_rules(inference))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 63154) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 63154)
   public static final SubLObject inference_allows_use_of_ruleP(SubLObject inference, SubLObject rule) {
     if ((NIL != inference_allows_use_of_all_rulesP(inference))) {
       return T;
@@ -2472,24 +2532,24 @@ if you want to include the time spent so far in the current continuation. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 64501) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 64501)
   public static final SubLObject inference_allows_use_of_all_modulesP(SubLObject inference) {
     return Equality.eq($kw383$ALL, inference_allowed_modules(inference));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 64626) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 64626)
   public static final SubLObject inference_allows_use_of_moduleP(SubLObject inference, SubLObject hl_module) {
     return makeBoolean(((NIL != inference_allows_use_of_all_modulesP(inference))
           || (NIL != Errors
 				.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 36412"))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 64837) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 64837)
   public static final SubLObject inference_forget_extra_resultsP(SubLObject inference) {
     return inference_datastructures_enumerated_types.inference_properties_forget_extra_resultsP(inference_input_query_properties(inference));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 65163) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 65163)
   public static final SubLObject find_inference_answer_by_id(SubLObject inference, SubLObject id) {
     checkType(id, $sym345$NON_NEGATIVE_INTEGER_P);
     {
@@ -2498,20 +2558,20 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 69024) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 69024)
   public static final SubLObject inference_maintain_term_working_setP(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     return list_utilities.sublisp_boolean(inference_problem_working_time_data(inference));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 69196) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 69196)
   public static final SubLObject inference_halt_condition_presentP(SubLObject inference, SubLObject halt_condition) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(halt_condition, $sym363$INFERENCE_HALT_CONDITION_P);
     return list_utilities.member_eqP(halt_condition, infrnc_halt_conditions(inference));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 71135) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 71135)
   public static final SubLObject compute_inference_pad_internal_real_time(SubLObject inference) {
     {
       SubLObject pad_probability = inference_probably_approximately_done(inference);
@@ -2530,10 +2590,10 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 71725) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 71725)
   private static SubLSymbol $pad_times_to_first_answer$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 71789) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 71789)
   public static final SubLObject initialize_pad_table(SubLObject filename) {
     {
       SubLObject scaled_times_to_first_answer = misc_utilities.scale_by_bogomips(inference_pad_data.$non_tkb_final_times_to_first_answer$.getGlobalValue(), inference_pad_data.$non_tkb_final_bogomips$.getGlobalValue());
@@ -2543,7 +2603,7 @@ if you want to include the time spent so far in the current continuation. */
   }
 
   /** @return positive-potentially-infinite-number-p (seconds or :positive-infinity) */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 72258) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 72258)
   public static final SubLObject probably_approximately_done_cutoff_time(SubLObject probability) {
     if (((NIL != list_utilities.safe_E(ONE_INTEGER, probability))
         || (NIL == Errors
@@ -2555,7 +2615,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 72938) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 72938)
   public static final SubLObject inference_note_transformation_depth(SubLObject inference, SubLObject depth) {
     {
       SubLObject max_transformation_depth_reached = inference_max_transformation_depth_reached(inference);
@@ -2566,7 +2626,7 @@ if you want to include the time spent so far in the current continuation. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 73329) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 73329)
   public static final SubLObject inference_note_new_transformation_depth_reached(SubLObject inference, SubLObject depth) {
     set_inference_max_transformation_depth_reached(inference, depth);
     possibly_signal_inference_new_transformation_depth_reached(inference, depth);
@@ -2579,7 +2639,7 @@ if you want to include the time spent so far in the current continuation. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 73859) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 73859)
   public static final SubLObject find_inference_answer_by_bindings(SubLObject inference, SubLObject v_bindings) {
     checkType(v_bindings, $sym336$BINDING_LIST_P);
     {
@@ -2588,7 +2648,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 74079) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 74079)
   public static final SubLObject new_inference_answer_id(SubLObject inference) {
     {
       SubLObject v_id_index = inference_answer_id_index(inference);
@@ -2596,7 +2656,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 74231) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 74231)
   public static final SubLObject inference_all_answers(SubLObject inference) {
     {
       SubLObject answers = NIL;
@@ -2654,7 +2714,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 74413) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 74413)
   public static final SubLObject inference_all_new_answers(SubLObject inference) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2680,29 +2740,29 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 75820) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 75820)
   public static final SubLObject inference_interrupt_signaledP(SubLObject inference) {
     return makeBoolean((NIL == queues.queue_empty_p(inference_interrupting_processes(inference))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 76263) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 76263)
   public static final SubLObject inference_answer_count(SubLObject inference) {
     return id_index.id_index_count(inference_answer_id_index(inference));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 76924) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 76924)
   public static final SubLObject forward_inference_p(SubLObject inference) {
     return makeBoolean(((NIL != inference_p(inference))
            && (NIL != inference_datastructures_problem_store.problem_store_forwardP(inference_problem_store(inference)))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 77221) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 77221)
   public static final SubLObject abductive_inference_p(SubLObject inference) {
     return makeBoolean(((NIL != inference_p(inference))
            && (NIL != inference_datastructures_problem_store.problem_store_abduction_allowedP(inference_problem_store(inference)))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 78666) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 78666)
   public static final SubLObject inference_set_static_properties(SubLObject inference, SubLObject static_properties) {
     checkType(static_properties, $sym404$INFERENCE_STATIC_PROPERTIES_P);
     {
@@ -2777,7 +2837,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 81782) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 81782)
   public static final SubLObject update_inference_input_query_properties(SubLObject inference, SubLObject input_dynamic_properties) {
     checkType(input_dynamic_properties, $sym407$QUERY_DYNAMIC_PROPERTIES_P);
     {
@@ -2806,7 +2866,7 @@ if you want to include the time spent so far in the current continuation. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 82921) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 82921)
   public static final SubLObject add_inference_relevant_problem(SubLObject inference, SubLObject problem) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(problem, $sym409$PROBLEM_P);
@@ -2814,7 +2874,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 83137) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 83137)
   public static final SubLObject remove_inference_relevant_problem(SubLObject inference, SubLObject problem) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(problem, $sym409$PROBLEM_P);
@@ -2822,14 +2882,14 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 83359) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 83359)
   public static final SubLObject clear_inference_relevant_problems(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     set.clear_set(infrnc_relevant_problems(inference));
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 83531) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 83531)
   public static final SubLObject add_inference_strategy(SubLObject inference, SubLObject strategy) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(strategy, $sym410$STRATEGY_P);
@@ -2837,14 +2897,14 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 83951) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 83951)
   public static final SubLObject clear_inference_strategy_set(SubLObject inference) {
     checkType(inference, $sym2$INFERENCE_P);
     set.clear_set(infrnc_strategy_set(inference));
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 84113) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 84113)
   public static final SubLObject reset_inference_new_answer_id(SubLObject inference) {
     {
       SubLObject next_id = inference_next_new_answer_id(inference);
@@ -2853,7 +2913,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 84312) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 84312)
   public static final SubLObject inference_next_new_answer_id(SubLObject inference) {
     {
       SubLObject v_id_index = inference_answer_id_index(inference);
@@ -2861,7 +2921,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 84510) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 84510)
   public static final SubLObject add_inference_new_answer_by_id(SubLObject inference, SubLObject answer) {
     checkType(answer, $sym411$INFERENCE_ANSWER_P);
     {
@@ -2872,7 +2932,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 85048) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 85048)
   public static final SubLObject add_inference_new_answer_by_bindings(SubLObject inference, SubLObject answer) {
     checkType(answer, $sym411$INFERENCE_ANSWER_P);
     {
@@ -2883,31 +2943,31 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 85718) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 85718)
   public static final SubLObject reset_inference_new_answer_justifications(SubLObject inference) {
     queues.clear_queue(inference_new_answer_justifications(inference));
     return inference;
   }
 
   /** Does not check for duplication with existing new justifications */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 85872) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 85872)
   public static final SubLObject add_inference_new_answer_justification(SubLObject inference, SubLObject answer_justification) {
     checkType(answer_justification, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P);
     queues.enqueue(answer_justification, inference_new_answer_justifications(inference));
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 86532) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 86532)
   public static final SubLObject clear_inference_control_process(SubLObject inference) {
     return set_inference_control_process(inference, NIL);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 86651) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 86651)
   public static final SubLObject set_inference_control_process_to_me(SubLObject inference) {
     return set_inference_control_process(inference, Threads.current_process());
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 86974) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 86974)
   public static final SubLObject increment_inference_cumulative_time(SubLObject inference, SubLObject time_delta) {
     {
       SubLObject cumulative_time = inference_cumulative_time(inference);
@@ -2917,14 +2977,14 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 88236) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 88236)
   public static final SubLObject reset_inference_new_answers(SubLObject inference) {
     reset_inference_new_answer_id(inference);
     reset_inference_new_answer_justifications(inference);
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 88429) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 88429)
   public static final SubLObject add_inference_new_answer(SubLObject inference, SubLObject answer) {
     checkType(answer, $sym411$INFERENCE_ANSWER_P);
     add_inference_new_answer_by_id(inference, answer);
@@ -2932,7 +2992,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 88900) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 88900)
   public static final SubLObject initialize_inference_time_properties(SubLObject inference) {
     {
       SubLObject real_time_now = Time.get_internal_real_time();
@@ -2953,7 +3013,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 89568) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 89568)
   public static final SubLObject finalize_inference_time_properties(SubLObject inference) {
     {
       SubLObject delta_time = inference_time_so_far(inference, NIL);
@@ -2962,7 +3022,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 89778) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 89778)
   public static final SubLObject inference_elapsed_internal_real_time_since_start(SubLObject inference) {
     {
       SubLObject start = inference_start_internal_real_time(inference);
@@ -2972,7 +3032,7 @@ if you want to include the time spent so far in the current continuation. */
   }
 
   /** @return the time spent so far on the current continuation of this INFERENCE. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 90194) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 90194)
   public static final SubLObject inference_time_so_far(SubLObject inference, SubLObject seconds_granularityP) {
     if ((seconds_granularityP == UNPROVIDED)) {
       seconds_granularityP = T;
@@ -2994,13 +3054,13 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 92472) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 92472)
   public static final SubLObject simplest_inference_p(SubLObject object) {
     return makeBoolean(((NIL != inference_p(object))
            && ($kw416$SIMPLEST == inference_type(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 92681) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 92681)
   public static final SubLObject new_simplest_inference(SubLObject store) {
     checkType(store, $sym324$PROBLEM_STORE_P);
     {
@@ -3010,13 +3070,13 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 92896) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 92896)
   public static final SubLObject simplest_inference_strategy(SubLObject inference) {
     checkType(inference, $sym417$SIMPLEST_INFERENCE_P);
     return inference_data(inference);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 93049) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 93049)
   public static final SubLObject set_simplest_inference_strategy(SubLObject inference, SubLObject strategy) {
     checkType(inference, $sym417$SIMPLEST_INFERENCE_P);
     checkType(strategy, $sym410$STRATEGY_P);
@@ -3024,7 +3084,7 @@ if you want to include the time spent so far in the current continuation. */
     return inference;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 93276) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 93276)
   public static final SubLObject new_simplest_inference_of_type(SubLObject store, SubLObject strategy_type) {
     checkType(store, $sym324$PROBLEM_STORE_P);
     checkType(strategy_type, $sym418$STRATEGY_TYPE_P);
@@ -3038,18 +3098,31 @@ if you want to include the time spent so far in the current continuation. */
   }
 
   public static final class $inference_answer_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $suid; }
+    @Override
     public SubLObject getField3() { return $inference; }
+    @Override
     public SubLObject getField4() { return $bindings; }
+    @Override
     public SubLObject getField5() { return $justifications; }
+    @Override
     public SubLObject getField6() { return $elapsed_creation_time; }
+    @Override
     public SubLObject getField7() { return $step_count; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $suid = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $inference = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $bindings = value; }
+    @Override
     public SubLObject setField5(SubLObject value) { return $justifications = value; }
+    @Override
     public SubLObject setField6(SubLObject value) { return $elapsed_creation_time = value; }
+    @Override
     public SubLObject setField7(SubLObject value) { return $step_count = value; }
     public SubLObject $suid = NIL;
     public SubLObject $inference = NIL;
@@ -3061,76 +3134,77 @@ if you want to include the time spent so far in the current continuation. */
     Structures.makeStructDeclNative($inference_answer_native.class, $sym419$INFERENCE_ANSWER, $sym411$INFERENCE_ANSWER_P, $list420, $list421, new String[] {"$suid", "$inference", "$bindings", "$justifications", "$elapsed_creation_time", "$step_count"}, $list422, $list423, $sym424$PRINT_INFERENCE_ANSWER);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static SubLSymbol $dtp_inference_answer$ = null;
 
   public static final class $inference_answer_p$UnaryFunction extends UnaryFunction {
     public $inference_answer_p$UnaryFunction() { super(extractFunctionNamed("INFERENCE-ANSWER-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 35743"); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject inf_answer_suid(SubLObject object) {
     checkType(object, $sym411$INFERENCE_ANSWER_P);
     return object.getField2();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject inf_answer_inference(SubLObject object) {
     checkType(object, $sym411$INFERENCE_ANSWER_P);
     return object.getField3();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject inf_answer_bindings(SubLObject object) {
     checkType(object, $sym411$INFERENCE_ANSWER_P);
     return object.getField4();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject inf_answer_justifications(SubLObject object) {
     checkType(object, $sym411$INFERENCE_ANSWER_P);
     return object.getField5();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject _csetf_inf_answer_suid(SubLObject object, SubLObject value) {
     checkType(object, $sym411$INFERENCE_ANSWER_P);
     return object.setField2(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject _csetf_inf_answer_inference(SubLObject object, SubLObject value) {
     checkType(object, $sym411$INFERENCE_ANSWER_P);
     return object.setField3(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject _csetf_inf_answer_bindings(SubLObject object, SubLObject value) {
     checkType(object, $sym411$INFERENCE_ANSWER_P);
     return object.setField4(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject _csetf_inf_answer_justifications(SubLObject object, SubLObject value) {
     checkType(object, $sym411$INFERENCE_ANSWER_P);
     return object.setField5(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject _csetf_inf_answer_elapsed_creation_time(SubLObject object, SubLObject value) {
     checkType(object, $sym411$INFERENCE_ANSWER_P);
     return object.setField6(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject _csetf_inf_answer_step_count(SubLObject object, SubLObject value) {
     checkType(object, $sym411$INFERENCE_ANSWER_P);
     return object.setField7(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 94251)
   public static final SubLObject make_inference_answer(SubLObject arglist) {
     if ((arglist == UNPROVIDED)) {
       arglist = NIL;
@@ -3164,7 +3238,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 96238) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 96238)
   public static final SubLObject new_inference_answer(SubLObject inference, SubLObject v_bindings) {
     checkType(inference, $sym2$INFERENCE_P);
     checkType(v_bindings, $sym444$BINDINGS_P);
@@ -3191,7 +3265,7 @@ if you want to include the time spent so far in the current continuation. */
 
   /** @return 0 inference-answer-p
 @return 1 booleanp; whether a new answer was created */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 97180) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 97180)
   public static final SubLObject find_or_create_inference_answer(SubLObject inference, SubLObject v_bindings) {
     checkType(inference, $sym2$INFERENCE_P);
     {
@@ -3205,51 +3279,51 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 98873) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 98873)
   public static final SubLObject inference_answer_suid(SubLObject inference_answer) {
     checkType(inference_answer, $sym411$INFERENCE_ANSWER_P);
     return inf_answer_suid(inference_answer);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 99040) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 99040)
   public static final SubLObject inference_answer_inference(SubLObject inference_answer) {
     checkType(inference_answer, $sym411$INFERENCE_ANSWER_P);
     return inf_answer_inference(inference_answer);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 99205) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 99205)
   public static final SubLObject inference_answer_bindings(SubLObject inference_answer) {
     checkType(inference_answer, $sym411$INFERENCE_ANSWER_P);
     return inf_answer_bindings(inference_answer);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 99368) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 99368)
   public static final SubLObject inference_answer_justifications(SubLObject inference_answer) {
     checkType(inference_answer, $sym411$INFERENCE_ANSWER_P);
     return inf_answer_justifications(inference_answer);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 99945) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 99945)
   public static final SubLObject set_inference_answer_bindings(SubLObject inference_answer, SubLObject v_bindings) {
     checkType(v_bindings, $sym444$BINDINGS_P);
     _csetf_inf_answer_bindings(inference_answer, v_bindings);
     return inference_answer;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 100151) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 100151)
   public static final SubLObject set_inference_answer_elapsed_creation_time(SubLObject inference_answer, SubLObject elapsed_creation_time) {
     _csetf_inf_answer_elapsed_creation_time(inference_answer, elapsed_creation_time);
     return inference_answer;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 100475) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 100475)
   public static final SubLObject set_inference_answer_step_count(SubLObject inference_answer, SubLObject step_count) {
     _csetf_inf_answer_step_count(inference_answer, step_count);
     return inference_answer;
   }
 
   /** @return nil or inference-answer-justification-p */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 101917) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 101917)
   public static final SubLObject find_inference_answer_justification(SubLObject inference_answer, SubLObject hl_justification) {
     {
       SubLObject existing_justifications = inference_answer_justifications(inference_answer);
@@ -3257,7 +3331,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 102291) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 102291)
   public static final SubLObject inference_answer_result_bindings(SubLObject answer) {
     {
       SubLObject inference = inference_answer_inference(answer);
@@ -3274,14 +3348,14 @@ if you want to include the time spent so far in the current continuation. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 103989) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 103989)
   public static final SubLObject add_inference_answer_justification(SubLObject inference_answer, SubLObject justification) {
     checkType(justification, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P);
     _csetf_inf_answer_justifications(inference_answer, cons(justification, inf_answer_justifications(inference_answer)));
     return inference_answer;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 104507) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 104507)
   public static final SubLObject initialize_inference_answer_elapsed_creation_time(SubLObject inference_answer) {
     {
       SubLObject inference = inference_answer_inference(inference_answer);
@@ -3293,12 +3367,19 @@ if you want to include the time spent so far in the current continuation. */
   }
 
   public static final class $inference_answer_justification_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $answer; }
+    @Override
     public SubLObject getField3() { return $supports; }
+    @Override
     public SubLObject getField4() { return $proofs; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $answer = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $supports = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $proofs = value; }
     public SubLObject $answer = NIL;
     public SubLObject $supports = NIL;
@@ -3307,52 +3388,53 @@ if you want to include the time spent so far in the current continuation. */
     Structures.makeStructDeclNative($inference_answer_justification_native.class, $sym456$INFERENCE_ANSWER_JUSTIFICATION, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P, $list457, $list458, new String[] {"$answer", "$supports", "$proofs"}, $list459, $list460, $sym461$PRINT_INFERENCE_ANSWER_JUSTIFICATION);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124)
   public static SubLSymbol $dtp_inference_answer_justification$ = null;
 
   public static final class $inference_answer_justification_p$UnaryFunction extends UnaryFunction {
     public $inference_answer_justification_p$UnaryFunction() { super(extractFunctionNamed("INFERENCE-ANSWER-JUSTIFICATION-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 35739"); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124)
   public static final SubLObject inf_ans_just_answer(SubLObject object) {
     checkType(object, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P);
     return object.getField2();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124)
   public static final SubLObject inf_ans_just_supports(SubLObject object) {
     checkType(object, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P);
     return object.getField3();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124)
   public static final SubLObject inf_ans_just_proofs(SubLObject object) {
     checkType(object, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P);
     return object.getField4();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124)
   public static final SubLObject _csetf_inf_ans_just_answer(SubLObject object, SubLObject value) {
     checkType(object, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P);
     return object.setField2(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124)
   public static final SubLObject _csetf_inf_ans_just_supports(SubLObject object, SubLObject value) {
     checkType(object, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P);
     return object.setField3(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124)
   public static final SubLObject _csetf_inf_ans_just_proofs(SubLObject object, SubLObject value) {
     checkType(object, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P);
     return object.setField4(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 105124)
   public static final SubLObject make_inference_answer_justification(SubLObject arglist) {
     if ((arglist == UNPROVIDED)) {
       arglist = NIL;
@@ -3380,7 +3462,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 106894) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 106894)
   public static final SubLObject new_inference_answer_justification(SubLObject answer, SubLObject supports) {
     checkType(answer, $sym411$INFERENCE_ANSWER_P);
     checkType(supports, $sym477$HL_JUSTIFICATION_P);
@@ -3395,7 +3477,7 @@ if you want to include the time spent so far in the current continuation. */
 
   /** @return 0 inference-answer-justification-p
 @return 1 booleanp; whether a new justification was created */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 107309) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 107309)
   public static final SubLObject find_or_create_inference_answer_justification(SubLObject inference, SubLObject v_bindings, SubLObject supports) {
     checkType(inference, $sym2$INFERENCE_P);
     {
@@ -3411,13 +3493,13 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 108950) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 108950)
   public static final SubLObject inference_answer_justification_answer(SubLObject justification) {
     checkType(justification, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P);
     return inf_ans_just_answer(justification);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 109142) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 109142)
   public static final SubLObject inference_answer_justification_supports(SubLObject justification) {
     checkType(justification, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P);
     return inf_ans_just_supports(justification);
@@ -3425,17 +3507,18 @@ if you want to include the time spent so far in the current continuation. */
 
   public static final class $inference_answer_justification_supports$UnaryFunction extends UnaryFunction {
     public $inference_answer_justification_supports$UnaryFunction() { super(extractFunctionNamed("INFERENCE-ANSWER-JUSTIFICATION-SUPPORTS")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return inference_answer_justification_supports(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 111968) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 111968)
   public static final SubLObject add_inference_answer_justification_proof(SubLObject justification, SubLObject proof) {
     checkType(proof, $sym496$PROOF_P);
     _csetf_inf_ans_just_proofs(justification, cons(proof, inf_ans_just_proofs(justification)));
     return justification;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 114910) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 114910)
   public static final SubLObject inference_compute_metrics(SubLObject inference) {
     {
       SubLObject template = inference_metrics_template(inference);
@@ -3450,7 +3533,7 @@ if you want to include the time spent so far in the current continuation. */
   /** Return an alist of the form (METRIC . VALUE) where
    METRIC is a metric in METRICS and
    VALUE is the result of that metric when computed on INFERENCE. */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 115757) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 115757)
   public static final SubLObject inference_compute_metrics_alist(SubLObject inference, SubLObject metrics) {
     {
       SubLObject store = inference_problem_store(inference);
@@ -3533,7 +3616,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 121408) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 121408)
   public static final SubLObject inference_problem_working_time_lock(SubLObject inference) {
     {
       SubLObject data = inference_problem_working_time_data(inference);
@@ -3541,7 +3624,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 122108) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 122108)
   public static final SubLObject inference_note_tactic_executed(SubLObject inference, SubLObject tactic) {
     {
       SubLObject result = NIL;
@@ -3574,7 +3657,7 @@ if you want to include the time spent so far in the current continuation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 122598) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 122598)
   public static final SubLObject inference_note_problem_pending(SubLObject inference, SubLObject problem) {
     {
       SubLObject result = NIL;
@@ -3603,18 +3686,18 @@ if you want to include the time spent so far in the current continuation. */
   }
 
   /** Called immediately after the creation of NEW-ANSWER */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 123149) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 123149)
   public static final SubLObject possibly_signal_new_inference_answer(SubLObject inference, SubLObject new_answer) {
     return NIL;
   }
 
   /** Called immediately after the status change */
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 123819) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 123819)
   public static final SubLObject possibly_signal_inference_status_change(SubLObject inference) {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 124447) 
+  @SubL(source = "cycl/inference/harness/inference-datastructures-inference.lisp", position = 124447)
   public static final SubLObject possibly_signal_inference_new_transformation_depth_reached(SubLObject inference, SubLObject new_depth) {
     return NIL;
   }
@@ -4165,7 +4248,7 @@ if you want to include the time spent so far in the current continuation. */
   public static final SubLObject init_inference_datastructures_inference_file() {
     $inference_types$ = deflexical("*INFERENCE-TYPES*", $list0);
     $dtp_inference$ = defconstant("*DTP-INFERENCE*", $sym1$INFERENCE);
-    $pad_times_to_first_answer$ = deflexical("*PAD-TIMES-TO-FIRST-ANSWER*", ((NIL != Symbols.boundp($sym394$_PAD_TIMES_TO_FIRST_ANSWER_)) ? ((SubLObject) $pad_times_to_first_answer$.getGlobalValue()) : $kw395$UNINITIALIZED));
+    $pad_times_to_first_answer$ = deflexical("*PAD-TIMES-TO-FIRST-ANSWER*", maybeDefault( $sym394$_PAD_TIMES_TO_FIRST_ANSWER_, $pad_times_to_first_answer$, ()-> ($kw395$UNINITIALIZED)));
     $dtp_inference_answer$ = defconstant("*DTP-INFERENCE-ANSWER*", $sym419$INFERENCE_ANSWER);
     $dtp_inference_answer_justification$ = defconstant("*DTP-INFERENCE-ANSWER-JUSTIFICATION*", $sym456$INFERENCE_ANSWER_JUSTIFICATION);
     return NIL;
@@ -4840,14 +4923,17 @@ if you want to include the time spent so far in the current continuation. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_datastructures_inference_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_datastructures_inference_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_datastructures_inference_file();
   }

@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,12 +80,12 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.red_infrastructure;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.red_infrastructure;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class red_infrastructure_macros extends SubLTranslatedFile {
 
@@ -184,9 +216,9 @@ public  final class red_infrastructure_macros extends SubLTranslatedFile {
     $reddef_var_prvt$ = defvar("REDDEF-VAR-PRVT", red_def_helper(($sym36$_RED_INFRASTRUCTURE_TEST_KEY_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym36$_RED_INFRASTRUCTURE_TEST_KEY_)) : $sym36$_RED_INFRASTRUCTURE_TEST_KEY_), $sym45$REDDEF_VAR_PRVT, ($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_)) : $sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_), $kw46$VAR, UNPROVIDED));
     $reddef_var_prot$ = defvar("REDDEF-VAR-PROT", red_def_helper(($sym36$_RED_INFRASTRUCTURE_TEST_KEY_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym36$_RED_INFRASTRUCTURE_TEST_KEY_)) : $sym36$_RED_INFRASTRUCTURE_TEST_KEY_), $sym47$REDDEF_VAR_PROT, ($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_)) : $sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_), $kw46$VAR, UNPROVIDED));
     $reddef_var_publ$ = defvar("REDDEF-VAR-PUBL", red_def_helper(($sym36$_RED_INFRASTRUCTURE_TEST_KEY_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym36$_RED_INFRASTRUCTURE_TEST_KEY_)) : $sym36$_RED_INFRASTRUCTURE_TEST_KEY_), $sym48$REDDEF_VAR_PUBL, ($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_)) : $sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_), $kw46$VAR, UNPROVIDED));
-    $reddef_gbl_prvt$ = deflexical("REDDEF-GBL-PRVT", ((NIL != Symbols.boundp($sym49$REDDEF_GBL_PRVT)) ? ((SubLObject) $reddef_gbl_prvt$.getGlobalValue()) : red_def_helper(($sym36$_RED_INFRASTRUCTURE_TEST_KEY_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym36$_RED_INFRASTRUCTURE_TEST_KEY_)) : $sym36$_RED_INFRASTRUCTURE_TEST_KEY_), $sym49$REDDEF_GBL_PRVT, ($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_)) : $sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_), $kw50$GLOBAL, UNPROVIDED)));
-    $reddef_gbl_prot$ = deflexical("REDDEF-GBL-PROT", ((NIL != Symbols.boundp($sym51$REDDEF_GBL_PROT)) ? ((SubLObject) $reddef_gbl_prot$.getGlobalValue()) : red_def_helper(($sym36$_RED_INFRASTRUCTURE_TEST_KEY_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym36$_RED_INFRASTRUCTURE_TEST_KEY_)) : $sym36$_RED_INFRASTRUCTURE_TEST_KEY_), $sym51$REDDEF_GBL_PROT, ($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_)) : $sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_), $kw50$GLOBAL, UNPROVIDED)));
-    $reddef_gbl_publ$ = deflexical("REDDEF-GBL-PUBL", ((NIL != Symbols.boundp($sym52$REDDEF_GBL_PUBL)) ? ((SubLObject) $reddef_gbl_publ$.getGlobalValue()) : red_def_helper(($sym36$_RED_INFRASTRUCTURE_TEST_KEY_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym36$_RED_INFRASTRUCTURE_TEST_KEY_)) : $sym36$_RED_INFRASTRUCTURE_TEST_KEY_), $sym52$REDDEF_GBL_PUBL, ($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_)) : $sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_), $kw50$GLOBAL, UNPROVIDED)));
+    $reddef_gbl_prvt$ = deflexical("REDDEF-GBL-PRVT", maybeDefault( $sym49$REDDEF_GBL_PRVT, $reddef_gbl_prvt$, ()-> (red_def_helper(($sym36$_RED_INFRASTRUCTURE_TEST_KEY_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym36$_RED_INFRASTRUCTURE_TEST_KEY_)) : $sym36$_RED_INFRASTRUCTURE_TEST_KEY_), $sym49$REDDEF_GBL_PRVT, ($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_)) : $sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_), $kw50$GLOBAL, UNPROVIDED))));
+    $reddef_gbl_prot$ = deflexical("REDDEF-GBL-PROT", maybeDefault( $sym51$REDDEF_GBL_PROT, $reddef_gbl_prot$, ()-> (red_def_helper(($sym36$_RED_INFRASTRUCTURE_TEST_KEY_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym36$_RED_INFRASTRUCTURE_TEST_KEY_)) : $sym36$_RED_INFRASTRUCTURE_TEST_KEY_), $sym51$REDDEF_GBL_PROT, ($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_)) : $sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_), $kw50$GLOBAL, UNPROVIDED))));
+    $reddef_gbl_publ$ = deflexical("REDDEF-GBL-PUBL", maybeDefault( $sym52$REDDEF_GBL_PUBL, $reddef_gbl_publ$, ()-> (red_def_helper(($sym36$_RED_INFRASTRUCTURE_TEST_KEY_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym36$_RED_INFRASTRUCTURE_TEST_KEY_)) : $sym36$_RED_INFRASTRUCTURE_TEST_KEY_), $sym52$REDDEF_GBL_PUBL, ($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_.isSymbol() ? ((SubLObject) Symbols.symbol_value($sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_)) : $sym38$_RED_INFRASTRUCTURE_TEST_DEFAULT_), $kw50$GLOBAL, UNPROVIDED))));
     return NIL;
   }
 

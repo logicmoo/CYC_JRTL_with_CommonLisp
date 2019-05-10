@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,10 +80,10 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
 
 public  final class subl_macro_promotions extends SubLTranslatedFile {
 
@@ -114,7 +146,8 @@ public  final class subl_macro_promotions extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_subl_macro_promotions_file() {
-    $catch_error_message_target$ = deflexical("*CATCH-ERROR-MESSAGE-TARGET*", ((NIL != Symbols.boundp($sym9$_CATCH_ERROR_MESSAGE_TARGET_)) ? ((SubLObject) $catch_error_message_target$.getGlobalValue()) : Symbols.make_symbol($str10$ERROR)));
+    $catch_error_message_target$ = SubLFiles.deflexical( "*CATCH-ERROR-MESSAGE-TARGET*", maybeDefault( $sym9$_CATCH_ERROR_MESSAGE_TARGET_, $catch_error_message_target$, () -> ( Symbols.make_symbol( $str10$ERROR ) ) ) );
+    $catch_error_message_target$ = deflexical("*CATCH-ERROR-MESSAGE-TARGET*", maybeDefault( $sym9$_CATCH_ERROR_MESSAGE_TARGET_, $catch_error_message_target$, ()-> (Symbols.make_symbol($str10$ERROR))));
     $within_with_timeout$ = defparameter("*WITHIN-WITH-TIMEOUT*", NIL);
     $with_timeout_nesting_depth$ = defparameter("*WITH-TIMEOUT-NESTING-DEPTH*", ZERO_INTEGER);
     return NIL;
@@ -201,14 +234,17 @@ public  final class subl_macro_promotions extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_subl_macro_promotions_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_subl_macro_promotions_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_subl_macro_promotions_file();
   }

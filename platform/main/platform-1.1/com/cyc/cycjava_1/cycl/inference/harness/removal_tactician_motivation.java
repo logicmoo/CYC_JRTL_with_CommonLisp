@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -47,40 +66,42 @@ import static com.cyc.tool.subl.util.SubLFiles.defvar;
 import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
-
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_lookahead_productivity;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
 import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_restriction;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.removal_tactician;
-import com.cyc.cycjava_1.cycl.inference.harness.removal_tactician_datastructures;
-import com.cyc.cycjava_1.cycl.inference.harness.removal_tactician_uninterestingness;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+
+
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_lookahead_productivity;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_restriction;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.removal_tactician;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.removal_tactician_datastructures;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.removal_tactician_uninterestingness;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class removal_tactician_motivation extends SubLTranslatedFile {
 
@@ -93,7 +114,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
   //// Definitions
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 1462) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 1462)
   public static final SubLObject removal_strategy_possibly_propagate_motivation_to_link_head(SubLObject strategy, SubLObject link_head) {
     checkType(link_head, $sym7$MOTIVATION_STRATEGEM_P);
     {
@@ -106,7 +127,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 1941) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 1941)
   public static final SubLObject removal_strategy_propagate_motivation_to_link_head(SubLObject strategy, SubLObject link_head) {
     checkType(strategy, $sym8$REMOVAL_STRATEGY_P);
     checkType(link_head, $sym7$MOTIVATION_STRATEGEM_P);
@@ -141,7 +162,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
   }
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 3251) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 3251)
   public static final SubLObject removal_strategy_link_motivates_problemP(SubLObject strategy, SubLObject link, SubLObject problem) {
     if ((problem == UNPROVIDED)) {
       problem = NIL;
@@ -203,7 +224,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
   }
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 4160) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 4160)
   public static final SubLObject removal_strategy_link_motivates_lookahead_problemP(SubLObject strategy, SubLObject link) {
     if ((NIL != inference_tactician.motivation_strategem_link_p(link))) {
       return removal_tactician_datastructures.removal_strategy_link_head_motivatedP(strategy, link);
@@ -220,7 +241,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
   }
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 4580) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 4580)
   public static final SubLObject removal_strategy_possibly_propagate_motivation_to_problem(SubLObject strategy, SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -295,7 +316,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
   }
 
   /** @return booleanp; whether STRATEGY chose to activate PROBLEM. */
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 5996) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 5996)
   public static final SubLObject removal_strategy_possibly_activate_problem(SubLObject strategy, SubLObject problem) {
     if ((NIL != removal_strategy_chooses_not_to_examine_problemP(strategy, problem))) {
       return NIL;
@@ -333,7 +354,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
 
   /** if you are a restricted non-focal problem of some (open?) join-ordered link which has R,
    you get R.  you're the rest of a removal. */
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 8087) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 8087)
   public static final SubLObject removal_strategy_problem_is_the_rest_of_a_removalP(SubLObject problem, SubLObject strategy) {
     {
       SubLObject set_contents_var = inference_datastructures_problem.problem_dependent_links(problem);
@@ -375,7 +396,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 8559) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 8559)
   public static final SubLObject removal_strategy_problem_is_the_rest_of_a_join_orderedP(SubLObject problem, SubLObject strategy) {
     {
       SubLObject part_of_join_orderedP = NIL;
@@ -417,14 +438,14 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 8883) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 8883)
   public static final SubLObject removal_strategy_possibly_propagate_proof_spec_to_restricted_non_focals(SubLObject strategy, SubLObject problem) {
     return NIL;
   }
 
   /** if you are a supporting rewritten problem of a rewrite link whose supported problem has R,
    you get R. */
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 10063) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 10063)
   public static final SubLObject removal_strategy_motivates_problem_via_rewriteP(SubLObject strategy, SubLObject problem) {
     if ((NIL != inference_datastructures_problem_store.problem_store_rewrite_allowedP(inference_datastructures_strategy.strategy_problem_store(strategy)))) {
       {
@@ -448,25 +469,25 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 10562) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 10562)
   public static final SubLObject removal_strategy_chooses_not_to_examine_problemP(SubLObject strategy, SubLObject problem) {
     return inference_tactician_strategic_uninterestingness.strategy_deems_problem_tactically_uninterestingP(strategy, problem);
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 10799) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 10799)
   public static final SubLObject removal_strategy_chooses_not_to_activate_problemP(SubLObject strategy, SubLObject problem) {
     return makeBoolean(((NIL != removal_tactician_datastructures.removal_strategy_problem_activeP(strategy, problem))
           || (NIL != removal_tactician_datastructures.removal_strategy_problem_pendingP(strategy, problem))));
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 11011) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 11011)
   public static final SubLObject removal_strategy_activate_problem(SubLObject strategy, SubLObject problem) {
     checkType(strategy, $sym8$REMOVAL_STRATEGY_P);
     checkType(problem, $sym13$PROBLEM_P);
     return Numbers.plusp(removal_strategy_possibly_activate_strategems(strategy, problem));
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 11239) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 11239)
   public static final SubLObject removal_strategy_possibly_activate_strategems(SubLObject strategy, SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -509,10 +530,10 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
   }
 
   /** The tactic types to use the RL tactician's ordering for. */
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 12889) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 12889)
   private static SubLSymbol $removal_strategy_rl_tactician_tactic_types$ = null;
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 15580) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 15580)
   public static final SubLObject removal_strategy_note_new_tactic(SubLObject strategy, SubLObject tactic) {
     inference_worker.default_compute_strategic_properties_of_tactic(strategy, tactic);
     if ((!((((NIL != inference_worker_split.split_tactic_p(tactic))
@@ -524,7 +545,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 16126) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 16126)
   public static final SubLObject removal_strategy_note_split_tactics_strategically_possible(SubLObject strategy, SubLObject split_tactics) {
     {
       SubLObject sorted_split_tactics = inference_tactician.strategy_sort(strategy, conses_high.copy_list(split_tactics), $sym17$LOGICAL_TACTIC_BETTER_WRT_REMOVAL_);
@@ -537,7 +558,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 16516) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 16516)
   public static final SubLObject removal_strategy_note_new_tactic_possible(SubLObject strategy, SubLObject tactic) {
     {
       SubLObject problem = inference_datastructures_tactic.tactic_problem(tactic);
@@ -566,7 +587,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
    Strategems are ordered in intended order of activation.
    @return 1 listp of strategem-p; an ordered list of strategems on PROBLEM which STRATEGY may want to set aside wrt removal.
    @return 2 listp of strategem-p; an ordered list of strategems on PROBLEM which STRATEGY may want to throw away wrt removal. */
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 18015) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 18015)
   public static final SubLObject removal_strategy_categorize_strategems(SubLObject strategy, SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -627,7 +648,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 20720) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 20720)
   public static final SubLObject removal_strategy_categorize_motivation_strategems(SubLObject strategy, SubLObject problem, SubLObject problem_set_asideP, SubLObject problem_thrown_awayP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -678,7 +699,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
   }
 
   /** Possible non-complete removal tactics should be in the reverse intended activation order */
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 22004) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 22004)
   public static final SubLObject removal_strategy_categorize_removal_tactics(SubLObject strategy, SubLObject problem, SubLObject problem_set_asideP, SubLObject problem_thrown_awayP) {
     {
       SubLObject best_complete_removal_tactic = NIL;
@@ -749,7 +770,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 27507) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 27507)
   public static final SubLObject removal_strategy_categorize_connected_conjunction_tactics(SubLObject strategy, SubLObject problem, SubLObject problem_set_asideP, SubLObject problem_thrown_awayP) {
     {
       SubLObject possible_motivation_strategems = NIL;
@@ -847,7 +868,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 31317) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 31317)
   public static final SubLObject removal_strategy_deems_conjunctive_tactic_spec_betterP(SubLObject strategy, SubLObject candidate_tactic, SubLObject candidate_tactic_productivity, SubLObject candidate_tactic_preference, SubLObject candidate_tactic_module_spec, SubLObject candidate_tactic_literal_count, SubLObject committed_tactic, SubLObject committed_tactic_productivity, SubLObject committed_tactic_preference, SubLObject committed_tactic_module_spec, SubLObject committed_tactic_literal_count) {
     if (((NIL != inference_datastructures_problem_store.problem_store_transformation_allowedP(inference_datastructures_tactic.tactic_store(committed_tactic)))
          && (NIL != Errors
@@ -864,7 +885,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     return inference_tactician_utilities.strategy_deems_conjunctive_tactic_spec_betterP(candidate_tactic_productivity, candidate_tactic_preference, candidate_tactic_module_spec, candidate_tactic_literal_count, committed_tactic_productivity, committed_tactic_preference, committed_tactic_module_spec, committed_tactic_literal_count);
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 32703) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 32703)
   public static final SubLObject removal_strategy_commits_to_no_removal_backtrackingP(SubLObject strategy, SubLObject committed_tactic, SubLObject committed_tactic_preference_level) {
     if ((NIL != ((NIL != inference_datastructures_problem_store.problem_store_transformation_allowedP(inference_datastructures_tactic.tactic_store(committed_tactic))) ? ((SubLObject) Equality.eq($kw22$COMPLETE, inference_worker.logical_tactic_generalized_removal_completeness(committed_tactic, strategy))) : Equality.eq($kw33$PREFERRED, committed_tactic_preference_level)))) {
       if ((NIL != removal_strategy_logical_tactic_removal_backtracking_cheapP(committed_tactic, strategy))) {
@@ -877,7 +898,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 33667) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 33667)
   public static final SubLObject removal_strategy_logical_tactic_removal_backtracking_cheapP(SubLObject logical_tactic, SubLObject strategy) {
     if ((NIL == inference_worker_join.join_tactic_p(logical_tactic))) {
       {
@@ -893,7 +914,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 36985) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 36985)
   public static final SubLObject removal_strategy_reactivate_executable_strategem(SubLObject strategy, SubLObject strategem) {
     checkType(strategy, $sym8$REMOVAL_STRATEGY_P);
     checkType(strategem, $sym35$EXECUTABLE_STRATEGEM_P);
@@ -909,7 +930,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 37634) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 37634)
   public static final SubLObject removal_strategy_strategically_deactivate_strategem(SubLObject strategy, SubLObject strategem) {
     if ((NIL != inference_tactician.strategem_invalid_p(strategem))) {
       return NIL;
@@ -926,7 +947,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 38122) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 38122)
   public static final SubLObject removal_strategy_deactivate_strategem(SubLObject strategy, SubLObject strategem) {
     checkType(strategy, $sym8$REMOVAL_STRATEGY_P);
     checkType(strategem, $sym36$REMOVAL_STRATEGEM_P);
@@ -945,7 +966,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 38683) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 38683)
   public static final SubLObject removal_strategy_possibly_deactivate_problem(SubLObject strategy, SubLObject problem) {
     if ((NIL == removal_tactician_datastructures.removal_strategy_problem_activeP(strategy, problem))) {
       inference_datastructures_strategy.strategy_note_problem_inactive(strategy, problem);
@@ -957,7 +978,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 39035) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 39035)
   public static final SubLObject removal_strategy_consider_that_problem_could_be_strategically_pending(SubLObject strategy, SubLObject problem) {
     if ((NIL != removal_tactician_uninterestingness.removal_strategy_chooses_to_throw_away_problemP(strategy, problem, UNPROVIDED))) {
       removal_strategy_make_problem_pending(strategy, problem);
@@ -966,7 +987,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 39348) 
+  @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 39348)
   public static final SubLObject removal_strategy_make_problem_pending(SubLObject strategy, SubLObject problem) {
     removal_tactician_datastructures.removal_strategy_note_problem_pending(strategy, problem);
     removal_strategy_possibly_deactivate_problem(strategy, problem);
@@ -1072,14 +1093,17 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_removal_tactician_motivation_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_removal_tactician_motivation_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_removal_tactician_motivation_file();
   }

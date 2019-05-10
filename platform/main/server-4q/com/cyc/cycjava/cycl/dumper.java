@@ -77,7 +77,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class dumper
+public class dumper
     extends
       SubLTranslatedFile
 {
@@ -85,25 +85,25 @@ public final class dumper
   public static final String myName = "com.cyc.cycjava.cycl.dumper";
   public static final String myFingerPrint = "8a2e3d11b93fd2a55db610403cef846ea4709247bc806d2a7b912cace3d84f44";
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1029L)
-  private static SubLSymbol $force_monolithic_kb_assumption$;
+  protected static SubLSymbol $force_monolithic_kb_assumption$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 4654L)
   public static SubLSymbol $separate_file_for_complex_indexingP$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 5047L)
-  private static SubLSymbol $default_dump_path$;
+  protected static SubLSymbol $default_dump_path$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 5488L)
-  private static SubLSymbol $default_dump_extension$;
+  protected static SubLSymbol $default_dump_extension$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 5602L)
-  private static SubLSymbol $default_dump_product_extension$;
+  protected static SubLSymbol $default_dump_product_extension$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 6153L)
   public static SubLSymbol $kb_dump_fvector_wide_mark_tag$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 7134L)
-  private static SubLSymbol $dump_bytes_per_assertion$;
+  protected static SubLSymbol $dump_bytes_per_assertion$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 7853L)
   public static SubLSymbol $dump_verify$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 9107L)
-  private static SubLSymbol $kb_load_gc_checkpoints_enabledP$;
+  protected static SubLSymbol $kb_load_gc_checkpoints_enabledP$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 10185L)
-  private static SubLSymbol $perform_standard_pre_dump_kb_cleanups_completeP$;
+  protected static SubLSymbol $perform_standard_pre_dump_kb_cleanups_completeP$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 19492L)
   public static SubLSymbol $assertion_tile_size$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 30706L)
@@ -111,17 +111,17 @@ public final class dumper
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 30803L)
   public static SubLSymbol $dump_verbose_detail$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 33675L)
-  private static SubLSymbol $auto_increment_kb_number_on_dumpP$;
+  protected static SubLSymbol $auto_increment_kb_number_on_dumpP$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 33815L)
-  private static SubLSymbol $snapshot_tombstoning_mode$;
+  protected static SubLSymbol $snapshot_tombstoning_mode$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 36136L)
-  private static SubLSymbol $kb_manifest$;
+  protected static SubLSymbol $kb_manifest$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 38103L)
   public static SubLSymbol $kb_units_fvector_descriptions$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 72789L)
   public static SubLSymbol $kb_dump_default_common_symbols$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 75115L)
-  private static SubLSymbol $kb_dump_common_symbols$;
+  protected static SubLSymbol $kb_dump_common_symbols$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 132090L)
   public static SubLSymbol $dtp_index_writer$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 188375L)
@@ -141,25 +141,25 @@ public final class dumper
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 221785L)
   public static SubLSymbol $bootstrapping_bookkeeping_gafsP$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 221843L)
-  private static SubLSymbol $essential_kb_evaluatable_file_type$;
+  protected static SubLSymbol $essential_kb_evaluatable_file_type$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 234193L)
-  private static SubLSymbol $dump_invalid_constants$;
+  protected static SubLSymbol $dump_invalid_constants$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 234257L)
-  private static SubLSymbol $dump_invalid_narts$;
+  protected static SubLSymbol $dump_invalid_narts$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 234316L)
-  private static SubLSymbol $dump_invalid_assertions$;
+  protected static SubLSymbol $dump_invalid_assertions$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 234380L)
-  private static SubLSymbol $dump_invalid_kb_hl_supports$;
+  protected static SubLSymbol $dump_invalid_kb_hl_supports$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 234448L)
-  private static SubLSymbol $dump_invalid_deductions$;
+  protected static SubLSymbol $dump_invalid_deductions$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 234512L)
-  private static SubLSymbol $dump_invalid_bookkeeping_gafs$;
+  protected static SubLSymbol $dump_invalid_bookkeeping_gafs$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 240049L)
-  private static SubLSymbol $exportable_mtP_caching_state$;
+  protected static SubLSymbol $exportable_mtP_caching_state$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 240434L)
-  private static SubLSymbol $exportable_deduction_supportP_caching_state$;
+  protected static SubLSymbol $exportable_deduction_supportP_caching_state$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 240770L)
-  private static SubLSymbol $exportable_deduction_supported_objectP_caching_state$;
+  protected static SubLSymbol $exportable_deduction_supported_objectP_caching_state$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 254261L)
   public static SubLSymbol $current_dump_assertion$;
   @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 254306L)
@@ -29058,7 +29058,7 @@ public final class dumper
   }
 }
 /*
- * 
+ *
  * Total time: 19051 ms alexandriaP alexandriaP thread directory_path
  * directory_path directory_path directory_path directory_path directory_path
  * directory_path directory_path directory_path directory_path directory_path

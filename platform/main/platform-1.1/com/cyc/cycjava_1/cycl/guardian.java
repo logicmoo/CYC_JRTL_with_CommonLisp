@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,18 +80,18 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.integer_sequence_generator;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.process_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.integer_sequence_generator;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.process_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class guardian extends SubLTranslatedFile {
 
@@ -165,13 +197,13 @@ public  final class guardian extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_guardian_file() {
-    $guardian_process$ = deflexical("*GUARDIAN-PROCESS*", ((NIL != Symbols.boundp($sym0$_GUARDIAN_PROCESS_)) ? ((SubLObject) $guardian_process$.getGlobalValue()) : NIL));
-    $guarding_requests$ = deflexical("*GUARDING-REQUESTS*", ((NIL != Symbols.boundp($sym1$_GUARDING_REQUESTS_)) ? ((SubLObject) $guarding_requests$.getGlobalValue()) : NIL));
+    $guardian_process$ = deflexical("*GUARDIAN-PROCESS*", maybeDefault( $sym0$_GUARDIAN_PROCESS_, $guardian_process$, NIL));
+    $guarding_requests$ = deflexical("*GUARDING-REQUESTS*", maybeDefault( $sym1$_GUARDING_REQUESTS_, $guarding_requests$, NIL));
     $guardian_timeslice$ = deflexical("*GUARDIAN-TIMESLICE*", TWO_INTEGER);
-    $guardian_isg$ = deflexical("*GUARDIAN-ISG*", ((NIL != Symbols.boundp($sym2$_GUARDIAN_ISG_)) ? ((SubLObject) $guardian_isg$.getGlobalValue()) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+    $guardian_isg$ = deflexical("*GUARDIAN-ISG*", maybeDefault( $sym2$_GUARDIAN_ISG_, $guardian_isg$, ()-> (integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED))));
     $dtp_guardian_request$ = defconstant("*DTP-GUARDIAN-REQUEST*", $sym3$GUARDIAN_REQUEST);
-    $guardian_shutdown_marker$ = deflexical("*GUARDIAN-SHUTDOWN-MARKER*", ((NIL != Symbols.boundp($sym65$_GUARDIAN_SHUTDOWN_MARKER_)) ? ((SubLObject) $guardian_shutdown_marker$.getGlobalValue()) : Symbols.make_symbol($str66$Guardian_Shutdown_Marker)));
-    $guardian_sleep_marker$ = deflexical("*GUARDIAN-SLEEP-MARKER*", ((NIL != Symbols.boundp($sym75$_GUARDIAN_SLEEP_MARKER_)) ? ((SubLObject) $guardian_sleep_marker$.getGlobalValue()) : Symbols.make_symbol($str76$Guardian_Sleep_Marker)));
+    $guardian_shutdown_marker$ = deflexical("*GUARDIAN-SHUTDOWN-MARKER*", maybeDefault( $sym65$_GUARDIAN_SHUTDOWN_MARKER_, $guardian_shutdown_marker$, ()-> (Symbols.make_symbol($str66$Guardian_Shutdown_Marker))));
+    $guardian_sleep_marker$ = deflexical("*GUARDIAN-SLEEP-MARKER*", maybeDefault( $sym75$_GUARDIAN_SLEEP_MARKER_, $guardian_sleep_marker$, ()-> (Symbols.make_symbol($str76$Guardian_Sleep_Marker))));
     return NIL;
   }
 

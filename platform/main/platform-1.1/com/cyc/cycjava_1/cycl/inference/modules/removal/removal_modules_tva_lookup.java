@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.modules.removal;
+package com.cyc.cycjava_1.cycl.inference.modules.removal;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,72 +67,72 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.backward;
-import com.cyc.cycjava_1.cycl.backward_utilities;
-import com.cyc.cycjava_1.cycl.cardinality_estimates;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_grammar;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.deck;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.formula_pattern_match;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.function_terms;
-import com.cyc.cycjava_1.cycl.genl_predicates;
-import com.cyc.cycjava_1.cycl.ghl_search_utilities;
-import com.cyc.cycjava_1.cycl.gt_methods;
-import com.cyc.cycjava_1.cycl.gt_vars;
-import com.cyc.cycjava_1.cycl.hl_supports;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.obsolete;
-import com.cyc.cycjava_1.cycl.pred_relevance_macros;
-import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_genlpreds_lookup;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_symmetry;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_what_mts;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_utilities;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.tva_cache;
-import com.cyc.cycjava_1.cycl.tva_inference;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.backward;
+//dm import com.cyc.cycjava_1.cycl.backward_utilities;
+//dm import com.cyc.cycjava_1.cycl.cardinality_estimates;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_grammar;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.deck;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.formula_pattern_match;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.function_terms;
+//dm import com.cyc.cycjava_1.cycl.genl_predicates;
+//dm import com.cyc.cycjava_1.cycl.ghl_search_utilities;
+//dm import com.cyc.cycjava_1.cycl.gt_methods;
+//dm import com.cyc.cycjava_1.cycl.gt_vars;
+//dm import com.cyc.cycjava_1.cycl.hl_supports;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.obsolete;
+//dm import com.cyc.cycjava_1.cycl.pred_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.preference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_genlpreds_lookup;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_symmetry;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_what_mts;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.tva_cache;
+//dm import com.cyc.cycjava_1.cycl.tva_inference;
 import com.cyc.cycjava_1.cycl.tva_utilities;
-import com.cyc.cycjava_1.cycl.unification_utilities;
-import com.cyc.cycjava_1.cycl.variables;
-import com.cyc.cycjava_1.cycl.virtual_indexing;
-import com.cyc.cycjava_1.cycl.wff;
+//dm import com.cyc.cycjava_1.cycl.unification_utilities;
+//dm import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.virtual_indexing;
+//dm import com.cyc.cycjava_1.cycl.wff;
 
 public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
 
@@ -125,7 +144,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
 
   //// Definitions
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 1139) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 1139)
   public static final SubLObject tva_pos_preference(SubLObject asent, SubLObject bindable_vars, SubLObject strategic_context) {
     {
       SubLObject inference = inference_datastructures_strategy.strategic_context_inference(strategic_context);
@@ -179,7 +198,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 3462) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 3462)
   public static final SubLObject tva_asent_has_fully_bound_argP(SubLObject asent) {
     {
       SubLObject found_fully_bound_argP = NIL;
@@ -198,7 +217,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 3717) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 3717)
   public static final SubLObject tva_applicable_to_some_bindable_argP(SubLObject asent, SubLObject bindable_vars) {
     {
       SubLObject applicableP = NIL;
@@ -223,7 +242,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
   }
 
   /** @return booleanp. Whether ASENT meets the requirements to be proved by :tva */
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 11849) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 11849)
   public static final SubLObject removal_tva_required(SubLObject asent) {
     {
       SubLObject predicate = cycl_utilities.atomic_sentence_predicate(asent);
@@ -234,7 +253,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 12234) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 12234)
   public static final SubLObject removal_tva_check_required(SubLObject asent, SubLObject sense) {
     if ((sense == UNPROVIDED)) {
       sense = NIL;
@@ -242,10 +261,10 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
     return removal_tva_required(asent);
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 12426) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 12426)
   private static SubLSymbol $default_tva_check_cost$ = null;
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 13870) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 13870)
   public static final SubLObject removal_tva_unify_required(SubLObject asent, SubLObject sense) {
     if ((sense == UNPROVIDED)) {
       sense = NIL;
@@ -254,7 +273,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
            && (NIL != tva_unify_usefulP(asent))));
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 14112) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 14112)
   public static final SubLObject removal_tva_unify_required_int_internal(SubLObject asent, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = mt_relevance_macros.$mt$.getDynamicValue();
@@ -263,7 +282,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
            && (NIL != no_nested_variables_p(asent))));
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 14112) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 14112)
   public static final SubLObject removal_tva_unify_required_int(SubLObject asent, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = mt_relevance_macros.$mt$.getDynamicValue();
@@ -315,7 +334,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
   }
 
   /** TVA will only be useful on ASENT if ASENT has some non-variable terms in transitivity arg positions. */
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 14319) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 14319)
   public static final SubLObject tva_unify_usefulP(SubLObject asent) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -631,7 +650,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 15605) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 15605)
   public static final SubLObject tva_unify_from_cache_possibleP(SubLObject asent) {
     {
       SubLObject arg0 = cycl_utilities.atomic_sentence_predicate(asent);
@@ -654,7 +673,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
 
   /** @hack. Temporary addition to prevent TVA module from firing when it can't handle
    what it is attempting to unify. */
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 15944) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 15944)
   public static final SubLObject no_nested_variables_p(SubLObject asent) {
     {
       SubLObject foundP = NIL;
@@ -676,7 +695,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 16333) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 16333)
   public static final SubLObject removal_tva_unify_cost(SubLObject asent, SubLObject sense) {
     if ((sense == UNPROVIDED)) {
       sense = NIL;
@@ -1223,15 +1242,17 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
 
   public static final class $removal_tva_unify_cost$UnaryFunction extends UnaryFunction {
     public $removal_tva_unify_cost$UnaryFunction() { super(extractFunctionNamed("REMOVAL-TVA-UNIFY-COST")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return removal_tva_unify_cost(arg1, UNPROVIDED); }
   }
 
   public static final class $removal_tva_unify_cost$BinaryFunction extends BinaryFunction {
     public $removal_tva_unify_cost$BinaryFunction() { super(extractFunctionNamed("REMOVAL-TVA-UNIFY-COST")); }
+    @Override
     public SubLObject processItem(SubLObject arg1, SubLObject arg2) { return removal_tva_unify_cost(arg1, arg2); }
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 19426) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 19426)
   public static final SubLObject removal_tva_unify_closure_required(SubLObject asent, SubLObject sense) {
     if ((sense == UNPROVIDED)) {
       sense = NIL;
@@ -1246,15 +1267,17 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
 
   public static final class $removal_tva_unify_closure_required$UnaryFunction extends UnaryFunction {
     public $removal_tva_unify_closure_required$UnaryFunction() { super(extractFunctionNamed("REMOVAL-TVA-UNIFY-CLOSURE-REQUIRED")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return removal_tva_unify_closure_required(arg1, UNPROVIDED); }
   }
 
   public static final class $removal_tva_unify_closure_required$BinaryFunction extends BinaryFunction {
     public $removal_tva_unify_closure_required$BinaryFunction() { super(extractFunctionNamed("REMOVAL-TVA-UNIFY-CLOSURE-REQUIRED")); }
+    @Override
     public SubLObject processItem(SubLObject arg1, SubLObject arg2) { return removal_tva_unify_closure_required(arg1, arg2); }
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 24557) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 24557)
   public static final SubLObject removal_tva_unify_closure_conjunction_applicability(SubLObject contextualized_dnf_clause) {
     {
       SubLObject subclause_specs = NIL;
@@ -1323,10 +1346,11 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
 
   public static final class $removal_tva_unify_closure_conjunction_applicability$UnaryFunction extends UnaryFunction {
     public $removal_tva_unify_closure_conjunction_applicability$UnaryFunction() { super(extractFunctionNamed("REMOVAL-TVA-UNIFY-CLOSURE-CONJUNCTION-APPLICABILITY")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return removal_tva_unify_closure_conjunction_applicability(arg1); }
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 25518) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 25518)
   public static final SubLObject removal_tva_unify_closure_conjunction_appropriate_asentP(SubLObject asent, SubLObject mt) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1359,7 +1383,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 25889) 
+  @SubL(source = "cycl/inference/modules/removal/removal-modules-tva-lookup.lisp", position = 25889)
   public static final SubLObject removal_tva_unify_closure_conjunction_appropriate_predicateP(SubLObject predicate) {
     return makeBoolean((!(((NIL != hl_supports.hl_predicate_p(predicate))
             || (NIL != sbhl_module_utilities.sbhl_predicate_p(predicate))
@@ -1499,14 +1523,17 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_removal_modules_tva_lookup_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_removal_modules_tva_lookup_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_removal_modules_tva_lookup_file();
   }

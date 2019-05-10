@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,89 +80,89 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arg_type;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.inference.ask_utilities;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.at_admitted;
-import com.cyc.cycjava_1.cycl.at_defns;
-import com.cyc.cycjava_1.cycl.at_macros;
-import com.cyc.cycjava_1.cycl.at_utilities;
-import com.cyc.cycjava_1.cycl.at_vars;
-import com.cyc.cycjava_1.cycl.bookkeeping_store;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.czer_meta;
-import com.cyc.cycjava_1.cycl.czer_utilities;
-import com.cyc.cycjava_1.cycl.disjoint_with;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.equals;
-import com.cyc.cycjava_1.cycl.fi;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.inference.harness.forward;
-import com.cyc.cycjava_1.cycl.genl_mts;
-import com.cyc.cycjava_1.cycl.genl_predicates;
-import com.cyc.cycjava_1.cycl.genls;
-import com.cyc.cycjava_1.cycl.ghl_search_methods;
-import com.cyc.cycjava_1.cycl.gt_vars;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.isa;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.mt_vars;
-import com.cyc.cycjava_1.cycl.negation_predicate;
-import com.cyc.cycjava_1.cycl.relation_evaluation;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_different;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_evaluation;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_genls;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_reflexive_on;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_transitivity;
-import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_tva_lookup;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_methods;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_what_mts;
-import com.cyc.cycjava_1.cycl.sdc;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.term;
-import com.cyc.cycjava_1.cycl.unification_utilities;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.wff;
-import com.cyc.cycjava_1.cycl.wff_vars;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arg_type;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.inference.ask_utilities;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.at_admitted;
+//dm import com.cyc.cycjava_1.cycl.at_defns;
+//dm import com.cyc.cycjava_1.cycl.at_macros;
+//dm import com.cyc.cycjava_1.cycl.at_utilities;
+//dm import com.cyc.cycjava_1.cycl.at_vars;
+//dm import com.cyc.cycjava_1.cycl.bookkeeping_store;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.czer_meta;
+//dm import com.cyc.cycjava_1.cycl.czer_utilities;
+//dm import com.cyc.cycjava_1.cycl.disjoint_with;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.equals;
+//dm import com.cyc.cycjava_1.cycl.fi;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.forward;
+//dm import com.cyc.cycjava_1.cycl.genl_mts;
+//dm import com.cyc.cycjava_1.cycl.genl_predicates;
+//dm import com.cyc.cycjava_1.cycl.genls;
+//dm import com.cyc.cycjava_1.cycl.ghl_search_methods;
+//dm import com.cyc.cycjava_1.cycl.gt_vars;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.isa;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_vars;
+//dm import com.cyc.cycjava_1.cycl.negation_predicate;
+//dm import com.cyc.cycjava_1.cycl.relation_evaluation;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_different;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_evaluation;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_genls;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_reflexive_on;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_transitivity;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.removal.removal_modules_tva_lookup;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_methods;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_what_mts;
+//dm import com.cyc.cycjava_1.cycl.sdc;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.term;
+//dm import com.cyc.cycjava_1.cycl.unification_utilities;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.wff;
+//dm import com.cyc.cycjava_1.cycl.wff_vars;
 
-public  final class hl_supports extends SubLTranslatedFile {
+  final class hl_supports_hide extends SubLTranslatedFile {
 
   //// Constructor
 
-  private hl_supports() {}
-  public static final SubLFile me = new hl_supports();
-  public static final String myName = "com.cyc.cycjava_1.cycl.hl_supports";
+  private hl_supports_hide() {}
+  public static final SubLFile me = new hl_supports_hide();
+  public static final String myName = "com.cyc.cycjava_1.cycl.hl_supports_hide";
 
   //// Definitions
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 899) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 899)
   private static SubLSymbol $hl_predicates$ = null;
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 1360) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 1360)
   public static final SubLObject hl_predicate_p(SubLObject object) {
     return list_utilities.member_eqP(object, $hl_predicates$.getGlobalValue());
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 1445) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 1445)
   public static final SubLObject non_hl_predicate_p(SubLObject object) {
     return makeBoolean(((NIL != forts.fort_p(object))
            && (NIL == hl_predicate_p(object))));
@@ -138,36 +170,37 @@ public  final class hl_supports extends SubLTranslatedFile {
 
   public static final class $non_hl_predicate_p$UnaryFunction extends UnaryFunction {
     public $non_hl_predicate_p$UnaryFunction() { super(extractFunctionNamed("NON-HL-PREDICATE-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return non_hl_predicate_p(arg1); }
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 1849) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 1849)
   private static SubLSymbol $hl_support_modules$ = null;
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 2061) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 2061)
   public static final SubLObject hl_support_modules() {
     return $hl_support_modules$.getGlobalValue();
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 2169) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 2169)
   private static SubLSymbol $hl_support_module_plist_indicators$ = null;
 
   /** Return T iff OBJECT is an HL support module. */
-  @SubL(source = "cycl/hl-supports.lisp", position = 2283) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 2283)
   public static final SubLObject hl_support_module_p(SubLObject object) {
     return list_utilities.member_eqP(object, $hl_support_modules$.getGlobalValue());
   }
 
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 10331) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 10331)
   public static final SubLObject opaque_hl_support_p(SubLObject support) {
     return makeBoolean(((NIL == assertion_handles.assertion_p(support))
            && ($kw24$OPAQUE == arguments.support_module(support))));
   }
 
-  
+
   /** Declare NAME as a new HL support module */
-  @SubL(source = "cycl/hl-supports.lisp", position = 2451) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 2451)
   public static final SubLObject setup_hl_support_module(SubLObject name, SubLObject plist) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -202,24 +235,24 @@ public  final class hl_supports extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 3140) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 3140)
   public static final SubLObject hl_support_module_justify_func(SubLObject hl_support_module) {
     return Symbols.get(hl_support_module, $kw11$JUSTIFY, NIL);
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 3370) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 3370)
   public static final SubLObject hl_support_module_forward_mt_combos_func(SubLObject hl_support_module) {
     return Symbols.get(hl_support_module, $kw13$FORWARD_MT_COMBOS, $sym14$LIST);
   }
 
   /** @return listp; a list of supports */
-  @SubL(source = "cycl/hl-supports.lisp", position = 4295) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 4295)
   public static final SubLObject hl_justify(SubLObject support) {
     checkType(support, $sym15$SUPPORT_P);
     return arguments.support_justification(support);
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 5552) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 5552)
   public static final SubLObject hl_support_justify(SubLObject hl_support) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -261,12 +294,12 @@ public  final class hl_supports extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 6391) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 6391)
   public static final SubLObject hl_trivial_justification(SubLObject support) {
     return list(support);
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 7428) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 7428)
   public static final SubLObject hl_forward_mt_combos(SubLObject support) {
     {
       SubLObject hl_module = arguments.support_module(support);
@@ -285,7 +318,7 @@ public  final class hl_supports extends SubLTranslatedFile {
   }
 
   /** @return hl-support-p; Returns an assertion corresponding to SENTENCE iff one exists (within MT relevance), or a :code support with SENTENCE as support sentence. */
-  @SubL(source = "cycl/hl-supports.lisp", position = 7903) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 7903)
   public static final SubLObject find_assertion_or_make_support(SubLObject sentence, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -319,17 +352,17 @@ public  final class hl_supports extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 9575) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 9575)
   public static SubLSymbol $perform_opaque_support_verification$ = null;
 
   /** The mt in which assertions for HL justifications of bookkeeping assertions are expected to be. */
-  @SubL(source = "cycl/hl-supports.lisp", position = 12615) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 12615)
   public static SubLSymbol $bookkeeping_justification_assertion_mt$ = null;
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 12844) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 12844)
   private static SubLSymbol $cached_find_assertion_cycl_caching_state$ = null;
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 26107) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 26107)
   public static final SubLObject hl_justify_eval(SubLObject support) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -490,10 +523,11 @@ public  final class hl_supports extends SubLTranslatedFile {
 
   public static final class $hl_justify_eval$UnaryFunction extends UnaryFunction {
     public $hl_justify_eval$UnaryFunction() { super(extractFunctionNamed("HL-JUSTIFY-EVAL")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return hl_justify_eval(arg1); }
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 28783) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 28783)
   public static final SubLObject hl_justify_reflexive(SubLObject support) {
     {
       SubLObject datum = support;
@@ -556,7 +590,7 @@ public  final class hl_supports extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 38065) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 38065)
   public static final SubLObject hl_justify_transitivity(SubLObject support) {
     {
       SubLObject datum = support;
@@ -610,12 +644,12 @@ public  final class hl_supports extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 45569) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 45569)
   public static final SubLObject hl_justify_admit(SubLObject support) {
     return NIL;
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 53932) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 53932)
   public static final SubLObject hl_justify_sbhl(SubLObject support) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -732,7 +766,7 @@ public  final class hl_supports extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 61345) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 61345)
   public static final SubLObject hl_justify_genls(SubLObject support) {
     {
       SubLObject datum = support;
@@ -773,7 +807,7 @@ public  final class hl_supports extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 61730) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 61730)
   public static final SubLObject hl_forward_mt_combos_genls(SubLObject support) {
     {
       SubLObject datum = support;
@@ -819,7 +853,7 @@ public  final class hl_supports extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/hl-supports.lisp", position = 62367) 
+  @SubL(source = "cycl/hl-supports.lisp", position = 62367)
   public static final SubLObject inference_max_floor_mts_of_genls_paths(SubLObject spec, SubLObject genl) {
     if ((NIL != term.first_order_nautP(spec))) {
       return Errors
@@ -977,10 +1011,10 @@ public  final class hl_supports extends SubLTranslatedFile {
 
   public static final SubLObject init_hl_supports_file() {
     $hl_predicates$ = deflexical("*HL-PREDICATES*", $list0);
-    $hl_support_modules$ = deflexical("*HL-SUPPORT-MODULES*", ((NIL != Symbols.boundp($sym2$_HL_SUPPORT_MODULES_)) ? ((SubLObject) $hl_support_modules$.getGlobalValue()) : NIL));
+    $hl_support_modules$ = deflexical("*HL-SUPPORT-MODULES*", maybeDefault( $sym2$_HL_SUPPORT_MODULES_, $hl_support_modules$, NIL));
     $hl_support_module_plist_indicators$ = defparameter("*HL-SUPPORT-MODULE-PLIST-INDICATORS*", $list3);
     $perform_opaque_support_verification$ = defparameter("*PERFORM-OPAQUE-SUPPORT-VERIFICATION*", NIL);
-    $bookkeeping_justification_assertion_mt$ = deflexical("*BOOKKEEPING-JUSTIFICATION-ASSERTION-MT*", ((NIL != Symbols.boundp($sym38$_BOOKKEEPING_JUSTIFICATION_ASSERTION_MT_)) ? ((SubLObject) $bookkeeping_justification_assertion_mt$.getGlobalValue()) : $const39$BaseKB));
+    $bookkeeping_justification_assertion_mt$ = deflexical("*BOOKKEEPING-JUSTIFICATION-ASSERTION-MT*", maybeDefault( $sym38$_BOOKKEEPING_JUSTIFICATION_ASSERTION_MT_, $bookkeeping_justification_assertion_mt$, ()-> ($const39$BaseKB)));
     $cached_find_assertion_cycl_caching_state$ = deflexical("*CACHED-FIND-ASSERTION-CYCL-CACHING-STATE*", NIL);
     return NIL;
   }
@@ -1231,14 +1265,17 @@ public  final class hl_supports extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_hl_supports_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_hl_supports_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_hl_supports_file();
   }

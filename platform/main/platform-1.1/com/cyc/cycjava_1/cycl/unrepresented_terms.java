@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,16 +80,16 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
-import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.unrepresented_term_index_manager;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.id_index;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing_datastructures;
+//dm import com.cyc.cycjava_1.cycl.kb_macros;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.unrepresented_term_index_manager;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class unrepresented_terms extends SubLTranslatedFile {
 
@@ -425,8 +457,8 @@ public  final class unrepresented_terms extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_unrepresented_terms_file() {
-    $unrepresented_term_to_suid$ = deflexical("*UNREPRESENTED-TERM-TO-SUID*", ((NIL != Symbols.boundp($sym0$_UNREPRESENTED_TERM_TO_SUID_)) ? ((SubLObject) $unrepresented_term_to_suid$.getGlobalValue()) : NIL));
-    $unrepresented_term_from_suid$ = deflexical("*UNREPRESENTED-TERM-FROM-SUID*", ((NIL != Symbols.boundp($sym1$_UNREPRESENTED_TERM_FROM_SUID_)) ? ((SubLObject) $unrepresented_term_from_suid$.getGlobalValue()) : NIL));
+    $unrepresented_term_to_suid$ = deflexical("*UNREPRESENTED-TERM-TO-SUID*", maybeDefault( $sym0$_UNREPRESENTED_TERM_TO_SUID_, $unrepresented_term_to_suid$, NIL));
+    $unrepresented_term_from_suid$ = deflexical("*UNREPRESENTED-TERM-FROM-SUID*", maybeDefault( $sym1$_UNREPRESENTED_TERM_FROM_SUID_, $unrepresented_term_from_suid$, NIL));
     $unrepresented_term_dump_id_table$ = defparameter("*UNREPRESENTED-TERM-DUMP-ID-TABLE*", NIL);
     return NIL;
   }

@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,15 +80,15 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class keyhash extends SubLTranslatedFile {
 
@@ -747,8 +779,8 @@ public  final class keyhash extends SubLTranslatedFile {
     $dtp_keyhash$ = defconstant("*DTP-KEYHASH*", $sym0$KEYHASH);
     $keyhash_a$ = defconstant("*KEYHASH-A*", $int27$10009);
     $keyhash_step$ = defconstant("*KEYHASH-STEP*", THIRTEEN_INTEGER);
-    $keyhash_empty_key$ = deflexical("*KEYHASH-EMPTY-KEY*", ((NIL != Symbols.boundp($sym28$_KEYHASH_EMPTY_KEY_)) ? ((SubLObject) $keyhash_empty_key$.getGlobalValue()) : Symbols.make_symbol($str29$The_Empty_KEYHASH_Key)));
-    $keyhash_empty_hash$ = deflexical("*KEYHASH-EMPTY-HASH*", ((NIL != Symbols.boundp($sym30$_KEYHASH_EMPTY_HASH_)) ? ((SubLObject) $keyhash_empty_hash$.getGlobalValue()) : NIL));
+    $keyhash_empty_key$ = deflexical("*KEYHASH-EMPTY-KEY*", maybeDefault( $sym28$_KEYHASH_EMPTY_KEY_, $keyhash_empty_key$, ()-> (Symbols.make_symbol($str29$The_Empty_KEYHASH_Key))));
+    $keyhash_empty_hash$ = deflexical("*KEYHASH-EMPTY-HASH*", maybeDefault( $sym30$_KEYHASH_EMPTY_HASH_, $keyhash_empty_hash$, NIL));
     $keyhash_grow_sizes$ = deflexical("*KEYHASH-GROW-SIZES*", compute_keyhash_grow_sizes($keyhash_step$.getGlobalValue(), Numbers.$most_positive_fixnum$.getGlobalValue()));
     $cfasl_opcode_keyhash$ = defconstant("*CFASL-OPCODE-KEYHASH*", $int82$68);
     return NIL;

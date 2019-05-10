@@ -2010,10 +2010,13 @@ public class BeanShellCntrl
       {
         if( was.value != self )
         {
-          String message = "Difference from " + was + " and " + wasnt + " isntance " + self;
-          MsgBox.error( message );
-          if( true )
-            throw new StartupError( message );
+          if( !SubLMain.TINY_KB )
+          {
+            String message = "Difference from " + was + " and " + wasnt + " isntance " + self;
+            MsgBox.error( message );
+            if( true )
+              throw new StartupError( message );
+          }
           named = null;
         }
         // throw new StartupError("REregistering from " + isc + "
@@ -2087,6 +2090,10 @@ public class BeanShellCntrl
       {
         try
         {
+          String pathvar = System.getenv( "PATH" );
+          String JLP = System.getProperty( "java.library.path", null );
+          if( JLP == null )
+            System.setProperty( "java.library.path", pathvar );
           started_from_prolog = !JPL.init();
           // Thread.sleep(10000);
           Object r = JPL.getDefaultInitArgs();

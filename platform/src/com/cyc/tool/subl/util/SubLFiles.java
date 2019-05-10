@@ -102,6 +102,8 @@ public class SubLFiles
   }
   //// Public Area
   public static List<String> skippedClasses = new ArrayList<String>();
+  public static List<String> notAgain = new ArrayList<String>();
+  public static List<String> shouldOverride = new ArrayList<String>();
 
   public static void declareFunction(String className, String methodName, String functionName, int requiredArgCount, int optionalArgCount, boolean allowsRest)
   {
@@ -236,7 +238,8 @@ public class SubLFiles
     {
       variableName = ( (SubLObject) variableName ).princToString();
     }
-    return SubLObjectFactory.makeSymbol( variableName.toString(), package1 );
+    final String string = variableName.toString();
+    return SubLObjectFactory.makeSymbol( string, package1 );
   }
 
   public static void declareMacro(String className, String methodName, String functionName)
@@ -430,7 +433,14 @@ public class SubLFiles
   {
     if( skippedClasses.contains( className ) )
     {
+      return;
     }
+    if( notAgain.contains( className ) )
+    {
+      return;
+    }
+    notAgain.add(className);
+
     org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
     try
     {
@@ -585,6 +595,6 @@ public class SubLFiles
    */
   public static void declareOverridable(String string)
   {
-
+    shouldOverride.add(string);
   }
 }

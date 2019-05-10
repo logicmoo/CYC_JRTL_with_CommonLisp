@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,44 +67,44 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.assertion_utilities;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_strategic_uninterestingness;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_lookahead_productivity;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.assertion_utilities;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_datastructures;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_balanced_tactician_strategic_uninterestingness;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_lookahead_productivity;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
 import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_answer;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_residual_transformation;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_restriction;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_rewrite;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_union;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_answer;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join_ordered;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_residual_transformation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_restriction;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_rewrite;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_split;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_union;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class inference_balanced_tactician_motivation extends SubLTranslatedFile {
 
@@ -98,7 +117,7 @@ public  final class inference_balanced_tactician_motivation extends SubLTranslat
   //// Definitions
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 1490) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 1490)
   public static final SubLObject balanced_strategy_possibly_propagate_motivation_to_link_head(SubLObject strategy, SubLObject motivation, SubLObject link_head) {
     checkType(link_head, $sym7$MOTIVATION_STRATEGEM_P);
     {
@@ -116,17 +135,17 @@ the motivation transformation link getting T, or the motivating join-ordered lin
 getting T.  Leviathan experiments indicated that we actually gain
 more completeness by refraining from triggering via join-ordered T,
 but more recent work requires this to be T for correctness. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 2005) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 2005)
   public static SubLSymbol $balanced_strategy_new_roots_triggered_by_t_on_jo_linkP$ = null;
 
   /** It seems correct to ensure that the motivating join-ordered link has T before using it
 to motivate the creation of a new root.  However, turning this to NIL causes 13 haystacks
 to become answerable.  Leviathan @todo investigate why, and try to come up with a more
 principled fix. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 2439) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 2439)
   public static SubLSymbol $balanced_strategy_new_roots_check_for_t_on_jo_linkP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 2799) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 2799)
   public static final SubLObject balanced_strategy_propagate_motivation_to_link_head(SubLObject strategy, SubLObject motivation, SubLObject link_head) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -242,7 +261,7 @@ principled fix. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 7830) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 7830)
   public static final SubLObject balanced_strategy_propagate_transformation_motivation_to_transformation_link(SubLObject strategy, SubLObject t_link) {
     if ((NIL != balanced_strategy_chooses_to_make_d_a_new_rootP(strategy, t_link))) {
       {
@@ -268,12 +287,12 @@ principled fix. */
   /** @return booleanp; whether STRATEGY chooses that 'D', rather than '(^ A D), should
 be a new root.  'D' is the supporting transformed problem of T-LINK, and '(^ A D) is
 a residual conjunction problem of some residual transformation argument link of D. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 8969) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 8969)
   public static final SubLObject balanced_strategy_chooses_to_make_d_a_new_rootP(SubLObject strategy, SubLObject t_link) {
     return Types.sublisp_null(balanced_strategy_residual_conjunction_new_root_candidates(strategy, t_link));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 9399) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 9399)
   public static final SubLObject balanced_strategy_residual_conjunction_new_root_candidates(SubLObject strategy, SubLObject t_link) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -341,7 +360,7 @@ a residual conjunction problem of some residual transformation argument link of 
   }
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 13413) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 13413)
   public static final SubLObject balanced_strategy_link_motivates_problemP(SubLObject strategy, SubLObject link, SubLObject motivation, SubLObject problem) {
     if ((problem == UNPROVIDED)) {
       problem = NIL;
@@ -403,7 +422,7 @@ a residual conjunction problem of some residual transformation argument link of 
   }
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 14358) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 14358)
   public static final SubLObject balanced_strategy_link_motivates_lookahead_problemP(SubLObject strategy, SubLObject link, SubLObject motivation) {
     if ((NIL != inference_tactician.motivation_strategem_link_p(link))) {
       return inference_balanced_tactician_datastructures.balanced_strategy_link_head_motivatedP(strategy, motivation, link);
@@ -420,7 +439,7 @@ a residual conjunction problem of some residual transformation argument link of 
   }
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 14814) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 14814)
   public static final SubLObject balanced_strategy_possibly_propagate_motivation_to_problem(SubLObject strategy, SubLObject motivation, SubLObject problem) {
     {
       SubLObject pcase_var = motivation;
@@ -437,13 +456,13 @@ a residual conjunction problem of some residual transformation argument link of 
   }
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 15390) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 15390)
   public static final SubLObject balanced_strategy_possibly_make_new_root(SubLObject strategy, SubLObject problem) {
     return balanced_strategy_possibly_propagate_new_root_motivation_to_problem(strategy, problem);
   }
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 15584) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 15584)
   public static final SubLObject balanced_strategy_possibly_propagate_new_root_motivation_to_problem(SubLObject strategy, SubLObject problem) {
     {
       SubLObject already_motivatedP = inference_balanced_tactician_datastructures.balanced_strategy_problem_motivated_wrt_new_rootP(strategy, problem);
@@ -455,7 +474,7 @@ a residual conjunction problem of some residual transformation argument link of 
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 15976) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 15976)
   public static final SubLObject balanced_strategy_propagate_new_root_motivation_to_problem(SubLObject strategy, SubLObject problem) {
     inference_balanced_tactician_datastructures.balanced_strategy_note_problem_motivated_wrt_new_root(strategy, problem);
     {
@@ -534,7 +553,7 @@ a residual conjunction problem of some residual transformation argument link of 
   }
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 17199) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 17199)
   public static final SubLObject balanced_strategy_possibly_propagate_removal_motivation_to_problem(SubLObject strategy, SubLObject problem) {
     {
       SubLObject already_motivatedP = inference_balanced_tactician_datastructures.balanced_strategy_problem_motivated_wrt_removalP(strategy, problem);
@@ -546,7 +565,7 @@ a residual conjunction problem of some residual transformation argument link of 
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 17588) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 17588)
   public static final SubLObject balanced_strategy_propagate_removal_motivation_to_problem(SubLObject strategy, SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -637,7 +656,7 @@ a residual conjunction problem of some residual transformation argument link of 
   }
 
   /** @return booleanp */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 19412) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 19412)
   public static final SubLObject balanced_strategy_possibly_propagate_transformation_motivation_to_problem(SubLObject strategy, SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -657,7 +676,7 @@ a residual conjunction problem of some residual transformation argument link of 
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 19979) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 19979)
   public static final SubLObject balanced_strategy_propagate_transformation_motivation_to_problem(SubLObject strategy, SubLObject problem) {
     inference_balanced_tactician_datastructures.balanced_strategy_note_problem_motivated_wrt_transformation(strategy, problem);
     {
@@ -704,7 +723,7 @@ a residual conjunction problem of some residual transformation argument link of 
   }
 
   /** @return booleanp; whether STRATEGY chose to activate PROBLEM. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 20777) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 20777)
   public static final SubLObject balanced_strategy_possibly_activate_problem(SubLObject strategy, SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -755,12 +774,13 @@ a residual conjunction problem of some residual transformation argument link of 
 
   public static final class $balanced_strategy_possibly_activate_problem$BinaryFunction extends BinaryFunction {
     public $balanced_strategy_possibly_activate_problem$BinaryFunction() { super(extractFunctionNamed("BALANCED-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM")); }
+    @Override
     public SubLObject processItem(SubLObject arg1, SubLObject arg2) { return balanced_strategy_possibly_activate_problem(arg1, arg2); }
   }
 
   /** if you are a restricted non-focal problem of some (open?) join-ordered link which has R,
    you get R.  you're the rest of a removal. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 23525) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 23525)
   public static final SubLObject balanced_strategy_problem_is_the_rest_of_a_removalP(SubLObject problem, SubLObject strategy) {
     {
       SubLObject set_contents_var = inference_datastructures_problem.problem_dependent_links(problem);
@@ -804,7 +824,7 @@ a residual conjunction problem of some residual transformation argument link of 
 
   /** if you are a restricted non-focal problem of some early removal link,
    you get N.  you're the rest of an early removal. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 24008) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 24008)
   public static final SubLObject balanced_strategy_problem_is_the_rest_of_an_early_removalP(SubLObject problem, SubLObject strategy) {
     {
       SubLObject set_contents_var = inference_datastructures_problem.problem_dependent_links(problem);
@@ -845,7 +865,7 @@ a residual conjunction problem of some residual transformation argument link of 
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 24462) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 24462)
   public static final SubLObject balanced_strategy_problem_is_the_rest_of_a_join_orderedP(SubLObject problem, SubLObject strategy) {
     {
       SubLObject part_of_join_orderedP = NIL;
@@ -887,7 +907,7 @@ a residual conjunction problem of some residual transformation argument link of 
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 24787) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 24787)
   public static final SubLObject balanced_strategy_possibly_propagate_proof_spec_to_restricted_non_focals(SubLObject strategy, SubLObject problem) {
     return NIL;
   }
@@ -895,12 +915,12 @@ a residual conjunction problem of some residual transformation argument link of 
   /** When deciding whether a problem is motivated via residual transformation, if
 the rule used on the transformation link is a self expanding rule and this fix is
 enabled, prevents the motivation from flowing. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 27234) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 27234)
   private static SubLSymbol $balanced_strategy_self_expanding_rule_fix_enabledP$ = null;
 
   /** if you are a supporting rewritten problem of a rewrite link whose supported problem has R,
    you get R. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 27523) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 27523)
   public static final SubLObject balanced_strategy_motivates_problem_via_rewriteP(SubLObject strategy, SubLObject problem) {
     if ((NIL != inference_datastructures_problem_store.problem_store_rewrite_allowedP(inference_datastructures_strategy.strategy_problem_store(strategy)))) {
       {
@@ -924,7 +944,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 28053) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 28053)
   public static final SubLObject balanced_strategy_chooses_to_propagate_new_root_motivation_to_restricted_non_focal_problemP(SubLObject strategy, SubLObject problem, SubLObject join_ordered_link) {
     if ((NIL != balanced_strategy_treats_restricted_non_focal_as_new_rootP(strategy, join_ordered_link))) {
       return T;
@@ -935,43 +955,43 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 28483) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 28483)
   public static final SubLObject balanced_strategy_treats_restricted_non_focal_as_new_rootP(SubLObject strategy, SubLObject join_ordered_link) {
     return makeBoolean(((NIL != inference_worker_join_ordered.join_ordered_link_with_non_focal_unbound_predicateP(join_ordered_link))
           || (NIL != inference_worker_join_ordered.join_ordered_link_with_non_focal_isa_unbound_unbound_where_arg2_is_restrictedP(join_ordered_link))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 28799) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 28799)
   public static final SubLObject balanced_strategy_chooses_not_to_examine_problemP(SubLObject strategy, SubLObject problem) {
     return inference_tactician_strategic_uninterestingness.strategy_deems_problem_tactically_uninterestingP(strategy, problem);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 29282) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 29282)
   public static final SubLObject balanced_strategy_chooses_not_to_activate_problemP(SubLObject strategy, SubLObject problem) {
     return makeBoolean(((NIL != balanced_strategy_chooses_not_to_activate_problem_wrt_new_rootP(strategy, problem))
            && (NIL != balanced_strategy_chooses_not_to_activate_problem_wrt_removalP(strategy, problem))
            && (NIL != balanced_strategy_chooses_not_to_activate_problem_wrt_transformationP(strategy, problem))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 29651) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 29651)
   public static final SubLObject balanced_strategy_chooses_not_to_activate_problem_wrt_new_rootP(SubLObject strategy, SubLObject problem) {
     return makeBoolean(((NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_activeP(strategy, problem, $kw15$NEW_ROOT))
           || (NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_pendingP(strategy, problem, $kw15$NEW_ROOT))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 29899) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 29899)
   public static final SubLObject balanced_strategy_chooses_not_to_activate_problem_wrt_removalP(SubLObject strategy, SubLObject problem) {
     return makeBoolean(((NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_activeP(strategy, problem, $kw14$REMOVAL))
           || (NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_pendingP(strategy, problem, $kw14$REMOVAL))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 30144) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 30144)
   public static final SubLObject balanced_strategy_chooses_not_to_activate_problem_wrt_transformationP(SubLObject strategy, SubLObject problem) {
     return makeBoolean(((NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_activeP(strategy, problem, $kw10$TRANSFORMATION))
           || (NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_pendingP(strategy, problem, $kw10$TRANSFORMATION))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 30410) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 30410)
   public static final SubLObject balanced_strategy_possibly_activate_problem_wrt_new_root(SubLObject strategy, SubLObject problem) {
     {
       SubLObject activateP = makeBoolean(((NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_motivated_wrt_new_rootP(strategy, problem))
@@ -988,7 +1008,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 30913) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 30913)
   public static final SubLObject balanced_strategy_possibly_activate_problem_wrt_removal(SubLObject strategy, SubLObject problem) {
     {
       SubLObject activateP = makeBoolean(((NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_motivated_wrt_removalP(strategy, problem))
@@ -1005,7 +1025,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 31411) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 31411)
   public static final SubLObject balanced_strategy_possibly_activate_problem_wrt_transformation(SubLObject strategy, SubLObject problem) {
     {
       SubLObject activateP = makeBoolean(((NIL != inference_balanced_tactician_datastructures.balanced_strategy_problem_motivated_wrt_transformationP(strategy, problem))
@@ -1022,14 +1042,14 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 31944) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 31944)
   public static final SubLObject balanced_strategy_activate_problem_wrt_new_root(SubLObject strategy, SubLObject problem) {
     checkType(strategy, $sym8$BALANCED_STRATEGY_P);
     checkType(problem, $sym22$PROBLEM_P);
     return Numbers.plusp(balanced_strategy_possibly_activate_strategems_wrt_new_root(strategy, problem));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 32201) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 32201)
   public static final SubLObject balanced_strategy_activate_problem_wrt_removal(SubLObject strategy, SubLObject problem) {
     checkType(strategy, $sym8$BALANCED_STRATEGY_P);
     checkType(problem, $sym22$PROBLEM_P);
@@ -1038,20 +1058,20 @@ enabled, prevents the motivation from flowing. */
 
   /** add all transformation strategems to the R-box or set-asides.
 @return booleanp; T unless STRATEGY chooses to throw away PROBLEM. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 32456) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 32456)
   public static final SubLObject balanced_strategy_activate_problem_wrt_transformation(SubLObject strategy, SubLObject problem) {
     checkType(strategy, $sym8$BALANCED_STRATEGY_P);
     checkType(problem, $sym22$PROBLEM_P);
     return Numbers.plusp(balanced_strategy_possibly_activate_strategems_wrt_transformation(strategy, problem));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 32858) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 32858)
   public static final SubLObject balanced_strategy_possibly_activate_strategems_wrt_new_root(SubLObject strategy, SubLObject problem) {
     inference_balanced_tactician_datastructures.balanced_strategy_add_new_root(strategy, problem);
     return TWO_INTEGER;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 33075) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 33075)
   public static final SubLObject balanced_strategy_possibly_activate_strategems_wrt_removal(SubLObject strategy, SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1095,10 +1115,10 @@ enabled, prevents the motivation from flowing. */
   }
 
   /** The tactic types to use the RL tactician's ordering for. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 34791) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 34791)
   private static SubLSymbol $balanced_strategy_rl_tactician_tactic_types$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 37496) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 37496)
   public static final SubLObject balanced_strategy_possibly_activate_strategems_wrt_transformation(SubLObject strategy, SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1142,7 +1162,7 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 39517) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 39517)
   public static final SubLObject balanced_strategy_note_argument_link_added(SubLObject strategy, SubLObject link) {
     if ((NIL != inference_worker_transformation.transformation_link_p(link))) {
       balanced_strategy_possibly_activate_transformation_link(strategy, link);
@@ -1150,7 +1170,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 39836) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 39836)
   public static final SubLObject balanced_strategy_possibly_activate_transformation_link(SubLObject strategy, SubLObject transformation_link) {
     if ((NIL != inference_datastructures_problem_link.problem_link_with_supporting_problem_p(transformation_link))) {
       if ((NIL == inference_balanced_tactician_datastructures.balanced_strategy_link_head_motivated_wrt_transformationP(strategy, transformation_link))) {
@@ -1160,7 +1180,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 40284) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 40284)
   public static final SubLObject balanced_strategy_activate_transformation_link(SubLObject strategy, SubLObject transformation_link) {
     inference_balanced_tactician_datastructures.balanced_strategy_note_problem_unpending_wrt_transformation(strategy, inference_datastructures_problem_link.problem_link_supported_problem(transformation_link));
     {
@@ -1177,7 +1197,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 41078) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 41078)
   public static final SubLObject balanced_strategy_note_new_tactic(SubLObject strategy, SubLObject tactic) {
     inference_worker.default_compute_strategic_properties_of_tactic(strategy, tactic);
     if ((!((((NIL != inference_worker_split.split_tactic_p(tactic))
@@ -1188,7 +1208,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 41983) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 41983)
   public static final SubLObject balanced_strategy_note_new_tactic_possible(SubLObject strategy, SubLObject tactic) {
     {
       SubLObject problem = inference_datastructures_tactic.tactic_problem(tactic);
@@ -1223,7 +1243,7 @@ enabled, prevents the motivation from flowing. */
    Strategems are ordered in intended order of activation.
    @return 1 listp of strategem-p; an ordered list of strategems on PROBLEM which STRATEGY may want to set aside wrt removal.
    @return 2 listp of strategem-p; an ordered list of strategems on PROBLEM which STRATEGY may want to throw away wrt removal. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 44498) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 44498)
   public static final SubLObject balanced_strategy_categorize_strategems_wrt_removal(SubLObject strategy, SubLObject problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1284,7 +1304,7 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 47252) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 47252)
   public static final SubLObject balanced_strategy_categorize_motivation_strategems_wrt_removal(SubLObject strategy, SubLObject problem, SubLObject problem_set_aside_wrt_removalP, SubLObject problem_thrown_away_wrt_removalP) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1335,7 +1355,7 @@ enabled, prevents the motivation from flowing. */
   }
 
   /** Possible non-complete removal tactics should be in the reverse intended activation order */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 48684) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 48684)
   public static final SubLObject balanced_strategy_categorize_removal_tactics_wrt_removal(SubLObject strategy, SubLObject problem, SubLObject problem_set_aside_wrt_removalP, SubLObject problem_thrown_away_wrt_removalP) {
     {
       SubLObject best_complete_removal_tactic = NIL;
@@ -1406,7 +1426,7 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 54456) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 54456)
   public static final SubLObject balanced_strategy_categorize_connected_conjunction_tactics_wrt_removal(SubLObject strategy, SubLObject problem, SubLObject problem_set_aside_wrt_removalP, SubLObject problem_thrown_away_wrt_removalP) {
     {
       SubLObject possible_motivation_strategems = NIL;
@@ -1504,7 +1524,7 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 58306) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 58306)
   public static final SubLObject balanced_strategy_commits_to_no_removal_backtrackingP(SubLObject strategy, SubLObject committed_tactic, SubLObject committed_tactic_preference_level) {
     if ((NIL != ((NIL != inference_datastructures_problem_store.problem_store_transformation_allowedP(inference_datastructures_tactic.tactic_store(committed_tactic))) ? ((SubLObject) Equality.eq($kw34$COMPLETE, inference_worker.logical_tactic_generalized_removal_completeness(committed_tactic, strategy))) : Equality.eq($kw44$PREFERRED, committed_tactic_preference_level)))) {
       if ((NIL != balanced_strategy_logical_tactic_removal_backtracking_cheapP(committed_tactic, strategy))) {
@@ -1521,7 +1541,7 @@ enabled, prevents the motivation from flowing. */
    Strategems are ordered in intended order of activation.
    @return 1 listp of strategem-p; an ordered list of strategems on PROBLEM which STRATEGY may want to set aside wrt transformation.
    @return 2 listp of strategem-p; an ordered list of strategems on PROBLEM which STRATEGY may want to throw away wrt transformation. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 59272) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 59272)
   public static final SubLObject balanced_strategy_categorize_strategems_wrt_transformation(SubLObject strategy, SubLObject problem) {
     {
       SubLObject strategems_to_activate = NIL;
@@ -1649,7 +1669,7 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 63183) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 63183)
   public static final SubLObject balanced_strategy_logical_tactic_removal_backtracking_cheapP(SubLObject logical_tactic, SubLObject strategy) {
     if ((NIL == inference_worker_join.join_tactic_p(logical_tactic))) {
       {
@@ -1665,7 +1685,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 68324) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 68324)
   public static final SubLObject balanced_strategy_reactivate_executable_strategem(SubLObject strategy, SubLObject strategem) {
     checkType(strategy, $sym8$BALANCED_STRATEGY_P);
     checkType(strategem, $sym46$EXECUTABLE_STRATEGEM_P);
@@ -1681,7 +1701,7 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 69186) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 69186)
   public static final SubLObject balanced_strategy_strategically_deactivate_strategem(SubLObject strategy, SubLObject strategem, SubLObject motivation) {
     if ((NIL != inference_tactician.strategem_invalid_p(strategem))) {
       return NIL;
@@ -1698,7 +1718,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 69698) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 69698)
   public static final SubLObject balanced_strategy_deactivate_strategem(SubLObject strategy, SubLObject strategem, SubLObject motivation) {
     {
       SubLObject pcase_var = motivation;
@@ -1712,7 +1732,7 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 70101) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 70101)
   public static final SubLObject balanced_strategy_deactivate_strategem_wrt_removal(SubLObject strategy, SubLObject removal_strategem) {
     checkType(strategy, $sym8$BALANCED_STRATEGY_P);
     checkType(removal_strategem, $sym47$REMOVAL_STRATEGEM_P);
@@ -1731,7 +1751,7 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 70721) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 70721)
   public static final SubLObject balanced_strategy_deactivate_strategem_wrt_transformation(SubLObject strategy, SubLObject transformation_strategem) {
     checkType(strategy, $sym8$BALANCED_STRATEGY_P);
     checkType(transformation_strategem, $sym48$TRANSFORMATION_STRATEGEM_P);
@@ -1750,7 +1770,7 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 71389) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 71389)
   public static final SubLObject balanced_strategy_possibly_deactivate_problem(SubLObject strategy, SubLObject problem) {
     if (((NIL == inference_balanced_tactician_datastructures.balanced_strategy_problem_activeP(strategy, problem, $kw15$NEW_ROOT))
          && (NIL == inference_balanced_tactician_datastructures.balanced_strategy_problem_activeP(strategy, problem, $kw14$REMOVAL))
@@ -1766,7 +1786,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 72084) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 72084)
   public static final SubLObject balanced_strategy_consider_that_problem_could_be_strategically_totally_pending(SubLObject strategy, SubLObject problem) {
     {
       SubLObject pending_wrt_new_rootP = balanced_strategy_consider_that_problem_could_be_strategically_pending(strategy, problem, $kw15$NEW_ROOT);
@@ -1778,7 +1798,7 @@ enabled, prevents the motivation from flowing. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 73492) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 73492)
   public static final SubLObject balanced_strategy_consider_that_problem_could_be_strategically_pending(SubLObject strategy, SubLObject problem, SubLObject motivation) {
     if ((NIL != inference_balanced_tactician_strategic_uninterestingness.balanced_strategy_chooses_to_throw_away_problemP(strategy, problem, motivation, UNPROVIDED))) {
       balanced_strategy_make_problem_pending(strategy, problem, motivation);
@@ -1787,7 +1807,7 @@ enabled, prevents the motivation from flowing. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 73797) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 73797)
   public static final SubLObject balanced_strategy_make_problem_pending(SubLObject strategy, SubLObject problem, SubLObject motivation) {
     inference_balanced_tactician_datastructures.balanced_strategy_note_problem_pending(strategy, problem, motivation);
     balanced_strategy_possibly_deactivate_problem(strategy, problem);
@@ -1795,7 +1815,7 @@ enabled, prevents the motivation from flowing. */
   }
 
   /** you're join-ordered, you have R, your supported problem has N, your lookahead problem is complete, you're cheap, and you're open. */
-  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 74034) 
+  @SubL(source = "cycl/inference/harness/inference-balanced-tactician-motivation.lisp", position = 74034)
   public static final SubLObject balanced_strategy_early_removal_linkP(SubLObject strategy, SubLObject link) {
     checkType(strategy, $sym8$BALANCED_STRATEGY_P);
     checkType(link, $sym49$PROBLEM_LINK_P);
@@ -1964,14 +1984,17 @@ enabled, prevents the motivation from flowing. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_balanced_tactician_motivation_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_balanced_tactician_motivation_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_balanced_tactician_motivation_file();
   }

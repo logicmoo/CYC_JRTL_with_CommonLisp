@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,8 +80,8 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
 
 public  final class access_macros extends SubLTranslatedFile {
 
@@ -61,24 +93,24 @@ public  final class access_macros extends SubLTranslatedFile {
 
   //// Definitions
 
-  @SubL(source = "cycl/access-macros.lisp", position = 11270) 
+  @SubL(source = "cycl/access-macros.lisp", position = 11270)
   public static final SubLObject define_obsolete_register(SubLObject v_obsolete, SubLObject replacements) {
     return v_obsolete;
   }
 
-  @SubL(source = "cycl/access-macros.lisp", position = 13012) 
+  @SubL(source = "cycl/access-macros.lisp", position = 13012)
   private static SubLSymbol $external_symbols$ = null;
 
-  @SubL(source = "cycl/access-macros.lisp", position = 13278) 
+  @SubL(source = "cycl/access-macros.lisp", position = 13278)
   public static final SubLObject register_external_symbol(SubLObject symbol) {
     Hashtables.sethash(symbol, $external_symbols$.getGlobalValue(), T);
     return symbol;
   }
 
-  @SubL(source = "cycl/access-macros.lisp", position = 16849) 
+  @SubL(source = "cycl/access-macros.lisp", position = 16849)
   private static SubLSymbol $external_access_methods$ = null;
 
-  @SubL(source = "cycl/access-macros.lisp", position = 17509) 
+  @SubL(source = "cycl/access-macros.lisp", position = 17509)
   public static final SubLObject register_macro_helper(SubLObject helper, SubLObject macro) {
     {
       SubLObject macros = Symbols.get(helper, $kw57$MACRO_HELPER_FOR, UNPROVIDED);
@@ -157,7 +189,8 @@ public  final class access_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_access_macros_file() {
-    $external_symbols$ = deflexical("*EXTERNAL-SYMBOLS*", ((NIL != Symbols.boundp($sym44$_EXTERNAL_SYMBOLS_)) ? ((SubLObject) $external_symbols$.getGlobalValue()) : Hashtables.make_hash_table($int45$400, Symbols.symbol_function(EQ), UNPROVIDED)));
+    $external_symbols$ = SubLFiles.deflexical( "*EXTERNAL-SYMBOLS*", maybeDefault( $sym44$_EXTERNAL_SYMBOLS_, $external_symbols$, () -> ( Hashtables.make_hash_table( $int45$400, Symbols.symbol_function( EQ ),
+        UNPROVIDED ) ) ) );
     $external_access_methods$ = deflexical("*EXTERNAL-ACCESS-METHODS*", $list56);
     return NIL;
   }
@@ -238,14 +271,17 @@ public  final class access_macros extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_access_macros_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_access_macros_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_access_macros_file();
   }

@@ -97,7 +97,7 @@ public class PatchFileLoader extends ClassLoader {
 		Class c = findLoadedClass(name);
 		if (c == null)
 			try {
-				if (!name.startsWith("com.cyc.cycjava.cycl") && !name.startsWith("eu.cyc"))
+				if (isExternalClass( name ))
 					throw new ClassNotFoundException(name);
 				c = classNameToClassMap.get(name);
 				if (c != null) {
@@ -118,7 +118,7 @@ public class PatchFileLoader extends ClassLoader {
 
 	@Override
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
-		if (!name.startsWith("com.cyc.cycjava.cycl") && !name.startsWith("eu.cyc"))
+		if (isExternalClass( name ))
 			return super.findClass(name);
 		String path = name.replace('.', '/').concat(".class");
 		for (JarFile jarFile : files) {
@@ -153,4 +153,13 @@ public class PatchFileLoader extends ClassLoader {
 		}
 		throw new ClassNotFoundException(name);
 	}
+
+  /**
+   * @param name
+   * @return
+   */
+  private boolean isExternalClass(String name)
+  {
+    return !name.startsWith("com.cyc.cycjava.cycl") && !name.startsWith("eu.cyc");
+  }
 }

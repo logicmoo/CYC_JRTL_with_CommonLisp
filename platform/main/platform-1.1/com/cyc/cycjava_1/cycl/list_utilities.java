@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,24 +80,24 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cycl_variables;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_utilities;
-import com.cyc.cycjava_1.cycl.cyc_testing.generic_testing;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_utilities;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.vector_utilities;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.cycl_variables;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.generic_testing;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_utilities;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.vector_utilities;
 
 public  final class list_utilities extends SubLTranslatedFile {
 
@@ -77,34 +109,35 @@ public  final class list_utilities extends SubLTranslatedFile {
 
   //// Definitions
 
-  /** the cutoff beyond which it's more efficient to use a hashtable 
+  /** the cutoff beyond which it's more efficient to use a hashtable
 than an N^2 non-consing algorithm, used for the fast-* functions. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 623) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 623)
   public static SubLSymbol $magic_hashing_cutoff$ = null;
 
   /** Convert OBJECT to T or NIL */
-  @SubL(source = "cycl/list-utilities.lisp", position = 1025) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 1025)
   public static final SubLObject sublisp_boolean(SubLObject object) {
     return makeBoolean((NIL != object));
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 1196) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 1196)
   public static final SubLObject not_eq(SubLObject obj1, SubLObject obj2) {
     return makeBoolean((obj1 != obj2));
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 2308) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 2308)
   public static final SubLObject cdddr(SubLObject cons) {
     return conses_high.cddr(cons).rest();
   }
 
   public static final class $cadar$UnaryFunction extends UnaryFunction {
     public $cadar$UnaryFunction() { super(extractFunctionNamed("CADAR")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 9052"); }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 2923) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 2923)
   public static final SubLObject proper_subsetp(SubLObject list1, SubLObject list2, SubLObject test, SubLObject key) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -119,7 +152,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
   /** @return boolean; whether the length of SEQ is strictly less than N.
    @param count-dotted-list? whether (1 2 . 3) counts as length 2 or 3.
    If it is t, it counts as length 3, otherwise it counts as length 2. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 13865) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 13865)
   public static final SubLObject lengthL(SubLObject seq, SubLObject n, SubLObject count_dotted_listP) {
     if ((count_dotted_listP == UNPROVIDED)) {
       count_dotted_listP = NIL;
@@ -145,7 +178,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
   /** @return boolean; whether the length of SEQ is less than or equal to N.
    @param count-dotted-list? whether (1 2 . 3) counts as length 2 or 3.
    If it is t, it counts as length 3, otherwise it counts as length 2. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 14452) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 14452)
   public static final SubLObject lengthLE(SubLObject seq, SubLObject n, SubLObject count_dotted_listP) {
     if ((count_dotted_listP == UNPROVIDED)) {
       count_dotted_listP = NIL;
@@ -156,7 +189,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
   /** @return boolean; whether the length of SEQ is exactly N.
    @param count-dotted-list? whether (1 2 . 3) counts as length 2 or 3.
    If it is t, it counts as length 3, otherwise it counts as length 2. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 14775) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 14775)
   public static final SubLObject lengthE(SubLObject seq, SubLObject n, SubLObject count_dotted_listP) {
     if ((count_dotted_listP == UNPROVIDED)) {
       count_dotted_listP = NIL;
@@ -186,7 +219,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
   /** @return boolean; whether the length of SEQ is strictly greater than N.
    @param count-dotted-list? whether (1 2 . 3) counts as length 2 or 3.
    If it is t, it counts as length 3, otherwise it counts as length 2. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 15792) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 15792)
   public static final SubLObject lengthG(SubLObject seq, SubLObject n, SubLObject count_dotted_listP) {
     if ((count_dotted_listP == UNPROVIDED)) {
       count_dotted_listP = NIL;
@@ -197,7 +230,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
   /** @return boolean; whether the length of SEQ is greater than or equal to N.
    @param count-dotted-list? whether (1 2 . 3) counts as length 2 or 3.
    If it is t, it counts as length 3, otherwise it counts as length 2. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 16116) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 16116)
   public static final SubLObject lengthGE(SubLObject seq, SubLObject n, SubLObject count_dotted_listP) {
     if ((count_dotted_listP == UNPROVIDED)) {
       count_dotted_listP = NIL;
@@ -209,7 +242,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
    @param seq1; a sequence.
    @parem seq2; a sequence.
    @owner sdevoy */
-  @SubL(source = "cycl/list-utilities.lisp", position = 17843) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 17843)
   public static final SubLObject greater_length_p(SubLObject seq1, SubLObject seq2) {
     if ((NIL == seq1)) {
       return NIL;
@@ -242,7 +275,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
    @param seq1; a sequence.
    @parem seq2; a sequence.
    @owner sdevoy */
-  @SubL(source = "cycl/list-utilities.lisp", position = 18496) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 18496)
   public static final SubLObject greater_or_same_length_p(SubLObject seq1, SubLObject seq2) {
     if ((NIL == seq1)) {
       return makeBoolean(((NIL == seq2)
@@ -273,13 +306,13 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 20053) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 20053)
   public static final SubLObject proper_list_p(SubLObject object) {
     return makeBoolean((object.isCons()
            && (NIL == conses_high.last(object, UNPROVIDED).rest())));
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 20230) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 20230)
   public static final SubLObject dotted_list_p(SubLObject object) {
     return makeBoolean((object.isCons()
            && (NIL != conses_high.last(object, UNPROVIDED).rest())));
@@ -287,16 +320,17 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
 
   public static final class $dotted_list_p$UnaryFunction extends UnaryFunction {
     public $dotted_list_p$UnaryFunction() { super(extractFunctionNamed("DOTTED-LIST-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return dotted_list_p(arg1); }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 20319) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 20319)
   public static final SubLObject non_dotted_list_p(SubLObject object) {
     return makeBoolean(((NIL == object)
           || (NIL != proper_list_p(object))));
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 20412) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 20412)
   public static final SubLObject dotted_length(SubLObject cons) {
     {
       SubLObject cdr = cons.rest();
@@ -309,10 +343,10 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
   }
 
   /** This variable is only to be used below by the negated sequence and test functions */
-  @SubL(source = "cycl/list-utilities.lisp", position = 24325) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 24325)
   public static SubLSymbol $negated_test_func$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 24578) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 24578)
   public static final SubLObject negated_test_func(SubLObject obj) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -322,11 +356,12 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
 
   public static final class $negated_test_func$UnaryFunction extends UnaryFunction {
     public $negated_test_func$UnaryFunction() { super(extractFunctionNamed("NEGATED-TEST-FUNC")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return negated_test_func(arg1); }
   }
 
   /** Negated version of REMOVE-IF */
-  @SubL(source = "cycl/list-utilities.lisp", position = 24661) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 24661)
   public static final SubLObject remove_if_not(SubLObject test, SubLObject sequence, SubLObject key, SubLObject start, SubLObject end, SubLObject count) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -359,7 +394,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
   }
 
   /** Negated version of DELETE-IF */
-  @SubL(source = "cycl/list-utilities.lisp", position = 24928) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 24928)
   public static final SubLObject delete_if_not(SubLObject test, SubLObject sequence, SubLObject key, SubLObject start, SubLObject end, SubLObject count) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -392,7 +427,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
   }
 
   /** Negated version of FIND-IF */
-  @SubL(source = "cycl/list-utilities.lisp", position = 25772) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 25772)
   public static final SubLObject find_if_not(SubLObject test, SubLObject sequence, SubLObject key, SubLObject start, SubLObject end) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -421,15 +456,15 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 26289) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 26289)
   private static SubLSymbol $position_if_binary_lambda_func$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 26350) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 26350)
   private static SubLSymbol $position_if_binary_lambda_arg2$ = null;
 
   /** Cons a new pair only if the CAR or CDR of CONS are not EQ to CAR and CDR.
    @see ncons for a destructive version of this. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 47290) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 47290)
   public static final SubLObject recons(SubLObject car, SubLObject cdr, SubLObject cons) {
     if (((cons.first() == car)
          && (cons.rest() == cdr))) {
@@ -441,7 +476,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
 
   /** Return CONS after replacing its CAR and CDR.
   @see recons for a non-destructive version of this. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 47560) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 47560)
   public static final SubLObject ncons(SubLObject car, SubLObject cdr, SubLObject cons) {
     if ((!(car.eql(cons.first())))) {
       ConsesLow.rplaca(cons, car);
@@ -452,7 +487,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
     return cons;
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 47816) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 47816)
   public static final SubLObject delete_first(SubLObject obj, SubLObject sequence, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -462,7 +497,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
 
   /** A destructive version of @xref mapcar.
    WARNING: This will produce really funky behaviour if elements of LIST share list structure. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 48102) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 48102)
   public static final SubLObject nmapcar(SubLObject function, SubLObject list) {
     {
       SubLObject partial_list = NIL;
@@ -473,7 +508,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
     return list;
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 48428) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 48428)
   public static final SubLObject mapappend(SubLObject function, SubLObject list) {
     {
       SubLObject ans = NIL;
@@ -498,7 +533,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
    Then we return the unique elements of X, concatenating over all elements of LIST.
    e.g. (define mapabs (list) (ret (mapcar 'abs list)))
         (mapunion 'mapabs '((1 2 3) (0 -1 -2))) -> (1 2 3 0) */
-  @SubL(source = "cycl/list-utilities.lisp", position = 48591) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 48591)
   public static final SubLObject mapunion(SubLObject function, SubLObject list, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -525,7 +560,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 49217) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 49217)
   public static final SubLObject mapnunion(SubLObject function, SubLObject list, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -541,7 +576,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 49389) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 49389)
   public static final SubLObject mapcar_product(SubLObject function, SubLObject list1, SubLObject list2) {
     {
       SubLObject ans = NIL;
@@ -566,7 +601,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
   }
 
   /** Returns a list consisting of the last item in LIST. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 50363) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 50363)
   public static final SubLObject last1(SubLObject list) {
     {
       SubLObject rest = NIL;
@@ -579,7 +614,7 @@ than an N^2 non-consing algorithm, used for the fast-* functions. */
 
   /** Returns the LIST with ITEM as the new last element.
 LIST may be destructively modified. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 50755) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 50755)
   public static final SubLObject nadd_to_end(SubLObject item, SubLObject list) {
     {
       SubLObject new_last_cons = cons(item, NIL);
@@ -598,7 +633,7 @@ LIST may be destructively modified. */
   /** @return 0 list; all the elements of LIST which pass FUNC
    @return 1 list; all the elements of LIST which do not pass FUNC
    Otherwise, order is preserved. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 52026) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 52026)
   public static final SubLObject partition_list(SubLObject list, SubLObject func) {
     {
       SubLObject head = NIL;
@@ -616,7 +651,7 @@ LIST may be destructively modified. */
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 59160) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 59160)
   public static final SubLObject find_all_if_not(SubLObject test, SubLObject seq, SubLObject key) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -644,7 +679,7 @@ LIST may be destructively modified. */
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 59735) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 59735)
   public static final SubLObject only_one(SubLObject list) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -658,7 +693,7 @@ LIST may be destructively modified. */
   }
 
   /** Non-recursive function which returns a list of the non-nil atoms in TREE. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 60276) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 60276)
   public static final SubLObject flatten(SubLObject tree) {
     {
       SubLObject stack = list(tree);
@@ -683,14 +718,14 @@ LIST may be destructively modified. */
   }
 
   /** return the first N elements of LIST */
-  @SubL(source = "cycl/list-utilities.lisp", position = 61850) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 61850)
   public static final SubLObject first_n(SubLObject n, SubLObject list) {
     return conses_high.ldiff(list, conses_high.nthcdr(n, list));
   }
 
   /** replace the Nth item of LIST with NEW (destructive)
    This is a safer version of @xref set-nth */
-  @SubL(source = "cycl/list-utilities.lisp", position = 63966) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 63966)
   public static final SubLObject nreplace_nth(SubLObject n, SubLObject v_new, SubLObject list) {
     checkType(n, $sym91$INTEGERP);
     checkType(list, $sym53$LISTP);
@@ -711,7 +746,7 @@ LIST may be destructively modified. */
 
   /** replace the Nth item of LIST with NEW (nondestructive)
    @owner pace */
-  @SubL(source = "cycl/list-utilities.lisp", position = 70556) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 70556)
   public static final SubLObject replace_nth(SubLObject n, SubLObject v_new, SubLObject list) {
     return nreplace_nth(n, v_new, conses_high.copy_list(list));
   }
@@ -721,7 +756,7 @@ LIST may be destructively modified. */
 be modified, use @xref NEW-NUM-LIST instead.
 @note - If you're getting a list of numbers just to iterate over it, use @xref
 DO-NUMBERS instead. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 74220) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 74220)
   public static final SubLObject num_list(SubLObject num, SubLObject start) {
     if ((start == UNPROVIDED)) {
       start = ZERO_INTEGER;
@@ -741,9 +776,9 @@ DO-NUMBERS instead. */
 
   /** @return list; a list of length NUM containing the integers START to NUM-1+START.
 @note - The list returned by this function is NOT cached, so if you're sure it won't
-be modified and you're going to be calling this a lot with the same arguments, use 
+be modified and you're going to be calling this a lot with the same arguments, use
 @xref NUM-LIST or @xref DO-NUMBERS instead. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 74826) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 74826)
   public static final SubLObject new_num_list(SubLObject num, SubLObject start) {
     if ((start == UNPROVIDED)) {
       start = ZERO_INTEGER;
@@ -759,7 +794,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** @return BOOLEAN; Is NUM-LIST a list of length LENGTH containing the integers START to LENGTH-1+START? */
-  @SubL(source = "cycl/list-utilities.lisp", position = 75273) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 75273)
   public static final SubLObject verify_num_list(SubLObject num_list, SubLObject length, SubLObject start) {
     {
       SubLObject badP = makeBoolean((!((num_list.isList()
@@ -779,17 +814,17 @@ be modified and you're going to be calling this a lot with the same arguments, u
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 75684) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 75684)
   private static SubLSymbol $num_list_cached_caching_state$ = null;
 
   /** @return list; a list of length NUM containing the integers START to NUM-1+START.
 @note - We cache this to save space, not time. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 75684) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 75684)
   public static final SubLObject num_list_cached_internal(SubLObject num, SubLObject start) {
     return new_num_list(num, start);
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 75684) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 75684)
   public static final SubLObject num_list_cached(SubLObject num, SubLObject start) {
     {
       SubLObject caching_state = $num_list_cached_caching_state$.getGlobalValue();
@@ -829,7 +864,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** @return list; a list of length LENGTH containing the numbers 0 + START to LENGTH-1 + START. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 75917) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 75917)
   public static final SubLObject numlist(SubLObject length, SubLObject start) {
     if ((start == UNPROVIDED)) {
       start = ZERO_INTEGER;
@@ -838,38 +873,38 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** An optimized form of (member? ITEM LIST #'eq) */
-  @SubL(source = "cycl/list-utilities.lisp", position = 76479) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 76479)
   public static final SubLObject member_eqP(SubLObject item, SubLObject list) {
     return subl_promotions.memberP(item, list, Symbols.symbol_function(EQ), UNPROVIDED);
   }
 
   /** An optimized form of (member? ITEM LIST #'equal) */
-  @SubL(source = "cycl/list-utilities.lisp", position = 76723) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 76723)
   public static final SubLObject member_equalP(SubLObject item, SubLObject list) {
     return subl_promotions.memberP(item, list, Symbols.symbol_function(EQUAL), UNPROVIDED);
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 85519) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 85519)
   public static final SubLObject singletonP(SubLObject list) {
     return makeBoolean((list.isCons()
            && (NIL == list.rest())));
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 85593) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 85593)
   public static final SubLObject doubletonP(SubLObject list) {
     return makeBoolean((list.isCons()
            && (NIL != list.rest())
            && (NIL == conses_high.cddr(list))));
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 85679) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 85679)
   public static final SubLObject tripleP(SubLObject list) {
     return makeBoolean((list.isCons()
            && (NIL != conses_high.cddr(list))
            && (NIL == cdddr(list))));
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 86251) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 86251)
   public static final SubLObject duplicatesP(SubLObject list, SubLObject test, SubLObject key) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -889,7 +924,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 86652) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 86652)
   public static final SubLObject duplicates(SubLObject list, SubLObject test, SubLObject key) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -912,7 +947,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 90773) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 90773)
   public static final SubLObject multisets_equalP(SubLObject set1, SubLObject set2, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -941,7 +976,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 91166) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 91166)
   public static final SubLObject sets_equalP(SubLObject set1, SubLObject set2, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -951,7 +986,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
              && (NIL != conses_high.subsetp(set2, set1, test, UNPROVIDED)))));
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 91317) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 91317)
   public static final SubLObject fast_sets_equalP(SubLObject set1, SubLObject set2, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -960,7 +995,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
            && (NIL != fast_subsetP(set2, set1, test))));
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 91467) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 91467)
   public static final SubLObject fast_subsetP(SubLObject list1, SubLObject list2, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -995,7 +1030,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** like union only the result preserves the order of elements in the input sets */
-  @SubL(source = "cycl/list-utilities.lisp", position = 93332) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 93332)
   public static final SubLObject ordered_union(SubLObject set1, SubLObject set2, SubLObject test, SubLObject key) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1017,7 +1052,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** Like @xref set-difference except the order of returned items is the same order as in LIST1. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 93873) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 93873)
   public static final SubLObject ordered_set_difference(SubLObject list1, SubLObject list2, SubLObject test, SubLObject key) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1040,7 +1075,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
 
   /** Like @xref set-difference except not slow.
    @owner Pace */
-  @SubL(source = "cycl/list-utilities.lisp", position = 94434) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 94434)
   public static final SubLObject fast_set_difference(SubLObject list1, SubLObject list2, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1057,23 +1092,24 @@ be modified and you're going to be calling this a lot with the same arguments, u
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 99092) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 99092)
   public static final SubLObject flip_alist(SubLObject alist) {
     return Mapping.mapcar($sym105$FLIP_CONS, alist);
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 99155) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 99155)
   public static final SubLObject flip_cons(SubLObject cons) {
     return cons(cons.rest(), cons.first());
   }
 
   public static final class $flip_cons$UnaryFunction extends UnaryFunction {
     public $flip_cons$UnaryFunction() { super(extractFunctionNamed("FLIP-CONS")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return flip_cons(arg1); }
   }
 
   /** Return T iff evaluation of OBJECT necessarily returns OBJECT. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 102525) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 102525)
   public static final SubLObject self_evaluating_form_p(SubLObject object) {
     return makeBoolean((object.isAtom()
            && ((NIL == object)
@@ -1083,7 +1119,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** Return an expression which, if evaluated, would return OBJECT. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 103095) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 103095)
   public static final SubLObject quotify(SubLObject object) {
     if ((NIL != self_evaluating_form_p(object))) {
       return object;
@@ -1094,11 +1130,12 @@ be modified and you're going to be calling this a lot with the same arguments, u
 
   public static final class $quotify$UnaryFunction extends UnaryFunction {
     public $quotify$UnaryFunction() { super(extractFunctionNamed("QUOTIFY")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return quotify(arg1); }
   }
 
   /** Splice OBJECT into SORTED-LIST sorted by PREDICATE. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 104793) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 104793)
   public static final SubLObject splice_into_sorted_list(SubLObject object, SubLObject sorted_list, SubLObject predicate, SubLObject key) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -1131,7 +1168,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 108824) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 108824)
   public static final SubLObject tree_funcall_if(SubLObject test, SubLObject fn, SubLObject object, SubLObject key) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -1145,31 +1182,31 @@ be modified and you're going to be calling this a lot with the same arguments, u
     return NIL;
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 110694) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 110694)
   private static SubLSymbol $remove_duplicates_eq_table$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 110853) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 110853)
   private static SubLSymbol $remove_duplicates_eql_table$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 110932) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 110932)
   private static SubLSymbol $remove_duplicates_equal_table$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 111015) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 111015)
   private static SubLSymbol $remove_duplicates_equalp_table$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 111100) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 111100)
   private static SubLSymbol $remove_duplicates_eq_table_lock$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 111202) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 111202)
   private static SubLSymbol $remove_duplicates_eql_table_lock$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 111305) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 111305)
   private static SubLSymbol $remove_duplicates_equal_table_lock$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 111412) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 111412)
   private static SubLSymbol $remove_duplicates_equalp_table_lock$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 114114) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 114114)
   public static final SubLObject fast_delete_duplicates(SubLObject sequence, SubLObject test, SubLObject key, SubLObject hashtable, SubLObject start, SubLObject end) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQUAL);
@@ -1207,19 +1244,19 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** @return the list FORTS with all duplicates removed */
-  @SubL(source = "cycl/list-utilities.lisp", position = 115092) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 115092)
   public static final SubLObject remove_duplicate_forts(SubLObject v_forts) {
     return fast_delete_duplicates(v_forts, Symbols.symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
   }
 
   /** @return listp; the list FORTS with all duplicates destructively removed */
-  @SubL(source = "cycl/list-utilities.lisp", position = 115273) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 115273)
   public static final SubLObject delete_duplicate_forts(SubLObject v_forts) {
     return fast_delete_duplicates(v_forts, Symbols.symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
   }
 
   /** Deletes duplicates from SORTED-LIST. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 123415) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 123415)
   public static final SubLObject delete_duplicates_sorted(SubLObject sorted_list, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1240,7 +1277,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** Return T iff OBJECT is an association list. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 125045) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 125045)
   public static final SubLObject alist_p(SubLObject object) {
     return Types.listp(object);
   }
@@ -1248,7 +1285,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   /** Return the value associated with KEY in ALIST (using TEST for key equality).
    Return DEFAULT if KEY is not present.
    Return a second value of T iff KEY was found. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 125486) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 125486)
   public static final SubLObject alist_lookup(SubLObject alist, SubLObject key, SubLObject test, SubLObject v_default) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1270,7 +1307,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   /** Return the value associated with KEY in ALIST (using TEST for key equality).
    Return DEFAULT if KEY is not present.
    Unlike ALIST-LOOKUP, only 1 value is returned. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 125874) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 125874)
   public static final SubLObject alist_lookup_without_values(SubLObject alist, SubLObject key, SubLObject test, SubLObject v_default) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1285,7 +1322,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** @return booleanp; whether KEY is a key in the association list ALIST */
-  @SubL(source = "cycl/list-utilities.lisp", position = 129813) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 129813)
   public static final SubLObject alist_has_keyP(SubLObject alist, SubLObject key, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1297,7 +1334,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   /** Note that VALUE is associated with KEY in ALIST (using TEST for key equality).
    Return the resulting alist.
    Return a second value of T iff KEY was found. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 131013) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 131013)
   public static final SubLObject alist_enter(SubLObject alist, SubLObject key, SubLObject value, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1317,7 +1354,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   /** Note that VALUE is associated with KEY in ALIST (using TEST for key equality).
    Return the resulting alist.
    Unlike ALIST-ENTER, only 1 value is returned. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 131433) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 131433)
   public static final SubLObject alist_enter_without_values(SubLObject alist, SubLObject key, SubLObject value, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1337,7 +1374,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   /** Delete any association for KEY in ALIST (using TEST for key equality).
    Return the resulting alist.
    Return a second value of T iff KEY was found. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 132765) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 132765)
   public static final SubLObject alist_delete(SubLObject alist, SubLObject key, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1355,7 +1392,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   /** Note that VALUE is in a list associated with KEY in ALIST (using TEST for key equality).
    Return the resulting alist.
    Return a second value of T iff KEY was found. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 134321) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 134321)
   public static final SubLObject alist_push(SubLObject alist, SubLObject key, SubLObject value, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1373,7 +1410,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** Return a list of all the keys of ALIST. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 136170) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 136170)
   public static final SubLObject alist_keys(SubLObject alist) {
     checkType(alist, $sym134$ALIST_P);
     {
@@ -1398,7 +1435,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   }
 
   /** Return a list of all the values of ALIST. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 136405) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 136405)
   public static final SubLObject alist_values(SubLObject alist) {
     checkType(alist, $sym134$ALIST_P);
     {
@@ -1424,7 +1461,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
 
   /** Return a copy of ALIST where the order of the keys have been optimized (sorted)
    via the preference PREDICATE. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 136643) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 136643)
   public static final SubLObject alist_optimize(SubLObject alist, SubLObject predicate) {
     checkType(alist, $sym134$ALIST_P);
     return conses_high.copy_alist(Sort.stable_sort(conses_high.copy_list(alist), predicate, Symbols.symbol_function($sym20$CAR)));
@@ -1432,7 +1469,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
 
   /** Return a hashtable of all the (key . value) entries in ALIST.
    TEST is the equality test for keys in ALIST. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 138013) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 138013)
   public static final SubLObject alist_to_hash_table(SubLObject alist, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1462,7 +1499,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
   /** Return a hashtable of all the (key . value) entries in ALIST
    using the value as the key and the key as the value.
    TEST is the equality test for values in ALIST. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 138382) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 138382)
   public static final SubLObject alist_to_reverse_hash_table(SubLObject alist, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1491,7 +1528,7 @@ be modified and you're going to be calling this a lot with the same arguments, u
 
   /** Creates a new plist based on PLIST, but only including properties
 which pass PRED. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 139635) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 139635)
   public static final SubLObject filter_plist(SubLObject plist, SubLObject pred) {
     {
       SubLObject new_plist = NIL;
@@ -1510,9 +1547,9 @@ which pass PRED. */
     }
   }
 
-  /** Place all of the values of list B onto list A destructively and return 
+  /** Place all of the values of list B onto list A destructively and return
    the resulting PLIST. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 142288) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 142288)
   public static final SubLObject nmerge_plist(SubLObject plist_a, SubLObject plist_b) {
     checkType(plist_a, $sym151$PROPERTY_LIST_P);
     checkType(plist_b, $sym151$PROPERTY_LIST_P);
@@ -1537,15 +1574,15 @@ which pass PRED. */
 
   /** Place all of the values of list B onto a copy of list A and return
   the resulting PLIST. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 142797) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 142797)
   public static final SubLObject merge_plist(SubLObject plist_a, SubLObject plist_b) {
     return nmerge_plist(conses_high.copy_list(plist_a), plist_b);
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 147205) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 147205)
   private static SubLSymbol $plistlist_sort_indicator$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 152834) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 152834)
   public static final SubLObject any_in_list(SubLObject predicate, SubLObject list, SubLObject key) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -1580,7 +1617,7 @@ which pass PRED. */
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 153221) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 153221)
   public static final SubLObject every_in_list(SubLObject predicate, SubLObject list, SubLObject key) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -1615,11 +1652,11 @@ which pass PRED. */
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 154221) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 154221)
   public static SubLSymbol $subseq_subst_recursive_answers$ = null;
 
   /** Return the first item in LIST which maximizes TEST */
-  @SubL(source = "cycl/list-utilities.lisp", position = 158296) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 158296)
   public static final SubLObject extremal(SubLObject list, SubLObject test, SubLObject key) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -1661,7 +1698,7 @@ which pass PRED. */
   /** Return T iff the position of ITEM1 in GUIDE-SEQ is less than that of ITEM2.
 All objects not in the GUIDE-SEQ are considered to be after all those that are,
 and are themselves considered equivalent by this test. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 163609) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 163609)
   public static final SubLObject position_L(SubLObject item1, SubLObject item2, SubLObject guide_seq, SubLObject test, SubLObject key) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1684,16 +1721,16 @@ and are themselves considered equivalent by this test. */
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 164194) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 164194)
   private static SubLSymbol $sort_via_position_guide$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 164354) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 164354)
   private static SubLSymbol $sort_via_position_test$ = null;
 
   /** Sort SEQ using GUIDE-SEQ as a positional guide.
 Objects in GUIDE-SEQ appear in the order they are in GUIDE-SEQ.
 Objects not in GUIDE-SEQ all appear after those that do. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 164406) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 164406)
   public static final SubLObject sort_via_position(SubLObject seq, SubLObject guide_seq, SubLObject test, SubLObject key) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1727,7 +1764,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
   /** Stably sort SEQ using GUIDE-SEQ as a positional guide.
 Objects in GUIDE-SEQ appear in the order they are in GUIDE-SEQ.
 Objects not in GUIDE-SEQ all appear after those that do. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 164919) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 164919)
   public static final SubLObject stable_sort_via_position(SubLObject seq, SubLObject guide_seq, SubLObject test, SubLObject key) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1758,7 +1795,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
     }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 165453) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 165453)
   public static final SubLObject sort_via_position_earlier(SubLObject item1, SubLObject item2) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1768,13 +1805,14 @@ Objects not in GUIDE-SEQ all appear after those that do. */
 
   public static final class $sort_via_position_earlier$BinaryFunction extends BinaryFunction {
     public $sort_via_position_earlier$BinaryFunction() { super(extractFunctionNamed("SORT-VIA-POSITION-EARLIER")); }
+    @Override
     public SubLObject processItem(SubLObject arg1, SubLObject arg2) { return sort_via_position_earlier(arg1, arg2); }
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 165625) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 165625)
   private static SubLSymbol $sort_via_test_function$ = null;
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 170450) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 170450)
   public static final SubLObject safe_E(SubLObject object1, SubLObject object2) {
     if ((object1.isNumber()
          && object2.isNumber())) {
@@ -1790,7 +1828,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
    @example (parametrized-median '(4 1 2 5 3) #'<) 3
    @example (parametrized-median '(4 1 2 5)   #'<) 4
    @owner pace */
-  @SubL(source = "cycl/list-utilities.lisp", position = 171886) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 171886)
   public static final SubLObject parametrized_median(SubLObject list, SubLObject sort_pred) {
     {
       SubLObject sorted_list = Sort.sort(conses_high.copy_list(list), sort_pred, UNPROVIDED);
@@ -1804,7 +1842,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
 @return 0 the found sub-object.
 @return 1 T if a sub-object is found.
 @owner jantos ;; added second return argument */
-  @SubL(source = "cycl/list-utilities.lisp", position = 176901) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 176901)
   public static final SubLObject tree_find(SubLObject item, SubLObject object, SubLObject test, SubLObject key) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1860,7 +1898,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
   }
 
   /** Return T iff the non-nil ITEM is found in OBJECT (via EQ) */
-  @SubL(source = "cycl/list-utilities.lisp", position = 177884) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 177884)
   public static final SubLObject simple_tree_findP(SubLObject item, SubLObject object) {
     if ((item == object)) {
       return T;
@@ -1898,7 +1936,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
   }
 
   /** Return T iff the non-nil ITEM is found in OBJECT (via EQUAL) */
-  @SubL(source = "cycl/list-utilities.lisp", position = 178458) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 178458)
   public static final SubLObject simple_tree_find_via_equalP(SubLObject item, SubLObject object) {
     if (item.equal(object)) {
       return T;
@@ -1936,7 +1974,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
   }
 
   /** Look for any of ITEMS in the tree OBJECT.  Return the first item found, or NIL if none found. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 179078) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 179078)
   public static final SubLObject tree_find_any(SubLObject items, SubLObject tree, SubLObject test, SubLObject key) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -1957,7 +1995,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
   }
 
   /** Obsolete -- use tree-find-if */
-  @SubL(source = "cycl/list-utilities.lisp", position = 179357) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 179357)
   public static final SubLObject cons_tree_find_if(SubLObject test, SubLObject object, SubLObject key) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -1965,7 +2003,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
     return tree_find_if(test, object, key);
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 179515) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 179515)
   public static final SubLObject tree_find_if(SubLObject test, SubLObject object, SubLObject key) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -1997,7 +2035,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
     return NIL;
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 182971) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 182971)
   public static final SubLObject tree_count_if(SubLObject test, SubLObject object, SubLObject key) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -2023,7 +2061,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
     return ZERO_INTEGER;
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 183994) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 183994)
   public static final SubLObject tree_gather(SubLObject object, SubLObject predicate, SubLObject test, SubLObject key, SubLObject subs_tooP) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQL);
@@ -2037,7 +2075,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
     return Sequences.nreverse(tree_gather_internal(object, predicate, test, key, subs_tooP, NIL));
   }
 
-  @SubL(source = "cycl/list-utilities.lisp", position = 184172) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 184172)
   public static final SubLObject tree_gather_internal(SubLObject object, SubLObject predicate, SubLObject test, SubLObject key, SubLObject subs_tooP, SubLObject so_far) {
     {
       SubLObject result = so_far;
@@ -2074,7 +2112,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
   }
 
   /** if a and b are in LIST, and (TEST (KEY a) (KEY b)) is true, don't include b in the result */
-  @SubL(source = "cycl/list-utilities.lisp", position = 189291) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 189291)
   public static final SubLObject delete_subsumed_items(SubLObject list, SubLObject test, SubLObject key) {
     if ((key == UNPROVIDED)) {
       key = Symbols.symbol_function(IDENTITY);
@@ -2090,7 +2128,7 @@ Objects not in GUIDE-SEQ all appear after those that do. */
   /** Return a list of all possible distinct ordered lists of the elements in ELEMENTS.
 By convention, (permute-list NIL) -> NIL.
 By convention, if TEST is NIL, the check for duplicates is skipped. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 193274) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 193274)
   public static final SubLObject permute_list(SubLObject elements, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQUAL);
@@ -2138,7 +2176,7 @@ By convention, if TEST is NIL, the check for duplicates is skipped. */
 
   /** Given a list of elements, return all permutations of the elements
 @note Assumes no two elements are equal with respect to TEST. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 194743) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 194743)
   public static final SubLObject permute_list_int(SubLObject elements, SubLObject test) {
     if ((test == UNPROVIDED)) {
       test = Symbols.symbol_function(EQ);
@@ -2172,7 +2210,7 @@ By convention, if TEST is NIL, the check for duplicates is skipped. */
 
   /** Returns all permutations of the numbers from 0 to N-1.
    By convention, (all-permutations 0) -> (NIL). */
-  @SubL(source = "cycl/list-utilities.lisp", position = 195360) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 195360)
   public static final SubLObject all_permutations(SubLObject n) {
     if (n.numE(ZERO_INTEGER)) {
       return list(NIL);
@@ -2183,7 +2221,7 @@ By convention, if TEST is NIL, the check for duplicates is skipped. */
 
   /** e.g. (permute '(a b c) '(2 0 1)) -> (c a b)
    By convention, (permute X NIL) -> X. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 196381) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 196381)
   public static final SubLObject permute(SubLObject list, SubLObject permutation) {
     if ((NIL != permutation)) {
       {
@@ -2205,7 +2243,7 @@ By convention, if TEST is NIL, the check for duplicates is skipped. */
    @param start; listp: an optional seed for building the product
    @param test; fboundp (binary function) or nil
    @returns list: the cartesian product of the elements of l */
-  @SubL(source = "cycl/list-utilities.lisp", position = 202736) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 202736)
   public static final SubLObject cartesian_product(SubLObject l, SubLObject fun, SubLObject start, SubLObject test) {
     if ((fun == UNPROVIDED)) {
       fun = Symbols.symbol_function($sym13$CONS);
@@ -2241,7 +2279,7 @@ By convention, if TEST is NIL, the check for duplicates is skipped. */
   }
 
   /** takes two lists and returns the cartesian product.  fun generally should be #'cons */
-  @SubL(source = "cycl/list-utilities.lisp", position = 203625) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 203625)
   public static final SubLObject cartesian_helper(SubLObject a, SubLObject b, SubLObject fun) {
     {
       SubLObject accum = NIL;
@@ -2264,7 +2302,7 @@ By convention, if TEST is NIL, the check for duplicates is skipped. */
    Returns T if: - OBJECT is a non-dotted list, and
                  - PRED returns non-nil when applied to any item in OBJECT
    Otherwise, returns NIL. */
-  @SubL(source = "cycl/list-utilities.lisp", position = 205555) 
+  @SubL(source = "cycl/list-utilities.lisp", position = 205555)
   public static final SubLObject list_of_type_p(SubLObject pred, SubLObject object) {
     if ((NIL != non_dotted_list_p(object))) {
       {
@@ -2877,7 +2915,7 @@ By convention, if TEST is NIL, the check for duplicates is skipped. */
   public static final SubLObject setup_list_utilities_file() {
     // CVS_ID("Id: list-utilities.lisp 128760 2009-09-15 04:40:33Z pace ");
     memoization_state.note_globally_cached_function($sym93$NUM_LIST_CACHED);
-    generic_testing.define_test_case_table_int($sym110$SAFE_SPLICE_INTO_SORTED_LIST, list(new SubLObject[] {$kw111$TEST, Symbols.symbol_function(EQUAL), $kw112$OWNER, NIL, $kw113$CLASSES, NIL, $kw114$KB, $kw115$TINY, $kw116$WORKING_, T}), $list117);
+    //generic_testing.define_test_case_table_int($sym110$SAFE_SPLICE_INTO_SORTED_LIST, list(new SubLObject[] {$kw111$TEST, Symbols.symbol_function(EQUAL), $kw112$OWNER, NIL, $kw113$CLASSES, NIL, $kw114$KB, $kw115$TINY, $kw116$WORKING_, T}), $list117);
     access_macros.define_obsolete_register($sym183$GET_ARGLIST, $list184);
     return NIL;
   }
@@ -3084,14 +3122,17 @@ By convention, if TEST is NIL, the check for duplicates is skipped. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_list_utilities_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_list_utilities_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_list_utilities_file();
   }

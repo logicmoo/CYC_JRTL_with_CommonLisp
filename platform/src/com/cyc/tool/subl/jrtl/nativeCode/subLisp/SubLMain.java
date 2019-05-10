@@ -70,6 +70,7 @@ import com.hp.hpl.jena.sparql.algebra.op.OpOrder;
 public class SubLMain
 {
   public static boolean OPENCYC = false;
+  public static boolean TINY_KB = false;
   public static boolean Never_REDEFINE = true;
   public static boolean BOOTY_HACKZ = true;
 
@@ -125,7 +126,7 @@ public class SubLMain
     {
       System.out.println( "Starting Cyc." );
     }
-    long startTime = System.currentTimeMillis();
+    startTime = System.currentTimeMillis();
     try
     {
       SubLMain.initializeSubL( args );
@@ -714,6 +715,9 @@ public class SubLMain
       initialize1TranslatedSystem( "com.cyc.cycjava.cycl.rcycl" );
     if( !SubLMain.OPENCYC )
       initialize1TranslatedSystem( "org.logicmoo.system.export" );
+    if( SubLMain.TINY_KB )
+      initialize1TranslatedSystem( "com.cyc.cycjava_1.cycl.dumper_larkc" );
+
     PrintLow.registerJRTLPrintMethods();
   }
 

@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.sbhl;
+package com.cyc.cycjava_1.cycl.sbhl;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,19 +67,19 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class sbhl_module_vars extends SubLTranslatedFile {
 
@@ -916,9 +935,9 @@ extent.   The two possible values are t (assume nonempty) and nil (assume nothin
   public static final SubLObject init_sbhl_module_vars_file() {
     $dtp_sbhl_module$ = defconstant("*DTP-SBHL-MODULE*", $sym0$SBHL_MODULE);
     $sbhl_module_key_test$ = deflexical("*SBHL-MODULE-KEY-TEST*", Symbols.symbol_function(EQ));
-    $sbhl_modules$ = deflexical("*SBHL-MODULES*", ((NIL != Symbols.boundp($sym56$_SBHL_MODULES_)) ? ((SubLObject) $sbhl_modules$.getGlobalValue()) : dictionary.new_dictionary($sbhl_module_key_test$.getGlobalValue(), UNPROVIDED)));
+    $sbhl_modules$ = deflexical("*SBHL-MODULES*", maybeDefault( $sym56$_SBHL_MODULES_, $sbhl_modules$, ()-> (dictionary.new_dictionary($sbhl_module_key_test$.getGlobalValue(), UNPROVIDED))));
     $sbhl_module_types$ = deflexical("*SBHL-MODULE-TYPES*", $list64);
-    $sbhl_module_properties$ = deflexical("*SBHL-MODULE-PROPERTIES*", ((NIL != Symbols.boundp($sym80$_SBHL_MODULE_PROPERTIES_)) ? ((SubLObject) $sbhl_module_properties$.getGlobalValue()) : dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED)));
+    $sbhl_module_properties$ = deflexical("*SBHL-MODULE-PROPERTIES*", maybeDefault( $sym80$_SBHL_MODULE_PROPERTIES_, $sbhl_module_properties$, ()-> (dictionary.new_dictionary(Symbols.symbol_function(EQ), UNPROVIDED))));
     $sbhl_module_required_properties$ = deflexical("*SBHL-MODULE-REQUIRED-PROPERTIES*", $list107);
     $sbhl_module$ = defparameter("*SBHL-MODULE*", NIL);
     $sbhl_module_vars$ = defvar("*SBHL-MODULE-VARS*", NIL);

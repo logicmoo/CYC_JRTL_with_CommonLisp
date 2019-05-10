@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,21 +67,21 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
 import com.cyc.cycjava_1.cycl.assertion_utilities;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.backward_results;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.kb_control_vars;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.backward_results;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.kb_control_vars;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.variables;
 
 public  final class abnormal extends SubLTranslatedFile {
 
@@ -75,14 +94,14 @@ public  final class abnormal extends SubLTranslatedFile {
   //// Definitions
 
   /** When non-nil, #$abnormal reasoning is performed to defeat proofs. */
-  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 499) 
+  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 499)
   public static SubLSymbol $abnormality_checking_enabled$ = null;
 
   /** When non-nil, support #$except abnormality checking. */
-  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 689) 
+  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 689)
   private static SubLSymbol $abnormality_except_support_enabled$ = null;
 
-  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 809) 
+  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 809)
   public static final SubLObject abnormality_except_support_enabledP() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -91,7 +110,7 @@ public  final class abnormal extends SubLTranslatedFile {
   }
 
   /** Return T iff RULE is a rule that has some exceptions somewhere. */
-  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 913) 
+  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 913)
   public static final SubLObject rule_has_exceptionsP(SubLObject rule) {
     return makeBoolean(((NIL != assertions_high.rule_assertionP(rule))
            && (NIL != assertion_utilities.assertion_has_meta_assertionsP(rule))
@@ -103,7 +122,7 @@ public  final class abnormal extends SubLTranslatedFile {
 
   /** Return non-nil iff RULE-BINDINGS can be proven to be abnormal wrt RULE in
    in problem-store STORE under the assumptions of TRANSFORMATION-MT. */
-  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 1321) 
+  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 1321)
   public static final SubLObject rule_bindings_abnormalP(SubLObject store, SubLObject rule, SubLObject rule_bindings, SubLObject transformation_mt) {
     if ((NIL != rule_has_exceptionsP(rule))) {
       {
@@ -115,12 +134,12 @@ public  final class abnormal extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 2775) 
+  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 2775)
   public static SubLSymbol $abnormality_transformation_depth$ = null;
 
   /** @return booleanp; Like @xref forward-abnormality-check except doesn't throw anything,
 just returns a nice, simple boolean. */
-  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 5346) 
+  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 5346)
   public static final SubLObject forward_bindings_abnormalP(SubLObject propagation_mt, SubLObject rule, SubLObject trigger_bindings, SubLObject inference_bindings) {
     {
       SubLObject abnormalP = NIL;
@@ -134,7 +153,7 @@ just returns a nice, simple boolean. */
   }
 
   /** Reject forward inference if the given bindings are abnormal wrt RULE. */
-  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 5758) 
+  @SubL(source = "cycl/inference/harness/abnormal.lisp", position = 5758)
   public static final SubLObject forward_abnormality_check(SubLObject propagation_mt, SubLObject rule, SubLObject trigger_bindings, SubLObject inference_bindings) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -225,14 +244,17 @@ just returns a nice, simple boolean. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_abnormal_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_abnormal_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_abnormal_file();
   }

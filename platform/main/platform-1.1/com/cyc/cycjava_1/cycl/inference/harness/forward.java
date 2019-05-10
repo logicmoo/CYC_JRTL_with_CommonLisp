@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,58 +67,59 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.inference.harness.abnormal;
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.inference.ask_utilities;
-import com.cyc.cycjava_1.cycl.assertion_handles;
-import com.cyc.cycjava_1.cycl.assertion_utilities;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.auxiliary_indexing;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.abnormal;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.inference.ask_utilities;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.assertion_utilities;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.auxiliary_indexing;
 import com.cyc.cycjava_1.cycl.backward;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.cardinality_estimates;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_grammar;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.czer_main;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.cardinality_estimates;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_grammar;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.czer_main;
+//dm
 import com.cyc.cycjava_1.cycl.deductions_high;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.enumeration_types;
-import com.cyc.cycjava_1.cycl.fort_types_interface;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.inference.modules.forward_modules;
-import com.cyc.cycjava_1.cycl.function_terms;
-import com.cyc.cycjava_1.cycl.genl_mts;
-import com.cyc.cycjava_1.cycl.hl_storage_modules;
-import com.cyc.cycjava_1.cycl.hl_supports;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.enumeration_types;
+//dm import com.cyc.cycjava_1.cycl.fort_types_interface;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.forward_modules;
+//dm import com.cyc.cycjava_1.cycl.function_terms;
+//dm import com.cyc.cycjava_1.cycl.genl_mts;
+//dm import com.cyc.cycjava_1.cycl.hl_storage_modules;
+//dm import com.cyc.cycjava_1.cycl.hl_supports;
 import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
-import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_trivial;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_control_vars;
-import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_kernel;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_trivial;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_transformation;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_control_vars;
+//dm import com.cyc.cycjava_1.cycl.kb_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
 import com.cyc.cycjava_1.cycl.queues;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.tms;
-import com.cyc.cycjava_1.cycl.unification_utilities;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.tms;
+//dm import com.cyc.cycjava_1.cycl.unification_utilities;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.variables;
 
 public  final class forward extends SubLTranslatedFile {
 
@@ -113,27 +133,27 @@ public  final class forward extends SubLTranslatedFile {
 
   /** Whether forward inference requires that a computed placement mt for
    a forward deduction be the mt of one of its supports. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 598) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 598)
   public static SubLSymbol $require_cached_gaf_mt_from_supports$ = null;
 
   /** A function-spec-p to call on each browsable forward inference.
 It will be passed an inference-p as its arg1 (the forward inference object)
 and a rule-assertion? as its arg2 (the forward rule being used). */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 863) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 863)
   public static SubLSymbol $forward_inference_browsing_callback$ = null;
 
   /** Optionally, store more info about each forward inference by passing it to the callback.  Additions are stored in a plist and are: target-asent target-truth trigger-bindings trigger-supports forward-results.  @see forward-propagate-dnf. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1137) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1137)
   public static SubLSymbol $forward_inference_browsing_callback_more_infoP$ = null;
 
   /** Variable for debugging */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1456) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1456)
   private static SubLSymbol $block_forward_inferencesP$ = null;
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1537) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1537)
   public static SubLSymbol $tracing_forward_inference$ = null;
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1585) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1585)
   public static final SubLObject current_forward_inference_environment() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -141,35 +161,35 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1779) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1779)
   public static final SubLObject get_forward_inference_environment() {
     return new_forward_inference_environment();
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1985) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 1985)
   public static final SubLObject clear_forward_inference_environment(SubLObject environment) {
     return queues.clear_queue(environment);
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 2087) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 2087)
   public static final SubLObject new_forward_inference_environment() {
     return queues.create_queue();
   }
 
   /** Initialize global forward inference environment. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 2179) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 2179)
   public static final SubLObject initialize_forward_inference_environment() {
     kb_control_vars.$forward_inference_environment$.setDynamicValue(get_forward_inference_environment());
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 2430) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 2430)
   private static SubLSymbol $forward_inference_gaf$ = null;
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 2612) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 2612)
   private static SubLSymbol $forward_inference_rule$ = null;
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 2999) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 2999)
   public static final SubLObject current_forward_inference_rule() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -178,17 +198,17 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
   }
 
   /** Problem store properties assumed by forward inference. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 3213) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 3213)
   private static SubLSymbol $forward_problem_store_properties$ = null;
 
   /** @return problem-store-p ; a new problem-store suitable for forward inference. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 3794) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 3794)
   public static final SubLObject new_forward_problem_store() {
     inference_metrics.increment_forward_problem_store_historical_count();
     return inference_datastructures_problem_store.new_problem_store($forward_problem_store_properties$.getGlobalValue());
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 4039) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 4039)
   public static final SubLObject destroy_forward_problem_store(SubLObject store) {
     inference_metrics.update_forward_problem_historical_count(store);
     inference_metrics.update_maximum_forward_problem_store_historical_problem_count(store);
@@ -196,10 +216,10 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
   }
 
   /** temp control variable */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 4255) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 4255)
   private static SubLSymbol $forward_inference_shares_same_problem_storeP$ = null;
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 4394) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 4394)
   public static final SubLObject forward_inference_shares_same_problem_storeP() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -207,7 +227,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 4515) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 4515)
   public static final SubLObject get_forward_problem_store() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -225,7 +245,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
   }
 
   /** Clear and destroy the current forward problem store (if any) */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 4866) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 4866)
   public static final SubLObject clear_current_forward_problem_store() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -250,12 +270,12 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 5223) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 5223)
   public static final SubLObject clear_current_forward_inference_environment() {
     return clear_forward_inference_environment(current_forward_inference_environment());
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 5436) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 5436)
   public static final SubLObject queue_forward_assertion(SubLObject assertion) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -273,7 +293,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 5762) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 5762)
   public static final SubLObject remqueue_forward_assertion(SubLObject assertion) {
     checkType(assertion, $sym6$ASSERTION_P);
     {
@@ -285,11 +305,11 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 5989) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 5989)
   private static SubLSymbol $forward_inference_recursion_depth$ = null;
 
   /** Exhaustively complete all pending forward inference */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 6051) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 6051)
   public static final SubLObject perform_forward_inference() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -345,10 +365,10 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
   }
 
   /** The queue of new assertibles (hl-assertible-p) computed during one forward theory revision cycle. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 7171) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 7171)
   private static SubLSymbol $forward_inference_assertibles_queue$ = null;
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 7444) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 7444)
   public static final SubLObject forward_inference_assertibles_queue() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -356,7 +376,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 7547) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 7547)
   public static final SubLObject note_new_forward_assertible(SubLObject hl_assertible) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -366,7 +386,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
   }
 
   /** @note When *current-forward-problem-store* is NIL, this function will set it as a side-effect (to support forward problem store reuse.)  This can be very bad if it's not dynamically bound as a global forward problem store will exist, quickly become stale, and cause incorrectness.  Be safe and wrap rogue calls to forward-propagate-assertion with the with-normal-forward-inference macro (or at least with-clean-forward-problem-store-environment if you're tweaking forward inference behavior.) */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 7731) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 7731)
   public static final SubLObject forward_propagate_assertion(SubLObject assertion, SubLObject propagation_mt) {
     if ((propagation_mt == UNPROVIDED)) {
       propagation_mt = $const9$InferencePSC;
@@ -548,7 +568,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 10584) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 10584)
   public static final SubLObject forward_propagate_rule(SubLObject rule, SubLObject propagation_mt) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -569,7 +589,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 10994) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 10994)
   public static final SubLObject forward_propagate_gaf(SubLObject source_gaf_assertion, SubLObject propagation_mt) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -604,7 +624,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 11684) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 11684)
   public static final SubLObject forward_propagate_gaf_expansions(SubLObject source_asent, SubLObject source_sense, SubLObject propagation_mt, SubLObject source_gaf_assertion) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -658,7 +678,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 12490) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 12490)
   public static final SubLObject make_forward_trigger_supports(SubLObject source_gaf_assertion, SubLObject additional_supports) {
     {
       SubLObject trigger_supports = conses_high.copy_list(additional_supports);
@@ -670,10 +690,10 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
   }
 
   /** Should we bother to type-filter a prospective forward DNF. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 12755) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 12755)
   public static SubLSymbol $type_filter_forward_dnf$ = null;
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 12872) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 12872)
   public static final SubLObject forward_inference_allowed_rules() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -681,7 +701,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 12983) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 12983)
   public static final SubLObject forward_inference_all_rules_allowedP() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -689,7 +709,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 13095) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 13095)
   public static final SubLObject forward_inference_rule_allowedP(SubLObject rule) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -698,7 +718,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 13264) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 13264)
   public static final SubLObject forward_propagate_gaf_internal(SubLObject trigger_asent, SubLObject examine_asent, SubLObject examine_sense, SubLObject propagation_mt, SubLObject rule, SubLObject trigger_supports) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -751,7 +771,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 14919) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 14919)
   private static SubLSymbol $forward_non_trigger_literal_restricted_examine_asent$ = null;
 
   /** Assume TRIGGER-ASENT is the sentence that triggered this forward propagation.
@@ -763,7 +783,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
    @param TRIGGER-BINDINGS; bindings resulting from unifying the TRIGGER-ASENT with EXAMINE-ASENT from RULE.
    @param RULE; the rule assertion that being triggerd by the TRIGGER-ASENT.
    @param TRIGGER-SUPPORTS; the supports that justify TRIGGER-ASENT. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 15010) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 15010)
   public static final SubLObject handle_forward_propagation_from_gaf(SubLObject examine_asent, SubLObject remainder_neg_lits, SubLObject remainder_pos_lits, SubLObject pragmatic_dnf, SubLObject propagation_mt, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -786,7 +806,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 18292) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 18292)
   public static final SubLObject handle_forward_propagation(SubLObject rule_remainder_cnf, SubLObject pragmatic_dnf, SubLObject propagation_mt, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -825,7 +845,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 19902) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 19902)
   public static final SubLObject handle_one_forward_propagation(SubLObject query_dnf, SubLObject pragmatic_dnf, SubLObject propagation_mt, SubLObject target_asent, SubLObject target_truth, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports) {
     {
       SubLObject catch_var = NIL;
@@ -849,7 +869,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
   }
 
   /** Removes #$forwardNonTriggerLiteral pos-lits from PRAGMATIC-DNF. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 20904) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 20904)
   public static final SubLObject filter_forward_pragmatic_dnf(SubLObject pragmatic_dnf) {
     {
       SubLObject pos_lits = clauses.pos_lits(pragmatic_dnf);
@@ -864,7 +884,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 21316) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 21316)
   public static final SubLObject forward_propagate_dnf(SubLObject query_dnf, SubLObject pragmatic_dnf, SubLObject propagation_mt, SubLObject target_asent, SubLObject target_truth, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -899,7 +919,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 22638) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 22638)
   public static final SubLObject new_forward_query_from_dnf(SubLObject query_dnf, SubLObject pragmatic_dnf, SubLObject propagation_mt, SubLObject overriding_query_properties) {
     if ((overriding_query_properties == UNPROVIDED)) {
       overriding_query_properties = NIL;
@@ -929,7 +949,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 24301) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 24301)
   public static final SubLObject forward_inference_query_properties(SubLObject pragmatic_dnf, SubLObject overriding_query_properties) {
     if ((overriding_query_properties == UNPROVIDED)) {
       overriding_query_properties = NIL;
@@ -960,7 +980,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 26188) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 26188)
   public static final SubLObject add_forward_propagation_result(SubLObject target_asent, SubLObject target_truth, SubLObject propagation_mt, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports, SubLObject forward_result) {
     {
       SubLObject datum = forward_result;
@@ -992,7 +1012,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 27324) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 27324)
   public static final SubLObject add_empty_forward_propagation_result(SubLObject target_asent, SubLObject target_truth, SubLObject propagation_mt, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports) {
     return add_forward_propagation_result(target_asent, target_truth, propagation_mt, trigger_bindings, rule, trigger_supports, $list55);
   }
@@ -1000,7 +1020,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
   /** Combine RULE, TRIGGER-SUPPORTS and INFERENCE-SUPPORTS (if any)
    into a single list of support-p that represents one complete justification for
    a new forward conclusion. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 27596) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 27596)
   public static final SubLObject new_forward_concluded_supports(SubLObject rule, SubLObject trigger_supports, SubLObject inference_supports) {
     if ((inference_supports == UNPROVIDED)) {
       inference_supports = NIL;
@@ -1008,7 +1028,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     return reader.bq_cons(rule, ConsesLow.append(((NIL != trigger_supports) ? ((SubLObject) conses_high.copy_list(trigger_supports)) : NIL), ((NIL != inference_supports) ? ((SubLObject) conses_high.copy_list(inference_supports)) : NIL), NIL));
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 28029) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 28029)
   public static final SubLObject add_forward_deductions_from_supports(SubLObject propagation_mt, SubLObject concluded_asent, SubLObject concluded_truth, SubLObject concluded_supports) {
     if ((NIL != kb_accessors.decontextualized_literalP(concluded_asent))) {
       {
@@ -1065,7 +1085,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 30047) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 30047)
   public static final SubLObject handle_forward_deduction_in_mt(SubLObject asent, SubLObject truth, SubLObject mt, SubLObject supports) {
     if ((NIL == ((NIL != abnormal.abnormality_except_support_enabledP()) ? ((SubLObject) inference_worker_transformation.supports_contain_excepted_assertion_in_mtP(supports, mt)) : NIL))) {
       {
@@ -1090,10 +1110,10 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
   }
 
   /** When non-NIL, the deductions that result from forward inference are assumed to be WFF. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 30537) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 30537)
   public static SubLSymbol $assume_forward_deduction_is_wfP$ = null;
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 30711) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 30711)
   public static final SubLObject handle_forward_deduction_in_mt_as_assertible(SubLObject asent, SubLObject truth, SubLObject mt, SubLObject supports) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1167,7 +1187,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 32061) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 32061)
   public static final SubLObject handle_forward_deduction_in_mt_as_assertible_int(SubLObject cnf, SubLObject mt, SubLObject supports, SubLObject variable_map) {
     if ((variable_map == UNPROVIDED)) {
       variable_map = NIL;
@@ -1183,11 +1203,11 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
 
   /** Temporary control variable;  When non-nil, forward rules labelled with #$constraint are treated
    as constraints that must be already true rather than mechanisms to add deductions to the KB. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 32443) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 32443)
   private static SubLSymbol $forward_constraint_inference_enabledP$ = null;
 
   /** Return T iff RULE is a rule assertion labelled as a #$constraint in MT */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 32737) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 32737)
   public static final SubLObject constraint_ruleP(SubLObject rule, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -1197,10 +1217,10 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
   }
 
   /** temporary control parameter; @todo eliminate */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 34411) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 34411)
   private static SubLSymbol $forward_non_trigger_literal_pruning_enabledP$ = null;
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 34726) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 34726)
   public static final SubLObject syntactically_valid_forward_non_trigger_asents(SubLObject dnf) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1233,7 +1253,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 35485) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 35485)
   public static final SubLObject semantically_valid_forward_dnf(SubLObject dnf, SubLObject propagation_mt) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1251,10 +1271,10 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
    threshold are considered to be sufficiently close to being a leaf microtheory
    as to warrant eager forward inference mt-pruning analysis.
    A negative value therefore disables this feature. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 36190) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 36190)
   private static SubLSymbol $forward_leafy_mt_threshold$ = null;
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 36863) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 36863)
   public static final SubLObject forward_propagation_supports_doomedP(SubLObject rule, SubLObject trigger_supports) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1280,7 +1300,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 38676) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 38676)
   public static final SubLObject compute_all_mt_and_support_combinations(SubLObject supports) {
     if ((NIL != some_support_combinations_extensionally_possible(supports))) {
       {
@@ -1301,7 +1321,7 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 39443) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 39443)
   public static final SubLObject compute_decontextualized_support_combinations(SubLObject supports) {
     if ((NIL != some_support_combinations_theoretically_possible(supports))) {
       {
@@ -1319,18 +1339,18 @@ and a rule-assertion? as its arg2 (the forward rule being used). */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 39998) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 39998)
   public static SubLSymbol $verify_some_support_combinations_possible$ = null;
 
   /** We don't care whether there exists an mt that can see all the SUPPORTS,
 but could there possibly exist one?  This should return t most of the time,
 unless two of the supports are in negationMts of each other or something. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 40060) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 40060)
   public static final SubLObject some_support_combinations_theoretically_possible(SubLObject supports) {
     return T;
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 40445) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 40445)
   public static final SubLObject some_support_combinations_extensionally_possible(SubLObject supports) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1349,7 +1369,7 @@ unless two of the supports are in negationMts of each other or something. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 40786) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 40786)
   public static final SubLObject all_forward_support_mt_combinations(SubLObject supports) {
     if ((NIL == supports)) {
       return list(NIL);
@@ -1378,7 +1398,7 @@ unless two of the supports are in negationMts of each other or something. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 41180) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 41180)
   public static final SubLObject forward_support_mt_combinations(SubLObject support) {
     if ((NIL != assertion_handles.assertion_p(support))) {
       return list(support);
@@ -1388,7 +1408,7 @@ unless two of the supports are in negationMts of each other or something. */
   }
 
   /** From SUPPORTS, compute the microtheories in which such an argument should be placed. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 41342) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 41342)
   public static final SubLObject compute_mts_from_supports(SubLObject supports, SubLObject require_from_listP) {
     if ((require_from_listP == UNPROVIDED)) {
       require_from_listP = $require_cached_gaf_mt_from_supports$.getDynamicValue();
@@ -1429,7 +1449,7 @@ unless two of the supports are in negationMts of each other or something. */
   /** Separate SUPPORTS into two lists, which are returned as multiple values:
    @return 0 ; supports where we can safely assume the support is WFF.
    @return 1 ; supports where can must compute the mts where the support is WFF. */
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 42422) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 42422)
   public static final SubLObject separate_supports_for_mt_placement(SubLObject supports) {
     {
       SubLObject assume_wff_supports = NIL;
@@ -1455,7 +1475,7 @@ unless two of the supports are in negationMts of each other or something. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/forward.lisp", position = 43287) 
+  @SubL(source = "cycl/inference/harness/forward.lisp", position = 43287)
   public static final SubLObject forward_mt_placements_from_support_mts(SubLObject mts, SubLObject require_from_listP) {
     if ((require_from_listP == UNPROVIDED)) {
       require_from_listP = NIL;
@@ -1656,14 +1676,17 @@ unless two of the supports are in negationMts of each other or something. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_forward_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_forward_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_forward_file();
   }

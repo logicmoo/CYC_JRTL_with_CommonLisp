@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.inference.harness;
+package com.cyc.cycjava_1.cycl.inference.harness;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,65 +67,65 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.inference.harness.abnormal;
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.arguments;
-import com.cyc.cycjava_1.cycl.assertion_handles;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.abnormal;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.arguments;
+//dm import com.cyc.cycjava_1.cycl.assertion_handles;
 import com.cyc.cycjava_1.cycl.assertion_utilities;
-import com.cyc.cycjava_1.cycl.assertions_high;
-import com.cyc.cycjava_1.cycl.backward;
-import com.cyc.cycjava_1.cycl.backward_utilities;
-import com.cyc.cycjava_1.cycl.bindings;
-import com.cyc.cycjava_1.cycl.clause_utilities;
-import com.cyc.cycjava_1.cycl.clauses;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cycl_grammar;
-import com.cyc.cycjava_1.cycl.cycl_utilities;
-import com.cyc.cycjava_1.cycl.cycl_variables;
-import com.cyc.cycjava_1.cycl.czer_utilities;
-import com.cyc.cycjava_1.cycl.el_utilities;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.inference.harness.forward;
-import com.cyc.cycjava_1.cycl.gt_methods;
+//dm import com.cyc.cycjava_1.cycl.assertions_high;
+//dm import com.cyc.cycjava_1.cycl.backward;
+//dm import com.cyc.cycjava_1.cycl.backward_utilities;
+//dm import com.cyc.cycjava_1.cycl.bindings;
+//dm import com.cyc.cycjava_1.cycl.clause_utilities;
+//dm import com.cyc.cycjava_1.cycl.clauses;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.cycl_grammar;
+//dm import com.cyc.cycjava_1.cycl.cycl_utilities;
+//dm import com.cyc.cycjava_1.cycl.cycl_variables;
+//dm import com.cyc.cycjava_1.cycl.czer_utilities;
+//dm import com.cyc.cycjava_1.cycl.el_utilities;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.forward;
+//dm import com.cyc.cycjava_1.cycl.gt_methods;
 import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_abduction_utilities;
-import com.cyc.cycjava_1.cycl.inference.inference_completeness_utilities;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_czer;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_proof;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
-import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_residual_transformation;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_accessors;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.inference.leviathan;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.inference.modules.transformation_modules;
-import com.cyc.cycjava_1.cycl.unification;
-import com.cyc.cycjava_1.cycl.utilities_macros;
-import com.cyc.cycjava_1.cycl.variables;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_abduction_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_completeness_utilities;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_czer;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_enumerated_types;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_link;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_query;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_proof;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_strategy;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_tactic;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
+//dm import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_residual_transformation;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_accessors;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.inference.leviathan;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.inference.modules.transformation_modules;
+//dm import com.cyc.cycjava_1.cycl.unification;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.variables;
 
 public  final class inference_worker_transformation extends SubLTranslatedFile {
 
@@ -119,14 +138,23 @@ public  final class inference_worker_transformation extends SubLTranslatedFile {
   //// Definitions
 
   public static final class $transformation_link_data_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $hl_module; }
+    @Override
     public SubLObject getField3() { return $bindings; }
+    @Override
     public SubLObject getField4() { return $supports; }
+    @Override
     public SubLObject getField5() { return $non_explanatory_subquery; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $hl_module = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $bindings = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $supports = value; }
+    @Override
     public SubLObject setField5(SubLObject value) { return $non_explanatory_subquery = value; }
     public SubLObject $hl_module = NIL;
     public SubLObject $bindings = NIL;
@@ -136,10 +164,10 @@ public  final class inference_worker_transformation extends SubLTranslatedFile {
     Structures.makeStructDeclNative($transformation_link_data_native.class, $sym0$TRANSFORMATION_LINK_DATA, $sym1$TRANSFORMATION_LINK_DATA_P, $list2, $list3, new String[] {"$hl_module", "$bindings", "$supports", "$non_explanatory_subquery"}, $list4, $list5, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232)
   public static SubLSymbol $dtp_transformation_link_data$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232)
   public static final SubLObject transformation_link_data_print_function_trampoline(SubLObject object, SubLObject stream) {
     compatibility.default_struct_print_function(object, stream, ZERO_INTEGER);
     return NIL;
@@ -147,53 +175,54 @@ public  final class inference_worker_transformation extends SubLTranslatedFile {
 
   public static final class $transformation_link_data_p$UnaryFunction extends UnaryFunction {
     public $transformation_link_data_p$UnaryFunction() { super(extractFunctionNamed("TRANSFORMATION-LINK-DATA-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 36436"); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232)
   public static final SubLObject trans_link_data_hl_module(SubLObject object) {
     checkType(object, $sym1$TRANSFORMATION_LINK_DATA_P);
     return object.getField2();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232)
   public static final SubLObject trans_link_data_bindings(SubLObject object) {
     checkType(object, $sym1$TRANSFORMATION_LINK_DATA_P);
     return object.getField3();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232)
   public static final SubLObject trans_link_data_supports(SubLObject object) {
     checkType(object, $sym1$TRANSFORMATION_LINK_DATA_P);
     return object.getField4();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232)
   public static final SubLObject _csetf_trans_link_data_hl_module(SubLObject object, SubLObject value) {
     checkType(object, $sym1$TRANSFORMATION_LINK_DATA_P);
     return object.setField2(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232)
   public static final SubLObject _csetf_trans_link_data_bindings(SubLObject object, SubLObject value) {
     checkType(object, $sym1$TRANSFORMATION_LINK_DATA_P);
     return object.setField3(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232)
   public static final SubLObject _csetf_trans_link_data_supports(SubLObject object, SubLObject value) {
     checkType(object, $sym1$TRANSFORMATION_LINK_DATA_P);
     return object.setField4(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232)
   public static final SubLObject _csetf_trans_link_data_non_explanatory_subquery(SubLObject object, SubLObject value) {
     checkType(object, $sym1$TRANSFORMATION_LINK_DATA_P);
     return object.setField5(value);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 1232)
   public static final SubLObject make_transformation_link_data(SubLObject arglist) {
     if ((arglist == UNPROVIDED)) {
       arglist = NIL;
@@ -224,7 +253,7 @@ public  final class inference_worker_transformation extends SubLTranslatedFile {
   }
 
   /** @return transformation-link-p */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 2410) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 2410)
   public static final SubLObject new_transformation_link(SubLObject supported_problem, SubLObject supporting_mapped_problem, SubLObject hl_module, SubLObject transformation_bindings, SubLObject rule_assertion, SubLObject more_supports, SubLObject non_explanatory_subquery) {
     checkType(supported_problem, $sym21$PROBLEM_P);
     if ((NIL != supporting_mapped_problem)) {
@@ -245,7 +274,7 @@ public  final class inference_worker_transformation extends SubLTranslatedFile {
   /** Returns a new :transformation link
 with its data properties set to HL-MODULE, BINDINGS, and SUPPORTS,
 with a supported problem of PROBLEM, and no supporting problems yet. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 3222) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 3222)
   public static final SubLObject new_transformation_link_int(SubLObject problem, SubLObject hl_module, SubLObject transformation_bindings, SubLObject supports, SubLObject non_explanatory_subquery) {
     {
       SubLObject transformation_link = inference_datastructures_problem_link.new_problem_link($kw23$TRANSFORMATION, problem);
@@ -262,7 +291,7 @@ with a supported problem of PROBLEM, and no supporting problems yet. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 4128) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 4128)
   public static final SubLObject new_transformation_link_data(SubLObject transformation_link) {
     {
       SubLObject data = make_transformation_link_data(UNPROVIDED);
@@ -271,7 +300,7 @@ with a supported problem of PROBLEM, and no supporting problems yet. */
     return transformation_link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 4845) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 4845)
   public static final SubLObject transformation_link_hl_module(SubLObject transformation_link) {
     checkType(transformation_link, $sym25$TRANSFORMATION_LINK_P);
     {
@@ -283,7 +312,7 @@ with a supported problem of PROBLEM, and no supporting problems yet. */
   /** The first elements of these bindings are in the space of TRANSFORMATION-LINK's
 supported problem, and their second elements are in the space of
 TRANSFORMATION-LINK's unique supporting problem. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 5087) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 5087)
   public static final SubLObject transformation_link_bindings(SubLObject transformation_link) {
     checkType(transformation_link, $sym25$TRANSFORMATION_LINK_P);
     {
@@ -292,7 +321,7 @@ TRANSFORMATION-LINK's unique supporting problem. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 5512) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 5512)
   public static final SubLObject transformation_link_supports(SubLObject transformation_link) {
     checkType(transformation_link, $sym25$TRANSFORMATION_LINK_P);
     {
@@ -301,12 +330,12 @@ TRANSFORMATION-LINK's unique supporting problem. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 5740) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 5740)
   public static final SubLObject transformation_link_rule_assertion(SubLObject transformation_link) {
     return transformation_link_supports(transformation_link).first();
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 6286) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 6286)
   public static final SubLObject set_transformation_link_hl_module(SubLObject transformation_link, SubLObject hl_module) {
     checkType(hl_module, $sym26$HL_MODULE_P);
     {
@@ -316,7 +345,7 @@ TRANSFORMATION-LINK's unique supporting problem. */
     return transformation_link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 6618) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 6618)
   public static final SubLObject set_transformation_link_bindings(SubLObject transformation_link, SubLObject v_bindings) {
     checkType(v_bindings, $sym27$BINDING_LIST_P);
     {
@@ -326,7 +355,7 @@ TRANSFORMATION-LINK's unique supporting problem. */
     return transformation_link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 6936) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 6936)
   public static final SubLObject set_transformation_link_supports(SubLObject transformation_link, SubLObject supports) {
     checkType(supports, $sym28$HL_JUSTIFICATION_P);
     {
@@ -336,7 +365,7 @@ TRANSFORMATION-LINK's unique supporting problem. */
     return transformation_link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 7258) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 7258)
   public static final SubLObject set_transformation_link_non_explanatory_subquery(SubLObject transformation_link, SubLObject subquery) {
     checkType(subquery, $sym29$NON_EXPLANATORY_SUBQUERY_SPEC_P);
     {
@@ -346,7 +375,7 @@ TRANSFORMATION-LINK's unique supporting problem. */
     return transformation_link;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 7625) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 7625)
   public static final SubLObject transformation_link_tactic(SubLObject transformation_link) {
     checkType(transformation_link, $sym25$TRANSFORMATION_LINK_P);
     {
@@ -371,13 +400,13 @@ TRANSFORMATION-LINK's unique supporting problem. */
   }
 
   /** @return nil or mapped-problem-p */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 9127) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 9127)
   public static final SubLObject transformation_link_supporting_mapped_problem(SubLObject transformation_link) {
     return inference_datastructures_problem_link.problem_link_first_supporting_mapped_problem(transformation_link);
   }
 
   /** @return nil or problem-p */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 9326) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 9326)
   public static final SubLObject transformation_link_supporting_problem(SubLObject transformation_link) {
     {
       SubLObject supporting_mapped_problem = transformation_link_supporting_mapped_problem(transformation_link);
@@ -390,7 +419,7 @@ TRANSFORMATION-LINK's unique supporting problem. */
   }
 
   /** @return variable-map-p */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 9650) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 9650)
   public static final SubLObject transformation_link_supporting_variable_map(SubLObject transformation_link) {
     {
       SubLObject supporting_mapped_problem = transformation_link_supporting_mapped_problem(transformation_link);
@@ -402,7 +431,7 @@ TRANSFORMATION-LINK's unique supporting problem. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 9982) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 9982)
   public static final SubLObject transformation_link_transformation_mt(SubLObject transformation_link) {
     {
       SubLObject problem = inference_datastructures_problem_link.problem_link_supported_problem(transformation_link);
@@ -410,17 +439,17 @@ TRANSFORMATION-LINK's unique supporting problem. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 12855) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 12855)
   public static final SubLObject meta_transformation_tactic_p(SubLObject object) {
     return makeBoolean(((NIL != inference_datastructures_tactic.tactic_p(object))
            && (NIL != inference_modules.meta_transformation_module_p(inference_datastructures_tactic.tactic_hl_module(object)))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 13048) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 13048)
   private static SubLSymbol $determine_new_transformation_tactics_module$ = null;
 
   /** First we add a tactic which, if executed, determines the rest of the transformation tactics for PROBLEM. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 13200) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 13200)
   public static final SubLObject add_tactic_to_determine_new_literal_transformation_tactics(SubLObject problem, SubLObject asent, SubLObject sense, SubLObject mt) {
     if ((NIL == inference_backchain_forbidden_asentP(asent, mt))) {
       new_meta_transformation_tactic(problem, asent, sense);
@@ -429,7 +458,7 @@ TRANSFORMATION-LINK's unique supporting problem. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 13554) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 13554)
   public static final SubLObject inference_backchain_forbidden_asentP(SubLObject asent, SubLObject mt) {
     {
       SubLObject predicate = cycl_utilities.atomic_sentence_predicate(asent);
@@ -444,7 +473,7 @@ TRANSFORMATION-LINK's unique supporting problem. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 13861) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 13861)
   public static final SubLObject new_meta_transformation_tactic(SubLObject problem, SubLObject asent, SubLObject sense) {
     {
       SubLObject tactic = inference_datastructures_tactic.new_tactic(problem, $determine_new_transformation_tactics_module$.getGlobalValue(), UNPROVIDED);
@@ -539,13 +568,13 @@ TRANSFORMATION-LINK's unique supporting problem. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 14507) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 14507)
   public static final SubLObject transformation_link_p(SubLObject object) {
     return makeBoolean(((NIL != inference_datastructures_problem_link.problem_link_p(object))
            && ($kw23$TRANSFORMATION == inference_datastructures_problem_link.problem_link_type(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 14673) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 14673)
   public static final SubLObject transformation_tactic_p(SubLObject tactic) {
     return makeBoolean(((NIL != inference_datastructures_tactic.tactic_p(tactic))
            && ($kw23$TRANSFORMATION == inference_datastructures_tactic.tactic_type(tactic))));
@@ -553,19 +582,20 @@ TRANSFORMATION-LINK's unique supporting problem. */
 
   public static final class $transformation_tactic_p$UnaryFunction extends UnaryFunction {
     public $transformation_tactic_p$UnaryFunction() { super(extractFunctionNamed("TRANSFORMATION-TACTIC-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return transformation_tactic_p(arg1); }
   }
 
   /** @return rule-assertion?; the rule assertion associated with TACTIC
 temporarily sometimes returns NIL while transformation modules are in transition. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 14804) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 14804)
   public static final SubLObject transformation_tactic_rule(SubLObject transformation_tactic) {
     return inference_datastructures_tactic.tactic_data(transformation_tactic);
   }
 
   /** @return booleanp; whether OBJECT is a transformation tactic that generates other
 transformation tactics. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 15223) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 15223)
   public static final SubLObject transformation_generator_tactic_p(SubLObject object) {
     if ((NIL != transformation_tactic_p(object))) {
       return Types.sublisp_null(transformation_tactic_rule(object));
@@ -574,7 +604,7 @@ transformation tactics. */
   }
 
   /** Return the next rule that TRANSFORMATION-GENERATOR-TACTIC would generate, if any. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 15488) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 15488)
   public static final SubLObject transformation_generator_tactic_lookahead_rule(SubLObject transformation_generator_tactic) {
     checkType(transformation_generator_tactic, $sym44$TRANSFORMATION_GENERATOR_TACTIC_P);
     {
@@ -603,7 +633,7 @@ transformation tactics. */
   }
 
   /** Return the rule to use for lookahead heuristic analysis of TRANSFORMATION-TACTIC. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 16088) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 16088)
   public static final SubLObject transformation_tactic_lookahead_rule(SubLObject transformation_tactic) {
     {
       SubLObject rule = transformation_tactic_rule(transformation_tactic);
@@ -614,32 +644,32 @@ transformation tactics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 16445) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 16445)
   public static final SubLObject transformation_proof_p(SubLObject object) {
     return makeBoolean(((NIL != inference_datastructures_proof.proof_p(object))
            && (NIL != transformation_link_p(inference_datastructures_proof.proof_link(object)))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 16576) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 16576)
   public static final SubLObject transformation_proof_rule_assertion(SubLObject proof) {
     checkType(proof, $sym45$TRANSFORMATION_PROOF_P);
     return inference_datastructures_proof.proof_supports(proof).first();
   }
 
   /** @return nil or proof-p */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 16868) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 16868)
   public static final SubLObject transformation_proof_subproof(SubLObject proof) {
     checkType(proof, $sym45$TRANSFORMATION_PROOF_P);
     return inference_datastructures_proof.proof_first_subproof(proof);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 17034) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 17034)
   public static final SubLObject generalized_transformation_link_p(SubLObject object) {
     return makeBoolean(((NIL != transformation_link_p(object))
           || (NIL != inference_worker_residual_transformation.residual_transformation_link_p(object))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 17215) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 17215)
   public static final SubLObject generalized_transformation_link_rule_assertion(SubLObject link) {
     if ((NIL != transformation_link_p(link))) {
       return transformation_link_rule_assertion(link);
@@ -651,18 +681,18 @@ transformation tactics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 17573) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 17573)
   public static final SubLObject generalized_transformation_link_unaffected_by_exceptionsP(SubLObject link) {
     return makeBoolean((NIL == abnormal.rule_has_exceptionsP(generalized_transformation_link_rule_assertion(link))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 17750) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 17750)
   public static final SubLObject generalized_transformation_proof_p(SubLObject object) {
     return makeBoolean(((NIL != inference_datastructures_proof.proof_p(object))
            && (NIL != generalized_transformation_link_p(inference_datastructures_proof.proof_link(object)))));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 17906) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 17906)
   public static final SubLObject generalized_transformation_proof_rule_assertion(SubLObject proof) {
     if ((NIL != transformation_proof_p(proof))) {
       return transformation_proof_rule_assertion(proof);
@@ -674,7 +704,7 @@ transformation tactics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 19335) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 19335)
   public static final SubLObject determine_rules_for_literal_transformation_tactics(SubLObject problem, SubLObject asent, SubLObject hl_module) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -738,17 +768,17 @@ transformation tactics. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 21109) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 21109)
   public static final SubLObject inference_excepted_assertionP(SubLObject assertion) {
     return memoized_inference_excepted_assertionP(assertion, mt_relevance_macros.current_mt_relevance_mt());
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 21254) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 21254)
   public static final SubLObject memoized_inference_excepted_assertionP_internal(SubLObject assertion, SubLObject mt) {
     return assertion_utilities.excepted_assertion_in_mtP(assertion, mt_relevance_macros.conservative_constraint_mt(mt));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 21254) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 21254)
   public static final SubLObject memoized_inference_excepted_assertionP(SubLObject assertion, SubLObject mt) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -796,9 +826,9 @@ transformation tactics. */
     }
   }
 
-  /** Given a problem get its inference if the problem store it is in is private for its inference 
+  /** Given a problem get its inference if the problem store it is in is private for its inference
    Also return whether the problem store is private and the inference is non-continuable. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 21440) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 21440)
   public static final SubLObject problem_inference_and_non_continuable_problem_store_private(SubLObject problem) {
     {
       SubLObject problem_store = inference_datastructures_problem.problem_store(problem);
@@ -816,7 +846,7 @@ transformation tactics. */
   }
 
   /** Returns lists of the form (hl-module productivity), :complete is the assumed completeness */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 22705) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 22705)
   public static final SubLObject determine_literal_transformation_tactic_specs(SubLObject asent, SubLObject sense, SubLObject disabled_modules) {
     return determine_literal_transformation_tactic_specs_int(asent, sense, disabled_modules, $kw53$TACTIC_SPECS);
   }
@@ -824,7 +854,7 @@ transformation tactics. */
   /** @param RETURN-TYPE keywordp; either :tactic-spec or :total-productivity.
 If :tactic-specs, returns lists of the form (hl-module productivity), where :complete is the assumed completeness.
 If :total-productivity, returns a productivity-p which is the sum of all the applicable productivities. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 22997) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 22997)
   public static final SubLObject determine_literal_transformation_tactic_specs_int(SubLObject asent, SubLObject sense, SubLObject disabled_modules, SubLObject return_type) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -912,7 +942,7 @@ If :total-productivity, returns a productivity-p which is the sum of all the app
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 25302) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 25302)
   public static final SubLObject literal_level_transformation_tactic_p(SubLObject tactic) {
     return makeBoolean(((NIL != transformation_tactic_p(tactic))
            && (NIL != inference_worker.literal_level_tactic_p(tactic))));
@@ -920,7 +950,7 @@ If :total-productivity, returns a productivity-p which is the sum of all the app
 
   /** @return nil or transformation-link-p
 Creates a new transformation link iff it would be interesting to do so. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 25452) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 25452)
   public static final SubLObject maybe_new_transformation_link(SubLObject supported_problem, SubLObject supporting_mapped_problem, SubLObject tactic, SubLObject transformation_bindings, SubLObject rule_assertion, SubLObject more_supports, SubLObject non_explanatory_subquery) {
     {
       SubLObject mt = inference_datastructures_problem.single_literal_problem_mt(supported_problem);
@@ -942,7 +972,7 @@ Creates a new transformation link iff it would be interesting to do so. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 26691) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 26691)
   public static final SubLObject recompute_thrown_away_due_to_new_transformation_link(SubLObject problem) {
     {
       SubLObject prob = problem;
@@ -1051,7 +1081,7 @@ Creates a new transformation link iff it would be interesting to do so. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 27084) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 27084)
   public static final SubLObject new_transformation_tactic(SubLObject problem, SubLObject hl_module, SubLObject productivity, SubLObject rule) {
     {
       SubLObject tactic = inference_datastructures_tactic.new_tactic(problem, hl_module, rule);
@@ -1146,12 +1176,12 @@ Creates a new transformation link iff it would be interesting to do so. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 27482) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 27482)
   public static final SubLObject compute_strategic_properties_of_transformation_tactic(SubLObject tactic, SubLObject strategy) {
     return tactic;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 28207) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 28207)
   public static final SubLObject execute_literal_level_transformation_tactic(SubLObject tactic, SubLObject mt, SubLObject asent, SubLObject sense) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1222,7 +1252,7 @@ Creates a new transformation link iff it would be interesting to do so. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 29186) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 29186)
   public static final SubLObject maybe_make_transformation_tactic_progress_iterator(SubLObject tactic, SubLObject asent, SubLObject sense) {
     if ((NIL != meta_transformation_tactic_p(tactic))) {
       return maybe_make_meta_transformation_progress_iterator(tactic, asent, sense);
@@ -1233,7 +1263,7 @@ Creates a new transformation link iff it would be interesting to do so. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 29621) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 29621)
   public static final SubLObject maybe_make_meta_transformation_progress_iterator(SubLObject tactic, SubLObject asent, SubLObject sense) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1276,10 +1306,10 @@ Creates a new transformation link iff it would be interesting to do so. */
   }
 
   /** The number of expected transformation tactic results at which we generate them iteratively. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 30520) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 30520)
   private static SubLSymbol $transformation_tactic_iteration_threshold$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 30831) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 30831)
   public static final SubLObject maybe_make_transformation_rule_select_progress_iterator(SubLObject tactic, SubLObject asent) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1302,7 +1332,7 @@ Creates a new transformation link iff it would be interesting to do so. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 32031) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 32031)
   public static final SubLObject handle_one_transformation_tactic_rule_select_result(SubLObject transformation_tactic, SubLObject rule) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1324,7 +1354,7 @@ Creates a new transformation link iff it would be interesting to do so. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 32731) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 32731)
   public static final SubLObject maybe_make_transformation_expand_progress_iterator(SubLObject tactic, SubLObject asent) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1353,7 +1383,7 @@ Creates a new transformation link iff it would be interesting to do so. */
 
   /** @param UNIFICATION-BINDINGS; current tactic's problem vars -> something
    @param UNIFICATION-DEPENDENT-DNF the new transformed query */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 33455) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 33455)
   public static final SubLObject handle_transformation_add_node_for_expand_results(SubLObject rule_assertion, SubLObject rule_pivot_asent, SubLObject rule_pivot_sense, SubLObject unification_bindings, SubLObject unification_dependent_dnf, SubLObject more_supports) {
     unification_bindings = bindings.inference_simplify_unification_bindings(unification_bindings);
     unification_bindings = bindings.possibly_optimize_bindings_wrt_equivalence(unification_bindings);
@@ -1394,10 +1424,10 @@ Creates a new transformation link iff it would be interesting to do so. */
 
   /** Whether we allow the possibility of adding type constraints
 during transformation. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 35870) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 35870)
   public static SubLSymbol $inference_transformation_type_checking_enabledP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 36037) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 36037)
   public static final SubLObject rule_assertion_worth_adding_type_constraintsP(SubLObject rule) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1408,7 +1438,7 @@ during transformation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 36315) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 36315)
   public static final SubLObject transformation_additional_dont_care_constraints(SubLObject rule_pivot_asent, SubLObject unification_dependent_dnf, SubLObject rule_assertion, SubLObject unification_bindings) {
     {
       SubLObject source_var_pos_lits = backward_utilities.additional_source_variable_pos_lits(rule_pivot_asent, unification_dependent_dnf, rule_assertion);
@@ -1427,14 +1457,14 @@ during transformation. */
     }
   }
 
-  /** Destructively modify EXISTING-DNF by merging ADDED-DNF into it.  
+  /** Destructively modify EXISTING-DNF by merging ADDED-DNF into it.
    Return the modified EXISTING-DNF. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 36915) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 36915)
   public static final SubLObject nmerge_dnf(SubLObject existing_dnf, SubLObject added_dnf) {
     return clauses.make_dnf(ConsesLow.append(clauses.neg_lits(existing_dnf), clauses.neg_lits(added_dnf)), ConsesLow.append(clauses.pos_lits(existing_dnf), clauses.pos_lits(added_dnf)));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 37434) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 37434)
   public static final SubLObject complete_execution_of_transformation_tactic(SubLObject tactic, SubLObject transformation_bindings, SubLObject rule_assertion, SubLObject more_supports, SubLObject unrestricted_transformation_dependent_dnf, SubLObject unrestricted_transformation_explanatory_dnf) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1461,7 +1491,7 @@ during transformation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 38913) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 38913)
   public static final SubLObject compute_transformation_non_explanatory_subquery(SubLObject unrestricted_transformation_dependent_dnf, SubLObject unrestricted_transformation_explanatory_dnf, SubLObject restricted_transformation_dependent_dnf, SubLObject transformation_bindings, SubLObject supporting_mapped_problem) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1479,7 +1509,7 @@ during transformation. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 39846) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 39846)
   public static final SubLObject potentially_wf_transformation_dependent_query(SubLObject dependent_query, SubLObject abduction_allowedP) {
     {
       SubLObject cdolist_list_var = dependent_query;
@@ -1518,7 +1548,7 @@ during transformation. */
     return T;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 40241) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 40241)
   public static final SubLObject potentially_wf_restricted_transformation_dependent_asent(SubLObject contextualized_asent, SubLObject sense, SubLObject abduction_allowedP) {
     {
       SubLObject datum = contextualized_asent;
@@ -1544,7 +1574,7 @@ during transformation. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 40723) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 40723)
   public static final SubLObject syntactically_valid_asent(SubLObject asent) {
     return cycl_grammar.cycl_atomic_sentence_p(asent);
   }
@@ -1555,7 +1585,7 @@ during transformation. */
 @return 1 whether the returned proof was newly created
 @note see the unit test :heinous-unification-backchain for an example walkthrough of
 the bindings processing of this function. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 40984) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 40984)
   public static final SubLObject new_transformation_proof(SubLObject transformation_link, SubLObject subproof, SubLObject variable_map) {
     checkType(transformation_link, $sym25$TRANSFORMATION_LINK_P);
     if ((NIL != subproof)) {
@@ -1573,7 +1603,7 @@ the bindings processing of this function. */
   /** @param T-LINK-VARIABLE-MAP; TRANSFORMATION-LINK's supporting problem -> TRANSFORMATION-LINK's extended supported problem
    @param TRANSFORMATION-BINDINGS; TRANSFORMATION-LINK's extended supported problem vars -> extended supported problem vars or new contents
    @param SUPPORTING-SUBPROOF-BINDINGS; TRANSFORMATION-LINK's supporting problem vars -> old contents */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 42055) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 42055)
   public static final SubLObject compute_canonical_transformation_proof_bindings(SubLObject t_link_variable_map, SubLObject transformation_bindings, SubLObject supporting_subproof_bindings) {
     {
       SubLObject subproof_bindings = bindings.transfer_variable_map_to_bindings_filtered(t_link_variable_map, supporting_subproof_bindings);
@@ -1584,7 +1614,7 @@ the bindings processing of this function. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 43303) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 43303)
   public static final SubLObject unification_dependent_dnf_to_transformation_dependent_dnf(SubLObject unification_dependent_dnf) {
     return unification.variable_base_inversion(unification_dependent_dnf);
   }
@@ -1594,7 +1624,7 @@ UNIFICATION-BINDINGS has the base variables (0-99) being the variables of the su
 and the non-base vars (100-199) being the variables of the supported problem.
 This swaps the base and non-base variables.
 It also does a little bit of bindings simplification. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 43504) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 43504)
   public static final SubLObject unification_bindings_to_transformation_bindings(SubLObject unification_bindings) {
     {
       SubLObject swapped_unification_bindings = swap_variable_spaces_of_unification_bindings(unification_bindings);
@@ -1621,14 +1651,14 @@ It also does a little bit of bindings simplification. */
   /** Adds or subtracts 100 from all variables in UNIFICATION-BINDINGS.
 This is tied with the assumptions inside the transformation modules about how they
 call transformation-asent-unify. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 44669) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 44669)
   public static final SubLObject swap_variable_spaces_of_unification_bindings(SubLObject unification_bindings) {
     return unification.variable_base_inversion(unification_bindings);
   }
 
   /** @return bindings-p; TRANSFORMATION-LINK's rule assertion vars -> contents
 i.e. the variables in the TRANSFORMATION-LINK's rule assertion that were bound by SUBPROOF */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 44996) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 44996)
   public static final SubLObject transformation_proof_rule_bindings(SubLObject transformation_proof) {
     checkType(transformation_proof, $sym45$TRANSFORMATION_PROOF_P);
     {
@@ -1640,7 +1670,7 @@ i.e. the variables in the TRANSFORMATION-LINK's rule assertion that were bound b
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 45787) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 45787)
   public static final SubLObject compute_transformation_link_rule_bindings(SubLObject transformation_link, SubLObject supporting_subproof_bindings) {
     checkType(transformation_link, $sym25$TRANSFORMATION_LINK_P);
     checkType(supporting_subproof_bindings, $sym75$BINDINGS_P);
@@ -1658,7 +1688,7 @@ i.e. the variables in the TRANSFORMATION-LINK's rule assertion that were bound b
    @param SUBPROOF-BINDINGS;       TRANSFORMATION-LINK's extended supported problem vars -> old contents
 This function recursively reduces all loops and dependencies between TRANSFORMATION-BINDINGS and SUBPROOF-BINDINGS
 until all bindings have fully-bound values. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 48877) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 48877)
   public static final SubLObject unify_transformation_and_subproof_bindings(SubLObject transformation_bindings, SubLObject subproof_bindings) {
     {
       SubLObject combined_bindings = ConsesLow.append(subproof_bindings, transformation_bindings);
@@ -1703,7 +1733,7 @@ the non-base variables, leaving only the bindings whose variables are in the spa
 of the supported problem.  In other words:
 @param EXTENDED-SUPPORTED-PROBLEM-BINDINGS; TRANSFORMATION-LINK's extended supported problem bindings -> content
 @return         SUPPORTED-PROBLEM-BINDINGS; TRANSFORMATION-LINK's supported problem bindings -> content */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 50925) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 50925)
   public static final SubLObject extended_supported_problem_bindings_to_supported_problem_bindings(SubLObject extended_supported_problem_bindings) {
     {
       SubLObject supported_problem_bindings = NIL;
@@ -1721,7 +1751,7 @@ of the supported problem.  In other words:
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 51939) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 51939)
   public static final SubLObject supported_problem_variable_p(SubLObject variable) {
     return unification.base_variable_p(variable);
   }
@@ -1733,7 +1763,7 @@ the base variables, leaving only the bindings whose variables are in the space
 of the rule assertion.  In other words:
 @param EXTENDED-SUPPORTED-PROBLEM-BINDINGS; TRANSFORMATION-LINK's extended supported problem bindings -> content
 @return                      RULE-BINDINGS; TRANSFORMATION-LINK's rule assertion bindings -> content */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 52032) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 52032)
   public static final SubLObject extended_supported_problem_bindings_to_rule_bindings(SubLObject extended_supported_problem_bindings) {
     {
       SubLObject rule_bindings = NIL;
@@ -1751,13 +1781,13 @@ of the rule assertion.  In other words:
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 52979) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 52979)
   public static final SubLObject rule_assertion_variable_p(SubLObject variable) {
     return unification.non_base_variable_p(variable);
   }
 
   /** Return T iff RULE-ASSERTION has some relevant #$pragmaticRequirement in MT */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 53833) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 53833)
   public static final SubLObject rule_assertion_has_some_pragmatic_requirementP(SubLObject rule_assertion, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -1786,10 +1816,10 @@ of the rule assertion.  In other words:
   }
 
   /** Temporary control variable; whether or not #$pragmaticRequirement is enabled for forward inference. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 54475) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 54475)
   private static SubLSymbol $forward_pragmatic_requirement_enabledP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 54648) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 54648)
   public static final SubLObject forward_rule_pragmatic_dnf(SubLObject rule, SubLObject propagation_mt) {
     {
       SubLObject pragmatics_mt = ($const79$InferencePSC.equal(propagation_mt) ? ((SubLObject) assertions_high.assertion_mt(rule)) : propagation_mt);
@@ -1800,7 +1830,7 @@ of the rule assertion.  In other words:
   }
 
   /** Return a DNF clause expressing all the known #$pragmaticRequirements for RULE-ASSERTION in MT */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 55338) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 55338)
   public static final SubLObject rule_assertion_pragmatic_requirements_dnf(SubLObject rule_assertion, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -1876,7 +1906,7 @@ of the rule assertion.  In other words:
   }
 
   /** Merge the pragmatic requirements for RULE-ASSERTION expressed in PRAGMA-ASSERTION into MERGE-DNF and return it. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 55782) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 55782)
   public static final SubLObject merge_pragmatic_requirement(SubLObject rule_assertion, SubLObject pragma_assertion, SubLObject merge_dnf) {
     {
       SubLObject neg_lits = clauses.neg_lits(merge_dnf);
@@ -1915,17 +1945,17 @@ of the rule assertion.  In other words:
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 56656) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 56656)
   private static SubLSymbol $merge_dnf_lambda_var$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 56707) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 56707)
   private static SubLSymbol $rule_dnf_lambda_var$ = null;
 
   /** If LITERAL contains any HL variables that are not mentioned in RULE-DNF
 but _are_ mentioned in MERGE-DNF, returns a new literal which is LITERAL
 with those HL variables substituted with new HL variables which do not occur
 in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 56757) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 56757)
   public static final SubLObject compute_pragmatic_literal_for_merge(SubLObject literal, SubLObject merge_dnf, SubLObject rule_dnf) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1959,7 +1989,7 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 57685) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 57685)
   public static final SubLObject hl_variable_not_mentioned_in_rule_dnf_but_mentioned_in_merge_dnf(SubLObject object) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1971,10 +2001,11 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
 
   public static final class $hl_variable_not_mentioned_in_rule_dnf_but_mentioned_in_merge_dnf$UnaryFunction extends UnaryFunction {
     public $hl_variable_not_mentioned_in_rule_dnf_but_mentioned_in_merge_dnf$UnaryFunction() { super(extractFunctionNamed("HL-VARIABLE-NOT-MENTIONED-IN-RULE-DNF-BUT-MENTIONED-IN-MERGE-DNF")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return hl_variable_not_mentioned_in_rule_dnf_but_mentioned_in_merge_dnf(arg1); }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 57937) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 57937)
   public static final SubLObject bubble_up_proof_to_transformation_link(SubLObject supporting_proof, SubLObject variable_map, SubLObject transformation_link) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1994,12 +2025,12 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 58457) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 58457)
   public static final SubLObject transformation_proof_abnormalP_internal(SubLObject transformation_proof) {
     return transformation_proof_abnormal_intP(transformation_proof);
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 58457) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 58457)
   public static final SubLObject transformation_proof_abnormalP(SubLObject transformation_proof) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2026,7 +2057,7 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 58661) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 58661)
   public static final SubLObject transformation_proof_abnormal_intP(SubLObject transformation_proof) {
     checkType(transformation_proof, $sym45$TRANSFORMATION_PROOF_P);
     {
@@ -2039,12 +2070,12 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
     }
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 59199) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 59199)
   public static final SubLObject proof_depends_on_excepted_assertionP(SubLObject proof) {
     return supports_contain_excepted_assertionP(inference_datastructures_proof.proof_supports(proof));
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 59334) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 59334)
   public static final SubLObject supports_contain_excepted_assertionP(SubLObject supports) {
     {
       SubLObject cdolist_list_var = supports;
@@ -2059,7 +2090,7 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
     return NIL;
   }
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 59594) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 59594)
   public static final SubLObject supports_contain_excepted_assertion_in_mtP(SubLObject supports, SubLObject mt) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2089,10 +2120,10 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
   /** Temporary control variable; when non-nil #$genlRules is used to filter the
    use of overly specific rules in transformation when a more general rule
    is also applicable.  Eventually should stay T. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 62001) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 62001)
   private static SubLSymbol $genl_rules_enabledP$ = null;
 
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 62293) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 62293)
   public static final SubLObject genl_rules_enabledP() {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2100,9 +2131,9 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
     }
   }
 
-  /** Returns the most-general rules (via #$genlRules) among RULES, 
+  /** Returns the most-general rules (via #$genlRules) among RULES,
    which are those rules that have no proper genlRule among RULES. */
-  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 62456) 
+  @SubL(source = "cycl/inference/harness/inference-worker-transformation.lisp", position = 62456)
   public static final SubLObject max_rules(SubLObject rules, SubLObject mt) {
     if ((mt == UNPROVIDED)) {
       mt = NIL;
@@ -2250,7 +2281,7 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
 
   public static final SubLObject init_inference_worker_transformation_file() {
     $dtp_transformation_link_data$ = defconstant("*DTP-TRANSFORMATION-LINK-DATA*", $sym0$TRANSFORMATION_LINK_DATA);
-    $determine_new_transformation_tactics_module$ = deflexical("*DETERMINE-NEW-TRANSFORMATION-TACTICS-MODULE*", ((NIL != Symbols.boundp($sym40$_DETERMINE_NEW_TRANSFORMATION_TACTICS_MODULE_)) ? ((SubLObject) $determine_new_transformation_tactics_module$.getGlobalValue()) : inference_modules.inference_meta_transformation_module($kw41$DETERMINE_NEW_TRANSFORMATION_TACTICS, UNPROVIDED)));
+    $determine_new_transformation_tactics_module$ = deflexical("*DETERMINE-NEW-TRANSFORMATION-TACTICS-MODULE*", maybeDefault( $sym40$_DETERMINE_NEW_TRANSFORMATION_TACTICS_MODULE_, $determine_new_transformation_tactics_module$, ()-> (inference_modules.inference_meta_transformation_module($kw41$DETERMINE_NEW_TRANSFORMATION_TACTICS, UNPROVIDED))));
     $transformation_tactic_iteration_threshold$ = defparameter("*TRANSFORMATION-TACTIC-ITERATION-THRESHOLD*", TWO_INTEGER);
     $inference_transformation_type_checking_enabledP$ = defparameter("*INFERENCE-TRANSFORMATION-TYPE-CHECKING-ENABLED?*", NIL);
     $forward_pragmatic_requirement_enabledP$ = deflexical("*FORWARD-PRAGMATIC-REQUIREMENT-ENABLED?*", T);
@@ -2370,14 +2401,17 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_inference_worker_transformation_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_inference_worker_transformation_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_inference_worker_transformation_file();
   }

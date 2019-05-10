@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,14 +80,14 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.red_api;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.red_api;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class red_infrastructure extends SubLTranslatedFile {
 
@@ -329,11 +361,11 @@ public  final class red_infrastructure extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_red_infrastructure_file() {
-    $red_variables_dictionary$ = deflexical("*RED-VARIABLES-DICTIONARY*", ((NIL != Symbols.boundp($sym0$_RED_VARIABLES_DICTIONARY_)) ? ((SubLObject) $red_variables_dictionary$.getGlobalValue()) : dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-    $red_symbols_list$ = deflexical("*RED-SYMBOLS-LIST*", ((NIL != Symbols.boundp($sym1$_RED_SYMBOLS_LIST_)) ? ((SubLObject) $red_symbols_list$.getGlobalValue()) : NIL));
-    $red_keys_dictionary$ = deflexical("*RED-KEYS-DICTIONARY*", ((NIL != Symbols.boundp($sym2$_RED_KEYS_DICTIONARY_)) ? ((SubLObject) $red_keys_dictionary$.getGlobalValue()) : dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-    $red_reload_callback_moniker_dictionary$ = deflexical("*RED-RELOAD-CALLBACK-MONIKER-DICTIONARY*", ((NIL != Symbols.boundp($sym3$_RED_RELOAD_CALLBACK_MONIKER_DICTIONARY_)) ? ((SubLObject) $red_reload_callback_moniker_dictionary$.getGlobalValue()) : dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
-    $repositories_loaded$ = deflexical("*REPOSITORIES-LOADED*", ((NIL != Symbols.boundp($sym4$_REPOSITORIES_LOADED_)) ? ((SubLObject) $repositories_loaded$.getGlobalValue()) : NIL));
+    $red_variables_dictionary$ = deflexical("*RED-VARIABLES-DICTIONARY*", maybeDefault( $sym0$_RED_VARIABLES_DICTIONARY_, $red_variables_dictionary$, ()-> (dictionary.new_dictionary(UNPROVIDED, UNPROVIDED))));
+    $red_symbols_list$ = deflexical("*RED-SYMBOLS-LIST*", maybeDefault( $sym1$_RED_SYMBOLS_LIST_, $red_symbols_list$, NIL));
+    $red_keys_dictionary$ = deflexical("*RED-KEYS-DICTIONARY*", maybeDefault( $sym2$_RED_KEYS_DICTIONARY_, $red_keys_dictionary$, ()-> (dictionary.new_dictionary(UNPROVIDED, UNPROVIDED))));
+    $red_reload_callback_moniker_dictionary$ = deflexical("*RED-RELOAD-CALLBACK-MONIKER-DICTIONARY*", maybeDefault( $sym3$_RED_RELOAD_CALLBACK_MONIKER_DICTIONARY_, $red_reload_callback_moniker_dictionary$, ()-> (dictionary.new_dictionary(UNPROVIDED, UNPROVIDED))));
+    $repositories_loaded$ = deflexical("*REPOSITORIES-LOADED*", maybeDefault( $sym4$_REPOSITORIES_LOADED_, $repositories_loaded$, NIL));
     $dtp_red_symbol$ = defconstant("*DTP-RED-SYMBOL*", $sym5$RED_SYMBOL);
     return NIL;
   }

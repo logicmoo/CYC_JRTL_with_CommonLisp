@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,46 +80,46 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.agenda;
-import com.cyc.cycjava_1.cycl.assertion_manager;
-import com.cyc.cycjava_1.cycl.builder_utilities;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constant_index_manager;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing_initialization;
-import com.cyc.cycjava_1.cycl.deduction_manager;
-import com.cyc.cycjava_1.cycl.dumper;
-import com.cyc.cycjava_1.cycl.file_utilities;
-import com.cyc.cycjava_1.cycl.hl_storage_modules;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_analysis;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava_1.cycl.java_api_kernel;
-import com.cyc.cycjava_1.cycl.kb_hl_support_manager;
-import com.cyc.cycjava_1.cycl.cyc_testing.kb_content_test.kct_utils;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.memoization_state;
-import com.cyc.cycjava_1.cycl.nart_hl_formula_manager;
-import com.cyc.cycjava_1.cycl.nart_index_manager;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.operation_communication;
-import com.cyc.cycjava_1.cycl.os_process_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_declarations;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.system_info;
-import com.cyc.cycjava_1.cycl.system_parameters;
-import com.cyc.cycjava_1.cycl.tcp_server_utilities;
-import com.cyc.cycjava_1.cycl.transcript_utilities;
-import com.cyc.cycjava_1.cycl.tva_cache;
-import com.cyc.cycjava_1.cycl.unrepresented_term_index_manager;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.agenda;
+//dm import com.cyc.cycjava_1.cycl.assertion_manager;
+//dm import com.cyc.cycjava_1.cycl.builder_utilities;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constant_index_manager;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing_initialization;
+//dm import com.cyc.cycjava_1.cycl.deduction_manager;
+//dm import com.cyc.cycjava_1.cycl.dumper;
+//dm import com.cyc.cycjava_1.cycl.file_utilities;
+//dm import com.cyc.cycjava_1.cycl.hl_storage_modules;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_analysis;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_inference;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_datastructures_problem_store;
+//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_modules;
+//dm import com.cyc.cycjava_1.cycl.java_api_kernel;
+//dm import com.cyc.cycjava_1.cycl.kb_hl_support_manager;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.kb_content_test.kct_utils;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.memoization_state;
+//dm import com.cyc.cycjava_1.cycl.nart_hl_formula_manager;
+//dm import com.cyc.cycjava_1.cycl.nart_index_manager;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.operation_communication;
+//dm import com.cyc.cycjava_1.cycl.os_process_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_declarations;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.system_info;
+//dm import com.cyc.cycjava_1.cycl.system_parameters;
+//dm import com.cyc.cycjava_1.cycl.tcp_server_utilities;
+//dm import com.cyc.cycjava_1.cycl.transcript_utilities;
+//dm import com.cyc.cycjava_1.cycl.tva_cache;
+//dm import com.cyc.cycjava_1.cycl.unrepresented_term_index_manager;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class misc_utilities extends SubLTranslatedFile {
 
@@ -265,7 +297,7 @@ public  final class misc_utilities extends SubLTranslatedFile {
             try {
               Dynamic.bind(Errors.$error_handler$, $sym15$CATCH_ERROR_MESSAGE_HANDLER);
               try {
-                symbols = dumper.load_kb_product_shared_symbols(hl_store_caches_directory());
+                symbols = dumper_larkc.load_kb_product_shared_symbols(hl_store_caches_directory());
               } catch (Throwable catch_var) {
                 Errors.handleThrowable(catch_var, NIL);
               }
@@ -322,7 +354,7 @@ public  final class misc_utilities extends SubLTranslatedFile {
     if ($hl_store_caches_directory$.getGlobalValue().isString()) {
       return $hl_store_caches_directory$.getGlobalValue();
     }
-    if ((NIL == dumper.force_monolithic_kb_assumptionP())) {
+    if ((NIL == dumper_larkc.force_monolithic_kb_assumptionP())) {
       set_hl_store_caches_directory(Errors
 			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 30777"));
     }
@@ -532,9 +564,9 @@ public  final class misc_utilities extends SubLTranslatedFile {
 
   public static final SubLObject init_misc_utilities_file() {
     $kb_content_copyright_notice$ = defconstant("*KB-CONTENT-COPYRIGHT-NOTICE*", $str1$___Copyright__c__1998___2009_Cyco);
-    $system_code_initializations_marker$ = deflexical("*SYSTEM-CODE-INITIALIZATIONS-MARKER*", ((NIL != Symbols.boundp($sym2$_SYSTEM_CODE_INITIALIZATIONS_MARKER_)) ? ((SubLObject) $system_code_initializations_marker$.getGlobalValue()) : Environment.get_process_id(UNPROVIDED)));
-    $hl_store_caches_directory$ = deflexical("*HL-STORE-CACHES-DIRECTORY*", ((NIL != Symbols.boundp($sym9$_HL_STORE_CACHES_DIRECTORY_)) ? ((SubLObject) $hl_store_caches_directory$.getGlobalValue()) : NIL));
-    $hl_store_caches_shared_symbols$ = deflexical("*HL-STORE-CACHES-SHARED-SYMBOLS*", ((NIL != Symbols.boundp($sym10$_HL_STORE_CACHES_SHARED_SYMBOLS_)) ? ((SubLObject) $hl_store_caches_shared_symbols$.getGlobalValue()) : NIL));
+    $system_code_initializations_marker$ = deflexical("*SYSTEM-CODE-INITIALIZATIONS-MARKER*", maybeDefault( $sym2$_SYSTEM_CODE_INITIALIZATIONS_MARKER_, $system_code_initializations_marker$, ()-> (Environment.get_process_id(UNPROVIDED))));
+    $hl_store_caches_directory$ = deflexical("*HL-STORE-CACHES-DIRECTORY*", maybeDefault( $sym9$_HL_STORE_CACHES_DIRECTORY_, $hl_store_caches_directory$, NIL));
+    $hl_store_caches_shared_symbols$ = deflexical("*HL-STORE-CACHES-SHARED-SYMBOLS*", maybeDefault( $sym10$_HL_STORE_CACHES_SHARED_SYMBOLS_, $hl_store_caches_shared_symbols$, NIL));
     $hostname_caching_state$ = deflexical("*HOSTNAME-CACHING-STATE*", NIL);
     $machine_bogomips$ = deflexical("*MACHINE-BOGOMIPS*", $kw47$UNINITIALIZED);
     return NIL;

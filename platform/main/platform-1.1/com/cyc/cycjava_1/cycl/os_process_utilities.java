@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,16 +80,16 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.file_utilities;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.misc_utilities;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.file_utilities;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+//dm import com.cyc.cycjava_1.cycl.misc_utilities;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class os_process_utilities extends SubLTranslatedFile {
 
@@ -507,8 +539,8 @@ public  final class os_process_utilities extends SubLTranslatedFile {
   public static final SubLObject init_os_process_utilities_file() {
     $dtp_os_process_impl$ = defconstant("*DTP-OS-PROCESS-IMPL*", $sym0$OS_PROCESS_IMPL);
     $valid_os_process_status$ = defconstant("*VALID-OS-PROCESS-STATUS*", $list59);
-    $os_process_enumeration_lock$ = deflexical("*OS-PROCESS-ENUMERATION-LOCK*", ((NIL != Symbols.boundp($sym60$_OS_PROCESS_ENUMERATION_LOCK_)) ? ((SubLObject) $os_process_enumeration_lock$.getGlobalValue()) : Locks.make_lock($str61$OS_Process_enumeration_lock)));
-    $active_os_processes$ = deflexical("*ACTIVE-OS-PROCESSES*", ((NIL != Symbols.boundp($sym62$_ACTIVE_OS_PROCESSES_)) ? ((SubLObject) $active_os_processes$.getGlobalValue()) : NIL));
+    $os_process_enumeration_lock$ = deflexical("*OS-PROCESS-ENUMERATION-LOCK*", maybeDefault( $sym60$_OS_PROCESS_ENUMERATION_LOCK_, $os_process_enumeration_lock$, ()-> (Locks.make_lock($str61$OS_Process_enumeration_lock))));
+    $active_os_processes$ = deflexical("*ACTIVE-OS-PROCESSES*", maybeDefault( $sym62$_ACTIVE_OS_PROCESSES_, $active_os_processes$, NIL));
     $forked_cyc_server_process_task$ = defparameter("*FORKED-CYC-SERVER-PROCESS-TASK*", NIL);
     return NIL;
   }

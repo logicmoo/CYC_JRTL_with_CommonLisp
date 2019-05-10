@@ -3,7 +3,7 @@
 
 ' (defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
 (let ((*PACKAGE* *PACKAGE*))
-  (cl:load "e2c/hash-dollar.lisp"))
+  (cl:load "contrib-site/e2c/hash-dollar.lisp"))
 
 ;; (let ((*print-readably* t)) (prin1-to-string (find-class 'symbol)))
 (defmethod print-object ((obj class) stream)
@@ -11,9 +11,9 @@
     (write `(find-class ',(class-name obj)) :stream stream :readably t))
 
 
-;; (load "../slime/start-swank.lisp")
+;; (load "contrib-site/slime/start-swank.lisp")
  ;; Load swank.
- (load "../slime/swank-loader.lisp")
+ (load "contrib-site/slime/swank-loader.lisp")
  (swank-loader:init)
  (swank:create-server :port 4005
                        :style swank:*communication-style*

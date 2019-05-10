@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,49 +80,49 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.deck;
-import com.cyc.cycjava_1.cycl.dictionary;
-import com.cyc.cycjava_1.cycl.dictionary_contents;
-import com.cyc.cycjava_1.cycl.file_vector_utilities;
-import com.cyc.cycjava_1.cycl.fort_types_interface;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.function_terms;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.id_index;
-import com.cyc.cycjava_1.cycl.isa;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_indexing;
-import com.cyc.cycjava_1.cycl.kb_macros;
-import com.cyc.cycjava_1.cycl.kb_mapping_macros;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.map_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.misc_utilities;
-import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.obsolete;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_methods;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_methods;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
-import com.cyc.cycjava_1.cycl.set;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.deck;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
+//dm import com.cyc.cycjava_1.cycl.file_vector_utilities;
+//dm import com.cyc.cycjava_1.cycl.fort_types_interface;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.function_terms;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.id_index;
+//dm import com.cyc.cycjava_1.cycl.isa;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_indexing;
+//dm import com.cyc.cycjava_1.cycl.kb_macros;
+//dm import com.cyc.cycjava_1.cycl.kb_mapping_macros;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.map_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.misc_utilities;
+//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.obsolete;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_methods;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_methods;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
+//dm import com.cyc.cycjava_1.cycl.set;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class cardinality_estimates extends SubLTranslatedFile {
 
@@ -442,14 +474,14 @@ link between them. */
   }
 
   public static final SubLObject init_cardinality_estimates_file() {
-    $local_instance_cardinality$ = deflexical("*LOCAL-INSTANCE-CARDINALITY*", ((NIL != Symbols.boundp($sym7$_LOCAL_INSTANCE_CARDINALITY_)) ? ((SubLObject) $local_instance_cardinality$.getGlobalValue()) : NIL));
-    $local_quoted_instance_cardinality$ = deflexical("*LOCAL-QUOTED-INSTANCE-CARDINALITY*", ((NIL != Symbols.boundp($sym8$_LOCAL_QUOTED_INSTANCE_CARDINALITY_)) ? ((SubLObject) $local_quoted_instance_cardinality$.getGlobalValue()) : NIL));
-    $local_spec_cardinality$ = deflexical("*LOCAL-SPEC-CARDINALITY*", ((NIL != Symbols.boundp($sym9$_LOCAL_SPEC_CARDINALITY_)) ? ((SubLObject) $local_spec_cardinality$.getGlobalValue()) : NIL));
-    $total_instance_cardinality$ = deflexical("*TOTAL-INSTANCE-CARDINALITY*", ((NIL != Symbols.boundp($sym10$_TOTAL_INSTANCE_CARDINALITY_)) ? ((SubLObject) $total_instance_cardinality$.getGlobalValue()) : NIL));
-    $total_quoted_instance_cardinality$ = deflexical("*TOTAL-QUOTED-INSTANCE-CARDINALITY*", ((NIL != Symbols.boundp($sym11$_TOTAL_QUOTED_INSTANCE_CARDINALITY_)) ? ((SubLObject) $total_quoted_instance_cardinality$.getGlobalValue()) : NIL));
-    $total_spec_cardinality$ = deflexical("*TOTAL-SPEC-CARDINALITY*", ((NIL != Symbols.boundp($sym12$_TOTAL_SPEC_CARDINALITY_)) ? ((SubLObject) $total_spec_cardinality$.getGlobalValue()) : NIL));
-    $total_genl_cardinality$ = deflexical("*TOTAL-GENL-CARDINALITY*", ((NIL != Symbols.boundp($sym13$_TOTAL_GENL_CARDINALITY_)) ? ((SubLObject) $total_genl_cardinality$.getGlobalValue()) : NIL));
-    $generality_estimate_table$ = deflexical("*GENERALITY-ESTIMATE-TABLE*", ((NIL != Symbols.boundp($sym14$_GENERALITY_ESTIMATE_TABLE_)) ? ((SubLObject) $generality_estimate_table$.getGlobalValue()) : NIL));
+    $local_instance_cardinality$ = deflexical("*LOCAL-INSTANCE-CARDINALITY*", maybeDefault( $sym7$_LOCAL_INSTANCE_CARDINALITY_, $local_instance_cardinality$, NIL));
+    $local_quoted_instance_cardinality$ = deflexical("*LOCAL-QUOTED-INSTANCE-CARDINALITY*", maybeDefault( $sym8$_LOCAL_QUOTED_INSTANCE_CARDINALITY_, $local_quoted_instance_cardinality$, NIL));
+    $local_spec_cardinality$ = deflexical("*LOCAL-SPEC-CARDINALITY*", maybeDefault( $sym9$_LOCAL_SPEC_CARDINALITY_, $local_spec_cardinality$, NIL));
+    $total_instance_cardinality$ = deflexical("*TOTAL-INSTANCE-CARDINALITY*", maybeDefault( $sym10$_TOTAL_INSTANCE_CARDINALITY_, $total_instance_cardinality$, NIL));
+    $total_quoted_instance_cardinality$ = deflexical("*TOTAL-QUOTED-INSTANCE-CARDINALITY*", maybeDefault( $sym11$_TOTAL_QUOTED_INSTANCE_CARDINALITY_, $total_quoted_instance_cardinality$, NIL));
+    $total_spec_cardinality$ = deflexical("*TOTAL-SPEC-CARDINALITY*", maybeDefault( $sym12$_TOTAL_SPEC_CARDINALITY_, $total_spec_cardinality$, NIL));
+    $total_genl_cardinality$ = deflexical("*TOTAL-GENL-CARDINALITY*", maybeDefault( $sym13$_TOTAL_GENL_CARDINALITY_, $total_genl_cardinality$, NIL));
+    $generality_estimate_table$ = deflexical("*GENERALITY-ESTIMATE-TABLE*", maybeDefault( $sym14$_GENERALITY_ESTIMATE_TABLE_, $generality_estimate_table$, NIL));
     $generality_estimate_scale_factor$ = defparameter("*GENERALITY-ESTIMATE-SCALE-FACTOR*", $int58$100);
     return NIL;
   }

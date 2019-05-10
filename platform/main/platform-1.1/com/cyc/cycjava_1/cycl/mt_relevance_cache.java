@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,16 +80,16 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cache;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.forts;
-import com.cyc.cycjava_1.cycl.genl_mts;
-import com.cyc.cycjava_1.cycl.hlmt;
-import com.cyc.cycjava_1.cycl.set_contents;
-import com.cyc.cycjava_1.cycl.set_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cache;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.forts;
+//dm import com.cyc.cycjava_1.cycl.genl_mts;
+//dm import com.cyc.cycjava_1.cycl.hlmt;
+//dm import com.cyc.cycjava_1.cycl.set_contents;
+//dm import com.cyc.cycjava_1.cycl.set_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
 
 public  final class mt_relevance_cache extends SubLTranslatedFile {
 
@@ -174,8 +206,8 @@ public  final class mt_relevance_cache extends SubLTranslatedFile {
 
   public static final SubLObject init_mt_relevance_cache_file() {
     $mt_relevance_cache_unknown$ = deflexical("*MT-RELEVANCE-CACHE-UNKNOWN*", $kw0$UNKNOWN);
-    $monad_mt_fort_cache$ = deflexical("*MONAD-MT-FORT-CACHE*", ((NIL != Symbols.boundp($sym4$_MONAD_MT_FORT_CACHE_)) ? ((SubLObject) $monad_mt_fort_cache$.getGlobalValue()) : cache.new_cache($int5$256, Symbols.symbol_function(EQ))));
-    $monad_mt_naut_cache$ = deflexical("*MONAD-MT-NAUT-CACHE*", ((NIL != Symbols.boundp($sym6$_MONAD_MT_NAUT_CACHE_)) ? ((SubLObject) $monad_mt_naut_cache$.getGlobalValue()) : cache.new_cache($int5$256, Symbols.symbol_function(EQUAL))));
+    $monad_mt_fort_cache$ = deflexical("*MONAD-MT-FORT-CACHE*", maybeDefault( $sym4$_MONAD_MT_FORT_CACHE_, $monad_mt_fort_cache$, ()-> (cache.new_cache($int5$256, Symbols.symbol_function(EQ)))));
+    $monad_mt_naut_cache$ = deflexical("*MONAD-MT-NAUT-CACHE*", maybeDefault( $sym6$_MONAD_MT_NAUT_CACHE_, $monad_mt_naut_cache$, ()-> (cache.new_cache($int5$256, Symbols.symbol_function(EQUAL)))));
     return NIL;
   }
 

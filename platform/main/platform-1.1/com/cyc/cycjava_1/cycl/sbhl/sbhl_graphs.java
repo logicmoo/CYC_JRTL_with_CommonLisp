@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.sbhl;
+package com.cyc.cycjava_1.cycl.sbhl;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,32 +67,32 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cache_utilities;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.constants_high;
-import com.cyc.cycjava_1.cycl.dictionary;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cache_utilities;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.constants_high;
+//dm import com.cyc.cycjava_1.cycl.dictionary;
 import com.cyc.cycjava_1.cycl.file_vector;
-import com.cyc.cycjava_1.cycl.file_vector_utilities;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.genls;
-import com.cyc.cycjava_1.cycl.isa;
-import com.cyc.cycjava_1.cycl.iteration;
-import com.cyc.cycjava_1.cycl.kb_paths;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.map_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.misc_utilities;
-import com.cyc.cycjava_1.cycl.process_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.file_vector_utilities;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+//dm import com.cyc.cycjava_1.cycl.genls;
+//dm import com.cyc.cycjava_1.cycl.isa;
+//dm import com.cyc.cycjava_1.cycl.iteration;
+//dm import com.cyc.cycjava_1.cycl.kb_paths;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.map_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.misc_utilities;
+//dm import com.cyc.cycjava_1.cycl.process_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
+//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
 
 public  final class sbhl_graphs extends SubLTranslatedFile {
 
@@ -86,23 +105,23 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
   //// Definitions
 
   /** Temporary -- the equality test used for sbhl-graphs. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1120) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1120)
   private static SubLSymbol $sbhl_graph_equality_test$ = null;
 
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1231) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1231)
   public static final SubLObject make_new_sbhl_graph() {
     return Hashtables.make_hash_table(ZERO_INTEGER, $sbhl_graph_equality_test$.getGlobalValue(), UNPROVIDED);
   }
-  
+
 
   /** This is called by the load KB command after swapping in the references. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 5552) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 5552)
   public static final SubLObject initialize_sbhl_graph_caches_during_load_kb(SubLObject data_file, SubLObject index_file) {
     return initialize_sbhl_graph_caches_file_vector(data_file, index_file);
   }
 
 
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 3237) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 3237)
   public static final SubLObject initialize_sbhl_graph_caches_file_vector(SubLObject data_file, SubLObject index_file) {
     if ((NIL != file_vector.file_vector_p($sbhl_backing_file_vector$.getGlobalValue()))) {
       file_vector.close_file_vector($sbhl_backing_file_vector$.getGlobalValue());
@@ -111,39 +130,39 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
     return NIL;
   }
 
-  
+
   /** The file vector that backs the SBHL graph. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1443) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1443)
   public static SubLSymbol $sbhl_backing_file_vector$ = null;
 
   /** An ALIST-P that houses the association map from caches on a per-module basis */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1622) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1622)
   public static SubLSymbol $sbhl_backing_file_vector_caches_for_modules$ = null;
 
   /** The percentage of the graph size for the module that should be cached in memory */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1780) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1780)
   public static SubLSymbol $sbhl_backing_file_vector_cache_size_percentage$ = null;
 
-  /** The minimal size of the cache, in the case of small population (e.g. #$negationMt 
+  /** The minimal size of the cache, in the case of small population (e.g. #$negationMt
    or #$successorStrict-HL-TimePrecedence) */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1945) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 1945)
   public static SubLSymbol $sbhl_backing_file_vector_cache_minimum_size$ = null;
 
   /** Whether the caches are supposed to keep metrics of their performance or not. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 2156) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 2156)
   public static SubLSymbol $sbhl_backing_file_vector_cache_gather_cache_metricsP$ = null;
 
   /** The lock for ensuring that CFASL input against the stream is uninterrupted.
    See also FILE-VECTOR-UTILITIES for details on the implementation side. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 2324) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 2324)
   public static SubLSymbol $sbhl_file_vector_data_stream_lock$ = null;
 
   /** The allocator to use to get the new caches. Each constructor takes a capacity and
    an optional equality test. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 2590) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 2590)
   public static SubLSymbol $sbhl_backing_file_vector_cache_constructor$ = null;
 
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 2811) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 2811)
   public static final SubLObject initialize_sbhl_graph_caches() {
     {
       SubLObject data_file = misc_utilities.get_hl_store_cache_filename($str6$sbhl_module_graphs, $str7$cfasl);
@@ -158,7 +177,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
   }
 
   /** Allocate the cache strategy object for the SBHL graph file vector. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 3620) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 3620)
   public static final SubLObject new_cache_strategy_for_sbhl_module(SubLObject sbhl_module, SubLObject capacity) {
     if ((capacity == UNPROVIDED)) {
       capacity = NIL;
@@ -178,7 +197,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
 
   /** Either fetch or allocate the CACHE-STRATEGY-P for the SBHL module provided.
    Assumes that the SBHL lock has already been acquired. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 4199) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 4199)
   public static final SubLObject get_cache_strategy_for_sbhl_module(SubLObject sbhl_module) {
     {
       SubLObject v_cache = list_utilities.alist_lookup_without_values($sbhl_backing_file_vector_caches_for_modules$.getGlobalValue(), sbhl_module, UNPROVIDED, UNPROVIDED);
@@ -190,7 +209,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
     }
   }
 
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 4684) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 4684)
   public static final SubLObject set_cache_strategy_for_sbhl_module(SubLObject sbhl_module, SubLObject cache_strategy) {
     checkType(cache_strategy, $sym11$CACHE_STRATEGY_OR_SYMBOL_P);
     $sbhl_backing_file_vector_caches_for_modules$.setGlobalValue(list_utilities.alist_enter($sbhl_backing_file_vector_caches_for_modules$.getGlobalValue(), sbhl_module, cache_strategy, UNPROVIDED));
@@ -200,7 +219,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
   /** Compute the cache capacity as a percentage of the known size of the SBHL module
    graph, but clamp it to the minimum from below.
    @return POSITIVE-INTEGER-P */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 5021) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 5021)
   public static final SubLObject cache_capacity_for_cache_strategy_for_sbhl_module(SubLObject sbhl_module) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -213,11 +232,11 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
     }
   }
 
-  /** Get the graph link from the graph, potentially swapping it 
+  /** Get the graph link from the graph, potentially swapping it
    in from the file vector backing.
    Notice that the underlying implementation is smart enough to
    only lock the data stream when it is actually necessary. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 7123) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 7123)
   public static final SubLObject get_sbhl_graph_link_from_graph(SubLObject node, SubLObject graph, SubLObject v_cache) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -243,7 +262,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
 
   /** Modify the graph in such a fashion that the file vector backed
    map can track the modification. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 7753) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 7753)
   public static final SubLObject put_sbhl_graph_link_into_graph(SubLObject node, SubLObject graph, SubLObject v_cache, SubLObject value) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -269,7 +288,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
 
   /** Remove that node from the graph, with potential modifications
    that can be tracked by the file vector backing infrastructure. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 8234) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 8234)
   public static final SubLObject remove_sbhl_graph_link_from_graph(SubLObject node, SubLObject graph, SubLObject v_cache) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -295,7 +314,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
 
   /** Inform the file vector backing infrastructure that the entry for
    the node in the graph is mutated. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 8739) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 8739)
   public static final SubLObject touch_sbhl_link_graph(SubLObject node, SubLObject graph, SubLObject v_cache) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -320,7 +339,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
   }
 
   /** Accessor: @return direction-link-p; the sbhl-direction-link structure for NODE within graph corresponding to PRED. uses MODULE / *sbhl-module* to access sbhl graph. @see get-sbhl-graph */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 9232) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 9232)
   public static final SubLObject get_sbhl_graph_link(SubLObject node, SubLObject module) {
     checkType(module, $sym12$SBHL_MODULE_P);
     {
@@ -340,7 +359,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
   }
 
   /** Modifier: Sets the value corresonding to NODE in graph determined by MODULE / *sbhl-module* to DIRECTION-LINK, if it is an @see sbhl-direction-link-p. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 9948) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 9948)
   public static final SubLObject set_sbhl_graph_link(SubLObject node, SubLObject direction_link, SubLObject module) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -400,7 +419,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
   /** Modifier: Notifies the SBHL swapping infrastructure that the NODE has been modified and that
    the swapping mechanism needs to treat this as mutated. The graph is determined by
    MODULE / *sbhl-module* as in @see get-sbhl-graph. */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 10482) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 10482)
   public static final SubLObject touch_sbhl_graph_link(SubLObject node, SubLObject direction_link, SubLObject module) {
     {
       final SubLThread thread = SubLProcess.currentSubLThread();
@@ -440,7 +459,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
   }
 
   /** Modifier: performs (remhash NODE graph) on graph determined by MODULE / *sbhl-module* */
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 11040) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 11040)
   public static final SubLObject remove_sbhl_graph_link(SubLObject node, SubLObject module) {
     checkType(module, $sym12$SBHL_MODULE_P);
     {
@@ -458,13 +477,13 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
     return NIL;
   }
 
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 12073) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 12073)
   public static final SubLObject swap_out_all_pristine_graph_links(SubLObject module) {
     file_vector_utilities.swap_out_all_pristine_file_vector_backed_map_objects(sbhl_module_utilities.get_sbhl_graph(module));
     return module;
   }
 
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 12232) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 12232)
   public static final SubLObject swap_out_all_pristine_sbhl_module_graph_links() {
     {
       SubLObject cdolist_list_var = sbhl_module_vars.get_sbhl_module_list();
@@ -476,10 +495,10 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
     return T;
   }
 
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 15235) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 15235)
   public static SubLSymbol $default_number_of_concurrent_readers$ = null;
 
-  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 15375) 
+  @SubL(source = "cycl/sbhl/sbhl-graphs.lisp", position = 15375)
   public static SubLSymbol $default_number_of_terms_checked$ = null;
 
   public static final SubLObject declare_sbhl_graphs_file() {
@@ -522,12 +541,12 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
 
   public static final SubLObject init_sbhl_graphs_file() {
     $sbhl_graph_equality_test$ = deflexical("*SBHL-GRAPH-EQUALITY-TEST*", Symbols.symbol_function(EQ));
-    $sbhl_backing_file_vector$ = deflexical("*SBHL-BACKING-FILE-VECTOR*", ((NIL != Symbols.boundp($sym0$_SBHL_BACKING_FILE_VECTOR_)) ? ((SubLObject) $sbhl_backing_file_vector$.getGlobalValue()) : NIL));
-    $sbhl_backing_file_vector_caches_for_modules$ = deflexical("*SBHL-BACKING-FILE-VECTOR-CACHES-FOR-MODULES*", ((NIL != Symbols.boundp($sym1$_SBHL_BACKING_FILE_VECTOR_CACHES_FOR_MODULES_)) ? ((SubLObject) $sbhl_backing_file_vector_caches_for_modules$.getGlobalValue()) : NIL));
+    $sbhl_backing_file_vector$ = deflexical("*SBHL-BACKING-FILE-VECTOR*", maybeDefault( $sym0$_SBHL_BACKING_FILE_VECTOR_, $sbhl_backing_file_vector$, NIL));
+    $sbhl_backing_file_vector_caches_for_modules$ = deflexical("*SBHL-BACKING-FILE-VECTOR-CACHES-FOR-MODULES*", maybeDefault( $sym1$_SBHL_BACKING_FILE_VECTOR_CACHES_FOR_MODULES_, $sbhl_backing_file_vector_caches_for_modules$, NIL));
     $sbhl_backing_file_vector_cache_size_percentage$ = defparameter("*SBHL-BACKING-FILE-VECTOR-CACHE-SIZE-PERCENTAGE*", TWO_INTEGER);
     $sbhl_backing_file_vector_cache_minimum_size$ = defparameter("*SBHL-BACKING-FILE-VECTOR-CACHE-MINIMUM-SIZE*", $int2$100);
     $sbhl_backing_file_vector_cache_gather_cache_metricsP$ = defparameter("*SBHL-BACKING-FILE-VECTOR-CACHE-GATHER-CACHE-METRICS?*", T);
-    $sbhl_file_vector_data_stream_lock$ = deflexical("*SBHL-FILE-VECTOR-DATA-STREAM-LOCK*", ((NIL != Symbols.boundp($sym3$_SBHL_FILE_VECTOR_DATA_STREAM_LOCK_)) ? ((SubLObject) $sbhl_file_vector_data_stream_lock$.getGlobalValue()) : Locks.make_lock($str4$SBHL_File_Vector_Data_Stream_lock)));
+    $sbhl_file_vector_data_stream_lock$ = deflexical("*SBHL-FILE-VECTOR-DATA-STREAM-LOCK*", maybeDefault( $sym3$_SBHL_FILE_VECTOR_DATA_STREAM_LOCK_, $sbhl_file_vector_data_stream_lock$, ()-> (Locks.make_lock($str4$SBHL_File_Vector_Data_Stream_lock))));
     $sbhl_backing_file_vector_cache_constructor$ = deflexical("*SBHL-BACKING-FILE-VECTOR-CACHE-CONSTRUCTOR*", $sym5$NEW_METERED_PREALLOCATED_CACHE);
     $default_number_of_concurrent_readers$ = deflexical("*DEFAULT-NUMBER-OF-CONCURRENT-READERS*", TWENTY_INTEGER);
     $default_number_of_terms_checked$ = deflexical("*DEFAULT-NUMBER-OF-TERMS-CHECKED*", $int43$500);
@@ -602,14 +621,17 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_sbhl_graphs_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_sbhl_graphs_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_sbhl_graphs_file();
   }

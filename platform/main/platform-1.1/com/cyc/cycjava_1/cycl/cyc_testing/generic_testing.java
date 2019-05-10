@@ -17,7 +17,26 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl.cyc_testing;
+package com.cyc.cycjava_1.cycl.cyc_testing;
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,22 +67,22 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.cfasl;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing;
-import com.cyc.cycjava_1.cycl.hash_table_utilities;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.number_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.utilities_macros;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.cfasl;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+// //dm import com.cyc.cycjava_1.cycl.cyc_testing.cyc_testing;
+//dm import com.cyc.cycjava_1.cycl.hash_table_utilities;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.number_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
-public  final class generic_testing extends SubLTranslatedFile {
+  final class generic_testing_hide extends SubLTranslatedFile {
 
   //// Constructor
 
-  private generic_testing() {}
+  private generic_testing_hide() {}
   public static final SubLFile me = new generic_testing();
   public static final String myName = "com.cyc.cycjava_1.cycl.cyc_testing.generic_testing";
 
@@ -94,20 +113,35 @@ public  final class generic_testing extends SubLTranslatedFile {
   private static SubLSymbol $test_case_table_post_build_token$ = null;
 
   public static final class $generic_test_case_table_native extends SubLStructNative {
+    @Override
     public SubLStructDecl getStructDecl() { return structDecl; }
+    @Override
     public SubLObject getField2() { return $name; }
+    @Override
     public SubLObject getField3() { return $tuples; }
+    @Override
     public SubLObject getField4() { return $test; }
+    @Override
     public SubLObject getField5() { return $owner; }
+    @Override
     public SubLObject getField6() { return $classes; }
+    @Override
     public SubLObject getField7() { return $kb; }
+    @Override
     public SubLObject getField8() { return $workingP; }
+    @Override
     public SubLObject setField2(SubLObject value) { return $name = value; }
+    @Override
     public SubLObject setField3(SubLObject value) { return $tuples = value; }
+    @Override
     public SubLObject setField4(SubLObject value) { return $test = value; }
+    @Override
     public SubLObject setField5(SubLObject value) { return $owner = value; }
+    @Override
     public SubLObject setField6(SubLObject value) { return $classes = value; }
+    @Override
     public SubLObject setField7(SubLObject value) { return $kb = value; }
+    @Override
     public SubLObject setField8(SubLObject value) { return $workingP = value; }
     public SubLObject $name = NIL;
     public SubLObject $tuples = NIL;
@@ -136,6 +170,7 @@ public  final class generic_testing extends SubLTranslatedFile {
 
   public static final class $generic_test_case_table_p$UnaryFunction extends UnaryFunction {
     public $generic_test_case_table_p$UnaryFunction() { super(extractFunctionNamed("GENERIC-TEST-CASE-TABLE-P")); }
+    @Override
     public SubLObject processItem(SubLObject arg1) { return generic_test_case_table_p(arg1); }
   }
 
@@ -416,8 +451,8 @@ public  final class generic_testing extends SubLTranslatedFile {
   }
 
   public static final SubLObject init_generic_testing_file() {
-    $test_case_table_index$ = deflexical("*TEST-CASE-TABLE-INDEX*", ((NIL != Symbols.boundp($sym0$_TEST_CASE_TABLE_INDEX_)) ? ((SubLObject) $test_case_table_index$.getGlobalValue()) : Hashtables.make_hash_table($int1$212, Symbols.symbol_function(EQL), UNPROVIDED)));
-    $ordered_test_cases$ = deflexical("*ORDERED-TEST-CASES*", ((NIL != Symbols.boundp($sym2$_ORDERED_TEST_CASES_)) ? ((SubLObject) $ordered_test_cases$.getGlobalValue()) : NIL));
+    $test_case_table_index$ = deflexical("*TEST-CASE-TABLE-INDEX*", maybeDefault( $sym0$_TEST_CASE_TABLE_INDEX_, $test_case_table_index$, ()-> (Hashtables.make_hash_table($int1$212, Symbols.symbol_function(EQL), UNPROVIDED))));
+    $ordered_test_cases$ = deflexical("*ORDERED-TEST-CASES*", maybeDefault( $sym2$_ORDERED_TEST_CASES_, $ordered_test_cases$, NIL));
     $test_case_tables_by_class$ = deflexical("*TEST-CASE-TABLES-BY-CLASS*", Hashtables.make_hash_table($int3$64, EQL, UNPROVIDED));
     $generic_test_results$ = deflexical("*GENERIC-TEST-RESULTS*", $list4);
     $generic_test_verbosity_levels$ = deflexical("*GENERIC-TEST-VERBOSITY-LEVELS*", $list5);
@@ -538,14 +573,17 @@ public  final class generic_testing extends SubLTranslatedFile {
 
   //// Initializers
 
+  @Override
   public void declareFunctions() {
     declare_generic_testing_file();
   }
 
+  @Override
   public void initializeVariables() {
     init_generic_testing_file();
   }
 
+  @Override
   public void runTopLevelForms() {
     setup_generic_testing_file();
   }

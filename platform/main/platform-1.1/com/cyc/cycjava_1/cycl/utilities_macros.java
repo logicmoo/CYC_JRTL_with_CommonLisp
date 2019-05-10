@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,20 +80,20 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.kb_control_vars;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.meta_macros;
-import com.cyc.cycjava_1.cycl.numeric_date_utilities;
-import com.cyc.cycjava_1.cycl.string_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.subl_macros;
-import com.cyc.cycjava_1.cycl.subl_promotions;
-import com.cyc.cycjava_1.cycl.system_info;
-import com.cyc.cycjava_1.cycl.system_parameters;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+//dm import com.cyc.cycjava_1.cycl.kb_control_vars;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.meta_macros;
+//dm import com.cyc.cycjava_1.cycl.numeric_date_utilities;
+//dm import com.cyc.cycjava_1.cycl.string_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.subl_macros;
+//dm import com.cyc.cycjava_1.cycl.subl_promotions;
+//dm import com.cyc.cycjava_1.cycl.system_info;
+//dm import com.cyc.cycjava_1.cycl.system_parameters;
 
 public  final class utilities_macros extends SubLTranslatedFile {
 
@@ -1084,23 +1116,23 @@ for a structure resource declared via DEFINE-STRUCTURE-RESOURCE. */
   }
 
   public static final SubLObject init_utilities_macros_file() {
-    $api_special_table$ = deflexical("*API-SPECIAL-TABLE*", ((NIL != Symbols.boundp($sym15$_API_SPECIAL_TABLE_)) ? ((SubLObject) $api_special_table$.getGlobalValue()) : Hashtables.make_hash_table(TEN_INTEGER, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $api_predefined_function_table$ = deflexical("*API-PREDEFINED-FUNCTION-TABLE*", ((NIL != Symbols.boundp($sym17$_API_PREDEFINED_FUNCTION_TABLE_)) ? ((SubLObject) $api_predefined_function_table$.getGlobalValue()) : Hashtables.make_hash_table($int18$1000, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $api_predefined_host_function_table$ = deflexical("*API-PREDEFINED-HOST-FUNCTION-TABLE*", ((NIL != Symbols.boundp($sym19$_API_PREDEFINED_HOST_FUNCTION_TABLE_)) ? ((SubLObject) $api_predefined_host_function_table$.getGlobalValue()) : Hashtables.make_hash_table($int20$100, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $api_predefined_macro_table$ = deflexical("*API-PREDEFINED-MACRO-TABLE*", ((NIL != Symbols.boundp($sym21$_API_PREDEFINED_MACRO_TABLE_)) ? ((SubLObject) $api_predefined_macro_table$.getGlobalValue()) : Hashtables.make_hash_table($int20$100, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $api_predefined_host_macro_table$ = deflexical("*API-PREDEFINED-HOST-MACRO-TABLE*", ((NIL != Symbols.boundp($sym22$_API_PREDEFINED_HOST_MACRO_TABLE_)) ? ((SubLObject) $api_predefined_host_macro_table$.getGlobalValue()) : Hashtables.make_hash_table(TEN_INTEGER, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $api_symbols$ = deflexical("*API-SYMBOLS*", ((NIL != Symbols.boundp($sym23$_API_SYMBOLS_)) ? ((SubLObject) $api_symbols$.getGlobalValue()) : NIL));
-    $api_types$ = deflexical("*API-TYPES*", ((NIL != Symbols.boundp($sym29$_API_TYPES_)) ? ((SubLObject) $api_types$.getGlobalValue()) : NIL));
-    $kb_function_table$ = deflexical("*KB-FUNCTION-TABLE*", ((NIL != Symbols.boundp($sym58$_KB_FUNCTION_TABLE_)) ? ((SubLObject) $kb_function_table$.getGlobalValue()) : Hashtables.make_hash_table($int59$400, Symbols.symbol_function(EQ), UNPROVIDED)));
-    $funcall_helper_property$ = deflexical("*FUNCALL-HELPER-PROPERTY*", ((NIL != Symbols.boundp($sym65$_FUNCALL_HELPER_PROPERTY_)) ? ((SubLObject) $funcall_helper_property$.getGlobalValue()) : $kw66$FUNCALL_HELPER));
-    $unprovided$ = deflexical("*UNPROVIDED*", ((NIL != Symbols.boundp($sym68$_UNPROVIDED_)) ? ((SubLObject) $unprovided$.getGlobalValue()) : Symbols.make_symbol($str69$UNPROVIDED)));
+    $api_special_table$ = deflexical("*API-SPECIAL-TABLE*", maybeDefault( $sym15$_API_SPECIAL_TABLE_, $api_special_table$, ()-> (Hashtables.make_hash_table(TEN_INTEGER, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $api_predefined_function_table$ = deflexical("*API-PREDEFINED-FUNCTION-TABLE*", maybeDefault( $sym17$_API_PREDEFINED_FUNCTION_TABLE_, $api_predefined_function_table$, ()-> (Hashtables.make_hash_table($int18$1000, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $api_predefined_host_function_table$ = deflexical("*API-PREDEFINED-HOST-FUNCTION-TABLE*", maybeDefault( $sym19$_API_PREDEFINED_HOST_FUNCTION_TABLE_, $api_predefined_host_function_table$, ()-> (Hashtables.make_hash_table($int20$100, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $api_predefined_macro_table$ = deflexical("*API-PREDEFINED-MACRO-TABLE*", maybeDefault( $sym21$_API_PREDEFINED_MACRO_TABLE_, $api_predefined_macro_table$, ()-> (Hashtables.make_hash_table($int20$100, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $api_predefined_host_macro_table$ = deflexical("*API-PREDEFINED-HOST-MACRO-TABLE*", maybeDefault( $sym22$_API_PREDEFINED_HOST_MACRO_TABLE_, $api_predefined_host_macro_table$, ()-> (Hashtables.make_hash_table(TEN_INTEGER, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $api_symbols$ = deflexical("*API-SYMBOLS*", maybeDefault( $sym23$_API_SYMBOLS_, $api_symbols$, NIL));
+    $api_types$ = deflexical("*API-TYPES*", maybeDefault( $sym29$_API_TYPES_, $api_types$, NIL));
+    $kb_function_table$ = deflexical("*KB-FUNCTION-TABLE*", maybeDefault( $sym58$_KB_FUNCTION_TABLE_, $kb_function_table$, ()-> (Hashtables.make_hash_table($int59$400, Symbols.symbol_function(EQ), UNPROVIDED))));
+    $funcall_helper_property$ = deflexical("*FUNCALL-HELPER-PROPERTY*", maybeDefault( $sym65$_FUNCALL_HELPER_PROPERTY_, $funcall_helper_property$, ()-> ($kw66$FUNCALL_HELPER)));
+    $unprovided$ = deflexical("*UNPROVIDED*", maybeDefault( $sym68$_UNPROVIDED_, $unprovided$, ()-> (Symbols.make_symbol($str69$UNPROVIDED))));
     $cfasl_stream$ = defparameter("*CFASL-STREAM*", NIL);
-    $global_locks$ = deflexical("*GLOBAL-LOCKS*", ((NIL != Symbols.boundp($sym98$_GLOBAL_LOCKS_)) ? ((SubLObject) $global_locks$.getGlobalValue()) : NIL));
-    $fi_state_variables$ = deflexical("*FI-STATE-VARIABLES*", ((NIL != Symbols.boundp($sym106$_FI_STATE_VARIABLES_)) ? ((SubLObject) $fi_state_variables$.getGlobalValue()) : NIL));
-    $gt_state_variables$ = deflexical("*GT-STATE-VARIABLES*", ((NIL != Symbols.boundp($sym142$_GT_STATE_VARIABLES_)) ? ((SubLObject) $gt_state_variables$.getGlobalValue()) : NIL));
-    $at_state_variables$ = deflexical("*AT-STATE-VARIABLES*", ((NIL != Symbols.boundp($sym144$_AT_STATE_VARIABLES_)) ? ((SubLObject) $at_state_variables$.getGlobalValue()) : NIL));
-    $defn_state_variables$ = deflexical("*DEFN-STATE-VARIABLES*", ((NIL != Symbols.boundp($sym145$_DEFN_STATE_VARIABLES_)) ? ((SubLObject) $defn_state_variables$.getGlobalValue()) : NIL));
-    $kbp_state_variables$ = deflexical("*KBP-STATE-VARIABLES*", ((NIL != Symbols.boundp($sym148$_KBP_STATE_VARIABLES_)) ? ((SubLObject) $kbp_state_variables$.getGlobalValue()) : NIL));
+    $global_locks$ = deflexical("*GLOBAL-LOCKS*", maybeDefault( $sym98$_GLOBAL_LOCKS_, $global_locks$, NIL));
+    $fi_state_variables$ = deflexical("*FI-STATE-VARIABLES*", maybeDefault( $sym106$_FI_STATE_VARIABLES_, $fi_state_variables$, NIL));
+    $gt_state_variables$ = deflexical("*GT-STATE-VARIABLES*", maybeDefault( $sym142$_GT_STATE_VARIABLES_, $gt_state_variables$, NIL));
+    $at_state_variables$ = deflexical("*AT-STATE-VARIABLES*", maybeDefault( $sym144$_AT_STATE_VARIABLES_, $at_state_variables$, NIL));
+    $defn_state_variables$ = deflexical("*DEFN-STATE-VARIABLES*", maybeDefault( $sym145$_DEFN_STATE_VARIABLES_, $defn_state_variables$, NIL));
+    $kbp_state_variables$ = deflexical("*KBP-STATE-VARIABLES*", maybeDefault( $sym148$_KBP_STATE_VARIABLES_, $kbp_state_variables$, NIL));
     $current_forward_problem_store$ = defparameter("*CURRENT-FORWARD-PROBLEM-STORE*", NIL);
     $tracing_level$ = defparameter("*TRACING-LEVEL*", NIL);
     $structure_resourcing_enabled$ = deflexical("*STRUCTURE-RESOURCING-ENABLED*", NIL);
@@ -1119,7 +1151,7 @@ for a structure resource declared via DEFINE-STRUCTURE-RESOURCE. */
     $util_func_error_format_string$ = defparameter("*UTIL-FUNC-ERROR-FORMAT-STRING*", $str300$_S___function__S_is_not_a_symbol_);
     $util_search_type_error_format_string$ = defparameter("*UTIL-SEARCH-TYPE-ERROR-FORMAT-STRING*", $str301$_S___search_type__S_is_not_one_of);
     $process_resource_tracking_100s_of_nanoseconds_properties$ = deflexical("*PROCESS-RESOURCE-TRACKING-100S-OF-NANOSECONDS-PROPERTIES*", $list430);
-    $kb_var_initializations$ = deflexical("*KB-VAR-INITIALIZATIONS*", ((NIL != Symbols.boundp($sym467$_KB_VAR_INITIALIZATIONS_)) ? ((SubLObject) $kb_var_initializations$.getGlobalValue()) : NIL));
+    $kb_var_initializations$ = deflexical("*KB-VAR-INITIALIZATIONS*", maybeDefault( $sym467$_KB_VAR_INITIALIZATIONS_, $kb_var_initializations$, NIL));
     $partial_results_accumulator$ = defparameter("*PARTIAL-RESULTS-ACCUMULATOR*", NIL);
     $partial_results_size$ = defparameter("*PARTIAL-RESULTS-SIZE*", NIL);
     $partial_results_threshold$ = defparameter("*PARTIAL-RESULTS-THRESHOLD*", $int492$40);

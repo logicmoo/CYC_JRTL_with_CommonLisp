@@ -17,7 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.cycjava_1.cycl;
+package com.cyc.cycjava_1.cycl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+
+ import com.cyc.cycjava.cycl.*;
+ import com.cyc.cycjava.cycl.cyc_testing.*;
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+import com.cyc.cycjava.cycl.inference.*;
+ import com.cyc.cycjava.cycl.inference.harness.*;
+ import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.*;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+
+
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -48,14 +80,14 @@ import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
-import com.cyc.cycjava_1.cycl.access_macros;
-import com.cyc.cycjava_1.cycl.constant_handles;
-import com.cyc.cycjava_1.cycl.control_vars;
-import com.cyc.cycjava_1.cycl.format_nil;
-import com.cyc.cycjava_1.cycl.list_utilities;
-import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-import com.cyc.cycjava_1.cycl.system_parameters;
-import com.cyc.cycjava_1.cycl.system_version;
+//dm import com.cyc.cycjava_1.cycl.access_macros;
+//dm import com.cyc.cycjava_1.cycl.constant_handles;
+//dm import com.cyc.cycjava_1.cycl.control_vars;
+//dm import com.cyc.cycjava_1.cycl.format_nil;
+//dm import com.cyc.cycjava_1.cycl.list_utilities;
+//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
+//dm import com.cyc.cycjava_1.cycl.system_parameters;
+//dm import com.cyc.cycjava_1.cycl.system_version;
 
 public  final class system_info extends SubLTranslatedFile {
 
@@ -152,9 +184,9 @@ public  final class system_info extends SubLTranslatedFile {
 
   public static final SubLObject init_system_info_file() {
     $cyc_home_directory$ = deflexical("*CYC-HOME-DIRECTORY*", Filesys.construct_filename(NIL, NIL, NIL, T));
-    $available_cyc_features$ = deflexical("*AVAILABLE-CYC-FEATURES*", ((NIL != Symbols.boundp($sym0$_AVAILABLE_CYC_FEATURES_)) ? ((SubLObject) $available_cyc_features$.getGlobalValue()) : NIL));
-    $cycl_start_time$ = deflexical("*CYCL-START-TIME*", ((NIL != Symbols.boundp($sym11$_CYCL_START_TIME_)) ? ((SubLObject) $cycl_start_time$.getGlobalValue()) : NIL));
-    $subl_initial_continuation$ = deflexical("*SUBL-INITIAL-CONTINUATION*", ((NIL != Symbols.boundp($sym13$_SUBL_INITIAL_CONTINUATION_)) ? ((SubLObject) $subl_initial_continuation$.getGlobalValue()) : NIL));
+    $available_cyc_features$ = deflexical("*AVAILABLE-CYC-FEATURES*", maybeDefault( $sym0$_AVAILABLE_CYC_FEATURES_, $available_cyc_features$, NIL));
+    $cycl_start_time$ = deflexical("*CYCL-START-TIME*", maybeDefault( $sym11$_CYCL_START_TIME_, $cycl_start_time$, NIL));
+    $subl_initial_continuation$ = deflexical("*SUBL-INITIAL-CONTINUATION*", maybeDefault( $sym13$_SUBL_INITIAL_CONTINUATION_, $subl_initial_continuation$, NIL));
     return NIL;
   }
 
