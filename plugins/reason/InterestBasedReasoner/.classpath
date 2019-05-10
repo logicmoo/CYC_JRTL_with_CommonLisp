@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="src/" kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LarKC platform"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/arq-2.8.1.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/icu4j-3.4.4.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/iri-0.7.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/jena-2.6.2.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/jena-2.6.2-tests.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/lucene-core-2.3.1.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/slf4j-api-1.5.6.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/slf4j-log4j12-1.5.6.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/wstx-asl-3.2.9.jar"/>
+	<classpathentry kind="lib" path="D:/LARKC_PLATFORM/workspace_larkc_1.0/InterestBasedReasoner/lib/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

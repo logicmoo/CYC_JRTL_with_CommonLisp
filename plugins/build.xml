@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<project name="plugins" default="dist">
+  <dirname property="base1" file="${ant.file.plugins}"/>
+  
+    <target name="dist">
+        
+	<subant target="dist">
+    	  <fileset dir="${base1}" includes="decide/*/build.xml"/>
+          <fileset dir="${base1}" includes="identify/*/build.xml"/>
+          <fileset dir="${base1}" includes="reason/*/build.xml"/>
+          <fileset dir="${base1}" includes="select/*/build.xml"/>
+          <fileset dir="${base1}" includes="transform/*/build.xml"/>
+        </subant>
+    </target>
+    <target name="clean">
+	<subant target="clean">
+          <fileset dir="${base1}" includes="decide/*/build.xml"/>
+          <fileset dir="${base1}" includes="identify/*/build.xml"/>
+          <fileset dir="${base1}" includes="reason/*/build.xml"/>
+          <fileset dir="${base1}" includes="select/*/build.xml"/>
+          <fileset dir="${base1}" includes="transform/*/build.xml"/>
+	</subant>
+    </target>
+
+</project>
+
+<!-- vim: set filetype=xml expandtab tabstop=2 shiftwidth=2 autoindent smartindent: -->

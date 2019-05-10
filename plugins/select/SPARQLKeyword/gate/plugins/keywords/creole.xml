@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<CREOLE-DIRECTORY>
+	<CREOLE>
+		<RESOURCE>
+			<JAR>keywords-1.0.jar</JAR>
+			<NAME>Keyphrase Extractor</NAME>
+			<CLASS>keywords.KeyPhraseExtractor</CLASS>
+			<COMMENT>Extracts key phrases from all or parts of a document
+			</COMMENT>
+
+			<PARAMETER NAME="document" RUNTIME="true">gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="inputASName" RUNTIME="true" OPTIONAL="true">
+				java.lang.String</PARAMETER>
+			<PARAMETER NAME="outputASName" RUNTIME="true" OPTIONAL="true">
+				java.lang.String</PARAMETER>
+
+			<PARAMETER NAME="trainingMode" RUNTIME="true" DEFAULT="true">
+				java.lang.Boolean</PARAMETER>
+			<PARAMETER NAME="maximumNumberOfPhrasesInModel" RUNTIME="true"
+				DEFAULT="50000">java.lang.Integer</PARAMETER>
+			<PARAMETER NAME="maximumNumberOfPhrasesToStoreWhileTraining"
+				RUNTIME="true" DEFAULT="150000">java.lang.Integer
+			</PARAMETER>
+
+			<PARAMETER NAME="wordAnnotation" RUNTIME="true" DEFAULT="Token">
+				java.lang.String</PARAMETER>
+			<PARAMETER NAME="inputWordFeature" RUNTIME="true" DEFAULT="root">
+				java.lang.String</PARAMETER>
+			<PARAMETER NAME="outputWordFeature" RUNTIME="true" DEFAULT="string">
+				java.lang.String</PARAMETER>
+
+			<PARAMETER NAME="inputSectionAnnotation" RUNTIME="true"
+				DEFAULT="TopicalSegment" OPTIONAL="true">java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="keyPhraseAnnotation" RUNTIME="true"
+				DEFAULT="KeyPhrase">java.lang.String</PARAMETER>
+			<PARAMETER NAME="featuresToTransfer" RUNTIME="true"
+				OPTIONAL="true" DEFAULT="">java.util.ArrayList
+			</PARAMETER>
+			<PARAMETER NAME="markKeyPhrasesOnSegment" RUNTIME="true"
+				DEFAULT="true">java.lang.Boolean</PARAMETER>
+
+			<PARAMETER NAME="minimumLengthOfKeyPhrase" RUNTIME="true"
+				DEFAULT="1">java.lang.Integer</PARAMETER>
+			<PARAMETER NAME="maximumLengthOfKeyPhrase" RUNTIME="true"
+				DEFAULT="10">java.lang.Integer</PARAMETER>
+
+			<PARAMETER NAME="maximumNumberOfKeyPhrasesToExtract"
+				RUNTIME="true" DEFAULT="0">java.lang.Integer
+			</PARAMETER>
+			<PARAMETER NAME="minimumTFIDFValueOfKeyPhrases" RUNTIME="true"
+				DEFAULT="0.0">java.lang.Double</PARAMETER>
+			<PARAMETER NAME="minimumNumberOfOccurencesForEachKeyPhrase"
+				RUNTIME="true" DEFAULT="2">java.lang.Integer
+			</PARAMETER>
+			<PARAMETER NAME="tokenKindFilter" RUNTIME="true" DEFAULT="kind">
+				java.util.ArrayList</PARAMETER>
+			<PARAMETER NAME="tokenValueFilter" RUNTIME="true" DEFAULT="punctuation">
+				java.util.ArrayList</PARAMETER>
+		</RESOURCE>
+	</CREOLE>
+</CREOLE-DIRECTORY>

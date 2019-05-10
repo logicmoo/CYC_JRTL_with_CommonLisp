@@ -25,6 +25,8 @@
 	<path id="platform.lib">
 		<fileset dir="${lib}">
 			<include name="**/*.jar" />
+			<exclude name="**/javagat/adaptors" />
+			<exclude name="**/javagat/lib-gt4_0_0" />
 		</fileset>
 	</path>
 	
@@ -37,7 +39,8 @@
 		<copy todir="${base}/bin">
 			<fileset dir="${src}" />
 		</copy>
-		<javac debug="on" srcdir="${base}/bin" classpathref="platform.lib" destdir="${base}/bin" />
+		<javac fork="true" debug="on" srcdir="${base}/bin" classpathref="platform.lib" destdir="${base}/bin"  memoryinitialsize="256m"
+		       memorymaximumsize="512m"/>
 	</target>
 
 	<target name="dist" depends="compile">
@@ -47,6 +50,7 @@
 		<copy todir="${dist}">
 			<fileset dir="${base}/conf/run" />
 		</copy>
+		<chmod file="${dist}/run-larkc.sh" perm="ugo+rx"/>
 		<copy todir="${dist}/ext">
 			 <fileset dir="${ext}" />
 		</copy>
@@ -57,6 +61,8 @@
 		<path id="platform.run">
 			<fileset dir="${bin}">
 				<include name="**/*.jar" />
+				<exclude name="**/javagat/adaptors/*/*" />
+				<exclude name="**/javagat/lib-gt4_0_0/*" />
 			</fileset>
 			<pathelement location="${dist}/conf" />
 			<pathelement location="${dist}/ext" />

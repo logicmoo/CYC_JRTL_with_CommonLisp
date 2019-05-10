@@ -1,0 +1,9 @@
+@prefix larkc: <http://larkc.eu/plugin#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+larkc:SPARQLToTriplePatternQueryTransformer
+	rdf:type            rdfs:Class;
+	rdfs:subClassOf     larkc:QueryTransformer;
+	larkc:hasInputType  larkc:SPARQLQuery;
+	larkc:hasOutputType larkc:TriplePatternQuery.	

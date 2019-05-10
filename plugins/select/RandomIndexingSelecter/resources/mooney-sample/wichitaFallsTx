@@ -1,0 +1,163 @@
+http://www.mooney.net/geo#wichitaFallsTx http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.mooney.net/geo#City
+http://www.mooney.net/geo#wichitaFallsTx http://www.w3.org/2000/01/rdf-schema#label wichita falls
+http://www.mooney.net/geo#wichitaFallsTx http://www.mooney.net/geo#cityPopulation 94201
+http://www.mooney.net/geo#wichitaFallsTx http://www.mooney.net/geo#isCityOf http://www.mooney.net/geo#texas
+http://www.mooney.net/geo#texas http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.mooney.net/geo#State
+http://www.mooney.net/geo#texas http://www.w3.org/2000/01/rdf-schema#label texas
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#abbreviation tx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#statePopulation 266807
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#stateArea 14229000
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#statePopDensity 0.018750932
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#borders http://www.mooney.net/geo#newMexico
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#borders http://www.mooney.net/geo#louisiana
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#borders http://www.mooney.net/geo#arkansas
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#borders http://www.mooney.net/geo#oklahoma
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#portArthurTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#longviewTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#mcallenTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#mesquiteTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#tylerTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#midlandTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#grandPrairieTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#planoTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#richardsonTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#sanAngeloTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#brownsvilleTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#odessaTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#laredoTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#wichitaFallsTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#abileneTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#wacoTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#irvingTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#pasadenaTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#beaumontTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#garlandTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#amarilloTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#arlingtonTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#lubbockTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#corpusChristiTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#austinTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#fortWorthTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#elPasoTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#sanAntonioTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#dallasTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#houstonTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road30
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road44
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road35
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road20
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road40
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road10
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#washita2
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#pecos2
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#rioGrande2
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#canadian2
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#red2
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasHighPoint http://www.mooney.net/geo#guadalupePeakTx
+http://www.mooney.net/geo#texas http://www.mooney.net/geo#hasLowPoint http://www.mooney.net/geo#gulfOfMexicoTx
+http://www.mooney.net/geo#newMexico http://www.w3.org/2000/01/rdf-schema#label new mexico
+http://www.mooney.net/geo#newMexico http://www.mooney.net/geo#abbreviation nm
+http://www.mooney.net/geo#newMexico http://www.mooney.net/geo#statePopulation 121600
+http://www.mooney.net/geo#newMexico http://www.mooney.net/geo#stateArea 1303000
+http://www.mooney.net/geo#newMexico http://www.mooney.net/geo#statePopDensity 0.093323104
+http://www.mooney.net/geo#louisiana http://www.w3.org/2000/01/rdf-schema#label louisiana
+http://www.mooney.net/geo#louisiana http://www.mooney.net/geo#abbreviation la
+http://www.mooney.net/geo#louisiana http://www.mooney.net/geo#statePopulation 47700
+http://www.mooney.net/geo#louisiana http://www.mooney.net/geo#stateArea 4206000
+http://www.mooney.net/geo#louisiana http://www.mooney.net/geo#statePopDensity 0.011340941
+http://www.mooney.net/geo#arkansas http://www.w3.org/2000/01/rdf-schema#label arkansas
+http://www.mooney.net/geo#arkansas http://www.mooney.net/geo#abbreviation ar
+http://www.mooney.net/geo#arkansas http://www.mooney.net/geo#statePopulation 53200
+http://www.mooney.net/geo#arkansas http://www.mooney.net/geo#stateArea 2286000
+http://www.mooney.net/geo#arkansas http://www.mooney.net/geo#statePopDensity 0.023272092
+http://www.mooney.net/geo#oklahoma http://www.w3.org/2000/01/rdf-schema#label oklahoma
+http://www.mooney.net/geo#oklahoma http://www.mooney.net/geo#abbreviation ok
+http://www.mooney.net/geo#oklahoma http://www.mooney.net/geo#statePopulation 69950
+http://www.mooney.net/geo#oklahoma http://www.mooney.net/geo#stateArea 3025000
+http://www.mooney.net/geo#oklahoma http://www.mooney.net/geo#statePopDensity 0.023123967
+http://www.mooney.net/geo#portArthurTx http://www.w3.org/2000/01/rdf-schema#label port arthur
+http://www.mooney.net/geo#portArthurTx http://www.mooney.net/geo#cityPopulation 61195
+http://www.mooney.net/geo#longviewTx http://www.w3.org/2000/01/rdf-schema#label longview
+http://www.mooney.net/geo#longviewTx http://www.mooney.net/geo#cityPopulation 62762
+http://www.mooney.net/geo#mcallenTx http://www.w3.org/2000/01/rdf-schema#label mcallen
+http://www.mooney.net/geo#mcallenTx http://www.mooney.net/geo#cityPopulation 67042
+http://www.mooney.net/geo#mesquiteTx http://www.w3.org/2000/01/rdf-schema#label mesquite
+http://www.mooney.net/geo#mesquiteTx http://www.mooney.net/geo#cityPopulation 67053
+http://www.mooney.net/geo#tylerTx http://www.w3.org/2000/01/rdf-schema#label tyler
+http://www.mooney.net/geo#tylerTx http://www.mooney.net/geo#cityPopulation 70508
+http://www.mooney.net/geo#midlandTx http://www.w3.org/2000/01/rdf-schema#label midland
+http://www.mooney.net/geo#midlandTx http://www.mooney.net/geo#cityPopulation 70525
+http://www.mooney.net/geo#grandPrairieTx http://www.w3.org/2000/01/rdf-schema#label grand prairie
+http://www.mooney.net/geo#grandPrairieTx http://www.mooney.net/geo#cityPopulation 71462
+http://www.mooney.net/geo#planoTx http://www.w3.org/2000/01/rdf-schema#label plano
+http://www.mooney.net/geo#planoTx http://www.mooney.net/geo#cityPopulation 72331
+http://www.mooney.net/geo#richardsonTx http://www.w3.org/2000/01/rdf-schema#label richardson
+http://www.mooney.net/geo#richardsonTx http://www.mooney.net/geo#cityPopulation 72496
+http://www.mooney.net/geo#sanAngeloTx http://www.w3.org/2000/01/rdf-schema#label san angelo
+http://www.mooney.net/geo#sanAngeloTx http://www.mooney.net/geo#cityPopulation 73240
+http://www.mooney.net/geo#brownsvilleTx http://www.w3.org/2000/01/rdf-schema#label brownsville
+http://www.mooney.net/geo#brownsvilleTx http://www.mooney.net/geo#cityPopulation 84997
+http://www.mooney.net/geo#odessaTx http://www.w3.org/2000/01/rdf-schema#label odessa
+http://www.mooney.net/geo#odessaTx http://www.mooney.net/geo#cityPopulation 90027
+http://www.mooney.net/geo#laredoTx http://www.w3.org/2000/01/rdf-schema#label laredo
+http://www.mooney.net/geo#laredoTx http://www.mooney.net/geo#cityPopulation 91449
+http://www.mooney.net/geo#wichitaFallsTx http://www.w3.org/2000/01/rdf-schema#label wichita falls
+http://www.mooney.net/geo#wichitaFallsTx http://www.mooney.net/geo#cityPopulation 94201
+http://www.mooney.net/geo#abileneTx http://www.w3.org/2000/01/rdf-schema#label abilene
+http://www.mooney.net/geo#abileneTx http://www.mooney.net/geo#cityPopulation 98315
+http://www.mooney.net/geo#wacoTx http://www.w3.org/2000/01/rdf-schema#label waco
+http://www.mooney.net/geo#wacoTx http://www.mooney.net/geo#cityPopulation 101261
+http://www.mooney.net/geo#irvingTx http://www.w3.org/2000/01/rdf-schema#label irving
+http://www.mooney.net/geo#irvingTx http://www.mooney.net/geo#cityPopulation 109943
+http://www.mooney.net/geo#pasadenaTx http://www.w3.org/2000/01/rdf-schema#label pasadena
+http://www.mooney.net/geo#pasadenaTx http://www.mooney.net/geo#cityPopulation 112560
+http://www.mooney.net/geo#beaumontTx http://www.w3.org/2000/01/rdf-schema#label beaumont
+http://www.mooney.net/geo#beaumontTx http://www.mooney.net/geo#cityPopulation 118102
+http://www.mooney.net/geo#garlandTx http://www.w3.org/2000/01/rdf-schema#label garland
+http://www.mooney.net/geo#garlandTx http://www.mooney.net/geo#cityPopulation 138857
+http://www.mooney.net/geo#amarilloTx http://www.w3.org/2000/01/rdf-schema#label amarillo
+http://www.mooney.net/geo#amarilloTx http://www.mooney.net/geo#cityPopulation 149230
+http://www.mooney.net/geo#arlingtonTx http://www.w3.org/2000/01/rdf-schema#label arlington
+http://www.mooney.net/geo#arlingtonTx http://www.mooney.net/geo#cityPopulation 160123
+http://www.mooney.net/geo#lubbockTx http://www.w3.org/2000/01/rdf-schema#label lubbock
+http://www.mooney.net/geo#lubbockTx http://www.mooney.net/geo#cityPopulation 173979
+http://www.mooney.net/geo#corpusChristiTx http://www.w3.org/2000/01/rdf-schema#label corpus christi
+http://www.mooney.net/geo#corpusChristiTx http://www.mooney.net/geo#cityPopulation 231999
+http://www.mooney.net/geo#austinTx http://www.w3.org/2000/01/rdf-schema#label austin
+http://www.mooney.net/geo#austinTx http://www.mooney.net/geo#cityPopulation 345496
+http://www.mooney.net/geo#fortWorthTx http://www.w3.org/2000/01/rdf-schema#label fort worth
+http://www.mooney.net/geo#fortWorthTx http://www.mooney.net/geo#cityPopulation 385164
+http://www.mooney.net/geo#elPasoTx http://www.w3.org/2000/01/rdf-schema#label el paso
+http://www.mooney.net/geo#elPasoTx http://www.mooney.net/geo#cityPopulation 425259
+http://www.mooney.net/geo#sanAntonioTx http://www.w3.org/2000/01/rdf-schema#label san antonio
+http://www.mooney.net/geo#sanAntonioTx http://www.mooney.net/geo#cityPopulation 785880
+http://www.mooney.net/geo#dallasTx http://www.w3.org/2000/01/rdf-schema#label dallas
+http://www.mooney.net/geo#dallasTx http://www.mooney.net/geo#cityPopulation 904078
+http://www.mooney.net/geo#houstonTx http://www.w3.org/2000/01/rdf-schema#label houston
+http://www.mooney.net/geo#houstonTx http://www.mooney.net/geo#cityPopulation 1595138
+http://www.mooney.net/geo#road30 http://www.w3.org/2000/01/rdf-schema#label road 30
+http://www.mooney.net/geo#road30 http://www.mooney.net/geo#number 30
+http://www.mooney.net/geo#road44 http://www.w3.org/2000/01/rdf-schema#label road 44
+http://www.mooney.net/geo#road44 http://www.mooney.net/geo#number 44
+http://www.mooney.net/geo#road35 http://www.w3.org/2000/01/rdf-schema#label road 35
+http://www.mooney.net/geo#road35 http://www.mooney.net/geo#number 35
+http://www.mooney.net/geo#road20 http://www.w3.org/2000/01/rdf-schema#label road 20
+http://www.mooney.net/geo#road20 http://www.mooney.net/geo#number 20
+http://www.mooney.net/geo#road40 http://www.w3.org/2000/01/rdf-schema#label road 40
+http://www.mooney.net/geo#road40 http://www.mooney.net/geo#number 40
+http://www.mooney.net/geo#road10 http://www.w3.org/2000/01/rdf-schema#label road 10
+http://www.mooney.net/geo#road10 http://www.mooney.net/geo#number 10
+http://www.mooney.net/geo#washita2 http://www.w3.org/2000/01/rdf-schema#label washita
+http://www.mooney.net/geo#washita2 http://www.mooney.net/geo#length 805
+http://www.mooney.net/geo#pecos2 http://www.w3.org/2000/01/rdf-schema#label pecos
+http://www.mooney.net/geo#pecos2 http://www.mooney.net/geo#length 805
+http://www.mooney.net/geo#rioGrande2 http://www.w3.org/2000/01/rdf-schema#label rio grande
+http://www.mooney.net/geo#rioGrande2 http://www.mooney.net/geo#length 3033
+http://www.mooney.net/geo#canadian2 http://www.w3.org/2000/01/rdf-schema#label canadian
+http://www.mooney.net/geo#canadian2 http://www.mooney.net/geo#length 1458
+http://www.mooney.net/geo#red2 http://www.w3.org/2000/01/rdf-schema#label red
+http://www.mooney.net/geo#red2 http://www.mooney.net/geo#length 1638
+http://www.mooney.net/geo#guadalupePeakTx http://www.w3.org/2000/01/rdf-schema#label guadalupe peak
+http://www.mooney.net/geo#guadalupePeakTx http://www.mooney.net/geo#hiElevation 2667
+http://www.mooney.net/geo#gulfOfMexicoTx http://www.w3.org/2000/01/rdf-schema#label gulf of mexico
+http://www.mooney.net/geo#gulfOfMexicoTx http://www.mooney.net/geo#loElevation 0

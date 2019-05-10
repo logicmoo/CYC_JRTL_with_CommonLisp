@@ -20,10 +20,12 @@ larkc:Plugin   rdf:type   rdfs:Class,
 
 larkc:hasUri  rdf:type   rdf:Property;
 				  rdfs:domain larkc:Plugin;
+			      ocyc:arg1Genl larkc:Plugin;
 				  rdfs:range  xsd:string.
 				  				  
 larkc:hasEndpoint rdf:type   rdf:Property;
 				  rdfs:domain larkc:Plugin;
+                  ocyc:arg1Genl larkc:Plugin;
 				  rdfs:range  xsd:string.                        
 
 larkc:Identifier  rdf:type rdfs:Class ;

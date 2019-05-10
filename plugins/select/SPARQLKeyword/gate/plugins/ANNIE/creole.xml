@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<!-- $Id: creole.xml 8819 2007-06-20 15:05:11Z nirajaswani $ -->
+<!-- creole.xml directory file for ANNIE Processing resources -->
+<CREOLE-DIRECTORY>
+	<!-- Language Resources -->
+	<CREOLE>
+	</CREOLE>
+
+	<!-- Processing Resources -->
+	<CREOLE>
+		<!-- creole.xml for the Unicode tokeniser -->
+		<RESOURCE>
+			<NAME>GATE Unicode Tokeniser</NAME>
+			<CLASS>gate.creole.tokeniser.SimpleTokeniser</CLASS>
+			<COMMENT>
+				A customisable Unicode tokeniser
+				(http://gate.ac.uk/sale/tao/#sec:tokeniser).
+			</COMMENT>
+			<PARAMETER NAME="document"
+				COMMENT="The document to be tokenised" RUNTIME="true">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="annotationSetName" RUNTIME="true"
+				COMMENT="The annotation set to be used for the generated annotations"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER
+				DEFAULT="resources/tokeniser/DefaultTokeniser.rules"
+				COMMENT="The URL for the rules file" SUFFIXES="rules"
+				NAME="rulesURL">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER DEFAULT="UTF-8"
+				COMMENT="The encoding used for reading the definitions"
+				NAME="encoding">
+				java.lang.String
+			</PARAMETER>
+			<ICON>tokeniser</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for the Englishtokeniser -->
+		<RESOURCE>
+			<NAME>ANNIE English Tokeniser</NAME>
+			<CLASS>gate.creole.tokeniser.DefaultTokeniser</CLASS>
+			<COMMENT>
+				A customisable English tokeniser
+				(http://gate.ac.uk/sale/tao/#sec:en-tokeniser).
+			</COMMENT>
+			<PARAMETER NAME="document"
+				COMMENT="The document to be tokenised" RUNTIME="true">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="annotationSetName" RUNTIME="true"
+				COMMENT="The annotation set to be used for the generated annotations"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="tokeniserRulesURL"
+				DEFAULT="resources/tokeniser/DefaultTokeniser.rules"
+				COMMENT="The URL for the rules file" SUFFIXES="rules">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="transducerGrammarURL"
+				DEFAULT="resources/tokeniser/postprocess.jape"
+				COMMENT="The URL for the postprocessing transducer"
+				SUFFIXES="jape">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="encoding"
+				COMMENT="The encoding used for reading the definitions"
+				DEFAULT="UTF-8">
+				java.lang.String
+			</PARAMETER>
+			<ICON>tokeniser</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for Sentence splitter-->
+		<RESOURCE>
+			<NAME>ANNIE Sentence Splitter</NAME>
+			<COMMENT>
+				ANNIE sentence splitter
+				(http://gate.ac.uk/sale/tao/#sec:splitter)
+			</COMMENT>
+			<CLASS>gate.creole.splitter.SentenceSplitter</CLASS>
+			<PARAMETER COMMENT="The document to be processed"
+				NAME="document" RUNTIME="true">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="inputASName"
+				COMMENT="The name used for the temporary annotation set"
+				RUNTIME="true" OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="outputASName"
+				COMMENT="The name used for the temporary annotation set"
+				RUNTIME="true" OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="encoding"
+				COMMENT="The encoding used for reading the definition files"
+				DEFAULT="UTF-8">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="gazetteerListsURL"
+				DEFAULT="resources/sentenceSplitter/gazetteer/lists.def"
+				COMMENT="The URL to the custom list lookup definition file"
+				OPTIONAL="true" SUFFIXES="def">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="transducerURL"
+				DEFAULT="resources/sentenceSplitter/grammar/main.jape"
+				COMMENT="The URL to the custom Jape grammar file" OPTIONAL="true"
+				SUFFIXES="jape">
+				java.net.URL
+			</PARAMETER>
+			<ICON>sentence-splitter</ICON>
+		</RESOURCE>
+	</CREOLE>
+</CREOLE-DIRECTORY>

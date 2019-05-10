@@ -1,0 +1,50 @@
+/* 
+*
+* rdf.rules
+* RDF entailment rules (in datalog)
+* From: http://www.w3.org/TR/rdf-mt/#RDFRules
+* and LarKC FP7 D1.1.3 p. 26
+* 20.01.2009
+*
+*/
+
+// Prefix rdf:  namespace URI: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+// Prefix rdfs: namespace URI: http://www.w3.org/2000/01/rdf-schema#
+// Prefix xsd:  namespace URI: http://www.w3.org/2001/XMLSchema#
+// Prefix owl:  namespace URI: http://www.w3.org/2002/07/owl#
+
+/* rdf1: */
+triple(?p, _iri("rdf:type"), _iri("rdf:Property") ) :- triple(?v, ?p, ?w).
+
+/* rdf2: */  
+// triple(?b1, _iri("rdf:type"), _iri("rdf:XMLLiteral")) :- triple(?v, ?p, ?blankNode), IS_BLANK_NODE(?blankNode).
+
+/* rdf2-D: */ 
+//triple(?b1, _iri("rdf:type"), ?a) :- triple(?v, ?p, ?l).
+
+/* ***** lg rules ***** */
+
+/* lg: */  
+/* triple(?v, ?p, ?bnode('')) :- triple(?v, ?p, ?l). */
+/* not yet supported */
+
+/* gl: */ 
+/* triple(?v, ?p, ?l) :- triple(?v, ?p, ?b1). */
+/* not yet supported */
+
+// =====================================
+// RDF Axiomatic triples
+// =====================================
+
+triple( _iri( "rdf:type" ), _iri( "rdf:type" ), _iri( "rdf:Property" ) ) :- .
+triple( _iri( "rdf:subject" ), _iri( "rdf:type" ), _iri( "rdf:Property" ) ) :- .
+triple( _iri( "rdf:predicate" ), _iri( "rdf:type" ), _iri( "rdf:Property" ) ) :- .
+triple( _iri( "rdf:object" ), _iri( "rdf:type" ), _iri( "rdf:Property" ) ) :- .
+triple( _iri( "rdf:first" ), _iri( "rdf:type" ), _iri( "rdf:Property" ) ) :- .
+triple( _iri( "rdf:rest" ), _iri( "rdf:type" ), _iri( "rdf:Property" ) ) :- .
+triple( _iri( "rdf:value" ), _iri( "rdf:type" ), _iri( "rdf:Property" ) ) :- .
+//triple( _iri( "rdf:_1" ), _iri( "rdf:type" ), _iri( "rdf:Property" ) ) :- .
+//triple( _iri( "rdf:_2" ), _iri( "rdf:type" ), _iri( "rdf:Property" ) ) :- .
+//...
+triple( _iri( "rdf:nil" ), _iri( "rdf:type" ), _iri( "rdf:List" ) ) :- .
+

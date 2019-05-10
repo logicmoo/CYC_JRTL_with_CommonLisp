@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL SELECTERS -->
+	<wsdl:interface name="identifier"
+		sawsdl:modelReference="http://larkc.eu/plugin#Identifier">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS IDENTIFIER -->
+    <wsdl:service name="urn:eu.larkc.plugin.identify.urbancomputing.ubl.UrbanSindiceIdentifier.wsdl" interface="identifier"
+  	sawsdl:modelReference="http://larkc.eu/plugin#UrbanSindiceIdentifier" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.identify.urbancomputing.ubl.UrbanSindiceIdentifier" />
+    </wsdl:service>
+
+</wsdl:description>

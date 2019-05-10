@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="NotificationConsumer" targetNamespace="http://wsrf.globus.org/core/notification" xmlns:tns="http://wsrf.globus.org/core/notification" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsntw="http://docs.oasis-open.org/wsn/bw-2" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <import namespace="http://docs.oasis-open.org/wsrf/rpw-2" location="../../wsrf/properties/rpw-2.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsn/bw-2" location="../../wsrf/notification/bw-2.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsrf/rw-2" location="../../wsrf/resource/rw-2.wsdl"/>
+  <types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://wsrf.globus.org/core/notification" xmlns:tns="http://wsrf.globus.org/core/notification" xmlns:wsrp="http://docs.oasis-open.org/wsrf/rp-2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+     
+            <xsd:import namespace="http://docs.oasis-open.org/wsrf/rp-2" schemaLocation="../../wsrf/properties/rp-2.xsd"/>
+
+            <xsd:complexType name="ResourcePropertyValueChangeNotificationElementType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" ref="wsrp:ResourcePropertyValueChangeNotification"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+  </types>
+  <portType name="Consumer">
+    <operation name="Notify">
+      <input message="wsntw:Notify" wsaw:Action="http://docs.oasis-open.org/wsn/bw-2/NotificationConsumer/Notify"/>
+    </operation>
+  </portType>
+</definitions>

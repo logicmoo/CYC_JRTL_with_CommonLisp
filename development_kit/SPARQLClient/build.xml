@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project name="SPARQLClient" default="dist">
+	<dirname property="base_sc" file="${ant.file.SPARQLClient}"/>
+
+	<property name="bin_sc"  value="${base_sc}/bin" />
+	<property name="dist_sc" value="${base_sc}/dist" />
+	<property name="lib_sc"  value="${base_sc}/lib" />
+	<property name="src_sc"  value="${base_sc}/src" />
+
+	<path id="sc_libs">
+		<fileset dir="${base_sc}/lib" includes="**/*.jar" />
+	</path>
+
+	<target name="init">
+		<mkdir dir="${base_sc}/bin"/>
+		<mkdir dir="${base_sc}/dist"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${base_sc}/bin" />
+		<delete dir="${base_sc}/dist" />
+		<delete file="${base_sc}/SPARQLClient.jar" />
+	</target>
+
+	<target name="dist" depends="init">
+		<mkdir dir="${base_sc}/bin"/>
+		<mkdir dir="${base_sc}/dist"/>
+		<copy todir="${base_sc}/dist">
+			<fileset dir="${base_sc}/src" />
+		</copy>
+		<javac debug="on" srcdir="${base_sc}/dist" classpathref="sc_libs" destdir="${base_sc}/dist"/>
+		<jar destfile="${base_sc}/SPARQLClient.jar" basedir="${base_sc}/dist" manifest="${base_sc}/Manifest.mf"/>
+	</target>
+</project>

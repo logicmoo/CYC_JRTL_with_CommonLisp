@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="src/" kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/LarKC platform"/>
+	<classpathentry kind="lib" path="lib/geonames-1.0.1-java5.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.5.3.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

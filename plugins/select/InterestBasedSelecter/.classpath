@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="src/" kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LarKC platform"/>
+	<classpathentry kind="lib" path="/simple_pipeline/lib/larkcplatform/larkc-platform.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

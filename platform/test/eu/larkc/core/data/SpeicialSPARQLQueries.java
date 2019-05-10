@@ -3,6 +3,8 @@ package eu.larkc.core.data;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import org.openrdf.model.impl.URIImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.larkc.core.data.VariableBinding.Binding;
 import eu.larkc.core.data.util.SPARQLQueryExecutor;
@@ -32,6 +34,7 @@ public class SpeicialSPARQLQueries extends ORDITestCase {
 
 	@Test
 	public void testRdfDataMerge() {
+		Logger log = LoggerFactory.getLogger(SpeicialSPARQLQueries.class);
 		RdfGraph graph = df.createRemoteRdfGraph(new URIImpl(
 				RDFProviders.TOPIC_URL));
 		RdfGraph graph2 = df.createRemoteRdfGraph(new URIImpl(
@@ -49,7 +52,7 @@ public class SpeicialSPARQLQueries extends ORDITestCase {
 		int count = 0;
 		while (iter.hasNext()) {
 			count++;
-			System.out.println(iter.next());
+			log.info("" + iter.next());
 		}
 		assertEquals(count, RDFProviders.TOPIC_COUNT + 1);
 	}

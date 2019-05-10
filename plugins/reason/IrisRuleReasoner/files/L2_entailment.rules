@@ -1,0 +1,112 @@
+/* 
+*
+* L2_entailment.rules
+* L2 entailment rules (in datalog)
+* From: http://www.w3.org/TR/rdf-mt/#rules and http://www-kasm.nii.ac.jp/~koide/SWCLOS/Manual/OWLEntailments.html
+* and LarKC FP7 D1.1.3 p. 26
+* 20.01.2009
+*
+*/
+
+// Prefix rdf:  namespace URI: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+// Prefix rdfs: namespace URI: http://www.w3.org/2000/01/rdf-schema#
+// Prefix xsd:  namespace URI: http://www.w3.org/2001/XMLSchema#
+// Prefix owl:  namespace URI: http://www.w3.org/2002/07/owl#
+
+/* rdf1: */
+triple(?p, _iri("rdf:type"), _iri("rdf:Property") ) :- triple(?v, ?p, ?w).
+
+/* rdfs2: */ 
+triple(?v, _iri("rdf:type"), ?u) :- triple(?p, _iri("rdfs:domain"), ?u), triple(?v, ?p, ?w).
+
+/* rdfs3: */ 
+triple(?w, _iri("rdf:type"), ?u) :- triple(?p, _iri("rdfs:range"), ?u), triple(?v, ?p, ?w).
+
+/* rdfs4a: */ 
+triple(?v, _iri("rdf:type"), _iri("rdfs:Resource") ) :- triple(?v, ?p, ?w). 
+
+/* rdfs4b: */ 
+triple(?w, _iri("rdf:type"), _iri("rdfs:Resource") ) :- triple(?v, ?p, ?w).
+
+/* rdfs5: */ 
+triple(?v, _iri("rdfs:subPropertyOf"), ?u) :- triple(?v, _iri("rdfs:subPropertyOf"), ?w),  triple(?w, _iri("rdfs:subPropertyOf"), ?u).
+
+/* rdfs6: */ 
+triple(?v, _iri("rdfs:subPropertyOf"), ?v) :- triple(?v, _iri("rdf:type"), _iri("rdf:Property") ). 
+
+/* rdfs7x: */ 
+triple(?v, ?q, ?w) :- triple(?p, _iri("rdfs:subPropertyOf"), ?q), triple(?v, ?p, ?w).
+
+/* rdfs8: */ 
+triple(?v, _iri("rdfs:subClassOf"), _iri("rdfs:Resource") ) :- triple(?v, _iri("rdf:type"), _iri("rdfs:Class") ).
+
+/* rdfs9: */ 
+triple(?u, _iri("rdf:type"), ?w) :- triple(?v, _iri("rdfs:subClassOf"), ?w), triple(?u, _iri("rdf:type"), ?v).
+
+/* rdfs10: */ 
+triple(?v, _iri("rdfs:subClassOf"), ?v) :- triple(?v, _iri("rdf:type"), _iri("rdfs:Class") ).
+
+/* rdfs11: */ 
+triple(?v, _iri("rdfs:subClassOf"), ?u) :- triple(?v, _iri("rdfs:subClassOf"), ?w), triple(?w, _iri("rdfs:subClassOf"), ?u).
+
+/* rdfs12: */ 
+triple(?v, _iri("rdfs:subPropertyOf"), _iri("rdfs:member")) :- triple(?v, _iri("rdf:type"), _iri("rdfs:ContainerMembershipProperty") ).
+
+/* rdfs13: */ 
+triple(?v, _iri("rdfs:subClassOf"), _iri("rdfs:Literal") ) :- triple(?v, _iri("rdf:type"), _iri("rdfs:Datatype") ).
+
+/* rdfp3 */
+triple(?v, ?p, ?w) :- triple(?w, ?p, ?v), triple(?p, _iri('rdf:type'), _iri('owl:SymmetricProperty')).
+
+/* rdfp4 */
+triple(?u, ?p, ?w) :- triple(?u, ?p, ?v), triple(?v, ?p, ?w), triple(?p, _iri('rdf:type'), _iri('owl:TransitiveProperty')).
+
+/* rdfp5a 
+	!!!WARNING!!!
+	generates problems when creating triple(STRING, URI, STRING), since the first STRING has to be an URI actually */
+triple(?v, _iri('owl:sameAs'), ?v) :- triple(?v, ?p, ?w).
+
+/* rdfp5b
+	!!!WARNING!!!
+	generates problems when creating triple(STRING, URI, STRING), since the first STRING has to be an URI actually  */
+triple(?w, _iri('owl:sameAs'), ?w) :- triple(?v, ?p, ?w).
+
+/* rdfp6 */
+triple(?w, _iri('owl:sameAs'), ?v) :- triple(?v, _iri('owl:sameAs'), ?w).
+
+/* rdfp7 */
+triple(?u, _iri('owl:sameAs'), ?w) :- triple(?u, _iri('owl:sameAs'), ?v), triple(?v, _iri('owl:sameAs'), ?w).
+
+/* rdfp8ax */
+triple(?w, ?q, ?u) :- triple(?u, ?p, ?w), triple(?p, _iri('owl:inverseOf'), ?q).
+
+/* rdfp8bx */
+triple(?w, ?p, ?u) :- triple(?u, ?q, ?w), triple(?p, _iri('owl:inverseOf'), ?q).
+
+/* rdfp9 */ 
+triple(?v, _iri('rdfs:subClassOf'), ?w) :- triple(?v, _iri('rdf:type'), _iri('rdfs:Class')), triple(?v, _iri('owl:sameAs'), ?w).
+
+/* rdfp10 */ 
+triple(?p, _iri('rdfs:subPropertyOf'), ?q) :- triple(?p, _iri('rdf:type'), _iri('rdfs:Property')), triple(?p, _iri('owl:sameAs'), ?q).
+
+/* rdfp11 */ 	
+triple(?u1, ?p, ?v1) :- triple(?u, ?p, ?v), triple(?u, _iri('owl:sameAs'), ?u1), triple(?v, _iri('owl:sameAs'), ?v1).
+
+/* rdfp12a */ 
+triple(?v, _iri('rdfs:subClassOf'), ?w) :- triple(?v, _iri('owl:equivalentClass'), ?w).
+
+/* rdfp12b */ 
+triple(?w, _iri('rdfs:subClassOf'), ?v) :- triple(?v, _iri('owl:equivalentClass'), ?w).
+
+/* rdfp12c */ 
+triple(?v, _iri('owl:equivalentClass'), ?w) :- triple(?v, _iri('rdfs:subClassOf'), ?w), triple(?w, _iri('rdfs:subClassOf'), ?v).
+
+/* rdfp13a */ 
+triple(?v, _iri('rdfs:subPropertyOf'), ?w) :- triple(?v, _iri('owl:equivalentProperty'), ?w).
+
+/* rdfp13b */ 
+triple(?w, _iri('rdfs:subPropertyOf'), ?v) :- triple(?v, _iri('owl:equivalentProperty'), ?w).
+
+/* rdfp13c */ 
+triple(?v, _iri('owl:equivalentProperty'), ?w) :- triple(?v, _iri('rdfs:subPropertyOf'), ?w), triple(?w, _iri('rdfs:subPropertyOf'), ?v).
+

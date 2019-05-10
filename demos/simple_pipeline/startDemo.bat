@@ -1,0 +1,3 @@
+
+TITLE Starting the LarKC Workflow Demonstrator...
+java -Xmx512M -Xms512M -jar larkc_demonstrator.jar

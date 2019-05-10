@@ -1,0 +1,58 @@
+		Urban LarKC Event DECIDER
+
+Introduction
+
+The workflow activated by this decider is able to 
+retrieve the events happening in a given city on a given date.
+The SPARQL query to get the desired results should be 
+in the following form (events in Milan on July 2nd, 2010):
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfcal: <http://www.w3.org/2002/12/cal/icaltzd#>
+PREFIX addr: <http://schemas.talis.com/2005/address/schema#>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?e ?s ?summary ?cat ?desc ?l ?lab ?lat ?lng
+WHERE{
+	?e rdf:type rdfcal:Vevent.
+	?e rdfcal:summary ?summary.
+	?e skos:subject ?cat.
+	?e rdfcal:description ?desc.
+	?e geo:location ?l.
+	?l rdfs:label ?lab.
+	?l geo:lat ?lat.
+	?l geo:long ?lng.
+	?e rdfcal:dtstart ?s .
+	?l addr:localityName "Milan".
+	FILTER(?s > xsd:dateTime("2010-07-02T00:00:00Z") 
+		&& ?s < xsd:dateTime("2010-07-02T23:59:59Z")).
+}
+
+The user of this workflow can set both the name of the destination 
+(which will be identified by LarKC by querying Geonames) and the 
+date on which the events are sought.
+
+The events are currently found on those listed by the well-known 
+Web 2.0 service Eventful (http://eventful.com//).
+ 
+
+
+Prerequisites and dependencies
+
+In order to work properly, the Urban LarKC Event workflow needs the 
+configuration of (at least) one of its plugins, namely the 
+EventIdentifier, which requires a valid Eventful API key. 
+Further instructions are given in the EventIdentifier README file.
+
+
+Contact information
+
+Daniele Dell'Aglio - CEFRIEL
+daniele.dellaglio@cefriel.it
+
+
+License
+The component follows the licensing strategy for the LarKC Plug-ins
+and is released under the Apache License (version 2.0).

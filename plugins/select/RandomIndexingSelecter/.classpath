@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="src/" kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="LARKC_PLATFORM/platform/dist/bin/larkc-platform.jar"/>
+	<classpathentry kind="lib" path="lib/sspace-lib.jar"/>
+	<classpathentry kind="lib" path="lib/semanticvectors-1.25.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/LarKC_Molecules.jar"/>
+	<classpathentry kind="lib" path="lib/gate.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

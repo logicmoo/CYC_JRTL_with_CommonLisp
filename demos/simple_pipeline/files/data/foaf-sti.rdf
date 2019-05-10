@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE rdf:RDF [
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#">
+]>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+
+	xmlns:owl="http://www.w3.org/2002/07/owl/"
+	
+	xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	xmlns:rss="http://purl.org/rss/1.0/"
+	
+	xml:base="http://sti2.at/">
+
+	<foaf:Person rdf:ID="tx_derimp_list_uid255">
+		<foaf:name>Christoph Fuchs</foaf:name>
+		<foaf:family_name>Fuchs</foaf:family_name>
+		<foaf:surname>Fuchs</foaf:surname>
+		<foaf:firstname>Christoph</foaf:firstname>
+		<foaf:givenname>Christoph</foaf:givenname>
+
+		<foaf:phone>+43 512 507 6481</foaf:phone>
+		<foaf:mbox_sha1sum>f440f115556146595f5c6d1375e4516440dbe049</foaf:mbox_sha1sum>
+		<foaf:depiction rdf:resource="http://www.deri.at/fileadmin/images/photos/christoph_fuchs.jpg" />
+		<foaf:workplaceHomepage rdf:resource="http://www.deri.at" />
+		<foaf:workInfoHomepage rdf:resource="http://www.deri.at/about/team/details/?uid=255" />
+	</foaf:Person>
+
+	<foaf:Person rdf:ID="tx_derimp_list_uid255b">
+		<foaf:name>Christoph 'Gigi' Fuchs</foaf:name>
+		<foaf:family_name>Fuchs</foaf:family_name>
+		<foaf:surname>Fuchs</foaf:surname>
+		<foaf:firstname>Christoph</foaf:firstname>
+		<foaf:givenname>Christoph</foaf:givenname>
+		<foaf:nickname>Gigi</foaf:nickname>
+
+		<foaf:phone>+43 650 6815557</foaf:phone>
+
+		<owl:sameAs rdf:resource="#tx_derimp_list_uid255"/>
+	</foaf:Person>
+
+	<foaf:Person rdf:ID="tx_derimp_list_uid256">
+		<foaf:name>Matthias Pressnig</foaf:name>
+
+		<foaf:family_name>Pressnig</foaf:family_name>
+		<foaf:surname>Pressnig</foaf:surname>
+		<foaf:firstname>Matthias</foaf:firstname>
+		<foaf:givenname>Matthias</foaf:givenname>
+		<foaf:phone>+43 512 507 96880</foaf:phone>
+		<foaf:mbox_sha1sum>47ec9623149eef483ba75c1137b0f4eb6f0c7519</foaf:mbox_sha1sum>
+
+		<foaf:depiction rdf:resource="http://www.deri.at/fileadmin/images/photos/matthias_pressnig.jpg" />
+		<foaf:workplaceHomepage rdf:resource="http://www.deri.at" />
+		<foaf:workInfoHomepage rdf:resource="http://www.deri.at/about/team/details/?uid=256" />
+	</foaf:Person>
+	<foaf:Person rdf:ID="tx_derimp_list_uid257">
+		<foaf:name>Helmut Steiner</foaf:name>
+		<foaf:family_name>Steiner</foaf:family_name>
+		<foaf:surname>Steiner</foaf:surname>
+
+		<foaf:firstname>Helmut</foaf:firstname>
+		<foaf:givenname>Helmut</foaf:givenname>
+		<foaf:phone>+43 512 507 96844</foaf:phone>
+		<foaf:mbox_sha1sum>98d3819e5acdab44fce5be9d1e483247addfe8fc</foaf:mbox_sha1sum>
+		<foaf:depiction rdf:resource="http://www.deri.at/fileadmin/images/photos/helmut_steiner.jpg" />
+		<foaf:workplaceHomepage rdf:resource="http://www.deri.at" />
+		<foaf:workInfoHomepage rdf:resource="http://www.deri.at/about/team/details/?uid=257" />
+
+	</foaf:Person>
+	<foaf:Person rdf:ID="tx_derimp_list_uid260">
+		<foaf:name>Dmitriy Solomakhin</foaf:name>
+		<foaf:family_name>Solomakhin</foaf:family_name>
+		<foaf:surname>Solomakhin</foaf:surname>
+		<foaf:firstname>Dmitriy</foaf:firstname>
+		<foaf:givenname>Dmitriy</foaf:givenname>
+
+		<foaf:phone>+43 512 507 96875</foaf:phone>
+		<foaf:mbox_sha1sum>16cdbe8ac99dc2efd508a15ef975dd94b79ad565</foaf:mbox_sha1sum>
+		<foaf:depiction rdf:resource="http://www.deri.at/fileadmin/images/photos/dmitriy_solomakhin.jpg" />
+		<foaf:workplaceHomepage rdf:resource="http://www.deri.at" />
+		<foaf:workInfoHomepage rdf:resource="http://www.deri.at/about/team/details/?uid=260" />
+	</foaf:Person>
+
+</rdf:RDF>

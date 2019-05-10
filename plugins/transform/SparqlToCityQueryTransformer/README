@@ -1,0 +1,17 @@
+		SparqlToCityQueryTransformer IDENTIFIER
+
+Introduction
+
+The SparqlToCityQueryTransformer receive the input query of 
+the Urban LarKC event workflow and interacts with GeoNames in
+order to find the coordinates of the input city.
+
+Contact information
+
+Daniele Dell'Aglio - CEFRIEL
+daniele.dellaglio@cefriel.it
+
+
+License
+The component follows the licensing strategy for the LarKC Plug-ins
+and is released under the Apache License (version 2.0).

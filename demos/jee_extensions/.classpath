@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="converter"/>
+	<classpathentry kind="src" path="client"/>
+	<classpathentry kind="src" path="server"/>
+	<classpathentry kind="src" path="shared"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/httpUtils/httpclient-4.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/httpUtils/httpcore-4.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/ordi-model-0.5.jar"/>
+	<classpathentry kind="lib" path="lib/ordi-trree-adapter-3.1.a6.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v6.0"/>
+	<classpathentry kind="lib" path="lib/openrdf-sesame-2.2.4-onejar.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LarKC platform"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

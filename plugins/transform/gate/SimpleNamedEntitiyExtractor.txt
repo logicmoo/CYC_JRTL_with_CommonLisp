@@ -1,0 +1,13 @@
+// very simple word tokenization
+String[] words = documentStr.split("[ \n.,']");
+HashSet<String> orgsList = new HashSet<String>();
+for (String word : words) {
+	if (word == null) { continue; }
+	word = word.trim();
+	if (word.length() < 3) { continue; }
+	if (Character.isUpperCase(word.charAt(0)) && !orgsList.contains(word)) {
+		orgsList.add(word);
+		System.out.println(" - " + word);
+	}
+}
+			

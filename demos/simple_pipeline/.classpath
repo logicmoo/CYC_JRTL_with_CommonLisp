@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/growingdatasetselecter/GrowingDataSetSelecter.jar"/>
+	<classpathentry kind="lib" path="lib/simpleanytimedecider/SimpleAnytimeDecider.jar"/>
+	<classpathentry kind="lib" path="lib/sindicetriplepatternidentifier/SindiceTriplePatternIdentifier.jar"/>
+	<classpathentry kind="lib" path="lib/sparqlqueryevaluationreasoner/SparqlQueryEvaluationReasoner.jar"/>
+	<classpathentry kind="lib" path="lib/sparqltotriplepatternquerytransformer/SPARQLToTriplePatternQueryTransformer.jar"/>
+	<classpathentry kind="lib" path="lib/larkcplatform/larkc-platform.jar"/>
+	<classpathentry kind="lib" path="lib/simplefilereaderidentifier/SimpleFileReaderIdentifier.jar"/>
+	<classpathentry kind="lib" path="lib/irisrulebasedreasoner/IrisRuleReasoner.jar"/>
+	<classpathentry kind="lib" path="lib/irisrulebasedreasoner/lib/iris-0.58.jar"/>
+	<classpathentry kind="lib" path="lib/irisrulebasedreasoner/lib/iris-parser-0.58.jar"/>
+	<classpathentry kind="lib" path="lib/passitontransformer/PassItOnTransformer.jar"/>
+	<classpathentry kind="lib" path="lib/larkc_jee_client.jar"/>
+	<classpathentry kind="lib" path="lib/nulldatatransformer/NullDataTransformer.jar"/>
+	<classpathentry kind="lib" path="/home/hpcochep/Development/LarKC/LarKC-trunk/platform/lib/openrdf-sesame-2.2.4-onejar.jar"/>
+	<classpathentry kind="lib" path="/home/hpcochep/Development/LarKC/LarKC-trunk/platform/lib/slf4j/slf4j-log4j12-1.5.3.jar"/>
+	<classpathentry kind="lib" path="/home/hpcochep/Development/LarKC/LarKC-trunk/platform/lib/slf4j/slf4j-api-1.5.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL IDENTIFIERS -->
+	<wsdl:interface name="identifier"
+		sawsdl:modelReference="http://larkc.eu/plugin#Identifier">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS IDENTIFIER -->
+    <wsdl:service name="urn:EventIdentifier" interface="identifier"
+  	sawsdl:modelReference="http://larkc.eu/plugin#EventIdentifier" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.identify.urbancomputing.ubl.EventIdentifier" />
+    </wsdl:service>
+
+</wsdl:description>

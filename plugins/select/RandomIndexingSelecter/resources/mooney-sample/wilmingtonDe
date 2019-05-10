@@ -1,0 +1,46 @@
+http://www.mooney.net/geo#wilmingtonDe http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.mooney.net/geo#City
+http://www.mooney.net/geo#wilmingtonDe http://www.w3.org/2000/01/rdf-schema#label wilmington
+http://www.mooney.net/geo#wilmingtonDe http://www.mooney.net/geo#cityPopulation 70195
+http://www.mooney.net/geo#wilmingtonDe http://www.mooney.net/geo#isCityOf http://www.mooney.net/geo#delaware
+http://www.mooney.net/geo#delaware http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.mooney.net/geo#State
+http://www.mooney.net/geo#delaware http://www.w3.org/2000/01/rdf-schema#label delaware
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#abbreviation de
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#statePopulation 2044
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#stateArea 594000
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#statePopDensity 0.0034410774
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#borders http://www.mooney.net/geo#maryland
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#borders http://www.mooney.net/geo#newJersey
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#borders http://www.mooney.net/geo#pennsylvania
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#doverDe
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#wilmingtonDe
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road95
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#delaware2
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#hasHighPoint http://www.mooney.net/geo#centervilleDe
+http://www.mooney.net/geo#delaware http://www.mooney.net/geo#hasLowPoint http://www.mooney.net/geo#atlanticOceanDe
+http://www.mooney.net/geo#maryland http://www.w3.org/2000/01/rdf-schema#label maryland
+http://www.mooney.net/geo#maryland http://www.mooney.net/geo#abbreviation md
+http://www.mooney.net/geo#maryland http://www.mooney.net/geo#statePopulation 10460
+http://www.mooney.net/geo#maryland http://www.mooney.net/geo#stateArea 4217000
+http://www.mooney.net/geo#maryland http://www.mooney.net/geo#statePopDensity 0.0024804363
+http://www.mooney.net/geo#newJersey http://www.w3.org/2000/01/rdf-schema#label new jersey
+http://www.mooney.net/geo#newJersey http://www.mooney.net/geo#abbreviation nj
+http://www.mooney.net/geo#newJersey http://www.mooney.net/geo#statePopulation 7787
+http://www.mooney.net/geo#newJersey http://www.mooney.net/geo#stateArea 7365000
+http://www.mooney.net/geo#newJersey http://www.mooney.net/geo#statePopDensity 0.001057298
+http://www.mooney.net/geo#pennsylvania http://www.w3.org/2000/01/rdf-schema#label pennsylvania
+http://www.mooney.net/geo#pennsylvania http://www.mooney.net/geo#abbreviation pa
+http://www.mooney.net/geo#pennsylvania http://www.mooney.net/geo#statePopulation 45308
+http://www.mooney.net/geo#pennsylvania http://www.mooney.net/geo#stateArea 11863000
+http://www.mooney.net/geo#pennsylvania http://www.mooney.net/geo#statePopDensity 0.00381927
+http://www.mooney.net/geo#doverDe http://www.w3.org/2000/01/rdf-schema#label dover
+http://www.mooney.net/geo#doverDe http://www.mooney.net/geo#cityPopulation 0
+http://www.mooney.net/geo#wilmingtonDe http://www.w3.org/2000/01/rdf-schema#label wilmington
+http://www.mooney.net/geo#wilmingtonDe http://www.mooney.net/geo#cityPopulation 70195
+http://www.mooney.net/geo#road95 http://www.w3.org/2000/01/rdf-schema#label road 95
+http://www.mooney.net/geo#road95 http://www.mooney.net/geo#number 95
+http://www.mooney.net/geo#delaware2 http://www.w3.org/2000/01/rdf-schema#label delaware
+http://www.mooney.net/geo#delaware2 http://www.mooney.net/geo#length 451
+http://www.mooney.net/geo#centervilleDe http://www.w3.org/2000/01/rdf-schema#label centerville
+http://www.mooney.net/geo#centervilleDe http://www.mooney.net/geo#hiElevation 135
+http://www.mooney.net/geo#atlanticOceanDe http://www.w3.org/2000/01/rdf-schema#label atlantic ocean
+http://www.mooney.net/geo#atlanticOceanDe http://www.mooney.net/geo#loElevation 0

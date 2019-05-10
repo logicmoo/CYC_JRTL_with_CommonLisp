@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL DECIDERS -->
+	<wsdl:interface name="decider"
+		sawsdl:modelReference="http://larkc.eu/plugin#Decider">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS DECIDER -->
+    <wsdl:service name="urn:UrbanLarKCEventDecider" interface="decider"
+  	sawsdl:modelReference="http://larkc.eu/plugin#UrbanLarKCEventDecider" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.decider.urbancomputing.ubl.UrbanLarKCEventDecider" />
+    </wsdl:service>
+
+</wsdl:description>

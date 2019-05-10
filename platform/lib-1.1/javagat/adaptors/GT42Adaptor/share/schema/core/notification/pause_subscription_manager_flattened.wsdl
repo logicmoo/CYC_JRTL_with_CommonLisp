@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="PausableSubscriptionManagerService" targetNamespace="http://wsrf.globus.org/core/notification" xmlns:wsrp="http://docs.oasis-open.org/wsrf/rp-2" xmlns:tns="http://wsrf.globus.org/core/notification" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/rpw-2" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/rlw-2" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsntw="http://docs.oasis-open.org/wsn/bw-2" xmlns:wsrf-rw="http://docs.oasis-open.org/wsrf/rw-2" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <import namespace="http://docs.oasis-open.org/wsn/bw-2" location="../../wsrf/notification/bw-2.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsrf/rpw-2" location="../../wsrf/properties/rpw-2.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsrf/rlw-2" location="../../wsrf/lifetime/rlw-2.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsrf/rw-2" location="../../wsrf/resource/rw-2.wsdl"/>
+  <types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://wsrf.globus.org/core/notification" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+            <xsd:import namespace="http://docs.oasis-open.org/wsn/b-2" schemaLocation="../../wsrf/notification/b-2.xsd"/>
+
+            <!-- copied from the specification, just import adn reference
+            causes the flatten tool to fail -->
+            <xsd:element name="PausableSubscriptionManagerRP">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element maxOccurs="1" minOccurs="1" ref="wsnt:ConsumerReference"/>
+                        <xsd:element maxOccurs="1" minOccurs="0" ref="wsnt:Filter"/>
+                        <xsd:element maxOccurs="1" minOccurs="0" ref="wsnt:SubscriptionPolicy"/>
+                        <xsd:element maxOccurs="1" minOccurs="0" ref="wsnt:CreationTime"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+  </types>
+  <portType name="PausableSubscriptionManager" wsrp:ResourceProperties="tns:PausableSubscriptionManagerRP">
+    <operation name="GetResourceProperty">
+      <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsaw:Action="http://docs.oasis-open.org/wsrf/rpw-2/GetResourceProperty/GetResourcePropertyRequest"/>
+      <output name="GetResourcePropertyResponse" message="wsrpw:GetResourcePropertyResponse" wsaw:Action="http://docs.oasis-open.org/wsrf/rpw-2/GetResourceProperty/GetResourcePropertyResponse"/>
+      <fault name="InvalidResourcePropertyQNameFault" message="wsrpw:InvalidResourcePropertyQNameFault" wsaw:Action="http://docs.oasis-open.org/wsrf/fault"/>
+      <fault name="ResourceUnavailableFault" message="wsrf-rw:ResourceUnavailableFault" wsaw:Action="http://docs.oasis-open.org/wsrf/fault"/>
+      <fault name="ResourceUnknownFault" message="wsrf-rw:ResourceUnknownFault" wsaw:Action="http://docs.oasis-open.org/wsrf/fault"/>
+    </operation>
+    <operation name="Renew">
+      <input name="RenewRequest" message="wsntw:RenewRequest" wsaw:Action="http://docs.oasis-open.org/wsn/bw-2/SubscriptionManager/RenewRequest"/>
+      <output name="RenewResponse" message="wsntw:RenewResponse" wsaw:Action="http://docs.oasis-open.org/wsn/bw-2/SubscriptionManager/RenewResponse"/>
+      <fault name="UnacceptableTerminationTimeFault" message="wsntw:UnacceptableTerminationTimeFault" wsaw:Action="http://docs.oasis-open.org/wsn/fault"/>
+      <fault name="ResourceUnknownFault" message="wsrf-rw:ResourceUnknownFault" wsaw:Action="http://docs.oasis-open.org/wsrf/fault"/>
+    </operation>
+    <operation name="Unsubscribe">
+      <input name="UnsubscribeRequest" message="wsntw:UnsubscribeRequest" wsaw:Action="http://docs.oasis-open.org/wsn/bw-2/SubscriptionManager/UnsubscribeRequest"/>
+      <output name="UnsubscribeResponse" message="wsntw:UnsubscribeResponse" wsaw:Action="http://docs.oasis-open.org/wsn/bw-2/SubscriptionManager/UnsubscribeResponse"/>
+      <fault name="UnableToDestroySubscriptionFault" message="wsntw:UnableToDestroySubscriptionFault" wsaw:Action="http://docs.oasis-open.org/wsn/fault"/>
+      <fault name="ResourceUnknownFault" message="wsrf-rw:ResourceUnknownFault" wsaw:Action="http://docs.oasis-open.org/wsrf/fault"/>
+    </operation>
+    <operation name="PauseSubscription">
+      <input message="wsntw:PauseSubscriptionRequest" wsaw:Action="http://docs.oasis-open.org/wsn/bw-2/PausableSubscriptionManager/PauseSubscriptionRequest"/>
+      <output message="wsntw:PauseSubscriptionResponse" wsaw:Action="http://docs.oasis-open.org/wsn/bw-2/PausableSubscriptionManager/PauseSubscriptionResponse"/>
+      <fault name="PauseFailedFault" message="wsntw:PauseFailedFault" wsaw:Action="http://docs.oasis-open.org/wsn/fault"/>
+      <fault name="ResourceUnknownFault" message="wsrf-rw:ResourceUnknownFault" wsaw:Action="http://docs.oasis-open.org/wsrf/fault"/>
+    </operation>
+    <operation name="ResumeSubscription">
+      <input message="wsntw:ResumeSubscriptionRequest" wsaw:Action="http://docs.oasis-open.org/wsn/bw-2/PausableSubscriptionManager/ResumeSubscriptionRequest"/>
+      <output message="wsntw:ResumeSubscriptionResponse" wsaw:Action="http://docs.oasis-open.org/wsn/bw-2/PausableSubscriptionManager/ResumeSubscriptionResponse"/>
+      <fault name="ResumeFailedFault" message="wsntw:ResumeFailedFault" wsaw:Action="http://docs.oasis-open.org/wsn/fault"/>
+      <fault name="ResourceUnknownFault" message="wsrf-rw:ResourceUnknownFault" wsaw:Action="http://docs.oasis-open.org/wsrf/fault"/>
+    </operation>
+    <operation name="Destroy">
+      <input name="DestroyRequest" message="wsrlw:DestroyRequest" wsaw:Action="http://docs.oasis-open.org/wsrf/rlw-2/ImmediateResourceTermination/DestroyRequest"/>
+      <output name="DestroyResponse" message="wsrlw:DestroyResponse" wsaw:Action="http://docs.oasis-open.org/wsrf/rlw-2/ImmediateResourceTermination/DestroyResponse"/>
+      <fault name="ResourceNotDestroyedFault" message="wsrlw:ResourceNotDestroyedFault" wsaw:Action="http://docs.oasis-open.org/wsrf/faults"/>
+      <fault name="ResourceUnavailableFault" message="wsrf-rw:ResourceUnavailableFault" wsaw:Action="http://docs.oasis-open.org/wsrf/faults"/>
+      <fault name="ResourceUnknownFault" message="wsrf-rw:ResourceUnknownFault" wsaw:Action="http://docs.oasis-open.org/wsrf/faults"/>
+    </operation>
+  </portType>
+</definitions>

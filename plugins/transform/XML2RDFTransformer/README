@@ -1,0 +1,18 @@
+		XML2RDFTransformer IDENTIFIER
+
+Introduction
+
+The XML2RDFTransfomer is the plugin which translates a XML 
+document in RDF and inserts it in the Data Layer. In order to 
+work the plug-in requires the locations of the XML file and 
+of the related XSLT transformation.
+
+Contact information
+
+Daniele Dell'Aglio - CEFRIEL
+daniele.dellaglio@cefriel.it
+
+
+License
+The component follows the licensing strategy for the LarKC Plug-ins
+and is released under the Apache License (version 2.0).

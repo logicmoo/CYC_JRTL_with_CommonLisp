@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL SELECTERS -->
+	<wsdl:interface name="reasoner"
+		sawsdl:modelReference="http://larkc.eu/plugin#Reasoner">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS IDENTIFIER -->
+    <wsdl:service name="urn:eu.larkc.plugin.reason.cycreasoner.CycReasoner" interface="reasoner"
+  	sawsdl:modelReference="http://larkc.eu/plugin#CycReasoner" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.reason.cycreasoner.CycReasoner" />
+    </wsdl:service>
+
+</wsdl:description>

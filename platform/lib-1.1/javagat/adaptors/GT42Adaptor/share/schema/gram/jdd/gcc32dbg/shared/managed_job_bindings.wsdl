@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ManagedJob" targetNamespace="http://www.globus.org/namespaces/2008/03/gram/job/bindings" xmlns:porttype="http://www.globus.org/namespaces/2008/03/gram/job" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://www.globus.org/namespaces/2008/03/gram/job" location="managed_job_port_type.wsdl"/>
+  <wsdl:binding name="ManagedJobPortTypeSOAPBinding" type="porttype:ManagedJobPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="QueryResourceProperties">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/rpw-2/QueryResourceProperties/QueryResourcePropertiesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidQueryExpressionFault">
+        <soap:fault name="InvalidQueryExpressionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="QueryEvaluationErrorFault">
+        <soap:fault name="QueryEvaluationErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnavailableFault">
+        <soap:fault name="ResourceUnavailableFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnknownQueryExpressionDialectFault">
+        <soap:fault name="UnknownQueryExpressionDialectFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleResourceProperties">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/rpw-2/GetMultipleResourceProperties/GetMultipleResourcePropertiesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnavailableFault">
+        <soap:fault name="ResourceUnavailableFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Subscribe">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsn/bw-2/NotificationProducer/SubscribeRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TopicNotSupportedFault">
+        <soap:fault name="TopicNotSupportedFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidTopicExpressionFault">
+        <soap:fault name="InvalidTopicExpressionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnsupportedPolicyRequestFault">
+        <soap:fault name="UnsupportedPolicyRequestFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnacceptableInitialTerminationTimeFault">
+        <soap:fault name="UnacceptableInitialTerminationTimeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidMessageContentExpressionFault">
+        <soap:fault name="InvalidMessageContentExpressionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidProducerPropertiesExpressionFault">
+        <soap:fault name="InvalidProducerPropertiesExpressionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="SubscribeCreationFailedFault">
+        <soap:fault name="SubscribeCreationFailedFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TopicExpressionDialectUnknownFault">
+        <soap:fault name="TopicExpressionDialectUnknownFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidFilterFault">
+        <soap:fault name="InvalidFilterFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="NotifyMessageNotSupportedFault">
+        <soap:fault name="NotifyMessageNotSupportedFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnrecognizedPolicyRequestFault">
+        <soap:fault name="UnrecognizedPolicyRequestFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrentMessage">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsn/bw-2/NotificationProducer/GetCurrentMessageRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="MultipleTopicsSpecifiedFault">
+        <soap:fault name="MultipleTopicsSpecifiedFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TopicNotSupportedFault">
+        <soap:fault name="TopicNotSupportedFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidTopicExpressionFault">
+        <soap:fault name="InvalidTopicExpressionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="NoCurrentMessageOnTopicFault">
+        <soap:fault name="NoCurrentMessageOnTopicFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TopicExpressionDialectUnknownFault">
+        <soap:fault name="TopicExpressionDialectUnknownFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="terminate">
+      <soap:operation soapAction="http://www.globus.org/namespaces/2008/03/gram/job/terminate"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="delegatedCredentialDestroyFault">
+        <soap:fault name="delegatedCredentialDestroyFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="resourceNotTerminatedFault">
+        <soap:fault name="resourceNotTerminatedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SetTerminationTime">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/rlw-2/ScheduledResourceTermination/SetTerminationTimeRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceUnavailableFault">
+        <soap:fault name="ResourceUnavailableFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UnableToSetTerminationTimeFault">
+        <soap:fault name="UnableToSetTerminationTimeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="TerminationTimeChangeRejectedFault">
+        <soap:fault name="TerminationTimeChangeRejectedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="register">
+      <soap:operation soapAction="http://www.globus.org/namespaces/2008/03/gram/job/ManagedJobPortType/registerRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="rankTakenFault">
+        <soap:fault name="rankTakenFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="capacityReachedFault">
+        <soap:fault name="capacityReachedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetResourceProperty">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/rpw-2/GetResourceProperty/GetResourcePropertyRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnavailableFault">
+        <soap:fault name="ResourceUnavailableFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="release">
+      <soap:operation soapAction="http://www.globus.org/namespaces/2008/03/gram/job/release"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="resourceNotReleasedFault">
+        <soap:fault name="resourceNotReleasedFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>

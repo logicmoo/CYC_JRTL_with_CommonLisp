@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL SELECTERS -->
+	<wsdl:interface name="infosetTransformer"
+		sawsdl:modelReference="http://larkc.eu/plugin#InformationSetTransformer">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS TRANSFORMER -->
+    <wsdl:service name="urn:eu.larkc.plugin.transform.gate.GateTransformer" interface="infosetTransformer"
+  	sawsdl:modelReference="http://larkc.eu/plugin#GateTransformer" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.transform.gate.GateTransformer" />
+    </wsdl:service>
+
+</wsdl:description>

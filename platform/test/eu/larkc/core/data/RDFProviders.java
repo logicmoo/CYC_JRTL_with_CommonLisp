@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RDFProviders extends ORDITestCase {
 
@@ -105,7 +107,8 @@ public class RDFProviders extends ORDITestCase {
 	 * @param graph
 	 */
 	public void printGraph(SetOfStatements graph, int expectedCount) {
-		System.out.println(graph.getClass());
+		Logger log = LoggerFactory.getLogger(RDFProviders.class);
+		log.info("",graph.getClass());
 		CloseableIterator<Statement> iter = graph.getStatements();
 
 		int count = 0;

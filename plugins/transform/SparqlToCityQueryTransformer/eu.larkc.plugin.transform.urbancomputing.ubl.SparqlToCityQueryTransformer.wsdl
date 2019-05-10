@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL SELECTERS -->
+	<wsdl:interface name="queryTransformer"
+		sawsdl:modelReference="http://larkc.eu/plugin#InformationSetTransformer">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS IDENTIFIER -->
+    <wsdl:service name="urn:eu.larkc.plugin.transform.urbancomputing.ubl.SparqlToCityQueryTransformer" interface="queryTransformer"
+  	sawsdl:modelReference="http://larkc.eu/plugin#SparqlToCityQueryTransformer" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.transform.urbancomputing.ubl.SparqlToCityQueryTransformer" />
+    </wsdl:service>
+
+</wsdl:description>

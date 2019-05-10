@@ -1,0 +1,12 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uc: <http://larkc.cefriel.it/ontologies/plugin#> .
+@prefix larkc: <http://larkc.eu/plugin#> .
+
+uc:XmlDocument rdf:type rdfs:Class.
+
+uc:hasXslt 	rdf:type rdf:Property;
+			rdfs:domain uc:XmlDocument.
+
+uc:isPartOfGraph 	rdf:type rdf:Property;
+					rdfs:domain uc:XmlDocument.

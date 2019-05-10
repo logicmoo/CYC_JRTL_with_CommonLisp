@@ -1,0 +1,73 @@
+http://www.mooney.net/geo#wichitaKs http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.mooney.net/geo#City
+http://www.mooney.net/geo#wichitaKs http://www.w3.org/2000/01/rdf-schema#label wichita
+http://www.mooney.net/geo#wichitaKs http://www.mooney.net/geo#cityPopulation 279212
+http://www.mooney.net/geo#wichitaKs http://www.mooney.net/geo#isCityOf http://www.mooney.net/geo#kansas
+http://www.mooney.net/geo#kansas http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.mooney.net/geo#State
+http://www.mooney.net/geo#kansas http://www.w3.org/2000/01/rdf-schema#label kansas
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#abbreviation ks
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#statePopulation 82300
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#stateArea 2364000
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#statePopDensity 0.034813873
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#borders http://www.mooney.net/geo#colorado
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#borders http://www.mooney.net/geo#oklahoma
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#borders http://www.mooney.net/geo#missouri
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#borders http://www.mooney.net/geo#nebraska
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#overlandParkKs
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#topekaKs
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#kansasCityKs
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#wichitaKs
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road35
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road70
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#smokyHill2
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#neosho2
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#republican2
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#cimarron2
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#arkansas2
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasHighPoint http://www.mooney.net/geo#mountSunflowerKs
+http://www.mooney.net/geo#kansas http://www.mooney.net/geo#hasLowPoint http://www.mooney.net/geo#verdigrisRiverKs
+http://www.mooney.net/geo#colorado http://www.w3.org/2000/01/rdf-schema#label colorado
+http://www.mooney.net/geo#colorado http://www.mooney.net/geo#abbreviation co
+http://www.mooney.net/geo#colorado http://www.mooney.net/geo#statePopulation 104000
+http://www.mooney.net/geo#colorado http://www.mooney.net/geo#stateArea 2889000
+http://www.mooney.net/geo#colorado http://www.mooney.net/geo#statePopDensity 0.035998616
+http://www.mooney.net/geo#oklahoma http://www.w3.org/2000/01/rdf-schema#label oklahoma
+http://www.mooney.net/geo#oklahoma http://www.mooney.net/geo#abbreviation ok
+http://www.mooney.net/geo#oklahoma http://www.mooney.net/geo#statePopulation 69950
+http://www.mooney.net/geo#oklahoma http://www.mooney.net/geo#stateArea 3025000
+http://www.mooney.net/geo#oklahoma http://www.mooney.net/geo#statePopDensity 0.023123967
+http://www.mooney.net/geo#missouri http://www.w3.org/2000/01/rdf-schema#label missouri
+http://www.mooney.net/geo#missouri http://www.mooney.net/geo#abbreviation mo
+http://www.mooney.net/geo#missouri http://www.mooney.net/geo#statePopulation 69700
+http://www.mooney.net/geo#missouri http://www.mooney.net/geo#stateArea 4916000
+http://www.mooney.net/geo#missouri http://www.mooney.net/geo#statePopDensity 0.014178194
+http://www.mooney.net/geo#nebraska http://www.w3.org/2000/01/rdf-schema#label nebraska
+http://www.mooney.net/geo#nebraska http://www.mooney.net/geo#abbreviation ne
+http://www.mooney.net/geo#nebraska http://www.mooney.net/geo#statePopulation 77300
+http://www.mooney.net/geo#nebraska http://www.mooney.net/geo#stateArea 1569000
+http://www.mooney.net/geo#nebraska http://www.mooney.net/geo#statePopDensity 0.04926705
+http://www.mooney.net/geo#overlandParkKs http://www.w3.org/2000/01/rdf-schema#label overland park
+http://www.mooney.net/geo#overlandParkKs http://www.mooney.net/geo#cityPopulation 81784
+http://www.mooney.net/geo#topekaKs http://www.w3.org/2000/01/rdf-schema#label topeka
+http://www.mooney.net/geo#topekaKs http://www.mooney.net/geo#cityPopulation 118690
+http://www.mooney.net/geo#kansasCityKs http://www.w3.org/2000/01/rdf-schema#label kansas city
+http://www.mooney.net/geo#kansasCityKs http://www.mooney.net/geo#cityPopulation 161148
+http://www.mooney.net/geo#wichitaKs http://www.w3.org/2000/01/rdf-schema#label wichita
+http://www.mooney.net/geo#wichitaKs http://www.mooney.net/geo#cityPopulation 279212
+http://www.mooney.net/geo#road35 http://www.w3.org/2000/01/rdf-schema#label road 35
+http://www.mooney.net/geo#road35 http://www.mooney.net/geo#number 35
+http://www.mooney.net/geo#road70 http://www.w3.org/2000/01/rdf-schema#label road 70
+http://www.mooney.net/geo#road70 http://www.mooney.net/geo#number 70
+http://www.mooney.net/geo#smokyHill2 http://www.w3.org/2000/01/rdf-schema#label smoky hill
+http://www.mooney.net/geo#smokyHill2 http://www.mooney.net/geo#length 869
+http://www.mooney.net/geo#neosho2 http://www.w3.org/2000/01/rdf-schema#label neosho
+http://www.mooney.net/geo#neosho2 http://www.mooney.net/geo#length 740
+http://www.mooney.net/geo#republican2 http://www.w3.org/2000/01/rdf-schema#label republican
+http://www.mooney.net/geo#republican2 http://www.mooney.net/geo#length 679
+http://www.mooney.net/geo#cimarron2 http://www.w3.org/2000/01/rdf-schema#label cimarron
+http://www.mooney.net/geo#cimarron2 http://www.mooney.net/geo#length 965
+http://www.mooney.net/geo#arkansas2 http://www.w3.org/2000/01/rdf-schema#label arkansas
+http://www.mooney.net/geo#arkansas2 http://www.mooney.net/geo#length 2333
+http://www.mooney.net/geo#mountSunflowerKs http://www.w3.org/2000/01/rdf-schema#label mount sunflower
+http://www.mooney.net/geo#mountSunflowerKs http://www.mooney.net/geo#hiElevation 1231
+http://www.mooney.net/geo#verdigrisRiverKs http://www.w3.org/2000/01/rdf-schema#label verdigris river
+http://www.mooney.net/geo#verdigrisRiverKs http://www.mooney.net/geo#loElevation 207

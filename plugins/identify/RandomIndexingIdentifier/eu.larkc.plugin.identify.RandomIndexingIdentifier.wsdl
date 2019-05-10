@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL Identifiers -->
+	<wsdl:interface name="identifier"
+		sawsdl:modelReference="http://larkc.eu/plugin#Identifier">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS Identifiers -->
+    <wsdl:service name="urn:RandomIndexingIdentifier" interface="identifier"
+  	sawsdl:modelReference="http://larkc.eu/plugin#RandomIndexingIdentifier" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.identify.RandomIndexingIdentifier" />
+    </wsdl:service>
+
+</wsdl:description>

@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL SELECTERS -->
+	<wsdl:interface name="queryTransformer"
+		sawsdl:modelReference="http://larkc.eu/plugin#QueryTransformer">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS IDENTIFIER -->
+    <wsdl:service name="urn:GWASQueryTransformer" interface="queryTransformer"
+  	sawsdl:modelReference="http://larkc.eu/plugin#GWASQueryTransformer" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.transform.GWASQueryTransformer" />
+    </wsdl:service>
+
+</wsdl:description>

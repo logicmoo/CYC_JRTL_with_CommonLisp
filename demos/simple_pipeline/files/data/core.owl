@@ -1,0 +1,2684 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns="http://purl.uniprot.org/core/"
+  xml:base="http://purl.uniprot.org/core/">
+  <owl:Ontology rdf:about="">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Properties and classes used for protein annotation.</rdfs:comment>
+  </owl:Ontology>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Subcellular_Location">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Component"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/locationSpecifiedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Cellular_Component"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/locationSpecifiedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >3</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/locationSpecifiedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Genomic_DNA">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/DNA"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Genomic DNA</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Similarity_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Similarity</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >SIMILARITY</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the similarities (sequence or structural) of a protein with other proteins.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Annotation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Component">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Cellular_Component"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Pharmaceutical_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the use of a protein as a pharmaceutical drug.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pharmaceutical</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >PHARMACEUTICAL</alias>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Annotation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Metal_Binding_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Binding site for a metal ion.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >METAL</alias>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Site_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Metal Ion Binding Site</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Erroneous_Gene_Model_Prediction">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence_Caution_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Erroneous Gene Model Prediction</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Gene">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:minCardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Ribosomal_Frameshifting">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Alternative_Products_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ribosomal Frameshifting</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Turn_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Turn</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >TURN</alias>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Secondary_Structure_Annotation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Repeat_Annotation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Region_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of an internal sequence repetition.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Repeat</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >REPEAT</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Developmental_Stage_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the developmentally-specific expression of a protein.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Developmental Stage</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Annotation"/>
+    </rdfs:subClassOf>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DEVELOPMENTAL STAGE</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Cross-link_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CROSSLNK</alias>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Modification_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Crosslink</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Posttranslationally formed amino acid bonds.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/PH_Dependence_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Describes the optimum pH for enzyme activity and/or the variation of enzyme activity with pH variation.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >pH Dependence</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Biophysicochemical_Annotation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Initiator_Methionine_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indicates that the initiator methionine has been cleaved off and is not shown in the sequence.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >INIT_MET</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Initiator Methionine</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Molecule_Processing_Annotation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Peptide_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a released active peptide.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >PEPTIDE</alias>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Molecule_Processing_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Peptide</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Journal_Citation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An article published in a journal.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Published_Citation"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Journal Citation</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Modification_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Modification</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Describes amino acid modifications, post pre- and post-translational.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Motif_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Motif</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Region_Annotation"/>
+    </rdfs:subClassOf>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MOTIF</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Short (&lt;=20 amino acids) sequence motif of biological interest.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Frameshift_Annotation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence_Caution_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Frameshift</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Strain">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Sample_Source"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Strain</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A strain of a species.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Electronic_Citation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An electronic publication.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Electronic Citation</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Published_Citation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Orientation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Cellular_Component"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Helix_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Helix</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >HELIX</alias>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Secondary_Structure_Annotation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/DNA">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Molecule"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Published_Citation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Published Citation</rdfs:label>
+    <owl:disjointWith>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Unpublished_Citation"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Citation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Calcium_Binding_Annotation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Region_Annotation"/>
+    </rdfs:subClassOf>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CA_BIND</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a calcium-binding region.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Calcium Binding</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Unassigned_DNA">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Unassigned DNA</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/DNA"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence_Caution_Annotation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sequence Caution</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/NP_Binding_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >NP_BIND</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nucleotide Phosphate Binding</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a nucleotide phosphate-binding region.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Region_Annotation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Range">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A range of amino acids on a protein  sequence.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >1</owl:cardinality>
+            <owl:onProperty>
+              <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/begin"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >1</owl:cardinality>
+            <owl:onProperty>
+              <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/end"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:unionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Method">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An experimental method.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Glycosylation_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Modification_Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CARBOHYD</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Glycosylation Site</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Describes the occurrence of the attachment of a glycan (mono- or polysaccharide) to a residue of a protein.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Citation_Statement">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Sample_Source"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/context"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The relationship between a resource and a citation.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Citation Statement</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of a resource on a specific topic.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Catalytic_Activity_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CATALYTIC ACTIVITY</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the reactions catalyzed by an enzyme.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Catalytic Activity</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sequence Annotation</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of a special region or site in a protein sequence.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Domain_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Domain</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the domain structure of a protein.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DOMAIN</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An amino acid sequence.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Function_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >General description of the functions of a protein.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >FUNCTION</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Function</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Coiled_Coil_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Coiled-Coil</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Region_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a coiled-coil region.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >COILED</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Modified_Sequence">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Alternative_Sequence_Annotation"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/modification"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Known_Sequence"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/basedOn"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Simple_Sequence"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Modified Sequence</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Unknown_Sequence">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Unknown Sequence</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Unpublished_Citation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Citation"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="http://purl.uniprot.org/core/Published_Citation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Unpublished Citation</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Cofactor_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of an enzyme cofactor.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cofactor</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >COFACTOR</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Redox_Potential_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Redox Potential</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Biophysicochemical_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Reports the value of the standard (midpoint) oxido-reduction potential(s) for electron transport proteins.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Image"/>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Lipidation_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Modification_Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Covalent binding of a lipid moiety.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >LIPID</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Lipid Binding</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Topological_Domain_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A topological domain.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >TOPO_DOM</alias>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Region_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Topological Domain</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Natural_Variant_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >VARIANT</alias>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Natural_Variation_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sequence Variant</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Authors report that sequence variants exist.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Binding_Site_Annotation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Site_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Binding Site</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >BINDING</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Binding site for any chemical group (co-enzyme, prosthetic group, etc.).</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Experimental_Information_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence_Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Experimental Information</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Molecule">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A biological molecule.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Protein_Existence"/>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Topology">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Cellular_Component"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Concept_Status">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Status"/>
+    </rdfs:subClassOf>
+    <rdfs:seeAlso rdf:resource="http://www.geneontology.org/GO.evidence.shtml"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Concept Status</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Transit_Peptide_Annotation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Molecule_Processing_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a transit peptide (mitochondrion, chloroplast, thylakoid, cyanelle or microbody).</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Transit Peptide</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >TRANSIT</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Nucleotide_Binding_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DNA_BIND</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DNA Binding</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a DNA-binding region.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Region_Annotation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Natural_Variation_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Natural Variation</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence_Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Enzyme_Regulation_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ENZYME REGULATION</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Enzyme Regulation</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of an enzyme regulatory mechanism.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Erroneous_Initiation_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Erroneous Initiation</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence_Caution_Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Non-terminal_Residue_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The residue at an extremity of the sequence is not the terminal residue.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >NON_TER</alias>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Experimental_Information_Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Non-terminal Residue</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Unassigned_RNA">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Unassigned RNA</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/RNA"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Submission_Citation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Submission Citation</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Data that was submitted directly to a database.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Published_Citation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/database"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Secondary_Structure_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Secondary Structure</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Describes the secondary structure of proteins whose tertiary structure is known experimentally.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence_Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/RNA">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Molecule"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Structure_Resource">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A resource that describes the 3D structure of a protein.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >1</owl:cardinality>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/method"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <owl:Class rdf:about="http://purl.uniprot.org/core/Structure_Determination_Method"/>
+            </owl:allValuesFrom>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/method"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Resource"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Structure Resource</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Citation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of a publication from which data was obtained.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Subunit_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >SUBUNIT</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Subunit</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the quaternary structure of a protein.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Nucleotide_Resource">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Resource"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nucleotide Resource</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A resource that descripes a nucleutide sequence.</rdfs:comment>
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:minCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/locatedOn"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Mass_Measurement_Method">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Mass Measurement</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An experimental method for measuring the mass of a molecule.</rdfs:comment>
+    <rdfs:seeAlso rdf:resource="iki:Mass_spectrometry"/>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Method"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Non-adjacent_Residues_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >NON_CONS</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indicates that two residues in a sequence are not consecutive and that there are a number of unsequenced residues between them.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Experimental_Information_Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Non-consecutive Residues</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Other_DNA">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Other DNA</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/DNA"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Beta_Strand_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >STRAND</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Strand</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Secondary_Structure_Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/RNA_Editing_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of any type of RNA editing that leads to one or more amino acid changes.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >RNA EDITING</alias>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >RNA Editing</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Active_Site_Annotation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Site_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Active Site</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ACT_SITE</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Amino acid(s) involved in the activity of an enzyme.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Nucleotide_Mapping_Statement">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The relationship between a protein and a nucleotide sequence.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nucleotide Mapping Statement</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Cellular_Component">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A structure with specialized function within a cell.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Rank">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A rank of a taxon.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Compositional_Bias_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >COMPBIAS</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Compositionally Biased Region</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Region_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a compositionally biased region.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Simple_Sequence">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Known_Sequence"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Simple Sequence</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Cluster">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cluster of proteins with similar sequences.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="http://purl.uniprot.org/core/Sequence"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/member"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Database">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Metadata for a life science database.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Alternative_Splicing_Annotation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Alternative_Products_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Alternative Splicing</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Mutagenesis_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Mutagenesis Site</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Experimental_Information_Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MUTAGEN</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Site which has been experimentally altered.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Protein_Family">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Protein Family</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Desription of a set of related proteins.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Interaction">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of a protein-protein interaction.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Transposon">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Transposon</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A transposon</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Sample_Source"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Absorption_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Absorption</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Biophysicochemical_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indicates the wavelength in nm at which photoreactive proteins such as opsins and DNA photolyases show maximal absorption.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Biophysicochemical_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Biophysical and physicochemical data such as pH dependence, temperature dependence, kinetic parameters, redox potentials, and maximal absorption.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Biophysicochemical Property</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >BIOPHYSICOCHEMICAL PROPERTIES</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Genomic_RNA">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Genomic RNA</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/RNA"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Molecule_Processing_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence_Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Molecule Processing</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Polymorphism_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of polymorphisms.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Polymorphism</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >POLYMORPHISM</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Thesis_Citation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Published_Citation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/institution"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A Ph.D. thesis.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Thesis Citation</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Region_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Region</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence_Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >REGION</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Pathway">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence_Uncertainty_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Unsure Residue</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >UNSURE</alias>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Experimental_Information_Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Used to describe region(s) of a sequence for which the authors are unsure about the sequence assignment.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Caution_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Warning about possible errors and/or grounds for confusion.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CAUTION</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Caution</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Enzyme">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A specific catalytic activity, defined by the Enzyme Commission of the Nomenclature Committee of the International Union of Biochemistry and Molecular Biology (IUBMB).</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Enzyme</rdfs:label>
+    <rdfs:seeAlso rdf:resource="http://www.expasy.org/enzyme/"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="http://purl.uniprot.org/core/Enzyme"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/replacedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="http://purl.uniprot.org/core/Enzyme"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/replaces"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Taxon">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An element of a taxonomy for classifying life forms.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/scientificName"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/mnemonic"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/replacedBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/replaces"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:seeAlso rdf:resource="http://www.ebi.ac.uk/newt/"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Structure_Mapping_Statement">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Structure Mapping Statement</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The relationship between a protein and a 3D structure.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Disease_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Disease</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the diseases associated with a deficiency of a protein.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DISEASE</alias>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Disulfide_Bond_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Disulfide Bond</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Describes residues which are linked by an intra-chain disulfide bond. If the endpoints are identical, the disulfide bond is an interchain one.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Modification_Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DISULFID</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Temperature_Dependence_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Biophysicochemical_Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indicates the optimum temperature for enzyme activity and/or the variation of enzyme activity with temperature variation; the thermostability/thermolability of the enzyme is also mentioned when it is known.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Temperature Dependence</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Allergen_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Allergen</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ALLERGEN</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Information relevant to allergenic proteins.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Domain_Assignment_Statement">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The relationship between a protein and a protein domain.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Domain Assignment Statement</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Kinetics_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Mentions the Michaelis-Menten constant (KM) and maximal velocity (Vmax) of enzymes.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Kinetics</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Biophysicochemical_Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Viral_cRNA">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Viral cRNA</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/RNA"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Positive cRNA molecule that is made from from a single stranded genomic RNA.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Protein">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Protein</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:minCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/organism"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:minCardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="http://purl.uniprot.org/core/Protein"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/replaces"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/sequence"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://purl.uniprot.org/core/Simple_Sequence"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/replacedBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="http://purl.uniprot.org/core/Protein"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of a protein.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Disruption_Phenotype_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DISRUPTION PHENOTYPE</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Disruption Phenotype</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Status">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indicator for the reliability of a piece of information.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Observation_Citation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Citation of an unpublished result.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Observation Citation</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Unpublished_Citation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Alternative_Promoter_Usage_Annotation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Alternative_Products_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Alternative Promoter Usage</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Transmembrane_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a transmembrane region.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Region_Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Transmembrane</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >TRANSMEM</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Sample_Source">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:minCardinality>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of a source of a biological sample.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sample Source</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Transcribed_RNA">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/RNA"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Transcribed RNA</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Part">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of a part of a protein.</rdfs:comment>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+        </owl:onProperty>
+        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:minCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Domain_Extent_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Domain Extent</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a domain, which is defined as a specific combination of secondary structures organized into a characteristic three-dimensional structure or fold.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Region_Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DOMAIN</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Other_RNA">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Other RNA</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/RNA"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Structured_Name"/>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Erroneous_Termination_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence_Caution_Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Erroneous Termination</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/MRNA">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mRNA</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/RNA"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/PTM_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >PTM</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of a posttranslational modification.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >PTM</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Patent_Citation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Patent Citation</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Published_Citation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A patent application.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Propeptide_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a propeptide.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >PROPEP</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Propeptide</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Molecule_Processing_Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Structure_Determination_Method">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An experimental method for determining the 3D structure of a protein.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Method"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Structure Determination</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Concept">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/replaces"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="http://purl.uniprot.org/core/Concept"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Concept</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A concept used to classify resources.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Induction_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >INDUCTION</alias>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the compounds or conditions that stimulate the synthesis of a protein.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Induction</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Resource">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/database"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A life science resource.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Erroneous_Translation_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence_Caution_Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Erroneous Translation</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Alternative_Initiation_Annotation">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Alternative_Products_Annotation"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Alternative Initiation</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Signal_Peptide_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >SIGNAL</alias>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Molecule_Processing_Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a signal sequence (prepeptide).</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Signal Peptide</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Pathway_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >PATHWAY</alias>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the metabolic pathways with which a protein is associated.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pathway</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/External_Sequence">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >External Sequence</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.uniprot.org/core/Known_Sequence"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Participant"/>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Modified_Residue_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MOD_RES</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Posttranslational modification of a residue.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Modified Residue</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Modification_Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Biotechnology_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the use of a specific protein in a biotechnological process.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >BIOTECHNOLOGY</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Biotechnology</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Alternative_Products_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the existence of related protein sequences produced by alternative splicing of the same gene or by the use of alternative initiation codons.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Alternative Products</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ALTERNATIVE PRODUCTS</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Site_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence_Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Any interesting single amino-acid site on the sequence, that is not defined by another feature key. It can also apply to an amino acid bond which is represented by the positions of the two flanking amino acids.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Site</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >SITE</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Book_Citation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Book Citation</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Published_Citation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+        </owl:onProperty>
+        <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:cardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A chapter from a book.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence_Conflict_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sequence Conflict</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Different sources report differing sequences.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CONFLICT</alias>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Experimental_Information_Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Toxic_Dose_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Toxic Dose</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >TOXIC DOSE</alias>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Information on the LD(50). LD stands for "Lethal Dose". LD(50) is the amount of a toxin, given all at once, which causes the death of 50% (one half) of a group of test animals.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Tissue">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A tissue such as lung or heart.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Tissue</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sample_Source"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Chain_Annotation">
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CHAIN</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a polypeptide chain in the mature protein.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Molecule_Processing_Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Chain</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Tissue_Specificity_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >TISSUE SPECIFICITY</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the tissue specificity of a protein.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Tissue Specificity</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Alternative_Sequence_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of sequence variants produced by alternative splicing.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Splice Variant</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Natural_Variation_Annotation"/>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >VAR_SEQ</alias>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Zinc_Finger_Annotation">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Zinc Finger</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ZN_FING</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Extent of a zinc finger region.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Region_Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Non-standard_Residue_Annotation">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Modification_Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Non standard residue</rdfs:label>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >NON_STD</alias>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Describes the occurrence of a non standard residue in the sequence record.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Subcellular_Location_Annotation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Description of the subcellular location of the mature protein.</rdfs:comment>
+    <alias rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >SUBCELLULAR LOCATION</alias>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Subcellular Location</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Family_Membership_Statement">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The relationship between a protein and a protein family.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Family Membership Statement</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Endpoint_Statement">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Metadata for an endpoint of a range on a sequence.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Endpoint Statement</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Mass_Spectrometry_Annotation">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:maxCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</owl:maxCardinality>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/method"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Experimental_Information_Annotation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/method"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="http://purl.uniprot.org/core/Mass_Measurement_Method"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indicates the mass of a sequence determined by mass spectrometry.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Mass</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.uniprot.org/core/Known_Sequence">
+    <rdfs:subClassOf rdf:resource="http://purl.uniprot.org/core/Sequence"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Known Sequence</rdfs:label>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/replacedBy">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A resource that replaces this resource.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >replaced by</rdfs:label>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Taxon"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Enzyme"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Enzyme"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Taxon"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/replaces"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/modification">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A modification of a sequence.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Modified_Sequence"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Alternative_Sequence_Annotation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/host">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/locationPartOf">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/citation">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Annotation"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Citation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A publication from which data was extracted, or which contains additional information.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/annotation">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Annotation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Attaches an annotation to a resource.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/sequenceFor">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/sequence"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Sequence"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A resource that describes this sequence.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >sequence for</rdfs:label>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Annotation"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/status">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Status"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The reliability of a statement.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/classifiedWith">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >classified with</rdfs:label>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A concept that classifies this resource.</rdfs:comment>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Concept"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/relatedLocation">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/location">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Subcellular_Location"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Subcellular_Location_Annotation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/memberOf">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Cluster"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/member"/>
+    </owl:inverseOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >member of</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/locatedOn">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Nucleotide_Resource"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Molecule"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The molecule a this resource is located on.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >located on</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/organism">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The organism in which a protein occurs.</rdfs:comment>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/submittedName">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Structured_Name"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Part"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A name provided by the submitter of the underlying nucleotide sequence.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/recommendedName">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Part"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The name recommended by the UniProt consortium.</rdfs:comment>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Structured_Name"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/commonTaxon">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Cluster"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/context">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Citation_Statement"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/seedFor">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Cluster"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Sequence"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/database">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Resource"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The database a resource is part of.</rdfs:comment>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Database"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/participant">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Participant"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Interaction"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A protein that participates in a protein-protein interaction.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/erratumFor">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Published_Citation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >erratum for</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The publication which an erratum refers to.</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/erratum"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Published_Citation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/sequence">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Annotation"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An amino acid sequence.</rdfs:comment>
+    <owl:inverseOf rdf:resource="http://purl.uniprot.org/core/sequenceFor"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Sequence"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/domain">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Part"/>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/part"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A domain of a protein.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/source">
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/part">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Part"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/interaction">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Interaction"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/locationIsA">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/alternativeName">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Structured_Name"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Part"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A synonym of the recommended name.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/rank">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The rank of a taxon.</rdfs:comment>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Rank"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/enzyme">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Enzyme"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Part"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >enzyme</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The catalytic activity associated with a protein. or part of a protein.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/locationSpecifiedBy">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Cellular_Component"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Subcellular_Location"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/depiction">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Image"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/range">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A range of amino acids.</rdfs:comment>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Range"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Sequence_Annotation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/erratum">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Published_Citation"/>
+    <owl:inverseOf rdf:resource="http://purl.uniprot.org/core/erratumFor"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An erratum for a publication.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Published_Citation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/isolatedFrom">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Tissue"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/encodedIn">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The subcellular location where a protein is encoded.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >encoded in</rdfs:label>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Component"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/method">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Mass_Spectrometry_Annotation"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Structure_Resource"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The experimental method that was used.</rdfs:comment>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Method"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/component">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A component of a protein.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="http://purl.uniprot.org/core/part"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Part"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/strain">
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Strain"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/submittedTo">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Submission_Citation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The database a resource  was submitted to.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/replaces">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A resource that is replaced by this resource.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Enzyme"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Taxon"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Taxon"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Enzyme"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <owl:inverseOf rdf:resource="http://purl.uniprot.org/core/replacedBy"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/basedOn">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Modified_Sequence"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >based on</rdfs:label>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Simple_Sequence"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The sequence on which the description of a modified sequence is based.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/member">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Cluster"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >One of several similar resources.</rdfs:comment>
+    <owl:inverseOf rdf:resource="http://purl.uniprot.org/core/memberOf"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Protein"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/representativeFor">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Sequence"/>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Cluster"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.uniprot.org/core/encodedBy">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >encoded by</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The gene by which a protein is encoded.</rdfs:comment>
+    <rdfs:range rdf:resource="http://purl.uniprot.org/core/Gene"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/internationalNonproprietaryName">
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/structuredNameType"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The international nonproprietary name: A generic name for a pharmaceutical substance or active pharmaceutical ingredient that is globally recognized and is a public property.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/fragment">
+    <rdfs:range>
+      <owl:DataRange>
+        <owl:oneOf rdf:parseType="Resource">
+          <rdf:rest rdf:parseType="Resource">
+            <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >multiple</rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+          </rdf:rest>
+          <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+          >single</rdf:first>
+        </owl:oneOf>
+      </owl:DataRange>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Simple_Sequence"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indicates if a sequence is complete or consists of one or more fragments.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/experiments">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Interaction"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/obsolete">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Taxon"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True if this resource has been replaced or deleted.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >obsolete</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/width">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Image"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/identity">
+    <rdfs:range>
+      <owl:DataRange>
+        <owl:oneOf rdf:parseType="Resource">
+          <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+          >0.5</rdf:first>
+          <rdf:rest rdf:parseType="Resource">
+            <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+            >0.9</rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+              <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+              >1.0</rdf:first>
+              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+          </rdf:rest>
+        </owl:oneOf>
+      </owl:DataRange>
+    </rdfs:range>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The level of sequence identity in a cluster.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Cluster"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/height">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Image"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/shortName">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An abbreviation of the full name or an acronym.</rdfs:comment>
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/structuredNameType"/>
+    </rdfs:subPropertyOf>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/fullName">
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/structuredNameType"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The full name.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/alias">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >An alternative name used in the flat text format.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/date">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The date a resource was published.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Citation"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/volume">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The volume a publication is part of.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Journal_Citation"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Book_Citation"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/commonName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >common name</rdfs:label>
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+    </rdfs:subPropertyOf>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/precursor">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Simple_Sequence"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/activity">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The description of a catalytic activity.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >catalytic activity</rdfs:label>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Enzyme"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/orfName">
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Gene"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ORF name</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/modified">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Simple_Sequence"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The date a resource was last modified.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/synonym">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/complete">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/editor">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The editor of a publication.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Book_Citation"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/hits">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The number of hits found in a sequence.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Domain_Assignment_Statement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/cofactor">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Enzyme"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cofactor</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A cofactor required for a catalytic activity.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/frameshift">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True if a sequence modification causes a frameshift.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/RNA_Editing_Annotation"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/maximum">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Absorption_Annotation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A maximum value.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/structuredNameType">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Structured_Name"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/atypical">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Family_Membership_Statement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True if the protein is divergent in sequence or has mutated functional sites.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/institution">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Thesis_Citation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The institution at which a thesis was written.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/title">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Citation"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The title of a publication.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/biotechName">
+    <rdfs:subPropertyOf rdf:resource="http://purl.uniprot.org/core/structuredNameType"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A name used in a biotechnological context.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/existence"/>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/reviewed">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indicates whether a resource has been reviewed by a curator.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/negative">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Interaction"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/locusName">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Gene"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >locus name</rdfs:label>
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/position">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/RNA_Editing_Annotation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A position on a sequence.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/group">
+    <rdfs:subPropertyOf>
+      <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/author"/>
+    </rdfs:subPropertyOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The group or consortium that authored a publication.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Citation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/name">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Book_Citation"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Part"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Electronic_Citation"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Sample_Source"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Gene"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >name</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/resolution">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The resolution of an experiment, in Angstrom.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Structure_Resource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/publisher">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Book_Citation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The publisher of a book.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/version">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/created">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Protein"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The date a resource was created.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/chain">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Maps a series of symbols representing chains of a protein to a range of amino acids.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Structure_Mapping_Statement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/pages">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Journal_Citation"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Book_Citation"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The first and last page for a chapter or article.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/length">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Sequence"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/author">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The author of a publication.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Citation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/measuredAffinity">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The Michaelis-Menten constant, Km.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Kinetics_Annotation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >measured affinity</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/place">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Thesis_Citation"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Book_Citation"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The place where a publication was published. This usually includes a country name.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/falseNegative">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True if a statement is true even though it was not predicted.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Domain_Assignment_Statement"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >false negative</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/substitution">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A replacement sequence.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Mutagenesis_Annotation"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence_Conflict_Annotation"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Natural_Variant_Annotation"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/domains">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The number of domains in a protein that correspond to a family. This is almost always 1, but may be 2 if  two identical domains are fused.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Family_Membership_Statement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/locator">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Citation"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/order">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/certain">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Endpoint_Statement"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Absorption_Annotation"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Domain_Assignment_Statement"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >False if there is any uncertainty about a statement.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/measuredError">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The magnitude of the error of a value that was measured.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >measured error</rdfs:label>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Mass_Spectrometry_Annotation"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/measuredValue">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >measured value</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A value that was measured.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Mass_Spectrometry_Annotation"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/allergenName">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >See http://www.expasy.org/cgi-bin/lists?allergen.txt</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="http://purl.uniprot.org/core/structuredNameType"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/partOfLineage">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True for taxa that can appear as part of an organism's lineage.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >part of lineage</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/fused">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True if the rule on which the membership of a protein to a family is based does not cover the entire protein.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Family_Membership_Statement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/pattern">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Database"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A URL pattern, used to generate links by substituting an identifier.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/scope">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The extent of the work carried out by the authors of a publication.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Citation_Statement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/mass">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The mass of a sequence in Daltons.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Simple_Sequence"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/indexable">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/xeno">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Interaction"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/begin">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The first position of a range.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Range"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/otherName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:subPropertyOf rdf:resource="http://purl.uniprot.org/core/name"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >other name</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/scientificName">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >scientific name</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:subPropertyOf rdf:resource="http://purl.uniprot.org/core/name"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Taxon"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/mnemonic">
+    <rdfs:subPropertyOf rdf:resource="http://purl.uniprot.org/core/name"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Taxon"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Protein"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/cdAntigenName">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A name from the Human Cell Differentiation Molecules (HCDM) nomenclature.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="http://purl.uniprot.org/core/structuredNameType"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/limit">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Endpoint_Statement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True if the range does not extend beyond the specified endpoint.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/partial">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Domain_Assignment_Statement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True if the pattern or profile on which the domain assignment is based did not detect the sequence because the sequence is not complete and lacks the region on which the pattern or profile is based.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/implicit">
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Database"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True if existance of this resource can be inferred.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/end">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The last position of a range.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Range"/>
+          <owl:Class rdf:about="http://purl.uniprot.org/core/Sequence"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/abstract">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Database"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >True if the class does not have any direct instances.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.uniprot.org/core/measuredActivity">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The maximum velocity, Vmax.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.uniprot.org/core/Kinetics_Annotation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >measured activity</rdfs:label>
+  </owl:DatatypeProperty>
+  <Rank rdf:about="http://purl.uniprot.org/core/Varietas">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <owl:AllDifferent/>
+  <Mass_Measurement_Method rdf:about="http://purl.uniprot.org/core/PD">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Plasma Desorption</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:comment>
+  </Mass_Measurement_Method>
+  <Rank rdf:about="http://purl.uniprot.org/core/Subtribe">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Protein_Existence rdf:about="http://purl.uniprot.org/core/Evidence_at_Transcript_Level_Existence">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Evidence at transcript level</rdfs:label>
+  </Protein_Existence>
+  <Concept_Status rdf:about="http://purl.uniprot.org/core/NAS">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Non-traceable Author Statement</rdfs:label>
+  </Concept_Status>
+  <Concept_Status rdf:about="http://purl.uniprot.org/core/IMP">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Inferred from Mutant Phenotype</rdfs:label>
+  </Concept_Status>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Forma">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <Rank rdf:about="http://purl.uniprot.org/core/Class">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Protein_Existence rdf:about="http://purl.uniprot.org/core/Predicted_Existence">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Predicted</rdfs:label>
+  </Protein_Existence>
+  <Concept_Status rdf:about="http://purl.uniprot.org/core/IPI">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Inferred from Physical Interaction</rdfs:label>
+  </Concept_Status>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Genus">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <Mass_Measurement_Method rdf:about="http://purl.uniprot.org/core/MALDI">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Matrix-Assisted Laser Desorption</rdfs:label>
+    <rdfs:seeAlso rdf:resource="iki:Matrix-assisted_laser_desorption_ionization"/>
+  </Mass_Measurement_Method>
+  <Status rdf:about="http://purl.uniprot.org/core/Potential"/>
+  <Mass_Measurement_Method rdf:about="http://purl.uniprot.org/core/API">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Atmospheric Pressure Ionization</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:comment>
+  </Mass_Measurement_Method>
+  <Concept_Status rdf:about="http://purl.uniprot.org/core/TAS">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Traceable Author Statement</rdfs:label>
+  </Concept_Status>
+  <Structure_Determination_Method rdf:about="http://purl.uniprot.org/core/Prediction"/>
+  <Mass_Measurement_Method rdf:about="http://purl.uniprot.org/core/ESI">
+    <rdfs:seeAlso rdf:resource="iki:Electrospray_ionization"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Electrospray Ionization</rdfs:label>
+  </Mass_Measurement_Method>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Species_Group">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Species Group</rdfs:label>
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <owl:AllDifferent/>
+  <Rank rdf:about="http://purl.uniprot.org/core/Subclass">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Structure_Determination_Method rdf:about="http://purl.uniprot.org/core/Neutron_Diffraction">
+    <rdfs:seeAlso rdf:resource="iki:Neutron_diffraction"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Neutron Diffraction</rdfs:label>
+  </Structure_Determination_Method>
+  <Structure_Determination_Method rdf:about="http://purl.uniprot.org/core/NMR_Spectroscopy">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >NMR Spectroscopy</rdfs:label>
+    <rdfs:seeAlso rdf:resource="iki:NMR"/>
+  </Structure_Determination_Method>
+  <Mass_Measurement_Method rdf:about="http://purl.uniprot.org/core/FAB">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Fast Atom Bombardment</rdfs:label>
+  </Mass_Measurement_Method>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Superorder">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Tribe">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Superphylum">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <Mass_Measurement_Method rdf:about="http://purl.uniprot.org/core/SELDI">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Surface Enhanced Laser Desorption Ionization</rdfs:label>
+  </Mass_Measurement_Method>
+  <Mass_Measurement_Method rdf:about="http://purl.uniprot.org/core/LSIMS">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Liquid Secondary Ionization</rdfs:label>
+  </Mass_Measurement_Method>
+  <Structure_Determination_Method rdf:about="http://purl.uniprot.org/core/Electron_Microscopy">
+    <rdfs:seeAlso rdf:resource="iki:Electron_microscopy"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Electron Microscopy</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The electron microscope is a microscope that can magnify very small details with high resolving power due to the use of electrons rather than light to scatter off material, magnifying at levels up to 500,000 times.	</rdfs:comment>
+  </Structure_Determination_Method>
+  <Rank rdf:about="http://purl.uniprot.org/core/Subphylum">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Subfamily">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <Rank rdf:about="http://purl.uniprot.org/core/Suborder">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Rank rdf:about="http://purl.uniprot.org/core/Species_Subgroup">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Species Subgroup</rdfs:label>
+  </Rank>
+  <Rank rdf:about="http://purl.uniprot.org/core/Species">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Rank rdf:about="http://purl.uniprot.org/core/Subkingdom">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Rank rdf:about="http://purl.uniprot.org/core/Infraorder">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Concept_Status rdf:about="http://purl.uniprot.org/core/IGI">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Inferred from Genetic Interaction</rdfs:label>
+  </Concept_Status>
+  <Status rdf:about="http://purl.uniprot.org/core/Probable"/>
+  <Rank rdf:about="http://purl.uniprot.org/core/Infraclass">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Concept_Status rdf:about="http://purl.uniprot.org/core/IDA">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Inferred from Direct Assay</rdfs:label>
+  </Concept_Status>
+  <Concept_Status rdf:about="http://purl.uniprot.org/core/IEP">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Inferred from Expression Pattern</rdfs:label>
+  </Concept_Status>
+  <Status rdf:about="http://purl.uniprot.org/core/Experimental"/>
+  <Concept_Status rdf:about="http://purl.uniprot.org/core/ISS">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Inferred from Sequence or Structural Similarity</rdfs:label>
+  </Concept_Status>
+  <Protein_Existence rdf:about="http://purl.uniprot.org/core/Evidence_at_Protein_Level_Existence">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Evidence at protein level</rdfs:label>
+  </Protein_Existence>
+  <Protein_Existence rdf:about="http://purl.uniprot.org/core/Inferred_from_Homology_Existence">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Inferred from homology</rdfs:label>
+  </Protein_Existence>
+  <Concept_Status rdf:about="http://purl.uniprot.org/core/IC">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Inferred by Curator</rdfs:label>
+  </Concept_Status>
+  <Rank rdf:about="http://purl.uniprot.org/core/Superfamily">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Structure_Determination_Method rdf:about="http://purl.uniprot.org/core/X-Ray_Crystallography">
+    <rdfs:seeAlso rdf:resource="iki:X-ray_crystallography"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A technique in crystallography in which the pattern produced by the diffraction of x-rays through the closely spaced lattice of atoms in a crystal is recorded and then analyzed to reveal the nature of that lattice.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >X-Ray Crystallography</rdfs:label>
+  </Structure_Determination_Method>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Subgenus">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <owl:DataRange>
+    <owl:oneOf rdf:parseType="Resource">
+      <rdf:rest rdf:parseType="Resource">
+        <rdf:rest rdf:parseType="Resource">
+          <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+          >Inferred from homology</rdf:first>
+          <rdf:rest rdf:parseType="Resource">
+            <rdf:rest rdf:parseType="Resource">
+              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+              <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >Predicted</rdf:first>
+            </rdf:rest>
+            <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Uncertain</rdf:first>
+          </rdf:rest>
+        </rdf:rest>
+        <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Evidence at transcript level</rdf:first>
+      </rdf:rest>
+      <rdf:first rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+      >Evidence at protein level</rdf:first>
+    </owl:oneOf>
+  </owl:DataRange>
+  <Structure_Determination_Method rdf:about="http://purl.uniprot.org/core/Infrared_Spectroscopy">
+    <rdfs:seeAlso rdf:resource="iki:Infrared_spectroscopy"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A type of spectroscopy that uses the Infrared portion of the electromagnetic spectrum.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Infrared Spectroscopy</rdfs:label>
+  </Structure_Determination_Method>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Family">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Kingdom">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <Protein_Existence rdf:about="http://purl.uniprot.org/core/Uncertain_Existence">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Uncertain</rdfs:label>
+  </Protein_Existence>
+  <Rank rdf:about="http://purl.uniprot.org/core/Subspecies">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Structure_Determination_Method rdf:about="http://purl.uniprot.org/core/Fiber_Diffraction">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Fiber Diffraction</rdfs:label>
+  </Structure_Determination_Method>
+  <Rank rdf:about="http://purl.uniprot.org/core/Parvorder">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <Status rdf:about="http://purl.uniprot.org/core/By_Similarity">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >By Similarity</rdfs:label>
+  </Status>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Superkingdom">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Phylum">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+  <Rank rdf:about="http://purl.uniprot.org/core/Order">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </Rank>
+  <owl:Thing rdf:about="http://purl.uniprot.org/core/Superclass">
+    <rdf:type rdf:resource="http://purl.uniprot.org/core/Rank"/>
+  </owl:Thing>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.4, Build 500)  http://protege.stanford.edu -->

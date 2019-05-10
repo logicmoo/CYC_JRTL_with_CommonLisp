@@ -1,0 +1,1 @@
+place lld1-docs-vectors.sspace into input folder before building this plugin

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Viva SHRDLU!</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+      background-color: #f0f0ff;
+      margin: 0px;
+      overflow: hidden;
+      position:relative;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="import/three.min.js"></script>
+    <script src="import/stats.min.js"></script>
+    <script src="import/tween.min.js"></script>
+    <script src="box.js"></script>
+    <script src="oview.js"></script>
+    <!-- Code to display an information button and box when clicked. -->
+
+    <script src="http://stemkoski.github.io/Three.js/js/jquery-1.9.1.js"></script>
+    <script src="http://stemkoski.github.io/Three.js/js/jquery-ui.js"></script>
+    <link rel=stylesheet href="http://stemkoski.github.io/Three.js/css/jquery-ui.css" />
+    <link rel=stylesheet href="import/info.css"/>
+    <script src="info.js"></script>
+    <div id="docButton"></div>
+    <div id="docBox">
+      <div align="center">
+	<p>Welcome to www.<a href="http://en.wikipedia.org/wiki/SHRDLU" target="_blank">SHRDLU</a> -- Beta testing.</p>
+      </div>
+      <p>
+	SHRDLU is a landmark AI program written by Terry Winograd at
+	MIT, 1968-1971.  Though the symbolic approach to language
+	understanding has fallen out of favor since then, few projects
+	since have achieved anything like the language facility of
+	SHRDLU.</p>
+      <p>
+	Originally written for MACLISP, a long-dead dialect of Lisp,
+	for MIT's Incompatible Time Sharing system (ITS), a long-dead
+	operating system, it was ported to Common Lisp
+	(<a href="http://www.clisp.org" target="_blank">CLisp</a> to be precise) in
+	the 1990s
+	by <a href="http://www.semaphorecorp.com/misc/shrdlu.html" target="_blank">a
+	group of students</a> in Missouri.  Tom Sgouros, 
+	at Brown University, has fixed a few bugs from that port, written a
+	web-compatible graphics front end, and equipped SHRDLU with
+	new digs here on the internet.
+      </p>
+      <p>
+	Close this window and click the "S" icon below left to get started.
+	Type your commands in the form of English sentences, and end
+	them with a period, question mark or exclamation point.  In
+	the process of being ported twice, SHRDLU has lost some of its
+	original functionality.  Think of this version as SHRDLU that
+	has suffered a minor stroke.  Despite that limitation, SHRDLU
+	can still accommodate requests like "find a block smaller than
+	the one you are holding and put it in the box."  But don't
+	take my word for it; give it a try.
+      </p>
+      <p>
+	If you would like to check out, fix, or otherwise contribute
+	to the code, you'll find a git repo for it at
+	<a href="http://github.com/tsgouros/www-shrdlu" target="_blank">github</a>.</p>
+      <p>
+	<b>Getting started.</b>  SHRDLU's language is deep but not
+	extensive, and the error recovery is not great, either.  Try a
+	dialog like the following to see what it can do:</p>
+      <p class="shrdlu-sentence">
+	Put the biggest green block in the box.</p>
+      <p class="shrdlu-response">
+	Ok.</p>
+      <p class="shrdlu-sentence">
+        Put the blue block on it.</p>
+      <p class="shrdlu-response">
+        Ok.</p>
+      <p class="shrdlu-sentence">
+	Is there a red block under a green one?</p>
+      <p class="shrdlu-response">
+        Yes, two of them the large red one and the red cube.</p>
+      <p class="shrdlu-sentence">
+        Put the blue block on the large red block.</p>
+      <p class="shrdlu-response">
+        Ok.</p>
+      <p class="shrdlu-sentence">
+        Put the large red block on the red cube.</p>
+      <p class="shrdlu-response">Ok.</p>
+      <p class="shrdlu-sentence">
+        Is there a block smaller than the blue pyramid?</p>
+      <p class="shrdlu-response">
+	Yes, the red cube.</p>
+      <p class="shrdlu-sentence">
+        Does it support a block?</p>
+      <p class="shrdlu-response">
+	Yes, the large red one.</p>
+
+      <p>You can find renderings of historical SHRDLU dialogs at the
+	links above.</p>
+
+    </div>
+    <div id="infoButton"></div>
+    <div id="infoBox" title="SHRDLU Communicates">
+      <div id="infoScroll" >
+	<p>Welcome to 
+	  <a href="http://en.wikipedia.org/wiki/SHRDLU" target="_blank">SHRDLU</a>.  Try entering sentences such as "put the
+	red cube in the box." or "Is there a cube?"  End all sentences
+	with a period, exclamation point, or question mark.
+	Remember, there is nothing but the table.</p>
+      </div>
+      <div id="enterText">
+	<form action="/" id="sentenceForm">
+	  <input type="text" name="cmd" id="cmdbox" size="50" autofocus/>
+	  <input type="submit" name="Submit"/> SHRDLU prefers proper punctuation please.
+	</form>
+      </div>
+    </div>
+  </body>
+</html>

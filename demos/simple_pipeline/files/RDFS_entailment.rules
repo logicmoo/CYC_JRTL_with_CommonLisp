@@ -1,0 +1,126 @@
+/* 
+*
+* rdfs.rules
+* RDFS entailment rules (in datalog)
+* From: http://www.w3.org/TR/rdf-mt/#RDFSRules
+* and LarKC FP7 D1.1.3 p. 26
+* 20.01.2009
+*
+*/
+
+// Prefix rdf:  namespace URI: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+// Prefix rdfs: namespace URI: http://www.w3.org/2000/01/rdf-schema#
+// Prefix xsd:  namespace URI: http://www.w3.org/2001/XMLSchema#
+// Prefix owl:  namespace URI: http://www.w3.org/2002/07/owl#
+
+/* rdfs1: */ 
+//triple(?b1, "rdf:type", "rdfs:Literal") :- triple(?v, ?p, ?l).
+	/* where l is a plain literal (with or without a language tag).  */ 
+	/* where ?b1 identifies a blank node allocated to ?l by rule rule lg.*/
+
+/* rdfs2: */ 
+triple(?v, _iri("rdf:type"), ?u) :- triple(?p, _iri("rdfs:domain"), ?u), triple(?v, ?p, ?w).
+
+/* rdfs3: */ 
+triple(?w, _iri("rdf:type"), ?u) :- triple(?p, _iri("rdfs:range"), ?u), triple(?v, ?p, ?w).
+
+/* rdfs4a: */ 
+triple(?v, _iri("rdf:type"), _iri("rdfs:Resource")) :- triple(?v, ?p, ?w). 
+
+/* rdfs4b: */ 
+triple(?w, _iri("rdf:type"), _iri("rdfs:Resource")) :- triple(?v, ?p, ?w).
+
+/* rdfs5: */ 
+triple(?v, _iri("rdfs:subPropertyOf"), ?u) :- triple(?v, _iri("rdfs:subPropertyOf"), ?w),  triple(?w, _iri("rdfs:subPropertyOf"), ?u).
+
+/* rdfs6: */ 
+triple(?v, _iri("rdfs:subPropertyOf"), ?v) :- triple(?v, _iri("rdf:type"), _iri("rdf:Property")). 
+
+/* rdfs7x: */ 
+triple(?v, ?q, ?w) :- triple(?p, _iri("rdfs:subPropertyOf"), ?q), triple(?v, ?p, ?w).
+
+/* rdfs8: */ 
+triple(?v, _iri("rdfs:subClassOf"), _iri("rdfs:Resource")) :- triple(?v, _iri("rdf:type"), _iri("rdfs:Class")).
+
+/* rdfs9: */ 
+triple(?u, _iri("rdf:type"), ?w) :- triple(?v, _iri("rdfs:subClassOf"), ?w), triple(?u, _iri("rdf:type"), ?v).
+
+/* rdfs10: */ 
+triple(?v, _iri("rdfs:subClassOf"), ?v) :- triple(?v, _iri("rdf:type"), _iri("rdfs:Class")).
+
+/* rdfs11: */ 
+triple(?v, _iri("rdfs:subClassOf"), ?u) :- triple(?v, _iri("rdfs:subClassOf"), ?w), triple(?w, _iri("rdfs:subClassOf"), ?u).
+
+/* rdfs12: */ 
+triple(?v, _iri("rdfs:subPropertyOf"), _iri("rdfs:member")) :- triple(?v, _iri("rdf:type"), _iri("rdfs:ContainerMembershipProperty")).
+
+/* rdfs13: */ 
+triple(?v, _iri("rdfs:subClassOf"), _iri("rdfs:Literal")) :- triple(?v, _iri("rdf:type"), _iri("rdfs:Datatype")).
+
+
+/* ***** lg rules ***** */
+
+/* lg: */  
+/* triple(?v, ?p, ?bnode('')) :- triple(?v, ?p, ?l). */
+/* not yet supported */
+
+/* gl: */ 
+/* triple(?v, ?p, ?l) :- triple(?v, ?p, ?b1). */
+/* not yet supported */
+
+// =====================================
+// RDFS Axiomatic triples
+// =====================================
+triple( _iri("rdf:type"),           _iri("rdfs:domain"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdfs:domain"),        _iri("rdfs:domain"), _iri("rdf:Property") ) :- .
+triple( _iri("rdfs:range"),         _iri("rdfs:domain"), _iri("rdf:Property") ) :- .
+triple( _iri("rdfs:subPropertyOf"), _iri("rdfs:domain"), _iri("rdf:Property") ) :- .
+triple( _iri("rdfs:subClassOf"),    _iri("rdfs:domain"), _iri("rdfs:Class") ) :- .
+triple( _iri("rdf:subject"),        _iri("rdfs:domain"), _iri("rdf:Statement") ) :- .
+triple( _iri("rdf:predicate"),      _iri("rdfs:domain"), _iri("rdf:Statement") ) :- .
+triple( _iri("rdf:object"),         _iri("rdfs:domain"), _iri("rdf:Statement") ) :- .
+triple( _iri("rdfs:member"),        _iri("rdfs:domain"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdf:first"),          _iri("rdfs:domain"), _iri("rdf:List") ) :- .
+triple( _iri("rdf:rest"),           _iri("rdfs:domain"), _iri("rdf:List") ) :- .
+triple( _iri("rdfs:seeAlso"),       _iri("rdfs:domain"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdfs:isDefinedBy"),   _iri("rdfs:domain"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdfs:comment"),       _iri("rdfs:domain"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdfs:label"),         _iri("rdfs:domain"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdf:value"),          _iri("rdfs:domain"), _iri("rdfs:Resource") ) :- .
+
+triple( _iri("rdf:type"),           _iri("rdfs:range"), _iri("rdfs:Class") ) :- .
+triple( _iri("rdfs:domain"),        _iri("rdfs:range"), _iri("rdfs:Class") ) :- .
+triple( _iri("rdfs:range"),         _iri("rdfs:range"), _iri("rdfs:Class") ) :- .
+triple( _iri("rdfs:subPropertyOf"), _iri("rdfs:range"), _iri("rdf:Property") ) :- .
+triple( _iri("rdfs:subClassOf"),    _iri("rdfs:range"), _iri("rdfs:Class") ) :- .
+triple( _iri("rdf:subject"),        _iri("rdfs:range"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdf:predicate"),      _iri("rdfs:range"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdf:object"),         _iri("rdfs:range"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdfs:member"),        _iri("rdfs:range"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdf:first"),          _iri("rdfs:range"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdf:rest"),           _iri("rdfs:range"), _iri("rdf:List") ) :- .
+triple( _iri("rdfs:seeAlso"),       _iri("rdfs:range"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdfs:isDefinedBy"),   _iri("rdfs:range"), _iri("rdfs:Resource") ) :- .
+triple( _iri("rdfs:comment"),       _iri("rdfs:range"), _iri("rdfs:Literal") ) :- .
+triple( _iri("rdfs:label"),         _iri("rdfs:range"), _iri("rdfs:Literal") ) :- .
+triple( _iri("rdf:value"),          _iri("rdfs:range"), _iri("rdfs:Resource") ) :- .
+
+triple( _iri("rdf:Alt"),                          _iri("rdfs:subClassOf"), _iri("rdfs:Container") ) :- .
+triple( _iri("rdf:Bag"),                          _iri("rdfs:subClassOf"), _iri("rdfs:Container") ) :- .
+triple( _iri("rdf:Seq"),                          _iri("rdfs:subClassOf"), _iri("rdfs:Container") ) :- .
+triple( _iri("rdfs:ContainerMembershipProperty"), _iri("rdfs:subClassOf"), _iri("rdf:Property") ) :- .
+
+triple( _iri("rdfs:isDefinedBy"), _iri("rdfs:subPropertyOf"), _iri("rdfs:seeAlso") ) :- .
+
+triple( _iri("rdf:XMLLiteral"), _iri("rdf:type"),        _iri("rdfs:Datatype") ) :- .
+triple( _iri("rdf:XMLLiteral"), _iri("rdfs:subClassOf"), _iri("rdfs:Literal") ) :- .
+triple( _iri("rdfs:Datatype"),  _iri("rdfs:subClassOf"), _iri("rdfs:Class") ) :- .
+
+// triple( _iri("rdf:_1"), _iri("rdf:type"),    _iri("rdfs:ContainerMembershipProperty") ) :- .
+// triple( _iri("rdf:_1"), _iri("rdfs:domain"), _iri("rdfs:Resource") ) :- .
+// triple( _iri("rdf:_1"), _iri("rdfs:range"),  _iri("rdfs:Resource") ) :- .
+// triple( _iri("rdf:_2"), _iri("rdf:type"),    _iri("rdfs:ContainerMembershipProperty") ) :- .
+// triple( _iri("rdf:_2"), _iri("rdfs:domain"), _iri("rdfs:Resource") ) :- .
+// triple( _iri("rdf:_2"), _iri("rdfs:range"),  _iri("rdfs:Resource") ) :- .
+// etc
+

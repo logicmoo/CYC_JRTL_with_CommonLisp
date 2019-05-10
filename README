@@ -1,0 +1,47 @@
+OVERVIEW
+LarKC is a platform for massive distributed incomplete reasoning that will 
+remove the scalability barriers of currently existing reasoning systems for the 
+Semantic Web.
+
+The LarKC platform can be configured to run arbitrary pipelines of plugins, and 
+can run on a single machine but also on a distributed system such as a grid or 
+a cluster. Some plugins are included with this distribution, others may be found 
+online.
+
+See http://larkc.eu/ for more information.
+
+GETTING STARTED
+You will need Java and Ant installed. The LarKC platform can be started using 
+Ant: go to the directory 'platform' and invoke 'ant build.xml'.
+
+REQUIREMENTS
+Java 1.6
+Ant 1.7
+
+LICENSE
+The LarKC platform is licensed under the Apache License (version 2.0).  Plugins 
+are licensed as decided by the plugin authors, but not incompatible with the 
+Apache License. 
+
+AUTHORS
+The LarKC platform was developed as part of LarKC project, funded by the 
+European Commission under grant nr. FP7-215535. Many authors have contributed to 
+the code, including:
+
+Axel Tenschert 
+Barry Bishop 
+Blaz Fortuna 
+Christoph Fuchs 
+Daniele Dell'Aglio 
+Eyal Oren
+Gaston Tagni 
+Georgina Gallizo 
+Hamish Cunningham 
+Ivan Peikov 
+Luka Bradesko 
+Mark Greenwood 
+Matthias Pressnig 
+Michael Witbrock 
+Mick Kerrigan 
+Vassil Momtchev 
+Zhisheng Huang 

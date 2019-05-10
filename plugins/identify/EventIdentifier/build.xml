@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+	<project name="plugins" default="dist">
+    
+	  <dirname property="base" file="../../../platform/build.xml"/>      
+
+		<property name="plugin_name" value="EventIdentifier"/>
+		<property name="jar" location="dist/${plugin_name}.jar" />
+		<property name="larkc" location="${base}/dist/plugins/${plugin_name}.larkc" />
+		<property name="bin" location="bin" />
+		<property name="dist" location="dist" />
+		<property name="lib" location="lib" />
+		<property name="src" location="src" />
+
+	  <target name="init">
+	    <mkdir dir="${bin}"/>
+	    <mkdir dir="${dist}"/>
+	    <mkdir dir="${dist}/lib"/>
+	  </target>
+
+		<path id="plugins.lib">
+			<fileset dir="${base}/dist/bin/">
+				<include name="larkc-platform.jar" />
+			</fileset>
+			<fileset dir="${base}/dist/bin/">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${lib}">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+
+	  <target name="clean">
+			<delete dir="${bin}" />
+			<delete dir="${dist}" />
+			<delete file="${larkc}" />
+	  </target>
+
+	<target name="compile" depends="init">
+		<copy todir="${dist}">
+			<fileset dir="${src}" />
+		</copy>
+		<javac debug="on" srcdir="${dist}" classpathref="plugins.lib" destdir="${dist}" />
+		<!-- .wsdl and rdf files should be in bin directory -->
+	</target>
+	  
+	<target name="dist" depends="compile">
+		<copy todir="${dist}/lib">
+			<fileset dir="${lib}" />
+		</copy>
+		<copy todir="${dist}">
+			<fileset dir="">
+				<include name="**/*.xml"/>
+				<include name="**/*.rdf"/>
+				<include name="**/*.wsdl"/>
+				<exclude name="**/build.xml*"/>
+			</fileset>
+		</copy>		
+		<jar jarfile="${larkc}" basedir="${dist}" />
+		
+		<delete dir="${bin}" />
+		<delete dir="${dist}" />
+
+
+	</target>
+	</project>
+
+	<!-- vim: set filetype=xml expandtab tabstop=2 shiftwidth=2 autoindent smartindent: -->

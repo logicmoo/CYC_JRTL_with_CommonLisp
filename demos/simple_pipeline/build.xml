@@ -1,0 +1,79 @@
+<?xml version="1.0"?> 
+
+<project name="simple_pipeline" default="DemoGuiPipelineEditor"> 
+	
+	<!-- Define the working directorye -->
+	<dirname property="base_spd" file="${ant.file.simple_pipeline}"/>
+	  
+	<!-- Define the environment variable -->
+	<property file="clients.properties"/>
+
+	<!-- Build directories -->
+	<!-- Directory for all binaries -->
+	<property name="build.dir" value="${base_spd}/bin"/>
+	
+	<!-- External libraries -->
+	<property name="lib.dir" location="${base_spd}/lib"/>
+	
+	<!-- Necessary dirs -->
+	<property name="src.dir" value="${base_spd}/src"/>
+	
+	<!-- Temp dir -->
+	<property name="tmp.dir" value="${base_spd}/ordi-trree"/>
+	
+	<!-- The project libraries -->
+	<path id="lib.id">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+		<fileset dir="${lib.dir}/larkcplatform" includes="*.jar" />
+		<fileset dir="${lib.dir}/growingdatasetselecter" includes="*.jar" />
+		<fileset dir="${lib.dir}/irisrulebasedreasoner" includes="*.jar" />
+		<fileset dir="${lib.dir}/irisrulebasedreasoner/lib" includes="*.jar" />
+		<fileset dir="${lib.dir}/nulldatatransformer" includes="*.jar" />
+		<fileset dir="${lib.dir}/passitontransformer" includes="*.jar" />
+		<fileset dir="${lib.dir}/simpleanytimedecider" includes="*.jar" />
+		<fileset dir="${lib.dir}/simplefilereaderidentifier" includes="*.jar" />
+		<fileset dir="${lib.dir}/sindicetriplepatternidentifier" includes="*.jar" />
+		<fileset dir="${lib.dir}/sparqlqueryevaluationreasoner" includes="*.jar" />
+		<fileset dir="${lib.dir}/sparqltotriplepatternquerytransformer" includes="*.jar" />
+		
+		<pathelement location="${build.dir}"/>
+	</path>
+	
+	<!-- Cleans the binaries -->
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="${tmp.dir}"/>
+		<mkdir dir="${build.dir}"/>
+	</target>
+	
+	<!-- Compiles the source files -->
+	<target name="compile" depends="clean"> 
+		<echo>Compiling Java Source Files</echo>
+	    	<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.id"/> 
+	</target> 
+	
+	<!-- Create the jar file contining the application-->
+	<target name="dist" depends="compile">
+		<delete file="larkc_demonstrator.jar"/>
+		<jar destfile="larkc_demonstrator.jar" basedir="${build.dir}"
+				   includes="eu/larkc/demo/**"
+				   manifest="${base_spd}/Manifest.mf"/>
+	</target>
+	
+	<!-- Runs the DemoGuiPipelineEditor -->
+	<target name="DemoGuiPipelineEditor" depends="compile">
+		<java classname="eu.larkc.demo.DemoGuiPipelineEditor" fork="yes" classpathref="lib.id">
+			<jvmarg value="-Xmx512M"/>
+			<jvmarg value="-Xms512M"/>
+		</java>
+	</target>
+	
+	<!-- Runs the ConfigurableSimplePipeline -->
+	<target name="ConfigurableSimplePipeline" depends="compile">
+		<java classname="eu.larkc.demo.ConfigurableSimplePipeline" fork="yes" classpathref="lib.id">
+			<jvmarg value="-Xmx768M"/>
+			<jvmarg value="-Xms768M"/>
+		</java>
+	</target>
+	
+</project>

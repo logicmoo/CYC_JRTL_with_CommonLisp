@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="LarKCWizard.category1"
+            name="LarKC">
+      </category>
+      <wizard
+            category="LarKCWizard.category1"
+            class="larkcwizard.NewPluginWizard"
+            icon="LarKC.png"
+            id="LarKCWizard.wizard1"
+            name="LarKC Plugin">
+      </wizard>
+   </extension>
+   <extension
+         id="larkcwizard.projectNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="larkcwizard.natures.ProjectNature">
+         </run>
+      </runtime>
+   </extension>
+
+</plugin>

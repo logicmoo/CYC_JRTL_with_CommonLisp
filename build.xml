@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<project name="larkc" default="dist" basedir=".">
+  <import file="platform/build.xml"/>
+  <import file="plugins/build.xml"/>
+  <import file="demos/simple_pipeline/build.xml"/>
+
+  <target name="dist" depends="platform.dist,plugins.dist,simple_pipeline.dist" />
+  <target name="clean" depends="platform.clean,plugins.clean,simple_pipeline.clean" />
+  <target name="doc" depends="platform.doc" />
+
+  <target name="run" depends="dist">
+    <java fork="true" classpathref="run.path" classname="com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain">
+      <sysproperty key="java.util.logging.config.file" value="platform/conf/larkc.properties" />
+      <arg line="-i platform/conf/jrtl-release-init.lisp" />
+    </java>
+  </target>
+</project>
+
+<!-- vim: set filetype=xml expandtab tabstop=2 shiftwidth=2 autoindent smartindent: -->

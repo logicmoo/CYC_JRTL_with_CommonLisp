@@ -1,0 +1,118 @@
+<project name="jee_extensions" basedir="." default="build-all">
+
+	<tstamp />
+
+	<property file="build.properties" />
+
+	<patternset id="java-source-files">
+		<include name="**/*.java" />
+	</patternset>
+			
+	<path id="defaultcp">
+		<fileset dir="${dir.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+
+	<target name="init">
+	</target>
+
+	<target name="clean" description="deletes ALL generated files" depends="init">
+		<delete dir="${dir.build}" />
+	</target>
+
+	<target name="compile-client" description="compiles all the client class files" depends="init">
+		<delete dir="${dir.classes.client}" />
+		<mkdir  dir="${dir.classes.client}" />
+		
+		<copy todir="${dir.classes.client}" preservelastmodified="yes" includeEmptyDirs="no">
+			<fileset dir="${dir.src.client}">
+				<patternset refid="java-source-files" />
+			</fileset>
+			<fileset dir="${dir.src.shared}">
+				<patternset refid="java-source-files" />
+			</fileset>
+		</copy>
+		
+		<javac srcdir="${dir.classes.client}" classpathref="defaultcp" destdir="${dir.classes.client}" compiler="modern" deprecation="on" debug="on" debuglevel="lines,vars,source">
+			<compilerarg value="-Xlint:unchecked" />
+			<compilerarg value="-version" />
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="compile-server" description="compiles all the server class files" depends="init">
+		<delete dir="${dir.classes.server}" />
+		<mkdir  dir="${dir.classes.server}" />
+		
+		<copy todir="${dir.classes.server}" preservelastmodified="yes" includeEmptyDirs="no">
+			<fileset dir="${dir.src.server}">
+				<patternset refid="java-source-files" />
+			</fileset>
+			<fileset dir="${dir.src.shared}">
+				<patternset refid="java-source-files" />
+			</fileset>
+		</copy>
+		
+		<javac srcdir="${dir.classes.server}" classpathref="defaultcp" destdir="${dir.classes.server}" compiler="modern" deprecation="on" debug="on" debuglevel="lines,vars,source">
+			<compilerarg value="-Xlint:unchecked" />
+			<compilerarg value="-version" />
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="compile-converter" description="compiles all the converter class files" depends="init">
+		<delete dir="${dir.classes.converter}" />
+		<mkdir  dir="${dir.classes.converter}" />
+		
+		<copy todir="${dir.classes.converter}" preservelastmodified="yes" includeEmptyDirs="no">
+			<fileset dir="${dir.src.converter}">
+				<patternset refid="java-source-files" />
+			</fileset>
+		</copy>
+		
+		<javac srcdir="${dir.classes.converter}" classpathref="defaultcp" destdir="${dir.classes.converter}" compiler="modern" deprecation="on" debug="on" debuglevel="lines,vars,source">
+			<compilerarg value="-Xlint:unchecked" />
+			<compilerarg value="-version" />
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+		
+
+	<target name="build-client" description="creates the client jar file" depends="compile-client">
+		<mkdir  dir="${dir.jar}" />
+		<delete file="${file.jar.client}" />
+		<jar basedir="${dir.classes.client}" destfile="${file.jar.client}" index="true" />
+	</target>
+
+	<target name="build-server" description="creates the server jar file" depends="compile-server">
+		<mkdir  dir="${dir.jar}" />
+		<delete file="${file.jar.server}" />
+		<copy file="server/ordi.properties" todir="${dir.classes.server}" preservelastmodified="yes" includeEmptyDirs="no" />
+		<jar basedir="${dir.classes.server}" destfile="${file.jar.server}" index="true" />
+	</target>
+
+	<target name="build-converter" description="creates the converter jar file" depends="compile-converter,build-server">
+		<mkdir  dir="${dir.jar}" />
+		<delete file="${file.jar.converter}" />
+		
+		<mkdir  dir="${dir.classes.converter}/${war.dir.lib}" />
+		<copy todir="${dir.classes.converter}/${war.dir.lib}" flatten="true">
+			<fileset dir="${dir.webapp.lib}">
+				<include name="**/*" />
+			</fileset>
+			<fileset file="${file.jar.server}" />
+		</copy>
+		<jar basedir="${dir.classes.converter}" destfile="${file.jar.converter}" index="true">
+			<manifest>
+				<attribute name="Main-Class" value="eu.larkc.pluginconverter.Convert"/>
+			</manifest>                                                          
+		</jar>
+	</target>
+
+	<target name="build-all" description="creates all the jar files" depends="build-client,build-server,build-converter">
+	</target>
+
+</project>

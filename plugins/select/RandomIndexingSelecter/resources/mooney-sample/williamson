@@ -1,0 +1,292 @@
+http://www.mooney.net/geo#williamson http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.mooney.net/geo#Mountain
+http://www.mooney.net/geo#williamson http://www.w3.org/2000/01/rdf-schema#label williamson
+http://www.mooney.net/geo#williamson http://www.mooney.net/geo#height 4382
+http://www.mooney.net/geo#williamson http://www.mooney.net/geo#isMountainOf http://www.mooney.net/geo#california
+http://www.mooney.net/geo#california http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.mooney.net/geo#State
+http://www.mooney.net/geo#california http://www.w3.org/2000/01/rdf-schema#label california
+http://www.mooney.net/geo#california http://www.mooney.net/geo#abbreviation ca
+http://www.mooney.net/geo#california http://www.mooney.net/geo#statePopulation 158000
+http://www.mooney.net/geo#california http://www.mooney.net/geo#stateArea 23670000
+http://www.mooney.net/geo#california http://www.mooney.net/geo#statePopDensity 0.0066751163
+http://www.mooney.net/geo#california http://www.mooney.net/geo#borders http://www.mooney.net/geo#arizona
+http://www.mooney.net/geo#california http://www.mooney.net/geo#borders http://www.mooney.net/geo#nevada
+http://www.mooney.net/geo#california http://www.mooney.net/geo#borders http://www.mooney.net/geo#oregon
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#scottsValleyCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#redondoBeachCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#fairfieldCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#mountainViewCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#irvineCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#escondidoCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#newportBeachCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#alamedaCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#sanLeandroCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#buenaParkCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#alhambraCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#southGateCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#whittierCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#westminsterCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#venturaCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#elCajonCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#santaBarbaraCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#lakewoodCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#richmondCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#oceansideCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#simiValleyCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#sanMateoCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#thousandOaksCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#dalyCityCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#elMonteCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#vallejoCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#westCovinaCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#salinasCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#carsonCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#comptonCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#costaMesaCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#downeyCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#santaRosaCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#chulaVistaCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#burbankCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#norwalkCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#citrusHeightsCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#santaClaraCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#santaMonicaCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#ontarioCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#orangeCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#pomonaCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#haywardCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#inglewoodCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#fullertonCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#berkeleyCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#concordCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#bakersfieldCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#sunnyvaleCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#modestoCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#oxnardCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#eastLosAngelesCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#pasadenaCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#sanBernardinoCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#gardenGroveCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#torranceCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#fremontCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#glendaleCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#stocktonCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#huntingtonBeachCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#riversideCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#santaAnaCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#fresnoCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#anaheimCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#sacramentoCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#oaklandCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#longBeachCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#sanJoseCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#sanFranciscoCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#sanDiegoCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasCity http://www.mooney.net/geo#losAngelesCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasMountain http://www.mooney.net/geo#sill
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasMountain http://www.mooney.net/geo#shasta
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasMountain http://www.mooney.net/geo#northPalisade
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasMountain http://www.mooney.net/geo#white
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasMountain http://www.mooney.net/geo#williamson
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasMountain http://www.mooney.net/geo#whitney
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road8
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road5
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road15
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road40
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road10
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasRoad http://www.mooney.net/geo#road80
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasRiver http://www.mooney.net/geo#colorado2
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasLake http://www.mooney.net/geo#tahoe
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasLake http://www.mooney.net/geo#saltonSea
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasHighPoint http://www.mooney.net/geo#mountWhitneyCa
+http://www.mooney.net/geo#california http://www.mooney.net/geo#hasLowPoint http://www.mooney.net/geo#deathValleyCa
+http://www.mooney.net/geo#arizona http://www.w3.org/2000/01/rdf-schema#label arizona
+http://www.mooney.net/geo#arizona http://www.mooney.net/geo#abbreviation az
+http://www.mooney.net/geo#arizona http://www.mooney.net/geo#statePopulation 114000
+http://www.mooney.net/geo#arizona http://www.mooney.net/geo#stateArea 2718000
+http://www.mooney.net/geo#arizona http://www.mooney.net/geo#statePopDensity 0.041942604
+http://www.mooney.net/geo#nevada http://www.w3.org/2000/01/rdf-schema#label nevada
+http://www.mooney.net/geo#nevada http://www.mooney.net/geo#abbreviation nv
+http://www.mooney.net/geo#nevada http://www.mooney.net/geo#statePopulation 110500
+http://www.mooney.net/geo#nevada http://www.mooney.net/geo#stateArea 800500
+http://www.mooney.net/geo#nevada http://www.mooney.net/geo#statePopDensity 0.13803872
+http://www.mooney.net/geo#oregon http://www.w3.org/2000/01/rdf-schema#label oregon
+http://www.mooney.net/geo#oregon http://www.mooney.net/geo#abbreviation or
+http://www.mooney.net/geo#oregon http://www.mooney.net/geo#statePopulation 97073
+http://www.mooney.net/geo#oregon http://www.mooney.net/geo#stateArea 2633000
+http://www.mooney.net/geo#oregon http://www.mooney.net/geo#statePopDensity 0.03686783
+http://www.mooney.net/geo#scottsValleyCa http://www.w3.org/2000/01/rdf-schema#label scotts valley
+http://www.mooney.net/geo#scottsValleyCa http://www.mooney.net/geo#cityPopulation 6037
+http://www.mooney.net/geo#redondoBeachCa http://www.w3.org/2000/01/rdf-schema#label redondo beach
+http://www.mooney.net/geo#redondoBeachCa http://www.mooney.net/geo#cityPopulation 57102
+http://www.mooney.net/geo#fairfieldCa http://www.w3.org/2000/01/rdf-schema#label fairfield
+http://www.mooney.net/geo#fairfieldCa http://www.mooney.net/geo#cityPopulation 58099
+http://www.mooney.net/geo#mountainViewCa http://www.w3.org/2000/01/rdf-schema#label mountain view
+http://www.mooney.net/geo#mountainViewCa http://www.mooney.net/geo#cityPopulation 58655
+http://www.mooney.net/geo#irvineCa http://www.w3.org/2000/01/rdf-schema#label irvine
+http://www.mooney.net/geo#irvineCa http://www.mooney.net/geo#cityPopulation 62134
+http://www.mooney.net/geo#escondidoCa http://www.w3.org/2000/01/rdf-schema#label escondido
+http://www.mooney.net/geo#escondidoCa http://www.mooney.net/geo#cityPopulation 62480
+http://www.mooney.net/geo#newportBeachCa http://www.w3.org/2000/01/rdf-schema#label newport beach
+http://www.mooney.net/geo#newportBeachCa http://www.mooney.net/geo#cityPopulation 63475
+http://www.mooney.net/geo#alamedaCa http://www.w3.org/2000/01/rdf-schema#label alameda
+http://www.mooney.net/geo#alamedaCa http://www.mooney.net/geo#cityPopulation 63852
+http://www.mooney.net/geo#sanLeandroCa http://www.w3.org/2000/01/rdf-schema#label san leandro
+http://www.mooney.net/geo#sanLeandroCa http://www.mooney.net/geo#cityPopulation 63952
+http://www.mooney.net/geo#buenaParkCa http://www.w3.org/2000/01/rdf-schema#label buena park
+http://www.mooney.net/geo#buenaParkCa http://www.mooney.net/geo#cityPopulation 64165
+http://www.mooney.net/geo#alhambraCa http://www.w3.org/2000/01/rdf-schema#label alhambra
+http://www.mooney.net/geo#alhambraCa http://www.mooney.net/geo#cityPopulation 64767
+http://www.mooney.net/geo#southGateCa http://www.w3.org/2000/01/rdf-schema#label south gate
+http://www.mooney.net/geo#southGateCa http://www.mooney.net/geo#cityPopulation 66784
+http://www.mooney.net/geo#whittierCa http://www.w3.org/2000/01/rdf-schema#label whittier
+http://www.mooney.net/geo#whittierCa http://www.mooney.net/geo#cityPopulation 68558
+http://www.mooney.net/geo#westminsterCa http://www.w3.org/2000/01/rdf-schema#label westminster
+http://www.mooney.net/geo#westminsterCa http://www.mooney.net/geo#cityPopulation 71133
+http://www.mooney.net/geo#venturaCa http://www.w3.org/2000/01/rdf-schema#label ventura
+http://www.mooney.net/geo#venturaCa http://www.mooney.net/geo#cityPopulation 73774
+http://www.mooney.net/geo#elCajonCa http://www.w3.org/2000/01/rdf-schema#label el cajon
+http://www.mooney.net/geo#elCajonCa http://www.mooney.net/geo#cityPopulation 73892
+http://www.mooney.net/geo#santaBarbaraCa http://www.w3.org/2000/01/rdf-schema#label santa barbara
+http://www.mooney.net/geo#santaBarbaraCa http://www.mooney.net/geo#cityPopulation 74542
+http://www.mooney.net/geo#lakewoodCa http://www.w3.org/2000/01/rdf-schema#label lakewood
+http://www.mooney.net/geo#lakewoodCa http://www.mooney.net/geo#cityPopulation 74654
+http://www.mooney.net/geo#richmondCa http://www.w3.org/2000/01/rdf-schema#label richmond
+http://www.mooney.net/geo#richmondCa http://www.mooney.net/geo#cityPopulation 74676
+http://www.mooney.net/geo#oceansideCa http://www.w3.org/2000/01/rdf-schema#label oceanside
+http://www.mooney.net/geo#oceansideCa http://www.mooney.net/geo#cityPopulation 76698
+http://www.mooney.net/geo#simiValleyCa http://www.w3.org/2000/01/rdf-schema#label simi valley
+http://www.mooney.net/geo#simiValleyCa http://www.mooney.net/geo#cityPopulation 77500
+http://www.mooney.net/geo#sanMateoCa http://www.w3.org/2000/01/rdf-schema#label san mateo
+http://www.mooney.net/geo#sanMateoCa http://www.mooney.net/geo#cityPopulation 77640
+http://www.mooney.net/geo#thousandOaksCa http://www.w3.org/2000/01/rdf-schema#label thousand oaks
+http://www.mooney.net/geo#thousandOaksCa http://www.mooney.net/geo#cityPopulation 77797
+http://www.mooney.net/geo#dalyCityCa http://www.w3.org/2000/01/rdf-schema#label daly city
+http://www.mooney.net/geo#dalyCityCa http://www.mooney.net/geo#cityPopulation 78519
+http://www.mooney.net/geo#elMonteCa http://www.w3.org/2000/01/rdf-schema#label el monte
+http://www.mooney.net/geo#elMonteCa http://www.mooney.net/geo#cityPopulation 79494
+http://www.mooney.net/geo#vallejoCa http://www.w3.org/2000/01/rdf-schema#label vallejo
+http://www.mooney.net/geo#vallejoCa http://www.mooney.net/geo#cityPopulation 80188
+http://www.mooney.net/geo#westCovinaCa http://www.w3.org/2000/01/rdf-schema#label west covina
+http://www.mooney.net/geo#westCovinaCa http://www.mooney.net/geo#cityPopulation 80292
+http://www.mooney.net/geo#salinasCa http://www.w3.org/2000/01/rdf-schema#label salinas
+http://www.mooney.net/geo#salinasCa http://www.mooney.net/geo#cityPopulation 80479
+http://www.mooney.net/geo#carsonCa http://www.w3.org/2000/01/rdf-schema#label carson
+http://www.mooney.net/geo#carsonCa http://www.mooney.net/geo#cityPopulation 81221
+http://www.mooney.net/geo#comptonCa http://www.w3.org/2000/01/rdf-schema#label compton
+http://www.mooney.net/geo#comptonCa http://www.mooney.net/geo#cityPopulation 81230
+http://www.mooney.net/geo#costaMesaCa http://www.w3.org/2000/01/rdf-schema#label costa mesa
+http://www.mooney.net/geo#costaMesaCa http://www.mooney.net/geo#cityPopulation 82291
+http://www.mooney.net/geo#downeyCa http://www.w3.org/2000/01/rdf-schema#label downey
+http://www.mooney.net/geo#downeyCa http://www.mooney.net/geo#cityPopulation 82602
+http://www.mooney.net/geo#santaRosaCa http://www.w3.org/2000/01/rdf-schema#label santa rosa
+http://www.mooney.net/geo#santaRosaCa http://www.mooney.net/geo#cityPopulation 83205
+http://www.mooney.net/geo#chulaVistaCa http://www.w3.org/2000/01/rdf-schema#label chula vista
+http://www.mooney.net/geo#chulaVistaCa http://www.mooney.net/geo#cityPopulation 83927
+http://www.mooney.net/geo#burbankCa http://www.w3.org/2000/01/rdf-schema#label burbank
+http://www.mooney.net/geo#burbankCa http://www.mooney.net/geo#cityPopulation 84625
+http://www.mooney.net/geo#norwalkCa http://www.w3.org/2000/01/rdf-schema#label norwalk
+http://www.mooney.net/geo#norwalkCa http://www.mooney.net/geo#cityPopulation 84901
+http://www.mooney.net/geo#citrusHeightsCa http://www.w3.org/2000/01/rdf-schema#label citrus heights
+http://www.mooney.net/geo#citrusHeightsCa http://www.mooney.net/geo#cityPopulation 85911
+http://www.mooney.net/geo#santaClaraCa http://www.w3.org/2000/01/rdf-schema#label santa clara
+http://www.mooney.net/geo#santaClaraCa http://www.mooney.net/geo#cityPopulation 87700
+http://www.mooney.net/geo#santaMonicaCa http://www.w3.org/2000/01/rdf-schema#label santa monica
+http://www.mooney.net/geo#santaMonicaCa http://www.mooney.net/geo#cityPopulation 88314
+http://www.mooney.net/geo#ontarioCa http://www.w3.org/2000/01/rdf-schema#label ontario
+http://www.mooney.net/geo#ontarioCa http://www.mooney.net/geo#cityPopulation 88820
+http://www.mooney.net/geo#orangeCa http://www.w3.org/2000/01/rdf-schema#label orange
+http://www.mooney.net/geo#orangeCa http://www.mooney.net/geo#cityPopulation 91450
+http://www.mooney.net/geo#pomonaCa http://www.w3.org/2000/01/rdf-schema#label pomona
+http://www.mooney.net/geo#pomonaCa http://www.mooney.net/geo#cityPopulation 92742
+http://www.mooney.net/geo#haywardCa http://www.w3.org/2000/01/rdf-schema#label hayward
+http://www.mooney.net/geo#haywardCa http://www.mooney.net/geo#cityPopulation 93585
+http://www.mooney.net/geo#inglewoodCa http://www.w3.org/2000/01/rdf-schema#label inglewood
+http://www.mooney.net/geo#inglewoodCa http://www.mooney.net/geo#cityPopulation 94162
+http://www.mooney.net/geo#fullertonCa http://www.w3.org/2000/01/rdf-schema#label fullerton
+http://www.mooney.net/geo#fullertonCa http://www.mooney.net/geo#cityPopulation 102246
+http://www.mooney.net/geo#berkeleyCa http://www.w3.org/2000/01/rdf-schema#label berkeley
+http://www.mooney.net/geo#berkeleyCa http://www.mooney.net/geo#cityPopulation 103328
+http://www.mooney.net/geo#concordCa http://www.w3.org/2000/01/rdf-schema#label concord
+http://www.mooney.net/geo#concordCa http://www.mooney.net/geo#cityPopulation 103763
+http://www.mooney.net/geo#bakersfieldCa http://www.w3.org/2000/01/rdf-schema#label bakersfield
+http://www.mooney.net/geo#bakersfieldCa http://www.mooney.net/geo#cityPopulation 105611
+http://www.mooney.net/geo#sunnyvaleCa http://www.w3.org/2000/01/rdf-schema#label sunnyvale
+http://www.mooney.net/geo#sunnyvaleCa http://www.mooney.net/geo#cityPopulation 106618
+http://www.mooney.net/geo#modestoCa http://www.w3.org/2000/01/rdf-schema#label modesto
+http://www.mooney.net/geo#modestoCa http://www.mooney.net/geo#cityPopulation 106963
+http://www.mooney.net/geo#oxnardCa http://www.w3.org/2000/01/rdf-schema#label oxnard
+http://www.mooney.net/geo#oxnardCa http://www.mooney.net/geo#cityPopulation 108195
+http://www.mooney.net/geo#eastLosAngelesCa http://www.w3.org/2000/01/rdf-schema#label east los angeles
+http://www.mooney.net/geo#eastLosAngelesCa http://www.mooney.net/geo#cityPopulation 110017
+http://www.mooney.net/geo#pasadenaCa http://www.w3.org/2000/01/rdf-schema#label pasadena
+http://www.mooney.net/geo#pasadenaCa http://www.mooney.net/geo#cityPopulation 118072
+http://www.mooney.net/geo#sanBernardinoCa http://www.w3.org/2000/01/rdf-schema#label san bernardino
+http://www.mooney.net/geo#sanBernardinoCa http://www.mooney.net/geo#cityPopulation 118794
+http://www.mooney.net/geo#gardenGroveCa http://www.w3.org/2000/01/rdf-schema#label garden grove
+http://www.mooney.net/geo#gardenGroveCa http://www.mooney.net/geo#cityPopulation 123351
+http://www.mooney.net/geo#torranceCa http://www.w3.org/2000/01/rdf-schema#label torrance
+http://www.mooney.net/geo#torranceCa http://www.mooney.net/geo#cityPopulation 131497
+http://www.mooney.net/geo#fremontCa http://www.w3.org/2000/01/rdf-schema#label fremont
+http://www.mooney.net/geo#fremontCa http://www.mooney.net/geo#cityPopulation 131945
+http://www.mooney.net/geo#glendaleCa http://www.w3.org/2000/01/rdf-schema#label glendale
+http://www.mooney.net/geo#glendaleCa http://www.mooney.net/geo#cityPopulation 139060
+http://www.mooney.net/geo#stocktonCa http://www.w3.org/2000/01/rdf-schema#label stockton
+http://www.mooney.net/geo#stocktonCa http://www.mooney.net/geo#cityPopulation 149779
+http://www.mooney.net/geo#huntingtonBeachCa http://www.w3.org/2000/01/rdf-schema#label huntington beach
+http://www.mooney.net/geo#huntingtonBeachCa http://www.mooney.net/geo#cityPopulation 170505
+http://www.mooney.net/geo#riversideCa http://www.w3.org/2000/01/rdf-schema#label riverside
+http://www.mooney.net/geo#riversideCa http://www.mooney.net/geo#cityPopulation 170876
+http://www.mooney.net/geo#santaAnaCa http://www.w3.org/2000/01/rdf-schema#label santa ana
+http://www.mooney.net/geo#santaAnaCa http://www.mooney.net/geo#cityPopulation 203713
+http://www.mooney.net/geo#fresnoCa http://www.w3.org/2000/01/rdf-schema#label fresno
+http://www.mooney.net/geo#fresnoCa http://www.mooney.net/geo#cityPopulation 218202
+http://www.mooney.net/geo#anaheimCa http://www.w3.org/2000/01/rdf-schema#label anaheim
+http://www.mooney.net/geo#anaheimCa http://www.mooney.net/geo#cityPopulation 219311
+http://www.mooney.net/geo#sacramentoCa http://www.w3.org/2000/01/rdf-schema#label sacramento
+http://www.mooney.net/geo#sacramentoCa http://www.mooney.net/geo#cityPopulation 275741
+http://www.mooney.net/geo#oaklandCa http://www.w3.org/2000/01/rdf-schema#label oakland
+http://www.mooney.net/geo#oaklandCa http://www.mooney.net/geo#cityPopulation 339337
+http://www.mooney.net/geo#longBeachCa http://www.w3.org/2000/01/rdf-schema#label long beach
+http://www.mooney.net/geo#longBeachCa http://www.mooney.net/geo#cityPopulation 361334
+http://www.mooney.net/geo#sanJoseCa http://www.w3.org/2000/01/rdf-schema#label san jose
+http://www.mooney.net/geo#sanJoseCa http://www.mooney.net/geo#cityPopulation 629442
+http://www.mooney.net/geo#sanFranciscoCa http://www.w3.org/2000/01/rdf-schema#label san francisco
+http://www.mooney.net/geo#sanFranciscoCa http://www.mooney.net/geo#cityPopulation 678974
+http://www.mooney.net/geo#sanDiegoCa http://www.w3.org/2000/01/rdf-schema#label san diego
+http://www.mooney.net/geo#sanDiegoCa http://www.mooney.net/geo#cityPopulation 875538
+http://www.mooney.net/geo#losAngelesCa http://www.w3.org/2000/01/rdf-schema#label los angeles
+http://www.mooney.net/geo#losAngelesCa http://www.mooney.net/geo#cityPopulation 2966850
+http://www.mooney.net/geo#sill http://www.w3.org/2000/01/rdf-schema#label sill
+http://www.mooney.net/geo#sill http://www.mooney.net/geo#height 4317
+http://www.mooney.net/geo#shasta http://www.w3.org/2000/01/rdf-schema#label shasta
+http://www.mooney.net/geo#shasta http://www.mooney.net/geo#height 4317
+http://www.mooney.net/geo#northPalisade http://www.w3.org/2000/01/rdf-schema#label north palisade
+http://www.mooney.net/geo#northPalisade http://www.mooney.net/geo#height 4341
+http://www.mooney.net/geo#white http://www.w3.org/2000/01/rdf-schema#label white
+http://www.mooney.net/geo#white http://www.mooney.net/geo#height 4342
+http://www.mooney.net/geo#williamson http://www.w3.org/2000/01/rdf-schema#label williamson
+http://www.mooney.net/geo#williamson http://www.mooney.net/geo#height 4382
+http://www.mooney.net/geo#whitney http://www.w3.org/2000/01/rdf-schema#label whitney
+http://www.mooney.net/geo#whitney http://www.mooney.net/geo#height 4418
+http://www.mooney.net/geo#road8 http://www.w3.org/2000/01/rdf-schema#label road 8
+http://www.mooney.net/geo#road8 http://www.mooney.net/geo#number 8
+http://www.mooney.net/geo#road5 http://www.w3.org/2000/01/rdf-schema#label road 5
+http://www.mooney.net/geo#road5 http://www.mooney.net/geo#number 5
+http://www.mooney.net/geo#road15 http://www.w3.org/2000/01/rdf-schema#label road 15
+http://www.mooney.net/geo#road15 http://www.mooney.net/geo#number 15
+http://www.mooney.net/geo#road40 http://www.w3.org/2000/01/rdf-schema#label road 40
+http://www.mooney.net/geo#road40 http://www.mooney.net/geo#number 40
+http://www.mooney.net/geo#road10 http://www.w3.org/2000/01/rdf-schema#label road 10
+http://www.mooney.net/geo#road10 http://www.mooney.net/geo#number 10
+http://www.mooney.net/geo#road80 http://www.w3.org/2000/01/rdf-schema#label road 80
+http://www.mooney.net/geo#road80 http://www.mooney.net/geo#number 80
+http://www.mooney.net/geo#colorado2 http://www.w3.org/2000/01/rdf-schema#label colorado
+http://www.mooney.net/geo#colorado2 http://www.mooney.net/geo#length 2333
+http://www.mooney.net/geo#tahoe http://www.w3.org/2000/01/rdf-schema#label tahoe
+http://www.mooney.net/geo#tahoe http://www.mooney.net/geo#lakeArea 497
+http://www.mooney.net/geo#saltonSea http://www.w3.org/2000/01/rdf-schema#label salton sea
+http://www.mooney.net/geo#saltonSea http://www.mooney.net/geo#lakeArea 932
+http://www.mooney.net/geo#mountWhitneyCa http://www.w3.org/2000/01/rdf-schema#label mount whitney
+http://www.mooney.net/geo#mountWhitneyCa http://www.mooney.net/geo#hiElevation 4418
+http://www.mooney.net/geo#deathValleyCa http://www.w3.org/2000/01/rdf-schema#label death valley
+http://www.mooney.net/geo#deathValleyCa http://www.mooney.net/geo#loElevation -85

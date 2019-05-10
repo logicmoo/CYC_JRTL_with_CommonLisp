@@ -1,0 +1,40 @@
+#!/bin/sh
+
+    if [ -z "$1" ] ; then
+        echo Please add the version number as an argument
+	exit 1
+    fi
+
+    if [ -e "larkc-core-$1-binary.tgz" ] ; then
+        rm larkc-core-$1-binary.tgz
+    fi
+
+    if [ -e "larkc-core-$1-binary.zip" ] ; then
+        rm larkc-core-$1-binary.zip
+    fi
+
+
+    ant dist
+
+#platform
+
+    if [ -e "larkc-core-$1-binary" ] ; then
+        rm -r larkc-core-$1-binary
+    fi
+
+    cd platform
+    ant create_distrib
+    cd ..
+
+    mkdir larkc-core-$1-binary
+    cp -r platform/dist/* larkc-core-$1-binary/
+    
+
+#zip & tar
+cd larkc-core-$1-binary
+tar czf larkc-core-$1-binary.tgz *
+zip -r larkc-core-$1-binary.zip *
+mv larkc-core-$1-binary.tgz ../
+mv larkc-core-$1-binary.zip ../
+cd ..
+rm -rf larkc-core-$1-binary

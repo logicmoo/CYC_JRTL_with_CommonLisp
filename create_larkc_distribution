@@ -1,0 +1,49 @@
+#!/bin/sh
+
+    if [ -z "$1" ] ; then
+        echo Please add the version number as an argument
+	exit 1
+    fi
+
+    if [ -e "larkc-core-$1.tgz" ] ; then
+        rm larkc-core-$1.tgz
+    fi
+
+    if [ -e "larkc-core-$1.zip" ] ; then
+        rm larkc-core-$1.zip
+    fi
+
+
+    ant dist
+
+#platform
+
+    if [ -e "larkc-core-$1" ] ; then
+        rm -r larkc-core-$1
+    fi
+
+    mkdir larkc-core-$1
+    mkdir larkc-core-$1/platform
+
+    svn export platform/src larkc-core-$1/platform --force
+
+#plugins
+    
+    for x1 in plugins/* ; do 
+        for x2 in $x1/* ; do
+
+	    if [ -d "$x2" ] ; then
+		mkdir -p larkc-core-$1/$x2
+		svn export $x2/src  larkc-core-$1/$x2 --force
+    	    fi
+	done
+    done
+
+#zip & tar
+cd larkc-core-$1
+tar czf larkc-core-$1.tgz *
+zip -r larkc-core-$1.zip *
+mv larkc-core-$1.tgz ../
+mv larkc-core-$1.zip ../
+cd ..
+rm -rf larkc-core-$1

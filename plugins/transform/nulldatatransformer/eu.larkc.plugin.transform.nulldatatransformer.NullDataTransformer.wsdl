@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL SELECTERS -->
+	<wsdl:interface name="infosetTransformer"
+		sawsdl:modelReference="http://larkc.eu/plugin#InformationSetTransformer">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS IDENTIFIER -->
+    <wsdl:service name="urn:eu.larkc.plugin.transform.nulldatatransformer.NullDataTransformer" interface="infosetTransformer"
+  	sawsdl:modelReference="eu/larkc/plugin/transform/nulldatatransformer/NullDataTransformer.rdf#NullDataTransformer" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.transform.nulldatatransformer.NullDataTransformer" />
+    </wsdl:service>
+
+</wsdl:description>

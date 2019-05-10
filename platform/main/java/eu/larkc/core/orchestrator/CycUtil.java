@@ -1,3 +1,21 @@
+/*
+   This file is part of the LarKC platform 
+   http://www.larkc.eu/
+
+   Copyright 2010 LarKC project consortium
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
 package eu.larkc.core.orchestrator;
 
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
@@ -32,10 +50,10 @@ import eu.larkc.core.metadata.PluginRegistry;
 
 public class CycUtil {
 	//private static Logger log = LoggerFactory.getLogger(CycUtil.class);
-	private static Logger logger = Logger.getLogger(PluginRegistry.class.getCanonicalName());
+	private static Logger logger = Logger.getLogger(CycUtil.class.getCanonicalName());
 
 	private static final OwlToCycMapping owlToCycMapping = new OwlToCycMapping();
-	private static String mtStr = "BaseKB";
+	public static String mtStr = "BaseKB";
 	//private static String uriFnStr = "LarkcURIFn";
 
 	public static final void loadRdfTurtle(InputStream inputStream) throws RDFParseException, RDFHandlerException, IOException {
@@ -113,11 +131,11 @@ public class CycUtil {
 		// constants when you're not sure it exists
 
 		SubLObject constSubL = toConst(constStr);
-		if (constSubL instanceof $constant_native) {
-			$constant_native constant = ($constant_native)constSubL;
+		if (constSubL instanceof constant_handles.$constant_native) {
+			constant_handles.$constant_native constant = (constant_handles.$constant_native)constSubL;
 			if (constant.$suid == SubLNil.NIL) {
-				logger.info("adding constant: "+ constStr);
-				ke.ke_create_now(makeString(constStr), CommonSymbols.UNPROVIDED);
+				logger.fine("adding constant: "+ constStr);
+				ke.ke_create_now(makeString(constStr), SubLFile.UNPROVIDED);
 			}
 		}
 	}
@@ -137,8 +155,8 @@ public class CycUtil {
 	}
 
 	public static final boolean addAssertion(SubLObject assertion, SubLObject mt) {
-		logger.info("adding assertion: "+ assertion + " MT: " +mt);
-		SubLObject res = ke.ke_assert_now(assertion, mt, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
+		logger.fine("adding assertion: "+ assertion + " MT: " +mt);
+		SubLObject res = ke.ke_assert_now(assertion, mt, SubLFile.UNPROVIDED, SubLFile.UNPROVIDED);	
 		if (res.isNil()){
 			logger.warning("The assertion was not asserted. It violates the KB consistency!");
 			return false;
@@ -154,7 +172,7 @@ public class CycUtil {
 	public static final void addForwardRule(String forwardRuleStr, SubLObject mt) {
 		// TODO: this rule only works if added after plug-ins' info already in the KB!
 		ke.ke_assert_now(CycUtil.toAssertion(forwardRuleStr), mt,
-				CommonSymbols.UNPROVIDED, makeKeyword("FORWARD"));
+				SubLFile.UNPROVIDED, makeKeyword("FORWARD"));
 	}
 
 	public static final SubLObject askQuery(String queryStr) {

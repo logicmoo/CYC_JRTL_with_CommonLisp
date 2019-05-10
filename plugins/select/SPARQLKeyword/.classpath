@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="src/" kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LarKC platform"/>
+	<classpathentry kind="lib" path="lib/gate.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/nekohtml-0.9.5.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-0.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/keywords-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/ontotext.jar"/>
+	<classpathentry kind="lib" path="lib/jasper-compiler-jdt.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,16 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uc: <http://larkc.cefriel.it/ontologies/urbancomputing#> .
+@prefix larkc: <http://larkc.eu/plugin#> .
+
+uc:EventService rdf:type rdfs:Class.
+
+uc:hasApiKey 	rdf:type rdf:Property;
+				rdfs:domain uc:EventService.
+				
+uc:hasXsltTransformation rdf:type rdf:Property;
+						 rdfs:domaian rdf:EventService.
+
+<http://api.evdb.com/> 	rdf:type uc:EventService;
+						uc:hasApiKey "Md2mzZP7Tk4GkPhw";
+						uc:hasXsltTransformation <http://seip.cefriel.it/urbanlarkc-public/evdb-event2rdf.xsl>.

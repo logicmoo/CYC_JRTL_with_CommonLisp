@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL SELECTERS -->
+	<wsdl:interface name="identifier"
+		sawsdl:modelReference="http://larkc.eu/plugin#Identifier">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS IDENTIFIER -->
+    <wsdl:service name="urn:SindiceTriplePatternIdentifier" interface="identifier"
+  	sawsdl:modelReference="http://larkc.eu/plugin#SindiceTriplePatternIdentifier" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.identify.sindice.SindiceTriplePatternIdentifier" />
+    </wsdl:service>
+
+</wsdl:description>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+ <globalConfiguration>
+  <parameter name="adminPassword" value="admin"/>
+  <parameter name="enableNamespacePrefixOptimization" value="true"/>
+  <parameter name="disablePrettyXML" value="true"/>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+  <requestFlow>
+   <handler type="java:org.globus.wsrf.handlers.AddressingHandler"/>
+   <handler type="java:org.globus.wsrf.impl.security.authentication.ClientPropertiesHandler"/>
+   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
+    <parameter name="className" value="org.globus.wsrf.impl.security.authorization.handlers.SAMLAuthzAssertionHandler"/>
+   </handler>
+   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
+    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.securemsg.X509EncryptHandler"/>
+   </handler>
+   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
+    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.securemsg.X509SignHandler"/>
+   </handler>
+   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
+    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.UsernameHandler"/>
+   </handler>
+   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
+    <parameter name="authService" value="auto"/>
+    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.secureconv.SecContextHandler"/>
+   </handler>
+   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
+    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.secureconv.GSSHandler"/>
+   </handler>
+   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
+    <parameter name="className" value="org.globus.wsrf.impl.security.authorization.TrustedTargetHandler"/>
+   </handler>
+   <handler type="java:org.globus.wsrf.handlers.MessageLoggingHandler"/>
+  </requestFlow>
+  <responseFlow>
+   <handler type="java:org.globus.wsrf.handlers.AddressingHandler"/>
+   <handler type="java:org.globus.wsrf.handlers.MessageLoggingHandler"/>
+   <handler type="java:org.apache.axis.handlers.JAXRPCHandler">
+    <parameter name="className" value="org.globus.wsrf.impl.security.authentication.wssec.WSSecurityClientHandler"/>
+   </handler>
+  </responseFlow>
+ </globalConfiguration>
+ <transport name="https" pivot="java:org.globus.axis.transport.commons.HTTPSSender"/>
+ <transport name="http" pivot="java:org.globus.axis.transport.commons.HTTPSender"/>
+ <transport name="java" pivot="java:org.apache.axis.transport.java.JavaSender"/>
+ <transport name="local" pivot="java:org.apache.axis.transport.local.LocalSender">
+  <requestFlow>
+   <handler type="java:org.globus.axis.transport.local.LocalHandler"/>
+  </requestFlow>
+ </transport>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.ResourceNotTerminatedFaultType" qname="ns1:ResourceNotTerminatedFaultType" xmlns:ns1="http://www.globus.org/namespaces/2008/03/gram/job/terminate"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.rft.generated.RFTAuthenticationFaultType" qname="ns2:RFTAuthenticationFaultType" xmlns:ns2="http://www.globus.org/namespaces/2008/04/rft"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.LocalResourceManagerJobTerminateFaultType" qname="ns3:LocalResourceManagerJobTerminateFaultType" xmlns:ns3="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.mds.aggregator.types.AggregatorContent" qname="ns4:AggregatorContent" xmlns:ns4="http://mds.globus.org/aggregator/types"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.rft.generated.RFTAuthorizationFaultType" qname="ns5:RFTAuthorizationFaultType" xmlns:ns5="http://www.globus.org/namespaces/2008/04/rft"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.InsufficientCredentialsFaultType" qname="ns6:InsufficientCredentialsFaultType" xmlns:ns6="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.oasis.wsrf.faults.BaseFaultType" qname="ns7:BaseFaultType" xmlns:ns7="http://docs.oasis-open.org/wsrf/bf-2"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory" deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory" type="java:org.globus.ws.trust.BinaryExchangeType" qname="ns8:BinaryExchangeType" xmlns:ns8="http://schemas.xmlsoap.org/ws/2004/04/trust"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.axis.message.addressing.EndpointReferenceType" qname="ns9:EndpointReferenceType" xmlns:ns9="http://www.w3.org/2005/08/addressing"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.rft.generated.RepeatedlyStartedFaultType" qname="ns10:RepeatedlyStartedFaultType" xmlns:ns10="http://www.globus.org/namespaces/2008/04/rft"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.InvalidPathFaultType" qname="ns11:InvalidPathFaultType" xmlns:ns11="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.rft.generated.DelegationEPRMissingFaultType" qname="ns12:DelegationEPRMissingFaultType" xmlns:ns12="http://www.globus.org/namespaces/2008/04/rft"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.InternalFaultType" qname="ns13:InternalFaultType" xmlns:ns13="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory" deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory" type="java:org.globus.axis.message.addressing.ServiceNameType" qname="ns14:ServiceNameType" xmlns:ns14="http://www.w3.org/2005/08/addressing"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.StagingTerminateFaultType" qname="ns15:StagingTerminateFaultType" xmlns:ns15="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.FaultType" qname="ns16:FaultType" xmlns:ns16="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.oasis.wsrf.properties.QueryResourcePropertiesResponse" qname="ns17:QueryResourcePropertiesResponse" xmlns:ns17="http://docs.oasis-open.org/wsrf/rp-2"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory" deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory" type="java:org.globus.axis.message.addressing.AttributedURIType" qname="ns18:AttributedURI" xmlns:ns18="http://www.w3.org/2005/08/addressing"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.CredentialSerializationFaultType" qname="ns19:CredentialSerializationFaultType" xmlns:ns19="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.axis.message.addressing.ReferenceParametersType" qname="ns20:ReferenceParametersType" xmlns:ns20="http://www.w3.org/2005/08/addressing"/>
+ <typeMapping encodingStyle="" serializer="org.globus.wsrf.encoding.FaultCauseSerializerFactory" deserializer="org.globus.wsrf.encoding.FaultCauseDeserializationFactory" type="java:org.oasis.wsrf.faults.BaseFaultTypeFaultCause" qname="ns21:&gt;BaseFaultType&gt;FaultCause" xmlns:ns21="http://docs.oasis-open.org/wsrf/bf-2"/>
+ <typeMapping encodingStyle="" serializer="org.globus.wsrf.encoding.TopicExpressionSerializerFactory" deserializer="org.globus.wsrf.encoding.TopicExpressionDeserializerFactory" type="java:org.oasis.wsn.TopicExpressionType" qname="ns22:TopicExpressionType" xmlns:ns22="http://docs.oasis-open.org/wsn/b-2"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.axis.message.addressing.MetadataType" qname="ns23:MetadataType" xmlns:ns23="http://www.w3.org/2005/08/addressing"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.StagingFaultType" qname="ns24:StagingFaultType" xmlns:ns24="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.JobResourceExpiredFaultType" qname="ns25:JobResourceExpiredFaultType" xmlns:ns25="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.ServiceLevelAgreementFaultType" qname="ns26:ServiceLevelAgreementFaultType" xmlns:ns26="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.InvalidCredentialsFaultType" qname="ns27:InvalidCredentialsFaultType" xmlns:ns27="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.DelegatedCredentialDestroyFaultType" qname="ns28:DelegatedCredentialDestroyFaultType" xmlns:ns28="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.globus.wsrf.encoding.AnyListSerializerFactory" deserializer="org.globus.wsrf.encoding.AnyListDeserializerFactory" type="java:org.oasis.wsrf.properties.SetResourceProperties_Element" qname="ns29:&gt;SetResourceProperties" xmlns:ns29="http://docs.oasis-open.org/wsrf/rp-2"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.ExecutionFailedFaultType" qname="ns30:ExecutionFailedFaultType" xmlns:ns30="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory" deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory" type="java:org.globus.axis.message.addressing.AttributedQNameType" qname="ns31:AttributedQName" xmlns:ns31="http://www.w3.org/2005/08/addressing"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.FilePermissionsFaultType" qname="ns32:FilePermissionsFaultType" xmlns:ns32="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.ResourceNotReleasedFaultType" qname="ns33:ResourceNotReleasedFaultType" xmlns:ns33="http://www.globus.org/namespaces/2008/03/gram/job/release"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.wsrf.core.query.targetedXPath.TargetedXPathQueryElement" qname="ns34:QueryExpressionDialect" xmlns:ns34="http://www.globus.org/namespaces/2006/07/TargetedXPath"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.ws.sc.SecurityContextTokenType" qname="ns35:SecurityContextTokenType" xmlns:ns35="http://schemas.xmlsoap.org/ws/2004/04/sc"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.rft.generated.TransferTransientFaultType" qname="ns36:TransferTransientFaultType" xmlns:ns36="http://www.globus.org/namespaces/2008/04/rft"/>
+ <typeMapping encodingStyle="" serializer="org.globus.wsrf.encoding.QueryExpressionSerializerFactory" deserializer="org.globus.wsrf.encoding.QueryExpressionDeserializerFactory" type="java:org.oasis.wsrf.properties.QueryExpressionType" qname="ns37:QueryExpressionType" xmlns:ns37="http://docs.oasis-open.org/wsrf/rp-2"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.exec.generated.UnsupportedFeatureFaultType" qname="ns38:UnsupportedFeatureFaultType" xmlns:ns38="http://www.globus.org/namespaces/2008/03/gram/job/faults"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.rft.generated.RFTDatabaseFaultType" qname="ns39:RFTDatabaseFaultType" xmlns:ns39="http://www.globus.org/namespaces/2008/04/rft"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory" deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory" type="java:java.lang.String" qname="ns40:QueryExpressionDialect" xmlns:ns40="http://www.globus.org/foobar"/>
+ <typeMapping encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="java:org.globus.rft.generated.TransferFaultType" qname="ns41:TransferFaultType" xmlns:ns41="http://www.globus.org/namespaces/2008/04/rft"/>
+</deployment>

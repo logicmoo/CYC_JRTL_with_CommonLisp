@@ -1,0 +1,15 @@
+<wsdl:description>
+	<!-- COMMON TO ALL Transformers -->
+	<wsdl:interface name="queryTransformer"
+		sawsdl:modelReference="http://larkc.eu/plugin#InformationSetTransformer">
+	</wsdl:interface>
+	
+	<wsdl:binding name="larkcbinding" type="http://larkc.eu/wsdl-binding" />
+
+	<!-- SPECIFIC TO THIS Transformer -->
+    <wsdl:service name="urn:eu.larkc.plugin.transform.gate.RandomIndexingTransformer_MPI" interface="queryTransformer"
+  	sawsdl:modelReference="eu/larkc/plugin/transform/gate/RandomIndexingTransformer_MPI.rdf#RandomIndexingTransformer_MPI" >
+	    <wsdl:endpoint location="java:eu.larkc.plugin.transform.gate.RandomIndexingTransformer_MPI" />
+    </wsdl:service>
+
+</wsdl:description>

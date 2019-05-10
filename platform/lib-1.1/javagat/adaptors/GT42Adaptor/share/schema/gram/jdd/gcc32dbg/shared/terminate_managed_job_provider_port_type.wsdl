@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 1999-2006 University of Chicago
+ 
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+ 
+  http://www.apache.org/licenses/LICENSE-2.0
+ 
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<!-- non pre-processed WSDL -->
+<wsdl:definitions
+    name="TerminateManagedJob"
+    targetNamespace="http://www.globus.org/namespaces/2008/03/gram/job/terminate"
+    xmlns:tns="http://www.globus.org/namespaces/2008/03/gram/job/terminate"
+    xmlns:faults="http://www.globus.org/namespaces/2008/03/gram/job/faults"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
+    xmlns:wsa="http://www.w3.org/2005/08/addressing"
+    xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+    xmlns:wsrfrw="http://docs.oasis-open.org/wsrf/rw-2"
+    xmlns:wsbf="http://docs.oasis-open.org/wsrf/bf-2"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <wsdl:import
+        namespace="http://docs.oasis-open.org/wsrf/rw-2"
+        location="../../wsrf/resource/rw-2.wsdl"/>
+
+    <wsdl:import
+        namespace="http://docs.oasis-open.org/wsn/bw-2"
+        location="../../wsrf/notification/bw-2.wsdl" />
+
+    <wsdl:import
+        namespace="http://www.globus.org/namespaces/2008/03/gram/job/faults"
+        location="./managed_job_faults.wsdl" />
+    
+    <wsdl:types>
+        <xsd:schema
+            targetNamespace="http://www.globus.org/namespaces/2008/03/gram/job/terminate"
+            xmlns:tns="http://www.globus.org/namespaces/2008/03/gram/job/terminate"
+            xmlns:types="http://www.globus.org/namespaces/2008/03/gram/job/types"
+            xmlns:desc="http://www.globus.org/namespaces/2008/03/gram/job/description"
+            xmlns:wsbf="http://docs.oasis-open.org/wsrf/bf-2"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+
+            <xsd:import 
+                namespace="http://www.globus.org/namespaces/2008/03/gram/job/types" 
+                schemaLocation="managed_job_types.xsd"/>
+
+            <xsd:import
+                namespace="http://www.w3.org/2005/08/addressing"
+                schemaLocation="../../ws/addressing/ws-addr.xsd"/>
+            
+            <xsd:import
+                namespace="http://docs.oasis-open.org/wsrf/bf-2"
+                schemaLocation="../../wsrf/faults/bf-2.xsd"/>
+            
+            <xsd:element name="terminate" type="tns:TerminateInputType"/>
+            <xsd:complexType name="TerminateInputType">
+                <xsd:sequence>
+                    <xsd:element name="destroyAfterCleanup"
+                        type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="continueNotifying"
+                        type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="destroyDelegatedCredentials"
+                        type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            
+            <xsd:element name="terminateResponse" type="tns:TerminateOutputType"/>
+            <xsd:complexType name="TerminateOutputType">
+                <xsd:sequence>
+                    <xsd:element name="terminationCompleted"
+                        type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            
+            <xsd:element name="resourceNotTerminatedFault" type="tns:ResourceNotTerminatedFaultType"/>
+            <xsd:complexType name="ResourceNotTerminatedFaultType">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        This fault indicates that an error occured during
+                        termination of a job resource that is different from
+                         ResourceUnknownFault.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexContent>
+                    <xsd:extension base="wsbf:BaseFaultType"/>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+        </xsd:schema>
+    </wsdl:types>
+
+    <wsdl:message name="terminateInputMessage">
+        <wsdl:part name="parameters" element="tns:terminate"/>
+    </wsdl:message>
+    <wsdl:message name="terminateOutputMessage">
+        <wsdl:part name="parameters" element="tns:terminateResponse"/>
+    </wsdl:message>
+    <wsdl:message name="resourceNotTerminatedFault">
+        <wsdl:part name="parameters" element="tns:resourceNotTerminatedFault"/>
+    </wsdl:message>
+
+    <wsdl:portType name="TerminateManagedJob">
+        <wsdl:operation name="terminate">
+            <wsdl:input  name="terminateInputMessage"
+                         message="tns:terminateInputMessage"
+                         wsaw:Action="http://www.globus.org/namespaces/2008/03/gram/job/terminate"/>
+            <wsdl:output name="terminateOutputMessage"
+                         message="tns:terminateOutputMessage"
+                         wsaw:Action="http://www.globus.org/namespaces/2008/03/gram/job/terminateResponse"/>
+            <wsdl:fault  name="ResourceUnknownFault"
+                         message="wsrfrw:ResourceUnknownFault"
+                         wsaw:Action="http://docs.oasis-open.org/wsrf/faults"/>
+            <wsdl:fault  name="delegatedCredentialDestroyFault"
+                         message="faults:delegatedCredentialDestroyFault"
+                         wsaw:Action="http://docs.oasis-open.org/wsrf/faults"/>
+            <wsdl:fault  name="resourceNotTerminatedFault"
+                         message="tns:resourceNotTerminatedFault"
+                         wsa:Action="http://docs.oasis-open.org/wsrf/faults"/>
+        </wsdl:operation>
+
+    </wsdl:portType>
+</wsdl:definitions>

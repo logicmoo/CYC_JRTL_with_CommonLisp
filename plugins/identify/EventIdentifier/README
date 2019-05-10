@@ -1,0 +1,41 @@
+		Event IDENTIFIER
+
+Introduction
+
+The EventIdentifier is the plugin which invokes the Eventful 
+service (http://eventful.com/) to retrieve events on the date 
+and in the location specified in the user's query sent to 
+the Urban LarKC Event workflow.
+ 
+
+
+Prerequisites and dependencies
+
+In order to work properly, the EventIdentifier requires a 
+valid Eventful API key. 
+
+To get the key, the user should register on the Eventful 
+website. More detailed instructions can be found at 
+http://api.eventful.com/keys.
+
+To configure the EventIdentifier, the user then should:
+- stop the LarKC platform (if running)
+- open the "configuration.rdf" file located in the 
+  "configuration-schema" folder
+- insert the key obtained from the Eventful registration into
+  the configuration file where indicated
+- save the configuration file
+- re-build the EventIdentifier project (if using Eclipse)
+- re-start the LarKC platform
+
+ 
+
+Contact information
+
+Daniele Dell'Aglio - CEFRIEL
+daniele.dellaglio@cefriel.it
+
+
+License
+The component follows the licensing strategy for the LarKC Plug-ins
+and is released under the Apache License (version 2.0).

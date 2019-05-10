@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE rdf:RDF [
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#">
+]>
+
+<!--
+wine-light.rdf
+
+for testing the LarKC Iris reasoner plugin
+-->
+<rdf:RDF
+ 	xmlns="http://wine-light.org/wine#"
+  	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl/"
+	xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	xmlns:rss="http://purl.org/rss/1.0/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/" 
+	xml:base="http://wine-light.org/wine#"
+>
+
+ <owl:Ontology rdf:about="">
+    <rdfs:comment>An example OWL ontology</rdfs:comment>
+    <rdfs:label>Wine Ontology Light</rdfs:label>
+  </owl:Ontology>
+  
+  
+	<owl:SymmetricProperty rdf:ID="adjacentRegion">
+	</owl:SymmetricProperty>
+	
+	<owl:TransitiveProperty rdf:ID="locatedIn">
+	</owl:TransitiveProperty>
+	
+  <Region rdf:ID="CaliforniaRegion">
+    <locatedIn rdf:resource="#USRegion" />
+  </Region>
+  
+  <Region rdf:ID="SonomaRegion">
+    <locatedIn rdf:resource="#CaliforniaRegion" />
+  </Region>
+  
+  <Region rdf:ID="SouthAustraliaRegion">
+    <locatedIn rdf:resource="#AustralianRegion" />
+  </Region>
+  
+  <Region rdf:ID="StEmilionRegion">
+    <locatedIn rdf:resource="#BordeauxRegion" />
+  </Region>
+  
+   <Region rdf:ID="SauterneRegion">
+    <locatedIn rdf:resource="#BordeauxRegion" />
+  </Region>
+  
+  <Region rdf:ID="SantaCruzMountainsRegion">
+    <locatedIn rdf:resource="#CaliforniaRegion" />
+  </Region>
+  
+  <Region rdf:ID="CentralTexasRegion">
+    <locatedIn rdf:resource="#TexasRegion" />
+  </Region>
+  
+  <Region rdf:ID="SantaBarbaraRegion">
+    <locatedIn rdf:resource="#CaliforniaRegion" />
+  </Region>
+  
+  <Region rdf:ID="SancerreRegion">
+    <locatedIn rdf:resource="#LoireRegion" />
+  </Region>
+  
+   <Region rdf:ID="PauillacRegion">
+    <locatedIn rdf:resource="#MedocRegion" />
+  </Region>
+  
+  <Region rdf:ID="MuscadetRegion">
+    <locatedIn rdf:resource="#LoireRegion" />
+  </Region>
+  
+  <Region rdf:ID="NapaRegion">
+    <locatedIn rdf:resource="#CaliforniaRegion" />
+  </Region>
+  
+   <Region rdf:ID="MeursaultRegion">
+    <locatedIn rdf:resource="#BourgogneRegion" />
+  </Region>
+  
+  <Region rdf:ID="NewZealandRegion" />
+  
+   <Region rdf:ID="MendocinoRegion">
+    <locatedIn rdf:resource="#CaliforniaRegion" />
+    <adjacentRegion rdf:resource="#SonomaRegion" />
+  </Region>
+  
+   <CabernetSauvignon rdf:ID="MariettaCabernetSauvignon">
+    <locatedIn rdf:resource="#SonomaRegion" />
+    <hasFlavor rdf:resource="#Moderate" />
+    <hasBody   rdf:resource="#Medium" />
+  </CabernetSauvignon>
+  
+  <RedTableWine rdf:ID="MariettaOldVinesRed">
+    <locatedIn rdf:resource="#SonomaRegion" />
+    <hasFlavor rdf:resource="#Moderate" />
+    <hasBody   rdf:resource="#Medium" />
+  </RedTableWine>
+  
+  <PetiteSyrah rdf:ID="MariettaPetiteSyrah">
+    <locatedIn rdf:resource="#SonomaRegion" />
+    <hasFlavor rdf:resource="#Moderate" />
+    <hasBody   rdf:resource="#Medium" />
+  </PetiteSyrah>
+  
+  <Zinfandel rdf:ID="MariettaZinfandel">
+    <locatedIn rdf:resource="#SonomaRegion" />
+    <hasFlavor rdf:resource="#Moderate" />
+    <hasBody   rdf:resource="#Medium" />
+  </Zinfandel>
+
+	
+</rdf:RDF>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="var" path="LARKC_PLATFORM/platform/dist/bin/larkc-platform.jar"/>
+	<classpathentry exported="true" kind="var" path="LARKC_PLATFORM/plugins/transform/RDFToText/lib/LarKC_Molecules.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME"/>
+	<classpathentry kind="var" path="LARKC_PLATFORM/plugins/transform/RDFToText/lib/commons-io-1.4.jar"/>
+	<classpathentry kind="var" path="LARKC_PLATFORM/plugins/transform/RDFToText/lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="var" path="LARKC_PLATFORM/plugins/transform/RDFToText/lib/commons-codec-1.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LarKC platform"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

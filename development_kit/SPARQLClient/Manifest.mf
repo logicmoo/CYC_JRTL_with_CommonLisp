@@ -1,0 +1,2 @@
+Main-Class: eu.larkc.sparqlclient.gui.SPARQLFrame
+Class-Path: lib/appFramework-1.0.jar lib/jnlp.jar lib/slf4j-api-1.5.3.jar lib/slf4j-log4j12-1.5.3.jar lib/log4j-1.2.13.jar

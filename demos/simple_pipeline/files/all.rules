@@ -1,0 +1,209 @@
+/* 
+*
+* all.rules
+* entailment rules (in datalog)
+* From: http://www.w3.org/TR/rdf-mt/#rules
+* and LarKC FP7 D1.1.3 p. 26
+* 20.01.2009
+*
+*/
+
+// Prefix rdf:  namespace URI: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+// Prefix rdfs: namespace URI: http://www.w3.org/2000/01/rdf-schema#
+// Prefix xsd:  namespace URI: http://www.w3.org/2001/XMLSchema#
+// Prefix owl:  namespace URI: http://www.w3.org/2002/07/owl#
+
+/* ***** simple rulse ***** */
+
+/* se1: */
+triple(?v, ?p, ?b1) :- triple(?v, ?p, ?u).
+	/* where ?b1 identifies a blank node allocated to ?u by rule se1 or se2.*/
+
+/* se2: */
+triple(?b1, ?p, ?u) :- triple(?v, ?p, ?u).
+	/* where ?b1 identifies a blank node allocated to ?v by rule se1 or se2.*/
+
+/* ***** rdfp rules ***** */
+
+/* rdfp1: */
+triple(?v, "owl:sameAs", ?w) :- triple(?u, ?p, ?v), triple(?u, ?p, ?w), triple(?p, "rdf:type", "owl:FunctionalProperty").  
+
+/* rdfp2: */ 
+triple(?u, "owl:sameAs", ?v) :- triple(?u, ?p, ?w), triple(?v, ?p, ?w), triple(?p, "rdf:type", "owl:InverseFuntionalProperty").  
+
+/* ***** rdfp L2 rules ***** */
+
+/* rdfp3: */
+triple(?v, ?p, ?w) :- triple(?w, ?p, ?v), triple(?p, "rdf:type", "owl:SymmetricProperty").
+
+/* rdfp4: */ 
+triple(?u, ?p, ?w) :- triple(?u, ?p, ?v), triple(?v, ?p, ?w), triple(?p, "rdf:type", "owl:TransitiveProperty").
+
+/* rdfp5a: */ 
+triple(?v, ?p, ?w) :- triple(?v, "owl:sameAs", ?v).
+
+/* rdfp5b: */ 
+triple(?v, ?p, ?w) :- triple(?w, "owl:sameAs", ?w).
+
+/* rdfp6: */ 
+triple(?w, "owl:sameAs", ?v) :- triple(?v, "owl:sameAs", ?w).
+
+/* rdfp7: */ 
+triple(?u, "owl:sameAs", ?w) :- triple(?u, "owl:sameAs", ?v), triple(?v, "owl:sameAs", ?w).
+
+/* rdfp8ax: */ 
+triple(?w, ?q, ?v) :- triple(?u, ?p, ?w), triple(?p, "owl:inverseOf", ?q).
+
+/* rdfp8bx: */ 
+triple(?w, ?p, ?v) :- triple(?u, ?q, ?w), triple(?p, "owl:inverseOf", ?q).
+
+/* rdfp9: */ 
+triple(?v, "rdfs:subClassOf", ?w) :- triple(?v, "rdf:type", "rdfs:Class"), triple(?v, "owl:sameAs", ?w).
+
+/* rdfp10: */ 	
+triple(?p, "rdfs:subPropertyOf", ?q) :- triple(?p, "rdf:type", "rdfs:Property"), triple(?p, "owl:sameAs", ?q).
+
+/* rdfp11: */ 	
+triple(?u1, ?p, ?v1) :- triple(?u, ?p, ?v), triple(?u, "owl:sameAs", ?u1), triple(?v, "owl:sameAs", ?v1).
+
+/* rdfp12a: */ 
+triple(?v, "rdfs:subClassOf", ?w) :- triple(?v, "owl:equivalentClass", ?w).
+
+/* rdfp12b: */ 
+triple(?w, "rdfs:subClassOf", ?v) :- triple(?v, "owl:equivalentClass", ?w).
+
+/* rdfp12c: */ 
+triple(?v, "owl:equivalentClass", ?w) :- triple(?v, "rdfs:subClassOf", ?w), triple(?w, "rdfs:subClassOf", ?v).
+
+/* rdfp13a: */ 
+triple(?v, "rdfs:subPropertyOf", ?w) :- triple(?v, "owl:equivalentProperty", ?w).
+
+/* rdfp13b: */ 
+triple(?w, "rdfs:subPropertyOf", ?v) :- triple(?v, "owl:equivalentProperty", ?w).
+
+/* rdfp13c: */ 
+triple(?v, "owl:equivalentProperty", ?w) :- triple(?v, "rdfs:subPropertyOf", ?w), triple(?w, "rdfs:subPropertyOf", ?v).
+
+/* ***** rdfp rules ***** */
+
+/* rdfp14a: */ 
+triple(?u, "rdf:type", ?v) :- triple(?v, "owl:hasValue", ?w), triple(?v, "owl:onProperty", ?p), triple(?u, ?p, ?w).
+
+/* rdfp14bx: */ 
+triple(?u, ?p, ?w) :- triple(?v, "owl:hasValue", ?w), triple(?v, "owl:onProperty", ?p), triple(?u, "rdf:type", ?v).
+
+/* rdfp15: */ 
+triple(?u, "rdf:type", ?v) :- triple(?v, "owl:someValuesFrom", ?w), triple(?v, "owl:onProperty", ?p), triple(?u, ?p, ?x), triple(?x, "rdf:type", ?w).
+
+/* rdfp16: */ 
+triple(?x, "rdf:type", ?w) :- triple(?v, "owl:allValuesFrom", ?w), triple(?v, "owl:onProperty", ?p), triple(?u, "rdf:type", ?v), triple(?u, ?p, ?x).
+
+/* ***** lg rules ***** */
+
+/* lg: */  
+triple(?v, ?p, ?b1) :- triple(?v, ?p, ?l).
+
+/* gl: */ 
+triple(?v, ?p, ?l) :- triple(?v, ?p, ?b1).
+
+/* ***** rdf rules ***** */
+
+/* rdf1: */
+triple(?p, "rdf:type", "rdf:Property") :- triple(?v, ?p, ?w).
+
+/* rdf2: */  
+triple(?b1, "rdf:type", "rdf:XMLLiteral") :- triple(?v, ?p, ?l).
+/* rdf2-D: */ 
+triple(?b1, "rdf:type", ?a) :- triple(?v, ?p, ?l).
+
+/* rdfs rules */
+
+/* rdfs1: */ 
+triple(?b1, "rdf:type", "rdfs:Literal") :- triple(?v, ?p, ?l).  
+	/* where ?b1 identifies a blank node allocated to ?l by rule rule lg.*/
+
+/* rdfs2: */ 
+triple(?v, "rdf:type", ?u) :- triple(?p, "rdfs:domain", ?u), triple(?v, ?p, ?w).
+
+/* rdfs3: */ 
+triple(?w, "rdf:type", ?u) :- triple(?p, "rdfs:range", ?u), triple(?v, ?p, ?w).
+
+/* rdfs4a: */ 
+triple(?v, "rdf:type", "rdfs:Resource") :- triple(?v, ?p, ?w). 
+
+/* rdfs4b: */ 
+triple(?w, "rdf:type", "rdfs:Resource") :- triple(?v, ?p, ?w).
+
+/* rdfs5: */ 
+triple(?v, "rdfs:subPropertyOf", ?u) :- triple(?v, "rdfs:subPropertyOf", ?w),  triple(?w, "rdfs:subPropertyOf", ?u).
+
+/* rdfs6: */ 
+triple(?v, "rdfs:subPropertyOf", ?v) :- triple(?v, "rdf:type", "rdf:Property"). 
+
+/* rdfs7x: */ 
+triple(?v, ?q, ?w) :- triple(?p, "rdfs:subPropertyOf", ?q), triple(?v, ?p, ?w).
+
+/* rdfs8: */ 
+triple(?v, "rdfs:subClassOf", "rdfs:Resource") :- triple(?v, "rdf:type", "rdfs:Class").
+
+/* rdfs9: */ 
+triple(?u, "rdf:type", ?w) :- triple(?v, "rdfs:subClassOf", ?w), triple(?u, "rdf:type", ?v).
+
+/* rdfs10: */ 
+triple(?v, "rdfs:subClassOf", ?v) :- triple(?v, "rdf:type", "rdfs:Class").
+
+/* rdfs11: */ 
+triple(?v, "rdfs:subClassOf", ?u) :- triple(?v, "rdfs:subClassOf", ?w), triple(?w, "rdfs:subClassOf", ?u).
+
+/* rdfs12: */ 
+triple(?v, "rdfs:subPropertyOf", "rdfs:member") :- triple(?v, "rdf:type", "rdfs:ContainerMembershipProperty").
+
+/* rdfs13: */ 
+triple(?v, "rdfs:subClassOf", "rdfs:Literal") :- triple(?v, "rdf:type", "rdfs:Datatype").
+
+/* extended entailment rules */
+
+/* ext1: */ 
+triple(?u, "rdfs:domain", ?z) :- triple(?u, "rdfs:domain", ?v), triple(?v, "rdfs:subClassOf", ?z).
+
+/* ext2: */ 
+triple(?u, "rdfs:range", ?z) :- triple(?u, "rdfs:range", ?v), triple(?v, "rdfs:subClassOf", ?z).
+
+/* ext3: */ 
+triple(?w, "rdfs:domain", ?v) :- triple(?u, "rdfs:domain", ?v), triple(?w, "rdfs:subPropertyOf", ?u).
+
+/* ext4: */ 
+triple(?w, "rdfs:range", ?v) :- triple(?u, "rdfs:range", ?v), triple(?w, "rdfs:subPropertyOf", ?u).
+
+/* ext5: */ 
+triple("rdfs:Resource", "rdfs:subClassOf", ?v) :- triple("rdf:type", "rdfs:subPropertyOf", ?w), triple(?w, "rdfs:domain", ?v).
+
+/* ext6: */ 
+triple("rdfs:Class", "rdfs:subClassOf", ?v) :- triple("rdfs:subClassOf", "rdfs:subPropertyOf", ?w), triple(?w, "rdfs:domain", ?v).
+
+/* ext7: */ 
+triple("rdf:Property", "rdfs:subClassOf", ?v) :- triple("rdfs:subPropertyOf", "rdfs:subPropertyOf", ?w), triple(?w, "rdfs:domain", ?v). 
+
+/* ext8: */ 
+triple("rdfs:Class", "rdfs:subClassOf", ?v) :- triple("rdfs:subClassOf", "rdfs:subPropertyOf", ?w), triple(?w, "rdfs:range", ?v).
+
+/* ext9: */ 
+triple("rdf:Property", "rdfs:subClassOf", ?v) :- triple("rdfs:subPropertyOf", "rdfs:subPropertyOf", ?w), triple(?w, "rdfs:range", ?v).
+
+/* d entailment rules */
+
+/* rdfD1: */ 
+// triple(?b1, "rdf:type", ?d) :- triple(?d, "rdf:type", "rdfs:Datatype"), triple(?u, ?a, ?s"?d").
+	/* where ?b1 identifies a blank node allocated to ?s"?d" by rule rule lg. */
+
+/* rdfD2: */ 
+// triple(?u, ?a, ?t"?e") :- triple(?d, "rdf:type", "rdfs:Datatype"), triple(?u, ?a, ?s"?d").
+
+/* rdfD3: */ 
+// triple(?u, ?a, ?t"?e") :- triple(?d, "rdf:type", "rdfs:Datatype"),  triple(?e, "rdf:type", "rdfs:Datatype"), triple(?u, ?a, ?s"?d").
+
+
+
+
+
+

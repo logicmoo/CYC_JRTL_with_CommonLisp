@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.larkc.core.data.VariableBinding.Binding;
 import eu.larkc.core.query.SPARQLQuery;
@@ -60,6 +62,7 @@ public class SPARQLQueries extends ORDITestCase {
 	
 	@Test
 	public void testSPARQLLabelledGroup() {
+		Logger log = LoggerFactory.getLogger(SPARQLQueries.class);
 		DataFactory df = DataFactory.INSTANCE;
 		RdfStoreConnection con = df.createRdfStoreConnection();
 		LabelledGroupOfStatements label = con.createLabelledGroupOfStatements();
@@ -73,7 +76,7 @@ public class SPARQLQueries extends ORDITestCase {
 		CloseableIterator<Binding> iter = result.iterator();
 		Assert.assertTrue(iter.hasNext());
 		while (iter.hasNext()) {
-			System.out.println(iter.next());
+			log.info("" + iter.next());
 		}
 	}
 }

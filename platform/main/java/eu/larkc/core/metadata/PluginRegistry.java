@@ -15,6 +15,8 @@
  */
 package eu.larkc.core.metadata;
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -49,8 +51,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSemaphore;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
 import eu.larkc.core.orchestrator.CycUtil;
+import eu.larkc.core.orchestrator.OwlToCycMapping;
 import eu.larkc.plugin.Plugin;
 import eu.larkc.plugin.decide.Decider;
 
@@ -63,6 +70,8 @@ import eu.larkc.plugin.decide.Decider;
  *
  */
 public class PluginRegistry {
+   // maybe
+   static public boolean Plugin1_1 = true;
 	private static Logger logger = Logger.getLogger(PluginRegistry.class.getCanonicalName());
 	
 	//count for registered plug-ins. Used also to generate unique id in the internal kb.
@@ -75,6 +84,7 @@ public class PluginRegistry {
       pluginClassH = new HashMap<String, Class<?>>();
    }
 	
+   
    /**
     * Generates and returns a new instance of plug-in
     * 
@@ -91,6 +101,7 @@ public class PluginRegistry {
      return null;
    }
 	
+   
 	/**
 	 * Generates and returns a new instance of plug-in
 	 * @param pluginIdentifier unique identifier
@@ -111,6 +122,7 @@ public class PluginRegistry {
 		String LARKC_RDF = "larkc.rdf";
 		LARKC_RDF = hereOrConf(LARKC_RDF);
 		
+  // 1.1 InputStream fstream = ClassLoader.getSystemClassLoader().getResourceAsStream(LARKC_RDF);
 		InputStream fstream = asInputStream(LARKC_RDF);
 		try {
 			if (fstream==null) {
@@ -169,7 +181,7 @@ public class PluginRegistry {
 		File[] pluginFiles = pluginsDir.listFiles();
 		if (pluginFiles!=null && pluginFiles.length!=0){
 			for (File file : pluginFiles) {
-				registerPlugins(file);
+				findAndRegisterPlugins(file);
 			}
 		}
 		else
@@ -178,6 +190,7 @@ public class PluginRegistry {
 		
 		try {
 			// Open the file where the additional plug-in list is written
+     // 1.1 InputStream fstream = ClassLoader.getSystemClassLoader().getResourceAsStream(PLUGINS_INI);
 			InputStream fstream = asInputStream(PLUGINS_INI);
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -189,7 +202,7 @@ public class PluginRegistry {
 				if (strLine.endsWith(".wsdl") || strLine.endsWith(".larkc")){
 					strLine.replace('/', File.separatorChar);
 			    	strLine.replace('\\', File.separatorChar);
-					registerPlugins(new File(strLine));
+					findAndRegisterPlugins(new File(strLine));
 				}
 				else
 					logger.warning("Invalid line in the " + PLUGINS_INI + " file:" + strLine);
@@ -223,14 +236,14 @@ public class PluginRegistry {
 	 * 
 	 * @param fileOrDir directory or a file location of the plug-in
 	 */
-	private void registerPlugins(File fileOrDir){
+	private void findAndRegisterPlugins(File fileOrDir){
 		InputStream wsdlFile = null;
 		File fileSource = null;
 		
 		if (fileOrDir.isDirectory()){
 			for (File file : fileOrDir.listFiles()) {
 				if (!file.isDirectory())//only check directories one level deep
-					registerPlugins(file);
+					findAndRegisterPlugins(file);
 			}//list files in the subdirectory
 			return;//after scanned all the files it already registered whatewer it had. So the method should end.
 		}//if directory
@@ -251,7 +264,7 @@ public class PluginRegistry {
 				if (where.exists())//if the directory exists already, no need for unzipping
 					return;
 				unzip(fileOrDir,fileDir);
-				registerPlugins(where);
+				findAndRegisterPlugins(where);
 				return;
 				
 			} catch (ZipException e) {
@@ -281,8 +294,8 @@ public class PluginRegistry {
 		for (int iPluginNum = 0; iPluginNum < plugins.getLength(); iPluginNum++) {
 			Element plugin = (Element) plugins.item(iPluginNum);
 			String sPluginId = plugin.getAttribute("name");
-			String[] sRdfReferece = plugin.getAttribute("sawsdl:modelReference").split("#");
-			String sRdfFile = sRdfReferece[0];
+			String sRdfReferece = plugin.getAttribute("sawsdl:modelReference");
+			String sRdfFile = sRdfReferece.split("#")[0];
 			
 			InputStream  fstream = findFileInJarOrDir(fileSource, ".rdf");
 			if (fstream== null){
@@ -296,21 +309,35 @@ public class PluginRegistry {
 				}
 			}
 
+			NodeList endpoints = plugin.getElementsByTagName("wsdl:endpoint");
+			String sLocation = ((Element)endpoints.item(0)).getAttribute("location");
+			
 			String sRdfClass = sRdfReferece[1];
 			try{
 				CycUtil.loadRdfTurtle(fstream);
+			
+           if(Plugin1_1) {	
+				SubLObject sblPlugin = CycUtil.addRdfTerm(sRdfReferece);
+				SubLObject hasUri =  CycUtil.addRdfTerm("http://larkc.eu/plugin#hasUri");
+				SubLString uri = SubLObjectFactory.makeString(sPluginId);
+				SubLObject cycAssertion = list( hasUri,sblPlugin, uri);
+				CycUtil.addAssertion(cycAssertion, CycUtil.mtStr);
+				
+				SubLObject hasEndpoint =  CycUtil.addRdfTerm("http://larkc.eu/plugin#hasEndpoint");
+				SubLString endpoint = SubLObjectFactory.makeString(sLocation);
+				cycAssertion = list( hasEndpoint,sblPlugin, endpoint);
+				CycUtil.addAssertion(cycAssertion, CycUtil.mtStr);
+          }
 			}
 			catch (Exception e)
 			{
 				logger.warning("Error parsing the "+ sRdfFile + "("+e.getMessage()+")");
 			}
 				
-			NodeList endpoints = plugin.getElementsByTagName("wsdl:endpoint");
-			String sLocation = ((Element)endpoints.item(0)).getAttribute("location");
-			
 			if (sLocation.startsWith("java:")){
-				registerJavaPlugin(new URIImpl(sPluginId), sLocation, sRdfClass);
-				registerPlugin(sLocation.substring(5),fileSource);
+				if(!Plugin1_1)registerJavaPlugin(new URIImpl(sPluginId), sLocation, sRdfClass);
+				if(Plugin1_1)registerPlugin(new URIImpl(sPluginId), sLocation.substring(5),fileSource);
+                if(!Plugin1_1)registerPlugin(sLocation.substring(5),fileSource);
 				logger.fine("Registered the " + sLocation.substring(5));
 			}
 			else{
@@ -417,6 +444,9 @@ public class PluginRegistry {
 	 */
 	@SuppressWarnings("unchecked")
 	private void registerPlugin(String pluginName, File file) {		
+          registerPlugin(pluginName,pluginName,file);
+    }
+	private void registerPlugin(URI _pluginName, String _class, File file) {
 		try {
 			//find external plug-in libraries
 			ArrayList<URL> vUrl = new ArrayList<URL>();
@@ -445,7 +475,7 @@ public class PluginRegistry {
 	      ClassLoader classLoader = new URLClassLoader(urls);	        
 	      //load the class
 	      Class<? extends Plugin> pluginClass = 
-	      				classLoader.loadClass(pluginName).asSubclass(Plugin.class);
+	      				classLoader.loadClass(_class).asSubclass(Plugin.class);
 	        
 	      //check whether it is a Decider
 	      for (Class<?> iface : pluginClass.getInterfaces()) {
@@ -470,10 +500,10 @@ public class PluginRegistry {
 	    	logger.warning("Classloader cannot find class: "+ e.getMessage() + 
 	    																 "! Plug-in not loaded!");
 	   } catch (ClassCastException e){
-	    	Errors.handleError("Plugin \""+pluginName +"\" must implement" + 
+	    	Errors.handleError("Plugin \""+_class +"\" must implement" + 
 	    											 Plugin.class.getName()+ " interface",e);
 	   }catch (Exception e){
-	    	Errors.handleError("Plugin \""+pluginName +"\" Error",e);
+	    	Errors.handleError("Plugin \""+_class +"\" Error",e);
 	   }  
 	}
 

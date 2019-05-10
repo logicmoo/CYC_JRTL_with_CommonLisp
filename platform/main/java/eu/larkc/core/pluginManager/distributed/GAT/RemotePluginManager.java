@@ -1,3 +1,21 @@
+/*
+   This file is part of the LarKC platform 
+   http://www.larkc.eu/
+
+   Copyright 2010 LarKC project consortium
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
 package eu.larkc.core.pluginManager.distributed.GAT;
 
 import eu.larkc.core.data.InformationSet;
@@ -49,6 +67,7 @@ import org.gridlab.gat.resources.ResourceBroker;
 import org.gridlab.gat.resources.SoftwareDescription;
 import org.gridlab.gat.resources.Job.JobState;
 import org.gridlab.gat.resources.HardwareResourceDescription;
+import eu.larkc.core.gatresource.GATResource;
 
 
 /**
@@ -91,7 +110,7 @@ public abstract class RemotePluginManager <E, F> implements PluginManager {
 	private Queue<F> outputQueue;
 	
 	/**
-	 * Constructor thats takes the input and output queues as input
+	 * Constructor thats takes the input and output queues, resource properties, and input/output ID as input
 	 * 
 	 * @param theInputQueue The queue from which input messages will come from the previous plugin in the pipeline 
 	 * @param theOutputQueue The queue onto which output messages should be put to send them to the next plugin in the pipeline 
@@ -104,6 +123,22 @@ public abstract class RemotePluginManager <E, F> implements PluginManager {
 		this.LarKC_Location = LarKC_Location;
 		this.resourceURI = resourceURI;
 	}
+
+	/**
+	 * Constructor thats takes the input and output queues, resource properties, and input/output ID as input
+	 * 
+	 * @param theInputQueue The queue from which input messages will come from the previous plugin in the pipeline 
+	 * @param theOutputQueue The queue onto which output messages should be put to send them to the next plugin in the pipeline 
+	 * @param resource The GATResource instance which describes the resource parameters
+	 * @param input_output_ID The input (for prestage plug-ins) and output (for execute and poststage plug-ins) ID (disk file name)  
+	 */
+	public RemotePluginManager(Queue<E> theInputQueue, Queue<F> theOutputQueue, GATResource resource, String input_output_ID){
+		this.inputQueue = theInputQueue;
+		this.outputQueue = theOutputQueue;
+		this.resource = resource;
+		this.input_output_ID = input_output_ID; // acts as inputID for prestage and outputID for executor
+	}
+	
 	
 	/**
 	 * @see eu.larkc.core.pluginManager.PluginManager#accept(eu.larkc.core.pluginManager.PluginManager.Message)
@@ -467,7 +502,7 @@ public abstract class RemotePluginManager <E, F> implements PluginManager {
 	
 	protected static void runRemoteJob(RemoteContainerStub stub){
 				
-			System.out.println("Hello from remote transformer");
+			System.out.println("Hello from remote (maybe transformer) plug-in");
 
 			//getting the remote machine's hostname
 			try{
@@ -478,11 +513,20 @@ public abstract class RemotePluginManager <E, F> implements PluginManager {
 			} catch(java.net.UnknownHostException e){
 				e.printStackTrace();
 			}
+			
+			System.out.println ("The LarKC location is: " +
+					System.getProperty("larkc.location"));
+
+			System.out.println ("The input is: " +
+					System.getProperty("larkc.job.input"));
+			
+			System.out.println ("The output is: " +
+					System.getProperty("larkc.job.output"));
 
 			ArrayList<Object> parameters = new ArrayList<Object>();
 			
 			try {
-				java.io.FileInputStream inputStream = new java.io.FileInputStream("input");
+				java.io.FileInputStream inputStream = new java.io.FileInputStream(System.getProperty("larkc.job.input","input));
 				java.io.ObjectInputStream oin = new java.io.ObjectInputStream(inputStream);
 			
 				// read our startup parameters from local input file
@@ -515,7 +559,7 @@ public abstract class RemotePluginManager <E, F> implements PluginManager {
 			}
 			
 			try {		
-				java.io.FileOutputStream outputStream = new java.io.FileOutputStream("output");
+				java.io.FileOutputStream outputStream = new java.io.FileOutputStream(System.getProperty("larkc.job.output", "output"));
 				java.io.ObjectOutputStream outStream = new java.io.ObjectOutputStream(outputStream);
 			
 				for (int i=0; i<result.size(); i++)	{
@@ -527,7 +571,6 @@ public abstract class RemotePluginManager <E, F> implements PluginManager {
 			} catch(Exception e){
 				e.printStackTrace();
 			}		
-		
 	}
 	
 	
