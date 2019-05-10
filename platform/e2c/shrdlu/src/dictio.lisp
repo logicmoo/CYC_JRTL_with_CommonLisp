@@ -10,7 +10,8 @@
 
 (DEFS \, FEATURES (SPECIAL) SPECIAL (COMMA))
 
-(DEFS \" FEATURES (B-SPECIAL RELWRD) B-SPECIAL (DOUBLEQUOTER)) ;; "
+ ;;; Less confusion
+#.(READ-FROM-STRING "(DEFS |\"| FEATURES (B-SPECIAL RELWRD) B-SPECIAL (DOUBLEQUOTER))")
 
 (DEFS A SEMANTICS ((DET T)) FEATURES (DET NS INDEF))
 
@@ -21,8 +22,8 @@
 (DEFS ALL
       SEMANTICS
       ((DET (COND ((CQ OF) 'ALL)
-		  ((MEET '(NUM DEF) FE) 'DEF)
-		  ('NDET))))
+             ((MEET '(NUM DEF) FE) 'DEF)
+             ('NDET))))
       FEATURES
       (DET NPL QNTFR))
 
@@ -41,13 +42,13 @@
 (DEFS ASK
       SEMANTICS
       ((VB
-	     ((TRANS (RELATION
-			   (RESTRICTIONS\: (((\#ANIMATE))
-						 ((\#EVENT)))
-					   MARKERS\:
-					   (\#EVENT)
-					   PROCEDURE\:
-					   ((\#WANT \#1 \#2 *TIME))))))))
+        ((TRANS (RELATION
+                 (RESTRICTIONS\: (((\#ANIMATE))
+                                  ((\#EVENT)))
+                        MARKERS\:
+                        (\#EVENT)
+                        PROCEDURE\:
+                        ((\#WANT \#1 \#2 *TIME))))))))
       FEATURES
       (VB TRANS INF SUBTOB))
 
@@ -60,9 +61,9 @@
 (DEFS BALL
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#MANIP \#ROUND)
-			      PROCEDURE\:
-			      ((\#IS *** \#BALL))))))
+              (MARKERS\: (\#MANIP \#ROUND)
+                     PROCEDURE\:
+                     ((\#IS *** \#BALL))))))
       FEATURES
       (NOUN NS))
 
@@ -71,75 +72,75 @@
       (INT AUX VB BE INF)
       SEMANTICS
       ((VB
-	     ((THERE (\#BETHERE))
-		   (INT (\#BEINT))))))
+        ((THERE (\#BETHERE))
+         (INT (\#BEINT))))))
 
 (DEFUN \#BETHERE  NIL
       (RELATION
-	    (RESTRICTIONS\: (((\#THING)
-				   (EQ (QUANTIFIER? SMSUB)
-				       'INDEF)))
-			    PROCEDURE\:
-			    NIL)))
+       (RESTRICTIONS\: (((\#THING)
+                         (EQ (QUANTIFIER? SMSUB)
+                             'INDEF)))
+            PROCEDURE\:
+            NIL)))
 
 
-(DEFUN \#BEINT	NIL
+(DEFUN \#BEINT  NIL
       (COND
-	    ((RELATION
-		   (RESTRICTIONS\: (((\#PHYSOB))
-					 (SMCOMP (\#PROPERTY)))
-				   PROCEDURE\:
-				   (\#EVAL
-					 (PROG (PROPERTY)
-					       (COND
-						     ((SETQ
-							    PROPERTY
-								 (MEET (THGET '\#PROPERTY
-									      'SYSTEM)
-								       (MARKERS? SMCOMP)))
-						      (RETURN
-							    (LIST (LIST	(CAR PROPERTY)
-									'\#1
-									'\#2))))
-						     ((RETURN (LIST '(\#2 \#1))))))))
-		   (RESTRICTIONS\: (((\#THING))
-					 (SMCOMP
-					       (\#SYSTEMS)
-					       (AND (NOT (REFER? SMCOMP))
-						    (EQ	(REL? SMCOMP)
-							SMSUB))))
-				   PROCEDURE\:
-				   (\#EVAL (RELATIONS? SMCOMP)))
-		   (RESTRICTIONS\: (((\#THING))
-					 (SMCOMP (\#THING)
-						 (REFER? SMCOMP)))
-				   PROCEDURE\:
-				   ((\#EVAL
-					  (LIST	'THAMONG
-						'\#1
-						(LIST 'QUOTE
-						      (REFER? \#2))))))))
-	    (T
-	     (ERTERR SORRY I DON\'T UNDERSTAND	THE VERB BE WHEN YOU USE IT LIKE THAT))))
+       ((RELATION
+         (RESTRICTIONS\: (((\#PHYSOB))
+                          (SMCOMP (\#PROPERTY)))
+           PROCEDURE\:
+           (\#EVAL
+               (PROG (PROPERTY)
+                     (COND
+                          ((SETQ
+                                 PROPERTY
+                                (MEET (THGET '\#PROPERTY
+                                               'SYSTEM)
+                                      (MARKERS? SMCOMP)))
+                           (RETURN
+                                 (LIST (LIST  (CAR PROPERTY)
+                                        '\#1
+                                        '\#2))))
+                          ((RETURN (LIST '(\#2 \#1))))))))
+         (RESTRICTIONS\: (((\#THING))
+                          (SMCOMP
+                                     (\#SYSTEMS)
+                                     (AND (NOT (REFER? SMCOMP))
+                                         (EQ  (REL? SMCOMP)
+                                             SMSUB))))
+           PROCEDURE\:
+           (\#EVAL (RELATIONS? SMCOMP)))
+         (RESTRICTIONS\: (((\#THING))
+                          (SMCOMP (\#THING)
+                                 (REFER? SMCOMP)))
+           PROCEDURE\:
+           ((\#EVAL
+                (LIST  'THAMONG
+                     '\#1
+                     (LIST 'QUOTE
+                                 (REFER? \#2))))))))
+       (T
+         (ERTERR SORRY I DON\'T UNDERSTAND  THE VERB BE WHEN YOU USE IT LIKE THAT))))
 
 (DEFS BEFORE SEMANTICS ((BINDER (SMBINDER NIL START))) FEATURES (BINDER TIME))
 
 (DEFS BEGIN
       SEMANTICS
       ((VB
-	     ((TRANS (RELATION
-			   (RESTRICTIONS\: (((\#ANIMATE)) ((\#EVENT)))
-					   MARKERS\:
-					   (\#EVENT)
-					   PROCEDURE\:
-					   ((\#START \#2 *TIME)))))
-		   (ITRNS
-			 (RELATION
-			       (RESTRICTIONS\: (((\#ANIMATE)))
-					       MARKERS\:
-					       (\#EVENT)
-					       PROCEDURE\:
-					       ((\#START EE *TIME))))))))
+        ((TRANS (RELATION
+                 (RESTRICTIONS\: (((\#ANIMATE)) ((\#EVENT)))
+                        MARKERS\:
+                        (\#EVENT)
+                        PROCEDURE\:
+                        ((\#START \#2 *TIME)))))
+         (ITRNS
+           (RELATION
+                    (RESTRICTIONS\: (((\#ANIMATE)))
+                           MARKERS\:
+                           (\#EVENT)
+                           PROCEDURE\:
+                           ((\#START EE *TIME))))))))
       FEATURES
       (VB TRANS INF TOOB INGOB ITRNS))
 
@@ -166,28 +167,28 @@
 (DEFS BESIDE
       SEMANTICS
       ((PREP (RELATION
-		   (RESTRICTIONS\: (((\#PHYSOB)) ((\#PHYSOB)))
-				   PROCEDURE\:
-				   ((\#NEXTO \#1 \#2 *TIME))))))
+              (RESTRICTIONS\: (((\#PHYSOB)) ((\#PHYSOB)))
+                    PROCEDURE\:
+                    ((\#NEXTO \#1 \#2 *TIME))))))
       FEATURES
       (PREP PLACE))
 
 (DEFS BIG
       SEMANTICS
-      ((MEASURE	(MEASURE DIMENSION\:
-			 \#SIZE
-			 RESTRICTIONS\:
-			 (\#PHYSOB)
-			 DIRECTION\:
-			 T))
-	    (ADJ (OBJECT
-		       (MARKERS\: (\#PHYSOB \#BIG)
-				  PROCEDURE\:
-				  ((\#MORE \#SIZE
-					   ***
-					   (128. 128.
-						 128.))))))
-	    )
+      ((MEASURE  (MEASURE DIMENSION\:
+                  \#SIZE
+                  RESTRICTIONS\:
+                  (\#PHYSOB)
+                  DIRECTION\:
+                  T))
+       (ADJ (OBJECT
+             (MARKERS\: (\#PHYSOB \#BIG)
+              PROCEDURE\:
+              ((\#MORE \#SIZE
+                     ***
+                     (128. 128.
+                          128.)))))))
+
       FEATURES
       (ADJ))
 
@@ -196,9 +197,9 @@
 (DEFS BLOCK
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#MANIP \#RECTANGULAR)
-			      PROCEDURE\:
-			      ((\#IS *** \#BLOCK))))))
+              (MARKERS\: (\#MANIP \#RECTANGULAR)
+                     PROCEDURE\:
+                     ((\#IS *** \#BLOCK))))))
       FEATURES
       (NOUN NS))
 
@@ -213,41 +214,41 @@
       (BOTH AND)
       FEXPR
       (LAMBDA (A)
-	    (DECLARE (SPECIAL A))
-	    (PROG (END)
-		  (DECLARE (SPECIAL END))
-		  (SETQ END CUT)
-		  (RETURN (PROG	(CUT NBB BOTH)
-				(SETQ NBB N)
-				(AND (FLUSHME)
-				     (MOVE-PTW N
-					       NW
-					       (EQ (WORD PTW) (CAR A))
-					       NW)
-				     (CUT END)
-				     (SETQ BOTH PTW)
-				     (SETQ RE
-						(COND ((MEMQ (CAR R3ST)
-							     '(PREP ADV))
-						       (PARSE3 R3ST T))
-						      ((MEMQ (CAR R3ST)
-							     '(NG
-							       PREPG
-							       ADJG
-							       CLAUSE))
-						       (PARSE2 R3ST T))))
-				     (< (LENGTH N) (LENGTH BOTH))
-				     (RETURN (SETQ SPECIAL 'SKIP)))
-				(SETQ RE NIL)
-				(SETQ N NBB)
-				(RETURN NIL))))))
+       (DECLARE (SPECIAL A))
+       (PROG (END)
+        (DECLARE (SPECIAL END))
+        (SETQ END CUT)
+        (RETURN (PROG  (CUT NBB BOTH)
+                 (SETQ NBB N)
+                 (AND (FLUSHME)
+                      (MOVE-PTW N
+                              NW
+                              (EQ (WORD PTW) (CAR A))
+                              NW)
+                      (CUT END)
+                      (SETQ BOTH PTW)
+                      (SETQ RE
+                         (COND ((MEMQ (CAR R3ST)
+                                      '(PREP ADV))
+                                (PARSE3 R3ST T))
+                               ((MEMQ (CAR R3ST)
+                                      '(NG
+                                               PREPG
+                                               ADJG
+                                               CLAUSE))
+                                (PARSE2 R3ST T))))
+                      (< (LENGTH N) (LENGTH BOTH))
+                      (RETURN (SETQ SPECIAL 'SKIP)))
+                 (SETQ RE NIL)
+                 (SETQ N NBB)
+                 (RETURN NIL))))))
 
 (DEFS BOX
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#BOX)
-			      PROCEDURE\:
-			      ((\#IS *** \#BOX))))))
+              (MARKERS\: (\#BOX)
+                     PROCEDURE\:
+                     ((\#IS *** \#BOX))))))
       FEATURES
       (NOUN NS))
 
@@ -264,21 +265,21 @@
 (DEFS BY
       SEMANTICS
       ((PREP (RELATION
-		   (RESTRICTIONS\: (((\#PHYSOB)) ((\#PHYSOB)))
-				   PROCEDURE\:
-				   ((\#NEXTO \#1 \#2 *TIME))))))
+              (RESTRICTIONS\: (((\#PHYSOB)) ((\#PHYSOB)))
+                    PROCEDURE\:
+                    ((\#NEXTO \#1 \#2 *TIME))))))
       FEATURES
       (PREP))
 
 (DEFS CALL
       SEMANTICS
       ((VB
-	     ((TRANS2
-		    (RELATION
-			  (RESTRICTIONS\: (((\#ANIMATE)) ((\#THING))
-							 ((\#NAME)))
-					  PROCEDURE\:
-					  ((\#CALL \#2 \#3 *TIME))))))))
+        ((TRANS2
+          (RELATION
+            (RESTRICTIONS\: (((\#ANIMATE)) ((\#THING))
+                             ((\#NAME)))
+                   PROCEDURE\:
+                   ((\#CALL \#2 \#3 *TIME))))))))
       FEATURES
       (VB INF TRANS2))
 
@@ -337,9 +338,9 @@
 (DEFS COLOR
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#COLOR)
-			      PROCEDURE\:
-			      ((\#IS *** \#COLOR))))))
+              (MARKERS\: (\#COLOR)
+                     PROCEDURE\:
+                     ((\#IS *** \#COLOR))))))
       FEATURES
       (NOUN NS))
 
@@ -352,23 +353,23 @@
 (DEFS CONTAIN
       SEMANTICS
       ((VB
-	     ((TRANS (RELATION
-			   (RESTRICTIONS\: (((\#BOX)) ((\#PHYSOB)))
-					   PROCEDURE\:
-					   ((\#CONTAIN \#1 \#2 *TIME)))
-			   (RESTRICTIONS\: (((\#CONSTRUCT))
-						 ((\#THING)))
-					   PROCEDURE\:
-					   ((\#PART \#2 \#1 *TIME))))))))
+        ((TRANS (RELATION
+                 (RESTRICTIONS\: (((\#BOX)) ((\#PHYSOB)))
+                        PROCEDURE\:
+                        ((\#CONTAIN \#1 \#2 *TIME)))
+                 (RESTRICTIONS\: (((\#CONSTRUCT))
+                                  ((\#THING)))
+                        PROCEDURE\:
+                        ((\#PART \#2 \#1 *TIME))))))))
       FEATURES
       (VB INF TRANS))
 
 (DEFS CONTAINER
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#BOX)
-			      PROCEDURE\:
-			      ((\#IS *** \#BOX))))))
+              (MARKERS\: (\#BOX)
+                     PROCEDURE\:
+                     ((\#IS *** \#BOX))))))
       FEATURES
       (NOUN NS))
 
@@ -377,10 +378,10 @@
 (DEFS CUBE
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#MANIP \#RECTANGULAR)
-			      PROCEDURE\:
-			      ((\#IS *** \#BLOCK) (\#EQDIM ***))))
-	     ))
+              (MARKERS\: (\#MANIP \#RECTANGULAR)
+                     PROCEDURE\:
+                     ((\#IS *** \#BLOCK) (\#EQDIM ***))))))
+
       FEATURES
       (NOUN NS))
 
@@ -389,18 +390,18 @@
 (DEFS DO
       SEMANTICS
       ((VB
-	     ((TRANS
-		    (RELATION
-			  (RESTRICTIONS\: RESTRICTIONS\:
-					  PROCEDURE\:
-					  ((((\#ANIMATE)) ((\#EVENT))))
-					  MARKERS\:
-					  PROCEDURE\:
-					  PLAUSIBILITY\:
-					  (\#EVAL (OR (THGET MAP2 'REFER)
-						      (ERT DO
-							   DEFINITION)))))))
-	     ))
+        ((TRANS
+          (RELATION
+            (RESTRICTIONS\: RESTRICTIONS\:
+                   PROCEDURE\:
+                   ((((\#ANIMATE)) ((\#EVENT))))
+                   MARKERS\:
+                   PROCEDURE\:
+                   PLAUSIBILITY\:
+                   (\#EVAL (OR (THGET MAP2 'REFER)
+                              (ERT DO
+                                   DEFINITION)))))))))
+
       FEATURES
       (TRANS VFS PRESENT VPL VB AUX DO INF))
 
@@ -411,25 +412,25 @@
 (DEFS DROP
       SEMANTICS
       ((VB
-	     ((TRANSL
-		    (RELATION
-			  (RESTRICTIONS\: (((\#ANIMATE))
-						((\#MANIP))
-						(SMOBL (\#PLACE *TIME)))
-					  PROCEDURE\:
-					  ((\#DROP \#1 \#2 \#3))
-					  MARKERS\:
-					  (\#MOTION))))
-		   (TRANS (RELATION
-				(RESTRICTIONS\:	(((\#ANIMATE))
-						      ((\#PHYSOB)))
-						MARKERS\:
-						(\#EVENT)
-						PROCEDURE\:
-						((\#DROP \#1
-							 \#2
-							 ?
-							 *TIME))))))))
+        ((TRANSL
+          (RELATION
+            (RESTRICTIONS\: (((\#ANIMATE))
+                             ((\#MANIP))
+                             (SMOBL (\#PLACE *TIME)))
+                   PROCEDURE\:
+                   ((\#DROP \#1 \#2 \#3))
+                   MARKERS\:
+                   (\#MOTION))))
+         (TRANS (RELATION
+                 (RESTRICTIONS\:  (((\#ANIMATE))
+                                   ((\#PHYSOB)))
+                         MARKERS\:
+                         (\#EVENT)
+                         PROCEDURE\:
+                         ((\#DROP \#1
+                                  \#2
+                                  ?
+                                  *TIME))))))))
       FEATURES
       (TRANSL TRANSL2 VB INF TRANS))
 
@@ -468,13 +469,13 @@
 (DEFS FINISH
       SEMANTICS
       ((VB
-	     ((TRANS (RELATION
-			   (RESTRICTIONS\: (((\#ANIMATE))
-						 ((\#EVENT)))
-					   MARKERS\:
-					   (\#EVENT)
-					   PROCEDURE\:
-					   ((\#END \#2 *TIME))))))))
+        ((TRANS (RELATION
+                 (RESTRICTIONS\: (((\#ANIMATE))
+                                  ((\#EVENT)))
+                        MARKERS\:
+                        (\#EVENT)
+                        PROCEDURE\:
+                        ((\#END \#2 *TIME))))))))
       FEATURES
       (VB INF TRANS INFOB))
 
@@ -493,14 +494,14 @@
 (DEFS GIVE
       SEMANTICS
       ((VB
-	     ((TRANS2
-		    (RELATION
-			  (RESTRICTIONS\: (((\#ANIMATE)) ((\#ANIMATE))
-							 ((\#PHYSOB)))
-					  MARKERS\:
-					  (\#EVENT)
-					  PROCEDURE\:
-					  ((\#GIVE \#1 \#2 \#3 *TIME))))))))
+        ((TRANS2
+          (RELATION
+            (RESTRICTIONS\: (((\#ANIMATE)) ((\#ANIMATE))
+                             ((\#PHYSOB)))
+                   MARKERS\:
+                   (\#EVENT)
+                   PROCEDURE\:
+                   ((\#GIVE \#1 \#2 \#3 *TIME))))))))
       FEATURES
       (VB INF TRANS2))
 
@@ -533,9 +534,9 @@
 (DEFS HAND
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#HAND)
-			      PROCEDURE\:
-			      ((\#IS *** \#HAND))))))
+              (MARKERS\: (\#HAND)
+                     PROCEDURE\:
+                     ((\#IS *** \#HAND))))))
       FEATURES
       (NOUN NS))
 
@@ -555,30 +556,30 @@
 
 (DEFS HIGH
       SEMANTICS
-      ((MEASURE	(MEASURE DIMENSION\:
-			 \#HEIGHT
-			 RESTRICTIONS\:
-			 (\#PHYSOB)
-			 DIRECTION\:
-			 T))
-	    (ADJ (OBJECT
-		       (MARKERS\: (\#PHYSOB)
-				  PROCEDURE\:
-				  ((\#HIGH ***))))))
+      ((MEASURE  (MEASURE DIMENSION\:
+                  \#HEIGHT
+                  RESTRICTIONS\:
+                  (\#PHYSOB)
+                  DIRECTION\:
+                  T))
+       (ADJ (OBJECT
+             (MARKERS\: (\#PHYSOB)
+              PROCEDURE\:
+              ((\#HIGH ***))))))
       FEATURES
       (ADJ))
 
 (DEFS HOLD
       SEMANTICS
       ((VB
-	     ((TRANS
-		    (RELATION
-			  (RESTRICTIONS\: (((\#HAND)) ((\#MANIP)))
-					  PROCEDURE\:
-					  ((\#GRASPING \#2 *TIME)))
-			  (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
-					  PROCEDURE\:
-					  ((\#GRASPING \#2 *TIME))))))))
+        ((TRANS
+          (RELATION
+            (RESTRICTIONS\: (((\#HAND)) ((\#MANIP)))
+                   PROCEDURE\:
+                   ((\#GRASPING \#2 *TIME)))
+            (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
+                   PROCEDURE\:
+                   ((\#GRASPING \#2 *TIME))))))))
       FEATURES
       (VB INF TRANS))
 
@@ -646,20 +647,20 @@
 
 (DEFS LARGE
       SEMANTICS
-      ((MEASURE	(MEASURE DIMENSION\:
-			 \#SIZE
-			 RESTRICTIONS\:
-			 (\#PHYSOB)
-			 DIRECTION\:
-			 T))
-	    (ADJ (OBJECT
-		       (MARKERS\: (\#PHYSOB \#BIG)
-				  PROCEDURE\:
-				  ((\#MORE \#SIZE
-					   ***
-					   (128. 128.
-						 128.))))))
-	    )
+      ((MEASURE  (MEASURE DIMENSION\:
+                  \#SIZE
+                  RESTRICTIONS\:
+                  (\#PHYSOB)
+                  DIRECTION\:
+                  T))
+       (ADJ (OBJECT
+             (MARKERS\: (\#PHYSOB \#BIG)
+              PROCEDURE\:
+              ((\#MORE \#SIZE
+                     ***
+                     (128. 128.
+                          128.)))))))
+
       FEATURES
       (ADJ))
 
@@ -672,9 +673,9 @@
 (DEFS LEFT
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#DIRECTION)
-			      PROCEDURE\:
-			      ((\#DIRECTION \#RIGHT NIL))))))
+              (MARKERS\: (\#DIRECTION)
+                     PROCEDURE\:
+                     ((\#DIRECTION \#RIGHT NIL))))))
       FEATURES
       (NOUN NS))
 
@@ -687,10 +688,10 @@
 (DEFS LIKE
       SEMANTICS
       ((VB ((TRANS (RELATION
-			 (RESTRICTIONS\: (((\#ANIMATE))
-					       ((\#THING)))
-					 PROCEDURE\:
-					 ((\#LIKE \#1 \#2))))))))
+                    (RESTRICTIONS\: (((\#ANIMATE))
+                                     ((\#THING)))
+                           PROCEDURE\:
+                           ((\#LIKE \#1 \#2))))))))
       FEATURES
       (VB INF TRANS))
 
@@ -698,35 +699,35 @@
 
 (DEFS LITTLE
       SEMANTICS
-      ((MEASURE	(MEASURE DIMENSION\:
-			 \#SIZE
-			 RESTRICTIONS\:
-			 (\#PHYSOB)
-			 DIRECTION\:
-			 NIL))
-	    (ADJ (OBJECT
-		       (MARKERS\: (\#PHYSOB \#LITTLE)
-				  PROCEDURE\:
-				  ((\#MORE \#SIZE
-					   (128. 128. 128.)
-					   ***))))))
+      ((MEASURE  (MEASURE DIMENSION\:
+                  \#SIZE
+                  RESTRICTIONS\:
+                  (\#PHYSOB)
+                  DIRECTION\:
+                  NIL))
+       (ADJ (OBJECT
+             (MARKERS\: (\#PHYSOB \#LITTLE)
+              PROCEDURE\:
+              ((\#MORE \#SIZE
+                     (128. 128. 128.)
+                     ***))))))
       FEATURES
       (ADJ))
 
 (DEFS LONG
       SEMANTICS
-      ((MEASURE	(MEASURE DIMENSION\:
-			 \#LENGTH
-			 RESTRICTIONS\:
-			 (\#PHYSOB)
-			 DIRECTION\:
-			 T))
-	    (ADJ (OBJECT
-		       (MARKERS\: (\#PHYSOB)
-				  PROCEDURE\:
-				  ((\#MORE \#LENGTH
-					   ***
-					   (128. 128. 128.)))))))
+      ((MEASURE  (MEASURE DIMENSION\:
+                  \#LENGTH
+                  RESTRICTIONS\:
+                  (\#PHYSOB)
+                  DIRECTION\:
+                  T))
+       (ADJ (OBJECT
+             (MARKERS\: (\#PHYSOB)
+              PROCEDURE\:
+              ((\#MORE \#LENGTH
+                     ***
+                     (128. 128. 128.)))))))
       FEATURES
       (ADJ))
 
@@ -759,12 +760,12 @@
 (DEFS MOVE
       SEMANTICS
       ((VB ((TRANS (RELATION
-			 (RESTRICTIONS\: (((\#ANIMATE))
-					       ((\#PHYSOB)))
-					 PROCEDURE\:
-					 ((\#PUT \#2 ? *TIME))
-					 MARKERS\:
-					 (\#MOTION)))))))
+                    (RESTRICTIONS\: (((\#ANIMATE))
+                                     ((\#PHYSOB)))
+                           PROCEDURE\:
+                           ((\#PUT \#2 ? *TIME))
+                           MARKERS\:
+                           (\#MOTION)))))))
       FEATURES
       (VB INF TRANS))
 
@@ -773,27 +774,27 @@
 (DEFS NAME
       SEMANTICS
       ((NOUN (OBJECT
-		   ((\#NAME \#ROLE) ((IS *** \#NAME)
-					  (\#CALL ? ***)
-					  (\#ROLE (\#THING)
-						  (\#CALL \#2 \#1))))))
-	    (VB ((TRANS (\#NAME)))))
+              ((\#NAME \#ROLE) ((IS *** \#NAME)
+                                (\#CALL ? ***)
+                                (\#ROLE (\#THING)
+                                       (\#CALL \#2 \#1))))))
+       (VB ((TRANS (\#NAME)))))
       FEATURES
       (NOUN NS VB INF TRANS))
 
 (DEFS NARROW
       SEMANTICS
       ((ADJ (OBJECT
-		  (MARKERS\: (\#PHYSOB)
-			     PROCEDURE\:
-			     ((\#MORE \#WIDTH (128. 0. 0.) ***)))
-		  ))
-	    (MEASURE (MEASURE DIMENSION\:
-			      \#WIDTH
-			      RESTRICTIONS\:
-			      (\#PHSYOB)
-			      DIRECTION\:
-			      NIL)))
+             (MARKERS\: (\#PHYSOB)
+                    PROCEDURE\:
+                    ((\#MORE \#WIDTH (128. 0. 0.) ***)))))
+
+       (MEASURE (MEASURE DIMENSION\:
+                 \#WIDTH
+                 RESTRICTIONS\:
+                 (\#PHSYOB)
+                 DIRECTION\:
+                 NIL)))
       FEATURES
       (ADJ))
 
@@ -802,9 +803,9 @@
 (DEFS NICE
       SEMANTICS
       ((ADJ (OBJECT
-		  (MARKERS\: (\#THING)
-			     PROCEDURE\:
-			     ((\#LIKE \:FRIEND ***))))))
+             (MARKERS\: (\#THING)
+                    PROCEDURE\:
+                    ((\#LIKE \:FRIEND ***))))))
       FEATURES
       (ADJ))
 
@@ -824,44 +825,44 @@
 
 (DEFS NOW
       SEMANTICS
-      ((ADV (OR	(EQ (CADR (ASSQ 'TIME FE)) '\:NOW)
-		(ERT NOW DEFINITION))))
+      ((ADV (OR  (EQ (CADR (ASSQ 'TIME FE)) '\:NOW)
+             (ERT NOW DEFINITION))))
       FEATURES
       (ADV TIMW))
 
 (DEFS OBJECT
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#PHYSOB \#VAGUE)
-			      PROCEDURE\:
-			      ((\#PHYSOB ***))))))
+              (MARKERS\: (\#PHYSOB \#VAGUE)
+                     PROCEDURE\:
+                     ((\#PHYSOB ***))))))
       FEATURES
       (NOUN NS))
 
 (DEFS OF
       SEMANTICS
       ((PREP
-	     (AND
-		   (CQ NG)
-		   (RELATION
-			 (RESTRICTIONS\: (((\#DIRECTION)) ((\#PHYSOB)))
-					 PROCEDURE\:
-					 ((\#EVAL
-						(LIST
-						      '\#DIRECTION
-						      (CADR
-							    (SETQ
-								  XX
-								       (OR
-									     (ASSQ '\#DIRECTION
-										   (CDDAAR (INTERP MAP1)))
-									     (ERT OF DEFINITION))))
-						      (COND ((CADDR XX) '*OF)
-							    ('\#2))
-						      (COND ((CADDR XX) '\#2)
-							    ('*OF))
-						      '*TIME)))))))
-	    (PREP2 T))
+        (AND
+         (CQ NG)
+         (RELATION
+           (RESTRICTIONS\: (((\#DIRECTION)) ((\#PHYSOB)))
+                  PROCEDURE\:
+                  ((\#EVAL
+                        (LIST
+                                    '\#DIRECTION
+                                    (CADR
+                                          (SETQ
+                                                 XX
+                                                      (OR
+                                                              (ASSQ '\#DIRECTION
+                                                                       (CDDAAR (INTERP MAP1)))
+                                                              (ERT OF DEFINITION))))
+                                    (COND ((CADDR XX) '*OF)
+                                          ('\#2))
+                                    (COND ((CADDR XX) '\#2)
+                                          ('*OF))
+                                    '*TIME)))))))
+       (PREP2 T))
       FEATURES
       (PREP PREP2 OF))
 
@@ -912,18 +913,18 @@
       (PICK UP)
       SEMANTICS
       ((TRANS
-	     (RELATION
-		   (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
-				   MARKERS\:
-				   (\#EVENT)
-				   PROCEDURE\:
-				   ((\#EVAL (COND ((MEMQ (NUMBER? SMOB1)
-							 '(1. NS))
-						   '(\#PICKUP \#2 *TIME))
-						  ('(\#PUTIN
-						     \#2
-						     \:BOX
-						     *TIME)))))))))
+        (RELATION
+         (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
+           MARKERS\:
+           (\#EVENT)
+           PROCEDURE\:
+           ((\#EVAL (COND ((MEMQ (NUMBER? SMOB1)
+                            '(1. NS))
+                           '(\#PICKUP \#2 *TIME))
+                     ('(\#PUTIN
+                              \#2
+                              \:BOX
+                              *TIME)))))))))
       FEATURES
       (COMBINATION TRANS))
 
@@ -932,9 +933,9 @@
 (DEFS POINTED
       SEMANTICS
       ((ADJ (OBJECT
-		  (MARKERS\: (\#PHYSOB \#POINTED)
-			     PROCEDURE\:
-			     ((\#SHAPE *** \#POINTED))))))
+             (MARKERS\: (\#PHYSOB \#POINTED)
+                    PROCEDURE\:
+                    ((\#SHAPE *** \#POINTED))))))
       FEATURES
       (ADJ))
 
@@ -943,31 +944,31 @@
       PUT
       SEMANTICS
       ((VB
-	     ((TRANSL
-		    (RELATION
-			  (RESTRICTIONS\: (((\#ANIMATE))
-						((\#PHYSOB))
-						(SMOBL (\#PLACE)))
-					  MARKERS\:
-					  (\#EVENT)
-					  PROCEDURE\:
-					  (\#EVAL
-						(MAPCAR
-						      #'(LAMBDA (%PLNRPHRASE)
-							     (COND ((EQ	(CAR %PLNRPHRASE)
-									'\#ON)
-								    (LIST '\#PUTON
-									  '\#2
-									  (CADR %PLNRPHRASE)
-									  '*TIME))
-								   ((EQ	(CAR %PLNRPHRASE)
-									'\#IN)
-								    (LIST '\#PUTIN
-									  '\#2
-									  (CADR %PLNRPHRASE)
-									  '*TIME))
-								   ((ERT PUT DEFINITION))))
-						      (RELATIONS? SMOBL)))))))))
+        ((TRANSL
+          (RELATION
+            (RESTRICTIONS\: (((\#ANIMATE))
+                             ((\#PHYSOB))
+                             (SMOBL (\#PLACE)))
+                   MARKERS\:
+                   (\#EVENT)
+                   PROCEDURE\:
+                   (\#EVAL
+                        (MAPCAR
+                                    #'(LAMBDA (%PLNRPHRASE)
+                                           (COND ((EQ  (CAR %PLNRPHRASE)
+                                                   '\#ON)
+                                                  (LIST '\#PUTON
+                                                          '\#2
+                                                          (CADR %PLNRPHRASE)
+                                                          '*TIME))
+                                                 ((EQ  (CAR %PLNRPHRASE)
+                                                       '\#IN)
+                                                  (LIST '\#PUTIN
+                                                          '\#2
+                                                          (CADR %PLNRPHRASE)
+                                                          '*TIME))
+                                                 ((ERT PUT DEFINITION))))
+                                    (RELATIONS? SMOBL)))))))))
       FEATURES
       (INF PAST VB TRANSL VPRT))
 
@@ -976,11 +977,11 @@
       (PUT AWAY)
       SEMANTICS
       ((TRANS (RELATION
-		    (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
-				    MARKERS\:
-				    (\#EVENT)
-				    PROCEDURE\:
-				    ((\#PUTIN \#2 \:BOX *TIME))))))
+               (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
+                     MARKERS\:
+                     (\#EVENT)
+                     PROCEDURE\:
+                     ((\#PUTIN \#2 \:BOX *TIME))))))
       FEATURES
       (COMBINATION TRANS))
 
@@ -989,11 +990,11 @@
       (PUT DOWN)
       SEMANTICS
       ((TRANS (RELATION
-		    (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
-				    MARKERS\:
-				    (\#EVENT)
-				    PROCEDURE\:
-				    ((\#PUTON \#2 :TABLE *TIME))))))
+               (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
+                     MARKERS\:
+                     (\#EVENT)
+                     PROCEDURE\:
+                     ((\#PUTON \#2 :TABLE *TIME))))))
       FEATURES
       (COMBINATION TRANS))
 
@@ -1010,9 +1011,9 @@
       (NOUN NS)
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#PHYSOB \#POINTED)
-			      PROCEDURE\:
-			      ((\#IS *** \#PYRAMID)))))))
+              (MARKERS\: (\#PHYSOB \#POINTED)
+                     PROCEDURE\:
+                     ((\#IS *** \#PYRAMID)))))))
 
 (DEFS RED SEMANTICS ((ADJ (\#COLOR \#RED))) FEATURES (ADJ))
 
@@ -1021,18 +1022,18 @@
 (DEFS RIGHT
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#DIRECTION)
-			      PROCEDURE\:
-			      ((\#DIRECTION \#RIGHT T))))))
+              (MARKERS\: (\#DIRECTION)
+                     PROCEDURE\:
+                     ((\#DIRECTION \#RIGHT T))))))
       FEATURES
       (NOUN NS))
 
 (DEFS ROUND
       SEMANTICS
       ((ADJ (OBJECT
-		  (MARKERS\: (\#PHYSOB \#ROUND)
-			     PROCEDURE\:
-			     ((\#SHAPE *** \#ROUND))))))
+             (MARKERS\: (\#PHYSOB \#ROUND)
+                    PROCEDURE\:
+                    ((\#SHAPE *** \#ROUND))))))
       FEATURES
       (ADJ))
 
@@ -1047,20 +1048,20 @@
       (SET DOWN)
       SEMANTICS
       ((TRANS (RELATION
-		    (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
-				    MARKERS\:
-				    (\#EVENT)
-				    PROCEDURE\:
-				    ((\#PUTON \#2 :TABLE *TIME))))))
+               (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
+                     MARKERS\:
+                     (\#EVENT)
+                     PROCEDURE\:
+                     ((\#PUTON \#2 :TABLE *TIME))))))
       FEATURES
       (COMBINATION TRANS))
 
 (DEFS SHAPE
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#SHAPE)
-			      PROCEDURE\:
-			      ((\#IS *** \#SHAPE))))))
+              (MARKERS\: (\#SHAPE)
+                     PROCEDURE\:
+                     ((\#IS *** \#SHAPE))))))
       FEATURES
       (NOUN NS))
 
@@ -1068,18 +1069,18 @@
 
 (DEFS SHORT
       SEMANTICS
-      ((MEASURE	(MEASURE DIMENSION\:
-			 \#HEIGHT
-			 RESTRICTIONS\:
-			 (\#PHYSOB)
-			 DIRECTION\:
-			 NIL))
-	    (ADJ (OBJECT
-		       (MARKERS\: (\#PHYSOB)
-				  PROCEDURE\:
-				  ((\#MORE \#HEIGHT
-					   (128. 0. 0.)
-					   ***))))))
+      ((MEASURE  (MEASURE DIMENSION\:
+                  \#HEIGHT
+                  RESTRICTIONS\:
+                  (\#PHYSOB)
+                  DIRECTION\:
+                  NIL))
+       (ADJ (OBJECT
+             (MARKERS\: (\#PHYSOB)
+              PROCEDURE\:
+              ((\#MORE \#HEIGHT
+                     (128. 0. 0.)
+                     ***))))))
       FEATURES
       (ADJ))
 
@@ -1090,48 +1091,48 @@
 (DEFS SIT
       SEMANTICS
       ((VB
-	     ((ITRNSL
-		    (RELATION
-			  (RESTRICTIONS\: (((\#PHYSOB))
-						(SMOBL (\#PLACE)))
-					  PROCEDURE\:
-					  (\#EVAL
-						(MAPCAR
-						      #'(LAMBDA (%PLNRPHRASE)
-							     (COND ((MEMQ (CAR %PLNRPHRASE)
-									  '(\#ON \#IN))
-								    (LIST '\#SUPPORT
-									  (CADR %PLNRPHRASE)
-									  '\#1
-									  '*TIME))
-								   ((ERT SIT DEFINITION))))
-						      (RELATIONS? SMOBL)))))))))
+        ((ITRNSL
+          (RELATION
+            (RESTRICTIONS\: (((\#PHYSOB))
+                             (SMOBL (\#PLACE)))
+                   PROCEDURE\:
+                   (\#EVAL
+                        (MAPCAR
+                                    #'(LAMBDA (%PLNRPHRASE)
+                                           (COND ((MEMQ (CAR %PLNRPHRASE)
+                                                   '(\#ON \#IN))
+                                                  (LIST '\#SUPPORT
+                                                          (CADR %PLNRPHRASE)
+                                                          '\#1
+                                                          '*TIME))
+                                                 ((ERT SIT DEFINITION))))
+                                    (RELATIONS? SMOBL)))))))))
       FEATURES
       (VB INF ITRNSL))
 
 (DEFS SIZE
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#SIZE)
-			      PROCEDURE\:
-			      ((\#IS *** \#SIZE))))))
+              (MARKERS\: (\#SIZE)
+                     PROCEDURE\:
+                     ((\#IS *** \#SIZE))))))
       FEATURES
       (NOUN NS))
 
 (DEFS SMALL
       SEMANTICS
-      ((MEASURE	(MEASURE DIMENSION\:
-			 \#SIZE
-			 RESTRICTIONS\:
-			 (\#PHYSOB)
-			 DIRECTION\:
-			 NIL))
-	    (ADJ (OBJECT
-		       (MARKERS\: (\#PHYSOB \#LITTLE)
-				  PROCEDURE\:
-				  ((\#MORE \#SIZE
-					   (128. 128. 128.)
-					   ***))))))
+      ((MEASURE  (MEASURE DIMENSION\:
+                  \#SIZE
+                  RESTRICTIONS\:
+                  (\#PHYSOB)
+                  DIRECTION\:
+                  NIL))
+       (ADJ (OBJECT
+             (MARKERS\: (\#PHYSOB \#LITTLE)
+              PROCEDURE\:
+              ((\#MORE \#SIZE
+                     (128. 128. 128.)
+                     ***))))))
       FEATURES
       (ADJ))
 
@@ -1148,19 +1149,19 @@
 (DEFS SQUARE
       SEMANTICS
       ((ADJ (OBJECT
-		  (MARKERS\: (\#PHYSOB \#RECTANGULAR)
-			     PROCEDURE\:
-			     ((\#SHAPE ** \#RECTANGULAR))))))
+             (MARKERS\: (\#PHYSOB \#RECTANGULAR)
+                    PROCEDURE\:
+                    ((\#SHAPE ** \#RECTANGULAR))))))
       FEATURES
       (ADJ))
 
 (DEFS STACK
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#STACK)
-			      PROCEDURE\:
-			      ((\#IS *** \#STACK)))))
-	    (VB ((TRANS (\#STACKUP)))))
+              (MARKERS\: (\#STACK)
+                     PROCEDURE\:
+                     ((\#IS *** \#STACK)))))
+       (VB ((TRANS (\#STACKUP)))))
       FEATURES
       (NOUN NS VB INF VPRT TRANS))
 
@@ -1175,39 +1176,39 @@
 (DEFS START
       SEMANTICS
       ((VB
-	     ((TRANS
-		    (RELATION
-			  (RESTRICTIONS\: (((\#ANIMATE)) ((\#EVENT)))
-					  MARKERS\:
-					  (\#EVENT)
-					  PROCEDURE\:
-					  ((\#START \#2 *TIME))))))))
+        ((TRANS
+          (RELATION
+            (RESTRICTIONS\: (((\#ANIMATE)) ((\#EVENT)))
+                   MARKERS\:
+                   (\#EVENT)
+                   PROCEDURE\:
+                   ((\#START \#2 *TIME))))))))
       FEATURES
       (VB INF TRANS INGOB1 TOOB1))
 
 (DEFS SUPPORT
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#PHYSOB \#ROLE)
-			      PROCEDURE\:
-			      ((\#SUPPORT *** ?)
-				    (\#ROLE (\#PHYSOB)
-					    (\#SUPPORT \#1 \#2))))))
-	    (VB
-		  ((TRANS
-			 (RELATION
-			       (RESTRICTIONS\: (((\#PHYSOB)) ((\#MANIP)))
-					       PROCEDURE\:
-					       ((\#SUPPORT \#1 \#2 *TIME))))))))
+              (MARKERS\: (\#PHYSOB \#ROLE)
+                     PROCEDURE\:
+                     ((\#SUPPORT *** ?)
+                      (\#ROLE (\#PHYSOB)
+                            (\#SUPPORT \#1 \#2))))))
+       (VB
+        ((TRANS
+           (RELATION
+                    (RESTRICTIONS\: (((\#PHYSOB)) ((\#MANIP)))
+                           PROCEDURE\:
+                           ((\#SUPPORT \#1 \#2 *TIME))))))))
       FEATURES
       (VB INF TRANS IMPERF NOUN NS))
 
 (DEFS TABLE
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#TABLE)
-			      PROCEDURE\:
-			      ((\#IS *** \#TABLE))))))
+              (MARKERS\: (\#TABLE)
+                     PROCEDURE\:
+                     ((\#IS *** \#TABLE))))))
       FEATURES
       (NOUN NS))
 
@@ -1215,33 +1216,33 @@
 
 (DEFS TALL
       SEMANTICS
-      ((MEASURE	(MEASURE DIMENSION\:
-			 \#HEIGHT
-			 RESTRICTIONS\:
-			 (\#PHYSOB)
-			 DIRECTION\:
-			 T))
-	    (ADJ (OBJECT
-		       (MARKERS\: (\#PHYSOB)
-				  PROCEDURE\:
-				  ((\#MORE \#HEIGHT
-					   ***
-					   (128. 0.
-						 0.))))))
-	    )
+      ((MEASURE  (MEASURE DIMENSION\:
+                  \#HEIGHT
+                  RESTRICTIONS\:
+                  (\#PHYSOB)
+                  DIRECTION\:
+                  T))
+       (ADJ (OBJECT
+             (MARKERS\: (\#PHYSOB)
+              PROCEDURE\:
+              ((\#MORE \#HEIGHT
+                     ***
+                     (128. 0.
+                          0.)))))))
+
       FEATURES
       (ADJ))
 
 (DEFS TELL
       SEMANTICS
       ((VB
-	     ((TRANS (RELATION
-			   (RESTRICTIONS\: (((\#ANIMATE))
-						 ((\#EVENT)))
-					   MARKERS\:
-					   (\#EVENT)
-					   PROCEDURE\:
-					   ((\#WANT \#1 \#2 *TIME))))))))
+        ((TRANS (RELATION
+                 (RESTRICTIONS\: (((\#ANIMATE))
+                                  ((\#EVENT)))
+                        MARKERS\:
+                        (\#EVENT)
+                        PROCEDURE\:
+                        ((\#WANT \#1 \#2 *TIME))))))))
       FEATURES
       (VB INF TRANS2 TOOB2))
 
@@ -1251,10 +1252,10 @@
 
 (DEFUN THANK  NIL
       (COND ((EQ (CADR N) 'YOU)
-	     (SETQ GLOBAL-MESSAGE '(YOU\'RE WELCOME))
-	     (FLUSHME)
-	     (FLUSHME)
-	     (OR NN (SETQ SPECIAL 'DONE)))))
+             (SETQ GLOBAL-MESSAGE '(YOU\'RE WELCOME))
+             (FLUSHME)
+             (FLUSHME)
+             (OR NN (SETQ SPECIAL 'DONE)))))
 
 (DEFS THAT
       SEMANTICS
@@ -1271,16 +1272,16 @@
 (DEFS THEN
       SEMANTICS
       ((ADV
-	     (AND LASTIME
-		  (RPLACD (CDDADR (OR (AND (SETQ XX (ASSQ 'TIME
-							  FE))
-					   (NOT (ATOM (CADR XX)))
-					   XX)
-				      '(TIME (\#TIME (PAST) NIL))))
-			  (LIST	(OR (CADDDR LASTIME)
-				    (CAR (CDDDDR LASTIME)))
-				(OR (CAR (CDDDDR LASTIME))
-				    (CADDDR LASTIME)))))))
+        (AND LASTIME
+         (RPLACD (CDDADR (OR (AND (SETQ XX (ASSQ 'TIME
+                                            FE))
+                              (NOT (ATOM (CADR XX)))
+                              XX)
+                          '(TIME (\#TIME (PAST) NIL))))
+             (LIST  (OR (CADDDR LASTIME)
+                     (CAR (CDDDDR LASTIME)))
+                (OR (CAR (CDDDDR LASTIME))
+                    (CADDDR LASTIME)))))))
       FEATURES
       (ADV TIMW))
 
@@ -1295,45 +1296,45 @@
 (DEFS THICK
       SEMANTICS
       ((ADJ (OBJECT
-		  (MARKERS\: (\#PHYSOB)
-			     PROCEDURE\:
-			     ((\#MORE \#THICKNESS
-				      ***
-				      (0. 128.
-					  0.)))))
-	    )
-	    (MEASURE (MEASURE DIMENSION\:
-			      \#THICKNESS
-			      RESTRICTIONS\:
-			      (\#PHYSOB)
-			      DIRECTION\:
-			      T)))
+             (MARKERS\: (\#PHYSOB)
+                    PROCEDURE\:
+                    ((\#MORE \#THICKNESS
+                          ***
+                          (0. 128.
+                            0.))))))
+
+       (MEASURE (MEASURE DIMENSION\:
+                 \#THICKNESS
+                 RESTRICTIONS\:
+                 (\#PHYSOB)
+                 DIRECTION\:
+                 T)))
       FEATURES
       (ADJ))
 
 (DEFS THIN
       SEMANTICS
       ((ADJ (OBJECT
-		  (MARKERS\: (\#PHYSOB)
-			     PROCEDURE\:
-			     ((\#MORE \#THICKNESS
-				      (0. 128. 0.)
-				      ***)))))
-	    (MEASURE (MEASURE DIMENSION\:
-			      \#THICKNESS
-			      RESTRICTIONS\:
-			      (\#PHYSOB)
-			      DIRECTION\:
-			      NIL)))
+             (MARKERS\: (\#PHYSOB)
+                    PROCEDURE\:
+                    ((\#MORE \#THICKNESS
+                          (0. 128. 0.)
+                          ***)))))
+       (MEASURE (MEASURE DIMENSION\:
+                 \#THICKNESS
+                 RESTRICTIONS\:
+                 (\#PHYSOB)
+                 DIRECTION\:
+                 NIL)))
       FEATURES
       (ADJ))
 
 (DEFS THING
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#THING \#VAGUE \#PHYSOB)
-			      PROCEDURE\:
-			      ((\#PHYSOB ***))))))
+              (MARKERS\: (\#THING \#VAGUE \#PHYSOB)
+                     PROCEDURE\:
+                     ((\#PHYSOB ***))))))
       FEATURES
       (NOUN NS))
 
@@ -1346,13 +1347,13 @@
 (DEFS TO
       SEMANTICS
       ((PREP
-	     (RELATION
-		   (RESTRICTIONS\: (((\#PHYSOB)) ((\#DIRECTION)))
-				   PROCEDURE\:
-				   ((\#EVAL
-					  (SUBST '\#1
-						 '*OF
-						 (REFER? SMOB1))))))))
+        (RELATION
+         (RESTRICTIONS\: (((\#PHYSOB)) ((\#DIRECTION)))
+           PROCEDURE\:
+           ((\#EVAL
+                (SUBST '\#1
+                      '*OF
+                      (REFER? SMOB1))))))))
       FEATURES
       (PREP))
 
@@ -1371,9 +1372,9 @@
 (DEFS TOY
       SEMANTICS
       ((NOUN (OBJECT
-		   (MARKERS\: (\#PHYSOB)
-			      PROCEDURE\:
-			      ((\#MANIP ***))))))
+              (MARKERS\: (\#PHYSOB)
+                     PROCEDURE\:
+                     ((\#MANIP ***))))))
       FEATURES
       (NOUN NS))
 
@@ -1398,13 +1399,13 @@
 (DEFS WANT
       SEMANTICS
       ((VB
-	     ((TRANS (RELATION
-			   (RESTRICTIONS\: (((\#ANIMATE))
-						 ((\#EVENT)))
-					   MARKERS\:
-					   (\#EVENT)
-					   PROCEDURE\:
-					   ((\#WANT \#1 \#2 *TIME))))))))
+        ((TRANS (RELATION
+                 (RESTRICTIONS\: (((\#ANIMATE))
+                                  ((\#EVENT)))
+                        MARKERS\:
+                        (\#EVENT)
+                        PROCEDURE\:
+                        ((\#WANT \#1 \#2 *TIME))))))))
       FEATURES
       (VB INF TRANS TOOB SUBTOB))
 
@@ -1455,7 +1456,7 @@
 (DEFS WHO
       SEMANTICS
       ((PRONREL T)
-	    (PRON (SMSET (LIST (NEWCOPY ANIMATE-OSS)))))
+       (PRON (SMSET (LIST (NEWCOPY ANIMATE-OSS)))))
       FEATURES
       (PRONREL QPRON PRON NS))
 
@@ -1470,16 +1471,16 @@
 (DEFS WIDE
       SEMANTICS
       ((ADJ (OBJECT
-		  (MARKERS\: (\#PHYSOB)
-			     PROCEDURE\:
-			     ((\#MORE \#WIDTH *** (0. 128. 0.))))
-		  ))
-	    (MEASURE (MEASURE DIMENSION\:
-			      \#WIDTH
-			      RESTRICTIONS\:
-			      (\#PHYSOB)
-			      DIRECTION\:
-			      T)))
+             (MARKERS\: (\#PHYSOB)
+                    PROCEDURE\:
+                    ((\#MORE \#WIDTH *** (0. 128. 0.))))))
+
+       (MEASURE (MEASURE DIMENSION\:
+                 \#WIDTH
+                 RESTRICTIONS\:
+                 (\#PHYSOB)
+                 DIRECTION\:
+                 T)))
       FEATURES
       (ADJ))
 
@@ -1518,58 +1519,58 @@
 (DEFS \#BLUEPRINT
       EXPR
       (LAMBDA (X)
-	    (PROG (PARTS)
-		  (COND	((THGET X 'REFER) (RETURN '\#2))
-			((NULL (SETQ X (CDDAAR (INTERP X))))
-			 (GO DONE)))
-		  LOOP
-		  (COND	((NOT (EQ (CAAR X) 'THGOAL))
-			 (ERT BLUEPRINT THGOAL))
-			((EQ (CAADAR X) '\#IS))
-			((EQ (CAADAR X) '\#PART)
-			 (SETQ PARTS
-				    (CONS (CADR (CADAR X)) PARTS)))
-			((ERT \#BLUEPRINT)))
-		  (AND (SETQ X (CDR X)) (GO LOOP))
-		  DONE
-		  (AND PARTS
-		       (THGET (CAR PARTS) 'REFER)
-		       (RETURN (THGET (CAR PARTS) 'REFER)))
-		  (THSETF (G3T 'BLUEPRINT 'SM)
-			  (COND	((NULL PARTS)
-				 (THGET	'STACKPARTS
-					'SM))
-				((CDR PARTS)
-				 (ERT \#BLUEPRINT PARTS))
-				((THGET (CAR PARTS) 'SM))))
-		  (RETURN 'BLUEPRINT))))
+       (PROG (PARTS)
+        (COND  ((THGET X 'REFER) (RETURN '\#2))
+          ((NULL (SETQ X (CDDAAR (INTERP X))))
+           (GO DONE)))
+        LOOP
+        (COND  ((NOT (EQ (CAAR X) 'THGOAL))
+                (ERT BLUEPRINT THGOAL))
+          ((EQ (CAADAR X) '\#IS))
+          ((EQ (CAADAR X) '\#PART)
+           (SETQ PARTS
+                   (CONS (CADR (CADAR X)) PARTS)))
+          ((ERT \#BLUEPRINT)))
+        (AND (SETQ X (CDR X)) (GO LOOP))
+        DONE
+        (AND PARTS
+               (THGET (CAR PARTS) 'REFER)
+               (RETURN (THGET (CAR PARTS) 'REFER)))
+        (THSETF (G3T 'BLUEPRINT 'SM)
+            (COND  ((NULL PARTS)
+                    (THGET  'STACKPARTS
+                         'SM))
+               ((CDR PARTS)
+                (ERT \#BLUEPRINT PARTS))
+               ((THGET (CAR PARTS) 'SM))))
+        (RETURN 'BLUEPRINT))))
 
 (DEFS \#BOX SYS (\#PHYSOB))
 
 (DEFS \#BUILD
       EXPR
       (LAMBDA NIL
-	    (RELATION
-		  (RESTRICTIONS\: (((\#ANIMATE)) ((\#STACK)))
-				  MARKERS\:
-				  (\#EVENT)
-				  PROCEDURE\:
-				  ((\#EVAL (LIST '\#STACKUP
-						 (\#BLUEPRINT SMOB1)
-						 '*TIME)))))))
+       (RELATION
+        (RESTRICTIONS\: (((\#ANIMATE)) ((\#STACK)))
+          MARKERS\:
+          (\#EVENT)
+          PROCEDURE\:
+          ((\#EVAL (LIST '\#STACKUP
+                    (\#BLUEPRINT SMOB1)
+                    '*TIME)))))))
 
 (DEFS \#CALL THMLIST ((3. '((THUSE TC-3)))))
 
 (DEFS \#COLOR
       FEXPR
       (LAMBDA (A)
-	    (EVAL (SUBST (CAR A)
-			 'COLOR
-			 '(OBJECT
-			   (MARKERS\:
-			    (\#PHYSOB COLOR)
-			    PROCEDURE\:
-			    ((\#COLOR *** COLOR)))))))
+       (EVAL (SUBST (CAR A)
+              'COLOR
+              '(OBJECT
+                   (MARKERS\:
+                       (\#PHYSOB COLOR)
+                       PROCEDURE\:
+                       ((\#COLOR *** COLOR)))))))
       PRIORITY
       192.
       SYS
@@ -1582,51 +1583,51 @@
 (DEFS \#CLEANOFF
       EXPR
       (LAMBDA NIL
-	    (RELATION
-		  (RESTRICTIONS\: (((\#ANIMATE)) ((\#PHYSOB)))
-				  MARKERS\:
-				  (\#EVENT)
-				  PROCEDURE\:
-				  ((\#CLEARTOP \#2 *TIME))))))
+       (RELATION
+        (RESTRICTIONS\: (((\#ANIMATE)) ((\#PHYSOB)))
+          MARKERS\:
+          (\#EVENT)
+          PROCEDURE\:
+          ((\#CLEARTOP \#2 *TIME))))))
 
 (DEFS \#CLEARTOP
       NAMEVENT
-      (I3 (CONS	(VBFIX 'CLEAN NIL)
-		(PRTPUT 'OFF OBJ1)))
+      (I3 (CONS  (VBFIX 'CLEAN NIL)
+           (PRTPUT 'OFF OBJ1)))
       THMLIST
       ((2. '((THUSE TC-2))) (3. '((THUSE TCT-3)))
-			    (4. '((THUSE TCTE-4)))))
+          (4. '((THUSE TCTE-4)))))
 
 (DEFS \#DEFINE
       EXPR
       (LAMBDA (X Y)
-	    (LIST '\#DEFINITION
-		  (CADADR (CDAAR (INTERP X)))
-		  (PROG	(X)
-			(THSETF	(GETF (SETQ X (MAKESYM 'ATM)) 'NEWWORD)
-				(INTERP Y))
-			(RETURN X)))))
+       (LIST '\#DEFINITION
+        (CADADR (CDAAR (INTERP X)))
+        (PROG  (X)
+          (THSETF  (GETF (SETQ X (MAKESYM 'ATM)) 'NEWWORD)
+               (INTERP Y))
+          (RETURN X)))))
 
 (DEFS \#DEFINITION
       FEXPR
       (LAMBDA (A)
-	    (THSETF (G3T (CADAR A) 'WORD) '(NOUN NS))
-	    (THSETF (G3T (CADAR A) 'SMNTC)
-		    (SUBST (SUBST '***
-				  (CADDR (THGET (CADR A) 'NEWWORD))
-				  (CAR (THGET (CADR A) 'NEWWORD)))
-			   'NG
-			   '((NOUN
-			      (SETQ
-			       LIST2
-			       (LIST
-				(SUBST
-				 (SUBST
-				  (CADDAR LIST1)
-				  '***
-				  'NG)
-				 (CAAR LIST1)
-				 (CAR LIST1)))))))))
+       (THSETF (G3T (CADAR A) 'WORD) '(NOUN NS))
+       (THSETF (G3T (CADAR A) 'SMNTC)
+        (SUBST (SUBST '***
+                (CADDR (THGET (CADR A) 'NEWWORD))
+                (CAR (THGET (CADR A) 'NEWWORD)))
+           'NG
+           '((NOUN
+                 (SETQ
+                     LIST2
+                     (LIST
+                      (SUBST
+                           (SUBST
+                                (CADDAR LIST1)
+                                '***
+                                'NG)
+                           (CAAR LIST1)
+                           (CAR LIST1)))))))))
       NOGOAL
       T)
 
@@ -1641,13 +1642,13 @@
 (DEFS \#END
       THMLIST
       ((3. '((THUSE TC-STARTEND3)))
-	    (4. '((THUSE TC-STARTEND4)))))
+       (4. '((THUSE TC-STARTEND4)))))
 
 (DEFS \#EQDIM
       EXPR
       (LAMBDA (X)
-	    (SETQ X (SIZE X))
-	    (AND (EQ (CAR X) (CADR X)) (EQ (CAR X) (CADDR X))))
+       (SETQ X (SIZE X))
+       (AND (EQ (CAR X) (CADR X)) (EQ (CAR X) (CADDR X))))
       NOGOAL
       T)
 
@@ -1658,33 +1659,33 @@
 (DEFS \#EXISTS
       THMLIST
       ((2. '((THUSE TC-EXISTS)))
-	    (3. '((THUSE TCT-EXISTS)))))
+       (3. '((THUSE TCT-EXISTS)))))
 
 (DEFS \#GET-RID-OF
       THMLIST
       ((2. '((THUSE TCT-EXISTS)))
-	    (3. '((THUSE THUSE TCT-3)))
-	    (4. '((THUSE TCTE-4))))
+       (3. '((THUSE THUSE TCT-3)))
+       (4. '((THUSE TCTE-4))))
       NAMEVENT
       (I3 (APPEND (LIST (VBFIX 'GET T) 'RID 'OF)
-		  OBJ1)))
+           OBJ1)))
 
 (DEFS \#GRASP
       EXPR
       (LAMBDA NIL
-	    (RELATION
-		  (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
-				  MARKERS\:
-				  (\#EVENT)
-				  PROCEDURE\:
-				  ((\#EVAL (COND ((IMPERF)
-						  '(\#GRASPING \#2 *TIME))
-						 ('(\#GRASP \#2 *TIME))))))))
+       (RELATION
+        (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
+          MARKERS\:
+          (\#EVENT)
+          PROCEDURE\:
+          ((\#EVAL (COND ((IMPERF)
+                          '(\#GRASPING \#2 *TIME))
+                    ('(\#GRASP \#2 *TIME))))))))
       NAMEVENT
       (I3 (CONS (VBFIX 'GRASP NIL) OBJ1))
       THMLIST
       ((2. '((THUSE TC-2))) (3. '((THUSE TCT-3)))
-			    (4. '((THUSE TCTE-4)))))
+          (4. '((THUSE TCTE-4)))))
 
 (DEFS \#GRASPING THMLIST ((3. '((THUSE TCT-GRASPING)))))
 
@@ -1695,48 +1696,48 @@
 (DEFS \#HAVE
       EXPR
       (LAMBDA NIL
-	    (RELATION
-		  (RESTRICTIONS\: (((\#THING))
-					((\#THING)
-					      (AND
-						    (MEMQ '\#ROLE (MARKERS? SMOB1))
-						    (CHECK
-							  (CADR	(ASSOC '\#ROLE
-								       (RELATIONS? SMOB1)))
-							  (MARKERS? SMSUB)
-							  (SYSTEMS? SMSUB)))))
-				  PROCEDURE\:
-				  ((\#SUBST \#1 ?)))
-		  (RESTRICTIONS\: (((\#ANIMATE)) ((\#PHYSOB)))
-				  PROCEDURE\:
-				  ((\#BELONG \#2 \#1))))))
+       (RELATION
+        (RESTRICTIONS\: (((\#THING))
+                         ((\#THING)
+                          (AND
+                               (MEMQ '\#ROLE (MARKERS? SMOB1))
+                               (CHECK
+                                     (CADR  (ASSOC '\#ROLE
+                                                    (RELATIONS? SMOB1)))
+                                     (MARKERS? SMSUB)
+                                     (SYSTEMS? SMSUB)))))
+          PROCEDURE\:
+          ((\#SUBST \#1 ?)))
+        (RESTRICTIONS\: (((\#ANIMATE)) ((\#PHYSOB)))
+          PROCEDURE\:
+          ((\#BELONG \#2 \#1))))))
 
 (DEFS \#HEIGHT MEASFN (LAMBDA (X) (CADDR (SIZE X))))
 
 (DEFS \#IN
       EXPR
       (LAMBDA ()
-	    (COND ((CQ LOBJ)
-		   (RELATION
-			 (RESTRICTIONS\: (((\#THING)) ((\#BOX)))
-					 MARKERS\:
-					 (\#PLACE)
-					 PROCEDURE\:
-					 ((\#IN \#2)))))
-		  ((RELATION
-			 (RESTRICTIONS\: (((\#MANIP)) ((\#BOX)))
-					 PROCEDURE\:
-					 ((\#CONTAIN \#2 \#1 *TIME)))
-			 (RESTRICTIONS\: (((\#MANIP)) ((\#HAND)))
-					 PROCEDURE\:
-					 ((\#GRASPING \#1 *TIME)))
-			 (RESTRICTIONS\: (((\#PLACE)) ((\#BOX)))
-					 PROCEDURE\:
-					 ((\#IN \#1 \#2)))
-			 (RESTRICTIONS\: (((\#MANIP))
-					       ((\#CONSTRUCT)))
-					 PROCEDURE\:
-					 ((\#PART \#1 \#2 *TIME))))))))
+       (COND ((CQ LOBJ)
+              (RELATION
+                (RESTRICTIONS\: (((\#THING)) ((\#BOX)))
+                       MARKERS\:
+                       (\#PLACE)
+                       PROCEDURE\:
+                       ((\#IN \#2)))))
+        ((RELATION
+           (RESTRICTIONS\: (((\#MANIP)) ((\#BOX)))
+                  PROCEDURE\:
+                  ((\#CONTAIN \#2 \#1 *TIME)))
+           (RESTRICTIONS\: (((\#MANIP)) ((\#HAND)))
+                  PROCEDURE\:
+                  ((\#GRASPING \#1 *TIME)))
+           (RESTRICTIONS\: (((\#PLACE)) ((\#BOX)))
+                  PROCEDURE\:
+                  ((\#IN \#1 \#2)))
+           (RESTRICTIONS\: (((\#MANIP))
+                            ((\#CONSTRUCT)))
+                  PROCEDURE\:
+                  ((\#PART \#1 \#2 *TIME))))))))
 
 (DEFS \#IS PRIORITY 64.)
 
@@ -1751,28 +1752,28 @@
 (DEFS \#LOC2
       EXPR
       (LAMBDA (LOCTYPE \#LOC)
-	    (DECLARE (SPECIAL LOCTYPE \#LOC))
-	    (COND
-		  ((CQ LOBJ)
-		   (RELATION
-			 (RESTRICTIONS\: (((\#THING)) (LOBJ (\#PHYSOB)))
-					 MARKERS\:
-					 (\#PLACE)
-					 PROCEDURE\:
-					 ((\#EVAL (LIST	'\#LOC
-							LOCTYPE
-							\#LOC
-							\#2))))))
-		  ((RELATION
-			 (RESTRICTIONS\: (((\#PHYSOB)) ((\#PHYSOB)))
-					 PROCEDURE\:
-					 ((\#EVAL (LIST	'\#LOC
-							LOCTYPE
-							(COND (\#LOC '\#1)
-							      ('\#2))
-							(COND (\#LOC '\#2)
-							      ('\#1))
-							'*TIME)))))))))
+       (DECLARE (SPECIAL LOCTYPE \#LOC))
+       (COND
+        ((CQ LOBJ)
+         (RELATION
+           (RESTRICTIONS\: (((\#THING)) (LOBJ (\#PHYSOB)))
+                  MARKERS\:
+                  (\#PLACE)
+                  PROCEDURE\:
+                  ((\#EVAL (LIST  '\#LOC
+                            LOCTYPE
+                            \#LOC
+                            \#2))))))
+        ((RELATION
+           (RESTRICTIONS\: (((\#PHYSOB)) ((\#PHYSOB)))
+                  PROCEDURE\:
+                  ((\#EVAL (LIST  '\#LOC
+                            LOCTYPE
+                            (COND (\#LOC '\#1)
+                                  ('\#2))
+                            (COND (\#LOC '\#2)
+                                  ('\#1))
+                            '*TIME)))))))))
 
 (DEFS \#MANIP SYS (\#PHYSOB))
 
@@ -1783,12 +1784,12 @@
       ((2. '((THUSE TC-2))))
       EXPR
       (LAMBDA NIL
-	    (RELATION
-		  (RESTRICTIONS\: (((\#ANIMATE)) ((\#PHYSOB)))
-				  MARKERS\:
-				  (\#EVENT)
-				  PROCEDURE\:
-				  ((\#NAME \#2)))))
+       (RELATION
+        (RESTRICTIONS\: (((\#ANIMATE)) ((\#PHYSOB)))
+          MARKERS\:
+          (\#EVENT)
+          PROCEDURE\:
+          ((\#NAME \#2)))))
       SYS
       (\#SYSTEMS))
 
@@ -1799,40 +1800,40 @@
       ((2. '((THUSE TC-2))))
       EXPR
       (LAMBDA NIL
-	    (RELATION
-		  (RESTRICTIONS\: (((\#ANIMATE)) ((\#PHYSOB)))
-				  MARKERS\:
-				  (\#EVENT)
-				  PROCEDURE\:
-				  ((\#NOTICE \#2 *TIME))))))
+       (RELATION
+        (RESTRICTIONS\: (((\#ANIMATE)) ((\#PHYSOB)))
+          MARKERS\:
+          (\#EVENT)
+          PROCEDURE\:
+          ((\#NOTICE \#2 *TIME))))))
 
 (DEFS \#ON
       THMLIST
       ((3. '((THUSE TC-ON))) (4. '((THUSE TCT-ON))))
       EXPR
       (LAMBDA NIL
-	    (COND ((CQ LOBJ)
-		   (RELATION
-			 (RESTRICTIONS\: (((\#THING)) ((\#PHYSOB)))
-					 MARKERS\:
-					 (\#PLACE)
-					 PROCEDURE\:
-					 ((\#ON \#2)))))
-		  ((RELATION
-			 (RESTRICTIONS\: (((\#PHYSOB))
-					       ((\#PHYSOB)))
-					 PARAPHRASE\:
-					 (ANYWHERE ON TOP OF)
-					 PROCEDURE\:
-					 ((\#ON \#1 \#2 *TIME)))
-			 (RESTRICTIONS\: (((\#PHYSOB)) ((\#MANIP)))
-					 PARAPHRASE\:
-					 (DIRECTLY ON THE SURFACE)
-					 PROCEDURE\:
-					 ((\#SUPPORT \#2 \#1 *TIME)))
-			 (RESTRICTIONS\: (((\#PLACE)) ((\#PHYSOB)))
-					 PROCEDURE\:
-					 ((\#ON \#1 \#2))))))))
+       (COND ((CQ LOBJ)
+              (RELATION
+                (RESTRICTIONS\: (((\#THING)) ((\#PHYSOB)))
+                       MARKERS\:
+                       (\#PLACE)
+                       PROCEDURE\:
+                       ((\#ON \#2)))))
+        ((RELATION
+           (RESTRICTIONS\: (((\#PHYSOB))
+                            ((\#PHYSOB)))
+                  PARAPHRASE\:
+                  (ANYWHERE ON TOP OF)
+                  PROCEDURE\:
+                  ((\#ON \#1 \#2 *TIME)))
+           (RESTRICTIONS\: (((\#PHYSOB)) ((\#MANIP)))
+                  PARAPHRASE\:
+                  (DIRECTLY ON THE SURFACE)
+                  PROCEDURE\:
+                  ((\#SUPPORT \#2 \#1 *TIME)))
+           (RESTRICTIONS\: (((\#PLACE)) ((\#PHYSOB)))
+                  PROCEDURE\:
+                  ((\#ON \#1 \#2))))))))
 
 (DEFS \#PACK THMLIST ((3. '((THUSE TC-3)))))
 
@@ -1844,31 +1845,31 @@
 (DEFS \#PICKUP
       THMLIST
       ((2. '((THUSE TC-2))) (3. '((THUSE TCT-PICKUP)))
-			    (4. '((THUSE TCTE-PICKUP))))
+          (4. '((THUSE TCTE-PICKUP))))
       NAMEVENT
-      (I3 (CONS	(VBFIX 'PICK NIL)
-		(PRTPUT 'UP OBJ1))))
+      (I3 (CONS  (VBFIX 'PICK NIL)
+           (PRTPUT 'UP OBJ1))))
 
 (DEFS \#PLACE SYS (\#SYSTEMS))
 
 (DEFS \#PUT
       THMLIST
       ((3. '((THUSE TCT-3)))
-	    (4. '((THUSE TCT-PUT)))
-	    (5. '((THUSE TCTE-PUT)))))
+       (4. '((THUSE TCT-PUT)))
+       (5. '((THUSE TCTE-PUT)))))
 
 (DEFS \#PUTIN
       THMLIST
       ((3. '((THUSE TC-3))) (4. '((THUSE TCT-4)))
-			    (5. '((THUSE TCT-5)))))
+          (5. '((THUSE TCT-5)))))
 
 (DEFS \#PUTON
       NAMEVENT
-      (I4 (CONS	(VBFIX 'PUT T)
-		(APPEND OBJ1 '(ON) OBJ2)))
+      (I4 (CONS  (VBFIX 'PUT T)
+           (APPEND OBJ1 '(ON) OBJ2)))
       THMLIST
-      ((3. '((THUSE TC-3))) (4. '((THUSE TCT-4))) (5. '((THUSE TCTE-5))))
-      )
+      ((3. '((THUSE TC-3))) (4. '((THUSE TCT-4))) (5. '((THUSE TCTE-5)))))
+
 
 (DEFS \#RAISE THMLIST ((1. '((THUSE TC-RAISE)))))
 
@@ -1889,8 +1890,8 @@
 (DEFS \#PROPDEFINE
       EXPR
       (LAMBDA (X)
-	    (THSETF (G3T X 'FEATURES) '(PROPN NS)) ;CHANGED TO FEATURES FROM 'WORD' IN THE OLD
-	    (THSETF (G3T X 'SEMANTICS) '((PROPN T))))) ;DICTIONARY
+       (THSETF (G3T X 'FEATURES) '(PROPN NS)) ;CHANGED TO FEATURES FROM 'WORD' IN THE OLD
+       (THSETF (G3T X 'SEMANTICS) '((PROPN T))))) ;DICTIONARY
 
 (DEFS \#PROPERTY SYSTEM (\#COLOR \#SIZE \#SHAPE) SYS (\#THING))
 
@@ -1923,20 +1924,20 @@
       ((2. '((THUSE TC-2))))
       EXPR
       (LAMBDA NIL
-	    (RELATION
-		  (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
-				  MARKERS\:
-				  (\#EVENT)
-				  PROCEDURE\:
-				  ((\#STACKUP \#2 *TIME)))))
+       (RELATION
+        (RESTRICTIONS\: (((\#ANIMATE)) ((\#MANIP)))
+          MARKERS\:
+          (\#EVENT)
+          PROCEDURE\:
+          ((\#STACKUP \#2 *TIME)))))
       NAMEVENT
-      (I3 (CONS	(VBFIX 'STACK NIL)
-		(PRTPUT 'UP OBJ1))))
+      (I3 (CONS  (VBFIX 'STACK NIL)
+           (PRTPUT 'UP OBJ1))))
 
 (DEFS \#START
       THMLIST
       ((3. '((THUSE TC-STARTEND3)))
-	    (4. '((THUSE TC-STARTEND4)))))
+       (4. '((THUSE TC-STARTEND4)))))
 
 (DEFS \#SUBST NOGOAL T)
 
@@ -1959,7 +1960,7 @@
       ((1. '((THUSE TC-UNGRASP))))
       NAMEVENT
       (I3 (APPEND (LIST (VBFIX 'LET T) 'GO 'OF)
-		  OBJ1)))
+           OBJ1)))
 
 (DEFS \#WANT
       THMLIST
@@ -2017,44 +2018,44 @@
 
 (DEFS VB
     ELIM (VB MVB
-	     AUX
-	     QAUX
-	     MODAL
-	     WILL
-	     BE
-	     DO
-	     HAVE
-	     ING
-	     EN
-	     INF
-	     V3PS
-	     QUOTING
-	     VFS
-	     VPL
-	     PAST
-	     PRESENT
-	     NEG
-	     ITRNS
-	     TRANS
-	     TRANSL
-	     TRANS2
-	     TRANSL2
-	     INT
-	     ITRNSL
-	     INGOB
-	     TOOB
-	     SUBTOB
-	     REPOB
-	     INGOB2
-	     TOOB2
-	     SUBTOB2
-	     REPOB2
-	     VPRT
-	     TO2
-         TRANSINT
-         TOOB1
-         INGOB1
-         REPOB1))
+          AUX
+          QAUX
+          MODAL
+          WILL
+          BE
+          DO
+          HAVE
+          ING
+          EN
+          INF
+          V3PS
+          QUOTING
+          VFS
+          VPL
+          PAST
+          PRESENT
+          NEG
+          ITRNS
+          TRANS
+          TRANSL
+          TRANS2
+          TRANSL2
+          INT
+          ITRNSL
+          INGOB
+          TOOB
+          SUBTOB
+          REPOB
+          INGOB2
+          TOOB2
+          SUBTOB2
+          REPOB2
+          VPRT
+          TO2
+          TRANSINT
+          TOOB1
+          INGOB1
+          REPOB1))
 
 
 
@@ -2133,8 +2134,8 @@
       FIRSTWORD
       (BY)
       DAUGHTERS
-      (FAKE-AGENT FAKE-BY)
-      )
+      (FAKE-AGENT FAKE-BY))
+
 
 (DEFS FAKE-BY
       FEATURES
@@ -2294,21 +2295,21 @@
 (DEFS WE OSS WE-OSS)
 
 (DEFLIST CONTRAST
-	 (RED \#COLOR)
-	 (BLUE \#COLOR)
-	 (GREEN \#COLOR)
-	 (WHITE \#COLOR)
-	 (BLACK \#COLOR)
-	 (BIG \#SIZE)
-	 (LITTLE \#SIZE)
-	 (LARGE \#SIZE)
-	 (SMALL \#SIZE)
-	 (WIDE \#WIDTH)
-	 (NARROW \#WIDTH)
-	 (TALL \#HEIGHT)
-	 (SHORT \#HEIGHT)
-	 (THICK \#THICKNESS)
-	 (THIN \#THICKNESS))
- #|«Visual LISP© Format Options»
+   (RED \#COLOR)
+   (BLUE \#COLOR)
+   (GREEN \#COLOR)
+   (WHITE \#COLOR)
+   (BLACK \#COLOR)
+   (BIG \#SIZE)
+   (LITTLE \#SIZE)
+   (LARGE \#SIZE)
+   (SMALL \#SIZE)
+   (WIDE \#WIDTH)
+   (NARROW \#WIDTH)
+   (TALL \#HEIGHT)
+   (SHORT \#HEIGHT)
+   (THICK \#THICKNESS)
+   (THIN \#THICKNESS))
+#|ï¿½Visual LISPï¿½ Format Optionsï¿½
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

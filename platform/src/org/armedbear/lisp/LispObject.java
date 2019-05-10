@@ -1611,6 +1611,10 @@ public class LispObject
   @Override
   public String getStringValue()
   {
+    if(SubLMain.BOOTY_HACKZ) {
+      return toString();
+    }
+
     type_error( this, Symbol.STRING );
     // Not reached.
     return null;

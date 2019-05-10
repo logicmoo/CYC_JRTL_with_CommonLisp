@@ -55,7 +55,8 @@
 						 INTERPLIST))
 				     %SM))))
 								       ;WHEN THERE IS NO RESTLIST,
-	     (MAPCAR #'(LAMBDA (INTERP) (DECLARE (SPECIAL INTERP))
+	    (MAPCAR #'(LAMBDA (INTERP)
+			   (DECLARE (SPECIAL INTERP))
 	                                (SMCONJ2 (CONS INTERP
 						      INTERPLIST)
 								       ;WE HAVE LOOPED TO THE END OF
@@ -112,22 +113,8 @@
 								       ;QUESTION  BUT RATHER,
 		   ((SETDIF TENSE '(PAST PRESENT))
 								       ;IMPERATIVE
-		    (GLOBAL-ERR '(I DON\'T
-				    KNOW
-				    HOW
-				    TO
-				    HANDLE
-				    TENSES
-				    INVOLVING
-				    FUTURE
-				    EVENTS
-				    OR
-				    MODALS
-				    OTHER
-				    THAN
-				    IN
-				    THE
-				    PRESENT))))
+		   (GLOBAL-ERR
+			 '(I DON\'T KNOW HOW TO HANDLE TENSES INVOLVING FUTURE EVENTS OR MODALS OTHER THAN IN THE PRESENT))))
 	     (THSETF (G3T TSS_LOCAL1 'TENSE=) TENSE)
 	     (RETURN T)))
 
@@ -342,12 +329,14 @@
 								       ;TRY REL (I.E. QUESTION FOCUS
 	     (MOVE-PT LASTSENT DLC)
 								       ;) OF THE LAST SENTENCE. GO
-	UP   (COND ((NOT (MOVE-PT PV (NG))) (GO ON))
+	     UP
+	     (COND ((NOT (MOVE-PT PV (NG))) (GO ON))
 		   (ELSE (SMIT2 PT 64.)))
 								       ;THROUGH TOP LEVEL NG'S OF
 	     (AND (MOVE-PT PV) (GO UP))
 								       ;LAST SENTENCE
-	ON   (OR SM  ; IF WE HAVEN'T YET FOUND A
+	     ON
+	     (OR SM ; IF WE HAVEN'T YET FOUND A
 		 (MAPL #'(LAMBDA (ANSNODE) (SMIT2 ANSNODE 0.))
 								       ;REFERENT MAP DOWN THE ANSREF
 		      ANSNAME))
@@ -358,11 +347,12 @@
 								       ;REFERENT MAP DOWN THE
 		  BACKREF2))
 								       ;BACKREF2 (NG'S IN LAST
-	DONE (THSETF (G3T PRONOUN 'BIND) CANDIDATES)
+	     DONE
+	     (THSETF (G3T PRONOUN 'BIND) CANDIDATES)
 								       ;SENTENCE) LIST
 	     (OR (CDR SM) (REMPROP (CAR SM) 'AMBIGUITIES=))
 	     (RETURN SM)))
-
+
 (DEFUN SMIT2 (NODE PLAUSIBILITY)
        (DECLARE (SPECIAL NODE PLAUSIBILITY))
        (AND
@@ -415,10 +405,10 @@
 								       ; DONE SO THAT IF VARIBLE IS BOUND, PLANNER
 				       (VARIABLE? REFERENT-OSS)))))
 								       ;GENERATOR WILL USE IT  RELATION SAYS
-	   (SM NODE));THAT THIS OSS "REFERS" TO
+				    (SM NODE)) ;THAT THIS OSS "REFERS" TO
 	  SM))))     ;THE OSS WHOSE VARIABLE NAME IS GIVEN END OF
 								       ;BUILD-SHRDLU
-
+
 (DEFUN SMNGOF NIL
        ;; USED TO PROCESS NOUN GROUPS LIKE= "THREE OF THE BLOCKS"
        ;;"BOTH OF THEM"
@@ -463,7 +453,7 @@
 								       ;INTERPRETATIONS
 
 ;;;=============================================================
-
+
 (DEFUN SMNG1 NIL
 
        ;;; SMNG1 IS CALLED AS SOON AS TJHE HEAD OF A NOUN GROUP IUS
@@ -502,7 +492,7 @@
 			 (COND ((CQ HOWMANY) 'HOWMANY)
 			       ((CQ QDET) 'WHICH))))
 
-	     ;;;
+;;;
 	     (SMSET (LIST (BUILD-SHRDLU OSSNODE=
 				 (MAKESYM 'OSS)
 				 PARSENODE=
@@ -527,7 +517,8 @@
 								       ;ITS WAS EVALED ABOVE SO SKIP
 	     (SMSET (EVAL (SM WORD-BEING-INTERPRETED)))
 								       ;INCOMPLETES SUCH AS "PICK UP
-	LOOP (COND ((NULL SM) (RETURN NIL)))
+		  LOOP
+		  (COND ((NULL SM) (RETURN NIL)))
 								       ;TWO" EVAL THE HEAD NOUN IF
 	     (COND ((NULL (SETQ WORD-BEING-INTERPRETED
 				(CDR WORD-BEING-INTERPRETED)))
@@ -574,7 +565,7 @@
        (SMSET (MAPBLAND #'SMNG3 SM)))
 								       ;FOR POSSIBLE LATER BACK REFERENCE  GO THRU ALL
 		       ;THE POSSIBLE INTERPRETATIONS OF THIS NOUN GROUP
-
+
 (DEFUN SMNG3 (OSS)
        ;; TAKES AN OSS AS ARGUMENT AND TRIES TO FIND ITS REFERENCE IF
        ;;THE NOUN GROUP IS DEFINITE.  EXCEXT FOR SPECIAL "ONLY
@@ -600,7 +591,8 @@
 								       ; BUILDS UP THFIND EXPRESSION
 	     (THSETF (G3T OSS 'PLNRCODE=) FINDER)
 	     (SETQ WHO NIL)
-	UP   (COND ((NOT (SETQ CANDIDATES (THVAL2 WHO FINDER)))
+		  UP
+		  (COND	((NOT (SETQ CANDIDATES (THVAL2 WHO FINDER)))
 		    (GO TOOFEW))
 		   ((NUMBERP (NUMBER? OSS))
 		    (COND ((< (LENGTH CANDIDATES) (NUMBER? OSS))
@@ -614,9 +606,10 @@
 		   ((MEMQ (NUMBER? OSS) '(NPL SG-PL)))
 		   ((ERT SMNG3= SCREWY NUMBER PROPERTY OF OSS)))
 
-	     ;;;
+;;;
 	     (THSETF (G3T OSS 'REFER=) CANDIDATES)
-	DONE (RETURN OSS)
+		  DONE
+		  (RETURN OSS)
 
 	     ;;;
 	TOOFEW       ; WE DIDN'T FIND ANY (OR
@@ -683,7 +676,7 @@
 		      (SMONE2 (LIST (CAR PT))))
 		 (ERT SMONE= CAN\'T FIND REFERENT FOR \"ONE\"))
 	     (RETURN SM)))
-
+
 (DEFUN SMONE2 (X)
        ;; SMONE2 TAKES IN A LIST OF NOUN GROUP NODES AND TRIES TO SEE
        ;;IF ANY OF THOSE NOUN GROUPS COULD BE THE REFERENT FOR "ONE".
@@ -745,7 +738,7 @@
 		   ((SETQ X (CDR X)) (GO LOOK))
 		   (ELSE (RETURN NIL)))))
 								       ; FAIL IF NO WORD SUPPLYS CONTRAST
-
+
 (DEFUN SMPOSS NIL
        (PROG (X)
 	     (RETURN (AND (SETQ X (SMPOSS2 C (MOVE-PT H PV (POSS))))
@@ -765,7 +758,7 @@
 ;;WHICH HAS ALREADY BEEN SEMANTICALLY PROCESSED.  ITS SM CONTAINS THE OSS'S FOR WHOSE DOING THE POSSESSING.
 ;;THE SM CURRENTLY ACTIVE IS THE THING BEING POSSESSED.
 ;;;=============================================================
-
+
 (DEFUN SMRELATE (NODE)
        ;; RELATES A DESCRIPTIVE RSS TO ANOTHER RSS OR OSS ADDING IT
        ;;TO THE LIST OF RELATIONS.  IT TAKES THE LIST OF SS IN SM,
@@ -852,9 +845,11 @@
 								       ;TRANSITIVITY OF THE VERB ARE
 	     (OR SMCOMP (AND (CQ INT) (GO CHECK)))
 								       ;BEING MATCHED IN EVERY CASE.
-	     (GO REL)
-	CHECK(ERT BUG\: SMCL1 TRANSITIVITY)
-	REL  (SETQ RELLIST
+		(GO REL)
+		  CHECK
+		  (ERT BUG\: SMCL1 TRANSITIVITY)
+		  REL
+		  (SETQ RELLIST
 		   (SM (COND ((CQ RSQ) (GETR 'RELHEAD C))
 			     ((OR (CQ PREPG) (CQ ADJG))
 			      (GETR 'LOGICAL-SUBJECT C))
@@ -1010,16 +1005,7 @@
        	     (DECLARE (SPECIAL TSS))
 	     (AND (CDR (SM H))
 								       ;does the sm have more than
-		  (ERT I
-			   DON\'T
-			   KNOW
-			   WHAT
-			   TO
-			   DO
-			   WITH
-			   AMBIGUOUS
-			   BOUND
-			   CLAUSES))
+							   (ERT I DON\ 'T KNOW WHAT TO DO WITH AMBIGUOUS BOUND CLAUSES))
 								       ;one value???
 	     (COND ((ISQ (MOVE-PT H DF) TIME)
 								       ;dispatch table to match the appropriate action
@@ -1045,3 +1031,7 @@
        ;;SPECIFICATION ON WHEN IT ENDS.
        (THSETF (G3T TSS 'START=) START-EV)
        (THSETF (G3T TSS 'END=) END-EV))
+					
+ #|«Visual LISP© Format Options»
+(200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
+;*** DO NOT add text below the comment! ***|#

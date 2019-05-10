@@ -9,81 +9,81 @@
 
 (DEFUN-FEXPR THTRACE (L) (MAPC #'THTRACE1 L))
 
-(DEFUN THTRACE1	 (X)
+(DEFUN THTRACE1   (X)
       (PROG (Y)
  ;VARIETY OF POSSIBLE INPUT FORMATS TRANSFORMED TO STANDARD
  ;3 ELEMENT LIST (OBJECT-TO-BE-TRACED TRACE-CONDITION BREAK CONDITION)
-	    (SETQ X (COND ((ATOM X) (LIST X T NIL))
-			  ((CDDR X) X)
-			  ((NULL (CDR X))
-			   (PRINT X)
-			   (PRINC 'BAD\ FORMAT)
-			   (RETURN NIL))
-			  ((LIST (CAR X) (CADR X) NIL))))
+       (SETQ X (COND ((ATOM X) (LIST X T NIL))
+                ((CDDR X) X)
+                ((NULL (CDR X))
+                 (PRINT X)
+                 (PRINC 'BAD\ FORMAT)
+                 (RETURN NIL))
+                ((LIST (CAR X) (CADR X) NIL))))
 
  ;IF OBJECT-TO-BE-TRACED IS A PARTICULAR THEOREM, THEN THE TRIPLET
  ;'(THEOREM (THSEL 'CADR)(THSEL 'CADDDR)) IS GUARANTEED TO
  ;BE ON THTRACE IN ADDITION TO THE STANDARD TRIPLET
-	    (COND ((THGET (CAR X) 'THEOREM)
-		   (COND ((SETQ Y (ASSQ 'THEOREM THTRACE))
-			  (RPLACD Y
-				  '((THSEL 'CADR)
-				    (THSEL 'CADDR))))
-			 ((SETQ	THTRACE
-				     (LIST X
-					   (APPEND '(THEOREM
-						     (THSEL 'CADR)
-						     (THSEL 'CADDR))
-						   THTRACE)))))))
+       (COND ((THGET (CAR X) 'THEOREM)
+              (COND ((SETQ Y (ASSQ 'THEOREM THTRACE))
+                     (RPLACD Y
+                          '((THSEL 'CADR)
+                            (THSEL 'CADDR))))
+                ((SETQ  THTRACE
+                         (LIST X
+                             (APPEND '(THEOREM
+                                       (THSEL 'CADR)
+                                       (THSEL 'CADDR))
+                                    THTRACE)))))))
 
  ;THTRACE IS UPDATED. IF THE OBJECT-TO-BE-TRACED IS ALREADY ON
  ;THTHRACE THEN THE TRACE AND BREAK CONDITIONS ARE UPDATED.
  ;ELSE THE WHOLE TRIPLET IS PLACED ON THTRACE
-	    (COND ((SETQ Y (ASSQ (CAR X) THTRACE)) (RPLACD Y (CDR X)))
-		  ((SETQ THTRACE (CONS X THTRACE))))
+       (COND ((SETQ Y (ASSQ (CAR X) THTRACE)) (RPLACD Y (CDR X)))
+        ((SETQ THTRACE (CONS X THTRACE))))
 
-	    (RETURN X)))
+       (RETURN X)))
 
 
  ;THUNTRACE REMOVES ELEMENTS OF ITS ARG FROM THTRACE
  ;IF NOT GIVEN ANY ARGS, THUNTRACE SETS THTRACE TO NIL
 (DEFUN-FEXPR THUNTRACE
-	     (L)
-	     (COND (L
-		    (SETQ THTRACE (MAPCAN #'(LAMBDA (X)
-						 (COND ((MEMQ (CAR X) L)
-							(PRINT X)
-							NIL)
-						       ((LIST X))))
-					  THTRACE)))
-		   ((MAPC #'PRINT THTRACE) (SETQ THTRACE NIL)))
-	     'DONE)
+       (L)
+       (COND (L
+              (SETQ THTRACE (MAPCAN #'(LAMBDA (X)
+                                       (COND ((MEMQ (CAR X) L)
+                                              (PRINT X)
+                                              NIL)
+                                             ((LIST X))))
+                             THTRACE)))
+        ((MAPC #'PRINT THTRACE) (SETQ THTRACE NIL)))
+       'DONE)
  ;THTRACES IS ACTIVATED BY THGOAL, THASSERT, ... IF THTRACE IS NON-NIL
  ;THF IS SET TO THE PARTICULAR CANDIDATE FOR TRACEAGE, E.G.
  ;TO 'THGOAL IF THE PLANNER FUNCTION THGOAL ACTIVATED THTRACES
  ;THL = THE INSTANTIATED ARG OF THF. SEE DESC OF X ON NEXT PAGE
 
-(DEFUN THTRACES	 (THF THL)
+(DEFUN THTRACES   (THF THL)
       (PROG (THY THZ THB)
-	    (AND
+       (AND
  ;THY SET TO TRIPLET ON THTRACE. IF NOT THERE, NO TRACING
-		  (SETQ THY (ASSOC THF THTRACE :TEST #'EQUAL))
+        (SETQ THY (ASSOC THF THTRACE :TEST #'EQUAL))
 
  ;IF BOTH TRACE AND BREAK ARE FALSE, DON'T TRACE
  ;SIDE EFFECT - THB SET TO VALUE OF BREAK
-		  (OR (SETQ THB (THVAL (CADDR THY) THALIST))
-		      (THVAL (CADR THY) THALIST))
+        (OR (SETQ THB (THVAL (CADDR THY) THALIST))
+            (THVAL (CADR THY) THALIST))
 
  ;THZ IS SET TO THE TRACE FUNCTION FOR THE OBJECT-TO-BE-TRACED
-		  (OR (SETQ THZ (THGET THF 'THTRACE))
-		      (THERT THTRACES - TRACE LOSSAG))
+        (OR (SETQ THZ (THGET THF 'THTRACE))
+            (THERT THTRACES - TRACE LOSSAG))
 
  ;THE TRACE FN IS EXECUTED
-		  (APPLY THZ (LIST THL THB))
+        (APPLY THZ (LIST THL THB))
 
  ;IF THB IS NON-NIL, BREAK
-		  THB
-		  (THERT))))
+        THB
+        (THERT))))
 
  ;THE CAR OF THE TREE IS '(THTRACES NAME-OF-TRACE-POINT OPTIONAL-PRINT-OF-THVALUE (THERT)-OR-NIL)
  ;THUS, THESE TWO FNS PRINT THE NAME OF THE TRACE POINT, "FAIL"-OR-"SUCCEED"
@@ -93,20 +93,20 @@
 (DEFS THTRACES
       THFAIL
       #'(LAMBDA NIL
-	     (PRINT (CADAR THTREE))
-	     (PRINC 'FAILED\ )
-	     (EVLIS (CDDAR THTREE))
-	     (THPOPT)
-	     NIL))
+         (PRINT (CADAR THTREE))
+         (PRINC 'FAILED\ )
+         (EVLIS (CDDAR THTREE))
+         (THPOPT)
+         NIL))
 
 (DEFS THTRACES
       THSUCCEED
       #'(LAMBDA NIL
-	     (PRINT (CADAR THTREE))
-	     (PRINC 'SUCCEEDED\ )
-	     (EVLIS (CDDAR THTREE))
-	     (THPOPT)
-	     THVALUE))
+         (PRINT (CADAR THTREE))
+         (PRINC 'SUCCEEDED\ )
+         (EVLIS (CDDAR THTREE))
+         (THPOPT)
+         THVALUE))
 
  ;THE TRACE FNS THBKPT, THGOAL, THEOREM, THASSERT, AND THERASE PUSH ONTO THE TREE
  ;'(THTRACES NAME-OF-TRACE-POINT OPTIONAL-PRINT-OF-THVALUE (THERT)-OR-NIL)
@@ -116,69 +116,69 @@
 (DEFS THBKPT
       THTRACE
       #'(LAMBDA (X B)
-	     (THPUSH THTREE
-		     (LIST 'THTRACES
-			   (THGENS B)
-			   (AND B '(THERT))))
-	     (THPRINTC 'PASSING\ BKPT)
-	     (PRIN1 (CADAR THTREE))
-	     (PRINC '\ )
+         (THPUSH THTREE
+            (LIST 'THTRACES
+              (THGENS B)
+              (AND B '(THERT))))
+         (THPRINTC 'PASSING\ BKPT)
+         (PRIN1 (CADAR THTREE))
+         (PRINC '\ )
  ;BY SETTING THBRANCH AND THABRANCH, A TRIPLE IS CREATED
  ;BY THVAL FOR BACKTRACKING.  THEN, THE TREE IS POPPED
  ;TO PREVENT THTRACES FROM TYPING OUT THE MEANINGLESS
  ;THAT THE BREAKPOINT SUCCEEDED.
-	     (SETQ THBRANCH THTREE)
-	     (SETQ THABRANCH THALIST)
-	     (THPOPT)
-	     (PRIN1 X)))
+         (SETQ THBRANCH THTREE)
+         (SETQ THABRANCH THALIST)
+         (THPOPT)
+         (PRIN1 X)))
 
 (DEFS THGOAL
       THTRACE
       #'(LAMBDA (X B)
-	     (THPUSH THTREE
-		     (LIST 'THTRACES
-			   (THGENS G)
-			   '(AND THVALUE (PRIN1 THVALUE))
-			   (AND B '(THERT))))
-	     (THPRINTC 'TRYING\ GOAL)
-	     (PRIN1 (CADAR THTREE))
-	     (PRINC '\ )
-	     (PRIN1 X)))
+         (THPUSH THTREE
+            (LIST 'THTRACES
+              (THGENS G)
+              '(AND THVALUE (PRIN1 THVALUE))
+              (AND B '(THERT))))
+         (THPRINTC 'TRYING\ GOAL)
+         (PRIN1 (CADAR THTREE))
+         (PRINC '\ )
+         (PRIN1 X)))
 
 (DEFS THEOREM
       THTRACE
       #'(LAMBDA (X B)
-	     (THPUSH THTREE
-		     (LIST 'THTRACES
-			   X
-			   '(AND THVALUE (PRIN1 THVALUE))
-			   (AND B '(THERT))))
-	     (THPRINTC 'ENTERING\ THEOREM)
-	     (PRIN1 X)))
+         (THPUSH THTREE
+            (LIST 'THTRACES
+              X
+              '(AND THVALUE (PRIN1 THVALUE))
+              (AND B '(THERT))))
+         (THPRINTC 'ENTERING\ THEOREM)
+         (PRIN1 X)))
 
 (DEFS THASSERT
       THTRACE
       #'(LAMBDA (X B)
-	     (THPUSH THTREE
-		     (LIST 'THTRACES
-			   (THGENS A)
-			   (AND B '(THERT))))
-	     (PRINT 'ASSERTING)
-	     (PRIN1 (CADAR THTREE))
-	     (PRINC '\ )
-	     (PRIN1 X)))
+         (THPUSH THTREE
+            (LIST 'THTRACES
+              (THGENS A)
+              (AND B '(THERT))))
+         (PRINT 'ASSERTING)
+         (PRIN1 (CADAR THTREE))
+         (PRINC '\ )
+         (PRIN1 X)))
 
 (DEFS THERASE
       THTRACE
       #'(LAMBDA (X B)
-	     (THPUSH THTREE
-		     (LIST 'THTRACES
-			   (THGENS E)
-			   (AND B '(THERT))))
-	     (PRINT 'ERASING)
-	     (PRIN1 (CADAR THTREE))
-	     (PRINC '\ )
-	     (PRIN1 X)))
+         (THPUSH THTREE
+            (LIST 'THTRACES
+              (THGENS E)
+              (AND B '(THERT))))
+         (PRINT 'ERASING)
+         (PRIN1 (CADAR THTREE))
+         (PRINC '\ )
+         (PRIN1 X)))
 
  ;UTILITY FNS
 
@@ -197,22 +197,22 @@
 
 (DEFUN THSEL  (THF)
       (PROG (THX)
-	    (RETURN (AND (SETQ THX (ASSQ THL THTRACE))
-			 (SETQ THX (THF THX))
-			 (THVAL THX THALIST)))))
+       (RETURN (AND (SETQ THX (ASSQ THL THTRACE))
+                (SETQ THX (THF THX))
+                (THVAL THX THALIST)))))
 
 
  ;MAKES A NAME WITH PREFIX X AND SUFFIX A UNIQUE NUMBER
 (DEFUN-FEXPR THGENS
-	     (X)
-	     (MAKNAM (NCONC (EXPLODE (CAR X))
-			    (EXPLODE (SETQ THGENS (+ 1 THGENS))))))
+       (X)
+       (MAKNAM (NCONC (EXPLODE (CAR X))
+                (EXPLODE (SETQ THGENS (+ 1 THGENS))))))
 
 (SETQ THGENS 0)
 
 
  ; removed thprintc - also defined in plnr.lisp -ts.
 ;; (DEFUN THPRINTC (X) (TERPRI) (PRINC X) (PRINC '\ ))
-#|«Visual LISP© Format Options»
+#|ï¿½Visual LISPï¿½ Format Optionsï¿½
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

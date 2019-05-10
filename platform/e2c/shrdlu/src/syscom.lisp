@@ -679,6 +679,6 @@
       (SETQ PLANNERSEE NIL)
       (SETQ SH-STANDARD-PRINTOUT NIL)
       (SETQ ANNOYANCE T))
-#|«Visual LISP© Format Options»
+#|ï¿½Visual LISPï¿½ Format Optionsï¿½
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

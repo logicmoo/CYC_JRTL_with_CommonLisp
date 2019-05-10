@@ -2197,6 +2197,6 @@
 (SETQ THTREE NIL)
 (SETQ THLEVEL NIL)
 
-#|  Visual LISP© Format Options»
+#|  Visual LISPï¿½ Format Optionsï¿½
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

@@ -1,8 +1,8 @@
 (defpackage "SHRDLU"
-	    (:use "COMMON-LISP")
-	    (:shadow
-	     ;; "REST" ;; "AND" "SPECIAL" "OR"
-	     ))
+      (:use "COMMON-LISP")
+      (:shadow))
+       ;; "REST" ;; "AND" "SPECIAL" "OR"
+
 
 (setq *print-length* nil
       *print-level* nil)
@@ -24,9 +24,9 @@
 (DEFCONSTANT CHRCT 76)
 
 (let ((*DEFAULT-PATHNAME-DEFAULTS*
-	    (make-pathname
-		  :directory
-		  (pathname-directory *load-pathname*))))
+       (make-pathname
+        :directory
+        (pathname-directory *load-pathname*))))
 
      (load "asktell.lisp")
      (load "fixes.lisp")
@@ -49,9 +49,9 @@
      (load "mover.lisp")
      (load "remote.lisp")
 
-     (setq *SHRDLU-PATHNAME* *DEFAULT-PATHNAME-DEFAULTS*)
+     (setq *SHRDLU-PATHNAME* *DEFAULT-PATHNAME-DEFAULTS*))
 
-     )
+
 
  ; Set either (DEBUGMODE) or (USERMODE) here.
 (USERMODE)
@@ -65,6 +65,6 @@
  ; Start the program
 (INITIALSTUFF 'UMR-1.0 NIL)
 
-#|«Visual LISP© Format Options»
+#|ï¿½Visual LISPï¿½ Format Optionsï¿½
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

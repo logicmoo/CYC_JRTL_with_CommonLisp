@@ -8,13 +8,13 @@
 ;;;********************************************************************************
 
 ;; my experimental version...
-(defun etao  nil
+(defun etao_UNUSED  nil
       (prog (WORD NEWWORD CHAR ALTN ALREADY-BLGING-NEWWRD WRD LAST NEXT Y WORD1 X RD POSS)
 	    THRU
 	    (SETQ SENT (SETQ WORD (SETQ PUNCT (SETQ POSS NIL))))
 	    (PRINT 'READY)
 	    (TERPRI)
-	    CHAR
+	  CHAR
 	    (COND ((EQUAL (PEEK-CHAR) #\~)
 		   (READ-CHAR)
 		   (ERT)
@@ -252,15 +252,16 @@
 											  'SEMANTICS)
 										   ROOT)
 									(CONS POSS SENT))
-				((BUILDWORD '\"S               ;; "
+	      ((BUILDWORD '\"S               ;; "
  ; CAN WE GENERALIZE IT???
 										   '(VB BE V3PS PRES)
 										   (THGET 'BE
 											  'SEMANTICS)
 										   'BE)
-				 (CONS '\"S (CONS WRD SENT)))))    ;; "
+				                  (CONS '\"S (CONS WRD SENT)))))    ;; "
 									      ((CONS WRD SENT))))
-	PUNC (COND
+              PUNC
+                                 (COND
 									(PUNCT (COND ((AND (EQ PUNCT '?) (NULL SENT))
 										      (HELP)
 										      (GO THRU))
@@ -273,7 +274,7 @@
 								       (SETQ PUNCT NIL)
 								       (SETQ WORD (SETQ POSS NIL))
 								       (GO CHAR)
-								       NO
+					 NO
 								       (COND
 									(NEWWORD (BUILDWORD WRD
 											    '(NOUN NS)

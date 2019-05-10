@@ -1,9 +1,9 @@
 (defpackage testme
-	    (:use :common-lisp)
-	    (:export hello-world))
+      (:use :common-lisp)
+      (:export hello-world))
 (defun testme:hello-world () (print "hello"))
 (testme:hello-world)
 
-#|«Visual LISP© Format Options»
+#|ï¿½Visual LISPï¿½ Format Optionsï¿½
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

@@ -1,6 +1,7 @@
 
 (in-package :CL-USER)
-(defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
+
+' (defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
 (let ((*PACKAGE* *PACKAGE*))
   (cl:load "e2c/hash-dollar.lisp"))
 
@@ -9,6 +10,14 @@
   (print1 "#." stream)
     (write `(find-class ',(class-name obj)) :stream stream :readably t))
 
+
+;; (load "../slime/start-swank.lisp")
+ ;; Load swank.
+ (load "../slime/swank-loader.lisp")
+ (swank-loader:init)
+ (swank:create-server :port 4005
+                       :style swank:*communication-style*
+                       :dont-close t)
 
 
 ;; Starts AppdapterGUI
@@ -24,13 +33,14 @@
 ;; (swipl-init-server)
 
 (require :abcl-contrib)
-'(require :jss)
+;; (require :jss)
+
 
 (pushnew :use-cyc *features*)
 ;; (pushnew :use-dd *features*)
 
 ;; Do ansi tests
-(defun dat ()
+(defun cyc-ansi ()
   (let ((*default-pathname-defaults*
     (merge-pathnames "../old-ansi-tests/"))) (load "doit.lsp")))
 
@@ -111,5 +121,7 @@
 ;; (prolog-query-once "rn")
 
 '(osim)
+
+
 
 
