@@ -6,7 +6,7 @@
       (parsings))
 
 (defun parsings	 nil
-      (printc '\ \ ratio\ of\ winning\ parses\ to\ total\ )
+      (printc "  ratio of winning parses to total ")
       (princ (THGET 'parsings 'wins))
       (princ '/)
       (princ parsings))
@@ -63,7 +63,7 @@
 				       (SETQ BODY (CDR (THGET X 'INTERPRET))))
 				      ((THGET X 'EXPR)
 				       (SETQ BODY (CDDR (CADDR (THGET X 'EXPR)))))
-				      (T (PRINC 'CAN\'T\ BE-) (GO TRACED)))
+				      (T (PRINC "CAN'T BE-") (GO TRACED)))
 				(MAPL #'(LAMBDA (Y)
 					     (AND (ATOM (CAR Y))
 						  (RPLACD Y
@@ -101,7 +101,7 @@
 			  (PROG	(BODY)
 				(PRINT X)
 				(COND ((NOT (THGET X 'LABELTRACED))
-				       (PRINC 'ISN\'T\ ALLREADY-)
+				       (PRINC "ISN'T ALLREADY-")
 				       (GO TRACED))
 				      ((THGET X 'INTERPRET)
 				       (SETQ BODY (CDR (THGET X
@@ -110,7 +110,7 @@
 				       (SETQ BODY (CDDR	(CADDR (THGET X
 								      'EXPR)))))
 				      (T
-				       (PRINC 'CAN\'T\ BE-)
+				       (PRINC "CAN'T BE-")
 				       (GO TRACED)))
 				(MAPL '(LAMBDA (Y)
 					     (AND (ATOM (CAR Y))
@@ -136,14 +136,14 @@
       (TERPRI)
       (TAB COL)
       (PRINC EV)
-      (PRINC '\ \ )
+      (PRINC "  ")
       (PRINC (THGET EV 'TYPE))
-      (PRINC '\ \ TIME\:\ )
+      (PRINC "  TIME: ")
       (PRINC (THGET EV 'START))
-      (PRINC '\ TO\ )
+      (PRINC " TO ")
       (PRINC (THGET EV 'END))
       (AND TOP
-	   (PRINC '\ REASON\:\ )
+	   (PRINC " REASON: ")
 	   (PRINC (THGET EV 'WHY)))
       (MAPC #'(LAMBDA (X)
 		   (AND	(EQ EV (THGET X 'WHY))
@@ -185,15 +185,15 @@
       (PROG (PLANNERSEE)
 	    (TERPRI)
 	    (TAB 16.)
-	    (PRINC 'CURRENT\ SCENE)
+	    (PRINC "CURRENT SCENE")
 	    (TERPRI)
 	    (TERPRI)
 	    (MAPC
 		  #'(LAMBDA (OBJ)
 			 (PRINT OBJ)
-			 (PRINC '-->\ \ )
+			 (PRINC "-->  ")
 			 (EVLIS (CAR (NAMEOBJ OBJ 'DESCRIBE)))
-			 (PRINC '\ AT\ )
+			 (PRINC " AT ")
 			 (PRINC (CADR (ASSOC OBJ ATABLE)))
 			 (AND (SETQ OBJ
 					 (THVAL	'(THFIND
@@ -206,12 +206,12 @@
 						    (THV X))))
 						(LIST (LIST 'OBJ OBJ))))
 			      (TAB 13.)
-			      (PRINC 'SUPPORTS\ )
+			      (PRINC "SUPPORTS ")
 			      (PRINC OBJ)))
 		  '(:B1 :B2 :B3 :B4 :B5 :B6 :B7 :B10 :BOX))
 	    (TERPRI)
 	    (SAY THE HAND IS GRASPING)
-	    (PRINT3 '\ )
+	    (PRINT3 " ")
 	    (PRINT3 (COND ((SETQ OBJ
 				      (THVAL '(THGOAL (\#GRASPING (THNV X)))
 					     '((X THUNBOUND))))
@@ -233,7 +233,7 @@
       (COND ((NULL A) (SHOWTELLCHOICE))
 	    ((THGET (CAR A) ACTION)
 	     (APPLY (EVAL (THGET (CAR A) ACTION)) (LIST A)))
-	    ((PRINTEXT '(I DON\'T KNOW HOW TO))
+	    ((PRINTEXT '("I DON'T KNOW HOW TO"))
 	     (PRINT2 ACTION)
 	     (PRINT2 (CAR A))))
       '*)
@@ -270,7 +270,7 @@
 			       (ERR NIL))
 			  (RETURN (CAR CH2)))))
 		  ((CHAR= CHAR #\Newline) (GO READ))
-		  ((CHAR= CHAR #\?) (PRINTEXT HELP) (GO CHOICES)))
+		  ((CHAR= CHAR #\QUESTION_MARK) (PRINTEXT HELP) (GO CHOICES)))
 	    (SETQ CH3 NIL
 		  EX3 NIL)
 	    (MAPC #'(LAMBDA (X Y)
@@ -300,7 +300,7 @@
 		   (READ-CHAR)
 		   (GO READ))
 		  ((EQUAL (PEEK-CHAR) 10.) (READ-CHAR) (RETURN NIL))
-		  ((EQ (ASCII (PEEK-CHAR)) '?)
+		  ((EQ (ASCII (PEEK-CHAR)) '|?|)
 		   (READ-CHAR)
 		   (PRINTEXT (OR HELP
 				 '(NO INFORMATION AVAILABLE)))
@@ -852,7 +852,7 @@
 		   (RETURN T)))
 
 (DEFUN HELP  NIL
-      (COND ((EQ 'S
+      (COND ((EQ '|S|
 		 (QUERY	'(TYPE
 			  L
 			  FOR

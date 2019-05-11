@@ -50,7 +50,7 @@
                 (RETURN (ERT)))
                (T (RETURN T))))
         (AND  SMNTRACE
-         (PROGN (PRINTC '\ \ CALLSM\:\ )
+         (PROGN (PRINTC "  CALLSM: ")
                 (PRINC (CAR SEMANTIC-EXPRESSION))))
         (SETQ MPLNR-TIME 0.)
         (SETQ GC    0
@@ -67,7 +67,7 @@
                 0))
         (SETQ MP-TIME (+ MP-TIME MPLNR-TIME))
         (AND  SMNTRACE
-         (PROGN (PRINTC 'CALLSM\ RETURNING\:\ )
+         (PROGN (PRINTC "CALLSM RETURNING: ")
                 (PRINC RESULT)))
         (COND ((OR (EQ SMNBREAKS 'ALL)
                 (MEMQ SMNFN SMNBREAKS))
@@ -85,17 +85,17 @@
         LOOK1
         (SETQ XX (CAR EXEC))
         LOOK
-        (COND ((EQ XX 'H)
+        (COND ((EQ XX '|H|)
                (OR (SETQ PT H) (GO FAIL))
                (GO EX))
-         ((EQ XX 'C) (SETQ PT C) (GO EX))
+         ((EQ XX '|C|) (SETQ PT C) (GO EX))
          ((EQ XX 'PC)
           (SETQ PT (H (PARENT C)))
           (GO EX))
          ((EQ XX 'LASTSENT)
           (SETQ PT LASTSENT)
           (GO EX))
-         ((EQ XX 'U)
+         ((EQ XX '|U|)
           (OR (SETQ PT (PARENT PT)) (GO FAIL)))
          ((EQ XX 'DLC)
           (OR (SETQ PT (H PT)) (GO FAIL)))
@@ -142,7 +142,7 @@
         LOOK1
         (SETQ XX (CAR EXEC))
         LOOK
-        (COND ((EQ XX 'N) (SETQ PTW N))
+        (COND ((EQ XX '|N|) (SETQ PTW N))
          ((EQ XX 'LASTSENT) (SETQ PTW (NB LASTSENT)))
          ((EQ XX 'FW) (SETQ PTW (NB PT)))
          ((EQ XX 'AW)
@@ -306,7 +306,7 @@
        (SETQ PARENT C)
        (COND ((NQ B-SPECIAL)
               (AND  PARSETRACE
-               (PROGN (PRINTC '\ \ SPECIAL\ WORD)
+               (PROGN (PRINTC "  SPECIAL WORD")
                       (PRINC (CAR N))
                       (TERPRI)))
               (EVAL (GETR 'B-SPECIAL N))))
@@ -317,7 +317,7 @@
         (PROGN  (TERPRI)
            (PRINC '\>)
            (PRINC LEVEL)
-           (PRINC '\ ####\ PARSING\:\ )
+           (PRINC " #### PARSING: ")
            (PRINC R3ST)))
        (COND ((NULL (SETQ RE (APPLY-GRAMMAR UNIT))) ;THIS IS WHERE ALL THE WORK HAPPENS. IF THE
               (SETQ RE NIL) ;PARSE SUCEEDS, IT WILL RETURN THE NODE THAT HAS
@@ -345,9 +345,9 @@
               (TERPRI)
               (PRINC '>)
               (PRINC LEVEL)
-              (PRINC '\ PARSE\ SUCEEDED\:\ )
+              (PRINC " PARSE SUCEEDED: ")
               (PRINC UNIT)
-              (PRINC '\ \ )
+              (PRINC "  ")
               (PRINC (FROM (NB RE) N))
               (AND PARSENODE-SEE (DP (CAR RE)))
               (AND  (OR (EQ PARSEBREAK 'ALL)
@@ -357,7 +357,7 @@
          (TERPRI)
          (PRINC '\>)
          (PRINC LEVEL)
-         (PRINC '\ PARSE\ FAILED)
+         (PRINC " PARSE FAILED")
          (AND  (OR (EQ PARSEBREAK 'ALL)
                 (MEMQ UNIT PARSEBREAK))
           (ERT))))
@@ -542,6 +542,6 @@
       (AND (MOVE-PT C U (REL-NOT-FOUND))
        (NOT  (MEET (FE PT)
               '(OBJ1Q OBJ1REL OBJ2Q OBJ2REL LOBREL LOBQ)))))
-#|�Visual LISP� Format Options�
+#| Visual LISP  Format Options 
 ;; (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

@@ -90,7 +90,7 @@
 		   T)
  ;IS EMBEDDED.
 		  ((EQUAL TENSE '(MODAL))
-		   (SETQ GLOBAL-MESSAGE '(THAT DOESN\'T MAKE ANY SENSE TO ME\.))
+		   (SETQ GLOBAL-MESSAGE '("THAT DOESN'T MAKE ANY SENSE TO ME."))
 		   (ADD-F-PT 'MODAL PT))
  ;CLAUSES ARE ALSO MARKED AS
 		  ((AND	(EQUAL TENSE '(FUTURE))
@@ -109,7 +109,7 @@
 		  ((SETDIF TENSE '(PAST PRESENT))
  ;IMPERATIVE
 		   (GLOBAL-ERR
-			 '(I DON\'T KNOW HOW TO HANDLE TENSES INVOLVING FUTURE EVENTS OR MODALS OTHER THAN IN THE PRESENT))))
+			 '("I DON'T KNOW HOW TO HANDLE TENSES INVOLVING FUTURE EVENTS OR MODALS OTHER THAN IN THE PRESENT"))))
 	    (THSETF (G3T TSS_LOCAL1 'TENSE=) TENSE)
 	    (RETURN T)))
 
@@ -118,9 +118,9 @@
 (DEFUN SMPRON  (NODE)
       (EVAL (SM NODE))
       (COND ((NULL SM)
-	      (SETQ GLOBAL-MESSAGE (APPEND '(I DON\'T KNOW WHAT \")
+	      (SETQ GLOBAL-MESSAGE (APPEND '("I DON'T KNOW WHAT \"")
 					   (FROM (NB H) (N H))
-					   '(\" REFERS TO)))))
+					   '("\" REFERS TO")))))
        SM)
 
 (DEFUN SMVAUX NIL
@@ -159,7 +159,7 @@
 			   PARSENODE=
 			   C
 			   VARIABLE=
-			   (MAKESYM 'X)
+			   (MAKESYM '|X|)
 			   RELATIONS=
 			   (LIST (LIST '\#NAME
 				       OSSNODE=
@@ -265,7 +265,7 @@
        (PROG (CANDIDATES AMBIGUITIES)
              (DECLARE (SPECIAL CANDIDATES))
 								       ; A NODE LIST OF POSSIBLE
-	     (OR DISCOURSE (ERT SMIT\: DISCOURSE SWITCH NOT ON))
+	     (OR DISCOURSE (ERT "SMIT: DISCOURSE SWITCH NOT ON"))
 								       ;REFERENTS
 	     (AND MVB;IS THIS A "DO IT!" COMMAND?
 		  (ISQ MVB DO)
@@ -493,7 +493,7 @@
 					     PARSENODE=
 					     C
 					     VARIABLE=
-					     (MAKESYM 'X)
+					     (MAKESYM '|X|)
 					     MARKERS=
 					     (AND (CQ TPRON)
 						  '(\#VAGUE \#PHYSOB \#THING))
@@ -610,26 +610,18 @@
 		  TOOFEW ; WE DIDN'T FIND ANY (OR
 		  (COND	((OR (NULL DISCOURSE) (NULL WHO))
  ;ENOUGH) REFERENTS FOR THE NG
-		    (SETQ GLOBAL-MESSAGE (APPEND '(I DON\'T
-					    KNOW
-					    WHAT
-					    YOU
-					    MEAN
-					    BY
-						     \")
+		    (SETQ GLOBAL-MESSAGE (APPEND '("I DON'T KNOW WHAT YOU MEAN\"")
 						 (FROM NB N)
-						 '(\"\.)))
+						 '("\".")))
 		    (RETURN NIL))
 								       ;IF WE AREN'T REMEMBERING
 		   ((MEMQ WHO '(HE NIL))
 								       ;SENTENCES, FORGET IT IF WE JUST TRIED TO FIND
-		    (SETQ GLOBAL-MESSAGE (APPEND '(I DON\'T
-						     KNOW
-						     WHICH)
+		    (SETQ GLOBAL-MESSAGE (APPEND '("I DON'T KNOW WHICH")
 								       ;EVERYTHING (OR EVERYTHING
 						 (CDR (FROM NB N))
 								       ;THAT "HE" KNOWS ABOUT)
-						 '(YOU MEAN\.)))
+						 '("YOU MEAN.")))
 								       ;THEN FAIL
 		    (RETURN NIL)))
 	     (SETQ MUNG T)
@@ -669,7 +661,7 @@
 		 (COND (CONTRAST (SETQ CONTRAST NIL) (GO UP)))
 		 (AND (MOVE-PT LASTSENT DLC PV (NG))
 		      (SMONE2 (LIST (CAR PT))))
-		 (ERT SMONE= CAN\'T FIND REFERENT FOR \"ONE\"))
+		 (ERT SMONE= "CAN'T FIND REFERENT FOR \"ONE\""))
 	     (RETURN SM)))
 
 (DEFUN SMONE2 (X)
@@ -861,7 +853,7 @@
  ;TO TOPLEVEL CLAUSES SINCE ONLY THEY CAN HAVE
 							       (EQUAL X SMCOMP)
  ;FEATURES POLAR OR DECLAR.
-		      (ERTERR SMCL1 -- POLAR REL DOESN\'T MATCH))
+		      (ERTERR "SMCL1 -- POLAR REL DOESN'T MATCH"))
 							   (SETQ RELLIST X))
 
 	     ;;;
@@ -1000,7 +992,7 @@
 						      (DECLARE (SPECIAL TSS))
 						      (AND (CDR (SM H))
  ;does the sm have more than
-							   (ERT I DON\ 'T KNOW WHAT TO DO WITH AMBIGUOUS BOUND CLAUSES))
+							   (ERT "I DON'T KNOW WHAT TO DO WITH AMBIGUOUS BOUND CLAUSES"))
  ;one value???
 						      (COND ((ISQ (MOVE-PT H DF) TIME)
  ;dispatch table to match the appropriate action

@@ -118,7 +118,7 @@
 			    (COND (SUCCESS
 				   (APPEND (REVERSE PLAN2) ;PUTS ON THE JUNK FOR SAVING THE DISCOURSE
 					   '((SAY OK)))) ;REFERENTS ETC. THE THIRD ARGUMENT TO ANSBUILD
-				  (T '((SAY I CAN\ 'T)))) ;CAUSES THE SYSTEM TO GO BACK THROUGH THE
+				  (T '(("SAY I CAN'T")))) ;CAUSES THE SYSTEM TO GO BACK THROUGH THE
 			    T)))) ;DEDUCTION TO GET THE DATA BASE STRAIGHT IF THIS
  ;ANSWER IS PICKED.  IT ALSO TAKES CARE OF THE
  ;BACKREF STUFF.
@@ -133,7 +133,7 @@
       ;;FOR DECLARATIVES.
       (COND
 	    ((OR? RSS)
-	     (GLOBAL-ERR I DON\ 'T UNDERSTAND DISJUNCTIVE DECLARATIVES))
+	     (GLOBAL-ERR "I DON'T UNDERSTAND DISJUNCTIVE DECLARATIVES"))
 	    ((AND? RSS)
 	     (PROG (ANS)
 		   (SETQ ANS (MAPCAR 'ANSDECLARE (AND? RSS))) ;CONJOINED DECLARATIVES ARE HANDLED BY DOING
@@ -185,14 +185,14 @@
 		  ((SETQ AMB (CDR AMB)) (GO UP))
 		  (T (BUG ANSELIMINATE -- NO CONFLICT)))
 	    (TERPRI)
-	    (SAY I\'M NOT SURE WHAT YOU MEAN BY \' )
+	    (SAY "I'M NOT SURE WHAT YOU MEAN BY '" )
 	    (MAPC 'PRINT2
 		  (FROM (NB (CADDAR AMB)) (N (CADDAR AMB))))
-	    (SAY \ 'IN THE PHRASE \')
+	    (SAY " 'IN THE PHRASE '")
 	    (MAPC 'PRINT2
 		  (FROM	(NB (SETQ XX (PARENT? (CADDAR AMB))))
 			(N XX)))
-	    (PRINT3 '\ '\. )
+	    (PRINT3 " '.")
 	    (TERPRI)
 	    (SAY DO YOU MEAN\:)
 	    (SETQ XX 0.)
@@ -266,7 +266,7 @@
 	     (PROG (X)
 		   (RETURN (COND ((SETQ X (ANSDECLARE RSS)))
 				 ((EQUAL GLOBAL-MESSAGE
-					 '(THAT ISN\ 'T THE KIND OF THING I CAN BE TOLD))
+					 '("THAT ISN'T THE KIND OF THING I CAN BE TOLD"))
 				  (ANSQUEST RSS))
 				 ((ERR NIL)))))) ;THIS STRANGE CONSTRUCTION ALLOWS US A SECOND
 	    ((CQ QUEST) (ANSQUEST RSS)) ;CHANCE ON DECLARATIVES ABOUT THINGS WHICH CAN'T
@@ -350,7 +350,7 @@
 			 (ANSBUILD (+ (CAR ANS) (PLAUSIBILITY? RSS))
 				   (COND ((CADR ANS) '((SAY YES)))
 					 ((ISTENSE NODE 'MODAL)
-				 '((SAY I DON\'T KNOW)))
+				 '((SAY "I DON'T KNOW")))
 					 (T '((SAY NO))))
 				   T))
 			((SETQ ANS (THVAL-MULT (PLNR-FINDIFY 'ALL
@@ -362,7 +362,7 @@
 				      (+ (PLAUSIBILITY? RSS) (CAR ANS))) ;AN ANSWER IS VERY IMPLAUSIBILE IF IT MENTIONS
 				     (T (- (PLAUSIBILITY? RSS) 512.))) ;AN EVENT THE SYSTEM CAN'T FIND.
 			       (COND ((NULL (CADR ANS))
-			'((SAY I CAN\'T DISCUSS A NON-EXISTENT EVENT)))
+			'((SAY "I CAN'T DISCUSS A NON-EXISTENT EVENT")))
 				     ((APPEND (AND (EQ TYPE 'POLAR)
 						   '((SAY YES)))
 					      (LIST (LIST 'EVLIS
@@ -411,7 +411,7 @@
 				      (MAPCAR 'PLAUSIBILITY? ANS))
 			       (APPEND
 				     (AND (NOT (ISQ (PARSENODE? RSS) COMPONENT))
-		               '((SAY YOU\'RE TRYING TO CONFUSE ME\.)))
+		               '((SAY "YOU'RE TRYING TO CONFUSE ME.")))
 				     (MAPCAN
 					   '(LAMBDA (QUEST)
 						  (APPEND
@@ -488,7 +488,7 @@
 				      (COND
 					    ((NULL ANS)
 					     (COND ((ISTENSE (PARSENODE? RSS) 'MODAL)
-			                '((SAY I DON\'T KNOW)))
+			                '((SAY "I DON'T KNOW")))
 						   (T '((SAY NO)))))
 					    (T
 					     (APPEND
@@ -521,13 +521,13 @@
 					    (T
 					     (CONS '(SAY NO\,)
 						   (PREPPUT (NAMESUGAR LENGTH RES))))))
-				     ((EQ (CAR NUM) '>)
+				     ((EQ (CAR NUM) '|>|)
 				      (CONS (COND ((> LENGTH (CADR NUM))
 						   '(SAY YES\,))
 						  ((ZEROP LENGTH) '(SAY NO\,))
 						  (T '(SAY NO\, ONLY)))
 					    (PREPPUT (NAMESUGAR LENGTH REL))))
-				     ((EQ (CAR NUM) '<)
+				     ((EQ (CAR NUM) '|<|)
 				      (CONS (COND ((< LENGTH (CADR NUM)) '(SAY YES\,))
 						  (T '(SAY NO\,)))
 					    (PREPPUT (NAMESUGAR LENGTH REL))))
@@ -654,7 +654,7 @@
 	    (RETURN
 		  (COND
 			((EQ TYPE 'WHERE)
-		(GLOBAL-ERR I CAN\'T ANSWER \"WHERE\" QUESTIONS YET))
+		(GLOBAL-ERR "I CAN'T ANSWER \"WHERE\" QUESTIONS YET"))
 			((EQ TYPE 'WHY)
 			 (COND ((EQ (THGET EVENT 'WHY) 'COMMAND)
 				'((SAY BECAUSE YOU TOLD ME TO)))
@@ -669,7 +669,7 @@
 				 EVENTLIST)
 			 (COND
 			       ((NULL ANS)
-		  '((SAY I CAN\'T ANALYZE HOW I DID IT)))
+		  '((SAY "I CAN'T ANALYZE HOW I DID IT")))
 			       (T
 				(APPEND
 				      '((SAY BY))
@@ -886,7 +886,7 @@
 				    (CONS (VBFIX STACK T) (PRON-PRT 'UP OBJ1)))
 				   ((EQ VERB 'RAISEHAND) NIL)
 				   (T
-				    (BUG NAMEACTION - I DON\ 'T KNOW WHAT TO DO WITH THE VERB I GOT))))
+				    (BUG NAMEACTION - "I DON'T KNOW WHAT TO DO WITH THE VERB I GOT"))))
 		  (RETURN FOOBAR)))
 
 
@@ -939,7 +939,7 @@
 		       EIGHT
 		       NINE
 		       TEN))
-	   (GLOBAL-ERR I CAN\'T COUNT THAT HIGH)))
+	   (GLOBAL-ERR "I CAN\T COUNT THAT HIGH")))
 
 ;;;############################################################
 
@@ -989,7 +989,7 @@
 				    ((NULL (CDR SIZELIST))
 				     (ANSAY (CONS 'THE NAME))) ;THE SIZE MANAGES TO FINISH SPECIFYING IT.
 				    ((EQ SPEC 'INDEF)
-				     (ANSAY (CONS 'A NAME))) ;IN THE INDEFINITE CASE WE DON'T CARE IF THIS
+				     (ANSAY (CONS '|A| NAME))) ;IN THE INDEFINITE CASE WE DON'T CARE IF THIS
 				    ((SETQ X (THVAL2 NIL ;ISN'T A FULL SPECIFICATION.
 						     '(THFIND
 						       ALL
@@ -1131,7 +1131,7 @@
 	    (COND ((EQUAL NUM 1.) 'ONCE)
 		  ((EQUAL NUM 2.) 'TWICE)
 		  ((READLIST (NCONC (EXPLODE (NAMENUM NUM))
-				    '(\ T I M E S))))))
+				    '(" T I M E S"))))))
 
 
 
@@ -1179,7 +1179,7 @@
 	    ;;PLURAL.
 	    (COND ((> 2. NUM) ITEM)
 		  (T
-		   (COND ((MEMQ 'A (CAR ITEM))
+		   (COND ((MEMQ '|A| (CAR ITEM))
 			  (CONS	(PLURALMAKE (SUBST (NAMENUM NUM)
 						   'A
 						   (CAR ITEM)))
@@ -1385,8 +1385,8 @@
 	    (COND ((NUMBERP X) X)
 		  ((EQ (CAR X) 'EXACTLY)
 		   (LIST (CADR X) (+ 1 (CADR X)) NIL))
-		  ((EQ (CAR X) '>) (+ 1 (CADR X)))
-		  ((EQ (CAR X) '<) (CADR X))
+		  ((EQ (CAR X) '|>|) (+ 1 (CADR X)))
+		  ((EQ (CAR X) '|<|) (CADR X))
 		  ((EQ X 'NS) 1.)
 		  ((EQ X 'NPL) 2.)
 		  ((ERT FINDNUM))))
@@ -1414,14 +1414,14 @@
 					      #'SASS)))
 		      (RETURN T))
 	       (SAY \(BY)
-	       (PRINT3 (COND ((EQ X 'IT) '\"IT\")
+	       (PRINT3 (COND ((EQ X 'IT) "\"IT\"")
 				     ((MEMQ 'THEY (FROM SENT NIL))
-		       '\"THEY\")
-		       ('\"THEM\")))
+		       "\"THEY\"")
+		       ("\"THEM\"")))
 		       (SAY \, I ASSUME YOU)
 		       (PRINT3 'MEAN)
 		       (MAPC #'PRINT2 (PARAP XX))
-	       (RETURN (PRINT3 '\.\) ))))
+	       (RETURN (PRINT3 ".)" ))))
 
 
 
@@ -1477,7 +1477,7 @@
 					  (LIST	(LIST 'EVENT EVENT)
 						(LIST 'SUBJ
 						      (COND ((NUMBERP (CAR EV)) NIL)
-							    ('I)))
+							    ('|I|)))
 						(LIST 'OBJ1 NIL)
 						(LIST 'OBJ2 NIL))))
 			(ERT NAMEVENT THVAL))

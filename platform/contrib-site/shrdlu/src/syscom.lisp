@@ -59,11 +59,11 @@
 				      ((TIME-ANSWER '(ANSWER C)))
 				      ((APPLY-SAY
 					     (OR GLOBAL-MESSAGE
-						 '(I DON\ 'T UNDERSTAND\.))))))
+						 '("I DON'T UNDERSTAND."))))))
 			       ((OR ANNOYANCE (PRINT *3))
 				(APPLY-SAY
 				      (OR GLOBAL-MESSAGE
-					  '(I DON\ 'T UNDERSTAND\.)))))
+					  '("I DON'T UNDERSTAND.")))))
 			 (SHRDLU-TIMER)
 			 #+USE-MOBYTEST
 			 (AND MOBYTEST-IN-PROGRESS (AFTER-EACH-SENTENCE))
@@ -126,7 +126,7 @@
 
 (DEFUN END-OF-FILE-CONDITION  NIL
       (AND ^R (UFILE SHTRCE >))
-      (AND GO-AWAY (VALRET 'U)))
+      (AND GO-AWAY (VALRET '|U|)))
 
 #+USE-MOBYTEST
 (SETQ MOBYTEST-IN-PROGRESS NIL)
@@ -142,23 +142,23 @@
 	    (OR SH-PRINT-TIME (RETURN T))
 	    (SETQ BASE 10.)
 	    (TERPRI)
-	    (PRINC 'TOTAL\ TIME\ USED\:\ )
+	    (PRINC "TOTAL TIME USED: ")
 	    (PRINC (TIMER RUNTIME (GET-INTERNAL-RUN-TIME)))
-	    (PRINTC '\ \ AMOUNT\ SPENT\ IN\ GARBAGE\ COLLECTION)
+	    (PRINTC "  AMOUNT SPENT IN GARBAGE COLLECTION")
 	    (PRINC (TIMER SH-GCTIME 0))
 	    (OR (EQ SH-PRINT-TIME 'FANCY) (RETURN T))
 	    (TERPRI)
 	    (PRINC 'BREAKDOWN\:)
-	    (PRINTC '\ \ \ PARSING)
+	    (PRINTC "   PARSING")
 	    (PRINC P-TIME)
-	    (PRINTC '\ \ \ SEMANTICS)
+	    (PRINTC "   SEMANTICS")
 	    (PRINC SMN-TIME)
-	    (PRINTC '\ \ \ MICROPLANNER)
-	    (PRINTC '\ \ \ \ \ \ FOR\ SEMANTICS)
+	    (PRINTC "   MICROPLANNER")
+	    (PRINTC "      FOR SEMANTICS")
 	    (PRINC PLNR-TIME)
-	    (PRINTC '\ \ \ \ \ \ FOR\ ANSWERING)
+	    (PRINTC "      FOR ANSWERING")
 	    (PRINC ANS-PLNR-TIME)
-	    (PRINTC '\ \ \ ANSWERING)
+	    (PRINTC "   ANSWERING")
 	    (PRINC ANS-TIME)
 	    (TERPRI)))
 
@@ -210,7 +210,7 @@
 		   (TERPRI)
 		   (COND ((MEMQ (SETQ CH (READ-CHAR)) '(Y \y))
 			  (RETURN T))
-;;;  ((EQ CH '?)
+;;;  ((EQ CH '|?|)
 ;;;   (EVAL (THGET 'FLUSH 'EXPLANATION))
 ;;;   (GO MES))
 			 (T (RETURN NIL)))))
@@ -250,7 +250,7 @@
       (TERPRI)
       (AND (CONSP 0A)
 	   (PRINC (CAR 0A))
-	   (PRINC '\ >>\ )
+	   (PRINC " >> ")
 	   (PRINC (CADR 0A))
 	   (TERPRI))
       (PRINT (CDDR 0A)))
@@ -456,7 +456,7 @@
 			  (GO LISTEN))
 			 (ZOGUSER
 			  (PRINC GLOP)
-			  (SAY ISN\ 'T A COMMAND)
+			  (SAY "ISN'T A COMMAND")
 			  (TERPRI)
 			  (GO PRINT))
 			 (T (SETQ EXP GLOP) (GO EVAL-EXP))))
@@ -550,7 +550,7 @@
 	     (LIST (FROM (NB A) (N A))
 		   (FE A)
 		   (SM A)
-		   (COND ((ATOM (H A)) '\ )
+		   (COND ((ATOM (H A)) " ")
 			 ((MAPLIST #'PR1
 				   (REVERSE (H A)))))))))
 
@@ -573,14 +573,14 @@
 (pushnew :SHRDLU-CONSOLE *FEATURES*)
 
 (DEFUN PRINT2  (X)
-      (COND ((> CHRCT (FLATSIZE X)) (PRINC '\ ))
+      (COND ((> CHRCT (FLATSIZE X)) (PRINC " "))
 	    (T (TERPRI)))
       (PRINC X))
 
 (DEFUN PRINT3  (X)
       (PROG2 (OR (> CHRCT (FLATSIZE X)) (TERPRI))
 	     (PRINC X)
-	     (PRINC '\ )))
+	     (PRINC " ")))
 
 (DEFUN PRINTEXT	 (TEXT)
       (COND (TEXT
@@ -595,7 +595,7 @@
 		   (COND ((NULL L) (RETURN NIL)))
 		   (SETQ TEST (EVAL (CAR L)))
 		   (COND ((EQ TEST '<TAB>))
-			 (T (PRINC TEST) (PRINC '\ )))
+			 (T (PRINC TEST) (PRINC " ")))
 		   (SETQ L (CDR L))
 		   (GO =>)))
 
@@ -669,7 +669,7 @@
       (PROG (NN)
 	    A
 	    (COND ((> N 0.)
-		   (PRINC '\ )
+		   (PRINC " ")
 		   (SETQ N (- N 1))
 		   (GO A)))))
 
@@ -679,6 +679,6 @@
       (SETQ PLANNERSEE NIL)
       (SETQ SH-STANDARD-PRINTOUT NIL)
       (SETQ ANNOYANCE T))
-#|�Visual LISP� Format Options�
+#| Visual LISP  Format Options 
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

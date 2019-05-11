@@ -254,7 +254,7 @@
 
 (DEFUN MEMORY  NIL
       (OR NOMEM
-	  (THAND (THVSETQ (THNV EV) (MAKESYM 'E))
+	  (THAND (THVSETQ (THNV EV) (MAKESYM '|E|))
 		 (THSETQ EVENTLIST (CONS (THV EV) EVENTLIST))
 		 (THSETF (G3T (THV EV) 'START) THTIME)
 		 (THSETF (G3T (THV EV) 'WHY) (THV WHY)))))
@@ -291,7 +291,7 @@
 	    (MAPC #'(LAMBDA (X)
 			     (AND (THVAL '(THGOAL (\#IS (THV X)
 					(THEV TYPE-PACKO)))
-				     (LIST (LIST 'X X)))
+				     (LIST (LIST '|X| X)))
 			      (SETQ XX (PACKORD X (SIZE X) XX))))
 		  OBJ)
 	    (RETURN (MAPCAR #'CADR XX))))
@@ -346,9 +346,9 @@
 				(LIST (LIST 0
 					    (CADR X)
 					    (CADAR (THVAL '(THGOAL (\#SUPPORT (THV X) (THV Y)))
-							  (LIST	(LIST 'X
+							  (LIST	(LIST '|X|
 								      'THUNASSIGNED)
-								(LIST 'Y (CAR X))))))))))
+								(LIST '|Y| (CAR X))))))))))
 	    ATABLE)
       )
 

@@ -17,7 +17,7 @@
                 ((CDDR X) X)
                 ((NULL (CDR X))
                  (PRINT X)
-                 (PRINC 'BAD\ FORMAT)
+                 (PRINC "BAD FORMAT")
                  (RETURN NIL))
                 ((LIST (CAR X) (CADR X) NIL))))
 
@@ -94,7 +94,7 @@
       THFAIL
       #'(LAMBDA NIL
          (PRINT (CADAR THTREE))
-         (PRINC 'FAILED\ )
+         (PRINC "FAILED ")
          (EVLIS (CDDAR THTREE))
          (THPOPT)
          NIL))
@@ -103,7 +103,7 @@
       THSUCCEED
       #'(LAMBDA NIL
          (PRINT (CADAR THTREE))
-         (PRINC 'SUCCEEDED\ )
+         (PRINC "SUCCEEDED ")
          (EVLIS (CDDAR THTREE))
          (THPOPT)
          THVALUE))
@@ -120,9 +120,9 @@
             (LIST 'THTRACES
               (THGENS B)
               (AND B '(THERT))))
-         (THPRINTC 'PASSING\ BKPT)
+         (THPRINTC "PASSING BKPT")
          (PRIN1 (CADAR THTREE))
-         (PRINC '\ )
+         (PRINC " ")
  ;BY SETTING THBRANCH AND THABRANCH, A TRIPLE IS CREATED
  ;BY THVAL FOR BACKTRACKING.  THEN, THE TREE IS POPPED
  ;TO PREVENT THTRACES FROM TYPING OUT THE MEANINGLESS
@@ -140,9 +140,9 @@
               (THGENS G)
               '(AND THVALUE (PRIN1 THVALUE))
               (AND B '(THERT))))
-         (THPRINTC 'TRYING\ GOAL)
+         (THPRINTC "TRYING GOAL")
          (PRIN1 (CADAR THTREE))
-         (PRINC '\ )
+         (PRINC " ")
          (PRIN1 X)))
 
 (DEFS THEOREM
@@ -153,7 +153,7 @@
               X
               '(AND THVALUE (PRIN1 THVALUE))
               (AND B '(THERT))))
-         (THPRINTC 'ENTERING\ THEOREM)
+         (THPRINTC "ENTERING THEOREM")
          (PRIN1 X)))
 
 (DEFS THASSERT
@@ -165,7 +165,7 @@
               (AND B '(THERT))))
          (PRINT 'ASSERTING)
          (PRIN1 (CADAR THTREE))
-         (PRINC '\ )
+         (PRINC " ")
          (PRIN1 X)))
 
 (DEFS THERASE
@@ -177,7 +177,7 @@
               (AND B '(THERT))))
          (PRINT 'ERASING)
          (PRIN1 (CADAR THTREE))
-         (PRINC '\ )
+         (PRINC " ")
          (PRIN1 X)))
 
  ;UTILITY FNS
@@ -212,7 +212,7 @@
 
 
  ; removed thprintc - also defined in plnr.lisp -ts.
-;; (DEFUN THPRINTC (X) (TERPRI) (PRINC X) (PRINC '\ ))
-#|�Visual LISP� Format Options�
+;; (DEFUN THPRINTC (X) (TERPRI) (PRINC X) (PRINC " "))
+#| Visual LISP  Format Options 
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

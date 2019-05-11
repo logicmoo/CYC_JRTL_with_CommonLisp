@@ -121,7 +121,7 @@
                      (LIST 'QUOTE
                                  (REFER? \#2))))))))
        (T
-         (ERTERR SORRY I DON\'T UNDERSTAND  THE VERB BE WHEN YOU USE IT LIKE THAT))))
+         (ERTERR "SORRY I DON'T UNDERSTAND  THE VERB BE WHEN YOU USE IT LIKE THAT"))))
 
 (DEFS BEFORE SEMANTICS ((BINDER (SMBINDER NIL START))) FEATURES (BINDER TIME))
 
@@ -825,7 +825,7 @@
 
 (DEFS NOW
       SEMANTICS
-      ((ADV (OR  (EQ (CADR (ASSQ 'TIME FE)) '\:NOW)
+      ((ADV (OR  (EQ (CADR (ASSQ 'TIME FE)) ":NOW")
              (ERT NOW DEFINITION))))
       FEATURES
       (ADV TIMW))
@@ -1252,7 +1252,7 @@
 
 (DEFUN THANK  NIL
       (COND ((EQ (CADR N) 'YOU)
-             (SETQ GLOBAL-MESSAGE '(YOU\'RE WELCOME))
+             (SETQ GLOBAL-MESSAGE '("YOU'RE WELCOME"))
              (FLUSHME)
              (FLUSHME)
              (OR NN (SETQ SPECIAL 'DONE)))))
@@ -2310,6 +2310,6 @@
    (SHORT \#HEIGHT)
    (THICK \#THICKNESS)
    (THIN \#THICKNESS))
-#|�Visual LISP� Format Options�
+#| Visual LISP  Format Options 
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

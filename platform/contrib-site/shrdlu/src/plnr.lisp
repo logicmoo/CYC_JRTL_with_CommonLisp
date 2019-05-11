@@ -14,9 +14,9 @@
 (DEFUN EVLIS  (X) ;EVLIS EVALS ELEMENTS OF ARG THEN RETURNS ARG
       (MAPC #'EVAL X))
 
-(DEFUN THPRINT2 (X) (PRINC '\ ) (PRINC X))
+(DEFUN THPRINT2 (X) (PRINC " ") (PRINC X))
 
-(DEFUN THPRINTC (X) (TERPRI) (PRINC X) (PRINC '\ ))
+(DEFUN THPRINTC (X) (TERPRI) (PRINC X) (PRINC " "))
 
 (DEFUN THADD ;THADD ADDS THEOREMS OR ASSERTION TO THE
 
@@ -843,7 +843,7 @@
 	    ;;THNF IS A FREE VARIABLE FROM THADD (WHO CALLS THIS BUGER)
 	    ;;IT SAYS WE ARE LOOKING AT THE N'TH PLACE IN THE PATTERN
 	    (COND ((AND	(ATOM THI)
-			(NOT (EQ THI '?))
+			(NOT (EQ THI '|?|))
 			(NOT (NUMBERP THI)))
 
 		   ;;THI1 IS THE NAME OF THE ATOM TO LOOK UNDER
@@ -852,7 +852,7 @@
 		   ;;AS NORMAL ATOMS, NOR DOES "?" SINCE IT IS A SORT OF
 		   ;;VARIABLE IN PLANNER
 		   (SETQ THI1 THI))
-		  ((OR (EQ THI '?)
+		  ((OR (EQ THI '|?|)
 		       (MEMQ (CAR THI) '(THV THNV)))
 
 		   ;;SEE IF THI IS A VARIABLE
@@ -955,8 +955,8 @@
       (COND
 
 	    ;;IF EITHER IS A ? ANYTHING WILL MATCH, SO OK
-	    ((EQ THX '?))
-	    ((EQ THY '?))
+	    ((EQ THX '|?|))
+	    ((EQ THY '|?|))
 
 	    ;;IF EITHER IS A VARIABLE THINGS GET MESSY.
 	    ;;  EVERYTHING DOWN TO ***** IS
@@ -1048,8 +1048,8 @@
 
 			  ;;WE ARE "RESTRICTING" A ?.  SINCE ? HAS NO
 			  ;;BINDING LIST, WE MAKE UP A PSEUDO BINDING LIST
-			  (COND	((EQ (CADR THX) '?)
-				 (PROG1	(CONS '?
+			  (COND	((EQ (CADR THX) '|?|)
+				 (PROG1	(CONS '|?|
 					      (CONS 'THUNASSIGNED
 						    (COPY-LIST (CDDR THX))))
 					(SETQ THX '(THNV ?))))
@@ -1073,8 +1073,8 @@
 		   (COND
 			 ((THVAR THY) (THGAL THY THALIST))
 			 ((AND (LISTP THY) (EQ (CAR THY) 'THRESTRICT))
-			  (COND	((EQ (CADR THY) '?)
-				 (PROG1	(CONS '?
+			  (COND	((EQ (CADR THY) '|?|)
+				 (PROG1	(CONS '|?|
 					      (CONS 'THUNASSIGNED
 						    (COPY-LIST (CDDR THY))))
 					(SETQ THY '(THNV ?))))
@@ -1208,7 +1208,7 @@
 		       ;;IF THE ITEM IS NOT A NORMAL ATOM, SKIP IT AND
 		       ;;GO TO NEXT PASS
 		       (NUMBERP THB2)
-		       (EQ THB2 '?))
+		       (EQ THB2 '|?|))
 		   (GO THP1))
 
 		  ;;IF THE ITEM DOES NOT HAVE THE PROPERTY ON ITS PROPERTY
@@ -1467,10 +1467,10 @@
 	    ;;THIS COND SERVES THE SAME PURPOSE AS THE
 	    ;;FIRST COND IN THIP
 	    (COND ((AND	(ATOM THB)
-			(NOT (EQ THB '?))
+			(NOT (EQ THB '|?|))
 			(NOT (NUMBERP THB)))
 		   (SETQ THA THB))
-		  ((OR (EQ THB '?)
+		  ((OR (EQ THB '|?|)
 		       (MEMQ (CAR THB) '(THV THNV)))
 		   (COND (THFST (RETURN 'THVRB))
 			 ((SETQ THA 'THVRB))))
@@ -1591,7 +1591,7 @@
       (THB)
       (PROG (X)
 	    (COND ((ATOM (SETQ X (THGAL (CAR THB) THALIST)))
-		   (THPRINTC 'THRESTRICT\ IGNORED\ -\ CONTINUING))
+		   (THPRINTC "THRESTRICT IGNORED - CONTINUING"))
 		  ((THRPLACD (CDR X) (THUNION (CDDR X) (CDR THB)))))
 	    (RETURN X)))
 
@@ -1817,7 +1817,7 @@
 		   (PRINT THEOREM)
 		   (COND ((EQ (SETQ THEOREM
 					 (THERT BAD THEOREM - THTRY1))
-			      'T)
+			      '|T|)
 			  (GO NXTREC))
 			 (T (GO THTBF1)))))
 	    (COND ((PROG1 (AND (APPLY (CADR THX) (CAADDR THX))
@@ -2197,6 +2197,6 @@
 (SETQ THTREE NIL)
 (SETQ THLEVEL NIL)
 
-#|  Visual LISP� Format Options�
+#|  Visual LISP  Format Options 
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

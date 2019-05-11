@@ -15,12 +15,12 @@
 	    (PRINT 'READY)
 	    (TERPRI)
 	  CHAR
-	    (COND ((EQUAL (PEEK-CHAR) #\~)
+	    (COND ((EQUAL (PEEK-CHAR) #\TILDE)
 		   (READ-CHAR)
 		   (ERT)
 		   (GO THRU))) ; BREAK
 	    (SETQ CHAR (ASCII (CHAR-UPCASE (READ-CHAR))))
-	    (COND ((EQ CHAR '\ ) (setq WORD (cons WORD CHAR))) ;DELIMITER
+	    (COND ((EQ CHAR '| |) (setq WORD (cons WORD CHAR))) ;DELIMITER
 		  ((EQ CHAR RUBOUT)
 		   (COND (WORD
 			  (PRINC (CAR WORD))
@@ -56,13 +56,13 @@
 	    (NOP (TERPRI))
 	    (FORCE-OUTPUT)
 	    CHAR
-	    (COND ((EQUAL (PEEK-CHAR-REMOTE) #\~)
+	    (COND ((EQUAL (PEEK-CHAR-REMOTE) #\TILDE)
 		   (READ-CHAR-REMOTE)
 		   (ERT)
 		   (GO THRU))) ; BREAK
-	    (COND ((EQUAL (PEEK-CHAR-REMOTE) #\@) (read-char-remote) (go OUT)))
+	    (COND ((EQUAL (PEEK-CHAR-REMOTE) #\COMMERCIAL_AT) (read-char-remote) (go OUT)))
 	    (SETQ CHAR (ASCII (CHAR-UPCASE (READ-CHAR-REMOTE))))
-	    (COND ((EQ CHAR '\ ) (GO WORD)) ;DELIMITER
+	    (COND ((EQ CHAR '| |) (GO WORD)) ;DELIMITER
 		  ((EQ CHAR RUBOUT)
 		   (COND (WORD
 			  (PRINC (CAR WORD))
@@ -77,18 +77,18 @@
 		   (AND WORD (GO WORD))
 		   (GO PUNC)))
 	    (AND
-	      (OR (AND (EQ CHAR '\")  ;; "
+	      (OR (AND (EQ CHAR '|"|)  ;; "
 			       (NOT ALREADY-BLGING-NEWWRD)
 			       (SETQ NEWWORD (SETQ ALREADY-BLGING-NEWWRD T))
 			       (GO CHAR))
-		  (AND (EQ CHAR '\")   ;; "
+		  (AND (EQ CHAR '|"|)   ;; "
 				    ALREADY-BLGING-NEWWRD
 				    (NOT (SETQ ALREADY-BLGING-NEWWRD NIL))
 				    (GO WORD))
  ;WITHIN THIS "AND" ARE ALL THE CHARACTERS THAT
 				(NUMBERP CHAR)
  ;ARE UNDERSTOOD BY THE SYSTEM
-				(AND (EQ CHAR '=) (NULL WORD))
+				(AND (EQ CHAR '|=|) (NULL WORD))
 				(MEMQ CHAR VOWEL)
 				(MEMQ CHAR CONSO))
 			   (SETQ WORD (CONS CHAR WORD)))
@@ -97,7 +97,7 @@
 		      (PRINT 'READY2)
 		      (TERPRI)
 		      (MAPC #'(LAMBDA (X) (PRINT2 X)) (REVERSE SENT))
-	     (PRINT2 '\ ) ;; was princ
+	     (PRINT2 " ") ;; was princ
 	     (MAPC #'PRINT2 (REVERSE WORD)) ;; was princ
 		      (GO CHAR)
 	WORD (COND ((NULL WORD) (GO CHAR))
@@ -124,7 +124,7 @@
 					(CAR X)))
 			    ((EQ (CAR (LAST WORD)) '=)
 			     (BUILDWORD	WRD
-			       (COND ((MEMQ '\" WORD)    ;; "
+			       (COND ((MEMQ '|"| WORD)    ;; "
 						     '(PROPN NS POSS))
 					       ('(PROPN NS)))
 					      '((PROPN T))
@@ -165,27 +165,27 @@
 							   (NOT (MEMQ LAST LIQUID))
 							   (EQ LAST NEXT))
 						      (SETQ RD (CDR RD)))
-						     ((EQ LAST 'I)
-						      (SETQ RD (CONS 'Y (CDR RD))))
+						     ((EQ LAST '|I|)
+						      (SETQ RD (CONS '|Y| (CDR RD))))
 						     ((OR (AND (MEMQ LAST CONSO)
 							       (MEMQ NEXT VOWEL)
-							       (NOT (EQ NEXT 'E))
+							       (NOT (EQ NEXT '|E|))
 							       (MEMQ (CADDR RD) CONSO))
 							  (AND (MEMQ LAST LIQUID)
 							       (MEMQ NEXT CONSO)
 							       (NOT (MEMQ NEXT LIQUID)))
-							  (AND (EQ LAST 'H) (EQ NEXT 'T))
+							  (AND (EQ LAST '|H|) (EQ NEXT '|T|))
 							  (AND (MEMQ LAST '(C G S J V Z))
 							       (OR (MEMQ NEXT LIQUID)
 								   (AND	(MEMQ NEXT VOWEL)
 									(MEMQ (CADDR RD) VOWEL)))))
-						      (SETQ RD (CONS 'E RD))))
+						      (SETQ RD (CONS '|E| RD))))
 					       (GO TRY)
 					       LY
 					       (COND ((AND (MEMQ (CAR RD) VOWEL)
-							   (NOT (EQ (CAR RD) 'E))
+							   (NOT (EQ (CAR RD) '|E|))
 							   (MEMQ (CADR RD) CONSO))
-						      (SETQ RD (CONS 'E RD))))
+						      (SETQ RD (CONS '|E| RD))))
 					       (COND ((MEMQ 'ADJ
 							    (THGET (SETQ ROOT (READLIST (REVERSE RD)))
 								   'FEATURES))
@@ -200,12 +200,12 @@
 					       SIB
 					       (SETQ LAST (CAR RD))
 					       (SETQ NEXT (CADR RD))
-					       (COND ((NOT (EQ LAST 'E)))
-						     ((EQ NEXT 'I)
-						      (SETQ RD (CONS 'Y (CDDR RD))))
-						     ((EQ NEXT 'X) (SETQ RD (CDR RD)))
-						     ((AND (EQ NEXT 'H)
-							   (NOT (EQ (CADDR RD) 'T)))
+					       (COND ((NOT (EQ LAST '|E|)))
+						     ((EQ NEXT '|I|)
+						      (SETQ RD (CONS '|Y| (CDDR RD))))
+						     ((EQ NEXT '|X|) (SETQ RD (CDR RD)))
+						     ((AND (EQ NEXT '|H|)
+							   (NOT (EQ (CADDR RD) '|T|)))
 						      (SETQ RD (CDR RD)))
 						     ((AND (MEMQ NEXT '(S Z))
 							   (EQ NEXT (CADDR RD)))
@@ -225,7 +225,7 @@
 								 (SHRDLU-MOD FEATURES (THGET (CAR WORD) 'MOD))
 								 (THGET ROOT 'SEMANTICS)
 								 ROOT))
-						     ((EQ (CAR RD) 'E) (SETQ RD (CDR RD)) (GO TRY))
+						     ((EQ (CAR RD) '|E|) (SETQ RD (CDR RD)) (GO TRY))
 						     ((GO NO)))
 
 ;;;----------------------------------------------------
@@ -284,9 +284,9 @@
 										 (OR ALTN (SETQ NEWWORD NIL))
 										 (GO WRD)))
 								       (TERPRI)
-	     (SAY *SORRY I DON\'T KNOW THE WORD \")     ;; "
+	     (SAY "*SORRY I DON'T KNOW THE WORD \"")     ;; "
 									(PRINT3 WRD)
-	     (PRINT3 '\"\.)                 ;; "
+	     (PRINT3 "\".")                 ;; "
 										(TERPRI)
 										;; replaced to make more sense with modern keyboards
 										;; and remote usage.  -ts.
@@ -310,8 +310,8 @@
 (SETQ CARRET #\NEWLINE)
 
 (DEFUN ETNEW NIL
-       (AND (EQ (CAR WORD) '\")
-	    (EQ (CAR (LAST WORD)) '\")   ;; "
+       (AND (EQ (CAR WORD) '|"|)
+	    (EQ (CAR (LAST WORD)) '|"|)   ;; "
 										 (SETQ WRD (READLIST (CDR (REVERSE (CDR WORD)))))
 										 (BUILDWORD WRD
 											    '(NOUN NS)

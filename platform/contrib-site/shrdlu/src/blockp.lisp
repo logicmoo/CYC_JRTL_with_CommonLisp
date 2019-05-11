@@ -278,7 +278,7 @@
 									 (\#SUPPORT
 									  (THV Y)
 									  (THV X)))
-								       (CONS (LIST 'Y
+								       (CONS (LIST '|Y|
 										   'THUNASSIGNED)
 									     THALIST))
 								'((NIL :HAND))))
@@ -538,7 +538,7 @@
 	    (OR	(< (APPLY #'+
 			  (MAPCAR #'(LAMBDA (X) (CADDR (SIZE X))) (THV X)))
 		   1201)
-		(NOT (DPRINT2 'TOO\ HIGH\,)))
+		(NOT (DPRINT2 "TOO HIGH,")))
 	    (THCOND
 		  ((AND (THV X) (CDR (THV X))))
 		  ((THSETQ
@@ -732,7 +732,7 @@
 	       (TIMECHK (THV EVENT) (THV TIME))
 	       (THOR (THGOAL (\#PUTON (THV EVENT) (THV X) ?))
 		     (THGOAL (\#GET-RID-OF (THV EVENT) (THV X))))
-	       (THVSETQ (THNV EV) (MAKESYM 'E))
+	       (THVSETQ (THNV EV) (MAKESYM '|E|))
 	       (AND (THSETF (G3T (THV EV) 'END)
 			    (THSETF (G3T (THV EV) 'START)
 				    (THGET (THV EVENT) 'END)))
@@ -755,7 +755,7 @@
 				  (THGET (THV X) 'HISTORY)))
 		   (ERT TCTE-PUT WRONG))
 	       (THAMONG (THV Y) (LIST (CADR (THV Z))))
-	       (THSETQ (THNV EV) (MAKESYM 'E))
+	       (THSETQ (THNV EV) (MAKESYM '|E|))
 	       (AND (THSETF (G3T (THV EV) 'END)
 			    (THSETF (G3T (THV EV) 'START) (CAR (THV Z))))
 		    (THSETF (G3T (THV EV) 'WHY) (THV EVENT))

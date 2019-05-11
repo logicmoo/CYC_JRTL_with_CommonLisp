@@ -33,7 +33,7 @@
        MAJOR
        (AND LABELTRACE (PASSING 'MAJOR))
        (CUT END)
-       (COND ((EQ PUNCT '?) (GO QUEST))
+       (COND ((EQ PUNCT '|?|) (GO QUEST))
         ((OR (CQ IMPER) (EQ PUNCT '!)) (GO IMPER)))
        (GO THEREINIT)
        FDEC
@@ -1707,6 +1707,6 @@
         (RETURN T)
         )))
 
-#|�Visual LISP� Format Options�
+#| Visual LISP  Format Options 
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

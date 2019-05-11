@@ -6,7 +6,7 @@
 
 (defun setup (gram-num date)
 	(suspend)
-	(cursorpos 'c)
+	(cursorpos '|c|)
 	(terpri)
 	(princ 'shrdlu/'/s/ P/a/r/s/e/r/ / / )
 	(princ '/u/s/i/n/g/ /g/r/a/m/m/a/r/ )
@@ -125,41 +125,41 @@
 		   ;;property of the current readtable, but this was quicker to
 		   ;;patch.
                    )
-    	     (cond ((EQ char '/ ) (GO WORD))           ;DELIMITER
+    	     (cond ((EQ char '|/| ) (GO WORD))           ;DELIMITER
 		   ((MEMQ CHAR ALTMODE)
 		    (setq char (ascii (uppercase-ify-char (tyi))) )
 		    (COND ((MEMQ char ALTMODE)
 			   (ERT)
 			   (GO THRU))
 								       ;ALTMODE-ALTMODE
-			  ((EQ CHAR 'C) (TYO 12.) (GO DO))
+			  ((EQ CHAR '|C|) (TYO 12.) (GO DO))
 								       ;ALTMODE-C
-			  ((EQ CHAR 'R) (TERPRI) (GO DO))
+			  ((EQ CHAR '|R|) (TERPRI) (GO DO))
 								       ;ALTMODE-R
-			  ((AND (EQ CHAR 'S) SAVESENT)
+			  ((AND (EQ CHAR '|S|) SAVESENT)
 								       ;ALTMODE-S CAUSES THE LAST SENTENCE TYPED IN TO
 			   (SETQ SENT (CAR SAVESENT))
 								       ;RETURNED AS THE SENTENCE TO BE INTERPRETED
 			   (SETQ PUNCT (CDR SAVESENT))
 			   (%)
 			   (RETURN SENT))
-			  ((EQ CHAR 'N)
+			  ((EQ CHAR '|N|)
 			   (SETQ NEWWORD (NOT NEWWORD) 
 				 ALTN (NOT ALTN))
 			   (GO CHAR))
 								       ;ALTMODE-N COMPLEMENTS THE NEWWORD FLAG, WHICH
-			  ((EQ CHAR 'Q)
+			  ((EQ CHAR '|Q|)
 								       ;DETERMINES WHETHER UNRECOGNIZED WORDS WILL BE
 			   (IOC Q)
 								       ;CONSIDERED SPELLING ERRORS OR NEW WORDS.
 			   (SETQ IGNORE NIL)
 			   (GO THRU))
 								       ;ALTMODE-Q CAUSES READIN FROM DISK FILE.
-			  ((EQ CHAR 'M)
+			  ((EQ CHAR '|M|)
 			   (IOC Q)
 			   (SETQ IGNORE NIL MOBYREAD T)
 			   (GO thru))
-			  ((EQ CHAR 'I)
+			  ((EQ CHAR '|I|)
 			   (SETQ IGNORE T)
 			   (IOC Q)
 			   (GO THRU))
@@ -178,18 +178,18 @@
 		    (AND WORD (GO WORD))
 		    (GO PUNC)))
 	     (AND
-	      (OR (AND (EQ CHAR '")
+	      (OR (AND (EQ CHAR '|"|)
 		       (NOT ALREADY-BLGING-NEWRD)
 		       (SETQ NEWWORD (SETQ ALREADY-BLGING-NEWRD T))
 		       (GO CHAR))
-		  (AND (EQ CHAR '")
+		  (AND (EQ CHAR '|"|)
 		       ALREaDY-BLGING-NEWRD
 		       (NOT (SETQ ALREADY-BLGING-NEWRD NIL))
 		       (GO WORD))
 								       ;WITHIN THIS "AND" ARE ALL THE CHARACTERS THAT
 		  (NUMBERP CHAR)
 								       ;ARE UNDERSTOOD BY THE SYSTEM
-		  (AND (EQ CHAR '=) (NULL WORD))
+		  (AND (EQ CHAR '|=|) (NULL WORD))
 		  (MEMQ CHAR VOWEL)
 		  (MEMQ CHAR CONSO))
 	      (SETQ WORD (CONS CHAR WORD)))
@@ -197,7 +197,7 @@
 	DO   (PRINT 'READY)
 	     (TERPRI)
 	     (MAPC (FUNCTION (LAMBDA (X) (PRINT2 X))) (REVERSE SENT))
-	     (PRINC '/ )
+	     (PRINC "/" )
 	     (MAPC (FUNCTION PRINC) (REVERSE WORD))
 	     (GO CHAR)
 	WORD (COND ((NULL WORD) (GO CHAR))
@@ -222,9 +222,9 @@
 				    (CDR X))
 			       (SM X)
 			       (CAR X)))
-		   ((EQ (CAR (LAST WORD)) '=)
+		   ((EQ (CAR (LAST WORD)) '|=|)
 		    (BUILDWORD WRD
-			       (COND ((MEMQ '" WORD)
+			       (COND ((MEMQ '|"| WORD)
 				      '(PROPN NS POSS))
 				     ('(PROPN NS)))
 			       '((PROPN T))
@@ -235,15 +235,15 @@
 	     ;;;---------------------------------------------
 	     ;;;              MORPHOLOGY CODE
 	     ;;;--------------------------------------------
-	CUT  (COND ((STA WORD '(T " N))
+	CUT  (COND ((STA WORD '(T " N)) ;; "
 		    (SETQ RD (CDDDR WORD))
 		    (SETQ WORD (CONS '* WORD))
 		    (GO TRY))
-		   ((STA WORD '(S "))
+		   ((STA WORD '(S ")) ;; "
 		    (SETQ WORD (CDDR WORD))
 		    (SETQ POSS WRD)
 		    (GO WORD))
-		   ((STA WORD '("))
+		   ((STA WORD '(")) ;; "
 		    (SETQ WORD (CDR WORD))
 		    (SETQ POSS WRD)
 		    (GO WORD))
@@ -265,26 +265,26 @@
 			 (NOT (MEMQ LAST LIQUID))
 			 (EQ LAST NEXT))
 		    (SETQ RD (CDR RD)))
-		   ((EQ LAST 'I)
-		    (SETQ RD (CONS 'Y (CDR RD))))
+		   ((EQ LAST '|I|)
+		    (SETQ RD (CONS '|Y| (CDR RD))))
 		   ((OR (AND (MEMQ LAST CONSO)
 			     (MEMQ NEXT VOWEL)
-			     (NOT (EQ NEXT 'E))
+			     (NOT (EQ NEXT '|E|))
 			     (MEMQ (CADDR RD) CONSO))
 			(AND (MEMQ LAST LIQUID)
 			     (MEMQ NEXT CONSO)
 			     (NOT (MEMQ NEXT LIQUID)))
-			(AND (EQ LAST 'H) (EQ NEXT 'T))
+			(AND (EQ LAST '|H|) (EQ NEXT '|T|))
 			(AND (MEMQ LAST '(C G S J V Z))
 			     (OR (MEMQ NEXT LIQUID)
 				 (AND (MEMQ NEXT VOWEL)
 				      (MEMQ (CADDR RD) VOWEL)))))
-		    (SETQ RD (CONS 'E RD))))
+		    (SETQ RD (CONS '|E| RD))))
 	     (GO TRY)
 	LY   (COND ((AND (MEMQ (CAR RD) VOWEL)
-			 (NOT (EQ (CAR RD) 'E))
+			 (NOT (EQ (CAR RD) '|E|))
 			 (MEMQ (CADR RD) CONSO))
-		    (SETQ RD (CONS 'E RD))))
+		    (SETQ RD (CONS '|E| RD))))
 	     (COND ((MEMQ 'ADJ
 			  (GET (SETQ ROOT (READLIST (REVERSE RD)))
 			       'FEATURES))
@@ -298,12 +298,12 @@
 	     (GO NO)
 	SIB  (SETQ LAST (CAR RD))
 	     (SETQ NEXT (CADR RD))
-	     (COND ((NOT (EQ LAST 'E)))
-		   ((EQ NEXT 'I)
-		    (SETQ RD (CONS 'Y (CDDR RD))))
-		   ((EQ NEXT 'X) (SETQ RD (CDR RD)))
-		   ((AND (EQ NEXT 'H)
-			 (NOT (EQ (CADDR RD) 'T)))
+	     (COND ((NOT (EQ LAST '|E|)))
+		   ((EQ NEXT '|I|)
+		    (SETQ RD (CONS '|Y| (CDDR RD))))
+		   ((EQ NEXT '|X|) (SETQ RD (CDR RD)))
+		   ((AND (EQ NEXT '|H|)
+			 (NOT (EQ (CADDR RD) '|T|)))
 		    (SETQ RD (CDR RD)))
 		   ((AND (MEMQ NEXT '(S Z))
 			 (EQ NEXT (CADDR RD)))
@@ -322,7 +322,7 @@
 			  (MOD FEATURES (GET (CAR WORD) 'MOD))
 			  (GET ROOT 'SEMANTICS)
 			  ROOT))
-	      ((EQ (CAR RD) 'E) (SETQ RD (CDR RD)) (GO TRY))
+	      ((EQ (CAR RD) '|E|) (SETQ RD (CDR RD)) (GO TRY))
 	      ((GO NO)))
 
 	     ;;;----------------------------------------------------
@@ -341,7 +341,7 @@
 					    (APPEND (MEET FEATURES
 								       ;MARK IT AS POSSESSIVE 
 							  (GET 'POSS
-							       'ELIM))
+							       '|E|LIM))
 						    '(POSS))
 					    (GET WRD
 						 'SEMANTICS)
@@ -376,9 +376,9 @@
 			    (OR ALTN (SETQ NEWWORD NIL))
 			    (GO PUNC)))
 	     (TERPRI)
-	     (SAY *SORRY I DON/'T KNOW THE WORD ")
-	     (PRINC WRD)
-	     (PRINC '/ "/.)
+	     (SAY *SORRY I DON/'T KNOW THE WORD ") ;; "
+	     (PRINC WRD) 
+	     (PRINC "/ \"/.")
 	     (TERPRI)
 (cond (define-online 
 (terpri)
@@ -388,7 +388,7 @@
 (terpri)
 (mapc '(lambda (w) (print2 w)) (reverse sent))
 (print2 wrd)
-(princ '/ )
+(princ "/")
 (go char)
 ))
 	     (SAY PLEASE TYPE <LF> AND CONTINUE THE SENTENCE/.)

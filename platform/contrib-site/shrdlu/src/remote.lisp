@@ -71,7 +71,7 @@
   (if remote-cmds-p
       (prog2
        (reload-cmd-buffer)
-       (subseq cmd-buffer 0 (position #\  cmd-buffer))
+       (subseq cmd-buffer 0 (position #\Space cmd-buffer))
        (setq cmd-buffer ""))
       (read)))
 
@@ -119,7 +119,7 @@
   (let ((out '())
         (quotedp nil)
         (new-sentence t)
-        (final-punct  '(#\. #\? #\!))
+        (final-punct  '(#\FULL_STOP #\QUESTION_MARK #\EXCLAMATION_MARK))
         (maxindex (- (length s) 1)))
     (loop
        for c from 0 to maxindex
@@ -127,23 +127,23 @@
                 (current-char (char s c))
                 (next-char (char s (min (+ c 1) maxindex))))
       ;; eliminate inappropriate spaces next to quotation marks
-           (if (char= current-char #\")
+           (if (char= current-char #\QUOTATION_MARK)
             (setq quotedp (not quotedp)))
            (cond
         ;; eliminate double spaces and spaces before final punctuation.
-              ((char= current-char #\ )
-               (if (and (not (char= previous-char #\ ))
+              ((char= current-char #\Space)
+               (if (and (not (char= previous-char #\Space))
                     (not (member next-char final-punct))
                     (not (and quotedp
-                           (char= previous-char #\")))
+                           (char= previous-char #\QUOTATION_MARK)))
                     (not (and quotedp
-                           (char= next-char #\"))))
+                           (char= next-char #\QUOTATION_MARK))))
                 (setq out (cons current-char out))))
               ((char= current-char #\i)
                (if (and (or (= c 0)
-                         (char= previous-char #\ ))
-                    (or (char= next-char #\ )
-                        (char= next-char #\')))
+                         (char= previous-char #\Space))
+                    (or (char= next-char #\Space)
+                        (char= next-char #\APOSTROPHE)))
                 (setq out (cons #\I out))
                 (setq out (cons current-char out)))
                (setq new-sentence nil))
@@ -164,26 +164,26 @@
     (loop
        for c across s
        do (cond
-           ((char= c #\ )
-            (setq out (cons #\+ out)))
-           ((char= c #\?)
-            (setq out (append '(#\f #\3 #\%) out)))
-           ((char= c #\&)
-            (setq out (append '(#\6 #\2 #\%) out)))
-           ((char= c #\')
-            (setq out (append '(#\7 #\2 #\%) out)))
-           ((char= c #\")
-            (setq out (append '(#\2 #\2 #\%) out)))
-           ((char= c #\=)
-            (setq out (append '(#\d #\3 #\%) out)))
-           ((char= c #\+)
-            (setq out (append '(#\b #\2 #\%) out)))
-           ((char= c #\%)
-            (setq out (append '(#\5 #\2 #\%) out)))
-           ((char= c #\()
-            (setq out (append '(#\8 #\2 #\%) out)))
-           ((char= c #\))
-            (setq out (append '(#\9 #\2 #\%) out)))
+           ((char= c #\Space)
+            (setq out (cons #\PLUS out)))
+           ((char= c #\QUESTION_MARK)
+            (setq out (append '(#\f #\3 #\PERCENT_SIGN) out)))
+           ((char= c #\AMPERSAND)
+            (setq out (append '(#\6 #\2 #\PERCENT_SIGN) out)))
+           ((char= c #\APOSTROPHE)
+            (setq out (append '(#\7 #\2 #\PERCENT_SIGN) out)))
+           ((char= c #\QUOTATION_MARK)
+            (setq out (append '(#\2 #\2 #\PERCENT_SIGN) out)))
+           ((char= c #\EQUALS)
+            (setq out (append '(#\d #\3 #\PERCENT_SIGN) out)))
+           ((char= c #\PLUS)
+            (setq out (append '(#\b #\2 #\PERCENT_SIGN) out)))
+           ((char= c #\PERCENT_SIGN)
+            (setq out (append '(#\5 #\2 #\PERCENT_SIGN) out)))
+           ((char= c #\LEFT_PARENTHESIS)
+            (setq out (append '(#\8 #\2 #\PERCENT_SIGN) out)))
+           ((char= c #\RIGHT_PARENTHESIS)
+            (setq out (append '(#\9 #\2 #\PERCENT_SIGN) out)))
            (t
              (setq out (cons c out)))))
     (coerce (reverse out) 'string)))
@@ -211,7 +211,7 @@
 (DEFUN PRINT2 (X)
   "A replacement for SHDRLU's original PRINT2, meant to play nicely
   with the remote response mechanism, if necessary."
-  (COND ((> CHRCT (FLATSIZE X)) (PRINC '\ ))
+  (COND ((> CHRCT (FLATSIZE X)) (PRINC '\Space))
    (T (TERPRI)))
   (setq response-buffer
    (concatenate 'string
@@ -241,4 +241,4 @@
   Admittedly a lame name, but there are limits to cleverness."
   (PROG2 (OR (> CHRCT (FLATSIZE X)) (TERPRI))
       (PRINC X)
-    (PRINC '\ )))
+    (PRINC '\Space)))

@@ -91,10 +91,10 @@
                                       (LIST 'NN
                                             (LIST  'GO
                                                    (CADR EXP)))
-                                      (LIST 'T
+                                      (LIST '|T|
                                             (LIST  'GO
                                                    (CADDR EXP)))))))
-                     ((EQ (CAR EXP) ':)
+                     ((EQ (CAR EXP) '|:|)
                       (SETQ PREDICATE
                               (CADR EXP)
                               T1
@@ -118,7 +118,7 @@
                                                                                      (TOPLEVEL-LIST (LIST 'NULL
                                                                                                      'NN)
                                                                                                  (TAG-CHECK T3))
-                                                                                     (TOPLEVEL-LIST 'T
+                                                                                     (TOPLEVEL-LIST '|T|
                                                                                                  (TAG-CHECK T1))))
                                                                     (T (TAG-CHECK T1))))))
                                          ((AND (NULL T1) T2 (NULL T3))
@@ -134,13 +134,13 @@
                                                              (TOPLEVEL-LIST (LIST 'NULL
                                                                              'NN)
                                                                         (TAG-CHECK T3))
-                                                             (TOPLEVEL-LIST 'T
+                                                             (TOPLEVEL-LIST '|T|
                                                                         (TAG-CHECK T2))))))
                                          ((AND T1 T2 (NULL T3))
                                           (LIST 'COND
                                                 (TOPLEVEL-LIST  'RESULT
                                                           (TAG-CHECK T1))
-                                                (TOPLEVEL-LIST 'T (TAG-CHECK T2))))
+                                                (TOPLEVEL-LIST '|T| (TAG-CHECK T2))))
                                          ((AND T1 T2 T3)
                                           (LIST
                                                 'COND
@@ -149,9 +149,9 @@
                                                                     (TOPLEVEL-LIST (LIST 'NULL
                                                                                     'NN)
                                                                                (TAG-CHECK T3))
-                                                                    (TOPLEVEL-LIST 'T
+                                                                    (TOPLEVEL-LIST '|T|
                                                                                (TAG-CHECK T1))))
-                                                (TOPLEVEL-LIST 'T (TAG-CHECK T2))))
+                                                (TOPLEVEL-LIST '|T| (TAG-CHECK T2))))
                                          ((AND (NULL T1) (NULL T2) T3)
                                           (LIST 'COND
                                                 (TOPLEVEL-LIST  (LIST 'AND
@@ -169,6 +169,6 @@
        (T
          (LIST (LIST 'M (LIST 'QUOTE (CAR TAG-EXP)))
           (LIST 'GO 'FAIL)))))
-#|�Visual LISP� Format Options�
+#| Visual LISP  Format Options 
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#
