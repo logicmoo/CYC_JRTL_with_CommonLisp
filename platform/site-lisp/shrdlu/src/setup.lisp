@@ -202,28 +202,6 @@
            T)
       (SETQ *RSET T))
 
-(DEFUN TRACEMODE  NIL
-      (QUIETMODE)
-      (NORMALFEATUREMODE)
-      (NOPAUSES)
-      (SETQ NOSTOP
-           T
-       NEVERSTOP
-           T
-       ANSWER?
-           T
-       SMN
-           NIL
-       PLANNERSEE
-           'ALL
-       PARSETRACE
-           'ALL
-       TOPLEVEL-ERRSET?
-           NIL
-       ERT-ERRSET
-           T)
-      (SETQ *RSET T))
-
 
 (SETQ ZOG-USER NIL
       ZOGUSER NIL)

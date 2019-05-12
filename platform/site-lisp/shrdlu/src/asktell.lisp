@@ -1,4 +1,30 @@
 
+
+
+(DEFUN TRACEMODE  NIL
+      (QUIETMODE)
+      (NORMALFEATUREMODE)
+      (NOPAUSES)
+      (SETQ NOSTOP
+           T
+       NEVERSTOP
+           T
+       ANSWER?
+           T
+       SMN
+           NIL
+       PLANNERSEE
+           'ALL
+       PARSETRACE
+           'ALL
+       TOPLEVEL-ERRSET?
+           NIL
+       ERT-ERRSET
+           T)
+      (SETQ *RSET T))
+
+
+
 ;; Comments out code
 (DEFMACRO NOP (&REST R) T)
 
@@ -33,8 +59,8 @@
       vl))
 
 ;; Asserts
-;;(DEFMACRO THSETF ((GETTED SYM PRED) VAL)
-;;   `(S3TF ,SYM ,PRED ,VAL))
+(DEFMACRO THSETF ((GETTED SYM PRED) VAL)
+   `(S3TF ,SYM ,PRED ,VAL))
 
 (DEFMACRO S3TF (SYM PRED VAL)
    `(progn
