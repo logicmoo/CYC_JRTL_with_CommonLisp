@@ -5,7 +5,7 @@
 (defun shstpo  nil ;"sh-standard-printout"
       (parsings))
 
-(defun parsings	 nil
+(defun parsings   nil
       (printc "  ratio of winning parses to total ")
       (princ (THGET 'parsings 'wins))
       (princ '/)
@@ -13,33 +13,33 @@
 
 (defun parsetrace  (labels)
       (cond ((= (arg nil) 0)
-	     (setq parsetrace 'all))
-	    (t (setq parsetrace (listify labels)))))
+             (setq parsetrace 'all))
+       (t (setq parsetrace (listify labels)))))
 
 (defun parsebreak  (labels)
       (cond ((= (arg nil) 0)
-	     (setq parsebreak 'all))
-	    (t (setq parsebreak (listify labels)))))
+             (setq parsebreak 'all))
+       (t (setq parsebreak (listify labels)))))
 
 (defun fancytimer  (off?)
       (cond ((= (arg nil) 1)
-	     (setq sh-print-time nil))
-	    (t (setq sh-print-time 'fancy))))
+             (setq sh-print-time nil))
+       (t (setq sh-print-time 'fancy))))
 
 (defun totaltime  (off?)
       (cond ((= (arg nil) 1)
-	     (setq sh-print-time nil))
-	    (t (setq sh-print-time t))))
+             (setq sh-print-time nil))
+       (t (setq sh-print-time t))))
 
-(defun smntrace	 (off?)
+(defun smntrace   (off?)
       (cond ((= (arg nil) 1)
-	     (setq smntrace nil))
-	    (t (setq smntrace t))))
+             (setq smntrace nil))
+       (t (setq smntrace t))))
 
-(defun smnbreak	 (off?)
+(defun smnbreak   (off?)
       (cond ((= (arg nil) 1)
-	     (setq smnbreak nil))
-	    (t (setq smnbreak t))))
+             (setq smnbreak nil))
+       (t (setq smnbreak t))))
 
 
 
@@ -51,43 +51,43 @@
 
 (DEFUN-FEXPR LBK (LABELS) (SETQ LABELBREAK LABELS))
 (DEFUN-FEXPR LABELTRACE
-	     (A)
-	     (MAPC
-		   #'(LAMBDA (X)
-			  (PROG	(BODY)
-				(PRINT X)
-				(COND ((THGET X 'LABELTRACED)
-				       (PRINC 'ALLREADY-)
-				       (GO TRACED))
-				      ((THGET X 'INTERPRET)
-				       (SETQ BODY (CDR (THGET X 'INTERPRET))))
-				      ((THGET X 'EXPR)
-				       (SETQ BODY (CDDR (CADDR (THGET X 'EXPR)))))
-				      (T (PRINC "CAN'T BE-") (GO TRACED)))
-				(MAPL #'(LAMBDA (Y)
-					     (AND (ATOM (CAR Y))
-						  (RPLACD Y
-							  (CONS	(LIST 'PASSING
-								      (LIST 'QUOTE
-									    (CAR Y)))
-								(CDR Y)))))
-				      BODY)
-				(THSETF (G3T X 'LABELTRACED) T)
-				TRACED
-				(PRINC 'LABELTRACED)))
-		   A))
+       (A)
+       (MAPC
+        #'(LAMBDA (X)
+           (PROG  (BODY)
+              (PRINT X)
+              (COND ((THGET X 'LABELTRACED)
+                     (PRINC 'ALLREADY-)
+                     (GO TRACED))
+                    ((THGET X 'INTERPRET)
+                     (SETQ BODY (CDR (THGET X 'INTERPRET))))
+                    ((THGET X 'EXPR)
+                     (SETQ BODY (CDDR (CADDR (THGET X 'EXPR)))))
+                    (T (PRINC "CAN'T BE-") (GO TRACED)))
+              (MAPL #'(LAMBDA (Y)
+                         (AND (ATOM (CAR Y))
+                             (RPLACD Y
+                                     (CONS  (LIST 'PASSING
+                                                   (LIST 'QUOTE
+                                                           (CAR Y)))
+                                            (CDR Y)))))
+                      BODY)
+              (THSETF (G3T X 'LABELTRACED) T)
+              TRACED
+              (PRINC 'LABELTRACED)))
+        A))
 
 
-(DEFUN PASSING	(A)
+(DEFUN PASSING  (A)
       (SETQ LASTLABEL A)
       (AND (COND ((ATOM LABELTRACE)
-		  (AND LABELTRACE (PRINT 'PASSING) (PRINC A)))
-		 ((MEMQ A LABELTRACE)
-		  (PRINT 'PASSING)
-		  (PRINC A)))
-	   (COND ((ATOM LABELBREAK)
-		  (AND LABELBREAK (ERT LABELBREAK)))
-		 ((MEMQ A LABELBREAK) (ERT LABELBREAK)))))
+                  (AND LABELTRACE (PRINT 'PASSING) (PRINC A)))
+            ((MEMQ A LABELTRACE)
+             (PRINT 'PASSING)
+             (PRINC A)))
+       (COND ((ATOM LABELBREAK)
+              (AND LABELBREAK (ERT LABELBREAK)))
+        ((MEMQ A LABELBREAK) (ERT LABELBREAK)))))
 
 
 (SETQ LABELTRACE NIL)
@@ -95,42 +95,42 @@
 (SETQ LABELBREAK NIL)
 
 (DEFUN-FEXPR UNLABELTRACE
-	     (A)
-	     (MAPC
-		   '(LAMBDA (X)
-			  (PROG	(BODY)
-				(PRINT X)
-				(COND ((NOT (THGET X 'LABELTRACED))
-				       (PRINC "ISN'T ALLREADY-")
-				       (GO TRACED))
-				      ((THGET X 'INTERPRET)
-				       (SETQ BODY (CDR (THGET X
-							      'INTERPRET))))
-				      ((THGET X 'EXPR)
-				       (SETQ BODY (CDDR	(CADDR (THGET X
-								      'EXPR)))))
-				      (T
-				       (PRINC "CAN'T BE-")
-				       (GO TRACED)))
-				(MAPL '(LAMBDA (Y)
-					     (AND (ATOM (CAR Y))
-						  (RPLACD Y (CDDR Y))))
-				      BODY)
-				(THSETF (G3T X 'LABELTRACED) NIL)
-				(PRINC 'UN)
-				TRACED
-				(PRINC 'LABELTRACED)))
-		   A))
+       (A)
+       (MAPC
+        '(LAMBDA (X)
+          (PROG  (BODY)
+             (PRINT X)
+             (COND ((NOT (THGET X 'LABELTRACED))
+                    (PRINC "ISN'T ALLREADY-")
+                    (GO TRACED))
+                   ((THGET X 'INTERPRET)
+                    (SETQ BODY (CDR (THGET X
+                                     'INTERPRET))))
+                   ((THGET X 'EXPR)
+                    (SETQ BODY (CDDR  (CADDR (THGET X
+                                              'EXPR)))))
+                   (T
+                        (PRINC "CAN'T BE-")
+                        (GO TRACED)))
+             (MAPL '(LAMBDA (Y)
+                        (AND (ATOM (CAR Y))
+                            (RPLACD Y (CDDR Y))))
+                    BODY)
+             (THSETF (G3T X 'LABELTRACED) NIL)
+             (PRINC 'UN)
+             TRACED
+             (PRINC 'LABELTRACED)))
+        A))
 
 
 (DEFS TELLABLE
       TELL
       #'(LAMBDA (X)
-	     (APPLY TELLABLE
-		    (LIST (CHARG X
-				 'CONCEPT\:
-				 '(ANY PLANNER GOAL PATTERN BEGGININGWHITH THIS	CONCEPT	NAME CAN BE ACCEPTED BY	THE SYSTEM ASNEW INFORMATION --	BEWARE OF INTERACTIONS WITH SPECIALHACKS FOR LOCATION\,
-				   ETC\.))))))
+         (APPLY TELLABLE
+           (LIST (CHARG X
+                  'CONCEPT\:
+                  '(ANY PLANNER GOAL PATTERN BEGGININGWHITH THIS  CONCEPT  NAME CAN BE ACCEPTED BY  THE SYSTEM ASNEW INFORMATION --  BEWARE OF INTERACTIONS WITH SPECIALHACKS FOR LOCATION\,
+                        ETC\.))))))
 
 (DEFUN PEV  (EV COL TOP)
       (TERPRI)
@@ -143,37 +143,37 @@
       (PRINC " TO ")
       (PRINC (THGET EV 'END))
       (AND TOP
-	   (PRINC " REASON: ")
-	   (PRINC (THGET EV 'WHY)))
+       (PRINC " REASON: ")
+       (PRINC (THGET EV 'WHY)))
       (MAPC #'(LAMBDA (X)
-		   (AND	(EQ EV (THGET X 'WHY))
-			(PEV X (+ COL 8.) NIL)))
-	    (REVERSE EVENTLIST)))
+               (AND  (EQ EV (THGET X 'WHY))
+                (PEV X (+ COL 8.) NIL)))
+       (REVERSE EVENTLIST)))
 
 (DEFS EVENT
       SHOW
       #'(LAMBDA (X)
-	     (SETQ X (CHARG X
-			    'EVENT\:
-			    '(EVENT TO BE DISPLAYED --<LF> FOR ENTIRE EVENT LIST)))
-	     (COND (X (PEV X 0. T))
-		   (T
-		    (MAPC '(LAMBDA (Y)
-				 (AND (EQ 'COMMAND
-					  (THGET Y 'WHY))
-				      (PEV Y 0. T)))
-			  (REVERSE EVENTLIST))))))
+         (SETQ X (CHARG X
+                  'EVENT\:
+                  '(EVENT TO BE DISPLAYED --<LF> FOR ENTIRE EVENT LIST)))
+         (COND (X (PEV X 0. T))
+          (T
+             (MAPC '(LAMBDA (Y)
+                     (AND (EQ 'COMMAND
+                            (THGET Y 'WHY))
+                          (PEV Y 0. T)))
+               (REVERSE EVENTLIST))))))
 
 (DEFUN-FEXPR ABBREVIATE
-	     (A)
-	     (MAPCAR #'(LAMBDA (X)
-			    (THSETF (G3T (READLIST (MAPCAR #'(LAMBDA (X Y) X)
-							   (EXPLODE X)
-							   '(T T)))
-					 'ABBREV)
-				    X))
-		     A)
-	     'DONE)
+       (A)
+       (MAPCAR #'(LAMBDA (X)
+                  (THSETF (G3T (READLIST (MAPCAR #'(LAMBDA (X Y) X)
+                                          (EXPLODE X)
+                                          '(T T)))
+                           'ABBREV)
+                       X))
+          A)
+       'DONE)
 
 (ABBREVIATE SHOW TELL LISP
   PLANNER PARSING DEFINITIONS SCENE INPUT
@@ -183,40 +183,40 @@
 
 (DEFUN SHOWSCENE  (X)
       (PROG (PLANNERSEE)
-	    (TERPRI)
-	    (TAB 16.)
-	    (PRINC "CURRENT SCENE")
-	    (TERPRI)
-	    (TERPRI)
-	    (MAPC
-		  #'(LAMBDA (OBJ)
-			 (PRINT OBJ)
-			 (PRINC "-->  ")
-			 (EVLIS (CAR (NAMEOBJ OBJ 'DESCRIBE)))
-			 (PRINC " AT ")
-			 (PRINC (CADR (ASSOC OBJ ATABLE)))
-			 (AND (SETQ OBJ
-					 (THVAL	'(THFIND
-						  ALL
-						  (THV X)
-						  (X)
-						  (THGOAL
-						   (\#SUPPORT
-						    (THV OBJ)
-						    (THV X))))
-						(LIST (LIST 'OBJ OBJ))))
-			      (TAB 13.)
-			      (PRINC "SUPPORTS ")
-			      (PRINC OBJ)))
-		  '(:B1 :B2 :B3 :B4 :B5 :B6 :B7 :B10 :BOX))
-	    (TERPRI)
-	    (SAY THE HAND IS GRASPING)
-	    (PRINT3 " ")
-	    (PRINT3 (COND ((SETQ OBJ
-				      (THVAL '(THGOAL (\#GRASPING (THNV X)))
-					     '((X THUNBOUND))))
-			   (CADAR OBJ))
-			  (T 'NOTHING)))))
+       (TERPRI)
+       (TAB 16.)
+       (PRINC "CURRENT SCENE")
+       (TERPRI)
+       (TERPRI)
+       (MAPC
+        #'(LAMBDA (OBJ)
+           (PRINT OBJ)
+           (PRINC "-->  ")
+           (EVLIS (CAR (NAMEOBJ OBJ 'DESCRIBE)))
+           (PRINC " AT ")
+           (PRINC (CADR (ASSOC OBJ ATABLE)))
+           (AND (SETQ OBJ
+                  (THVAL  '(THFIND
+                            ALL
+                            (THV X)
+                            (X)
+                            (THGOAL
+                                   (\#SUPPORT
+                                          (THV OBJ)
+                                          (THV X))))
+                        (LIST (LIST 'OBJ OBJ))))
+                (TAB 13.)
+                (PRINC "SUPPORTS ")
+                (PRINC OBJ)))
+        '(:B1 :B2 :B3 :B4 :B5 :B6 :B7 :B10 :BOX))
+       (TERPRI)
+       (SAY THE HAND IS GRASPING)
+       (PRINT3 " ")
+       (PRINT3 (COND ((SETQ OBJ
+                       (THVAL '(THGOAL (\#GRASPING (THNV X)))
+                            '((X THUNBOUND))))
+                      (CADAR OBJ))
+                (T 'NOTHING)))))
 
 (DEFUN TELLCHOICE  (NODE)
       (DECLARE (SPECIAL NODE))
@@ -228,119 +228,119 @@
       (SETQ NODE (CAR NODE))
       (SHOWTELLCHOICE))
 
-(DEFUN SHOWTELL	 (A NODE SYSTEMS INFO ACTION)
+(DEFUN SHOWTELL   (A NODE SYSTEMS INFO ACTION)
       (DECLARE (SPECIAL SYSTEMS INFO ACTION))
       (COND ((NULL A) (SHOWTELLCHOICE))
-	    ((THGET (CAR A) ACTION)
-	     (APPLY (EVAL (THGET (CAR A) ACTION)) (LIST A)))
-	    ((PRINTEXT '("I DON'T KNOW HOW TO"))
-	     (PRINT2 ACTION)
-	     (PRINT2 (CAR A))))
+       ((THGET (CAR A) ACTION)
+        (APPLY (EVAL (THGET (CAR A) ACTION)) (LIST A)))
+       ((PRINTEXT '("I DON'T KNOW HOW TO"))
+        (PRINT2 ACTION)
+        (PRINT2 (CAR A))))
       '*)
 
 (DEFUN SHOWTELLCHOICE  NIL
-      (APPLY (EVAL (THGET (SETQ	NODE (QUERY '(WHICH OPTION?)
-					    (PRINT (THGET NODE SYSTEMS))
-					    (THGET NODE INFO)))
-			  ACTION))
-	     (LIST (LIST NODE))))
+      (APPLY (EVAL (THGET (SETQ  NODE (QUERY '(WHICH OPTION?)
+                                       (PRINT (THGET NODE SYSTEMS))
+                                       (THGET NODE INFO)))
+                    ACTION))
+       (LIST (LIST NODE))))
 
-(DEFUN SUBLEAF	(KID DAD)
+(DEFUN SUBLEAF  (KID DAD)
       (CATCH (AND (MAPC 'SUBL2 (THGET DAD SYSTEMS)) NIL)))
 
 (DEFUN SUBL2  (X)
       (COND ((EQ X KID) (THROW T))
-	    (T (MAPC 'SUBL2 (THGET X SYSTEMS)))))
+       (T (MAPC 'SUBL2 (THGET X SYSTEMS)))))
 
 (DEFUN QUERY  (TEXT CHOICES HELP)
       (PROG (EXPL CH2 EX2 CH3 EX3 CHAR NOTINIT)
-	    (SETQ EXPL (MAPCAR 'EXPLODE
-			       (CONS 'QUIT CHOICES)))
-	    TOP
-	    (SETQ CH2 (CONS 'QUIT CHOICES)
-		  EX2 EXPL)
-	    (PRINTEXT TEXT)
-	    READ
-	    (COND ((MEMBER (SETQ CHAR (CHAR-UPCASE (READ-CHAR))) BREAKCHARS)
-		   (COND ((NOT NOTINIT) (GO READ))
-			 ((CDR CH2) (WRITE-CHAR #\Newline) (GO READ))
-			 (T
-			  (MAPC 'PRINC (CAR EX2))
-			  (AND (EQ (CAR CH2) 'QUIT)
-			       (ERR NIL))
-			  (RETURN (CAR CH2)))))
-		  ((CHAR= CHAR #\Newline) (GO READ))
-		  ((CHAR= CHAR #\QUESTION_MARK) (PRINTEXT HELP) (GO CHOICES)))
-	    (SETQ CH3 NIL
-		  EX3 NIL)
-	    (MAPC #'(LAMBDA (X Y)
-			 (AND (CHAR= CHAR (CHARACTER (CAR X)))
-			      (SETQ CH3 (CONS Y CH3))
-			      (SETQ EX3 (CONS (CDR X) EX3))))
-		  EX2
-		  CH2)
-	    (AND CH3
-		 (SETQ EX2 EX3
-		       CH2 CH3)
-		 (SETQ NOTINIT T)
-		 (GO READ))
-	    GO
-	    (OR (MEMBER (READ-CHAR) BREAKCHARS) (GO GO))
-	    CHOICES
-	    (PRINTEXT '(THE CHOICES ARE\:))
-	    (PRINT CHOICES)
-	    (GO TOP)))
+       (SETQ EXPL (MAPCAR 'EXPLODE
+                   (CONS 'QUIT CHOICES)))
+       TOP
+       (SETQ CH2 (CONS 'QUIT CHOICES)
+        EX2 EXPL)
+       (PRINTEXT TEXT)
+       READ
+       (COND ((MEMBER (SETQ CHAR (CHAR-UPCASE (READ-CHAR))) BREAKCHARS)
+              (COND ((NOT NOTINIT) (GO READ))
+                ((CDR CH2) (WRITE-CHAR #\Newline) (GO READ))
+                (T
+                    (MAPC 'PRINC (CAR EX2))
+                    (AND (EQ (CAR CH2) 'QUIT)
+                         (ERR NIL))
+                    (RETURN (CAR CH2)))))
+        ((CHAR= CHAR #\Newline) (GO READ))
+        ((CHAR= CHAR #\U003F) (PRINTEXT HELP) (GO CHOICES))) ;; QUESTION_MARK
+       (SETQ CH3 NIL
+        EX3 NIL)
+       (MAPC #'(LAMBDA (X Y)
+                (AND (CHAR= CHAR (CHARACTER (CAR X)))
+                     (SETQ CH3 (CONS Y CH3))
+                     (SETQ EX3 (CONS (CDR X) EX3))))
+        EX2
+        CH2)
+       (AND CH3
+        (SETQ EX2 EX3
+                CH2 CH3)
+        (SETQ NOTINIT T)
+        (GO READ))
+       GO
+       (OR (MEMBER (READ-CHAR) BREAKCHARS) (GO GO))
+       CHOICES
+       (PRINTEXT '(THE CHOICES ARE\:))
+       (PRINT CHOICES)
+       (GO TOP)))
 
-(DEFUN REQUEST	(TEXT HELP)
+(DEFUN REQUEST  (TEXT HELP)
       (PROG (X)
-	    TOP
-	    (PRINTEXT TEXT)
-	    READ
-	    (COND ((MEMBER (ASCII (PEEK-CHAR)) BREAKCHARS)
-		   (READ-CHAR)
-		   (GO READ))
-		  ((EQUAL (PEEK-CHAR) 10.) (READ-CHAR) (RETURN NIL))
-		  ((EQ (ASCII (PEEK-CHAR)) '|?|)
-		   (READ-CHAR)
-		   (PRINTEXT (OR HELP
-				 '(NO INFORMATION AVAILABLE)))
-		   (GO TOP))
-		  ((EQ (SETQ X (READ)) 'QUIT) (ERR NIL))
-		  (T (RETURN X)))))
+       TOP
+       (PRINTEXT TEXT)
+       READ
+       (COND ((MEMBER (ASCII (PEEK-CHAR)) BREAKCHARS)
+              (READ-CHAR)
+              (GO READ))
+        ((EQUAL (PEEK-CHAR) 10.) (READ-CHAR) (RETURN NIL))
+        ((EQ (ASCII (PEEK-CHAR)) '|?|)
+         (READ-CHAR)
+         (PRINTEXT (OR HELP
+                    '(NO INFORMATION AVAILABLE)))
+         (GO TOP))
+        ((EQ (SETQ X (READ)) 'QUIT) (ERR NIL))
+        (T (RETURN X)))))
 
-(DEFUN SHOWPROP	 (X)
+(DEFUN SHOWPROP   (X)
       (COND ((NULL X)
-	     (SHOWPROP (CONS (REQUEST 'ATOM\:
-				      '(THE
-					NAME
-					OF
-					THE
-					ATOM
-					WHOSE
-					PROPERTY
-					(IES)
-					YOU
-					WANT
-					TO
-					EXAMINE))
-			     (LISTIFY (REQUEST 'PROPERTY\:
-						'(THE PROPERTY
-						 (IES)
-						 YOU
-						 WANT
-						 TO
-						 SEE\.
-						 A
-						 LINE
-						 FEED
-						 MEANS
-						 ALL
-						 PROPERTIES
-						 OF
-						 THE
-						 ATOM))))))
-	    ((CDR X) (APPLY 'DISP X))
-	    (T (PROG (DPSTOP) (DP (CAR X))))))
+             (SHOWPROP (CONS (REQUEST 'ATOM\:
+                              '(THE
+                                NAME
+                                OF
+                                THE
+                                ATOM
+                                WHOSE
+                                PROPERTY
+                                (IES)
+                                YOU
+                                WANT
+                                TO
+                                EXAMINE))
+                        (LISTIFY (REQUEST 'PROPERTY\:
+                                  '(THE PROPERTY
+                                         (IES)
+                                         YOU
+                                         WANT
+                                         TO
+                                         SEE\.
+                                         A
+                                         LINE
+                                         FEED
+                                         MEANS
+                                         ALL
+                                         PROPERTIES
+                                         OF
+                                         THE
+                                         ATOM))))))
+       ((CDR X) (APPLY 'DISP X))
+       (T (PROG (DPSTOP) (DP (CAR X))))))
 
 (DEFUN-FEXPR TELL (A)
     (SHOWTELL A 'CANTELL 'TELLTREE 'TELLINFO 'TELL))
@@ -350,16 +350,16 @@
       (TAB COL)
       (PRINC ROOT)
       (MAPC #'(LAMBDA (X) (TREEPRINT X TR (+ COL 8.)))
-	    (THGET ROOT TR))
+       (THGET ROOT TR))
       '*)
 
 (DEFUN CHARG  (X TEXT HELP)
       (COND ((CDR X) (CADR X))
-	    (T (REQUEST TEXT HELP))))
+       (T (REQUEST TEXT HELP))))
 
 (DEFUN-FEXPR SHOW
-	     (A)
-	     (SHOWTELL A 'CANSHOW 'SHOWTREE 'SHOWINFO 'SHOW))
+       (A)
+       (SHOWTELL A 'CANSHOW 'SHOWTREE 'SHOWINFO 'SHOW))
 
 (DEFS CANSHOW
       SHOWTREE
@@ -401,14 +401,14 @@
 (DEFS STOP
       TELL
       #'(LAMBDA (X)
-	     (SETQ DPSTOP (ONOFF X
-				 '(STOP AFTER DISPLAYING EACH NODEAND SEMANTIC STRUCTURE?)))
-	     (SETQ PLANNERSEE
-			(AND PLANNERSEE
-			     (COND ((ONOFF X
-					   '(STOP AFTER SHOWING PLANNER INPUT?))
-				    T)
-				   ('NOSTOP))))))
+         (SETQ DPSTOP (ONOFF X
+                       '(STOP AFTER DISPLAYING EACH NODEAND SEMANTIC STRUCTURE?)))
+         (SETQ PLANNERSEE
+          (AND PLANNERSEE
+                  (COND ((ONOFF X
+                          '(STOP AFTER SHOWING PLANNER INPUT?))
+                         T)
+                     ('NOSTOP))))))
 
 (DEFS PLANNER
       SHOWTREE
@@ -419,14 +419,14 @@
       (INPUT ACTION THEOREM ASSERTIONS TELLABLE)
       TELL
       #'(LAMBDA (X)
-	     (COND ((NULL (CDR X)) (TELLCHOICE X))
-		   ((EQ (CADR X) 'ON)
-		    (THTRACE THEOREM THASSERT THERASE (THGOAL T T))
-		    (SETQ PLANNERSEE T))
-		   ((EQ (CADR X) 'OFF)
-		    (SETQ PLANNERSEE NIL)
-		    (THUNTRACE))
-		   (T (TELLCHOICE X)))))
+         (COND ((NULL (CDR X)) (TELLCHOICE X))
+          ((EQ (CADR X) 'ON)
+           (THTRACE THEOREM THASSERT THERASE (THGOAL T T))
+           (SETQ PLANNERSEE T))
+          ((EQ (CADR X) 'OFF)
+           (SETQ PLANNERSEE NIL)
+           (THUNTRACE))
+          (T (TELLCHOICE X)))))
 
 (DEFS PARSING
       SHOWTREE
@@ -437,19 +437,19 @@
       (NODE LABEL ATTEMPT)
       TELL
       #'(LAMBDA (X)
-	     (COND ((NULL (CDR X)) (TELLCHOICE X))
-		   ((EQ (CADR X) 'ON)
-		    (IOC W)
-		    (SETQ PARSENODE-SEE	T
-			  LABELTRACE T)
-		    (TRACE CALLSM PARSE))
-		   ((EQ (CADR X) 'OFF)
-		    (IOC W)
-		    (SETQ PARSENODE-SEE	NIL
-			  LABELTRACE NIL)
-		    (UNTRACE CALLSM PARSE))
-		   (T (TELLCHOICE X)))
-	     (IOC V)))
+         (COND ((NULL (CDR X)) (TELLCHOICE X))
+          ((EQ (CADR X) 'ON)
+           (IOC W)
+           (SETQ PARSENODE-SEE  T
+             LABELTRACE T)
+           (TRACE CALLSM PARSE))
+          ((EQ (CADR X) 'OFF)
+           (IOC W)
+           (SETQ PARSENODE-SEE  NIL
+             LABELTRACE NIL)
+           (UNTRACE CALLSM PARSE))
+          (T (TELLCHOICE X)))
+         (IOC V)))
 
 (DEFS DEFINITIONS
       SHOWTREE
@@ -464,8 +464,8 @@
 (DEFS INPUT
       TELL
       #'(LAMBDA (X)
-	     (SETQ PLANNERSEE
-			(ONOFF X '(TO SEE INPUT TO PLANNER))))
+         (SETQ PLANNERSEE
+          (ONOFF X '(TO SEE INPUT TO PLANNER))))
       SHOW
       #'SHOWCHOICE
       SHOWTREE
@@ -474,24 +474,24 @@
 (DEFS SEMANTICS
       TELL
       #'(LAMBDA (X)
-	     (SETQ SMN NIL
-		   BUILD-SEE T
-		   SMN-STOP T)
-	     (COND ((EQ	(QUERY '(DO SEMANTIC ANALYSIS?)
-			       '(YES NO)
-			       NIL)
-			'NO)
-		    (SETQ SMN T))
-		   ((EQ	(QUERY '(SHOW BUILDING OF SEMANTIC STRUCTURES?)
-			       '(YES NO)
-			       NIL)
-			'NO)
-		    (SETQ BUILD-SEE NIL))
-		   ((EQ	(QUERY '(STOP AFTER DISPLAYING SEMANTIC STRUCTURES?)
-			       '(YES NO)
-			       NIL)
-			'NO)
-		    (SETQ SMN-STOP NIL)))))
+         (SETQ SMN NIL
+          BUILD-SEE T
+          SMN-STOP T)
+         (COND ((EQ  (QUERY '(DO SEMANTIC ANALYSIS?)
+                      '(YES NO)
+                      NIL)
+                 'NO)
+                (SETQ SMN T))
+          ((EQ  (QUERY '(SHOW BUILDING OF SEMANTIC STRUCTURES?)
+                   '(YES NO)
+                   NIL)
+            'NO)
+           (SETQ BUILD-SEE NIL))
+          ((EQ  (QUERY '(STOP AFTER DISPLAYING SEMANTIC STRUCTURES?)
+                   '(YES NO)
+                   NIL)
+            'NO)
+           (SETQ SMN-STOP NIL)))))
 
 (DEFS RUN
       TELLTREE
@@ -506,212 +506,212 @@
 (DEFS VALUE
       SHOW
       #'(LAMBDA (X)
-	     (DISP (EVAL (CHARG	X
-				'EXPRESSION\:
-				'(EXPRESSION TO BE EVALUATED BY THE LISP INTERPRETER))))))
+         (DISP (EVAL (CHARG  X
+                      'EXPRESSION\:
+                      '(EXPRESSION TO BE EVALUATED BY THE LISP INTERPRETER))))))
 
 (DEFS FUNCTION
       TELL
       #'(LAMBDA (X)
-	     (SETQ X (LIST (CHARG X
-				  'FUNCTION\:
-				  '(LISP FUNCTION WHOSE ACTION IS TO BE TRACED))
-			   (COND ((AND (CDR X)
-				       (CDDR X)
-				       (MEMQ (CADDR X)
-					     '(TRACE
-					       BREAK
-					       UNTRACE
-					       UNBREAK)))
-				  (CADDR X))
-				 (T
-				  (QUERY '(TRACE BREAK UNTRACE OR UNBREAK?)
-					 '(TRACE
-					   BREAK
-					   UNTRACE
-					   UNBREAK)
-					 '(TRACE CAUSES	PRINTOUT ON ENTRYAND EXIT OF FUNCTION\.	BREAK CAUSES LISP TO STOP ON ENTRY ANDEXIT\, ACCEPTING USER COMMANDS AND CONTINUING WHEN <CONTROL X> IS
-					   TYPED\.))))))
-	     (APPLY (SUBST 'WBREAK 'BREAK (CADR X))
-		    (LIST (CAR X))))
+         (SETQ X (LIST (CHARG X
+                        'FUNCTION\:
+                        '(LISP FUNCTION WHOSE ACTION IS TO BE TRACED))
+                  (COND ((AND (CDR X)
+                           (CDDR X)
+                           (MEMQ (CADDR X)
+                               '(TRACE
+                                      BREAK
+                                      UNTRACE
+                                      UNBREAK)))
+                         (CADDR X))
+                     (T
+                          (QUERY '(TRACE BREAK UNTRACE OR UNBREAK?)
+                               '(TRACE
+                                      BREAK
+                                      UNTRACE
+                                      UNBREAK)
+                               '(TRACE CAUSES  PRINTOUT ON ENTRYAND EXIT OF FUNCTION\.  BREAK CAUSES LISP TO STOP ON ENTRY ANDEXIT\, ACCEPTING USER COMMANDS AND CONTINUING WHEN <CONTROL X> IS
+                                      TYPED\.))))))
+         (APPLY (SUBST 'WBREAK 'BREAK (CADR X))
+           (LIST (CAR X))))
       SHOW
       #'(LAMBDA (X)
-	     (APPLY 'GB
-		    (LIST (CHARG X
-				 'FUNCTION\:
-				 '(LISP FUNCTION WHOSE LISP DEFINITION IS TO BE SHOWN))))))
+         (APPLY 'GB
+           (LIST (CHARG X
+                  'FUNCTION\:
+                  '(LISP FUNCTION WHOSE LISP DEFINITION IS TO BE SHOWN))))))
 
 (DEFS ASSERTIONS
       TELL
       #'(LAMBDA (X)
-	     (THVAL (LIST 'THASSERT
-			  (CHARG X
-				 'ASSERTION\:
-				 '(PLANNER ASSERTION TO BE ADDED TO DATA BASE))
-			  '(THTBF THTRUE))
-		    NIL))
+         (THVAL (LIST 'THASSERT
+                 (CHARG X
+                     'ASSERTION\:
+                     '(PLANNER ASSERTION TO BE ADDED TO DATA BASE))
+                 '(THTBF THTRUE))
+           NIL))
       SHOW
       #'(LAMBDA (X)
-	     (DA (CHARG	X
-			'ATOM\:
-			'(SHOW ALL ASSERTIONS WHICH CONTAIN THE GIVEN ATOM)))))
+         (DA (CHARG  X
+              'ATOM\:
+              '(SHOW ALL ASSERTIONS WHICH CONTAIN THE GIVEN ATOM)))))
 
 (DEFS THEOREM
       TELL
       #'DEFINETHEOREM
       SHOW
       #'(LAMBDA (X)
-	     (DISP (THGET (CHARG X
-				 'THEOREM-NAME\:
-				 '(PLANNER THEOREM WHOSE DEFINITION IS TO BE SHOWN))
-			  'THEOREM))))
+         (DISP (THGET (CHARG X
+                       'THEOREM-NAME\:
+                       '(PLANNER THEOREM WHOSE DEFINITION IS TO BE SHOWN))
+                'THEOREM))))
 
 (DEFS NODE
       TELL
       #'(LAMBDA (X)
-	     (SETQ PARSENODE-SEE T
-		   NODE-STOP T)
-	     (COND ((EQ	(QUERY '(SEE SUCCESSFUL PARSE NODES BEING BUILT?)
-			       '(YES NO)
-			       NIL)
-			'NO)
-		    (SETQ PARSENODE-SEE NIL))
-		   ((EQ	(QUERY '(STOP AFTER DISPLAY OF NODES?)
-			       '(YES NO)
-			       NIL)
-			'NO)
-		    (SETQ NODE-STOP NIL))))
+         (SETQ PARSENODE-SEE T
+          NODE-STOP T)
+         (COND ((EQ  (QUERY '(SEE SUCCESSFUL PARSE NODES BEING BUILT?)
+                      '(YES NO)
+                      NIL)
+                 'NO)
+                (SETQ PARSENODE-SEE NIL))
+          ((EQ  (QUERY '(STOP AFTER DISPLAY OF NODES?)
+                   '(YES NO)
+                   NIL)
+            'NO)
+           (SETQ NODE-STOP NIL))))
       SHOW
       #'(LAMBDA (X)
-	     (COND ((THGET (CADR X) 'FEATURES) (DP (CADR X)))
-		   ((SHOWMOVE (CDR X))
-		    (PROG (DPSTOP) (DP (CAR PT)))
-		    (RESTOREPT))
-		   (T (SAY NO SUCH NODE)))))
+         (COND ((THGET (CADR X) 'FEATURES) (DP (CADR X)))
+          ((SHOWMOVE (CDR X))
+           (PROG (DPSTOP) (DP (CAR PT)))
+           (RESTOREPT))
+          (T (SAY NO SUCH NODE)))))
 
 (DEFS TREE
       SHOW
       #'(LAMBDA (X)
-	     (COND ((THGET (CADR X) 'FEATURES)
-		    (WALLP (LIST (CADR X))))
-		   ((SHOWMOVE (CDR X)) (WALLP PT) (RESTOREPT))
-		   (T (SAY NO SUCH NODE)))))
+         (COND ((THGET (CADR X) 'FEATURES)
+                (WALLP (LIST (CADR X))))
+          ((SHOWMOVE (CDR X)) (WALLP PT) (RESTOREPT))
+          (T (SAY NO SUCH NODE)))))
 
 (DEFS UNIT
       SHOW
       #'(LAMBDA (X)
-	     (APPLY 'DG
-		    (OR	(CDR X)
-			(LIST (REQUEST 'UNIT\:
-				       '(GRAMMAR UNIT WHOSE PROGRAM IS TO BE EXAMINED -- E\.G\. CLAUSE NG PREPG VG ADJG)))))))
+         (APPLY 'DG
+           (OR  (CDR X)
+            (LIST (REQUEST 'UNIT\:
+                        '(GRAMMAR UNIT WHOSE PROGRAM IS TO BE EXAMINED -- E\.G\. CLAUSE NG PREPG VG ADJG)))))))
 
 (DEFS WORD
       SHOW
       #'(LAMBDA (X)
-	     (DP (CHARG	X
-			'WORD\:
-			'(ENGLISH WORD IN THE VOCABULARY))))
+         (DP (CHARG  X
+              'WORD\:
+              '(ENGLISH WORD IN THE VOCABULARY))))
       TELL
       #'(LAMBDA (X)
-	     (APPLY 'DEFINE
-		    (LIST (CHARG X
-				 'WORD\:
-				 '(ENGLISH WORD TO BE DEFINED -- MUST BE NOUN OR VERB))))))
+         (APPLY 'DEFINE
+           (LIST (CHARG X
+                  'WORD\:
+                  '(ENGLISH WORD TO BE DEFINED -- MUST BE NOUN OR VERB))))))
 
 (DEFS ACTION
       TELL
       #'(LAMBDA (X)
-	     (COND ((CDR X)
-		    (COND ((EQ (CADR X) 'ON) (SETQ X NIL))
-			  ((EQ X 'OFF)
-			   (SETQ X '(THUNTRACE)))))
-		   ((ONOFF X
-			   '(WATCH PLANNER PROGRAMS STEP BY STEP?))
-		    (SETQ X NIL))
-		   (T (SETQ X '(THUNTRACE))))
-	     (COND (X (THUNTRACE))
-		   (T (APPLY-THTRACE '(THEOREM THGOAL THASSERT THERASE))))))
+         (COND ((CDR X)
+                (COND ((EQ (CADR X) 'ON) (SETQ X NIL))
+                  ((EQ X 'OFF)
+                   (SETQ X '(THUNTRACE)))))
+          ((ONOFF X
+              '(WATCH PLANNER PROGRAMS STEP BY STEP?))
+           (SETQ X NIL))
+          (T (SETQ X '(THUNTRACE))))
+         (COND (X (THUNTRACE))
+          (T (APPLY-THTRACE '(THEOREM THGOAL THASSERT THERASE))))))
 
 (DEFS LABEL
       TELL
       #'(LAMBDA (X)
-	     (OR (CDR X)
-		 (SETQ X (LIST (REQUEST	'(TYPE LIST OF LABELS\, OR ON OR OFF\:)
-					'(WATCHES PARSER GO PAST PROGRAM LABELS IN THE GRAMMAR)))))
-	     (SETQ LABELTRACE (COND ((EQ (CAR X) 'OFF)
-				     NIL)
-				    (T (CAR X))))))
+         (OR (CDR X)
+          (SETQ X (LIST (REQUEST  '(TYPE LIST OF LABELS\, OR ON OR OFF\:)
+                         '(WATCHES PARSER GO PAST PROGRAM LABELS IN THE GRAMMAR)))))
+         (SETQ LABELTRACE (COND ((EQ (CAR X) 'OFF)
+                                 NIL)
+                           (T (CAR X))))))
 
 (DEFS ATTEMPT
       TELL
       #'(LAMBDA (X)
-	     (COND ((ONOFF X
-			   '(TO SEE ALL ATTEMPTS TO PARSE SYNTACTIC UNITS\, INCLUDING FAILURES))
-		    (TRACE PARSE)
-		    (TRACE CALLSM))
-		   (T (UNTRACE PARSE)))))
+         (COND ((ONOFF X
+                 '(TO SEE ALL ATTEMPTS TO PARSE SYNTACTIC UNITS\, INCLUDING FAILURES))
+                (TRACE PARSE)
+                (TRACE CALLSM))
+          (T (UNTRACE PARSE)))))
 
-(DEFUN SHOWMOVE	 (X)
+(DEFUN SHOWMOVE   (X)
       (SETQ SAVEPT PT)
       (APPLY-MOVE-PT
-	    (LISTIFY (OR X
-			 (REQUEST 'NODE-SPECIFICATION\:
-				  '(C MEANS CURRENT NODE -- H IS MOST RECENTLY PARSED FOR OTHER	POSSIBILITIES\,	SEE THESIS SECTION ON POINTER-MOVING COMMANDS))))))
+       (LISTIFY (OR X
+                 (REQUEST 'NODE-SPECIFICATION\:
+                       '(C MEANS CURRENT NODE -- H IS MOST RECENTLY PARSED FOR OTHER  POSSIBILITIES\,  SEE THESIS SECTION ON POINTER-MOVING COMMANDS))))))
 
 (DEFUN ONOFF  (ARG HELP)
       (COND ((EQ (CADR ARG) 'ON) T)
-	    ((EQ (CADR ARG) 'OFF) NIL)
-	    ((EQ 'ON
-		 (QUERY	'(ON OR OFF?)
-			'(ON OFF)
-			HELP)))))
+       ((EQ (CADR ARG) 'OFF) NIL)
+       ((EQ 'ON
+         (QUERY  '(ON OR OFF?)
+            '(ON OFF)
+            HELP)))))
 
 (DEFUN DEFINETHEOREM  (X)
       (THSETF (G3T (COND ((CDR X) (SETQ X (CADR X)))
-			 (T (SETQ X (MAKESYM 'THEOREM))))
-		   'THEOREM)
-	      (NCONC (LIST (QUERY '(WHICH THEOREM TYPE?)
-				  '(THANTE THERASING THCONSE)
-				  '(ANTECEDENT\, ERASING\, OR CONSEQUENT THEOREM))
-			   (LISTIFY (REQUEST 'VARIABLE-LIST\:
-					     NIL))
-			   (REQUEST 'PATTERN\:
-				    '(A
-				      LIST
-				      ENCLOSED
-				      IN
-				      PARENS\,
-				      LIKE
-				      (\#IS (THV X) \#ZOG)))
-			   (REQUEST 'BODY\:
-				    '(LIST
-				      OF
-				      MICROPLANNER
-				      STAEMENTS)))))
+                    (T (SETQ X (MAKESYM 'THEOREM))))
+               'THEOREM)
+        (NCONC (LIST (QUERY '(WHICH THEOREM TYPE?)
+                      '(THANTE THERASING THCONSE)
+                      '(ANTECEDENT\, ERASING\, OR CONSEQUENT THEOREM))
+                (LISTIFY (REQUEST 'VARIABLE-LIST\:
+                          NIL))
+                (REQUEST 'PATTERN\:
+                      '(A
+                            LIST
+                            ENCLOSED
+                            IN
+                            PARENS\,
+                            LIKE
+                            (\#IS (THV X) \#ZOG)))
+                (REQUEST 'BODY\:
+                      '(LIST
+                            OF
+                            MICROPLANNER
+                            STAEMENTS)))))
       (THADD X NIL)
       (PRINT X))
 
 (DEFS MARKER
       TELL
       #'(LAMBDA (X)
-	     (PROG (Y)
-		   (THSETF (G3T	(SETQ X	(CHARG X
-					       'MARKER\:
-					       '(MARKER TO BE ADDED)))
-				'SYS)
-			   (LIST (SETQ Y
-					    (REQUEST 'PARENT\:
-						     '(NODE TO WHICH IT ISATTACHED IN THE TREE)))))
-		   (THSETF (G3T Y 'SYSTEM)
-			   (CONS X (THGET Y 'SYSTEM)))))
+         (PROG (Y)
+          (THSETF (G3T  (SETQ X  (CHARG X
+                                  'MARKER\:
+                                  '(MARKER TO BE ADDED)))
+                   'SYS)
+              (LIST (SETQ Y
+                      (REQUEST 'PARENT\:
+                              '(NODE TO WHICH IT ISATTACHED IN THE TREE)))))
+          (THSETF (G3T Y 'SYSTEM)
+              (CONS X (THGET Y 'SYSTEM)))))
       SHOW
       #'(LAMBDA (X)
-	     (TREEPRINT	(OR (CHARG X
-				   'MARKER\:
-				   '(SEMANTIC MARKER WHOSE SUBSETS ARE TO BE EXAMINED\. TYPE <LF> FOR ENTIRE TREE\.))
-			    '\#SYSTEMS)
-			'SYSTEM
-			0.)))
+         (TREEPRINT  (OR (CHARG X
+                          'MARKER\:
+                          '(SEMANTIC MARKER WHOSE SUBSETS ARE TO BE EXAMINED\. TYPE <LF> FOR ENTIRE TREE\.))
+                      '\#SYSTEMS)
+          'SYSTEM
+          0.)))
 
 (DEFS ALL SHOW #'(LAMBDA (X) (%)))
 
@@ -722,165 +722,165 @@
 (DEFS SCENE SHOW #'SHOWSCENE)
 
 (DEFUN-FEXPR DEFINE
-	     (A)
-	     (PROG (FE TYPE MARK R3ST TR)
-		   (SETQ A (COND (A (CAR A))
-				 (T
-				  (REQUEST 'WORD\:
-					   '(ENGLISH WORD TO BE DEFINED)))))
-		   (SETQ TYPE
-			      (QUERY '(NOUN OR VERB?)
-				     '(NOUN VERB)
-				     '(OTHER TYPES MUST BE DEFINED IN LISP)))
-		   MAR
-		   (OR (SETQ MARK (REQUEST 'MARKERS\:
-					   '(LIST OF SEMANTIC MARKERS FOR WORD BEING DEFINED - TO SEE MARKER TREE TYPE <LF>)))
-		       (AND (SHOW MARKER \#SYSTEMS) (GO MAR)))
-		   (SETQ MARK (LISTIFY MARK))
-		   (COND
-			 ((EQ TYPE 'NOUN)
-			  (THSETF (G3T A 'FEATURES) '(NOUN NS))
-			  (THSETF (G3T A 'SEMANTICS)
-				  (LIST
-					(LIST
-					      'NOUN
-					      (LIST
-						    'OBJECT
-						    (LIST
-							  'MARKERS\:
-							  MARK
-							  'PROCEDURE\:
-							  (LIS2FY (REQUEST 'PROCEDURE\:
-									   '(EXPRESSION
-									     OR
-									     LIST
-									     OF
-									     EXPRESSIONS
-									     TO
-									     BE
-									     PUT
-									     IN
-									     PLANNER
-									     GOALS
-									     TO
-									     DESCRIBE
-									     OBJECT
-									     -
-									     USE
-									     ***
-									     TO
-									     REPRESENT
-									     OBJECT
-									     BEING
-									     DESCRIBED
-									     BY
-									     WORD
-									     --
-									     E\.G\.
-									     (\#IS *** \#ZOG)
-									     OR
-									     ((\#IS *** \#ZOG)
-									      (\#LOVE
-									       :EVERYONE
-									       ***))))))))))
-			  (RETURN T))
-			 ((SETQ	TR (EQ (QUERY '(TRANSITIVE OR INTRANSITIVE?)
-					      '(TRANSITIVE INTRANSITIVE)
-					      NIL)
-				       'TRANSITIVE))
-			  (THSETF (G3T A 'FEATURES) '(VB TRANS INF)))
-			 (T (THSETF (G3T A 'FEATURES) '(VB ITRNS INF))))
-		   (SETQ
-			 R3ST
-			      (LIST (LIST (LISTIFY (REQUEST '(RESTRICTIONS
-							      ON
-							      SUBJECT\:)
-							    '(LIST
-							      OF
-							      SEMANTIC
-							      MARKERS))))))
-		   (AND
-			 TR
-			 (SETQ
-			       REST
-				    (NCONC R3ST
-					   (LIST (LISTIFY (REQUEST '(RESTRICTIONS
-								     ON
-								     OBJECT\:)
-								   '(LIST
-								     OF
-								     SEMANTIC
-								     MARKERS)))))))
-		   (THSETF (G3T A 'SEMANTICS)
-			   (LIST
-				 (LIST
-				       'VB
-				       (LIST
-					     'RELATION
-					     (LIST 'MARKERS\:
-						   MARK
-						   'RESTRICTIONS\:
-						   REST
-						   'PROCEDURE\:
-						   (LIS2FY (REQUEST 'PROCEDURE\:
-								    '(LIST
-								      OF
-								      EXPRESSIONS
-								      TO
-								      BE
-								      PUT
-								      INTO
-								      PLANNER
-								      GOALS
-								      TO
-								      DESCRIBE
-								      ACTION
-								      OR
-								      RELATION
-								      --
-								      USE
-								      \#1
-								      FOR
-								      SUBJECT\,
-								      \#2
-								      FOR
-								      OBJECT\.E\.G\.
-								      (\#SUPPORT \#1 \#2)
-								      OR
-								      ((\#HAPPY \#1)
-								       (\#SMILING \#1))))))))))
-		   (RETURN T)))
+       (A)
+       (PROG (FE TYPE MARK R3ST TR)
+        (SETQ A (COND (A (CAR A))
+                 (T
+                      (REQUEST 'WORD\:
+                             '(ENGLISH WORD TO BE DEFINED)))))
+        (SETQ TYPE
+            (QUERY '(NOUN OR VERB?)
+                '(NOUN VERB)
+                '(OTHER TYPES MUST BE DEFINED IN LISP)))
+        MAR
+        (OR (SETQ MARK (REQUEST 'MARKERS\:
+                        '(LIST OF SEMANTIC MARKERS FOR WORD BEING DEFINED - TO SEE MARKER TREE TYPE <LF>)))
+            (AND (SHOW MARKER \#SYSTEMS) (GO MAR)))
+        (SETQ MARK (LISTIFY MARK))
+        (COND
+         ((EQ TYPE 'NOUN)
+          (THSETF (G3T A 'FEATURES) '(NOUN NS))
+          (THSETF (G3T A 'SEMANTICS)
+               (LIST
+                   (LIST
+                              'NOUN
+                              (LIST
+                                   'OBJECT
+                                   (LIST
+                                         'MARKERS\:
+                                         MARK
+                                         'PROCEDURE\:
+                                         (LIS2FY (REQUEST 'PROCEDURE\:
+                                                     '(EXPRESSION
+                                                                OR
+                                                                LIST
+                                                                OF
+                                                                EXPRESSIONS
+                                                                TO
+                                                                BE
+                                                                PUT
+                                                                IN
+                                                                PLANNER
+                                                                GOALS
+                                                                TO
+                                                                DESCRIBE
+                                                                OBJECT
+                                                                -
+                                                                USE
+                                                                ***
+                                                                TO
+                                                                REPRESENT
+                                                                OBJECT
+                                                                BEING
+                                                                DESCRIBED
+                                                                BY
+                                                                WORD
+                                                                --
+                                                                E\.G\.
+                                                                (\#IS *** \#ZOG)
+                                                                OR
+                                                                ((\#IS *** \#ZOG)
+                                                                 (\#LOVE
+                                                                           :EVERYONE
+                                                                           ***))))))))))
+          (RETURN T))
+         ((SETQ  TR (EQ (QUERY '(TRANSITIVE OR INTRANSITIVE?)
+                         '(TRANSITIVE INTRANSITIVE)
+                         NIL)
+                     'TRANSITIVE))
+          (THSETF (G3T A 'FEATURES) '(VB TRANS INF)))
+         (T (THSETF (G3T A 'FEATURES) '(VB ITRNS INF))))
+        (SETQ
+         R3ST
+            (LIST (LIST (LISTIFY (REQUEST '(RESTRICTIONS
+                                            ON
+                                            SUBJECT\:)
+                                  '(LIST
+                                           OF
+                                           SEMANTIC
+                                           MARKERS))))))
+        (AND
+         TR
+         (SETQ
+                  REST
+                 (NCONC R3ST
+                      (LIST (LISTIFY (REQUEST '(RESTRICTIONS
+                                                ON
+                                                OBJECT\:)
+                                      '(LIST
+                                                OF
+                                                SEMANTIC
+                                                MARKERS)))))))
+        (THSETF (G3T A 'SEMANTICS)
+         (LIST
+            (LIST
+                      'VB
+                      (LIST
+                          'RELATION
+                          (LIST 'MARKERS\:
+                               MARK
+                               'RESTRICTIONS\:
+                               REST
+                               'PROCEDURE\:
+                               (LIS2FY (REQUEST 'PROCEDURE\:
+                                          '(LIST
+                                                    OF
+                                                    EXPRESSIONS
+                                                    TO
+                                                    BE
+                                                    PUT
+                                                    INTO
+                                                    PLANNER
+                                                    GOALS
+                                                    TO
+                                                    DESCRIBE
+                                                    ACTION
+                                                    OR
+                                                    RELATION
+                                                    --
+                                                    USE
+                                                    \#1
+                                                    FOR
+                                                    SUBJECT\,
+                                                    \#2
+                                                    FOR
+                                                    OBJECT\.E\.G\.
+                                                    (\#SUPPORT \#1 \#2)
+                                                    OR
+                                                    ((\#HAPPY \#1)
+                                                     (\#SMILING \#1))))))))))
+        (RETURN T)))
 
 (DEFUN HELP  NIL
       (COND ((EQ '|S|
-		 (QUERY	'(TYPE
-			  L
-			  FOR
-			  LONG
-			  FORM
-			  (85. LINES)
-			  S
-			  FOR
-			  SHORT
-			  (16. LINES))
-			'(S L)
-			NIL))
-	     (SETQ FNAME "MINIH_DOC"))
-	    (T (SETQ FNAME "HELP_DOC")))
+              (QUERY  '(TYPE
+                        L
+                        FOR
+                        LONG
+                        FORM
+                        (85. LINES)
+                        S
+                        FOR
+                        SHORT
+                        (16. LINES))
+                 '(S L)
+                 NIL))
+             (SETQ FNAME "MINIH_DOC"))
+       (T (SETQ FNAME "HELP_DOC")))
       (SETQ FFF (OPEN FNAME))
       (DO ((LINE (READ-LINE FFF NIL 'EOF-VALUE)
-		 (READ-LINE FFF NIL 'EOF-VALUE)))
-	  ((EQ LINE 'EOF-VALUE))
-	  (WRITE-LINE LINE))
+            (READ-LINE FFF NIL 'EOF-VALUE)))
+       ((EQ LINE 'EOF-VALUE))
+       (WRITE-LINE LINE))
       '*)
 
  ; removed lis2fy, also in syscom.lisp -ts.
 #|
 (DEFUN LIS2FY  (X)
       (COND ((ATOM X) (LIST (LIST X)))
-	    ((ATOM (CAR X)) (LIST X))
-	    (X)))
+       ((ATOM (CAR X)) (LIST X))
+       (X)))
 |#
- #|«Visual LISP© Format Options»
+#|ï¿½Visual LISPï¿½ Format Optionsï¿½
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

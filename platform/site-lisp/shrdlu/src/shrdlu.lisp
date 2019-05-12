@@ -24,7 +24,7 @@
       (setq remote-cmds-p t)
       (setq remote-actions-p t)
       (setq remote-host (cadr EXT:*ARGS*))
-      (setq remote-port (parse-integer (caddr EXT:*ARGS*))) )
+      (setq remote-port (parse-integer (caddr EXT:*ARGS*))))
     (progn
       (setq remote-cmds-p nil)
       (setq remote-actions-p nil)))
@@ -55,4 +55,3 @@
 
 ; Start the program
 (INITIALSTUFF 'UMR-1.0 NIL)
-

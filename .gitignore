@@ -121,3 +121,6 @@ uabcl/
 /swipl-pack/
 
 
+/platform/site-lisp/shrdlu/srczzzz/*
+/platform/site-lisp/slime-ugh
+/platform/site-lisp/shrdlu/src/*._li

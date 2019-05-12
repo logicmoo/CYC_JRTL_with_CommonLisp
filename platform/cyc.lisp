@@ -11,14 +11,6 @@
     (write `(find-class ',(class-name obj)) :stream stream :readably t))
 
 
- ;; (load "contrib-site/slime/start-swank.lisp")
- ;; Load swank.
- (load "contrib-site/slime/swank-loader.lisp")
- (swank-loader:init)
- (swank:create-server :port 4005
-                       :style swank:*communication-style*
-                       :dont-close t)
-
 
 ;; Starts AppdapterGUI
 ;; (UI-INSPECTOR)
@@ -36,6 +28,7 @@
 ;; (require :jss)
 
 
+(pushnew :larkc *features*)
 (pushnew :use-cyc *features*)
 ;; (pushnew :use-dd *features*)
 
@@ -122,6 +115,17 @@
 
 '(osim)
 
+(PRINT *features*)
 
 
+(let ((*PACKAGE* *PACKAGE*))
+ ;; (load "contrib-site/slime/start-swank.lisp")
+ ;; Load swank.
+ (load "contrib-site/slime/swank-loader.lisp")
+ (swank-loader:init)
 
+ (swank:create-server :port 4005
+                       :style swank:*communication-style*
+                       :dont-close t))
+                       
+                       

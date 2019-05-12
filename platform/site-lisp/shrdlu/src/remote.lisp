@@ -119,7 +119,7 @@
   (let ((out '())
         (quotedp nil)
         (new-sentence t)
-        (final-punct  '(#\FULL_STOP #\QUESTION_MARK #\EXCLAMATION_MARK))
+        (final-punct  '(#\U002C #\U003F #\U0021)) ;  FULL_STOP QUESTION_MARK EXCLAMATION_MARK
         (maxindex (- (length s) 1)))
     (loop
        for c from 0 to maxindex
@@ -127,7 +127,7 @@
                 (current-char (char s c))
                 (next-char (char s (min (+ c 1) maxindex))))
       ;; eliminate inappropriate spaces next to quotation marks
-           (if (char= current-char #\QUOTATION_MARK)
+           (if (char= current-char #\")
             (setq quotedp (not quotedp)))
            (cond
         ;; eliminate double spaces and spaces before final punctuation.
@@ -135,15 +135,15 @@
                (if (and (not (char= previous-char #\Space))
                     (not (member next-char final-punct))
                     (not (and quotedp
-                           (char= previous-char #\QUOTATION_MARK)))
+                           (char= previous-char #\")))
                     (not (and quotedp
-                           (char= next-char #\QUOTATION_MARK))))
+                           (char= next-char #\"))))
                 (setq out (cons current-char out))))
               ((char= current-char #\i)
                (if (and (or (= c 0)
                          (char= previous-char #\Space))
                     (or (char= next-char #\Space)
-                        (char= next-char #\APOSTROPHE)))
+                        (char= next-char #\')))
                 (setq out (cons #\I out))
                 (setq out (cons current-char out)))
                (setq new-sentence nil))
@@ -165,25 +165,25 @@
        for c across s
        do (cond
            ((char= c #\Space)
-            (setq out (cons #\PLUS out)))
-           ((char= c #\QUESTION_MARK)
-            (setq out (append '(#\f #\3 #\PERCENT_SIGN) out)))
-           ((char= c #\AMPERSAND)
-            (setq out (append '(#\6 #\2 #\PERCENT_SIGN) out)))
-           ((char= c #\APOSTROPHE)
-            (setq out (append '(#\7 #\2 #\PERCENT_SIGN) out)))
-           ((char= c #\QUOTATION_MARK)
-            (setq out (append '(#\2 #\2 #\PERCENT_SIGN) out)))
-           ((char= c #\EQUALS)
-            (setq out (append '(#\d #\3 #\PERCENT_SIGN) out)))
-           ((char= c #\PLUS)
-            (setq out (append '(#\b #\2 #\PERCENT_SIGN) out)))
-           ((char= c #\PERCENT_SIGN)
-            (setq out (append '(#\5 #\2 #\PERCENT_SIGN) out)))
-           ((char= c #\LEFT_PARENTHESIS)
-            (setq out (append '(#\8 #\2 #\PERCENT_SIGN) out)))
-           ((char= c #\RIGHT_PARENTHESIS)
-            (setq out (append '(#\9 #\2 #\PERCENT_SIGN) out)))
+            (setq out (cons #\U002B out)))  ;; PLUS_SIGN
+           ((char= c #\?)  ;;
+            (setq out (append '(#\f #\3 #\%) out)))
+           ((char= c #\@)
+            (setq out (append '(#\6 #\2 #\%) out)))
+           ((char= c #\')
+            (setq out (append '(#\7 #\2 #\%) out)))
+           ((char= c #\")
+            (setq out (append '(#\2 #\2 #\%) out)))
+           ((char= c #\=)
+            (setq out (append '(#\d #\3 #\%) out)))
+           ((char= c #\+)
+            (setq out (append '(#\b #\2 #\%) out)))
+           ((char= c #\%)
+            (setq out (append '(#\5 #\2 #\%) out)))
+           ((char= c #\()
+            (setq out (append '(#\8 #\2 #\%) out)))
+           ((char= c #\))
+            (setq out (append '(#\9 #\2 #\%) out)))
            (t
              (setq out (cons c out)))))
     (coerce (reverse out) 'string)))

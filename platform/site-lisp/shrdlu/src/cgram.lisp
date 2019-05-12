@@ -1550,15 +1550,8 @@
        (COND ((SETQ GOODIE (APPLY-GRAMMAR 'CONJOIN)) (RETURN (SETQ RE GOODIE)))
         (T (RETURN NIL)))))
 
+(DEFUN COMMA NIL (COND ((SECONDWORD? *QUOTE_SYM*) (FLUSHME) T) ((CONJ)) ((ISQ RE INIT) (FLUSHME) T)))
 
-(DEFUN COMMA  NIL
-      (COND ((SECONDWORD? '|
-              "| ;; ")
-
-             (FLUSHME)
-             T)
-       ((CONJ))
-       ((ISQ RE INIT) (FLUSHME) T)))
 
 (DEFUN CONJOIN  NIL
       (PROG (FE H ME NB C SM CUT NN T1 T2 T3 RESULT PREV)
@@ -1704,9 +1697,9 @@
               (SETR REG H C)))
 
         (OR (NULL FEATURE) (F FEATURE))
-        (RETURN T)
-        )))
+        (RETURN T))))
 
-#| Visual LISP  Format Options 
+
+#| Visual LISP  Format Options
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

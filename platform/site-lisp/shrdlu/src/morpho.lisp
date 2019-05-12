@@ -15,7 +15,7 @@
 	    (PRINT 'READY)
 	    (TERPRI)
 	  CHAR
-	    (COND ((EQUAL (PEEK-CHAR) #\TILDE)
+	    (COND ((EQUAL (PEEK-CHAR) #\U007E)  ; TILDE
 		   (READ-CHAR)
 		   (ERT)
 		   (GO THRU))) ; BREAK
@@ -56,11 +56,11 @@
 	    (NOP (TERPRI))
 	    (FORCE-OUTPUT)
 	    CHAR
-	    (COND ((EQUAL (PEEK-CHAR-REMOTE) #\TILDE)
+	    (COND ((EQUAL (PEEK-CHAR-REMOTE) #\U007E) ; TILDE
 		   (READ-CHAR-REMOTE)
 		   (ERT)
 		   (GO THRU))) ; BREAK
-	    (COND ((EQUAL (PEEK-CHAR-REMOTE) #\COMMERCIAL_AT) (read-char-remote) (go OUT)))
+	    (COND ((EQUAL (PEEK-CHAR-REMOTE) #\U0040) (read-char-remote) (go OUT))) ; COMMERCIAL_AT
 	    (SETQ CHAR (ASCII (CHAR-UPCASE (READ-CHAR-REMOTE))))
 	    (COND ((EQ CHAR '| |) (GO WORD)) ;DELIMITER
 		  ((EQ CHAR RUBOUT)
@@ -322,7 +322,6 @@
 
 (SETQ CONSO '(B C D F G H J K L M N P Q R S T V W X Z))
 
-0.
 
 (SETQ LIQUID '(L R S Z V))
 
@@ -337,5 +336,3 @@
 (SETQ VOWEL '(NIL A E I O U Y))
 
 (SETQ SPACE-CHAR #\Space  )
-
-

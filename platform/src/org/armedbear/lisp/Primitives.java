@@ -2174,7 +2174,7 @@ public final class Primitives {
             if (third instanceof AbstractString)
                 symbol.setDocumentation(Symbol.VARIABLE, third);
             else if (third != NIL)
-                type_error(third, Symbol.STRING);
+              symbol.setDocumentation(Symbol.VARIABLE, third);// type_error(third, Symbol.STRING);
             symbol.initializeSpecial(second);
             return symbol;
         }

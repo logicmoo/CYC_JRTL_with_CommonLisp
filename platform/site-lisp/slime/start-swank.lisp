@@ -17,4 +17,4 @@
 (swank:create-server :port 4005
                      ;; if non-nil the connection won't be closed
                      ;; after connecting
-                     :dont-close nil)
+                     :dont-close t)  

@@ -5,6 +5,10 @@
 (DEFMACRO IFDEBUGGING (R) R)
 (DEFMACRO IFDEBUGGING (R) T)
 
+
+(deFconstant *QUOTE_STR* (make-string 1 :initial-element #\U0022))
+(deFconstant *QUOTE_SYM* (intern *QUOTE_STR*))
+
 ;; The code expects a random list in the prop (val1 val2 ...)
 (setq *SHRDLU-DATA-EACH* `(SEMANTICS FEATURES B-SPECIAL COLOR ELIM TELLTREE THMLIST SPECIAL MOD))
 ;; The code expects a ordered list in the prop (val1 val2 ...)
@@ -24,10 +28,9 @@
    `(progn
       (NOP (print `(WAZ ,,PRED ,,SYM ,,VAL)))
       (IFDEBUGGING (if (atom ,VAL)
-         (print `(,,SYM -> ,,PRED -> ,,VAL))
-         (if
-           (memq ,PRED *SHRDLU-DATA-EACH*)
-           (dolist (e ,VAL) (print `(,,SYM -> ,,PRED -> ,e)))
-           (print `(,,SYM -> ,,PRED --> ,,VAL)))))
-    (SETF (GET ,SYM ,PRED) ,VAL)))
-
+                    (print `(,,SYM -> ,,PRED -> ,,VAL))
+                    (if
+                      (memq ,PRED *SHRDLU-DATA-EACH*)
+                      (dolist (e ,VAL) (print `(,,SYM -> ,,PRED -> ,e)))
+                      (print `(,,SYM -> ,,PRED --> ,,VAL)))))
+     (SETF (GET ,SYM ,PRED) ,VAL)))

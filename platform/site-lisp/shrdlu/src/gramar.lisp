@@ -157,8 +157,8 @@
 		     (FQ INT AUXBE) ;PT TO A VERB WHICH CAN BE AN AUXILLIARY AND
 		     (RQ REL-NOT-FOUND) ;WHICH CAN BEGIN A CLAUSE
 		     (SETR 'COMP (GETR 'RELHEAD C) C)
-		     (SETR 'SUBJECT H C) ;"WHAT COLOR IS THE BLOCK?" OR "HOW BIG IS THE
-		     (SETMVB PT) ;BLOCK?"
+		     (SETR 'SUBJECT H C) ;"WHAT COLOR IS THE BLOCK?" OR "HOW BIG IS THE BLOCK?"
+		     (SETMVB PT)
 		     (GO ONT))
 		    ((ISQ PT HAVE)
 		     (FQ SUBQ)
@@ -2153,7 +2153,8 @@
 		   ((CQ VB)
 		    (PROG (COMMON)
 			  (SETQ COMMON (THGET 'VB 'ELIM))
-			  (MAPL	#'(LAMBDA (X)
+			  (MAPL	#
+				'(LAMBDA (X)
 				       (SETQ COMMON (MEET COMMON (FE X))))
 				H))
 		    (FESET (SHRDLU-UNION COMMON (FE C)) C)))
@@ -2256,6 +2257,12 @@
 			 (OR (NULL FEATURE) (F FEATURE))
 			 (RETURN T))))
 	    ))
- #|«Visual LISP© Format Options»
-; (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
-;*** DO NOT add text below the comment! ***|#
+#|ï¿½Visual
+LISPï¿½
+Format
+Optionsï¿½
+ ; (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
+ ;*** DO NOT add text below the comment! ***|#
+;|ï¿½Visual LISPï¿½ Format Optionsï¿½
+(200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
+;*** DO NOT add text below the comment! ***|;

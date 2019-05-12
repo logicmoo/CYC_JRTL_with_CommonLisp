@@ -59,11 +59,11 @@
 				      ((TIME-ANSWER '(ANSWER C)))
 				      ((APPLY-SAY
 					     (OR GLOBAL-MESSAGE
-						 '("I DON'T UNDERSTAND."))))))
+						 '(|I DON'T UNDERSTAND.|))))))
 			       ((OR ANNOYANCE (PRINT *3))
 				(APPLY-SAY
 				      (OR GLOBAL-MESSAGE
-					  '("I DON'T UNDERSTAND.")))))
+					  '(|I DON'T UNDERSTAND.|)))))
 			 (SHRDLU-TIMER)
 			 #+USE-MOBYTEST
 			 (AND MOBYTEST-IN-PROGRESS (AFTER-EACH-SENTENCE))
@@ -679,6 +679,6 @@
       (SETQ PLANNERSEE NIL)
       (SETQ SH-STANDARD-PRINTOUT NIL)
       (SETQ ANNOYANCE T))
-#| Visual LISP  Format Options 
+#| Visual LISP  Format Options
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

@@ -5,6 +5,9 @@
 (DEFMACRO IFDEBUGGING (R) R)
 (DEFMACRO IFDEBUGGING (R) T)
 
+(deconstant *QUOTE_STR* (make-string 1 :initial-element #\QUOTATION_MARK))
+(deconstant *QUOTE_SYM* (intern *QUOTE_STR*))
+
 ;; The code expects a random list in the prop (val1 val2 ...)
 (setq *SHRDLU-DATA-EACH* `(SEMANTICS FEATURES B-SPECIAL COLOR ELIM TELLTREE THMLIST SPECIAL MOD))
 ;; The code expects a ordered list in the prop (val1 val2 ...)

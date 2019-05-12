@@ -23,7 +23,7 @@
    (let ((subr-name (intern (format nil "APPLY-~A" fexpr-name))))
       `(progn (defmacro ,fexpr-name (&rest ,fexpr-arg)
                 `(,',subr-name ',,fexpr-arg))
-      	      (defun ,subr-name (,fexpr-arg) ,@fexpr-body)
+              (defun ,subr-name (,fexpr-arg) ,@fexpr-body)
               ',fexpr-name)))
 ; defines a function that operates on the remainder of the list of
 ; which it is a part and an "apply-" function that operates on a list.
@@ -42,8 +42,8 @@
 ; ASCII is only used in show, setup, and morpho...
 
 (DEFUN ASCII (N)
-	(COND ((NUMBERP N) (ASCII (CODE-CHAR N)))
-		(T (INTERN (STRING N)))))
+  (COND ((NUMBERP N) (ASCII (CODE-CHAR N)))
+     (T (INTERN (STRING N)))))
 
 (DEFUN READLIST (X)
   (READ-FROM-STRING (APPLY #'CONCATENATE (CONS 'STRING (MAPCAR #'STRING X)))))
@@ -66,4 +66,3 @@
 
 (DEFUN MAKNAM (CH-LIST)
    (MAKE-SYMBOL (FORMAT NIL "~{~A~}" CH-LIST)))
-
