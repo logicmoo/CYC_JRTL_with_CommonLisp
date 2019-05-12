@@ -8,12 +8,10 @@
 
 (setq parsings 0) ;atom used in the timing package
 
-(SETQ ELSE
-     T
-      SAVESENT
-     NIL
-      ALTMODE
-     (ASCII 27.)
+(SETQ
+     ELSE T
+     SAVESENT NIL
+     ALTMODE (ASCII 27.)
      DOT
      (ASCII 46.)
      *1
@@ -54,7 +52,7 @@
      =LINE
      '========================================================)
 
- ;(OR (THGET 'CLAUSE 'SUBR)
+ ;(OR (G3T 'CLAUSE 'SUBR)
  ;    (LABELTRACE CLAUSE NG VG ADJG PREPG CONJOIN))
 
 ;;*PAGE
@@ -204,6 +202,28 @@
            T)
       (SETQ *RSET T))
 
+(DEFUN TRACEMODE  NIL
+      (QUIETMODE)
+      (NORMALFEATUREMODE)
+      (NOPAUSES)
+      (SETQ NOSTOP
+           T
+       NEVERSTOP
+           T
+       ANSWER?
+           T
+       SMN
+           NIL
+       PLANNERSEE
+           'ALL
+       PARSETRACE
+           'ALL
+       TOPLEVEL-ERRSET?
+           NIL
+       ERT-ERRSET
+           T)
+      (SETQ *RSET T))
+
 
 (SETQ ZOG-USER NIL
       ZOGUSER NIL)
@@ -258,6 +278,6 @@
       annoyance  nil)
 
 (setq errlist nil)
-#| Visual LISP  Format Options 
+#| Visual LISP  Format Options
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

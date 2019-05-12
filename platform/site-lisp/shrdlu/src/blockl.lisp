@@ -247,17 +247,17 @@
 (DEFUN-FEXPR MEMOREND
        (A)
        (OR NOMEM
-        (AND (THSETF (G3T (THV EV) 'END) THTIME)
+        (AND (S3TF (THV EV) 'END THTIME)
              (APPLY-THASSERT
                (LIST (THVARSUBST (CAR A) NIL)))
-             (THSETF (G3T (THV EV) 'TYPE) (CAAR A)))))
+             (S3TF (THV EV) 'TYPE (CAAR A)))))
 
 (DEFUN MEMORY  NIL
       (OR NOMEM
        (THAND (THVSETQ (THNV EV) (MAKESYM '|E|))
          (THSETQ EVENTLIST (CONS (THV EV) EVENTLIST))
-         (THSETF (G3T (THV EV) 'START) THTIME)
-         (THSETF (G3T (THV EV) 'WHY) (THV WHY)))))
+         (S3TF (THV EV) 'START THTIME)
+         (S3TF (THV EV) 'WHY (THV WHY)))))
 
 (DEFUN OCCUPIER
      (X Y Z)
@@ -341,8 +341,8 @@
       (CLEANOUT E)
       (MAPC
        #'(LAMBDA (X)
-          (AND  (THGET (CAR X) 'THASSERTION)
-           (THSETF  (G3T (CAR X) 'HISTORY)
+          (AND  (G3T (CAR X) 'THASSERTION)
+           (S3TF (CAR X) 'HISTORY
                 (LIST (LIST 0
                           (CADR X)
                           (CADAR (THVAL '(THGOAL (\#SUPPORT (THV X) (THV Y)))
@@ -355,8 +355,7 @@
 
 (DEFUN STARTIME (LIST TIME) (< (CAAR LIST) (OR (START? TIME) -1)))
 
-(DEFUN SUPPORT
-    (LOC SIZE X)
+(DEFUN SUPPORT (LOC SIZE X)
     (COND ((EQ (CADDR LOC) 0) ':TABLE)
      ((SETQ LOC (OCCUPIER (+ (CAR LOC) (DIV2 (CAR SIZE)))
                  (+ (CADR LOC) (DIV2 (CADR SIZE)))
@@ -371,22 +370,21 @@
 
 (DEFUN TFIND  (X Y)
       (PROG (Z)
-       (OR (SETQ Z (THGET X 'HISTORY)) (RETURN NIL))
+       (OR (SETQ Z (GET X 'HISTORY)) (RETURN NIL))
        UP
        (COND ((NOT  (> (CAAR Z)
                      (OR (END? Y) 77777)))
               (RETURN Z))
         ((SETQ Z (CDR Z)) (GO UP)))))
 
-(DEFUN TIMECHK
-    (EV TIME)
+(DEFUN TIMECHK (EV TIME)
     (COND ((IMPERF? TIME)
-           (NOT (OR (< (THGET EV 'END) (OR (START? TIME) -1))
+           (NOT (OR (< (GET EV 'END) (OR (START? TIME) -1))
                  (< (OR (END? TIME) 777777)
-                  (THGET EV 'START)))))
-     ((NOT (OR (< (THGET EV 'START) (OR (START? TIME) -1))
+                  (GET EV 'START)))))
+     ((NOT (OR (< (GET EV 'START) (OR (START? TIME) -1))
             (< (OR (END? TIME) 777777)
-             (THGET EV 'END)))))))
+             (GET EV 'END)))))))
 
 #|�Visual LISP� Format Options�
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)

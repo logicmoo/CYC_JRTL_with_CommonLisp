@@ -1637,7 +1637,7 @@
                 (T (MOVE-PT H) (TRNSF NPL NS MASS NFS))))
         ((CQ VB)
          (PROG (COMMON)
-           (SETQ COMMON (THGET 'VB 'ELIM))
+           (SETQ COMMON (G3T 'VB 'ELIM))
            (MAPL #'(LAMBDA (X) (SETQ COMMON (MEET COMMON (FE X)))) H))
          (FESET (SHRDLU-UNION COMMON (FE C)) C)))
 

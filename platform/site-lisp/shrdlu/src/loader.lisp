@@ -53,13 +53,14 @@
 
 
 
- ; Set either (DEBUGMODE) or (USERMODE) here.
+ ; Set either (DEBUGMODE) (TRACEMODE) or (USERMODE) here.
 (USERMODE)
+(TRACEMODE)
 
 #+ABCL
 (when (print ext::*COMMAND-LINE-ARGUMENT-LIST*)
       (DEBUGMODE)
-      (COMMON-LISP-USER:lisp-repl))
+      (COMMON-LISP-USER::lisp-repl))
 
 
  ; Start the program

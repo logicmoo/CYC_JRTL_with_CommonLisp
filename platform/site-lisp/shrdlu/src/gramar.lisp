@@ -2152,7 +2152,7 @@
 			  (T (MOVE-PT H) (TRNSF NPL NS MASS NFS))))
 		   ((CQ VB)
 		    (PROG (COMMON)
-			  (SETQ COMMON (THGET 'VB 'ELIM))
+			  (SETQ COMMON (G3T 'VB 'ELIM))
 			  (MAPL	#
 				'(LAMBDA (X)
 				       (SETQ COMMON (MEET COMMON (FE X))))
@@ -2231,32 +2231,30 @@
 				      (T (MEMQ 'TRANS2 VBFEAT))))
 			       (T (MEMQ FEATURE VBFEAT))))))
 
-	    (DEFUN
-	     CANPARSE
-	     (NUM TYPE FEATURE)
-	     (PROG (REG)
-		   (AND
-			 (CANTAKE NUM TYPE FEATURE)
-			 (OR
-			       (NULL TYPE)
-			       (AND
-				     (APPLY-PARSE
-					   (APPEND TYPE
-						   (COND ((MEMQ 'COMP TYPE)
-							  (SETQ REG 'COMP)
-							  NIL)
-							 (T
-							  (LIST	'OBJ
-								(SETQ REG
-									   (COND ((OR (MEMQ 'LOC TYPE) (MEMQ 'PLACE TYPE))
-										  'LOBJ)
-										 ((EQUAL NUM 1.)
-										  'OBJ1)
-										 (T 'OBJ2))))))))
-				     (SETR REG H C)))
-			 (OR (NULL FEATURE) (F FEATURE))
-			 (RETURN T))))
-	    ))
+
+(DEFUN  CANPARSE  (NUM TYPE FEATURE)
+ (PROG (REG)
+   (AND
+	 (CANTAKE NUM TYPE FEATURE)
+	 (OR
+	       (NULL TYPE)
+	       (AND
+		     (APPLY-PARSE
+			   (APPEND TYPE
+				   (COND ((MEMQ 'COMP TYPE)
+					  (SETQ REG 'COMP)
+					  NIL)
+					 (T
+					  (LIST	'OBJ
+						(SETQ REG
+							   (COND ((OR (MEMQ 'LOC TYPE) (MEMQ 'PLACE TYPE))
+                  						  'LOBJ)
+								 ((EQUAL NUM 1.) 'OBJ1)
+								 (T 'OBJ2))))))))
+		     (SETR REG H C)))
+	 (OR (NULL FEATURE) (F FEATURE))
+	 (RETURN T))))
+))
 #|�Visual
 LISP�
 Format

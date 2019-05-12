@@ -54,7 +54,7 @@
       THEOREM
       (THCONSE (X Y YY)
          ((THV X) (THV Y))
-         (THGOAL (\#CHOOSE (THV Y) (THNV YY) (THEV (THGET (THV X) 'CHOOSE)))
+         (THGOAL (\#CHOOSE (THV Y) (THNV YY) (THEV (G3T (THV X) 'CHOOSE)))
             (THUSE TC-CHOOSE))
          (THGOAL ((THV X) (THV YY)) (THTBF THTRUE))))
 
@@ -62,9 +62,9 @@
       THEOREM
       (THCONSE (X Y Z YY ZZ)
          ((THV X) (THV Y) (THV Z))
-         (THGOAL (\#CHOOSE (THV Y) (THNV YY) (THEV (THGET (THV X) 'CHOOSE)))
+         (THGOAL (\#CHOOSE (THV Y) (THNV YY) (THEV (G3T (THV X) 'CHOOSE)))
             (THUSE TC-CHOOSE))
-         (THGOAL (\#CHOOSE (THV Z) (THNV ZZ) (THEV (THGET (THV X) 'CHOOSE2)))
+         (THGOAL (\#CHOOSE (THV Z) (THNV ZZ) (THEV (G3T (THV X) 'CHOOSE2)))
             (THUSE TC-CHOOSE))
          (THGOAL ((THV X) (THV YY) (THV ZZ)) (THTBF THTRUE))))
 
@@ -72,7 +72,7 @@
       THEOREM
       (THCONSE (MEASURE X Y)
          (\#ASMUCH MEASURE (THV X) (THV Y))
-         (THVSETQ (THNV MEASURE) (THGET (THV MEASURE) 'MEASFN))
+         (THVSETQ (THNV MEASURE) (G3T (THV MEASURE) 'MEASFN))
          (NOT (<
                (FUNCALL (EVAL (THV MEASURE)) (THV X))
                (FUNCALL (EVAL (THV MEASURE)) (THV Y))))))
@@ -140,7 +140,7 @@
       (THCONSE (SURF SIZE OBJ SPACE)
          (\#FINDSPACE (THV SURF) (THV SIZE) (THV OBJ) (THV SPACE))
          (THOR (AND (NOT (MEMQ (THV SURF) '(:BOX :TABLE)))
-                (NOT (THGET '\#NOCLEAR 'THASSERTION))
+                (NOT (G3T '\#NOCLEAR 'THASSERTION))
                 (THSETQ (THNV SPACE)
                      (FINDSPACE 'CENTER
                               (THV SURF)
@@ -148,7 +148,7 @@
                               (THV OBJ))))
           (AND (OR (EQ (THV SURF) ':BOX)
                 (AND (NOT (EQ (THV SURF) ':TABLE))
-                  (THGET '\#NOCLEAR
+                  (G3T '\#NOCLEAR
                        'THASSERTION)))
            (THSETQ (THNV SPACE)
                 (FINDSPACE 'PACK
@@ -242,7 +242,7 @@
       THEOREM
       (THCONSE (MEASURE X Y)
          (\#MORE (THV MEASURE) (THV X) (THV Y))
-         (THVSETQ (THNV MEASURE) (THGET (THV MEASURE) 'MEASFN))
+         (THVSETQ (THNV MEASURE) (G3T (THV MEASURE) 'MEASFN))
          (> (FUNCALL (EVAL (THV MEASURE)) (THV X))
           (FUNCALL (EVAL (THV MEASURE)) (THV Y)))))
 
@@ -283,7 +283,7 @@
                                                   THALIST))
                                        '((NIL :HAND))))
                                NIL)
-                          (THGET (THV X) 'HISTORY))
+                          (G3T (THV X) 'HISTORY))
                     'HISTORY)))
         ((THGOAL (\#MOVEHAND2 (THV Y)) (THNODB) (THUSE TC-MOVEHAND2))))))
 
@@ -418,7 +418,7 @@
       THEOREM
       (THCONSE (X)
          (\#REFERS (THV X))
-         (EVAL (LIST 'THSETQ (LIST 'THV (THV X)) (LIST 'QUOTE (ATOMIFY (THGET (THV X) 'BIND)))))))
+         (EVAL (LIST 'THSETQ (LIST 'THV (THV X)) (LIST 'QUOTE (ATOMIFY (G3T (THV X) 'BIND)))))))
 
 (DEFS TC-PUT
       THEOREM
@@ -475,7 +475,7 @@
                   (THGOAL (\#CLEARTOP (THV X)) (THUSE TC-CLEARTOP))
                   (THOR (THGOAL (\#FINDSPACE (THV Y) (THEV (SIZE (THV X))) (THV X) (THNV Z))
                          (THUSE TC-FINDSPACE))
-                     (AND  (NULL (THGET '\#NOCLEAR
+                     (AND  (NULL (G3T '\#NOCLEAR
                                   'THASSERTION))
                         (THGOAL  (\#FINDSPACE (THV Y)
                                        (THEV (SIZE (THV X)))
@@ -588,17 +588,17 @@
          (THGOAL (\#CHOOSE (THV EV) (THNV Z) NIL) (THUSE TC-CHOOSE))
          (OR (ATOM (THV Z)) (ERT TC-STARTEND4 ATOM))
          (THSETQ (THNV NEWEV) (MAKESYM 'EV))
-         (THSETF (G3T (THV NEWEV) 'END)
-            (THSETF (G3T (THV NEWEV) 'START)
-             (THGET (THV Z)
+         (S3TF (THV NEWEV) 'END
+            (S3TF (THV NEWEV) 'START
+             (G3T (THV Z)
                  (COND ((EQ (THV X) '\#START)
                         'START)
                      ((EQ (THV X) '\#END)
                       'END)
                      ((ERT TC-STARTEND (THV X)))))))
          (TIMECHK (THV NEWEV) (THV TIME))
-         (THSETF (G3T (THV NEWEV) 'WHY) (THV Z))
-         (THSETF (G3T (THV NEWEV) 'TYPE) '\#START)))
+         (S3TF (THV NEWEV) 'WHY (THV Z))
+         (S3TF (THV NEWEV) 'TYPE '\#START)))
 
 (DEFS TC-UNGRASP
       THEOREM
@@ -629,14 +629,14 @@
          (OR (AND (THASVAL (THV X)) (THASVAL (THV EV)) (THASVAL (THV TIME)))
           (ERT TC-WANT5 THASVAL))
          (EQ (THV X) ':FRIEND)
-         (EQ (THGET (THV EV) 'WHY) 'COMMAND)
+         (EQ (G3T (THV EV) 'WHY) 'COMMAND)
          (THSETQ (THNV NEWEV) (MAKESYM 'EV))
-         (THSETF (G3T (THV NEWEV) 'END)
-            (THSETF (G3T (THV NEWEV) 'START)
-             (THGET (THV EV) 'START)))
+         (S3TF (THV NEWEV) 'END
+            (S3TF (THV NEWEV) 'START
+             (G3T (THV EV) 'START)))
          (TIMECHK (THV NEWEV) (THV TIME))
-         (THSETF (G3T (THV NEWEV) 'TYPE) '\#TELL)
-         (THSETF (G3T (THV NEWEV) 'WHY) 'ESP)))
+         (S3TF (THV NEWEV) 'TYPE '\#TELL)
+         (S3TF (THV NEWEV) 'WHY 'ESP)))
 
 (DEFS TCT-EXISTS
       THEOREM
@@ -728,16 +728,16 @@
                 (THSUCCEED THEOREM))
           (THSUCCEED))
          (THAMONG (THV EVENT) EVENTLIST)
-         (MEMQ (THGET (THV EVENT) 'TYPE) '(\#PUTON \#GET-RID-OF))
+         (MEMQ (G3T (THV EVENT) 'TYPE) '(\#PUTON \#GET-RID-OF))
          (TIMECHK (THV EVENT) (THV TIME))
          (THOR (THGOAL (\#PUTON (THV EVENT) (THV X) ?))
           (THGOAL (\#GET-RID-OF (THV EVENT) (THV X))))
          (THVSETQ (THNV EV) (MAKESYM '|E|))
-         (AND (THSETF (G3T (THV EV) 'END)
-               (THSETF (G3T (THV EV) 'START)
-                    (THGET (THV EVENT) 'END)))
-          (THSETF (G3T (THV EV) 'TYPE) '\#PICKUP)
-          (THSETF (G3T (THV EV) 'WHY) (THV EVENT))
+         (AND (S3TF (THV EV) 'END
+               (S3TF (THV EV) 'START
+                    (G3T (THV EVENT) 'END)))
+          (S3TF (THV EV) 'TYPE '\#PICKUP)
+          (S3TF (THV EV) 'WHY (THV EVENT))
           (SETQ EVENTLIST (CONS (THV EV) EVENTLIST))
           (THASSERT (\#PICKUP (THV EV) (THV X))))))
 
@@ -746,20 +746,20 @@
       (THCONSE (X Y EV EVENT TIME Z)
          (\#PUT (THV EV) (THV X) (THV Y) (THV TIME))
          (THAMONG (THV EVENT) EVENTLIST)
-         (MEMQ (THGET (THV EVENT) 'TYPE) '(\#PICKUP \#PUTON))
+         (MEMQ (G3T (THV EVENT) 'TYPE) '(\#PICKUP \#PUTON))
          (TIMECHK (THV EVENT) (THV TIME))
          (THOR (THGOAL (\#PUTON (THV EVENT) (THV X) ?))
           (THGOAL (\#PICKUP (THV EVENT) (THV X))))
          (OR (THVSETQ (THNV Z)
-              (ASSQ (- (THGET (THV EVENT) 'END) 1)
-                 (THGET (THV X) 'HISTORY)))
+              (ASSQ (- (G3T (THV EVENT) 'END) 1)
+                 (G3T (THV X) 'HISTORY)))
           (ERT TCTE-PUT WRONG))
          (THAMONG (THV Y) (LIST (CADR (THV Z))))
          (THSETQ (THNV EV) (MAKESYM '|E|))
-         (AND (THSETF (G3T (THV EV) 'END)
-               (THSETF (G3T (THV EV) 'START) (CAR (THV Z))))
-          (THSETF (G3T (THV EV) 'WHY) (THV EVENT))
-          (THSETF (G3T (THV EV) 'TYPE) '\#PUT)
+         (AND (S3TF (THV EV) 'END
+               (S3TF (THV EV) 'START (CAR (THV Z))))
+          (S3TF (THV EV) 'WHY (THV EVENT))
+          (S3TF (THV EV) 'TYPE '\#PUT)
           (SETQ EVENTLIST (CONS (THV EV) EVENTLIST))
           (THASSERT (\#PUT (THV EV) (THV X) (THV Y))))))
 

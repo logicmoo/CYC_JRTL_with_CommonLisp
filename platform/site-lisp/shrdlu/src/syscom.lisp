@@ -211,14 +211,14 @@
 		   (COND ((MEMQ (SETQ CH (READ-CHAR)) '(Y \y))
 			  (RETURN T))
 ;;;  ((EQ CH '|?|)
-;;;   (EVAL (THGET 'FLUSH 'EXPLANATION))
+;;;   (EVAL (G3T 'FLUSH 'EXPLANATION))
 ;;;   (GO MES))
 			 (T (RETURN NIL)))))
 
 (DEFUN-FEXPR DEFLIST
 	     (LIST)
 	     (MAPC #'(LAMBDA (A)
-			  (THSETF (G3T (CAR A) (CAR LIST))
+			  (S3TF (CAR A) (CAR LIST)
 				  (CADR A)))
 		   (CDR LIST))
 	     (CAR LIST))
@@ -236,13 +236,13 @@
 
 (DEFUN DA  (X)
       (AND
-	    (THGET X 'THASSERTION)
+	    (G3T X 'THASSERTION)
 	    (DISP
 		  (APPLY 'APPEND
 			 (MAPCAR 'CDDR
 				 (APPLY	'APPEND
 					(MAPCAR	'CDR
-						(CDR (THGET X
+						(CDR (G3T X
 							    'THASSERTION)))))))))
 
 (DEFUN DISP
@@ -259,9 +259,9 @@
       (PRINT =LINE)
       (MAPC '(LAMBDA (X)
 		   (PRINTC (TAB 5.) X (TAB 22.) '= (EVAL X))
-		   (COND ((THGET X 'TURNED)
+		   (COND ((G3T X 'TURNED)
 			  (TAB 30.)
-			  (PRINC (LIST (THGET X 'TURNED))))))
+			  (PRINC (LIST (G3T X 'TURNED))))))
 	    L)
       (PRINTC =LINE))
 
@@ -318,7 +318,7 @@
 ;;;               (MAPC '(LAMBDA (Z)
 ;;;                         (THREMOVE (CAR Z)) )
 ;;;                     (CDDR Y)))
-;;;           (THGET X 'THASSERTION)) )
+;;;           (G3T X 'THASSERTION)) )
 ;;;
 ;;; AND THE CALL WAS:
 ;;;    (MAPC 'PLNRCLEAN EVENTLIST)
@@ -435,7 +435,7 @@
 	    (OR (SETQ GLOP (READ)) (GO PRINT))
 ;;;
 	    (COND ((ATOM GLOP)
-		   (SETQ GLOP (OR (THGET GLOP 'ABBREV) GLOP))
+		   (SETQ GLOP (OR (G3T GLOP 'ABBREV) GLOP))
 		   (COND ((MEMQ GLOP '(T P NIL)) ;LEAVE-LOOP CHARS
 			  (SETQ	ERT-TIME
 				     (+	(TIME-SINCE ERT-TIME)
@@ -494,14 +494,12 @@
 
 (SETQ CONSO '(B C D F G H J K L M N P Q R S T V W X Z))
 
-(DEFUN FINDB
-	      (X Y)
+(DEFUN FINDB (X Y)
       (COND ((NULL X) NIL)
 	    ((EQ Y (CDR X)) X)
 	    (T (FINDB (CDR X) Y))))
 
-(DEFUN FROM
-	     (A B)
+(DEFUN FROM (A B)
       (COND ((OR (NOT A) (EQ A B)) NIL)
 	    (T (CONS (WORD A) (FROM (CDR A) B)))))
 
@@ -559,12 +557,12 @@
 	    (ATOM A)
 	    (MAPC
 		  #'(LAMBDA (B)
-			 (AND (THGET B 'SM)
+			 (AND (G3T B 'SM)
 			      (OR (MEMQ B ALIST)
 				  (SETQ	ALIST
 					     (CONS (LIST B
-							 (THGET B 'SM)
-							 (THGET	B
+							 (G3T B 'SM)
+							 (G3T	B
 								'REFER))
 						   ALIST)))))
 		  A)))
@@ -657,7 +655,7 @@
 			  (EVAL (APPEND (LIST 'DEFUN A (CADADR L)) (CDDADR L))))
 			 ((EQ (CAR L) 'FEXPR)
 			  (EVAL (APPEND (LIST 'DEFUN-FEXPR A (CADADR L)) (CDDADR L))))
-			 (T (THSETF (G3T A (CAR L)) (CADR L))))
+			 (T (S3TF A (CAR L) (CADR L))))
 		   (COND ((SETQ L (CDDR L)) (GO LOOP)))
 		   (RETURN A)))
 
@@ -679,6 +677,7 @@
       (SETQ PLANNERSEE NIL)
       (SETQ SH-STANDARD-PRINTOUT NIL)
       (SETQ ANNOYANCE T))
+
 #| Visual LISP  Format Options
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

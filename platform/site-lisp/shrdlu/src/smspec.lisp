@@ -23,7 +23,7 @@
       ;;RECURSION
       (PROG (%SM) (DECLARE (SPECIAL %SM)) (SMCONJ2 NIL H) (RETURN (SMSET %SM))))
 
-(DEFUN SMCONJ2	(INTERPLIST RESTLIST)
+(DEFUN SMCONJ2  (INTERPLIST RESTLIST)
       ;;INTERPLIST IS THE LIST OF INTERPRETATIONS FOR THE CONJUNCTS
       ;;HANDLED SO FAR -- THIS FUNCTION WILL BE CALLED ONCE FOR EACH
       ;;POSSIBLE COMBINATION.  THE MARKERS FOR THE CONJOINED
@@ -32,37 +32,37 @@
       ;;HANDLED.
       (DECLARE (SPECIAL INTERPLIST))
       (PROG (%X)
-	    (OR	RESTLIST
-		(RETURN	(SETQ %SM
-				   (CONS (BUILD-SHRDLU RSSNODE=
-						       (AND (RSS? INTERP)
-							    (MAKESYM 'RSS))
-						       OSSNODE=
-						       (AND (OSS? INTERP)
-							    (MAKESYM 'OSS))
-						       MARKERS=
-						       (MARKERS? INTERP)
-						       SYSTEMS=
-						       (SYSTEMS? INTERP)
-						       REL=
-						       (REL? INTERP)
-						       AND=
-						       (AND (OR	(CQ BUT)
-								(CQ AND))
-							    INTERPLIST)
-						       OR=
-						       (AND (OR (CQ OR) (CQ NOR))
-							    INTERPLIST))
-					 %SM))))
+       (OR  RESTLIST
+        (RETURN  (SETQ %SM
+                  (CONS (BUILD-SHRDLU RSSNODE=
+                              (AND (RSS? INTERP)
+                                   (MAKESYM 'RSS))
+                              OSSNODE=
+                              (AND (OSS? INTERP)
+                                   (MAKESYM 'OSS))
+                              MARKERS=
+                              (MARKERS? INTERP)
+                              SYSTEMS=
+                              (SYSTEMS? INTERP)
+                              REL=
+                              (REL? INTERP)
+                              AND=
+                              (AND (OR  (CQ BUT)
+                                    (CQ AND))
+                                   INTERPLIST)
+                              OR=
+                              (AND (OR (CQ OR) (CQ NOR))
+                                   INTERPLIST))
+                      %SM))))
  ;WHEN THERE IS NO RESTLIST,
-	    (MAPCAR #'(LAMBDA (INTERP)
-			   (DECLARE (SPECIAL INTERP))
-			   (SMCONJ2 (CONS INTERP
-					  INTERPLIST)
+       (MAPCAR #'(LAMBDA (INTERP)
+                  (DECLARE (SPECIAL INTERP))
+                  (SMCONJ2 (CONS INTERP
+                            INTERPLIST)
  ;WE HAVE LOOPED TO THE END OF
-				    (CDR RESTLIST)))
+                        (CDR RESTLIST)))
  ;THE LIST OF CONJUNCTS, AND
-		    (SM RESTLIST))))
+        (SM RESTLIST))))
  ;THE RESULTING INTERPRETATION IS OK. THE MAPPING
  ;IS DOWN THE LIST OF INTERPRETATIONS FOR A
  ;SINGLE CONJUNCT WHILE THE RECURSION GETS US
@@ -110,7 +110,7 @@
  ;IMPERATIVE
 		   (GLOBAL-ERR
 			 '("I DON'T KNOW HOW TO HANDLE TENSES INVOLVING FUTURE EVENTS OR MODALS OTHER THAN IN THE PRESENT"))))
-	    (THSETF (G3T TSS_LOCAL1 'TENSE=) TENSE)
+	    (S3TF TSS_LOCAL1 'TENSE= TENSE)
 	    (RETURN T)))
 
 (DEFUN SMADJGQSHORT NIL (ERT SMADJQSHORT NOT WRITTEN YET))
@@ -125,7 +125,7 @@
 
 (DEFUN SMVAUX NIL
        (COND ((ISQ H NEG) (FQ NEG)) (T))
-       (THSETF (G3T (GETR 'TIME C) 'TENSE=)
+       (S3TF (GETR 'TIME C) 'TENSE=
 		(OR (MEET (FE H) '(PRESENT PAST MODAL))
 		    (ERTERR SMVAUX -- FUNNY TENSE))))
 
@@ -140,31 +140,33 @@
        ;;INTERPRETATIONS.  ONE IS THE OPAQUE REFERENCE TO THE NAME
        ;;ITSELF, AS IN "CALL IT SAM".  THE OTHER IS THE TRANSPARENT
        ;;REFERENT AS IN "PICK UP SAM".
-       (SMSET (LIST (BUILD-SHRDLU OSSNODE=
-			   (MAKESYM 'OSS)
-			   VARIABLE=
-			   'NAME
-			   DETERMINER=
-			   '(1. DEF NIL)
-			   PARSENODE=
-			   C
-			   MARKERS=
-			   '(\#NAME)
-			   REFER=
-			   (LIST (WORD (NB H))))
-		    (BUILD-SHRDLU OSSNODE=
-			   (MAKESYM 'OSS)
-			   DETERMINER=
-			   '(1. DEF NIL)
-			   PARSENODE=
-			   C
-			   VARIABLE=
-			   (MAKESYM '|X|)
-			   RELATIONS=
-			   (LIST (LIST '\#NAME
-				       OSSNODE=
-				       (WORD (NB H)))))))
-       (SMNG2))
+       (SMSET (LIST (BUILD-SHRDLU OSSNODE=))
+              (MAKESYM 'OSS)
+
+         VARIABLE=
+              'NAME
+
+         DETERMINER=
+         '(1. DEF NIL)
+         PARSENODE=
+         C
+         MARKERS=
+         '(\#NAME)
+         REFER=
+         (LIST (WORD (NB H)))
+        (BUILD-SHRDLU OSSNODE=
+         (MAKESYM 'OSS)
+         DETERMINER=
+         '(1. DEF NIL)
+         PARSENODE=
+         C
+         VARIABLE=
+         (MAKESYM '|X|)
+         RELATIONS=
+         (LIST (LIST '\#NAME
+                  OSSNODE=
+                  (WORD (NB H)))
+          (SMNG2)))))
 
 (DEFUN SMADJ (WORD-BEING-INTERPRETED)
        (DECLARE (SPECIAL WORD-BEING-INTERPRETED))
@@ -179,76 +181,76 @@
        ;;CALLED BY: SMNG1 IT NEEDS TO BE HAIRED UP FOR CONJOINED
        ;;ADJECTIVES LIKE "GREEN AND RED BALL".
        (EVAL (SM WORD-BEING-INTERPRETED)))
-								       ; EVALUATE THE DEFINITION OF THE ADJECTIVE
+                       ; EVALUATE THE DEFINITION OF THE ADJECTIVE
 
 ;;---------------------------------------------
 ;;;--------------------------------------------
 
 (DEFUN SMADJG-PREPG NIL
-								       ;HANDLES ADJECTIVE GROUPS AND
+                       ;HANDLES ADJECTIVE GROUPS AND
        (PROG (X SMSUB)
-								       ;PREPGS BOTH AS COMPLEMENTS
-	     (AND (OR (CQ AGENT) (CQ OF)) (RETURN T))
-								       ;AND QUALIFIERS DO NOTHING
+                       ;PREPGS BOTH AS COMPLEMENTS
+       (AND (OR (CQ AGENT) (CQ OF)) (RETURN T))
+                        ;AND QUALIFIERS DO NOTHING
 	     (SETR 'LOGICAL-SUBJECT
-								       ;FOR "BY" PHRASES IN PASSIVE
-		   (COND ((CQ COMP)
-			  (GETR 'SUBJECT
-				(MOVE-PT C U (CLAUSE))))
-								       ;CLAUSES OR "OF" PHRASES LIKE
-			 ((CQ LOBJ)
-								       ;IN THREE OF THE BLOCKS.
-			  (OR (GETR 'OBJ1
-				    (MOVE-PT C U (CLAUSE)))
-								       ;SEMANTIC SUBJECT IS THE
-			      (GETR 'SUBJECT PT)))
-								       ;SUBJECT OF AN INTENSIVE OR
+                        ;FOR "BY" PHRASES IN PASSIVE
+       (COND ((CQ COMP)
+        (GETR 'SUBJECT
+        (MOVE-PT C U (CLAUSE))))
+                       ;CLAUSES OR "OF" PHRASES LIKE
+       ((CQ LOBJ)
+                          ;IN THREE OF THE BLOCKS.
+        (OR (GETR 'OBJ1
+               (MOVE-PT C U (CLAUSE)))
+                              ;SEMANTIC SUBJECT IS THE
+            (GETR 'SUBJECT PT)))
+                          ;SUBJECT OF AN INTENSIVE OR
 			 ((ISQ (MOVE-PT C
-					U
-					(NOT (ISQ PT COMPONENT))
+          U
+          (NOT (ISQ PT COMPONENT))
 					U)
-			       NG)
-			  PT)
-								       ;THE NG TO WHICH THE GROUP IS
-			 ((ISQ PT CLAUSE) PT)
-								       ;A QUALIFIER, OR THE CLAUSE
+             NG)
+        PT)
+                          ;THE NG TO WHICH THE GROUP IS
+       ((ISQ PT CLAUSE) PT)
+                          ;A QUALIFIER, OR THE CLAUSE
 			 ((ERTERR SMADJG-PREPG FUNNY POSITION)))
-								       ;OF WHICH IT IS AN ADJUNCT.
+                          ;OF WHICH IT IS AN ADJUNCT.
 		   C)
-	     (SETQ SMSUB (SM (GETR 'LOGICAL-SUBJECT C)))
+       (SETQ SMSUB (SM (GETR 'LOGICAL-SUBJECT C)))
 	     (AND (CQ ADJG)
-		  (GETR 'OBJ1 C)
+      (GETR 'OBJ1 C)
 		  (SETR 'ADJGHEAD
-			(COMPARE-BUILD (GETR 'HEAD C)
+      (COMPARE-BUILD (GETR 'HEAD C)
 				       (COND ((CQ AS) '\#ASMUCH)
-					     ((CQ THAN) '\#MORE)
+                  ((CQ THAN) '\#MORE)
 					     ((ERTERR SMADJG-PREPG
-						      FUNNY
+                     FUNNY
 						      TYPE))))
 			C))
-	     (COND
-	      ((GETR 'OBJ1 C) (SMCL1) (RETURN SM))
+       (COND
+        ((GETR 'OBJ1 C) (SMCL1) (RETURN SM))
 	      ((RETURN
-		(SMSET
-		 (PROG (SM)
+    (SMSET
+     (PROG (SM)
 		       (SMSET (MAPCAR
-			       #'(LAMBDA (OSS)
+               #'(LAMBDA (OSS)
 			                (DECLARE (SPECIAL OSS))
-					(BUILD-SHRDLU OSSNODE=
-					       (MAKESYM 'OSS)
-					       MARKERS=
-					       (MARKERS? OSS)
-					       SYSTEMS=
-					       (SYSTEMS? OSS)
-					       VARIABLE=
-					       (VARIABLE? OSS)
-					       REFER=
-					       (REFER? OSS)
-					       REL=
-					       OSS
-					       REFER=
-					       (REFER? OSS)
-					       DETERMINER=
+            (BUILD-SHRDLU OSSNODE=
+                        (MAKESYM 'OSS)
+                        MARKERS=
+                        (MARKERS? OSS)
+                        SYSTEMS=
+                        (SYSTEMS? OSS)
+                        VARIABLE=
+                        (VARIABLE? OSS)
+                        REFER=
+                        (REFER? OSS)
+                        REL=
+                        OSS
+                        REFER=
+                        (REFER? OSS)
+                        DETERMINER=
 					       '(NS-PL INDEF NIL)))
 			       SMSUB))
 		       (EVAL (COND ((OR (CQ COMPAR) (CQ SUP))
@@ -272,16 +274,16 @@
 		  (CQ OBJ1)
 		  (RETURN (SMSET LASTEVENT)))
 								       ;IF SO, RETURN THE LAST EVENT
-	     (COND ((THGET PRONOUN 'BIND)
+	     (COND ((G3T PRONOUN 'BIND)
 								       ;MENTIONED IF THIS PRONOUN
 		    (MAPL #'(LAMBDA (BINDNODE)
 				   (SMIT2 BINDNODE 0.))
 								       ;HAS BEEN USED BEFORE IN THIS
-			 (THGET PRONOUN 'BIND))
+			 (G3T PRONOUN 'BIND))
 								       ;SENTENCE THEN USE THE SAME
 		    (RETURN SM))
 								       ;CANDIDATES
-		   ((SMIT2 (THGET PRONOUN 'LASTBIND) 0.)
+		   ((SMIT2 (G3T PRONOUN 'LASTBIND) 0.)
 								       ; IF THIS PRONOUN WAS USED IN
 		    (GO DONE))
 								       ;THE PREVIOUS SENTENCE
@@ -297,7 +299,7 @@
 				     (ADD-F-PT 'INDEF PT)
 				     (REMOVE-F-PT 'DEF PT)
 				     (MAPC #'(LAMBDA (INTERP)
-						  (THSETF (G3T INTERP 'DETERMINER=)
+						  (S3TF INTERP 'DETERMINER=
 							  '((EXACTLY 1.)
 							    INDEF
 							    NIL)))
@@ -343,7 +345,7 @@
 		       BACKREF2))
  ;BACKREF2 (NG'S IN LAST
 	     DONE
-	     (THSETF (G3T PRONOUN 'BIND) CANDIDATES)
+	     (S3TF PRONOUN 'BIND CANDIDATES)
  ;SENTENCE) LIST
 	     (OR (CDR SM) (REMPROP (CAR SM) 'AMBIGUITIES=))
 	     (RETURN SM)))
@@ -584,7 +586,7 @@
 							  (VARIABLE? OSS)
 							  (LIST (VARIABLE? OSS)))))
  ; BUILDS UP THFIND EXPRESSION
-		  (THSETF (G3T OSS 'PLNRCODE=) FINDER)
+		  (S3TF OSS 'PLNRCODE= FINDER)
 		  (SETQ WHO NIL)
 		  UP
 		  (COND	((NOT (SETQ CANDIDATES (THVAL2 WHO FINDER)))
@@ -602,7 +604,7 @@
 			((ERT SMNG3= SCREWY NUMBER PROPERTY OF OSS)))
 
 ;;;
-		  (THSETF (G3T OSS 'REFER=) CANDIDATES)
+		  (S3TF OSS 'REFER= CANDIDATES)
 		  DONE
 		  (RETURN OSS)
 
@@ -648,7 +650,7 @@
              (DECLARE (SPECIAL CONTRAST))
 	     (SETQ X H)
 								       ; SET  X TO DAUGHTERS OF
-	GO   (COND ((SETQ CONTRAST (THGET (ROOT (NB X))
+	GO   (COND ((SETQ CONTRAST (G3T (ROOT (NB X))
 					'CONTRAST))
 								       ;CURRENT NODE
 		    (SETQ CONTRAST (LIST CONTRAST (ROOT (NB X)))))
@@ -719,7 +721,7 @@
 	     (SETQ X (REVERSE NGWORDS))
 								       ;REFERENT WINS BY DEFAULT
 	LOOK (COND ((AND (EQ (CAR CONTRAST)
-			     (THGET (ROOT (NB X)) 'CONTRAST))
+			     (G3T (ROOT (NB X)) 'CONTRAST))
 			 (NOT (EQ (CADR CONTRAST) (ROOT (NB X)))))
 		    (RETURN (REVERSE (CDR X))))
 		   ((SETQ X (CDR X)) (GO LOOK))
@@ -738,7 +740,7 @@
 	     (SMSET '(\#HAVE))
 	     (RETURN (AND SM
 			  (SETQ X (MAKESYM 'NODE))
-			  (THSETF (G3T X 'SEMANTICS) SM)
+			  (S3TF X 'SEMANTICS SM)
 			  (LIST X)))))
 
 ;; SMPOSS WORKS BY ACTING LIKE SMCL1 AND SETTING UP AN RSS (HAVE X Y) .  NODE IS THE NODE OF THE POSSESSIVE
@@ -926,7 +928,7 @@
 						;;APPROPRIATE CONSTITUENT.  SOME SHOULD BE IGNORED SINCE THEY
 						;;HAVE ALREADY BEEN DEALT WITH AND OTHERS SHOULD BE EVALUATED
 						;;AS MODIFIERS OR FOR THEIR SIDE-EFFECTS ;
-						(COND ((NULL (THGET (CAR WORD-BEING-INTERPRETED) 'FEATURES)))
+						(COND ((NULL (G3T (CAR WORD-BEING-INTERPRETED) 'FEATURES)))
 
 						      ((OR (ISQ WORD-BEING-INTERPRETED VG)
 							   (ISQ WORD-BEING-INTERPRETED AUX)))
@@ -1005,8 +1007,8 @@
 							     (OR (SETQ EVENT (FINDEVENTS (CAR (SM H))))
 								 (GLOBAL-ERR '(NO SUCH THING EVER HAPPENED)))
 							     (SETQ EVENT (CAR EVENT))
-							     (SETQ START (THGET EVENT 'START))
-							     (SETQ END (THGET EVENT 'END))
+							     (SETQ START (GET EVENT 'START))
+							     (SETQ END (GET EVENT 'END))
 							     (EVAL (SM PT))
 							     (RETURN T)))))
 
@@ -1016,9 +1018,9 @@
 						;;OF "AFTER", WHICH IS (SMBINDER END NIL) I.E.  THE EVENT
 						;;STARTS AFTER THE END OF THE BOUND EVENT, WITH NO
 						;;SPECIFICATION ON WHEN IT ENDS.
-						(THSETF (G3T TSS 'START=) START-EV)
-						(THSETF (G3T TSS 'END=) END-EV))
-					
- #|«Visual LISP© Format Options»
+						(S3TF TSS 'START= START-EV)
+						(S3TF TSS 'END= END-EV))
+
+ #|ï¿½Visual LISPï¿½ Format Optionsï¿½
 (200 6 1 0 T "end of " 100 20 0 0 1 T T nil T)
 ;*** DO NOT add text below the comment! ***|#

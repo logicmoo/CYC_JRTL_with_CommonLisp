@@ -21,10 +21,22 @@
 (setq *SHRDLU-DATA-STRING* `(FIRSTWORD ROOT WORDAFTER))
 
 ;; Queries
-(DEFMACRO THGET (SYM PRED) `(GET ,SYM ,PRED))
+(DEFMACRO G3T (SYM PRED)
+   `(let ((vl (GET ,SYM ,PRED)))
+             (NOP (print `(G3T ,,PRED ,,SYM ,vl)))
+             (IFDEBUGGING (if (atom vl)
+                    (print `(,,SYM -> ,,PRED ====> ,vl))
+                    (if
+                      (memq ,PRED *SHRDLU-DATA-EACH*)
+                      (dolist (e vl) (print `(,,SYM -> ,,PRED ====> ,e)))
+                      (print `(,,SYM -> ,,PRED ===> ,vl)))))
+      vl))
 
 ;; Asserts
-(DEFMACRO THSETF ((GETTED SYM PRED) VAL)
+;;(DEFMACRO THSETF ((GETTED SYM PRED) VAL)
+;;   `(S3TF ,SYM ,PRED ,VAL))
+
+(DEFMACRO S3TF (SYM PRED VAL)
    `(progn
       (NOP (print `(WAZ ,,PRED ,,SYM ,,VAL)))
       (IFDEBUGGING (if (atom ,VAL)

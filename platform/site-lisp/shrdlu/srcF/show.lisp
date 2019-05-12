@@ -71,7 +71,7 @@
 							     (CAR Y)))
 						 (CDR Y)))))
 		     BODY)
-		(THSETF (G3T X 'LABELTRACED) T)
+		(S3TF X 'LABELTRACED T)
 	   TRACED
 		(PRINC 'LABELTRACED)))
 	A))
@@ -112,7 +112,7 @@
 		       (MAPL '(LAMBDA (Y) (AND (ATOM (CAR Y))
 					      (RPLACD Y (CDDR Y))))
 			    BODY)
-		       (THSETF (G3T X 'LABELTRACED) NIL)
+		       (S3TF X 'LABELTRACED NIL)
 		       (PRINC 'UN)
 		  TRACED
 		       (PRINC 'LABELTRACED)))
@@ -858,7 +858,7 @@
 							 IN
 							 THE
 							 TREE)))))
-		    (THSETF (G3T Y 'SYSTEM)
+		    (S3TF Y 'SYSTEM
 			     (CONS X (THGET Y 'SYSTEM)))))
       SHOW
       #'(LAMBDA (X) (TREEPRINT (OR (CHARG X
@@ -915,8 +915,8 @@
 	     (SETQ MARK (LISTIFY MARK))
 	     (COND
 	      ((EQ TYPE 'NOUN)
-	       (THSETF (G3T A 'FEATURES) '(NOUN NS))
-	       (THSETF (G3T A 'SEMANTICS)
+	       (S3TF A 'FEATURES '(NOUN NS))
+	       (S3TF A 'SEMANTICS
 		(LIST
 		 (LIST
 		  'NOUN
@@ -962,8 +962,8 @@
 				   '(TRANSITIVE INTRANSITIVE)
 				   NIL)
 			    'TRANSITIVE))
-	       (THSETF (G3T A 'FEATURES) '(VB TRANS INF)))
-	      (T (THSETF (G3T A 'FEATURES) '(VB ITRNS INF))))
+	       (S3TF A 'FEATURES '(VB TRANS INF)))
+	      (T (S3TF A 'FEATURES '(VB ITRNS INF))))
 	     (SETQ
 	      R3ST
 	      (LIST (LIST (LISTIFY (REQUEST '(RESTRICTIONS ON
@@ -981,7 +981,7 @@
 					       '(LIST OF
 						      SEMANTIC
 						      MARKERS)))))))
-	      (THSETF (G3T A 'SEMANTICS)
+	      (S3TF A 'SEMANTICS
 	       (LIST
 		(LIST
 		 'VB

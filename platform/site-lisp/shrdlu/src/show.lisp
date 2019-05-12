@@ -7,7 +7,7 @@
 
 (defun parsings   nil
       (printc "  ratio of winning parses to total ")
-      (princ (THGET 'parsings 'wins))
+      (princ (G3T 'parsings 'wins))
       (princ '/)
       (princ parsings))
 
@@ -56,13 +56,13 @@
         #'(LAMBDA (X)
            (PROG  (BODY)
               (PRINT X)
-              (COND ((THGET X 'LABELTRACED)
+              (COND ((G3T X 'LABELTRACED)
                      (PRINC 'ALLREADY-)
                      (GO TRACED))
-                    ((THGET X 'INTERPRET)
-                     (SETQ BODY (CDR (THGET X 'INTERPRET))))
-                    ((THGET X 'EXPR)
-                     (SETQ BODY (CDDR (CADDR (THGET X 'EXPR)))))
+                    ((G3T X 'INTERPRET)
+                     (SETQ BODY (CDR (G3T X 'INTERPRET))))
+                    ((G3T X 'EXPR)
+                     (SETQ BODY (CDDR (CADDR (G3T X 'EXPR)))))
                     (T (PRINC "CAN'T BE-") (GO TRACED)))
               (MAPL #'(LAMBDA (Y)
                          (AND (ATOM (CAR Y))
@@ -72,7 +72,7 @@
                                                            (CAR Y)))
                                             (CDR Y)))))
                       BODY)
-              (THSETF (G3T X 'LABELTRACED) T)
+              (S3TF X 'LABELTRACED T)
               TRACED
               (PRINC 'LABELTRACED)))
         A))
@@ -100,14 +100,14 @@
         '(LAMBDA (X)
           (PROG  (BODY)
              (PRINT X)
-             (COND ((NOT (THGET X 'LABELTRACED))
+             (COND ((NOT (G3T X 'LABELTRACED))
                     (PRINC "ISN'T ALLREADY-")
                     (GO TRACED))
-                   ((THGET X 'INTERPRET)
-                    (SETQ BODY (CDR (THGET X
+                   ((G3T X 'INTERPRET)
+                    (SETQ BODY (CDR (G3T X
                                      'INTERPRET))))
-                   ((THGET X 'EXPR)
-                    (SETQ BODY (CDDR  (CADDR (THGET X
+                   ((G3T X 'EXPR)
+                    (SETQ BODY (CDDR  (CADDR (G3T X
                                               'EXPR)))))
                    (T
                         (PRINC "CAN'T BE-")
@@ -116,7 +116,7 @@
                         (AND (ATOM (CAR Y))
                             (RPLACD Y (CDDR Y))))
                     BODY)
-             (THSETF (G3T X 'LABELTRACED) NIL)
+             (S3TF X 'LABELTRACED NIL)
              (PRINC 'UN)
              TRACED
              (PRINC 'LABELTRACED)))
@@ -137,16 +137,16 @@
       (TAB COL)
       (PRINC EV)
       (PRINC "  ")
-      (PRINC (THGET EV 'TYPE))
+      (PRINC (GET EV 'TYPE))
       (PRINC "  TIME: ")
-      (PRINC (THGET EV 'START))
+      (PRINC (GET EV 'START))
       (PRINC " TO ")
-      (PRINC (THGET EV 'END))
+      (PRINC (GET EV 'END))
       (AND TOP
        (PRINC " REASON: ")
-       (PRINC (THGET EV 'WHY)))
+       (PRINC (GET EV 'WHY)))
       (MAPC #'(LAMBDA (X)
-               (AND  (EQ EV (THGET X 'WHY))
+               (AND  (EQ EV (GET X 'WHY))
                 (PEV X (+ COL 8.) NIL)))
        (REVERSE EVENTLIST)))
 
@@ -160,17 +160,17 @@
           (T
              (MAPC '(LAMBDA (Y)
                      (AND (EQ 'COMMAND
-                            (THGET Y 'WHY))
+                            (GET Y 'WHY))
                           (PEV Y 0. T)))
                (REVERSE EVENTLIST))))))
 
 (DEFUN-FEXPR ABBREVIATE
        (A)
        (MAPCAR #'(LAMBDA (X)
-                  (THSETF (G3T (READLIST (MAPCAR #'(LAMBDA (X Y) X)
+                  (S3TF (READLIST (MAPCAR #'(LAMBDA (X Y) X)
                                           (EXPLODE X)
                                           '(T T)))
-                           'ABBREV)
+                           'ABBREV
                        X))
           A)
        'DONE)
@@ -231,26 +231,26 @@
 (DEFUN SHOWTELL   (A NODE SYSTEMS INFO ACTION)
       (DECLARE (SPECIAL SYSTEMS INFO ACTION))
       (COND ((NULL A) (SHOWTELLCHOICE))
-       ((THGET (CAR A) ACTION)
-        (APPLY (EVAL (THGET (CAR A) ACTION)) (LIST A)))
+       ((G3T (CAR A) ACTION)
+        (APPLY (EVAL (G3T (CAR A) ACTION)) (LIST A)))
        ((PRINTEXT '("I DON'T KNOW HOW TO"))
         (PRINT2 ACTION)
         (PRINT2 (CAR A))))
       '*)
 
 (DEFUN SHOWTELLCHOICE  NIL
-      (APPLY (EVAL (THGET (SETQ  NODE (QUERY '(WHICH OPTION?)
-                                       (PRINT (THGET NODE SYSTEMS))
-                                       (THGET NODE INFO)))
+      (APPLY (EVAL (G3T (SETQ  NODE (QUERY '(WHICH OPTION?)
+                                       (PRINT (G3T NODE SYSTEMS))
+                                       (G3T NODE INFO)))
                     ACTION))
        (LIST (LIST NODE))))
 
 (DEFUN SUBLEAF  (KID DAD)
-      (CATCH (AND (MAPC 'SUBL2 (THGET DAD SYSTEMS)) NIL)))
+      (CATCH (AND (MAPC 'SUBL2 (G3T DAD SYSTEMS)) NIL)))
 
 (DEFUN SUBL2  (X)
       (COND ((EQ X KID) (THROW T))
-       (T (MAPC 'SUBL2 (THGET X SYSTEMS)))))
+       (T (MAPC 'SUBL2 (G3T X SYSTEMS)))))
 
 (DEFUN QUERY  (TEXT CHOICES HELP)
       (PROG (EXPL CH2 EX2 CH3 EX3 CHAR NOTINIT)
@@ -350,7 +350,7 @@
       (TAB COL)
       (PRINC ROOT)
       (MAPC #'(LAMBDA (X) (TREEPRINT X TR (+ COL 8.)))
-       (THGET ROOT TR))
+       (G3T ROOT TR))
       '*)
 
 (DEFUN CHARG  (X TEXT HELP)
@@ -561,7 +561,7 @@
       #'DEFINETHEOREM
       SHOW
       #'(LAMBDA (X)
-         (DISP (THGET (CHARG X
+         (DISP (G3T (CHARG X
                        'THEOREM-NAME\:
                        '(PLANNER THEOREM WHOSE DEFINITION IS TO BE SHOWN))
                 'THEOREM))))
@@ -583,7 +583,7 @@
            (SETQ NODE-STOP NIL))))
       SHOW
       #'(LAMBDA (X)
-         (COND ((THGET (CADR X) 'FEATURES) (DP (CADR X)))
+         (COND ((G3T (CADR X) 'FEATURES) (DP (CADR X)))
           ((SHOWMOVE (CDR X))
            (PROG (DPSTOP) (DP (CAR PT)))
            (RESTOREPT))
@@ -592,7 +592,7 @@
 (DEFS TREE
       SHOW
       #'(LAMBDA (X)
-         (COND ((THGET (CADR X) 'FEATURES)
+         (COND ((G3T (CADR X) 'FEATURES)
                 (WALLP (LIST (CADR X))))
           ((SHOWMOVE (CDR X)) (WALLP PT) (RESTOREPT))
           (T (SAY NO SUCH NODE)))))
@@ -667,9 +667,9 @@
             HELP)))))
 
 (DEFUN DEFINETHEOREM  (X)
-      (THSETF (G3T (COND ((CDR X) (SETQ X (CADR X)))
+      (S3TF (COND ((CDR X) (SETQ X (CADR X)))
                     (T (SETQ X (MAKESYM 'THEOREM))))
-               'THEOREM)
+               'THEOREM
         (NCONC (LIST (QUERY '(WHICH THEOREM TYPE?)
                       '(THANTE THERASING THCONSE)
                       '(ANTECEDENT\, ERASING\, OR CONSEQUENT THEOREM))
@@ -695,15 +695,15 @@
       TELL
       #'(LAMBDA (X)
          (PROG (Y)
-          (THSETF (G3T  (SETQ X  (CHARG X
+          (S3TF (SETQ X  (CHARG X
                                   'MARKER\:
                                   '(MARKER TO BE ADDED)))
-                   'SYS)
+                   'SYS
               (LIST (SETQ Y
                       (REQUEST 'PARENT\:
                               '(NODE TO WHICH IT ISATTACHED IN THE TREE)))))
-          (THSETF (G3T Y 'SYSTEM)
-              (CONS X (THGET Y 'SYSTEM)))))
+          (S3TF Y 'SYSTEM
+              (CONS X (G3T Y 'SYSTEM)))))
       SHOW
       #'(LAMBDA (X)
          (TREEPRINT  (OR (CHARG X
@@ -739,8 +739,8 @@
         (SETQ MARK (LISTIFY MARK))
         (COND
          ((EQ TYPE 'NOUN)
-          (THSETF (G3T A 'FEATURES) '(NOUN NS))
-          (THSETF (G3T A 'SEMANTICS)
+          (S3TF A 'FEATURES '(NOUN NS))
+          (S3TF A 'SEMANTICS
                (LIST
                    (LIST
                               'NOUN
@@ -788,8 +788,8 @@
                          '(TRANSITIVE INTRANSITIVE)
                          NIL)
                      'TRANSITIVE))
-          (THSETF (G3T A 'FEATURES) '(VB TRANS INF)))
-         (T (THSETF (G3T A 'FEATURES) '(VB ITRNS INF))))
+          (S3TF A 'FEATURES '(VB TRANS INF)))
+         (T (S3TF A 'FEATURES '(VB ITRNS INF))))
         (SETQ
          R3ST
             (LIST (LIST (LISTIFY (REQUEST '(RESTRICTIONS
@@ -811,7 +811,7 @@
                                                 OF
                                                 SEMANTIC
                                                 MARKERS)))))))
-        (THSETF (G3T A 'SEMANTICS)
+        (S3TF A 'SEMANTICS
          (LIST
             (LIST
                       'VB
