@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="main/cycjava-persistence-hacks"/>
-	<classpathentry kind="src" path="main/logicmoo-main"/>
+	<classpathentry excluding="bsh/" kind="src" path="main/logicmoo-main"/>
 	<classpathentry kind="src" path="main/opencyc-server-jsrc"/>
 	<classpathentry kind="src" path="main/objectweb-asm-src"/>
 	<classpathentry kind="src" path="main/armedbear-j-src"/>
@@ -11,6 +11,8 @@
 	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
 	<classpathentry kind="src" path="main/server-4q"/>
 	<classpathentry kind="src" path="main/platform-1.1"/>
+	<classpathentry kind="src" path="main/beanshell/test"/>
+	<classpathentry excluding="test/|bsh/ClassGenerator.java" kind="src" path="main/beanshell"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-continuation-8.0.4.v20111024.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
@@ -157,7 +159,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/jcalendar.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jce-jdk13-131.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jcommon-1.0.16.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jdom.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jdom.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1557998638135/source/jdom-1.1.1-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jep-2.4.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-http-8.0.4.v20111024.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-io-8.0.4.v20111024.jar"/>

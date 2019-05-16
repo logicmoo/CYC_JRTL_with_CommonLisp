@@ -109,7 +109,7 @@ public class PrologSync extends SubLTrampolineFile
 						{
 							continue;
 						}
-						value = new bsh.LHS(f);
+						value = new bsh.LHS(value, f.getName());
 					}
 
 					BeanShellCntrl.addObject(prefix + f.getName(), value);

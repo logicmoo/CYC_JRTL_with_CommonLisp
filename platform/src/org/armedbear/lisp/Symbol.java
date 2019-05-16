@@ -1984,8 +1984,8 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject first, Environment env)
   {
-    LispObject fun;
-    if( ( fun = this.getSymbolFunction() ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if( fun == null )
       return this.undefinedFunction( list( first, env ) );
     if( fun instanceof SpecialOperator )
     {
@@ -2001,8 +2001,8 @@ public class Symbol
   @Override
   final public LispObject execute()
   {
-    LispObject fun;
-    if( ( fun = this.getSymbolFunction() ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if( fun == null )
       return this.undefinedFunction( NIL );
     return fun.execute();
   }
@@ -2010,12 +2010,9 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject arg)
   {
-    final LispObject fun;
-    if( ( fun = this.getSymbolFunction() ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if( fun == null )
     {
-      if( true )
-      {
-      }
       return this.undefinedFunction( list( arg ) );
     }
     return fun.execute( arg );
@@ -2024,9 +2021,8 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject first, LispObject second)
   {
-    final LispObject fun;
-    final LispObject symbolFunction = this.getSymbolFunction();
-    if( ( fun = symbolFunction ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if( fun == null )
       return this.undefinedFunction( list( first, second ) );
     return fun.execute( first, second );
   }
@@ -2034,8 +2030,8 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third)
   {
-    LispObject fun;
-    if( ( fun = this.getSymbolFunction() ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if( fun == null )
       return this.undefinedFunction( list( first, second, third ) );
     return fun.execute( first, second, third );
   }
@@ -2043,8 +2039,8 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth)
   {
-    LispObject fun;
-    if( ( fun = this.getSymbolFunction() ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if( fun == null )
       return this.undefinedFunction( list( first, second, third, fourth ) );
     return fun.execute( first, second, third, fourth );
   }
@@ -2052,8 +2048,9 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth)
   {
-    LispObject fun;
-    if( ( fun = this.getSymbolFunction() ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if ( fun == null)
+
       return this.undefinedFunction( list( first, second, third, fourth, fifth ) );
     return fun.execute( first, second, third, fourth, fifth );
   }
@@ -2061,8 +2058,8 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth)
   {
-    LispObject fun;
-    if( ( fun = this.getSymbolFunction() ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if( fun == null )
       return this.undefinedFunction( list( first, second, third, fourth, fifth, sixth ) );
     return fun.execute( first, second, third, fourth, fifth, sixth );
   }
@@ -2070,8 +2067,8 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh)
   {
-    LispObject fun;
-    if( ( fun = this.getSymbolFunction() ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if ( fun == null)
       return this.undefinedFunction( list( first, second, third, fourth, fifth, sixth, seventh ) );
     return fun.execute( first, second, third, fourth, fifth, sixth, seventh );
   }
@@ -2079,8 +2076,9 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh, LispObject eighth)
   {
-    LispObject fun;
-    if( ( fun = this.getSymbolFunction() ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if ( fun == null)
+
       return this.undefinedFunction( list( first, second, third, fourth, fifth, sixth, seventh, eighth ) );
     return fun.execute( first, second, third, fourth, fifth, sixth, seventh, eighth );
   }
@@ -2088,8 +2086,9 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject[] args)
   {
-    LispObject fun;
-    if( ( fun = this.getSymbolFunction() ) == null )
+    final LispObject fun = this.getSymbolFunction();
+    if ( fun == null)
+
     {
       LispObject list = NIL;
       for( int i = args.length; i-- > 0; )

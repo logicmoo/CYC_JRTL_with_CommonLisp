@@ -46,7 +46,6 @@
   #+lispworks '((swank lispworks) (swank gray))
   #+allegro '((swank allegro) (swank gray))
   #+clisp '(xref metering (swank clisp) (swank gray))
-  #+larkc '((swank larkc))
   #+armedbear '((swank abcl))
   #+cormanlisp '((swank corman) (swank gray))
   #+ecl '((swank ecl) (swank gray))
@@ -57,7 +56,7 @@
 
 (defparameter *implementation-features*
   '(:allegro :lispworks :sbcl :clozure :cmu :clisp :ccl :corman :cormanlisp
-    :larkc :armedbear :gcl :ecl :scl :mkcl :clasp :mezzano))
+    :armedbear :gcl :ecl :scl :mkcl :clasp :mezzano))
 
 (defparameter *os-features*
   '(:macosx :linux :windows :mswindows :win32 :solaris :darwin :sunos :hpux
@@ -68,7 +67,7 @@
     :sparc64 :sparc :hppa64 :hppa :arm :armv5l :armv6l :armv7l :arm64 :aarch64
     :pentium3 :pentium4
     :mips :mipsel
-    :java-1.4 :java-1.5 :java-1.6 :java-1.7 :java-1.8))
+    :java-1.4 :java-1.5 :java-1.6 :java-1.7))
 
 (defun q (s) (read-from-string s))
 
@@ -106,7 +105,7 @@
                        (:+ics "-ics")))
   #+clisp     (let ((s (lisp-implementation-version)))
                 (subseq s 0 (position #\space s)))
-  #+(or larkc armedbear) (lisp-implementation-version)
+  #+armedbear (lisp-implementation-version)
   #+ecl (ecl-version-string)
   #+clasp (clasp-version-string)
   #+mezzano (let ((s (lisp-implementation-version)))

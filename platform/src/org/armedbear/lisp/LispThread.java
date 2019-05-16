@@ -41,6 +41,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrowImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
@@ -91,7 +93,7 @@ public abstract class LispThread extends LispObject
         return threads.get();
     	}
     }
-
+    final String creator;
     final Thread javaThread;
     private boolean destroyed;
     final LispObject name;
@@ -101,14 +103,17 @@ public abstract class LispThread extends LispObject
     private Symbol wrapper =
         PACKAGE_THREADS.intern("THREAD-FUNCTION-WRAPPER");
 
-    LispThread(Thread javaThread)
+    protected LispThread(Thread javaThread)
     {
         this.javaThread = javaThread;
         name = new SimpleString(javaThread.getName());
+        creator = BeanShellCntrl.getStackTraceString(new Throwable());
     }
 
-    LispThread(final Function fun, LispObject name)
+    protected LispThread(final Function fun, LispObject name)
     {
+
+      creator = BeanShellCntrl.getStackTraceString(new Throwable());
         Runnable r = new Runnable() {
             @Override
 			public void run()

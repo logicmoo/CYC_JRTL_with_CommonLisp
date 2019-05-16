@@ -1,15 +1,20 @@
 
 (in-package :CL-USER)
 
-' (defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
+
+(defpackage "COMMON-LISP-USER" (:nicknames "USER" "CL-USER"))
 (let ((*PACKAGE* *PACKAGE*))
-  (cl:load "contrib-site/e2c/hash-dollar.lisp"))
+  (cl:load "site-lisp/e2c/hash-dollar.lisp"))
 
 ;; (let ((*print-readably* t)) (prin1-to-string (find-class 'symbol)))
-(defmethod print-object ((obj class) stream)
+`(defmethod print-object ((obj class) stream)
   (print1 "#." stream)
     (write `(find-class ',(class-name obj)) :stream stream :readably t))
 
+
+;; (pushnew :larkc *features*)
+(pushnew :use-cyc *features*)
+;; (pushnew :use-dd *features*)
 
 
 ;; Starts AppdapterGUI
@@ -28,15 +33,28 @@
 ;; (require :jss)
 
 
-(pushnew :larkc *features*)
-(pushnew :use-cyc *features*)
-;; (pushnew :use-dd *features*)
-
 ;; Do ansi tests
 (defun cyc-ansi ()
   (let ((*default-pathname-defaults*
     (merge-pathnames "../old-ansi-tests/"))) (load "doit.lsp")))
 
+
+(PRINT *features*)
+;;(cl:load "./site-lisp/slime/start-swank.lisp")
+(cl:load "site-lisp/slime/swank-loader.lisp")
+
+(swank-loader:init
+ :delete nil         ; delete any existing SWANK packages
+ :reload nil         ; reload SWANK, even if the SWANK package already exists
+ :load-contribs nil) ; load all contribs
+
+(swank:create-server :port 4005
+                     ;; if non-nil the connection won't be closed
+                     ;; after connecting
+                     :dont-close t)
+
+
+(PRINT *features*)
 
 ;; Do Load KB and rename things
 (defun ss ()
@@ -61,7 +79,7 @@
 
 ;; makes constant names slightly friendlier to prolog
 ;; #+CYC-EXTERNAL
-;; (print (let ((*PACKAGE* *PACKAGE*))  (in-package :cyc) (sl:load "e2c/renames-fixed.lisp")))
+;; (print (let ((*PACKAGE* *PACKAGE*))  (in-package :cyc) (sl:load "site-lisp/e2c/renames-fixed.lisp")))
 
 ;; uses com.cyc.cycjava.cycl.constants_low.lookup_constant_by_guid
 
@@ -72,12 +90,13 @@
 
 '(ss)
 
+(defun shrdlu () (cl:load "site-lisp/shrdlu/osim.lisp"))
 
-(defun osim () (sl:load "e2c/osim.lisp"))
+(defun osim () (sl:load "site-lisp/e2c/osim.lisp"))
 
 ;; Loads Daydreamer
 #+USE-DD
-(cl:load "contrib-site/d")
+(cl:load "site-lisp/d")
 
 
 ;; Starts Daydreamer
@@ -94,10 +113,12 @@
 (import 'cyc::foc (find-package :cl-user))
 
 
+
+
 (cl-imports-cyc)
 (cyc-imports-cl)
 ;;#+USE-CYC
-;;(let ((*PACKAGE* (find-package :CYC))) (sl:load "e2c/larkc_prolog.lisp"))
+;;(let ((*PACKAGE* (find-package :CYC))) (sl:load "site-lisp/e2c/larkc_prolog.lisp"))
 
 ;; Starts rest of CYC
 #+USE-CYC
@@ -115,17 +136,4 @@
 
 '(osim)
 
-(PRINT *features*)
 
-
-(let ((*PACKAGE* *PACKAGE*))
- ;; (load "contrib-site/slime/start-swank.lisp")
- ;; Load swank.
- (load "contrib-site/slime/swank-loader.lisp")
- (swank-loader:init)
-
- (swank:create-server :port 4005
-                       :style swank:*communication-style*
-                       :dont-close t))
-                       
-                       

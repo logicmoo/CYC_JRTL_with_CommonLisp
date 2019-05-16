@@ -212,10 +212,9 @@
 	    (PRINT3 '?)
 	    (show-response)
 	    (TERPRI)
-	    READ
-	    (SETQ XX (parse-integer (read-remote) :junk-allowed t))
+	    READ	    (SETQ XX (parse-integer (write-to-string (read-remote)) :junk-allowed t))
 	    (COND ((OR (NOT (NUMBERP XX))
-		       (> XX (LENGTH POSSIBILITIES)))
+		           (> XX (LENGTH POSSIBILITIES)))
 		   (TERPRI)
 		   (SAY PLEASE TYPE ONE OF THE NUMBERS.)
 		   (show-response)

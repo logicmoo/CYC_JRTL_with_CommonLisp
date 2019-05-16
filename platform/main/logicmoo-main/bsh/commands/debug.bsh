@@ -1,10 +1,12 @@
 /**
-	Toggle on and off debug mode. 
-	Debug output is verbose and generally useful only for developers.
+    Toggle on and off debug mode.
+    Debug output is verbose and generally useful only for developers.
 */
 
 bsh.help.debug = "usage: debug()";
 
 debug() {
-	this.interpreter.DEBUG = !this.interpreter.DEBUG;
+    if ( !this.interpreter.DEBUG.get() )
+        print("// Debug: On");
+    this.interpreter.DEBUG.set( !this.interpreter.DEBUG.get() );
 }

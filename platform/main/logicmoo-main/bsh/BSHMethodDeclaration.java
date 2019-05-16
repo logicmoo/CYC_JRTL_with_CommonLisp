@@ -1,181 +1,173 @@
 /*****************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one                *
+ * or more contributor license agreements.  See the NOTICE file              *
+ * distributed with this work for additional information                     *
+ * regarding copyright ownership.  The ASF licenses this file                *
+ * to you under the Apache License, Version 2.0 (the                         *
+ * "License"); you may not use this file except in compliance                *
+ * with the License.  You may obtain a copy of the License at                *
  *                                                                           *
- *  This file is part of the BeanShell Java Scripting distribution.          *
- *  Documentation and updates may be found at http://www.beanshell.org/      *
+ *     http://www.apache.org/licenses/LICENSE-2.0                            *
  *                                                                           *
- *  Sun Public License Notice:                                               *
+ * Unless required by applicable law or agreed to in writing,                *
+ * software distributed under the License is distributed on an               *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY                    *
+ * KIND, either express or implied.  See the License for the                 *
+ * specific language governing permissions and limitations                   *
+ * under the License.                                                        *
  *                                                                           *
- *  The contents of this file are subject to the Sun Public License Version  *
- *  1.0 (the "License"); you may not use this file except in compliance with *
- *  the License. A copy of the License is available at http://www.sun.com    * 
  *                                                                           *
- *  The Original Code is BeanShell. The Initial Developer of the Original    *
- *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
- *  (C) 2000.  All Rights Reserved.                                          *
- *                                                                           *
- *  GNU Public License Notice:                                               *
- *                                                                           *
- *  Alternatively, the contents of this file may be used under the terms of  *
- *  the GNU Lesser General Public License (the "LGPL"), in which case the    *
- *  provisions of LGPL are applicable instead of those above. If you wish to *
- *  allow use of your version of this file only under the  terms of the LGPL *
- *  and not to allow others to use your version of this file under the SPL,  *
- *  indicate your decision by deleting the provisions above and replace      *
- *  them with the notice and other provisions required by the LGPL.  If you  *
- *  do not delete the provisions above, a recipient may use your version of  *
- *  this file under either the SPL or the LGPL.                              *
- *                                                                           *
- *  Patrick Niemeyer (pat@pat.net)                                           *
- *  Author of Learning Java, O'Reilly & Associates                           *
- *  http://www.pat.net/~pat/                                                 *
+ * This file is part of the BeanShell Java Scripting distribution.           *
+ * Documentation and updates may be found at http://www.beanshell.org/       *
+ * Patrick Niemeyer (pat@pat.net)                                            *
+ * Author of Learning Java, O'Reilly & Associates                            *
  *                                                                           *
  *****************************************************************************/
+
 
 package bsh;
 
 class BSHMethodDeclaration extends SimpleNode
 {
-	public String name;
+    public String name;
 
-	// Begin Child node structure evaluated by insureNodesParsed
+    // Begin Child node structure evaluated by insureNodesParsed
 
-	BSHReturnType returnTypeNode;
-	BSHFormalParameters paramsNode;
-	BSHBlock blockNode;
-	// index of the first throws clause child node
-	int firstThrowsClause;
+    BSHReturnType returnTypeNode;
+    BSHFormalParameters paramsNode;
+    BSHBlock blockNode;
+    // index of the first throws clause child node
+    int firstThrowsClause;
 
-	// End Child node structure evaluated by insureNodesParsed
+    // End Child node structure evaluated by insureNodesParsed
 
-	public Modifiers modifiers;
+    public Modifiers modifiers = new Modifiers(Modifiers.METHOD);
 
-	// Unsafe caching of type here.
-	Class returnType;  // null (none), Void.TYPE, or a Class
-	int numThrows = 0;
+    // Unsafe caching of type here.
+    Class returnType;  // null (none), Void.TYPE, or a Class
+    int numThrows = 0;
+    boolean isVarArgs;
 
-	BSHMethodDeclaration(int id) { super(id); }
+    BSHMethodDeclaration(int id) { super(id); }
 
-	/**
-		Set the returnTypeNode, paramsNode, and blockNode based on child
-		node structure.  No evaluation is done here.
-	*/
-	synchronized void insureNodesParsed() 
-	{
-		if ( paramsNode != null ) // there is always a paramsNode
-			return;
+    /**
+        Set the returnTypeNode, paramsNode, and blockNode based on child
+        node structure.  No evaluation is done here.
+    */
+    synchronized void insureNodesParsed()
+    {
+        if ( paramsNode != null ) // there is always a paramsNode
+            return;
 
-		Object firstNode = jjtGetChild(0);
-		firstThrowsClause = 1;
-		if ( firstNode instanceof BSHReturnType )
-		{
-			returnTypeNode = (BSHReturnType)firstNode;
-			paramsNode = (BSHFormalParameters)jjtGetChild(1);
-			if ( jjtGetNumChildren() > 2+numThrows )
-				blockNode = (BSHBlock)jjtGetChild(2+numThrows); // skip throws
-			++firstThrowsClause;
-		}
-		else
-		{
-			paramsNode = (BSHFormalParameters)jjtGetChild(0);
-			blockNode = (BSHBlock)jjtGetChild(1+numThrows); // skip throws
-		}
-	}
+        Object firstNode = jjtGetChild(0);
+        firstThrowsClause = 1;
+        if ( firstNode instanceof BSHReturnType )
+        {
+            returnTypeNode = (BSHReturnType)firstNode;
+            paramsNode = (BSHFormalParameters)jjtGetChild(1);
+            if ( jjtGetNumChildren() > 2+numThrows )
+                blockNode = (BSHBlock)jjtGetChild(2+numThrows); // skip throws
+            ++firstThrowsClause;
+        }
+        else
+        {
+            paramsNode = (BSHFormalParameters)jjtGetChild(0);
+            blockNode = (BSHBlock)jjtGetChild(1+numThrows); // skip throws
+        }
+        paramsNode.insureParsed();
+        isVarArgs = paramsNode.isVarArgs;
+    }
 
-	/**
-		Evaluate the return type node.
-		@return the type or null indicating loosely typed return
-	*/
-	Class evalReturnType( CallStack callstack, Interpreter interpreter )
-		throws EvalError
-	{
-		insureNodesParsed();
-		if ( returnTypeNode != null )
-			return returnTypeNode.evalReturnType( callstack, interpreter );
-		else 
-			return null;
-	}
+    /**
+        Evaluate the return type node.
+        @return the type or null indicating loosely typed return
+    */
+    Class evalReturnType( CallStack callstack, Interpreter interpreter )
+        throws EvalError
+    {
+        insureNodesParsed();
+        if ( returnTypeNode != null )
+            return returnTypeNode.evalReturnType( callstack, interpreter );
+        else
+            return null;
+    }
 
-	String getReturnTypeDescriptor( 
-		CallStack callstack, Interpreter interpreter, String defaultPackage )
-	{
-		insureNodesParsed();
-		if ( returnTypeNode == null )
-			return null;
-		else
-			return returnTypeNode.getTypeDescriptor( 
-				callstack, interpreter, defaultPackage );
-	}
+    String getReturnTypeDescriptor(
+        CallStack callstack, Interpreter interpreter, String defaultPackage )
+    {
+        insureNodesParsed();
+        if ( returnTypeNode == null )
+            return null;
+        else
+            return returnTypeNode.getTypeDescriptor(
+                callstack, interpreter, defaultPackage );
+    }
 
-	BSHReturnType getReturnTypeNode() {
-		insureNodesParsed();
-		return returnTypeNode;
-	}
+    BSHReturnType getReturnTypeNode() {
+        insureNodesParsed();
+        return returnTypeNode;
+    }
 
-	/**
-		Evaluate the declaration of the method.  That is, determine the
-		structure of the method and install it into the caller's namespace.
-	*/
-	@Override
-	public Object eval( CallStack callstack, Interpreter interpreter )
-		throws EvalError
-	{
-		returnType = evalReturnType( callstack, interpreter );
-		evalNodes( callstack, interpreter );
+    /**
+        Evaluate the declaration of the method.  That is, determine the
+        structure of the method and install it into the caller's namespace.
+    */
+    public Object eval( CallStack callstack, Interpreter interpreter )
+        throws EvalError
+    {
+        returnType = evalReturnType( callstack, interpreter );
+        evalNodes( callstack, interpreter );
 
-		// Install an *instance* of this method in the namespace.
-		// See notes in BshMethod 
+        // Install an *instance* of this method in the namespace.
+        // See notes in BshMethod
 
 // This is not good...
 // need a way to update eval without re-installing...
 // so that we can re-eval params, etc. when classloader changes
 // look into this
 
-		NameSpace namespace = callstack.top();
-		BshMethod bshMethod = new BshMethod( this, namespace, modifiers );
-		try {
-			namespace.setMethod( name, bshMethod );
-		} catch ( UtilEvalError e ) {
-			throw e.toEvalError(this,callstack);
-		}
+        NameSpace namespace = callstack.top();
+        BshMethod bshMethod = new BshMethod( this, namespace, modifiers );
 
-		return Primitive.VOID;
-	}
+        namespace.setMethod( bshMethod );
 
-	private void evalNodes( CallStack callstack, Interpreter interpreter ) 
-		throws EvalError
-	{
-		insureNodesParsed();
-		
-		// validate that the throws names are class names
-		for(int i=firstThrowsClause; i<numThrows+firstThrowsClause; i++)
-			((BSHAmbiguousName)jjtGetChild(i)).toClass( 
-				callstack, interpreter );
+        return Primitive.VOID;
+    }
 
-		paramsNode.eval( callstack, interpreter );
+    private void evalNodes( CallStack callstack, Interpreter interpreter )
+        throws EvalError
+    {
+        insureNodesParsed();
 
-		// if strictJava mode, check for loose parameters and return type
-		if ( interpreter.getStrictJava() )
-		{
-			for(int i=0; i<paramsNode.paramTypes.length; i++)
-				if ( paramsNode.paramTypes[i] == null )
-					// Warning: Null callstack here.  Don't think we need
-					// a stack trace to indicate how we sourced the method.
-					throw new EvalError(
-				"(Strict Java Mode) Undeclared argument type, parameter: " +
-					paramsNode.getParamNames()[i] + " in method: " 
-					+ name, this, null );
+        // validate that the throws names are class names
+        for(int i=firstThrowsClause; i<numThrows+firstThrowsClause; i++)
+            ((BSHAmbiguousName)jjtGetChild(i)).toClass(
+                callstack, interpreter );
 
-			if ( returnType == null )
-				// Warning: Null callstack here.  Don't think we need
-				// a stack trace to indicate how we sourced the method.
-				throw new EvalError(
-				"(Strict Java Mode) Undeclared return type for method: "
-					+ name, this, null );
-		}
-	}
+        paramsNode.eval( callstack, interpreter );
 
-	@Override
-	public String toString() {
-		return "MethodDeclaration: "+name;
-	}
+        // if strictJava mode, check for loose parameters and return type
+        if ( interpreter.getStrictJava() )
+        {
+            for(int i=0; i<paramsNode.paramTypes.length; i++)
+                if ( paramsNode.paramTypes[i] == null )
+                    // Warning: Null callstack here.  Don't think we need
+                    // a stack trace to indicate how we sourced the method.
+                    throw new EvalError(
+                "(Strict Java Mode) Undeclared argument type, parameter: " +
+                    paramsNode.getParamNames()[i] + " in method: "
+                    + name, this, null );
+
+            if ( returnType == null )
+                // Warning: Null callstack here.  Don't think we need
+                // a stack trace to indicate how we sourced the method.
+                throw new EvalError(
+                "(Strict Java Mode) Undeclared return type for method: "
+                    + name, this, null );
+        }
+    }
+
+    public String toString() {
+        return "MethodDeclaration: "+name;
+    }
 }

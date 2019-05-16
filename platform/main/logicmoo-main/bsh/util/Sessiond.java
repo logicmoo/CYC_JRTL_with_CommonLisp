@@ -1,114 +1,98 @@
 /*****************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one                *
+ * or more contributor license agreements.  See the NOTICE file              *
+ * distributed with this work for additional information                     *
+ * regarding copyright ownership.  The ASF licenses this file                *
+ * to you under the Apache License, Version 2.0 (the                         *
+ * "License"); you may not use this file except in compliance                *
+ * with the License.  You may obtain a copy of the License at                *
  *                                                                           *
- *  This file is part of the BeanShell Java Scripting distribution.          *
- *  Documentation and updates may be found at http://www.beanshell.org/      *
+ *     http://www.apache.org/licenses/LICENSE-2.0                            *
  *                                                                           *
- *  Sun Public License Notice:                                               *
+ * Unless required by applicable law or agreed to in writing,                *
+ * software distributed under the License is distributed on an               *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY                    *
+ * KIND, either express or implied.  See the License for the                 *
+ * specific language governing permissions and limitations                   *
+ * under the License.                                                        *
  *                                                                           *
- *  The contents of this file are subject to the Sun Public License Version  *
- *  1.0 (the "License"); you may not use this file except in compliance with *
- *  the License. A copy of the License is available at http://www.sun.com    * 
  *                                                                           *
- *  The Original Code is BeanShell. The Initial Developer of the Original    *
- *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
- *  (C) 2000.  All Rights Reserved.                                          *
- *                                                                           *
- *  GNU Public License Notice:                                               *
- *                                                                           *
- *  Alternatively, the contents of this file may be used under the terms of  *
- *  the GNU Lesser General Public License (the "LGPL"), in which case the    *
- *  provisions of LGPL are applicable instead of those above. If you wish to *
- *  allow use of your version of this file only under the  terms of the LGPL *
- *  and not to allow others to use your version of this file under the SPL,  *
- *  indicate your decision by deleting the provisions above and replace      *
- *  them with the notice and other provisions required by the LGPL.  If you  *
- *  do not delete the provisions above, a recipient may use your version of  *
- *  this file under either the SPL or the LGPL.                              *
- *                                                                           *
- *  Patrick Niemeyer (pat@pat.net)                                           *
- *  Author of Learning Java, O'Reilly & Associates                           *
- *  http://www.pat.net/~pat/                                                 *
+ * This file is part of the BeanShell Java Scripting distribution.           *
+ * Documentation and updates may be found at http://www.beanshell.org/       *
+ * Patrick Niemeyer (pat@pat.net)                                            *
+ * Author of Learning Java, O'Reilly & Associates                            *
  *                                                                           *
  *****************************************************************************/
-
 package bsh.util;
 
-import java.io.*;
-
-import java.net.Socket;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.Reader;
 import java.net.ServerSocket;
-import bsh.*;
+import java.net.Socket;
+
+import bsh.FileReader;
+import bsh.Interpreter;
+import bsh.NameSpace;
 
 /**
-	BeanShell remote session server.
-	Starts instances of bsh for client connections.
-	Note: the sessiond effectively maps all connections to the same interpreter
-	(shared namespace).
+    BeanShell remote session server.
+    Starts instances of bsh for client connections.
+    Note: the sessiond effectively maps all connections to the same interpreter
+    (shared namespace).
 */
 public class Sessiond extends Thread
 {
-	static Sessiond globalSessiond = null;
-	private ServerSocket ss;
-	NameSpace globalNameSpace;
+    private ServerSocket ss;
+    NameSpace globalNameSpace;
 
-	public static void initBshSessiond(NameSpace ns, int port) throws IOException
-	{
-		globalSessiond = new Sessiond(ns, port);
-	}
-	/*
-	public static void main(String argv[]) throws IOException
-	{
-		new Sessiond( Integer.parseInt(argv[0])).start();
-	}
-	*/
+    /*
+    public static void main(String argv[]) throws IOException
+    {
+        new Sessiond( Integer.parseInt(argv[0])).start();
+    }
+    */
 
-	public Sessiond(NameSpace globalNameSpace, int port) throws IOException
-	{
-		ss = new ServerSocket(port);
-		this.globalNameSpace = globalNameSpace;
-	}
+    public Sessiond(NameSpace globalNameSpace, int port) throws IOException
+    {
+        ss = new ServerSocket(port);
+        this.globalNameSpace = globalNameSpace;
+    }
 
-	@Override
-	public void run()
-	{
-		try
-		{
-			while (true)
-			{
-				final Socket accepted = ss.accept();
-				new SessiondConnection(globalNameSpace, accepted).start();
-			}
-		} catch (IOException e)
-		{
-			System.out.println(e);
-		}
-	}
+    public void run()
+    {
+        try
+        {
+            while(true)
+                new SessiondConnection(globalNameSpace, ss.accept()).start();
+        }
+        catch(IOException e) { System.out.println(e); }
+    }
 }
 
 class SessiondConnection extends Thread
 {
-	NameSpace globalNameSpace;
-	Socket client;
+    NameSpace globalNameSpace;
+    Socket client;
+    Interpreter i;
 
-	SessiondConnection(NameSpace globalNameSpace, Socket client)
-	{
-		this.client = client;
-		this.globalNameSpace = globalNameSpace;
-	}
+    SessiondConnection(NameSpace globalNameSpace, Socket client)
+    {
+        this.client = client;
+        this.globalNameSpace = globalNameSpace;
+    }
 
-	@Override
-	public void run()
-	{
-		try
-		{
-			InputStream in = client.getInputStream();
-			PrintStream out = new PrintStream(client.getOutputStream());
-			Interpreter i = new Interpreter(new InputStreamReader(in), out, out, true, globalNameSpace);
-			i.setExitOnEOF(false); // don't exit interp
-			i.run();
-		} catch (IOException e)
-		{
-			System.out.println(e);
-		}
-	}
+    public void run()
+    {
+        try (Reader in = new FileReader(client.getInputStream())) {
+            PrintStream out = new PrintStream(
+                    client.getOutputStream(), true, "UTF-8");
+            i = new Interpreter(
+                in, out, out, true, globalNameSpace);
+            i.setExitOnEOF( false ); // don't exit interpreter
+            i.run();
+        }
+        catch(IOException e) { System.out.println(e); }
+    }
 }
+

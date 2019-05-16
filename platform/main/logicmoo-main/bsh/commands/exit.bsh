@@ -1,14 +1,14 @@
 /**
-	Conditionally exit the virtual machine.
-	Call System.exit(0) unless bsh.system.shutdownOnExit == false.
+    Conditionally exit the virtual machine.
+    Call System.exit(0) unless bsh.system.shutdownOnExit == false.
 */
 
 bsh.help.exit = "usage: exit()";
 
 exit() {
         this.interpreter.eof = true;
-	// shutdown Java VM unless flagged
-	if ( bsh.system.shutdownOnExit != false )
+    // shutdown Java VM unless flagged
+    if ( bsh.system.shutdownOnExit != false )
 		org.logicmoo.system.BeanShellCntrl.exit(0);
 }
 

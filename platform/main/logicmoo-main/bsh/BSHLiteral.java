@@ -1,52 +1,44 @@
 /*****************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one                *
+ * or more contributor license agreements.  See the NOTICE file              *
+ * distributed with this work for additional information                     *
+ * regarding copyright ownership.  The ASF licenses this file                *
+ * to you under the Apache License, Version 2.0 (the                         *
+ * "License"); you may not use this file except in compliance                *
+ * with the License.  You may obtain a copy of the License at                *
  *                                                                           *
- *  This file is part of the BeanShell Java Scripting distribution.          *
- *  Documentation and updates may be found at http://www.beanshell.org/      *
+ *     http://www.apache.org/licenses/LICENSE-2.0                            *
  *                                                                           *
- *  Sun Public License Notice:                                               *
+ * Unless required by applicable law or agreed to in writing,                *
+ * software distributed under the License is distributed on an               *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY                    *
+ * KIND, either express or implied.  See the License for the                 *
+ * specific language governing permissions and limitations                   *
+ * under the License.                                                        *
  *                                                                           *
- *  The contents of this file are subject to the Sun Public License Version  *
- *  1.0 (the "License"); you may not use this file except in compliance with *
- *  the License. A copy of the License is available at http://www.sun.com    * 
  *                                                                           *
- *  The Original Code is BeanShell. The Initial Developer of the Original    *
- *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
- *  (C) 2000.  All Rights Reserved.                                          *
- *                                                                           *
- *  GNU Public License Notice:                                               *
- *                                                                           *
- *  Alternatively, the contents of this file may be used under the terms of  *
- *  the GNU Lesser General Public License (the "LGPL"), in which case the    *
- *  provisions of LGPL are applicable instead of those above. If you wish to *
- *  allow use of your version of this file only under the  terms of the LGPL *
- *  and not to allow others to use your version of this file under the SPL,  *
- *  indicate your decision by deleting the provisions above and replace      *
- *  them with the notice and other provisions required by the LGPL.  If you  *
- *  do not delete the provisions above, a recipient may use your version of  *
- *  this file under either the SPL or the LGPL.                              *
- *                                                                           *
- *  Patrick Niemeyer (pat@pat.net)                                           *
- *  Author of Learning Java, O'Reilly & Associates                           *
- *  http://www.pat.net/~pat/                                                 *
+ * This file is part of the BeanShell Java Scripting distribution.           *
+ * Documentation and updates may be found at http://www.beanshell.org/       *
+ * Patrick Niemeyer (pat@pat.net)                                            *
+ * Author of Learning Java, O'Reilly & Associates                            *
  *                                                                           *
  *****************************************************************************/
 
 
+
 package bsh;
 
-class BSHLiteral extends SimpleNode
+public final class BSHLiteral extends SimpleNode
 {
+    public static volatile boolean internStrings = true;
+
     public Object value;
 
     BSHLiteral(int id) { super(id); }
 
-    @Override
-	public Object eval( CallStack callstack, Interpreter interpreter )
-		throws EvalError
+    public Object eval( CallStack callstack, Interpreter interpreter )
+        throws EvalError
     {
-		if ( value == null )
-			throw new InterpreterError("Null in bsh literal: "+value);
-
         return value;
     }
 
@@ -86,25 +78,40 @@ class BSHLiteral extends SimpleNode
 
     public void charSetup(String str)
     {
-        char ch = str.charAt(0);
-        if(ch == '\\')
-        {
-            // get next character
-            ch = str.charAt(1);
+        int len = str.toCharArray().length;
 
-            if(Character.isDigit(ch))
-                ch = (char)Integer.parseInt(str.substring(1), 8);
-            else
-                ch = getEscapeChar(ch);
+        if ( len == 0 || len > 4 || len > 1 && str.charAt(0) != '\\' ) {
+            stringSetup(str);
+            return;
         }
+        try {
+            char ch = str.charAt(0);
+            if(ch == '\\')
+            {
+                // get next character
+                ch = str.charAt(1);
 
-        value = new Primitive(new Character(ch).charValue());
+                if(Character.isDigit(ch)) {
+                    if (255 < (ch = (char)Integer.parseInt(str.substring(1), 8))) {
+                        stringSetup(str);
+                        return;
+                    }
+                }
+                else
+                    ch = getEscapeChar(ch);
+            }
+
+            value = new Primitive(Character.valueOf(ch).charValue());
+        } catch (Exception e) {
+            stringSetup(str);
+        }
     }
 
     void stringSetup(String str)
     {
-        StringBuffer buffer = new StringBuffer();
-        for(int i = 0; i < str.length(); i++)
+        StringBuilder buffer = new StringBuilder();
+        int len = str.length();
+        for(int i = 0; i < len; i++)
         {
             char ch = str.charAt(i);
             if(ch == '\\')
@@ -112,20 +119,25 @@ class BSHLiteral extends SimpleNode
                 // get next character
                 ch = str.charAt(++i);
 
-                if(Character.isDigit(ch))
+                if(Character.isDigit(ch) && Integer.parseInt(String.valueOf(ch)) < 8)
                 {
                     int endPos = i;
 
                     // check the next two characters
-                    while(endPos < i + 2)
+                    int max = Math.min( i + 2, len - 1 );
+                    while(endPos < max)
                     {
-                        if(Character.isDigit(str.charAt(endPos + 1)))
+                        final char t = str.charAt(endPos + 1);
+                        if(Character.isDigit(t) && Integer.parseInt(String.valueOf(t)) < 8)
                             endPos++;
                         else
                             break;
                     }
-
-                    ch = (char)Integer.parseInt(str.substring(i, endPos + 1), 8);
+                    String num = str.substring(i, endPos + 1);
+                    if (num.length() == 3 && Integer.parseInt(String.valueOf(ch)) > 3)
+                        ch = (char)Integer.parseInt(str.substring(i, endPos--), 8);
+                    else
+                        ch = (char)Integer.parseInt(num, 8);
                     i = endPos;
                 }
                 else
@@ -135,6 +147,14 @@ class BSHLiteral extends SimpleNode
             buffer.append(ch);
         }
 
-        value = buffer.toString().intern();
+        String s = buffer.toString();
+        if( internStrings )
+            s = s.intern();
+        value = s;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ": " + value;
     }
 }

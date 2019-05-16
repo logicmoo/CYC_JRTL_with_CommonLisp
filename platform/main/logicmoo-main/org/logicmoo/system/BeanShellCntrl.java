@@ -22,6 +22,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
@@ -3294,5 +3295,17 @@ public class BeanShellCntrl
     BeanShellCntrl.cl_imports_cyc();
     BeanShellCntrl.cyc_imports_cl();
     start_prolog_from_lisp();
+  }
+
+  /**
+   * TODO Describe the purpose of this method.
+   *
+   * @return
+   */
+  public static String getStackTraceString(Throwable t)
+  {
+    StringWriter sw = new StringWriter();
+    t.printStackTrace( new PrintWriter( sw ) );
+    return sw.toString();
   }
 }
