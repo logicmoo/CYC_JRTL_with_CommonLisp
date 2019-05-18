@@ -39,6 +39,7 @@ public final class SimpleTypeError extends TypeError
     {
         super(StandardClass.SIMPLE_TYPE_ERROR);
         initialize(initArgs);
+        super.trackError();
     }
 
     @Override
@@ -73,7 +74,7 @@ public final class SimpleTypeError extends TypeError
     public String getMessage()
     {
         LispObject formatControl = getFormatControl();
-        if (formatControl != NIL) {
+        if (formatControl != NIL && formatControl != Lisp.UNBOUND_VALUE) {
             LispObject formatArguments = getFormatArguments();
             // (apply 'format (append '(nil format-control) format-arguments))
             LispObject result =

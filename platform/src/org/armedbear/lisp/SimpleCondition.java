@@ -51,6 +51,9 @@ public class SimpleCondition extends Condition
     public SimpleCondition(LispObject initArgs)
     {
         super(initArgs);
+        if(true) {
+          
+        }
     }
 
     public SimpleCondition(String message)

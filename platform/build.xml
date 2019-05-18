@@ -233,6 +233,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 		<src path="main/cycjava-persistence-hacks"/>
 		<src path="main/jpl7-hacked"/>
 		<src path="main/logicmoo-main"/>
+		<src path="main/beanshell"/>
 		<src path="main/objectweb-asm-src"/>
 		<src path="main/opencyc-server-jsrc"/>
 		<src path="main/server-4q"/>

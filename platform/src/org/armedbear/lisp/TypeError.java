@@ -217,4 +217,15 @@ public class TypeError extends LispError
             return obj.getInstanceSlotValue(Symbol.EXPECTED_TYPE);
         }
     };
+
+    /**
+     * TODO Describe the purpose of this method.
+     */
+    public void trackError()
+    {
+      // TODO Auto-generated method stub
+      if(true) {
+        
+      }
+    }
 }

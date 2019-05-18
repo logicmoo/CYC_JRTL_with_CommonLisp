@@ -59,6 +59,8 @@
 
 (require "PPRINT")
 
+;; (defparameter *print-pprint-dispatch* nil)
+
 (defvar *ipd* nil ;see initialization at end of file.
   "initial print dispatch table.")
 
@@ -337,3 +339,4 @@
 (setf *print-pprint-dispatch* (copy-pprint-dispatch nil))
 
 (provide "PPRINT-DISPATCH")
+

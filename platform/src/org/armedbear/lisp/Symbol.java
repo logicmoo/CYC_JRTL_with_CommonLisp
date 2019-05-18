@@ -76,7 +76,7 @@ public class Symbol
     this.isTraced = b;
   }
   final public static String SYMBOL_TYPE_NAME = "SYMBOL";
-  public static boolean USE_THREAD_LOCALS = true;
+  public static boolean USE_THREAD_LOCALS = false;
   private static int idCounter = 0;
   final public AbstractString name;
   // SubLPackage thePackage;
@@ -196,6 +196,15 @@ public class Symbol
     }
   }
 
+  public void setIsTL(boolean tf) {
+    if(!USE_THREAD_LOCALS) return;
+    if (threadLocalValue==null) {
+      if(tf)this.threadLocalValue = new ThreadLocal<>(); 
+      
+    } else {
+      if(!tf)this.threadLocalValue = null;
+    }
+  }
   public void setTLValue(SubLObject value)
   {
     if( !USE_THREAD_LOCALS )
@@ -511,15 +520,16 @@ public class Symbol
     this.setTLValue( newValue );
   }
 
-  public void setUndeclaredValue(SubLObject newValue)
+  @Deprecated
+  private void setUndeclaredValue(SubLObject newValue)
   {
     this.resetCache();
+    this.setTLValue( newValue );
     final SubLEnvironment env = SubLEnvironment.currentEnvironment();
     if( env != null )
     {
       env.setBinding( this, newValue );
     }
-    this.setTLValue( newValue );
   }
 
   public void setValueSL(SubLObject value)
@@ -542,12 +552,13 @@ public class Symbol
       this.setTLValue( value ); // was setGlobalValue()
     else if( this.accessModeVar == VariableAccessMode.CONSTANT )
     {
-      if( this.getTLValue() == null )
+      final SubLObject tlValue = this.getTLValue();
+      if( tlValue == null )
       {
         this.setTLValue( value );
         return;
       }
-      if( !this.getTLValue().equal( value ) )
+      if( !tlValue.equal( value ) )
       {
         if( this.isConstantSymbol() )
         {
@@ -917,8 +928,7 @@ public class Symbol
 
   public final void initializeSpecial(LispObject value)
   {
-    this.flags |= FLAG_SPECIAL;
-    this.threadLocalValue = new ThreadLocal<SubLObject>();
+    this.flags |= FLAG_SPECIAL;   
     this.setTLValue( value );
   }
 

@@ -7,7 +7,7 @@
   (cl:load "site-lisp/e2c/hash-dollar.lisp"))
 
 ;; (let ((*print-readably* t)) (prin1-to-string (find-class 'symbol)))
-`(defmethod print-object ((obj class) stream)
+(defmethod print-object ((obj class) stream)
   (print1 "#." stream)
     (write `(find-class ',(class-name obj)) :stream stream :readably t))
 
@@ -55,6 +55,7 @@
 
 
 (PRINT *features*)
+
 
 ;; Do Load KB and rename things
 (defun ss ()

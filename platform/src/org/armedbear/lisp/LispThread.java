@@ -33,6 +33,7 @@
 
 package org.armedbear.lisp;
 
+import java.io.PrintStream;
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -41,7 +42,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.armedbear.lisp.ArgumentListProcessor.KeywordParam;
+import org.armedbear.lisp.ArgumentListProcessor.OptionalParam;
 import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrowImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -791,10 +795,20 @@ public abstract class LispThread extends LispObject
         stackPtr += 1;
     }
 
+    private void pushedStackFrame(int numArgs) {
+      if(trace_calls()) {
+        printCurrentFrame(">>>");
+      }
+    }
+
+
     private void popStackFrame(int numArgs) {
     	if(NO_STACK_FRAMES) {
     		return;
     	}
+      if(trace_calls()) {
+        printCurrentFrame("<<<");
+      }
         // Pop off intervening JavaFrames until we get back to a LispFrame
         Object stackObj = stack[stackPtr - 1];
         if (stackObj instanceof StackMarker) {
@@ -855,6 +869,7 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + 1] = STACK_MARKER_0;
         stackPtr += STACK_FRAME_EXTRA;
         try {
+          pushedStackFrame( 0 );
             return function.execute();
         }
         finally {
@@ -873,6 +888,7 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + 2] = STACK_MARKER_1;
         stackPtr += 1 + STACK_FRAME_EXTRA;
         try {
+          pushedStackFrame( 1 );
             return function.execute(arg);
         }
         finally {
@@ -893,6 +909,7 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + 3] = STACK_MARKER_2;
         stackPtr += 2 + STACK_FRAME_EXTRA;
         try {
+          pushedStackFrame( 2 );
             return function.execute(first, second);
         }
         finally {
@@ -914,6 +931,7 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + 4] = STACK_MARKER_3;
         stackPtr += 3 + STACK_FRAME_EXTRA;
         try {
+          pushedStackFrame( 3 );
             return function.execute(first, second, third);
         }
         finally {
@@ -937,10 +955,11 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + 5] = STACK_MARKER_4;
         stackPtr += 4 + STACK_FRAME_EXTRA;
         try {
+          pushedStackFrame(4);
             return function.execute(first, second, third, fourth);
         }
         finally {
-            popStackFrame(4);
+          popStackFrame(4);
         }
     }
 
@@ -961,6 +980,7 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + 6] = STACK_MARKER_5;
         stackPtr += 5 + STACK_FRAME_EXTRA;
         try {
+          pushedStackFrame( 5 );
             return function.execute(first, second, third, fourth, fifth);
         }
         finally {
@@ -987,6 +1007,7 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + 7] = STACK_MARKER_6;
         stackPtr += 6 + STACK_FRAME_EXTRA;
         try {
+          pushedStackFrame( 6 );
             return function.execute(first, second, third, fourth, fifth, sixth);
         }
         finally {
@@ -1014,6 +1035,7 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + 8] = STACK_MARKER_7;
         stackPtr += 7 + STACK_FRAME_EXTRA;
         try {
+          pushedStackFrame( 7 );
             return function.execute(first, second, third, fourth, fifth, sixth,
                                     seventh);
         }
@@ -1044,6 +1066,7 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + 9] = STACK_MARKER_8;
         stackPtr += 8 + STACK_FRAME_EXTRA;
         try {
+          pushedStackFrame( 8 );
             return function.execute(first, second, third, fourth, fifth, sixth,
                                     seventh, eighth);
         }
@@ -1062,6 +1085,7 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + args.length + 1] = new StackMarker(args.length);
         stackPtr += args.length + STACK_FRAME_EXTRA;
         try {
+          pushedStackFrame( args.length );
             return function.execute(args);
         }
         finally {
@@ -1219,6 +1243,166 @@ public abstract class LispThread extends LispObject
         }
         return unreadableString(sb.toString());
     }
+
+
+    /**
+     * TODO (ext:trace-lisp t)
+     */
+  private void printCurrentFrame(String why)
+  {
+    SystemCurrent.originalSystemOut.flush();
+    Object sf = backtrace( 1 ).car();
+    int fromTop = stackPtr;
+    int depth = 0;
+    while(--fromTop>0) {
+       if( stack[fromTop] instanceof StackFrame) {
+         depth++;
+       }       
+    }
+    if( sf instanceof StackFrame )
+    {
+      sf = ( (StackFrame) sf ).toLispString();
+    }
+    int indent = depth % 10;
+    indent = indent*2;
+    PrintStream ps = SystemCurrent.originalSystemErr;
+    
+    ps.print( "<" + name + "> "); 
+    while(indent-->0) ps.print(" ");
+    ps.println("("+depth+") " +why+ " "+ sf );
+    ps.flush();
+    try
+    {
+      Thread.sleep( 300L );
+    }
+    catch( InterruptedException e )
+    {
+      e.printStackTrace();
+    }
+  }
+  /**
+   * TODO Describe the purpose of this method.
+   * @return
+   */
+  boolean trace_calls() {
+    if(_TRACE_LISP_!=null && _TRACE_LISP_.boundp() ) {
+      return _TRACE_LISP_.symbolValue( this ).getBooleanValue();
+    }
+    return false;
+  }
+  
+
+  static final class signal_2 extends Primitive {
+     static final LispInteger INT283202;
+     static final Symbol SYM283201;
+     static final Symbol SYM283200;
+     static final Symbol SYM283199;
+     static final Symbol SYM283198;
+     static final Symbol SYM283195;
+     static final AbstractString STR283194;
+     static final Symbol SYM283193;
+     static final Symbol SYM283192;
+     static final Symbol SYM283191;
+     static final Symbol CURRENT_ERROR_DEPTH;
+
+     static final Symbol SYM283184 = Lisp.internInPackage("COERCE-TO-CONDITION", "SYSTEM");
+
+     @Override
+    public final LispObject execute(LispObject[] var1) {
+        LispThread thread = LispThread.currentThread();
+        LispObject var3 = thread.execute(SYM283184, var1[0], var1[1], Symbol.SIMPLE_ERROR, Symbol.ERROR);
+        thread._values = null;
+        thread.execute(Symbol.SIGNAL, var3);
+        thread._values = null;
+        SpecialBindingsMark var4 = thread.markSpecialBindings();
+        SpecialBinding var5 = thread.bindSpecial(CURRENT_ERROR_DEPTH, CURRENT_ERROR_DEPTH.symbolValue(thread).incr());
+        LispObject var10000;
+        if (var5.value.isGreaterThan(SYM283191.symbolValue(thread))) {
+           thread.execute(SYM283192, SYM283193.symbolValue(thread), STR283194, var5.value, var3);
+           thread.execute(SYM283195, Symbol.ERROR, Lisp.T);
+           thread._values = null;
+           var10000 = thread.execute(SYM283198, SYM283199) != Lisp.NIL ? thread.execute(SYM283199) : thread.execute(SYM283200, SYM283201, INT283202);
+        } else {
+           var10000 = thread.execute(Symbol.INVOKE_DEBUGGER, var3);
+        }
+
+        thread.resetSpecialBindings(var4);
+        return var10000;
+     }
+
+     public signal_2() {
+        super(Symbol.ERROR, "datum &rest arguments");
+     }
+
+     static {
+
+        
+        CURRENT_ERROR_DEPTH = Lisp.internInPackage("*CURRENT-ERROR-DEPTH*", "SYSTEM");
+        SYM283191 = Lisp.internInPackage("*MAXIMUM-ERROR-DEPTH*", "SYSTEM");
+        SYM283192 = Lisp.internInPackage("%FORMAT", "SYSTEM");
+        SYM283193 = Symbol.DEBUG_IO;
+        STR283194 = new SimpleString("~%Maximum error depth exceeded (~D nested errors) with '~A'.~%");
+        SYM283195 = Lisp.internInPackage("TRACE-LISP", "EXTENSIONS");
+        SYM283198 = Symbol.FBOUNDP;
+        SYM283199 = Lisp.internInPackage("INTERNAL-DEBUG", "SYSTEM");
+        SYM283200 = Lisp.internInPackage("QUIT", "EXTENSIONS");
+        SYM283201 = Keyword.STATUS;
+        INT283202 = Fixnum.constants[89];
+        new signal_2();
+     }
+  }
+
+  /*
+    DECOMPILATION REPORT
+
+    Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\subl.jar\org\armedbear\lisp\signal_2.class
+    Total time: 20 ms
+    
+    Decompiled with FernFlower.
+  */
+  
+  final static Thread mainThread = Thread.currentThread();
+  
+  final static Object yourthead = new Object() { /* (non-Javadoc)
+  * @see org.armedbear.lisp.LispObject#toString()
+  */
+  @Override
+  public String toString()
+  {
+     return Thread.currentThread().getName();
+  } 
+  };
+    
+  @DocString(name = "trace-lisp", args = "value &optional function")
+  private static final Primitive TRACE_LISP = new Primitive( "trace-lisp", PACKAGE_EXT, true, "value &optional function" )
+  {
+    @Override
+    public LispObject execute(LispObject[] args)
+    {
+      Symbol sym = Symbol.PRINT_PPRINT_DISPATCH.toLispObject();
+      PrintStream ps = SystemCurrent.originalSystemErr;
+      new Throwable("TRACE_LISP: ").printStackTrace( ps );
+      LispThread olt = map.get( mainThread );
+      LispThread thread = currentThread();
+      
+      Symbol symb = Lisp.readObjectFromString( "swank::*backtrace-pprint-dispatch-table*".toUpperCase() ).toSymbol().toLispObject();
+      ps.println( olt + " " + symb + "=" + symb.symbolValue( olt ) );
+      ps.println( thread + " " + symb + "=" + symb.symbolValue( thread ) );
+      ps.println( olt + " " + sym + "=" + symb.symbolValue( olt ) );
+      ps.println( thread + " " + sym + "=" + symb.symbolValue( thread ) );
+      _TRACE_LISP_.setSymbolValue( args[ 0 ] );
+
+      Symbol.ERROR.setSymbolFunction( new signal_2());
+      
+      return NIL;
+    }
+  };
+  static Symbol _TRACE_LISP_ = TRACE_LISP.getLambdaName().toSymbol().toLispObject();
+  static
+  {
+    _TRACE_LISP_.initializeSpecial( NIL );
+    Symbol.PRINT_PPRINT_DISPATCH.setIsTL( false );
+  }
 
     @DocString(name="make-thread", args="function &key name")
     private static final Primitive MAKE_THREAD =

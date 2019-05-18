@@ -69,6 +69,7 @@
              (%format *debug-io*
                       "~%Maximum error depth exceeded (~D nested errors) with '~A'.~%"
                       *current-error-depth* condition)
+             (ext:trace-lisp t)
              (if (fboundp 'internal-debug)
                  (internal-debug)
                  (quit :status 89))) ;; it's a prime and a fibonacci!

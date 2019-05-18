@@ -37,6 +37,8 @@ import java.util.List;
 
 import org.jpl7.Term;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+
 public class Condition extends StandardObject
 {
 	@Override
@@ -161,7 +163,7 @@ protected void initialize(LispObject initArgs)
    */
   public String getMessage()
   {
-    return null;
+    return null;// "Some condition";
   }
 
   @Override
@@ -230,6 +232,9 @@ public final String printObjectImpl()
               return format(formatControl, getFormatArguments());
             return Symbol.APPLY.execute(f, NIL, formatControl, getFormatArguments()).getStringValue();
           }
+        if(formatControl == UNBOUND_VALUE) {
+          Errors.warn( "formatControl == " + formatControl );
+        }
       }
     final int maxLevel;
     LispObject printLevel = Symbol.PRINT_LEVEL.symbolValue(thread);

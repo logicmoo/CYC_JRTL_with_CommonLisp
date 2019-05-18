@@ -1867,7 +1867,8 @@ public class Lisp {
                             thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                             thread.bindSpecial(Symbol.PRINT_READABLY, NIL);
                             try {
-                                sb.append(obj.printObject());
+                                final String printObject = obj.printObject();
+                                sb.append(printObject);
                             } finally {
                                 thread.resetSpecialBindings(mark);
                             }

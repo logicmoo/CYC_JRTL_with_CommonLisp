@@ -985,16 +985,17 @@ public class BeanShellCntrl
       @Override
       public LispObject call()
       {
-        init_cyc();
-        ensureMainReader();
+        SystemCurrent.setupIO();
+        //init_cyc();
+        //ensureMainReader();
         try
         {
-          SystemCurrent.takeOwnerShip();
+          //SystemCurrent.takeOwnerShip();
           return cyc_repl_no_suspend();
         }
         finally
         {
-          SystemCurrent.releaseOwnerShip();
+          //SystemCurrent.releaseOwnerShip();
         }
       }
     } ).call();
@@ -1004,6 +1005,10 @@ public class BeanShellCntrl
   static public LispObject cyc_repl_no_suspend()
   {
     boolean wasSubLisp = Main.isSubLisp();
+    LispObject io = Symbol.TERMINAL_IO.symbolValue();
+    LispObject out = Symbol.STANDARD_OUTPUT.symbolValue();
+    LispObject in = Symbol.STANDARD_INPUT.symbolValue();
+    
     init_cyc();
     SubLReader SLR = ensureMainReader();
     boolean wasQuitOnExit = SLR.quitOnExit;

@@ -3992,7 +3992,7 @@ public final class Primitives {
                     return ret.getResult();
                 }
                 throw ret;
-            } finally {
+            } finally { 
                 ext.inactive = true;
             }
         }
