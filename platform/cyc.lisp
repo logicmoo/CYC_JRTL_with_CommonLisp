@@ -41,7 +41,7 @@
 
 (PRINT *features*)
 ;;(cl:load "./site-lisp/slime/start-swank.lisp")
-(cl:load "site-lisp/slime/swank-loader.lisp")
+(cl:load "site-lisp/cusp/swank-loader.lisp")
 
 (swank-loader:init
  :delete nil         ; delete any existing SWANK packages

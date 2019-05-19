@@ -1,12 +1,23 @@
 #!/usr/bin/env swipl
 
+
+:- multifile user:file_search_path/2.
+:- dynamic   user:file_search_path/2.
+
 :- load_files(library(prolog_stack)).
 prolog_stack:stack_guard(none).
 
 :- dynamic user:library_directory/1.
 :- multifile user:library_directory/1.
 
-:- absolute_file_name('./pengines_server',Dir), asserta(user:library_directory(Dir)).
+:-  getenv('LARKC_HOME',_) -> true ; 
+   (prolog_load_context(directory,PLC),
+   setenv('LARKC_HOME',PLC)).
+   
+:- current_module(larkc_client) -> true;
+  (prolog_load_context(file,PLC),
+   absolute_file_name('./pengines_server/',Dir,[relative_to(PLC),access(write),file_type(directory)]), 
+   asserta(user:library_directory(Dir))).
 
 :- use_module(library(larkc_pengines_server)).
 :- use_module(library(larkc_client)).
@@ -26,8 +37,6 @@ ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(fal
 :- dmiles_machine -> (getenv('DISPLAY',_)->true;setenv('DISPLAY','10.0.0.122:0.0')) ; true.
 %:- ignore(shell('killall -9 xterm')).
 
-:- multifile user:file_search_path/2.
-:- dynamic   user:file_search_path/2.
 :- asserta((user:file_search_path(jar, ('.')))).
 :- asserta((user:file_search_path(runtime, ('.')))).
 

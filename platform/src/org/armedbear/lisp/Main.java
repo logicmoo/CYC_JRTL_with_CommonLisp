@@ -47,6 +47,7 @@ import org.logicmoo.system.SystemCurrent.In;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.jidesoft.icons.IconSet.File;
 
 public final class Main
 {
@@ -208,11 +209,17 @@ public final class Main
 
   public static String[] extractOptions(String[] args)
   {
-    List<String> argsList = new ArrayList<String>( Arrays.asList( args ) );
+    ArrayList<String> argsList = new ArrayList<String>( Arrays.asList( args ) );
+    if( argsList.remove( "--alisp" ) ) {      
+      argsList.add(0, "--lisp" );
+    }
+    if( argsList.remove( "--abcl" ) ) {      
+      argsList.add(0, "--lisp" );
+    }
     if( argsList.remove( "--lisp" ) )
     {
-      argsList.add( "--nocyc" );
-      argsList.add( "--noprolog" );
+      argsList.add(0, "--nocyc" );
+      argsList.add(0, "--noprolog" );
     }
     if( argsList.remove( "--noprolog" ) || argsList.remove( "--noswi" ) )
     {
@@ -282,6 +289,23 @@ public final class Main
       noBSHGUI = false;
     }
     String[] argsNew = jiggleEvalArgs( argsList.toArray( new String[ argsList.size() ] ) );
+    for( int i = 0; i < argsNew.length; i++ )
+    {
+      if (argsNew[i].equals( "-L" ))  {argsNew[i]= "--load";
+        noPrologJNI = true;
+      }
+      else if (argsNew[i].equals( "-E" )) argsNew[i]= "--eval";
+    }
+    if( argsNew.length > 0 )
+    {
+      final java.io.File file = new java.io.File( argsNew[ 0 ] );
+      if( file.exists() &&  file.isFile() &&  file.canRead() )
+      {
+        argsList = new ArrayList<String>( Arrays.asList( argsNew ) );
+        argsList.add( 0, "--load" );
+        argsNew = argsList.toArray( new String[ argsList.size() ] );
+      }
+    }
     return argsNew;
   }
 

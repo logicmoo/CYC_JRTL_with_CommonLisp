@@ -10,9 +10,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>pl.poznan.put.cs.gui4pddl.PDDLParser</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>pl.poznan.put.cs.gui4pddl.PDDLProject</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-        <nature>com.omondo.uml.std.Nature</nature>
 	</natures>
 </projectDescription>
